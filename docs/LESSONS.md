@@ -166,3 +166,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: session argv adds `--disable-slash-commands`. The probe ignores plugins whose source ends in `@builtin`. Probe budget raised to $0.30. Verified: no user skills, commands or MCP, and a canary question about the global CLAUDE.md (oh-my-claudecode) answers NO. `check_argv` now refuses an argv without the flag.
 - Rule: isolate headless agent runs with `--setting-sources project --strict-mcp-config --disable-slash-commands`, and judge leaks by plugin source, not plugin count.
 - Promotion: check: test_agent_run_dry
+
+## L-0024 · 2026-10-29 · run: phase-3.5 · tags: agent-lane, paths
+- Symptom: after the first real skeleton agent run (8 sessions, 0 errors), test_committed_run_rechecks_clean failed with 347 TRACE-002 errors: "product file … not found under ../../../../tests/agent/products/esg".
+- Root cause: agent-run.sh rewrote the copied run's `product:` path for a depth of four, but `tests/agent/results/<s>/run` is five levels below the repo root. The test could only exercise this after a real (paid) run, so the dry run and CI never covered it.
+- Fix: the rewrite now uses five `../` levels; the committed result's run.yaml is corrected; `pytest -m agent tests/agent` passes; `rmf check tests/agent/results/skeleton/run --final` reports 0 errors.
+- Rule: when a harness relocates a run, recompute relative paths from the destination's real depth, and re-check the relocated copy before reporting success.
+- Promotion: check: test_committed_run_rechecks_clean

@@ -1,0 +1,10 @@
+family: ac
+controls:
+  - control_id: ac-2
+    status: partial
+    statement: "Implemented today: (a) the console allows only identity-service accounts mapped by group claim to the admin or auditor role, one break-glass local account (esgadmin) and the shared local fieldtech account; no other account type is permitted. (b) The ISSO is the ESG account manager. (c, d, e, i) A remote user files an ESG access request that the ISSO approves; the installation identity service's account workflow then creates the account and its group membership, which sets the user's role and privileges on CMP-WEBUI. (f, h, l) When a user leaves or changes role, the identity service disables the account or removes the group claim, which ends console access; the ISSO confirms removal at the next review. (g) Sign-in, account-change and privilege-use events from CMP-WEBUI and CMP-GW-OS go to the CSSP SIEM, and the ISSO reads the ESG report weekly. (j) The ISSO reviews the console account list against the access request records quarterly; the last review is dated 2026-09-12. Break-glass use is logged and reported, and its credential is sealed in the program office safe. Missing: the shared fieldtech account used by about 10 field technicians on the maintenance port cannot be attributed to an individual, and (k) its shared password is changed every 90 days rather than when a technician leaves the group. Plan: per-technician local accounts with smart-card login in software release 2.3, planned for 2027-03; until then on-site privileged actions are not individually accountable."
+    responsible_roles: [PER-ISSO, PER-ISSM, PER-PM]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    parameters:
+      ac-02_odp.10: "quarterly"
+    sources: [INT-013.A1, INT-013.A2, INT-013.A3, INT-013.A4, product/architecture.md#identity, product/conops.md#limitations, product/test-results.md#account-review]

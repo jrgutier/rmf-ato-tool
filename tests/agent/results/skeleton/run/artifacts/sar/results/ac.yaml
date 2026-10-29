@@ -1,0 +1,25 @@
+family: ac
+determinations:
+  - control_id: ac-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    summary: "Examined the 2026-09-12 quarterly account review record against the access request records (program record): 3 administrator and 2 auditor identity-service accounts, all approved; break-glass esgadmin sealed and unused since 2026-06; shared local fieldtech account. Interviewed the ISSO on creation, removal and the shared account. Team test on two pre-production units (simulated): sign-in as fieldtech on the maintenance port produced audit records naming only the account. Objectives a, b, c, d, e, f, h, i, j and l are met for identity-service accounts; g (monitoring of account use) is not met for fieldtech because its use cannot be attributed to a person, and k is not met because the shared authenticator is changed every 90 days, not when a technician leaves the group. Evidence: reused program records (account review) and team-produced interview and test."
+    finding_refs: [FND-001, FND-002]
+    sources: [INT-023.A1, INT-023.A2, INT-023.A3, ART-SSP, product/test-results.md#account-review, product/conops.md#limitations]
+findings:
+  - id: FND-001
+    control_id: ac-2
+    title: "Shared fieldtech account use is not attributable to an individual"
+    description: "AC-2 requires that account use be monitored and accounts be tied to authorized users (AC-02d, AC-02g). Observed: about 10 field technicians share the local privileged account fieldtech on the maintenance port, and the audit records name only the account, so on-site privileged actions cannot be attributed to a person. Evidence: the 2026-09-12 account review record, the ISSO interview and the team's sign-in test."
+    status: open
+    severity: moderate
+    recommendation: "Replace fieldtech with per-technician local accounts with smart-card login (planned in release 2.3, 2027-03); until then keep a site-visit log naming the technician for each maintenance session and reconcile it with the audit records."
+    sources: [INT-023.A2, product/conops.md#limitations, product/test-results.md#account-review]
+  - id: FND-002
+    control_id: ac-2
+    title: "Shared account password is not changed when a technician leaves the group"
+    description: "AC-2k requires a process for changing shared or group account authenticators when individuals are removed from the group. Observed: the fieldtech password is changed only on a 90-day rotation; the ISSO has no record of an out-of-cycle change when a technician left. A departed technician keeps a working privileged credential for up to 90 days. Evidence: ISSO interview and the SSP's own statement of the gap."
+    status: open
+    severity: moderate
+    recommendation: "Change the fieldtech password whenever a technician leaves the team, with a record of each change, until per-technician accounts replace it in release 2.3."
+    sources: [INT-023.A2, ART-SSP, product/conops.md#limitations]

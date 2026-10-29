@@ -218,9 +218,9 @@ rm -rf "$RESULTS"
 mkdir -p "$RESULTS"
 cp "$WORK/check.json" "$RESULTS/check.json"
 cp -R "$RUN" "$RESULTS/run"
-# The copied run sits four levels below the repo root instead of two.
+# The copied run (tests/agent/results/<s>/run) sits five levels below the repo root instead of two.
 product=$(sed -n 's/^product: //p' "$RUN/run.yaml")
-sed -i.bak "s|^product: .*|product: ../../../../${product#../../}|" "$RESULTS/run/run.yaml"
+sed -i.bak "s|^product: .*|product: ../../../../../${product#../../}|" "$RESULTS/run/run.yaml"
 rm -f "$RESULTS/run/run.yaml.bak"
 check_sha=$(shasum -a 256 "$RESULTS/check.json" | cut -d' ' -f1)
 model=$(cat "$LOGS"/session-*.jsonl 2>/dev/null \

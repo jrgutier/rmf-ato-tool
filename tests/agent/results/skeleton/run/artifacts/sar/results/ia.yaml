@@ -1,0 +1,17 @@
+family: ia
+determinations:
+  - control_id: ia-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    summary: "Reused DT-2 results (PKI sign-in through the identity service for admin and auditor, refusal without an approved group claim, 12 of 12 units) and the open STIG finding STG-004 (BM-03, shared account for privileged access on INV-004). Examined October console audit records: remote sessions carry the person's certificate identity. Interviewed the ISSO, the developer and the enclave provider for the inherited ICAM part (relying party registered, groups provisioned after ISSO approval, enclave ATO 2025-11-20 current). Team test on two pre-production units (simulated): a maintenance-port sign-in as fieldtech produced audit records naming only the account. IA-02[01] and IA-02[02] are met for remote users and not met for the about 10 field technicians who share fieldtech. Evidence: reused DT-2 and STIG results, team-produced interviews, record examination and test."
+    finding_refs: [FND-003]
+    sources: [INT-026.A1, INT-027.A1, INT-028.A1, ART-SSP, ART-STIG, product/test-results.md#dt-2, product/conops.md#limitations]
+findings:
+  - id: FND-003
+    control_id: ia-2
+    title: "Field technicians are not uniquely identified and authenticated on the maintenance port"
+    description: "IA-2 requires organizational users to be uniquely identified and authenticated and that identity to be associated with processes acting for them (IA-02[01], IA-02[02]). Observed: about 10 field technicians sign in on the maintenance port with the shared local account fieldtech and a shared password; processes started in those sessions and their audit records are associated with fieldtech, not a person. The ICAM service covers no local accounts. Evidence: STIG finding STG-004 (open), the ISSO and developer interviews, October audit records and the team's sign-in test. Related to FND-001 (ac-2), same root cause."
+    status: open
+    severity: moderate
+    recommendation: "Deliver per-technician local accounts with smart-card login that works without the identity service (release 2.3, planned 2027-03) and close STG-004; until then keep a site-visit log naming the technician for each maintenance session and reconcile it with the audit records."
+    sources: [INT-026.A1, INT-027.A1, ART-STIG, product/conops.md#limitations]

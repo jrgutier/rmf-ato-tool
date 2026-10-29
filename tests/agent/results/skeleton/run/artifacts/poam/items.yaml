@@ -1,0 +1,117 @@
+items:
+  - id: POAM-001
+    finding_ref: FND-001
+    control_id: ac-2
+    weakness: "Shared fieldtech account use is not attributable to an individual"
+    description: "About 10 field technicians share the local privileged account fieldtech on the maintenance port; audit records name only the account, so on-site privileged actions cannot be attributed to a person (AC-02d, AC-02g not met)."
+    source_of_weakness: sar
+    severity: moderate
+    residual_risk: moderate
+    status: open
+    point_of_contact: PER-PM
+    resources_required: "Release 2.3 (per-technician local accounts with smart-card login), funded in the current ESIT development task order; ISSO time for the monthly site-visit log reconciliation"
+    scheduled_completion: "2027-03-31"
+    milestones:
+      - description: "Interim: site-visit log naming the technician for each maintenance session in use, reconciled monthly with the audit records by the ISSO"
+        due: "2026-11-15"
+      - description: "Release 2.3 with per-technician local accounts approved by the configuration control board"
+        due: "2027-03-01"
+      - description: "Release 2.3 installed on all 12 units and fieldtech disabled; team re-test of maintenance-port sign-in attribution"
+        due: "2027-03-31"
+    comments: "Same root cause as POAM-002 and POAM-003 (shared fieldtech account)."
+    sources: [ART-SAR, INT-029.A2, INT-030.A1, INT-030.A3]
+  - id: POAM-002
+    finding_ref: FND-002
+    control_id: ac-2
+    weakness: "Shared account password is not changed when a technician leaves the group"
+    description: "The fieldtech password changes only on a 90-day rotation, so a departed technician keeps a working privileged credential for up to 90 days (AC-02k not met)."
+    source_of_weakness: sar
+    severity: moderate
+    residual_risk: low
+    status: open
+    point_of_contact: PER-ISSM
+    resources_required: "ISSO procedure update and ISSO time for each out-of-cycle change; no funding needed"
+    scheduled_completion: "2026-11-30"
+    milestones:
+      - description: "ISSO procedure updated: change the fieldtech password whenever a technician leaves the team and record each change"
+        due: "2026-11-30"
+    comments: "The account itself is removed by release 2.3 under POAM-001."
+    sources: [ART-SAR, INT-029.A3, INT-030.A1, INT-030.A3]
+  - id: POAM-003
+    finding_ref: FND-003
+    control_id: ia-2
+    weakness: "Field technicians are not uniquely identified and authenticated on the maintenance port"
+    description: "Maintenance-port sessions use the shared local account fieldtech with a shared password, so processes and audit records are associated with the account, not a person (IA-02[01], IA-02[02] not met for field technicians)."
+    source_of_weakness: sar
+    severity: moderate
+    residual_risk: moderate
+    status: open
+    point_of_contact: PER-PM
+    resources_required: "Release 2.3 (smart-card login that works without the identity service), funded in the current ESIT development task order"
+    scheduled_completion: "2027-03-31"
+    milestones:
+      - description: "Release 2.3 with per-technician smart-card login approved by the configuration control board"
+        due: "2027-03-01"
+      - description: "Release 2.3 installed on all 12 units; STIG rescan closes STG-004"
+        due: "2027-03-31"
+    comments: "Also remediates STIG finding STG-004 (CAT II, BM-03, INV-004). Same root cause as POAM-001."
+    sources: [ART-SAR, ART-STIG, INT-029.A2, INT-030.A1, INT-030.A2]
+  - id: POAM-004
+    finding_ref: FND-004
+    control_id: si-2
+    weakness: "Security-relevant updates are not installed on fielded units within 30 days of bundle release"
+    description: "Fielded units receive bundles only at quarterly site visits because remote update is not approved, so units can fall up to about 90 days behind the 30-day period; at the 2026-09-30 scan two units ran the 63-day-old 2026-07 bundle with 4 high and 9 medium vulnerabilities (SI-02c not met)."
+    source_of_weakness: sar
+    severity: high
+    residual_risk: moderate
+    status: open
+    point_of_contact: PER-PM
+    resources_required: "Release 2.2 (remote update over the uplink), funded in the current ESIT development task order; enclave rule change by the Installation Network Enclave; AO agreement to the new flow"
+    scheduled_completion: "2027-01-31"
+    milestones:
+      - description: "New update flow submitted to the enclave provider and the AO for approval"
+        due: "2026-11-15"
+      - description: "Release 2.2 approved by the configuration control board and the update flow approved"
+        due: "2026-12-31"
+      - description: "Remote update in use on all 12 units; vulnerability and STIG rescan closes STG-001"
+        due: "2027-01-31"
+    comments: "Also remediates STIG finding STG-001 (CAT II, BM-01, INV-002). Per-unit items POAM-005 and POAM-006 track the two units past 30 days; any further unit past 30 days gets its own item."
+    sources: [ART-SAR, ART-STIG, INT-029.A1, INT-030.A1, INT-030.A2, INT-030.A3]
+  - id: POAM-005
+    finding_ref: FND-004
+    control_id: si-2
+    weakness: "Unit esg-north-01 runs an update bundle more than 30 days old"
+    description: "At the 2026-09-30 scan esg-north-01 ran the 2026-07 bundle, 63 days old, carrying vulnerabilities fixed in later bundles; the organization requires a POA&M item for each unit past 30 days."
+    source_of_weakness: sar
+    severity: high
+    residual_risk: moderate
+    status: open
+    point_of_contact: PER-PM
+    resources_required: "One unscheduled site visit under the current ESIT field support contract; ISSO rescan"
+    scheduled_completion: "2026-11-20"
+    milestones:
+      - description: "Current bundle installed at an unscheduled site visit"
+        due: "2026-11-20"
+      - description: "ISSO credentialed rescan confirms the unit is current"
+        due: "2026-11-20"
+    comments: "Unit-level item under POAM-004 (STG-001)."
+    sources: [ART-SAR, INT-029.A1, INT-030.A1]
+  - id: POAM-006
+    finding_ref: FND-004
+    control_id: si-2
+    weakness: "Unit esg-ridge-01 runs an update bundle more than 30 days old"
+    description: "At the 2026-09-30 scan esg-ridge-01 ran the 2026-07 bundle, 63 days old, carrying vulnerabilities fixed in later bundles; the organization requires a POA&M item for each unit past 30 days."
+    source_of_weakness: sar
+    severity: high
+    residual_risk: moderate
+    status: open
+    point_of_contact: PER-PM
+    resources_required: "One unscheduled site visit under the current ESIT field support contract; ISSO rescan"
+    scheduled_completion: "2026-11-20"
+    milestones:
+      - description: "Current bundle installed at an unscheduled site visit"
+        due: "2026-11-20"
+      - description: "ISSO credentialed rescan confirms the unit is current"
+        due: "2026-11-20"
+    comments: "Unit-level item under POAM-004 (STG-001)."
+    sources: [ART-SAR, INT-029.A1, INT-030.A1]
