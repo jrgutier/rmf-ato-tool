@@ -1,0 +1,43 @@
+# Golden excerpts for tests/unit/test_refs_extract_golden.py (slow).
+# `excerpts`: text that must appear on that physical page of references/text/<ID>.md
+# (whitespace-insensitive). `absent`: text that must not appear on any page from
+# `from_page` on (running headers/footers, glyph damage); cover pages legitimately
+# carry the "available free of charge" notice as body text.
+SP800-37R2:
+  excerpts:
+    - {page: 48, contains: "### TASK P-1"}
+    - {page: 66, contains: "### TASK C-2"}
+    - {page: 66, contains: "Categorize the system and document the security categorization results."}
+    - {page: 21, contains: "## 1.1 BACKGROUND"}
+  absent:
+    - {from_page: 5, text: "This publication is available free of charge from"}
+    - {from_page: 1, text: "NIST SP 800-37, REVISION 2 RISK MANAGEMENT FRAMEWORK"}
+    - {from_page: 1, text: "CHAPTER THREE PAGE"}
+SP800-53R5:
+  excerpts:
+    - {page: 46, contains: "### AC-2 ACCOUNT MANAGEMENT"}
+    - {page: 46, contains: "a. Define and document the types of accounts allowed and specifically prohibited for use within the system;"}
+    - {page: 46, contains: "b. Assign account managers;"}
+  absent:
+    - {from_page: 5, text: "This publication is available free of charge from"}
+    - {from_page: 1, text: "NIST SP 800-53, REV. 5 SECURITY AND PRIVACY CONTROLS"}
+SP800-53AR5:
+  excerpts:
+    - {page: 120, contains: "consistent with the trust relationships established with other organizations"}
+  absent:
+    # Unresolved private-use ligature glyphs (ti, tti, ft, tt, tf in this PDF's fonts).
+    - {from_page: 1, text: "\ue000"}
+    - {from_page: 1, text: "\ue001"}
+    - {from_page: 1, text: "\ue002"}
+    - {from_page: 1, text: "\ue003"}
+    - {from_page: 1, text: "\ue004"}
+    - {from_page: 5, text: "This publication is available free of charge from"}
+FIPS199:
+  excerpts:
+    - {page: 5, contains: "# 1 PURPOSE"}
+    - {page: 6, contains: "The potential impact is LOW if"}
+    - {page: 10, contains: "TABLE 1: POTENTIAL IMPACT DEFINITIONS FOR SECURITY OBJECTIVES"}
+SP800-60V2R1:
+  excerpts:
+    # Body text that starts high on the page must survive header stripping.
+    - {page: 43, contains: "Recommended Confidentiality Impact Level"}

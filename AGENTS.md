@@ -33,11 +33,12 @@ fork owns. Paths marked † are created by later build phases and may not exist 
 | `playbooks/` † | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
 | `personas/` † | upstream | persona cards, one per DoD RMF role |
 | `templates/` † | upstream | artifact, interview, journal and workspace templates |
-| `references/` † | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
+| `references/` | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
 | `MANUAL.md`, `docs/manual/` † | generated | rendered from `framework/`; never hand-edited |
 | `docs/LESSONS.md` | upstream | append-only lessons log |
 | `.phases/` | upstream | `<phase>.closed` markers; their set selects the default CI profile |
 | `scripts/` | upstream | `bootstrap.sh` (and the agent-lane harness †) |
+| `docs/spikes/` | upstream | time-boxed investigations and their decisions |
 | `product/` † | fork | product material the agent ingests; `profile.yaml` holds proposed values only |
 | `runs/<run-id>/` † | fork | one simulated or hybrid run: facts, interviews, artifacts, OSCAL, journal |
 
@@ -70,11 +71,21 @@ error. Commands that report support `--format json`.
 | `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, qpdf, LFS hooks); report optional extract/OCR tools |
 | `rmf ci [--profile P] [--slow] [--release]` | fast lane (ruff, pytest with coverage >= 85%) plus every check of the profile's phases |
 | `rmf lessons check` | LES-002 (LESSONS.md format, IDs, dates, append-only vs `resolve_base()`), LES-003 (no `pending`) |
+| `rmf refs fetch [--id ID] [--accept-new --note TEXT]` | download `acquisition: auto` references (ranged-GET probe, allowed domains on every redirect hop, `%PDF-` + `qpdf --check`), pin SHA-256; a changed upstream is reported and kept unless `--accept-new` |
+| `rmf refs import ID PATH [--url URL]` | pin a browser-assisted PDF from `references/_inbox/` (see `playbooks/_ops/fetch-blocked-refs.md`) |
+| `rmf refs verify [--required] [--id ID]` | offline: REF-001 status (`--required`: pending is an error), REF-002 SHA-256, REF-005 OSCAL pins, REF-006 domains |
+| `rmf refs extract [--id ID] [--extractor E] [--ocr] [--check] [--full]` | PDF to `references/text/<ID>.md` + `.toc.yaml`, recorded in index.yaml; `--check` is REF-003 (needs `EXTRACT=1` only to extract) |
+| `rmf refs index [--check]` | render `references/INDEX.md` from index.yaml; `--check` is REF-004 |
+| `rmf refs sync` | fetch missing, extract stale, render INDEX.md, verify |
+| `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
 
 Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
-checks are not implemented yet. Phase p1 checks: LES-002, LES-003, DOC-001.
+checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
+`refs verify` (REF-001 warns for `pending-acquisition`), `refs extract --check`,
+`refs index --check`, REF-002..006; p2x makes REF-001 an error for every required
+reference.
 
 ## Fork workflow
 
@@ -117,7 +128,9 @@ L-0003 is promoted to INV-7; the other seed lessons are promoted to checks.
 - Input catalogs and profiles (NIST oscal-content) may be any `1.2.x`; they are read as
   raw JSON, never through trestle models (L-0004).
 - OSCAL schema validation uses the `regex`-backed validator plus `FormatChecker` (L-0005).
-- † Reference PDFs: add or update the entry in `references/index.yaml`, run
+- Pins live in `rmf_tool.oscal.version` and `references/oscal/VERSIONS.yaml`; REF-005
+  fails when they, trestle, the index URLs or the fetched files disagree.
+- Reference PDFs: add or update the entry in `references/index.yaml`, run
   `rmf refs fetch` (or the browser-assisted import for blocked sites, L-0002/L-0003),
   `rmf refs extract`, `rmf refs index`, and commit the PDF (LFS), text and index together.
   Probe URLs with a ranged GET, never HEAD (L-0001).

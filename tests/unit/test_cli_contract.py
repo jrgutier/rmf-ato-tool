@@ -21,7 +21,10 @@ def test_version():
     assert result.stdout.strip() == f"rmf {__version__}"
 
 
-@pytest.mark.parametrize("cmd", [[], ["doctor"], ["ci"], ["lessons"], ["lessons", "check"]])
+@pytest.mark.parametrize("cmd", [
+    [], ["doctor"], ["ci"], ["lessons"], ["lessons", "check"], ["refs"],
+    *(["refs", c] for c in ("fetch", "import", "verify", "extract", "index", "sync", "show")),
+])
 def test_help(cmd):
     result = invoke(*cmd, "--help")
     assert result.exit_code == 0
@@ -139,7 +142,7 @@ def test_ci_reports_failures_exit_1(repo_with_p1):
 
 @pytest.mark.parametrize("args", [
     ["--profile", "bogus"],
-    ["--profile", "p2"],  # phase checks not implemented yet
+    ["--profile", "p3a"],  # phase checks not implemented yet
     ["--release"],
     ["--release", "--profile", "p1"],
 ])

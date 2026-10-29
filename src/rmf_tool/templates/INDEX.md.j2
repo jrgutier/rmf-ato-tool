@@ -1,0 +1,28 @@
+# Reference library
+
+Generated from `references/index.yaml` by `uv run rmf refs index`. Do not edit; regenerate.
+PDFs live in `pdf/` (Git LFS), text extractions in `text/`, NIST OSCAL content in `oscal/`.
+Status `pending-acquisition` entries are acquired browser-assisted by the user
+(`playbooks/_ops/fetch-blocked-refs.md`).
+
+## Documents
+
+| ID | Title | Revision | Req. | Status | URL | Downloaded | SHA-256 | Text |
+|---|---|---|---|---|---|---|---|---|
+{% for e in documents -%}
+| {{ e.id }} | {{ e.title | cell }} | {{ e.revision | cell }} | {{ "yes" if e.required else "no" }} | {{ e.status }} | {{ e | url }} | {{ e.downloaded or "—" }} | {{ e.sha256 | sha }} | {{ e | text }} |
+{% endfor %}
+## OSCAL
+
+| ID | Title | Revision | Status | URL | Downloaded | SHA-256 |
+|---|---|---|---|---|---|---|
+{% for e in oscal -%}
+| {{ e.id }} | {{ e.title | cell }} | {{ e.revision | cell }} | {{ e.status }} | {{ e | url }} | {{ e.downloaded or "—" }} | {{ e.sha256 | sha }} |
+{% endfor %}
+## Citation only
+
+| ID | Title | Revision | URL |
+|---|---|---|---|
+{% for e in web -%}
+| {{ e.id }} | {{ e.title | cell }} | {{ e.revision | cell }} | {{ e | url }} |
+{% endfor -%}

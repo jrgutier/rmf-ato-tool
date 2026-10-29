@@ -9,9 +9,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from rmf_tool import agents_md, lessons
+from rmf_tool import agents_md, lessons, refs
 from rmf_tool.findings import Finding
 from rmf_tool.profiles import PHASES, Profile, rule_active
+from rmf_tool.refs import index_render, verify
 
 COVERAGE_MIN = 85
 
@@ -39,6 +40,7 @@ class Step:
     phase: str | None  # None: fast lane, always run
     rules: tuple[str, ...]
     run: Callable[[Context], tuple[bool, list[Finding], str]]
+    unless: str | None = None  # skipped when the profile includes this phase
 
 
 def run_subprocess(argv: list[str], ctx: Context) -> tuple[bool, list[Finding], str]:
@@ -64,11 +66,29 @@ def _findings_step(findings: list[Finding]) -> tuple[bool, list[Finding], str]:
     return not any(f.severity == "E" for f in findings), findings, ""
 
 
+def _refs_step(check: Callable[[Path, Any], list[Finding]]) -> Callable[[Context], Any]:
+    """A step over references/index.yaml; an unreadable index is a REF-001 error."""
+    def run(ctx: Context) -> tuple[bool, list[Finding], str]:
+        try:
+            index = refs.load_index(ctx.root)
+        except refs.IndexFileError as exc:
+            return _findings_step([Finding("REF-001", "E", str(exc), refs.INDEX_PATH)])
+        return _findings_step(check(ctx.root, index))
+    return run
+
+
 STEPS: tuple[Step, ...] = (
     Step("lessons check", "p1", ("LES-002", "LES-003"),
          lambda ctx: _findings_step(lessons.check(ctx.root))),
     Step("AGENTS.md", "p1", ("DOC-001",),
          lambda ctx: _findings_step(agents_md.check(ctx.root, ctx.cli))),
+    # p2: REF-001 warns for pending-acquisition; p2x (the exit gate) makes it an error.
+    Step("refs verify", "p2", verify.VERIFY_RULES,
+         _refs_step(lambda root, index: verify.verify(root, index)), unless="p2x"),
+    Step("refs verify (strict)", "p2x", verify.VERIFY_RULES,
+         _refs_step(lambda root, index: verify.verify(root, index, strict=True))),
+    Step("refs extract --check", "p2", ("REF-003",), _refs_step(verify.check_texts)),
+    Step("refs index --check", "p2", ("REF-004",), _refs_step(index_render.check)),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )
@@ -84,6 +104,8 @@ def run(profile: Profile, ctx: Context, steps: tuple[Step, ...] = STEPS) -> list
     results = []
     for step in steps:
         if step.phase is not None and not rule_active(step.phase, profile):
+            continue
+        if step.unless is not None and profile.includes(step.unless):
             continue
         ok, findings, output = step.run(ctx)
         results.append(StepResult(step.name, step.rules, ok, findings, output))

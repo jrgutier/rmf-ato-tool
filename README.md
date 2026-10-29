@@ -45,9 +45,11 @@ example contain only public and fictional material.
 
 ## Clone size (Git LFS)
 
-The reference PDFs under `references/pdf/` are stored in Git LFS (on the order
-of a few hundred MB once Phase 2 lands). Text extractions and OSCAL JSON are in
-plain git. To clone without the PDFs:
+The reference PDFs under `references/pdf/` are stored in Git LFS (about 35 MB for
+the 17 NIST documents fetched automatically; the DoD and CNSS PDFs are added by the
+user, browser-assisted, per `playbooks/_ops/fetch-blocked-refs.md`). Text
+extractions and NIST OSCAL JSON (about 23 MB) are in plain git; `references/INDEX.md`
+lists every document with its source URL and SHA-256. To clone without the PDFs:
 
 ```sh
 GIT_LFS_SKIP_SMUDGE=1 git clone <your-fork-url>

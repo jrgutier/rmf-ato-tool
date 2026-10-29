@@ -9,19 +9,22 @@ from __future__ import annotations
 
 import json
 from enum import StrEnum
-from typing import Annotated
+from pathlib import Path
+from typing import Annotated, Any
 
 import typer
 from rich.console import Console
 from rich.table import Table
 
-from rmf_tool import __version__
+from rmf_tool import __version__, refs
 from rmf_tool import ci as ci_mod
 from rmf_tool import doctor as doctor_mod
 from rmf_tool import lessons as lessons_mod
 from rmf_tool.findings import Finding, report
 from rmf_tool.gitutil import repo_root
 from rmf_tool.profiles import PROFILES, ProfileError, resolve
+from rmf_tool.refs import fetch as fetch_mod
+from rmf_tool.refs import importer, index_render, show, sync, verify
 
 EXIT_OK, EXIT_VIOLATIONS, EXIT_USAGE = 0, 1, 2
 
@@ -33,6 +36,10 @@ app = typer.Typer(
 )
 lessons_app = typer.Typer(help="Check docs/LESSONS.md.", no_args_is_help=True)
 app.add_typer(lessons_app, name="lessons")
+refs_app = typer.Typer(
+    help="Fetch, import, verify, extract and index the reference library.", no_args_is_help=True
+)
+app.add_typer(refs_app, name="refs")
 
 console = Console()
 err_console = Console(stderr=True)
@@ -165,3 +172,236 @@ def lessons_check(fmt: FormatOption = OutputFormat.text) -> None:
     _emit_findings(findings, ["LES-002", "LES-003"], fmt)
     failed = any(f.severity == "E" for f in findings)
     raise typer.Exit(EXIT_VIOLATIONS if failed else EXIT_OK)
+
+
+# --- rmf refs ------------------------------------------------------------------------
+
+
+class Extractor(StrEnum):
+    pymupdf = "pymupdf"
+    pdfplumber = "pdfplumber"
+
+
+IdsOption = Annotated[
+    list[str] | None, typer.Option("--id", help="Limit to this reference ID (repeatable).")
+]
+
+
+def _usage_error(message: str) -> typer.Exit:
+    err_console.print(message, markup=False)
+    return typer.Exit(EXIT_USAGE)
+
+
+def _index(root: Path) -> Any:
+    try:
+        return refs.load_index(root)
+    except refs.IndexFileError as exc:
+        raise _usage_error(str(exc)) from exc
+
+
+def _exit_findings(findings: list[Finding], rules: list[str], fmt: OutputFormat) -> None:
+    _emit_findings(findings, rules, fmt)
+    raise typer.Exit(EXIT_VIOLATIONS if any(f.severity == "E" for f in findings) else EXIT_OK)
+
+
+def _emit_fetch(results: list[fetch_mod.Result], fmt: OutputFormat) -> None:
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps({
+            "ok": not any(r.failed for r in results),
+            "results": [{"id": r.id, "status": r.status, "message": r.message} for r in results],
+        }, indent=2))
+        return
+    for r in results:
+        line = f"{r.status:<16} {r.id}" + (f"  {r.message}" if r.message else "")
+        (err_console if r.failed else console).print(line, markup=False)
+
+
+@refs_app.command("fetch")
+def refs_fetch(
+    ids: IdsOption = None,
+    accept_new: Annotated[
+        bool, typer.Option("--accept-new", help="Replace a pinned file whose upstream changed.")
+    ] = False,
+    note: Annotated[
+        str | None, typer.Option(help="Revision note recorded with --accept-new (required).")
+    ] = None,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Download auto references and pin their SHA-256.
+
+    Ranged-GET probe, allowed domains on every redirect hop, %PDF- + qpdf --check.
+    Browser-assisted entries are skipped.
+    """
+    if accept_new and not note:
+        raise _usage_error("--accept-new requires --note")
+    root = repo_root()
+    _index(root)
+    try:
+        results = fetch_mod.fetch(root, ids, accept_new=accept_new, note=note)
+    except KeyError as exc:
+        raise _usage_error(str(exc.args[0])) from exc
+    _emit_fetch(results, fmt)
+    raise typer.Exit(EXIT_VIOLATIONS if any(r.failed for r in results) else EXIT_OK)
+
+
+@refs_app.command("import")
+def refs_import(
+    ref_id: Annotated[str, typer.Argument(metavar="ID", help="Reference ID in index.yaml.")],
+    path: Annotated[Path, typer.Argument(help="The downloaded PDF (e.g. in references/_inbox/).")],
+    url: Annotated[
+        str | None, typer.Option(help="The URL the file was downloaded from (recorded).")
+    ] = None,
+) -> None:
+    """Import a PDF downloaded by hand (browser-assisted).
+
+    Checks %PDF- and qpdf, moves it into references/pdf/ (Git LFS), pins its SHA-256
+    and marks the entry ok.
+    """
+    root = repo_root()
+    _index(root)
+    try:
+        entry = importer.import_ref(root, ref_id, path, url=url)
+    except importer.ImportRejected as exc:
+        err_console.print(f"rejected: {exc}", markup=False)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    console.print(f"imported {ref_id}: {entry['size_bytes']} bytes, sha256 {entry['sha256']}\n"
+                  f"next: uv run rmf refs verify --id {ref_id} && uv run rmf refs sync",
+                  markup=False)
+
+
+@refs_app.command("verify")
+def refs_verify(
+    required: Annotated[
+        bool, typer.Option("--required", help="Only required references; every one must be ok "
+                                              "(REF-001 is an error for pending-acquisition).")
+    ] = False,
+    ids: IdsOption = None,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Verify the reference library offline (REF-001/002/005/006).
+
+    REF-001 status, REF-002 SHA-256 (or LFS pointer oid), REF-005 OSCAL pins,
+    REF-006 allowed domains.
+    """
+    root = repo_root()
+    findings = verify.verify(root, _index(root), strict=required, required_only=required,
+                             ids=ids)
+    _exit_findings(findings, list(verify.VERIFY_RULES), fmt)
+
+
+@refs_app.command("extract")
+def refs_extract(
+    ids: IdsOption = None,
+    extractor: Annotated[
+        Extractor, typer.Option(help="PDF extractor (both need the [extract] extra).")
+    ] = Extractor.pymupdf,
+    ocr: Annotated[bool, typer.Option("--ocr", help="OCR image-only pages (opt-in).")] = False,
+    check: Annotated[
+        bool, typer.Option("--check", help="REF-003: verify the committed text; write nothing.")
+    ] = False,
+    full: Annotated[
+        bool, typer.Option("--full", help="Re-extract even when current; with --check, "
+                                          "re-extract to a temp dir and compare bytes.")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Extract reference PDFs to references/text/ and record them in index.yaml.
+
+    Writes <ID>.md and <ID>.toc.yaml. PDFs whose extraction is current are skipped.
+    """
+    from rmf_tool.refs.extract import ExtractorUnavailable
+
+    root = repo_root()
+    index = _index(root)
+    try:
+        if check:
+            findings = verify.check_texts(root, index, ids)
+            if full:
+                findings += sync.full_check(root, index, ids)
+            _exit_findings(findings, ["REF-003"], fmt)
+        results = sync.extract_all(root, ids, extractor=extractor.value, ocr=ocr, full=full)
+    except ExtractorUnavailable as exc:
+        raise _usage_error(str(exc)) from exc
+    except KeyError as exc:
+        raise _usage_error(str(exc.args[0])) from exc
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps({"results": [r.__dict__ for r in results]}, indent=2))
+    else:
+        for r in results:
+            console.print(f"{r.status:<10} {r.id} ({r.pages} pages)", markup=False)
+
+
+@refs_app.command("index")
+def refs_index(
+    check: Annotated[
+        bool, typer.Option("--check", help="REF-004: fail if INDEX.md is stale; write nothing.")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Render references/INDEX.md from references/index.yaml."""
+    root = repo_root()
+    index = _index(root)
+    if check:
+        _exit_findings(index_render.check(root, index), ["REF-004"], fmt)
+    wrote = index_render.write(root, index)
+    console.print(f"{index_render.INDEX_MD} {'written' if wrote else 'unchanged'}", markup=False)
+
+
+@refs_app.command("sync")
+def refs_sync(fmt: FormatOption = OutputFormat.text) -> None:
+    """Fetch missing references, extract stale text, render INDEX.md, verify.
+
+    REF-001 is a warning for pending-acquisition entries.
+    """
+    from rmf_tool.refs.extract import ExtractorUnavailable
+
+    root = repo_root()
+    _index(root)
+    results = fetch_mod.fetch(root, missing_only=True)
+    if fmt is OutputFormat.text:
+        _emit_fetch([r for r in results if r.status not in ("unchanged", "skipped")], fmt)
+    try:
+        extracted = sync.extract_all(root)
+    except ExtractorUnavailable as exc:
+        raise _usage_error(str(exc)) from exc
+    if fmt is OutputFormat.text:
+        for r in extracted:
+            if r.status == "extracted":
+                console.print(f"extracted  {r.id} ({r.pages} pages)", markup=False)
+    index = _index(root)
+    index_render.write(root, index)
+    findings = verify.verify(root, index) + verify.check_texts(root, index) \
+        + index_render.check(root, index)
+    findings += [Finding("REF-001", "E", f"{r.id}: fetch {r.status}: {r.message}")
+                 for r in results if r.failed]
+    _exit_findings(findings, [*verify.VERIFY_RULES, "REF-003", "REF-004"], fmt)
+
+
+@refs_app.command("show")
+def refs_show(
+    ref_id: Annotated[str, typer.Argument(metavar="ID", help="Reference ID in index.yaml.")],
+    section: Annotated[
+        str | None, typer.Option(help="Section number, title or heading anchor.")
+    ] = None,
+    page: Annotated[int | None, typer.Option(help="Physical page number (1-based).")] = None,
+    anchor: Annotated[
+        str | None, typer.Option(help="Text on the page (or a heading anchor); needs --page.")
+    ] = None,
+) -> None:
+    """Print a cited passage from the committed text extraction."""
+    if (section is None) == (page is None) or (page is not None) != (anchor is not None):
+        raise _usage_error("give either --section S or --page N --anchor A")
+    root = repo_root()
+    entry = refs.find(_index(root), ref_id)
+    if entry is None:
+        raise _usage_error(f"unknown reference id {ref_id!r}")
+    try:
+        if section is not None:
+            text = show.section(root, entry, section)
+        else:
+            assert page is not None and anchor is not None
+            text = show.page(root, entry, page, anchor)
+    except show.NotFound as exc:
+        err_console.print(str(exc), markup=False)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    typer.echo(text, nl=False)
