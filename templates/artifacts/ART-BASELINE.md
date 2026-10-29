@@ -16,7 +16,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Selection basis
 
-<<FILL: the SP 800-53B high-water-mark baseline of the approved categorization in the facts block, pending CNSSI 1253 per-objective selection (Phase 6), and the overlays applied, with tokens>>
+<<FILL: the selection method recorded in baseline.json (CNSSI 1253 per-objective selection plus the NSS privacy control baseline, or the SP 800-53B high-water mark when CNSSI 1253 is degraded) for the approved categorization in the facts block, and the overlays applied, with tokens>>
 
 ## Common controls available for inheritance
 

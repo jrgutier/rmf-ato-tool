@@ -1,0 +1,14 @@
+# Overlay on a synced copy of framework/, templates/playbook-body.md.j2 and playbooks/
+# (tests/unit/test_playbooks_sync.py::compose): `delete` removes files, the files beside
+# this one replace theirs, then `rmf playbooks sync --check` runs.
+rule: FW-PB-002
+description: >-
+  S-2's authored playbook has a hand-edited header and no `## Done when` section; M-3's
+  generated body was edited by hand; M-4 has no body marker.
+delete: []
+messages:
+  - "S-2: authored body lacks or misorders ## Done when"
+  - "playbooks/S/S-2.md: header stale or edited by hand"
+  - "playbooks/M/M-3.md: generated playbook stale or edited by hand"
+  - "M-4: no body marker"
+also: []

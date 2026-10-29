@@ -1,0 +1,192 @@
+{#- Generated playbook body (plan Decision C2h). Rendered by `rmf playbooks sync` for every
+    task whose playbook carries `<!-- rmf:body generated -->`; the context is built from
+    framework/ by rmf_tool.playbooks_sync.context. Keep the eight H2 sections in order:
+    FW-PB-002 requires them in authored bodies, and generated bodies follow the same shape. -#}
+{% set t = task %}
+<!-- Rendered by `rmf playbooks sync` from templates/playbook-body.md.j2 and framework/; do not edit. To hand-tune this playbook, change the marker above to `rmf:body authored`, then edit the body. -->
+
+## Steps
+
+1. **Entry check.** Run `uv run rmf status <run>`: {{ t.id }} is the next action, and
+{% if deps %}
+   {{ deps | map(attribute="id") | join(", ") }} {{ "is" if deps | length == 1 else "are" }} done or out of scope.
+{% else %}
+   nothing in the run comes before it.
+{% endif %}
+   Entry criteria (from `framework/tasks/{{ t.step }}.yaml`):
+{% for c in t.entry_criteria %}
+   - {{ c }}
+{% endfor %}
+   If one is not met, stop and journal a NOTE (`00-run-protocol.md`, stop conditions). Why:
+   the task builds on those results, and working around a gap leaves claims nobody can
+   trace.
+2. **Read the inputs** listed in `## Inputs`, and the passages in `## Citations` that say
+   what {{ t.id }} must achieve. The purpose in the header states the outcome.
+{% if alignment %}
+   {{ t.id }} feeds {% for a in alignment %}{{ a.id }} ({{ a.name }}, {{ a.kind }}){{ ", " if not loop.last else "" }}{% endfor %}; what it
+   records must be ready for {{ "that event" if alignment | length == 1 else "those events" }}.
+{% endif %}
+   Why: the playbook is generic, so the inputs and the cited text set the content.
+3. **Interview** following `_shared/interviewing.md` (and `_shared/hybrid-mode.md` in a
+   `hybrid` run). Start with the responsible (R) personas in `## Interviews`. Take the
+   questions from each persona card's `## Question bank by step` for step {{ t.step }}
+   ({{ step.name }}) and point them at what the exit criteria in `## Done when` need and the
+   inputs leave open.
+{% if t.min_interviews %}
+   Write at least {{ t.min_interviews }} interview file(s) with `task: {{ t.id }}`.
+{% else %}
+   The task needs no interview; interview only to fill a gap the inputs leave open.
+{% endif %}
+   Why: answers are the evidence that artifacts cite (`INT-###.A#`).
+{% if outputs %}
+4. **Write the outputs** in `## Outputs`, each file whole (INV-8), every claim traced per
+   `_shared/tagging-and-traceability.md`:
+{% for o in outputs %}
+{% if o.generated %}
+   - {{ o.id }} ({{ o.name }}) is generated: run `{{ o.generator or "uv run rmf build <run>" }}` and never edit
+     its output (INV-2).
+{% elif o.produces %}
+   - **{{ o.id }}** ({{ o.name }}): {{ o.description }}
+     Read `{{ o.template }}`, replace every `<<FILL: ...>>` placeholder, delete the template
+     comment, and write `{{ o.md }}` with `produced_by_task: {{ t.id }}` and
+     `touched_by: [{{ t.id }}]`.
+{% for d in o.data %}
+     Write `{{ d.path }}` whole{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`{% if d.template %}, template `{{ d.template }}`{% endif %}){% endif %}; summarize its records in the Markdown by ID instead of copying them.
+{% endfor %}
+{% else %}
+   - **{{ o.id }}** ({{ o.name }}, updated): Read `{{ o.md }}`, append `{{ t.id }}` to
+     `touched_by`, add a `## {{ t.name }} ({{ t.id }})` section with what this task
+     established, and write the whole file back. Keep every earlier section.
+{% for d in o.data %}
+     Rewrite `{{ d.path }}` whole{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`){% endif %} when this task changes its records; keep the records other tasks wrote.
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% if outputs | rejectattr("generated") | list %}
+   Why: `rmf status` counts {{ t.id }} done only when every output lists it in `touched_by`.
+{% else %}
+   Why: `rmf status` counts {{ t.id }} done only when the generated output exists.
+{% endif %}
+{% else %}
+4. **Record the result.** {{ t.id }} has no artifact output: its record is the interview
+   files, which must hold what the exit criteria in `## Done when` name, so later tasks
+   can cite the answers. When a persona makes a decision, also journal a DECISION entry
+   (`_shared/journaling-and-lessons.md`).
+{% endif %}
+{% if t.writes_facts %}
+5. **Write the facts** in `## Facts`: rewrite `facts.yaml` whole, keeping every field
+   other tasks wrote, with `set_by_task: {{ t.id }}` and the answers in `sources`.
+{% else %}
+5. **Leave `facts.yaml` alone.** {{ t.id }} writes no facts (INV-4).
+{% endif %}
+6. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task {{ t.id }}`,
+   until 0 errors (INV-6).
+7. **Journal** a CHECKPOINT (`## Journal and lessons`).
+
+## Interviews
+
+| Persona | Role | Interview |
+|---|---|---|
+{% for p in interviewees %}
+| {{ p.id }} ({{ p.name }}) | {{ p.roles }} | {{ "start here" if p.required else "when the inputs leave a question in this role's area open" }} |
+{% endfor %}
+
+{% if t.min_interviews %}
+At least {{ t.min_interviews }} interview(s) with `task: {{ t.id }}`. Never make a persona answer
+outside its role; ask the persona who would know, or record an assumption.
+{% else %}
+No interview is required.
+{% endif %}
+
+## Inputs
+
+{% for i in inputs %}
+{% if i.kind == "artifact" %}
+- {{ i.id }} ({{ i.name }}): {% for f in i.files %}`{{ f }}`{{ ", " if not loop.last else "" }}{% endfor %}
+
+{% elif i.cli %}
+- {{ i.id }} ({{ i.name }}): `{{ i.cli }}`
+{% elif i.kind == "reference" %}
+- {{ i.id }} ({{ i.name }}): {% for c in i.cites %}`{{ c }}`{{ "; " if not loop.last else "" }}{% endfor %}
+
+{% elif i.kind == "product" %}
+- {{ i.id }} ({{ i.name }}): files in the run's product directory, cited as
+  `product/<path>#<anchor>`.
+{% else %}
+- {{ i.id }} ({{ i.name }}): the product directory, when the fork supplies it there;
+  otherwise ask the responsible persona, and record an assumption for what nobody can
+  answer.
+{% endif %}
+{% endfor %}
+- Only these: do not open other run files (`00-run-protocol.md`, step 4).
+
+## Outputs
+
+{% if outputs %}
+| File | Front-matter | Notes |
+|---|---|---|
+{% for o in outputs %}
+{% if o.generated %}
+{% for d in o.data %}
+| `{{ d.path }}` | — | generated by `{{ o.generator or "uv run rmf build <run>" }}` |
+{% endfor %}
+{% else %}
+{% if o.produces %}
+| `{{ o.md }}` | `artifact_id: {{ o.id }}`, `produced_by_task: {{ t.id }}`, `touched_by: [{{ t.id }}]` | template `{{ o.template }}` |
+{% else %}
+| `{{ o.md }}` | append `{{ t.id }}` to `touched_by` | updated; keep `produced_by_task` |
+{% endif %}
+{% for d in o.data %}
+| `{{ d.path }}` | — | {{ "schema `" ~ d.schema ~ "`" if d.schema else "data" }}{{ ", written whole" if o.produces else ", rewritten whole when changed" }} |
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% else %}
+{{ t.id }} has no artifact output; the interviews (and any journal DECISION) are its record.
+{% endif %}
+
+## Facts
+
+{% if t.writes_facts %}
+| Field | Set by |
+|---|---|
+{% for f in t.writes_facts %}
+| `{{ f }}` | {{ t.id }} |
+{% endfor %}
+{% else %}
+{{ t.id }} writes no facts.
+{% endif %}
+
+## Done when
+
+{% for c in t.exit_criteria %}
+- {{ c }}
+{% endfor %}
+{% for o in outputs %}
+{% if not o.generated %}
+- `{{ o.md }}` lists {{ t.id }} in `touched_by`{{ " and has `produced_by_task: " ~ t.id ~ "`" if o.produces else "" }}.
+{% endif %}
+{% endfor %}
+{% if t.min_interviews %}
+- At least {{ t.min_interviews }} interview(s) with `task: {{ t.id }}`.
+{% endif %}
+- `uv run rmf check <run> --task {{ t.id }}` reports 0 errors.
+
+## Journal and lessons
+
+- CHECKPOINT: `## <time> · CHECKPOINT · task {{ t.id }}`, naming what the outputs now hold.
+{% if alignment | selectattr("kind", "equalto", "decision") | list %}
+- DECISION: when the {{ t.raci.A }} decides, `## <time> · DECISION · task {{ t.id }} · by: {{ t.raci.A }}`, citing the answer.
+{% endif %}
+{% for f in feeds_back %}
+- If the work shows that {{ f.id }} ({{ f.name }}) got something wrong, do not change that task's
+  outputs here: journal a NOTE naming the file and the evidence. {{ t.id }} feeds back to {{ f.id }}.
+{% endfor %}
+- A fix that took more than one `rmf check` round gets a RETRY entry and a lesson
+  (`_shared/journaling-and-lessons.md`).
+
+## Citations
+
+{% for c in citations %}
+- {{ c.ref }} {{ c.where }}: `{{ c.command }}`.
+{% endfor %}

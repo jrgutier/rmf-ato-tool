@@ -1,0 +1,12 @@
+# Overlay on a synced copy of framework/, templates/playbook-body.md.j2 and playbooks/
+# (tests/unit/test_playbooks_sync.py::compose): `delete` removes files, the files beside
+# this one replace theirs, then `rmf playbooks sync --check` runs.
+rule: FW-PB-001
+description: >-
+  M-7's playbook file is missing, and the shared org-context playbook has no `## Task P-3`
+  section for P-3's playbook anchor.
+delete: [playbooks/M/M-7.md]
+messages:
+  - "M-7: playbook not found"
+  - "P-3: playbooks/P/P-org-context.md has no section #task-p-3"
+also: [FW-PB-002]  # the stripped-down org-context sections lack their H3 sections
