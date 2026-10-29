@@ -9,7 +9,9 @@ tasks:
     primary_phase: PH-MSA
     phases: [PH-MSA, PH-TMRR]
     aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
-    purpose: Document the characteristics of the system, its users and the authorizations it leverages.
+    purpose: >-
+      Document the characteristics of the system, its users and the authorizations it leverages;
+      the PM provides the system description.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-LSE], I: []}
     inputs: [ART-BND, ART-REQ, ART-INV, EXT-PRODUCT]
     outputs: [ART-SD, ART-BND]
@@ -18,13 +20,19 @@ tasks:
     feeds_back_to: []
     min_interviews: 1
     entry_criteria:
-      - Boundary, inventory and requirements documented (ART-BND, ART-INV, ART-REQ); the system is registered (P-18).
+      - Boundary, inventory and requirements documented (ART-BND, ART-INV, ART-REQ); the system
+        is registered (P-18).
     exit_criteria:
-      - ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+      - The characteristics of the system are described and documented (DoDI 8510.01 Table 2
+        outcome).
+      - ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts
+        system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
     citations:
-      - {ref: SP800-37R2, section: "TASK C-1"}
+      - {ref: SP800-37R2, section: "TASK C-1", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 15, anchor: "Task C-1 System Description"}
       - {ref: DODI8510.01, page: 29, anchor: "Provide the system description"}
+      - {ref: SP800-37R2, section: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"}
+      - {ref: SP800-18R2, section: "4.2"}
     playbook: playbooks/C/C-1.md
   - id: C-2
     name: Security Categorization
@@ -34,7 +42,10 @@ tasks:
     primary_phase: PH-MSA
     phases: [PH-MSA, PH-TMRR]
     aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
-    purpose: Categorize the system per CNSSI 1253 (C/I/A) and record it in facts.yaml.
+    purpose: >-
+      Categorize the system per CNSSI 1253, an impact level for each information type and the
+      high-water mark for each security objective (C/I/A) plus the applicable overlays, and
+      record it in facts.yaml.
     raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [PER-UR, PER-ISSE, PER-PRIV, PER-CISO, PER-RE], I: [PER-AO]}
     inputs: [ART-SD, ART-INFOTYPES, ART-RA, EXT-CNSSI1253-OVERLAYS]
     outputs: [ART-CAT]
@@ -44,14 +55,26 @@ tasks:
     min_interviews: 1
     entry_criteria:
       - ART-SD exists and passes RUN-FM-001; information types documented (ART-INFOTYPES).
+      - Each information owner has set the impact levels for its own information types.
     exit_criteria:
+      - A security categorization of the system, including its information types, is completed
+        and is consistent with the enterprise architecture and the organization's risk
+        management strategy (DoDI 8510.01 Table 2 outcome).
       - facts.categorization (c, i, a, overlays) set_by C-2.
-      - ART-CAT records the impact per information type and security objective and the basis for each value.
+      - ART-CAT records the impact per information type and security objective and the basis for
+        each value.
+      - The categorization is not adjusted to reflect management decisions about control
+        stringency; those go through tailoring (S-2).
     citations:
-      - {ref: SP800-37R2, section: "TASK C-2"}
+      - {ref: SP800-37R2, section: "TASK C-2", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, section: "b. Categorize"}
       - {ref: CNSSI1253, section: "3.1"}
       - {ref: FIPS199, page: 10, anchor: "POTENTIAL IMPACT"}
+      - {ref: SP800-37R2, section: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"}
+      - {ref: CNSSI1253, section: "3.1.1"}
+      - {ref: CNSSI1253, page: 14, anchor: "The security categorization of a system must not be changed or modified to reflect management decisions"}
+      - {ref: DODI8510.01, page: 29, anchor: "categorize systems in accordance with CNSSI 1253 and document the categorization", note: "The system owner also documents the categorization in the JCIDS capabilities document (for example the CDD)."}
+      - {ref: SP800-60V1R1, section: "4.3"}
     playbook: playbooks/C/C-2.md
   - id: C-3
     name: Security Categorization Review and Approval
@@ -61,7 +84,9 @@ tasks:
     primary_phase: PH-MSA
     phases: [PH-MSA, PH-TMRR]
     aligned_with: {milestones: [MS-A], reviews: [RV-SRR], decisions: []}
-    purpose: Review the security categorization and have the AO (or AODR) approve it.
+    purpose: >-
+      Review the security categorization and have the AO (or AODR) approve it, with SAOP (or
+      designee) approval as well when the system processes PII; approval is due by Milestone A.
     raci: {R: [PER-AODR, PER-PRIV], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO], I: [PER-PM, PER-ISSM]}
     inputs: [ART-CAT]
     outputs: [ART-CAT]
@@ -72,9 +97,15 @@ tasks:
     entry_criteria:
       - facts.categorization set_by C-2.
     exit_criteria:
+      - The security categorization results are reviewed, and the categorization decision is
+        approved by senior leaders in the organization (DoDI 8510.01 Table 2 outcome).
       - facts.categorization.approved set_by C-3; ART-CAT records the approval.
+      - For a system that processes PII, ART-CAT also records the SAOP's (or designee's)
+        approval.
     citations:
-      - {ref: SP800-37R2, section: "TASK C-3"}
+      - {ref: SP800-37R2, section: "TASK C-3", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 15, anchor: "Task C-3 Security Categorization Review and Approval"}
       - {ref: CNSSI1253, section: "3.1.2"}
+      - {ref: SP800-37R2, section: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"}
+      - {ref: CNSSI1253, page: 14, anchor: "Obtain the SAOP's, or designee's, approval of the security categorization for systems that process PII"}
     playbook: playbooks/C/C-3.md

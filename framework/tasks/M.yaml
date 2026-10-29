@@ -9,7 +9,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [MS-IOC], reviews: [RV-PCA], decisions: []}
-    purpose: Monitor the system and its environment for changes that affect the security and privacy posture.
+    purpose: >-
+      Monitor the system and its environment for changes that affect the security and privacy
+      posture, analyzing the security impact of each change.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO]}
     inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, EXT-CHANGE-REQUESTS]
     outputs: [ART-CHG, ART-INV, ART-CMP]
@@ -20,11 +22,19 @@ tasks:
     entry_criteria:
       - The system operates under an authorization (R-4).
     exit_criteria:
-      - ART-CHG records each change with its security impact analysis and disposition; inventory and CM plan updated.
+      - The system and environment of operation are monitored in accordance with the continuous
+        monitoring strategy (DoDI 8510.01 Table 7 outcome).
+      - ART-CHG records each change with its security impact analysis and disposition; inventory
+        and CM plan updated.
+      - A significant system modification re-enters the RMF at the affected task (feeds back to
+        P-11 and C-1).
     citations:
-      - {ref: SP800-37R2, section: "TASK M-1"}
+      - {ref: SP800-37R2, section: "TASK M-1", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-1 System and Environment Changes"}
       - {ref: SP800-128, section: "3.3.3"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: SP800-128, section: "2.3.9"}
+      - {ref: DODI8510.01, page: 12, anchor: "and for any significant system modifications"}
     playbook: playbooks/M/M-1.md
   - id: M-2
     name: Ongoing Assessments
@@ -34,7 +44,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [], reviews: [], decisions: []}
-    purpose: Assess implemented and inherited controls on the frequencies of the continuous monitoring strategy.
+    purpose: >-
+      Assess implemented and inherited controls on the frequencies of the continuous monitoring
+      strategy, with reviews of the system at least annually.
     raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CISO, PER-CSSP], I: [PER-AO]}
     inputs: [ART-CONMON, ART-SSP, ART-SAP, ART-SAR, ART-POAM, EXT-MONITORING]
     outputs: [ART-SAR, ART-CONMON]
@@ -45,11 +57,17 @@ tasks:
     entry_criteria:
       - Monitoring data collected per the continuous monitoring strategy.
     exit_criteria:
-      - sar/results updated with the ongoing assessment results; conmon.yaml adjusted where frequencies changed.
+      - Ongoing testing and assessments of control effectiveness are conducted in accordance
+        with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
+      - sar/results updated with the ongoing assessment results; conmon.yaml adjusted where
+        frequencies changed.
     citations:
-      - {ref: SP800-37R2, section: "TASK M-2"}
+      - {ref: SP800-37R2, section: "TASK M-2", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-2 Ongoing Assessments"}
       - {ref: SP800-137, section: "3.4"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: DODI8510.01, page: 29, anchor: "Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually"}
+      - {ref: DODCIO-DEVSECOPS, section: "3.2.5"}
     playbook: playbooks/M/M-2.md
   - id: M-3
     name: Ongoing Risk Response
@@ -59,7 +77,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [], reviews: [], decisions: []}
-    purpose: Respond to risk from ongoing monitoring, risk assessments and outstanding POA&M items.
+    purpose: >-
+      Respond to risk from ongoing monitoring, risk assessments, emerging threats and
+      outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: []}
     inputs: [ART-SAR, ART-RA, ART-POAM]
     outputs: [ART-RA, ART-POAM]
@@ -68,12 +88,22 @@ tasks:
     feeds_back_to: [A-5]
     min_interviews: 1
     entry_criteria:
-      - Ongoing assessment results available (M-2).
+      - Ongoing assessment results available (M-2), or a new or previously unaddressed threat
+        has emerged and the PM has started a risk assessment.
     exit_criteria:
-      - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
+      - The output of continuous monitoring activities is analyzed and responded to
+        appropriately (DoDI 8510.01 Table 7 outcome).
+      - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and
+        the POA&M updated.
+      - Decisions to withhold or delay vulnerability remediation are coordinated with the
+        requirements sponsor, the AO and the Component cyberspace operations forces.
     citations:
-      - {ref: SP800-37R2, section: "TASK M-3"}
+      - {ref: SP800-37R2, section: "TASK M-3", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-3 Ongoing Risk Response"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: SP800-137, section: "3.5"}
+      - {ref: DODI5000.90, page: 11, anchor: "the PM will initiate a risk assessment to identify the risk to the platform"}
+      - {ref: DODI8510.01, page: 7, anchor: "decisions to withhold or delay vulnerability remediation"}
     playbook: playbooks/M/M-3.md
   - id: M-4
     name: Authorization Updates
@@ -83,7 +113,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [], reviews: [], decisions: []}
-    purpose: Update the security plan, assessment report, risk assessment and POA&M from continuous monitoring results.
+    purpose: >-
+      Update the security plan, assessment report, risk assessment and POA&M from continuous
+      monitoring results.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO]}
     inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA]
     outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
@@ -94,10 +126,15 @@ tasks:
     entry_criteria:
       - Risk responses decided (M-3).
     exit_criteria:
+      - Risk management documents are updated based on continuous monitoring activities (DoDI
+        8510.01 Table 7 outcome).
       - Authorization package artifacts reflect the current state of the system.
     citations:
-      - {ref: SP800-37R2, section: "TASK M-4"}
+      - {ref: SP800-37R2, section: "TASK M-4", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-4 Authorization Package Updates"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: SP800-18R2, section: "4.7"}
+      - {ref: DODI5000.90, page: 13, anchor: "Each iteration should conclude with the AO validating the PM's cybersecurity strategy and updated POA&M"}
     playbook: playbooks/M/M-4.md
   - id: M-5
     name: Security and Privacy Reporting
@@ -107,7 +144,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [], reviews: [], decisions: []}
-    purpose: Report the security and privacy posture to the AO and senior leaders as the monitoring strategy requires.
+    purpose: >-
+      Report the security and privacy posture to the AO and senior leaders as the monitoring
+      strategy requires.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP], I: [PER-AO, PER-CIO]}
     inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA]
     outputs: [ART-SECRPT]
@@ -118,11 +157,18 @@ tasks:
     entry_criteria:
       - Authorization artifacts current (M-4).
     exit_criteria:
-      - ART-SECRPT reports posture, open POA&M items and trends to the recipients in conmon.yaml.
+      - A process is in place to report the security, privacy and supply chain risk management
+        posture to the AO and other senior leaders and executives (DoDI 8510.01 Table 7
+        outcome).
+      - ART-SECRPT reports posture, open POA&M items and trends to the recipients in
+        conmon.yaml.
     citations:
-      - {ref: SP800-37R2, section: "TASK M-5"}
+      - {ref: SP800-37R2, section: "TASK M-5", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-5 Security and Privacy Reporting"}
       - {ref: SP800-137, section: "3.4.3"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: DODI8510.01, page: 30, anchor: "Maintain and report systems assessment and authorization status"}
+      - {ref: DODCIO-CATO, page: 1, anchor: "all security controls will need to be fed into a system level dashboard view"}
     playbook: playbooks/M/M-5.md
   - id: M-6
     name: Ongoing Authorization
@@ -132,7 +178,10 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-PD, PH-OS]
     aligned_with: {milestones: [MS-FOC], reviews: [], decisions: [AD-CATO]}
-    purpose: The AO reviews the posture on an ongoing basis to determine whether the risk remains acceptable.
+    purpose: >-
+      The AO reviews the posture on an ongoing basis to determine whether the risk remains
+      acceptable and, where monitoring is near real time, may seek a cATO through the Component
+      CISO.
     raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR], I: [PER-PM, PER-ISSM]}
     inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP]
     outputs: [ART-AODM]
@@ -141,13 +190,26 @@ tasks:
     feeds_back_to: [R-2]
     min_interviews: 1
     entry_criteria:
-      - Posture reports available (M-5); the monitoring strategy sets the ongoing-authorization triggers.
+      - Posture reports available (M-5); the monitoring strategy sets the ongoing-authorization
+        triggers.
+      - For AD-CATO, an ATO is in place and the system shows robust continuous monitoring of its
+        RMF controls, active cyber defense and use of an approved DevSecOps reference design.
     exit_criteria:
-      - decision.yaml records the ongoing authorization determination (continue, AD-CATO, or denial).
+      - The AO conducts ongoing authorization using the results of continuous monitoring and
+        communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table
+        7 outcome).
+      - decision.yaml records the ongoing authorization determination (continue, AD-CATO, or
+        denial).
     citations:
-      - {ref: SP800-37R2, section: "TASK M-6"}
+      - {ref: SP800-37R2, section: "TASK M-6", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-6 Ongoing Authorization"}
       - {ref: SP800-137, section: "2.2"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: SP800-37R2, page: 167, anchor: "ONGOING AUTHORIZATION"}
+      - {ref: SP800-37R2, page: 171, anchor: "REAUTHORIZATION"}
+      - {ref: DODCIO-CATO, page: 1, anchor: "the Authorizing Official (AO) must be able to demonstrate three main"}
+      - {ref: DODCIO-CATO, page: 2, anchor: "the AO will notify the component CISO of the intention to move that system to a cATO"}
+      - {ref: DODI5000.90, page: 13, anchor: "While the AO may authorize a continuous ATO (cATO)"}
     playbook: playbooks/M/M-6.md
   - id: M-7
     name: System Disposal
@@ -157,7 +219,9 @@ tasks:
     primary_phase: PH-OS
     phases: [PH-OS]
     aligned_with: {milestones: [], reviews: [], decisions: []}
-    purpose: Implement the disposal strategy and execute the required actions when the system is removed from operation.
+    purpose: >-
+      Implement the disposal strategy and execute the required actions when the system is
+      removed from operation.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AODR, PER-IO, PER-ISSO, PER-PRIV, PER-RE], I: [PER-AO]}
     inputs: [ART-SSP, ART-INV, ART-RA]
     outputs: [ART-DISP]
@@ -168,8 +232,13 @@ tasks:
     entry_criteria:
       - A decision to remove the system from operation.
     exit_criteria:
-      - ART-DISP records the disposal strategy, media sanitization and registry and inventory updates.
+      - A system disposal strategy is developed and implemented, as needed (DoDI 8510.01 Table 7
+        outcome).
+      - ART-DISP records the disposal strategy, media sanitization and registry and inventory
+        updates.
     citations:
-      - {ref: SP800-37R2, section: "TASK M-7"}
+      - {ref: SP800-37R2, section: "TASK M-7", note: "SDLC phase: New – Not Applicable; Existing – Disposal."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-7 System Disposal"}
+      - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
+      - {ref: DODI5000.85, page: 18, anchor: "sustains the system over its life cycle, including disposal"}
     playbook: playbooks/M/M-7.md

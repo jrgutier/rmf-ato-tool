@@ -8,22 +8,33 @@ decisions:
     description: >-
       A time-limited authorization to test the system in an operational environment or with
       live data before all controls are in place, limited to the time needed to complete the
-      testing objectives and usually with operating restrictions.
+      testing objectives and usually with operating restrictions (for example a minimum number
+      of users, restricted hours, increased audit logging and monitoring, or only the functions
+      that need live testing). In this framework it must be in place before the developmental
+      and operational test events that run on live networks or with live data (A-3 entry), and
+      it does not authorize operational use.
     decided_by: PER-AO
-    decided_in: [R-4]
+    # Issued with SAP approval (A-2), before the live-network test events of A-3 (lead
+    # decision, fan-out review of p3b alignment note c).
+    decided_in: [A-2]
     phases: [PH-EMD]
     atd_required: true
     conditions_required: false
     citations:
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
       - {ref: SP800-37R2, page: 162, anchor: "limited to the time needed to complete the testing objectives"}
+      - {ref: SP800-37R2, page: 162, anchor: "restricting the system functionality to include only the functions that require live testing"}
   - id: AD-ATO
     name: Authorization to Operate
     short: ATO
     description: >-
       The risk of operating the system is acceptable; the system may operate for a specified
       period under the terms and conditions the AO sets, until the authorization termination
-      date.
+      date. The AO may shorten the termination date, downgrade or revoke the authorization at
+      any time if risk conditions warrant. DoD IT and PIT systems update their ATO at least
+      every three years depending on risk, and before the ATO the PM reviews an Intelligence
+      Community threat assessment issued within the previous 12 months. Fielded systems need
+      it before Milestone C and initial operational capability.
     decided_by: PER-AO
     decided_in: [R-4]
     phases: [PH-EMD, PH-PD, PH-OS]
@@ -32,13 +43,18 @@ decisions:
     citations:
       - {ref: SP800-37R2, section: "Authorization to Operate"}
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
+      - {ref: DODI8510.01, page: 28, anchor: "An AO may downgrade or revoke an authorization decision at any time"}
+      - {ref: DODI5000.90, page: 11, anchor: "update their ATO at least every 3 years depending on risk"}
+      - {ref: DODI5000.90, page: 11, anchor: "Before a program receives an ATO, the PM will review the program's most recent threat assessment"}
+      - {ref: DODI8510.01, page: 13, anchor: "must receive and maintain a valid authorization before beginning operations"}
   - id: AD-ATOC
     name: Authorization to Operate with Conditions
     short: ATO w/ conditions
     description: >-
       An ATO whose acceptance of risk depends on specific conditions (for example remediation
       of named weaknesses by set dates, or operating restrictions) that the AO records and
-      tracks.
+      tracks. Each condition ties to POA&M items, whose execution the AO monitors; a missed
+      condition date is a candidate event-driven trigger for AO review.
     decided_by: PER-AO
     decided_in: [R-4]
     phases: [PH-EMD, PH-PD, PH-OS]
@@ -47,12 +63,15 @@ decisions:
     citations:
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
       - {ref: SP800-37R2, page: 93, anchor: "authorization termination date"}
+      - {ref: DODI8510.01, page: 27, anchor: "Monitor and track the overall execution of system-level POA&Ms"}
+      - {ref: SP800-37R2, page: 170, anchor: "event-driven triggers necessitate an immediate review"}
   - id: AD-DATO
     name: Denial of Authorization to Operate
     short: DATO
     description: >-
       The risk is unacceptable; the system is not authorized to operate, or must stop
-      operating if it already does.
+      operating if it already does. An AO may also downgrade an existing authorization to a
+      denial when monitoring shows the risk is no longer acceptable (R-4 or M-6).
     decided_by: PER-AO
     decided_in: [R-4]
     phases: [PH-EMD, PH-PD, PH-OS]
@@ -61,6 +80,7 @@ decisions:
     citations:
       - {ref: SP800-37R2, section: "Denial of Authorization"}
       - {ref: DODI8510.01, page: 18, anchor: "and denial ATO"}
+      - {ref: DODI8510.01, page: 28, anchor: "An AO may downgrade or revoke an authorization decision at any time"}
   - id: AD-CATO
     name: Continuous Authorization to Operate
     short: cATO
@@ -69,7 +89,11 @@ decisions:
       evidence (robust continuous monitoring of RMF controls, active cyber defense, an
       approved DevSecOps reference design) to the DoD CISO, whose approval removes the
       expiration date for as long as the real-time risk posture is maintained. It modifies
-      re-authorization; it does not replace the underlying ATO, and it can be revoked.
+      re-authorization; it does not replace the underlying ATO, and it can be revoked (for poor
+      posture, a change in risk tolerance or an incident) without losing the ATO. A secure
+      software supply chain with an SBOM is part of the evidence. DoDI 5000.90 limits it to
+      products with robust automated monitoring, currently in the software and defense business
+      system pathways.
     decided_by: PER-AO
     decided_in: [M-6]
     phases: [PH-PD, PH-OS]
@@ -81,3 +105,7 @@ decisions:
       - {ref: DODCIO-CATO, page: 1, anchor: "the Authorizing Official (AO) must be able to demonstrate three main"}
       - {ref: DODCIO-CATO, page: 3, anchor: "DoD CISO approved cATOs do not have an expiration date"}
       - {ref: DODI5000.90, page: 13, anchor: "While the AO may authorize a continuous ATO (cATO)"}
+      - {ref: DODCIO-CATO, page: 2, anchor: "the AO will notify the component CISO of the intention to move that system to a cATO"}
+      - {ref: DODCIO-CATO, page: 3, anchor: "The cATO determination does not affect the underlying system ATO"}
+      - {ref: DODCIO-CATO, page: 3, anchor: "A system can temporarily lose its cATO privilege without any loss of existing ATO"}
+      - {ref: DODCIO-DEVSECOPS, page: 28, anchor: "cATO includes the need for a Secure Software Supply Chain (SSSC) and requires a Software Bill of Materials (SBOM)"}

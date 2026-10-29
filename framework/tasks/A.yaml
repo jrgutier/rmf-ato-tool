@@ -10,7 +10,9 @@ tasks:
     primary_phase: PH-EMD
     phases: [PH-EMD]
     aligned_with: {milestones: [], reviews: [RV-TRR], decisions: []}
-    purpose: Select an assessor or assessment team with the level of independence the assessment requires.
+    purpose: >-
+      Select an assessor or assessment team with the level of independence the assessment
+      requires; the Component CISO is the SCA or formally delegates the role.
     raci: {R: [PER-AODR], A: PER-AO, C: [PER-CIO, PER-CISO, PER-PRIV], I: [PER-PM, PER-SCA]}
     inputs: [ART-SSP, ART-ORG-CONTEXT]
     outputs: []
@@ -21,11 +23,16 @@ tasks:
     entry_criteria:
       - Security plan approved (S-6).
     exit_criteria:
-      - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
+      - An assessor or assessment team is selected, with the appropriate level of independence
+        (DoDI 8510.01 Table 5 outcome).
+      - The selected SCA and the basis for its independence are recorded (interview and journal
+        DECISION), ready for the SAP team (A-2).
     citations:
-      - {ref: SP800-37R2, section: "TASK A-1"}
+      - {ref: SP800-37R2, section: "TASK A-1", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-1 Assessor Selection"}
       - {ref: DODI8510.01, page: 26, anchor: "Perform as the SCA or formally delegate the security control assessment role"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: SP800-53AR5, section: "3.1"}
     playbook: playbooks/A/A-1.md
   - id: A-2
     name: Assessment Plan
@@ -34,8 +41,11 @@ tasks:
     optional: false
     primary_phase: PH-EMD
     phases: [PH-EMD]
-    aligned_with: {milestones: [], reviews: [RV-TRR], decisions: []}
-    purpose: Develop, review and approve the security assessment plan, coordinated with developmental and operational test events.
+    aligned_with: {milestones: [], reviews: [RV-TRR], decisions: [AD-IATT]}
+    purpose: >-
+      Develop, review and approve the security assessment plan, coordinated with developmental
+      and operational test events, before the TRR for the first event that supplies assessment
+      evidence.
     raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: []}
     inputs: [ART-SSP, ART-BASELINE, EXT-ASSESSMENT-PROCEDURES]
     outputs: [ART-SAP]
@@ -45,13 +55,22 @@ tasks:
     min_interviews: 1
     entry_criteria:
       - Assessor selected (A-1) and the as-implemented security plan available (I-2).
+      - The TEMP identifies the developmental and operational test events and the cybersecurity
+        data each will produce.
     exit_criteria:
-      - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+      - Assessment plans document the test events and resources that support the assessments,
+        coordinated with developers and developmental and operational testers, and the AO
+        approves them after SCA review (DoDI 8510.01 Table 5 outcome).
+      - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team
+        and schedule, and the AO approves the plan (SAP-COV-001).
     citations:
-      - {ref: SP800-37R2, section: "TASK A-2"}
+      - {ref: SP800-37R2, section: "TASK A-2", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-2 Assessment Plan"}
       - {ref: SP800-53AR5, section: "3.2"}
       - {ref: DODI5000.89, page: 15, anchor: "incorporate the appropriate aspects of the risk management framework"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: SP800-53AR5, section: "3.2.6"}
+      - {ref: DODI5000.89, page: 16, anchor: "The TEMP DEF and OEF will identify specific cybersecurity data required"}
     playbook: playbooks/A/A-2.md
   - id: A-3
     name: Control Assessments
@@ -61,7 +80,9 @@ tasks:
     primary_phase: PH-EMD
     phases: [PH-EMD]
     aligned_with: {milestones: [], reviews: [RV-SVR], decisions: [AD-IATT]}
-    purpose: Assess the controls per the approved plan, reusing developer, developmental and operational test results.
+    purpose: >-
+      Assess the controls per the approved plan, reusing developer, developmental and
+      operational test results and prior assessments, and automating where possible.
     raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CDT, PER-OTA, PER-DEV], I: [PER-AO, PER-CISO]}
     inputs: [ART-SAP, ART-SSP, ART-STIG, EXT-TEST-RESULTS, EXT-ASSESSMENT-PROCEDURES]
     outputs: [ART-SAR, ART-STIG]
@@ -70,14 +91,23 @@ tasks:
     feeds_back_to: []
     min_interviews: 1
     entry_criteria:
-      - Assessment plan approved (A-2); an AD-IATT covers any testing on live networks or with live data.
+      - Assessment plan approved (A-2); an AD-IATT covers any testing on live networks or with
+        live data.
     exit_criteria:
-      - sar/results holds a determination for every scoped control (SAR-COV-001) and stig-summary.yaml holds the scan results.
+      - Control assessments are conducted per the plan, supported by developer, engineering,
+        developmental and operational test events, with reuse of earlier results and automation
+        considered (DoDI 8510.01 Table 5 outcome).
+      - sar/results holds a determination for every scoped control (SAR-COV-001) and
+        stig-summary.yaml holds the scan results.
     citations:
-      - {ref: SP800-37R2, section: "TASK A-3"}
+      - {ref: SP800-37R2, section: "TASK A-3", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-3 Control Assessments"}
       - {ref: SP800-53AR5, section: "3.3"}
       - {ref: DODI5000.89, page: 28, anchor: "Support cybersecurity assessments and authorization, including RMF security"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: DODI5000.89, page: 16, anchor: "Plan to conduct contractor and government integrated tailored cooperative vulnerability identification"}
+      - {ref: DODI5000.89, page: 16, anchor: "cooperative vulnerability and penetration assessment (CVPA) and an adversarial assessment"}
+      - {ref: DODCIO-DEVSECOPS, section: "3.3.2", note: "Pipeline security testing and control gates as assessment evidence."}
     playbook: playbooks/A/A-3.md
   - id: A-4
     name: Assessment Reports
@@ -87,7 +117,9 @@ tasks:
     primary_phase: PH-EMD
     phases: [PH-EMD]
     aligned_with: {milestones: [], reviews: [RV-SVR], decisions: []}
-    purpose: Prepare the security assessment report with findings and recommendations, including test-event results.
+    purpose: >-
+      Prepare the security assessment report with findings and recommendations, including
+      test-event results, for the AO and the program.
     raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV], I: [PER-AO, PER-AODR]}
     inputs: [ART-SAR]
     outputs: [ART-SAR]
@@ -98,11 +130,18 @@ tasks:
     entry_criteria:
       - Control assessments complete (A-3).
     exit_criteria:
-      - ART-SAR summarizes the determinations and states each finding with its severity and recommendation.
+      - Assessment reports with findings and recommendations are completed and include results
+        from developer, engineering, developmental and operational test events (DoDI 8510.01
+        Table 5 outcome).
+      - ART-SAR summarizes the determinations and states each finding with its severity and
+        recommendation.
     citations:
-      - {ref: SP800-37R2, section: "TASK A-4"}
+      - {ref: SP800-37R2, section: "TASK A-4", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-4 Assessment Reports"}
       - {ref: SP800-53AR5, section: "APPENDIX E"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: SP800-53AR5, section: "3.4"}
+      - {ref: DODI8510.01, page: 10, anchor: "Ensure acquisition programs submit cybersecurity T&E results to the appropriate AO"}
     playbook: playbooks/A/A-4.md
   - id: A-5
     name: Remediation Actions
@@ -112,7 +151,9 @@ tasks:
     primary_phase: PH-EMD
     phases: [PH-EMD]
     aligned_with: {milestones: [], reviews: [RV-SVR], decisions: []}
-    purpose: Take initial remediation actions on deficient controls and have the assessor reassess them.
+    purpose: >-
+      Take initial remediation actions on deficient controls and have the assessor reassess
+      them.
     raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: []}
     inputs: [ART-SAR, ART-SSP, ART-SAP]
     outputs: [ART-SAR, ART-SSP]
@@ -123,10 +164,15 @@ tasks:
     entry_criteria:
       - Assessment report delivered (A-4).
     exit_criteria:
-      - Remediated findings are reassessed and closed in sar/results; the security plan reflects the changes.
+      - Remediation actions are taken and the security and privacy plans are updated to reflect
+        the resulting control implementation changes (DoDI 8510.01 Table 5 outcome).
+      - Remediated findings are reassessed and closed in sar/results; the security plan reflects
+        the changes.
     citations:
-      - {ref: SP800-37R2, section: "TASK A-5"}
+      - {ref: SP800-37R2, section: "TASK A-5", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-5 Remediation Actions"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: SP800-18R2, section: "4.5"}
     playbook: playbooks/A/A-5.md
   - id: A-6
     name: Plan of Action and Milestones
@@ -136,7 +182,9 @@ tasks:
     primary_phase: PH-EMD
     phases: [PH-EMD]
     aligned_with: {milestones: [], reviews: [RV-PRR], decisions: []}
-    purpose: Prepare the POA&M for every open finding from the assessment report and every open CAT I STIG finding.
+    purpose: >-
+      Prepare the POA&M for every open finding from the assessment report and every open CAT I
+      STIG finding.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-PRIV, PER-CISO, PER-SCA, PER-MDA], I: [PER-AO]}
     inputs: [ART-SAR, ART-RA, ART-ORG-CONTEXT, ART-STIG]
     outputs: [ART-POAM]
@@ -147,9 +195,17 @@ tasks:
     entry_criteria:
       - Initial remediation complete and the assessment report updated (A-5).
     exit_criteria:
-      - poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001).
+      - A POA&M detailing remediation plans for the unacceptable risks in the assessment reports
+        is developed (DoDI 8510.01 Table 5 outcome).
+      - poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required
+        fields (POAM-FLD-001).
+      - The POA&M is available to the cybersecurity strategy annex of the program protection
+        plan.
     citations:
-      - {ref: SP800-37R2, section: "TASK A-6"}
+      - {ref: SP800-37R2, section: "TASK A-6", note: "SDLC phase: New – Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-6 A Plan of Actions and Milestones"}
       - {ref: DODI8510.01, page: 9, anchor: "Develop and maintain a plan of action and milestones"}
+      - {ref: SP800-37R2, section: "TABLE 6: ASSESS TASKS AND OUTCOMES"}
+      - {ref: DODI5000.90, page: 12, anchor: "A plan of action and milestones (POA&M) to address known vulnerabilities"}
+      - {ref: DODI8510.01, page: 26, anchor: "Establish and maintain processes and procedures to manage DoD Component POA&Ms"}
     playbook: playbooks/A/A-6.md
