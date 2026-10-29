@@ -1,0 +1,16 @@
+# FICTIONAL. Benchmark titles are DISA guide families; versions and rule IDs are invented
+# for the ESG test product.
+benchmarks:
+  - {id: BM-01, title: General Purpose Operating System SRG, version: V3R1, kind: srg, applies_to: [INV-002], scan_date: '2026-09-30'}
+  - {id: BM-02, title: Web Server SRG, version: V4R1, kind: srg, applies_to: [INV-004], scan_date: '2026-09-30'}
+  - {id: BM-03, title: Application Security and Development STIG, version: V6R1, kind: stig, applies_to: [INV-003, INV-004], scan_date: '2026-09-30'}
+  - {id: BM-04, title: Database SRG, version: V3R2, kind: srg, applies_to: [INV-005], scan_date: '2026-09-30'}
+not_applicable:
+  - {inventory_item: INV-006, rationale: Radio module firmware has no applicable SRG or STIG; its integrity is verified by the signed update bundle and checked at each site visit.}
+  - {inventory_item: INV-008, rationale: Sensor node firmware has no IP stack and no applicable SRG or STIG; nodes are paired to one gateway and firmware images are signed.}
+findings:
+  - {id: STG-001, benchmark: BM-01, rule_id: SV-900101, category: CAT II, inventory_item: INV-002, title: Security-relevant software updates are not installed within the organization-defined time period, status: open, control_id: si-2}
+  - {id: STG-002, benchmark: BM-02, rule_id: SV-900214, category: CAT II, inventory_item: INV-004, title: The web server uses only approved TLS versions and cipher suites, status: not-a-finding, control_id: cm-6}
+  - {id: STG-003, benchmark: BM-04, rule_id: SV-900330, category: CAT II, inventory_item: INV-005, title: The database generates audit records for privileged activity, status: not-a-finding, control_id: au-2}
+  - {id: STG-004, benchmark: BM-03, rule_id: SV-900305, category: CAT II, inventory_item: INV-004, title: The application does not permit shared accounts for privileged access, status: open, control_id: ia-2}
+sources: [product/test-results.md#config-scan, product/test-results.md#vuln-scan, product/hw-sw-inventory.md#items]

@@ -58,3 +58,29 @@ def git_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> GitRepo:
     repo.root.mkdir()
     repo.git("init", "-q", "-b", "main")
     return repo
+
+
+VALID_MINIMAL = REPO_ROOT / "tests/fixtures/runs/valid_minimal"
+
+
+@pytest.fixture
+def minimal_run(tmp_path: Path) -> Path:
+    """A writable copy of the skeleton fixture run (tests/fixtures/runs/valid_minimal)."""
+    import shutil
+
+    return Path(shutil.copytree(VALID_MINIMAL, tmp_path / "valid_minimal"))
+
+
+def edit_yaml(path: Path, edit) -> None:
+    """Round-trip edit of a YAML file: ``edit(data)`` mutates the loaded mapping."""
+    import io
+
+    from ruamel.yaml import YAML
+
+    yaml = YAML()
+    yaml.width = 4096
+    data = yaml.load(path.read_text(encoding="utf-8"))
+    edit(data)
+    buf = io.StringIO()
+    yaml.dump(data, buf)
+    path.write_text(buf.getvalue(), encoding="utf-8")

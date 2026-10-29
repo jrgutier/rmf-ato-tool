@@ -60,7 +60,7 @@ def test_every_rule_has_fixture_or_exemption():
         if test:
             assert f"def {test}(" in target.read_text(encoding="utf-8"), rule.id
         checked += 1
-    assert checked == 21  # p1 (3) + p2 (6) + p3a (12)
+    assert checked == 36  # p1 (3) + p2 (6) + p3a (12) + p35 (15)
 
 
 def test_framework_rules_are_implemented_by_validate():

@@ -24,6 +24,10 @@ def test_version():
 @pytest.mark.parametrize("cmd", [
     [], ["doctor"], ["ci"], ["lessons"], ["lessons", "check"], ["refs"],
     *(["refs", c] for c in ("fetch", "import", "verify", "extract", "index", "sync", "show")),
+    ["new"], ["run"], ["run", "init"], ["status"], ["baseline"], ["baseline", "resolve"],
+    ["catalog"], ["catalog", "show"], ["assemble"], ["oscal"], ["oscal", "build"],
+    ["oscal", "validate"], ["build"], ["package"], ["check"], ["playbooks"],
+    ["playbooks", "sync"],
 ])
 def test_help(cmd):
     result = invoke(*cmd, "--help")
@@ -142,7 +146,7 @@ def test_ci_reports_failures_exit_1(repo_with_p1):
 
 @pytest.mark.parametrize("args", [
     ["--profile", "bogus"],
-    ["--profile", "p35"],  # phase checks not implemented yet
+    ["--profile", "p4"],  # phase checks not implemented yet
     ["--release"],
     ["--release", "--profile", "p1"],
 ])

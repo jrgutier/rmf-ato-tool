@@ -43,8 +43,8 @@ refs_app = typer.Typer(
 )
 app.add_typer(refs_app, name="refs")
 
-console = Console()
-err_console = Console(stderr=True)
+console = Console(soft_wrap=True)  # never wrap lines agents parse (L-0022)
+err_console = Console(stderr=True, soft_wrap=True)
 
 
 class OutputFormat(StrEnum):
@@ -465,3 +465,351 @@ def refs_show(
         err_console.print(str(exc), markup=False)
         raise typer.Exit(EXIT_VIOLATIONS) from exc
     typer.echo(text, nl=False)
+
+
+# --- workspaces and runs ---------------------------------------------------------------
+
+run_app = typer.Typer(help="Start runs.", no_args_is_help=True)
+app.add_typer(run_app, name="run")
+baseline_app = typer.Typer(help="Resolve the run's control baseline.", no_args_is_help=True)
+app.add_typer(baseline_app, name="baseline")
+catalog_app = typer.Typer(help="Read the NIST SP 800-53r5 catalog.", no_args_is_help=True)
+app.add_typer(catalog_app, name="catalog")
+oscal_app = typer.Typer(help="Build and validate a run's OSCAL documents.", no_args_is_help=True)
+app.add_typer(oscal_app, name="oscal")
+playbooks_app = typer.Typer(help="Keep playbook headers in sync with framework/.",
+                            no_args_is_help=True)
+app.add_typer(playbooks_app, name="playbooks")
+
+RunArg = Annotated[
+    Path | None,
+    typer.Argument(metavar="[RUN]", help="Run directory (default: the cwd if it holds run.yaml, "
+                                         "else the newest runs/*/).", show_default=False),
+]
+ModeOption = Annotated[str, typer.Option(help="synthetic or hybrid.")]
+RunIdOption = Annotated[
+    str | None, typer.Option("--run-id", help="Run ID (default YYYYMMDD-<mode>-NN).")
+]
+
+
+def _open(run: Path | None) -> Any:
+    from rmf_tool.run.model import RunError, open_run
+
+    try:
+        return open_run(run)
+    except RunError as exc:
+        raise _usage_error(str(exc)) from exc
+
+
+@app.command("new")
+def new(
+    slug: Annotated[str, typer.Argument(help="Short product name (lowercase, digits, -).")],
+    directory: Annotated[
+        Path | None, typer.Option("--dir", help="Workspace directory (default: ./<slug>).",
+                                  file_okay=False, show_default=False)
+    ] = None,
+    mode: ModeOption = "synthetic",
+    run_id: RunIdOption = None,
+    force: Annotated[
+        bool, typer.Option("--force", help="Reuse a non-empty product/ or runs/.")
+    ] = False,
+) -> None:
+    """Scaffold a workspace (product/ from templates, runs/) and start its first run."""
+    from rmf_tool.workspace import WorkspaceError, new_workspace
+
+    target = directory if directory is not None else Path(slug)
+    try:
+        run_dir = new_workspace(target, slug, repo_root(), mode, run_id, force)
+    except WorkspaceError as exc:
+        raise _usage_error(str(exc)) from exc
+    typer.echo(f"created {target / 'product'} and run {run_dir}\n"
+                  f"next: fill in product/, then uv run rmf status {run_dir}")
+
+
+@run_app.command("init")
+def run_init(
+    mode: ModeOption = "synthetic",
+    run_id: RunIdOption = None,
+    scenario: Annotated[
+        Path | None, typer.Option(help="Agent-lane scenario (tests/agent/scenarios/<s>.yaml): "
+                                       "product, scope, seeds, control subset.", dir_okay=False)
+    ] = None,
+) -> None:
+    """Start a run in ./runs/<run-id>/ and stamp run.yaml (upstream_hash, versions)."""
+    from rmf_tool.workspace import WorkspaceError, init_run
+
+    try:
+        run_dir = init_run(Path.cwd(), repo_root(), mode, run_id, scenario)
+    except WorkspaceError as exc:
+        raise _usage_error(str(exc)) from exc
+    typer.echo(f"created {run_dir}\nnext: uv run rmf status {run_dir}")
+
+
+@app.command()
+def status(
+    run: RunArg = None,
+    family_gaps: Annotated[
+        bool, typer.Option("--family-gaps", help="List baseline controls without SSP "
+                                                 "statements or SAR determinations, per family.")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Task completion derived from disk and the next action (plan §7.3)."""
+    from rmf_tool.run import status as status_mod
+
+    r = _open(run)
+    st = status_mod.compute(r)
+    data = status_mod.to_json(r, st, family_gaps)
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps(data, indent=2))
+        raise typer.Exit(EXIT_OK)
+    c = data["counts"]
+    typer.echo(f"now: {data['now']}")
+    typer.echo(f"run {st.run_id} ({st.mode}): {c['done']}/{c['active']} active task(s) done, "
+               f"{c['deferred']} deferred; SSP {st.statements}/{st.baseline} statements")
+    for t in data["tasks"]:
+        if t["state"] != "active":
+            continue
+        mark = "done" if t["done"] else "todo"
+        detail = "" if t["done"] else "  (" + "; ".join(t["missing"]) + ")"
+        typer.echo(f"  {mark:<5}{t['id']:<6}{t['name']}{detail}")
+    for fam, gaps in (data.get("family_gaps") or {}).items():
+        typer.echo(f"  gaps {fam}: ssp {', '.join(gaps['ssp']) or '-'}; "
+                      f"sar {', '.join(gaps['sar']) or '-'}")
+    if st.next is None:
+        typer.echo("next: none, every active task is done (rmf check --final)")
+    else:
+        nxt = data["next"]
+        fam = f" family {nxt['family']}" if nxt.get("family") else ""
+        typer.echo(f"next: {st.next} {nxt['name']}{fam} ({nxt['playbook']})")
+    raise typer.Exit(EXIT_OK)
+
+
+@baseline_app.command("resolve")
+def baseline_resolve(run: RunArg = None) -> None:
+    """Write baseline.json from facts.yaml (approved categorization), tailoring and subset."""
+    from rmf_tool import baseline as baseline_mod
+
+    r = _open(run)
+    try:
+        data = baseline_mod.resolve(r)
+    except baseline_mod.BaselineError as exc:
+        typer.echo(f"cannot resolve: {exc}", err=True)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    r.path("baseline.json").write_text(baseline_mod.render(data), encoding="utf-8")
+    typer.echo(f"baseline.json: {data['baseline_id']}, {len(data['controls'])} control(s); "
+               f"set facts.yaml baseline_id to {data['baseline_id']!r}")
+    typer.echo("note: selection is the SP 800-53B high-water mark (method: high-water-mark); "
+               "CNSSI 1253 per-objective selection is pending (Phase 6). Do not call this "
+               "the CNSSI 1253 baseline.")
+
+
+@catalog_app.command("show")
+def catalog_show(
+    family: Annotated[str | None, typer.Option(help="Control family (ac, AU, ...).")] = None,
+    control: Annotated[
+        list[str] | None, typer.Option(help="Control ID (ac-2, ac-2.1); repeatable.")
+    ] = None,
+    run: Annotated[
+        Path | None, typer.Option(help="Limit to the run's baseline.json controls.")
+    ] = None,
+    missing: Annotated[
+        bool, typer.Option("--missing", help="With --run: only controls without an SSP "
+                                             "statement.")
+    ] = False,
+    fields: Annotated[
+        str, typer.Option(help="Comma list of title, statement, guidance, objectives, params.")
+    ] = "title,statement",
+    chunk: Annotated[str | None, typer.Option(help="i/n: the i-th of n slices.")] = None,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Compact control text from the catalog (raw OSCAL JSON), for family-sized batches."""
+    from rmf_tool import catalog as catalog_mod
+    from rmf_tool.run import status as status_mod
+
+    chosen = tuple(f.strip() for f in fields.split(",") if f.strip())
+    bad = [f for f in chosen if f not in catalog_mod.FIELDS]
+    if bad:
+        raise _usage_error(f"unknown field(s) {', '.join(bad)}; "
+                           f"expected {', '.join(catalog_mod.FIELDS)}")
+    if missing and run is None:
+        raise _usage_error("--missing needs --run")
+    cat = catalog_mod.load(repo_root())
+    if run is not None:
+        from rmf_tool import baseline as baseline_mod
+
+        r = _open(run)
+        ids = baseline_mod.control_ids(r)
+        if missing:
+            gaps = status_mod.family_gaps(r)
+            ids = [c for c in ids if c in gaps.get(catalog_mod.family(c), {}).get("ssp", [])]
+    elif family is None and not control:
+        raise _usage_error("give --family, --control or --run")
+    else:
+        ids = list(cat.order)
+    if family is not None:
+        ids = [c for c in ids if catalog_mod.family(c) == family.lower()]
+    if control:
+        wanted = {c.lower() for c in control}
+        unknown = sorted(wanted - set(cat.controls))
+        if unknown:
+            raise _usage_error(f"unknown control(s) {', '.join(unknown)}")
+        ids = [c for c in ids if c in wanted]
+    if chunk is not None:
+        try:
+            ids = catalog_mod.chunk(ids, chunk)
+        except ValueError as exc:
+            raise _usage_error(str(exc)) from exc
+    views = [catalog_mod.view(cat, c, chosen) for c in ids]
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps({"controls": views}, indent=2))
+    else:
+        for v in views:
+            typer.echo(catalog_mod.render_text(v))
+        typer.echo(f"{len(views)} control(s)")
+
+
+def _changed(paths: list[str], verb: str) -> None:
+    for p in paths:
+        typer.echo(f"{verb} {p}")
+
+
+@app.command()
+def assemble(
+    run: RunArg = None,
+    check: Annotated[
+        bool, typer.Option("--check", help="Fail if any marker block is stale; write nothing.")
+    ] = False,
+) -> None:
+    """Fill the CLI-owned marker blocks (rmf:facts) in the run's artifact Markdown."""
+    from rmf_tool import assemble as assemble_mod
+
+    r = _open(run)
+    try:
+        if check:
+            stale = [rel for rel, (old, new) in assemble_mod.assembled(r).items() if old != new]
+            _changed(stale, "stale")
+            raise typer.Exit(EXIT_VIOLATIONS if stale else EXIT_OK)
+        _changed(assemble_mod.write(r), "assembled")
+    except assemble_mod.AssembleError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+
+
+@oscal_app.command("build")
+def oscal_build(
+    run: RunArg = None,
+    check: Annotated[
+        bool, typer.Option("--check", help="Fail if oscal/ differs from a fresh build.")
+    ] = False,
+) -> None:
+    """Build oscal/profile.json and oscal/ssp.json (trestle models, uuid5, OSCAL 1.2.1)."""
+    from rmf_tool import build as build_mod
+
+    r = _open(run)
+    out = build_mod.oscal_outputs(r)
+    stale = []
+    for rel, text in out.files.items():
+        path = r.path(rel)
+        current = path.read_text(encoding="utf-8") if path.is_file() else None
+        if current != text:
+            stale.append(rel)
+            if not check:
+                build_mod.write_output(r, rel, text)
+        if rel in out.notes:
+            typer.echo(f"not built {rel}: {out.notes[rel]}")
+    _changed(stale, "stale" if check else "wrote")
+    raise typer.Exit(EXIT_VIOLATIONS if check and stale else EXIT_OK)
+
+
+@oscal_app.command("validate")
+def oscal_validate(run: RunArg = None, fmt: FormatOption = OutputFormat.text) -> None:
+    """OSCAL-001 (NIST v1.2.1 schema, regex + FormatChecker) and OSCAL-002 (trestle load)."""
+    from rmf_tool.oscal import validate as validate_oscal
+
+    r = _open(run)
+    findings = [Finding("OSCAL-001", "E", m, rel) for rel, m in validate_oscal.schema_problems(r)]
+    findings += [Finding("OSCAL-002", "E", m, rel)
+                 for rel, m in validate_oscal.trestle_problems(r)]
+    if not validate_oscal.files(r):
+        typer.echo("no oscal/*.json yet (rmf build)")
+    _exit_findings(findings, ["OSCAL-001", "OSCAL-002"], fmt)
+
+
+@app.command()
+def build(run: RunArg = None) -> None:
+    """Assemble artifact Markdown, build OSCAL, render reports/assumptions.md and refresh
+    package/manifest.yaml when present. Run it before every `rmf check` (INV-6)."""
+    from rmf_tool import assemble as assemble_mod
+    from rmf_tool import build as build_mod
+
+    r = _open(run)
+    try:
+        changed, notes = build_mod.build(r)
+    except assemble_mod.AssembleError as exc:
+        typer.echo(str(exc), err=True)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    _changed(changed, "wrote")
+    for rel, why in notes.items():
+        typer.echo(f"not built {rel}: {why}")
+    typer.echo(f"rmf build: {len(changed)} file(s) changed")
+
+
+@app.command()
+def package(run: RunArg = None) -> None:
+    """Write package/manifest.yaml (ART-PKG): artifacts, OSCAL and reports with SHA-256."""
+    from rmf_tool import package as package_mod
+
+    r = _open(run)
+    wrote = package_mod.write(r)
+    typer.echo(f"package/manifest.yaml {'written' if wrote else 'unchanged'}")
+
+
+@app.command()
+def check(
+    run: RunArg = None,
+    task: Annotated[
+        str | None, typer.Option(help="Only rules applying at this task and its findings.")
+    ] = None,
+    family: Annotated[str | None, typer.Option(help="Only findings of this family.")] = None,
+    rules: Annotated[str | None, typer.Option(help="Comma list of rule IDs.")] = None,
+    final: Annotated[
+        bool, typer.Option("--final", help="Every rule, regardless of progress (scope-aware).")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Run-scope rules (RUN-*, FACTS, GEN-STALE, SSP-COV, SAR-POAM, TRACE, HYB, OSCAL,
+    JOURNAL) on a run."""
+    from rmf_tool.check import engine
+
+    r = _open(run)
+    wanted = [x.strip() for x in rules.split(",") if x.strip()] if rules else None
+    unknown = [x for x in wanted or [] if x not in engine.IMPLEMENTED]
+    if unknown:
+        raise _usage_error(f"unknown or unimplemented rule(s): {', '.join(unknown)}")
+    if task is not None and task not in r.tasks:
+        raise _usage_error(f"unknown task {task!r}")
+    if final and task is not None:
+        raise _usage_error("--final cannot be combined with --task")
+    ev = engine.evaluate(r)
+    findings = engine.select(r, ev, task, family.lower() if family else None, wanted, final)
+    if task is not None and fmt is OutputFormat.text and not ev.status.tasks[task].done:
+        missing = "; ".join(ev.status.tasks[task].missing) or ev.status.tasks[task].state
+        typer.echo(f"note: {task} is not done yet: {missing}", err=True)
+    _exit_findings(findings, engine.rules_run(wanted), fmt)
+
+
+@playbooks_app.command("sync")
+def playbooks_sync(
+    check: Annotated[
+        bool, typer.Option("--check", help="FW-PB-002: fail on a stale header; write nothing.")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Regenerate the header block of each authored playbook from framework/ YAML."""
+    from rmf_tool import playbooks_sync as sync_mod
+
+    root = repo_root()
+    if check:
+        _exit_findings(sync_mod.check(root), ["FW-PB-002"], fmt)
+    _changed(sync_mod.sync(root), "synced")

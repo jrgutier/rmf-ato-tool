@@ -30,17 +30,17 @@ fork owns. Paths marked † are created by later build phases and may not exist 
 | `src/rmf_tool/` | upstream | the `rmf` CLI (Python, `uv`) |
 | `tests/` | upstream | unit, integration, e2e (`slow`), agent lane (`agent`, local only) |
 | `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
-| `playbooks/` † | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
-| `personas/` † | upstream | persona cards, one per DoD RMF role |
-| `templates/` † | upstream | artifact, interview, journal and workspace templates |
+| `playbooks/` | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
+| `personas/` | upstream | persona cards, one per DoD RMF role |
+| `templates/` | upstream | artifact, interview, journal and workspace templates |
 | `references/` | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
 | `MANUAL.md`, `docs/manual/` † | generated | rendered from `framework/`; never hand-edited |
 | `docs/LESSONS.md` | upstream | append-only lessons log |
 | `.phases/` | upstream | `<phase>.closed` markers; their set selects the default CI profile |
-| `scripts/` | upstream | `bootstrap.sh` (and the agent-lane harness †) |
+| `scripts/` | upstream | `bootstrap.sh`, `agent-run.sh` (agent-lane harness, local only) |
 | `docs/spikes/` | upstream | time-boxed investigations and their decisions |
-| `product/` † | fork | product material the agent ingests; `profile.yaml` holds proposed values only |
-| `runs/<run-id>/` † | fork | one simulated or hybrid run: facts, interviews, artifacts, OSCAL, journal |
+| `product/` | fork | product material the agent ingests; `profile.yaml` holds proposed values only |
+| `runs/<run-id>/` | fork | one simulated or hybrid run: facts, interviews, artifacts, OSCAL, journal |
 
 ## Invariants
 
@@ -79,6 +79,20 @@ error. Commands that report support `--format json`.
 | `rmf refs sync` | fetch missing, extract stale, render INDEX.md, verify |
 | `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
+| `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
+| `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash`, versions); a scenario adds product, scope, seeds and control subset |
+| `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action |
+| `rmf baseline resolve [RUN]` | `baseline.json` from facts.yaml (approved categorization), `tailoring.yaml` and `control_subset` |
+| `rmf catalog show [--family F] [--control C] [--run RUN [--missing]] [--fields F,..] [--chunk i/n]` | compact SP 800-53r5 control text, per family or the run's baseline |
+| `rmf assemble [RUN] [--check]` | fill the `rmf:facts` marker blocks in artifact Markdown from facts.yaml |
+| `rmf oscal build [RUN] [--check]` | `oscal/profile.json` and `oscal/ssp.json` (trestle models, uuid5, OSCAL 1.2.1) |
+| `rmf oscal validate [RUN]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on `oscal/*.json` |
+| `rmf build [RUN]` | assemble + oscal build + `reports/assumptions.md` (+ refresh `package/manifest.yaml`); always before `rmf check` |
+| `rmf package [RUN]` | `package/manifest.yaml` (ART-PKG): artifacts, OSCAL and reports with SHA-256 |
+| `rmf check [RUN] [--task T] [--family F] [--rules R,..] [--final]` | run rules; `--task T` only what applies at T, `--final` everything (scope-aware) |
+| `rmf playbooks sync [--check]` | regenerate authored playbook headers from framework/; `--check` is FW-PB-002 |
+
+RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
 Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
@@ -88,25 +102,25 @@ checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
 `refs index --check`, REF-002..006; p2x makes REF-001 an error for every required
 reference and FW-CITE-002 strict; p3a `rmf validate` (FW-SCHEMA-001, FW-ID-001/002,
 FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001, FW-DAG-001, FW-CITE-001/002,
-FW-TASK-001). Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml`.
+FW-TASK-001); p35 `rmf check --final` on `tests/fixtures/runs/valid_minimal` (RUN-CFG-001,
+RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, SSP-COV-001, SAR-POAM-001, TRACE-001/002,
+HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W).
+Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml`.
 
 ## Fork workflow
 
-Steps marked † use commands that later build phases add; see `## CLI commands` for what
-exists today.
-
 1. Create a repository from this template and clone it (README.md has the LFS note).
 2. `make bootstrap` (add `EXTRACT=1` for the AGPL PDF extractor, `OCR=1` for OCR tools).
-3. † `uv run rmf new <slug> --dir .` scaffolds `product/` and `runs/`.
+3. `uv run rmf new <slug> --dir .` scaffolds `product/` and `runs/`.
 4. Fill in `product/` with your system's material (mind the CUI rule, INV-7).
-5. † `uv run rmf run init --mode synthetic|hybrid`.
-6. † Follow `playbooks/00-run-protocol.md` until the run reports done.
-7. † `uv run rmf ci --profile fork`.
+5. `uv run rmf run init --mode synthetic|hybrid`.
+6. Follow `playbooks/00-run-protocol.md` until the run reports done.
+7. `uv run rmf ci --profile fork`.
 8. Send lessons that touch upstream files back upstream as a pull request.
 
 ## Run protocol pointer
 
-† The master loop for a run lives in `playbooks/00-run-protocol.md`: ask `rmf status`
+The master loop for a run lives in `playbooks/00-run-protocol.md`: ask `rmf status`
 for the next task, load its playbook and persona cards, read only the listed inputs,
 interview, write whole files, then `rmf build` and `rmf check --task T` until 0 errors,
 and append a journal CHECKPOINT. Session units are one RMF step (at most 3 control

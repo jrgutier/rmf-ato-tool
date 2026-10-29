@@ -1,0 +1,75 @@
+information_types:
+  - id: INF-01
+    title: Perimeter and environmental sensor telemetry and alarms
+    description: >-
+      Intrusion, door, temperature, water and power readings and alarms with site and sensor
+      identifiers, collected from the field sensor network and forwarded to IODS.
+    sp800_60_ids: [C.3.1.3]
+    confidentiality: {base: moderate}
+    integrity: {base: moderate}
+    availability:
+      base: low
+      selected: low
+      adjustment_justification: >-
+        An outage removes sensing at one site; the SOC compensates with guard patrols for
+        several days, so the provisional low value is kept.
+    privacy: false
+    life_cycle:
+      - stage: collection
+        description: "Sensor nodes report readings every 30 seconds and alarms immediately over the field radio."
+        components: [CMP-SENSOR-NET, CMP-COLLECTOR]
+      - stage: storage
+        description: "The collector buffers up to 7 days of telemetry on the encrypted data partition."
+        components: [CMP-STORE]
+      - stage: dissemination
+        description: "The collector forwards every message to IODS over mutually authenticated TLS."
+        components: [CMP-COLLECTOR]
+      - stage: disposition
+        description: "Buffered telemetry is overwritten after 7 days or once IODS acknowledges it; IODS owns retention."
+        components: [CMP-STORE]
+    sources: [product/conops.md#information, product/data-flows.md#telemetry]
+  - id: INF-02
+    title: ESG configuration and security management data
+    description: >-
+      Device configuration, host firewall rules, account records and cryptographic keys of
+      the gateway.
+    sp800_60_ids: [C.3.5.5]
+    confidentiality:
+      base: low
+      selected: moderate
+      adjustment_justification: >-
+        The data includes private keys and firewall rules whose disclosure would let an
+        attacker impersonate a gateway or map the permitted paths into the enclave.
+    integrity: {base: moderate}
+    availability: {base: low}
+    privacy: false
+    life_cycle:
+      - stage: creation
+        description: "The developer's build pipeline creates the baseline configuration; administrators change it through the console."
+        components: [CMP-GW-OS, CMP-WEBUI]
+      - stage: storage
+        description: "Held on the gateway's encrypted system partition."
+        components: [CMP-GW-OS]
+      - stage: disposition
+        description: "Units returned for repair are wiped with the developer's sanitization procedure."
+        components: [CMP-GW-HW]
+    sources: [product/architecture.md#configuration, product/architecture.md#identity]
+  - id: INF-03
+    title: ESG audit records
+    description: Sign-in, account change, privilege use, configuration change and update events.
+    sp800_60_ids: [C.3.5.8]
+    confidentiality: {base: moderate}
+    integrity: {base: moderate}
+    availability: {base: low}
+    privacy: false
+    life_cycle:
+      - stage: creation
+        description: "The OS audit daemon, collector and console write events locally."
+        components: [CMP-GW-OS, CMP-COLLECTOR, CMP-WEBUI]
+      - stage: dissemination
+        description: "Events are forwarded over TLS to the CSSP SIEM within one minute."
+        components: [CMP-GW-OS]
+      - stage: disposition
+        description: "Local copies are kept 30 days; the CSSP owns long-term retention."
+        components: [CMP-GW-OS]
+    sources: [product/architecture.md#logging, product/data-flows.md#audit]

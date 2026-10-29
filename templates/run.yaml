@@ -1,0 +1,21 @@
+# Defaults for runs/<run-id>/run.yaml (schema framework/schema/run-config.schema.json).
+# `rmf run init` overwrites the stamped keys (mode, run_id, product, as_of,
+# framework_version, git_sha, upstream_hash, oscal_version) and keeps the rest as defaults.
+# After init, edit only humans, scope, seeded, lifecycle_stop, include_after_stop,
+# lifecycle_stop_rationale and deferred.
+mode: synthetic
+run_id: example-run
+product: ../../product
+as_of: "2026-01-01T00:00:00Z"
+framework_version: 0.1.0
+git_sha: null
+upstream_hash: "0000000000000000000000000000000000000000000000000000000000000000"
+oscal_version: 1.2.1
+humans: {}            # hybrid mode: PER-ID: person's name (playbooks/_shared/hybrid-mode.md)
+scope:
+  tasks: all          # or a list of task IDs
+seeded: []            # {artifact, from_task, path} for inputs whose producers are out of scope
+lifecycle_stop: null  # a task ID: later tasks are deferred (lifecycle) unless listed below
+include_after_stop: []
+lifecycle_stop_rationale: null
+deferred: {}          # TASK: {kind: not-applicable|performed-externally|later-cycle, rationale}

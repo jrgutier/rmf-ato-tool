@@ -1,0 +1,9 @@
+rule: OSCAL-001
+bases: [minimal, example]
+description: a generated OSCAL file violates the NIST v1.2.1 schema (FormatChecker uuid)
+build: false
+mutations:
+  - op: write_file
+    file: oscal/extra.json
+    content: '{"profile": {"uuid": "not-a-uuid", "metadata": {"title": "x", "last-modified": "2026-10-29T12:00:00Z", "version": "1", "oscal-version": "1.2.1"}, "imports": [{"href": "#x"}]}}'
+expect: {errors: [OSCAL-001], also: [OSCAL-002, GEN-STALE-001]}

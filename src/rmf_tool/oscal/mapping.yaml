@@ -1,0 +1,32 @@
+# YAML -> OSCAL field mapping (plan §6.6). One row per OSCAL path the builders write; each
+# row is tested against a build of tests/fixtures/runs/valid_minimal (test_oscal_mapping.py).
+# Phase 3.5 implements the profile and SSP builders; the SAP, SAR and POA&M rows arrive with
+# their builders in Phase 6. `path` is dotted; `[]` marks a list (checked on its first item).
+schema_version: 1
+rows:
+  - {model: all, path: metadata.title, source: "artifact title + facts.yaml system_name"}
+  - {model: all, path: metadata.version, source: "run.yaml run_id"}
+  - {model: all, path: metadata.oscal-version, source: "rmf_tool.oscal.version.OSCAL_VERSION"}
+  - {model: all, path: metadata.last-modified, source: "run.yaml as_of (RFC 3339)"}
+  - {model: ssp, path: "metadata.roles[]", source: "framework/personas.yaml (personas named in responsible_roles)"}
+  - {model: ssp, path: "metadata.parties[]", source: "framework/personas.yaml + run.yaml humans (prop simulated)"}
+  - {model: ssp, path: "metadata.responsible-parties[]", source: "one party per role"}
+  - {model: profile, path: "imports[].include-controls[].with-ids", source: "baseline.json controls"}
+  - {model: ssp, path: import-profile.href, source: "oscal/profile.json (from baseline.json)"}
+  - {model: ssp, path: "system-characteristics.system-ids[].id", source: "facts.yaml system_id"}
+  - {model: ssp, path: system-characteristics.system-name, source: "facts.yaml system_name"}
+  - {model: ssp, path: system-characteristics.system-name-short, source: "facts.yaml acronym"}
+  - {model: ssp, path: system-characteristics.description, source: "ART-SD first section prose"}
+  - {model: ssp, path: system-characteristics.security-sensitivity-level, source: "facts.yaml categorization (high-water mark)"}
+  - {model: ssp, path: system-characteristics.security-impact-level.security-objective-confidentiality, source: "facts.yaml categorization.c"}
+  - {model: ssp, path: "system-characteristics.system-information.information-types[]", source: "artifacts/data/infotypes.yaml"}
+  - {model: ssp, path: system-characteristics.status.state, source: "facts.yaml lifecycle_state"}
+  - {model: ssp, path: system-characteristics.authorization-boundary.description, source: "artifacts/data/boundary.yaml authorization_boundary"}
+  - {model: ssp, path: system-characteristics.network-architecture.description, source: "artifacts/data/boundary.yaml network_architecture"}
+  - {model: ssp, path: system-characteristics.data-flow.description, source: "artifacts/data/boundary.yaml data_flow"}
+  - {model: ssp, path: "system-implementation.users[]", source: "artifacts/data/users.yaml"}
+  - {model: ssp, path: "system-implementation.components[]", source: "artifacts/data/boundary.yaml components + this-system"}
+  - {model: ssp, path: "system-implementation.inventory-items[]", source: "artifacts/data/inventory.yaml"}
+  - {model: ssp, path: "system-implementation.leveraged-authorizations[]", source: "artifacts/data/leveraged-authorizations.yaml"}
+  - {model: ssp, path: "control-implementation.implemented-requirements[]", source: "artifacts/ssp/controls/<fam>.yaml"}
+  - {model: ssp, path: "control-implementation.implemented-requirements[].by-components[].implementation-status.state", source: "ssp controls status (inherited -> implemented + remarks)"}

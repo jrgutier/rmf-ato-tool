@@ -9,7 +9,8 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
-from rmf_tool import agents_md, lessons, refs
+from rmf_tool import agents_md, lessons, playbooks_sync, refs
+from rmf_tool.check import agent_lane
 from rmf_tool.findings import Finding
 from rmf_tool.framework import validate as framework_validate
 from rmf_tool.framework.model import FRAMEWORK_DIR
@@ -17,6 +18,7 @@ from rmf_tool.profiles import PHASES, Profile, rule_active
 from rmf_tool.refs import index_render, verify
 
 COVERAGE_MIN = 85
+VALID_MINIMAL = "tests/fixtures/runs/valid_minimal"
 
 
 @dataclass
@@ -90,6 +92,34 @@ def _framework(ctx: Context) -> tuple[bool, list[Finding], str]:
     return _findings_step(result.findings)
 
 
+def _valid_minimal(rules: tuple[str, ...] | None = None) -> Callable[[Context], Any]:
+    """`rmf check --final` on the skeleton fixture, optionally limited to some rules."""
+    def run(ctx: Context) -> tuple[bool, list[Finding], str]:
+        from rmf_tool.check import engine
+        from rmf_tool.run.model import RunError, open_run
+
+        try:
+            r = open_run(ctx.root / VALID_MINIMAL, ctx.root)
+        except RunError as exc:
+            return _findings_step([Finding("RUN-CFG-001", "E", str(exc), VALID_MINIMAL)])
+        found = engine.select(r, engine.evaluate(r), rules=list(rules) if rules else None,
+                              final=True)
+        return _findings_step([replace(f, path=f"{VALID_MINIMAL}/{f.path}" if f.path
+                                       else VALID_MINIMAL) for f in found])
+    return run
+
+
+def _agent_lane(ctx: Context) -> tuple[bool, list[Finding], str]:
+    assert ctx.profile is not None
+    if ctx.profile.agent_severity is None:  # --profile fork
+        return True, [], "AGENT-001 skipped (fork profile)"
+    return _findings_step(agent_lane.check(ctx.root, ctx.profile.agent_severity))
+
+
+SKELETON_RULES = ("RUN-CFG-001", "RUN-FM-001", "RUN-ART-001", "FACTS-001", "GEN-STALE-001",
+                  "SSP-COV-001", "SAR-POAM-001", "TRACE-001", "TRACE-002", "HYB-001", "HYB-002",
+                  "OSCAL-001", "OSCAL-002", "JOURNAL-001")
+
 STEPS: tuple[Step, ...] = (
     Step("lessons check", "p1", ("LES-002", "LES-003"),
          lambda ctx: _findings_step(lessons.check(ctx.root))),
@@ -103,6 +133,12 @@ STEPS: tuple[Step, ...] = (
     Step("refs extract --check", "p2", ("REF-003",), _refs_step(verify.check_texts)),
     Step("refs index --check", "p2", ("REF-004",), _refs_step(index_render.check)),
     Step("rmf validate", "p3a", framework_validate.IMPLEMENTED, _framework),
+    Step("rmf check --final valid_minimal", "p35", SKELETON_RULES, _valid_minimal()),
+    Step("rmf oscal validate valid_minimal", "p35", ("OSCAL-001", "OSCAL-002"),
+         _valid_minimal(("OSCAL-001", "OSCAL-002"))),
+    Step("rmf playbooks sync --check", "p35", ("FW-PB-002",),
+         lambda ctx: _findings_step(playbooks_sync.check(ctx.root))),
+    Step("agent lane", "p35", ("AGENT-001",), _agent_lane),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

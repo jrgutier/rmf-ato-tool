@@ -124,3 +124,38 @@ with the next ID; never edit or delete an existing entry.
 - Fix: Dropped RV-ASR and RV-ISR (tasks aligned to them now align to milestones only) and cited every phase, milestone, review, decision and pathway by page and anchor in the imported DoDI 5000.85/5000.88/5000.89/5000.02/5000.90 and DoD CIO cATO text.
 - Rule: Add a structural framework entity only with a citation that resolves in the imported text (check it with rmf refs show); treat plan lists as a starting point, not a source, and use page+anchor where the toc has no heading.
 - Promotion: none — FW-CITE-001 requires citations only on tasks, artifacts, personas and decisions (plan §6.5); every phase, milestone, review and pathway now cites a source that FW-CITE-002 resolves
+
+## L-0018 · 2026-10-29 · run: phase-3.5 · tags: seeds, scope
+- Symptom: With only the plan §7.3 seed set, a fresh skeleton run failed RUN-CFG-001: "C-1 needs ART-REQ (input), whose producer(s) P-15 are not in scope" (and the same for S-1).
+- Root cause: The plan's seed table was written from the producers its author remembered, not derived from the in-scope tasks' inputs; Phase 3a made ART-REQ an input of C-1 and S-1.
+- Fix: Seeded ART-REQ (from P-15) in tests/agent/seeds/esg-skeleton and scenarios/skeleton.yaml; tests/agent/README.md lists the full seed set.
+- Rule: Derive a scenario's seed set by running rmf check --rules RUN-CFG-001 on a fresh run of the scenario, never from a hand-written table.
+- Promotion: check: RUN-CFG-001
+
+## L-0019 · 2026-10-29 · run: phase-3.5 · tags: templates, workspace
+- Symptom: Explicit Markdown heading anchors ({#mission}) in templates/workspace/product broke rendering: jinja reported "Missing end of comment tag".
+- Root cause: rmf new renders every product template through jinja for {{ slug }}, and jinja reads Markdown's {#id} as the start of a comment.
+- Fix: The product templates cite headings by GitHub-style slug instead of explicit anchors; the ESG test product, which is not rendered, keeps {#id}.
+- Rule: Files under templates/workspace/ never contain "{#"; product headings are cited by slug.
+- Promotion: none — rmf new aborts with a template error rather than failing silently, and templates/workspace/product/README.md states the slug convention
+
+## L-0020 · 2026-10-29 · run: phase-3.5 · tags: yaml, run-data
+- Symptom: A boundary.yaml written in YAML flow style ({description: ..., sources: [...]}) failed RUN-FM-001 with "Additional properties are not allowed"; an ESG seed file failed its schema the same way.
+- Root cause: Commas inside an unquoted flow-mapping value split one description into several keys.
+- Fix: Rewrote both files in block style with double-quoted free text; every templates/data file uses that style.
+- Rule: Run-data YAML uses block style with double-quoted free text; flow style only for short lists of IDs or trace tokens.
+- Promotion: none — RUN-FM-001 already catches it, and the rule is step 6 of playbooks/00-run-protocol.md
+
+## L-0021 · 2026-10-29 · run: phase-3.5 · tags: agent-lane, tooling
+- Symptom: The plan's isolation fallback (retry the probe with --bare) cannot work under the user's Claude Code login, and a bare session would not see AGENTS.md.
+- Root cause: In claude 2.1.312, --bare reads Anthropic auth only from ANTHROPIC_API_KEY or an apiKeyHelper (never OAuth or the keychain) and skips CLAUDE.md auto-discovery.
+- Fix: scripts/agent-run.sh falls back to --bare only when ANTHROPIC_API_KEY is set, passes AGENTS.md with --append-system-prompt, and otherwise stops with that reason.
+- Rule: Check every claude flag the harness relies on against `claude --help` of the installed version before planning around it; --bare means API-key auth and no auto-loaded instructions.
+- Promotion: none — harness behaviour, documented in the scripts/agent-run.sh header and enforced by its isolation probe at run time
+
+## L-0022 · 2026-10-29 · run: phase-3.5 · tags: cli, agents
+- Symptom: `rmf` output that an agent parses (findings, `next:` lines, the baseline id to copy into facts.yaml) broke across lines when not printed to a terminal.
+- Root cause: rich.Console wraps text at 80 columns when stdout is not a TTY, which is always the case for agents and subprocess capture.
+- Fix: The CLI consoles use soft_wrap=True, and the run commands print plain lines with typer.echo.
+- Rule: CLI lines meant for agents or scripts are never wrapped; use typer.echo or a soft-wrapping console, and keep --format json for anything structured.
+- Promotion: none — fixed once in rmf_tool.cli's shared consoles; there is no second place to repeat it
