@@ -21,6 +21,7 @@ PLAN_RUN_SCHEMAS = {
     "ssp-controls", "sap", "sar-results", "poam-items", "stig-summary", "baseline", "decision",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar"}  # data named in plan §6.4
+FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
 def schema(name):
@@ -54,7 +55,7 @@ def test_mini_framework_valid():
 
 def test_schema_files_are_the_planned_set():
     names = {p.name.removesuffix(".schema.json") for p in SCHEMAS.glob("*.schema.json")}
-    assert names == {"framework"} | PLAN_RUN_SCHEMAS | EXTRA_RUN_SCHEMAS
+    assert names == {"framework"} | PLAN_RUN_SCHEMAS | EXTRA_RUN_SCHEMAS | FRAMEWORK_DATA_SCHEMAS
 
 
 @pytest.mark.parametrize("path", sorted(SCHEMAS.glob("*.schema.json")), ids=lambda p: p.name)

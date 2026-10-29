@@ -25,12 +25,12 @@ def test_negative_fixture_fires_exactly_its_rules(overlay, tmp_path):
 
 def test_every_p3a_framework_rule_has_a_fixture():
     p3a_rules = {r.id for r in load_registry() if r.id.startswith("FW-") and r.phase == "p3a"}
-    assert p3a_rules == {p.name for p in FIXTURE_DIRS} == set(IMPLEMENTED)
+    assert p3a_rules == {p.name for p in FIXTURE_DIRS} <= set(IMPLEMENTED)
 
 
 def test_registry_points_at_the_fixture_dirs():
     for rule in load_registry():
-        if rule.id in IMPLEMENTED:
+        if rule.id in IMPLEMENTED and rule.phase == "p3a":
             assert rule.fixture == f"tests/fixtures/framework_neg/{rule.id}/"
 
 

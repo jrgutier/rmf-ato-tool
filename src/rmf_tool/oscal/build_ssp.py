@@ -1,9 +1,9 @@
 """OSCAL profile and SSP builders (plan Decision B1, §6.6 ``mapping.yaml``).
 
-Source YAML is mapped to OSCAL JSON, loaded through the compliance-trestle 5.2.0 pydantic
-models and serialized by them. UUIDs are uuid5 and the only time stamp is
-``run.yaml:as_of``, so a build is byte-identical for the same inputs (GEN-STALE-001).
-The SSP is built only once all of its inputs exist; until then the reasons are reported.
+Source YAML is mapped to OSCAL JSON through the shared helpers in ``oscal.common`` (trestle
+models, uuid5, ``run.yaml:as_of`` as the only time stamp), so a build is byte-identical for
+the same inputs (GEN-STALE-001). The SSP is built only once all of its inputs exist; until
+then the reasons are reported.
 """
 
 from __future__ import annotations
@@ -13,14 +13,24 @@ from typing import Any
 
 from rmf_tool import baseline as baseline_mod
 from rmf_tool import catalog
+from rmf_tool.oscal.common import (
+    RMF_NS,
+    NotBuildable,
+    doc_metadata,
+    load_data,
+    persona_parties,
+    prop,
+    serialize,
+    system_id,
+)
 from rmf_tool.oscal.uuids import uuid_for
-from rmf_tool.oscal.version import OSCAL_VERSION
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import frontmatter
-from rmf_tool.run.model import OSCAL_DIR, Run, YamlError
+from rmf_tool.run.model import OSCAL_DIR, Run
 from rmf_tool.run.trace import HEADING, PROSE, strip_generated
 
-RMF_NS = "urn:rmf-tool:oscal"
+__all__ = ["RMF_NS", "NotBuildable", "PROFILE_FILE", "SSP_FILE", "build_profile", "build_ssp"]
+
 CATALOG_URL = ("https://raw.githubusercontent.com/usnistgov/oscal-content/v1.6.0/nist.gov/"
                "SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json")
 SP800_60 = "https://doi.org/10.6028/NIST.SP.800-60v2r1"
@@ -38,31 +48,8 @@ LEVERAGED = "artifacts/data/leveraged-authorizations.yaml"
 SSP_CONTROLS_DIR = "artifacts/ssp/controls"
 
 
-class NotBuildable(Exception):
-    def __init__(self, reasons: list[str]) -> None:
-        super().__init__("; ".join(reasons))
-        self.reasons = reasons
-
-
-def _prop(name: str, value: str, ns: str | None = RMF_NS) -> dict[str, str]:
-    return {"name": name, "value": value, **({"ns": ns} if ns else {})}
-
-
 def _plain(text: str) -> str:
     return " ".join(PROSE.sub(lambda m: "", text).split())
-
-
-def _serialize(model_cls: Any, body: dict[str, Any]) -> str:
-    return model_cls.model_validate(body).oscal_serialize_json(pretty=True) + "\n"
-
-
-def _system_id(run: Run, facts: dict[str, Any]) -> str:
-    return facts_mod.value(facts, "system_id") or run.run_id
-
-
-def _metadata(run: Run, title: str) -> dict[str, Any]:
-    return {"title": title, "last-modified": run.config["as_of"], "version": run.run_id,
-            "oscal-version": OSCAL_VERSION}
 
 
 def build_profile(run: Run) -> str | None:
@@ -72,31 +59,15 @@ def build_profile(run: Run) -> str | None:
     data = baseline_mod.load(run)
     if data is None:
         return None
-    sid = _system_id(run, facts_mod.load(run))
+    sid = system_id(run, facts_mod.load(run))
     body = {
         "uuid": uuid_for(sid, "profile", "profile"),
-        "metadata": _metadata(run, f"Tailored control baseline {data.get('baseline_id')}"),
+        "metadata": doc_metadata(run, f"Tailored control baseline {data.get('baseline_id')}"),
         "imports": [{"href": CATALOG_URL,
                      "include-controls": [{"with-ids": baseline_mod.control_ids(run)}]}],
         "merge": {"as-is": True},
     }
-    return _serialize(Profile, body)
-
-
-def _load(run: Run, rel: str, schema: str, reasons: list[str], required: bool = True) -> Any:
-    if not run.path(rel).is_file():
-        if required:
-            reasons.append(f"{rel} missing")
-        return None
-    try:
-        data = run.data(rel)
-    except YamlError as exc:
-        reasons.append(f"{rel}: {exc}")
-        return None
-    if run.schema_errors(schema, data):
-        reasons.append(f"{rel} violates {schema}.schema.json (see RUN-FM-001)")
-        return None
-    return data
+    return serialize(Profile, body)
 
 
 def _description(run: Run, fallback: str) -> str:
@@ -150,17 +121,17 @@ def build_ssp(run: Run) -> str:
     base = baseline_mod.load(run)
     if base is None:
         reasons.append("baseline.json missing (rmf baseline resolve)")
-    boundary = _load(run, BOUNDARY, "boundary", reasons)
-    users = _load(run, USERS, "users", reasons)
-    infotypes = _load(run, INFOTYPES, "infotypes", reasons)
-    inventory = _load(run, INVENTORY, "inventory", reasons, required=False)
-    leveraged = _load(run, LEVERAGED, "leveraged-authorizations", reasons, required=False)
+    boundary = load_data(run, BOUNDARY, "boundary", reasons)
+    users = load_data(run, USERS, "users", reasons)
+    infotypes = load_data(run, INFOTYPES, "infotypes", reasons)
+    inventory = load_data(run, INVENTORY, "inventory", reasons, required=False)
+    leveraged = load_data(run, LEVERAGED, "leveraged-authorizations", reasons, required=False)
     statements: list[dict[str, Any]] = []
     families = sorted(run.path(SSP_CONTROLS_DIR).glob("*.yaml"))
     if not families:
         reasons.append(f"no {SSP_CONTROLS_DIR}/<fam>.yaml yet (S-4)")
     for path in families:
-        data = _load(run, run.rel(path), "ssp-controls", reasons)
+        data = load_data(run, run.rel(path), "ssp-controls", reasons)
         statements += data["controls"] if data else []
     if reasons:
         raise NotBuildable(reasons)
@@ -172,18 +143,8 @@ def build_ssp(run: Run) -> str:
     description = _description(run, f"{name}.")
 
     # metadata: one role and one party per persona named in a statement
-    personas = sorted({p for s in statements for p in s["responsible_roles"]})
-    humans = run.config.get("humans") or {}
-    roles, parties, responsible = [], [], []
-    for pid in personas:
-        persona = run.personas.get(pid, {})
-        party = uuid_for(sid, "ssp", f"party/{pid}")
-        human = humans.get(pid)
-        roles.append({"id": pid, "title": persona.get("name", pid)})
-        parties.append({"uuid": party, "type": "person",
-                        "name": human or f"{persona.get('name', pid)} (simulated)",
-                        "props": [_prop("simulated", "false" if human else "true")]})
-        responsible.append({"role-id": pid, "party-uuids": [party]})
+    roles, parties, responsible = persona_parties(
+        run, sid, {p for s in statements for p in s["responsible_roles"]})
 
     # components: this-system plus the boundary components
     this_system = next((c for c in boundary["components"] if c["type"] == "this-system"), None)
@@ -199,14 +160,14 @@ def build_ssp(run: Run) -> str:
         out: dict[str, Any] = {
             "uuid": comp_uuid[c["id"]], "type": c["type"], "title": c["title"],
             "description": c["description"].strip(),
-            "props": [_prop("asset-id", c["id"], None),
-                      _prop("implementation-point",
+            "props": [prop("asset-id", c["id"], None),
+                      prop("implementation-point",
                             "external" if c.get("external") else "internal", None)],
             "status": {"state": state, **({"remarks": c["status"]} if state != c["status"]
                                           else {})},
         }
         if c.get("leveraged_authorization") in la_uuid:
-            out["props"].append(_prop("leveraged-authorization-uuid",
+            out["props"].append(prop("leveraged-authorization-uuid",
                                       la_uuid[c["leveraged_authorization"]], None))
         return out
 
@@ -225,8 +186,8 @@ def build_ssp(run: Run) -> str:
         out: dict[str, Any] = {
             "uuid": uuid_for(sid, "ssp", f"user/{u['id']}"), "title": u["title"],
             "short-name": u["id"],
-            "props": [_prop("type", u["type"], None),
-                      _prop("privilege-level", u["privilege_level"], None)],
+            "props": [prop("type", u["type"], None),
+                      prop("privilege-level", u["privilege_level"], None)],
         }
         role_ids = [r for r in u.get("roles") or [] if TOKEN_ID.match(r)]
         if role_ids:
@@ -239,14 +200,14 @@ def build_ssp(run: Run) -> str:
         return out
 
     def inventory_item(i: dict[str, Any]) -> dict[str, Any]:
-        props = [_prop("asset-id", i["id"], None), _prop("asset-type", i["kind"], None)]
-        for key, prop in (("vendor", "vendor-name"), ("product", "software-name"),
+        props = [prop("asset-id", i["id"], None), prop("asset-type", i["kind"], None)]
+        for key, name in (("vendor", "vendor-name"), ("product", "software-name"),
                           ("version", "version"), ("hostname", "fqdn")):
             if i.get(key):
-                props.append(_prop(prop, str(i[key]), None))
+                props.append(prop(name, str(i[key]), None))
         for key in ("virtual", "public"):
             if key in i:
-                props.append(_prop(key, "yes" if i[key] else "no", None))
+                props.append(prop(key, "yes" if i[key] else "no", None))
         return {"uuid": uuid_for(sid, "ssp", f"inventory/{i['id']}"),
                 "description": i["description"].strip(), "props": props,
                 "implemented-components": [{"component-uuid": comp_uuid.get(
@@ -276,8 +237,8 @@ def build_ssp(run: Run) -> str:
                       + (f" {remarks}" if remarks else "")
         out: dict[str, Any] = {
             "uuid": uuid_for(sid, "ssp", f"requirement/{ctl}"), "control-id": ctl,
-            "props": [_prop("rmf-status", s["status"])]
-            + [_prop("trace", src) for src in s["sources"]],
+            "props": [prop("rmf-status", s["status"])]
+            + [prop("trace", src) for src in s["sources"]],
             "responsible-roles": [{"role-id": r} for r in s["responsible_roles"]],
             "by-components": [],
         }
@@ -318,7 +279,7 @@ def build_ssp(run: Run) -> str:
         "data-flow": _diagrams(sid, "data-flow", boundary["data_flow"]),
     }
     if facts_mod.value(facts, "boundary_id"):
-        characteristics["props"] = [_prop("boundary-id", facts_mod.value(facts, "boundary_id"))]
+        characteristics["props"] = [prop("boundary-id", facts_mod.value(facts, "boundary_id"))]
     implementation: dict[str, Any] = {
         "users": [user(u) for u in users["users"]],
         "components": components,
@@ -332,7 +293,7 @@ def build_ssp(run: Run) -> str:
     if inventory and inventory.get("items"):
         implementation["inventory-items"] = [inventory_item(i) for i in inventory["items"]]
 
-    metadata = _metadata(run, f"{name} System Security Plan (draft)")
+    metadata = doc_metadata(run, f"{name} System Security Plan (draft)")
     if roles:
         metadata.update({"roles": roles, "parties": parties, "responsible-parties": responsible})
     elif parties:
@@ -349,4 +310,4 @@ def build_ssp(run: Run) -> str:
             "implemented-requirements": [requirement(s) for s in statements],
         },
     }
-    return _serialize(SystemSecurityPlan, body)
+    return serialize(SystemSecurityPlan, body)

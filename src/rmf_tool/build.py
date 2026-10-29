@@ -9,6 +9,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from rmf_tool import assemble, package
+from rmf_tool.oscal.build_poam import POAM_FILE, build_poam
+from rmf_tool.oscal.build_sap import SAP_FILE, build_sap
+from rmf_tool.oscal.build_sar import SAR_FILE, build_sar
 from rmf_tool.oscal.build_ssp import PROFILE_FILE, SSP_FILE, NotBuildable, build_profile, build_ssp
 from rmf_tool.run import assumptions, interviews
 from rmf_tool.run.model import Run
@@ -22,14 +25,15 @@ class Generated:
 
 def oscal_outputs(run: Run) -> Generated:
     out = Generated()
-    out.files[PROFILE_FILE] = build_profile(run)
+    for rel, builder in ((PROFILE_FILE, build_profile), (SSP_FILE, build_ssp),
+                         (SAP_FILE, build_sap), (SAR_FILE, build_sar), (POAM_FILE, build_poam)):
+        try:
+            out.files[rel] = builder(run)
+        except NotBuildable as exc:
+            out.files[rel] = None
+            out.notes[rel] = str(exc)
     if out.files[PROFILE_FILE] is None:
-        out.notes[PROFILE_FILE] = "baseline.json missing (rmf baseline resolve)"
-    try:
-        out.files[SSP_FILE] = build_ssp(run)
-    except NotBuildable as exc:
-        out.files[SSP_FILE] = None
-        out.notes[SSP_FILE] = str(exc)
+        out.notes.setdefault(PROFILE_FILE, "baseline.json missing (rmf baseline resolve)")
     return out
 
 

@@ -17,8 +17,9 @@ def test_fixture_done():
     from conftest import VALID_MINIMAL
 
     st = status_of(VALID_MINIMAL)
+    n = len(open_run(VALID_MINIMAL, REPO_ROOT).config["control_subset"])
     assert st.done and st.next is None
-    assert (st.baseline, st.statements, st.determinations) == (6, 6, 6)
+    assert (st.baseline, st.statements, st.determinations) == (n, n, n)
 
 
 def test_task_done_requires_outputs_touched_and_task_rules_pass(minimal_run):
@@ -35,7 +36,8 @@ def test_task_done_requires_outputs_touched_and_task_rules_pass(minimal_run):
 
 def test_updater_task_requires_touched_by(minimal_run):
     md = minimal_run / "artifacts/ART-BND.md"
-    md.write_text(md.read_text().replace("touched_by: [P-11, C-1]", "touched_by: [P-11]"))
+    md.write_text(md.read_text().replace("touched_by: [P-11, P-16, C-1]",
+                                         "touched_by: [P-11, P-16]"))
     st = status_of(minimal_run)
     assert st.tasks["P-11"].done
     assert "ART-BND touched_by does not list C-1" in st.tasks["C-1"].missing
@@ -82,20 +84,23 @@ def test_applies_after_gates_rules(minimal_run):
 
 
 def test_scope_out_of_scope_tasks_deferred():
-    from conftest import VALID_MINIMAL
+    from conftest import HYBRID_MINIMAL, VALID_MINIMAL
 
-    st = status_of(VALID_MINIMAL)
+    st = status_of(HYBRID_MINIMAL)
     assert st.tasks["P-1"].state == scope.OUT_OF_SCOPE and not st.tasks["P-1"].done
     assert st.tasks["P-10"].state == scope.ACTIVE
+    st = status_of(VALID_MINIMAL)  # scope all, explicit P-6 deferral, lifecycle stop at R-5
+    assert st.tasks["P-6"].state == scope.DEFERRED and st.tasks["M-1"].state == scope.LIFECYCLE
+    assert st.done and len(st.done_tasks) == 39
 
 
-def test_lifecycle_stop_vs_deferred_precedence(minimal_run):
+def test_lifecycle_stop_vs_deferred_precedence(hybrid_run):
     def edit(d):
         d["lifecycle_stop"] = "S-4"
         d["lifecycle_stop_rationale"] = "Skeleton stops after planning."
         d["deferred"] = {"A-2": {"kind": "later-cycle", "rationale": "Assessment next cycle."}}
-    edit_yaml(minimal_run / "run.yaml", edit)
-    scopes = scope.task_scopes(open_run(minimal_run, REPO_ROOT))
+    edit_yaml(hybrid_run / "run.yaml", edit)
+    scopes = scope.task_scopes(open_run(hybrid_run, REPO_ROOT))
     assert scopes["P-1"].state == scope.OUT_OF_SCOPE  # scope beats everything
     assert scopes["A-2"].state == scope.DEFERRED  # explicit beats lifecycle
     assert scopes["A-3"].state == scope.LIFECYCLE

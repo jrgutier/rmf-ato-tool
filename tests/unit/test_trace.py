@@ -26,7 +26,7 @@ def test_anchors():
 @pytest.mark.parametrize("token, problem", [
     ("INT-001.A1", None), ("INT-001.A9", "no interview answer"),
     ("ASM-001", None), ("ASM-BASELINE-001", "no assumption"),
-    ("ART-SSP", None), ("ART-CONMON", "not in the run"), ("ART-NOPE", "unknown artifact"),
+    ("ART-SSP", None), ("ART-CHG", "not in the run"), ("ART-NOPE", "unknown artifact"),
     ("product/security.md#audit", None), ("product/security.md#nope", "no heading or key"),
     ("product/missing.md", "not found"), ("product/../run.yaml", "outside the product"),
     ("product/README.md", None), ("int-1", "malformed"),

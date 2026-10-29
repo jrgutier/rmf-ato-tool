@@ -1,26 +1,31 @@
 # YAML -> OSCAL field mapping (plan §6.6). One row per OSCAL path the builders write; each
-# row is tested against a build of tests/fixtures/runs/valid_minimal (test_oscal_mapping.py).
-# Phase 3.5 implements the profile and SSP builders; the SAP, SAR and POA&M rows arrive with
-# their builders in Phase 6. `path` is dotted; `[]` marks a list (checked on its first item).
+# row is a test case in tests/unit/test_oscal_mapping.py, checked against the build of
+# tests/fixtures/runs/valid_minimal. `model` is one document (profile, ssp, assessment-plan,
+# assessment-results, poam), a list of them, or `all` (all five). `path` is dotted; `[]`
+# marks a list, checked on its first item. `expect`, when present, is the exact value.
 schema_version: 1
 rows:
+  # --- every document -----------------------------------------------------------------
   - {model: all, path: metadata.title, source: "artifact title + facts.yaml system_name"}
-  - {model: all, path: metadata.version, source: "run.yaml run_id"}
-  - {model: all, path: metadata.oscal-version, source: "rmf_tool.oscal.version.OSCAL_VERSION"}
-  - {model: all, path: metadata.last-modified, source: "run.yaml as_of (RFC 3339)"}
-  - {model: ssp, path: "metadata.roles[]", source: "framework/personas.yaml (personas named in responsible_roles)"}
-  - {model: ssp, path: "metadata.parties[]", source: "framework/personas.yaml + run.yaml humans (prop simulated)"}
-  - {model: ssp, path: "metadata.responsible-parties[]", source: "one party per role"}
+  - {model: all, path: metadata.version, source: "run.yaml run_id", expect: valid-minimal}
+  - {model: all, path: metadata.oscal-version, source: "rmf_tool.oscal.version.OSCAL_VERSION", expect: "1.2.1"}
+  - {model: all, path: metadata.last-modified, source: "run.yaml as_of (RFC 3339)", expect: "2026-10-29T12:00:00+00:00"}
+  - {model: [ssp, assessment-plan, assessment-results, poam], path: "metadata.roles[]", source: "framework/personas.yaml (personas the document names as a role-id; POA&M adds points of contact)"}
+  - {model: [ssp, assessment-plan, assessment-results, poam], path: "metadata.parties[]", source: "framework/personas.yaml + run.yaml humans (prop simulated); party uuid5 shared with the SSP"}
+  - {model: [ssp, assessment-plan, assessment-results, poam], path: "metadata.responsible-parties[]", source: "one party per role"}
+  # --- profile ------------------------------------------------------------------------
   - {model: profile, path: "imports[].include-controls[].with-ids", source: "baseline.json controls"}
-  - {model: ssp, path: import-profile.href, source: "oscal/profile.json (from baseline.json)"}
-  - {model: ssp, path: "system-characteristics.system-ids[].id", source: "facts.yaml system_id"}
-  - {model: ssp, path: system-characteristics.system-name, source: "facts.yaml system_name"}
-  - {model: ssp, path: system-characteristics.system-name-short, source: "facts.yaml acronym"}
+  # --- SSP ----------------------------------------------------------------------------
+  - {model: ssp, path: import-profile.href, source: "oscal/profile.json (from baseline.json)", expect: profile.json}
+  - {model: ssp, path: "system-characteristics.system-ids[].id", source: "facts.yaml system_id", expect: FDR-0001}
+  - {model: ssp, path: system-characteristics.system-name, source: "facts.yaml system_name", expect: Field Data Relay}
+  - {model: ssp, path: system-characteristics.system-name-short, source: "facts.yaml acronym", expect: FDR}
   - {model: ssp, path: system-characteristics.description, source: "ART-SD first section prose"}
-  - {model: ssp, path: system-characteristics.security-sensitivity-level, source: "facts.yaml categorization (high-water mark)"}
-  - {model: ssp, path: system-characteristics.security-impact-level.security-objective-confidentiality, source: "facts.yaml categorization.c"}
+  - {model: ssp, path: system-characteristics.security-sensitivity-level, source: "facts.yaml categorization (high-water mark)", expect: fips-199-moderate}
+  - {model: ssp, path: system-characteristics.security-impact-level.security-objective-confidentiality, source: "facts.yaml categorization.c", expect: fips-199-moderate}
+  - {model: ssp, path: system-characteristics.security-impact-level.security-objective-availability, source: "facts.yaml categorization.a", expect: fips-199-low}
   - {model: ssp, path: "system-characteristics.system-information.information-types[]", source: "artifacts/data/infotypes.yaml"}
-  - {model: ssp, path: system-characteristics.status.state, source: "facts.yaml lifecycle_state"}
+  - {model: ssp, path: system-characteristics.status.state, source: "facts.yaml lifecycle_state", expect: under-development}
   - {model: ssp, path: system-characteristics.authorization-boundary.description, source: "artifacts/data/boundary.yaml authorization_boundary"}
   - {model: ssp, path: system-characteristics.network-architecture.description, source: "artifacts/data/boundary.yaml network_architecture"}
   - {model: ssp, path: system-characteristics.data-flow.description, source: "artifacts/data/boundary.yaml data_flow"}
@@ -30,3 +35,42 @@ rows:
   - {model: ssp, path: "system-implementation.leveraged-authorizations[]", source: "artifacts/data/leveraged-authorizations.yaml"}
   - {model: ssp, path: "control-implementation.implemented-requirements[]", source: "artifacts/ssp/controls/<fam>.yaml"}
   - {model: ssp, path: "control-implementation.implemented-requirements[].by-components[].implementation-status.state", source: "ssp controls status (inherited -> implemented + remarks)"}
+  # --- assessment plan (ART-SAP) ------------------------------------------------------
+  - {model: assessment-plan, path: import-ssp.href, source: "oscal/ssp.json", expect: ssp.json}
+  - {model: assessment-plan, path: "metadata.props[].value", source: "artifacts/data/sap.yaml sources (prop trace)", expect: INT-008.A1}
+  - {model: assessment-plan, path: "local-definitions.activities[]", source: "catalog assessment-method parts (EXAMINE, INTERVIEW, TEST) of the scoped controls"}
+  - {model: assessment-plan, path: "local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id", source: "scoped controls with that method in the catalog", expect: ac-2}
+  - {model: assessment-plan, path: "reviewed-controls.control-selections[].include-controls[].control-id", source: "baseline.json controls minus sap.yaml scope.excluded_controls", expect: ac-2}
+  - {model: assessment-plan, path: "assessment-subjects[].type", source: "artifacts/data/sap.yaml assessment_subjects (SSP uuid5 subject IDs)", expect: component}
+  - {model: assessment-plan, path: "assessment-assets.assessment-platforms[]", source: "artifacts/data/sap.yaml team (prop assessor)"}
+  - {model: assessment-plan, path: "tasks[].timing.within-date-range.start", source: "artifacts/data/sap.yaml schedule.start", expect: "2026-11-02T00:00:00+00:00"}
+  - {model: assessment-plan, path: "tasks[].associated-activities[]", source: "one per activity, on the assessment subjects"}
+  - {model: assessment-plan, path: "tasks[].responsible-roles[].role-id", source: "artifacts/data/sap.yaml team personas", expect: PER-SCA}
+  - {model: assessment-plan, path: "tasks[].tasks[].title", source: "artifacts/data/sap.yaml schedule.events (milestones)", expect: Kickoff}
+  - {model: assessment-plan, path: "terms-and-conditions.parts[].prose", source: "artifacts/data/sap.yaml rules_of_engagement (then the team)", expect: "Testing uses the developmental test environment only; no production data."}
+  # --- assessment results (ART-SAR) ---------------------------------------------------
+  - {model: assessment-results, path: import-ap.href, source: "oscal/assessment-plan.json", expect: assessment-plan.json}
+  - {model: assessment-results, path: "results[].start", source: "artifacts/data/sap.yaml schedule.start", expect: "2026-11-02T00:00:00+00:00"}
+  - {model: assessment-results, path: "results[].reviewed-controls.control-selections[].include-controls[].control-id", source: "baseline.json controls minus sap.yaml exclusions", expect: ac-2}
+  - {model: assessment-results, path: "results[].observations[].description", source: "artifacts/sar/results/<fam>.yaml determinations (summary)", expect: "No quarterly account review has been performed yet."}
+  - {model: assessment-results, path: "results[].observations[].methods[]", source: "determination methods, upper-cased", expect: EXAMINE}
+  - {model: assessment-results, path: "results[].findings[].title", source: "artifacts/sar/results/<fam>.yaml findings", expect: Quarterly account review not yet performed}
+  - {model: assessment-results, path: "results[].findings[].target.target-id", source: "catalog assessment-objective part of the finding's control", expect: ac-2_obj}
+  - {model: assessment-results, path: "results[].findings[].target.status.state", source: "finding status (closed -> satisfied, else not-satisfied)", expect: not-satisfied}
+  - {model: assessment-results, path: "results[].findings[].related-observations[]", source: "the determination observation of the finding's control"}
+  - {model: assessment-results, path: "results[].findings[].related-risks[]", source: "artifacts/data/rar.yaml risks whose finding_refs name the finding"}
+  - {model: assessment-results, path: "results[].risks[].title", source: "artifacts/data/rar.yaml risks", expect: Stale accounts until the first quarterly review}
+  - {model: assessment-results, path: "results[].risks[].status", source: "rar.yaml response + linked POA&M item status", expect: remediating}
+  - {model: assessment-results, path: "results[].risks[].characterizations[].facets[].value", source: "rar.yaml likelihood, impact, level (SP 800-30), by the ART-RAR producer's R personas", expect: low}
+  - {model: assessment-results, path: "results[].risks[].related-observations[]", source: "observations behind the risk's finding_refs"}
+  # --- POA&M (ART-POAM) ---------------------------------------------------------------
+  - {model: poam, path: import-ssp.href, source: "oscal/ssp.json", expect: ssp.json}
+  - {model: poam, path: system-id.id, source: "facts.yaml system_id", expect: FDR-0001}
+  - {model: poam, path: "poam-items[].title", source: "artifacts/poam/items.yaml weakness", expect: Quarterly account review not yet performed.}
+  - {model: poam, path: "poam-items[].props[].value", source: "poam/items.yaml id, finding_ref, control_id, status and DoD fields (prop per field)", expect: POAM-001}
+  - {model: poam, path: "poam-items[].related-findings[]", source: "finding_ref FND-### -> the SAR finding uuid5"}
+  - {model: poam, path: "poam-items[].related-observations[]", source: "finding_ref STG-### or the FND's determination -> the SAR observation uuid5"}
+  - {model: poam, path: "poam-items[].related-risks[]", source: "artifacts/data/rar.yaml risks whose poam_refs name the item"}
+  - {model: poam, path: "findings[]", source: "linked SAR findings, repeated with the SAR uuid5"}
+  - {model: poam, path: "observations[]", source: "linked SAR observations, repeated with the SAR uuid5"}
+  - {model: poam, path: "risks[]", source: "linked RAR risks, repeated with the SAR uuid5"}

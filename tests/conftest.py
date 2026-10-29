@@ -61,14 +61,36 @@ def git_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> GitRepo:
 
 
 VALID_MINIMAL = REPO_ROOT / "tests/fixtures/runs/valid_minimal"
+HYBRID_MINIMAL = REPO_ROOT / "tests/fixtures/runs/hybrid_minimal"
+
+
+def copy_run(src: Path, dest: Path) -> Path:
+    """A writable copy of a fixture run whose upstream_hash is re-stamped to the current
+    union hash, so upstream edits elsewhere in the repo never raise RUN-STALE-001 in tests."""
+    import re
+    import shutil
+
+    from rmf_tool.run import upstream_hash
+
+    run_dir = Path(shutil.copytree(src, dest))
+    run_yaml = run_dir / "run.yaml"
+    fresh = upstream_hash.compute(REPO_ROOT, upstream_hash.UNION_GLOBS)
+    run_yaml.write_text(re.sub(r"^upstream_hash: .*$", f"upstream_hash: '{fresh}'",
+                               run_yaml.read_text(encoding="utf-8"), count=1, flags=re.M),
+                        encoding="utf-8")
+    return run_dir
 
 
 @pytest.fixture
 def minimal_run(tmp_path: Path) -> Path:
-    """A writable copy of the skeleton fixture run (tests/fixtures/runs/valid_minimal)."""
-    import shutil
+    """A writable copy of tests/fixtures/runs/valid_minimal (scope all, synthetic)."""
+    return copy_run(VALID_MINIMAL, tmp_path / "valid_minimal")
 
-    return Path(shutil.copytree(VALID_MINIMAL, tmp_path / "valid_minimal"))
+
+@pytest.fixture
+def hybrid_run(tmp_path: Path) -> Path:
+    """A writable copy of tests/fixtures/runs/hybrid_minimal (skeleton scope, seeded, hybrid)."""
+    return copy_run(HYBRID_MINIMAL, tmp_path / "hybrid_minimal")
 
 
 def edit_yaml(path: Path, edit) -> None:

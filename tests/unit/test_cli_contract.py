@@ -144,9 +144,21 @@ def test_ci_reports_failures_exit_1(repo_with_p1):
     assert "PASS  AGENTS.md (DOC-001)" in result.stdout
 
 
+def test_ci_profile_with_unimplemented_phase_exit_2(repo_with_p1, monkeypatch):
+    """A profile that includes a phase without checks exits 2 (no vacuous pass); the p4
+    step is dropped here, so the test holds whichever phases are finished."""
+    steps = tuple(s for s in ci.STEPS if s.phase != "p4")
+    real = ci.unimplemented_phases
+    monkeypatch.setattr(ci, "unimplemented_phases", lambda profile: real(profile, steps))
+
+    result = invoke("ci", "--profile", "p4")
+
+    assert result.exit_code == 2 and "p4" in result.output
+    assert repo_with_p1.calls == []
+
+
 @pytest.mark.parametrize("args", [
     ["--profile", "bogus"],
-    ["--profile", "p4"],  # phase checks not implemented yet
     ["--release"],
     ["--release", "--profile", "p1"],
 ])

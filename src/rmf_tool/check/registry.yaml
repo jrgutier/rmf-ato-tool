@@ -146,9 +146,9 @@ rules:
     ac: [AC-14]
     phase: p5
     applies_after: null
-    summary: persona card missing required sections
+    summary: persona card missing required sections or a resolvable citation
     fixture: tests/fixtures/repo_neg/FW-PER-002/
-    hint: Cards need Responsibilities, Decision authority, Typical concerns, What they know and don't know, Question bank by step, Artifacts owned-approved, Role-play guidance, Red lines.
+    hint: Cards need Responsibilities, Decision authority, Typical concerns, What they know and don't know, Question bank by step, Artifacts owned-approved, Role-play guidance, Red lines and Citations (at least one resolvable uv run rmf refs show command).
   - id: FW-MAN-001
     scope: repo
     severity: E
@@ -294,7 +294,7 @@ rules:
     ac: [AC-20]
     phase: p6
     applies_after: null
-    summary: run upstream_hash differs from the current union hash
+    summary: run upstream_hash differs from a fresh hash of its variant (union, or the scenario's hash_globs; ADR-0001)
     fixture: tests/fixtures/negative/RUN-STALE-001.yaml
     hint: Upstream files changed since the run started; re-run the affected tasks or re-stamp deliberately.
   - id: FACTS-001
@@ -357,7 +357,7 @@ rules:
     ac: [AC-18]
     phase: p6
     applies_after: A-2
-    summary: baseline control not in the SAP scope
+    summary: baseline control not in the SAP scope (no SAP data, scope not the baseline, or an exclusion outside the baseline or without a rationale)
     fixture: tests/fixtures/negative/SAP-COV-001.yaml
     hint: Scope covers the whole baseline unless a control is excluded with a rationale.
   - id: SAR-COV-001
@@ -510,7 +510,7 @@ rules:
     ac: [AC-15]
     phase: p6
     applies_after: null
-    summary: "respondent: human not in run.yaml humans, or a human answer in synthetic mode"
+    summary: "respondent: human not a named person in run.yaml humans, a human answer in synthetic mode, or a named human simulated without fallback: human-unavailable (or a fallback for an unnamed persona)"
     fixture: tests/fixtures/negative/HYB-003.yaml
     hint: List the human under run.yaml humans, or mark the answer simulated.
   - id: OSCAL-001
@@ -565,7 +565,7 @@ rules:
     phase: p6
     applies_after: null
     summary: run depends on a degraded reference (non-suppressible)
-    fixture: tests/fixtures/negative/DEGRADED-001.yaml
+    fixture: tests/unit/test_run_rules.py::test_degraded_reference_warns_and_needs_disclosure
     hint: Disclose the degraded reference in the AO memo (plan §7.6).
   - id: TASK-DEF-001
     scope: run

@@ -173,3 +173,73 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the rewrite now uses five `../` levels; the committed result's run.yaml is corrected; `pytest -m agent tests/agent` passes; `rmf check tests/agent/results/skeleton/run --final` reports 0 errors.
 - Rule: when a harness relocates a run, recompute relative paths from the destination's real depth, and re-check the relocated copy before reporting success.
 - Promotion: check: test_committed_run_rechecks_clean
+
+## L-0025 · 2026-10-29 · run: phase-4 · tags: framework, ci
+- Symptom: once a p4 `rmf ci` step for FW-MAN-001 existed, `rmf validate --profile p4` and the p3a ci step run under profile p4 stopped with "active rule(s) not implemented in this version: FW-MAN-001"; test_framework_rules_are_implemented_by_validate also failed.
+- Root cause: `rmf validate` treats every active FW-* registry rule as its own, but FW-MAN-001 (`rmf render --check`) and FW-PB-002 (`rmf playbooks sync --check`) are enforced by other commands with their own ci steps.
+- Fix: framework/validate.py has CHECKED_ELSEWHERE (rule -> command); active_rules() skips those rules, and the registry test accepts a rule found in IMPLEMENTED or CHECKED_ELSEWHERE. The ci-level guard (unimplemented_phases) still stops a vacuous pass.
+- Rule: a FW-* rule enforced outside `rmf validate` is listed in CHECKED_ELSEWHERE in the same change that adds its ci step.
+- Promotion: check: test_framework_rules_are_implemented_by_validate
+
+## L-0026 · 2026-10-29 · run: phase-6 · tags: refs, cnssi, extraction
+- Symptom: in references/text/CNSSI1253.md the Appendix D tables have between 23 and 42 columns per page. In AC-4's row ("√4 … X X X X") the text does not show which of the nine C/I/A L/M/H cells the marks sit in. pymupdf `find_tables` also shifted cells on rows whose ID sits in a different cell (AC-2(11), AC-3).
+- Root cause: the text extractor drops empty table cells and splits merged ones, so the column position of a symbol is lost. The order of the symbols in a row survives.
+- Fix: rmf_tool.cnssi1253 places each X/+/-- under the nearest L/M/H header using the PDF's word coordinates, then requires each row's symbol order to equal the text's. All 1,189 rows matched and no override was needed. X/-- per level also agrees with the 800-53B profiles, apart from 3 known `+` rows. The YAML is regenerated with `--check`.
+- Rule: never read a table column from extracted text; take positions from PDF geometry, check them against the text, and commit the generator together with its output.
+- Promotion: check: test_committed_yaml_is_regenerated_output
+
+## L-0027 · 2026-10-29 · run: phase-3b · tags: framework, playbooks
+- Symptom: Phase 3b changed only prose fields, but `rmf playbooks sync --check` then reported 21 FW-PB-002 errors, and `rmf validate` could not have caught an accidental structural edit, because a changed depends_on or RACI value is still valid YAML.
+- Root cause: a task's `purpose` is copied into every playbook header (playbooks_sync.header), so prose and generated headers are coupled. The structural-diff guard that would stop a prose lane from editing structure is deferred to v1.1 (plan Phase 3b).
+- Fix: the lane compared every non-prose field of framework/**/*.yaml with HEAD after each splice, checked that names were unchanged and that no existing citation was lost; it reported OK on all 13 files. The playbook owner (worker-p5b) was asked to re-run `rmf playbooks sync`.
+- Rule: a prose-only framework edit is followed by a structural diff against HEAD and by `rmf playbooks sync`, in the same change.
+- Promotion: none — the structural-diff guard is deferred to v1.1 by the plan; FW-PB-002 already catches stale headers
+
+## L-0028 · 2026-10-29 · run: phase-5 · tags: personas, citations
+- Symptom: three locations in the new persona cards were wrong on the first draft. DoDI 5000.85 was cited as "§3C.1" (it is §3.1.b(1)). The DoDI 5000.89 T&E WIPT and evaluation framework items were cited under §3.2 (they sit in §3.1). A DoDI 5000.88 anchor was given page 15 (it is on page 14).
+- Root cause: section and page numbers were read from TOC entries and from surrounding `sed` output, not from the heading line and the `<!-- page N -->` marker just above the passage. Before Phase 5 nothing checked the citation commands in persona cards.
+- Fix: corrected all three. FW-PER-002 (rmf_tool.framework.personas_check) now resolves every `uv run rmf refs show` command in a card's `## Citations`, the same way FW-CITE-002 resolves framework citations, and the 22 cards pass.
+- Rule: give every cited claim in a card or playbook a `rmf refs show` command and run it; take section numbers from the heading line and pages from the nearest page marker above.
+- Promotion: check: FW-PER-002
+
+## L-0029 · 2026-10-29 · run: phase-3b · tags: framework, decisions
+- Symptom: AD-IATT was `decided_in: [R-4]`, but A-3's entry criterion needs an IATT already in place for live-network test events, and R-4 comes after A-3 in the task DAG. The framework therefore modelled the interim test authorization as granted after the testing it authorizes.
+- Root cause: in 3a all AO decisions were attached to R-4 (the authorization decision task). An IATT is a separate, earlier AO decision, made with assessment-plan approval, before DT&E on live networks.
+- Fix: AD-IATT is now `decided_in: [A-2]` (the AO is Accountable for A-2). A-2's aligned_with.decisions includes AD-IATT; R-4's no longer does; A-3 keeps it, because A-3 consumes it. `rmf validate --profile p3b` reports 0 errors.
+- Rule: a decision's decided_in task must precede every task whose entry criteria depend on that decision.
+- Promotion: none — single modelling fix; candidate rule for v1.1 (decision ordering vs. entry criteria needs prose parsing)
+
+## L-0030 · 2026-10-29 · run: phase-6 · tags: oscal, builders
+- Symptom: With the POA&M builder wired into `rmf build`, the SAR-POAM-001 negative fixture (delete the only POA&M item) crashed `rmf check` with a pydantic ValidationError instead of reporting findings.
+- Root cause: `items: []` is valid against poam-items.schema.json, but OSCAL requires at least one poam-item. The trestle model rejected the mapped body, and only NotBuildable was caught. A SAP that excludes every baseline control has the same gap (reviewed-controls needs include-controls).
+- Fix: oscal.common.serialize turns any trestle ValidationError into NotBuildable, so the document is reported as "not built", never a crash. The POA&M and SAP builders also name the two known cases in their reasons.
+- Rule: An OSCAL builder never assumes schema-valid run data maps to a valid OSCAL document. Check every OSCAL list with minItems that a run-data list feeds, and route trestle rejections through NotBuildable.
+- Promotion: check: test_trestle_rejection_is_not_buildable
+
+## L-0031 · 2026-10-29 · run: phase-5 · tags: playbooks, tooling
+- Symptom: a quick inventory script reported all 47 playbooks as `authored`, including the 21 generated ones, because it checked whether the file contained `rmf:body authored`.
+- Root cause: the generated-body banner says "change the marker above to `rmf:body authored`", so substring detection misread it. `playbooks_sync` had the same weakness: an authored body that quotes the generated marker would have been treated as generated and overwritten by the next `rmf playbooks sync`.
+- Fix: `playbooks_sync._body_kind` takes the first `<!-- rmf:body authored|generated -->` that stands on a line of its own, and every sync and check path uses it.
+- Rule: detect CLI-owned markers as whole lines, never as substrings, because docs and banners quote them.
+- Promotion: check: test_marker_must_stand_on_its_own_line
+
+## L-0032 · 2026-10-29 · run: phase-6 · tags: fixtures, upstream-hash
+- Symptom: Run-rule tests on copies of valid_minimal began reporting RUN-STALE-001 as soon as other lanes edited framework/, playbooks/ or templates/. A test that compared every finding failed, although the run content was unchanged.
+- Root cause: A fixture run commits an upstream_hash. Any upstream edit changes the union hash, so a committed hash can never stay current while the template evolves.
+- Fix: tests copy fixture runs with conftest.copy_run, which re-stamps upstream_hash to the current union hash. The committed fixtures may show only the RUN-STALE-001 warning (test_committed_base_has_no_errors). ADR-0001 records the hash variant in run.yaml (upstream_hash_basis).
+- Rule: Tests that mutate a fixture run start from copy_run, never a plain copytree, and assert on the findings the mutation causes; RUN-STALE-001 on a committed fixture is expected drift, never an error.
+- Promotion: check: test_check_rules.py::test_base_has_no_findings
+
+## L-0033 · 2026-10-29 · run: phase-5 · tags: baseline, facts
+- Symptom: worker-p5b found that a tailoring add or remove under `control_subset` changed `baseline.json:baseline_id` (`-SUBSET-n` counted the post-tailoring selection), so FACTS-001 would fail against S-1's `baseline_id` fact, which S-2 is not allowed to write.
+- Root cause: baseline_id mixed the selection basis with the tailoring result. One fact had two effective writers (S-1 by value, S-2 by side effect).
+- Fix: baseline.py now suffixes `-SUBSET-{len(control_subset)}`, the configured size, so tailoring never changes the ID. The S-2 playbook step 5 now says the IDs must match and to stop only on a basis change. test_baseline and pipeline_minimal pass; valid_minimal `--final` has 0 errors.
+- Rule: identifiers that are facts must derive only from inputs owned by the fact's single writer.
+- Promotion: check: FACTS-001
+
+## L-0034 · 2026-10-29 · run: phase-6 · tags: ci, profiles, tests
+- Symptom: at fan-out integration, closing p3b/p4/p5/p6 made `rmf ci --profile p6` exit 2 ("profile p6 includes phase(s) with no checks: p3b"). Two test_framework_cli tests that pass `--profile p3a` then failed, because p5 rules (FW-PER/FW-PB) ran against framework_mini.
+- Root cause: p3b's verify (`rmf validate --profile p3b`) never got a ci.STEPS entry. `--profile pX` means closed ∪ {pX}, so tests that pin only `--profile` still depend on which `.phases/*.closed` markers the repo has.
+- Fix: added a p3b ci step (`rmf validate (p3b, all citations resolvable)`, p3a step `unless="p3b"`, p3b step `unless="p5"`). test_framework_cli now monkeypatches `profiles.closed_phases` to {p1, p2, p2x}. Full gate is green (776 tests; `rmf ci --profile p6` PASS).
+- Rule: every phase in profiles.PHASES needs a ci step before its marker is created. Tests exercising a profile must pin `closed_phases`.
+- Promotion: check: test_ci_profile_with_unimplemented_phase_exit_2

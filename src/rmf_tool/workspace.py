@@ -2,10 +2,11 @@
 
 A workspace holds ``product/`` (from ``templates/workspace/product/``) and ``runs/``. A run
 is ``runs/<run-id>/`` with run.yaml (stamped: mode, run_id, product, as_of,
-framework_version, git_sha, upstream_hash, oscal_version), facts.yaml, assumptions.yaml,
-journal.md and empty artifact and interview directories. A scenario
+framework_version, git_sha, upstream_hash, upstream_hash_basis, oscal_version), facts.yaml,
+assumptions.yaml, journal.md and empty artifact and interview directories. A scenario
 (``tests/agent/scenarios/<s>.yaml``) supplies the product, scope, seeds, lifecycle and
-control subset, and its ``hash_globs`` scope the upstream hash.
+control subset, and its ``hash_globs`` scope the upstream hash (``upstream_hash_basis``
+records which variant a run carries, ADR-0001).
 """
 
 from __future__ import annotations
@@ -42,7 +43,7 @@ RUN_ID = re.compile(r"^[a-z0-9][a-z0-9-]{2,40}$")
 TEMPLATES = "templates"
 PRODUCT_TEMPLATE = f"{TEMPLATES}/workspace/product"
 STAMPED = ("mode", "run_id", "product", "as_of", "framework_version", "git_sha",
-           "upstream_hash", "oscal_version")
+           "upstream_hash", "upstream_hash_basis", "oscal_version")
 DEFAULTS: dict[str, Any] = {
     "humans": {}, "scope": {"tasks": "all"}, "seeded": [], "lifecycle_stop": None,
     "include_after_stop": [], "lifecycle_stop_rationale": None, "deferred": {},
@@ -125,9 +126,12 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
     if scenario:
         product = repo / scenario["product"]
         globs = scenario["hash_globs"]
+        basis = {"variant": "scenario", "scenario": Path(
+            os.path.relpath(scenario_path.resolve(), repo.resolve())).as_posix()}
     else:
         product = workspace / "product"
         globs = list(upstream_hash.UNION_GLOBS)
+        basis = {"variant": "union"}
     if not product.is_dir():
         raise WorkspaceError(f"product directory {product} not found")
 
@@ -146,6 +150,7 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
         "framework_version": str(meta["framework_version"]),
         "git_sha": _git_sha(repo),
         "upstream_hash": upstream_hash.compute(repo, globs),
+        "upstream_hash_basis": basis,
         "oscal_version": OSCAL_VERSION,
     })
     seeds: list[tuple[Path, str]] = []

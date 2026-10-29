@@ -10,4 +10,4 @@ date: '2026-10-29'
 ### Q1 {#INT-008.Q1}
 Asked of: PER-SCA · Task: A-2
 **A1 {#INT-008.A1}** respondent: simulated · tag: SIMULATED · basis: [[product/security.md#accounts]]
-> Assess all six controls by examine, interview and test in November.
+> Assess all seven controls by examine, interview and test in November.

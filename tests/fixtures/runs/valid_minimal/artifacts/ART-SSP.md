@@ -2,7 +2,7 @@
 artifact_id: ART-SSP
 run_id: valid-minimal
 produced_by_task: S-4
-touched_by: [S-4]
+touched_by: [S-4, S-6, I-2, A-5]
 sources: [INT-007.A1, ART-BASELINE]
 ---
 # System security plan
@@ -18,10 +18,23 @@ sources: [INT-007.A1, ART-BASELINE]
 | Life-cycle state | under-development | C-1 |
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
 | Categorization approved | yes (PER-AO) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-7 | S-1 |
 <!-- END rmf:facts -->
 
 ## Approach
 
 Control statements live in artifacts/ssp/controls; each cites the interview or product
 passage it rests on [[INT-007.A1]] [[ART-BASELINE]].
+
+## Approval
+
+The AODR approved the SSP for assessment [[INT-031.A1]].
+
+## As built
+
+Statements were confirmed against the build [[INT-033.A1]].
+
+## After remediation
+
+Console audit forwarding was fixed during testing; the AU-2 statement stands
+[[INT-036.A1]].

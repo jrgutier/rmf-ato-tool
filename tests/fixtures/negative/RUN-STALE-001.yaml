@@ -1,0 +1,9 @@
+rule: RUN-STALE-001
+bases: [minimal, hybrid, example]
+description: run.yaml upstream_hash no longer matches the union hash of the upstream files
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: upstream_hash
+    value: "0000000000000000000000000000000000000000000000000000000000000000"
+expect: {errors: [], warnings: [RUN-STALE-001]}

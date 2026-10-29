@@ -1,0 +1,730 @@
+{
+  "system-security-plan": {
+    "uuid": "7ca451d2-6cfa-545f-a2e5-392f24cb13b8",
+    "metadata": {
+      "title": "Field Data Relay System Security Plan (draft)",
+      "last-modified": "2026-10-29T12:00:00+00:00",
+      "version": "valid-minimal",
+      "oscal-version": "1.2.1",
+      "roles": [
+        {
+          "id": "PER-ISSE",
+          "title": "Information Systems Security Engineer"
+        },
+        {
+          "id": "PER-ISSM",
+          "title": "Information System Security Manager"
+        },
+        {
+          "id": "PER-ISSO",
+          "title": "Information System Security Officer"
+        }
+      ],
+      "parties": [
+        {
+          "uuid": "940d780f-b9c6-5ce1-9e92-1e9f7f8b330e",
+          "type": "person",
+          "name": "Information Systems Security Engineer (simulated)",
+          "props": [
+            {
+              "name": "simulated",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "uuid": "dc4e6c74-0c4d-5092-ae27-a72e1f80fc59",
+          "type": "person",
+          "name": "Information System Security Manager (simulated)",
+          "props": [
+            {
+              "name": "simulated",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "uuid": "f7845415-920a-58b3-9685-e5456e7f0089",
+          "type": "person",
+          "name": "Information System Security Officer (simulated)",
+          "props": [
+            {
+              "name": "simulated",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "uuid": "c126a8d3-b8cb-5595-9df9-ce97702c9e48",
+          "type": "organization",
+          "name": "Enterprise IT Services"
+        }
+      ],
+      "responsible-parties": [
+        {
+          "role-id": "PER-ISSE",
+          "party-uuids": [
+            "940d780f-b9c6-5ce1-9e92-1e9f7f8b330e"
+          ]
+        },
+        {
+          "role-id": "PER-ISSM",
+          "party-uuids": [
+            "dc4e6c74-0c4d-5092-ae27-a72e1f80fc59"
+          ]
+        },
+        {
+          "role-id": "PER-ISSO",
+          "party-uuids": [
+            "f7845415-920a-58b3-9685-e5456e7f0089"
+          ]
+        }
+      ]
+    },
+    "import-profile": {
+      "href": "profile.json"
+    },
+    "system-characteristics": {
+      "system-ids": [
+        {
+          "id": "FDR-0001"
+        }
+      ],
+      "system-name": "Field Data Relay",
+      "system-name-short": "FDR",
+      "description": "The Field Data Relay collects signed sensor reports from field units and relays them to the analysis enclave .",
+      "props": [
+        {
+          "name": "boundary-id",
+          "ns": "urn:rmf-tool:oscal",
+          "value": "FDR-BND-1"
+        }
+      ],
+      "security-sensitivity-level": "fips-199-moderate",
+      "system-information": {
+        "information-types": [
+          {
+            "uuid": "ac7d7491-4f3b-58fd-86c2-b096176af58e",
+            "title": "Sensor reports",
+            "description": "Signed reports from field units relayed to the analysis enclave.",
+            "categorizations": [
+              {
+                "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+                "information-type-ids": [
+                  "D.2.1"
+                ]
+              }
+            ],
+            "confidentiality-impact": {
+              "base": "fips-199-moderate"
+            },
+            "integrity-impact": {
+              "base": "fips-199-moderate"
+            },
+            "availability-impact": {
+              "base": "fips-199-low"
+            }
+          },
+          {
+            "uuid": "a7beb0fa-1232-533c-87ab-69b00fdf9d51",
+            "title": "Relay configuration",
+            "description": "Configuration and account data of the relay appliance.",
+            "categorizations": [
+              {
+                "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+                "information-type-ids": [
+                  "C.3.5.1"
+                ]
+              }
+            ],
+            "confidentiality-impact": {
+              "base": "fips-199-low"
+            },
+            "integrity-impact": {
+              "base": "fips-199-moderate"
+            },
+            "availability-impact": {
+              "base": "fips-199-low"
+            }
+          }
+        ]
+      },
+      "security-impact-level": {
+        "security-objective-confidentiality": "fips-199-moderate",
+        "security-objective-integrity": "fips-199-moderate",
+        "security-objective-availability": "fips-199-low"
+      },
+      "status": {
+        "state": "under-development"
+      },
+      "authorization-boundary": {
+        "description": "The boundary encloses the relay appliance (relay service and report store) and the operator console."
+      },
+      "network-architecture": {
+        "description": "The appliance has a radio-side interface on the field network and an enclave-side interface behind the enclave firewall; the console is on the management VLAN."
+      },
+      "data-flow": {
+        "description": "Field units send signed reports to the relay service, which stores them and forwards them over TLS to the analysis enclave."
+      }
+    },
+    "system-implementation": {
+      "leveraged-authorizations": [
+        {
+          "uuid": "3817c5e6-7bfd-555d-9b0c-7ee3f4a0f9fd",
+          "title": "Enterprise identity provider ATO",
+          "party-uuid": "c126a8d3-b8cb-5595-9df9-ce97702c9e48",
+          "date-authorized": "2026-03-01"
+        }
+      ],
+      "users": [
+        {
+          "uuid": "d09d1b47-3295-5c29-8e62-7c951659f048",
+          "title": "Operator",
+          "short-name": "USR-OPERATOR",
+          "props": [
+            {
+              "name": "type",
+              "value": "internal"
+            },
+            {
+              "name": "privilege-level",
+              "value": "non-privileged"
+            }
+          ],
+          "role-ids": [
+            "operator"
+          ],
+          "authorized-privileges": [
+            {
+              "title": "Monitor relay",
+              "functions-performed": [
+                "view relay health",
+                "acknowledge alerts"
+              ]
+            }
+          ]
+        },
+        {
+          "uuid": "a0c11fd4-8a6f-5cdc-92c5-9ae7e5cf105f",
+          "title": "Administrator",
+          "short-name": "USR-ADMIN",
+          "props": [
+            {
+              "name": "type",
+              "value": "internal"
+            },
+            {
+              "name": "privilege-level",
+              "value": "privileged"
+            }
+          ],
+          "role-ids": [
+            "administrator"
+          ],
+          "authorized-privileges": [
+            {
+              "title": "Administer appliance",
+              "functions-performed": [
+                "manage accounts",
+                "change configuration",
+                "apply patches"
+              ]
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "uuid": "1ebd7a34-b9d8-5568-9ec4-88b80e3d5010",
+          "type": "this-system",
+          "title": "Field Data Relay",
+          "description": "The Field Data Relay as a whole.",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "CMP-FDR"
+            },
+            {
+              "name": "implementation-point",
+              "value": "internal"
+            }
+          ],
+          "status": {
+            "state": "under-development"
+          }
+        },
+        {
+          "uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a",
+          "type": "software",
+          "title": "Relay service",
+          "description": "The fdr-relay service on the relay appliance.",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "CMP-RELAY"
+            },
+            {
+              "name": "implementation-point",
+              "value": "internal"
+            }
+          ],
+          "status": {
+            "state": "under-development"
+          }
+        },
+        {
+          "uuid": "0446d61d-6621-53d3-bc8f-c86d1c19102d",
+          "type": "software",
+          "title": "Report store",
+          "description": "The PostgreSQL report store.",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "CMP-STORE"
+            },
+            {
+              "name": "implementation-point",
+              "value": "internal"
+            }
+          ],
+          "status": {
+            "state": "under-development"
+          }
+        },
+        {
+          "uuid": "6adf1c53-4e67-5d48-9645-500953fe85ca",
+          "type": "hardware",
+          "title": "Operator console",
+          "description": "The operator console workstation.",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "CMP-CONSOLE"
+            },
+            {
+              "name": "implementation-point",
+              "value": "internal"
+            }
+          ],
+          "status": {
+            "state": "under-development"
+          }
+        },
+        {
+          "uuid": "8d67c677-6eee-5f2f-aa96-1761a2fb0e3e",
+          "type": "service",
+          "title": "Enterprise identity provider",
+          "description": "Enterprise sign-in with CAC multi-factor authentication.",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "CMP-IDP"
+            },
+            {
+              "name": "implementation-point",
+              "value": "external"
+            },
+            {
+              "name": "leveraged-authorization-uuid",
+              "value": "3817c5e6-7bfd-555d-9b0c-7ee3f4a0f9fd"
+            }
+          ],
+          "status": {
+            "state": "operational"
+          }
+        }
+      ],
+      "inventory-items": [
+        {
+          "uuid": "79b7cece-648b-54e3-9a3e-251f1ef299f3",
+          "description": "Relay appliance server",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "INV-001"
+            },
+            {
+              "name": "asset-type",
+              "value": "hardware"
+            },
+            {
+              "name": "vendor-name",
+              "value": "Dell"
+            },
+            {
+              "name": "software-name",
+              "value": "PowerEdge R660"
+            }
+          ],
+          "implemented-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a"
+            }
+          ]
+        },
+        {
+          "uuid": "520fd682-c150-5819-b605-a785f4900ecc",
+          "description": "Appliance operating system",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "INV-002"
+            },
+            {
+              "name": "asset-type",
+              "value": "operating-system"
+            },
+            {
+              "name": "vendor-name",
+              "value": "Red Hat"
+            },
+            {
+              "name": "software-name",
+              "value": "Enterprise Linux"
+            },
+            {
+              "name": "version",
+              "value": "9.4"
+            }
+          ],
+          "implemented-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a"
+            }
+          ]
+        },
+        {
+          "uuid": "1f6ed20b-75e2-57bb-a868-333b3cb07a99",
+          "description": "Relay service",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "INV-003"
+            },
+            {
+              "name": "asset-type",
+              "value": "software"
+            },
+            {
+              "name": "software-name",
+              "value": "fdr-relay"
+            },
+            {
+              "name": "version",
+              "value": "1.3"
+            }
+          ],
+          "implemented-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a"
+            }
+          ]
+        },
+        {
+          "uuid": "f4803387-b4e6-5926-8fea-5ff6f91d5d5a",
+          "description": "Report store database",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "INV-004"
+            },
+            {
+              "name": "asset-type",
+              "value": "database"
+            },
+            {
+              "name": "vendor-name",
+              "value": "PostgreSQL"
+            },
+            {
+              "name": "version",
+              "value": "16"
+            }
+          ],
+          "implemented-components": [
+            {
+              "component-uuid": "0446d61d-6621-53d3-bc8f-c86d1c19102d"
+            }
+          ]
+        },
+        {
+          "uuid": "6ebaf636-46da-5dcf-ab8e-eafc99aa2f7f",
+          "description": "Operator console",
+          "props": [
+            {
+              "name": "asset-id",
+              "value": "INV-005"
+            },
+            {
+              "name": "asset-type",
+              "value": "operating-system"
+            },
+            {
+              "name": "vendor-name",
+              "value": "Microsoft"
+            },
+            {
+              "name": "software-name",
+              "value": "Windows 11"
+            }
+          ],
+          "implemented-components": [
+            {
+              "component-uuid": "6adf1c53-4e67-5d48-9645-500953fe85ca"
+            }
+          ]
+        }
+      ]
+    },
+    "control-implementation": {
+      "description": "Planned and implemented controls for baseline CNSSI1253-M-M-L-SUBSET-7.",
+      "implemented-requirements": [
+        {
+          "uuid": "891598ab-b110-50f5-b510-c21db5156f75",
+          "control-id": "ac-2",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "implemented"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-007.A1"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#accounts"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSO"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a",
+              "uuid": "d640a134-289e-5df6-aca0-ee742e1fa2b3",
+              "description": "Accounts are provisioned through the enterprise identity provider; one local break-glass administrator exists and accounts are reviewed quarterly.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "component-uuid": "8d67c677-6eee-5f2f-aa96-1761a2fb0e3e",
+              "uuid": "e546878e-3b8a-58f7-9a5a-b5f31e13c7f9",
+              "description": "Accounts are provisioned through the enterprise identity provider; one local break-glass administrator exists and accounts are reviewed quarterly.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "6edbe2d0-9945-51d4-9a61-3c87a7ef6151",
+          "control-id": "au-2",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "implemented"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#audit"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSO"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a",
+              "uuid": "6d6097ea-83a4-55c0-bd26-96b55ab27b60",
+              "description": "The relay service and operating system log sign-in, configuration change and relay errors to the audit log forwarded to the SIEM.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "292144cb-b2cd-5dec-ae16-a633cdd29010",
+          "control-id": "cm-6",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "implemented"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#configuration"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSE"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a",
+              "uuid": "f207480a-7e73-5336-8345-fd4446dfc310",
+              "description": "The appliance is built from a hardened RHEL 9 image applying the DISA STIG settings.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "c982bf48-f4dc-50a6-a1bf-acdf87b36703",
+          "control-id": "ia-2",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "implemented"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#authentication"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "ASM-001"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSE"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "8d67c677-6eee-5f2f-aa96-1761a2fb0e3e",
+              "uuid": "e6c1036e-db22-5a69-b5b0-f8fd16cce2fa",
+              "description": "All interactive sign-ins use CAC multi-factor authentication through the enterprise identity provider.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "33056cf0-9d38-5746-8d10-b750e3c8374c",
+          "control-id": "sc-7",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "inherited"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#boundary-protection"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSM"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "1ebd7a34-b9d8-5568-9ec4-88b80e3d5010",
+              "uuid": "222461ca-0630-5cfd-b679-305b47e13887",
+              "description": "The enclave firewall allows only TLS from the relay to the enclave ingest service.",
+              "implementation-status": {
+                "state": "implemented"
+              },
+              "remarks": "Inherited from Analysis enclave boundary (common control)."
+            }
+          ]
+        },
+        {
+          "uuid": "b023814a-3a7e-5198-8296-5b8c4e6fa295",
+          "control-id": "sc-15",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "not-applicable"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/inventory.md#items"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-007.A1"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSE"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "1ebd7a34-b9d8-5568-9ec4-88b80e3d5010",
+              "uuid": "b6a7b92a-dd7f-5281-81b3-b6887f384fe3",
+              "description": "FDR has no collaborative computing devices.",
+              "implementation-status": {
+                "state": "not-applicable"
+              },
+              "remarks": "Neither the relay appliance nor the operator console has a camera, microphone or other collaborative computing device."
+            }
+          ]
+        },
+        {
+          "uuid": "781452f6-c2be-553d-b80a-87d1bd2c72f5",
+          "control-id": "si-2",
+          "props": [
+            {
+              "name": "rmf-status",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "implemented"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "product/security.md#patching"
+            }
+          ],
+          "responsible-roles": [
+            {
+              "role-id": "PER-ISSO"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "fcd4f2be-3425-52b7-bb4c-1ea390c1094a",
+              "uuid": "b9711c2d-3690-5005-a62a-11e674a9d078",
+              "description": "Security patches are applied monthly from the mirrored repositories.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

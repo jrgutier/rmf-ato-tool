@@ -37,8 +37,11 @@ def test_baseline_resolve_states_its_method(minimal_run, monkeypatch):
     monkeypatch.chdir(REPO_ROOT)
     result = runner.invoke(app, ["baseline", "resolve", str(minimal_run)])
     assert result.exit_code == 0
-    assert "high-water-mark" in result.stdout and "CNSSI 1253 per-objective selection is " \
-        "pending (Phase 6)" in result.stdout
+    assert "CNSSI 1253 per-objective selection (method: cnssi1253)" in result.stdout
+    assert "C=moderate, I=moderate, A=low" in result.stdout and "pending" not in result.stdout
+    refused = runner.invoke(app, ["baseline", "resolve", str(minimal_run),
+                                  "--method", "high-water-mark"])
+    assert refused.exit_code == 1 and "categorization.method" in refused.output
 
 
 def test_check_json_and_task_mode(minimal_run, monkeypatch):
@@ -47,7 +50,8 @@ def test_check_json_and_task_mode(minimal_run, monkeypatch):
     result = runner.invoke(app, ["check", str(minimal_run), "--final", "--format", "json"])
     data = json.loads(result.stdout)
     assert result.exit_code == 1 and data["summary"]["errors"] >= 1
-    assert {f["rule"] for f in data["findings"]} == {"GEN-STALE-001", "RUN-ART-001"}
+    assert {f["rule"] for f in data["findings"] if f["severity"] == "E"} == {
+        "GEN-STALE-001", "RUN-ART-001"}
     task = runner.invoke(app, ["check", str(minimal_run), "--task", "S-4"])
     assert task.exit_code == 1 and "error RUN-ART-001" not in task.output  # gated at R-1
     assert "note: S-4 is not done yet: ART-CP missing" in task.output

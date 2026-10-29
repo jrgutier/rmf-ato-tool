@@ -18,7 +18,7 @@ sources: [INT-004.A1, ART-INFOTYPES]
 | Life-cycle state | under-development | C-1 |
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
 | Categorization approved | yes (PER-AO) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-7 | S-1 |
 <!-- END rmf:facts -->
 
 ## Basis

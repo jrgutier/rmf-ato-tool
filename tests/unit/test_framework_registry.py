@@ -10,7 +10,7 @@ from ruamel.yaml import YAML
 
 from rmf_tool import ci
 from rmf_tool.check import REGISTRY_PATH, load_registry, registry_errors, rules_by_id
-from rmf_tool.framework.validate import IMPLEMENTED
+from rmf_tool.framework.validate import CHECKED_ELSEWHERE, IMPLEMENTED
 
 REPO_RULES = {
     "FW-SCHEMA-001", "FW-ID-001", "FW-ID-002", "FW-REF-001", "FW-ART-001", "FW-ORD-001",
@@ -36,7 +36,8 @@ def test_phases_follow_the_plan():
     by_id = rules_by_id()
     assert {r for r, rule in by_id.items() if rule.phase == "p35"} == SKELETON_RULES | {
         "AGENT-001"}
-    assert {r.id for r in by_id.values() if r.phase == "p3a"} == set(IMPLEMENTED)
+    assert {r.id for r in by_id.values() if r.phase == "p3a"} == {
+        r for r in IMPLEMENTED if by_id[r].phase == "p3a"}
     assert {r.phase for r in by_id.values() if r.scope == "run"} == {"p35", "p6"}
     assert all(r.applies_after is None for r in by_id.values() if r.scope == "repo")
 
@@ -60,13 +61,14 @@ def test_every_rule_has_fixture_or_exemption():
         if test:
             assert f"def {test}(" in target.read_text(encoding="utf-8"), rule.id
         checked += 1
-    assert checked == 36  # p1 (3) + p2 (6) + p3a (12) + p35 (15)
+    # every rule of a phase with checks has a fixture (plan §6.5: no exemptions)
+    assert checked == sum(r.phase in active for r in load_registry())
 
 
 def test_framework_rules_are_implemented_by_validate():
     for rule in load_registry():
         if rule.id.startswith("FW-") and rule.phase in phases_with_checks():
-            assert rule.id in IMPLEMENTED
+            assert rule.id in IMPLEMENTED or rule.id in CHECKED_ELSEWHERE
 
 
 def test_profile_severity_needs_a_note():

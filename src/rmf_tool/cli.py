@@ -477,7 +477,7 @@ catalog_app = typer.Typer(help="Read the NIST SP 800-53r5 catalog.", no_args_is_
 app.add_typer(catalog_app, name="catalog")
 oscal_app = typer.Typer(help="Build and validate a run's OSCAL documents.", no_args_is_help=True)
 app.add_typer(oscal_app, name="oscal")
-playbooks_app = typer.Typer(help="Keep playbook headers in sync with framework/.",
+playbooks_app = typer.Typer(help="Keep playbooks in sync with framework/.",
                             no_args_is_help=True)
 app.add_typer(playbooks_app, name="playbooks")
 
@@ -554,12 +554,15 @@ def status(
     ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
-    """Task completion derived from disk and the next action (plan §7.3)."""
+    """Task completion derived from disk and the next action (plan §7.3); writes
+    reports/status.md and reports/metrics.json."""
+    from rmf_tool import reports
     from rmf_tool.run import status as status_mod
 
     r = _open(run)
     st = status_mod.compute(r)
     data = status_mod.to_json(r, st, family_gaps)
+    reports.write_status(r, st)
     if fmt is OutputFormat.json:
         typer.echo(json.dumps(data, indent=2))
         raise typer.Exit(EXIT_OK)
@@ -586,22 +589,39 @@ def status(
 
 
 @baseline_app.command("resolve")
-def baseline_resolve(run: RunArg = None) -> None:
-    """Write baseline.json from facts.yaml (approved categorization), tailoring and subset."""
+def baseline_resolve(
+    run: RunArg = None,
+    method: Annotated[
+        str | None, typer.Option(help="cnssi1253 or high-water-mark (the plan §7.6 fallback "
+                                 "while CNSSI1253 is degraded); must match facts.yaml "
+                                 "categorization.method.")
+    ] = None,
+) -> None:
+    """Write baseline.json from facts.yaml (approved categorization), overlays, tailoring and
+    subset."""
     from rmf_tool import baseline as baseline_mod
 
     r = _open(run)
     try:
-        data = baseline_mod.resolve(r)
+        data = baseline_mod.resolve(r, method)
     except baseline_mod.BaselineError as exc:
         typer.echo(f"cannot resolve: {exc}", err=True)
         raise typer.Exit(EXIT_VIOLATIONS) from exc
     r.path("baseline.json").write_text(baseline_mod.render(data), encoding="utf-8")
     typer.echo(f"baseline.json: {data['baseline_id']}, {len(data['controls'])} control(s); "
                f"set facts.yaml baseline_id to {data['baseline_id']!r}")
-    typer.echo("note: selection is the SP 800-53B high-water mark (method: high-water-mark); "
-               "CNSSI 1253 per-objective selection is pending (Phase 6). Do not call this "
-               "the CNSSI 1253 baseline.")
+    cia = ", ".join(f"{k.upper()}={v}" for k, v in data["categorization"].items())
+    overlays = ", ".join(data["overlays"]) or "none"
+    if data["method"] == baseline_mod.CNSSI:
+        privacy = sum(c["origin"] == "privacy-baseline" for c in data["controls"])
+        typer.echo(f"note: CNSSI 1253 per-objective selection (method: cnssi1253): the union "
+                   f"of the Appendix D {cia} columns (origin baseline) and the NSS privacy "
+                   f"control baseline, a default for all NSS ({privacy} control(s) only it "
+                   f"selects, origin privacy-baseline); overlays: {overlays}.")
+    else:
+        typer.echo(f"note: SP 800-53B high-water mark of {cia} (method: high-water-mark), the "
+                   f"plan §7.6 fallback while CNSSI1253 is degraded; record ASM-BASELINE-001. "
+                   f"Overlays: {overlays}.")
 
 
 @catalog_app.command("show")
@@ -703,7 +723,8 @@ def oscal_build(
         bool, typer.Option("--check", help="Fail if oscal/ differs from a fresh build.")
     ] = False,
 ) -> None:
-    """Build oscal/profile.json and oscal/ssp.json (trestle models, uuid5, OSCAL 1.2.1)."""
+    """Build oscal/profile.json, ssp.json, assessment-plan.json, assessment-results.json and
+    poam.json (trestle models, uuid5, OSCAL 1.2.1)."""
     from rmf_tool import build as build_mod
 
     r = _open(run)
@@ -723,10 +744,27 @@ def oscal_build(
 
 
 @oscal_app.command("validate")
-def oscal_validate(run: RunArg = None, fmt: FormatOption = OutputFormat.text) -> None:
+def oscal_validate(
+    run: Annotated[
+        Path | None,
+        typer.Argument(metavar="[RUN|DIR]", help="Run directory (its oscal/*.json), or any "
+                       "directory of OSCAL *.json such as tests/golden/oscal (default: as for "
+                       "RUN).", show_default=False),
+    ] = None,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
     """OSCAL-001 (NIST v1.2.1 schema, regex + FormatChecker) and OSCAL-002 (trestle load)."""
     from rmf_tool.oscal import validate as validate_oscal
 
+    if run is not None and run.is_dir() and not (run / "run.yaml").is_file():
+        paths = sorted(run.glob("*.json"))
+        if not paths:
+            raise _usage_error(f"{run}: neither a run (run.yaml) nor a directory of *.json")
+        findings = [Finding("OSCAL-001", "E", m, rel) for rel, m in
+                    validate_oscal.schema_problems_in(repo_root(), run, paths)]
+        findings += [Finding("OSCAL-002", "E", m, rel)
+                     for rel, m in validate_oscal.trestle_problems_in(run, paths)]
+        _exit_findings(findings, ["OSCAL-001", "OSCAL-002"], fmt)
     r = _open(run)
     findings = [Finding("OSCAL-001", "E", m, rel) for rel, m in validate_oscal.schema_problems(r)]
     findings += [Finding("OSCAL-002", "E", m, rel)
@@ -778,8 +816,9 @@ def check(
     ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
-    """Run-scope rules (RUN-*, FACTS, GEN-STALE, SSP-COV, SAR-POAM, TRACE, HYB, OSCAL,
-    JOURNAL) on a run."""
+    """Run-scope rules (plan §6.5) on a run; writes reports/check.json and check.md.
+    DEGRADED-001 is never filtered out."""
+    from rmf_tool import reports
     from rmf_tool.check import engine
 
     r = _open(run)
@@ -796,20 +835,90 @@ def check(
     if task is not None and fmt is OutputFormat.text and not ev.status.tasks[task].done:
         missing = "; ".join(ev.status.tasks[task].missing) or ev.status.tasks[task].state
         typer.echo(f"note: {task} is not done yet: {missing}", err=True)
-    _exit_findings(findings, engine.rules_run(wanted), fmt)
+    data = reports.check_report(r, findings, engine.rules_run(wanted))
+    selection = ", ".join(x for x in (
+        "--final" if final else None, f"--task {task}" if task else None,
+        f"--family {family.lower()}" if family else None,
+        f"--rules {','.join(wanted)}" if wanted else None) if x) or "progress-gated"
+    reports.write_check(r, data, selection)
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps(data, indent=2))
+        raise typer.Exit(EXIT_VIOLATIONS if data["summary"]["errors"] else EXIT_OK)
+    _exit_findings(findings, data["summary"]["rules_run"], fmt)
 
 
 @playbooks_app.command("sync")
 def playbooks_sync(
     check: Annotated[
-        bool, typer.Option("--check", help="FW-PB-002: fail on a stale header; write nothing.")
+        bool, typer.Option("--check", help="FW-PB-001/002: fail on a missing or stale "
+                                            "playbook; write nothing.")
     ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
-    """Regenerate the header block of each authored playbook from framework/ YAML."""
+    """Regenerate playbook headers and generated bodies from framework/ YAML, and create
+    missing playbooks with a generated body. Authored bodies are never touched."""
     from rmf_tool import playbooks_sync as sync_mod
 
     root = repo_root()
     if check:
-        _exit_findings(sync_mod.check(root), ["FW-PB-002"], fmt)
+        _exit_findings(sync_mod.check(root), [sync_mod.COVERAGE, sync_mod.RULE], fmt)
     _changed(sync_mod.sync(root), "synced")
+
+
+@app.command()
+def render(
+    check: Annotated[
+        bool, typer.Option("--check", help="FW-MAN-001: fail if the manual is stale; write "
+                                           "nothing.")
+    ] = False,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Render MANUAL.md and docs/manual/PH-*.md from framework/ (byte-identical on rerun)."""
+    from rmf_tool.render import manual
+
+    root = repo_root()
+    if check:
+        _exit_findings(manual.check(root), [manual.RULE], fmt)
+    try:
+        written, removed = manual.write(root)
+    except refs.IndexFileError as exc:
+        raise _usage_error(str(exc)) from exc
+    except manual.RenderError as exc:
+        _emit_findings(exc.findings, ["FW-SCHEMA-001"], fmt)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    _changed(written, "wrote")
+    _changed(removed, "removed")
+    typer.echo(f"rmf render: {len(written) + len(removed)} file(s) changed")
+
+
+report_app = typer.Typer(help="Write generated run reports.", no_args_is_help=True)
+app.add_typer(report_app, name="report")
+
+
+@report_app.command("assumptions")
+def report_assumptions(run: RunArg = None) -> None:
+    """Write reports/assumptions.md: every assumption and tagged answer (HYB-002)."""
+    from rmf_tool import reports
+
+    r = _open(run)
+    wrote = reports.write_assumptions(r)
+    typer.echo(f"{reports.ASSUMPTIONS_REPORT} {'written' if wrote else 'unchanged'}")
+
+
+@app.command("checks-doc")
+def checks_doc(
+    check: Annotated[
+        bool, typer.Option("--check", help="Fail if docs/CHECKS.md is stale; write nothing.")
+    ] = False,
+) -> None:
+    """Render docs/CHECKS.md from the rule registry (registry.yaml)."""
+    from rmf_tool import checks_doc as doc
+
+    root = repo_root()
+    if check:
+        if doc.stale(root):
+            err_console.print(f"{doc.CHECKS_PATH} is stale; run `rmf checks-doc`", markup=False)
+            raise typer.Exit(EXIT_VIOLATIONS)
+        typer.echo(f"{doc.CHECKS_PATH} is current")
+        raise typer.Exit(EXIT_OK)
+    typer.echo(f"{doc.CHECKS_PATH} {'written' if doc.write(root) else 'unchanged'}")

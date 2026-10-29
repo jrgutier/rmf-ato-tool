@@ -2,7 +2,7 @@
 artifact_id: ART-BND
 run_id: valid-minimal
 produced_by_task: P-11
-touched_by: [P-11, C-1]
+touched_by: [P-11, P-16, C-1]
 sources: [INT-002.A1, product/architecture.md]
 ---
 # Authorization boundary, network architecture and data flows
@@ -21,3 +21,7 @@ field units through the relay to the enclave over TLS [[product/architecture.md#
 ## Update at C-1
 
 C-1 confirmed the external identity provider as a leveraged service [[INT-003.A1]].
+
+## Enterprise architecture
+
+FDR sits at the edge of the analysis enclave behind the enclave firewall [[INT-025.A1]].

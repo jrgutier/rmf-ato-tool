@@ -6,8 +6,9 @@ import pytest
 from conftest import REPO_ROOT
 from typer.testing import CliRunner
 
-from rmf_tool import catalog
+from rmf_tool import baseline, catalog
 from rmf_tool.cli import app
+from rmf_tool.run.model import open_run
 
 runner = CliRunner()
 
@@ -42,12 +43,14 @@ def test_cli_family_filter_json(monkeypatch):
 
 def test_cli_missing_only(minimal_run, monkeypatch):
     monkeypatch.chdir(REPO_ROOT)
-    (minimal_run / "artifacts/ssp/controls/sc.yaml").unlink()
+    (minimal_run / "artifacts/ssp/controls/si.yaml").unlink()
+    missing = [c for c in baseline.control_ids(open_run(minimal_run, REPO_ROOT))
+               if catalog.family(c) == "si"]
     result = runner.invoke(app, ["catalog", "show", "--run", str(minimal_run), "--missing",
                                  "--fields", "title,statement,guidance,objectives"])
-    assert result.exit_code == 0
-    assert result.stdout.startswith("sc-7 Boundary Protection")
-    assert "objectives:" in result.stdout and "1 control(s)" in result.stdout
+    assert result.exit_code == 0 and missing
+    assert result.stdout.startswith(f"{missing[0]} ")
+    assert "objectives:" in result.stdout and f"{len(missing)} control(s)" in result.stdout
 
 
 @pytest.mark.parametrize("args", [

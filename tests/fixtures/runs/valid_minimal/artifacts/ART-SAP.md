@@ -9,5 +9,5 @@ sources: [INT-008.A1]
 
 ## Scope and schedule
 
-All six baseline controls are assessed by examine, interview and test in November
+All seven baseline controls are assessed by examine, interview and test in November
 [[INT-008.A1]] [[ART-BASELINE]].

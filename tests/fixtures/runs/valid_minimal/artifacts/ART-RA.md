@@ -16,3 +16,8 @@ radio-side network [[product/architecture.md#network]].
 
 The open account-review weakness (FND-001) raises the likelihood of misuse of stale
 accounts until the POA&M closes it [[INT-011.A1]].
+
+## Assessment at P-14
+
+The ISSM rated spoofed reports and radio-side attacks as the likeliest threat events
+[[INT-023.A1]].

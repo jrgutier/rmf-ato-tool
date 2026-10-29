@@ -65,6 +65,7 @@ def test_run_yaml_stamps_upstream_hash(tmp_path):
     (tmp_path / "product").mkdir()
     config = read_yaml(init_run(tmp_path, REPO_ROOT, as_of=AS_OF) / "run.yaml")
     assert config["upstream_hash"] == upstream_hash.compute(REPO_ROOT, upstream_hash.UNION_GLOBS)
+    assert config["upstream_hash_basis"] == {"variant": "union"}
     assert config["as_of"] == AS_OF
     assert config["oscal_version"] == "1.2.1"
 
@@ -103,6 +104,7 @@ def test_scenario_seeds_copied_and_hash_scoped(tmp_path):
     assert seed.data["run_id"] == "mini-run"
     scenario = load_scenario(tmp_path, path)
     assert config["upstream_hash"] == scenario_hash(tmp_path, scenario)
+    assert config["upstream_hash_basis"] == {"variant": "scenario", "scenario": "mini.yaml"}
 
 
 def test_invalid_scenario_and_missing_seed(tmp_path):

@@ -10,15 +10,18 @@ from pathlib import Path
 from typing import Any
 
 from rmf_tool import agents_md, lessons, playbooks_sync, refs
-from rmf_tool.check import agent_lane
+from rmf_tool.check import agent_lane, load_registry
 from rmf_tool.findings import Finding
 from rmf_tool.framework import validate as framework_validate
 from rmf_tool.framework.model import FRAMEWORK_DIR
 from rmf_tool.profiles import PHASES, Profile, rule_active
 from rmf_tool.refs import index_render, verify
+from rmf_tool.render import manual
 
 COVERAGE_MIN = 85
 VALID_MINIMAL = "tests/fixtures/runs/valid_minimal"
+HYBRID_MINIMAL = "tests/fixtures/runs/hybrid_minimal"
+GOLDEN_OSCAL = "tests/golden/oscal"
 
 
 @dataclass
@@ -92,21 +95,44 @@ def _framework(ctx: Context) -> tuple[bool, list[Finding], str]:
     return _findings_step(result.findings)
 
 
-def _valid_minimal(rules: tuple[str, ...] | None = None) -> Callable[[Context], Any]:
-    """`rmf check --final` on the skeleton fixture, optionally limited to some rules."""
+def _valid_minimal(rules: tuple[str, ...] | None = None,
+                   fixture: str = VALID_MINIMAL) -> Callable[[Context], Any]:
+    """`rmf check --final` on a fixture run, optionally limited to some rules."""
     def run(ctx: Context) -> tuple[bool, list[Finding], str]:
         from rmf_tool.check import engine
         from rmf_tool.run.model import RunError, open_run
 
         try:
-            r = open_run(ctx.root / VALID_MINIMAL, ctx.root)
+            r = open_run(ctx.root / fixture, ctx.root)
         except RunError as exc:
-            return _findings_step([Finding("RUN-CFG-001", "E", str(exc), VALID_MINIMAL)])
+            return _findings_step([Finding("RUN-CFG-001", "E", str(exc), fixture)])
         found = engine.select(r, engine.evaluate(r), rules=list(rules) if rules else None,
                               final=True)
-        return _findings_step([replace(f, path=f"{VALID_MINIMAL}/{f.path}" if f.path
-                                       else VALID_MINIMAL) for f in found])
+        return _findings_step([replace(f, path=f"{fixture}/{f.path}" if f.path
+                                       else fixture) for f in found])
     return run
+
+
+def _golden_oscal(ctx: Context) -> tuple[bool, list[Finding], str]:
+    from rmf_tool.oscal import validate as oscal_validate
+
+    base = ctx.root / GOLDEN_OSCAL
+    paths = sorted(base.glob("*.json"))
+    found = [Finding("OSCAL-001", "E", m, f"{GOLDEN_OSCAL}/{rel}")
+             for rel, m in oscal_validate.schema_problems_in(ctx.root, base, paths)]
+    found += [Finding("OSCAL-002", "E", m, f"{GOLDEN_OSCAL}/{rel}")
+              for rel, m in oscal_validate.trestle_problems_in(base, paths)]
+    if not paths:
+        found.append(Finding("OSCAL-001", "E", "no golden OSCAL documents", GOLDEN_OSCAL))
+    return _findings_step(found)
+
+
+def _checks_doc(ctx: Context) -> tuple[bool, list[Finding], str]:
+    from rmf_tool import checks_doc
+
+    if checks_doc.stale(ctx.root):
+        return False, [], f"{checks_doc.CHECKS_PATH} is stale; run `rmf checks-doc`"
+    return True, [], ""
 
 
 def _agent_lane(ctx: Context) -> tuple[bool, list[Finding], str]:
@@ -120,6 +146,8 @@ SKELETON_RULES = ("RUN-CFG-001", "RUN-FM-001", "RUN-ART-001", "FACTS-001", "GEN-
                   "SSP-COV-001", "SAR-POAM-001", "TRACE-001", "TRACE-002", "HYB-001", "HYB-002",
                   "OSCAL-001", "OSCAL-002", "JOURNAL-001")
 
+RUN_RULES = tuple(r.id for r in load_registry() if r.scope == "run")
+
 STEPS: tuple[Step, ...] = (
     Step("lessons check", "p1", ("LES-002", "LES-003"),
          lambda ctx: _findings_step(lessons.check(ctx.root))),
@@ -132,13 +160,31 @@ STEPS: tuple[Step, ...] = (
          _refs_step(lambda root, index: verify.verify(root, index, strict=True))),
     Step("refs extract --check", "p2", ("REF-003",), _refs_step(verify.check_texts)),
     Step("refs index --check", "p2", ("REF-004",), _refs_step(index_render.check)),
-    Step("rmf validate", "p3a", framework_validate.IMPLEMENTED, _framework),
-    Step("rmf check --final valid_minimal", "p35", SKELETON_RULES, _valid_minimal()),
+    # From p5 on, `rmf validate` also runs FW-PB-001/002 and FW-PER-001/002, so the p5 step
+    # replaces the p3a step and the p35 playbook step (each finding is reported once).
+    # p3b (prose enrichment) is verified by the same `rmf validate`, now with p2x closed, so
+    # every citation must resolve. Each validate step stands down for the next one.
+    Step("rmf validate", "p3a", framework_validate.IMPLEMENTED, _framework, unless="p3b"),
+    Step("rmf validate (p3b, all citations resolvable)", "p3b", framework_validate.IMPLEMENTED,
+         _framework, unless="p5"),
+    Step("rmf check --final valid_minimal", "p35", SKELETON_RULES,
+         _valid_minimal(SKELETON_RULES), unless="p6"),
     Step("rmf oscal validate valid_minimal", "p35", ("OSCAL-001", "OSCAL-002"),
          _valid_minimal(("OSCAL-001", "OSCAL-002"))),
     Step("rmf playbooks sync --check", "p35", ("FW-PB-002",),
-         lambda ctx: _findings_step(playbooks_sync.check(ctx.root))),
+         lambda ctx: _findings_step(playbooks_sync.check(ctx.root)), unless="p5"),
     Step("agent lane", "p35", ("AGENT-001",), _agent_lane),
+    Step("rmf render --check", "p4", (manual.RULE,),
+         lambda ctx: _findings_step(manual.check(ctx.root))),
+    Step("rmf validate (playbooks, persona cards)", "p5", framework_validate.IMPLEMENTED,
+         _framework),
+    # p6: every run rule on both fixture runs (the p35 step above then stands down).
+    Step("rmf check --final valid_minimal (all run rules)", "p6", RUN_RULES, _valid_minimal()),
+    Step("rmf check --final hybrid_minimal", "p6", RUN_RULES,
+         _valid_minimal(fixture=HYBRID_MINIMAL)),
+    Step("rmf checks-doc --check", "p6", (), _checks_doc),
+    Step("rmf oscal validate tests/golden/oscal", "p6", ("OSCAL-001", "OSCAL-002"),
+         _golden_oscal),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

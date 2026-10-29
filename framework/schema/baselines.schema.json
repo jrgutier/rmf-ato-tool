@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:baselines",
+  "title": "framework/baselines/cnssi-1253.yaml (generated)",
+  "description": "CNSSI 1253 Appendix D: the NSS privacy control baseline and the per-objective (C/I/A) low/moderate/high security control baselines, plus the Appendix E overlays. Written by `python -m rmf_tool.cnssi1253` (ADR-0002); every table block carries a page+anchor citation (FW-CITE-002).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["baseline", "title", "ref", "citations", "cells", "tables", "overlays"],
+  "properties": {
+    "baseline": {"const": "CNSSI-1253"},
+    "title": {"type": "string", "minLength": 1},
+    "ref": {"const": "CNSSI1253"},
+    "citations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/citation"}},
+    "cells": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "legend"],
+      "properties": {
+        "order": {"const": ["low", "moderate", "high"]},
+        "legend": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["X", "+", "-", "."],
+          "patternProperties": {"^[X+.-]$": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "tables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["table", "family", "title", "blocks"],
+        "properties": {
+          "table": {"type": "string", "pattern": "^D-\\d{1,2}$"},
+          "family": {"type": "string", "pattern": "^[a-z]{2}$"},
+          "title": {"type": "string", "minLength": 1},
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["citation", "controls"],
+              "properties": {
+                "citation": {"$ref": "#/$defs/page_citation"},
+                "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/row"}}
+              }
+            }
+          }
+        }
+      }
+    },
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "ref", "transcribed"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
+          "title": {"type": "string", "minLength": 1},
+          "ref": {"type": "string", "minLength": 1},
+          "transcribed": {"type": "boolean"},
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["citation", "add"],
+              "properties": {
+                "citation": {"$ref": "#/$defs/page_citation"},
+                "add": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}}
+              }
+            }
+          }
+        },
+        "if": {"properties": {"transcribed": {"const": true}}},
+        "then": {"required": ["blocks"]},
+        "else": {"not": {"required": ["blocks"]}}
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the SP 800-53r5 catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "cells": {
+      "description": "Low, moderate, high: X (SP 800-53B and NSS), + (NSS addition), - (SP 800-53B only, \"--\" in the table), . (blank).",
+      "type": "string",
+      "pattern": "^[X+.-]{3}$"
+    },
+    "row": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "withdrawn"],
+          "properties": {"id": {"$ref": "#/$defs/control_id"}, "withdrawn": {"const": true}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "privacy", "c", "i", "a"],
+          "properties": {
+            "id": {"$ref": "#/$defs/control_id"},
+            "privacy": {"type": "string", "pattern": "^[X+.-]$"},
+            "c": {"$ref": "#/$defs/cells"},
+            "i": {"$ref": "#/$defs/cells"},
+            "a": {"$ref": "#/$defs/cells"}
+          }
+        }
+      ]
+    },
+    "citation": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {"ref": {"type": "string", "minLength": 1}}
+    },
+    "page_citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "page", "anchor"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "page": {"type": "integer", "minimum": 1},
+        "anchor": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

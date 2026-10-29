@@ -9,7 +9,9 @@ from conftest import REPO_ROOT
 from typer.testing import CliRunner
 
 from rmf_tool import ci
+from rmf_tool.check import load_registry
 from rmf_tool.cli import app
+from rmf_tool.framework.validate import CHECKED_ELSEWHERE
 from rmf_tool.profiles import Profile
 
 runner = CliRunner()
@@ -18,6 +20,10 @@ runner = CliRunner()
 @pytest.fixture(autouse=True)
 def at_repo(monkeypatch):
     monkeypatch.chdir(REPO_ROOT)
+    # `--profile p3a` means closed ∪ {p3a}; pin "closed" to the phases before p3a so these
+    # tests check exactly the p3a rules, however many .phases/*.closed markers the repo has.
+    monkeypatch.setattr("rmf_tool.profiles.closed_phases",
+                        lambda root: frozenset({"p1", "p2", "p2x"}))
 
 
 def invoke(*args):
@@ -75,13 +81,24 @@ def test_closed_profile_without_framework_phase_runs_nothing(tmp_path, monkeypat
 
 @pytest.mark.parametrize("args, needle", [
     (["--profile", "p99"], "unknown profile"),
-    (["--profile", "p4"], "not implemented in this version: FW-MAN-001"),
     (["--profile", "p3a", "--root", "no/such/dir"], "framework directory not found"),
 ])
 def test_usage_errors_exit_2(args, needle):
     result = invoke("validate", *args)
     assert result.exit_code == 2
     assert needle in result.output
+
+
+def test_unimplemented_active_rule_exit_2(monkeypatch):
+    """An active FW-* rule this version does not implement stops validate (no vacuous
+    pass); simulated by dropping one rule, so it holds whichever phases are finished."""
+    from rmf_tool.framework import validate as validate_mod
+
+    monkeypatch.setattr(validate_mod, "IMPLEMENTED",
+                        tuple(r for r in validate_mod.IMPLEMENTED if r != "FW-TASK-001"))
+    result = invoke("validate", "--profile", "p3a")
+    assert result.exit_code == 2
+    assert "not implemented in this version: FW-TASK-001" in result.output
 
 
 def test_bad_index_is_usage_error(tmp_path, monkeypatch):
@@ -102,7 +119,9 @@ def test_ci_p3a_step_runs_validate():
     [result] = ci.run(P3A, ctx, (step,))
 
     assert result.ok and result.name == "rmf validate"
-    assert result.rules[0] == "FW-SCHEMA-001" and len(result.rules) == 12
+    fw_rules = {r.id for r in load_registry() if r.id.startswith("FW-")}
+    assert result.rules[0] == "FW-SCHEMA-001"
+    assert set(result.rules) == fw_rules - set(CHECKED_ELSEWHERE)
     assert ci.run(Profile("p2", frozenset({"p1", "p2"})), ctx, (step,)) == []
 
 

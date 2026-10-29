@@ -7,6 +7,8 @@ Every rule runs over the whole run; selection then applies the plan §7.3 semant
   run-wide. T's own missing CHECKPOINT is not demanded: the journal entry follows the pass.
 - no option: rules whose ``applies_after`` lies before the next action, findings owned by
   tasks before it or run-wide; once the run is done this equals ``--final``.
+
+DEGRADED-001 is non-suppressible (plan §7.6): every selection keeps it.
 """
 
 from __future__ import annotations
@@ -15,7 +17,7 @@ from dataclasses import dataclass
 
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
-from rmf_tool.check.rules import IMPLEMENTED, JOURNAL_RULE, RULES
+from rmf_tool.check.rules import IMPLEMENTED, JOURNAL_RULE, RULES, UNFILTERED
 from rmf_tool.check.rules.journal import journal
 from rmf_tool.findings import Finding
 from rmf_tool.run import status as status_mod
@@ -69,10 +71,10 @@ def select(run: Run, ev: Evaluation, task: str | None = None, family: str | None
             keep = f.family == family
         if keep and rules:
             keep = f.rule in rules
-        if keep:
+        if keep or f.rule in UNFILTERED:
             chosen.append(f)
     return [f.finding for f in chosen]
 
 
 def rules_run(rules: list[str] | None = None) -> list[str]:
-    return [r for r in IMPLEMENTED if not rules or r in rules]
+    return [r for r in IMPLEMENTED if not rules or r in rules or r in UNFILTERED]

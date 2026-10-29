@@ -57,6 +57,46 @@
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
+    "upstream_hash_basis": {
+      "description": "Which globs upstream_hash covers (ADR-0001; RUN-STALE-001): the union globs, or a scenario's hash_globs. Absent means union.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant"
+      ],
+      "properties": {
+        "variant": {
+          "enum": [
+            "union",
+            "scenario"
+          ]
+        },
+        "scenario": {
+          "description": "The scenario file, relative to the repository root.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "variant": {
+            "const": "scenario"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "scenario"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "scenario"
+          ]
+        }
+      }
+    },
     "oscal_version": {
       "const": "1.2.1"
     },

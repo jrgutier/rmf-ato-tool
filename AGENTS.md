@@ -34,7 +34,7 @@ fork owns. Paths marked † are created by later build phases and may not exist 
 | `personas/` | upstream | persona cards, one per DoD RMF role |
 | `templates/` | upstream | artifact, interview, journal and workspace templates |
 | `references/` | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
-| `MANUAL.md`, `docs/manual/` † | generated | rendered from `framework/`; never hand-edited |
+| `MANUAL.md`, `docs/manual/` | generated | rendered from `framework/`; never hand-edited |
 | `docs/LESSONS.md` | upstream | append-only lessons log |
 | `.phases/` | upstream | `<phase>.closed` markers; their set selects the default CI profile |
 | `scripts/` | upstream | `bootstrap.sh`, `agent-run.sh` (agent-lane harness, local only) |
@@ -80,17 +80,20 @@ error. Commands that report support `--format json`.
 | `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 | `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
-| `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash`, versions); a scenario adds product, scope, seeds and control subset |
-| `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action |
-| `rmf baseline resolve [RUN]` | `baseline.json` from facts.yaml (approved categorization), `tailoring.yaml` and `control_subset` |
+| `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset |
+| `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action; writes `reports/status.md` and `reports/metrics.json` |
+| `rmf baseline resolve [RUN] [--method M]` | `baseline.json` from facts.yaml (approved categorization: CNSSI 1253 per-objective C/I/A selection plus the privacy baseline, then overlays), `tailoring.yaml` and `control_subset` |
 | `rmf catalog show [--family F] [--control C] [--run RUN [--missing]] [--fields F,..] [--chunk i/n]` | compact SP 800-53r5 control text, per family or the run's baseline |
 | `rmf assemble [RUN] [--check]` | fill the `rmf:facts` marker blocks in artifact Markdown from facts.yaml |
-| `rmf oscal build [RUN] [--check]` | `oscal/profile.json` and `oscal/ssp.json` (trestle models, uuid5, OSCAL 1.2.1) |
-| `rmf oscal validate [RUN]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on `oscal/*.json` |
+| `rmf oscal build [RUN] [--check]` | `oscal/` profile, SSP, assessment plan, assessment results and POA&M (trestle models, uuid5, OSCAL 1.2.1); each is built once its inputs exist |
+| `rmf oscal validate [RUN\|DIR]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on the run's `oscal/*.json`, or on a directory of OSCAL JSON |
 | `rmf build [RUN]` | assemble + oscal build + `reports/assumptions.md` (+ refresh `package/manifest.yaml`); always before `rmf check` |
-| `rmf package [RUN]` | `package/manifest.yaml` (ART-PKG): artifacts, OSCAL and reports with SHA-256 |
-| `rmf check [RUN] [--task T] [--family F] [--rules R,..] [--final]` | run rules; `--task T` only what applies at T, `--final` everything (scope-aware) |
-| `rmf playbooks sync [--check]` | regenerate authored playbook headers from framework/; `--check` is FW-PB-002 |
+| `rmf package [RUN]` | `package/manifest.yaml` (ART-PKG): the DoDI 8510.01 authorization package, every artifact (class, status, files with SHA-256, OSCAL), OSCAL documents, reports, degraded references |
+| `rmf check [RUN] [--task T] [--family F] [--rules R,..] [--final]` | run rules; `--task T` only what applies at T, `--final` everything (scope-aware); writes `reports/check.{json,md}`; DEGRADED-001 is never filtered out |
+| `rmf report assumptions [RUN]` | write `reports/assumptions.md` (every assumption and tagged answer, HYB-002); also part of `rmf build` |
+| `rmf checks-doc [--check]` | render `docs/CHECKS.md` from the rule registry; `--check` fails when it is stale |
+| `rmf playbooks sync [--check]` | regenerate playbook headers and generated bodies from framework/, create missing playbooks; `--check` is FW-PB-001/002 |
+| `rmf render [--check]` | render `MANUAL.md` and `docs/manual/PH-*.md` from framework/ (byte-identical on rerun); `--check` is FW-MAN-001 |
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
@@ -104,8 +107,12 @@ reference and FW-CITE-002 strict; p3a `rmf validate` (FW-SCHEMA-001, FW-ID-001/0
 FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001, FW-DAG-001, FW-CITE-001/002,
 FW-TASK-001); p35 `rmf check --final` on `tests/fixtures/runs/valid_minimal` (RUN-CFG-001,
 RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, SSP-COV-001, SAR-POAM-001, TRACE-001/002,
-HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W).
-Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml`.
+HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
+p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 to
+`rmf validate`; p6 `rmf check --final` with every run rule on `valid_minimal` (scope all)
+and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL.
+Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
+into `docs/CHECKS.md`.
 
 ## Fork workflow
 

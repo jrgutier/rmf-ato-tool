@@ -1,19 +1,24 @@
 """JOURNAL-001 (plan §8): ``journal.md`` is well formed and every done task has a CHECKPOINT.
+LES-001: every RETRY and CORRECTION cites a lesson that exists in docs/LESSONS.md, or says
+``lesson: none — <reason>``.
 
     # Journal — <run-id>
     ## 2026-11-05T14:02Z · CHECKPOINT · task C-2
     ## 2026-11-05T15:40Z · RETRY · task S-4 · lesson: L-0012
+    ## 2026-11-05T16:30Z · CORRECTION · artifact ART-SAR · lesson: none — typo only
 """
 
 from __future__ import annotations
 
 import re
 
+from rmf_tool import lessons
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.run.model import JOURNAL_FILE
 
 RULE = "JOURNAL-001"
+LESSON = re.compile(r"(?:^| · )lesson: (?:(?P<id>L-\d{4})|none — \S.*?)(?= · |$)")
 TITLE = re.compile(r"^# Journal — (\S+)\s*$")
 ENTRY = re.compile(
     r"^## (?P<ts>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?Z) · "
@@ -55,4 +60,30 @@ def journal(ctx: Context, done: set[str]) -> list[RunFinding]:
         if task in done and task not in checkpoints:
             out.append(make(RULE, f"{task} is done but has no CHECKPOINT entry", JOURNAL_FILE,
                             None, {task}))
+    return out
+
+
+def lesson_refs(ctx: Context) -> list[RunFinding]:
+    path = ctx.run.path(JOURNAL_FILE)
+    if not path.is_file():
+        return []  # JOURNAL-001
+    try:
+        known = {e.id for e in lessons.parse(
+            (ctx.run.repo / lessons.LESSONS_PATH).read_text(encoding="utf-8"))[0]}
+    except OSError:
+        known = None
+    out: list[RunFinding] = []
+    for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        m = ENTRY.match(line)
+        if m is None or m.group("type") not in ("RETRY", "CORRECTION"):
+            continue
+        ref = LESSON.search(m.group("extra"))
+        if ref is None:
+            problem = (f"{m.group('type')} without 'lesson: L-NNNN' or "
+                       "'lesson: none — <reason>'")
+        elif ref.group("id") and known is not None and ref.group("id") not in known:
+            problem = f"{m.group('type')} cites {ref.group('id')}, which is not in docs/LESSONS.md"
+        else:
+            continue
+        out.append(make("LES-001", problem, JOURNAL_FILE, lineno))
     return out

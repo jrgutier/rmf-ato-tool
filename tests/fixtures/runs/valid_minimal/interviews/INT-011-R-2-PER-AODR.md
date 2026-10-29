@@ -10,4 +10,4 @@ date: '2026-10-29'
 ### Q1 {#INT-011.Q1}
 Asked of: PER-AODR · Task: R-2
 **A1 {#INT-011.A1}** respondent: simulated · tag: SIMULATED · basis: [[ART-POAM]]
-> Low overall: the account-review weakness has a dated POA&M item.
+> The account-review weakness is low; the open CAT I configuration finding is moderate, so moderate overall. Both have dated POA&M items.

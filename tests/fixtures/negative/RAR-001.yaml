@@ -1,0 +1,9 @@
+rule: RAR-001
+bases: [minimal, example]
+description: a risk links a finding that does not exist, leaving FND-001 without a risk
+mutations:
+  - op: set_field
+    file: artifacts/data/rar.yaml
+    path: risks.0.finding_refs
+    value: [FND-099]
+expect: {errors: [RAR-001]}

@@ -15,6 +15,7 @@ FRAMEWORK_DIR = "framework"
 SCHEMA_DIR = "framework/schema"
 FRAMEWORK_SCHEMA = "framework/schema/framework.schema.json"
 TASKS_DIR = "tasks"
+BASELINES_DIR = "baselines"  # CNSSI 1253 control baselines (ADR-0002)
 
 STEP_ORDER = ("P", "C", "S", "I", "A", "R", "M")
 

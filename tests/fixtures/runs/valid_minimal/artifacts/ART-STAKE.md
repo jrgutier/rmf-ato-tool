@@ -11,3 +11,11 @@ sources: [product/README.md]
 
 The program manager, ISSM, ISSO, information owner, security control assessor and the
 authorizing official are the stakeholders for FDR [[product/README.md]].
+
+## Mission focus
+
+Analysts need reports within minutes and tolerate a day-long outage [[INT-019.A1]].
+
+## Confirmation
+
+The program manager confirmed the stakeholder list [[INT-020.A1]].

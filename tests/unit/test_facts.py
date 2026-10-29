@@ -21,8 +21,9 @@ def test_baseline_resolve_reads_facts_not_profile(minimal_run):
     (minimal_run / "product/profile.yaml").write_text(
         "categorization: {c: high, i: high, a: high}\n")
     edit_yaml(minimal_run / "facts.yaml", lambda d: d["categorization"].__setitem__("c", "high"))
-    data = baseline.resolve(open_run(minimal_run, REPO_ROOT))
-    assert data["baseline_id"] == "SP800-53B-HIGH-SUBSET-6"
+    run = open_run(minimal_run, REPO_ROOT)
+    data = baseline.resolve(run)
+    assert data["baseline_id"] == f"CNSSI1253-H-M-L-SUBSET-{len(run.config['control_subset'])}"
     assert data["categorization"] == {"c": "high", "i": "moderate", "a": "low"}
 
 

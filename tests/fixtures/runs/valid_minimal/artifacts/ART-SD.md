@@ -2,7 +2,7 @@
 artifact_id: ART-SD
 run_id: valid-minimal
 produced_by_task: C-1
-touched_by: [C-1]
+touched_by: [C-1, I-2]
 sources: [INT-003.A1, product/architecture.md]
 ---
 # System description
@@ -21,7 +21,7 @@ analysis enclave [[INT-003.A1]] [[product/architecture.md#overview]].
 | Life-cycle state | under-development | C-1 |
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
 | Categorization approved | yes (PER-AO) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-7 | S-1 |
 <!-- END rmf:facts -->
 
 ## Users
@@ -31,3 +31,7 @@ Operators monitor relay health; administrators manage the appliance [[product/us
 ## Leveraged authorizations
 
 Sign-in relies on the separately authorized enterprise identity provider [[INT-003.A1]].
+
+## As built
+
+The developers confirmed the description against the build [[INT-033.A1]].

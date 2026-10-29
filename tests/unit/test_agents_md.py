@@ -59,9 +59,9 @@ def test_command_paths_from_typer_app():
 
 def test_commands_registered_and_documented():
     unregistered = real_text().replace(
-        "| `rmf doctor` |", "| `rmf render --check` | x |\n| `rmf doctor` |"
+        "| `rmf doctor` |", "| `rmf publish --check` | x |\n| `rmf doctor` |"
     )
-    assert messages(unregistered) == ["CLI section documents unregistered command: rmf render"]
+    assert messages(unregistered) == ["CLI section documents unregistered command: rmf publish"]
 
     lines = [line for line in real_text().splitlines() if "`rmf lessons check`" not in line]
     assert messages("\n".join(lines)) == [

@@ -19,7 +19,7 @@ SAR_DIR = "artifacts/sar/results"
 POAM_FILE = "artifacts/poam/items.yaml"
 
 
-def _family_records(ctx: Context, directory: str, key: str) -> Iterator[tuple[str, dict]]:
+def family_records(ctx: Context, directory: str, key: str) -> Iterator[tuple[str, dict]]:
     for path in sorted(ctx.run.path(directory).glob("*.yaml")):
         data = ctx.data(ctx.run.rel(path))
         for item in (data or {}).get(key) or [] if isinstance(data, dict) else []:
@@ -67,7 +67,7 @@ def ssp_coverage(ctx: Context) -> list[RunFinding]:
     if baseline_mod.load(run) is None:
         return [make("SSP-COV-001", "no baseline.json; S-1 runs `rmf baseline resolve`",
                      BASELINE_FILE, None, {"S-4"})]
-    stated = {item.get("control_id") for _, item in _family_records(ctx, SSP_DIR, "controls")}
+    stated = {item.get("control_id") for _, item in family_records(ctx, SSP_DIR, "controls")}
     return [make("SSP-COV-001", f"baseline control {cid} has no SSP statement",
                  f"{SSP_DIR}/{family(cid)}.yaml")
             for cid in baseline_mod.control_ids(run) if cid not in stated]
@@ -78,7 +78,7 @@ def sar_poam(ctx: Context) -> list[RunFinding]:
     linked = {i.get("finding_ref") for i in (poam or {}).get("items") or []
               if isinstance(i, dict)} if isinstance(poam, dict) else set()
     out = []
-    for _, f in _family_records(ctx, SAR_DIR, "findings"):
+    for _, f in family_records(ctx, SAR_DIR, "findings"):
         if f.get("status") != "closed" and f.get("id") not in linked:
             cid = str(f.get("control_id", ""))
             out.append(make("SAR-POAM-001", f"SAR finding {f.get('id')} ({cid}, "

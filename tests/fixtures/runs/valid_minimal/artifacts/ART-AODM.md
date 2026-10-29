@@ -18,12 +18,13 @@ sources: [INT-012.A1, ART-RAR]
 | Life-cycle state | under-development | C-1 |
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
 | Categorization approved | yes (PER-AO) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-7 | S-1 |
 <!-- END rmf:facts -->
 
 ## Decision
 
-The AO grants an authorization to operate for one year, conditioned on closing POAM-001
+The AO grants an authorization to operate with conditions for one year: the root SSH fix
+(POAM-002, POAM-003) by December and the account review (POAM-001) by January
 [[INT-012.A1]] [[ART-RAR]].
 
 ## Disclaimer

@@ -18,13 +18,15 @@ from typing import Any
 
 import jsonschema
 
-from rmf_tool import refs
+from rmf_tool import playbooks_sync, refs
 from rmf_tool.check import load_registry
 from rmf_tool.findings import Finding
-from rmf_tool.framework import graph
+from rmf_tool.framework import graph, personas_check
 from rmf_tool.framework.citations import DEFERRED, ERROR, Resolver, describe
-from rmf_tool.framework.load import Loaded, load
+from rmf_tool.framework.load import Loaded, display_path, load
+from rmf_tool.framework.load import _read as read_yaml_rt
 from rmf_tool.framework.model import (
+    BASELINES_DIR,
     CITING_KINDS,
     COLLECTIONS,
     FRAMEWORK_SCHEMA,
@@ -37,6 +39,7 @@ from rmf_tool.framework.model import (
     Location,
 )
 from rmf_tool.profiles import Profile, rule_active
+from rmf_tool.run.model import schema_errors
 
 FACTS_SCHEMA = f"{SCHEMA_DIR}/facts.schema.json"
 
@@ -67,6 +70,8 @@ class Context:
     ancestors: dict[str, frozenset[str]] = field(default_factory=dict)
     deferred: int = 0
     citations: int = 0
+    # citing blocks of framework/baselines/*.yaml (not entities: no ID rules apply)
+    cited: list[Entity] = field(default_factory=list)
 
 
 def _err(rule: str, entity: Entity | None, message: str, location: Location | None = None
@@ -268,7 +273,7 @@ def _citations(e: Entity) -> list[Any]:
 def rule_cite_present(ctx: Context) -> list[Finding]:
     assert ctx.resolver is not None
     out = []
-    for e in ctx.fw.entities:
+    for e in [*ctx.fw.entities, *ctx.cited]:
         cites = _citations(e)
         if e.kind in CITING_KINDS and not cites:
             out.append(_err("FW-CITE-001", e, "no citation (cite at least one reference)"))
@@ -282,7 +287,7 @@ def rule_cite_present(ctx: Context) -> list[Finding]:
 def rule_cite_resolve(ctx: Context) -> list[Finding]:
     assert ctx.resolver is not None
     out = []
-    for e in ctx.fw.entities:
+    for e in [*ctx.fw.entities, *ctx.cited]:
         for c in _citations(e):
             if not ctx.resolver.known(c.get("ref")):
                 continue  # FW-CITE-001
@@ -332,6 +337,23 @@ def rule_task_set(ctx: Context) -> list[Finding]:
     return out
 
 
+def rule_persona_cards(ctx: Context) -> list[Finding]:
+    return personas_check.missing_cards(ctx.fw, ctx.repo)
+
+
+def rule_persona_card_content(ctx: Context) -> list[Finding]:
+    assert ctx.resolver is not None
+    return personas_check.card_problems(ctx.fw, ctx.repo, ctx.resolver)
+
+
+def rule_playbook_coverage(ctx: Context) -> list[Finding]:
+    return [f for f in playbooks_sync.findings(ctx.fw, ctx.repo) if f.rule == "FW-PB-001"]
+
+
+def rule_playbook_sync(ctx: Context) -> list[Finding]:
+    return [f for f in playbooks_sync.findings(ctx.fw, ctx.repo) if f.rule == "FW-PB-002"]
+
+
 RULES: dict[str, Callable[[Context], list[Finding]]] = {
     "FW-ID-001": rule_id_unique,
     "FW-ID-002": rule_id_pattern,
@@ -344,17 +366,25 @@ RULES: dict[str, Callable[[Context], list[Finding]]] = {
     "FW-CITE-001": rule_cite_present,
     "FW-CITE-002": rule_cite_resolve,
     "FW-TASK-001": rule_task_set,
+    "FW-PER-001": rule_persona_cards,
+    "FW-PER-002": rule_persona_card_content,
+    "FW-PB-001": rule_playbook_coverage,
+    "FW-PB-002": rule_playbook_sync,
 }
 IMPLEMENTED = ("FW-SCHEMA-001", *RULES)
+# FW-* rules that another command enforces (each has its own rmf ci step), not rmf validate.
+CHECKED_ELSEWHERE = {"FW-MAN-001": "rmf render --check"}
 
 
 # --- driver ------------------------------------------------------------------------------
 
 
 def active_rules(profile: Profile) -> list[str]:
-    """Registry rules of the framework family (FW-*) whose phase is in the profile."""
+    """Registry rules of the framework family (FW-*) whose phase is in the profile, less
+    those checked by another command."""
     return [r.id for r in load_registry()
-            if r.id.startswith("FW-") and rule_active(r.phase, profile)]
+            if r.id.startswith("FW-") and r.id not in CHECKED_ELSEWHERE
+            and rule_active(r.phase, profile)]
 
 
 def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
@@ -378,6 +408,36 @@ def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
     return out
 
 
+def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Entity]]:
+    """``baselines/*.yaml`` under the framework root (CNSSI 1253 tables, ADR-0002): schema
+    errors as FW-SCHEMA-001 findings, and each citing block (the file, every table block and
+    every overlay block) as a pseudo-entity for the FW-CITE rules. ``*.overrides.yaml`` files
+    are generator input, not tables."""
+    findings: list[Finding] = []
+    cited: list[Entity] = []
+    for path in sorted((fw_root / BASELINES_DIR).glob("*.yaml")):
+        if path.name.endswith(".overrides.yaml"):
+            continue
+        shown = display_path(path, repo)
+        data = read_yaml_rt(path, shown, findings)
+        if data is None:
+            continue
+        errors = schema_errors(repo, "baselines", data)
+        findings += [Finding("FW-SCHEMA-001", "E", e, shown) for e in errors]
+        if errors:
+            continue
+        cited.append(Entity("baselines", {"id": data["baseline"],
+                                          "citations": data["citations"]},
+                            Location(shown, 1)))
+        blocks = [(f"{data['baseline']} table {t['table']}", b) for t in data["tables"]
+                  for b in t["blocks"]]
+        blocks += [(f"overlay {o['id']}", b) for o in data["overlays"]
+                   for b in o.get("blocks") or []]
+        cited += [Entity("baselines", {"id": label, "citations": [b["citation"]]},
+                         Location(shown, b.lc.line + 1)) for label, b in blocks]
+    return findings, cited
+
+
 def validate(fw_root: Path, repo: Path, profile: Profile) -> Result:
     """Run the active FW-* rules on the framework at ``fw_root``. References, schemas and
     the facts schema always come from ``repo``. Raises UnimplementedRules, and
@@ -392,10 +452,12 @@ def validate(fw_root: Path, repo: Path, profile: Profile) -> Result:
     if not rules:
         return Result(findings, rules, {**stats, "citations": 0, "deferred_citations": 0})
     findings += loaded.findings + schema_findings(loaded, repo)
+    table_findings, cited = baseline_tables(fw_root, repo)
+    findings += table_findings
     resolver = None
-    if any(r.startswith("FW-CITE-") for r in rules):
+    if any(r.startswith(("FW-CITE-", "FW-PER-")) for r in rules):
         resolver = Resolver(repo, refs.load_index(repo), strict=profile.includes("p2x"))
-    ctx = Context(loaded.framework, repo, resolver)
+    ctx = Context(loaded.framework, repo, resolver, cited=cited)
     if not findings:
         ctx.deps = graph.dependency_graph(ctx.fw)
         ctx.ancestors = graph.ancestors(ctx.deps)

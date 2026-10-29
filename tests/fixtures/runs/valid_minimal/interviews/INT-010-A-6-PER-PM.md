@@ -11,3 +11,8 @@ date: '2026-10-29'
 Asked of: PER-PM · Task: A-6
 **A1 {#INT-010.A1}** respondent: simulated · tag: SIMULATED · basis: [[product/security.md#accounts]]
 > The ISSO will run the first quarterly account review by the end of January.
+
+### Q2 {#INT-010.Q2}
+Asked of: PER-PM · Task: A-6
+**A2 {#INT-010.A2}** respondent: simulated · tag: SIMULATED · basis: [[product/security.md#configuration]]
+> The developers will rebuild the image with root SSH login disabled within 30 days; the ISSE re-scans it.

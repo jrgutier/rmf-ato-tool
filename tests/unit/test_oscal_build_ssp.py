@@ -5,6 +5,7 @@ import json
 import pytest
 from conftest import REPO_ROOT, VALID_MINIMAL, edit_yaml
 
+from rmf_tool import baseline
 from rmf_tool.oscal import build_ssp, schema_validate
 from rmf_tool.oscal import validate as oscal_validate
 from rmf_tool.oscal.uuids import uuid_for
@@ -20,6 +21,7 @@ def test_minimal_golden():
     """The committed fixture OSCAL is exactly a fresh build (GEN-STALE-001 relies on it)."""
     run = open_run(VALID_MINIMAL, REPO_ROOT)
     assert build_ssp.build_ssp(run) == (VALID_MINIMAL / "oscal/ssp.json").read_text()
+    assert build_ssp.build_ssp(run) == (REPO_ROOT / "tests/golden/oscal/ssp.json").read_text()
     assert build_ssp.build_profile(run) == (VALID_MINIMAL / "oscal/profile.json").read_text()
 
 
@@ -58,7 +60,7 @@ def test_statement_mapping():
     ssp, profile = built(VALID_MINIMAL)
     reqs = {r["control-id"]: r for r in
             ssp["system-security-plan"]["control-implementation"]["implemented-requirements"]}
-    assert list(reqs) == ["ac-2", "au-2", "cm-6", "ia-2", "sc-7", "si-2"]
+    assert list(reqs) == baseline.control_ids(open_run(VALID_MINIMAL, REPO_ROOT))
     sc7 = reqs["sc-7"]["by-components"][0]
     assert sc7["implementation-status"] == {"state": "implemented"}
     assert sc7["remarks"].startswith("Inherited from Analysis enclave")

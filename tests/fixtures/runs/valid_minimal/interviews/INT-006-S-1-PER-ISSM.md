@@ -10,4 +10,4 @@ date: '2026-10-29'
 ### Q1 {#INT-006.Q1}
 Asked of: PER-ISSM · Task: S-1
 **A1 {#INT-006.A1}** respondent: simulated · tag: SIMULATED · basis: [[product/security.md#accounts]]
-> The moderate baseline, restricted to the six skeleton controls, with quarterly account review.
+> The moderate baseline, restricted to the seven fixture-profile controls, with quarterly account review.

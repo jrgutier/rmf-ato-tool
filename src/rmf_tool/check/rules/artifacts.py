@@ -1,5 +1,5 @@
-"""RUN-FM-001 (artifact front-matter and data-file shape) and RUN-ART-001 (core artifacts
-present, scope-aware)."""
+"""RUN-FM-001 (artifact front-matter and data-file shape), RUN-ART-001 (core artifacts
+present, scope-aware) and RUN-PH-001 (template placeholders left in run files)."""
 
 from __future__ import annotations
 
@@ -7,10 +7,21 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
-from rmf_tool.run.model import BASELINE_FILE, FACTS_FILE, FAMILY_TOKEN, MANIFEST_FILE
+from rmf_tool.run.model import (
+    ARTIFACTS_DIR,
+    ASSUMPTIONS_FILE,
+    BASELINE_FILE,
+    FACTS_FILE,
+    FAMILY_TOKEN,
+    INTERVIEWS_DIR,
+    JOURNAL_FILE,
+    MANIFEST_FILE,
+)
 
 FM = "RUN-FM-001"
 ART = "RUN-ART-001"
+PH = "RUN-PH-001"
+PLACEHOLDER = "<<FILL"  # templates/ placeholders: <<FILL: what to write>>
 
 
 def front_matter(ctx: Context) -> list[RunFinding]:
@@ -96,4 +107,27 @@ def core_present(ctx: Context) -> list[RunFinding]:
                     out.append(make(ART, f"{aid}: no {path} file", parent, None, owners))
             elif not run.path(path).is_file():
                 out.append(make(ART, f"{aid}: {path} missing", path, None, owners))
+    return out
+
+
+def placeholders(ctx: Context) -> list[RunFinding]:
+    """Every agent-written file: artifacts (Markdown and data), interviews, facts,
+    assumptions and the journal."""
+    run = ctx.run
+    paths = sorted(p for p in run.path(ARTIFACTS_DIR).rglob("*")
+                   if p.is_file() and p.suffix in (".md", ".yaml", ".yml"))
+    paths += sorted(run.path(INTERVIEWS_DIR).glob("*.md"))
+    paths += [run.path(f) for f in (FACTS_FILE, ASSUMPTIONS_FILE, JOURNAL_FILE)]
+    out: list[RunFinding] = []
+    for path in paths:
+        if not path.is_file():
+            continue
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except (OSError, UnicodeDecodeError):
+            continue
+        for lineno, line in enumerate(lines, start=1):
+            if PLACEHOLDER in line:
+                out.append(make(PH, f"unresolved placeholder: {line.strip()[:120]}",
+                                run.rel(path), lineno))
     return out

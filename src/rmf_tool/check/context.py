@@ -5,7 +5,8 @@ from __future__ import annotations
 from functools import cached_property
 from typing import Any
 
-from rmf_tool.run import assumptions, frontmatter, interviews
+from rmf_tool import refs
+from rmf_tool.run import assumptions, frontmatter, interviews, scope
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run.model import ARTIFACTS_DIR, Run
 from rmf_tool.run.trace import Resolver
@@ -40,6 +41,26 @@ class Context:
         items, _ = self.assumptions
         return Resolver(self.run, interviews.answer_ids(self.interviews),
                         {str(a.get("id")) for a in items})
+
+    @cached_property
+    def degraded_refs(self) -> list[str]:
+        """Degraded references (plan §7.6) cited by an active task or by an artifact in play;
+        an unreadable index reads as none (REF-001 reports it at repo scope)."""
+        try:
+            index = refs.load_index(self.run.repo)
+        except refs.IndexFileError:
+            return []
+        degraded = {str(r["id"]) for r in index["references"] if r.get("status") == "degraded"}
+        if not degraded:
+            return []
+        cited: set[str] = set()
+        entities = [self.run.framework.index("tasks")[t] for t in scope.active_tasks(self.run)]
+        entities += [e for aid, e in self.run.framework.index("artifacts").items()
+                     if scope.produced_or_seeded(self.run, aid)]
+        for e in entities:
+            cited |= {str(c.get("ref")) for c in e.data.get("citations") or []
+                      if isinstance(c, dict)}
+        return sorted(degraded & cited)
 
     def interview_task(self, rel: str) -> str | None:
         return next((i.task for i in self.interviews if i.rel == rel), None)
