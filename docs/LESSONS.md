@@ -159,3 +159,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: The CLI consoles use soft_wrap=True, and the run commands print plain lines with typer.echo.
 - Rule: CLI lines meant for agents or scripts are never wrapped; use typer.echo or a soft-wrapping console, and keep --format json for anything structured.
 - Promotion: none — fixed once in rmf_tool.cli's shared consoles; there is no second place to repeat it
+
+## L-0023 · 2026-10-29 · run: phase-3.5 · tags: agent-lane, tooling
+- Symptom: the agent-run isolation probe failed. Under `--setting-sources project --strict-mcp-config`, the headless session still loaded the user's skills and slash commands, and the init event listed 3 plugins. A $0.10 probe then stopped with `error_max_budget_usd` after answering.
+- Root cause: `--setting-sources project` does not stop user skills and commands from resolving, so it is not enough on its own. The 3 plugins were Claude Code's own (`source: <name>@builtin`), not user-installed. A minimal headless turn with the default system prompt costs about $0.16 cold.
+- Fix: session argv adds `--disable-slash-commands`. The probe ignores plugins whose source ends in `@builtin`. Probe budget raised to $0.30. Verified: no user skills, commands or MCP, and a canary question about the global CLAUDE.md (oh-my-claudecode) answers NO. `check_argv` now refuses an argv without the flag.
+- Rule: isolate headless agent runs with `--setting-sources project --strict-mcp-config --disable-slash-commands`, and judge leaks by plugin source, not plugin count.
+- Promotion: check: test_agent_run_dry

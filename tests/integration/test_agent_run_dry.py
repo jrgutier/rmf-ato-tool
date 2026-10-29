@@ -18,7 +18,7 @@ def test_agent_run_dry():
     assert proc.returncode == 0, proc.stderr
     argv = next(line for line in proc.stdout.splitlines() if line.startswith("claude argv:"))
     for needed in ("--setting-sources project", "--strict-mcp-config",
-                   "--no-session-persistence", "--max-budget-usd",
+                   "--no-session-persistence", "--disable-slash-commands", "--max-budget-usd",
                    "--allowedTools Bash\\(uv\\ run\\ rmf:\\*\\) Read Edit Write Glob Grep"):
         assert needed in argv, needed
     for bad in FORBIDDEN:

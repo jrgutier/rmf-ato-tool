@@ -18,7 +18,7 @@
 #
 # --dry-run prepares the copy, validates the scenario and seeds (RUN-CFG-001), prints the exact
 # session argv and checks it, then runs one isolation probe (one small model call, at most
-# $0.10) unless --no-probe. The probe asserts that the session loads no user-level plugins
+# $0.30) unless --no-probe. The probe asserts that the session loads no user-level plugins
 # or MCP servers and that a heading of ~/.claude/CLAUDE.md is not in the agent's context. If
 # it leaks, the probe is retried with --bare (which needs ANTHROPIC_API_KEY, because --bare
 # never reads the OAuth login); a passing bare probe records isolation: bare.
@@ -57,7 +57,7 @@ for tool in claude uv jq rsync shasum; do
 done
 BUDGET=${AGENT_BUDGET_USD:-5}
 MAX_SESSIONS=${AGENT_MAX_SESSIONS:-12}
-PROBE_BUDGET=0.10
+PROBE_BUDGET=0.30
 TMP=${TMPDIR:-/tmp}
 WORK="${TMP%/}/rmf-agent-$SCENARIO"
 RESULTS="$REPO/tests/agent/results/$SCENARIO"
@@ -87,6 +87,7 @@ uv run rmf check "$RUN" --rules RUN-CFG-001 >/dev/null \
 
 session_argv() {  # $1: prompt; $2: budget -> ARGV
   ARGV=(claude -p "$1" --setting-sources project --strict-mcp-config --no-session-persistence
+        --disable-slash-commands
         --allowedTools "Bash(uv run rmf:*)" Read Edit Write Glob Grep
         --max-budget-usd "$2" --output-format stream-json --verbose)
   if [[ $ISOLATION == bare ]]; then
@@ -103,6 +104,8 @@ check_argv() {
   done
   [[ " ${ARGV[*]} " == *" --allowedTools Bash(uv run rmf:*) Read Edit Write Glob Grep "* ]] \
     || die "scoped allowlist missing from claude argv"
+  [[ " ${ARGV[*]} " == *" --disable-slash-commands "* ]] \
+    || die "--disable-slash-commands missing from claude argv (user skills would load; L-0023)"
 }
 
 prompt_for() {  # $1: RMF step letter
@@ -133,8 +136,10 @@ If there are none, print NONE. Do not use any tools." "$PROBE_BUDGET"
   local init
   init=$(jq -c 'select(.type == "system" and .subtype == "init")' "$log" | head -n 1)
   [[ -n $init ]] || { echo "probe: no system/init event (see $log.err)" >&2; return 1; }
+  # Claude Code's own plugins report source "<name>@builtin"; only user-installed ones leak.
   if ! jq -e '((.mcp_servers // []) | length == 0)
-              and ((.plugins // []) | length == 0)
+              and ([(.plugins // [])[] | select((.source // "") | endswith("@builtin") | not)]
+                   | length == 0)
               and ([(.slash_commands // [])[], (.skills // [])[]
                     | tostring | select(test(":"))] | length == 0)' <<<"$init" >/dev/null; then
     echo "probe: user-level plugins, skills or MCP servers loaded ($ISOLATION)" >&2
