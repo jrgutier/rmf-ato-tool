@@ -110,3 +110,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: imported DODI8510.01 only. The other 9 stay pending-acquisition, with direct URLs recorded in the Phase 2 handoff. CNSSI1253 waits for a user-supplied copy or the §7.6 degraded policy. Declined Playwright or headless fetching to get past the 403s (bot-detection circumvention) and clicking through certificate errors.
 - Rule: run the browser-assisted acquisition only while the user is at the machine. Expect one prompt per site for multiple downloads; one download per page load avoids the batch block.
 - Promotion: none — operator procedure, documented in playbooks/_ops/fetch-blocked-refs.md "Practical notes"
+
+## L-0016 · 2026-10-29 · run: phase-2 · tags: refs, tls, browser
+- Symptom: www.cnss.gov failed TLS verification in curl, Python and the user's real browser (whole-site error page). Its openDoc.cfm links then redirected to error_page.cfm?EC=09 even with valid TLS.
+- Root cause: L-0003's diagnosis ("incomplete chain") was wrong. cnss.gov serves a DoD PKI certificate (DOD SW CA-82, chaining to DoD Root CA 3–6), which public trust stores don't contain. openDoc tokens are bound to the session cookie set by the listing page.
+- Fix: downloaded DISA's public DoD PKI bundle (dl.dod.cyber.mil, file hashes checked against its manifest) into the scratchpad. Used it as `curl --cacert` for these fetches only (full verification; no system or browser trust change; user approved). Loaded Instructions.cfm and the openDoc links within one cookie jar. Imported CNSSI1253 (2022-08-01) and split the overlay placeholder into 4 entries (1253E Att1/Att5, 1253F Att2 2025, Att6). Browser downloads (L-0015) now work as one download per fresh tab.
+- Rule: a .mil/.gov TLS failure usually means a DoD PKI chain. Verify against DISA's DoD root bundle scoped to the call; never disable verification or change system trust. For cnss.gov, fetch documents within the listing page's session.
+- Promotion: none — operator procedure, documented in playbooks/_ops/fetch-blocked-refs.md "Practical notes"

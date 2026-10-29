@@ -75,3 +75,5 @@ as not met.
 - Agent-driven sessions: save one file per page load and confirm each lands in the browser's download folder before moving on.
 - Don't route bytes from the page to a localhost receiver; Chrome's Local Network Access prompt blocks it.
 - cnss.gov may be unreachable even in a real browser. Never click through a certificate warning. If CNSSI 1253 can't be obtained, use the degraded-reference policy below.
+- **cnss.gov (L-0016):** the site uses a DoD PKI certificate. Download DISA's DoD PKI CA bundle (`https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/unclass-certificates_pkcs7_DoD.zip`) to a scratch folder, convert it with `openssl pkcs7 -print_certs`, and pass it as `curl --cacert` for these fetches only. Load `Instructions.cfm` with a cookie jar first; `openDoc.cfm` links only work within that session.
+- **Agent-driven browser downloads (L-0016):** a fresh tab allows one download. Use one new tab per file (navigate → trigger download → close).
