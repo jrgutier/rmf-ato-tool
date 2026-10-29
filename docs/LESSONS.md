@@ -68,3 +68,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: Do not import click; walk typer.main.get_command(app) by its commands mapping, and test with typer.testing.CliRunner.
 - Rule: Never import click directly; use only Typer's public API and duck-type the built command tree.
 - Promotion: check: test_command_paths_from_typer_app
+
+## L-0010 · 2026-10-29 · run: phase-1 · tags: team, git
+- Symptom: Phase 1 ended up with two commits under the same message. The worker committed the phase, and the lead, believing it was uncommitted, committed a follow-up (pyright config) with a duplicate message.
+- Root cause: commit ownership was changed mid-task by message. The worker acted on the first message ("commit at phase close") after its report was already sent, so the lead's view was stale and both parties committed.
+- Fix: amended the lead's commit message to describe its real content (pyright venv config); history is otherwise correct.
+- Rule: exactly one party owns the phase-close commit, and it is fixed in the worker's spawn prompt. The lead runs `git log` before committing and never commits while a worker is live in the same tree.
+- Promotion: none — team-process rule; recorded in .omc/handoffs/team-plan.md
