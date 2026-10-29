@@ -1,0 +1,91 @@
+{#- One phase chapter. Needs p (phase), base (heading level), m, L. -#}
+{{ h(base) }} <a id="{{ anchor('phases', p.id) }}"></a>Phase {{ p.order }}: {{ p.short }} · {{ p.name }}
+
+{{ p.purpose | text }}
+
+| | |
+|---|---|
+| Starts at | {{ (L(p.entry_milestone) ~ " " ~ p.entry_name | cell) if p.entry_milestone else ("Start of the life cycle" if p.order == m.phases[0].order else "End of the previous phase") }} |
+| Ends at | {{ (L(p.exit_milestone) ~ " " ~ p.exit_name | cell) if p.exit_milestone else "End of the life cycle (disposal)" }} |
+| RMF steps active | {% for s in p.steps %}{{ ", " if not loop.first }}{{ L(s, s ~ " " ~ m.kinds[s][1]) }}{% else %}—{% endfor %} |
+| Tasks | {{ p.tasks | length }} with this primary phase{{ "; " ~ (p.also_tasks | length) ~ " more also run here" if p.also_tasks else "" }} |
+| Authorization decisions possible | {{ L.many(p.decisions, "none") }} |
+
+**Entry criteria**
+
+{% for c in p.entry_criteria %}
+- {{ c | text }}
+{% endfor %}
+
+**Exit criteria**
+
+{% for c in p.exit_criteria %}
+- {{ c | text }}
+{% endfor %}
+{% if p.citations %}
+
+**Sources**
+
+{% for c in p.citations %}
+- {{ L.cite(c) }}
+{% endfor %}
+{% endif %}
+{% if p.milestones %}
+
+{{ h(base + 1) }} {{ p.short }} milestones and decision points
+
+| Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
+|---|---|---|---|---|
+{% for ms in p.milestones %}
+| <a id="{{ anchor('milestones', ms.id) }}"></a>**{{ ms.short | cell }}** {{ ms.name | cell }} | {{ ms.kind | replace("-", " ") }} | {{ L(ms.decision_authority) if ms.decision_authority else "—" }} | {{ ms.purpose | cell }} | {{ L.many(ms.tasks) }} |
+{% endfor %}
+{% if p.milestones | selectattr("citations") | list %}
+
+Sources:
+
+{% for ms in p.milestones if ms.citations %}
+- **{{ ms.short }}**: {% for c in ms.citations %}{{ "; " if not loop.first }}{{ L.cite(c) }}{% endfor +%}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if p.reviews %}
+
+{{ h(base + 1) }} {{ p.short }} technical reviews
+
+| Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
+|---|---|---|---|
+{% for r in p.reviews %}
+| <a id="{{ anchor('reviews', r.id) }}"></a>**{{ r.short | cell }}** {{ r.name | cell }} | {{ r.purpose | cell }} | {{ r.rmf_focus | cell }} | {{ L.many(r.tasks) }} |
+{% endfor %}
+{% if p.reviews | selectattr("citations") | list %}
+
+Sources:
+
+{% for r in p.reviews if r.citations %}
+- **{{ r.short }}**: {% for c in r.citations %}{{ "; " if not loop.first }}{{ L.cite(c) }}{% endfor +%}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{{ h(base + 1) }} {{ p.short }} task summary
+
+{% if p.tasks %}
+Tasks are listed in the order they can start: every task comes after the tasks it depends on.
+
+| Task | Step | Accountable | Produces | Updates | Feeds |
+|---|---|---|---|---|---|
+{% for t in p.tasks %}
+| {{ L(t.id) }} {{ t.name | cell }}{{ " *(optional)*" if t.optional else "" }} | {{ t.step_name }} | {{ L(t.raci.A) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "produces") | map(attribute=0)) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "updates") | map(attribute=0)) }} | {{ L.many(t.aligned.milestones + t.aligned.reviews + t.aligned.decisions) }} |
+{% endfor %}
+{% else %}
+No task has this as its primary phase.
+{% endif %}
+{% if p.also_tasks %}
+
+Also active in this phase (described in their primary phase): {{ L.many(p.also_tasks) }}.
+{% endif %}
+
+{% for t in p.tasks %}
+{% include "task.md.j2" %}
+
+{% endfor %}

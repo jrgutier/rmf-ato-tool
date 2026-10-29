@@ -1,0 +1,166 @@
+{#- The whole manual. Rendered by rmf_tool.render.manual; m = model(), L = Links. -#}
+# {{ m.meta.title | text }}
+
+> **Generated file. Do not edit.** `uv run rmf render` writes this file from `{{ m.source }}/`
+> (framework version {{ m.meta.framework_version }}). To change it, edit the YAML and render again;
+> `rmf ci` fails while the committed manual differs from a fresh render (FW-MAN-001).
+>
+> **Draft guidance, not policy.** This manual arranges public NIST, CNSS and DoD guidance into a
+> working plan. It does not replace those documents, your DoD Component's RMF guidance, a Security
+> Control Assessor or an Authorizing Official.
+
+{{ m.meta.description | text }}
+
+## Contents
+
+1. [How to read this manual](#how-to-read)
+2. [Life cycle at a glance](#lifecycle)
+3. [Who does what (RACI matrix)](#raci)
+4. [Phases and tasks](#phases)
+{% for p in m.phases %}
+   - {{ L(p.id, "Phase " ~ p.order ~ ": " ~ p.short ~ " · " ~ p.name) }} ({{ p.tasks | length }} task{{ "" if p.tasks | length == 1 else "s" }}; also in [{{ docs[p.id] }}]({{ L.path(docs[p.id]) }}))
+{% endfor %}
+5. [Authorization decisions](#decisions)
+6. [Acquisition pathway notes](#pathways)
+7. [Artifact catalog](#artifacts)
+8. [Persona catalog](#personas)
+9. [References](#references)
+
+## <a id="how-to-read"></a>1. How to read this manual
+
+The manual follows a system from inception to disposal. It covers the {{ m.tasks | length }} tasks of
+the NIST SP 800-37 Rev. 2 Risk Management Framework (RMF) as the DoD runs them, arranged along the
+phases, milestones and technical reviews of the {{ L(m.meta.spine_pathway) }} acquisition pathway. Start with the
+[life cycle](#lifecycle) to find the phase your program is in, then read that phase's chapter.
+
+Each phase chapter has an overview (purpose, entry and exit criteria, the milestones and technical
+reviews in the phase, and the RMF evidence each one expects), a task summary table, and one section
+per task. Every task section has the same parts:
+
+| Part | What it tells you |
+|---|---|
+| Purpose | The outcome the task produces. |
+| Stakeholders (RACI) | Who does the work (**R**esponsible), who owns the outcome and signs off (**A**ccountable, exactly one), whose input is needed (**C**onsulted) and who is kept informed (**I**nformed). Names link to persona cards that describe each role. |
+| Inputs | Artifacts and outside material the task needs, and the task that produces each artifact. |
+| Outputs | The deliverables the task first **produces** or later **updates**, with their package status: *core* artifacts are required in the authorization package. |
+| Entry criteria | What must be true before the task starts. |
+| Exit criteria | What must be true to call the task done. |
+| Alignment | The acquisition milestones, technical reviews and authorization decisions the task's results feed. |
+| Citations | The source passages the task rests on. |
+| Playbook | The step-by-step procedure an analyst or an AI agent follows to carry out the task. |
+| Cross-references | Tasks this one depends on, tasks that depend on it, and feedback loops. |
+
+Conventions:
+
+- IDs are stable and never reused: `PH-` phases, `MS-` milestones and decision points, `RV-`
+  technical reviews, `AD-` authorization decisions, `PER-` personas, `ART-` artifacts, `EXT-`
+  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`).
+- A citation reads `REFERENCE, section "heading"` or `REFERENCE, p. N, "quoted words"`. The page is
+  the PDF page. To read the passage, run `uv run rmf refs show REFERENCE --section "heading"` or
+  `uv run rmf refs show REFERENCE --page N --anchor "quoted words"`.
+- Tasks run in dependency order. A task lists every task it depends on; feedback loops (later
+  results that revise earlier work) are shown separately and do not block.
+- `facts.yaml` is the single record of system facts in a run (identity, boundary, categorization,
+  baseline). Where a task writes one, its section says so.
+
+> **Warning: CUI and LLM endpoints.** Put Controlled Unclassified Information (CUI) or any other
+> non-public data into a fork of this repository, its `product/` folder or an AI agent's context only
+> when the repository host, every machine involved and the LLM endpoint are all authorized for that
+> data (AGENTS.md INV-7). Do not assume a commercial LLM service is authorized for CUI; confirm with
+> your ISSM and AO first. Simulated (`synthetic`) runs need only public or invented product material.
+
+## <a id="lifecycle"></a>2. Life cycle at a glance
+
+| # | Phase | Starts at | Ends at | Milestones and decision points | Technical reviews | RMF tasks (primary phase) | Also active | Authorization decisions |
+|---|---|---|---|---|---|---|---|---|
+{% for p in m.phases %}
+| {{ p.order }} | {{ L(p.id) }} {{ p.name | cell }} | {{ L(p.entry_milestone) if p.entry_milestone else "—" }} | {{ L(p.exit_milestone) if p.exit_milestone else "—" }} | {{ L.many(p.milestones | map(attribute="id")) }} | {{ L.many(p.reviews | map(attribute="id")) }} | {{ L.many(p.tasks | map(attribute="id")) }} | {{ L.many(p.also_tasks) }} | {{ L.many(p.decisions) }} |
+{% endfor %}
+
+The flowchart shows the phases in order, joined by the milestones that open and close them. Dotted
+lines lead to events inside a phase and to the tasks where the Authorizing Official makes an
+authorization decision.
+
+```mermaid
+{{ m.mermaid }}
+```
+
+### <a id="steps"></a>RMF steps
+
+| Step | Purpose | Tasks | Primary phases |
+|---|---|---|---|
+{% for s in m.steps %}
+| <a id="{{ anchor('steps', s.id) }}"></a>{{ s.id }} {{ s.name | cell }} | {{ s.purpose | cell }} | {{ L.many(s.tasks) }} | {{ L.many(s.primary_phases) }} |
+{% endfor %}
+
+{% include "raci_matrix.md.j2" %}
+
+## <a id="phases"></a>4. Phases and tasks
+
+{% for p in m.phases %}
+{% set base = 3 %}
+{% include "phase.md.j2" %}
+
+{% endfor %}
+## <a id="decisions"></a>5. Authorization decisions
+
+Only the Authorizing Official makes an authorization decision, in the task listed. The decision memo
+records it (see the artifact catalog).
+
+| Decision | Decided by | Decided in | Phases | Termination date required | Conditions required |
+|---|---|---|---|---|---|
+{% for d in m.decisions %}
+| {{ L(d.id) }} {{ d.name | cell }} | {{ L(d.decided_by) }} | {{ L.many(d.decided_in) }} | {{ L.many(d.phases) }} | {{ d.atd_required | yesno }} | {{ d.conditions_required | yesno }} |
+{% endfor %}
+
+{% for d in m.decisions %}
+### <a id="{{ anchor('decisions', d.id) }}"></a>{{ d.short }}: {{ d.name }}
+
+{{ d.description | text }}
+
+{% if d.aligned_tasks %}
+Tasks whose results feed this decision: {{ L.many(d.aligned_tasks) }}.
+
+{% endif %}
+Citations:
+
+{% for c in d.citations %}
+- {{ L.cite(c) }}
+{% endfor %}
+
+{% endfor %}
+## <a id="pathways"></a>6. Acquisition pathway notes
+
+The RMF steps and tasks are the same on every acquisition pathway. Only the timing and the
+acquisition events they line up with change. This manual follows {{ L(m.meta.spine_pathway) }}; for
+another pathway, use the notes below to map its events onto the phases.
+
+| Pathway | Instruction | Corresponding phases |
+|---|---|---|
+{% for w in m.pathways %}
+| {{ L(w.id) }} {{ w.name | cell }} | {{ w.instruction | cell }} | {{ L.many(w.phases) }} |
+{% endfor %}
+
+{% for w in m.pathways %}
+### <a id="{{ anchor('pathways', w.id) }}"></a>{{ w.short }}: {{ w.name }}{{ " (the spine of this manual)" if w.id == m.meta.spine_pathway else "" }}
+
+{{ w.description | text }}
+
+{% for note in w.rmf_notes %}
+- {{ note | text }}
+{% endfor %}
+{% if w.citations %}
+
+Citations:
+
+{% for c in w.citations %}
+- {{ L.cite(c) }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% include "artifact_catalog.md.j2" %}
+
+{% include "persona_catalog.md.j2" %}
+
+{% include "references.md.j2" %}

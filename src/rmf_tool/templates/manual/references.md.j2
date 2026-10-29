@@ -1,0 +1,12 @@
+{#- References cited by the framework, from references/index.yaml. -#}
+## <a id="references"></a>9. References
+
+The documents this manual cites, from `references/index.yaml`. Each one is kept in the repository
+as a pinned PDF with a text extraction that citations resolve against; `references/INDEX.md` lists
+the whole library with checksums.
+
+| ID | Title | Publisher | Revision | Source | Text |
+|---|---|---|---|---|---|
+{% for r in m.references %}
+| <a id="{{ anchor('refs', r.id) }}"></a>**{{ r.id }}** | {{ r.title | cell }} | {{ r.publisher | cell }} | {{ r.revision | cell }} | {% set url = (r.urls or [r.landing_url])[0] %}{{ "<" ~ url ~ ">" if url else "—" }} | {{ L.file(r.text.path, r.text.path.split("/")[-1]) if r.text else "—" }} |
+{% endfor %}

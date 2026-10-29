@@ -1,0 +1,39 @@
+{#- Persona catalog: every role, its card, and where it appears in the RACI. -#}
+## <a id="personas"></a>8. Persona catalog
+
+Personas are the roles that take part in the RMF: DoD RMF roles plus the acquisition, engineering
+and test roles the RMF works with. Each card describes the role's responsibilities, decision
+authority, typical concerns and the questions to ask it; agents use the cards to interview
+simulated stakeholders.
+
+| Persona | Category | Appointed by | Card | Tasks R / A / C / I |
+|---|---|---|---|---|
+{% for p in m.personas %}
+| {{ L(p.id) }} {{ p.name | cell }} | {{ p.category }} | {{ p.appointed_by | cell if p.appointed_by else "—" }} | {{ L.file(p.card, p.id ~ ".md") }} | {{ p.raci | map(attribute=1) | map("length") | join(" / ") }} |
+{% endfor %}
+
+{% for p in m.personas %}
+### <a id="{{ anchor('personas', p.id) }}"></a>{{ p.short }}: {{ p.name }}
+
+{{ p.description | text }}
+
+- Card: {{ L.file(p.card) }}
+- Category: {{ p.category }}; appointed by: {{ p.appointed_by | text if p.appointed_by else "not specified" }}
+- SP 800-37 Rev. 2 roles: {{ p.nist_roles | join(", ") if p.nist_roles else "none" }}
+{% for phrase, ids in p.raci %}
+- {{ phrase }}: {{ L.many(ids, "none") }}
+{% endfor %}
+{% if p.decides %}
+- Makes the authorization decisions: {{ L.many(p.decides) }}
+{% endif %}
+{% if p.milestone_authority %}
+- Decision authority for: {{ L.many(p.milestone_authority) }}
+{% endif %}
+
+Citations:
+
+{% for c in p.citations %}
+- {{ L.cite(c) }}
+{% endfor %}
+
+{% endfor %}

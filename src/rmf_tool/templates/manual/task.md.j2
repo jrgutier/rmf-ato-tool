@@ -1,0 +1,87 @@
+{#- One task section. Needs t (task), base (phase heading level), m, L. -#}
+{{ h(base + 1) }} <a id="{{ anchor('tasks', t.id) }}"></a>{{ t.id }} · {{ t.name }}
+
+*{{ L(t.step, t.step_name) }} step · {{ t.level }} level · primary phase {{ L(t.primary_phase) }}{{ " (continues in " ~ L.many(t.other_phases) ~ ")" if t.other_phases else "" }} · {{ "optional" if t.optional else "required" }} · at least {{ t.min_interviews }} stakeholder interview{{ "" if t.min_interviews == 1 else "s" }}*
+
+**Purpose.** {{ t.purpose | text }}
+
+**Stakeholders (RACI)**
+
+| Role | Persona |
+|---|---|
+{% for label, ids in t.raci_rows %}
+| {{ label }} | {% for pid in ids %}{{ "<br>" if not loop.first }}{% set per = m.personas_by_id.get(pid) %}{% if per %}{{ L.file(per.card, per.short) }} {{ per.name | cell }}{% else %}{{ pid }}{% endif %}{% endfor %} |
+{% endfor %}
+
+**Inputs**
+
+{% if t.inputs %}
+| Input | What it is | Comes from |
+|---|---|---|
+{% for i in t.inputs %}
+{% set a = m.artifacts_by_id.get(i) %}
+{% set x = m.externals_by_id.get(i) %}
+| {{ L(i) }} | {{ (a or x or {"name": ""}).name | cell }} | {% if a %}{{ L.many(t.input_producers[i]) }} ({{ a.package }} artifact){% elif x %}outside input ({{ x.kind }}){% else %}—{% endif %} |
+{% endfor %}
+{% else %}
+None.
+{% endif %}
+
+**Outputs**
+
+{% if t.output_rows %}
+| Output | What it is | This task | Package |
+|---|---|---|---|
+{% for aid, action in t.output_rows %}
+{% set a = m.artifacts_by_id.get(aid) %}
+| {{ L(aid) }} | {{ a.name | cell if a else "" }} | {{ action }} | {{ a.package if a else "—" }} |
+{% endfor %}
+{% else %}
+No artifact. The task is done when its interviews are recorded and its checks pass.
+{% endif %}
+{% if t.writes_facts %}
+
+Writes to `facts.yaml`: {% for f in t.writes_facts %}{{ ", " if not loop.first }}`{{ f }}`{% endfor %}.
+{% endif %}
+
+**Entry criteria**
+
+{% for c in t.entry_criteria %}
+- {{ c | text }}
+{% endfor %}
+
+**Exit criteria**
+
+{% for c in t.exit_criteria %}
+- {{ c | text }}
+{% endfor %}
+
+{% if t.decides %}
+**Authorization decision.** The {{ L(m.decisions | selectattr("id", "equalto", t.decides[0]) | map(attribute="decided_by") | first) }} decides here: {{ L.many(t.decides) }} (see [authorization decisions]({{ L.path("MANUAL.md") if L.doc != "MANUAL.md" else "" }}#decisions)).
+
+{% endif %}
+**Alignment**
+
+{% if t.aligned.milestones or t.aligned.reviews or t.aligned.decisions %}
+{% if t.aligned.milestones %}
+- Milestones and decision points: {{ L.many(t.aligned.milestones) }}
+{% endif %}
+{% if t.aligned.reviews %}
+- Technical reviews: {{ L.many(t.aligned.reviews) }}
+{% endif %}
+{% if t.aligned.decisions %}
+- Authorization decisions: {{ L.many(t.aligned.decisions) }}
+{% endif %}
+{% else %}
+Not tied to a specific acquisition event; runs as part of its phase.
+{% endif %}
+
+**Citations**
+
+{% for c in t.citations %}
+- {{ L.cite(c) }}
+{% endfor %}
+
+**Playbook:** {{ L.file(t.playbook) }}
+
+**Cross-references:** depends on {{ L.many(t.depends_on, "nothing") }}; required by {{ L.many(t.required_by, "no later task") }}{{ "; feeds back to " ~ L.many(t.feeds_back_to) if t.feeds_back_to else "" }}{{ "; receives feedback from " ~ L.many(t.fed_back_from) if t.fed_back_from else "" }}.

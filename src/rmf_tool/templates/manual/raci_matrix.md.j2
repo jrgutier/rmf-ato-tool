@@ -1,0 +1,17 @@
+{#- RACI matrix, one table per RMF step; columns are the personas that step involves. -#}
+## <a id="raci"></a>3. Who does what (RACI matrix)
+
+**R** Responsible (does the work) · **A** Accountable (owns the outcome; one per task) ·
+**C** Consulted · **I** Informed. `A/R` means the accountable persona also does the work. Column
+headings link to the persona catalog; each persona's card describes the role in full.
+
+{% for table in m.raci_tables %}
+### {{ table.step.id }} {{ table.step.name }}
+
+| Task |{% for c in table.columns %} {{ L(c) }} |{% endfor +%}
+|---|{% for c in table.columns %}:-:|{% endfor +%}
+{% for tid, name, letters in table.rows %}
+| {{ L(tid) }} {{ name | cell }} |{% for x in letters %} {{ x }} |{% endfor +%}
+{% endfor %}
+
+{% endfor %}
