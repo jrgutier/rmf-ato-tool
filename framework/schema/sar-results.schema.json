@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:sar-results",
+  "title": "runs/<run-id>/artifacts/sar/results/<fam>[.<n>].yaml",
+  "description": "Assessment determinations and findings for one family (A-3; updated by A-4, A-5). Coverage is SAR-COV-001; open findings need a POA&M item (SAR-POAM-001).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "determinations",
+    "findings"
+  ],
+  "properties": {
+    "family": {
+      "$ref": "#/$defs/family"
+    },
+    "chunk": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "determinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "control_id",
+          "result",
+          "methods",
+          "summary",
+          "sources"
+        ],
+        "properties": {
+          "control_id": {
+            "$ref": "#/$defs/control_id"
+          },
+          "result": {
+            "enum": [
+              "satisfied",
+              "other-than-satisfied",
+              "not-applicable"
+            ]
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "examine",
+                "interview",
+                "test"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "finding_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^FND-\\d{3}$"
+            },
+            "uniqueItems": true
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "control_id",
+          "title",
+          "description",
+          "status",
+          "severity",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FND-\\d{3}$"
+          },
+          "control_id": {
+            "$ref": "#/$defs/control_id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "risk-accepted"
+            ]
+          },
+          "severity": {
+            "$ref": "#/$defs/level"
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "family": {
+      "type": "string",
+      "pattern": "^[a-z]{2}$"
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

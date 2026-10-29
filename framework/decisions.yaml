@@ -1,0 +1,83 @@
+# Authorization decision types. Only the AO decides; the decision cannot be delegated
+# (DoDI 8510.01 4.4.a(5)). DoDI 8510.01 names IATT, ATO, ATO with conditions and denial of
+# ATO; cATO comes from the DoD CIO cATO memo and DoDI 5000.90.
+decisions:
+  - id: AD-IATT
+    name: Interim Authorization to Test
+    short: IATT
+    description: >-
+      A time-limited authorization to test the system in an operational environment or with
+      live data before all controls are in place, limited to the time needed to complete the
+      testing objectives and usually with operating restrictions.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD]
+    atd_required: true
+    conditions_required: false
+    citations:
+      - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
+      - {ref: SP800-37R2, page: 162, anchor: "limited to the time needed to complete the testing objectives"}
+  - id: AD-ATO
+    name: Authorization to Operate
+    short: ATO
+    description: >-
+      The risk of operating the system is acceptable; the system may operate for a specified
+      period under the terms and conditions the AO sets, until the authorization termination
+      date.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: true
+    conditions_required: false
+    citations:
+      - {ref: SP800-37R2, section: "Authorization to Operate"}
+      - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
+  - id: AD-ATOC
+    name: Authorization to Operate with Conditions
+    short: ATO w/ conditions
+    description: >-
+      An ATO whose acceptance of risk depends on specific conditions (for example remediation
+      of named weaknesses by set dates, or operating restrictions) that the AO records and
+      tracks.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: true
+    conditions_required: true
+    citations:
+      - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
+      - {ref: SP800-37R2, page: 93, anchor: "authorization termination date"}
+  - id: AD-DATO
+    name: Denial of Authorization to Operate
+    short: DATO
+    description: >-
+      The risk is unacceptable; the system is not authorized to operate, or must stop
+      operating if it already does.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    citations:
+      - {ref: SP800-37R2, section: "Denial of Authorization"}
+      - {ref: DODI8510.01, page: 18, anchor: "and denial ATO"}
+  - id: AD-CATO
+    name: Continuous Authorization to Operate
+    short: cATO
+    description: >-
+      Continuous authorization: with an ATO in place, the AO and Component CISO present the
+      evidence (robust continuous monitoring of RMF controls, active cyber defense, an
+      approved DevSecOps reference design) to the DoD CISO, whose approval removes the
+      expiration date for as long as the real-time risk posture is maintained. It modifies
+      re-authorization; it does not replace the underlying ATO, and it can be revoked.
+    decided_by: PER-AO
+    decided_in: [M-6]
+    phases: [PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    citations:
+      - {ref: SP800-37R2, section: "TASK M-6"}
+      - {ref: SP800-137, section: "2.2"}
+      - {ref: DODCIO-CATO, page: 1, anchor: "the Authorizing Official (AO) must be able to demonstrate three main"}
+      - {ref: DODCIO-CATO, page: 3, anchor: "DoD CISO approved cATOs do not have an expiration date"}
+      - {ref: DODI5000.90, page: 13, anchor: "While the AO may authorize a continuous ATO (cATO)"}

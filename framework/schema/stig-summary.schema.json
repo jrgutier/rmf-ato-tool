@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:stig-summary",
+  "title": "runs/<run-id>/artifacts/data/stig-summary.yaml",
+  "description": "STIG/SRG applicability and results (I-1; updated by A-3). STIG-001: every software/OS inventory item is mapped or not applicable; STIG-002: open CAT I findings are in the POA&M.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "benchmarks",
+    "not_applicable",
+    "findings"
+  ],
+  "properties": {
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "version",
+          "applies_to"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^BM-\\d{2,3}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "stig",
+              "srg"
+            ]
+          },
+          "applies_to": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^INV-\\d{3}$"
+            },
+            "minItems": 1
+          },
+          "scan_date": {
+            "$ref": "#/$defs/date"
+          }
+        }
+      }
+    },
+    "not_applicable": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inventory_item",
+          "rationale"
+        ],
+        "properties": {
+          "inventory_item": {
+            "type": "string",
+            "pattern": "^INV-\\d{3}$"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "benchmark",
+          "rule_id",
+          "category",
+          "inventory_item",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^STG-\\d{3}$"
+          },
+          "benchmark": {
+            "type": "string",
+            "pattern": "^BM-\\d{2,3}$"
+          },
+          "rule_id": {
+            "description": "DISA rule or vulnerability ID (V-/SV-).",
+            "type": "string",
+            "pattern": "^S?V-\\d+"
+          },
+          "category": {
+            "enum": [
+              "CAT I",
+              "CAT II",
+              "CAT III"
+            ]
+          },
+          "inventory_item": {
+            "type": "string",
+            "pattern": "^INV-\\d{3}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "open",
+              "not-a-finding",
+              "not-applicable",
+              "not-reviewed"
+            ]
+          },
+          "control_id": {
+            "$ref": "#/$defs/control_id"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

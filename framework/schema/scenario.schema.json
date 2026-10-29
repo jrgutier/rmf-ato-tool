@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:scenario",
+  "title": "tests/agent/scenarios/<scenario>.yaml",
+  "description": "An agent-lane scenario (plan §4.4): what runs, what is seeded, and the files whose upstream_hash makes the result current.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "description",
+    "product",
+    "scope",
+    "seeded",
+    "hash_globs"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product": {
+      "description": "Product directory, relative to the repository root.",
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tasks"
+      ],
+      "properties": {
+        "tasks": {
+          "oneOf": [
+            {
+              "const": "all"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/task_id"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          ]
+        }
+      }
+    },
+    "seeds_dir": {
+      "description": "Seed files directory, relative to the repository root.",
+      "type": "string",
+      "minLength": 1
+    },
+    "seeded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact",
+          "from_task",
+          "path"
+        ],
+        "properties": {
+          "artifact": {
+            "$ref": "#/$defs/artifact_id"
+          },
+          "from_task": {
+            "$ref": "#/$defs/task_id"
+          },
+          "path": {
+            "description": "File relative to the run directory (run.yaml) or the seeds directory (scenario).",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "hash_globs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "lifecycle_stop": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/task_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "include_after_stop": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/task_id"
+      },
+      "uniqueItems": true
+    },
+    "control_subset": {
+      "description": "Test scenarios only: restrict the resolved baseline to these controls.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/control_id"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+    },
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[PCSIARM]-[1-9]\\d?$"
+    }
+  }
+}

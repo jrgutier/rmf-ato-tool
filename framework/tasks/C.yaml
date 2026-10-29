@@ -1,0 +1,80 @@
+# RMF Categorize tasks (SP 800-37r2 section 3.2; DoDI 8510.01 3.2.b: categorize in
+# accordance with CNSSI 1253). The categorization lives in facts.yaml (INV-4).
+tasks:
+  - id: C-1
+    name: System Description
+    step: C
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Document the characteristics of the system, its users and the authorizations it leverages.
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-LSE], I: []}
+    inputs: [ART-BND, ART-REQ, ART-INV, EXT-PRODUCT]
+    outputs: [ART-SD, ART-BND]
+    writes_facts: [system_id, system_name, acronym, aliases, lifecycle_state]
+    depends_on: [P-15, P-18]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Boundary, inventory and requirements documented (ART-BND, ART-INV, ART-REQ); the system is registered (P-18).
+    exit_criteria:
+      - ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-1"}
+      - {ref: DODI8510.01, page: 15, anchor: "Task C-1 System Description"}
+      - {ref: DODI8510.01, page: 29, anchor: "Provide the system description"}
+    playbook: playbooks/C/C-1.md
+  - id: C-2
+    name: Security Categorization
+    step: C
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Categorize the system per CNSSI 1253 (C/I/A) and record it in facts.yaml.
+    raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [PER-UR, PER-ISSE, PER-PRIV, PER-CISO, PER-RE], I: [PER-AO]}
+    inputs: [ART-SD, ART-INFOTYPES, ART-RA, EXT-CNSSI1253-OVERLAYS]
+    outputs: [ART-CAT]
+    writes_facts: [categorization]
+    depends_on: [C-1, P-12]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - ART-SD exists and passes RUN-FM-001; information types documented (ART-INFOTYPES).
+    exit_criteria:
+      - facts.categorization (c, i, a, overlays) set_by C-2.
+      - ART-CAT records the impact per information type and security objective and the basis for each value.
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-2"}
+      - {ref: DODI8510.01, section: "b. Categorize"}
+      - {ref: CNSSI1253, section: "3.1"}
+      - {ref: FIPS199, page: 10, anchor: "POTENTIAL IMPACT"}
+    playbook: playbooks/C/C-2.md
+  - id: C-3
+    name: Security Categorization Review and Approval
+    step: C
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [RV-SRR], decisions: []}
+    purpose: Review the security categorization and have the AO (or AODR) approve it.
+    raci: {R: [PER-AODR, PER-PRIV], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO], I: [PER-PM, PER-ISSM]}
+    inputs: [ART-CAT]
+    outputs: [ART-CAT]
+    writes_facts: [categorization.approved]
+    depends_on: [C-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - facts.categorization set_by C-2.
+    exit_criteria:
+      - facts.categorization.approved set_by C-3; ART-CAT records the approval.
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-3"}
+      - {ref: DODI8510.01, page: 15, anchor: "Task C-3 Security Categorization Review and Approval"}
+      - {ref: CNSSI1253, section: "3.1.2"}
+    playbook: playbooks/C/C-3.md

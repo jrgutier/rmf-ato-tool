@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:poam-items",
+  "title": "runs/<run-id>/artifacts/poam/items.yaml",
+  "description": "POA&M items (A-6; updated by R-3, M-3). DoD-required fields (severity, point of contact, resources, scheduled completion, milestones) are POAM-FLD-001, so a partial item fails that rule rather than the schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "finding_ref",
+          "control_id",
+          "weakness",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^POAM-\\d{3}$"
+          },
+          "finding_ref": {
+            "description": "A SAR finding (FND-###) or STIG finding (STG-###).",
+            "type": "string",
+            "pattern": "^(FND|STG)-\\d{3}$"
+          },
+          "control_id": {
+            "$ref": "#/$defs/control_id"
+          },
+          "weakness": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_of_weakness": {
+            "enum": [
+              "sar",
+              "stig",
+              "conmon",
+              "other"
+            ]
+          },
+          "severity": {
+            "$ref": "#/$defs/level"
+          },
+          "residual_risk": {
+            "$ref": "#/$defs/level"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "ongoing",
+              "completed",
+              "risk-accepted"
+            ]
+          },
+          "point_of_contact": {
+            "$ref": "#/$defs/persona_id"
+          },
+          "resources_required": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scheduled_completion": {
+            "$ref": "#/$defs/date"
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "description",
+                "due"
+              ],
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "due": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "comments": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

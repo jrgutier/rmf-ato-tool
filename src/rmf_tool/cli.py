@@ -21,6 +21,8 @@ from rmf_tool import ci as ci_mod
 from rmf_tool import doctor as doctor_mod
 from rmf_tool import lessons as lessons_mod
 from rmf_tool.findings import Finding, report
+from rmf_tool.framework import validate as validate_mod
+from rmf_tool.framework.model import FRAMEWORK_DIR
 from rmf_tool.gitutil import repo_root
 from rmf_tool.profiles import PROFILES, ProfileError, resolve
 from rmf_tool.refs import fetch as fetch_mod
@@ -163,6 +165,64 @@ def ci(
             label = f"{r.name} ({', '.join(r.rules)})" if r.rules else r.name
             console.print(f"{'PASS' if r.ok else 'FAIL'}  {label}", markup=False)
     raise typer.Exit(EXIT_OK if ok else EXIT_VIOLATIONS)
+
+
+@app.command()
+def validate(
+    profile: Annotated[
+        str | None,
+        typer.Option(help=f"Validation profile: {', '.join(PROFILES)}. "
+                          "Default: the closed phases (.phases/*.closed)."),
+    ] = None,
+    stats: Annotated[
+        bool, typer.Option("--stats", help="Also report entity and citation counts.")
+    ] = False,
+    root: Annotated[
+        Path | None,
+        typer.Option("--root", help=f"Framework directory (default: {FRAMEWORK_DIR}/).",
+                     file_okay=False),
+    ] = None,
+    fmt: FormatOption = OutputFormat.text,
+) -> None:
+    """Validate the framework YAML: every FW-* rule whose phase is in the profile.
+
+    FW-SCHEMA-001, FW-ID-*, FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001,
+    FW-DAG-001, FW-CITE-001/002, FW-TASK-001. Citations to pending-acquisition references
+    are counted as deferred until p2x.
+    """
+    repo = repo_root()
+    try:
+        active = resolve(repo, profile)
+    except ProfileError as exc:
+        raise _usage_error(str(exc)) from exc
+    fw_root = root if root is not None else repo / FRAMEWORK_DIR
+    if not fw_root.is_dir():
+        raise _usage_error(f"framework directory not found: {fw_root}")
+    try:
+        result = validate_mod.validate(fw_root, repo, active)
+    except validate_mod.UnimplementedRules as exc:
+        raise _usage_error(f"profile {active.name}: {exc}") from exc
+    except refs.IndexFileError as exc:
+        raise _usage_error(str(exc)) from exc
+    out = report(result.findings, result.rules_run)
+    out["summary"]["deferred_citations"] = result.stats["deferred_citations"]
+    if fmt is OutputFormat.json:
+        payload = {"profile": active.name, **(result.stats if stats else {}), **out}
+        typer.echo(json.dumps(payload, indent=2))
+    else:
+        for f in result.findings:
+            err_console.print(f.render(), markup=False)
+        if stats:
+            console.print(", ".join(f"{k}: {v}" for k, v in result.stats.items()), markup=False)
+        if result.rules_run:
+            summary = out["summary"]
+            console.print(f"rmf validate ({active.name}): {len(result.rules_run)} rule(s), "
+                          f"{summary['errors']} error(s), {summary['warnings']} warning(s), "
+                          f"{summary['deferred_citations']} deferred citation(s)", markup=False)
+        else:
+            console.print(f"rmf validate ({active.name}): no framework rules are active in "
+                          f"phases {', '.join(sorted(active.phases)) or 'none'}", markup=False)
+    raise typer.Exit(EXIT_OK if result.ok else EXIT_VIOLATIONS)
 
 
 @lessons_app.command("check")

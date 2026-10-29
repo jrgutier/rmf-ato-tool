@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:framework",
+  "title": "RMF framework (merged document)",
+  "description": "The merged framework document {meta, phases, ..., tasks} that rmf validate builds from framework/*.yaml and framework/tasks/*.yaml (FW-SCHEMA-001). Shape and types only: ID patterns (FW-ID-002), references (FW-REF-001), RACI cardinality (FW-RACI-001), citation form and resolution (FW-CITE-*) and the task set (FW-TASK-001) are separate rules. Changes after Phase 3.5 need an ADR note.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "phases", "milestones", "reviews", "decisions", "steps", "personas",
+               "artifacts", "external_inputs", "pathways", "tasks"],
+  "properties": {
+    "meta": {"$ref": "#/$defs/meta"},
+    "phases": {"type": "array", "items": {"$ref": "#/$defs/phase"}},
+    "milestones": {"type": "array", "items": {"$ref": "#/$defs/milestone"}},
+    "reviews": {"type": "array", "items": {"$ref": "#/$defs/review"}},
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}},
+    "steps": {"type": "array", "items": {"$ref": "#/$defs/step"}},
+    "personas": {"type": "array", "items": {"$ref": "#/$defs/persona"}},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "external_inputs": {"type": "array", "items": {"$ref": "#/$defs/external_input"}},
+    "pathways": {"type": "array", "items": {"$ref": "#/$defs/pathway"}},
+    "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1},
+    "ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+    "text": {"type": "string", "minLength": 1},
+    "texts": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "order": {"type": "integer", "minimum": 1},
+    "citation": {
+      "description": "{ref, section} or {ref, page, anchor}; the form is checked by FW-CITE-002 so that a page without an anchor is reported by that rule.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": {"$ref": "#/$defs/id"},
+        "section": {"$ref": "#/$defs/text"},
+        "page": {"type": "integer", "minimum": 1},
+        "anchor": {"$ref": "#/$defs/text"},
+        "note": {"$ref": "#/$defs/text"},
+        "fallback": {
+          "description": "Required when ref is degraded (plan §7.6).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ref"],
+          "properties": {
+            "ref": {"$ref": "#/$defs/id"},
+            "section": {"$ref": "#/$defs/text"},
+            "page": {"type": "integer", "minimum": 1},
+            "anchor": {"$ref": "#/$defs/text"}
+          }
+        }
+      }
+    },
+    "citations": {"type": "array", "items": {"$ref": "#/$defs/citation"}},
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "framework_version", "title", "description", "task_set",
+                   "spine_pathway"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "framework_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "title": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"},
+        "task_set": {
+          "description": "exact: all 47 SP 800-37r2 tasks (the real framework); subset: a fixture with canonical tasks only.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "mode"],
+          "properties": {
+            "source": {"const": "SP800-37R2"},
+            "mode": {"enum": ["exact", "subset"]}
+          }
+        },
+        "spine_pathway": {"$ref": "#/$defs/id"}
+      }
+    },
+    "phase": {
+      "description": "An acquisition life-cycle phase (DoDI 5000.85 major capability acquisition spine).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "order", "purpose", "entry_milestone", "exit_milestone",
+                   "entry_criteria", "exit_criteria", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "order": {"$ref": "#/$defs/order"},
+        "purpose": {"$ref": "#/$defs/text"},
+        "entry_milestone": {"type": ["string", "null"], "minLength": 1},
+        "exit_milestone": {"type": ["string", "null"], "minLength": 1},
+        "entry_criteria": {"$ref": "#/$defs/texts"},
+        "exit_criteria": {"$ref": "#/$defs/texts"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "milestone": {
+      "description": "A milestone, decision point or life-cycle event.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "kind", "phase", "order", "decision_authority",
+                   "purpose", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["milestone", "decision-point", "event"]},
+        "phase": {"$ref": "#/$defs/id"},
+        "order": {"$ref": "#/$defs/order"},
+        "decision_authority": {"type": ["string", "null"], "minLength": 1},
+        "purpose": {"$ref": "#/$defs/text"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "review": {
+      "description": "A systems engineering technical review or audit.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "phase", "order", "purpose", "rmf_focus", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "phase": {"$ref": "#/$defs/id"},
+        "order": {"$ref": "#/$defs/order"},
+        "purpose": {"$ref": "#/$defs/text"},
+        "rmf_focus": {"$ref": "#/$defs/text"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "decision": {
+      "description": "An authorization decision type; only the AO makes one (PER-AO).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "description", "decided_by", "decided_in", "phases",
+                   "atd_required", "conditions_required", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"},
+        "decided_by": {"$ref": "#/$defs/id"},
+        "decided_in": {"$ref": "#/$defs/ids"},
+        "phases": {"$ref": "#/$defs/ids"},
+        "atd_required": {"type": "boolean"},
+        "conditions_required": {"type": "boolean"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "step": {
+      "description": "An RMF step (SP 800-37r2 chapter 3).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "order", "purpose", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "order": {"$ref": "#/$defs/order"},
+        "purpose": {"$ref": "#/$defs/text"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "persona": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "category", "description", "appointed_by",
+                   "nist_roles", "card", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "category": {"enum": ["organization", "rmf", "acquisition", "engineering", "test",
+                              "operations"]},
+        "description": {"$ref": "#/$defs/text"},
+        "appointed_by": {"type": ["string", "null"], "minLength": 1},
+        "nist_roles": {"$ref": "#/$defs/texts"},
+        "card": {"type": "string", "pattern": "^personas/PER-[A-Z0-9]+\\.md$"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "producer", "package", "generated", "data",
+                   "oscal", "template", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"},
+        "producer": {"$ref": "#/$defs/id"},
+        "package": {"description": "core: required in the package by AC-16.",
+                    "enum": ["core", "supporting"]},
+        "generated": {"description": "true: written by the CLI, never by an agent (INV-2).",
+                      "type": "boolean"},
+        "data": {
+          "description": "Structured data files, relative to the run directory; schema names framework/schema/<schema>.schema.json.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "schema"],
+            "properties": {
+              "path": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_./<>-]*(#[a-z_]+)?$"},
+              "schema": {"type": ["string", "null"], "pattern": "^[a-z][a-z-]*$"}
+            }
+          }
+        },
+        "oscal": {
+          "description": "OSCAL targets as <model>#<path> (plan §6.6).",
+          "type": "array",
+          "items": {"type": "string", "pattern": "^(ssp|assessment-plan|assessment-results|poam|profile)#[a-z0-9.\\[\\]-]+$"}
+        },
+        "template": {"type": ["string", "null"], "pattern": "^templates/artifacts/ART-[A-Z-]+\\.md$"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "external_input": {
+      "description": "An input that no framework task produces: product material, organizational policy, reference content or operational data.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "kind", "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["product", "organization", "reference", "operational"]},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "pathway": {
+      "description": "An Adaptive Acquisition Framework pathway (DoDI 5000.02). The framework has one spine (meta.spine_pathway); the others carry notes.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "short", "instruction", "phases", "description", "rmf_notes",
+                   "citations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "short": {"$ref": "#/$defs/text"},
+        "instruction": {"$ref": "#/$defs/text"},
+        "phases": {"$ref": "#/$defs/ids"},
+        "description": {"$ref": "#/$defs/text"},
+        "rmf_notes": {"$ref": "#/$defs/texts"},
+        "citations": {"$ref": "#/$defs/citations"}
+      }
+    },
+    "task": {
+      "description": "An SP 800-37r2 task (plan Phase 3a task shape).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "step", "level", "optional", "primary_phase", "phases",
+                   "aligned_with", "purpose", "raci", "inputs", "outputs", "writes_facts",
+                   "depends_on", "feeds_back_to", "min_interviews", "entry_criteria",
+                   "exit_criteria", "citations", "playbook"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"$ref": "#/$defs/text"},
+        "step": {"$ref": "#/$defs/id"},
+        "level": {"enum": ["organization", "system"]},
+        "optional": {"type": "boolean"},
+        "primary_phase": {"$ref": "#/$defs/id"},
+        "phases": {"allOf": [{"$ref": "#/$defs/ids"}, {"minItems": 1}]},
+        "aligned_with": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["milestones", "reviews", "decisions"],
+          "properties": {
+            "milestones": {"$ref": "#/$defs/ids"},
+            "reviews": {"$ref": "#/$defs/ids"},
+            "decisions": {"$ref": "#/$defs/ids"}
+          }
+        },
+        "purpose": {"$ref": "#/$defs/text"},
+        "raci": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["R", "A", "C", "I"],
+          "properties": {
+            "R": {"$ref": "#/$defs/ids"},
+            "A": {"oneOf": [{"$ref": "#/$defs/id"}, {"$ref": "#/$defs/ids"}]},
+            "C": {"$ref": "#/$defs/ids"},
+            "I": {"$ref": "#/$defs/ids"}
+          }
+        },
+        "inputs": {"$ref": "#/$defs/ids"},
+        "outputs": {"description": "Artifacts the task produces or updates; the producer is artifacts.yaml producer.",
+                    "$ref": "#/$defs/ids"},
+        "writes_facts": {"description": "Dotted facts.yaml paths this task sets (set_by_task).",
+                         "$ref": "#/$defs/ids"},
+        "depends_on": {"$ref": "#/$defs/ids"},
+        "feeds_back_to": {"$ref": "#/$defs/ids"},
+        "min_interviews": {"type": "integer", "minimum": 0},
+        "entry_criteria": {"allOf": [{"$ref": "#/$defs/texts"}, {"minItems": 1}]},
+        "exit_criteria": {"allOf": [{"$ref": "#/$defs/texts"}, {"minItems": 1}]},
+        "citations": {"$ref": "#/$defs/citations"},
+        "playbook": {"type": "string", "pattern": "^playbooks/[PCSIARM]/[A-Za-z0-9-]+\\.md(#[a-z0-9-]+)?$"}
+      }
+    }
+  }
+}

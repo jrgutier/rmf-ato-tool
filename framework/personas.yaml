@@ -1,0 +1,297 @@
+# Personas: DoD RMF roles (DoDI 8510.01 section 4) plus the acquisition, engineering and
+# test roles the RMF integrates with. appointed_by follows DoDI 8510.01 Table 8 where the
+# role is listed there. nist_roles maps each persona to the SP 800-37r2 Appendix D roles it
+# fills, which is how task RACI was derived from the 800-37r2 primary/supporting roles.
+personas:
+  - id: PER-AO
+    name: Authorizing Official
+    short: AO
+    category: rmf
+    description: >-
+      Senior government official who accepts the risk of operating the system; the sole
+      authority for authorization decisions (AD-*), which cannot be delegated.
+    appointed_by: DoD Component head; PAO for MA-managed information systems
+    nist_roles: [Authorizing Official]
+    card: personas/PER-AO.md
+    citations:
+      - {ref: DODI8510.01, page: 27, anchor: "DoD Component heads are responsible for appointing trained and qualified AOs"}
+      - {ref: DODI8510.01, page: 28, anchor: "Do not delegate authorization decisions"}
+      - {ref: SP800-37R2, page: 133, anchor: "AUTHORIZING OFFICIAL"}
+  - id: PER-AODR
+    name: Authorizing Official Designated Representative
+    short: AODR
+    category: rmf
+    description: >-
+      Formally appointed by the AO to carry out delegated AO tasks (reviews, approvals of
+      plans); cannot make the authorization decision.
+    appointed_by: AO
+    nist_roles: [Authorizing Official Designated Representative]
+    card: personas/PER-AODR.md
+    citations:
+      - {ref: DODI8510.01, page: 28, anchor: "Other AO responsibilities and tasks may be delegated to formally appointed and qualified AODRs"}
+      - {ref: SP800-37R2, page: 134, anchor: "AUTHORIZING OFFICIAL DESIGNATED REPRESENTATIVE"}
+  - id: PER-CIO
+    name: DoD Component Chief Information Officer
+    short: Component CIO
+    category: organization
+    description: >-
+      Administers the RMF in the Component cybersecurity program, communicates organizational
+      risk tolerance and develops the Prepare step guidance.
+    appointed_by: DoD Component head
+    nist_roles: [Head of Agency, Chief Information Officer]
+    card: personas/PER-CIO.md
+    citations:
+      - {ref: DODI8510.01, page: 26, anchor: "Communicate organizational risk tolerance"}
+      - {ref: DODI8510.01, page: 13, anchor: "must be completed by the DoD Component CIO, DoD PAO, and JCA capability portfolio manager"}
+      - {ref: SP800-37R2, page: 134, anchor: "CHIEF INFORMATION OFFICER"}
+  - id: PER-CISO
+    name: DoD Component Chief Information Security Officer
+    short: Component CISO
+    category: organization
+    description: >-
+      Directs the Component cybersecurity program; owns the security control assessment
+      process and is the Component SCA unless that role is formally delegated.
+    appointed_by: DoD Component CIO (or the Component head where no CIO position exists)
+    nist_roles: [Senior Agency Information Security Officer]
+    card: personas/PER-CISO.md
+    citations:
+      - {ref: DODI8510.01, page: 26, anchor: "Have authority and responsibility for security controls assessment"}
+      - {ref: SP800-37R2, page: 141, anchor: "SENIOR AGENCY INFORMATION SECURITY OFFICER"}
+  - id: PER-RE
+    name: Risk Executive Function
+    short: RE
+    category: organization
+    description: >-
+      The DoD ISRMC supported by the DSAWG (and Component equivalents): sets enterprise risk
+      guidance, assesses organization-level risk and accepts enterprise-level risk.
+    appointed_by: null
+    nist_roles: [Risk Executive (Function), Senior Accountable Official for Risk Management]
+    card: personas/PER-RE.md
+    citations:
+      - {ref: DODI8510.01, page: 23, anchor: "The Risk Executive Function consists of the DoD ISRMC supported by the DSAWG"}
+      - {ref: SP800-37R2, page: 138, anchor: "RISK EXECUTIVE (FUNCTION)"}
+  - id: PER-SCA
+    name: Security Control Assessor
+    short: SCA
+    category: rmf
+    description: >-
+      Independent assessor (or assessment team, including SCA representatives and validators)
+      who plans and conducts control assessments and reports findings and recommendations.
+    appointed_by: DoD Component CISO (the Component SCA, who may formally delegate the role)
+    nist_roles: [Control Assessor]
+    card: personas/PER-SCA.md
+    citations:
+      - {ref: DODI8510.01, page: 26, anchor: "Perform as the SCA or formally delegate the security control assessment role"}
+      - {ref: SP800-37R2, page: 136, anchor: "CONTROL ASSESSOR"}
+  - id: PER-PM
+    name: Program Manager / System Owner
+    short: PM/SO
+    category: acquisition
+    description: >-
+      Accountable for the system and for implementing the RMF in step with the acquisition
+      process; provides the system description, registers the system, appoints the ISSM and
+      oversees the POA&M.
+    appointed_by: DoD Component Acquisition Executive (PM); DoD Component head (SO)
+    nist_roles: [System Owner, Mission or Business Owner]
+    card: personas/PER-PM.md
+    citations:
+      - {ref: DODI8510.01, page: 29, anchor: "PMs (or SO, if no PM is assigned)"}
+      - {ref: DODI5000.90, page: 13, anchor: "starts with the PM’s cybersecurity strategy and continues through the RMF process"}
+      - {ref: SP800-37R2, page: 142, anchor: "SYSTEM OWNER"}
+  - id: PER-ISSM
+    name: Information System Security Manager
+    short: ISSM
+    category: rmf
+    description: >-
+      Leads the system cybersecurity program day to day: maintains the authorization package
+      and its status, directs the ISSO and coordinates with the PM, SO and UR.
+    appointed_by: PM or SO
+    nist_roles: [System Security Officer]
+    card: personas/PER-ISSM.md
+    citations:
+      - {ref: DODI8510.01, page: 30, anchor: "ISSMs, in addition to the responsibilities established in DoDI 8500.01"}
+      - {ref: SP800-37R2, page: 143, anchor: "SYSTEM SECURITY OR PRIVACY OFFICER"}
+  - id: PER-ISSO
+    name: Information System Security Officer
+    short: ISSO
+    category: rmf
+    description: >-
+      Maintains the operational security posture of the system under the ISSM's direction:
+      account management, patching, monitoring and evidence for assessments.
+    appointed_by: PM or SO
+    nist_roles: [System Security Officer, System Administrator]
+    card: personas/PER-ISSO.md
+    citations:
+      - {ref: DODI8510.01, page: 28, anchor: "activities of the SO, PM, UR, ISSM, and ISSO at the system level"}
+      - {ref: SP800-37R2, page: 143, anchor: "SYSTEM SECURITY OR PRIVACY OFFICER"}
+  - id: PER-ISSE
+    name: Information Systems Security Engineer
+    short: ISSE
+    category: engineering
+    description: >-
+      Systems security engineer integrated into the systems engineering process; designs the
+      security architecture and allocates and implements controls in the design.
+    appointed_by: null
+    nist_roles: [Systems Security Engineer, Security Architect]
+    card: personas/PER-ISSE.md
+    citations:
+      - {ref: DODI8510.01, page: 29, anchor: "assigned system security engineer who is fully integrated into the systems engineering process"}
+      - {ref: SP800-37R2, page: 143, anchor: "SYSTEMS SECURITY OR PRIVACY ENGINEER"}
+  - id: PER-LSE
+    name: Lead Systems Engineer
+    short: LSE
+    category: engineering
+    description: >-
+      Leads the program's systems engineering and technical reviews; owns the system
+      architecture and its place in the enterprise architecture.
+    appointed_by: null
+    nist_roles: [Enterprise Architect]
+    card: personas/PER-LSE.md
+    citations:
+      - {ref: DODI5000.88, page: 8, anchor: "lead systems engineers (LSEs)"}
+      - {ref: SP800-37R2, page: 136, anchor: "ENTERPRISE ARCHITECT"}
+      - {ref: SP800-160V1R1, page: 168, anchor: "Conduct required management and technical reviews"}
+  - id: PER-UR
+    name: User Representative
+    short: UR
+    category: operations
+    description: >-
+      Represents the operational and functional requirements of the user community in the RMF
+      process.
+    appointed_by: SO (DoDI 8510.01 4.4.b(4)(b); Table 8 lists the appointer as ISO)
+    nist_roles: [System User]
+    card: personas/PER-UR.md
+    citations:
+      - {ref: DODI8510.01, page: 30, anchor: "URs represent the operational and functional requirements of the user community"}
+      - {ref: SP800-37R2, page: 143, anchor: "SYSTEM USER"}
+  - id: PER-IO
+    name: Information Owner / Steward
+    short: IO
+    category: organization
+    description: >-
+      Official with authority over specific information; determines how it is handled and
+      takes part in categorization with the system owner.
+    appointed_by: null
+    nist_roles: [Information Owner or Steward]
+    card: personas/PER-IO.md
+    citations:
+      - {ref: DODI8510.01, page: 29, anchor: "In coordination with the IOs, data owners or stewards, categorize systems"}
+      - {ref: SP800-37R2, page: 138, anchor: "INFORMATION OWNER OR STEWARD"}
+  - id: PER-CCP
+    name: Common Control Provider
+    short: CCP
+    category: rmf
+    description: >-
+      Develops, implements, assesses and monitors common controls that systems inherit, and
+      documents them in its own security plan.
+    appointed_by: null
+    nist_roles: [Common Control Provider]
+    card: personas/PER-CCP.md
+    citations:
+      - {ref: SP800-37R2, page: 135, anchor: "COMMON CONTROL PROVIDER"}
+      - {ref: DODI8510.01, page: 29, anchor: "common security controls owner performs this function for inherited controls"}
+  - id: PER-CSSP
+    name: Cybersecurity Service Provider
+    short: CSSP
+    category: operations
+    description: >-
+      Provides the cyber defense services (monitoring, incident response, vulnerability
+      management) that support continuous monitoring of the fielded system.
+    appointed_by: null
+    nist_roles: [System Administrator]
+    card: personas/PER-CSSP.md
+    citations:
+      - {ref: DODI8510.01, page: 9, anchor: "DoDIs 8530.01 and 8531.01"}
+      - {ref: SP800-137, section: "2.4"}
+  - id: PER-PRIV
+    name: Component Privacy Officer
+    short: Privacy
+    category: organization
+    description: >-
+      Senior privacy official for the Component and system privacy officer; responsible for
+      privacy risk, PII handling and privacy controls.
+    appointed_by: null
+    nist_roles: [Senior Agency Official for Privacy, System Privacy Officer]
+    card: personas/PER-PRIV.md
+    citations:
+      - {ref: SP800-37R2, page: 141, anchor: "SENIOR AGENCY OFFICIAL FOR PRIVACY"}
+      - {ref: DODI8510.01, page: 15, anchor: "Senior Agency Official for Privacy (for systems processing personal identifiable information)"}
+  - id: PER-MDA
+    name: Milestone Decision Authority
+    short: MDA
+    category: acquisition
+    description: >-
+      Approves the program's entry into each acquisition phase at milestones and decision
+      points; the acquisition counterpart of the AO.
+    appointed_by: null
+    nist_roles: [Chief Acquisition Officer]
+    card: personas/PER-MDA.md
+    citations:
+      - {ref: DODI8510.01, page: 20, anchor: "designed to complement and support the Defense Acquisition System activities, milestones, and phases"}
+      - {ref: SP800-37R2, page: 134, anchor: "CHIEF ACQUISITION OFFICER"}
+      - {ref: DODI5000.02, page: 9, anchor: "The MDA/DA is the program decision authority"}
+  - id: PER-CDT
+    name: Chief Developmental Tester
+    short: CDT
+    category: test
+    description: >-
+      Plans and oversees developmental test and evaluation, including cybersecurity DT&E whose
+      results feed control assessments.
+    appointed_by: null
+    nist_roles: []
+    card: personas/PER-CDT.md
+    citations:
+      - {ref: DODI8510.01, page: 10, anchor: "develop evaluation metrics for DT&E and OT&E"}
+      - {ref: DODI5000.89, page: 8, anchor: "chief developmental tester (CDT)"}
+  - id: PER-OTA
+    name: Operational Test Agency Representative
+    short: OTA
+    category: test
+    description: >-
+      Plans and conducts independent operational test and evaluation, including cyber
+      survivability, whose findings are integrated into the RMF.
+    appointed_by: null
+    nist_roles: []
+    card: personas/PER-OTA.md
+    citations:
+      - {ref: DODI8510.01, page: 8, anchor: "ensures OT&E findings are integrated into the RMF"}
+      - {ref: DODI5000.89, page: 9, anchor: "The OTA representative will develop the operational evaluation framework"}
+  - id: PER-SPONSOR
+    name: Capability / Requirements Sponsor
+    short: Sponsor
+    category: acquisition
+    description: >-
+      Owns the capability need and the requirements documents; the mission owner whose
+      missions the system supports and with whom sustainment trade-offs are coordinated.
+    appointed_by: null
+    nist_roles: [Mission or Business Owner]
+    card: personas/PER-SPONSOR.md
+    citations:
+      - {ref: DODI8510.01, page: 7, anchor: "with the requirements sponsors, AO, and Component cyberspace operations forces"}
+      - {ref: SP800-37R2, page: 138, anchor: "MISSION OR BUSINESS OWNER"}
+  - id: PER-DEV
+    name: Developer / Integrator
+    short: Developer
+    category: engineering
+    description: >-
+      Contractor or government team that builds and integrates the system, implements controls
+      and supports developer test events and assessments.
+    appointed_by: null
+    nist_roles: [System Administrator]
+    card: personas/PER-DEV.md
+    citations:
+      - {ref: DODI8510.01, page: 17, anchor: "coordinated with developers and developmental and operational testers"}
+      - {ref: SP800-37R2, page: 142, anchor: "SYSTEM ADMINISTRATOR"}
+  - id: PER-CCB
+    name: Configuration Control Board Chair
+    short: CCB
+    category: engineering
+    description: >-
+      Chairs the board that approves or rejects configuration changes after a security impact
+      analysis.
+    appointed_by: null
+    nist_roles: []
+    card: personas/PER-CCB.md
+    citations:
+      - {ref: SP800-128, section: "2.3.3"}
+      - {ref: SP800-128, section: "APPENDIX H CCB CHARTER SAMPLE"}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:check-registry",
+  "title": "rmf check rule registry",
+  "description": "Every rule the tool enforces (plan §6.5). docs/CHECKS.md is generated from this file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "rules"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "rules": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/rule"}
+    }
+  },
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "scope", "severity", "ac", "phase", "applies_after", "summary", "hint"],
+      "oneOf": [
+        {"required": ["fixture"], "not": {"required": ["exempt_reason"]}},
+        {"required": ["exempt_reason"], "not": {"required": ["fixture"]}}
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]+(?:-[A-Z]+)*-\\d{3}$"},
+        "scope": {"enum": ["repo", "run"]},
+        "severity": {
+          "description": "E or W; 'profile' when the severity depends on the profile (explained in severity_note).",
+          "enum": ["E", "W", "profile"]
+        },
+        "severity_note": {"type": "string", "minLength": 1},
+        "ac": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "pattern": "^AC-\\d{1,2}a?$"}
+        },
+        "phase": {"enum": ["p1", "p2", "p2x", "p3a", "p35", "p3b", "p4", "p5", "p6", "p7"]},
+        "applies_after": {
+          "description": "Run rules: the task after which non --final checks evaluate the rule; null means always.",
+          "type": ["string", "null"],
+          "pattern": "^[PCSIARM]-[1-9]\\d?$"
+        },
+        "summary": {"type": "string", "minLength": 1},
+        "fixture": {
+          "description": "The negative fixture: a directory, a mutation spec, or a test node id (path::test).",
+          "type": "string",
+          "minLength": 1
+        },
+        "exempt_reason": {"type": "string", "minLength": 1},
+        "hint": {"type": "string", "minLength": 1}
+      },
+      "if": {"properties": {"severity": {"const": "profile"}}},
+      "then": {"required": ["severity_note"]}
+    }
+  }
+}

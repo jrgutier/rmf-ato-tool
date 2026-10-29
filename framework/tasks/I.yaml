@@ -1,0 +1,51 @@
+# RMF Implement tasks (SP 800-37r2 section 3.4), carried out in EMD as the design is built.
+tasks:
+  - id: I-1
+    name: Control Implementation
+    step: I
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-CDR], decisions: []}
+    purpose: Implement the controls in the approved security plan, applying STIG/SRG secure configurations.
+    raci: {R: [PER-PM, PER-CCP, PER-DEV, PER-ISSE], A: PER-PM, C: [PER-IO, PER-PRIV, PER-ISSM, PER-ISSO, PER-LSE], I: []}
+    inputs: [ART-SSP, EXT-STIG, EXT-PRODUCT]
+    outputs: [ART-STIG]
+    writes_facts: []
+    depends_on: [S-6]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Security plan approved (S-6).
+    exit_criteria:
+      - stig-summary.yaml maps every software and OS inventory item to a STIG/SRG or a not-applicable rationale (STIG-001).
+    citations:
+      - {ref: SP800-37R2, section: "TASK I-1"}
+      - {ref: DODI8510.01, page: 16, anchor: "Task I-1 Control Implementation"}
+    playbook: playbooks/I/I-1.md
+  - id: I-2
+    name: Update Control Implementation Information
+    step: I
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-TRR], decisions: []}
+    purpose: Update the security plan and related artifacts to the as-implemented state, with the configuration baseline.
+    raci: {R: [PER-ISSM, PER-CCP, PER-DEV], A: PER-PM, C: [PER-IO, PER-ISSE, PER-PRIV, PER-ISSO, PER-LSE], I: []}
+    inputs: [ART-SSP, ART-STIG, EXT-PRODUCT]
+    outputs: [ART-SSP, ART-SD, ART-INV, ART-CMP, ART-CP, ART-IRP]
+    writes_facts: []
+    depends_on: [I-1]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Controls implemented (I-1).
+    exit_criteria:
+      - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
+    citations:
+      - {ref: SP800-37R2, section: "TASK I-2"}
+      - {ref: DODI8510.01, page: 16, anchor: "Task I-2 Update Control Implementation Information"}
+      - {ref: SP800-128, section: "2.3.7"}
+    playbook: playbooks/I/I-2.md

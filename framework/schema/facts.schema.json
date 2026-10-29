@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:facts",
+  "title": "runs/<run-id>/facts.yaml",
+  "description": "The only home of system facts (INV-4, plan §7.2). Each fact is an object with set_by_task, the task that wrote it (framework tasks' writes_facts name these dotted paths). Facts accumulate during a run, so none is required here; FACTS-001 checks completeness after C-3.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "system_id": {"$ref": "#/$defs/string_fact"},
+    "system_name": {"$ref": "#/$defs/string_fact"},
+    "acronym": {"$ref": "#/$defs/string_fact"},
+    "aliases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "set_by_task"],
+      "properties": {
+        "value": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    },
+    "boundary_id": {"$ref": "#/$defs/string_fact"},
+    "lifecycle_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "set_by_task"],
+      "properties": {
+        "value": {
+          "description": "OSCAL SSP system-characteristics.status.state.",
+          "enum": ["operational", "under-development", "under-major-modification", "disposition", "other"]
+        },
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    },
+    "categorization": {
+      "description": "CNSSI 1253 categorization: one impact value per security objective, plus the applicable overlays. Set by C-2; approved by C-3.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["c", "i", "a", "overlays", "set_by_task"],
+      "properties": {
+        "c": {"$ref": "#/$defs/impact"},
+        "i": {"$ref": "#/$defs/impact"},
+        "a": {"$ref": "#/$defs/impact"},
+        "overlays": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "method": {
+          "description": "cnssi1253 normally; high-water-mark only under the degraded policy (plan §7.6).",
+          "enum": ["cnssi1253", "high-water-mark"]
+        },
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"},
+        "approved": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "set_by_task"],
+          "properties": {
+            "value": {"type": "boolean"},
+            "approved_by": {"type": "string", "pattern": "^PER-[A-Z0-9]+$"},
+            "set_by_task": {"$ref": "#/$defs/task_id"},
+            "sources": {"$ref": "#/$defs/sources"}
+          }
+        }
+      }
+    },
+    "baseline_id": {"$ref": "#/$defs/string_fact"}
+  },
+  "$defs": {
+    "task_id": {"type": "string", "pattern": "^[PCSIARM]-[1-9]\\d?$"},
+    "impact": {"enum": ["low", "moderate", "high"]},
+    "sources": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"}
+    },
+    "string_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "set_by_task"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    }
+  }
+}

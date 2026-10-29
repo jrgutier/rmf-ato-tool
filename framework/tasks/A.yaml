@@ -1,0 +1,155 @@
+# RMF Assess tasks (SP 800-37r2 section 3.5). DoDI 8510.01 Table 5 adds the DoD emphasis:
+# assessment plans coordinate with developmental and operational testers, and test events
+# support the assessments.
+tasks:
+  - id: A-1
+    name: Assessor Selection
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-TRR], decisions: []}
+    purpose: Select an assessor or assessment team with the level of independence the assessment requires.
+    raci: {R: [PER-AODR], A: PER-AO, C: [PER-CIO, PER-CISO, PER-PRIV], I: [PER-PM, PER-SCA]}
+    inputs: [ART-SSP, ART-ORG-CONTEXT]
+    outputs: []
+    writes_facts: []
+    depends_on: [S-6]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Security plan approved (S-6).
+    exit_criteria:
+      - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-1"}
+      - {ref: DODI8510.01, page: 17, anchor: "Task A-1 Assessor Selection"}
+      - {ref: DODI8510.01, page: 26, anchor: "Perform as the SCA or formally delegate the security control assessment role"}
+    playbook: playbooks/A/A-1.md
+  - id: A-2
+    name: Assessment Plan
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-TRR], decisions: []}
+    purpose: Develop, review and approve the security assessment plan, coordinated with developmental and operational test events.
+    raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: []}
+    inputs: [ART-SSP, ART-BASELINE, EXT-ASSESSMENT-PROCEDURES]
+    outputs: [ART-SAP]
+    writes_facts: []
+    depends_on: [A-1, I-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Assessor selected (A-1) and the as-implemented security plan available (I-2).
+    exit_criteria:
+      - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-2"}
+      - {ref: DODI8510.01, page: 17, anchor: "Task A-2 Assessment Plan"}
+      - {ref: SP800-53AR5, section: "3.2"}
+      - {ref: DODI5000.89, page: 15, anchor: "incorporate the appropriate aspects of the risk management framework"}
+    playbook: playbooks/A/A-2.md
+  - id: A-3
+    name: Control Assessments
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-SVR], decisions: [AD-IATT]}
+    purpose: Assess the controls per the approved plan, reusing developer, developmental and operational test results.
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CDT, PER-OTA, PER-DEV], I: [PER-AO, PER-CISO]}
+    inputs: [ART-SAP, ART-SSP, ART-STIG, EXT-TEST-RESULTS, EXT-ASSESSMENT-PROCEDURES]
+    outputs: [ART-SAR, ART-STIG]
+    writes_facts: []
+    depends_on: [A-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Assessment plan approved (A-2); an AD-IATT covers any testing on live networks or with live data.
+    exit_criteria:
+      - sar/results holds a determination for every scoped control (SAR-COV-001) and stig-summary.yaml holds the scan results.
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-3"}
+      - {ref: DODI8510.01, page: 17, anchor: "Task A-3 Control Assessments"}
+      - {ref: SP800-53AR5, section: "3.3"}
+      - {ref: DODI5000.89, page: 28, anchor: "Support cybersecurity assessments and authorization, including RMF security"}
+    playbook: playbooks/A/A-3.md
+  - id: A-4
+    name: Assessment Reports
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-SVR], decisions: []}
+    purpose: Prepare the security assessment report with findings and recommendations, including test-event results.
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV], I: [PER-AO, PER-AODR]}
+    inputs: [ART-SAR]
+    outputs: [ART-SAR]
+    writes_facts: []
+    depends_on: [A-3]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Control assessments complete (A-3).
+    exit_criteria:
+      - ART-SAR summarizes the determinations and states each finding with its severity and recommendation.
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-4"}
+      - {ref: DODI8510.01, page: 18, anchor: "Task A-4 Assessment Reports"}
+      - {ref: SP800-53AR5, section: "APPENDIX E"}
+    playbook: playbooks/A/A-4.md
+  - id: A-5
+    name: Remediation Actions
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-SVR], decisions: []}
+    purpose: Take initial remediation actions on deficient controls and have the assessor reassess them.
+    raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: []}
+    inputs: [ART-SAR, ART-SSP, ART-SAP]
+    outputs: [ART-SAR, ART-SSP]
+    writes_facts: []
+    depends_on: [A-4]
+    feeds_back_to: [I-2]
+    min_interviews: 1
+    entry_criteria:
+      - Assessment report delivered (A-4).
+    exit_criteria:
+      - Remediated findings are reassessed and closed in sar/results; the security plan reflects the changes.
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-5"}
+      - {ref: DODI8510.01, page: 18, anchor: "Task A-5 Remediation Actions"}
+    playbook: playbooks/A/A-5.md
+  - id: A-6
+    name: Plan of Action and Milestones
+    step: A
+    level: system
+    optional: false
+    primary_phase: PH-EMD
+    phases: [PH-EMD]
+    aligned_with: {milestones: [], reviews: [RV-PRR], decisions: []}
+    purpose: Prepare the POA&M for every open finding from the assessment report and every open CAT I STIG finding.
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-PRIV, PER-CISO, PER-SCA, PER-MDA], I: [PER-AO]}
+    inputs: [ART-SAR, ART-RA, ART-ORG-CONTEXT, ART-STIG]
+    outputs: [ART-POAM]
+    writes_facts: []
+    depends_on: [A-5]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Initial remediation complete and the assessment report updated (A-5).
+    exit_criteria:
+      - poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001).
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-6"}
+      - {ref: DODI8510.01, page: 18, anchor: "Task A-6 A Plan of Actions and Milestones"}
+      - {ref: DODI8510.01, page: 9, anchor: "Develop and maintain a plan of action and milestones"}
+    playbook: playbooks/A/A-6.md

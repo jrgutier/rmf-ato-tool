@@ -1,0 +1,448 @@
+# RMF Prepare tasks (SP 800-37r2 section 3.1). P-1..P-7 are organization-level and share the
+# org-context playbook; P-8..P-18 are system-level. RACI maps the 800-37r2 primary roles to
+# R and its supporting roles to C/I through personas.yaml nist_roles; the PM (system owner)
+# is accountable for system-level tasks unless the AO owns the outcome.
+tasks:
+  - id: P-1
+    name: Risk Management Roles
+    step: P
+    level: organization
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Identify and assign the individuals who fill the security and privacy risk management roles.
+    raci: {R: [PER-CIO, PER-PRIV], A: PER-CIO, C: [PER-AO, PER-RE, PER-CISO], I: [PER-PM]}
+    inputs: [EXT-ORG-POLICY]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: []
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Component policies and organizational charts are available (EXT-ORG-POLICY).
+    exit_criteria:
+      - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-1"}
+      - {ref: DODI8510.01, page: 13, anchor: "Task P-1 Risk Management Roles"}
+      - {ref: DODI8510.01, page: 30, anchor: "Appointment of RMF Roles"}
+    playbook: playbooks/P/P-org-context.md#task-p-1
+  - id: P-2
+    name: Risk Management Strategy
+    step: P
+    level: organization
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Establish the organization's risk management strategy, including its risk tolerance.
+    raci: {R: [PER-CIO, PER-RE], A: PER-CIO, C: [PER-CISO, PER-PRIV], I: [PER-AO]}
+    inputs: [EXT-ORG-POLICY, ART-ORG-CONTEXT]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-1]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - RMF roles assigned (P-1).
+    exit_criteria:
+      - ART-ORG-CONTEXT states the risk management strategy and the organizational risk tolerance.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-2"}
+      - {ref: DODI8510.01, page: 13, anchor: "Task P-2 Risk Management Strategy"}
+      - {ref: SP800-39, section: "2.3.3"}
+    playbook: playbooks/P/P-org-context.md#task-p-2
+  - id: P-3
+    name: Risk Assessment—Organization
+    step: P
+    level: organization
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Assess organization-wide security and privacy risk and keep the results current.
+    raci: {R: [PER-RE, PER-CISO, PER-PRIV], A: PER-RE, C: [PER-CIO, PER-SPONSOR, PER-AO], I: []}
+    inputs: [ART-ORG-CONTEXT, EXT-THREAT]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Risk management strategy established (P-2).
+    exit_criteria:
+      - ART-ORG-CONTEXT summarizes the organization-level risk assessment results.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-3"}
+      - {ref: DODI8510.01, page: 13, anchor: "Task P-3 Risk Assessment – Organization"}
+      - {ref: SP800-30R1, section: "2.4"}
+    playbook: playbooks/P/P-org-context.md#task-p-3
+  - id: P-4
+    name: Organizationally-Tailored Control Baselines and CSF Profiles
+    step: P
+    level: organization
+    optional: true
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Establish and publish organizationally-tailored control baselines and/or CSF profiles (optional).
+    raci: {R: [PER-SPONSOR, PER-RE], A: PER-RE, C: [PER-CIO, PER-AO, PER-CISO, PER-PRIV], I: []}
+    inputs: [ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-3]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Organization-level risk assessment available (P-3).
+    exit_criteria:
+      - ART-ORG-CONTEXT lists the approved or directed tailored baselines and overlays, or records that none apply.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-4"}
+      - {ref: DODI8510.01, page: 13, anchor: "Task P-4 Organizationally – Tailored Control Baselines"}
+      - {ref: SP800-53B, section: "OVERLAYS"}
+    playbook: playbooks/P/P-org-context.md#task-p-4
+  - id: P-5
+    name: Common Control Identification
+    step: P
+    level: organization
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Identify, document and publish the common controls available for inheritance and their providers.
+    raci: {R: [PER-CISO, PER-PRIV], A: PER-CISO, C: [PER-SPONSOR, PER-RE, PER-CIO, PER-AO, PER-CCP, PER-PM], I: []}
+    inputs: [ART-ORG-CONTEXT, EXT-ORG-POLICY]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-3]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Organization-level risk assessment available (P-3).
+    exit_criteria:
+      - ART-ORG-CONTEXT lists the common control providers and the controls each offers for inheritance.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-5"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-5 Common Control Identification"}
+    playbook: playbooks/P/P-org-context.md#task-p-5
+  - id: P-6
+    name: Impact-Level Prioritization
+    step: P
+    level: organization
+    optional: true
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Prioritize organizational systems that share an impact level (optional).
+    raci: {R: [PER-RE], A: PER-RE, C: [PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO], I: []}
+    inputs: [ART-ORG-CONTEXT]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-3]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Organization-level risk assessment available (P-3).
+    exit_criteria:
+      - ART-ORG-CONTEXT records the impact sub-category prioritization, or that the organization does not use one.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-6"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-6 Impact – Level Prioritization"}
+    playbook: playbooks/P/P-org-context.md#task-p-6
+  - id: P-7
+    name: Continuous Monitoring Strategy—Organization
+    step: P
+    level: organization
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-MDD], reviews: [], decisions: []}
+    purpose: Develop and implement the organization-wide strategy for continuously monitoring control effectiveness.
+    raci: {R: [PER-RE], A: PER-RE, C: [PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO], I: [PER-CSSP]}
+    inputs: [ART-ORG-CONTEXT]
+    outputs: [ART-ORG-CONTEXT]
+    writes_facts: []
+    depends_on: [P-2, P-3]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Risk management strategy and organization-level risk assessment available (P-2, P-3).
+    exit_criteria:
+      - ART-ORG-CONTEXT summarizes the organizational continuous monitoring strategy that system strategies (S-5) must follow.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-7"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-7 Continuous Monitoring Strategy – Organization"}
+      - {ref: SP800-137, section: "3.1.1"}
+    playbook: playbooks/P/P-org-context.md#task-p-7
+  - id: P-8
+    name: Mission or Business Focus
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Identify the missions, business functions and mission/business processes the system will support.
+    raci: {R: [PER-SPONSOR], A: PER-PM, C: [PER-AO, PER-IO, PER-UR, PER-CIO, PER-CISO, PER-PRIV], I: [PER-ISSM]}
+    inputs: [ART-ORG-CONTEXT, EXT-CAPDOC, EXT-PRODUCT]
+    outputs: []
+    writes_facts: []
+    depends_on: [P-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - A capability need is documented (EXT-CAPDOC) and the organizational context is available.
+    exit_criteria:
+      - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-8"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-8 Mission or Business Focus"}
+    playbook: playbooks/P/P-8.md
+  - id: P-9
+    name: System Stakeholders
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Identify the stakeholders with an interest in the system across its life cycle.
+    raci: {R: [PER-PM, PER-SPONSOR], A: PER-PM, C: [PER-CIO, PER-AO, PER-IO, PER-CISO, PER-PRIV, PER-MDA], I: [PER-ISSM]}
+    inputs: [EXT-PRODUCT, EXT-CAPDOC, EXT-ORG-POLICY]
+    outputs: [ART-STAKE]
+    writes_facts: []
+    depends_on: [P-8]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Mission focus identified (P-8).
+    exit_criteria:
+      - ART-STAKE lists the stakeholders and the persona that represents each in interviews.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-9"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-9 System Stakeholders"}
+    playbook: playbooks/P/P-9.md
+  - id: P-10
+    name: Asset Identification
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Identify and prioritize the assets that require protection, as the system hardware and software inventory.
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-SPONSOR, PER-IO, PER-CISO, PER-PRIV, PER-DEV], I: []}
+    inputs: [ART-STAKE, EXT-PRODUCT]
+    outputs: [ART-INV]
+    writes_facts: []
+    depends_on: [P-9]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - ART-STAKE names who can describe the assets.
+    exit_criteria:
+      - ART-INV and inventory.yaml list every hardware and software item with its component, and the assets are prioritized.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-10"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-10 Asset Identification"}
+      - {ref: SP800-128, section: "2.3.4"}
+    playbook: playbooks/P/P-10.md
+  - id: P-11
+    name: Authorization Boundary
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Determine the authorization boundary of the system, its network architecture and data flows.
+    raci: {R: [PER-PM, PER-ISSM], A: PER-AO, C: [PER-CIO, PER-SPONSOR, PER-CISO, PER-PRIV, PER-LSE, PER-ISSE], I: []}
+    inputs: [ART-INV, ART-STAKE, EXT-PRODUCT]
+    outputs: [ART-BND]
+    writes_facts: [boundary_id]
+    depends_on: [P-10]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - ART-INV identifies the assets to be protected.
+    exit_criteria:
+      - ART-BND and boundary.yaml describe the boundary, network architecture, data flows and components; facts.boundary_id set_by P-11.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-11"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-11 Authorization Boundary"}
+      - {ref: SP800-37R2, section: "APPENDIX G"}
+    playbook: playbooks/P/P-11.md
+  - id: P-12
+    name: Information Types
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Identify the types of information the system processes, stores and transmits.
+    raci: {R: [PER-PM, PER-IO], A: PER-PM, C: [PER-ISSM, PER-PRIV], I: []}
+    inputs: [ART-INV, EXT-PRODUCT]
+    outputs: [ART-INFOTYPES]
+    writes_facts: []
+    depends_on: [P-10]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - ART-INV identifies the assets and the data they hold.
+    exit_criteria:
+      - ART-INFOTYPES and infotypes.yaml list each information type with its SP 800-60 identifier and provisional impact levels.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-12"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-12 Information Types"}
+      - {ref: SP800-60V1R1, section: "4.1"}
+    playbook: playbooks/P/P-12.md
+  - id: P-13
+    name: Information Life Cycle
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Identify and understand every stage of the information life cycle for each information type.
+    raci: {R: [PER-PRIV, PER-PM, PER-IO], A: PER-PM, C: [PER-CIO, PER-SPONSOR, PER-ISSE, PER-LSE], I: []}
+    inputs: [ART-INFOTYPES, ART-BND, EXT-PRODUCT]
+    outputs: [ART-INFOTYPES]
+    writes_facts: []
+    depends_on: [P-11, P-12]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Information types (P-12) and the boundary and data flows (P-11) are documented.
+    exit_criteria:
+      - infotypes.yaml records the life-cycle stages and components for every information type.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-13"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-13 Information Life Cycle"}
+    playbook: playbooks/P/P-13.md
+  - id: P-14
+    name: Risk Assessment—System
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [RV-SRR], decisions: []}
+    purpose: Conduct a system-level (mission-based cyber) risk assessment and keep its results current.
+    raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: []}
+    inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT]
+    outputs: [ART-RA]
+    writes_facts: []
+    depends_on: [P-3, P-13]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Assets, boundary and information life cycle documented (P-10, P-11, P-13); threat information available.
+    exit_criteria:
+      - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-14"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-14 Mission-Based Cyber Risk Assessment"}
+      - {ref: SP800-30R1, section: "3.2"}
+    playbook: playbooks/P/P-14.md
+  - id: P-15
+    name: Requirements Definition
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [RV-SRR], decisions: []}
+    purpose: Define and prioritize the security and privacy requirements for the system and its environment.
+    raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: []}
+    inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY]
+    outputs: [ART-REQ]
+    writes_facts: []
+    depends_on: [P-14]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - System risk assessment available (P-14).
+    exit_criteria:
+      - ART-REQ lists prioritized security and privacy requirements traced to their sources.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-15"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-15 Requirements Definition"}
+    playbook: playbooks/P/P-15.md
+  - id: P-16
+    name: Enterprise Architecture
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-TMRR
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [], reviews: [RV-SRR], decisions: []}
+    purpose: Determine the placement of the system within the enterprise, security and privacy architecture.
+    raci: {R: [PER-LSE, PER-ISSE, PER-SPONSOR, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-CISO, PER-IO], I: []}
+    inputs: [ART-REQ, ART-BND, ART-INV]
+    outputs: [ART-BND]
+    writes_facts: []
+    depends_on: [P-15]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Security and privacy requirements defined (P-15).
+    exit_criteria:
+      - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-16"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-16 Enterprise Architecture"}
+      - {ref: SP800-39, section: "2.4.2"}
+    playbook: playbooks/P/P-16.md
+  - id: P-17
+    name: Requirements Allocation
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-TMRR
+    phases: [PH-TMRR]
+    aligned_with: {milestones: [MS-DRFPRD], reviews: [RV-SFR], decisions: []}
+    purpose: Allocate the security and privacy requirements to the system, its elements and its environment of operation.
+    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: []}
+    inputs: [ART-REQ, ART-ORG-CONTEXT, ART-INV]
+    outputs: [ART-REQ]
+    writes_facts: []
+    depends_on: [P-5, P-16]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Requirements defined and the enterprise architecture placement known (P-15, P-16); common controls published (P-5).
+    exit_criteria:
+      - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-17"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-17 Requirements Allocation"}
+    playbook: playbooks/P/P-17.md
+  - id: P-18
+    name: System Registration
+    step: P
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA, PH-TMRR]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Register the system in the DoD Component registry for management, accountability and oversight.
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [], I: [PER-CISO, PER-CIO]}
+    inputs: [ART-BND, EXT-REGISTRY]
+    outputs: [ART-REG]
+    writes_facts: []
+    depends_on: [P-11]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria:
+      - Authorization boundary determined (P-11).
+    exit_criteria:
+      - ART-REG records the registry entry for the system.
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-18"}
+      - {ref: DODI8510.01, page: 14, anchor: "Task P-18 System Registration"}
+      - {ref: DODI8510.01, page: 29, anchor: "Register the system in the DoD Component registry"}
+    playbook: playbooks/P/P-18.md

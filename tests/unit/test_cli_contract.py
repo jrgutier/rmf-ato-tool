@@ -142,7 +142,7 @@ def test_ci_reports_failures_exit_1(repo_with_p1):
 
 @pytest.mark.parametrize("args", [
     ["--profile", "bogus"],
-    ["--profile", "p3a"],  # phase checks not implemented yet
+    ["--profile", "p35"],  # phase checks not implemented yet
     ["--release"],
     ["--release", "--profile", "p1"],
 ])

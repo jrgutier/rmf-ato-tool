@@ -1,0 +1,359 @@
+# Artifacts (plan §6.4). The producer is the first task that touches the artifact; every
+# other task listing it in outputs is an updater, and the producer must be a strict
+# ancestor of each updater (FW-ORD-001). package: core = required by AC-16. Data paths are
+# relative to the run directory; schemas are framework/schema/<schema>.schema.json.
+artifacts:
+  - id: ART-ORG-CONTEXT
+    name: Organizational risk context
+    description: >-
+      RMF role assignments, risk management strategy and risk tolerance, organization-level
+      risk assessment, tailored baselines, common controls available for inheritance and the
+      organizational continuous monitoring strategy.
+    producer: P-1
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-ORG-CONTEXT.md
+    citations:
+      - {ref: SP800-37R2, section: "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"}
+      - {ref: DODI8510.01, page: 13, anchor: "Organization Prepare Step Tasks"}
+  - id: ART-STAKE
+    name: Stakeholder register
+    description: Stakeholders with an interest in the system and the personas who represent them in interviews.
+    producer: P-9
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-STAKE.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-9"}
+  - id: ART-INV
+    name: Hardware and software inventory
+    description: The assets to be protected, as hardware and software inventory items mapped to boundary components.
+    producer: P-10
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/inventory.yaml, schema: inventory}
+    oscal: ["ssp#system-implementation.inventory-items"]
+    template: templates/artifacts/ART-INV.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-10"}
+      - {ref: SP800-128, section: "2.3.4"}
+  - id: ART-BND
+    name: Authorization boundary, network architecture and data flows
+    description: >-
+      The authorization boundary, network architecture and data flows, and the components
+      inside and at the edge of the boundary.
+    producer: P-11
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/boundary.yaml, schema: boundary}
+    oscal:
+      - "ssp#system-characteristics.authorization-boundary"
+      - "ssp#system-characteristics.network-architecture"
+      - "ssp#system-characteristics.data-flow"
+      - "ssp#system-implementation.components"
+    template: templates/artifacts/ART-BND.md
+    citations:
+      - {ref: SP800-37R2, section: "2.5"}
+      - {ref: SP800-37R2, section: "APPENDIX G"}
+  - id: ART-INFOTYPES
+    name: Information types and information life cycle
+    description: Information types processed, stored and transmitted, their provisional impact levels and life-cycle stages.
+    producer: P-12
+    package: supporting
+    generated: false
+    data:
+      - {path: artifacts/data/infotypes.yaml, schema: infotypes}
+    oscal: ["ssp#system-characteristics.system-information"]
+    template: templates/artifacts/ART-INFOTYPES.md
+    citations:
+      - {ref: SP800-60V1R1, section: "4.1"}
+      - {ref: SP800-37R2, section: "TASK P-13"}
+  - id: ART-RA
+    name: System risk assessment
+    description: System-level security and privacy risk assessment, updated as the system and threat change.
+    producer: P-14
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-RA.md
+    citations:
+      - {ref: SP800-30R1, section: "3.2"}
+      - {ref: SP800-37R2, section: "TASK P-14"}
+  - id: ART-REQ
+    name: Security and privacy requirements and allocation
+    description: Security and privacy requirements for the system and its environment, and their allocation to system elements.
+    producer: P-15
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-REQ.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-15"}
+      - {ref: SP800-37R2, section: "TASK P-17"}
+  - id: ART-REG
+    name: System registration
+    description: Record of the system's registration in the DoD Component registry.
+    producer: P-18
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-REG.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK P-18"}
+      - {ref: DODI8510.01, page: 29, anchor: "Register the system in the DoD Component registry"}
+  - id: ART-SD
+    name: System description, users and leveraged authorizations
+    description: The documented characteristics of the system, its users and privileges, and the authorizations it leverages.
+    producer: C-1
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/users.yaml, schema: users}
+      - {path: artifacts/data/leveraged-authorizations.yaml, schema: leveraged-authorizations}
+    oscal:
+      - "ssp#system-characteristics.description"
+      - "ssp#system-implementation.users"
+      - "ssp#system-implementation.leveraged-authorizations"
+    template: templates/artifacts/ART-SD.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-1"}
+      - {ref: SP800-18R2, section: "3.2"}
+  - id: ART-CAT
+    name: Security categorization
+    description: >-
+      CNSSI 1253 categorization (one impact value each for confidentiality, integrity and
+      availability) with its basis and approval; the values live in facts.yaml.
+    producer: C-2
+    package: core
+    generated: false
+    data:
+      - {path: "facts.yaml#categorization", schema: facts}
+    oscal:
+      - "ssp#system-characteristics.security-sensitivity-level"
+      - "ssp#system-characteristics.security-impact-level"
+    template: templates/artifacts/ART-CAT.md
+    citations:
+      - {ref: FIPS199, page: 10, anchor: "POTENTIAL IMPACT"}
+      - {ref: SP800-37R2, section: "TASK C-2"}
+      - {ref: CNSSI1253, section: "3.1.2"}
+  - id: ART-BASELINE
+    name: Tailored control baseline, tailoring and allocation
+    description: The selected baseline (generated), the tailoring actions and the allocation of controls to system elements.
+    producer: S-1
+    package: supporting
+    generated: false
+    data:
+      - {path: baseline.json, schema: baseline}
+      - {path: artifacts/data/tailoring.yaml, schema: tailoring}
+      - {path: artifacts/data/allocation.yaml, schema: allocation}
+    oscal: ["profile#imports"]
+    template: templates/artifacts/ART-BASELINE.md
+    citations:
+      - {ref: SP800-53B, section: "2.4"}
+      - {ref: SP800-37R2, section: "TASK S-3"}
+  - id: ART-SSP
+    name: System Security Plan
+    description: The security plan with a statement for every control in the tailored baseline.
+    producer: S-4
+    package: core
+    generated: false
+    data:
+      - {path: "artifacts/ssp/controls/<fam>.yaml", schema: ssp-controls}
+    oscal: ["ssp#control-implementation.implemented-requirements"]
+    template: templates/artifacts/ART-SSP.md
+    citations:
+      - {ref: SP800-18R2, section: "2.1"}
+      - {ref: SP800-37R2, section: "TASK S-4"}
+  - id: ART-CONMON
+    name: Continuous monitoring strategy
+    description: The system-level strategy for monitoring control effectiveness, including the time-driven trigger for ongoing authorization.
+    producer: S-5
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/conmon.yaml, schema: conmon}
+    oscal: []
+    template: templates/artifacts/ART-CONMON.md
+    citations:
+      - {ref: SP800-137, section: "3.1.2"}
+      - {ref: SP800-37R2, section: "TASK S-5"}
+  - id: ART-CMP
+    name: Configuration management plan
+    description: Security-focused configuration management plan, configuration items and change control process.
+    producer: S-4
+    package: core
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-CMP.md
+    citations:
+      - {ref: SP800-128, section: "2.3.2"}
+  - id: ART-CP
+    name: Contingency plan
+    description: Information system contingency plan with the business impact analysis, recovery strategy and test plan.
+    producer: S-4
+    package: core
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-CP.md
+    citations:
+      - {ref: SP800-34R1, section: "Chapter 4. Information System Contingency Plan Development"}
+  - id: ART-IRP
+    name: Incident response plan
+    description: Incident response roles, procedures and reporting, aligned with the cybersecurity service provider.
+    producer: S-4
+    package: core
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-IRP.md
+    citations:
+      - {ref: SP800-61R3, section: "2.3"}
+  - id: ART-STIG
+    name: STIG/SRG summary
+    description: STIG and SRG applicability per inventory item, scan results and open findings by category.
+    producer: I-1
+    package: supporting
+    generated: false
+    data:
+      - {path: artifacts/data/stig-summary.yaml, schema: stig-summary}
+    oscal: ["assessment-results#results.observations"]
+    template: templates/artifacts/ART-STIG.md
+    citations:
+      - {ref: DODI8510.01, page: 6, anchor: "security requirements guides, and security technical implementation guides"}
+  - id: ART-SAP
+    name: Security assessment plan
+    description: Assessment scope, procedures, team, schedule, test events and rules of engagement, approved by the AO.
+    producer: A-2
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/sap.yaml, schema: sap}
+    oscal: ["assessment-plan#reviewed-controls"]
+    template: templates/artifacts/ART-SAP.md
+    citations:
+      - {ref: SP800-53AR5, section: "3.2"}
+      - {ref: SP800-37R2, section: "TASK A-2"}
+  - id: ART-SAR
+    name: Security assessment report
+    description: Assessment determinations per control, findings and recommendations, including test-event results.
+    producer: A-3
+    package: core
+    generated: false
+    data:
+      - {path: "artifacts/sar/results/<fam>.yaml", schema: sar-results}
+    oscal:
+      - "assessment-results#results.findings"
+      - "assessment-results#results.observations"
+    template: templates/artifacts/ART-SAR.md
+    citations:
+      - {ref: SP800-53AR5, section: "APPENDIX E"}
+      - {ref: SP800-37R2, section: "TASK A-4"}
+  - id: ART-POAM
+    name: Plan of action and milestones
+    description: Remediation plan for weaknesses from the assessment and STIG findings, with milestones and resources.
+    producer: A-6
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/poam/items.yaml, schema: poam-items}
+    oscal: ["poam#poam-items"]
+    template: templates/artifacts/ART-POAM.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK A-6"}
+      - {ref: DODI8510.01, page: 9, anchor: "Develop and maintain a plan of action and milestones"}
+  - id: ART-RAR
+    name: Risk assessment report
+    description: Risks derived from the findings and POA&M, their likelihood, impact and level, and the recommended responses.
+    producer: R-2
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/rar.yaml, schema: rar}
+    oscal: ["assessment-results#results.risks"]
+    template: templates/artifacts/ART-RAR.md
+    citations:
+      - {ref: SP800-30R1, section: "APPENDIX K"}
+      - {ref: SP800-37R2, section: "TASK R-2"}
+  - id: ART-PKG
+    name: Authorization package manifest
+    description: Generated manifest of the authorization package contents (security plan, assessment report, POA&Ms and supporting artifacts).
+    producer: R-1
+    package: supporting
+    generated: true
+    data:
+      - {path: package/manifest.yaml, schema: null}
+    oscal: []
+    template: null
+    citations:
+      - {ref: DODI8510.01, page: 19, anchor: "The security authorization documentation package is made up of"}
+      - {ref: SP800-37R2, section: "TASK R-1"}
+  - id: ART-AODM
+    name: AO decision memo
+    description: The authorization decision, its terms and conditions and the authorization termination date, signed by the AO.
+    producer: R-4
+    package: core
+    generated: false
+    data:
+      - {path: artifacts/data/decision.yaml, schema: decision}
+    oscal: []
+    template: templates/artifacts/ART-AODM.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK R-4"}
+      - {ref: DODI8510.01, page: 19, anchor: "The authorization decision document"}
+  - id: ART-AUTHRPT
+    name: Authorization report
+    description: Report of the authorization decision and significant deficiencies to organizational officials, and the registry annotation.
+    producer: R-5
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-AUTHRPT.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK R-5"}
+  - id: ART-CHG
+    name: Change log and security impact analyses
+    description: Changes to the system and its environment, with their security impact analyses and dispositions.
+    producer: M-1
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-CHG.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK M-1"}
+      - {ref: SP800-128, section: "3.3.3"}
+  - id: ART-SECRPT
+    name: Security and privacy posture report
+    description: Periodic report of the system's security and privacy posture to the AO and senior leaders.
+    producer: M-5
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-SECRPT.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK M-5"}
+      - {ref: SP800-137, section: "3.4.3"}
+  - id: ART-DISP
+    name: Disposal plan
+    description: System disposal strategy and the actions taken when the system is removed from operation.
+    producer: M-7
+    package: supporting
+    generated: false
+    data: []
+    oscal: []
+    template: templates/artifacts/ART-DISP.md
+    citations:
+      - {ref: SP800-37R2, section: "TASK M-7"}

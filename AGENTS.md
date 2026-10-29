@@ -29,7 +29,7 @@ fork owns. Paths marked † are created by later build phases and may not exist 
 |---|---|---|
 | `src/rmf_tool/` | upstream | the `rmf` CLI (Python, `uv`) |
 | `tests/` | upstream | unit, integration, e2e (`slow`), agent lane (`agent`, local only) |
-| `framework/` † | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, personas, artifacts |
+| `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
 | `playbooks/` † | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
 | `personas/` † | upstream | persona cards, one per DoD RMF role |
 | `templates/` † | upstream | artifact, interview, journal and workspace templates |
@@ -78,6 +78,7 @@ error. Commands that report support `--format json`.
 | `rmf refs index [--check]` | render `references/INDEX.md` from index.yaml; `--check` is REF-004 |
 | `rmf refs sync` | fetch missing, extract stale, render INDEX.md, verify |
 | `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
+| `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 
 Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
@@ -85,7 +86,9 @@ evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a pha
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
 `refs verify` (REF-001 warns for `pending-acquisition`), `refs extract --check`,
 `refs index --check`, REF-002..006; p2x makes REF-001 an error for every required
-reference.
+reference and FW-CITE-002 strict; p3a `rmf validate` (FW-SCHEMA-001, FW-ID-001/002,
+FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001, FW-DAG-001, FW-CITE-001/002,
+FW-TASK-001). Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml`.
 
 ## Fork workflow
 

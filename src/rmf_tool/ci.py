@@ -5,12 +5,14 @@ from __future__ import annotations
 import subprocess
 import sys
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
 from rmf_tool import agents_md, lessons, refs
 from rmf_tool.findings import Finding
+from rmf_tool.framework import validate as framework_validate
+from rmf_tool.framework.model import FRAMEWORK_DIR
 from rmf_tool.profiles import PHASES, Profile, rule_active
 from rmf_tool.refs import index_render, verify
 
@@ -32,6 +34,7 @@ class Context:
     cli: Any  # typer.main.get_command(app)
     slow: bool
     capture: bool  # capture subprocess output (json) instead of streaming it (text)
+    profile: Profile | None = None  # set by run()
 
 
 @dataclass(frozen=True)
@@ -77,6 +80,16 @@ def _refs_step(check: Callable[[Path, Any], list[Finding]]) -> Callable[[Context
     return run
 
 
+def _framework(ctx: Context) -> tuple[bool, list[Finding], str]:
+    """`rmf validate` on framework/ under the active profile."""
+    assert ctx.profile is not None
+    try:
+        result = framework_validate.validate(ctx.root / FRAMEWORK_DIR, ctx.root, ctx.profile)
+    except refs.IndexFileError as exc:
+        return _findings_step([Finding("FW-CITE-001", "E", str(exc), refs.INDEX_PATH)])
+    return _findings_step(result.findings)
+
+
 STEPS: tuple[Step, ...] = (
     Step("lessons check", "p1", ("LES-002", "LES-003"),
          lambda ctx: _findings_step(lessons.check(ctx.root))),
@@ -89,6 +102,7 @@ STEPS: tuple[Step, ...] = (
          _refs_step(lambda root, index: verify.verify(root, index, strict=True))),
     Step("refs extract --check", "p2", ("REF-003",), _refs_step(verify.check_texts)),
     Step("refs index --check", "p2", ("REF-004",), _refs_step(index_render.check)),
+    Step("rmf validate", "p3a", framework_validate.IMPLEMENTED, _framework),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )
@@ -101,6 +115,7 @@ def unimplemented_phases(profile: Profile, steps: tuple[Step, ...] = STEPS) -> l
 
 
 def run(profile: Profile, ctx: Context, steps: tuple[Step, ...] = STEPS) -> list[StepResult]:
+    ctx = replace(ctx, profile=profile)
     results = []
     for step in steps:
         if step.phase is not None and not rule_active(step.phase, profile):

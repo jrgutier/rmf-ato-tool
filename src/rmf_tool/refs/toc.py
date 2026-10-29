@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 from ruamel.yaml import YAML
@@ -201,7 +202,14 @@ def _q(text: str) -> str:
 
 
 def load_toc(path: Path) -> list[TocEntry]:
-    data = YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+    stat = path.stat()
+    return list(_load_toc(str(path), stat.st_mtime_ns, stat.st_size))
+
+
+@lru_cache(maxsize=64)
+def _load_toc(path: str, mtime_ns: int, size: int) -> tuple[TocEntry, ...]:
+    """Parsed once per file version: citation checks resolve hundreds of sections."""
+    data = YAML(typ="safe").load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, list):
         raise ValueError(f"{path}: toc must be a YAML list")
-    return [TocEntry(**{k: item[k] for k in TocEntry.__dataclass_fields__}) for item in data]
+    return tuple(TocEntry(**{k: item[k] for k in TocEntry.__dataclass_fields__}) for item in data)

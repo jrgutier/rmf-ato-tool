@@ -1,0 +1,578 @@
+# Rule registry (plan §6.5): 63 rules, 27 repo-scope and 36 run-scope. Authoritative;
+# docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
+# enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
+# Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
+schema_version: 1
+rules:
+  # --- repo scope: framework (rmf validate) --------------------------------------------
+  - id: FW-SCHEMA-001
+    scope: repo
+    severity: E
+    ac: [AC-6]
+    phase: p3a
+    applies_after: null
+    summary: framework YAML unreadable or violates framework/schema/framework.schema.json
+    fixture: tests/fixtures/framework_neg/FW-SCHEMA-001/
+    hint: Fix the field named in the message; the schema lists every allowed key and type.
+  - id: FW-ID-001
+    scope: repo
+    severity: E
+    ac: [AC-5]
+    phase: p3a
+    applies_after: null
+    summary: duplicate ID across the framework
+    fixture: tests/fixtures/framework_neg/FW-ID-001/
+    hint: IDs are global and stable (INV-3); give the new entity a new ID instead of reusing one.
+  - id: FW-ID-002
+    scope: repo
+    severity: E
+    ac: [AC-5]
+    phase: p3a
+    applies_after: null
+    summary: ID does not match the pattern for its entity type
+    fixture: tests/fixtures/framework_neg/FW-ID-002/
+    hint: Patterns live in rmf_tool.framework.model.COLLECTIONS (e.g. PH-MSA, ART-SSP, PER-AO, C-2).
+  - id: FW-REF-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: dangling reference to an ID (or fact) that does not exist
+    fixture: tests/fixtures/framework_neg/FW-REF-001/
+    hint: Define the target entity first, or correct the ID; writes_facts names come from facts.schema.json.
+  - id: FW-ART-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: artifact without a producer (no task outputs it, or its producer does not)
+    fixture: tests/fixtures/framework_neg/FW-ART-001/
+    hint: List the artifact in its producer task's outputs, or fix artifacts.yaml producer.
+  - id: FW-ORD-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: an artifact's producer is not a strict ancestor of every task that updates it
+    fixture: tests/fixtures/framework_neg/FW-ORD-001/
+    hint: Add a depends_on path from the updater back to the producer, or move the output.
+  - id: FW-IO-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: task input neither external (EXT-*) nor produced by a strict ancestor
+    fixture: tests/fixtures/framework_neg/FW-IO-001/
+    hint: Make the producer an ancestor via depends_on, or model the input as an EXT-* entry.
+  - id: FW-RACI-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: RACI does not have exactly one Accountable persona and at least one Responsible
+    fixture: tests/fixtures/framework_neg/FW-RACI-001/
+    hint: Exactly one persona is accountable (raci.A); move the others to R or C.
+  - id: FW-DAG-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p3a
+    applies_after: null
+    summary: depends_on cycle
+    fixture: tests/fixtures/framework_neg/FW-DAG-001/
+    hint: Break the cycle; a loop back to an earlier task belongs in feeds_back_to, which never orders tasks.
+  - id: FW-CITE-001
+    scope: repo
+    severity: E
+    ac: [AC-8]
+    phase: p3a
+    applies_after: null
+    summary: task, artifact, persona or decision without a citation, or a citation to an unknown reference
+    fixture: tests/fixtures/framework_neg/FW-CITE-001/
+    hint: Cite at least one reference ID from references/index.yaml.
+  - id: FW-CITE-002
+    scope: repo
+    severity: E
+    ac: [AC-8, AC-4a]
+    phase: p3a
+    applies_after: null
+    summary: citation section/page/anchor not resolvable in the text extraction, or a page without an anchor
+    fixture: tests/fixtures/framework_neg/FW-CITE-002/
+    hint: Check it with `rmf refs show ID --section S` or `--page N --anchor A`. Citations to pending-acquisition references are deferred until p2x; degraded references need a fallback.
+  - id: FW-TASK-001
+    scope: repo
+    severity: E
+    ac: [AC-5]
+    phase: p3a
+    applies_after: null
+    summary: the NIST SP 800-37r2 task set is not exact (IDs, names, steps, levels, optional flags, TASK citation)
+    fixture: tests/fixtures/framework_neg/FW-TASK-001/
+    hint: Task IDs and names are pinned in rmf_tool.framework.model.TASKS_80037; each task cites SP800-37R2 "TASK X-n".
+  - id: FW-PB-001
+    scope: repo
+    severity: E
+    ac: [AC-13]
+    phase: p5
+    applies_after: null
+    summary: task without a playbook
+    fixture: tests/fixtures/repo_neg/FW-PB-001/
+    hint: Run `rmf playbooks sync` to create generated playbooks; P-1..P-7 share playbooks/P/P-org-context.md.
+  - id: FW-PB-002
+    scope: repo
+    severity: E
+    ac: [AC-13]
+    phase: p5
+    applies_after: null
+    summary: playbook header or generated body stale, or authored sections missing
+    fixture: tests/fixtures/repo_neg/FW-PB-002/
+    hint: Run `rmf playbooks sync`; never edit inside the CLI-owned markers.
+  - id: FW-PER-001
+    scope: repo
+    severity: E
+    ac: [AC-14]
+    phase: p5
+    applies_after: null
+    summary: persona without a card
+    fixture: tests/fixtures/repo_neg/FW-PER-001/
+    hint: Add personas/<PER-ID>.md for every persona in framework/personas.yaml.
+  - id: FW-PER-002
+    scope: repo
+    severity: E
+    ac: [AC-14]
+    phase: p5
+    applies_after: null
+    summary: persona card missing required sections
+    fixture: tests/fixtures/repo_neg/FW-PER-002/
+    hint: Cards need Responsibilities, Decision authority, Typical concerns, What they know and don't know, Question bank by step, Artifacts owned-approved, Role-play guidance, Red lines.
+  - id: FW-MAN-001
+    scope: repo
+    severity: E
+    ac: [AC-11]
+    phase: p4
+    applies_after: null
+    summary: MANUAL.md or docs/manual stale
+    fixture: tests/fixtures/repo_neg/FW-MAN-001/
+    hint: Run `rmf render` and commit the result; never hand-edit the manual (INV-2).
+  # --- repo scope: references, lessons, docs, agent lane --------------------------------
+  - id: REF-001
+    scope: repo
+    severity: profile
+    severity_note: W for pending-acquisition before p2x, E from p2x on; W for degraded with approval.
+    ac: [AC-1]
+    phase: p2
+    applies_after: null
+    summary: required reference not ok
+    fixture: tests/unit/test_refs_verify.py::test_pending_required_is_warning_before_p2x_error_at_p2x
+    hint: Fetch or import the reference (playbooks/_ops/fetch-blocked-refs.md); see plan §7.6 for the degraded policy.
+  - id: REF-002
+    scope: repo
+    severity: E
+    ac: [AC-4]
+    phase: p2
+    applies_after: null
+    summary: PDF SHA-256 (or LFS pointer oid) mismatch
+    fixture: tests/unit/test_refs_verify.py::test_sha_mismatch_and_missing_file
+    hint: Re-fetch, or accept the new upstream with `rmf refs fetch --accept-new --note`.
+  - id: REF-003
+    scope: repo
+    severity: E
+    ac: [AC-4a]
+    phase: p2
+    applies_after: null
+    summary: text extraction missing, stale, tuple mismatch or bad page markers
+    fixture: tests/unit/test_refs_extract.py::test_check_detects_text_sha_drift
+    hint: Run `rmf refs extract --id ID` (needs the EXTRACT=1 bootstrap) and commit the text.
+  - id: REF-004
+    scope: repo
+    severity: E
+    ac: [AC-3]
+    phase: p2
+    applies_after: null
+    summary: references/INDEX.md stale
+    fixture: tests/unit/test_refs_index.py::test_cli_index_write_and_check
+    hint: Run `rmf refs index` and commit INDEX.md.
+  - id: REF-005
+    scope: repo
+    severity: E
+    ac: [AC-2]
+    phase: p2
+    applies_after: null
+    summary: OSCAL pins inconsistent
+    fixture: tests/unit/test_refs_oscal.py::test_oscal_versions_consistent
+    hint: Bump OSCAL_VERSION, the NIST schemas and trestle together (AGENTS.md, Bumping OSCAL).
+  - id: REF-006
+    scope: repo
+    severity: E
+    ac: [AC-1]
+    phase: p2
+    applies_after: null
+    summary: URL or redirect hop outside the allowed domains
+    fixture: tests/unit/test_refs_verify.py::test_disallowed_urls
+    hint: Use only allowed public domains (INV-7); blocked sources are browser-assisted.
+  - id: LES-002
+    scope: repo
+    severity: E
+    ac: [AC-22]
+    phase: p1
+    applies_after: null
+    summary: docs/LESSONS.md malformed or not append-only versus resolve_base()
+    fixture: tests/unit/test_lessons.py::test_append_only_vs_merge_base
+    hint: Append new entries with the next ID; never edit or delete an existing entry.
+  - id: LES-003
+    scope: repo
+    severity: E
+    ac: [AC-22]
+    phase: p1
+    applies_after: null
+    summary: "'Promotion: pending' present"
+    fixture: tests/unit/test_lessons.py::test_pending_promotion_fails
+    hint: Triage the lesson in the same change (check, LR-nn, INV-n, or none with a reason).
+  - id: DOC-001
+    scope: repo
+    severity: E
+    ac: [AC-21]
+    phase: p1
+    applies_after: null
+    summary: AGENTS.md sections, length or CLI command list wrong
+    fixture: tests/unit/test_agents_md.py::test_commands_registered_and_documented
+    hint: Keep the eight fixed H2 sections, at most 250 lines, and list every registered command.
+  - id: AGENT-001
+    scope: repo
+    severity: profile
+    severity_note: W under rmf ci, E under rmf ci --release; skipped under --profile fork.
+    ac: [AC-13, AC-20]
+    phase: p35
+    applies_after: null
+    summary: agent-lane result missing, errors > 0, or stale scenario upstream_hash
+    fixture: tests/fixtures/repo_neg/AGENT-001/
+    hint: Re-run scripts/agent-run.sh <scenario> locally and commit the self-attested results.
+  # --- run scope ------------------------------------------------------------------------
+  - id: RUN-CFG-001
+    scope: run
+    severity: E
+    ac: [AC-15]
+    phase: p35
+    applies_after: null
+    summary: run.yaml or scenario invalid, bad mode or scope, unseeded input or updated output of an out-of-scope producer, or missing seed file
+    fixture: tests/fixtures/negative/RUN-CFG-001.yaml
+    hint: Add the artifact to run.yaml seeded with an existing file, or bring its producer into scope.
+  - id: RUN-FM-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p35
+    applies_after: null
+    summary: front-matter not exactly the 5 standard keys, or unknown artifact_id
+    fixture: tests/fixtures/negative/RUN-FM-001.yaml
+    hint: Front-matter is artifact_id, run_id, produced_by_task, touched_by, sources; facts live in facts.yaml (INV-4).
+  - id: RUN-ART-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p35
+    applies_after: R-1
+    summary: core artifact missing (scope-aware)
+    fixture: tests/fixtures/negative/RUN-ART-001.yaml
+    hint: Produce the artifact, or seed it when its producer is out of scope.
+  - id: RUN-PH-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p6
+    applies_after: null
+    summary: unresolved template placeholders
+    fixture: tests/fixtures/negative/RUN-PH-001.yaml
+    hint: Replace every template placeholder with traced content.
+  - id: RUN-STALE-001
+    scope: run
+    severity: W
+    ac: [AC-20]
+    phase: p6
+    applies_after: null
+    summary: run upstream_hash differs from the current union hash
+    fixture: tests/fixtures/negative/RUN-STALE-001.yaml
+    hint: Upstream files changed since the run started; re-run the affected tasks or re-stamp deliberately.
+  - id: FACTS-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p35
+    applies_after: C-3
+    summary: facts incomplete, missing set_by_task, or categorization unapproved before S-1
+    fixture: tests/fixtures/negative/FACTS-001.yaml
+    hint: Each fact carries set_by_task; C-3 must approve the categorization before S-1.
+  - id: GEN-STALE-001
+    scope: run
+    severity: E
+    ac: [AC-17, AC-18]
+    phase: p35
+    applies_after: null
+    summary: generated output differs from a fresh rmf build, baseline resolve or package
+    fixture: tests/fixtures/negative/GEN-STALE-001.yaml
+    hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
+  - id: SSP-COV-001
+    scope: run
+    severity: E
+    ac: [AC-16, AC-18]
+    phase: p35
+    applies_after: S-4
+    summary: baseline control without an SSP statement
+    fixture: tests/fixtures/negative/SSP-COV-001.yaml
+    hint: Use `rmf catalog show --missing` and write the whole family file.
+  - id: SSP-COV-002
+    scope: run
+    severity: W
+    ac: [AC-18]
+    phase: p6
+    applies_after: S-4
+    summary: SSP statement for a control outside the baseline
+    fixture: tests/fixtures/negative/SSP-COV-002.yaml
+    hint: Remove the statement or tailor the control in (tailoring.yaml).
+  - id: SSP-DUP-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: S-4
+    summary: duplicate SSP statement for a control
+    fixture: tests/fixtures/negative/SSP-DUP-001.yaml
+    hint: Keep exactly one statement per control across family chunks.
+  - id: SSP-STAT-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p6
+    applies_after: S-4
+    summary: bad implementation status, or not-applicable / inherited without rationale / provider
+    fixture: tests/fixtures/negative/SSP-STAT-001.yaml
+    hint: not-applicable needs a rationale; inherited needs inherited_from.
+  - id: SAP-COV-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-2
+    summary: baseline control not in the SAP scope
+    fixture: tests/fixtures/negative/SAP-COV-001.yaml
+    hint: Scope covers the whole baseline unless a control is excluded with a rationale.
+  - id: SAR-COV-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-3
+    summary: scoped control without an assessment determination
+    fixture: tests/fixtures/negative/SAR-COV-001.yaml
+    hint: Write a determination for every control in the SAP scope.
+  - id: SAR-POAM-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p35
+    applies_after: A-6
+    summary: open SAR finding neither closed nor linked to a POA&M item
+    fixture: tests/fixtures/negative/SAR-POAM-001.yaml
+    hint: Add a POA&M item whose finding_ref is the finding ID, or close the finding with evidence.
+  - id: POAM-CTL-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-6
+    summary: POA&M control not in the catalog or baseline
+    fixture: tests/fixtures/negative/POAM-CTL-001.yaml
+    hint: Use OSCAL control IDs from baseline.json (e.g. ac-2, ac-2.1).
+  - id: POAM-FLD-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-6
+    summary: required POA&M fields missing
+    fixture: tests/fixtures/negative/POAM-FLD-001.yaml
+    hint: Each item needs severity, point_of_contact, resources_required, scheduled_completion and milestones.
+  - id: RAR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: R-2
+    summary: risk to finding / POA&M linkage broken
+    fixture: tests/fixtures/negative/RAR-001.yaml
+    hint: Every risk links existing findings and POA&M items; every open finding maps to a risk.
+  - id: AODM-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: R-4
+    summary: decision not an AD-* type, ATD or conditions missing, no RAR reference, or missing degraded disclosure
+    fixture: tests/fixtures/negative/AODM-001.yaml
+    hint: decision.yaml names an AD-* decision; ATO types carry an ATD, AD-ATOC carries conditions.
+  - id: INV-BND-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: C-1
+    summary: inventory item not among the boundary components
+    fixture: tests/fixtures/negative/INV-BND-001.yaml
+    hint: Every inventory item's component is a component in boundary.yaml.
+  - id: INV-BND-002
+    scope: run
+    severity: W
+    ac: [AC-18]
+    phase: p6
+    applies_after: C-1
+    summary: boundary component not in the inventory
+    fixture: tests/fixtures/negative/INV-BND-002.yaml
+    hint: Add inventory items for the component, or explain why it has none.
+  - id: STIG-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p6
+    applies_after: I-1
+    summary: software or OS item without a STIG/SRG mapping or not-applicable rationale
+    fixture: tests/fixtures/negative/STIG-001.yaml
+    hint: Map the item to a benchmark in stig-summary.yaml or list it under not_applicable with a rationale.
+  - id: STIG-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-6
+    summary: open CAT I STIG finding without a POA&M item
+    fixture: tests/fixtures/negative/STIG-002.yaml
+    hint: Every open CAT I finding needs a POA&M item (finding_ref STG-###).
+  - id: CONMON-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p6
+    applies_after: S-5
+    summary: baseline control family without a monitoring frequency
+    fixture: tests/fixtures/negative/CONMON-001.yaml
+    hint: conmon.yaml lists a frequency for every family in the baseline.
+  - id: TRACE-001
+    scope: run
+    severity: E
+    ac: [AC-19]
+    phase: p35
+    applies_after: null
+    summary: prose section or statement without a trace token or sources
+    fixture: tests/fixtures/negative/TRACE-001.yaml
+    hint: Cite an interview answer, a product file or a tagged ASSUMPTION (INV-5).
+  - id: TRACE-002
+    scope: run
+    severity: E
+    ac: [AC-19]
+    phase: p35
+    applies_after: null
+    summary: unresolved trace token
+    fixture: tests/fixtures/negative/TRACE-002.yaml
+    hint: The token must name an existing answer anchor, product file/anchor, assumption or artifact.
+  - id: INT-001
+    scope: run
+    severity: E
+    ac: [AC-19]
+    phase: p6
+    applies_after: null
+    summary: interview malformed, or unknown persona or task
+    fixture: tests/fixtures/negative/INT-001.yaml
+    hint: Follow the interview front-matter schema and the answer format (plan §7.4).
+  - id: HYB-001
+    scope: run
+    severity: E
+    ac: [AC-15]
+    phase: p35
+    applies_after: null
+    summary: untagged simulated answer or assumption
+    fixture: tests/fixtures/negative/HYB-001.yaml
+    hint: Simulated answers carry tag SIMULATED; assumptions carry tag ASSUMPTION.
+  - id: HYB-002
+    scope: run
+    severity: E
+    ac: [AC-15]
+    phase: p35
+    applies_after: null
+    summary: assumptions report missing or incomplete
+    fixture: tests/fixtures/negative/HYB-002.yaml
+    hint: Run `rmf build <run>`; it regenerates reports/assumptions.md.
+  - id: HYB-003
+    scope: run
+    severity: E
+    ac: [AC-15]
+    phase: p6
+    applies_after: null
+    summary: "respondent: human not in run.yaml humans, or a human answer in synthetic mode"
+    fixture: tests/fixtures/negative/HYB-003.yaml
+    hint: List the human under run.yaml humans, or mark the answer simulated.
+  - id: OSCAL-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p35
+    applies_after: null
+    summary: NIST OSCAL v1.2.1 schema failure (regex engine + FormatChecker)
+    fixture: tests/fixtures/negative/OSCAL-001.yaml
+    hint: Fix the source YAML and run `rmf build`; never edit OSCAL JSON (INV-2).
+  - id: OSCAL-002
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p35
+    applies_after: null
+    summary: compliance-trestle 5.2.0 model load failure
+    fixture: tests/fixtures/negative/OSCAL-002.yaml
+    hint: Fix the source YAML and run `rmf build`.
+  - id: JOURNAL-001
+    scope: run
+    severity: E
+    ac: [AC-23]
+    phase: p35
+    applies_after: null
+    summary: journal malformed, or no CHECKPOINT for a completed step
+    fixture: tests/fixtures/negative/JOURNAL-001.yaml
+    hint: Append a CHECKPOINT entry after each task passes `rmf check --task`.
+  - id: LES-001
+    scope: run
+    severity: E
+    ac: [AC-22]
+    phase: p6
+    applies_after: null
+    summary: RETRY or CORRECTION without a lesson reference or 'none — reason'
+    fixture: tests/fixtures/negative/LES-001.yaml
+    hint: "Cite the lesson ID (L-NNNN) or write 'lesson: none — <reason>'."
+  - id: PKG-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p6
+    applies_after: R-1
+    summary: package manifest missing, or a core artifact absent from it
+    fixture: tests/fixtures/negative/PKG-001.yaml
+    hint: Run `rmf package <run>`.
+  - id: DEGRADED-001
+    scope: run
+    severity: W
+    ac: [AC-1, AC-16]
+    phase: p6
+    applies_after: null
+    summary: run depends on a degraded reference (non-suppressible)
+    fixture: tests/fixtures/negative/DEGRADED-001.yaml
+    hint: Disclose the degraded reference in the AO memo (plan §7.6).
+  - id: TASK-DEF-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p6
+    applies_after: null
+    summary: deferral without rationale, or deferral of an in-scope task that produces a core artifact
+    fixture: tests/fixtures/negative/TASK-DEF-001.yaml
+    hint: Give run.yaml deferred entries a rationale; core-producing in-scope tasks cannot be deferred.

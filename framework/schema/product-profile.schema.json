@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:product-profile",
+  "title": "product/profile.yaml",
+  "description": "Proposed values only (plan §7.2): tasks confirm them through interviews and write the accepted values to facts.yaml. Never read by rmf baseline resolve.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "acronym",
+    "pathway",
+    "current_phase",
+    "proposed_categorization",
+    "pii",
+    "nss"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acronym": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9-]{1,15}$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pathway": {
+      "type": "string",
+      "pattern": "^PW-[A-Z]{2,6}$"
+    },
+    "current_phase": {
+      "type": "string",
+      "pattern": "^PH-[A-Z]{2,6}$"
+    },
+    "proposed_categorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "c",
+        "i",
+        "a"
+      ],
+      "properties": {
+        "c": {
+          "$ref": "#/$defs/impact"
+        },
+        "i": {
+          "$ref": "#/$defs/impact"
+        },
+        "a": {
+          "$ref": "#/$defs/impact"
+        }
+      }
+    },
+    "proposed_overlays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "pii": {
+      "type": "boolean"
+    },
+    "nss": {
+      "description": "National security system (CNSSI 1253 applies).",
+      "type": "boolean"
+    },
+    "common_control_providers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "fictional": {
+      "description": "true for demonstration products (FICTIONAL banner).",
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "impact": {
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ]
+    }
+  }
+}

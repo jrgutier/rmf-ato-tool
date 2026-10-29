@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:interview",
+  "title": "runs/<run-id>/interviews/INT-###-<task>-<persona>.md front-matter",
+  "description": "Interview file front-matter (INT-001). Answers in the body follow plan §7.4; $defs/answer is the parsed form of each answer header.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interview_id",
+    "run_id",
+    "task",
+    "persona",
+    "date"
+  ],
+  "properties": {
+    "interview_id": {
+      "type": "string",
+      "pattern": "^INT-\\d{3}$"
+    },
+    "run_id": {
+      "$ref": "#/$defs/run_id"
+    },
+    "task": {
+      "$ref": "#/$defs/task_id"
+    },
+    "persona": {
+      "$ref": "#/$defs/persona_id"
+    },
+    "date": {
+      "$ref": "#/$defs/date"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question_id",
+        "asked_of",
+        "task",
+        "respondent",
+        "tag"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^INT-\\d{3}\\.A\\d+$"
+        },
+        "question_id": {
+          "type": "string",
+          "pattern": "^INT-\\d{3}\\.Q\\d+$"
+        },
+        "asked_of": {
+          "$ref": "#/$defs/persona_id"
+        },
+        "task": {
+          "$ref": "#/$defs/task_id"
+        },
+        "control_focus": {
+          "$ref": "#/$defs/control_id"
+        },
+        "respondent": {
+          "enum": [
+            "simulated",
+            "human"
+          ]
+        },
+        "tag": {
+          "description": "Required in both modes (plan §7.4).",
+          "enum": [
+            "SIMULATED",
+            "HUMAN"
+          ]
+        },
+        "fallback": {
+          "description": "Hybrid mode: a listed human was unavailable.",
+          "const": "human-unavailable"
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "description": "The parsed header of one answer: **A3 {#INT-007.A3}** respondent: simulated · tag: SIMULATED · basis: [[product/architecture.md#identity]]."
+    },
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,40}$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[PCSIARM]-[1-9]\\d?$"
+    }
+  }
+}

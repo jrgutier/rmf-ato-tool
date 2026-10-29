@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:baseline",
+  "title": "runs/<run-id>/baseline.json (generated)",
+  "description": "Written by rmf baseline resolve from facts.yaml and the raw OSCAL catalog/profiles (never hand-edited, INV-2; GEN-STALE-001).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "baseline_id",
+    "method",
+    "categorization",
+    "overlays",
+    "sources",
+    "controls"
+  ],
+  "properties": {
+    "baseline_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "method": {
+      "enum": [
+        "cnssi1253",
+        "high-water-mark"
+      ]
+    },
+    "categorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "c",
+        "i",
+        "a"
+      ],
+      "properties": {
+        "c": {
+          "$ref": "#/$defs/impact"
+        },
+        "i": {
+          "$ref": "#/$defs/impact"
+        },
+        "a": {
+          "$ref": "#/$defs/impact"
+        }
+      }
+    },
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "control_id",
+          "origin"
+        ],
+        "properties": {
+          "control_id": {
+            "$ref": "#/$defs/control_id"
+          },
+          "origin": {
+            "enum": [
+              "baseline",
+              "overlay",
+              "tailored-in"
+            ]
+          }
+        }
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "impact": {
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ]
+    }
+  }
+}
