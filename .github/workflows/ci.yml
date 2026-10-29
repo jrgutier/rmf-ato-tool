@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      # LFS objects are pulled after the cache restore below; with `lfs: true` checkout
+      # would download them first and the cache would never save a transfer (L-0008).
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 0  # rmf lessons check diffs against the merge-base with origin/main
+
+      - name: List LFS objects
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - name: Bootstrap
+        run: EXTRACT=1 scripts/bootstrap.sh
+
+      - name: rmf ci
+        run: uv run rmf ci --slow
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: reports/
+          if-no-files-found: ignore
