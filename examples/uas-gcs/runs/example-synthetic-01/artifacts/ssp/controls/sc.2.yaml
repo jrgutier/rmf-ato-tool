@@ -1,0 +1,179 @@
+family: sc
+chunk: 2
+controls:
+  - control_id: sc-10
+    status: implemented
+    statement: "The router ends idle administrative sessions after 10 minutes and the workstation ends sessions at sign-out."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-053.A2]
+  - control_id: sc-12
+    status: implemented
+    statement: "The ISSO manages the aircraft link keys, loaded before each mission, and the workstation's DoD PKI certificates."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-GDT, CMP-AV]
+    sources: [INT-053.A2]
+  - control_id: sc-13
+    status: implemented
+    statement: "The workstation OS and router use FIPS-validated cryptographic modules for TLS and disk encryption; the aircraft link uses its approved link encryption."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-GDT, CMP-AV, CMP-ROUTER]
+    sources: [INT-053.A2]
+  - control_id: sc-15
+    status: implemented
+    statement: "The laptop camera and microphone are disabled in the image."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-053.A3]
+  - control_id: sc-16
+    status: implemented
+    statement: "Mission products carry their release marking as a metadata attribute on export."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-16.1
+    status: implemented
+    statement: "The export package is signed so the marking attribute cannot be changed in transit."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-16.2
+    status: implemented
+    statement: "The video application checks the release marking on export before a product leaves the station."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-17
+    status: implemented
+    statement: "Workstation and router certificates come from DoD PKI, managed by the ISSO."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-053.A2]
+  - control_id: sc-18
+    status: implemented
+    statement: "The STIG settings block mobile code except integrator-signed application components."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-18.1
+    status: implemented
+    statement: "Unsigned mobile code is blocked by the image and the block is logged."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-18.2
+    status: implemented
+    statement: "The integrator's build admits only signed code, which covers the mobile code it acquires or develops."
+    responsible_roles: [PER-DEV]
+    components: [this-system]
+    sources: [INT-053.A3]
+  - control_id: sc-18.3
+    status: implemented
+    statement: "The image prevents download and execution of mobile code outside the signed components."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-18.4
+    status: implemented
+    statement: "The image does not run mobile code automatically and has no general web or mail client that would open it."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3, INT-053.A1]
+  - control_id: sc-20
+    status: not-applicable
+    statement: "The station provides no name service."
+    rationale: "The station hosts no authoritative name server; the router forwards lookups to the enclave resolvers."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-21
+    status: implemented
+    statement: "The router forwards all lookups to the enclave's validating resolvers, and the workstation uses only the router for name resolution."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER, CMP-WS-OS]
+    sources: [INT-053.A1]
+  - control_id: sc-22
+    status: not-applicable
+    statement: "The station provides no name service."
+    rationale: "No authoritative or recursive name service runs inside the boundary; resolution is provided by the enclave."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-23
+    status: implemented
+    statement: "Uplink sessions use mutually authenticated TLS with DoD PKI certificates, and the aircraft link accepts only commands from a keyed terminal."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-GDT]
+    sources: [INT-053.A2, product/test-results.md#dt-1]
+  - control_id: sc-23.1
+    status: implemented
+    statement: "Workstation session identifiers are invalidated at sign-out."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A2]
+  - control_id: sc-23.3
+    status: implemented
+    statement: "The workstation generates unique random session identifiers."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A2]
+  - control_id: sc-23.5
+    status: implemented
+    statement: "The workstation trusts only DoD PKI certificate authorities."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A2]
+  - control_id: sc-28
+    status: implemented
+    statement: "The workstation disk is fully encrypted."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW, CMP-WS-OS]
+    sources: [INT-053.A2, product/architecture.md#components]
+  - control_id: sc-28.1
+    status: implemented
+    statement: "Full-disk encryption uses a FIPS-validated module and protects mission data, logs and keys at rest."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW, CMP-WS-OS]
+    sources: [INT-053.A2]
+  - control_id: sc-28.3
+    status: implemented
+    statement: "The disk encryption keys are held in the laptop's TPM."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A2]
+  - control_id: sc-38
+    status: implemented
+    statement: "The platoon applies OPSEC: stations stay under its control and cases lock with tamper seals."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-053.A3, product/architecture.md#physical]
+  - control_id: sc-39
+    status: implemented
+    statement: "The workstation OS runs each process in its own execution domain."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-41
+    status: implemented
+    statement: "USB storage is blocked except for the maintainer role installing signed bundles, and unused ports are disabled."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-053.A3]
+  - control_id: sc-45
+    status: implemented
+    statement: "The router takes time from the enclave time source when connected and the workstation syncs from the router."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-45.1
+    status: implemented
+    statement: "After each reconnection the router compares its clock with the enclave time source and flags drift over one second."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-47
+    status: alternative
+    statement: "There is no second command radio; instead, when the aircraft link drops the aircraft flies its pre-loaded lost-link route, which DT-1 confirmed on 6 of 6 flights."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT]
+    sources: [INT-053.A1, product/test-results.md#dt-1]

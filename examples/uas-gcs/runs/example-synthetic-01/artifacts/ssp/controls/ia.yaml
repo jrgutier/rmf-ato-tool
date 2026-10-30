@@ -1,0 +1,211 @@
+family: ia
+controls:
+  - control_id: ia-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the identification and authentication policy and procedures; the station follows them."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-044.A1]
+  - control_id: ia-2
+    status: partial
+    statement: "Operators, commanders and remote administrators are uniquely identified and authenticated with their CAC against the brigade directory, which the Brigade Tactical Network Enclave provides; the station enforces CAC sign-in on the workstation. Missing: field maintainers share the local gcsmaint account on the workstation and router, and the GDT management service uses one vendor administrator account, so those users are not uniquely identified. Plan: per-maintainer local accounts with offline CAC sign-in in release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    inherited_from: "Brigade Tactical Network Enclave"
+    sources: [INT-044.A1, product/architecture.md#identity, product/conops.md#limitations, product/test-results.md#dt-1]
+  - control_id: ia-2.1
+    status: partial
+    statement: "Remote administrators reach privileged accounts with CAC and PIN (multifactor). Missing: privileged maintenance through gcsmaint and the GDT administrator account is password only. Plan: offline CAC sign-in for maintainers in release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A1, product/conops.md#limitations]
+  - control_id: ia-2.2
+    status: implemented
+    statement: "Non-privileged users (operators and commanders) sign in only with CAC and PIN on the workstation; the router and GDT have no non-privileged accounts."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A1, product/test-results.md#dt-1]
+  - control_id: ia-2.5
+    status: partial
+    statement: "The sealed break-glass account is opened only by the platoon leader, who records its use. Missing: maintainers use the shared gcsmaint account without first authenticating individually. Plan: individual maintainer accounts in release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A1, product/conops.md#limitations, product/test-results.md#account-review]
+  - control_id: ia-2.6
+    status: partial
+    statement: "The CAC is a separate device from the workstation and provides the second factor for directory users. Missing: gcsmaint maintenance access uses no separate device. Plan: release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A1, product/conops.md#limitations]
+  - control_id: ia-2.8
+    status: implemented
+    statement: "CAC sign-in uses Kerberos with PKI-based pre-authentication, which is replay resistant, for every directory account on the workstation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A1]
+  - control_id: ia-2.12
+    status: implemented
+    statement: "The workstation accepts and electronically verifies DoD CAC (PIV-compliant) credentials against the DoD PKI trust store."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A1, INT-044.A3]
+  - control_id: ia-3
+    status: implemented
+    statement: "The workstation authenticates to the brigade directory with its machine certificate over LDAPS, the router presents its device certificate for syslog over TLS, and the GDT accepts only the keyed aircraft link."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A2, product/architecture.md#network]
+  - control_id: ia-3.1
+    status: implemented
+    statement: "The GDT and the aircraft data link endpoint authenticate each other cryptographically with the link keys loaded before each mission; DT-1 showed an unkeyed terminal is rejected."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV]
+    sources: [INT-044.A2, product/test-results.md#dt-1]
+  - control_id: ia-4
+    status: partial
+    statement: "The ISSO assigns directory identifiers to roles only on a supervisor's signed request; identifiers come from CAC issuance and are not reused. Missing: the shared gcsmaint identifier and the GDT vendor administrator identifier are not assigned to individuals. Plan: release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1, product/test-results.md#account-review]
+  - control_id: ia-4.4
+    status: implemented
+    statement: "Directory groups identify each user's status as operator, commander or admin, and the station grants access by that status."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1, product/architecture.md#identity]
+  - control_id: ia-4.9
+    status: implemented
+    statement: "User attributes are held and protected centrally in the brigade directory; the workstation reads them over LDAPS."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A1, INT-044.A2]
+  - control_id: ia-5
+    status: partial
+    statement: "CAC authenticators are issued and revoked through DoD PKI; the gcsmaint password is changed every 60 days. Missing: the gcsmaint password is shared, and the GDT administrator password is set once at installation with no change cycle. Plan: per-person authenticators in release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A3, product/conops.md#limitations]
+  - control_id: ia-5.1
+    status: partial
+    statement: "Local passwords are stored hashed by the OS and router and changed every 60 days for gcsmaint. Missing: the shared gcsmaint password and the unchanged GDT administrator password. Plan: release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A3, product/conops.md#limitations]
+  - control_id: ia-5.2
+    status: implemented
+    statement: "The workstation validates CAC certificates to the DoD root in its trust store, maps them to the directory account and enforces PIN access to the private key; cached credentials expire after 14 days."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3, product/architecture.md#identity]
+  - control_id: ia-5.6
+    status: partial
+    statement: "CAC private keys stay on the card. Missing: the gcsmaint password is known to every maintainer of the platoon. Plan: release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A3, product/test-results.md#account-review]
+  - control_id: ia-5.7
+    status: implemented
+    statement: "The integrator's build scan confirms that the OS image and the flight control, planner and video applications contain no embedded clear-text static authenticators."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WS-OS, CMP-C2, CMP-PLANNER, CMP-VIDEO]
+    sources: [INT-044.A3]
+  - control_id: ia-5.8
+    status: partial
+    statement: "Directory users have one account across stations. Missing: the same shared gcsmaint account exists on the workstation and the router. Plan: release 2.4 (2027-02)."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A3, product/conops.md#limitations]
+  - control_id: ia-5.13
+    status: implemented
+    statement: "Cached CAC sign-in credentials expire after 14 days disconnected from the brigade directory."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3, product/architecture.md#identity, product/test-results.md#dt-1]
+  - control_id: ia-5.14
+    status: implemented
+    statement: "The DoD PKI trust store is part of the configuration baseline and is updated only through the signed quarterly bundle."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3, product/architecture.md#updates]
+  - control_id: ia-5.16
+    status: implemented
+    statement: "CAC authenticators are issued in person by the DoD credential issuer; the break-glass credential is sealed and handed in person to the platoon leader."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1, INT-044.A3]
+  - control_id: ia-6
+    status: implemented
+    statement: "The workstation, router and GDT sign-in screens mask PINs and passwords."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A3]
+  - control_id: ia-7
+    status: implemented
+    statement: "The OS runs its cryptographic modules in FIPS mode, and the CAC middleware and the GDT link encryption use the vendor-documented validated modules."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-GDT, CMP-AV]
+    sources: [INT-044.A2]
+  - control_id: ia-8
+    status: implemented
+    statement: "The station has no non-organizational users; intelligence analysts receive products on the brigade network and never sign in, and only DoD CAC holders in approved groups are accepted."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3, product/conops.md#users]
+  - control_id: ia-8.1
+    status: not-applicable
+    statement: "No PIV credentials from other agencies are used."
+    rationale: "The station has no non-organizational users; only DoD CAC holders sign in."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3]
+  - control_id: ia-8.2
+    status: not-applicable
+    statement: "No external authenticators are accepted."
+    rationale: "The station has no non-organizational users and no federation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3]
+  - control_id: ia-8.4
+    status: not-applicable
+    statement: "No external identity profiles are used."
+    rationale: "The station has no non-organizational users and no federation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-044.A3]
+  - control_id: ia-9
+    status: implemented
+    statement: "The flight control application opens its command session to the GDT only with the mission key, so the GDT authenticates the service before accepting commands."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-C2, CMP-GDT]
+    sources: [INT-044.A2]
+  - control_id: ia-11
+    status: implemented
+    statement: "Users re-authenticate with CAC after the 15-minute screen lock and on privilege elevation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-044.A1, product/architecture.md#identity]
+  - control_id: ia-12
+    status: implemented
+    statement: "Users are identity proofed at CAC issuance; the ISSO grants station access only to CAC holders on a supervisor's signed request."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1]
+  - control_id: ia-12.1
+    status: implemented
+    statement: "Each request to join a station role group carries the supervisor's signed authorization, which the ISSO keeps."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1]
+  - control_id: ia-12.2
+    status: implemented
+    statement: "Identity evidence is presented and checked at CAC issuance."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1]
+  - control_id: ia-12.3
+    status: implemented
+    statement: "Identity evidence is validated and verified at CAC issuance; the station relies on the issued CAC."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-044.A1]

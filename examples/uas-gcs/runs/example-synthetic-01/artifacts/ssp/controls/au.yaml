@@ -1,0 +1,193 @@
+family: au
+controls:
+  - control_id: au-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the audit and accountability policy and procedures; the ISSO applies them on the station."
+    responsible_roles: [PER-CCP, PER-ISSO]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-040.A2]
+  - control_id: au-2
+    status: implemented
+    statement: "The event list, agreed with the CSSP, covers sign-in, account and privilege events, configuration changes, mission upload, command sessions and product export on the workstation OS and flight control application, administrative sessions and denied traffic on the router, and administrator sign-in and configuration changes on the GDT."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT, CMP-C2]
+    sources: [INT-040.A1, product/architecture.md#logging]
+  - control_id: au-3
+    status: implemented
+    statement: "Each record holds the time, component, user, event type, source and outcome."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT, CMP-C2]
+    sources: [INT-040.A1]
+  - control_id: au-3.1
+    status: implemented
+    statement: "Flight control records add the mission ID; router records add the source and destination of denied traffic."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT, CMP-C2]
+    sources: [INT-040.A1]
+  - control_id: au-3.3
+    status: implemented
+    statement: "Personal data in workstation and flight control records is limited to the user name."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-C2]
+    sources: [INT-040.A1, product/conops.md#information]
+  - control_id: au-4
+    status: implemented
+    statement: "The workstation holds 90 days of records locally and forwards them to the enclave collector when connected."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2, product/architecture.md#logging]
+  - control_id: au-4.1
+    status: implemented
+    statement: "The workstation and router transfer records to the enclave log collector over syslog with TLS whenever the uplink is available."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-040.A2, product/architecture.md#network, product/test-results.md#dt-1]
+  - control_id: au-5
+    status: implemented
+    statement: "The workstation alerts the operator and the log on any logging failure."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-5.1
+    status: implemented
+    statement: "The workstation warns the operator when local log space reaches 75 percent."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-6
+    status: partial
+    statement: "Hybrid with the Brigade Tactical Network Enclave, which reviews collected workstation and router records daily. On the station the ISSO reviews a weekly station report while disconnected. Missing: the weekly station review runs today only during test events, and GDT and mission planner logs are not forwarded, so they are not reviewed. Plan: the ISSO runs the weekly review on every fielded station from first fielding; GDT and planner log forwarding is an open engineering item."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    inherited_from: "Brigade Tactical Network Enclave"
+    parameters:
+      au-06_odp.01: "weekly on the station while disconnected; daily by the enclave for collected records"
+    sources: [INT-040.A2, product/architecture.md#logging, product/test-results.md#dt-1]
+  - control_id: au-6.1
+    status: implemented
+    statement: "Collected records are reviewed with the enclave's automated tools; the workstation report tool supports the ISSO's local review."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-6.3
+    status: partial
+    statement: "The enclave correlates workstation and router records with other enclave records. Missing: GDT and mission planner records stay local and are not correlated. Plan: GDT and planner log forwarding is an open engineering item."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2, product/test-results.md#dt-1]
+  - control_id: au-6.4
+    status: implemented
+    statement: "The enclave collector holds the forwarded station records centrally for review and analysis."
+    responsible_roles: [PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2, product/architecture.md#leveraged]
+  - control_id: au-7
+    status: implemented
+    statement: "The workstation provides a filter and report tool for local records, and the enclave collector provides reduction and reporting for forwarded records."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-7.1
+    status: implemented
+    statement: "The workstation report tool filters local records by time, user and event type."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-8
+    status: implemented
+    statement: "The workstation and router timestamp records from the enclave time server when connected and from the GDT's GPS-derived time otherwise."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-040.A1]
+  - control_id: au-9
+    status: implemented
+    statement: "Hybrid with the Brigade Tactical Network Enclave, which protects forwarded records under its ATO; on the workstation only the admin role can read or delete local records."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    inherited_from: "Brigade Tactical Network Enclave"
+    sources: [INT-040.A2, product/architecture.md#leveraged]
+  - control_id: au-9.4
+    status: implemented
+    statement: "Management of local audit settings and records is limited to the admin role."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-9.6
+    status: implemented
+    statement: "Non-admin users have read-only or no access to local records."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-10
+    status: partial
+    statement: "Workstation and flight control records name the signed-in CAC user for mission upload, command sessions and product export. Missing: actions under the shared gcsmaint account cannot be tied to a person. Plan: per-maintainer accounts with offline CAC sign-in in release 2.4 (planned 2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-C2]
+    sources: [INT-040.A1, product/conops.md#limitations]
+  - control_id: au-11
+    status: implemented
+    statement: "Records are kept 90 days on the station and retained by the enclave collector under its retention rules."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2, product/architecture.md#logging]
+  - control_id: au-11.1
+    status: implemented
+    statement: "Long-term retrieval of forwarded records is provided by the enclave collector."
+    responsible_roles: [PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A2]
+  - control_id: au-12
+    status: implemented
+    statement: "The workstation OS, flight control application, router and GDT generate the agreed events; the GDT keeps them in a local log."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT, CMP-C2]
+    sources: [INT-040.A1, product/architecture.md#logging]
+  - control_id: au-12.1
+    status: implemented
+    statement: "Workstation and router records are time-correlated through the common time source."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-040.A1]
+  - control_id: au-12.3
+    status: implemented
+    statement: "The admin role can change which events the workstation logs from one console."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A1]
+  - control_id: au-14
+    status: implemented
+    statement: "The flight control application records each command session from start to end with its commands."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A1, product/architecture.md#logging]
+  - control_id: au-14.1
+    status: implemented
+    statement: "Session recording starts automatically when a command session starts."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A1]
+  - control_id: au-14.3
+    status: implemented
+    statement: "The admin role can watch a live command session on the workstation."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-040.A1]
+  - control_id: au-16
+    status: implemented
+    statement: "Station records are shared with the enclave collector, which shares them with the CSSP."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [this-system]
+    sources: [INT-040.A2]
+  - control_id: au-16.1
+    status: implemented
+    statement: "Forwarded records keep the station's component and user identity across the enclave."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-040.A1, INT-040.A2]
+  - control_id: au-16.2
+    status: implemented
+    statement: "Station records are shared with the enclave and the CSSP under the enclave connection approval."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [this-system]
+    sources: [INT-040.A2, product/architecture.md#interconnections]

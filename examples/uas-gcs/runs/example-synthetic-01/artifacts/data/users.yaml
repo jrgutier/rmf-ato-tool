@@ -1,0 +1,61 @@
+users:
+  - id: USR-OPERATOR
+    title: "Air vehicle operators"
+    description: "Two per station; plan routes, fly the aircraft and operate the sensor, signing in locally with CAC"
+    type: internal
+    privilege_level: non-privileged
+    roles: ["operator"]
+    authorized_privileges:
+      - title: "Mission operation"
+        functions_performed: ["plan routes", "upload mission plans", "command the aircraft", "operate the sensor and record video"]
+    sources: [INT-023.A1, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-COMMANDER
+    title: "Mission commander"
+    description: "One per station; approves the mission plan and releases mission products, signing in locally with CAC"
+    type: internal
+    privilege_level: non-privileged
+    roles: ["commander"]
+    authorized_privileges:
+      - title: "Mission approval and product release"
+        functions_performed: ["approve mission plans", "release mission products to the brigade intelligence system"]
+    sources: [INT-023.A1, INT-023.A2, product/conops.md#users]
+  - id: USR-MAINTAINER
+    title: "Field maintainers"
+    description: "About four per platoon; install updates, replace hardware and run diagnostics through the shared local account gcsmaint, so actions cannot be tied to a person"
+    type: internal
+    privilege_level: privileged
+    roles: ["gcsmaint (shared local account)"]
+    authorized_privileges:
+      - title: "Local maintenance administration"
+        functions_performed: ["install signed update bundles from removable media", "replace hardware", "run diagnostics on the workstation and router"]
+    sources: [INT-023.A1, product/conops.md#limitations, product/architecture.md#identity]
+  - id: USR-ADMIN
+    title: "System administrators (brigade S6)"
+    description: "Two per brigade; manage accounts and configuration and review logs remotely over the tactical network with CAC"
+    type: internal
+    privilege_level: privileged
+    roles: ["admin"]
+    authorized_privileges:
+      - title: "Remote system administration"
+        functions_performed: ["manage accounts", "manage configuration", "review logs"]
+    sources: [INT-023.A1, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-BREAKGLASS
+    title: "Platoon leader (break-glass holder)"
+    description: "Holds the sealed break-glass administrator account for each station"
+    type: internal
+    privilege_level: privileged
+    roles: ["break-glass administrator"]
+    authorized_privileges:
+      - title: "Emergency administration"
+        functions_performed: ["restore administrative access when normal sign-in fails"]
+    sources: [INT-023.A1, product/architecture.md#identity]
+  - id: USR-ANALYST
+    title: "Intelligence analysts"
+    description: "Receive mission products on the brigade intelligence system; never log in to the system"
+    type: external
+    privilege_level: no-logical-access
+    roles: ["product consumer"]
+    authorized_privileges:
+      - title: "None"
+        functions_performed: ["use released mission products outside the boundary"]
+    sources: [INT-023.A2, product/conops.md#users]

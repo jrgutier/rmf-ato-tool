@@ -44,6 +44,22 @@ def facts_complete(ctx: Context) -> list[RunFinding]:
             out.append(make("FACTS-001", f"fact {fact} set_by_task is "
                             f"{node.get('set_by_task')!r}; {writer} writes it",
                             FACTS_FILE, None, {writer}))
+    # An overlay S-1 cannot apply is C-2's error. FACTS-001 applies from C-3, so the approval
+    # reopens there instead of S-1 failing after it (L-0035).
+    cat = facts_mod.get(facts, "categorization")
+    overlays = cat.get("overlays") if isinstance(cat, dict) else None
+    if overlays and isinstance(overlays, list):
+        owners = {run.fact_writers.get("categorization", "C-2"),
+                  run.fact_writers.get("categorization.approved", "C-3")}
+        try:
+            tables = baseline_mod.load_tables(run)
+        except baseline_mod.BaselineError as exc:
+            out.append(make("FACTS-001", str(exc), FACTS_FILE, None, owners))
+        else:
+            for name in overlays:
+                problem = baseline_mod.overlay_problem(tables, str(name))
+                if problem:
+                    out.append(make("FACTS-001", problem, FACTS_FILE, None, owners))
     approval = facts_mod.get(facts, "categorization.approved")
     if isinstance(approval, dict) and approval.get("value") is not True:
         approver = run.fact_writers.get("categorization.approved", "C-3")

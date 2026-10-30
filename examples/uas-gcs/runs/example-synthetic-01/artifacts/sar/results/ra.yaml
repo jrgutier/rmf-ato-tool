@@ -1,0 +1,113 @@
+family: ra
+determinations:
+  - control_id: ra-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited: the Component risk assessment policy and procedures, reviewed within the last year, were examined; the program office is on the distribution list."
+    sources: [INT-090.A1]
+  - control_id: ra-2
+    result: satisfied
+    methods: [examine, interview]
+    summary: "The approved categorization (ART-CAT) is filed with the security plan."
+    sources: [INT-089.A1]
+  - control_id: ra-3
+    result: satisfied
+    methods: [examine, interview]
+    summary: "M-2 2026-10-29: no threat change and no incident in the cycle, so the signed risk assessment (P-14 version and post-DT-1 update) needs no event-driven update; the yearly review is not yet due."
+    sources: [INT-110.A2, product/monitoring/cycle-2026-10.md#threat-updates, INT-089.A1]
+  - control_id: ra-3.1
+    result: satisfied
+    methods: [examine]
+    summary: "The risk assessment has a supply chain section for the laptop, mission planner and terminal firmware built from the integrator's supplier records."
+    sources: [INT-089.A1]
+  - control_id: ra-3.2
+    result: satisfied
+    methods: [examine]
+    summary: "The brigade threat assessment and the Component threat summaries are on file and used in the risk assessment."
+    sources: [INT-090.A3]
+  - control_id: ra-3.3
+    result: satisfied
+    methods: [examine]
+    summary: "M-2 2026-10-29: the ISSM's 2026-10-28 threat update records the cycle's review of CSSP information (no new threat affecting the station)."
+    sources: [product/monitoring/cycle-2026-10.md#threat-updates, INT-110.A2]
+  - control_id: ra-5
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "M-2 2026-10-29: the 2026-10-24 scan after the 2026-10 bundle confirms the three medium workstation and router findings fixed and no new high or critical findings; the GDT management web service vulnerability is still open on all six stations (firmware 5.1.8, 5.2.1 in regression testing for the 2026-12 bundle, service reachable only from the station internal network), the two planner library findings are open with no vendor fix date, and the planner is still outside any compliance scan. Unchanged from A-3 (FND-054)."
+    finding_refs: [FND-054]
+    sources: [INT-109.A3, product/monitoring/cycle-2026-10.md#vuln-scan, product/monitoring/cycle-2026-10.md#stig-scan]
+  - control_id: ra-5.2
+    result: satisfied
+    methods: [examine]
+    summary: "Each scan log starts with a dated feed update from the enclave."
+    sources: [INT-087.A1]
+  - control_id: ra-5.4
+    result: satisfied
+    methods: [examine, test]
+    summary: "Scan reports list exposed uplink services; the DT-1 port scan found only documented ports."
+    sources: [INT-087.A1, product/test-results.md#dt-1]
+  - control_id: ra-5.5
+    result: satisfied
+    methods: [examine]
+    summary: "Scan headers show the dedicated scan account, not gcsmaint."
+    sources: [INT-087.A1]
+  - control_id: ra-5.11
+    result: satisfied
+    methods: [examine]
+    summary: "The integrator contract's report-acceptance clause and the DoD vulnerability disclosure program cover public reports."
+    sources: [INT-090.A3, INT-089.A2]
+  - control_id: ra-7
+    result: satisfied
+    methods: [examine, interview]
+    summary: "M-2 2026-10-29: every open finding is now tracked as an item with milestones in the POA&M opened at A-6 (ART-POAM), reviewed monthly by the ISSO and ISSM. A-3 result: other-than-satisfied (FND-055, now closed)."
+    sources: [INT-109.A3, ART-POAM]
+  - control_id: ra-8
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "The privacy threshold analysis is drafted but unsigned by the SAOP designee, so the privacy impact assessment decision has not been made."
+    finding_refs: [FND-056]
+    sources: [INT-086.A1]
+  - control_id: ra-9
+    result: satisfied
+    methods: [examine]
+    summary: "The risk assessment ranks the flight control application, GDT and air vehicle endpoint as mission-critical from the inventory priority."
+    sources: [INT-089.A1, product/hw-sw-inventory.md#priority]
+  - control_id: ra-10
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "M-2 2026-10-29: the CSSP hunt still sees only workstation and router records in the enclave collector; GDT and planner records still do not arrive. Unchanged from A-3 (FND-057)."
+    finding_refs: [FND-057]
+    sources: [INT-110.A1, product/monitoring/cycle-2026-10.md#log-reviews]
+findings:
+  - id: FND-054
+    control_id: ra-5
+    title: "Known GDT and mission planner vulnerabilities remain open and the planner configuration is not scanned"
+    description: "ra-5 requires vulnerabilities to be scanned and remediated within defined response times. The 2026-09-15 scan's GDT management web service vulnerability (vendor rating high) awaits firmware 5.2.1, the two medium planner library findings have no vendor fix date, and the planner has no STIG so its configuration is outside the compliance scan. The GDT service is reachable only from the station internal segment."
+    status: open
+    severity: moderate
+    recommendation: "Install firmware 5.2.1 in the 2026-12 bundle and rescan; record a risk acceptance or compensating measure for the planner library findings until the release 3.0 replacement; add an SRG-based check of the planner to the monthly scan."
+    sources: [INT-087.A1, INT-088.A3, product/test-results.md#vuln-scan, INT-109.A3, product/monitoring/cycle-2026-10.md#vuln-scan]
+  - id: FND-055
+    control_id: ra-7
+    title: "Open findings are not tracked in a POA&M"
+    description: "ra-7 requires responses to findings to be tracked. Responses are recorded only in the risk assessment; no POA&M with milestones exists."
+    status: closed
+    severity: low
+    recommendation: "Open the POA&M in A-6 with every open finding of this assessment and review it monthly. M-2 2026-10-29: closed on evidence; the A-6 POA&M tracks every open finding and is reviewed monthly."
+    sources: [INT-089.A1, INT-109.A3, ART-POAM]
+  - id: FND-056
+    control_id: ra-8
+    title: "Privacy threshold analysis not approved"
+    description: "ra-8 requires a privacy impact assessment where needed. The threshold analysis that decides whether one is needed still lacks the SAOP designee's signature; the SSP planned the decision before S-6. Same root cause as FND-051..053."
+    status: open
+    severity: low
+    recommendation: "Obtain the SAOP designee's decision on the threshold analysis and, if required, complete the privacy impact assessment."
+    sources: [INT-086.A1]
+  - id: FND-057
+    control_id: ra-10
+    title: "Threat hunting cannot see mission planner and GDT logs"
+    description: "ra-10 requires threat hunting across the system. The CSSP hunt runs on the enclave collector, which receives no planner or GDT logs. Same root cause as FND-007/008."
+    status: open
+    severity: low
+    recommendation: "Forward planner and GDT logs to the enclave collector together with the FND-007/008 fix."
+    sources: [INT-090.A3, product/test-results.md#dt-1]

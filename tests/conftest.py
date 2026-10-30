@@ -62,17 +62,26 @@ def git_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> GitRepo:
 
 VALID_MINIMAL = REPO_ROOT / "tests/fixtures/runs/valid_minimal"
 HYBRID_MINIMAL = REPO_ROOT / "tests/fixtures/runs/hybrid_minimal"
+EXAMPLE_RUN = REPO_ROOT / "examples/uas-gcs/runs/example-synthetic-01"
 
 
 def copy_run(src: Path, dest: Path) -> Path:
     """A writable copy of a fixture run whose upstream_hash is re-stamped to the current
-    union hash, so upstream edits elsewhere in the repo never raise RUN-STALE-001 in tests."""
+    union hash, so upstream edits elsewhere in the repo never raise RUN-STALE-001 in tests.
+    A workspace run (``<ws>/runs/<id>``, product at ``../../product``) is copied with its
+    workspace, so its product link still resolves."""
     import re
     import shutil
 
     from rmf_tool.run import upstream_hash
 
-    run_dir = Path(shutil.copytree(src, dest))
+    product = re.search(r"^product: (.*)$", (src / "run.yaml").read_text(encoding="utf-8"),
+                        flags=re.M)
+    if product and product.group(1).strip().startswith("../../"):
+        shutil.copytree(src.parents[1], dest)
+        run_dir = dest / "runs" / src.name
+    else:
+        run_dir = Path(shutil.copytree(src, dest))
     run_yaml = run_dir / "run.yaml"
     fresh = upstream_hash.compute(REPO_ROOT, upstream_hash.UNION_GLOBS)
     run_yaml.write_text(re.sub(r"^upstream_hash: .*$", f"upstream_hash: '{fresh}'",

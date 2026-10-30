@@ -157,9 +157,9 @@ def test_ci_profile_with_unimplemented_phase_exit_2(repo_with_p1, monkeypatch):
     assert repo_with_p1.calls == []
 
 
+# `--release` alone is a usage error only while a phase has no checks; from p7 on it runs.
 @pytest.mark.parametrize("args", [
     ["--profile", "bogus"],
-    ["--release"],
     ["--release", "--profile", "p1"],
 ])
 def test_ci_usage_errors(repo_with_p1, args):

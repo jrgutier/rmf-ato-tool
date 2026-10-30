@@ -1,0 +1,254 @@
+family: ia
+determinations:
+  - control_id: ia-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited from the Component cybersecurity program: the current identification and authentication policy and procedures were examined."
+    sources: [INT-079.A2]
+  - control_id: ia-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    summary: "DT-1 and the 2026-09-08 review confirm CAC sign-in for directory users, but 5 maintainers share gcsmaint on each workstation and router and the GDT has one vendor administrator account."
+    finding_refs: [FND-027]
+    sources: [INT-077.A1, product/test-results.md#account-review, product/test-results.md#dt-1]
+  - control_id: ia-2.1
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Remote administrators use CAC and PIN, but privileged maintenance through gcsmaint and the GDT administrator account is password only."
+    finding_refs: [FND-028]
+    sources: [INT-077.A1]
+  - control_id: ia-2.2
+    result: satisfied
+    methods: [examine, test]
+    summary: "DT-1 CAC sign-in tests passed for operator and commander accounts and refused users outside the approved groups; router and GDT have no non-privileged accounts."
+    sources: [product/test-results.md#dt-1, INT-077.A1]
+  - control_id: ia-2.5
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Break-glass envelopes are sealed and unused, but maintainers use gcsmaint with no prior individual authentication."
+    finding_refs: [FND-029]
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - control_id: ia-2.6
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "The CAC is a separate device for directory users; gcsmaint and GDT administrator access uses no separate device."
+    finding_refs: [FND-030]
+    sources: [INT-077.A1]
+  - control_id: ia-2.8
+    result: satisfied
+    methods: [examine]
+    summary: "Image policy enforces smart card sign-in with Kerberos PKINIT for directory accounts."
+    sources: [INT-078.A1]
+  - control_id: ia-2.12
+    result: satisfied
+    methods: [examine, test]
+    summary: "DoD-only trust store examined; DT-1 CAC sign-in verified the credentials electronically."
+    sources: [INT-078.A1, product/test-results.md#dt-1]
+  - control_id: ia-3
+    result: satisfied
+    methods: [examine]
+    summary: "LDAPS binding with the machine certificate and syslog over TLS with the router's device certificate examined in the configuration."
+    sources: [INT-078.A1]
+  - control_id: ia-3.1
+    result: satisfied
+    methods: [test]
+    summary: "DT-1: commands from an unkeyed terminal were rejected."
+    sources: [product/test-results.md#dt-1]
+  - control_id: ia-4
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Directory identifiers have supervisor-signed requests on file, but the gcsmaint and GDT vendor administrator identifiers are not assigned to individuals."
+    finding_refs: [FND-031]
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - control_id: ia-4.4
+    result: satisfied
+    methods: [examine, test]
+    summary: "Directory role groups examined; DT-1 refused users outside the approved groups."
+    sources: [INT-079.A2, product/test-results.md#dt-1]
+  - control_id: ia-4.9
+    result: satisfied
+    methods: [examine]
+    summary: "Attributes held centrally in the brigade directory and read over LDAPS."
+    sources: [INT-079.A2, INT-078.A1]
+  - control_id: ia-5
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "CAC lifecycle via DoD PKI and a 60-day gcsmaint change (last 2026-09-30), but gcsmaint is shared and the GDT administrator password has never changed since installation."
+    finding_refs: [FND-032]
+    sources: [INT-077.A1]
+  - control_id: ia-5.1
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Passwords are stored hashed, but the shared gcsmaint password and the unchanged GDT administrator password do not meet password-based authentication requirements."
+    finding_refs: [FND-033]
+    sources: [INT-077.A1]
+  - control_id: ia-5.2
+    result: satisfied
+    methods: [examine, test]
+    summary: "Path validation to the DoD root, account mapping and PIN-protected keys examined; station 6 refused the cached sign-in after 15 days."
+    sources: [INT-078.A1, INT-077.A2]
+  - control_id: ia-5.6
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "CAC keys stay on the card, but the gcsmaint password is known to all 5 maintainers."
+    finding_refs: [FND-034]
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - control_id: ia-5.7
+    result: satisfied
+    methods: [examine]
+    summary: "The 2026-10 bundle build scan reported no embedded clear-text static authenticators."
+    sources: [INT-078.A1]
+  - control_id: ia-5.8
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "The same shared gcsmaint account and password exist on every workstation and router."
+    finding_refs: [FND-035]
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - control_id: ia-5.13
+    result: satisfied
+    methods: [test]
+    summary: "DT-1 passed cached sign-in at 7 days; station 6 refused cached sign-in after 15 days disconnected, inside the 14-day limit."
+    sources: [product/test-results.md#dt-1, INT-077.A2]
+  - control_id: ia-5.14
+    result: satisfied
+    methods: [examine]
+    summary: "Trust store is in the configuration baseline and changed only by the signed bundle."
+    sources: [INT-078.A1]
+  - control_id: ia-5.16
+    result: satisfied
+    methods: [examine, interview]
+    summary: "CACs issued in person by the DoD issuer; break-glass envelopes sealed and held by the platoon leader."
+    sources: [INT-079.A2, INT-077.A1]
+  - control_id: ia-6
+    result: satisfied
+    methods: [test]
+    summary: "Masking observed on the workstation, router and GDT sign-in screens."
+    sources: [INT-077.A2]
+  - control_id: ia-7
+    result: satisfied
+    methods: [examine]
+    summary: "FIPS mode set in the OS policy; CAC middleware and GDT link modules are on their vendors' validated-module lists."
+    sources: [INT-078.A1]
+  - control_id: ia-8
+    result: satisfied
+    methods: [examine, test]
+    summary: "No non-organizational accounts in the 2026-09-08 review; DT-1 refused users outside the approved groups."
+    sources: [product/test-results.md#account-review, product/test-results.md#dt-1]
+  - control_id: ia-8.1
+    result: not-applicable
+    methods: [examine]
+    summary: "No other-agency PIV users; only DoD CAC holders were in the account review."
+    sources: [product/test-results.md#account-review]
+  - control_id: ia-8.2
+    result: not-applicable
+    methods: [examine]
+    summary: "No external authenticators or federation are configured."
+    sources: [INT-078.A1]
+  - control_id: ia-8.4
+    result: not-applicable
+    methods: [examine]
+    summary: "No external identity profiles are configured."
+    sources: [INT-078.A1]
+  - control_id: ia-9
+    result: satisfied
+    methods: [examine, test]
+    summary: "The flight control application opens its GDT session only with the mission key; DT-1 rejected an unkeyed terminal."
+    sources: [INT-078.A1, product/test-results.md#dt-1]
+  - control_id: ia-11
+    result: satisfied
+    methods: [test]
+    summary: "Station 3 required the CAC PIN after the 15-minute lock and again at elevation; DT-1 passed the 15-minute lock."
+    sources: [INT-077.A2, product/test-results.md#dt-1]
+  - control_id: ia-12
+    result: satisfied
+    methods: [examine]
+    summary: "All 14 CAC accounts have supervisor-signed requests; identity proofing is done at CAC issuance."
+    sources: [INT-077.A1, INT-079.A2]
+  - control_id: ia-12.1
+    result: satisfied
+    methods: [examine]
+    summary: "Supervisor-signed requests on file for each role-group membership."
+    sources: [INT-077.A1]
+  - control_id: ia-12.2
+    result: satisfied
+    methods: [interview]
+    summary: "Identity evidence is presented at CAC issuance, confirmed by the common control provider."
+    sources: [INT-079.A2]
+  - control_id: ia-12.3
+    result: satisfied
+    methods: [interview]
+    summary: "Identity evidence is validated at CAC issuance; the station relies on the issued CAC."
+    sources: [INT-079.A2]
+findings:
+  - id: FND-027
+    control_id: ia-2
+    title: "Maintainers and the GDT administrator are not uniquely identified and authenticated"
+    description: "ia-2 requires unique identification and authentication of users. The 2026-09-08 review shows 5 maintainers sharing gcsmaint on each workstation and router, and the GDT has one vendor administrator account. Open STIG findings STG-001 (workstation) and STG-002 (router), CAT II, record the same gap."
+    status: open
+    severity: moderate
+    recommendation: "Deliver per-maintainer accounts with offline CAC sign-in and a per-person GDT administrator account in release 2.4; until then log the named user of every session."
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - id: FND-028
+    control_id: ia-2.1
+    title: "Privileged maintenance access is single-factor"
+    description: "ia-2.1 requires multifactor authentication to privileged accounts. gcsmaint and the GDT administrator account accept a password only."
+    status: open
+    severity: moderate
+    recommendation: "Require CAC and PIN for maintainer access in release 2.4."
+    sources: [INT-077.A1]
+  - id: FND-029
+    control_id: ia-2.5
+    title: "Shared gcsmaint used without prior individual authentication"
+    description: "ia-2.5 requires individual authentication before a shared account is used. Maintainers sign in to gcsmaint directly."
+    status: open
+    severity: moderate
+    recommendation: "Retire gcsmaint, or gate it behind individual CAC sign-in, in release 2.4."
+    sources: [INT-077.A1]
+  - id: FND-030
+    control_id: ia-2.6
+    title: "Maintenance access uses no separate authentication device"
+    description: "ia-2.6 requires one factor on a separate device for the defined access. gcsmaint and GDT administrator access use only a password."
+    status: open
+    severity: low
+    recommendation: "Use the CAC as the separate device for maintainer access in release 2.4."
+    sources: [INT-077.A1]
+  - id: FND-031
+    control_id: ia-4
+    title: "Shared identifiers are not assigned to individuals"
+    description: "ia-4 requires identifiers assigned to an individual, group, role or device under authorization. The gcsmaint and GDT vendor administrator identifiers are used by several people and assigned to none."
+    status: open
+    severity: moderate
+    recommendation: "Issue per-maintainer identifiers in release 2.4 and record their assignment on signed requests."
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - id: FND-032
+    control_id: ia-5
+    title: "GDT administrator password never changed; gcsmaint password shared"
+    description: "ia-5 requires authenticator management including change and protection. The GDT administrator password has not changed since installation, and the gcsmaint password is shared by 5 people."
+    status: open
+    severity: moderate
+    recommendation: "Change the GDT administrator password now and on a 60-day cycle; replace shared passwords with per-person authenticators in release 2.4."
+    sources: [INT-077.A1]
+  - id: FND-033
+    control_id: ia-5.1
+    title: "Password-based authentication does not meet requirements for shared and GDT accounts"
+    description: "ia-5.1 requires password composition, change and protection rules. The GDT administrator password has no change cycle and the gcsmaint password is shared."
+    status: open
+    severity: moderate
+    recommendation: "Apply the 60-day change and composition rules to the GDT account now; retire shared passwords in release 2.4."
+    sources: [INT-077.A1]
+  - id: FND-034
+    control_id: ia-5.6
+    title: "gcsmaint authenticator is not protected from disclosure"
+    description: "ia-5.6 requires authenticators protected commensurate with the access they permit. The privileged gcsmaint password is known to all 5 maintainers."
+    status: open
+    severity: moderate
+    recommendation: "Replace the shared password with per-person authenticators in release 2.4."
+    sources: [INT-077.A1, product/test-results.md#account-review]
+  - id: FND-035
+    control_id: ia-5.8
+    title: "Same shared account across all workstations and routers"
+    description: "ia-5.8 requires managing the risk of one account on multiple systems. gcsmaint has the same password on every workstation and router, so one disclosure exposes all stations."
+    status: open
+    severity: moderate
+    recommendation: "Per-maintainer accounts in release 2.4; meanwhile set a distinct gcsmaint password per device."
+    sources: [INT-077.A1, product/test-results.md#account-review]

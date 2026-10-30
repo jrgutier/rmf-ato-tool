@@ -110,7 +110,9 @@ RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, SSP-COV-001, SAR-POAM-001, TR
 HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
 p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 to
 `rmf validate`; p6 `rmf check --final` with every run rule on `valid_minimal` (scope all)
-and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL.
+and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL;
+p7 `rmf check --final` with every run rule on `examples/uas-gcs/runs/example-synthetic-01`
+(skipped under `--profile fork`).
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 

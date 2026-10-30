@@ -1,0 +1,155 @@
+family: sc
+chunk: 1
+controls:
+  - control_id: sc-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the system and communications protection policy and procedures; the program office follows them."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-053.A1]
+  - control_id: sc-2
+    status: implemented
+    statement: "The STIG workstation image runs administration tools only for the admin role, separate from operator and commander functions."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-4
+    status: implemented
+    statement: "The workstation OS isolates processes and clears shared memory between users."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A3]
+  - control_id: sc-5
+    status: partial
+    statement: "In place: the router denies all unlisted traffic, rate-limits inbound traffic on the uplink and logs denied traffic, and the enclave protects the brigade side. Missing: the ground data terminal management web service has a published vulnerability that lets an adjacent network crash it; the fix (firmware 5.2.1) is pending regression testing. Plan: install 5.2.1 in the 2026-12 bundle; until then the service listens only on the station internal segment."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-ROUTER, CMP-GDT]
+    sources: [INT-053.A1, product/conops.md#limitations, product/architecture.md#network]
+  - control_id: sc-5.1
+    status: implemented
+    statement: "Station components can reach only the internal segment and the listed uplink services, so they cannot be used to launch attacks on other systems."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER, CMP-GDT]
+    sources: [INT-053.A1]
+  - control_id: sc-5.2
+    status: implemented
+    statement: "The router rate-limits inbound uplink traffic so the station keeps capacity for its mission flows."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER, CMP-GDT]
+    sources: [INT-053.A1]
+  - control_id: sc-5.3
+    status: implemented
+    statement: "The router logs denied traffic and the logs reach the enclave collector for review; the enclave intrusion detection watches the brigade side."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-ROUTER, CMP-GDT]
+    sources: [INT-053.A1, product/architecture.md#logging]
+  - control_id: sc-7
+    status: implemented
+    statement: "The router's uplink port is the only external interface and the boundary edge; it permits only the listed flows and denies the rest. The enclave firewall and intrusion detection protect the brigade side under the enclave's ATO."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    inherited_from: "Brigade Tactical Network Enclave"
+    sources: [INT-053.A1, product/architecture.md#network, product/architecture.md#leveraged]
+  - control_id: sc-7.3
+    status: implemented
+    statement: "The station has one external access point, the router uplink port."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#boundary]
+  - control_id: sc-7.4
+    status: implemented
+    statement: "The uplink to the brigade network is a managed interface with a documented rule set for each permitted flow, reviewed through the CCB."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#configuration]
+  - control_id: sc-7.5
+    status: implemented
+    statement: "The router denies all traffic by default in both directions and allows only the listed flows."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#network]
+  - control_id: sc-7.7
+    status: implemented
+    statement: "The workstation has no VPN client and the router allows no split tunneling; remote administration enters only from the S6 management subnet."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-7.8
+    status: alternative
+    statement: "Instead of an authenticated proxy, the router permits only point-to-point flows to named brigade services (product drop, log collector, directory); the station sends no general web traffic, so there is nothing for a proxy to filter."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-7.9
+    status: implemented
+    statement: "The router blocks and logs any outbound traffic outside the listed flows."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-7.10
+    status: implemented
+    statement: "Outbound deny-by-default on the router and the workstation host firewall prevent exfiltration outside the listed flows."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER, CMP-WS-OS]
+    sources: [INT-053.A1]
+  - control_id: sc-7.11
+    status: implemented
+    statement: "Inbound connections are accepted only for remote administration from the S6 management subnet."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#network]
+  - control_id: sc-7.12
+    status: implemented
+    statement: "The workstation host firewall repeats the router rules."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-053.A1]
+  - control_id: sc-7.13
+    status: implemented
+    statement: "The GDT management service and router administration are reachable only on the isolated internal segment or from the S6 management subnet."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#network]
+  - control_id: sc-7.14
+    status: implemented
+    statement: "Unused workstation ports are disabled, and the locked, tamper-sealed cases stay under platoon control."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-053.A3, product/architecture.md#physical]
+  - control_id: sc-7.25
+    status: implemented
+    statement: "The station connects to other national security systems only through the enclave, over the listed flows."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-7.28
+    status: implemented
+    statement: "The station has no connection to any public network."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1]
+  - control_id: sc-7.29
+    status: implemented
+    statement: "The workstation, GDT management port and router sit on one isolated internal segment, and the aircraft link has no IP route to the uplink."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-053.A1, product/architecture.md#network]
+  - control_id: sc-8
+    status: implemented
+    statement: "Uplink flows use TLS and the aircraft link is encrypted with mission-loaded keys."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV, CMP-ROUTER]
+    sources: [INT-053.A2, product/architecture.md#network]
+  - control_id: sc-8.1
+    status: implemented
+    statement: "TLS through FIPS-validated modules protects uplink flows; the aircraft link encryption protects command, telemetry and video."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV, CMP-ROUTER]
+    sources: [INT-053.A2]
+  - control_id: sc-8.2
+    status: implemented
+    statement: "The aircraft link protects data before sending and on receipt; DT-1 showed commands from an unkeyed terminal are rejected."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV]
+    sources: [INT-053.A2, product/test-results.md#dt-1]

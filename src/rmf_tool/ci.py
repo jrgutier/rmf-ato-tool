@@ -21,6 +21,7 @@ from rmf_tool.render import manual
 COVERAGE_MIN = 85
 VALID_MINIMAL = "tests/fixtures/runs/valid_minimal"
 HYBRID_MINIMAL = "tests/fixtures/runs/hybrid_minimal"
+EXAMPLE_RUN = "examples/uas-gcs/runs/example-synthetic-01"
 GOLDEN_OSCAL = "tests/golden/oscal"
 
 
@@ -113,6 +114,17 @@ def _valid_minimal(rules: tuple[str, ...] | None = None,
     return run
 
 
+def _example(ctx: Context) -> tuple[bool, list[Finding], str]:
+    """The example fork run (p7); a fork's own profile does not evaluate examples/."""
+    assert ctx.profile is not None
+    if not ctx.profile.examples:
+        return True, [], f"{EXAMPLE_RUN} skipped ({ctx.profile.name} profile)"
+    if not (ctx.root / EXAMPLE_RUN / "run.yaml").is_file():
+        return _findings_step([Finding("RUN-CFG-001", "E", "the example run is missing",
+                                       EXAMPLE_RUN)])
+    return _valid_minimal(fixture=EXAMPLE_RUN)(ctx)
+
+
 def _golden_oscal(ctx: Context) -> tuple[bool, list[Finding], str]:
     from rmf_tool.oscal import validate as oscal_validate
 
@@ -185,6 +197,8 @@ STEPS: tuple[Step, ...] = (
     Step("rmf checks-doc --check", "p6", (), _checks_doc),
     Step("rmf oscal validate tests/golden/oscal", "p6", ("OSCAL-001", "OSCAL-002"),
          _golden_oscal),
+    # p7: the example fork's synthetic run, every run rule (OSCAL and staleness included).
+    Step(f"rmf check --final {EXAMPLE_RUN}", "p7", RUN_RULES, _example),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

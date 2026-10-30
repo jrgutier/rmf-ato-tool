@@ -243,3 +243,17 @@ with the next ID; never edit or delete an existing entry.
 - Fix: added a p3b ci step (`rmf validate (p3b, all citations resolvable)`, p3a step `unless="p3b"`, p3b step `unless="p5"`). test_framework_cli now monkeypatches `profiles.closed_phases` to {p1, p2, p2x}. Full gate is green (776 tests; `rmf ci --profile p6` PASS).
 - Rule: every phase in profiles.PHASES needs a ci step before its marker is created. Tests exercising a profile must pin `closed_phases`.
 - Promotion: check: test_ci_profile_with_unimplemented_phase_exit_2
+
+## L-0035 · 2026-10-29 · run: uas-gcs/example-synthetic-01 · tags: baseline, overlays
+- Symptom: at S-1, `rmf baseline resolve` exited 1: "overlay CNSSI1253F-ATT6-PRIVACY (Privacy Overlay) is not transcribed in framework/baselines/cnssi-1253.yaml". C-2 had selected that overlay and C-3 approved it, so S-1 could not write baseline.json or the baseline_id fact, and two agent sessions stalled.
+- Root cause: the framework lists the Privacy Overlay as a valid `categorization.overlays` value (C-2 may pick it, FACTS-001 accepted it) but its control blocks were never transcribed, and nothing before S-1 checked `transcribed`. The overlay also selects one of four control sets, which a single ID cannot express.
+- Fix: transcribed Table 2 of CNSSI 1253F Att. 6 as four overlays, CNSSI1253F-ATT6-PRIVACY-{ACCT,LOW,MODERATE,HIGH} (ADR-0003); C-2 step 6 explains the two-question set selection. FACTS-001 now rejects any overlay resolve cannot apply, owned by C-2 and C-3, so the approval reopens at categorization time.
+- Rule: an overlay a run can record must be one `rmf baseline resolve` can apply; the check runs at C-3, not at S-1.
+- Promotion: check: test_overlay_resolve_cannot_apply_reopens_c3
+
+## L-0036 · 2026-10-29 · run: uas-gcs/example-synthetic-01 · tags: monitor, inputs, scope
+- Symptom: at M-2 the entry check failed: the run includes M-1, M-2, M-3 and M-5 (`include_after_stop`), but `examples/uas-gcs/product/` had no monitoring data (EXT-MONITORING, e.g. `product/monitoring/`), so no family due this cycle could be assessed and two sessions stopped after M-1. RUN-CFG-001 and `rmf status` did not report the missing input.
+- Root cause: the example product was written for the lifecycle up to R-5 only; M-2's entry check requires monitoring data on disk, and nothing ties `include_after_stop: [M-2]` to the presence of EXT-MONITORING.
+- Fix: added `examples/uas-gcs/product/monitoring/cycle-2026-10.md` (configuration checks, STIG and vulnerability scans after the 2026-10 bundle, weekly log reviews, account review, incidents, threat updates), consistent with the seeded weaknesses; the run resumed at M-2.
+- Rule: a run that scopes in a task with an EXT-* input must have that input in its product directory, or the task's playbook must name a fallback, before the run reaches the task.
+- Promotion: none — EXT-* inputs have no machine-checkable path in framework/artifacts.yaml yet; a RUN-CFG check needs that field first (v1.1 candidate, noted in the Phase 7 handoff)

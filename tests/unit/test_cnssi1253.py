@@ -73,9 +73,12 @@ def test_800_53b_profiles_agree_with_the_x_marks(result):
         assert any(rows[cid].cells[f"{o}{level}"] == "+" for o in cnssi1253.OBJECTIVES)
 
 
+PRIVACY_SET_IDS = [f"{cnssi1253.PRIVACY}-{s}" for s, _ in cnssi1253.PRIVACY_SETS]
+
+
 def test_classified_overlay_transcribed(tables):
     overlays = {o["id"]: o for o in tables["overlays"]}
-    assert set(overlays) == set(cnssi1253.OVERLAYS)
+    assert set(overlays) == set(cnssi1253.OVERLAYS) | set(PRIVACY_SET_IDS)
     classified = overlays["CNSSI1253E-ATT5-CLASSIFIED"]
     added = [cid for b in classified["blocks"] for cid in b["add"]]
     assert len(added) == len(set(added)) == 108
@@ -83,10 +86,37 @@ def test_classified_overlay_transcribed(tables):
     assert not overlays["CNSSI1253F-ATT6-PRIVACY"]["transcribed"]
 
 
-def test_every_block_cites_a_page_that_resolves():
+def test_privacy_overlay_control_sets(tables):
+    """Table 2, one overlay per control set (ADR-0003). Low, Moderate and High nest, and the
+    ACCT set (audit and account records) is inside Low."""
+    overlays = {o["id"]: o for o in tables["overlays"]}
+    sets = {i.rsplit("-", 1)[1]: [c for b in overlays[i]["blocks"] for c in b["add"]]
+            for i in PRIVACY_SET_IDS}
+    assert {s: len(ids) for s, ids in sets.items()} == {
+        "ACCT": 92, "LOW": 121, "MODERATE": 169, "HIGH": 174}
+    assert all(len(ids) == len(set(ids)) for ids in sets.values())
+    assert set(sets["ACCT"]) <= set(sets["LOW"]) <= set(sets["MODERATE"]) <= set(sets["HIGH"])
+    # joined split IDs (AC- / 3(14), PM- / 20(1)), errata rows and family-prefixed -1 rows
+    assert {"ac-3.14", "ac-6.2", "ia-2.6", "ma-1", "pt-8", "si-18.5"} <= set(sets["HIGH"])
+    assert {"ac-2.9", "ia-2.5", "pt-8"} <= set(sets["ACCT"])
+    assert "ia-2.6" not in sets["LOW"] and "ac-2.1" not in sets["LOW"]
+    # "GR" with no "+" (CP-6, CP-7 and enhancements at Mod/High) is guidance, not a selection
+    assert not {"cp-6", "cp-6.1", "cp-6.3", "cp-7", "cp-7.1"} & set(sets["HIGH"])
+
+
+def test_privacy_erratum_must_match(monkeypatch):
+    monkeypatch.setitem(cnssi1253._PRIVACY_ERRATA, "ac-1", "no such erratum")
+    known = catalog.load(REPO_ROOT).controls
+    with pytest.raises(cnssi1253.ExtractError, match="erratum for ac-1 matched no row"):
+        cnssi1253.privacy_overlay(REPO_ROOT / f"references/text/{cnssi1253.PRIVACY}.md", known)
+
+
+def test_every_block_cites_a_page_that_resolves(tables):
     findings, cited = baseline_tables(REAL, REPO_ROOT)
     assert findings == []
-    assert len(cited) == 1 + 136 + 5  # file, Appendix D table pages, overlay pages
+    overlay_pages = sum(len(o.get("blocks") or []) for o in tables["overlays"])
+    assert overlay_pages == 5 + 55  # Classified System Overlay, Privacy Overlay control sets
+    assert len(cited) == 1 + 136 + overlay_pages  # file, Appendix D table pages, overlays
     assert all("page" in e.data["citations"][0] for e in cited[1:])
     result = validate(REAL, REPO_ROOT, P3A)
     assert not [f for f in result.findings if "baselines" in (f.path or "")]

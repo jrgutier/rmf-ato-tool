@@ -1,0 +1,65 @@
+benchmarks:
+  - id: BM-01
+    title: "Windows STIG"
+    version: "release not stated (ASM-010)"
+    kind: stig
+    applies_to: [INV-002]
+    scan_date: "2026-09-15"
+  - id: BM-02
+    title: "Network Device STIG"
+    version: "release not stated (ASM-010)"
+    kind: stig
+    applies_to: [INV-008]
+    scan_date: "2026-09-15"
+  - id: BM-03
+    title: "Application Security and Development SRG"
+    version: "release not stated (ASM-010)"
+    kind: srg
+    applies_to: [INV-003, INV-004, INV-005]
+not_applicable:
+  - inventory_item: INV-007
+    rationale: "No DISA STIG or SRG exists for the vendor's ground data terminal firmware; it is covered by the vulnerability scan and vendor-signed releases, and its management service is reachable only from the station internal network."
+  - inventory_item: INV-010
+    rationale: "The mission map package is data loaded from published map products, not executable software; no STIG or SRG applies."
+findings:
+  - id: STG-001
+    benchmark: BM-01
+    rule_id: SV-900101
+    category: CAT II
+    inventory_item: INV-002
+    title: "Shared local account gcsmaint is used by several maintainers on the workstation"
+    status: open
+    control_id: ia-2
+  - id: STG-002
+    benchmark: BM-02
+    rule_id: SV-900102
+    category: CAT II
+    inventory_item: INV-008
+    title: "Shared local account gcsmaint is used by several maintainers on the router"
+    status: open
+    control_id: ia-2
+  - id: STG-003
+    benchmark: BM-03
+    rule_id: SV-900103
+    category: CAT II
+    inventory_item: INV-004
+    title: "Mission planner hand hardening against the SRG has not been assessed"
+    status: not-reviewed
+    control_id: cm-6
+  - id: STG-004
+    benchmark: BM-03
+    rule_id: SV-900104
+    category: CAT II
+    inventory_item: INV-003
+    title: "Flight control application has not been checked against the SRG"
+    status: not-reviewed
+    control_id: cm-6
+  - id: STG-005
+    benchmark: BM-03
+    rule_id: SV-900105
+    category: CAT II
+    inventory_item: INV-005
+    title: "Video application has not been checked against the SRG"
+    status: not-reviewed
+    control_id: cm-6
+sources: [product/test-results.md#stig-scan, product/test-results.md#account-review, product/conops.md#limitations, INT-060.A1, INT-060.A2, INT-060.A4, ASM-010]

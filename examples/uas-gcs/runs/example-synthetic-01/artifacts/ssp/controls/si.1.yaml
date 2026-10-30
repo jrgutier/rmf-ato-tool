@@ -1,0 +1,149 @@
+family: si
+chunk: 1
+controls:
+  - control_id: si-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the system and information integrity policy and procedures; the ISSO applies them to the stations."
+    responsible_roles: [PER-CCP, PER-ISSO]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-054.A1]
+  - control_id: si-2
+    status: partial
+    statement: "Flaws are fixed on every component through the integrator's signed quarterly update bundle, regression-tested before release and installed by field maintainers from removable media; the ISSO assesses CSSP alerts and requests out-of-cycle bundles when needed. Two flaws remain open: the GDT management web service vulnerability (vendor rating high, reachable only from the station internal network) waits for firmware 5.2.1 in the 2026-12 bundle, and the mission planner's two medium library findings have no vendor fix date; the program tracks both and is evaluating a planner replacement for release 3.0."
+    responsible_roles: [PER-ISSO, PER-DEV]
+    components: [CMP-WS-HW, CMP-WS-OS, CMP-C2, CMP-PLANNER, CMP-VIDEO, CMP-GDT, CMP-ROUTER]
+    sources: [INT-054.A1, product/architecture.md#updates, product/test-results.md#vuln-scan, product/conops.md#limitations]
+  - control_id: si-2.2
+    status: implemented
+    statement: "The start-up compliance check reports each workstation's installed bundle level to the local log, which the ISSO uses to see which stations are current."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A1, product/architecture.md#configuration]
+  - control_id: si-2.3
+    status: implemented
+    statement: "The ISSO records the time from a vendor fix to its installation in the fielded bundle for each flaw."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-054.A1]
+  - control_id: si-2.4
+    status: implemented
+    statement: "The signed bundle installer applies operating system and application updates on the workstation as one automated package."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A1, product/architecture.md#updates]
+  - control_id: si-2.6
+    status: implemented
+    statement: "The bundle installer removes superseded software packages on the workstation and replaces the previous firmware image on the GDT."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-GDT]
+    sources: [INT-054.A1]
+  - control_id: si-3
+    status: implemented
+    statement: "The workstation image runs the operating system's real-time malicious code protection and scans removable media on insertion; signatures update with each bundle and from the enclave when connected; a detection quarantines the file, alerts the user and is logged."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2]
+  - control_id: si-3.10
+    status: implemented
+    statement: "The ISSO sends suspect samples to the Component CSSP for malicious code analysis."
+    responsible_roles: [PER-ISSO, PER-CSSP]
+    components: [this-system]
+    sources: [INT-054.A2]
+  - control_id: si-4
+    status: partial
+    statement: "Monitoring is shared with the enclave, which runs intrusion detection and the central log collector reviewed by the S6. The station's part: the router logs denied and inbound uplink traffic, the workstation logs privileged activity and device connections, and both forward to the collector when connected; drift and malware events raise local alerts the ISSO reviews. The mission planner and the GDT keep only local logs that are not forwarded, so they are not monitored centrally (DT-1); forwarding them is an open item for the program."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    inherited_from: "Brigade Tactical Network Enclave"
+    sources: [INT-054.A2, product/architecture.md#logging, product/architecture.md#leveraged, product/test-results.md#dt-1]
+  - control_id: si-4.1
+    status: implemented
+    statement: "Workstation and router events feed the enclave's system-wide intrusion detection through the central log collector."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-054.A2]
+  - control_id: si-4.2
+    status: implemented
+    statement: "Workstation monitoring events are forwarded automatically to the enclave collector for near-real-time analysis when the uplink is up."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2]
+  - control_id: si-4.4
+    status: implemented
+    statement: "The router logs inbound and denied traffic on the uplink, the only external interface."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-ROUTER]
+    sources: [INT-054.A2]
+  - control_id: si-4.5
+    status: implemented
+    statement: "Drift, integrity and malicious code events raise a local alert on the workstation that the ISSO reviews."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2]
+  - control_id: si-4.10
+    status: implemented
+    statement: "Outbound encrypted flows go only to named brigade services, where the enclave sensors inspect them on decryption."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-ROUTER]
+    sources: [INT-054.A2]
+  - control_id: si-4.11
+    status: implemented
+    statement: "The router logs outbound traffic at the uplink and denies any flow outside the four permitted services."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-ROUTER]
+    sources: [INT-054.A2, product/architecture.md#network]
+  - control_id: si-4.12
+    status: implemented
+    statement: "The workstation raises automated alerts to the ISSO for compliance drift, integrity failures and malicious code detections."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2]
+  - control_id: si-4.14
+    status: partial
+    statement: "The GDT rejects commands from unkeyed terminals and records the attempts in its local log (DT-1), but that log is not forwarded or reviewed, so radio-link intrusion attempts are not seen centrally; forwarding GDT logs is an open item."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-GDT]
+    sources: [INT-054.A3, product/test-results.md#dt-1, product/architecture.md#logging]
+  - control_id: si-4.15
+    status: implemented
+    statement: "The aircraft link has no IP route to the uplink, so no traffic passes from the wireless link to the wired network."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT]
+    sources: [INT-054.A3, product/architecture.md#network]
+  - control_id: si-4.16
+    status: partial
+    statement: "The enclave collector correlates workstation and router events with enclave sensor data; planner and GDT events are missing from the correlation because their logs are not forwarded."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2, product/test-results.md#dt-1]
+  - control_id: si-4.19
+    status: implemented
+    statement: "The ISSO reviews activity of maintainers and administrators in the weekly station report, with closer review for the shared gcsmaint account."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-054.A2, product/architecture.md#logging]
+  - control_id: si-4.20
+    status: implemented
+    statement: "The workstation logs privileged-user activity and forwards it to the enclave collector."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A2]
+  - control_id: si-4.22
+    status: implemented
+    statement: "The router denies and logs any service outside the documented ports and flags unexpected services; DT-1 port scans found only documented ports."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-ROUTER]
+    sources: [INT-054.A2, product/test-results.md#dt-1]
+  - control_id: si-4.23
+    status: implemented
+    statement: "Host-based monitoring on the workstation and the router's own logging cover each device."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-054.A2]
+  - control_id: si-4.24
+    status: implemented
+    statement: "Indicators of compromise come to the ISSO from the CSSP and reach the workstation protection with the signature updates."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A1, INT-054.A2]

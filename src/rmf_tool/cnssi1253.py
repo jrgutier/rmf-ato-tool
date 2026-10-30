@@ -53,9 +53,11 @@ _ID_MAX_X = 90.0  # the ID column's right edge
 
 
 # CNSSI 1253 Appendix E overlays the references hold, by reference ID (the form C-2 records in
-# facts.yaml categorization.overlays). Only the Classified System Overlay is transcribed: its
-# Table 1 is a plain add-list. The Space Platform and Privacy overlays select per condition
-# and are not machine-readable yet, so baseline resolution refuses them.
+# facts.yaml categorization.overlays). The Classified System Overlay's Table 1 is a plain
+# add-list. The Privacy Overlay selects one of four control sets (its §4.1 two questions), so
+# it is transcribed as one overlay per set, `<ref>-<SET>` (ADR-0003); the bare reference ID
+# stays listed untranscribed so an old pick fails with a pointer to the sets. The Space
+# Platform Overlay selects per condition and is not machine-readable yet.
 OVERLAYS = {
     "CNSSI1253E-ATT5-CLASSIFIED": "Classified System Overlay",
     "CNSSI1253F-ATT2-SPACE": "Space Platform Overlay",
@@ -65,6 +67,18 @@ CLASSIFIED = "CNSSI1253E-ATT5-CLASSIFIED"
 _CLASSIFIED_TITLE = "Table 1: Classified System Overlay Summary of Control Specifications"
 _CLASSIFIED_END = "Table 2: Controls with Implementation Considerations"
 _OVERLAY_MARK = re.compile(r"^\+[GRV]*$")
+PRIVACY = "CNSSI1253F-ATT6-PRIVACY"
+# Table 2 columns 3..6, in order: (overlay ID suffix, title of the control set)
+PRIVACY_SETS = (("ACCT", "Accountability (ACCT)"), ("LOW", "Low"), ("MODERATE", "Moderate"),
+                ("HIGH", "High"))
+_PRIVACY_TITLE = "Table 2: Privacy Overlays Security and Privacy Controls"
+_PRIVACY_END = "Detailed Overlays Control Specifications"
+# Rows whose printed control name is not the catalog title of their printed ID. The ID wins.
+_PRIVACY_ERRATA = {
+    "ia-2.6": "the row repeats IA-2(5)'s name (Individual Authentication with Group "
+              "Authentication)",
+    "pt-8": "the row says 'Requirement'; the catalog title is 'Computer Matching Requirements'",
+}
 
 
 # CNSSI 1253 makes the NSS privacy control baseline apply to every NSS (cited in the YAML).
@@ -247,6 +261,126 @@ def classified_overlay(md: Path) -> dict[int, list[str]]:
     return dict(pages)
 
 
+def _name_key(s: str) -> str:
+    # "(MAINTENANCE) POLICY AND PROCEDURES": Table 2 prefixes the family to each -1 control.
+    s = re.sub(r"^\s*[(\[][^)\]]*[)\]]\s*(?=POLICIES AND PROCEDURES|POLICY AND PROCEDURES)", "",
+               s)
+    return re.sub(r"[^a-z0-9]", "", s.lower())
+
+
+def _catalog_name(controls: dict[str, dict[str, Any]], cid: str) -> str:
+    """The name Table 2 prints: the title, prefixed by the parent's title for an enhancement."""
+    title = controls[cid]["title"]
+    return f"{controls[cid.split('.')[0]]['title']} {title}" if "." in cid else title
+
+
+@dataclass(frozen=True)
+class PrivacyRow:
+    page: int
+    id: str  # OSCAL control ID
+    anchor: str | None  # the printed ID when one cell holds all of it (a usable page anchor)
+    marks: tuple[str, ...]  # the ACCT, Low, Mod and High cells
+
+
+def _privacy_rows(md: Path) -> list[tuple[int, list[str]]]:
+    rows, page, inside = [], 0, False
+    for line in md.read_text(encoding="utf-8").splitlines():
+        m = _PAGE.match(line)
+        if m:
+            page = int(m.group(1))
+            continue
+        if line.strip() == _PRIVACY_TITLE:
+            inside = True
+        elif line.strip() == _PRIVACY_END:
+            break
+        if not inside or not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in re.split(r"(?<!\\)\|", line.strip())[1:-1]]
+        if len(cells) != 7:
+            raise ExtractError(f"{PRIVACY} page {page}: Table 2 row with {len(cells)} cells")
+        if cells[1] in ("---", "Control Name") or cells[2] == "ACCT" or cells[0] == "Control":
+            continue  # the header repeated on every page
+        rows.append((page, cells))
+    if not rows:
+        raise ExtractError(f"{PRIVACY}: {_PRIVACY_TITLE!r} not found")
+    return rows
+
+
+def privacy_overlay(md: Path, controls: dict[str, dict[str, Any]]) -> list[PrivacyRow]:
+    """Table 2 of the Privacy Overlays: the rows that select a control in some control set.
+
+    The extraction sometimes prints an ID on the row after its name, or splits it over two
+    rows (``AC-`` then ``3(11)``); both are joined back. A row without an ID is identified by
+    its name. A row with an ID must carry that control's catalog name, or be listed in
+    ``_PRIVACY_ERRATA``."""
+    raw = _privacy_rows(md)
+    by_name: dict[str, list[str]] = defaultdict(list)
+    for cid in controls:
+        by_name[_name_key(_catalog_name(controls, cid))].append(cid)
+    out: list[PrivacyRow] = []
+    used_errata: set[str] = set()
+    problems: list[str] = []
+    i = 0
+    while i < len(raw):
+        page, cells = raw[i]
+        i += 1
+        if not cells[1]:
+            if any(cells[2:]) or not _ID.match(re.sub(r"\s", "", cells[0])):
+                problems.append(f"page {page}: stray row {cells!r}")
+            continue  # an ID printed below a row that already had one: checked by name
+        printed = re.sub(r"\s", "", cells[0])
+        pieces = [cells[0]] if cells[0] else []
+        while (not printed or printed.endswith("-")) and i < len(raw) \
+                and not raw[i][1][1] and not any(raw[i][1][2:]):
+            printed += re.sub(r"\s", "", raw[i][1][0])
+            pieces.append(raw[i][1][0])
+            i += 1
+        marks = tuple(cells[2:6])
+        if not any(c.startswith("+") for c in marks):
+            continue
+        name = cells[1].replace("\\|", " ")
+        if printed:
+            if not _ID.match(printed):
+                problems.append(f"page {page}: unreadable ID {printed!r} ({name})")
+                continue
+            cid = oscal_id(printed)
+            if cid not in controls:
+                problems.append(f"page {page}: {printed} is not in the SP 800-53r5 catalog")
+                continue
+            if _name_key(_catalog_name(controls, cid)) != _name_key(name):
+                if cid not in _PRIVACY_ERRATA:
+                    problems.append(f"page {page}: {printed} is named {name!r}")
+                    continue
+                used_errata.add(cid)
+        else:
+            found = by_name.get(_name_key(name), [])
+            if len(found) != 1:
+                problems.append(f"page {page}: no single catalog control named {name!r}")
+                continue
+            cid = found[0]
+        anchor = pieces[0] if len(pieces) == 1 and _ID.match(pieces[0]) else None
+        out.append(PrivacyRow(page, cid, anchor, marks))
+    problems += [f"erratum for {cid} matched no row" for cid in _PRIVACY_ERRATA
+                 if cid not in used_errata]
+    seen = [r.id for r in out]
+    problems += [f"{cid} appears twice" for cid in sorted({c for c in seen if seen.count(c) > 1})]
+    if problems:
+        raise ExtractError(f"{PRIVACY} Table 2: " + "; ".join(problems))
+    return out
+
+
+def privacy_sets(rows: list[PrivacyRow]) -> dict[str, dict[int, list[PrivacyRow]]]:
+    """Control set suffix -> page -> the rows that set selects (a cell starting with "+")."""
+    sets: dict[str, dict[int, list[PrivacyRow]]] = {}
+    for k, (suffix, _) in enumerate(PRIVACY_SETS):
+        pages: dict[int, list[PrivacyRow]] = defaultdict(list)
+        for r in rows:
+            if r.marks[k].startswith("+"):
+                pages[r.page].append(r)
+        sets[suffix] = dict(pages)
+    return sets
+
+
 # --- overrides, cross-checks, output -----------------------------------------------------
 
 
@@ -344,7 +478,19 @@ def _q(s: str) -> str:
     return json.dumps(s, ensure_ascii=False)
 
 
-def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]]) -> str:
+def _privacy_blocks(pages: dict[int, list[PrivacyRow]]) -> list[str]:
+    out = []
+    for n, (page, rows) in enumerate(pages.items()):
+        anchor = _PRIVACY_TITLE if n == 0 else next((r.anchor for r in rows if r.anchor), None)
+        if anchor is None:
+            raise ExtractError(f"{PRIVACY} page {page}: no printed ID to cite as the anchor")
+        out += [f"      - citation: {{ref: {PRIVACY}, page: {page}, anchor: {_q(anchor)}}}",
+                f"        add: [{', '.join(r.id for r in rows)}]"]
+    return out
+
+
+def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
+           privacy: dict[str, dict[int, list[PrivacyRow]]]) -> str:
     out = [
         f"# {YAML_PATH}: GENERATED by `uv run python -m rmf_tool.cnssi1253`; do not edit.",
         "# Cell values come from the PDF's table geometry and are checked cell for cell",
@@ -398,13 +544,17 @@ def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]]) 
     for ref, title in OVERLAYS.items():
         out += [f"  - id: {ref}", f"    title: {title}", f"    ref: {ref}",
                 f"    transcribed: {'true' if ref == CLASSIFIED else 'false'}"]
-        if ref != CLASSIFIED:
-            continue
-        out.append("    blocks:")
-        for n, (page, ids) in enumerate(classified.items()):
-            anchor = _CLASSIFIED_TITLE if n == 0 else ids[0]
-            out += [f"      - citation: {{ref: {ref}, page: {page}, anchor: {_q(anchor)}}}",
-                    f"        add: [{', '.join(oscal_id(i) for i in ids)}]"]
+        if ref == CLASSIFIED:
+            out.append("    blocks:")
+            for n, (page, ids) in enumerate(classified.items()):
+                anchor = _CLASSIFIED_TITLE if n == 0 else ids[0]
+                out += [f"      - citation: {{ref: {ref}, page: {page}, anchor: {_q(anchor)}}}",
+                        f"        add: [{', '.join(oscal_id(i) for i in ids)}]"]
+        elif ref == PRIVACY:
+            for suffix, set_title in PRIVACY_SETS:
+                out += [f"  - id: {ref}-{suffix}", f"    title: {title}, {set_title} control set",
+                        f"    ref: {ref}", "    transcribed: true", "    blocks:",
+                        *_privacy_blocks(privacy[suffix])]
     return "\n".join(out) + "\n"
 
 
@@ -414,6 +564,7 @@ class Result:
     text: str
     nist: dict[str, dict[str, list[str]]]
     classified: int  # controls the Classified System Overlay adds
+    privacy: dict[str, int]  # Privacy Overlay control set suffix -> controls it adds
 
 
 def generate(repo: Path) -> Result:
@@ -439,8 +590,10 @@ def generate(repo: Path) -> Result:
                  for page, ids in classified.items() for i in ids if oscal_id(i) not in known]
     if problems:
         raise ExtractError(f"{len(problems)} problem(s):\n  " + "\n  ".join(problems))
-    return Result(rows, render(rows, text, classified), nist_differences(repo, rows),
-                  sum(len(ids) for ids in classified.values()))
+    privacy = privacy_sets(privacy_overlay(repo / f"references/text/{PRIVACY}.md", known))
+    return Result(rows, render(rows, text, classified, privacy), nist_differences(repo, rows),
+                  sum(len(ids) for ids in classified.values()),
+                  {s: sum(len(rs) for rs in pages.values()) for s, pages in privacy.items()})
 
 
 def summary(result: Result) -> str:
@@ -449,6 +602,7 @@ def summary(result: Result) -> str:
              f"{len({r.table_id[:2] for r in rows})} families"]
     lines.append(f"privacy baseline: {sum(r.privacy in 'X+' for r in rows)}")
     lines.append(f"{CLASSIFIED}: {result.classified} control(s) added")
+    lines.append(f"{PRIVACY}: " + ", ".join(f"{s}={n}" for s, n in result.privacy.items()))
     for obj in OBJECTIVES:
         lines.append(f"{obj}: " + ", ".join(f"{lv}={len(selected(rows, obj, lv))}"
                                              for lv in LEVELS))

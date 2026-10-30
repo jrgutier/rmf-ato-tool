@@ -1,0 +1,73 @@
+authorization_boundary:
+  description: "One station kit, type-authorized with one configuration baseline for all stations: the workstation hardware, its operating system image and the flight control, mission planner and video applications, the ground data terminal, the station router and the air vehicle data link endpoint. The edge is the router's uplink port. The Brigade Tactical Network Enclave and the brigade intelligence system are outside and separately authorized; the airframe is covered by airworthiness."
+  sources: [INT-012.A1, INT-013.A1, INT-013.A2, product/architecture.md#boundary]
+network_architecture:
+  description: "Workstation, GDT management port and router share one isolated station segment; the GDT management web service listens only there. The router uplink permits outbound TLS to the brigade intelligence system product drop, syslog over TLS to the enclave log collector, LDAPS to the brigade directory, and inbound remote administration from the brigade S6 management subnet only; all other traffic is denied both ways. The aircraft link is encrypted line-of-sight radio with per-mission keys and is not routed to the uplink."
+  sources: [INT-012.A2, product/architecture.md#network]
+data_flow:
+  description: "DF-1 routes and commands to the aircraft and DF-2 telemetry and video back over the encrypted radio link; DF-3 mission plan from planner to flight control as a local file with an integrity hash; DF-4 mission products to the brigade intelligence system over mutually authenticated TLS; DF-5 audit records to the enclave log collector over syslog TLS; DF-6 authentication to the brigade directory over LDAPS; DF-7 remote administration from the S6 subnet with CAC sign-in; DF-8 update bundles and map data by removable media with bundle signature checks; DF-9 GDT configuration from the workstation over HTTPS with a single vendor administrator password."
+  sources: [INT-012.A3, product/data-flows.md#top]
+components:
+  - id: CMP-WS-HW
+    title: "Ruggedized workstation laptop"
+    type: hardware
+    description: "Station workstation with encrypted disk and two Ethernet ports"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-WS-OS
+    title: "Workstation operating system"
+    type: software
+    description: "Hardened Windows-based image built by the integrator"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-C2
+    title: "Flight control application"
+    type: software
+    description: "Aircraft command, telemetry display and lost-link settings"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-PLANNER
+    title: "Mission planner (RouteCraft Planner 7)"
+    type: software
+    description: "COTS route planning with the per-mission map package; no STIG exists"
+    status: under-development
+    sources: [product/architecture.md#components, product/conops.md#limitations]
+  - id: CMP-VIDEO
+    title: "Video exploitation and recording application"
+    type: software
+    description: "Records, clips and annotates sensor video"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-GDT
+    title: "Ground data terminal"
+    type: hardware
+    description: "Line-of-sight radio to the aircraft with vendor firmware and a management web service"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-ROUTER
+    title: "Station router"
+    type: hardware
+    description: "Joins the workstation and GDT; uplink to the brigade network is the boundary edge"
+    status: under-development
+    sources: [product/architecture.md#components, INT-012.A1]
+  - id: CMP-AV
+    title: "Kestrel-X air vehicle data link endpoint"
+    type: hardware
+    description: "The aircraft's radio and flight computer interface; the airframe is outside this boundary"
+    status: under-development
+    sources: [product/architecture.md#components]
+  - id: CMP-BTNE
+    title: "Brigade Tactical Network Enclave"
+    type: service
+    description: "Enclave firewall, intrusion detection, brigade directory, log collection and incident response support; separately authorized (ATO 2025-05-30, fictional)"
+    status: operational
+    external: true
+    leveraged_authorization: LA-01
+    sources: [product/architecture.md#leveraged, INT-013.A2, INT-022.A4]
+  - id: CMP-BIS
+    title: "Brigade intelligence system"
+    type: interconnection
+    description: "Receives mission products (IC-1); separately authorized (ATO 2025-08-14, fictional); interconnection agreement unsigned draft"
+    status: operational
+    external: true
+    sources: [product/architecture.md#interconnections, INT-013.A2]

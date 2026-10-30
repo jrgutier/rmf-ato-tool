@@ -1,15 +1,15 @@
 """Run-rule negative fixtures (plan §4.1): each ``tests/fixtures/negative/<RULE>.yaml``
 mutates a copy of a base run; ``rmf check --final`` must then report exactly the rule's
 errors plus the listed ``also`` errors (and, for a warning rule, the listed ``warnings``).
-Bases: ``minimal`` (valid_minimal, scope all) and ``hybrid`` (hybrid_minimal, skeleton
-scope); the ``example`` base arrives in Phase 7. Copies are re-stamped to the current
+Bases: ``minimal`` (valid_minimal, scope all), ``hybrid`` (hybrid_minimal, skeleton scope)
+and ``example`` (the uas-gcs synthetic run, Phase 7). Copies are re-stamped to the current
 upstream hash, so the bases start without findings."""
 
 from pathlib import Path
 
 import pytest
 from _mutations import apply
-from conftest import HYBRID_MINIMAL, REPO_ROOT, VALID_MINIMAL, copy_run
+from conftest import EXAMPLE_RUN, HYBRID_MINIMAL, REPO_ROOT, VALID_MINIMAL, copy_run, edit_yaml
 from ruamel.yaml import YAML
 
 from rmf_tool import build
@@ -17,7 +17,7 @@ from rmf_tool.check import engine, load_registry
 from rmf_tool.run.model import open_run
 
 NEGATIVE = REPO_ROOT / "tests/fixtures/negative"
-BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
+BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL, "example": EXAMPLE_RUN}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 
@@ -42,6 +42,23 @@ def test_committed_base_has_no_errors(base):
     run = open_run(BASES[base], REPO_ROOT)
     found = engine.select(run, engine.evaluate(run), final=True)
     assert {f.rule for f in found} <= {"RUN-STALE-001"}
+
+
+@pytest.mark.parametrize(("overlay", "expected"), [
+    ("CNSSI1253F-ATT6-PRIVACY", "selected per control set"),
+    ("CNSSI1253F-ATT2-SPACE", "not transcribed"),
+])
+def test_overlay_resolve_cannot_apply_reopens_c3(overlay, expected, tmp_path):
+    """L-0035: an overlay S-1 could not apply is a FACTS-001 error charged to C-2 and C-3, so
+    the approval reopens instead of S-1 stopping after it."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "facts.yaml",
+              lambda d: d["categorization"].__setitem__("overlays", [overlay]))
+    run = open_run(run_dir, REPO_ROOT)
+    ev = engine.evaluate(run)
+    found = [f for f in ev.findings if f.rule == "FACTS-001" and expected in f.finding.message]
+    assert len(found) == 1 and found[0].owners == {"C-2", "C-3"}
+    assert not ev.status.tasks["C-3"].done and ev.status.tasks["C-2"].done
 
 
 def test_valid_minimal_is_non_vacuous():

@@ -102,8 +102,20 @@ def test_transcribed_overlay_adds_controls(minimal_run):
     assert sum(o == "overlay" for o in origins.values()) == len(origins) - 466
 
 
+def test_privacy_overlay_acct_set_adds_controls(minimal_run):
+    _no_subset(minimal_run)
+    _categorize(minimal_run, "moderate", "moderate", "low",
+                overlays=["CNSSI1253F-ATT6-PRIVACY-ACCT"])
+    origins = {c["control_id"]: c["origin"]
+               for c in baseline.resolve(open_run(minimal_run, REPO_ROOT))["controls"]}
+    added = sorted(c for c, o in origins.items() if o == "overlay")
+    assert len(added) == 31 and {"ac-3.14", "pt-8", "ra-8", "si-18.5"} <= set(added)
+    assert origins["ac-2.9"] == "baseline"  # ACCT, but already in the M/M/L NSS baseline
+
+
 @pytest.mark.parametrize(("overlay", "message"), [
-    ("CNSSI1253F-ATT6-PRIVACY", "not transcribed"),
+    ("CNSSI1253F-ATT6-PRIVACY", "selected per control set.*PRIVACY-ACCT"),
+    ("CNSSI1253F-ATT2-SPACE", "not transcribed"),
     ("CNSSI1253F-NOPE", "unknown overlay"),
 ])
 def test_overlay_not_available_fails_clearly(minimal_run, overlay, message):

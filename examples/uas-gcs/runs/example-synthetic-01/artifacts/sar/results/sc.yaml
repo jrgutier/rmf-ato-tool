@@ -1,0 +1,282 @@
+family: sc
+determinations:
+  - control_id: sc-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited: the Component system and communications protection policy and procedures, reviewed within the last year, were examined."
+    sources: [INT-090.A1]
+  - control_id: sc-2
+    result: satisfied
+    methods: [examine]
+    summary: "Image settings run administration tools only for the admin role."
+    sources: [INT-087.A2]
+  - control_id: sc-4
+    result: satisfied
+    methods: [examine]
+    summary: "M-2 2026-10-29: the SCA-witnessed STIG scan of 2026-10-24 after the 2026-10 bundle shows the process isolation and memory clearing settings still at baseline on all six stations."
+    sources: [INT-111.A1, product/monitoring/cycle-2026-10.md#stig-scan]
+  - control_id: sc-5
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "M-2 2026-10-29: default deny, uplink rate limit and deny logging held with no router drift in the cycle's compliance checks, but the 2026-10-24 scan shows the GDT management web service crash vulnerability still open on all six stations (firmware 5.1.8; 5.2.1 in regression testing for the 2026-12 bundle); the service is still reachable only from the station internal network. Unchanged from A-3 (FND-062)."
+    finding_refs: [FND-062]
+    sources: [INT-111.A1, product/monitoring/cycle-2026-10.md#vuln-scan, product/monitoring/cycle-2026-10.md#config-checks]
+  - control_id: sc-5.1
+    result: satisfied
+    methods: [examine]
+    summary: "Outbound rules allow only the listed flows; the collector shows blocked outbound attempts."
+    sources: [INT-087.A2]
+  - control_id: sc-5.2
+    result: satisfied
+    methods: [examine]
+    summary: "The uplink inbound rate limit is in the router rule set export."
+    sources: [INT-087.A2]
+  - control_id: sc-5.3
+    result: satisfied
+    methods: [examine]
+    summary: "Router deny records are in the enclave collector; enclave intrusion detection is in the enclave baseline."
+    sources: [INT-087.A2, INT-090.A2]
+  - control_id: sc-7
+    result: satisfied
+    methods: [examine]
+    summary: "M-2 2026-10-29: the automated start-up and pre-upload checks (41 start-ups, 37 uploads on six stations) found no drift from the approved router rule set and host firewall policy, and the 2026-10-24 router STIG scan is at baseline; the A-3 test results (DT-1, only documented ports) remain current and the enclave side stays under the enclave ATO."
+    sources: [INT-111.A1, product/monitoring/cycle-2026-10.md#config-checks, product/monitoring/cycle-2026-10.md#stig-scan, INT-087.A2, INT-090.A2]
+  - control_id: sc-7.3
+    result: satisfied
+    methods: [examine]
+    summary: "The router uplink is the only external interface in the rule set and connection approval."
+    sources: [INT-087.A2, INT-090.A2]
+  - control_id: sc-7.4
+    result: satisfied
+    methods: [examine]
+    summary: "CCB minutes list each permitted flow of the current rule set."
+    sources: [INT-087.A2]
+  - control_id: sc-7.5
+    result: satisfied
+    methods: [examine, test]
+    summary: "Default deny both ways in the rule set; DT-1 port scan confirmed."
+    sources: [INT-087.A2, product/test-results.md#dt-1]
+  - control_id: sc-7.7
+    result: satisfied
+    methods: [examine]
+    summary: "No VPN client in the image; remote administration is permitted only from the S6 subnet."
+    sources: [INT-087.A2, INT-088.A2]
+  - control_id: sc-7.8
+    result: satisfied
+    methods: [examine]
+    summary: "Alternative accepted: only point-to-point flows to named brigade services are permitted and the image has no browser, so there is no general traffic to proxy."
+    sources: [INT-087.A2, INT-088.A2]
+  - control_id: sc-7.9
+    result: satisfied
+    methods: [examine]
+    summary: "Blocked outbound attempts appear in the router deny records at the collector."
+    sources: [INT-087.A2]
+  - control_id: sc-7.10
+    result: satisfied
+    methods: [examine]
+    summary: "Router outbound deny and the matching host firewall policy were examined."
+    sources: [INT-087.A2]
+  - control_id: sc-7.11
+    result: satisfied
+    methods: [examine]
+    summary: "The only inbound permit is remote administration from the S6 subnet."
+    sources: [INT-087.A2]
+  - control_id: sc-7.12
+    result: satisfied
+    methods: [examine]
+    summary: "The workstation host firewall policy carries the router rules."
+    sources: [INT-087.A2]
+  - control_id: sc-7.13
+    result: satisfied
+    methods: [test]
+    summary: "The assessor watched the GDT management port refuse a connection from the uplink side."
+    sources: [INT-087.A2]
+  - control_id: sc-7.14
+    result: satisfied
+    methods: [examine]
+    summary: "Unused ports are disabled in the image; seal numbers match the hand receipts."
+    sources: [INT-087.A2, INT-087.A3]
+  - control_id: sc-7.25
+    result: satisfied
+    methods: [examine]
+    summary: "The connection approval shows the enclave as the only path to other national security systems."
+    sources: [INT-090.A2]
+  - control_id: sc-7.28
+    result: satisfied
+    methods: [examine]
+    summary: "No public network flow exists in the rule set or connection approval."
+    sources: [INT-087.A2, INT-090.A2]
+  - control_id: sc-7.29
+    result: satisfied
+    methods: [examine, test]
+    summary: "The internal segment is isolated and the GDT port is unreachable from the uplink."
+    sources: [INT-087.A2]
+  - control_id: sc-8
+    result: satisfied
+    methods: [examine, test]
+    summary: "Uplink flows use mutual TLS; DT-1 rejected commands from an unkeyed terminal."
+    sources: [INT-088.A2, product/test-results.md#dt-1]
+  - control_id: sc-8.1
+    result: satisfied
+    methods: [examine]
+    summary: "FIPS mode is on and the module validation certificates are in the documentation set."
+    sources: [INT-088.A2]
+  - control_id: sc-8.2
+    result: satisfied
+    methods: [test]
+    summary: "DT-1 showed the aircraft link rejects commands from an unkeyed terminal."
+    sources: [product/test-results.md#dt-1]
+  - control_id: sc-10
+    result: satisfied
+    methods: [examine]
+    summary: "Router idle administrative timeout is 10 minutes; workstation sessions end at sign-out."
+    sources: [INT-087.A2, INT-088.A2]
+  - control_id: sc-12
+    result: satisfied
+    methods: [examine]
+    summary: "The key log records each link key load with loader and validity; certificate list examined."
+    sources: [INT-087.A3]
+  - control_id: sc-13
+    result: satisfied
+    methods: [examine]
+    summary: "Validated modules for TLS and disk encryption are documented; FIPS mode on."
+    sources: [INT-088.A2]
+  - control_id: sc-15
+    result: satisfied
+    methods: [examine]
+    summary: "Camera and microphone are disabled in the image settings."
+    sources: [INT-087.A2]
+  - control_id: sc-16
+    result: satisfied
+    methods: [examine]
+    summary: "Exports carry the release marking attribute."
+    sources: [INT-088.A2]
+  - control_id: sc-16.1
+    result: satisfied
+    methods: [examine]
+    summary: "Export packages are signed."
+    sources: [INT-088.A2]
+  - control_id: sc-16.2
+    result: satisfied
+    methods: [examine]
+    summary: "The integrator's test log shows an export with a missing marking refused."
+    sources: [INT-088.A2]
+  - control_id: sc-17
+    result: satisfied
+    methods: [examine]
+    summary: "All workstation and router certificates are DoD PKI-issued; none expires within 90 days."
+    sources: [INT-087.A3]
+  - control_id: sc-18
+    result: satisfied
+    methods: [examine]
+    summary: "The application control policy allows only integrator-signed components."
+    sources: [INT-088.A2]
+  - control_id: sc-18.1
+    result: satisfied
+    methods: [examine]
+    summary: "Unsigned code is blocked and the block is logged."
+    sources: [INT-088.A2]
+  - control_id: sc-18.2
+    result: satisfied
+    methods: [examine]
+    summary: "The build admits only signed code."
+    sources: [INT-088.A1, INT-088.A2]
+  - control_id: sc-18.3
+    result: satisfied
+    methods: [examine]
+    summary: "Application control prevents unsigned downloads from running."
+    sources: [INT-088.A2]
+  - control_id: sc-18.4
+    result: satisfied
+    methods: [examine]
+    summary: "No browser or mail client in the image; no automatic execution."
+    sources: [INT-088.A2]
+  - control_id: sc-20
+    result: not-applicable
+    methods: [examine]
+    summary: "The station provides no name service; lookups go to the enclave resolvers."
+    sources: [INT-087.A2]
+  - control_id: sc-21
+    result: satisfied
+    methods: [examine]
+    summary: "The router forwards lookups to the enclave's validating resolvers, which are in the enclave baseline."
+    sources: [INT-087.A2, INT-090.A2]
+  - control_id: sc-22
+    result: not-applicable
+    methods: [examine]
+    summary: "The station provides no name service."
+    sources: [INT-087.A2]
+  - control_id: sc-23
+    result: satisfied
+    methods: [examine, test]
+    summary: "Uplink TLS is mutual with DoD PKI; DT-1 confirmed keyed-terminal-only commands."
+    sources: [INT-088.A2, product/test-results.md#dt-1]
+  - control_id: sc-23.1
+    result: satisfied
+    methods: [examine]
+    summary: "Sessions are invalidated at sign-out."
+    sources: [INT-088.A2]
+  - control_id: sc-23.3
+    result: satisfied
+    methods: [examine]
+    summary: "M-2 2026-10-29: the STIG session settings are still at baseline in the 2026-10-24 scan after the 2026-10 bundle."
+    sources: [INT-111.A1, product/monitoring/cycle-2026-10.md#stig-scan]
+  - control_id: sc-23.5
+    result: satisfied
+    methods: [examine]
+    summary: "The trust store holds only DoD roots."
+    sources: [INT-088.A2]
+  - control_id: sc-28
+    result: satisfied
+    methods: [examine]
+    summary: "Full-disk encryption is on in the image settings."
+    sources: [INT-088.A2]
+  - control_id: sc-28.1
+    result: satisfied
+    methods: [examine]
+    summary: "Disk encryption uses a validated module."
+    sources: [INT-088.A2]
+  - control_id: sc-28.3
+    result: satisfied
+    methods: [examine]
+    summary: "The disk encryption key is held in the TPM."
+    sources: [INT-088.A2]
+  - control_id: sc-38
+    result: satisfied
+    methods: [examine]
+    summary: "Seal numbers matched hand receipts at the last setup."
+    sources: [INT-087.A3]
+  - control_id: sc-39
+    result: satisfied
+    methods: [examine]
+    summary: "M-2 2026-10-29: OS process separation settings are still at baseline in the 2026-10-24 scan after the 2026-10 bundle."
+    sources: [INT-111.A1, product/monitoring/cycle-2026-10.md#stig-scan]
+  - control_id: sc-41
+    result: satisfied
+    methods: [examine]
+    summary: "USB storage blocked except the maintainer role for signed bundles; unused ports disabled."
+    sources: [INT-087.A2]
+  - control_id: sc-45
+    result: satisfied
+    methods: [examine]
+    summary: "The router takes time from the enclave source; the workstation syncs from the router."
+    sources: [INT-087.A2, INT-090.A2]
+  - control_id: sc-45.1
+    result: satisfied
+    methods: [examine]
+    summary: "The router log shows the drift check after each reconnection, none over one second."
+    sources: [INT-087.A2]
+  - control_id: sc-47
+    result: satisfied
+    methods: [examine, test]
+    summary: "Alternative accepted: DT-1 confirmed lost-link return on 6 of 6 flights."
+    sources: [INT-088.A2, product/test-results.md#dt-1]
+findings:
+  - id: FND-062
+    control_id: sc-5
+    title: "GDT management web service can be crashed from an adjacent network"
+    description: "sc-5 requires protection against denial-of-service events. The GDT management web service has a published vulnerability that lets an adjacent network crash it (2026-09-15 scan); firmware 5.2.1 is in regression testing. The service answers only on the station internal segment, which the assessor confirmed. Same root cause as FND-054."
+    status: open
+    severity: moderate
+    recommendation: "Install firmware 5.2.1 in the 2026-12 bundle and rescan; keep the internal-segment restriction until then. M-2 2026-10-29: still open on all six stations in the 2026-10-24 scan."
+    sources: [INT-087.A2, INT-088.A3, product/test-results.md#vuln-scan, INT-111.A1, product/monitoring/cycle-2026-10.md#vuln-scan]

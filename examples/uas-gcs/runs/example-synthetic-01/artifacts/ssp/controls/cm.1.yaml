@@ -1,0 +1,118 @@
+family: cm
+chunk: 1
+controls:
+  - control_id: cm-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the configuration management policy and procedures; the program office and integrator follow them."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-042.A1]
+  - control_id: cm-2
+    status: implemented
+    statement: "Each component's baseline is the integrator's released configuration: the workstation image on the Windows STIG, the router on the network device STIG with deviations in the STIG summary, the hand-recorded planner settings, and the released flight control, video, GDT and hardware versions. The CCB approves each baseline and the integrator updates it with every quarterly bundle."
+    responsible_roles: [PER-ISSE, PER-CCB]
+    components: [CMP-WS-HW, CMP-WS-OS, CMP-C2, CMP-PLANNER, CMP-VIDEO, CMP-GDT, CMP-ROUTER]
+    sources: [INT-042.A1, product/architecture.md#configuration]
+  - control_id: cm-2.2
+    status: implemented
+    statement: "The compliance check at every start-up and before each mission upload compares the workstation to its baseline and logs drift."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-042.A1, product/architecture.md#configuration]
+  - control_id: cm-2.3
+    status: implemented
+    statement: "The integrator keeps the last two released baselines so a station can be rolled back."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-042.A1]
+  - control_id: cm-2.7
+    status: implemented
+    statement: "Stations deploy with the same hardened image whatever the area of operation; the workstation hardware and OS carry no additional configuration for high-risk areas because the standard image is already locked down."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW, CMP-WS-OS]
+    sources: [INT-042.A1]
+  - control_id: cm-3
+    status: implemented
+    statement: "Every change goes to the SUGS-PO CCB with an impact analysis; the CCB approves or rejects it, approved changes ship only in the signed quarterly bundle, and the CCB keeps the change records."
+    responsible_roles: [PER-CCB, PER-ISSE]
+    components: [this-system]
+    sources: [INT-042.A1, product/architecture.md#configuration]
+  - control_id: cm-3.2
+    status: implemented
+    statement: "The integrator tests, validates and documents each change on the pre-production stations before it enters the quarterly bundle."
+    responsible_roles: [PER-DEV, PER-ISSE]
+    components: [this-system]
+    sources: [INT-042.A1, product/architecture.md#updates]
+  - control_id: cm-3.4
+    status: implemented
+    statement: "The ISSM sits on the CCB as the security and privacy representative."
+    responsible_roles: [PER-ISSM, PER-CCB]
+    components: [this-system]
+    sources: [INT-042.A1]
+  - control_id: cm-3.6
+    status: implemented
+    statement: "Changes to cryptographic keys, certificates and mechanisms on the workstation and the GDT go through the CCB like any other change."
+    responsible_roles: [PER-CCB, PER-ISSE]
+    components: [CMP-WS-OS, CMP-GDT]
+    sources: [INT-042.A1]
+  - control_id: cm-3.7
+    status: implemented
+    statement: "The CCB reviews delivered changes in each bundle against the approved requests."
+    responsible_roles: [PER-CCB]
+    components: [this-system]
+    sources: [INT-042.A1]
+  - control_id: cm-4
+    status: implemented
+    statement: "Each change request carries a security and privacy impact analysis reviewed by the ISSM before the CCB decides."
+    responsible_roles: [PER-ISSM, PER-ISSE]
+    components: [this-system]
+    sources: [INT-042.A1]
+  - control_id: cm-4.1
+    status: implemented
+    statement: "Changes are analyzed and tested on the six pre-production stations at the test range, separate from fielded stations."
+    responsible_roles: [PER-DEV]
+    components: [this-system]
+    sources: [INT-042.A1, product/test-results.md#top]
+  - control_id: cm-4.2
+    status: implemented
+    statement: "After each change the integrator re-runs the control tests on the pre-production stations to verify the affected controls still work."
+    responsible_roles: [PER-DEV, PER-ISSE]
+    components: [this-system]
+    sources: [INT-042.A1]
+  - control_id: cm-5
+    status: implemented
+    statement: "Only the admin role, maintainers and the GDT vendor administrator account can change configuration on the workstation, router and GDT; changes are physically limited to stations under platoon control and enter only through the signed bundle."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-042.A2, product/architecture.md#identity, product/architecture.md#physical]
+  - control_id: cm-5.1
+    status: partial
+    statement: "The workstation OS enforces change access and logs every change. Missing: changes made through the shared gcsmaint account cannot be tied to a person (conops limitation 2). Plan: per-maintainer local accounts with offline CAC sign-in in release 2.4, planned 2027-02."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-042.A2, product/conops.md#limitations, product/test-results.md#account-review]
+  - control_id: cm-5.5
+    status: partial
+    statement: "Privileges to change the workstation, router and GDT are limited to the admin role, maintainers and the GDT vendor administrator. Missing: the shared gcsmaint account on the workstation and router and the single GDT vendor administrator account give privileges to a shared login whose holders are not individually reviewed. Plan: per-maintainer accounts in release 2.4 (2027-02); the GDT account stays under ISSO password control until the vendor supports named accounts."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-042.A2, product/architecture.md#identity, product/conops.md#limitations]
+  - control_id: cm-5.6
+    status: implemented
+    statement: "System libraries and program folders on the workstation are writable only by administrators."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-042.A2]
+  - control_id: cm-6
+    status: partial
+    statement: "Workstation and router settings follow the Windows and network device STIGs with deviations recorded in the STIG summary, verified by the SCA-witnessed scan of 2026-09-15. Missing: the mission planner has no STIG; its hand-recorded hardening against the Application Security and Development SRG has never been assessed and the scan did not cover it (conops limitation 1). Plan: the SCA assesses the planner hardening in A-3, and the program evaluates a replacement planner for release 3.0 before vendor support ends 2027-06."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-WS-HW, CMP-WS-OS, CMP-C2, CMP-PLANNER, CMP-VIDEO, CMP-GDT, CMP-ROUTER]
+    sources: [INT-042.A2, product/conops.md#limitations, product/test-results.md#stig-scan]
+  - control_id: cm-6.1
+    status: implemented
+    statement: "The start-up and pre-upload compliance check verifies the workstation settings automatically, and the router settings are verified by the STIG scan tool with each bundle."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-042.A2, product/architecture.md#configuration, product/test-results.md#stig-scan]

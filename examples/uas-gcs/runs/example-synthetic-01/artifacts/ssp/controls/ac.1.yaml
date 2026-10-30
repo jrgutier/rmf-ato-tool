@@ -1,0 +1,170 @@
+family: ac
+chunk: 1
+controls:
+  - control_id: ac-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the access control policy and procedures; the station follows them and the ISSO applies them to station accounts."
+    responsible_roles: [PER-CCP, PER-ISSO]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-038.A1]
+  - control_id: ac-2
+    status: partial
+    statement: "Hybrid with the Brigade Tactical Network Enclave. The enclave's brigade directory creates, disables and removes CAC accounts on S6 request; the ISSO approves every membership in the operator, commander and admin groups, which the workstation OS maps to roles, and reviews all station accounts quarterly (last record 2026-09-08). Missing: the shared local maintenance account gcsmaint on the workstation and router and the single vendor administrator account on the GDT are not individually assigned, so maintenance actions cannot be tied to a person. Plan: per-maintainer local accounts with offline CAC sign-in in release 2.4 (planned 2027-02)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    inherited_from: "Brigade Tactical Network Enclave"
+    parameters:
+      ac-02_odp.10: "quarterly"
+    sources: [INT-036.A1, INT-036.A2, INT-038.A1, product/architecture.md#identity, product/conops.md#limitations, product/test-results.md#account-review]
+  - control_id: ac-2.1
+    status: implemented
+    statement: "CAC account management is automated through the brigade directory groups that the workstation OS reads at sign-in; local accounts are fixed by the image and reviewed quarterly by the ISSO."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A1, product/architecture.md#identity]
+  - control_id: ac-2.2
+    status: implemented
+    statement: "The only emergency account is the sealed break-glass administrator account per station, held by the platoon leader; after any use the ISSO resets its password and renews the seal. No temporary accounts are created."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A2, product/architecture.md#identity]
+  - control_id: ac-2.3
+    status: implemented
+    statement: "Directory accounts of departing users are disabled by S6 in the brigade directory and stop working on the station when cached credentials expire after 14 days or at reconnect; the gcsmaint password is changed when a maintainer leaves."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A1, INT-036.A2, product/architecture.md#identity]
+  - control_id: ac-2.4
+    status: partial
+    statement: "The workstation OS logs account creation, changes, lockouts and privilege use and the router logs administrative sessions, both forwarded to the enclave collector when connected. Missing: the GDT keeps its administrator account events in a local log that is not forwarded. Plan: covered by the logging work tracked for the GDT and planner logs."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-036.A3, product/architecture.md#logging, product/test-results.md#dt-1]
+  - control_id: ac-2.5
+    status: implemented
+    statement: "The workstation locks the session after 15 minutes idle, and users sign out at the end of their shift or mission."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3, product/architecture.md#identity]
+  - control_id: ac-2.7
+    status: partial
+    statement: "Privileged roles are the directory admin group, approved by the ISSO and reviewed quarterly, and the sealed break-glass account. Missing: the shared privileged gcsmaint account on the workstation and router and the single GDT vendor administrator account are not tied to individual users. Plan: per-maintainer accounts in release 2.4 (planned 2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-036.A1, INT-036.A2, product/conops.md#limitations]
+  - control_id: ac-2.9
+    status: partial
+    statement: "Shared accounts are limited to gcsmaint (workstation and router) and the GDT vendor administrator account; the gcsmaint password is shared only among the platoon's maintainers and changes every 60 days and when a maintainer leaves. Missing: use of the shared accounts cannot be attributed to a person, which the ISSO's 2026-09-08 review referred to the program office. Plan: replace gcsmaint with per-maintainer local accounts and offline CAC sign-in in release 2.4 (planned 2027-02)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-036.A2, product/conops.md#limitations, product/test-results.md#account-review]
+  - control_id: ac-2.12
+    status: partial
+    statement: "Brigade S6 reviews the enclave log collector for atypical account use once station logs arrive. Missing: while a station is disconnected for days no one reviews account use, and the ISSO reviews a weekly station report only during test events. Plan: an ISSO weekly station report in operational use, to be set in the system continuous monitoring strategy (S-5)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A3, product/architecture.md#logging, product/conops.md#environment]
+  - control_id: ac-2.13
+    status: implemented
+    statement: "On notice of a high-risk individual S6 disables the directory account at once and the ISSO removes group memberships; a high-risk maintainer triggers an immediate gcsmaint password change."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A1, INT-036.A2]
+  - control_id: ac-3
+    status: implemented
+    statement: "The workstation OS and applications enforce the operator, commander and admin roles from the directory groups; the router and GDT accept configuration only from their administrator accounts."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A1, product/test-results.md#dt-1]
+  - control_id: ac-3.4
+    status: implemented
+    statement: "OS file permissions protect mission data; owners cannot grant access outside the role groups set in the image."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A1]
+  - control_id: ac-3.9
+    status: implemented
+    statement: "Mission products leave the station only after the mission commander releases them, and the router passes them only to the intelligence system's product drop over one TLS port."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-037.A2, product/architecture.md#network]
+  - control_id: ac-3.14
+    status: not-applicable
+    statement: "No individual access mechanism is provided on the station."
+    rationale: "ETGCS holds no personal data beyond account names in its account and audit records; requests by individuals are handled by the Component privacy program."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4, product/conops.md#information]
+  - control_id: ac-4
+    status: implemented
+    statement: "The router denies all traffic except outbound TLS to the product drop, syslog over TLS, LDAPS and inbound SSH from the S6 management subnet; there is no IP route from the aircraft link to the uplink."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER, CMP-WS-OS]
+    sources: [INT-037.A2, product/architecture.md#network, product/test-results.md#dt-1]
+  - control_id: ac-5
+    status: implemented
+    statement: "Duties are split across roles: operators fly and plan, the mission commander approves plans and releases products, administrators and maintainers change configuration, and the ISSO approves accounts."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A1, product/conops.md#users]
+  - control_id: ac-6
+    status: implemented
+    statement: "Applications run as standard users; only the admin role and maintainers hold administrator rights on the workstation, and only administrator accounts configure the router and GDT."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A1]
+  - control_id: ac-6.1
+    status: implemented
+    statement: "Access to security functions and settings is limited to the admin role, maintainers and the device administrator accounts."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A1]
+  - control_id: ac-6.2
+    status: implemented
+    statement: "Administrators use a separate non-privileged sign-in for routine work and the admin role only for security functions."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A1]
+  - control_id: ac-6.5
+    status: implemented
+    statement: "Privileged accounts are restricted to S6 administrators in the admin group, the platoon's field maintainers and the platoon leader's sealed break-glass account."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-036.A1, INT-036.A2, product/conops.md#users]
+  - control_id: ac-6.7
+    status: implemented
+    statement: "The ISSO reviews all user privileges quarterly and removes those no longer needed; the last review is dated 2026-09-08."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-036.A1, product/test-results.md#account-review]
+  - control_id: ac-6.8
+    status: implemented
+    statement: "The flight control, video and planner applications run at standard user privilege."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A1]
+  - control_id: ac-6.9
+    status: partial
+    statement: "The workstation OS logs privilege use and the router logs administrative sessions, forwarded to the enclave collector. Missing: GDT administrator actions stay in a local log that is not forwarded, and gcsmaint actions cannot be tied to a person. Plan: per-maintainer accounts in release 2.4 (planned 2027-02); GDT log forwarding tracked with the logging gap."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-036.A3, product/architecture.md#logging, product/conops.md#limitations]
+  - control_id: ac-6.10
+    status: implemented
+    statement: "The OS prevents operator and commander accounts from running administrative tools or changing security settings."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A1]
+  - control_id: ac-7
+    status: implemented
+    statement: "Three consecutive failed sign-ins lock a local account for 15 minutes on the workstation, router and GDT; DT-1 confirmed it on the workstation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A3, product/architecture.md#identity, product/test-results.md#dt-1]
+  - control_id: ac-8
+    status: implemented
+    statement: "The workstation, router and GDT management service display the DoD consent banner before sign-in."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-037.A3]

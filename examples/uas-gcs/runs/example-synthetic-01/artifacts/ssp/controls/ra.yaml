@@ -1,0 +1,95 @@
+family: ra
+controls:
+  - control_id: ra-1
+    status: inherited
+    statement: "The Component cybersecurity program issues and reviews the risk assessment policy and procedures; the program office follows them."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    inherited_from: "Component cybersecurity program"
+    sources: [INT-051.A1]
+  - control_id: ra-2
+    status: implemented
+    statement: "The station was categorized in C-2 and the categorization approved in C-3 (ART-CAT); the ISSM keeps it with the security plan and reviews it at every major release."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A1]
+  - control_id: ra-3
+    status: implemented
+    statement: "The P-14 system risk assessment (ART-RA) is the working assessment; the ISSM updates it at each software release, after each test event and when a threat report or vulnerability changes a risk, and the program manager signs each update."
+    responsible_roles: [PER-ISSM, PER-PM]
+    components: [this-system]
+    sources: [INT-051.A1]
+  - control_id: ra-3.1
+    status: implemented
+    statement: "The risk assessment covers the supply chain of the three commercial items (workstation laptop, mission planner, ground data terminal firmware), using the integrator's supplier records and the Component's supply chain threat information."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A1]
+  - control_id: ra-3.2
+    status: implemented
+    statement: "The risk assessment uses the brigade S2 threat assessment and the Component's all-source intelligence threat summaries."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A1]
+  - control_id: ra-3.3
+    status: implemented
+    statement: "CSSP alerts reach the ISSM through the enclave and are reviewed weekly while stations are connected; a relevant alert triggers a risk assessment update."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A1]
+  - control_id: ra-5
+    status: partial
+    statement: "In place: the ISSO runs a credentialed vulnerability scan of every connected station at least monthly and on every reconnection; fixes ship in the signed quarterly bundle, and the 3 medium workstation and router findings of the 2026-09-15 scan are fixed in the 2026-10 bundle. Missing: the ground data terminal management web service vulnerability (vendor rating high) stays open until firmware 5.2.1 finishes regression testing for the 2026-12 bundle, with the service reachable only from the station internal network meanwhile; the mission planner's 2 medium library findings have no vendor fix date; and the mission planner has no STIG, so its configuration is not covered by the compliance scan. Plan: install 5.2.1 in the 2026-12 bundle and track the planner findings to the release 3.0 replacement decision."
+    responsible_roles: [PER-ISSO, PER-ISSM]
+    components: [CMP-WS-HW, CMP-WS-OS, CMP-C2, CMP-PLANNER, CMP-VIDEO, CMP-GDT, CMP-ROUTER]
+    parameters:
+      ra-05_odp.01: "at least monthly when connected and on every reconnection"
+    sources: [INT-051.A2, product/test-results.md#vuln-scan, product/test-results.md#stig-scan, product/conops.md#limitations]
+  - control_id: ra-5.2
+    status: implemented
+    statement: "The scanner's vulnerability feed is updated from the enclave before each scan."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-051.A2]
+  - control_id: ra-5.4
+    status: implemented
+    statement: "Each scan reports the services and information a station exposes on its uplink; the DT-1 router port scan found only documented ports answering."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-051.A2, product/test-results.md#dt-1]
+  - control_id: ra-5.5
+    status: implemented
+    statement: "Scans use a dedicated scan credential with privileged access on the workstation, router and ground data terminal, not the shared maintenance account."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-ROUTER, CMP-GDT]
+    sources: [INT-051.A2]
+  - control_id: ra-5.11
+    status: implemented
+    statement: "The integrator's contract requires it to accept vulnerability reports from any source and pass them to the program office; the DoD vulnerability disclosure program covers public reports."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A2]
+  - control_id: ra-7
+    status: partial
+    statement: "In place: the ISSM records a response for each finding in the risk assessment, including the mitigations for the three disclosed limitations. Missing: the POA&M is not opened until the assessment, so open items are tracked only in the risk assessment. Plan: open the POA&M in A-6 with every open finding."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A3]
+  - control_id: ra-8
+    status: partial
+    statement: "In place: the privacy threshold analysis has been prepared and submitted. Missing: it is still with the SAOP's designee, who will decide whether a full privacy impact assessment is required. Plan: decision before the plan review in S-6."
+    responsible_roles: [PER-PRIV]
+    components: [this-system]
+    sources: [INT-051.A3, INT-050.A1]
+  - control_id: ra-9
+    status: implemented
+    statement: "The inventory's asset priority identifies the flight control application, the ground data terminal and the air vehicle endpoint as mission-critical; the risk assessment uses this criticality."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A1, product/hw-sw-inventory.md#priority]
+  - control_id: ra-10
+    status: partial
+    statement: "In place: the CSSP hunts for threats on the enclave using the forwarded workstation and router logs. Missing: the mission planner and ground data terminal logs stay local and are not forwarded, so the hunt cannot see them. Plan: tracked with the audit forwarding gap for a later release."
+    responsible_roles: [PER-CSSP, PER-ISSM]
+    components: [this-system]
+    sources: [INT-051.A3, product/test-results.md#dt-1, product/architecture.md#logging]

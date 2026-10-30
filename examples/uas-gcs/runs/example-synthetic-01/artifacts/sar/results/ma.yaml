@@ -1,0 +1,111 @@
+family: ma
+determinations:
+  - control_id: ma-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited from the Component cybersecurity program: the current maintenance policy and procedures were examined."
+    sources: [INT-079.A2]
+  - control_id: ma-2
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Station maintenance logs record every action since 2026-07 with date and task, but the sign-in shows gcsmaint and the maintainer is named only for scheduled work."
+    finding_refs: [FND-047]
+    sources: [INT-077.A4, product/test-results.md#account-review]
+  - control_id: ma-3
+    result: satisfied
+    methods: [examine]
+    summary: "The diagnostic kit is on the baseline inventory as the only approved maintenance tool set."
+    sources: [INT-077.A4]
+  - control_id: ma-3.1
+    result: satisfied
+    methods: [examine]
+    summary: "Case seal checks logged at every setup."
+    sources: [INT-077.A4]
+  - control_id: ma-3.2
+    result: satisfied
+    methods: [examine]
+    summary: "Media scanned at the kiosk and the 2026-10 bundle signature checked before install on all six stations."
+    sources: [INT-077.A4]
+  - control_id: ma-3.3
+    result: satisfied
+    methods: [examine]
+    summary: "The kit stays in the platoon's locked case."
+    sources: [INT-077.A4]
+  - control_id: ma-3.4
+    result: satisfied
+    methods: [examine]
+    summary: "Tool use limited to the 5 maintainers on the ISSO's signed list."
+    sources: [INT-077.A4]
+  - control_id: ma-3.5
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Privileged maintenance sessions are logged, but under gcsmaint the use of privileged tools cannot be tied to a person."
+    finding_refs: [FND-048]
+    sources: [INT-077.A4, product/test-results.md#account-review]
+  - control_id: ma-3.6
+    result: satisfied
+    methods: [examine]
+    summary: "Tools updated with the 2026-10 signed bundle on all six stations."
+    sources: [INT-077.A4]
+  - control_id: ma-4
+    result: satisfied
+    methods: [examine, test]
+    summary: "Router ACL admits administration only from the S6 subnet after CAC sign-in on encrypted protocols; the DT-1 port scan found only documented ports."
+    sources: [INT-078.A2, product/test-results.md#dt-1]
+  - control_id: ma-4.1
+    result: satisfied
+    methods: [examine, test]
+    summary: "Router and workstation sessions are logged; DT-1 confirmed their logs reach the enclave collector."
+    sources: [INT-078.A2, product/test-results.md#dt-1]
+  - control_id: ma-4.3
+    result: satisfied
+    methods: [examine]
+    summary: "Administration originates only from S6 workstations in the authorized brigade enclave."
+    sources: [INT-079.A2]
+  - control_id: ma-4.4
+    result: satisfied
+    methods: [examine]
+    summary: "Router ACL restricts administration to the S6 management subnet, separate from mission traffic."
+    sources: [INT-078.A2]
+  - control_id: ma-4.6
+    result: satisfied
+    methods: [examine]
+    summary: "Only encrypted remote administration protocols are enabled."
+    sources: [INT-078.A2]
+  - control_id: ma-4.7
+    result: satisfied
+    methods: [examine]
+    summary: "Idle sessions drop after 10 minutes and the session end is logged."
+    sources: [INT-078.A2]
+  - control_id: ma-5
+    result: satisfied
+    methods: [examine]
+    summary: "The ISSO's signed list names the 5 authorized maintainers."
+    sources: [INT-077.A4]
+  - control_id: ma-6
+    result: satisfied
+    methods: [test]
+    summary: "Station 5 swap from a spare kit finished in under 3 hours, inside the 4-hour target."
+    sources: [INT-077.A4]
+  - control_id: ma-6.1
+    result: satisfied
+    methods: [examine]
+    summary: "The 2026-10 quarterly bundle was installed on all six stations."
+    sources: [INT-077.A4]
+findings:
+  - id: FND-047
+    control_id: ma-2
+    title: "Maintenance records do not identify the maintainer"
+    description: "ma-2 requires maintenance records including who performed the work. Logs show the shared gcsmaint account; the maintainer is named only for scheduled work."
+    status: open
+    severity: low
+    recommendation: "Name the maintainer for every logged action now; individual maintainer accounts in release 2.4."
+    sources: [INT-077.A4, product/test-results.md#account-review]
+  - id: FND-048
+    control_id: ma-3.5
+    title: "Privileged maintenance tool use not attributable"
+    description: "ma-3.5 requires monitoring the use of maintenance tools with privileged access. Under gcsmaint the person using privileged tools is not recorded."
+    status: open
+    severity: moderate
+    recommendation: "Individual maintainer accounts in release 2.4; meanwhile a signed log of each privileged session."
+    sources: [INT-077.A4]

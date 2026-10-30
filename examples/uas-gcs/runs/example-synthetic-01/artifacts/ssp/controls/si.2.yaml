@@ -1,0 +1,151 @@
+family: si
+chunk: 2
+controls:
+  - control_id: si-5
+    status: implemented
+    statement: "The ISSO receives security alerts and IAVM notices from the Component CSSP, assesses them for the station and asks the integrator for an out-of-cycle bundle when one applies."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-054.A1]
+  - control_id: si-7
+    status: implemented
+    statement: "Signed bundles and signed GDT firmware images are verified before install, and the start-up compliance check verifies workstation files and settings against the baseline."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-WS-OS, CMP-GDT]
+    sources: [INT-055.A1, product/architecture.md#updates]
+  - control_id: si-7.1
+    status: implemented
+    statement: "Integrity checks run at every station start-up and before each mission upload; GDT firmware is checked at install."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS, CMP-GDT]
+    sources: [INT-055.A1, product/architecture.md#configuration]
+  - control_id: si-7.7
+    status: implemented
+    statement: "An integrity mismatch is logged and alerted, and the ISSO handles it under the incident procedure."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-055.A1]
+  - control_id: si-7.8
+    status: implemented
+    statement: "Integrity failures are written to the audit log as integrity events."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WS-OS]
+    sources: [INT-055.A1]
+  - control_id: si-7.9
+    status: implemented
+    statement: "The laptop uses secure boot with the TPM measuring the boot chain."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-055.A1]
+  - control_id: si-7.10
+    status: implemented
+    statement: "The laptop firmware setup is password-protected and firmware changes only through signed bundles."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-055.A1]
+  - control_id: si-7.15
+    status: implemented
+    statement: "The station verifies the signature of the integrator's quarterly update bundle and the GDT firmware images before install and rejects unsigned or altered code."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-GDT]
+    parameters:
+      si-07.15_odp: "the integrator's quarterly update bundle and the GDT firmware images"
+    sources: [INT-055.A1, product/architecture.md#updates]
+  - control_id: si-8
+    status: not-applicable
+    statement: "The station has no e-mail, chat or messaging service."
+    rationale: "No messaging entry point exists on the station; operators use other brigade systems for e-mail and chat."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A3]
+  - control_id: si-8.2
+    status: not-applicable
+    statement: "The station has no e-mail, chat or messaging service to protect."
+    rationale: "No messaging entry point exists on the station."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-054.A3]
+  - control_id: si-10
+    status: partial
+    statement: "The flight control application checks every command and route against aircraft limits before upload, and the planner and video applications validate imported files and fields. The planner's validation is the vendor's own and has not been independently assessed, since its hand hardening was never assessed; the assessment in A-3 and the release 3.0 replacement decision address it."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-C2, CMP-PLANNER, CMP-VIDEO]
+    sources: [INT-055.A2, product/conops.md#limitations]
+  - control_id: si-10.3
+    status: implemented
+    statement: "The flight control application and planner refuse invalid input and show the operator a plain message."
+    responsible_roles: [PER-DEV]
+    components: [CMP-C2, CMP-PLANNER]
+    sources: [INT-055.A2]
+  - control_id: si-10.6
+    status: implemented
+    statement: "The applications validate imported files and fields before use, so injected content is refused."
+    responsible_roles: [PER-DEV]
+    components: [CMP-C2, CMP-PLANNER, CMP-VIDEO]
+    sources: [INT-055.A2]
+  - control_id: si-11
+    status: implemented
+    statement: "Error messages show no internal detail; detail goes to the local log visible to the admin role."
+    responsible_roles: [PER-DEV]
+    components: [CMP-C2, CMP-PLANNER, CMP-VIDEO]
+    sources: [INT-055.A2]
+  - control_id: si-12
+    status: implemented
+    statement: "Information is kept by the Component records schedule: logs 90 days locally, products until transferred to the intelligence system and then deleted."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3, product/architecture.md#logging]
+  - control_id: si-12.1
+    status: implemented
+    statement: "The only personal data held is user names in accounts and audit records; no other personal fields are stored."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3, product/conops.md#information]
+  - control_id: si-12.3
+    status: implemented
+    statement: "Retired stations and drives are sanitized under the Component procedure."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]
+  - control_id: si-15
+    status: implemented
+    statement: "The video application exports only products with a valid release marking, and the flight control application uploads only validated commands."
+    responsible_roles: [PER-DEV]
+    components: [CMP-C2, CMP-PLANNER, CMP-VIDEO]
+    sources: [INT-055.A2]
+  - control_id: si-16
+    status: implemented
+    statement: "The image enables data execution prevention and address randomization for all processes."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-055.A2]
+  - control_id: si-18
+    status: implemented
+    statement: "User names come from the brigade directory at each CAC sign-in, so station records match the authoritative source."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]
+  - control_id: si-18.1
+    status: implemented
+    statement: "Names refresh automatically from the directory at each sign-in."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]
+  - control_id: si-18.3
+    status: implemented
+    statement: "User names are taken from tagged directory attributes, so the station uses only the authoritative name field."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]
+  - control_id: si-18.4
+    status: implemented
+    statement: "Users request corrections from the directory owner; the change reaches the station at the next sign-in."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]
+  - control_id: si-18.5
+    status: implemented
+    statement: "The directory owner notifies users when a correction is made."
+    responsible_roles: [PER-ISSO]
+    components: [this-system]
+    sources: [INT-055.A3]

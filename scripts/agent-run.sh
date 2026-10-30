@@ -23,7 +23,15 @@
 # it leaks, the probe is retried with --bare (which needs ANTHROPIC_API_KEY, because --bare
 # never reads the OAuth login); a passing bare probe records isolation: bare.
 #
-# Environment: AGENT_BUDGET_USD (per session, default 5), AGENT_MAX_SESSIONS (default 12).
+# --run-dir DIR drives an existing run (repo-relative, e.g. an examples/ fork run) instead of a
+# scenario: no `rmf run init`; <scenario> only names the prompt (tests/agent/prompts/<s>.md)
+# and the results directory, which then holds check.json and meta.yaml but no run/ copy, and
+# needs no tests/agent/scenarios file (so AGENT-001 does not track it). The finished run is
+# copied back over DIR in the repo.
+#
+# Environment: AGENT_BUDGET_USD (per session, default 5), AGENT_MAX_SESSIONS (default 12),
+# AGENT_TOTAL_BUDGET_USD (stop starting sessions once the sessions so far cost this much;
+# default unlimited).
 set -euo pipefail
 
 usage() {
@@ -35,10 +43,12 @@ die() { echo "agent-run: $*" >&2; exit 1; }
 DRY=0
 PROBE=1
 SCENARIO=""
+RUN_DIR=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1 ;;
     --no-probe) PROBE=0 ;;
+    --run-dir) [[ $# -ge 2 ]] || usage 2; RUN_DIR=${2%/}; shift ;;
     -h|--help) usage 0 ;;
     -*) echo "agent-run: unknown option $1" >&2; usage 2 ;;
     *) [[ -z $SCENARIO ]] || usage 2; SCENARIO=$1 ;;
@@ -50,19 +60,35 @@ done
 REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 SCENARIO_FILE="tests/agent/scenarios/$SCENARIO.yaml"
 PROMPT_FILE="tests/agent/prompts/$SCENARIO.md"
-[[ -f $REPO/$SCENARIO_FILE ]] || die "no scenario $SCENARIO_FILE"
+if [[ -n $RUN_DIR ]]; then
+  # The finished run is rsync'd back with --delete, so DIR must stay inside the repo, and
+  # top-level runs/ is excluded from the work copy.
+  [[ $RUN_DIR != /* && /$RUN_DIR/ != */../* && $RUN_DIR != runs/* ]] \
+    || die "--run-dir must be a repo-relative path outside runs/ without '..': $RUN_DIR"
+  [[ -f $REPO/$RUN_DIR/run.yaml ]] || die "no run at $RUN_DIR (run.yaml missing)"
+else
+  [[ -f $REPO/$SCENARIO_FILE ]] || die "no scenario $SCENARIO_FILE"
+fi
 [[ -f $REPO/$PROMPT_FILE ]] || die "no prompt $PROMPT_FILE"
 for tool in claude uv jq rsync shasum; do
   command -v "$tool" >/dev/null || die "$tool not found"
 done
 BUDGET=${AGENT_BUDGET_USD:-5}
 MAX_SESSIONS=${AGENT_MAX_SESSIONS:-12}
+TOTAL_BUDGET=${AGENT_TOTAL_BUDGET_USD:-}
+[[ -z $TOTAL_BUDGET || $TOTAL_BUDGET =~ ^[0-9]+([.][0-9]+)?$ ]] \
+  || die "AGENT_TOTAL_BUDGET_USD must be a number of dollars: $TOTAL_BUDGET"
 PROBE_BUDGET=0.30
 TMP=${TMPDIR:-/tmp}
 WORK="${TMP%/}/rmf-agent-$SCENARIO"
 RESULTS="$REPO/tests/agent/results/$SCENARIO"
-RUN_ID="agent-$SCENARIO"
-RUN="runs/$RUN_ID"
+if [[ -n $RUN_DIR ]]; then
+  RUN=$RUN_DIR
+  RUN_ID=$(basename "$RUN_DIR")
+else
+  RUN_ID="agent-$SCENARIO"
+  RUN="runs/$RUN_ID"
+fi
 LOGS="$WORK/agent-logs"
 ISOLATION=project
 FORBIDDEN=(--permission-mode --max-turns --dangerously-skip-permissions bypassPermissions
@@ -81,9 +107,16 @@ export UV_PROJECT_ENVIRONMENT="$REPO/.venv-agent"
 (cd "$REPO" && env -u UV_NO_SYNC uv sync --locked --quiet)
 export UV_NO_SYNC=1
 cd "$WORK"
-uv run rmf run init --scenario "$SCENARIO_FILE" --run-id "$RUN_ID" >/dev/null
+if [[ -z $RUN_DIR ]]; then
+  uv run rmf run init --scenario "$SCENARIO_FILE" --run-id "$RUN_ID" >/dev/null
+fi
 uv run rmf check "$RUN" --rules RUN-CFG-001 >/dev/null \
-  || die "scenario or seeds incomplete: uv run rmf check $RUN --rules RUN-CFG-001 (in $WORK)"
+  || die "run configuration incomplete: uv run rmf check $RUN --rules RUN-CFG-001 (in $WORK)"
+
+spent() {  # total cost of the sessions so far, USD
+  cat "$LOGS"/session-*.jsonl 2>/dev/null \
+    | jq -s '[.[] | select(.type == "result") | .total_cost_usd // 0] | add // 0'
+}
 
 session_argv() {  # $1: prompt; $2: budget -> ARGV
   ARGV=(claude -p "$1" --setting-sources project --strict-mcp-config --no-session-persistence
@@ -202,6 +235,11 @@ while :; do
     echo "agent-run: AGENT_MAX_SESSIONS=$MAX_SESSIONS reached; stopping" >&2
     break
   fi
+  if [[ -n $TOTAL_BUDGET ]] && jq -en --argjson s "$(spent)" --argjson t "$TOTAL_BUDGET" \
+       '$s >= $t' >/dev/null; then
+    echo "agent-run: AGENT_TOTAL_BUDGET_USD=$TOTAL_BUDGET reached (spent $(spent)); stopping" >&2
+    break
+  fi
   last=$key
   STEP=$(jq -r .next.step <<<"$status")
   sessions=$((sessions + 1))
@@ -217,16 +255,20 @@ uv run rmf check "$RUN" --final --format json >"$WORK/check.json" || true
 rm -rf "$RESULTS"
 mkdir -p "$RESULTS"
 cp "$WORK/check.json" "$RESULTS/check.json"
-cp -R "$RUN" "$RESULTS/run"
-# The copied run (tests/agent/results/<s>/run) sits five levels below the repo root instead of two.
-product=$(sed -n 's/^product: //p' "$RUN/run.yaml")
-sed -i.bak "s|^product: .*|product: ../../../../../${product#../../}|" "$RESULTS/run/run.yaml"
-rm -f "$RESULTS/run/run.yaml.bak"
+if [[ -n $RUN_DIR ]]; then
+  # The run keeps its own path, so its relative product link stays valid.
+  rsync -a --delete "$RUN/" "$REPO/$RUN_DIR/"
+else
+  cp -R "$RUN" "$RESULTS/run"
+  # The copied run (tests/agent/results/<s>/run) sits five levels below the repo root instead of two.
+  product=$(sed -n 's/^product: //p' "$RUN/run.yaml")
+  sed -i.bak "s|^product: .*|product: ../../../../../${product#../../}|" "$RESULTS/run/run.yaml"
+  rm -f "$RESULTS/run/run.yaml.bak"
+fi
 check_sha=$(shasum -a 256 "$RESULTS/check.json" | cut -d' ' -f1)
 model=$(cat "$LOGS"/session-*.jsonl 2>/dev/null \
   | jq -r 'select(.type == "system" and .subtype == "init") | .model' | tail -n 1)
-cost=$(cat "$LOGS"/session-*.jsonl 2>/dev/null \
-  | jq -s '[.[] | select(.type == "result") | .total_cost_usd // 0] | add // 0')
+cost=$(spent)
 cat >"$RESULTS/meta.yaml" <<EOF
 # Agent-lane provenance (plan §4.4); written by scripts/agent-run.sh. Self-attested.
 scenario: $SCENARIO

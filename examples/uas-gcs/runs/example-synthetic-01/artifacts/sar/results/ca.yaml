@@ -1,0 +1,154 @@
+family: ca
+determinations:
+  - control_id: ca-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited from the Component cybersecurity program: the current assessment, authorization and monitoring policy and procedures were examined."
+    sources: [INT-075.A1]
+  - control_id: ca-2
+    result: satisfied
+    methods: [examine, interview]
+    summary: "The AODR-approved assessment plan is being executed by the independent Component SCA team, reusing DT-1 and the 2026-09-15 scans; this report goes to the AO, PM and ISSM."
+    sources: [INT-076.A2, product/test-results.md#top]
+  - control_id: ca-2.1
+    result: satisfied
+    methods: [examine, interview]
+    summary: "The assessment team reports to the AO's representative and is independent of the program office and integrator."
+    sources: [INT-076.A2]
+  - control_id: ca-3
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "IC-2 enclave connection approval is signed; the IC-1 agreement with the brigade intelligence system is an unsigned draft."
+    finding_refs: [FND-010]
+    sources: [INT-076.A1, product/architecture.md#interconnections]
+  - control_id: ca-3.6
+    result: satisfied
+    methods: [examine, test]
+    summary: "Router rules admit inbound sessions only from the brigade S6 management subnet with admin CAC sign-in; the DT-1 port scan found only documented ports."
+    sources: [INT-074.A4, product/test-results.md#dt-1]
+  - control_id: ca-5
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "No POA&M exists yet for the station; it is to be opened from this report."
+    finding_refs: [FND-011]
+    sources: [INT-076.A2]
+  - control_id: ca-6
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "The AO is assigned but the station has no authorization decision yet."
+    finding_refs: [FND-012]
+    sources: [INT-076.A2]
+  - control_id: ca-7
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "The compliance check and enclave daily review run and the system strategy is written, but its monitoring activities have not started and planner and GDT logs are not monitored."
+    finding_refs: [FND-013]
+    sources: [INT-073.A1, product/test-results.md#dt-1]
+  - control_id: ca-7.1
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "Independent ongoing assessment is defined in the strategy but has not run."
+    finding_refs: [FND-014]
+    sources: [INT-073.A1]
+  - control_id: ca-7.3
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "No trend analysis of monitoring results has run."
+    finding_refs: [FND-015]
+    sources: [INT-073.A1]
+  - control_id: ca-7.4
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "Only configuration compliance is monitored; effectiveness and change monitoring have not started."
+    finding_refs: [FND-016]
+    sources: [INT-073.A1]
+  - control_id: ca-7.5
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "Consistency actions are defined in the strategy but have not run."
+    finding_refs: [FND-017]
+    sources: [INT-073.A1]
+  - control_id: ca-7.6
+    result: other-than-satisfied
+    methods: [interview]
+    summary: "No automated monitoring dashboard exists yet."
+    finding_refs: [FND-018]
+    sources: [INT-073.A1]
+  - control_id: ca-9
+    result: satisfied
+    methods: [examine, test]
+    summary: "The design lists each internal connection on the isolated station segment; router rules and the DT-1 station-side scan allowed nothing else."
+    sources: [INT-074.A4, product/test-results.md#dt-1]
+findings:
+  - id: FND-010
+    control_id: ca-3
+    title: "IC-1 interconnection agreement with the brigade intelligence system is not signed"
+    description: "ca-3 requires each external connection to be approved and documented in an agreement stating interface characteristics, security requirements and responsibilities. IC-2 is approved; the IC-1 agreement is an unsigned draft, so those terms are not agreed with the receiving system's owner."
+    status: open
+    severity: moderate
+    recommendation: "Get the IC-1 agreement signed by both owners before fielding and set an annual review for both agreements."
+    sources: [INT-076.A1, product/architecture.md#interconnections]
+  - id: FND-011
+    control_id: ca-5
+    title: "No POA&M exists for the station"
+    description: "ca-5 requires a plan of action and milestones for the weaknesses found. None exists at assessment time."
+    status: open
+    severity: low
+    recommendation: "Open the POA&M from this report's findings and the disclosed limitations, and update it monthly."
+    sources: [INT-076.A2]
+  - id: FND-012
+    control_id: ca-6
+    title: "The station is not yet authorized to operate"
+    description: "ca-6 requires the AO to authorize the system before operation. The AO is assigned, but no decision has been made."
+    status: open
+    severity: low
+    recommendation: "Complete the package and obtain the AO's decision, including acceptance of the inherited common controls, before fielding."
+    sources: [INT-076.A2]
+  - id: FND-013
+    control_id: ca-7
+    title: "System-level continuous monitoring is not operating and planner and GDT logs are not monitored"
+    description: "ca-7 requires continuous monitoring per the system strategy. Only the start-up compliance check and the enclave's daily review of forwarded workstation and router records run; the strategy's metrics, frequencies and reporting have not started, and planner and GDT logs are not forwarded, so nothing monitors them."
+    status: open
+    severity: moderate
+    recommendation: "Start the strategy's first monitoring cycle at authorization and include planner and GDT logs once forwarding is in place (see FND-007)."
+    sources: [INT-073.A1, product/test-results.md#dt-1]
+  - id: FND-014
+    control_id: ca-7.1
+    title: "Independent ongoing assessment has not started"
+    description: "ca-7.1 requires independent assessors to monitor controls on an ongoing basis. The strategy defines it, but no ongoing assessment has run."
+    status: open
+    severity: low
+    recommendation: "Schedule the SCA's first ongoing assessment with the first monitoring cycle."
+    sources: [INT-073.A1]
+  - id: FND-015
+    control_id: ca-7.3
+    title: "No trend analysis of monitoring results"
+    description: "ca-7.3 requires trend analyses to inform control implementation and monitoring frequency. No monitoring results exist to analyze yet."
+    status: open
+    severity: low
+    recommendation: "Run the strategy's trend analysis after the first two monitoring cycles."
+    sources: [INT-073.A1]
+  - id: FND-016
+    control_id: ca-7.4
+    title: "Effectiveness and change monitoring have not started"
+    description: "ca-7.4 requires risk monitoring covering effectiveness, compliance and change. Only configuration compliance is monitored."
+    status: open
+    severity: low
+    recommendation: "Start the effectiveness and change metrics in the first monitoring cycle."
+    sources: [INT-073.A1]
+  - id: FND-017
+    control_id: ca-7.5
+    title: "Consistency analysis of monitoring has not run"
+    description: "ca-7.5 requires actions to confirm policies are established and controls operate consistently. None have run."
+    status: open
+    severity: low
+    recommendation: "Run the consistency actions in the first monitoring cycle."
+    sources: [INT-073.A1]
+  - id: FND-018
+    control_id: ca-7.6
+    title: "No automated monitoring dashboard"
+    description: "ca-7.6 requires automated mechanisms to keep monitoring results accurate, current and available. No dashboard exists yet."
+    status: open
+    severity: low
+    recommendation: "Stand up the dashboard defined in the strategy before the first monitoring report."
+    sources: [INT-073.A1]

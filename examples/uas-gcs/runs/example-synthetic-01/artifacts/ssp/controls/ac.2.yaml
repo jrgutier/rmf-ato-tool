@@ -1,0 +1,191 @@
+family: ac
+chunk: 2
+controls:
+  - control_id: ac-10
+    status: implemented
+    statement: "The workstation OS allows one interactive session per user account."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3]
+  - control_id: ac-11
+    status: implemented
+    statement: "The workstation screen locks after 15 minutes idle and stays locked until the user signs in again with CAC."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3, product/architecture.md#identity, product/test-results.md#dt-1]
+  - control_id: ac-11.1
+    status: implemented
+    statement: "The locked screen shows a blank pattern-hiding image."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3]
+  - control_id: ac-12
+    status: implemented
+    statement: "Idle workstation sessions lock after 15 minutes and idle router management sessions end after 15 minutes."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS, CMP-ROUTER]
+    sources: [INT-037.A3]
+  - control_id: ac-12.1
+    status: implemented
+    statement: "Users can sign out of the workstation at any time from the session menu."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3]
+  - control_id: ac-12.2
+    status: implemented
+    statement: "The workstation tells the user when a session has ended."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3]
+  - control_id: ac-14
+    status: implemented
+    statement: "No user action is permitted without sign-in; without a signed-in user the station only lets the aircraft fly its pre-loaded lost-link route."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A3, product/test-results.md#dt-1]
+  - control_id: ac-16
+    status: implemented
+    statement: "The video application stamps the handling marking on every clip and still image."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4]
+  - control_id: ac-16.3
+    status: implemented
+    statement: "The video application keeps the marking attached to each product through clipping, annotation and export."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4]
+  - control_id: ac-16.6
+    status: implemented
+    statement: "Operators cannot remove or change a product's marking; only the mission commander's release step confirms it."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4, INT-037.A2]
+  - control_id: ac-16.7
+    status: implemented
+    statement: "The station and the brigade intelligence system use the same marking scheme, so markings are read the same way on both sides."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4]
+  - control_id: ac-17
+    status: implemented
+    statement: "Remote access is limited to administration over SSH from the brigade S6 management subnet through the router, for admin-role users only."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2, product/architecture.md#network]
+  - control_id: ac-17.1
+    status: implemented
+    statement: "The router logs every remote administration session and forwards the log to the enclave collector."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2, product/architecture.md#logging]
+  - control_id: ac-17.2
+    status: implemented
+    statement: "Remote administration uses SSH, which encrypts the session."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2]
+  - control_id: ac-17.3
+    status: implemented
+    statement: "The router's uplink port is the single managed access point for remote access."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2, product/architecture.md#boundary]
+  - control_id: ac-17.4
+    status: implemented
+    statement: "Privileged commands over remote access require the admin role and are logged by the router."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2]
+  - control_id: ac-17.6
+    status: implemented
+    statement: "The router's remote access configuration is held by the program and not published outside it."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2]
+  - control_id: ac-17.9
+    status: implemented
+    statement: "S6 or the platoon can cut remote access at once by disabling the router's uplink port."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-ROUTER]
+    sources: [INT-037.A2]
+  - control_id: ac-18
+    status: implemented
+    statement: "The only wireless link is the GDT-to-aircraft line-of-sight radio, which uses keys loaded before each mission and rejects unkeyed terminals."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV]
+    sources: [INT-037.A4, product/architecture.md#network, product/test-results.md#dt-1]
+  - control_id: ac-18.1
+    status: implemented
+    statement: "The GDT-aircraft link is encrypted and only keyed terminals are accepted; DT-1 confirmed that commands from an unkeyed terminal were rejected."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-AV]
+    sources: [INT-037.A4, product/test-results.md#dt-1]
+  - control_id: ac-18.3
+    status: implemented
+    statement: "Workstation Wi-Fi and Bluetooth are disabled in firmware; the GDT has no radio besides the aircraft link."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT, CMP-WS-HW]
+    sources: [INT-037.A4]
+  - control_id: ac-18.4
+    status: implemented
+    statement: "Operators cannot change the GDT radio settings; only the GDT administrator account can."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GDT]
+    sources: [INT-037.A4, INT-037.A1]
+  - control_id: ac-19
+    status: implemented
+    statement: "The laptop workstation stays under the platoon's physical control and travels in locked, tamper-sealed cases checked at each setup."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-037.A4, product/architecture.md#physical]
+  - control_id: ac-19.5
+    status: implemented
+    statement: "The laptop disk is fully encrypted."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-HW]
+    sources: [INT-037.A4, product/architecture.md#components]
+  - control_id: ac-20
+    status: implemented
+    statement: "The station connects only to the Brigade Tactical Network Enclave and the brigade intelligence system, both separately authorized."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A4, product/architecture.md#interconnections]
+  - control_id: ac-20.1
+    status: implemented
+    statement: "Use of the external systems is limited to the router flows allowed toward the enclave and the product drop, under their own authorizations."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A2, INT-037.A4]
+  - control_id: ac-20.2
+    status: implemented
+    statement: "Only removable media controlled by the platoon are used on the workstation."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WS-OS]
+    sources: [INT-037.A4, product/architecture.md#physical]
+  - control_id: ac-20.3
+    status: implemented
+    statement: "Personally owned devices are prohibited from connecting to the station."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A4]
+  - control_id: ac-21
+    status: implemented
+    statement: "The mission commander decides which mission products are shared and releases them to the brigade intelligence system."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A2]
+  - control_id: ac-22
+    status: not-applicable
+    statement: "The station publishes no content."
+    rationale: "ETGCS has no publicly accessible content or interface; analysts receive products only on the brigade network."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A4, product/conops.md#users]
+  - control_id: ac-23
+    status: not-applicable
+    statement: "The station holds no data store open to outside search."
+    rationale: "ETGCS keeps mission data on the station only, with no database interface that outsiders can query, so data mining protection has no object."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-037.A4]

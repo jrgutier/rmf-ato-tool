@@ -79,18 +79,33 @@ def cnssi_origins(tables: dict[str, Any], cat: dict[str, str]) -> dict[str, str]
     return origins
 
 
+def overlay_problem(tables: dict[str, Any], name: str) -> str | None:
+    """Why ``name`` cannot be applied from ``categorization.overlays``, or None."""
+    known = {o["id"]: o for o in tables["overlays"]}
+    overlay = known.get(name)
+    if overlay is None:
+        return (f"unknown overlay {name!r} in categorization.overlays; {TABLES_PATH} lists "
+                f"{', '.join(known)}")
+    if overlay["transcribed"]:
+        return None
+    # The Privacy Overlay is transcribed per control set under its reference ID (ADR-0003).
+    sets = [o["id"] for o in tables["overlays"]
+            if o["transcribed"] and o["id"].startswith(f"{name}-")]
+    if sets:
+        return (f"overlay {name} ({overlay['title']}) is selected per control set; record "
+                f"the set(s) that apply instead: {', '.join(sets)}")
+    return (f"overlay {name} ({overlay['title']}) is not transcribed in {TABLES_PATH}, so its "
+            "control selections cannot be applied")
+
+
 def overlay_ids(tables: dict[str, Any], overlays: list[str]) -> list[str]:
     known = {o["id"]: o for o in tables["overlays"]}
     ids: list[str] = []
     for name in overlays:
-        overlay = known.get(name)
-        if overlay is None:
-            raise BaselineError(f"unknown overlay {name!r} in categorization.overlays; "
-                                f"{TABLES_PATH} lists {', '.join(known)}")
-        if not overlay["transcribed"]:
-            raise BaselineError(f"overlay {name} ({overlay['title']}) is not transcribed in "
-                                f"{TABLES_PATH}, so its control selections cannot be applied")
-        ids += [cid for block in overlay["blocks"] for cid in block["add"]]
+        problem = overlay_problem(tables, name)
+        if problem:
+            raise BaselineError(problem)
+        ids += [cid for block in known[name]["blocks"] for cid in block["add"]]
     return ids
 
 

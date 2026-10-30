@@ -1,0 +1,76 @@
+family: pl
+determinations:
+  - control_id: pl-1
+    result: satisfied
+    methods: [examine]
+    summary: "Inherited from the Component cybersecurity program: the current planning policy and procedures, reviewed within the last year, were examined."
+    sources: [INT-081.A1]
+  - control_id: pl-2
+    result: satisfied
+    methods: [examine, interview]
+    summary: "The plan covers every baseline control, carries the S-6 conditional approval and was updated to release 2.3.0 in I-2."
+    sources: [INT-080.A3, INT-059.A2, INT-063.A1]
+  - control_id: pl-4
+    result: satisfied
+    methods: [examine]
+    summary: "19 signed rules of behavior on file (14 account holders, 5 maintainers), each signed before access was granted."
+    sources: [INT-080.A3]
+  - control_id: pl-4.1
+    result: satisfied
+    methods: [examine]
+    summary: "The signed rules forbid posting mission information on social media or external sites."
+    sources: [INT-080.A3]
+  - control_id: pl-7
+    result: satisfied
+    methods: [examine]
+    summary: "The concept of operations describes mission, users, environment and known limitations."
+    sources: [product/conops.md#top]
+  - control_id: pl-8
+    result: satisfied
+    methods: [examine]
+    summary: "The architecture description covers components, boundary, network, identity, logging and updates."
+    sources: [INT-082.A2, product/architecture.md#top]
+  - control_id: pl-8.1
+    result: satisfied
+    methods: [examine, test]
+    summary: "Layers confirmed: enclave firewall and IDS, station router (DT-1 port scan found only documented ports), isolated internal segment, CAC sign-in, encrypted disk."
+    sources: [INT-082.A2, product/test-results.md#dt-1]
+  - control_id: pl-8.2
+    result: other-than-satisfied
+    methods: [examine, interview]
+    summary: "The layers are separate devices under separate administration, but no layer's supplier is recorded, so supplier diversity is not shown."
+    finding_refs: [FND-049]
+    sources: [INT-082.A2]
+  - control_id: pl-9
+    result: other-than-satisfied
+    methods: [examine, test]
+    summary: "Accounts come from the brigade directory and every station runs the one signed bundle, but only workstation and router logs reach the enclave collector; planner and GDT logs are not centrally managed."
+    finding_refs: [FND-050]
+    sources: [INT-080.A3, product/test-results.md#dt-1]
+  - control_id: pl-10
+    result: satisfied
+    methods: [examine]
+    summary: "The baseline selected in S-1 is recorded in ART-BASELINE."
+    sources: [ART-BASELINE]
+  - control_id: pl-11
+    result: satisfied
+    methods: [examine]
+    summary: "The S-2 tailoring decisions are recorded with ART-BASELINE."
+    sources: [ART-BASELINE]
+findings:
+  - id: FND-049
+    control_id: pl-8.2
+    title: "Supplier diversity of protection layers not shown"
+    description: "pl-8.2 requires that the allocated controls be obtained from different suppliers. The architecture description names the layers but no layer's supplier; the integrator does not hold the enclave layers' supplier records."
+    status: open
+    severity: low
+    recommendation: "Record each layer's supplier in the architecture description, obtaining the enclave layers' suppliers from the enclave provider."
+    sources: [INT-082.A2]
+  - id: FND-050
+    control_id: pl-9
+    title: "Planner and GDT logging not centrally managed"
+    description: "pl-9 requires centrally managing the defined controls. The SSP states logs go to the enclave collector, but DT-1 and the ISSO confirm planner and GDT logs stay on the device. Same root cause as the audit and incident-response log-forwarding findings (FND-041, FND-042) and S-6 condition 4."
+    status: open
+    severity: low
+    recommendation: "Forward planner and GDT logs to the enclave collector on the date set for S-6 condition 4, and correct the pl-9 SSP statement in A-5."
+    sources: [INT-080.A3, product/test-results.md#dt-1]

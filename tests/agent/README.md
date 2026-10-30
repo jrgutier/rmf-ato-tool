@@ -32,6 +32,18 @@ and `--max-budget-usd`. Two sessions in a row without progress stop the loop (PM
 then runs `rmf build` and `rmf check --final`, and writes `results/<s>/check.json` and
 `meta.yaml`. Only the operator runs the real lane, and only after reviewing the dry run.
 
+`scripts/agent-run.sh --run-dir DIR <name>` drives an existing run instead (the example
+fork run, Phase 7): no `rmf run init`, the prompt is `prompts/<name>.md`, the finished run
+is copied back over `DIR`, and `results/<name>/` gets `check.json` and `meta.yaml` only.
+Such a result has no scenario file, so AGENT-001 does not track it; its run is checked by
+the p7 `rmf ci` step instead. `AGENT_TOTAL_BUDGET_USD` stops the loop once the sessions so
+far cost that much; a resumed run's `meta.yaml` covers only its own sessions.
+
+```sh
+AGENT_TOTAL_BUDGET_USD=80 AGENT_BUDGET_USD=3 AGENT_MAX_SESSIONS=70 \
+  scripts/agent-run.sh --run-dir examples/uas-gcs/runs/example-synthetic-01 example-uas-gcs
+```
+
 codex (`codex exec`) is a documented, **unsupported** alternative: the playbooks are
 agent-agnostic, but no codex lane or result is maintained.
 
