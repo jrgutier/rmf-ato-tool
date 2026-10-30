@@ -3,7 +3,7 @@ artifact_id: ART-SAR
 run_id: agent-skeleton
 produced_by_task: A-3
 touched_by: [A-3]
-sources: [ART-SAP, ART-SSP, ART-STIG, INT-023.A1, INT-023.A2, INT-026.A1, INT-026.A3, INT-027.A3, product/test-results.md#dt-2, product/test-results.md#vuln-scan, product/conops.md#limitations]
+sources: [ART-SAP, ART-SSP, ART-STIG, INT-020.A1, INT-020.A2, INT-020.A3, INT-021.A1, INT-021.A2, INT-021.A3, INT-022.A1, product/test-results.md#dt-2, product/test-results.md#config-scan, product/test-results.md#vuln-scan, product/test-results.md#account-review]
 ---
 # Security assessment report
 
@@ -16,68 +16,59 @@ sources: [ART-SAP, ART-SSP, ART-STIG, INT-023.A1, INT-023.A2, INT-026.A1, INT-02
 | Aliases | none | C-1 |
 | Authorization boundary | ESG-BND-1 | P-11 |
 | Life-cycle state | under-development | C-1 |
-| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
 | Categorization approved | yes (PER-AODR) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-6 | S-1 |
 <!-- END rmf:facts -->
 
 ## Assessment summary
 
-The team assessed the whole baseline (ac-2, au-2, cm-6, ia-2, sc-7, si-2) against every
-SP 800-53A objective, as the approved plan sets, using examine, interview and test for each
-control [[ART-SAP]] [[ART-SSP]]. For the hybrid controls au-2, ia-2 and sc-7 the ESG part was
-assessed and the provider parts were evidenced by the common control provider and current
-provider ATOs [[INT-024.A1]] [[INT-028.A1]] [[INT-028.A2]]. Result mix: satisfied 3 (au-2,
-cm-6, sc-7), other-than-satisfied 3 (ac-2, ia-2, si-2), not-applicable 0. Four findings are
-open: FND-001, FND-002 and FND-003 (moderate) and FND-004 (high). The determinations live in
-`artifacts/sar/results/<fam>.yaml`. Every other-than-satisfied result matches a gap the SSP
-already discloses as `partial`, so no SSP correction is needed [[ART-SSP]]
-[[product/conops.md#limitations]].
+The independent assessor (PER-SCA) assessed all six controls of the tailored baseline as the
+approved plan sets out, examining records and configuration, interviewing the control owners
+and testing every technical control [[ART-SAP]]. Interviews covered the ISSO for operations
+[[INT-020.A1]], the developer for built-in mechanisms [[INT-021.A1]] and the common control
+provider for the inherited parts [[INT-022.A1]]. The result mix is 3 satisfied (au-2, cm-6,
+sc-7) and 3 other-than-satisfied (ac-2, ia-2, si-2), with 3 open findings; the determinations
+are recorded per family in `artifacts/sar/results/`. Each other-than-satisfied control matches
+a gap the SSP already marked as partial [[ART-SSP]]. The vulnerability scan rerun that the plan
+foresees for November 2026 is not yet in the evidence, so the patch determination rests on the
+2026-09-30 scan [[ART-SAP]] [[product/test-results.md#vuln-scan]].
 
 ## Test results reused
 
-As the AODR required, each determination states which evidence was reused and which the team
-produced [[ART-SAP]]. Reused: the DT-2 developmental test results (PKI sign-in through the
-identity service on 12 of 12 units, event delivery to the SIEM within one minute, port scans
-from both interfaces) for ia-2, au-2 and sc-7 [[product/test-results.md#dt-2]]
-[[INT-025.A2]]; the assessor-witnessed 2026-09-30 SRG/STIG scan for cm-6 [[ART-STIG]]
-[[INT-025.A1]]; the 2026-09-12 account review record for ac-2
-[[product/test-results.md#account-review]]; and the program's 2026-09-30 vulnerability scan
-for si-2 [[product/test-results.md#vuln-scan]]. Team-produced (simulated, on two
-pre-production units, no testing on live networks): a sample PKI sign-in and port scan
-re-test, which matched DT-2; a maintenance-port sign-in as `fieldtech`, whose audit records
-named only the shared account; and a repeated credentialed vulnerability scan, clean on the
-current bundle [[INT-026.A1]] [[INT-026.A2]] [[INT-026.A3]].
+- DT-2 (2026-08-18 to 2026-08-29): PKI sign-in and refusal of unapproved users, local lockout,
+  session lock, audit delivery to the SIEM on 12 of 12 units, and port scans showing only the
+  documented ports with no routing between ports; reused for ac-2, ia-2, au-2 and sc-7
+  [[product/test-results.md#dt-2]] [[INT-021.A2]].
+- The assessor-witnessed 2026-09-30 SRG/STIG scan: approved baseline on all 12 units, no drift in
+  August and September 2026; reused for cm-6 and sc-7, and to confirm STG-001 and STG-004 open
+  [[product/test-results.md#config-scan]] [[INT-020.A3]] [[ART-STIG]].
+- The 2026-09-30 vulnerability scan: 10 units current and clean, 2 units behind; reused for si-2
+  [[product/test-results.md#vuln-scan]].
+- The 2026-09-12 quarterly account review; reused for ac-2 [[product/test-results.md#account-review]].
 
 ## Findings overview
 
-- **FND-004 (si-2, high, open).** Fielded units are patched only at quarterly site visits,
-  so security-relevant updates are not installed within the 30 days the SSP sets. At the
-  2026-09-30 scan two units ran the 63-day-old 2026-07 bundle with 4 high and 9 medium
-  vulnerabilities, and STIG finding STG-001 is open [[INT-026.A3]] [[INT-027.A3]]
-  [[product/test-results.md#vuln-scan]].
-- **FND-003 (ia-2, moderate, open).** About 10 field technicians share the local account
-  `fieldtech` on the maintenance port, so they are not uniquely identified; STIG finding
-  STG-004 is open [[INT-026.A1]] [[INT-027.A1]] [[ART-STIG]].
-- **FND-001 (ac-2, moderate, open).** For the same reason, privileged use of `fieldtech`
-  cannot be attributed to a person in the audit records [[INT-023.A2]]
-  [[product/test-results.md#account-review]].
-- **FND-002 (ac-2, moderate, open).** The `fieldtech` password changes only on a 90-day
-  rotation, not when a technician leaves the group [[INT-023.A2]]
-  [[product/conops.md#limitations]].
+- **FND-003 (high, si-2):** esg-north-01 and esg-ridge-01 ran a 63-day-old update bundle against
+  the 30-day installation period, with 4 high and 9 medium vulnerabilities that later bundles fix;
+  STG-001 is open [[INT-021.A3]] [[product/test-results.md#vuln-scan]].
+- **FND-001 (moderate, ac-2):** the shared `fieldtech` account used by 10 technicians cannot be
+  attributed to a person and its password is not changed when a technician leaves the team
+  [[INT-020.A1]] [[product/test-results.md#account-review]].
+- **FND-002 (moderate, ia-2):** for the same reason, technicians on the maintenance port are not
+  uniquely identified; STG-004 is open [[INT-021.A1]].
 
-FND-001, FND-002 and FND-003 share one root cause, the shared maintenance account; each
-needs its own POA&M item in A-6 [[INT-023.A2]] [[INT-026.A1]].
+As the AO required when approving the plan, the shared `fieldtech` account and update latency
+are both named here with the latest scan results [[ART-SAP]].
 
 ## Recommendations
 
-- FND-004: update the two overdue units at an unscheduled site visit now, deliver remote
-  update over the uplink (release 2.2, planned 2026-12) and close STG-001; until then track
-  each unit past 30 days as its own POA&M item and report monthly to the ISSM
-  [[INT-026.A3]] [[INT-027.A3]].
-- FND-001 and FND-003: replace `fieldtech` with per-technician local accounts with
-  smart-card login (release 2.3, planned 2027-03) and close STG-004; until then keep a
-  site-visit log naming the technician for each maintenance session and reconcile it with
-  the audit records [[INT-023.A2]] [[INT-027.A1]].
-- FND-002: change the `fieldtech` password whenever a technician leaves, with a record of
-  each change, until release 2.3 removes the account [[INT-023.A2]].
+- FND-003: deliver remote update over the uplink in release 2.2 (planned 2026-12); until then,
+  make out-of-cycle site visits so no unit runs a bundle older than 30 days, starting with the
+  two lagging units [[INT-021.A3]].
+- FND-001 and FND-002: deliver per-technician accounts with smart-card login in release 2.3
+  (planned 2027-03); until then, keep a site-visit log tying each `fieldtech` session to a named
+  technician and change the password whenever a technician leaves the team [[INT-020.A1]]
+  [[INT-021.A1]].
+- All three findings need POA&M items (A-6) and should be rescanned once the fixes ship
+  [[ART-SAP]].

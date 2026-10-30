@@ -1,0 +1,75 @@
+---
+artifact_id: ART-INV
+run_id: agent-c1-s4-one-family
+produced_by_task: P-10
+touched_by: [P-10]
+sources: [product/hw-sw-inventory.md#items, product/hw-sw-inventory.md#priority, product/architecture.md#components, product/architecture.md#updates, product/architecture.md#configuration, product/architecture.md#boundary, product/architecture.md#leveraged]
+---
+# Hardware and software inventory
+
+<!-- BEGIN rmf:facts -->
+| Fact | Value | Set by |
+|---|---|---|
+| System name | Example Sensor Gateway | C-1 |
+| Acronym | ESG | C-1 |
+| System ID | ESG-001 | C-1 |
+| Aliases | none | C-1 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-55 | S-1 |
+<!-- END rmf:facts -->
+
+## How the inventory was compiled
+
+The inventory starts from the program's configuration-item list, whose `INV-###` IDs are kept
+unchanged [[product/hw-sw-inventory.md#items]], mapped to the components of the product
+architecture [[product/architecture.md#components]]. The developer confirmed the list, the
+release 2.1.4 versions and the component of every item, and stated that nothing else is
+installed [[product/hw-sw-inventory.md#items]] [[product/architecture.md#components]] [[product/architecture.md#updates]] [[product/architecture.md#configuration]]. The program manager confirmed that the
+program owns only the gateways and sensor nodes; IODS, the identity service, the enclave and
+the CSSP are other programs' systems and are left to the boundary description, not this
+inventory [[product/architecture.md#boundary]] [[product/architecture.md#leveraged]].
+
+## Inventory summary
+
+The records live in `artifacts/data/inventory.yaml`: 8 items in total
+[[product/hw-sw-inventory.md#items]].
+
+| By kind | Count | Items |
+|---|---|---|
+| hardware | 2 | INV-001, INV-007 |
+| operating-system | 1 | INV-002 |
+| software | 2 | INV-003, INV-004 |
+| database | 1 | INV-005 |
+| firmware | 2 | INV-006, INV-008 |
+
+| By component | Items |
+|---|---|
+| CMP-GW-HW | INV-001, INV-006 |
+| CMP-GW-OS | INV-002 |
+| CMP-COLLECTOR | INV-003 |
+| CMP-WEBUI | INV-004 |
+| CMP-STORE | INV-005 |
+| CMP-SENSOR-NET | INV-007, INV-008 |
+
+The host firewall, audit daemon and nightly configuration check are part of the OS image
+(INV-002), not separate items [[product/architecture.md#components]] [[product/hw-sw-inventory.md#items]] [[product/architecture.md#updates]] [[product/architecture.md#configuration]]. Gateways are physical units named
+by site; none is virtual or publicly reachable, and sensor nodes have no IP address
+[[product/hw-sw-inventory.md#hostnames]] [[product/architecture.md#network]].
+
+## Asset priority
+
+The program manager ranks the gateway appliance, OS image, collector and console (INV-001 to
+INV-004) high, because losing or corrupting them silences a whole site or sends false alarms
+to the SOC [[product/hw-sw-inventory.md#priority]] [[product/hw-sw-inventory.md#items]] [[product/hw-sw-inventory.md#priority]]. The radio firmware, sensor
+nodes, node firmware and buffer database (INV-005 to INV-008) are moderate: a failed node is a
+local coverage gap, and the buffer only matters while IODS is unreachable [[product/hw-sw-inventory.md#priority]] [[product/hw-sw-inventory.md#items]].
+
+## Uncertain items
+
+No item's presence is in doubt [[product/architecture.md#updates]] [[product/architecture.md#configuration]]. Versions are those of release 2.1.4; because
+fielded units are updated only at quarterly site visits, a site may run one monthly bundle
+behind until its next visit, so the recorded versions are the approved baseline rather than a
+guarantee for every unit at every moment [[product/architecture.md#updates]] [[product/architecture.md#configuration]]. Remote update (release 2.2) is planned
+and adds no asset [[product/architecture.md#updates]].

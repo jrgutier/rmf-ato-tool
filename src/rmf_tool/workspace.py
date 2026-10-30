@@ -6,7 +6,8 @@ framework_version, git_sha, upstream_hash, upstream_hash_basis, oscal_version), 
 assumptions.yaml, journal.md and empty artifact and interview directories. A scenario
 (``tests/agent/scenarios/<s>.yaml``) supplies the product, scope, seeds, lifecycle and
 control subset, and its ``hash_globs`` scope the upstream hash (``upstream_hash_basis``
-records which variant a run carries, ADR-0001).
+records which variant a run carries, ADR-0001). A scenario with ``base_run`` starts from a
+copy of that run instead, minus its ``remove`` paths (ADR-0004).
 """
 
 from __future__ import annotations
@@ -106,6 +107,28 @@ def scenario_hash(repo: Path, scenario: dict[str, Any]) -> str:
     return upstream_hash.compute(repo, scenario["hash_globs"])
 
 
+def _copy_base_run(base_run: Path, run_dir: Path, run_id: str, remove: list[str]) -> None:
+    """A scenario's ``base_run`` copied into ``run_dir`` (ADR-0004): the ``remove`` paths are
+    deleted and every Markdown front-matter ``run_id`` names the new run. run.yaml is
+    rewritten by the caller."""
+    shutil.copytree(base_run, run_dir)
+    for rel in remove:
+        target = run_dir / rel
+        if not target.resolve().is_relative_to(run_dir.resolve()):
+            raise WorkspaceError(f"remove path {rel!r} leaves the run directory")
+        if target.is_dir():
+            shutil.rmtree(target)
+        elif target.exists():
+            target.unlink()
+        else:
+            raise WorkspaceError(f"remove path {rel!r} is not in base_run {base_run}")
+    for path in run_dir.rglob("*.md"):
+        text = path.read_text(encoding="utf-8")
+        updated = frontmatter.set_key(text, "run_id", run_id)
+        if updated != text:
+            path.write_text(updated, encoding="utf-8")
+
+
 def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str | None = None,
              scenario_path: Path | None = None, as_of: str | None = None) -> Path:
     """Create ``<workspace>/runs/<run-id>/``; returns the run directory."""
@@ -136,17 +159,22 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
         raise WorkspaceError(f"product directory {product} not found")
 
     yaml = _yaml()
-    template = repo / TEMPLATES / RUN_FILE
+    base_run = repo / scenario["base_run"] if scenario and "base_run" in scenario else None
+    if base_run is not None and not (base_run / RUN_FILE).is_file():
+        raise WorkspaceError(f"base_run {base_run} has no {RUN_FILE}")
+    template = base_run / RUN_FILE if base_run else repo / TEMPLATES / RUN_FILE
     base = yaml.load(template.read_text(encoding="utf-8")) if template.is_file() else None
     config: dict[str, Any] = dict(DEFAULTS)
     if isinstance(base, dict):
         config.update({k: v for k, v in base.items() if k not in STAMPED})
     meta = read_yaml(repo / FRAMEWORK_DIR / META_FILE)
     config.update({
-        "mode": mode,
+        # A resumed run keeps its mode and start time: its journal times must not go back.
+        "mode": base["mode"] if base_run and isinstance(base, dict) else mode,
         "run_id": run_id,
         "product": Path(os.path.relpath(product.resolve(), run_dir.resolve())).as_posix(),
-        "as_of": as_of or now_utc(),
+        "as_of": (base["as_of"] if base_run and isinstance(base, dict) else None)
+                 or as_of or now_utc(),
         "framework_version": str(meta["framework_version"]),
         "git_sha": _git_sha(repo),
         "upstream_hash": upstream_hash.compute(repo, globs),
@@ -159,7 +187,7 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
         for key in ("lifecycle_stop", "include_after_stop", "control_subset"):
             if key in scenario:
                 config[key] = scenario[key]
-        seeds_dir = repo / scenario.get("seeds_dir", ".")
+        seeds_dir = base_run or repo / scenario.get("seeds_dir", ".")
         config["seeded"] = [dict(s) for s in scenario["seeded"]]
         for s in scenario["seeded"]:
             src = seeds_dir / s["path"]
@@ -170,6 +198,14 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
     errors = schema_errors(repo, "run-config", ordered)
     if errors:
         raise WorkspaceError(f"run.yaml would be invalid: {errors[0]}")
+
+    if base_run is not None:
+        assert scenario is not None
+        _copy_base_run(base_run, run_dir, run_id, scenario.get("remove") or [])
+        buf = io.StringIO()
+        yaml.dump(ordered, buf)
+        (run_dir / RUN_FILE).write_text(buf.getvalue(), encoding="utf-8")
+        return run_dir
 
     for sub in (f"{ARTIFACTS_DIR}/data", INTERVIEWS_DIR):
         (run_dir / sub).mkdir(parents=True)

@@ -1,33 +1,23 @@
 risks:
   - id: RSK-001
-    title: "Privileged on-site actions through the shared fieldtech account cannot be attributed to a person"
-    description: "Threat: an insider or contractor misuses privileged maintenance-port access (TE-1). Weakness: about 10 field technicians share the local account fieldtech and its password, so sessions and audit records name only the account (FND-001, FND-003, STG-004). Effect: a unit's configuration or alarm handling at one site can be changed without accountability."
-    likelihood: moderate
-    impact: moderate
-    level: moderate
-    finding_refs: [FND-001, FND-003, STG-004]
-    poam_refs: [POAM-001, POAM-003]
-    response: mitigate
-    sources: [INT-031.A1, INT-032.A1, INT-032.A2, INT-032.A5, ART-RA]
-  - id: RSK-002
-    title: "A departed technician keeps a working privileged credential for up to 90 days"
-    description: "Threat: a former team member uses the shared fieldtech password after leaving the group (TE-1). Weakness: the password changes only on a 90-day rotation, not when a technician leaves (FND-002). Effect: unauthorized privileged access to a unit at one site, which still needs physical access to a remote shelter."
-    likelihood: low
-    impact: moderate
-    level: low
-    finding_refs: [FND-002]
-    poam_refs: [POAM-002]
-    response: mitigate
-    sources: [INT-031.A2, INT-032.A1, INT-032.A2, INT-032.A5, ART-RA]
-  - id: RSK-003
-    title: "An attacker exploits known vulnerabilities on fielded gateways that are behind on updates"
-    description: "Threat: an attacker on the installation network exploits a known vulnerability through a registered flow (TE-2). Weakness: fielded units are updated only at quarterly visits, so they can run bundles up to about 90 days old; two units ran a 63-day-old bundle with 4 high and 9 medium vulnerabilities (FND-004, STG-001). Effect: a compromised gateway feeds false or no alarms to installation security operations and gives a foothold in the enclave."
+    title: "Exploitation of known vulnerabilities on fielded units behind on updates"
+    description: "An outsider with a foothold on the installation network (TE-2) exploits one of the 4 high or 9 medium vulnerabilities on units running a 63-day-old update bundle, because updates reach fielded units only at quarterly site visits; a compromised gateway could falsify or suppress intrusion alarms."
     likelihood: moderate
     impact: high
     level: moderate
-    finding_refs: [FND-004, STG-001]
-    poam_refs: [POAM-004, POAM-005, POAM-006]
+    finding_refs: [FND-003, STG-001]
+    poam_refs: [POAM-003]
     response: mitigate
-    sources: [INT-031.A3, INT-032.A1, INT-032.A3, INT-032.A5, ART-RA]
+    sources: [INT-025.A1, INT-026.A1, ART-RA]
+  - id: RSK-002
+    title: "Unattributable privileged on-site actions through the shared fieldtech account"
+    description: "An insider or contractor (TE-1) misuses the shared local account fieldtech on the maintenance port; because ten technicians share it and its password is not changed on departure, privileged actions on a gateway cannot be tied to a person, weakening accountability and deterrence."
+    likelihood: moderate
+    impact: moderate
+    level: moderate
+    finding_refs: [FND-001, FND-002, STG-004]
+    poam_refs: [POAM-001, POAM-002]
+    response: mitigate
+    sources: [INT-025.A2, INT-026.A2, ART-RA]
 overall_risk: moderate
-sources: [ART-SAR, ART-POAM, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-031.A4, INT-032.A4]
+sources: [ART-SAR, ART-POAM, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-026.A3]

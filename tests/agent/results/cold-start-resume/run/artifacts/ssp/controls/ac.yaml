@@ -1,0 +1,10 @@
+family: ac
+controls:
+  - control_id: ac-2
+    status: partial
+    statement: "Allowed account types are identity-service accounts for remote administrators and auditors (console roles admin and auditor, mapped from group claims), one sealed break-glass account (esgadmin) whose use is logged and reported, and the shared local field-technician account fieldtech; no other account type is permitted. The ISSO is the account manager and approves every ESG access request; the Installation ICAM Service account workflow then creates the account and its group claim, and removing the claim removes access. CMP-WEBUI enforces the role mapping, CMP-GW-OS forwards sign-in and account-change events to the SIEM so account use is monitored, and the ISSO reviews the console account list against the access request records quarterly (last record 2026-09-12). Missing: fieldtech is a shared account used by ten technicians, its password changes every 90 days rather than when a technician leaves the team, and its use cannot be attributed to an individual. Plan: per-technician local accounts with smart-card login in release 2.3, planned for 2027-03."
+    responsible_roles: [PER-ISSO, PER-ISSM]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    parameters:
+      ac-02_odp.10: "quarterly"
+    sources: [INT-013.A1, INT-013.A2, product/architecture.md#identity, product/conops.md#limitations, product/test-results.md#account-review]

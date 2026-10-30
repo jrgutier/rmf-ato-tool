@@ -3,15 +3,15 @@ determinations:
   - control_id: si-2
     result: other-than-satisfied
     methods: [examine, interview, test]
-    summary: "Examined the ISSO's monthly reports to the ISSM (bundle level and scan results per unit), the configuration control board approvals of the monthly bundles and the 2026-09-30 vulnerability scan; the team repeated a credentialed vulnerability scan on the pre-production units (simulated), which ran the current bundle and showed no finding. Interviewed the developer on bundle build, regression testing and signature check, and the ISSO on fielded patch status. SI-02a, SI-02b and SI-02d are met: flaws are identified from advisories and scans, reported monthly, corrected in signed bundles that are regression-tested for effect and side effects before board release, and each bundle is a baseline change. SI-02c is not met: fielded units are updated only at quarterly site visits, so security-relevant updates are not installed within the 30 days the SSP sets; at the 2026-09-30 scan esg-north-01 and esg-ridge-01 ran the 63-day-old 2026-07 bundle with 4 high and 9 medium vulnerabilities, and STIG finding STG-001 (BM-01, INV-002) is open. Evidence: reused program scan and reports, team-produced scan, interviews and examination."
-    finding_refs: [FND-004]
-    sources: [INT-026.A3, INT-027.A3, ART-SSP, ART-STIG, product/test-results.md#vuln-scan, product/architecture.md#updates, product/conops.md#limitations]
+    summary: "Flaws are identified and reported through developer tracking and vulnerability scans, corrected in a signed monthly bundle tested on reference units before release, and each bundle passes the configuration control board (SI-02a, SI-02b, SI-02d met, per the developer interview and the update architecture). SI-02c is not met: the 2026-09-30 vulnerability scan showed esg-north-01 and esg-ridge-01 running the 2026-07 bundle, 63 days old against the 30-day period, with 4 high and 9 medium vulnerabilities fixed in later bundles, and STIG finding STG-001 (BM-01, CAT II) is open; 10 of 12 units were current with no vulnerabilities."
+    finding_refs: [FND-003]
+    sources: [INT-021.A3, product/test-results.md#vuln-scan, product/architecture.md#updates]
 findings:
-  - id: FND-004
+  - id: FND-003
     control_id: si-2
-    title: "Security-relevant updates are not installed on fielded units within 30 days of bundle release"
-    description: "SI-2c requires security-relevant software and firmware updates to be installed within the organization-defined period, 30 days from release of the update bundle. Observed: fielded units receive bundles only at quarterly site visits because remote update over the installation network is not approved, so every unit can fall up to about 90 days behind. At the 2026-09-30 scan esg-north-01 and esg-ridge-01 ran the 2026-07 bundle, 63 days old, with 4 high and 9 medium vulnerabilities fixed in later bundles; no POA&M item tracked them. Evidence: the 2026-09-30 vulnerability scan, STIG finding STG-001 (open), the ISSO's monthly report and interview, and the developer interview. The enclave firewall and the host firewall limit exposure to the registered flows but do not remove the vulnerabilities."
+    title: "Security-relevant updates are not installed within 30 days on fielded units"
+    description: "SI-2 c. requires security-relevant software and firmware updates to be installed within 30 days of release of the update bundle. Fielded units receive bundles only at quarterly site visits; at the 2026-09-30 scan 2 of 12 units (esg-north-01, esg-ridge-01) ran a 63-day-old bundle with 4 high and 9 medium vulnerabilities that later bundles fix, and STIG finding STG-001 is open. Release 2.2 (planned 2026-12) adds remote update over the uplink."
     status: open
     severity: high
-    recommendation: "Update esg-north-01 and esg-ridge-01 at an unscheduled site visit now; deliver remote update over the uplink (release 2.2, planned 2026-12) and close STG-001; until then open a POA&M item for each unit past 30 days, as the organizational rule requires, and report it monthly to the ISSM."
-    sources: [INT-026.A3, INT-027.A3, ART-STIG, product/test-results.md#vuln-scan, product/conops.md#limitations]
+    recommendation: "Deliver remote update over the uplink in release 2.2 and close STG-001; until then, schedule out-of-cycle site visits so no unit runs a bundle older than 30 days, prioritizing esg-north-01 and esg-ridge-01, and have the ISSO track bundle age per unit after each scan."
+    sources: [INT-021.A3, product/test-results.md#vuln-scan, product/conops.md#limitations]

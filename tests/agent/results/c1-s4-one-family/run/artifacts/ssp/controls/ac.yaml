@@ -1,0 +1,356 @@
+family: ac
+controls:
+  - control_id: ac-1
+    status: implemented
+    statement: "ESG access control procedures operate under the Component access control policy: the ISSO approves every access request, reviews accounts quarterly and applies the Component policy to the console's local and remote accounts; the ISSM keeps the ESG procedures with the SSP and reviews them with it."
+    responsible_roles: [PER-ISSM, PER-ISSO]
+    components: [this-system]
+    sources: [INT-013.A1, INT-008.A2, ART-ORG-CONTEXT]
+  - control_id: ac-2
+    status: partial
+    inherited_from: "Installation ICAM Service"
+    statement: "Remote administrator and auditor accounts are requested from and approved by the ISSO, then created, changed and disabled by the Installation ICAM Service account workflow; the console (CMP-WEBUI) maps group claims to the admin and auditor roles. The ISSO reviews the account list against request records quarterly (last 2026-09-12). Gap: the shared local account fieldtech is used by about ten technicians and cannot be tied to an individual; per-technician accounts with smart-card login are planned in release 2.3 (2027-03)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI]
+    parameters:
+      ac-02_odp.10: "quarterly"
+    sources: [INT-013.A1, INT-013.A2, INT-015.A1, product/architecture.md#identity, product/test-results.md#account-review, product/conops.md#limitations]
+  - control_id: ac-2.1
+    status: partial
+    inherited_from: "Installation ICAM Service"
+    statement: "Remote accounts are managed through the automated Installation ICAM Service workflow and its group claims. Local console accounts (fieldtech, esgadmin) are managed by hand by the ISSO; automation of local accounts arrives with the per-technician accounts in release 2.3 (2027-03)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, INT-013.A2, INT-011.A1, product/conops.md#limitations]
+  - control_id: ac-2.2
+    status: partial
+    statement: "ESG has no temporary accounts. The one emergency account, esgadmin, is sealed in the program office safe and every use is logged and reported to the ISSO, but the console does not disable it automatically after use; the ISSO reseals it and changes its password by hand. Automatic disabling after emergency use is an open item for the ISSM to plan."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A2, product/architecture.md#identity]
+  - control_id: ac-2.3
+    status: partial
+    inherited_from: "Installation ICAM Service"
+    statement: "Remote accounts are disabled by the Installation ICAM Service on the ISSO's request when users leave, no longer need access or are found in the quarterly review. The shared fieldtech account cannot be disabled for one technician; the team password is changed instead, every 90 days or on departure, until release 2.3 (2027-03)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, INT-013.A2, INT-015.A1, product/conops.md#limitations]
+  - control_id: ac-2.4
+    status: implemented
+    statement: "The console (CMP-WEBUI) and the OS audit daemon (CMP-GW-OS) log account creation, change and privilege use and forward the records to the CSSP SIEM within one minute; the ISSO reviews the weekly ESG report. DT-2 verified account-change events reach the SIEM on 12 of 12 units."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-013.A3, product/architecture.md#logging, product/test-results.md#dt-2]
+  - control_id: ac-2.5
+    status: implemented
+    statement: "The console locks an idle session after 15 minutes and ends it after 60 minutes idle, so users who leave a session open are logged out; users sign out with the Sign out control."
+    responsible_roles: [PER-DEV, PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A2, product/test-results.md#dt-2]
+  - control_id: ac-2.7
+    status: partial
+    statement: "Remote privileged users hold the admin role only through an approved identity-service group claim, and the ISSO reviews the role assignments quarterly. Gap: the on-site privileged role is held through the shared fieldtech account, so privileged technician access is not assigned or monitored per person; release 2.3 (2027-03) brings individual technician accounts."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, INT-013.A2, product/conops.md#limitations, product/test-results.md#account-review]
+  - control_id: ac-2.9
+    status: partial
+    statement: "The only shared account is fieldtech, kept because sites lack a network path to the identity service during some maintenance tasks; it is usable only on the maintenance port, which is enabled by the shelter key switch, and its password changes every 90 days. Individual technicians cannot be distinguished in audit records; per-technician local accounts with smart-card login are planned in release 2.3 (2027-03), and the risk is carried to the POA&M."
+    responsible_roles: [PER-ISSO, PER-ISSM]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A2, INT-009.A2, product/conops.md#limitations, product/architecture.md#network]
+  - control_id: ac-2.12
+    status: implemented
+    inherited_from: "Installation Cybersecurity Service Provider"
+    statement: "The console and OS generate sign-in, account-change and privilege-use events and forward them to the CSSP SIEM within one minute; the CSSP correlates them for atypical use and alerts the ISSO, who also reviews the ESG report weekly."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-013.A3, INT-015.A2, product/architecture.md#logging]
+  - control_id: ac-2.13
+    status: partial
+    inherited_from: "Installation ICAM Service"
+    statement: "When a remote user is found to pose significant risk, the ISSO asks the Installation ICAM Service to disable the account at once. For a field technician the shared fieldtech password must be changed for the whole team, so individual disabling is not possible until release 2.3 (2027-03)."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, INT-013.A2, INT-015.A1, product/conops.md#limitations]
+  - control_id: ac-3
+    status: implemented
+    statement: "The console checks the role on every request: auditor is read-only and only admin reaches configuration, account and update functions; users without an approved group claim are refused (DT-2). The OS restricts files and services to their service accounts."
+    responsible_roles: [PER-DEV, PER-ISSE]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-014.A1, INT-014.A3, product/test-results.md#dt-2]
+  - control_id: ac-3.4
+    status: not-applicable
+    rationale: "ESG has no user-owned objects to share: access is role-based in the console, and users cannot create or grant access to objects."
+    statement: "Not applicable: the console offers only role-based access to system-owned configuration and logs."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3, INT-014.A1]
+  - control_id: ac-4
+    status: implemented
+    inherited_from: "Installation Network Enclave"
+    statement: "The host firewall on CMP-GW-OS denies by default and permits only TLS to IODS, syslog over TLS to the CSSP and HTTPS to the console from the management VLAN, with no routing between the maintenance port, the uplink and the field radio; the collector accepts only messages from paired sensor nodes. The enclave firewall enforces the same flows at the enclave edge. DT-2 port scans confirmed only documented ports answer."
+    responsible_roles: [PER-ISSE, PER-CCP]
+    components: [CMP-GW-OS, CMP-COLLECTOR]
+    sources: [INT-011.A2, INT-015.A1, product/architecture.md#network, product/test-results.md#dt-2]
+  - control_id: ac-5
+    status: implemented
+    statement: "The console separates the admin role (configuration, accounts, updates) from the read-only auditor role held by ISSO staff, so those who review logs and configuration reports do not administer the system."
+    responsible_roles: [PER-ISSO, PER-ISSM]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A1, product/conops.md#users]
+  - control_id: ac-6
+    status: implemented
+    statement: "Each user group gets only the role it needs: SOC operators have no ESG access, auditors are read-only, administrators and technicians hold the admin role; on the OS each service runs under its own unprivileged account."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [product/conops.md#users, INT-014.A1, INT-014.A3]
+  - control_id: ac-6.1
+    status: implemented
+    statement: "Security functions (accounts, firewall rules, configuration, update upload) are reachable only with the admin role in the console; on the OS only the update installer runs as root."
+    responsible_roles: [PER-ISSO, PER-DEV]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-014.A1, INT-014.A3]
+  - control_id: ac-6.2
+    status: implemented
+    statement: "The console provides only administrative and audit functions; administrators do their non-security work on their installation workstations, outside the boundary, with their ordinary accounts."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A1, product/conops.md#users]
+  - control_id: ac-6.5
+    status: partial
+    statement: "Remote privileged accounts are limited to the three approved ESG administrators and the sealed esgadmin break-glass account. Gap: the privileged fieldtech account is shared by about ten technicians; release 2.3 (2027-03) replaces it with individual accounts."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-013.A2, product/test-results.md#account-review, product/conops.md#limitations]
+  - control_id: ac-6.7
+    status: implemented
+    statement: "The ISSO reviews every account's role against the access request records quarterly (last 2026-09-12) and removes privileges that are no longer needed through the identity service."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, product/test-results.md#account-review]
+  - control_id: ac-6.8
+    status: implemented
+    statement: "The signed OS image runs the collector, console and database under separate unprivileged service accounts; only the update installer runs with root privileges."
+    responsible_roles: [PER-DEV]
+    components: [CMP-GW-OS]
+    sources: [INT-014.A3]
+  - control_id: ac-6.9
+    status: partial
+    statement: "The console and OS audit daemon log privilege use and configuration changes and forward them to the CSSP SIEM. Gap: privileged actions taken through the shared fieldtech account are logged but not attributable to a person, until release 2.3 (2027-03)."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-013.A3, product/architecture.md#logging, product/conops.md#limitations]
+  - control_id: ac-6.10
+    status: implemented
+    statement: "The auditor role cannot reach any configuration, account or update function; the console refuses such requests, and OS service accounts cannot run privileged commands."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-014.A1, INT-014.A3]
+  - control_id: ac-7
+    status: implemented
+    statement: "Five consecutive failed local sign-ins lock the console account for 30 minutes (verified in DT-2); remote sign-ins use DoD PKI through the identity service."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    parameters:
+      ac-07_odp.01: "5"
+      ac-07_odp.03: "lock the account or node for 30 minutes"
+      ac-07_odp.04: "30 minutes"
+    sources: [INT-014.A2, product/architecture.md#identity, product/test-results.md#dt-2]
+  - control_id: ac-8
+    status: implemented
+    statement: "The console shows the DoD standard notice and consent banner before sign-in on both the uplink and the maintenance port, and sign-in requires acknowledging it."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A1]
+  - control_id: ac-10
+    status: implemented
+    statement: "The console allows one session per account; a new sign-in ends the older session."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A1]
+  - control_id: ac-11
+    status: implemented
+    statement: "The console locks a session after 15 minutes of inactivity and requires sign-in again to resume (verified in DT-2)."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    parameters:
+      ac-11_odp.02: "15 minutes"
+    sources: [INT-014.A2, product/test-results.md#dt-2]
+  - control_id: ac-11.1
+    status: implemented
+    statement: "The lock screen is blank and hides the page content until the user signs in again."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A2]
+  - control_id: ac-12
+    status: implemented
+    statement: "The console ends a session after 60 minutes of inactivity or on sign-out."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A2]
+  - control_id: ac-12.1
+    status: implemented
+    statement: "Every console page has a Sign out control that ends the session."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A2]
+  - control_id: ac-12.2
+    status: implemented
+    statement: "When a session ends, the console shows a session-ended message."
+    responsible_roles: [PER-DEV]
+    components: [CMP-WEBUI]
+    sources: [INT-014.A2]
+  - control_id: ac-14
+    status: implemented
+    statement: "Without sign-in the console serves only the banner and sign-in page; the collector accepts messages only from paired sensor nodes, so no other action is possible without identification."
+    responsible_roles: [PER-DEV, PER-ISSE]
+    components: [CMP-WEBUI, CMP-COLLECTOR]
+    sources: [INT-014.A1, INT-011.A2, product/test-results.md#dt-2]
+  - control_id: ac-16
+    status: not-applicable
+    rationale: "ESG uses no security or privacy attributes: it handles one sensitivity of information and makes no attribute-based access decisions."
+    statement: "Not applicable: no security or privacy attributes are associated with ESG information."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-16.6
+    status: not-applicable
+    rationale: "No attributes exist to maintain (see ac-16)."
+    statement: "Not applicable: ESG associates no attributes with its information."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-16.7
+    status: not-applicable
+    rationale: "No attributes are transmitted between components (see ac-16)."
+    statement: "Not applicable: ESG transmits no security or privacy attributes."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-17
+    status: implemented
+    inherited_from: "Installation Network Enclave"
+    statement: "The only remote access is HTTPS to the console from the installation management VLAN, authorized per user through the ISSO's access request and the identity service; the enclave provides the managed path and network access control, and the host firewall on CMP-GW-OS refuses console traffic from anywhere else."
+    responsible_roles: [PER-ISSE, PER-CCP]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-011.A2, INT-015.A1, product/architecture.md#network]
+  - control_id: ac-17.1
+    status: implemented
+    inherited_from: "Installation Cybersecurity Service Provider"
+    statement: "Remote sign-ins and console sessions are logged and forwarded to the CSSP SIEM within one minute; the CSSP monitors them and alerts the ISSO on anomalies."
+    responsible_roles: [PER-ISSO, PER-CCP]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-013.A3, INT-015.A2, product/architecture.md#logging]
+  - control_id: ac-17.2
+    status: implemented
+    statement: "Remote console sessions use HTTPS; sign-in assertions from the identity service travel over TLS."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-WEBUI]
+    sources: [product/data-flows.md#management, product/architecture.md#network]
+  - control_id: ac-17.3
+    status: implemented
+    inherited_from: "Installation Network Enclave"
+    statement: "Remote access passes through the enclave firewall and the management VLAN, the managed access point; the host firewall on CMP-GW-OS accepts console traffic only from that VLAN."
+    responsible_roles: [PER-ISSE, PER-CCP]
+    components: [CMP-GW-OS]
+    sources: [INT-011.A2, INT-015.A1, product/architecture.md#network]
+  - control_id: ac-17.4
+    status: implemented
+    statement: "Privileged commands over remote access are limited to users holding the admin role through an ISSO-approved group claim; auditors have read-only remote access."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI]
+    sources: [INT-013.A1, INT-014.A1]
+  - control_id: ac-17.6
+    status: implemented
+    statement: "Configuration, firewall rules and keys that describe remote access are stored on the encrypted data partition, readable only by the console service and root."
+    responsible_roles: [PER-DEV]
+    components: [CMP-GW-OS]
+    sources: [INT-014.A3]
+  - control_id: ac-17.9
+    status: implemented
+    statement: "An administrator can end remote access by disabling the console rule on the host firewall, and the ISSO can have any remote account disabled at once through the identity service."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-WEBUI, CMP-GW-OS]
+    sources: [INT-011.A2, INT-013.A1]
+  - control_id: ac-18
+    status: implemented
+    statement: "The only wireless link is the short-range field radio between each gateway radio module and its paired sensor nodes; pairing is done on site and the nodes have no IP connectivity."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GW-HW, CMP-COLLECTOR, CMP-SENSOR-NET]
+    sources: [INT-011.A2, product/architecture.md#network]
+  - control_id: ac-18.1
+    status: implemented
+    statement: "The field radio link is encrypted and paired; the collector rejects messages from unpaired nodes (verified in DT-2)."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GW-HW, CMP-COLLECTOR, CMP-SENSOR-NET]
+    sources: [INT-011.A2, product/test-results.md#dt-2]
+  - control_id: ac-18.3
+    status: implemented
+    statement: "The OS image disables Wi-Fi and Bluetooth; the field radio is the only enabled wireless capability."
+    responsible_roles: [PER-DEV]
+    components: [CMP-GW-HW, CMP-GW-OS]
+    sources: [INT-014.A3]
+  - control_id: ac-18.4
+    status: implemented
+    statement: "Only the admin role can pair or re-pair sensor nodes in the console, and pairing events are logged."
+    responsible_roles: [PER-ISSO]
+    components: [CMP-WEBUI, CMP-COLLECTOR]
+    sources: [INT-014.A1, product/architecture.md#logging]
+  - control_id: ac-19
+    status: implemented
+    statement: "The only portable devices that connect are installation-issued technician laptops, and only on site through the maintenance port, which is enabled by the shelter key switch and serves only the console on a link-local address."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-GW-HW, CMP-WEBUI]
+    sources: [INT-011.A3, product/architecture.md#network]
+  - control_id: ac-19.5
+    status: not-applicable
+    rationale: "ESG owns no mobile devices; technician laptops are installation assets outside the boundary whose encryption is the installation's responsibility."
+    statement: "Not applicable: no mobile devices are inside the ESG boundary."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-20
+    status: implemented
+    statement: "ESG connects only to IODS (interconnection agreement 2026-04-02), the identity service and the CSSP, each separately authorized; external systems are used only for those flows."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-011.A3, product/architecture.md#interconnections]
+  - control_id: ac-20.1
+    status: implemented
+    statement: "Use of an external system is permitted only after its authorization and an interconnection or service agreement are in place, as for IODS, the identity service and the CSSP."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-011.A3, product/architecture.md#interconnections]
+  - control_id: ac-20.2
+    status: implemented
+    statement: "The OS image disables USB mass storage; update bundles reach the gateway only by upload through the console."
+    responsible_roles: [PER-DEV]
+    components: [CMP-GW-OS]
+    sources: [INT-014.A3, product/architecture.md#components]
+  - control_id: ac-20.3
+    status: implemented
+    statement: "Only installation-issued laptops and workstations reach the console; the maintenance port and the management VLAN admit no personally owned systems."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    sources: [INT-011.A3, product/architecture.md#network]
+  - control_id: ac-21
+    status: not-applicable
+    rationale: "Users make no information-sharing decisions in ESG; telemetry goes only to IODS under the interconnection agreement."
+    statement: "Not applicable: ESG offers no user-driven information sharing."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-22
+    status: not-applicable
+    rationale: "ESG publishes no content to the public."
+    statement: "Not applicable: ESG has no publicly accessible content."
+    responsible_roles: [PER-ISSE]
+    components: [this-system]
+    sources: [INT-011.A3]
+  - control_id: ac-23
+    status: implemented
+    statement: "The buffer database has no user query interface; only the collector service reads and writes it, so stored telemetry cannot be mined through ESG."
+    responsible_roles: [PER-ISSE]
+    components: [CMP-STORE]
+    sources: [INT-011.A3]

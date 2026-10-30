@@ -16,9 +16,9 @@ sources: [product/conops.md#program, product/conops.md#users]
 | Aliases | none | C-1 |
 | Authorization boundary | ESG-BND-1 | P-11 |
 | Life-cycle state | under-development | C-1 |
-| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
 | Categorization approved | yes (PER-AODR) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-6 | S-1 |
 <!-- END rmf:facts -->
 
 <!-- Seeded for the walking-skeleton scenario (P-9 is out of scope). FICTIONAL

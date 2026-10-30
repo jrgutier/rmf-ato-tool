@@ -3,7 +3,7 @@ artifact_id: ART-STIG
 run_id: agent-skeleton
 produced_by_task: I-1
 touched_by: [I-1, A-3]
-sources: [product/test-results.md#config-scan, product/hw-sw-inventory.md#items, INT-023.A5, INT-025.A1, INT-026.A1, INT-026.A3]
+sources: [product/test-results.md#config-scan, product/hw-sw-inventory.md#items, INT-020.A2, INT-020.A3, INT-021.A1, INT-021.A3]
 ---
 # STIG/SRG summary — ESG
 
@@ -16,9 +16,9 @@ sources: [product/test-results.md#config-scan, product/hw-sw-inventory.md#items,
 | Aliases | none | C-1 |
 | Authorization boundary | ESG-BND-1 | P-11 |
 | Life-cycle state | under-development | C-1 |
-| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
 | Categorization approved | yes (PER-AODR) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-6 | S-1 |
 <!-- END rmf:facts -->
 
 <!-- Seeded for the walking-skeleton scenario (I-1 is out of scope). The structured results
@@ -51,17 +51,13 @@ No CAT I finding is open [[product/test-results.md#vuln-scan]].
 
 ## Assessor verification (A-3)
 
-The assessment team accepted the assessor-witnessed 2026-09-30 SRG/STIG scan of 12 units as
-evidence for cm-6, together with the nightly drift check, which showed no drift in August or
-September 2026 [[INT-023.A5]] [[INT-025.A1]]. The not-a-finding results were confirmed:
-STG-002 (TLS settings, cm-6) against the board-approved baseline, and STG-003 (database
-audit records, au-2) against the weekly SIEM reports and the DT-2 event delivery results
-[[INT-023.A4]] [[INT-025.A2]].
-
-Both open findings were confirmed by the team's own work. STG-001 (si-2) stands: at the
-2026-09-30 scan two fielded units ran the 63-day-old 2026-07 bundle, and fielded units are
-updated only at quarterly visits; it is carried as FND-004 [[INT-026.A3]] [[INT-027.A3]]
-[[product/test-results.md#vuln-scan]]. STG-004 (ia-2) stands: a maintenance-port sign-in
-test as `fieldtech` on two pre-production units (simulated) produced audit records naming
-only the shared account; it is carried as FND-003 [[INT-026.A1]] [[INT-027.A1]]. No finding
-changed status, so `artifacts/data/stig-summary.yaml` is unchanged.
+The assessor relied on the 2026-09-30 SRG/STIG scan, which the assessor witnessed on all 12
+units, and on the nightly configuration check showing no drift in August and September 2026
+[[INT-020.A3]] [[product/test-results.md#config-scan]]. No result was re-run and no finding's
+status changed, so the data file is unchanged. The two not-a-finding results were confirmed
+against other evidence: STG-002 (web server TLS) under cm-6 and STG-003 (database privileged
+audit records) under au-2 [[INT-020.A2]] [[INT-020.A3]]. Both open findings were confirmed:
+STG-004, because all field technicians still sign in as the shared `fieldtech` account
+(SAR finding FND-002) [[INT-021.A1]], and STG-001, because two units ran a 63-day-old update
+bundle at the 2026-09-30 vulnerability scan (SAR finding FND-003) [[INT-021.A3]]
+[[product/test-results.md#vuln-scan]].

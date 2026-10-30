@@ -1,64 +1,64 @@
 authorization_boundary:
-  description: "One gateway appliance per site with its operating system, collector service, admin console and buffer database, plus the field sensor nodes paired with it, authorized as one system across all sites on one configuration baseline. The installation network switch port is the boundary edge. IODS, the installation ICAM service, the installation network enclave and the CSSP are outside the boundary and separately authorized; technician laptops and administrator workstations are installation assets outside the boundary."
-  sources: [product/architecture.md#boundary, INT-003.A1, INT-003.A4, INT-004.A1, INT-004.A2]
+  description: "The boundary holds the gateway appliance at each site with its operating system, sensor collector, admin web console and local buffer database, plus the field sensor nodes paired with it; all units share one configuration baseline and are authorized as one system. The edge is the installation network switch port on the gateway uplink. IODS, the Installation ICAM Service, the Installation Network Enclave and the Installation CSSP are outside the boundary and separately authorized."
+  sources: [product/architecture.md#boundary, INT-003.A1, INT-004.A1, INT-004.A2]
 network_architecture:
-  description: "Each gateway has three interfaces. The uplink port on the enclave VLAN permits outbound TLS 1.3 to IODS, outbound syslog over TLS to the CSSP collector and inbound HTTPS to the console from the installation management VLAN only; the host firewall denies all other traffic in both directions. The maintenance port is disabled unless a technician enables it with the shelter key switch, serves only the console over HTTPS on a link-local address, and has no routing to the uplink. The field radio is an encrypted, paired link to the sensor nodes, which have no IP connectivity. The enclave firewall in front of every site switch enforces the same permitted flows."
-  sources: [product/architecture.md#network, INT-003.A2]
+  description: "The gateway uplink sits on the ESG VLAN of the installation enclave and permits only outbound TLS 1.3 to IODS, outbound syslog over TLS to the CSSP SIEM, TLS to the identity service and inbound HTTPS to the console from the installation management VLAN; the host firewall denies all other traffic and the enclave firewall enforces the same flows. The maintenance port is disabled unless enabled by the shelter key switch, serves only the console on a link-local address and does not route to the uplink. Sensor nodes connect only to their paired gateway over the encrypted field radio and have no IP connectivity."
+  sources: [product/architecture.md#network, INT-003.A2, INT-004.A3]
 data_flow:
-  description: "DF-1 sensor node to collector over the paired encrypted radio, unpaired nodes and malformed messages rejected; DF-2 collector to buffer, local on the encrypted data partition; DF-3 collector to IODS over TLS 1.3 with mutual certificate authentication; DF-4 audit records from the gateway to the CSSP SIEM over syslog with TLS; DF-5 administrator workstation to console over HTTPS with sign-in through the identity service; DF-6 console to identity service over TLS with signed assertions; DF-7 on-site technician laptop to console over HTTPS on the maintenance port with local sign-in. DF-3 to DF-6 cross the boundary edge and DF-7 enters through the maintenance port."
-  sources: [product/data-flows.md#top, product/data-flows.md#telemetry, product/data-flows.md#management, INT-003.A3]
+  description: "DF-1 sensor readings and alarms from nodes to the collector over the paired, encrypted radio; DF-2 collector to the local buffer on the encrypted data partition; DF-3 collector to IODS over TLS 1.3 with mutual certificate authentication; DF-4 audit records from the gateway to the CSSP SIEM over syslog TLS; DF-5 administrator workstation to the console over HTTPS; DF-6 console to the identity service over TLS with signed assertions; DF-7 technician laptop to the console over HTTPS on the maintenance port with local sign-in."
+  sources: [product/data-flows.md#top, INT-003.A2, INT-003.A4]
 components:
   - id: CMP-GW-HW
     title: "ESG gateway appliance"
     type: hardware
-    description: "Ruggedized fanless appliance with uplink and maintenance Ethernet ports and a field radio module, in a locked alarmed shelter"
+    description: "Ruggedized fanless appliance with uplink and maintenance Ethernet ports and a field radio module (INV-001, INV-006)"
     status: under-development
-    sources: [product/architecture.md#components, product/architecture.md#physical, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-GW-OS
     title: "Gateway operating system"
     type: software
-    description: "Hardened Linux-based OS image with host firewall (deny by default) and local audit daemon"
+    description: "Hardened Linux-based OS image with host firewall and local audit daemon (INV-002)"
     status: under-development
-    sources: [product/architecture.md#components, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-COLLECTOR
     title: "Sensor collector service"
     type: software
-    description: "Receives and validates sensor messages from the field radio, writes them to the buffer and forwards them to IODS"
+    description: "Receives and validates sensor messages, writes them to the buffer and forwards them to IODS (INV-003)"
     status: under-development
-    sources: [product/architecture.md#components, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-WEBUI
     title: "Admin web console"
     type: software
-    description: "HTTPS console for configuration, accounts, diagnostics and update upload"
+    description: "HTTPS console for configuration, accounts, diagnostics and update upload (INV-004)"
     status: under-development
-    sources: [product/architecture.md#components, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-STORE
     title: "Local buffer database"
     type: software
-    description: "Embedded database holding up to 7 days of telemetry while IODS is unreachable"
+    description: "Embedded database holding up to 7 days of telemetry while IODS is unreachable (INV-005)"
     status: under-development
-    sources: [product/architecture.md#components, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-SENSOR-NET
     title: "Field sensor network"
     type: hardware
-    description: "Up to 40 battery-powered sensor nodes per site and their firmware, paired to the site gateway by radio"
+    description: "Up to 40 battery-powered sensor nodes per site and their firmware (INV-007, INV-008)"
     status: under-development
-    sources: [product/architecture.md#components, INT-003.A1, INT-003.A5]
+    sources: [product/architecture.md#components, INT-003.A1]
   - id: CMP-IODS
     title: "Installation Operations Data Service"
     type: interconnection
-    description: "Receives ESG telemetry (IC-1) under an interconnection agreement signed 2026-04-02; separately authorized, ATO to 2029-03-15"
+    description: "Receives ESG telemetry (IC-1) under an interconnection agreement; separately authorized"
     status: operational
     external: true
-    sources: [product/architecture.md#interconnections, INT-003.A4, INT-004.A2]
+    sources: [product/architecture.md#interconnections, INT-003.A3, INT-004.A2]
   - id: CMP-ICAM
     title: "Installation ICAM Service"
     type: service
-    description: "Installation identity provider; DoD PKI authentication and account workflow for remote ESG administrators and auditors; covered by the enclave authorization"
+    description: "Installation identity provider giving DoD PKI sign-in for remote ESG administrators and auditors (IC-2); covered by the enclave authorization"
     status: operational
     external: true
     leveraged_authorization: LA-01
-    sources: [product/architecture.md#components, product/architecture.md#identity, product/architecture.md#leveraged, INT-003.A4, INT-004.A2, INT-005.A5]
+    sources: [product/architecture.md#components, product/architecture.md#interconnections, INT-003.A3, INT-005.A5]
   - id: CMP-ENCLAVE
     title: "Installation Network Enclave"
     type: service
@@ -66,12 +66,12 @@ components:
     status: operational
     external: true
     leveraged_authorization: LA-01
-    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-003.A4, INT-004.A2, INT-005.A5]
+    sources: [product/architecture.md#leveraged, INT-003.A3, INT-005.A5]
   - id: CMP-CSSP
     title: "Installation Cybersecurity Service Provider"
     type: service
-    description: "SIEM log collection and correlation, monitoring and incident response for the installation; separately authorized"
+    description: "SIEM log collection and correlation, monitoring and incident response support; separately authorized"
     status: operational
     external: true
     leveraged_authorization: LA-02
-    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-003.A4, INT-004.A2, INT-005.A5]
+    sources: [product/architecture.md#leveraged, INT-003.A3, INT-005.A5]

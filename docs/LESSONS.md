@@ -257,3 +257,17 @@ with the next ID; never edit or delete an existing entry.
 - Fix: added `examples/uas-gcs/product/monitoring/cycle-2026-10.md` (configuration checks, STIG and vulnerability scans after the 2026-10 bundle, weekly log reviews, account review, incidents, threat updates), consistent with the seeded weaknesses; the run resumed at M-2.
 - Rule: a run that scopes in a task with an EXT-* input must have that input in its product directory, or the task's playbook must name a fallback, before the run reaches the task.
 - Promotion: none — EXT-* inputs have no machine-checkable path in framework/artifacts.yaml yet; a RUN-CFG check needs that field first (v1.1 candidate, noted in the Phase 7 handoff)
+
+## L-0037 · 2026-10-29 · run: phase-8 · tags: agent-lane, upstream-hash
+- Symptom: the first cold-start-resume result reported RUN-STALE-001 (W) although nothing upstream had changed: "the scenario cold-start-resume hash differs".
+- Root cause: the scenario's hash_globs cover its base_run (tests/agent/results/skeleton/run/**). The harness deletes tests/agent/results/ from its work copy after `rmf run init` so the agent cannot read results, so the final `rmf check` hashed a different file set than init did.
+- Fix: scripts/agent-run.sh puts the base run back before the final `rmf build` / `rmf check`; the re-run reports 0 errors and 0 warnings ($0.53).
+- Rule: any file a scenario's upstream hash covers must be present, unchanged, wherever the run's hash is recomputed.
+- Promotion: none — harness (bash) behaviour; the committed cold-start result (0 warnings) is the evidence, and ADR-0004 records the sequence
+
+## L-0038 · 2026-10-29 · run: phase-8 · tags: ci, extras, tests
+- Symptom: `rmf ci --release` failed at pytest collection with `ModuleNotFoundError: No module named 'pymupdf'` after a plain `make bootstrap` (no `EXTRACT=1`).
+- Root cause: tests/unit/test_refs_extract.py imported PyMuPDF, the optional AGPL [extract] extra, at module level; every earlier gate ran in a venv bootstrapped with `EXTRACT=1`, so a fork with the default bootstrap would fail `rmf ci`.
+- Fix: the module uses `pytest.importorskip("pymupdf")`; without the extra its tests are skipped. Added tests/e2e/test_fork_template.py (clone without examples/, `rmf new`, `rmf ci --profile fork`), which bootstraps a fresh default environment.
+- Rule: a test that needs an optional extra must skip, not fail, when the extra is absent; gate at least once in a default (no-extras) environment.
+- Promotion: check: test_fork_without_examples_passes_fork_profile

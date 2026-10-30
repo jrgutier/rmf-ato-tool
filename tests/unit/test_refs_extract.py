@@ -8,11 +8,14 @@ import re
 from collections import Counter
 from pathlib import Path
 
-import pymupdf
 import pytest
 
 from rmf_tool.refs import extract as ex
 from rmf_tool.refs.toc import load_toc
+
+# PyMuPDF is the optional AGPL [extract] extra (make bootstrap EXTRACT=1); without it these
+# tests are skipped, so a default bootstrap still passes `rmf ci`.
+pymupdf = pytest.importorskip("pymupdf")
 
 HEADER = "ACME SPEC 100-1, REV. 2 SAMPLE SPECIFICATION FOR TESTS"
 NOTICE = "This publication is available free of charge from: https://example.invalid/100-1"

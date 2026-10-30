@@ -115,7 +115,25 @@
       },
       "minItems": 1,
       "uniqueItems": true
+    },
+    "base_run": {
+      "description": "Start from a copy of this run directory (relative to the repository root) instead of an empty run; its scope, seeds and subset are kept (ADR-0004).",
+      "type": "string",
+      "minLength": 1
+    },
+    "remove": {
+      "description": "With base_run: files or directories, relative to the run directory, deleted from the copy.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
     }
+  },
+  "dependentRequired": {
+    "remove": ["base_run"]
   },
   "$defs": {
     "artifact_id": {

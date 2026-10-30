@@ -3,7 +3,7 @@ artifact_id: ART-AODM
 run_id: agent-skeleton
 produced_by_task: R-4
 touched_by: [R-4]
-sources: [ART-RAR, ART-POAM, ART-ORG-CONTEXT, INT-033.A1, INT-033.A2, INT-033.A3, INT-033.A4]
+sources: [ART-RAR, ART-POAM, ART-PKG, ART-ORG-CONTEXT, INT-026.A3, INT-027.A1, INT-027.A2]
 ---
 # Authorization decision
 
@@ -16,62 +16,50 @@ sources: [ART-RAR, ART-POAM, ART-ORG-CONTEXT, INT-033.A1, INT-033.A2, INT-033.A3
 | Aliases | none | C-1 |
 | Authorization boundary | ESG-BND-1 | P-11 |
 | Life-cycle state | under-development | C-1 |
-| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
 | Categorization approved | yes (PER-AODR) | C-3 |
-| Control baseline | SP800-53B-MODERATE-SUBSET-6 | S-1 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-6 | S-1 |
 <!-- END rmf:facts -->
 
 ## Decision
 
-On 2026-10-29 the Authorizing Official (PER-AO) issued an **Authorization to Operate with
-Conditions** (AD-ATOC), recorded in `artifacts/data/decision.yaml`; the decision was not
-delegated [[INT-033.A1]] [[INT-033.A2]]. This is a draft produced in a synthetic run, not a
-real authorization.
+On 2026-10-30 the AO (PER-AO) issued an authorization to operate with conditions (AD-ATOC),
+after consulting the AODR on the risk analysis [[INT-027.A1]] [[INT-026.A3]]. This is a
+simulated draft decision; it does not replace a real AO's decision. The record is
+`artifacts/data/decision.yaml`.
 
 ## Terms and conditions
 
-The authorization holds only while these conditions are met by their due dates
-[[INT-033.A2]]:
+The authorization holds only while these conditions are met [[INT-027.A2]] [[ART-POAM]]:
 
-- **COND-01** (due 2026-11-20): the two overdue units updated and rescanned (POAM-005,
-  POAM-006); no unit past 30 days without its own POA&M item.
-- **COND-02** (due 2027-01-31): remote update in use on all units and STG-001 closed
-  (POAM-004); the new update flow is approved by the AO before it is enabled [[INT-004.A3]].
-- **COND-03** (due 2026-11-30): interim controls for the shared fieldtech account, the
-  monthly site-visit log reconciliation and the out-of-cycle password change (POAM-001,
-  POAM-002).
-- **COND-04** (due 2027-03-31): per-technician accounts in release 2.3 on all units,
-  fieldtech disabled and STG-004 closed (POAM-001, POAM-003).
+- COND-01 (due 2026-11-30): the November vulnerability rescan reaches the AO and shows no unit
+  past the 30-day update period (POAM-003).
+- COND-02 (due 2026-12-31): POAM-003 closed with release 2.2 remote update fielded.
+- COND-03 (due 2026-11-15): the site-visit sign-in log and password change on departure in force.
+- COND-04 (due 2027-03-31): POAM-001 and POAM-002 closed with release 2.3.
 
-The ISSM reports POA&M status to the AO monthly [[INT-033.A3]].
+A missed condition or an unapproved POA&M slip leads the AO to reconsider the authorization, up
+to denial [[INT-027.A2]].
 
 ## Authorization termination date
 
-The authorization terminates on 2027-10-29, one year after the decision and within the
-Component's 3-year maximum. The AO chose the shorter term because the system is in
-development with three partially implemented controls, and wants a new look once the
-conditions are closed and a broader assessment is done [[INT-033.A3]] [[ART-ORG-CONTEXT]].
+The authorization terminates on 2027-10-30, one year after the decision and well within the
+3-year maximum, so that it is reviewed once the remediations are in place [[INT-027.A2]]
+[[ART-ORG-CONTEXT]].
 
 ## Basis for the decision
 
-The AODR determined the overall risk as moderate: RSK-001 (unattributable on-site use of the
-shared account) and RSK-003 (fielded units behind on updates) are moderate, RSK-002 is low
-[[ART-RAR]]. The AO relied on the independent assessment and on the POA&M, which funds and
-schedules a fix for every open finding, FND-001 to FND-004 and STIG findings STG-001 and
-STG-004 (both CAT II; no CAT I is open) [[ART-POAM]] [[INT-033.A1]]. The mission needs the
-alarm feed to installation security operations [[INT-033.A1]].
+The AODR determined the overall risk as moderate from two moderate risks: RSK-001 (update latency
+on fielded units) and RSK-002 (the shared `fieldtech` account) [[ART-RAR]]. The AO relied on the
+funded, dated remediation in POAM-001, POAM-002 and POAM-003 and on the mission need for the
+system [[ART-POAM]] [[INT-027.A1]].
 
 ## Residual risk accepted
 
-The AO accepts **moderate** residual risk on behalf of the Component's installation
-security mission, within the Component's tolerance; no Component CIO concurrence is needed
-[[INT-033.A1]] [[ART-ORG-CONTEXT]]. The AO will downgrade or revoke the authorization if the
-per-unit updates miss 2026-11-20, the remote-update date slips without an accepted plan, or a
-CAT I STIG finding opens without a POA&M item, because the patching risk would then be high
-and need CIO concurrence [[INT-033.A4]].
+The AO accepts moderate residual risk on behalf of the Component, which allows an AO to accept
+moderate risk without Component CIO concurrence [[INT-027.A1]] [[ART-ORG-CONTEXT]].
 
 ## Disclosures
 
-No reference is degraded for this run. The categorization still rests on assumption ASM-002
-(no PII in scope pending the privacy office); if the privacy office finds otherwise, this
-decision is reopened [[INT-033.A4]] [[ASM-002]].
+No degraded references are reported for this run, so there is nothing to disclose; the si-2
+rating rests on the 2026-09-30 scan pending the rescan required by COND-01 [[ART-RAR]].

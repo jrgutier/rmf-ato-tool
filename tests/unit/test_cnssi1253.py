@@ -16,6 +16,7 @@ from rmf_tool.run.model import schema_errors
 
 @pytest.fixture(scope="module")
 def result():
+    pytest.importorskip("pymupdf")  # PDF geometry needs the optional [extract] extra (L-0038)
     return cnssi1253.generate(REPO_ROOT)
 
 

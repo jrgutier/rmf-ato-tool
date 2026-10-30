@@ -19,7 +19,7 @@ sources: [product/conops.md#environment, product/conops.md#limitations]
 |---|---|---|---|---|---|
 | TE-1 | Insider or contractor misuses privileged console access without being identified | adversarial, insider | moderate | moderate | moderate |
 | TE-2 | Attacker exploits a known vulnerability on a gateway that is behind on updates | adversarial, outsider on the installation network | moderate | high | moderate |
-| TE-3 | Intruder tampers with a gateway in a remote shelter to suppress alarms | adversarial, physical | low | high | moderate |
+| TE-3 | Intruder tampers with a gateway in a remote shelter to suppress alarms | adversarial, physical | low | high | low |
 | TE-4 | Radio jamming or link loss silences a site | adversarial or environmental | moderate | low | low |
 
 Sources: the operating environment and the program's disclosed limitations

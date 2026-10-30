@@ -119,6 +119,62 @@ def test_invalid_scenario_and_missing_seed(tmp_path):
         init_run(tmp_path / "ws", tmp_path, scenario_path=path, as_of=AS_OF)
 
 
+def _base_run(tmp_path):
+    """A started run to resume from, with an SAR result and an OSCAL document."""
+    path = write_scenario(tmp_path)
+    (tmp_path / "framework").symlink_to(REPO_ROOT / "framework")
+    base = init_run(tmp_path / "ws", tmp_path, run_id="base-run", scenario_path=path,
+                    as_of=AS_OF)
+    (base / "artifacts/sar/results").mkdir(parents=True)
+    (base / "artifacts/sar/results/ac.yaml").write_text("results: []\n")
+    (base / "oscal").mkdir()
+    (base / "oscal/ssp.json").write_text("{}\n")
+    return path, base
+
+
+def _resume_scenario(path, remove):
+    import json
+
+    body = json.loads(path.read_text())
+    body.update(name="resume", base_run="ws/runs/base-run", remove=remove)
+    resume = path.with_name("resume.yaml")
+    resume.write_text(json.dumps(body))
+    return resume
+
+
+def test_base_run_scenario_resumes_a_copy(tmp_path):
+    """ADR-0004: base_run copies a run, removes paths and renames the run everywhere."""
+    path, base = _base_run(tmp_path)
+    resume = _resume_scenario(path, ["oscal", "artifacts/sar/results/ac.yaml"])
+    run_dir = init_run(tmp_path / "ws2", tmp_path, run_id="resumed", scenario_path=resume,
+                       as_of="2030-01-01T00:00:00Z")
+    config = read_yaml(run_dir / "run.yaml")
+    assert config["run_id"] == "resumed" and config["as_of"] == AS_OF  # the base's start
+    assert config["upstream_hash_basis"] == {"variant": "scenario", "scenario": "resume.yaml"}
+    assert not (run_dir / "oscal").exists()
+    assert not (run_dir / "artifacts/sar/results/ac.yaml").exists()
+    assert (run_dir / "journal.md").is_file() and (base / "oscal/ssp.json").is_file()
+    seed = frontmatter.parse((run_dir / "artifacts/ART-STAKE.md").read_text())
+    assert seed.data["run_id"] == "resumed"
+
+
+def test_base_run_remove_must_exist_and_stay_inside(tmp_path):
+    path, _ = _base_run(tmp_path)
+    with pytest.raises(WorkspaceError, match="not in base_run"):
+        init_run(tmp_path / "ws2", tmp_path, run_id="resumed",
+                 scenario_path=_resume_scenario(path, ["oscal/nope.json"]))
+    with pytest.raises(WorkspaceError, match="scenario invalid"):
+        init_run(tmp_path / "ws3", tmp_path, run_id="resumed",
+                 scenario_path=_resume_scenario(path, ["../base-run"]))
+
+
+def test_remove_requires_base_run(tmp_path):
+    path = write_scenario(tmp_path, remove=["oscal"])
+    (tmp_path / "framework").symlink_to(REPO_ROOT / "framework")
+    with pytest.raises(WorkspaceError, match="scenario invalid"):
+        init_run(tmp_path / "ws", tmp_path, scenario_path=path, as_of=AS_OF)
+
+
 def test_outside_a_repository(tmp_path):
     with pytest.raises(WorkspaceError, match="not an rmf repository"):
         init_run(tmp_path, tmp_path, as_of=AS_OF)

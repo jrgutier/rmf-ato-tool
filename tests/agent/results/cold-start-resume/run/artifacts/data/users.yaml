@@ -1,0 +1,49 @@
+users:
+  - id: USR-SOC-OPERATOR
+    title: "SOC operators"
+    description: "About 25 installation security operations center operators who read ESG alarms in IODS and never sign in to ESG"
+    type: internal
+    privilege_level: no-logical-access
+    roles: ["none (consumer of outputs in IODS)"]
+    authorized_privileges: []
+    sources: [INT-006.A1, product/conops.md#users]
+  - id: USR-ADMIN
+    title: "ESG system administrators"
+    description: "Three remote administrators who sign in to the admin web console through the installation identity service with DoD PKI"
+    type: internal
+    privilege_level: privileged
+    roles: ["admin"]
+    authorized_privileges:
+      - title: "Console administration"
+        functions_performed: ["manage configuration", "manage accounts", "upload and install software updates", "review logs"]
+    sources: [INT-006.A2, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-FIELD-TECH
+    title: "Field technicians"
+    description: "About ten technicians who sign in on site through the maintenance port with the shared local fieldtech account"
+    type: internal
+    privilege_level: privileged
+    roles: ["fieldtech"]
+    authorized_privileges:
+      - title: "On-site maintenance"
+        functions_performed: ["replace sensors", "re-pair radios", "run diagnostics"]
+    sources: [INT-006.A2, INT-006.A3, product/conops.md#users, product/conops.md#limitations]
+  - id: USR-AUDITOR
+    title: "Auditors (ISSO staff)"
+    description: "Two ISSO staff with read-only remote console access through the installation identity service with DoD PKI"
+    type: internal
+    privilege_level: non-privileged
+    roles: ["auditor"]
+    authorized_privileges:
+      - title: "Read-only review"
+        functions_performed: ["review audit logs", "review configuration reports"]
+    sources: [INT-006.A2, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-BREAK-GLASS
+    title: "Break-glass administrator"
+    description: "Sealed local esgadmin account held in the program office safe for emergencies; each use is logged and reported"
+    type: internal
+    privilege_level: privileged
+    roles: ["esgadmin"]
+    authorized_privileges:
+      - title: "Emergency administration"
+        functions_performed: ["restore console access when the identity service is unavailable"]
+    sources: [INT-006.A2, product/architecture.md#identity]

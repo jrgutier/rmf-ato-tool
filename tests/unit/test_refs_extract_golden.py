@@ -75,6 +75,8 @@ def test_full_reextract_matches_committed(doc: str, tmp_path: Path) -> None:
     meta = ex.read_preamble(TEXT / f"{doc}.md")
     assert meta is not None
     sha, extractor = meta["source_sha256"], meta["extractor"]
+    if extractor == "pymupdf":
+        pytest.importorskip("pymupdf")  # the optional AGPL [extract] extra (L-0038)
     if meta["ocr"] == "true":  # OCR never runs in tests or CI: verify the recorded tuple only
         assert ex.check(doc, PDF / f"{doc}.pdf", TEXT, source_sha256=sha, extractor=extractor) == []
         return

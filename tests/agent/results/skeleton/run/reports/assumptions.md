@@ -4,26 +4,25 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (2)
+## Assumptions (1)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
-| ASM-001 | C-1 | PER-PM | The system identifier is ESG-001 until system registration assigns one. | Registration (P-18) is out of scope for this run and neither a registration record nor the product material gives an identifier; the PM asked for a placeholder. |
-| ASM-002 | C-2 | PER-ISSM | The privacy office will confirm that the user names in account and audit records do not make the system one that processes PII for the CNSSI 1253 privacy overlay. | The program has asked the privacy office to confirm this and no answer is recorded; the privacy overlay is ruled out on that basis and the categorization returns for review if the answer differs. |
+| ASM-001 | C-1 | PER-PM | The system identifier is ESG-001 until the component registry assigns one at registration. | Registration (P-18) is out of scope and the PM has no registry identifier yet. |
 
-## Interview answers (112; SIMULATED 112)
+## Interview answers (76; SIMULATED 76)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
 | P-10 | 2 | 7 | 0 |
-| P-11 | 2 | 8 | 0 |
-| C-1 | 2 | 8 | 0 |
-| C-2 | 3 | 11 | 0 |
+| P-11 | 2 | 7 | 0 |
+| C-1 | 2 | 9 | 0 |
+| C-2 | 3 | 10 | 0 |
 | C-3 | 1 | 4 | 0 |
-| S-1 | 2 | 8 | 0 |
-| S-4 | 7 | 20 | 0 |
-| A-2 | 3 | 11 | 0 |
-| A-3 | 6 | 16 | 0 |
-| A-6 | 2 | 6 | 0 |
-| R-2 | 2 | 9 | 0 |
-| R-4 | 1 | 4 | 0 |
+| S-1 | 2 | 5 | 0 |
+| S-4 | 4 | 10 | 0 |
+| A-2 | 3 | 6 | 0 |
+| A-3 | 3 | 7 | 0 |
+| A-6 | 2 | 4 | 0 |
+| R-2 | 2 | 5 | 0 |
+| R-4 | 1 | 2 | 0 |

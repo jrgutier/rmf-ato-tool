@@ -1,0 +1,17 @@
+family: ia
+determinations:
+  - control_id: ia-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    summary: "DT-2 results and the developer interview show remote administrators and auditors are uniquely identified and authenticated with DoD PKI at the Installation ICAM Service, their console sessions carry the individual's identity, users without an approved group claim were refused, and local lockout and session lock passed; the identity service's part is covered by the Installation Network Enclave ATO (2025-11-20). However, the open STIG finding STG-004 confirms the 10 field technicians sign in on the maintenance port with the shared local account fieldtech, so those users are not uniquely identified and their sessions cannot be associated with a person (IA-02[01], IA-02[02] not met for that path)."
+    finding_refs: [FND-002]
+    sources: [INT-021.A1, INT-022.A1, product/test-results.md#dt-2, product/architecture.md#identity]
+findings:
+  - id: FND-002
+    control_id: ia-2
+    title: "Field technicians share the local account fieldtech and are not uniquely identified"
+    description: "IA-2 requires organizational users to be uniquely identified and authenticated and that identity to be associated with processes acting for them. The witnessed 2026-09-30 scan left STG-004 (BM-03, CAT II, INV-004: application permits shared accounts for privileged access) open, and the developer confirmed that all 10 field technicians sign in on the maintenance port as fieldtech, so maintenance-port sessions cannot be tied to an individual. Release 2.3 (planned 2027-03) adds per-technician accounts with smart-card login; nothing has changed on fielded units."
+    status: open
+    severity: moderate
+    recommendation: "Deliver per-technician local accounts with smart-card login in release 2.3 and close STG-004; until then, record each fieldtech session against a named technician in a site-visit log and change the fieldtech password whenever a technician leaves the team (see FND-001)."
+    sources: [INT-021.A1, product/conops.md#limitations, product/test-results.md#config-scan]

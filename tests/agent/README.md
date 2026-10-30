@@ -69,6 +69,23 @@ agent-agnostic, but no codex lane or result is maintained.
   patching on fielded units, and the seeded STIG results carry two open CAT II findings, so
   an honest run produces other-than-satisfied determinations, findings and POA&M items.
 
+## The c1-s4-one-family scenario
+
+- C-1 to S-4 on ESG, the baseline restricted to the AC family at M/M/L (55 controls), so
+  S-4 writes real statements for one whole family in one session.
+- Seeds (`seeds/esg-c1-s4/`): the Prepare outputs C and S read. ART-INV and ART-BND (with
+  `inventory.yaml` and `boundary.yaml`) are the skeleton run's P-10 and P-11 outputs with
+  each interview token replaced by the product anchors that answer was based on, and C-1's
+  additions to ART-BND (its leveraged-authorization section and links) removed; the rest
+  are the skeleton seeds.
+
+## The cold-start-resume scenario
+
+- `base_run: tests/agent/results/skeleton/run` (ADR-0004), minus
+  `artifacts/sar/results/ac.yaml` and `oscal/`. The prompt points the agent at AGENTS.md
+  only; it must find the gap from `rmf status` and restore the run to 0 errors.
+- Its `hash_globs` include the skeleton result run: re-run it after every `skeleton` run.
+
 ## Changing seeds or the product
 
 - Keep the product's `CMP-*` and `INV-###` IDs: seeded allocation and STIG data refer to

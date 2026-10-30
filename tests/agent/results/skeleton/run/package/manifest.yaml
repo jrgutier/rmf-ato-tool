@@ -2,7 +2,7 @@
 package:
   run_id: agent-skeleton
   mode: synthetic
-  as_of: '2026-10-29T17:16:23Z'
+  as_of: '2026-10-30T00:10:26Z'
   framework_version: 0.1.0
   oscal_version: 1.2.1
   system:
@@ -13,7 +13,27 @@ package:
       c: moderate
       i: moderate
       a: low
-    baseline_id: SP800-53B-MODERATE-SUBSET-6
+    baseline_id: CNSSI1253-M-M-L-SUBSET-6
+  authorization_package:
+  - element: security-plan
+    artifact_id: ART-SSP
+    status: present
+    oscal: &id001
+    - oscal/ssp.json
+  - element: security-assessment-report
+    artifact_id: ART-SAR
+    status: present
+    oscal: &id002
+    - oscal/assessment-results.json
+  - element: poams
+    artifact_id: ART-POAM
+    status: present
+    oscal: &id003
+    - oscal/poam.json
+  - element: authorization-decision
+    artifact_id: ART-AODM
+    status: present
+    oscal: &id004 []
   artifacts:
   - artifact_id: ART-ORG-CONTEXT
     name: Organizational risk context
@@ -22,7 +42,8 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-ORG-CONTEXT.md
-      sha256: 2116aa16d69163a2c0d6d6bf6eaef4e57828939645aca18dfd3614e260e0dbb6
+      sha256: 94a7039abd236c57a62ca4d775eff01116f91be040467ad8d22baf328e65497a
+    oscal: []
   - artifact_id: ART-STAKE
     name: Stakeholder register
     package: supporting
@@ -30,7 +51,8 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-STAKE.md
-      sha256: 3417fac97ec50ab8f5f43ef887770f1437afada6d45f1c50504407432b3c51d4
+      sha256: c5d05b8b62ac477a93e2f0581521647d1a26267175bee7c6864763823bee8419
+    oscal: []
   - artifact_id: ART-INV
     name: Hardware and software inventory
     package: core
@@ -38,9 +60,11 @@ package:
     status: present
     files:
     - path: artifacts/ART-INV.md
-      sha256: 8176359bbb81cc30c5333404f48ec90ca98cf1a3fd5cd12880b32751de69b41c
+      sha256: 55391a81124f28e803c9da9ce2966880a16545295ed9b150111cfa8c4b5a4cd1
     - path: artifacts/data/inventory.yaml
-      sha256: e2d6e6cfb43c47819e65efae8f7b6736f3932804882b23dc45fbc88b25e3368c
+      sha256: 0fc03615b7d17718dcda26e9ba1b9c95661f0691faae8464c6b5be839342cf1e
+    oscal:
+    - oscal/ssp.json
   - artifact_id: ART-BND
     name: Authorization boundary, network architecture and data flows
     package: core
@@ -48,9 +72,11 @@ package:
     status: present
     files:
     - path: artifacts/ART-BND.md
-      sha256: 4385737c4e3f53e50a98e61506457355a2aac0ccc6adb1aba30b4a8b2943c2d7
+      sha256: c37ba542763e590b77d29cdeae1c1c1d8320d377944ca127d44eca6e68097b51
     - path: artifacts/data/boundary.yaml
-      sha256: 7f4e46531217d8d1cef80c7ee63a0f90d8f74f5280a102e6e0ff36e1d1def77f
+      sha256: 91f0712520c5bd82a0e4f896a655a1dbb83ff929439329d57a9cd402695544ed
+    oscal:
+    - oscal/ssp.json
   - artifact_id: ART-INFOTYPES
     name: Information types and information life cycle
     package: supporting
@@ -58,9 +84,11 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-INFOTYPES.md
-      sha256: d43f3ad4f9c798eec216df36e7e991b8672ba1af24a4fcfaafd087f9f404bb72
+      sha256: 7c786c969a03ee9894fbb33fd72e175542e56be8d4f30a8cf9a430297344a137
     - path: artifacts/data/infotypes.yaml
       sha256: 798e290e9bb7160a1ce87118f02b0683a82d72ca07f103dbb38ce084f636abdd
+    oscal:
+    - oscal/ssp.json
   - artifact_id: ART-RA
     name: System risk assessment
     package: supporting
@@ -68,7 +96,8 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-RA.md
-      sha256: 50d301faf1f25012db49be71a964eae00a37d719f7af96921620a3d5f63db9fe
+      sha256: 84504be217cf0f6e1e205a545bf120412872a40c28c86bb06c7c575f08cc06a4
+    oscal: []
   - artifact_id: ART-REQ
     name: Security and privacy requirements and allocation
     package: supporting
@@ -76,13 +105,15 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-REQ.md
-      sha256: ec1993500b1396044cce01f5f4b04ab34c4778f83979fcad350149e53a5d6d19
+      sha256: 0557099647f277ff49e2945f5afa217e33f0bf659dccea725d262b345e62dc2b
+    oscal: []
   - artifact_id: ART-REG
     name: System registration
     package: supporting
     producer: P-18
     status: not-in-scope
     files: []
+    oscal: []
   - artifact_id: ART-SD
     name: System description, users and leveraged authorizations
     package: core
@@ -90,11 +121,13 @@ package:
     status: present
     files:
     - path: artifacts/ART-SD.md
-      sha256: 52a2578b64866519b86c347bfdf029177b85613c1cee39fb778c4115aa2cc70d
+      sha256: a2fcf3ad839cbccabda734872f80ec0d7a9caa1b3854c327149406f1db51ae36
     - path: artifacts/data/users.yaml
-      sha256: abb594ae8aeaf043d1b231f1916b2d6c4d964c1814e0f124d40657019a749c0b
+      sha256: 7325c4d8c27dc2db0c1fc9916abe6237b53471fc086b8282b69509cd4b468371
     - path: artifacts/data/leveraged-authorizations.yaml
-      sha256: dcb780d6799b3747c36f7d05832cee962aa192509ca8fb9969f8ec65c7254bc0
+      sha256: 76f72042839aeb3a9d2bab1f56a982ea0c0ec5afbe6c7cec7e2bff9ff8d4dd42
+    oscal:
+    - oscal/ssp.json
   - artifact_id: ART-CAT
     name: Security categorization
     package: core
@@ -102,9 +135,11 @@ package:
     status: present
     files:
     - path: artifacts/ART-CAT.md
-      sha256: 64d83e842f07328831dce52460e17df1b5e924affbd4cda189daf79851dde1da
+      sha256: 38bbf19e1e4febea41b1297e8a11e351019a9ce50a960d297e7e7f3afb16f94f
     - path: facts.yaml
-      sha256: c33e18b30be87013c91d3498a5d6bb17f768b1451c5e276ca064a1e3ef0ab6fc
+      sha256: 229415fc692a7617af0bd8b49d15f1e10c46140c2f35ba6c392c5783c8b35217
+    oscal:
+    - oscal/ssp.json
   - artifact_id: ART-BASELINE
     name: Tailored control baseline, tailoring and allocation
     package: supporting
@@ -112,13 +147,15 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-BASELINE.md
-      sha256: 90a4fcb1fd0876898f5a234fb079b2c4c5b763848949fc8ee15bfcd39779d696
+      sha256: 0c756e50dbedca6c076025c0328c6594ee4102bd0bba979548d27183a4b53127
     - path: baseline.json
-      sha256: 42a18266fbe45103fbef0150c5b37af868395d41c0971869ba5e70610774ba7a
+      sha256: c283d45f0066e7647c01043dc0beb2bb8be49586a474441908a697c86afca810
     - path: artifacts/data/tailoring.yaml
       sha256: 150f95868007e55c10f621329e7b797ac359ec2db44bf2c977f78e934394db6e
     - path: artifacts/data/allocation.yaml
       sha256: 373c1b78b3a092b19a389f1f78e5dd8cb23370b0ba2a0c2e281bda405c804f54
+    oscal:
+    - oscal/profile.json
   - artifact_id: ART-SSP
     name: System Security Plan
     package: core
@@ -126,25 +163,27 @@ package:
     status: present
     files:
     - path: artifacts/ART-SSP.md
-      sha256: 1b2f02911886891dc7cee1ea4683ecb24e8dce4dbe0d2c0da906805108cf9a7e
+      sha256: de4c96f38b66510d53ade285cdc2856f3b2d497fb1bb68c77921c94be4921be4
     - path: artifacts/ssp/controls/ac.yaml
-      sha256: d127972f9e1f00bd21b6a5782c3c81fe24637d1b47e7f81a827e1b9320eeac8f
+      sha256: 2ce983f042de23d49dc0adfd890c58ffb77e6b84da52e29388464222481c4669
     - path: artifacts/ssp/controls/au.yaml
-      sha256: c5e19bdcd1808b883f5103df56d8ae861cb1a18a1d8bd770ba89762a2be17383
+      sha256: b93b02ae86bae19fe8a3a550502efcb88a603f1b1c88f895f916afb5c4abf091
     - path: artifacts/ssp/controls/cm.yaml
-      sha256: fbe098b95576609806e1e5b81f769aa5411824f39779e3b2d6b3f7ef4e441b9a
+      sha256: dee2def0236729df860f627bbf7c8d1861b89ebc8fa6dee1febccf3e2ba43aa4
     - path: artifacts/ssp/controls/ia.yaml
-      sha256: a9394b137b93e9861490d5ba971b74ae74ed78c89acd6cc8e1ad5578cd6c6b7f
+      sha256: d8b755d835df1a8214ae91c37581afb844c02c3646383ec938b115567efe641e
     - path: artifacts/ssp/controls/sc.yaml
-      sha256: 46e6b101794d6a3abcfea0cd7613110ab1724b8b9fc5b22e1f430360cc3aa542
+      sha256: 5591ab4fe1975e212946c589fb8134ac5399332326847b68175409d4ca218e40
     - path: artifacts/ssp/controls/si.yaml
-      sha256: 348dbff7da0ce51a7f5ae82ff0cabcd823fa0c09bce16a55d17ccb6338fb63c7
+      sha256: a07fd075e0ba80c13707bf4ad59585cfc38f8ab9663eb29184958e6a83999bf5
+    oscal: *id001
   - artifact_id: ART-CONMON
     name: Continuous monitoring strategy
     package: core
     producer: S-5
     status: not-in-scope
     files: []
+    oscal: []
   - artifact_id: ART-CMP
     name: Configuration management plan
     package: core
@@ -152,7 +191,8 @@ package:
     status: present
     files:
     - path: artifacts/ART-CMP.md
-      sha256: 25c3618d5c105928ffc6f2268fdab4519d936fc164de3a0f544cd94bd9495f42
+      sha256: 647b7213c92c6eecd1baa2eea60b8f032f1e6ad2dd69e4dd64b6ad7a24f2727c
+    oscal: []
   - artifact_id: ART-CP
     name: Contingency plan
     package: core
@@ -160,7 +200,8 @@ package:
     status: present
     files:
     - path: artifacts/ART-CP.md
-      sha256: fc5af9d5845ab7ab5b86082e0185bd33435c2299626a75979f86ffac0671b08e
+      sha256: bdd6fde60171a717701eb857a1595e91e5e17924397d35e62d99b8992ea81e54
+    oscal: []
   - artifact_id: ART-IRP
     name: Incident response plan
     package: core
@@ -168,7 +209,8 @@ package:
     status: present
     files:
     - path: artifacts/ART-IRP.md
-      sha256: 114557f8fd5e5502ddac49dff85663a0ed22a9dca330bd98433494ef538ca98f
+      sha256: e05ccffe235e09b10c880ffe5cc4a641823e9a1397fe088718fbec4c2381022b
+    oscal: []
   - artifact_id: ART-STIG
     name: STIG/SRG summary
     package: supporting
@@ -176,9 +218,11 @@ package:
     status: seeded
     files:
     - path: artifacts/ART-STIG.md
-      sha256: bf6466b5751756354d9084ab28f231c5bfcf9948d7e2be6f8eae10d09e2792b5
+      sha256: 1c259dc28275c744ce1c2fc3592cfc08573711ae07a3a81d08a73fb687bbf757
     - path: artifacts/data/stig-summary.yaml
       sha256: 46f8bb21adb0de25b0a56b71103a9a5de5439f3a78481275dd823ba71d1c9748
+    oscal:
+    - oscal/assessment-results.json
   - artifact_id: ART-SAP
     name: Security assessment plan
     package: core
@@ -186,9 +230,11 @@ package:
     status: present
     files:
     - path: artifacts/ART-SAP.md
-      sha256: 276f9806ccf59385cc880b9e31efbdbb1a63ebba9cc5fb1993f1a8c3c4a6a0b3
+      sha256: e0b6c7324bdd4028d82faf944360af0c48d7930f90a3f1fcdddda0981c1be319
     - path: artifacts/data/sap.yaml
-      sha256: 9087f0c76253c69cdad9891f25767989302ad6baef202e36840c37b3d6df39ba
+      sha256: 686a6e3fb3f39bbada31682e39f6ec4e47f57ce33cdcc25b3a88b5226e27614c
+    oscal:
+    - oscal/assessment-plan.json
   - artifact_id: ART-SAR
     name: Security assessment report
     package: core
@@ -196,19 +242,20 @@ package:
     status: present
     files:
     - path: artifacts/ART-SAR.md
-      sha256: 7356e2637f8a5f48b72bce6fe302339aa3a4239195954be09a9eb04f221cb993
+      sha256: ee10ae61213d7328a2fd2c1383bad3f88e23ef5abbe841e1131340823354eed2
     - path: artifacts/sar/results/ac.yaml
-      sha256: 9497e874220e28f29b2bd3fc8b62ac24d63aceb723165b72cbfde91aacd68b28
+      sha256: fc4c5ab34e4517b76b8af337bac6062c0d4af12db7e95b9ad93ed96acedfb9a5
     - path: artifacts/sar/results/au.yaml
-      sha256: bb7104226a2f0ad821576bd332bb4d6271ebfc458f06e24369d29bca32b78d2f
+      sha256: c0878bc6ea7e5c457ea72ba0e8aacd3fd7f59bd3e06cd924fc4df34ab38f571a
     - path: artifacts/sar/results/cm.yaml
-      sha256: dbb61008e0da074c550c87db5e5624e08e6151399dc9a6be7e44ac9203955a03
+      sha256: c0e9253df4bb0c930362cdd5b6995d4c4aad53c1ed6d820a05835f3731aa9f11
     - path: artifacts/sar/results/ia.yaml
-      sha256: d739bf07a461b9a73940502148ccc26c18eafc83ed636e6b00dff52c67e75bfa
+      sha256: 480b1be9dff403d7f491bf9a09f79c2b0c20ab2c707dd449e86803f7f8ec435c
     - path: artifacts/sar/results/sc.yaml
-      sha256: 0d609acfb9f29d3324c1c252691b393b249852851f4b17a22859ef3bd6895614
+      sha256: 3118c119fcff3c508a791336a8ed4541d6c9e8f5f393fc0f33032aab11fb375d
     - path: artifacts/sar/results/si.yaml
-      sha256: 058c4c99f03e54e0d13efc4bc3b1367ab5fa7a5a33b96556b2e9b9b897e95af2
+      sha256: 659848dfcc94702dd3aff4e4f0ce91b13f454c821e1aa07ec42a873432b4d18e
+    oscal: *id002
   - artifact_id: ART-POAM
     name: Plan of action and milestones
     package: core
@@ -216,9 +263,10 @@ package:
     status: present
     files:
     - path: artifacts/ART-POAM.md
-      sha256: 3d1419c2f35fca03e132ea08aeb9dc5758fe394bc900fc1c3c2d0e206f023722
+      sha256: 071a1ecd1338c3e214216b1d55d7c87b31d6e8d2225d3bce461e93afc5b6cdcc
     - path: artifacts/poam/items.yaml
-      sha256: 2262eec41cbc081e6d01fa044316e3747e61917068a7c66a7eb9f55ee2fe608c
+      sha256: bf1a72df1b361e2f37d070af13d0fe9fd8424f63f5d71c8086e0cf13c7b09368
+    oscal: *id003
   - artifact_id: ART-RAR
     name: Risk assessment report
     package: core
@@ -226,9 +274,11 @@ package:
     status: present
     files:
     - path: artifacts/ART-RAR.md
-      sha256: 8c0ee714736aa105e34d0ebf099735e26f3c052dd832433c96675454c8cf9580
+      sha256: 2b1ea48f6beb4457de2dd50b118f0e2d637450dbd767f1ea0804e80d9c708291
     - path: artifacts/data/rar.yaml
-      sha256: a9868bbeba212be4f47f53963ca4d45f027533fb89a3846e54f90b10eb2451a8
+      sha256: f972611868e8ed3b62b7fdf0db9ae04d156c90cabdb7bce6e14fa595a39205c3
+    oscal:
+    - oscal/assessment-results.json
   - artifact_id: ART-AODM
     name: AO decision memo
     package: core
@@ -236,38 +286,60 @@ package:
     status: present
     files:
     - path: artifacts/ART-AODM.md
-      sha256: 9cc785f1521995f3fdda75300aff783056f3fd9336243afc8f7d57e619411649
+      sha256: cf3775cebb3d3818ac3d977e9cd2af526bf7ea0fb12c22484b03ed3c23116886
     - path: artifacts/data/decision.yaml
-      sha256: 2491241b26add6d79dcbdb6d792eee8ae670e69e4d8c8cc072551d0a6c207ebd
+      sha256: 80a5dbcf36a643e1f6d56e82510e6b419957974da764a6ca902c24c63035f4be
+    oscal: *id004
   - artifact_id: ART-AUTHRPT
     name: Authorization report
     package: supporting
     producer: R-5
     status: not-in-scope
     files: []
+    oscal: []
   - artifact_id: ART-CHG
     name: Change log and security impact analyses
     package: supporting
     producer: M-1
     status: not-in-scope
     files: []
+    oscal: []
   - artifact_id: ART-SECRPT
     name: Security and privacy posture report
     package: supporting
     producer: M-5
     status: not-in-scope
     files: []
+    oscal: []
   - artifact_id: ART-DISP
     name: Disposal plan
     package: supporting
     producer: M-7
     status: not-in-scope
     files: []
+    oscal: []
   oscal:
+  - path: oscal/assessment-plan.json
+    model: assessment-plan
+    artifact_id: ART-SAP
+    sha256: d1e0c39c94673151c4933f5078029c1fd767832a16c9e77fc18f4a7ee39f803d
+  - path: oscal/assessment-results.json
+    model: assessment-results
+    artifact_id: ART-SAR
+    sha256: 32387c639079cd8b97f7d12facdd1026bc80d266f0aca1d668ea9edcdd76ebd0
+  - path: oscal/poam.json
+    model: poam
+    artifact_id: ART-POAM
+    sha256: eed065308fa63590e4f190db9c929f3ccdf39244b944911e8534ac89f9505d70
   - path: oscal/profile.json
-    sha256: f180006593fb0442b5b6fd0b71e9807a12e746a17b8b5d22b330916e526e24aa
+    model: profile
+    artifact_id: ART-BASELINE
+    sha256: 0a275303c92da274b942af274aea96b918f5ca754e9a56a496ac317f9ebe40e4
   - path: oscal/ssp.json
-    sha256: 1ad12bbe415c60e30b300a3d72d6790e7c5611c7edc3da1cb81f2c595fd75bbd
+    model: ssp
+    artifact_id: ART-SSP
+    sha256: 51db9180712ca8e11e566e7bffb478f9085fcd5144442ace1374ded726459da2
   reports:
   - path: reports/assumptions.md
-    sha256: d103951bd0ee0f931fbcdcd11506affbde662dc8882b8f9a2b76a0e6d6c037ae
+    sha256: 34f75fd0503f06c81b35d49f69ccb5c25f4a46c0942b4d4f50a9beabd9415c1f
+  degraded_references: []

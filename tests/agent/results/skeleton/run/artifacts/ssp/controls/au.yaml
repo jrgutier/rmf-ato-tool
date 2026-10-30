@@ -2,10 +2,10 @@ family: au
 controls:
   - control_id: au-2
     status: implemented
-    statement: "(a) The OS audit daemon on CMP-GW-OS, the collector (CMP-COLLECTOR) and the console (CMP-WEBUI) are able to log sign-in success and failure, account changes, privilege use, configuration changes, update installation, service start and stop, and radio pairing events. (b) The program coordinated the event list with the Installation Cybersecurity Service Provider, which agreed it on 2026-05-20 so that it feeds the CSSP's SIEM correlation; the CSSP collects and correlates the forwarded events, and that part is inherited. (c) All of these event types are logged continuously on every unit and forwarded over TLS to the SIEM within one minute, with 30 days held locally. (d) The ISSE's rationale: the list records who signed in, who changed accounts, configuration or firewall rules, what software was installed, whether a service was stopped, and whether a sensor was paired, which is what an after-the-fact investigation of an ESG incident needs. Events from the shared fieldtech account name the account, not a person; that weakness is tracked under ac-2. (e) The ISSO and the CSSP review and update the event list annually. The system's own part is event generation and forwarding on its three components; the ISSO reads the ESG-specific SIEM report weekly."
-    responsible_roles: [PER-ISSO, PER-ISSE, PER-CCP]
+    statement: "CMP-GW-OS (audit daemon), CMP-COLLECTOR and CMP-WEBUI log sign-in success and failure, account changes, privilege use, configuration changes, update installation, service start and stop, and radio pairing events. The event list was coordinated and agreed with the Installation CSSP on 2026-05-20 as the set an incident investigation needs, and the ISSO and the CSSP review and update it annually. Events are forwarded over TLS to the CSSP SIEM within one minute and held locally for 30 days; the CSSP correlates them and the ISSO reviews the ESG report weekly. Shared responsibility: the CSSP provides collection and correlation, ESG generates and forwards the events. Events from the shared fieldtech account are logged but name the account, not a person (tracked under ac-2)."
+    responsible_roles: [PER-ISSO, PER-CSSP]
     components: [CMP-GW-OS, CMP-COLLECTOR, CMP-WEBUI]
+    inherited_from: "Installation Cybersecurity Service Provider"
     parameters:
       au-02_odp.04: "annually"
-    inherited_from: "Installation Cybersecurity Service Provider"
-    sources: [INT-013.A5, INT-014.A3, INT-015.A1, INT-012.A3, product/architecture.md#logging, product/test-results.md#dt-2]
+    sources: [INT-013.A3, INT-012.A1, product/architecture.md#logging, product/test-results.md#dt-2]

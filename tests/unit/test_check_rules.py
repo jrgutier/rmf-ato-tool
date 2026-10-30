@@ -17,7 +17,9 @@ from rmf_tool.check import engine, load_registry
 from rmf_tool.run.model import open_run
 
 NEGATIVE = REPO_ROOT / "tests/fixtures/negative"
-BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL, "example": EXAMPLE_RUN}
+BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
+if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3)
+    BASES["example"] = EXAMPLE_RUN
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 

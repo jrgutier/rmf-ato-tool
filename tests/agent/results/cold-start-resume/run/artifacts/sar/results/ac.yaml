@@ -1,0 +1,17 @@
+family: ac
+determinations:
+  - control_id: ac-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    summary: "Examined the 2026-09-12 quarterly account review and the DT-2 results, and interviewed the ISSO: the 3 administrator and 2 auditor identity-service accounts each match an approved access request, the break-glass account esgadmin is sealed and unused since 2026-06, role mapping and SIEM forwarding of sign-in and account-change events work as the SSP states. However, the shared local account fieldtech is used by 10 field technicians, its password changes every 90 days rather than when a technician leaves the team, and its sign-ins cannot be attributed to a person, so account management does not meet the control's intent for that account."
+    finding_refs: [FND-001]
+    sources: [INT-020.A1, product/test-results.md#account-review, product/test-results.md#dt-2, product/conops.md#limitations]
+findings:
+  - id: FND-001
+    control_id: ac-2
+    title: "Shared field-technician account fieldtech is not attributable and not managed on team departure"
+    description: "AC-2 requires accounts to be managed, including changing shared or group account authenticators when individuals are removed from the group, and account use to be monitored. The 2026-09-12 account review and the ISSO interview show the shared local account fieldtech is used by 10 field technicians, its password changes every 90 days and not when a technician leaves the team, and its sign-ins cannot be tied to a person. Release 2.3 (planned 2027-03) replaces it with per-technician accounts; nothing has changed on fielded units."
+    status: open
+    severity: moderate
+    recommendation: "Deliver per-technician local accounts with smart-card login in release 2.3 and remove fieldtech; until then, keep a site-visit log tying each fieldtech session to a named technician and change the fieldtech password whenever a technician leaves the team."
+    sources: [INT-020.A1, product/test-results.md#account-review, product/conops.md#limitations]

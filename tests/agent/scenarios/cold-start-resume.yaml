@@ -1,0 +1,43 @@
+# Agent-lane scenario (plan §4.4, Phase 8): the cold-start drill. Start from the committed
+# skeleton result, delete the AC assessment results and every OSCAL document, and let a fresh
+# agent with AGENTS.md as its only guidance restore the run until `rmf check --final` reports
+# 0 errors. Proves that run state is derived from disk (AGENTS.md "Run protocol pointer").
+name: cold-start-resume
+description: >-
+  The skeleton run on the Example Sensor Gateway, with artifacts/sar/results/ac.yaml and
+  oscal/ removed; the agent resumes from disk alone (ADR-0004 base_run).
+product: tests/agent/products/esg
+base_run: tests/agent/results/skeleton/run
+remove:
+  - artifacts/sar/results/ac.yaml
+  - oscal
+scope:
+  tasks: [P-10, P-11, C-1, C-2, C-3, S-1, S-4, A-2, A-3, A-6, R-2, R-4]
+seeded:
+  - {artifact: ART-ORG-CONTEXT, from_task: P-1, path: artifacts/ART-ORG-CONTEXT.md}
+  - {artifact: ART-STAKE, from_task: P-9, path: artifacts/ART-STAKE.md}
+  - {artifact: ART-INFOTYPES, from_task: P-12, path: artifacts/ART-INFOTYPES.md}
+  - {artifact: ART-INFOTYPES, from_task: P-12, path: artifacts/data/infotypes.yaml}
+  - {artifact: ART-REQ, from_task: P-15, path: artifacts/ART-REQ.md}
+  - {artifact: ART-RA, from_task: P-14, path: artifacts/ART-RA.md}
+  - {artifact: ART-BASELINE, from_task: S-2, path: artifacts/data/tailoring.yaml}
+  - {artifact: ART-BASELINE, from_task: S-3, path: artifacts/data/allocation.yaml}
+  - {artifact: ART-STIG, from_task: I-1, path: artifacts/ART-STIG.md}
+  - {artifact: ART-STIG, from_task: I-1, path: artifacts/data/stig-summary.yaml}
+control_subset: [ac-2, au-2, cm-6, ia-2, sc-7, si-2]
+hash_globs:
+  - AGENTS.md
+  - framework/**/*.yaml
+  - framework/schema/*.json
+  - playbooks/00-run-protocol.md
+  - playbooks/_shared/*.md
+  - playbooks/A/A-3.md
+  - playbooks/A/A-6.md
+  - personas/PER-SCA.md
+  - personas/PER-ISSO.md
+  - personas/PER-ISSM.md
+  - templates/**
+  - tests/agent/products/esg/**
+  - tests/agent/results/skeleton/run/**
+  - tests/agent/prompts/cold-start-resume.md
+  - tests/agent/scenarios/cold-start-resume.yaml

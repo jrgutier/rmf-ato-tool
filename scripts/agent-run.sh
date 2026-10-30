@@ -108,7 +108,16 @@ export UV_PROJECT_ENVIRONMENT="$REPO/.venv-agent"
 export UV_NO_SYNC=1
 cd "$WORK"
 if [[ -z $RUN_DIR ]]; then
+  # A base_run (ADR-0004) is a committed result, excluded from the copy above: bring it in
+  # for `rmf run init` only, then remove it again so no result is visible to the agent.
+  BASE_RUN=$(sed -n 's/^base_run: *//p' "$SCENARIO_FILE" | tr -d "'\"")
+  if [[ -n $BASE_RUN ]]; then
+    [[ -d $REPO/$BASE_RUN ]] || die "base_run $BASE_RUN not found"
+    mkdir -p "$(dirname "$BASE_RUN")"
+    rsync -a "$REPO/$BASE_RUN/" "$BASE_RUN/"
+  fi
   uv run rmf run init --scenario "$SCENARIO_FILE" --run-id "$RUN_ID" >/dev/null
+  [[ -z $BASE_RUN ]] || rm -rf tests/agent/results
 fi
 uv run rmf check "$RUN" --rules RUN-CFG-001 >/dev/null \
   || die "run configuration incomplete: uv run rmf check $RUN --rules RUN-CFG-001 (in $WORK)"
@@ -250,6 +259,11 @@ while :; do
 done
 
 # --- 4. results ------------------------------------------------------------------------
+# The scenario hash covers its base_run: put it back so the final check sees the same files.
+if [[ -n ${BASE_RUN:-} ]]; then
+  mkdir -p "$(dirname "$BASE_RUN")"
+  rsync -a "$REPO/$BASE_RUN/" "$BASE_RUN/"
+fi
 uv run rmf build "$RUN" >/dev/null || true
 uv run rmf check "$RUN" --final --format json >"$WORK/check.json" || true
 rm -rf "$RESULTS"
