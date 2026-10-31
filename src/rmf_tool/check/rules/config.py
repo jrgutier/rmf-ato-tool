@@ -56,6 +56,34 @@ def run_cfg(ctx: Context) -> list[RunFinding]:
         if need.artifact not in have:
             err(f"{need.task} needs {need.artifact} ({need.kind}), whose producer(s) "
                 f"{', '.join(need.producers)} are not in scope; add it to seeded with a file")
+    out += _missing_external_inputs(ctx, active)
+    return out
+
+
+def _has_input(directory: Path) -> bool:
+    """A file or directory of material; guidance in a README.md and dot-files such as
+    .DS_Store do not count."""
+    if directory.is_file():
+        return True
+    return directory.is_dir() and any(
+        p.is_file() and p.name != "README.md" and not p.name.startswith(".")
+        for p in directory.rglob("*"))
+
+
+def _missing_external_inputs(ctx: Context, active: set[str]) -> list[RunFinding]:
+    """An EXT-* input with a ``path`` that an active task needs but the product directory
+    lacks (L-0036). Owned by the task, so it shows once the run reaches it."""
+    run = ctx.run
+    paths = {i: e.data["path"] for i, e in run.framework.index("external_inputs").items()
+             if e.data.get("path")}
+    out = []
+    for t in run.order:
+        for ext in run.tasks[t].get("inputs") or []:
+            if t in active and ext in paths and not _has_input(run.product_dir / paths[ext]):
+                out.append(make(RULE, f"{t} needs {ext}, expected under "
+                                f"{run.config.get('product')}/{paths[ext]}/ (see its README.md)"
+                                " but none is there; add it or defer the task", RUN_FILE,
+                                owners={t}))
     return out
 
 

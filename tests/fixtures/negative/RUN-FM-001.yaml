@@ -1,9 +1,15 @@
 rule: RUN-FM-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a fact restated in artifact front-matter (a sixth key)
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: artifacts/ART-INV.md
     old: "touched_by: [P-10, I-2]\n"
     new: "touched_by: [P-10, I-2]\nsystem_name: Field Data Relay\n"
+  - only: [example]
+    op: replace_text
+    file: artifacts/ART-INV.md
+    old: "touched_by: [P-10, I-2, M-1]\n"
+    new: "touched_by: [P-10, I-2, M-1]\nsystem_name: Example Tactical UAS GCS\n"
 expect: {errors: [RUN-FM-001]}

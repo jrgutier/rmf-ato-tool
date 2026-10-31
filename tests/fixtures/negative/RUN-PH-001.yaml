@@ -1,9 +1,15 @@
 rule: RUN-PH-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a template placeholder left in artifact prose
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: artifacts/ART-SD.md
     old: "Sign-in relies on the separately authorized enterprise identity provider [[INT-003.A1]]."
     new: "Sign-in relies on <<FILL: each leveraged authorization>> [[INT-003.A1]]."
+  - only: [example]
+    op: replace_text
+    file: artifacts/ART-SD.md
+    old: "The system inherits boundary protection"
+    new: "<<FILL: each inherited protection>>"
 expect: {errors: [RUN-PH-001]}

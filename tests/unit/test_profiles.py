@@ -18,8 +18,8 @@ def test_phase_marker_files_read(tmp_path):
 
 
 def test_unknown_marker_rejected(tmp_path):
-    close(tmp_path, "p9")
-    with pytest.raises(ProfileError, match="p9"):
+    close(tmp_path, "p99")
+    with pytest.raises(ProfileError, match="p99"):
         closed_phases(tmp_path)
 
 
@@ -58,7 +58,7 @@ def test_fork_profile_skips_examples_and_agent(tmp_path):
 
 def test_unknown_profile_rejected(tmp_path):
     with pytest.raises(ProfileError, match="unknown profile"):
-        resolve(tmp_path, "p8")
+        resolve(tmp_path, "p99")
 
 
 def test_p3b_requires_p2x_closed(tmp_path):

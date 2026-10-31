@@ -9,7 +9,7 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
-from rmf_tool import agents_md, lessons, playbooks_sync, refs
+from rmf_tool import agents_md, doc_counts, lessons, playbooks_sync, refs
 from rmf_tool.check import agent_lane, load_registry
 from rmf_tool.findings import Finding
 from rmf_tool.framework import validate as framework_validate
@@ -199,6 +199,9 @@ STEPS: tuple[Step, ...] = (
          _golden_oscal),
     # p7: the example fork's synthetic run, every run rule (OSCAL and staleness included).
     Step(f"rmf check --final {EXAMPLE_RUN}", "p7", RUN_RULES, _example),
+    # p8: documented counts equal computed values.
+    Step("documented counts", "p8", (doc_counts.RULE,),
+         lambda ctx: _findings_step(doc_counts.check(ctx.root))),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

@@ -1,9 +1,14 @@
 rule: LES-001
-bases: [minimal, hybrid]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, hybrid, example]
 description: a RETRY entry without a lesson reference
 mutations:
-  - op: replace_text
+  - only: [minimal, hybrid]
+    op: replace_text
     file: journal.md
     old: " · lesson: L-0020"
     new: ""
+  - only: [example]
+    op: append_text
+    file: journal.md
+    text: "\n## 2026-10-29T22:30Z · RETRY · task A-1\nThe plan failed a check and was rewritten.\n"
 expect: {errors: [LES-001]}

@@ -1,8 +1,11 @@
 # Proposed values only (schema framework/schema/product-profile.schema.json). RMF tasks
 # confirm them in interviews and write the accepted values to the run's facts.yaml; nothing
 # reads this file as a fact. Replace every value below with your program's proposal.
+{% set acr = (("S" if slug[0] in "0123456789" else "") ~ slug | upper | replace("_", "-"))
+    | truncate(16, True, "", 0) -%}
+{% set acr = acr.rstrip("-") -%}
 name: {{ slug }}
-acronym: {{ slug | upper | replace("_", "-") | truncate(16, True, "") }}
+acronym: {{ acr if acr | length > 1 else acr ~ "X" }}
 description: >-
   One paragraph: what the system does, for whom, and where it operates.
 pathway: PW-MCA          # an ID from framework/pathways.yaml

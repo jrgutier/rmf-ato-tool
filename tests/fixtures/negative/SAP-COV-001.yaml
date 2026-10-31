@@ -1,9 +1,15 @@
 rule: SAP-COV-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: the SAP excludes a control that is not in the baseline (a stale scope)
 mutations:
-  - op: set_field
+  - only: [minimal]
+    op: set_field
     file: artifacts/data/sap.yaml
     path: scope.excluded_controls
     value: [{control_id: pm-1, rationale: Assessed with the organization's program plan.}]
+  - only: [example]
+    op: set_field
+    file: artifacts/data/sap.yaml
+    path: scope.excluded_controls
+    value: [{control_id: sc-29, rationale: Assessed with the organization's program plan.}]
 expect: {errors: [SAP-COV-001]}

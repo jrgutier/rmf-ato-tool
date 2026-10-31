@@ -1,8 +1,13 @@
 rule: SSP-COV-002
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: an SSP statement for a control outside the baseline (ac-3)
 mutations:
-  - op: append_text
+  - only: [minimal]
+    op: append_text
     file: artifacts/ssp/controls/ac.yaml
     text: "  - control_id: ac-3\n    status: implemented\n    statement: The relay service enforces role-based access.\n    responsible_roles: [PER-ISSO]\n    components: [CMP-RELAY]\n    sources: [product/users.md#operators]\n"
+  - only: [example]
+    op: append_text
+    file: artifacts/ssp/controls/ac.2.yaml
+    text: "  - control_id: sc-29\n    status: implemented\n    statement: The station image enforces heterogeneity.\n    responsible_roles: [PER-ISSO]\n    components: [CMP-WS-OS]\n    sources: [INT-038.A1]\n"
 expect: {errors: [], warnings: [SSP-COV-002]}

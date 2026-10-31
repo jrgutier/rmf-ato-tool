@@ -1,6 +1,5 @@
-"""The rule registry (plan §6.5): exactly 63 rules (27 repo, 36 run), each with a phase
-and a negative fixture or exemption; rules of phases that have checks are implemented and
-their fixtures exist."""
+"""The rule registry (plan §6.5): each rule has a phase and a negative fixture or exemption;
+rules of phases that have checks are implemented and their fixtures exist."""
 
 from pathlib import Path
 
@@ -11,13 +10,18 @@ from ruamel.yaml import YAML
 from rmf_tool import ci
 from rmf_tool.check import REGISTRY_PATH, load_registry, registry_errors, rules_by_id
 from rmf_tool.framework.validate import CHECKED_ELSEWHERE, IMPLEMENTED
+from rmf_tool.gitutil import resolve_base, show_file
 
-REPO_RULES = {
-    "FW-SCHEMA-001", "FW-ID-001", "FW-ID-002", "FW-REF-001", "FW-ART-001", "FW-ORD-001",
-    "FW-IO-001", "FW-RACI-001", "FW-DAG-001", "FW-CITE-001", "FW-CITE-002", "FW-TASK-001",
-    "FW-PB-001", "FW-PB-002", "FW-PER-001", "FW-PER-002", "FW-MAN-001", "REF-001", "REF-002",
-    "REF-003", "REF-004", "REF-005", "REF-006", "LES-002", "LES-003", "DOC-001", "AGENT-001",
+REGISTRY_REL = "src/rmf_tool/check/registry.yaml"
+RUN_RULES = {
+    "AODM-001", "CONMON-001", "DEGRADED-001", "FACTS-001", "GEN-STALE-001", "HYB-001",
+    "HYB-002", "HYB-003", "INT-001", "INV-BND-001", "INV-BND-002", "JOURNAL-001", "LES-001",
+    "OSCAL-001", "OSCAL-002", "PKG-001", "POAM-CTL-001", "POAM-FLD-001", "RAR-001",
+    "RUN-ART-001", "RUN-CFG-001", "RUN-FM-001", "RUN-PH-001", "RUN-STALE-001", "SAP-COV-001",
+    "SAR-COV-001", "SAR-POAM-001", "SSP-COV-001", "SSP-COV-002", "SSP-DUP-001", "SSP-STAT-001",
+    "STIG-001", "STIG-002", "TASK-DEF-001", "TRACE-001", "TRACE-002",
 }
+
 SKELETON_RULES = {
     "RUN-CFG-001", "RUN-FM-001", "RUN-ART-001", "FACTS-001", "GEN-STALE-001", "SSP-COV-001",
     "SAR-POAM-001", "TRACE-001", "TRACE-002", "HYB-001", "HYB-002", "OSCAL-001", "OSCAL-002",
@@ -25,11 +29,63 @@ SKELETON_RULES = {
 }
 
 
-def test_registry_rule_count():
+def test_registry_rules_are_unique_and_every_repo_rule_runs_in_ci():
+    """Repo-scope rules of phases that have checks are each run by a `rmf ci` step or by
+    `rmf validate`; DOC-002 pins the counts the documents state."""
     rules = load_registry()
-    assert len(rules) == 63
-    assert {r.id for r in rules if r.scope == "repo"} == REPO_RULES
-    assert sum(r.scope == "run" for r in rules) == 36
+    assert len({r.id for r in rules}) == len(rules)
+    assert {r.scope for r in rules} == {"repo", "run"}
+    step_rules = {rule for step in ci.STEPS for rule in step.rules}
+    runs_in_ci = step_rules | set(IMPLEMENTED) | set(CHECKED_ELSEWHERE)
+    active = phases_with_checks()
+    assert {r.id for r in rules if r.scope == "repo" and r.phase in active} <= runs_in_ci
+
+
+def removed_rule_ids(root: Path) -> set[str]:
+    """INV-3: rule IDs in the registry at resolve_base() that the current one lacks. Nothing
+    is checked when there is no base or the base has no registry."""
+    base = resolve_base(root)
+    if base.ref is None:
+        return set()
+    text = show_file(root, base.ref, REGISTRY_REL)
+    if text is None:
+        return set()
+    old = {r["id"] for r in YAML(typ="safe").load(text)["rules"]}
+    current = {r["id"] for r in YAML(typ="safe").load(
+        (root / REGISTRY_REL).read_text(encoding="utf-8"))["rules"]}
+    return old - current
+
+
+def test_rule_ids_are_only_ever_added():
+    assert removed_rule_ids(REPO_ROOT) == set()
+
+
+def test_run_rule_ids_are_pinned():
+    assert {r.id for r in load_registry() if r.scope == "run"} >= RUN_RULES
+
+
+def test_a_removed_rule_id_is_reported(git_repo):
+    def registry(*ids: str) -> str:
+        return "rules:\n" + "".join(f"  - id: {i}\n" for i in ids)
+
+    assert removed_rule_ids(git_repo.root) == set()
+    git_repo.write(REGISTRY_REL, registry("A-001", "B-001"))
+    git_repo.commit("base")
+    git_repo.git("checkout", "-q", "-b", "work")
+    git_repo.write(REGISTRY_REL, registry("A-001", "B-001", "C-001"))
+    git_repo.commit("add")
+    assert removed_rule_ids(git_repo.root) == set()
+    git_repo.write(REGISTRY_REL, registry("A-001", "C-001"))
+    git_repo.commit("remove B-001")
+    assert removed_rule_ids(git_repo.root) == {"B-001"}
+
+
+def test_no_registry_at_the_base_checks_nothing(git_repo):
+    git_repo.write("README.md", "x")
+    git_repo.commit("base")
+    git_repo.write(REGISTRY_REL, "rules:\n  - id: A-001\n")
+    git_repo.commit("add registry")
+    assert removed_rule_ids(git_repo.root) == set()
 
 
 def test_phases_follow_the_plan():

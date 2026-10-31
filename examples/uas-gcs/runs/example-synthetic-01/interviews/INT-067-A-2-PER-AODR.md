@@ -23,6 +23,6 @@ Asked of: PER-AODR · Task: A-2 · Control focus: ca-2
 Does the schedule fit the milestones, and is the plan approved?
 
 **A2 {#INT-067.A2}** respondent: simulated · tag: SIMULATED · basis: [[INT-066.A4]] [[INT-065.A1]]
-> The 2026-11-09 to 2026-12-04 window lands the SAR ahead of the authorization decision the
+> The 2026-09-14 to 2026-10-09 window lands the SAR ahead of the authorization decision the
 > program needs. Under the AO's written delegation for assessment plans, I approve the plan as
 > written. The open S-6 conditions stay open items for the SCA to assess.

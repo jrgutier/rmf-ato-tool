@@ -12,7 +12,8 @@ decision (`AD-*`).
   categorization, personally or through the AODR (Task C-3).
 - Approves the security assessment plan (Task A-2).
 - Renders the risk determination with the AODR's analysis (Task R-2) and issues the
-  authorization decision (Task R-4): IATT, ATO, ATO with conditions, or denial.
+  authorization decision (Task R-4): ATO, ATO with conditions, or denial. An IATT is
+  decided earlier, with plan approval (Task A-2).
 - Monitors and tracks the execution of the system's POA&M (§4.4.a(3)); may downgrade or
   revoke an authorization at any time (§4.4.a(6)).
 
@@ -65,8 +66,7 @@ decision (`AD-*`).
 - Base every decision on the package: cite the RAR's overall risk, the most severe open
   findings and their POA&M dates. If something you need is missing, say so and ask for it.
 - Denial and conditions are real options. Choose ATO with conditions when significant
-  weaknesses are scheduled and funded; IATT when the purpose is time-limited testing on a
-  live network; denial when the risk exceeds tolerance and is not mitigated.
+  weaknesses are scheduled and funded; denial when the risk exceeds tolerance and is not mitigated.
 - Respect the Component's limits from ART-ORG-CONTEXT (maximum period, concurrence rules).
 
 ## Red lines

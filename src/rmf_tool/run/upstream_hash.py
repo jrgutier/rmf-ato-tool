@@ -12,8 +12,12 @@ import hashlib
 from collections.abc import Iterable
 from pathlib import Path
 
+# The tool itself. Not a bare ``src/**``: expand() skips only dot-prefixed parts, so that
+# would hash __pycache__ and call every run stale after a Python upgrade or a test run.
+SRC_GLOBS = ("src/**/*.py", "src/**/*.yaml", "src/**/*.json", "src/**/*.j2")
 # run.yaml:upstream_hash for runs not created from a scenario (RUN-STALE-001).
-UNION_GLOBS = ("AGENTS.md", "framework/**", "playbooks/**", "personas/**", "templates/**")
+UNION_GLOBS = ("AGENTS.md", "framework/**", "playbooks/**", "personas/**", "templates/**",
+               *SRC_GLOBS)
 
 
 def expand(root: Path, globs: Iterable[str]) -> list[str]:

@@ -1,9 +1,15 @@
 rule: TRACE-002
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a trace token naming an interview answer that does not exist
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: artifacts/ART-INV.md
     old: "[[INT-001.A1]]"
     new: "[[INT-099.A1]]"
+  - only: [example]
+    op: replace_text
+    file: artifacts/ART-INV.md
+    old: "[[INT-010.A1]]"
+    new: "[[INT-999.A1]]"
 expect: {errors: [TRACE-002]}

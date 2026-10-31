@@ -47,10 +47,10 @@ Asked of: PER-SCA · Task: A-2 · Control focus: ca-2
 What is the schedule?
 
 **A4 {#INT-066.A4}** respondent: simulated · tag: SIMULATED · basis: [[INT-063.A2]]
-> Kickoff 2026-11-09. Document examination and interviews 2026-11-10 to 2026-11-13. Spot scans
-> on test stations 2026-11-17 and 2026-11-18. We observe the cp-4 and ir-3 tabletops the
-> program scheduled for the week of 2026-11-16. Out-brief 2026-11-25; SAR draft by
-> 2026-12-04.
+> Kickoff 2026-09-14. Document examination and interviews 2026-09-15 to 2026-09-18. Spot scans
+> on test stations 2026-09-22 and 2026-09-23. We examine the cp-4 and ir-3 plans and the
+> tabletop schedule on 2026-09-21; the tabletops the program scheduled for the week of
+> 2026-11-16 fall after the window. Out-brief 2026-10-01; SAR draft by 2026-10-09.
 
 ### Q5 {#INT-066.Q5}
 Asked of: PER-SCA · Task: A-2 · Control focus: ca-2, ra-5

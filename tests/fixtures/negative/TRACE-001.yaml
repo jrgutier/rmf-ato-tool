@@ -1,9 +1,15 @@
 rule: TRACE-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a prose section without a trace token
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: artifacts/ART-INV.md
     old: "databases and one software item [[product/inventory.md#items]]."
     new: "databases and one software item."
+  - only: [example]
+    op: replace_text
+    file: artifacts/ART-INV.md
+    old: "tracked as a package\n[[INT-010.A3]]; the planned planner replacement is not chosen and is not listed [[INT-011.A2]]."
+    new: "tracked as a package; the planned planner replacement is not chosen and is not listed."
 expect: {errors: [TRACE-001]}

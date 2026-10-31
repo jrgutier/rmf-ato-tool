@@ -10,16 +10,18 @@ from rmf_tool.run import scope
 from rmf_tool.run.model import (
     ARTIFACTS_DIR,
     ASSUMPTIONS_FILE,
-    BASELINE_FILE,
     FACTS_FILE,
     FAMILY_TOKEN,
     INTERVIEWS_DIR,
     JOURNAL_FILE,
     MANIFEST_FILE,
+    YamlError,
+    read_yaml,
 )
 
 FM = "RUN-FM-001"
 ART = "RUN-ART-001"
+PROFILE_FILE = "profile.yaml"
 PH = "RUN-PH-001"
 PLACEHOLDER = "<<FILL"  # templates/ placeholders: <<FILL: what to write>>
 
@@ -62,7 +64,7 @@ def front_matter(ctx: Context) -> list[RunFinding]:
     for aid in run.artifacts:
         owners = set(run.writers(aid))
         for rel, schema in run.data_files(aid):
-            if schema is None or rel in (BASELINE_FILE, MANIFEST_FILE):
+            if schema is None or rel == MANIFEST_FILE:
                 continue
             data = ctx.data(rel)
             if data is None:
@@ -83,7 +85,23 @@ def front_matter(ctx: Context) -> list[RunFinding]:
         else:
             for e in run.schema_errors("facts", data if data is not None else {}):
                 out.append(make(FM, f"facts.schema.json: {e}", FACTS_FILE))
+    out += _product_profile(run)
     return out
+
+
+def _product_profile(run) -> list[RunFinding]:
+    """product/profile.yaml is optional; when present it has the shape of
+    product-profile.schema.json (proposed values only)."""
+    path = run.product_dir / PROFILE_FILE
+    if not path.is_file():
+        return []
+    shown = f"{run.config.get('product')}/{PROFILE_FILE}"
+    try:
+        data = read_yaml(path)
+    except YamlError as exc:
+        return [make(FM, str(exc), shown, run_wide=True)]
+    return [make(FM, f"product-profile.schema.json: {e}", shown, run_wide=True)
+            for e in run.schema_errors("product-profile", data if data is not None else {})]
 
 
 def core_present(ctx: Context) -> list[RunFinding]:

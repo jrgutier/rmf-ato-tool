@@ -1,7 +1,11 @@
 rule: RUN-ART-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
-description: a core artifact produced in scope (ART-CP, S-4) is missing
+bases: [minimal, example]
+description: a core artifact produced in scope is missing (ART-CP on valid_minimal; ART-SD on the example, which nothing else cites)
 mutations:
-  - op: delete_file
+  - only: [minimal]
+    op: delete_file
     file: artifacts/ART-CP.md
+  - only: [example]
+    op: delete_file
+    file: artifacts/ART-SD.md
 expect: {errors: [RUN-ART-001]}

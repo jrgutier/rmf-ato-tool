@@ -17,6 +17,7 @@ has cited them. Replace the guidance in each file with your system's material.
 | `data-flows.md` | data flows (`DF-*`) with source, destination, path, information and protection |
 | `hw-sw-inventory.md` | hardware, software and firmware items with stable `INV-###` IDs and their components |
 | `test-results.md` | developer and developmental test results, scans and records the assessor may reuse |
+| `monitoring/` | continuous monitoring data for M-2 (EXT-MONITORING): see `monitoring/README.md`; needed only when the run includes M-2 |
 
 ## Stable identifiers
 

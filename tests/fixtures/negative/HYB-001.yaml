@@ -1,9 +1,15 @@
 rule: HYB-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a simulated answer without its SIMULATED tag
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: interviews/INT-001-P-10-PER-PM.md
+    old: "respondent: simulated · tag: SIMULATED · "
+    new: "respondent: simulated · "
+  - only: [example]
+    op: replace_text
+    file: interviews/INT-001-P-1-PER-CIO.md
     old: "respondent: simulated · tag: SIMULATED · "
     new: "respondent: simulated · "
 expect: {errors: [HYB-001]}

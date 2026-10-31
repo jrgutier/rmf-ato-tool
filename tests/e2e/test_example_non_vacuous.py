@@ -1,6 +1,7 @@
 """PM-6 on the example fork run (plan §3): an honest run of the seeded product is not
-vacuously green. The run-rule mutation fixtures are re-applied to it in
-tests/unit/test_check_rules.py (base ``example``)."""
+vacuously green. These tests read the committed run. The run-rule mutation fixtures that
+list ``example`` among their bases (all but three; see test_example_base_coverage_ge_80pct)
+are applied to a copy of it in tests/unit/test_check_rules.py."""
 
 import json
 
@@ -58,5 +59,16 @@ def test_seeded_weaknesses_reach_the_poam():
 
 
 def test_metrics_report_the_status_mix():
+    """metrics.json agrees with the SSP and the baseline on disk and shows a real mix."""
     metrics = json.loads((EXAMPLE_RUN / "reports/metrics.json").read_text(encoding="utf-8"))
-    assert metrics
+    controls = records("artifacts/ssp/controls", "controls")
+    on_disk = {}
+    for control in controls:
+        on_disk[control["status"]] = on_disk.get(control["status"], 0) + 1
+    baseline = json.loads((EXAMPLE_RUN / "baseline.json").read_text(encoding="utf-8"))
+
+    assert metrics["ssp_status_mix"] == on_disk
+    assert sum(on_disk.values()) == len(controls) == len(baseline["controls"])
+    assert metrics["coverage"]["baseline"] == metrics["coverage"]["ssp_statements"] == len(controls)
+    assert len(on_disk) >= 4 and metrics["done"] is True
+    assert metrics["answers"]["total"] > 0 and metrics["assumptions"] > 0

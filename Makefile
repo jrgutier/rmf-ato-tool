@@ -15,10 +15,10 @@ ci-release:
 test:
 	uv run pytest -q
 
-# Regenerate MANUAL.md and docs/manual/ (rmf render is added in Phase 4).
+# Regenerate MANUAL.md and docs/manual/ from framework/.
 render:
 	uv run rmf render
 
-# Fetch, verify, extract and index references (rmf refs is added in Phase 2).
+# Fetch, verify, extract and index references.
 refs:
 	uv run rmf refs sync

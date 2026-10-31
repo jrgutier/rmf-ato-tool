@@ -1,10 +1,16 @@
 rule: GEN-STALE-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: generated OSCAL hand-edited (no rmf build afterwards)
 build: false
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: oscal/ssp.json
     old: "Field Data Relay System Security Plan (draft)"
     new: "Field Data Relay System Security Plan (edited)"
+  - only: [example]
+    op: replace_text
+    file: oscal/ssp.json
+    old: "Example Tactical UAS Ground Control Station System Security Plan (draft)"
+    new: "Example Tactical UAS Ground Control Station System Security Plan (edited)"
 expect: {errors: [GEN-STALE-001]}

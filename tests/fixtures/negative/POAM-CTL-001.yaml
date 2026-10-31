@@ -1,9 +1,15 @@
 rule: POAM-CTL-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a POA&M item names a control outside the baseline (ac-3)
 mutations:
-  - op: set_field
+  - only: [minimal]
+    op: set_field
     file: artifacts/poam/items.yaml
     path: items.0.control_id
     value: ac-3
+  - only: [example]
+    op: set_field
+    file: artifacts/poam/items.yaml
+    path: items.0.control_id
+    value: sc-29
 expect: {errors: [POAM-CTL-001]}

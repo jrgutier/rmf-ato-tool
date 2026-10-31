@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 63 rules, 27 repo-scope and 36 run-scope. Authoritative;
+# Rule registry (plan §6.5): 64 rules, 28 repo-scope and 36 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -241,6 +241,15 @@ rules:
     summary: AGENTS.md sections, length or CLI command list wrong
     fixture: tests/unit/test_agents_md.py::test_commands_registered_and_documented
     hint: Keep the eight fixed H2 sections, at most 250 lines, and list every registered command.
+  - id: DOC-002
+    scope: repo
+    severity: E
+    ac: [AC-24]
+    phase: p8
+    applies_after: null
+    summary: a count stated in README.md, AGENTS.md or the registry.yaml header differs from the computed value
+    fixture: tests/unit/test_doc_counts.py::test_stale_counts_are_reported
+    hint: Edit the statement to the computed count the message names, or regenerate what it describes.
   - id: AGENT-001
     scope: repo
     severity: profile

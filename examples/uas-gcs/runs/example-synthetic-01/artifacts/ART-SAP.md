@@ -58,7 +58,7 @@ system [[INT-065.A2]].
 
 ## Schedule
 
-Kickoff, examination and interviews, observation of the cp-4 and ir-3 tabletops, spot scans
+Kickoff, examination and interviews, examination of the cp-4 and ir-3 plans and tabletop schedule, spot scans
 and out-brief, with the SAR draft at the end of the window; the dates are in
 `artifacts/data/sap.yaml` [[INT-066.A4]].
 

@@ -23,22 +23,26 @@ persona cards. Outputs are drafts; they never replace a real SCA or AO.
 ## Repo layout
 
 Upstream (this template) owns everything except `product/` and `runs/`, which the
-fork owns. Paths marked † are created by later build phases and may not exist yet.
+fork owns. A fork may delete `examples/`.
 
 | Path | Owner | Contents |
 |---|---|---|
 | `src/rmf_tool/` | upstream | the `rmf` CLI (Python, `uv`) |
 | `tests/` | upstream | unit, integration, e2e (`slow`), agent lane (`agent`, local only) |
-| `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
+| `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, 22 personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
 | `playbooks/` | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
 | `personas/` | upstream | persona cards, one per DoD RMF role |
 | `templates/` | upstream | artifact, interview, journal and workspace templates |
 | `references/` | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
 | `MANUAL.md`, `docs/manual/` | generated | rendered from `framework/`; never hand-edited |
 | `docs/LESSONS.md` | upstream | append-only lessons log |
+| `docs/CHECKS.md` | generated | the rule catalog rendered from `registry.yaml` (`rmf checks-doc`) |
+| `docs/adr/` | upstream | architecture decision records |
+| `docs/audits/` | upstream | dated audits of the repository against its sources, with finding IDs |
 | `.phases/` | upstream | `<phase>.closed` markers; their set selects the default CI profile |
 | `scripts/` | upstream | `bootstrap.sh`, `agent-run.sh` (agent-lane harness, local only) |
 | `docs/spikes/` | upstream | time-boxed investigations and their decisions |
+| `examples/` | upstream | `uas-gcs`: a fictional example fork with a synthetic run (`rmf ci` checks it) |
 | `product/` | fork | product material the agent ingests; `profile.yaml` holds proposed values only |
 | `runs/<run-id>/` | fork | one simulated or hybrid run: facts, interviews, artifacts, OSCAL, journal |
 
@@ -97,7 +101,7 @@ error. Commands that report support `--format json`.
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -112,7 +116,8 @@ p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 t
 `rmf validate`; p6 `rmf check --final` with every run rule on `valid_minimal` (scope all)
 and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL;
 p7 `rmf check --final` with every run rule on `examples/uas-gcs/runs/example-synthetic-01`
-(skipped under `--profile fork`).
+(skipped under `--profile fork`); p8 DOC-002, the counts stated in README.md, AGENTS.md
+and the registry header equal the registry, framework and reference index.
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 
@@ -120,12 +125,12 @@ into `docs/CHECKS.md`.
 
 1. Create a repository from this template and clone it (README.md has the LFS note).
 2. `make bootstrap` (add `EXTRACT=1` for the AGPL PDF extractor, `OCR=1` for OCR tools).
-3. `uv run rmf new <slug> --dir .` scaffolds `product/` and `runs/`.
+3. `uv run rmf new <slug> --dir .` scaffolds `product/` and `runs/` and starts the first
+   run (`--mode synthetic|hybrid`). Use `rmf run init` only for a further run.
 4. Fill in `product/` with your system's material (mind the CUI rule, INV-7).
-5. `uv run rmf run init --mode synthetic|hybrid`.
-6. Follow `playbooks/00-run-protocol.md` until the run reports done.
-7. `uv run rmf ci --profile fork`.
-8. Send lessons that touch upstream files back upstream as a pull request.
+5. Follow `playbooks/00-run-protocol.md` until the run reports done.
+6. `uv run rmf ci --profile fork`.
+7. Send lessons that touch upstream files back upstream as a pull request.
 
 ## Run protocol pointer
 
@@ -145,7 +150,8 @@ Two lessons with the same tag and rule force a promotion.
 
 None yet.
 
-L-0003 is promoted to INV-7; the other seed lessons are promoted to checks.
+Of the seed lessons, L-0003 is promoted to INV-7 and L-0007 is `none`
+(planning-tooling behaviour outside this repo); the others are promoted to checks.
 
 ## Bumping OSCAL / references
 

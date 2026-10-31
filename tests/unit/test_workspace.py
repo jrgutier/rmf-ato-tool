@@ -178,3 +178,19 @@ def test_remove_requires_base_run(tmp_path):
 def test_outside_a_repository(tmp_path):
     with pytest.raises(WorkspaceError, match="not an rmf repository"):
         init_run(tmp_path, tmp_path, as_of=AS_OF)
+
+
+@pytest.mark.parametrize("slug", ["demo", "tactical-gcs-sys-17", "17th-wing-gcs",
+                                  "abcdefghijklmnop-qrs", "ab--", "a---"])
+def test_new_profile_matches_its_schema_for_any_accepted_slug(tmp_path, slug):
+    new_workspace(tmp_path / "ws", slug, REPO_ROOT, as_of=AS_OF)
+    profile = read_yaml(tmp_path / "ws/product/profile.yaml")
+    assert schema_errors(REPO_ROOT, "product-profile", profile) == []
+    assert profile["name"] == slug
+
+
+def test_new_renders_every_real_template(tmp_path):
+    new_workspace(tmp_path / "ws", "demo", REPO_ROOT, as_of=AS_OF)
+    monitoring = (tmp_path / "ws/product/monitoring/README.md").read_text()
+    assert "{#anchor}" in monitoring and "{%" not in monitoring
+    assert "{{" not in (tmp_path / "ws/product/README.md").read_text()

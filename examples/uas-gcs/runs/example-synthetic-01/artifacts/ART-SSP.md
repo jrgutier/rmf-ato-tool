@@ -76,8 +76,9 @@ These statements are `partial` or `planned`; each names its gap and plan in the 
   [[product/architecture.md#interconnections]].
 - **Privacy threshold analysis not approved** (pt-2, pt-3, ra-8): the privacy officer obtains
   approval before S-6 [[INT-050.A1]].
-- **Assessment, authorization and monitoring not started** (ca-2, ca-2.1, ca-5, ca-6, ca-7.1,
-  ca-7.3, ca-7.4, ca-7.5, ca-7.6, ra-7): planned in A-1 to A-6, R-4 and the S-5 strategy.
+- **Authorization and monitoring not started** (ca-5, ca-6, ca-7.1, ca-7.3, ca-7.4, ca-7.5,
+  ca-7.6, ra-7): planned in A-6, R-4 and the S-5 strategy. (ca-2 and ca-2.1 were assessed in
+  A-3; see the A-5 section.)
 
 ## Plan Review and Approval (S-6)
 
@@ -131,7 +132,11 @@ planner and GDT log forwarding [[INT-063.A3]]. Conditions 1 and 2 had no new inf
 
 ## Changes from remediation (A-5)
 
-No control statement changed in A-5: no finding was remediated during the assessment period,
-so no implementation changed [[INT-096.A1]] [[INT-097.A1]]. The plans and tabletops behind
+No finding was remediated during the assessment period, so no implementation changed
+[[INT-096.A1]] [[INT-097.A1]]. Four statements were corrected to match the A-3 determinations:
+ca-2 and ca-2.1 moved from `planned` to `implemented` (the independent SCA team assessed the
+baseline under the approved plan) [[INT-076.A2]]; pl-9 and si-4.19 moved from `implemented` to
+`partial` (planner and GDT logs are not forwarded, FND-050; the privileged-activity review runs
+only in test weeks, FND-067) [[INT-080.A3]] [[INT-091.A2]]. The plans and tabletops behind
 condition 3 are still drafts and scheduled exercises [[INT-096.A2]]. All 69 findings go to the
 POA&M at A-6.

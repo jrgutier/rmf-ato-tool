@@ -1,8 +1,13 @@
 rule: SSP-STAT-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: an inherited control without inherited_from
 mutations:
-  - op: delete_field
+  - only: [minimal]
+    op: delete_field
     file: artifacts/ssp/controls/sc.yaml
+    path: controls.0.inherited_from
+  - only: [example]
+    op: delete_field
+    file: artifacts/ssp/controls/ac.1.yaml
     path: controls.0.inherited_from
 expect: {errors: [SSP-STAT-001]}

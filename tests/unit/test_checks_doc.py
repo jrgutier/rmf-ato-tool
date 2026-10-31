@@ -19,7 +19,10 @@ def test_every_rule_listed_once_and_render_is_deterministic():
     assert text == checks_doc.render()
     for rule in load_registry():
         assert text.count(f"\n| {rule.id} |") == 1, rule.id
-    assert "63 rules: 27 repository-scope, 36 run-scope." in text
+    rules = load_registry()
+    counts = {scope: sum(r.scope == scope for r in rules) for scope in ("repo", "run")}
+    assert (f"{len(rules)} rules: {counts['repo']} repository-scope, "
+            f"{counts['run']} run-scope.") in text
     assert "W for pending-acquisition before p2x" in text  # severity notes survive
 
 

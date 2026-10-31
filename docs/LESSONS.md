@@ -271,3 +271,24 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the module uses `pytest.importorskip("pymupdf")`; without the extra its tests are skipped. Added tests/e2e/test_fork_template.py (clone without examples/, `rmf new`, `rmf ci --profile fork`), which bootstraps a fresh default environment.
 - Rule: a test that needs an optional extra must skip, not fail, when the extra is absent; gate at least once in a default (no-extras) environment.
 - Promotion: check: test_fork_without_examples_passes_fork_profile
+
+## L-0039 · 2026-10-31 · run: phase-8 · tags: monitor, inputs, templates
+- Symptom: a fork that reached M-2 stalled with no `product/monitoring/` and no hint where the data goes; `rmf check` did not report it (the stale-template gap behind L-0036, whose fix lived only in the example).
+- Root cause: external inputs had no checkable location, and the fork template (`templates/workspace/product/`) had no guidance for them, so a fix made in one place did not reach the other.
+- Fix: `framework/external-inputs.yaml` gives an input an optional `path` (set on EXT-MONITORING); RUN-CFG-001 reports an active task whose input path holds nothing but a README.md, owned by that task so it shows when the run reaches it; the template gained `product/monitoring/README.md`.
+- Rule: an EXT-* input the fork supplies as files gets a `path` in the framework (only EXT-MONITORING has one so far; the other 12 task-read inputs have none) and guidance in the fork template; a fix to the example product is mirrored in the template.
+- Promotion: check: test_task_needing_monitoring_data_reports_its_absence
+
+## L-0040 · 2026-10-31 · run: phase-8 · tags: docs, counts, tests
+- Symptom: README.md said "will provide" and "17 NIST documents fetched automatically; the DoD and CNSS PDFs are added by the user" while 32 PDFs were committed; tests hard-coded 63 rules.
+- Root cause: counts and status statements were written once in prose and tests, and nothing recomputed them.
+- Fix: DOC-002 compares the counts stated in README.md, AGENTS.md and the registry header with values computed from the registry, framework and reference index; the registry tests compute instead of hard-coding.
+- Rule: a number in documentation is checked against a computed value; a test does not repeat a count the registry holds.
+- Promotion: check: DOC-002
+
+## L-0041 · 2026-10-31 · run: phase-8 · tags: tests, fixtures, audit
+- Symptom: the audit counted 15 of 35 negative specs on the example; `grep example` counts 33, because 18 specs carry `example` only in a comment that says they are left out.
+- Root cause: coverage was read from comments and prose, not from parsed data, and nothing enforced the "most specs also run on the example" intent.
+- Fix: 17 specs gained example-base mutations (per-mutation `only:`), and `test_example_base_coverage_ge_80pct` parses the specs, requires at least 80% on the example and lists each exception with its reason.
+- Rule: measure coverage from parsed data; a fixture left out of a base is listed with its reason in a test.
+- Promotion: check: test_example_base_coverage_ge_80pct

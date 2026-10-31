@@ -1,9 +1,15 @@
 rule: JOURNAL-001
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a done task without a CHECKPOINT entry
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: journal.md
     old: "## 2026-10-29T12:45Z · CHECKPOINT · task C-3\n"
+    new: ""
+  - only: [example]
+    op: replace_text
+    file: journal.md
+    old: "## 2026-10-29T21:56Z · CHECKPOINT · task A-1\n"
     new: ""
 expect: {errors: [JOURNAL-001]}

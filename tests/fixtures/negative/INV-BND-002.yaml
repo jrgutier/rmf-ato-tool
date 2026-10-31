@@ -1,9 +1,15 @@
 rule: INV-BND-002
-bases: [minimal]  # example: mutation targets valid_minimal text (Phase 7 handoff)
+bases: [minimal, example]
 description: a boundary component with no inventory item
 mutations:
-  - op: replace_text
+  - only: [minimal]
+    op: replace_text
     file: artifacts/data/boundary.yaml
     old: "  - {id: CMP-IDP,"
     new: "  - {id: CMP-BACKUP, title: Backup appliance, type: hardware, description: The configuration backup target., status: under-development, sources: [product/architecture.md#components]}\n  - {id: CMP-IDP,"
+  - only: [example]
+    op: replace_text
+    file: artifacts/data/boundary.yaml
+    old: "components:\n  - id: CMP-WS-HW"
+    new: "components:\n  - id: CMP-BACKUP\n    title: Backup appliance\n    type: hardware\n    description: The configuration backup target.\n    status: under-development\n    sources: [product/architecture.md#components]\n  - id: CMP-WS-HW"
 expect: {errors: [], warnings: [INV-BND-002]}

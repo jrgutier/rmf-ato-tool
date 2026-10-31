@@ -227,7 +227,7 @@ SCA selected: the Aviation Systems SCA team (Component independent assessment ac
 Interview INT-065 (AODR, A1-A4) records the SCA, its independence basis, the assessment scope (whole baseline; inherited controls on the system's side only; 2026-09 STIG scan reusable; not-reviewed STIG items reviewed by the SCA; privacy staff on the team) and readiness for A-2 with S-6 conditions 1, 2 and 4 carried as open items. `rmf build` + `rmf check --task A-1`: 0 errors, 1 warning (RUN-STALE-001, pre-existing).
 
 ## 2026-10-29T21:56Z · DECISION · task A-2 · by: PER-AODR (simulated, INT-067.A2)
-Security assessment plan approved as written under the AO's written delegation for assessment plans: whole baseline, no exclusions, window 2026-11-09 to 2026-12-04; disclosed weaknesses (gcsmaint, unscanned planner, planner/GDT log forwarding) assessed explicitly.
+Security assessment plan approved as written under the AO's written delegation for assessment plans: whole baseline, no exclusions, window 2026-09-14 to 2026-10-09; disclosed weaknesses (gcsmaint, unscanned planner, planner/GDT log forwarding) assessed explicitly.
 
 ## 2026-10-29T21:56Z · CHECKPOINT · task A-2
 artifacts/data/sap.yaml (scope baseline, no exclusions; all components; team of 3, all independent; 6 events incl. reused DT-1; rules of engagement) and ART-SAP (7 sections, traced) written; oscal/assessment-plan.json built. Objectives listing per control not read in this session (methods derived by `rmf build`); A-3 reads them per family. Interviews INT-066 (SCA, A1-A5), INT-067 (AODR, A1-A2). `rmf build` + `rmf check --task A-2`: 0 errors, 1 warning (RUN-STALE-001, pre-existing).

@@ -203,6 +203,15 @@ def decision_valid(ctx: Context) -> list[RunFinding]:
     if kind is None:
         err(f"decision {decision.get('decision')!r} is not one of {', '.join(kinds)}")
     else:
+        decided_in = kind.get("decided_in") or []
+        writers = run.writers("ART-AODM")
+        if not any(s.get("artifact") == "ART-AODM" for s in scope.seeded(run)):
+            active = set(scope.active_tasks(run))
+            writers = [t for t in writers if t in active]
+        if not set(decided_in) & set(writers):
+            err(f"{decision.get('decision')} is decided in {', '.join(decided_in)}, not in "
+                f"{' or '.join(writers) or 'any task of this run'}, the tasks of this run that "
+                f"can write {DECISION_FILE}")
         if decision.get("decided_by") != kind.get("decided_by"):
             err(f"{decision.get('decision')} is decided by {kind.get('decided_by')}, not "
                 f"{decision.get('decided_by')}")

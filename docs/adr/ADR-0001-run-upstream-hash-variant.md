@@ -8,7 +8,9 @@ Date: 2026-10-29 · Status: accepted · Phase: 6 · Schema: `framework/schema/ru
 against. `rmf run init` computes it in one of two ways:
 
 - **union**: the plain `rmf run init`, over `AGENTS.md`, `framework/**`, `playbooks/**`,
-  `personas/**`, `templates/**` (`rmf_tool.run.upstream_hash.UNION_GLOBS`);
+  `personas/**`, `templates/**` and the tool sources `src/**/*.py`, `src/**/*.yaml`,
+  `src/**/*.json`, `src/**/*.j2` (`rmf_tool.run.upstream_hash.UNION_GLOBS`, amended in
+  phase 8, see below);
 - **scenario**: `rmf run init --scenario FILE`, over the scenario's own `hash_globs`
   (only the files that scenario reads, so the agent-lane result stays current when an
   unrelated playbook changes).
@@ -42,3 +44,17 @@ upstream_hash_basis: {variant: scenario, scenario: tests/agent/scenarios/skeleto
 - `rmf run init` stamps the key on every new run, so new runs never hit the fallback.
 - The scenario variant ties a run to a file under `tests/agent/`. A fork that deletes the
   agent lane gets the "cannot recompute" warning on such runs, never an error.
+
+## Amendment (phase 8): the tool sources are hashed
+
+The CLI, its rules and its schemas decide what a run's findings mean, but the hash covered
+only prose and data, so a rule change left every run looking current. The union hash and
+each scenario's `hash_globs` now include `src/**/*.py`, `src/**/*.yaml`, `src/**/*.json`
+and `src/**/*.j2` (`upstream_hash.SRC_GLOBS`).
+
+- The globs name suffixes on purpose. `expand()` skips only dot-prefixed path parts, so a
+  bare `src/**` would hash `__pycache__/*.pyc` and make every run stale after a test run or
+  a Python upgrade. `test_python_caches_cannot_enter_the_hash` pins this.
+- Existing runs and agent-lane results carry the old digest, so RUN-STALE-001 and AGENT-001
+  warn on them until they are re-run (planned for the final phase). Both are warnings
+  before the release gate, and the committed fixtures are re-stamped by the test helpers.
