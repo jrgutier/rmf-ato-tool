@@ -16,7 +16,8 @@ and pins them.
 ## Rules
 
 - Download only from the entry's `landing_url` (or a link on that page) on an allowed
-  domain: `esd.whs.mil`, `cnss.gov`, `dodcio.defense.gov`, `public.cyber.mil`, `nist.gov`.
+  domain: `esd.whs.mil`, `cnss.gov`, `dodcio.defense.gov`, `public.cyber.mil`,
+  `media.defense.gov` (the CSRMC PDFs only, ADR-0006), `nist.gov`.
 - Never accept a non-PDF. An HTML error page, a login wall saved as `.pdf`, or a ZIP is
   rejected by the import (`%PDF-` magic + `qpdf --check`); do not try to work around that.
 - One file per index entry. If a landing page offers several attachments that belong
@@ -49,9 +50,18 @@ and pins them.
    `--url` is optional but recommended; it is recorded as `resolved_url` and must be on an
    allowed domain. On `rejected: ... not a PDF` or `qpdf --check failed`, delete the file
    and download it again (often a login or error page was saved).
-4. If the page shows a newer change than the entry's `revision`, update `revision` (and
-   `revision_note`) in `references/index.yaml` by hand; those fields are hand-curated.
-5. After the last import, extract text, re-render the index and check the gate:
+4. Read the revision from the document, not the listing. Set `revision` in
+   `references/index.yaml` to the edition, date and change number the PDF shows (a month
+   and year or ISO date; REF-007), and replace any placeholder `title` with the document's
+   own. Run `uv run rmf refs extract --id <ID>` (needs `EXTRACT=1` bootstrap), then add a
+   `revision_stamp {page, anchor}` to the passage that shows it (`rmf refs show <ID> --page N
+   --anchor A`); its anchor must contain the revision's latest year. If no passage can show
+   it, declare `revision_source: {reason: ...}` and say where the date comes from in
+   `revision_note`.
+5. Once the entry is obtained and cited-ready, set `required: true` on it and add its ID to
+   `src/rmf_tool/refs/required.py` (and the required-set tests). Cite it only after that
+   (FW-CITE-003). Update the README PDF counts (DOC-002).
+6. After the last import, extract text, re-render the index and check the gate:
 
    ```sh
    uv run rmf refs sync
@@ -59,7 +69,7 @@ and pins them.
    uv run rmf ci --profile p2x
    ```
 
-6. Commit the PDFs (Git LFS), `references/text/<ID>.md` + `.toc.yaml`,
+7. Commit the PDFs (Git LFS), `references/text/<ID>.md` + `.toc.yaml`,
    `references/index.yaml` and `references/INDEX.md` together.
 
 ## If a required document cannot be obtained

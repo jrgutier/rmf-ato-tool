@@ -45,10 +45,10 @@ example contain only public and fictional material.
 
 ## Clone size (Git LFS)
 
-The 32 reference PDFs under `references/pdf/` are stored in Git LFS and committed:
-about 34 MB for the 17 NIST documents (fetched automatically) and 17 MB for the 15 DoD and
+The 34 reference PDFs under `references/pdf/` are stored in Git LFS and committed:
+about 39 MB for the 19 NIST documents (fetched automatically) and 17 MB for the 15 DoD and
 CNSS documents (imported browser-assisted by the maintainer, per
-`playbooks/_ops/fetch-blocked-refs.md`), 51 MB in all by `du -sh`. A new or changed DoD or
+`playbooks/_ops/fetch-blocked-refs.md`), 56 MB in all by `du -sh`. A new or changed DoD or
 CNSS PDF is added the same way, by whoever updates `references/index.yaml`. Text
 extractions and NIST OSCAL JSON (about 32 MB) are in plain git; `references/INDEX.md`
 lists every document with its source URL and SHA-256. To clone without the PDFs:

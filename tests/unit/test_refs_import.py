@@ -101,3 +101,13 @@ def test_cli_import(rr, monkeypatch):
 
     assert ok.exit_code == 0 and "imported DODI-X" in ok.stdout
     assert bad.exit_code == 1 and "rejected" in bad.output
+
+
+def test_import_drops_the_query_and_fragment_so_the_index_still_loads(rr):
+    src = rr.write("references/_inbox/download.pdf", PDF)
+    url = "https://www.cnss.gov/CNSS/openDoc.cfm?abc=1&doc=2#top"
+
+    importer.import_ref(rr.root, "DODI-X", src, url=url)
+
+    assert rr.entry("DODI-X")["resolved_url"] == "https://www.cnss.gov/CNSS/openDoc.cfm"
+    assert rr.index()

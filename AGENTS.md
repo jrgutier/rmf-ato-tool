@@ -59,8 +59,8 @@ fork owns. A fork may delete `examples/`.
 - INV-5: Every claim in a run carries a trace token to a transcript answer, a product
   file or a tagged `ASSUMPTION`; simulated answers are tagged `SIMULATED`.
 - INV-6: Run `rmf build` and then `rmf check` before moving on. Never proceed with errors.
-- INV-7: Use only public references from the allowed domains, with TLS verification on
-  (no `verify=False`, no User-Agent spoofing). Put CUI in a fork only if the host, the
+- INV-7: Use only public references from the allowed domains (`refs/domains.py`; ADR-0006),
+  with TLS verification on (no `verify=False`, no User-Agent spoofing). Put CUI in a fork only if the host, the
   machines and the LLM endpoint are all authorized for it.
 - INV-8: Write run-data files whole; never append to or patch them partially.
 
@@ -101,7 +101,7 @@ error. Commands that report support `--format json`.
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -117,7 +117,9 @@ p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 t
 and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL;
 p7 `rmf check --final` with every run rule on `examples/uas-gcs/runs/example-synthetic-01`
 (skipped under `--profile fork`); p8 DOC-002, the counts stated in README.md, AGENTS.md
-and the registry header equal the registry, framework and reference index.
+and the registry header equal the registry, framework and reference index; p9 REF-007
+(exact `revision`, resolving `revision_stamp`), REF-008 (OSCAL-only controls declared) and
+FW-CITE-003 (no citation to a `required: false` PDF, run by `rmf validate`).
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 
@@ -165,4 +167,7 @@ Of the seed lessons, L-0003 is promoted to INV-7 and L-0007 is `none`
 - Reference PDFs: add or update the entry in `references/index.yaml`, run
   `rmf refs fetch` (or the browser-assisted import for blocked sites, L-0002/L-0003),
   `rmf refs extract`, `rmf refs index`, and commit the PDF (LFS), text and index together.
+  Set `revision` to what the PDF shows and add a `revision_stamp` (or a `revision_source`
+  reason when no passage can show it; REF-007), and flip `required` (with `refs/required.py`)
+  in the commit that obtains the document before anything cites it (FW-CITE-003).
   Probe URLs with a ranged GET, never HEAD (L-0001).

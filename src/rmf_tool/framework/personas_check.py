@@ -121,3 +121,29 @@ def card_problems(fw: Framework, root: Path, resolver: Resolver) -> list[Finding
                 out.append(_err("FW-PER-002", p, f"{describe(citation)}: {result.message}",
                                 rel, where))
     return out
+
+
+def optional_pdf_citations(fw: Framework, root: Path, resolver: Resolver) -> list[Finding]:
+    """FW-CITE-003 for persona cards: a ``refs show`` command in ``## Citations`` that names
+    a PDF marked ``required: false``."""
+    out = []
+    for p in fw.of("personas"):
+        rel = card_path(p)
+        path = root / rel
+        if p.data.get("card") != rel or not path.is_file():
+            continue
+        section = _sections(path.read_text(encoding="utf-8")).get("Citations")
+        if section is None:
+            continue
+        line, body = section
+        for m in REFS_SHOW.finditer(body):
+            try:
+                ref = str(_citation(m.group(1))["ref"])
+            except ValueError:
+                continue
+            entry = resolver.entry(ref)
+            if entry is not None and entry["kind"] == "pdf" and not entry["required"]:
+                out.append(_err("FW-CITE-003", p, f"cites {ref}, a PDF marked required: "
+                                "false; mark it required (after import) or drop the citation",
+                                rel, line + body.count("\n", 0, m.start())))
+    return out

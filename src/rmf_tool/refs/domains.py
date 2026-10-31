@@ -7,9 +7,10 @@ from __future__ import annotations
 
 from urllib.parse import urlsplit
 
+# media.defense.gov hosts the CSRMC PDFs only (ADR-0006); defense.gov itself is not allowed.
 # A host matches when it equals a domain or is a subdomain of it.
 ALLOWED_DOMAINS = ("nist.gov", "esd.whs.mil", "cnss.gov", "public.cyber.mil",
-                   "dodcio.defense.gov")
+                   "dodcio.defense.gov", "media.defense.gov")
 # GitHub hosts are allowed only below these path prefixes.
 GITHUB_PREFIXES = {"github.com": "/usnistgov/", "raw.githubusercontent.com": "/usnistgov/"}
 # GitHub release-asset hosts: only as a redirect target from github.com/usnistgov/*.

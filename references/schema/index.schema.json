@@ -44,6 +44,28 @@
         "size_bytes": {"type": ["integer", "null"], "minimum": 1},
         "downloaded": {"$ref": "#/$defs/date"},
         "revision_note": {"$ref": "#/$defs/nullableString"},
+        "revision_stamp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["page", "anchor"],
+          "properties": {
+            "page": {"type": "integer", "minimum": 1},
+            "anchor": {"type": "string", "minLength": 1}
+          }
+        },
+        "revision_source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reason"],
+          "properties": {"reason": {"type": "string", "minLength": 1}}
+        },
+        "currency_checked": {"type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        "oscal_only_controls": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[A-Z]{2}-\\d+(?:\\(\\d+\\))?$"},
+          "uniqueItems": true
+        },
+        "tier": {"enum": [1, 2]},
         "status": {
           "enum": ["ok", "pending-acquisition", "manual-required", "missing", "changed",
                    "degraded"]
@@ -96,6 +118,12 @@
               "downloaded": {"type": "string"}
             }
           }
+        },
+        {
+          "if": {"properties": {"kind": {"not": {"const": "pdf"}}}},
+          "then": {"not": {"anyOf": [{"required": ["revision_stamp"]},
+                                     {"required": ["revision_source"]},
+                                     {"required": ["oscal_only_controls"]}]}}
         },
         {
           "if": {"properties": {"status": {"const": "degraded"}}},

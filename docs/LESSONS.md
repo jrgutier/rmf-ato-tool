@@ -292,3 +292,31 @@ with the next ID; never edit or delete an existing entry.
 - Fix: 17 specs gained example-base mutations (per-mutation `only:`), and `test_example_base_coverage_ge_80pct` parses the specs, requires at least 80% on the example and lists each exception with its reason.
 - Rule: measure coverage from parsed data; a fixture left out of a base is listed with its reason in a test.
 - Promotion: check: test_example_base_coverage_ge_80pct
+
+## L-0042 · 2026-10-31 · run: phase-9 · tags: refs, revision, currency
+- Symptom: `index.yaml` labelled DoDI 5000.02 and 5000.85 "(with changes)", SP 800-53 and 800-53B "(with updates)" and DevSecOps "current (record the version at import)"; the pinned PDFs carried Change 2 (2026-04-08), Change 1 (2021-11-04) and updates as of 12-10-2020, and nothing noticed the labels lagging.
+- Root cause: `revision` is hand-curated, a placeholder passed every check, and no check compared a label with the text that was already extracted.
+- Fix: exact revisions in the index; each pinned PDF gets a `revision_stamp {page, anchor}` pointing at the passage that shows it; REF-007 rejects vague labels and a stamp that does not resolve through `refs show`.
+- Rule: a pinned PDF's `revision` states the edition, date and change number its text shows, with a `revision_stamp` to that passage; `currency_checked` is set only on a day the upstream was actually checked.
+- Promotion: check: REF-007
+
+## L-0043 · 2026-10-31 · run: phase-9 · tags: refs, oscal, catalog
+- Symptom: seven controls in the pinned OSCAL catalog (IA-13 and its three enhancements, SA-15(13), SA-24, SI-2(7)) are absent from the text of SP 800-53, 800-53A and 800-53B, so a citation to them cannot resolve.
+- Root cause: the catalog (release 5.2.0) is newer than the PDFs, and the gap was found by one audit pass, not recorded where a later reader or check would see it.
+- Fix: `oscal_only_controls` on the three entries (with a `revision_note`); REF-008 warns on a catalog control that is absent from a PDF's text and not declared, and on a declaration that no longer holds. 800-53A writes IDs as CM-02(01), so IDs are normalised before comparing.
+- Rule: a difference between a pinned catalog and its PDF is declared in a structured field on the entry, never only in prose.
+- Promotion: check: REF-008
+
+## L-0044 · 2026-10-31 · run: phase-9 · tags: refs, required, citations
+- Symptom: seven pinned PDFs that the framework cites (DoDI 5000.89, 5000.90, DevSecOps and four CNSSI 1253 overlays) were `required: false`, so a fork that skipped optional documents would fail FW-CITE-002 on a citation to a document that is allowed to be absent.
+- Root cause: `required` and the citations were maintained separately, and `required: true` for a document still to be imported breaks `rmf ci` at once (REF-001 is an error from p2x on, and citing a pending reference fails FW-CITE-002).
+- Fix: FW-CITE-003 rejects a citation to a PDF that is `required: false`. Entries awaiting an operator import are added `required: false` and pending, are not cited, and flip to `required: true` in `index.yaml` and `refs/required.py` in the commit that imports them.
+- Rule: cite only required PDFs; make an entry required in the same commit that obtains it.
+- Promotion: check: FW-CITE-003
+
+## L-0045 · 2026-10-31 · run: phase-9 · tags: refs, revision, cnss
+- Symptom: CNSSI 1253 was dated 2022-08-01 in the index but its cover says 29 July 2022, and the dates of Attachments 5 and 6 (2022-09-30, 2024-10-31) appeared nowhere in their extracted text. REF-007 treated a stamp as optional, so both passed.
+- Root cause: these dates were copied from the cnss.gov listing at import, which publishes on a different day from the document's own date. ATT5 does print 09/30/2022 on every page, but the extractor strips it as page furniture; ATT6 prints no date at all.
+- Fix: CNSSI 1253 carries the cover date and a stamp. REF-007 now requires a `revision_stamp` on every pinned PDF, and the stamp must show the revision's latest year. ATT5 and ATT6 declare `revision_source` with the reason no passage shows their date, and their `revision_note` says where the date comes from (the page footer, or the listing).
+- Rule: a pinned PDF's `revision_stamp` points at text that states the revision; an entry that cannot have one declares `revision_source` with the reason, and a revision taken from a listing says so in `revision_note`.
+- Promotion: check: REF-007

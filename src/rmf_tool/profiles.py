@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-PHASES = ("p1", "p2", "p2x", "p3a", "p35", "p3b", "p4", "p5", "p6", "p7", "p8")
+PHASES = ("p1", "p2", "p2x", "p3a", "p35", "p3b", "p4", "p5", "p6", "p7", "p8", "p9")
 PROFILES = (*PHASES, "release", "fork")
 # A profile including the key phase may only run once the value phases are closed.
 REQUIRES_CLOSED = {"p3b": frozenset({"p2x"})}

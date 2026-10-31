@@ -14,6 +14,7 @@ ASSET = "https://release-assets.githubusercontent.com/github-production-release-
     "https://www.cnss.gov/CNSS/issuances/Instructions.cfm",
     "https://public.cyber.mil/stigs/",
     "https://dodcio.defense.gov/Library/",
+    "https://media.defense.gov/2025/Sep/24/2003808112/-1/-1/1/DOD-CIO-CSRMC.PDF",
     GH,
     "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.6.0/x.json",
 ])
@@ -28,6 +29,9 @@ def test_allowed(url):
     ("https://github.com/someone/OSCAL/x", "path outside"),
     ("https://raw.githubusercontent.com/other/oscal-content/x", "path outside"),
     (ASSET, "only as a redirect target"),
+    ("https://defense.gov/a.pdf", "not an allowed domain"),
+    ("https://www.defense.gov/a.pdf", "not an allowed domain"),
+    ("https://media.defense.gov.evil.com/a.pdf", "not an allowed domain"),
     ("not a url", "not https"),
 ])
 def test_disallowed(url, why):
@@ -42,4 +46,4 @@ def test_release_assets_only_via_usnistgov_redirect():
 
 def test_allowed_domains_constant():
     assert ALLOWED_DOMAINS == ("nist.gov", "esd.whs.mil", "cnss.gov", "public.cyber.mil",
-                               "dodcio.defense.gov")
+                               "dodcio.defense.gov", "media.defense.gov")

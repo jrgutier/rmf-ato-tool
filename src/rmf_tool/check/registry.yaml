@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 64 rules, 28 repo-scope and 36 run-scope. Authoritative;
+# Rule registry (plan §6.5): 67 rules, 31 repo-scope and 36 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -104,6 +104,15 @@ rules:
     summary: citation section/page/anchor not resolvable in the text extraction, or a page without an anchor
     fixture: tests/fixtures/framework_neg/FW-CITE-002/
     hint: Check it with `rmf refs show ID --section S` or `--page N --anchor A`. Citations to pending-acquisition references are deferred until p2x; degraded references need a fallback.
+  - id: FW-CITE-003
+    scope: repo
+    severity: E
+    ac: [AC-25]
+    phase: p9
+    applies_after: null
+    summary: the framework or a persona card cites a PDF reference marked required false
+    fixture: tests/unit/test_refs_currency.py::test_fw_cite_003_fires_on_an_optional_pdf
+    hint: Import the document, set required true in references/index.yaml and rmf_tool.refs.required, or drop the citation.
   - id: FW-TASK-001
     scope: repo
     severity: E
@@ -214,6 +223,24 @@ rules:
     summary: URL or redirect hop outside the allowed domains
     fixture: tests/unit/test_refs_verify.py::test_disallowed_urls
     hint: Use only allowed public domains (INV-7); blocked sources are browser-assisted.
+  - id: REF-007
+    scope: repo
+    severity: E
+    ac: [AC-26]
+    phase: p9
+    applies_after: null
+    summary: a pinned PDF's revision is vague or undated, it has no revision_stamp (or revision_source exemption), or the stamp does not resolve or does not show the revision's year
+    fixture: tests/unit/test_refs_currency.py::test_ref_007_requires_a_stamp_unless_revision_source_gives_a_reason
+    hint: State the edition, date and change number the text shows; point revision_stamp at that passage (rmf refs show ID --page N --anchor A), or declare revision_source with the reason none exists.
+  - id: REF-008
+    scope: repo
+    severity: W
+    ac: [AC-27]
+    phase: p9
+    applies_after: null
+    summary: OSCAL catalog controls absent from a PDF's text and not declared in oscal_only_controls
+    fixture: tests/unit/test_refs_currency.py::test_ref_008_flags_undeclared_oscal_only_controls
+    hint: List the control IDs in the entry's oscal_only_controls (normalised, as AC-2(1)) and explain them in revision_note.
   - id: LES-002
     scope: repo
     severity: E

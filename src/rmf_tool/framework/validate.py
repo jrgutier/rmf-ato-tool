@@ -300,6 +300,20 @@ def rule_cite_resolve(ctx: Context) -> list[Finding]:
     return out
 
 
+def rule_cite_required(ctx: Context) -> list[Finding]:
+    """FW-CITE-003: a citation to a PDF that is not in the required set. Only required
+    references are guaranteed present in every fork, so a citation to any other is unsound."""
+    assert ctx.resolver is not None
+    out = []
+    for e in [*ctx.fw.entities, *ctx.cited]:
+        for ref in dict.fromkeys(c.get("ref") for c in _citations(e)):
+            entry = ctx.resolver.entry(ref)
+            if entry is not None and entry["kind"] == "pdf" and not entry["required"]:
+                out.append(_err("FW-CITE-003", e, f"cites {ref}, a PDF marked required: false; "
+                                "mark it required (after import) or drop the citation"))
+    return out + personas_check.optional_pdf_citations(ctx.fw, ctx.repo, ctx.resolver)
+
+
 def _norm(name: str) -> str:
     return re.sub(r"\s*[-–—]\s*", "-", " ".join(name.split())).casefold()
 
@@ -365,6 +379,7 @@ RULES: dict[str, Callable[[Context], list[Finding]]] = {
     "FW-DAG-001": rule_dag,
     "FW-CITE-001": rule_cite_present,
     "FW-CITE-002": rule_cite_resolve,
+    "FW-CITE-003": rule_cite_required,
     "FW-TASK-001": rule_task_set,
     "FW-PER-001": rule_persona_cards,
     "FW-PER-002": rule_persona_card_content,

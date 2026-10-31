@@ -137,7 +137,7 @@ def test_profile_severity_needs_a_note():
 
 @pytest.mark.parametrize("change, needle", [
     ({"severity": "X"}, "'X' is not one of"),
-    ({"phase": "p9"}, "'p9' is not one of"),
+    ({"phase": "p99"}, "'p99' is not one of"),
     ({"exempt_reason": "both given"}, "is not valid under any of the given schemas"),
     ({"ac": ["AC-99a", "8"]}, "does not match"),
 ])

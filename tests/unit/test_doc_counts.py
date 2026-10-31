@@ -77,7 +77,8 @@ def test_a_pending_acquisition_reference_is_not_a_committed_pdf(tree):
     found = doc_counts.check(tree)
 
     assert [f.message for f in found if "PDFs" in f.message]
-    assert any("states 32 PDFs; computed 31" in f.message for f in found)
+    stated = re.search(r"The (\d+) reference PDFs", (REPO_ROOT / "README.md").read_text()).group(1)
+    assert any(f"states {stated} PDFs; computed {int(stated) - 1}" in f.message for f in found)
 
 
 def test_an_unreadable_index_is_a_finding_not_a_traceback(tree):

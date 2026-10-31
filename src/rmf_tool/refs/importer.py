@@ -2,7 +2,8 @@
 
 The file must start with ``%PDF-`` and pass ``qpdf --check``. It is moved to the entry's
 ``local_path`` (stored in Git LFS), its SHA-256 and size are pinned, and the entry
-becomes ``ok``. See ``playbooks/_ops/fetch-blocked-refs.md``.
+becomes ``ok``. ``--url`` is stored without its query and fragment (the index schema).
+See ``playbooks/_ops/fetch-blocked-refs.md``.
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ import datetime as dt
 import shutil
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit, urlunsplit
 
 from rmf_tool.refs import find, load_index, save_index, sha256_file
 from rmf_tool.refs.domains import disallowed_reason
@@ -47,7 +49,8 @@ def import_ref(root: Path, ref_id: str, source: Path, *, url: str | None = None,
     entry["sha256"] = sha256_file(dest)
     entry["size_bytes"] = dest.stat().st_size
     entry["downloaded"] = today or dt.datetime.now(dt.UTC).date().isoformat()
-    entry["resolved_url"] = url
+    # The index schema stores a resolved URL without query or fragment.
+    entry["resolved_url"] = url and urlunsplit(urlsplit(url)._replace(query="", fragment=""))
     entry["status"] = "ok"
     save_index(root, data)
     return entry

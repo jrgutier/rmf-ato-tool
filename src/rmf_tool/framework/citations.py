@@ -41,6 +41,9 @@ class Resolver:
         self._entries = {e["id"]: e for e in refs.entries(index)}
         self._located: dict[tuple[Any, ...], str | None] = {}
 
+    def entry(self, ref_id: Any) -> Any | None:
+        return self._entries.get(ref_id)
+
     def known(self, ref_id: Any) -> bool:
         return ref_id in self._entries
 

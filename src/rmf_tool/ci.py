@@ -15,7 +15,7 @@ from rmf_tool.findings import Finding
 from rmf_tool.framework import validate as framework_validate
 from rmf_tool.framework.model import FRAMEWORK_DIR
 from rmf_tool.profiles import PHASES, Profile, rule_active
-from rmf_tool.refs import index_render, verify
+from rmf_tool.refs import currency, index_render, verify
 from rmf_tool.render import manual
 
 COVERAGE_MIN = 85
@@ -202,6 +202,8 @@ STEPS: tuple[Step, ...] = (
     # p8: documented counts equal computed values.
     Step("documented counts", "p8", (doc_counts.RULE,),
          lambda ctx: _findings_step(doc_counts.check(ctx.root))),
+    # p9: reference currency (FW-CITE-003 runs in the rmf validate steps above).
+    Step("refs currency", "p9", currency.RULES, _refs_step(currency.check)),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )
