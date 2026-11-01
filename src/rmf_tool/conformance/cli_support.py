@@ -125,9 +125,11 @@ def mark_many(root: Path, marks: Mapping[str, Mapping[str, Any]]) -> list[str]:
     return lines
 
 
-def promote(root: Path, ref: str, page: int, anchor: str, reason: str) -> str:
+def promote(root: Path, ref: str, page: int, anchor: str, reason: str,
+            *, sentence: bool = False) -> str:
     """Promote a rejected paragraph, or a passage the extractor read as context, on one page
-    of a document into a live candidate entry, and rewrite the file."""
+    of a document into a live candidate entry, and rewrite the file. ``sentence`` takes only
+    the sentence of it that holds the anchor."""
     reg, index = _load(root)
     if ref not in reg.sources:
         raise UsageError(f"unknown source {ref!r}; see {register.SOURCES}")
@@ -136,7 +138,7 @@ def promote(root: Path, ref: str, page: int, anchor: str, reason: str) -> str:
         raise UsageError(f"{ref} is {entry['status'] if entry else 'not indexed'}, unassessed")
     try:
         text = register.text_of(root, entry)
-        made = register.promote(reg, ref, text, page, anchor, reason)
+        made = register.promote(reg, ref, text, page, anchor, reason, sentence=sentence)
     except OSError as exc:
         raise UsageError(f"{ref}: {exc}") from exc
     except register.MarkError as exc:

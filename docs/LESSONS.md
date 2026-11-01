@@ -376,3 +376,17 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the test reads raw page lines from `references/text` with its own stated exclusions and reports 0 lost lines; `blocks()` never continues a caption, an all-caps line or a leader line onto the next page, a caption line is its own paragraph, and a block that starts outside every scope is read by the scope it ends in. The two regexes are gone and their labels count as misses; prose keeps a floor at the level measured (91/94) and is otherwise reported, since extraction is a first pass that `rmf conformance promote` completes.
 - Rule: a recall or completeness test reads the source with its own reader, never the extractor's; a label is written before the extractor is tuned, and a miss stays a miss.
 - Promotion: check: test_no_raw_line_in_scope_is_dropped_silently
+
+## L-0054 · 2026-11-01 · run: phase-10 · tags: tests, refs, conformance
+- Symptom: importing the last 22 pending references failed `test_text_report_shows_every_section`, which looked for `pending-acquisition)` in the report of the real register, and `test_extract_writes_and_leaves_a_pending_document_unassessed`, which raised StopIteration looking for a real pending source.
+- Root cause: both tests needed a state the repository is meant to leave, although `_conformance_fixtures` already builds a pending reference.
+- Fix: both behaviours are tested on `fx.build` with its PENDING reference; scratch mutations of the report and of `cli_support.extract` each fail one of the tests.
+- Rule: a test of a state the repository is meant to leave builds that state in a fixture.
+- Promotion: none — a rule for writing upstream tests with no step in a fork; a checker cannot tell a transient repository state from a permanent one
+
+## L-0055 · 2026-11-01 · run: phase-10 · tags: refs, extraction, conformance
+- Symptom: CNSSP 12 passed `refs verify`, REF-003 and REF-007 with OCR errors in its text (`C SSP 12`, `ational`); the CSRMC graphic extracted scrambled and nine of ten tenets were rejected. No check raised a finding on any of them.
+- Root cause: the checks prove a text is the extraction of the pinned PDF, not that the extraction reads correctly.
+- Fix: the pages were read at import, the CSRMC scope has `tables: false`, and `docs/audits/2026-10-31-operator-imports.md` lists each case for triage.
+- Rule: at import, read the PDF's rendered pages beside its text; a passing extraction proves provenance, not legibility.
+- Promotion: none — legibility of a text layer takes a reader; no offline check can judge it

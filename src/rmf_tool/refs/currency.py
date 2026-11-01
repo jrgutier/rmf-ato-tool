@@ -3,7 +3,8 @@
 REF-007 (error): a pinned PDF's ``revision`` is vague or has no month-and-year or ISO date,
 its ``revision_stamp`` is missing (unless ``revision_source`` exempts it, with a reason), does
 not resolve in the text extraction through ``refs.show.page``, or does not show the revision:
-the anchor must contain the revision's latest full date (the year when it has none). What the
+the anchor must contain the revision's latest full date (its latest month and year when it
+has none, its year when it has neither). What the
 document says about its own revision is read wherever it sits, so moving the stamp cannot hide
 it: the highest ``Change N`` on pages 1, 2 or the stamp page with its date, the ``INCLUDES
 UPDATES AS OF`` date anywhere, and the latest date of an errata table must all be named.
@@ -38,6 +39,7 @@ VAGUE = re.compile(
     r"|\bcurrent\b|\blatest\b|\bpending\b|\brecord(?:ed)? (?:the |at )|\bTBD\b|\bunknown\b",
     re.IGNORECASE)
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
+_MONTH_YEAR = re.compile(rf"\b({_MONTH})\.?,?\s+(\d{{4}})\b", re.I)
 _MONTHS = {m: i for i, m in enumerate(
     ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"), 1)}
 # The number in "Version 2 March 2024" or "Rev. 5 September 2020" is not a day. Words such as
@@ -81,6 +83,11 @@ def full_dates(text: str) -> set[tuple[int, int, int]]:
                 continue
             out.add((year, month, day))
     return out
+
+
+def month_years(text: str) -> set[tuple[int, int]]:
+    """Every (year, month) written as a month and year in ``text``."""
+    return {(int(m[2]), _MONTHS[m[1][:3].lower()]) for m in _MONTH_YEAR.finditer(text)}
 
 
 def _first_line(body: str) -> str:
@@ -157,6 +164,12 @@ def _ref007(root: Path, entry: Any) -> list[Finding]:
             y, m, d = max(stated)
             fail(f"revision_stamp anchor {anchor!r} does not show {y}-{m:02d}-{d:02d}, the "
                  f"latest date of revision {revision!r}")
+            return out
+    elif month_years(revision):
+        if max(month_years(revision)) not in month_years(anchor):
+            y, m = max(month_years(revision))
+            fail(f"revision_stamp anchor {anchor!r} does not show {y}-{m:02d}, the latest "
+                 f"month of revision {revision!r}")
             return out
     elif years and max(years) not in anchor:
         fail(f"revision_stamp anchor {anchor!r} does not show {max(years)}, the latest "

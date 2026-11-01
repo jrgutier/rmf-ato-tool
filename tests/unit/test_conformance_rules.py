@@ -16,9 +16,11 @@ import _conformance_fixtures as fx
 import pytest
 from _framework_fixtures import MINI, REAL
 from conftest import REPO_ROOT
+from typer.testing import CliRunner
 
 from rmf_tool import ci, refs
 from rmf_tool.check import Rule
+from rmf_tool.cli import app
 from rmf_tool.conformance import evidence, extract, register, rules
 from rmf_tool.framework.citations import Resolver
 from rmf_tool.framework.load import load as load_framework
@@ -156,11 +158,13 @@ def test_requirement_ids_and_statements_are_pinned_against_the_base():
 
 def test_every_audit_finding_has_a_work_item():
     audit = (REPO_ROOT / "docs/audits/2026-10-31-coverage-audit.md").read_text(encoding="utf-8")
+    imports = (REPO_ROOT / "docs/audits/2026-11-01-import-findings.md").read_text(encoding="utf-8")
     findings = set(re.findall(r"^\| ([NDC]-\d+) \|", audit, re.M))
+    added = set(re.findall(r"^\| (I-\d+) \|", imports, re.M))
     linked = {f for w in register.load(REPO_ROOT).work_items.values() for f in w["findings"]}
 
     assert len(findings) == 47
-    assert findings == linked
+    assert findings | added == linked
 
 
 def test_every_open_register_work_item_binds_an_entry():
@@ -1277,8 +1281,9 @@ def test_the_resolver_stub_agrees_with_the_real_resolver_on_a_real_citation():
 
 
 def promote(repo, reg, page=1, anchor="The owner", reason="The lead-in names who the lettered "
-            "obligations under it bind."):
-    return register.promote(reg, DOC, register.text_of(repo, fx.INDEX[DOC]), page, anchor, reason)
+            "obligations under it bind.", **options):
+    return register.promote(reg, DOC, register.text_of(repo, fx.INDEX[DOC]), page, anchor, reason,
+                            **options)
 
 
 def test_a_promoted_rejection_becomes_a_live_entry_that_survives_re_extraction(repo, index):
@@ -1340,6 +1345,115 @@ def test_a_passage_the_extractor_read_as_context_can_be_promoted_and_a_bad_ancho
         promote(repo, reg, page=1, anchor="must approve every registration")
     with pytest.raises(register.MarkError, match="no requirements file"):
         register.promote(reg, "NOPE", "", 1, "x", "y")
+
+
+GLOSSARY = ("MDA A designated individual with overall responsibility. The MDA will establish "
+            "procedures for its programs. The MDA will report progress each quarter. release")
+
+
+@pytest.fixture
+def glossary(repo):
+    """Page 2, which the scopes exclude, holds a two-column glossary read line by line."""
+    text = repo / f"references/text/{DOC}.md"
+    text.write_text(text.read_text().replace(
+        "Appendix A references, which the register never reads.", GLOSSARY))
+    accept(repo)
+    return repo
+
+
+def test_sentence_takes_one_sentence_of_a_glued_glossary_paragraph(glossary, index):
+    reg = fx.load(glossary)
+
+    made = promote(glossary, reg, page=2, anchor="will establish procedures", sentence=True)
+    last = promote(glossary, reg, page=2, anchor="report progress each quarter", sentence=True)
+    fx.write(glossary, reg)
+
+    assert made["statement"] == "The MDA will establish procedures for its programs."
+    assert made["kind"] == register.PROMOTED_KIND and made["locator"] == ""
+    assert last["statement"] == "The MDA will report progress each quarter.", "no trailing label"
+    assert shape(glossary, fx.load(glossary), index) == [], "FW-REQ-001 finds it in its passage"
+    assert sync(glossary, index, DOC) == []
+
+
+def test_a_promoted_sentence_survives_re_extraction(glossary, index):
+    reg = fx.load(glossary)
+    made = promote(glossary, reg, page=2, anchor="will establish procedures", sentence=True)
+    fx.write(glossary, reg)
+    entry = fx.load(glossary).entry(made["id"])
+
+    fx.extract(glossary)
+
+    assert fx.load(glossary).entry(made["id"]) == entry
+    assert sync(glossary, index, DOC) == []
+
+
+def test_a_promoted_sentence_whose_passage_changes_is_flagged(glossary, index):
+    reg = fx.load(glossary)
+    made = promote(glossary, reg, page=2, anchor="will establish procedures", sentence=True)
+    fx.write(glossary, reg)
+    text = glossary / f"references/text/{DOC}.md"
+    text.write_text(text.read_text().replace("will establish procedures", "will set procedures"))
+
+    fx.extract(glossary)
+    entry = fx.load(glossary).entry(made["id"])
+
+    assert entry["needs_review"] is True and not entry.get("removed")
+
+
+@pytest.mark.parametrize("anchor, count", [
+    ("overall responsibility. The MDA will establish", 0), ("The MDA will", 2)])
+def test_sentence_refuses_an_anchor_outside_one_sentence(glossary, anchor, count):
+    reg = fx.load(glossary)
+    before = copy.deepcopy(reg.files[DOC])
+
+    with pytest.raises(register.MarkError, match=f"is in {count} sentences of that paragraph"):
+        promote(glossary, reg, page=2, anchor=anchor, sentence=True)
+
+    assert reg.files[DOC] == before
+
+
+def test_a_sentence_of_a_rejection_leaves_the_rest_rejected(repo, index):
+    text = repo / f"references/text/{DOC}.md"
+    paragraph = "The register holds records. The register lists owners."
+    results = "Assessors may reuse prior results.\n"
+    text.write_text(text.read_text().replace(results, f"{results}\n{paragraph}\n"))
+    fx.extract(repo)
+    accept(repo)
+    reg = fx.load(repo)
+
+    made = promote(repo, reg, anchor="lists owners", sentence=True)
+    fx.write(repo, reg)
+
+    assert made["statement"] == "The register lists owners."
+    assert paragraph in [r["text"] for r in fx.load(repo).files[DOC]["rejected"]]
+    assert sync(repo, index, DOC) == [], "a re-extraction finds the same rejection"
+
+
+def test_promote_sentence_command(glossary, monkeypatch):
+    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: glossary)
+    monkeypatch.setattr("rmf_tool.conformance.register.index_entries", lambda root: fx.index())
+    base = ["conformance", "promote", DOC, "--page", "2", "--reason", "It directs the MDA."]
+
+    none = CliRunner().invoke(app, [*base, "--anchor", "responsibility. The MDA", "--sentence"])
+    many = CliRunner().invoke(app, [*base, "--anchor", "The MDA will", "--sentence"])
+    made = CliRunner().invoke(app, [*base, "--anchor", "will establish", "--sentence"])
+    whole = CliRunner().invoke(app, [*base, "--anchor", "report progress"])
+
+    assert made.exit_code == 0, made.output
+    assert made.stdout.strip().endswith(": The MDA will establish procedures for its programs.")
+    assert none.exit_code == 2 and "is in 0 sentences" in none.output
+    assert many.exit_code == 2 and "is in 2 sentences" in many.output
+    assert whole.exit_code == 0 and whole.stdout.strip().endswith(f": {GLOSSARY}")
+
+
+@pytest.mark.parametrize("sentence, expected", [
+    ("The MDA will set procedures. program manager", "The MDA will set procedures."),
+    ("Use tools, e.g. scanners", "Use tools, e.g. scanners"),
+    ("see Paragraph 3.2. of this issuance", "see Paragraph 3.2. of this issuance"),
+    ("The MDA will set procedures.", "The MDA will set procedures."),
+])
+def test_a_trailing_label_is_dropped_and_an_abbreviation_is_not(sentence, expected):
+    assert extract.without_trailing_label(sentence) == expected
 
 
 def test_a_promoted_entry_the_extractor_later_finds_keeps_its_id_and_its_mark():

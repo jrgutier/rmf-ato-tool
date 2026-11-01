@@ -109,9 +109,24 @@ def test_ref_007_flags_a_revision_that_disagrees_with_its_stamp(tmp_path):
     assert "2021" in msg and "does not show" in msg
 
 
+def test_ref_007_requires_the_month_of_a_month_year_revision(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="July 2025",
+                                     revision_stamp={"page": 1, "anchor": "CNSSP 12 August 2025"})])
+    rr.write(TEXT, "<!-- page 1 -->\nCNSSP 12\nAugust 2025\n")
+    assert "does not show 2025-07" in only(currency.check(rr.root, rr.index()))
+
+    named = ok_pdf(revision="August 2025",
+                   revision_stamp={"page": 1, "anchor": "CNSSP 12 August 2025"})
+    rr.write_index([named])
+    assert currency.check(rr.root, rr.index()) == []
+
+
 def test_ref_007_flags_a_revision_that_omits_the_updates_date(tmp_path):
-    stale = ok_pdf(revision="Rev. 1 (September 2019, December 2020)")
-    assert "updates as of 2020-12-10" in only(findings(tmp_path, [stale]))
+    stale = ok_pdf(revision="Rev. 1 (September 2019, December 2020)",
+                   revision_stamp={"page": 2, "anchor": "December 2020"})
+    rr = make_root(tmp_path, [stale])
+    rr.write(TEXT, "<!-- page 2 -->\nDecember 2020\nINCLUDES UPDATES AS OF 12-10-2020\n")
+    assert "updates as of 2020-12-10" in only(currency.check(rr.root, rr.index()))
 
 
 def test_ref_007_reads_updates_as_of_outside_the_stamp_page(tmp_path):

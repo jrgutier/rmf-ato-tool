@@ -1053,6 +1053,9 @@ def conformance_promote(
                                         "rejection on the page that holds them, else the "
                                         "paragraph of the text that does.")],
     reason: Annotated[str, typer.Option("--reason", help="Why the passage is a requirement.")],
+    sentence: Annotated[bool, typer.Option("--sentence", help="Take only the sentence of the "
+                                           "passage that holds the words; exit 2 when they "
+                                           "are in no sentence or in several.")] = False,
 ) -> None:
     """Promote a rejected paragraph, or a passage the extractor read as context, into a live
     candidate entry with a new stable ID and `promoted: {reason}`.
@@ -1060,12 +1063,14 @@ def conformance_promote(
     Extraction is a first pass: triage reads the source pages (`rmf conformance page`) and
     promotes what the extractor missed. The entry survives `rmf conformance extract`, is
     flagged needs_review when its passage no longer resolves, is counted by `rmf conformance
-    report`, and its citation is checked by FW-REQ-001 like any other.
+    report`, and its citation is checked by FW-REQ-001 like any other. --sentence is for a
+    paragraph that runs several things together, such as a two-column glossary read line by
+    line.
     """
     from rmf_tool.conformance import cli_support
 
     try:
-        line = cli_support.promote(repo_root(), ref, page, anchor, reason)
+        line = cli_support.promote(repo_root(), ref, page, anchor, reason, sentence=sentence)
     except cli_support.UsageError as exc:
         raise _usage_error(str(exc)) from exc
     console.print(line, markup=False)

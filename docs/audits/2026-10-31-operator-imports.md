@@ -3,9 +3,15 @@
 Written at p9. 22 reference documents are pending (13 tier 1, 9 tier 2). A person downloads the PDFs into
 `references/_inbox/`. A maintainer agent does everything else.
 
-**Every title and link below is unconfirmed.** Nothing here has been probed, and no fetch log or read of a
-document proves any of it. A link can be wrong or gone; a title is what the p9 brief called the document.
-If a link fails, use the site's landing page and find the document there.
+**Titles are confirmed; links are not.** On 2026-11-01 a maintainer read all 22 documents and matched each to
+its ID. Eight titles in the tables below are the p9 brief's wording and differ from the document;
+`references/index.yaml` holds each document's own title and revision. No link has been probed. The files were
+saved through a browser extension, so their download records hold no file URL (the CNSS files name only
+`https://www.cnss.gov/`), and a file name that matches a link proves nothing about the URL. A link can be wrong
+or gone; if one fails, use the site's landing page and find the document there. For the four CNSS PDFs, a local
+log (`.omc/logs/cnss-verified.txt`, not committed) records a re-fetch over verified TLS on 2026-10-31 and a
+SHA-256 for each file, and each imported file's SHA-256 equals the logged value. The log records no comparison
+with the browser copies.
 
 ## What the human does
 
@@ -100,3 +106,33 @@ anything.
 
 Cite a document only after its import commit: a pending reference fails FW-CITE-002 and a `required: false` PDF
 fails FW-CITE-003. The two CSRMC PDFs come from `media.defense.gov` (ADR-0006).
+
+## Import note, 2026-11-01
+
+All 22 documents are imported. The checks prove each text is the extraction of the pinned PDF, not that it reads
+correctly, so triage reads these against the PDF.
+
+Findings I-1 to I-4 in [2026-11-01-import-findings.md](2026-11-01-import-findings.md) and work items WI-50 to WI-53
+track the first four below.
+
+- **CNSSP12, OCR text layer.** All 15 pages are scans with an Acrobat OCR text layer, and the errors reach the
+  register: `C SSP 12` for the running head, `ational` for National, `l.` and `(l)` for item labels 1. `rmf refs
+  extract --ocr` does not help; it acts only on pages with no text. In scratch, `ocrmypdf --force-ocr` fixed those
+  errors but added others (`Jmproving`, `Ata`, `Reference 0`), and its text comes from a new PDF, not the pinned one.
+- **DODCIO-CSRMC, scrambled extraction.** The page is a graphic, and the extractor's table finder read it as one
+  table of fragments. Its scope has `tables: false`, so those fragments are neither entries nor rejections. One
+  entry and 23 rejections remain, in scrambled reading order. Read the five phases and the tenet band from the PDF.
+- **DODCIO-CSRMC-TENETS, rejected tenets.** Nine of the ten tenets are rejected as `no-marker`, because each heading
+  joins its sentence (`Automation Automate to enhance...`). Only the continuous monitoring tenet entered; the other
+  nine are promoted with the heading in the statement.
+- **Figures with no extracted text.** On these in-scope pages the figure is an image, so only its caption is in
+  the text: DODI5000.74 pp. 5, 12; DODI5000.75 p. 6; DODI5000.81 pp. 4, 9, 10; DODI5000.82 p. 5; DODI5000.83 p. 20;
+  DODI8500.01 pp. 27, 37; DODI8530.01 pp. 34, 35; DODI8531.01 p. 14; DODCIO-CATO-IG pp. 7, 12, 17, 18;
+  DODCIO-CATO-EVAL pp. 5, 6, 7.
+- **Glossary duty sentences.** Five glossaries are two-column, and their extraction runs each term's label into the
+  neighbouring definition, so those pages are excluded. Their seven duty sentences are promoted one at a time with
+  `rmf conformance promote --sentence`: DODI5000.74 p. 27 (2), DODI5000.75 pp. 37 and 38 (3), DODI5000.82 p. 29,
+  DOWI8430.01 p. 34.
+- **DODCIO-RECIPROCITY p. 12.** A blank line in the extraction splits item 4.2.j, so REQ-DODCIO-RECIPROCITY-0065
+  stops at `systems’` and its last word is promoted alone as REQ-DODCIO-RECIPROCITY-0163. Triage marks 0163
+  not-applicable with the reason `last word of REQ-0065; read together`, and assesses 0065.

@@ -189,6 +189,7 @@ _FOOTNOTE = re.compile(r"^\d{1,3} [A-Z\[“]")
 _SENTENCE_END = re.compile(r"(?:[.?!]|(?<=[a-z\)”])[.?!]\d{1,3})\s+(?=[A-Z(“\"])")
 _NO_BREAK = re.compile(
     r"\b(?:e\.g|i\.e|etc|No|Nos|vs|Dr|Mr|Ms|U\.S|Sec|Rev|Vol|Fig|cf|al|App|Sect|Pub|Inc|Jr|L)\.$")
+_TRAILING_WORDS = re.compile(r"(?<=[a-z\)”][.?!])\s+[a-z][a-z -]*$")
 _TERMINAL = ('.', ':', ';', '?', '!', '.”', '.)', '”', ')')
 _SEPARATOR = re.compile(r"^\|[\s:|-]+\|$")
 _TITLE_WORD = re.compile(r"^(?:[A-Z0-9&(]|of$|and$|the$|for$|or$|in$|to$|a$|an$)")
@@ -370,6 +371,16 @@ def sentences(paragraph: str) -> list[str]:
         start = m.end()
     out.append(paragraph[start:].strip())
     return [s for s in out if s]
+
+
+def without_trailing_label(sentence: str) -> str:
+    """``sentence`` without lower-case words after its last full stop. A two-column glossary
+    read line by line puts the next term's label there, and sentences() never splits before a
+    lower-case word. An abbreviation is no sentence end, as in sentences()."""
+    m = _TRAILING_WORDS.search(sentence)
+    if m is None or _NO_BREAK.search(sentence[:m.start()]):
+        return sentence
+    return sentence[:m.start()]
 
 
 def _is_label_only(body: str) -> bool:

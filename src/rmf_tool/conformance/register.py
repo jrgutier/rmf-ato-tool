@@ -500,13 +500,24 @@ def _block_at(text: str, page: int, wanted: str) -> extract.Block | None:
     return None
 
 
-def promote(reg: Register, ref: str, text: str, page: int, anchor: str,
-            reason: str) -> dict[str, Any]:
+def _sentence_of(paragraph: str, wanted: str, anchor: str) -> str:
+    """The one sentence of ``paragraph`` that holds the anchor."""
+    hits = [s for s in map(extract.without_trailing_label, extract.sentences(paragraph))
+            if wanted in compact(s)]
+    if len(hits) != 1:
+        raise MarkError(f"{anchor!r} is in {len(hits)} sentences of that paragraph, not one; "
+                        "use words of a single sentence")
+    return hits[0]
+
+
+def promote(reg: Register, ref: str, text: str, page: int, anchor: str, reason: str,
+            *, sentence: bool = False) -> dict[str, Any]:
     """A reviewer's entry for a passage the extractor rejected or read as context
     (`rmf conformance promote`): the rejection on ``page`` holding ``anchor``, else the block
-    of the text on that page holding it. The entry gets the next ID of its document, cites
-    the page with the passage's opening words, and carries ``promoted: {reason}``. The caller
-    writes the file; FW-REQ-001 then checks the citation like any other."""
+    of the text on that page holding it; with ``sentence``, only the sentence of it that holds
+    the anchor. The entry gets the next ID of its document, cites the page with the passage's
+    opening words, and carries ``promoted: {reason}``. The caller writes the file; FW-REQ-001
+    then checks the citation like any other."""
     doc = reg.files.get(ref)
     if doc is None or ref not in reg.sources:
         raise MarkError(f"no requirements file for {ref}")
@@ -520,7 +531,6 @@ def promote(reg: Register, ref: str, text: str, page: int, anchor: str,
     rejection = _rejection_at(doc, page, wanted)
     if rejection is not None:
         statement, locator = rejection["text"], rejection["locator"]
-        doc["rejected"].remove(rejection)
     else:
         block = _block_at(text, page, wanted)
         if block is None:
@@ -528,6 +538,10 @@ def promote(reg: Register, ref: str, text: str, page: int, anchor: str,
                             f"{page}; see rmf conformance page {ref} {page}")
         statement = block.text.split(" ", 1)[1] if block.kind == "footnote" else block.text
         locator = ""
+    if sentence:
+        statement = _sentence_of(statement, wanted, anchor)
+    if rejection is not None and compact(statement) == compact(rejection["text"]):
+        doc["rejected"].remove(rejection)  # part of it stays rejected, as re-extraction finds it
     item = extract.Item(PROMOTED_KIND, page, statement, locator, "")
     item = extract.identify([item], extract.raw_pages(text))[0]
     numbers = [int(e["id"].rsplit("-", 1)[1]) for e in doc["requirements"]]

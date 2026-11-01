@@ -183,12 +183,23 @@ def test_a_removed_entry_leaves_the_totals_and_is_listed():
     assert data["removed"] == ["REQ-DOC-0001"]
 
 
-def test_text_report_shows_every_section():
+def test_text_report_shows_the_committed_register():
     result = runner.invoke(app, ["conformance", "report"])
 
     assert result.exit_code == 0
-    for needle in ("DODI8510.01", "open work items:", "unassessed documents", "WI-",
-                   "pending-acquisition)"):
+    assert "DODI8510.01" in result.stdout
+
+
+def test_text_report_names_a_pending_document_as_unassessed(tmp_path, monkeypatch):
+    repo = fx.build(tmp_path)
+    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: repo)
+    monkeypatch.setattr("rmf_tool.conformance.register.index_entries", lambda root: fx.index())
+
+    result = runner.invoke(app, ["conformance", "report"])
+
+    assert result.exit_code == 0
+    for needle in (fx.DOC, "open work items:", "WI-01", "unassessed documents",
+                   f"{fx.PENDING} (tier 1, pending-acquisition)"):
         assert needle in result.stdout
 
 
@@ -213,23 +224,19 @@ def test_extract_refuses_an_unknown_reference():
 
 
 def test_extract_writes_and_leaves_a_pending_document_unassessed(tmp_path, monkeypatch):
-    for rel in ("conformance", "references/text"):
-        shutil.copytree(REPO_ROOT / rel, tmp_path / rel,
-                        ignore=shutil.ignore_patterns("SP800-*", "CNSSI*", "DODI5*", "DODCIO-D*"))
-    shutil.copytree(REPO_ROOT / "references/schema", tmp_path / "references/schema")
-    shutil.copy(REPO_ROOT / "references/index.yaml", tmp_path / "references/index.yaml")
-    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: tmp_path)
-    target = tmp_path / register.requirements_path("FIPS199")
+    repo = fx.build(tmp_path)
+    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: repo)
+    monkeypatch.setattr("rmf_tool.conformance.register.index_entries", lambda root: fx.index())
+    target = repo / register.requirements_path(fx.DOC)
     target.unlink()
-    pending = next(r for r, s in register.load(REPO_ROOT).sources.items()
-                   if register.index_entries(REPO_ROOT)[r]["status"] != "ok")
 
-    written = runner.invoke(app, ["conformance", "extract", "--id", "FIPS199"])
-    unassessed = runner.invoke(app, ["conformance", "extract", "--id", pending])
+    written = runner.invoke(app, ["conformance", "extract", "--id", fx.DOC])
+    unassessed = runner.invoke(app, ["conformance", "extract", "--id", fx.PENDING])
 
-    assert written.exit_code == 0 and "FIPS199" in written.stdout and target.is_file()
-    assert unassessed.exit_code == 0 and "unassessed" in unassessed.stdout
-    assert not (tmp_path / register.requirements_path(pending)).exists()
+    assert written.exit_code == 0 and fx.DOC in written.stdout and target.is_file()
+    assert unassessed.exit_code == 0
+    assert f"{fx.PENDING}: pending-acquisition, unassessed" in unassessed.stdout
+    assert not (repo / register.requirements_path(fx.PENDING)).exists()
 
 
 def test_accept_text_and_mark_commands(tmp_path, monkeypatch):
