@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import subprocess
 import sys
 from collections.abc import Callable
@@ -20,6 +21,7 @@ from rmf_tool.refs import currency, index_render, verify
 from rmf_tool.render import manual
 
 COVERAGE_MIN = 85
+MIN_WORKER_CPUS = 4
 VALID_MINIMAL = "tests/fixtures/runs/valid_minimal"
 HYBRID_MINIMAL = "tests/fixtures/runs/hybrid_minimal"
 EXAMPLE_RUN = "examples/uas-gcs/runs/example-synthetic-01"
@@ -67,8 +69,11 @@ def _ruff(ctx: Context) -> tuple[bool, list[Finding], str]:
 
 def _pytest(ctx: Context) -> tuple[bool, list[Finding], str]:
     marker = "not network and not agent" if ctx.slow else "not slow and not network and not agent"
-    # xdist is a dev dependency; an environment synced without it runs the tests in series.
-    workers = ["-n", "auto"] if importlib.util.find_spec("xdist") else []
+    # Workers repeat module fixtures, so below MIN_WORKER_CPUS they cost more than they save: a
+    # 2-core runner took 65 minutes with them and 49 in series. An environment synced without
+    # xdist, a dev dependency, also runs in series.
+    parallel = importlib.util.find_spec("xdist") and (os.cpu_count() or 1) >= MIN_WORKER_CPUS
+    workers = ["-n", "auto"] if parallel else []
     argv = [sys.executable, "-m", "pytest", "-q", *workers, "-m", marker,
             "--cov=rmf_tool", f"--cov-fail-under={COVERAGE_MIN}"]
     return run_subprocess(argv, ctx)

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from dataclasses import dataclass, field, replace
 from functools import lru_cache
 from typing import Any
@@ -54,6 +55,7 @@ REJECT_REASONS = {
     "label-only": "a run-in heading or a short list label that names what follows, under no "
                   "lead-in that enumerates it",
     "legend": "a figure legend or key row: abbreviations or scale values and their expansions",
+    "footer": "a page footer declared in conformance/sources.yaml",
 }
 
 MODAL = re.compile(
@@ -204,7 +206,7 @@ class SourceError(Exception):
 class Block:
     page: int
     text: str
-    kind: str  # paragraph | row | header | heading | footnote
+    kind: str  # paragraph | row | header | heading | footnote | footer
     end_page: int = 0
 
 
@@ -328,17 +330,49 @@ def _paragraphs(text: str) -> list[Block]:
     return blocks
 
 
-def blocks(text: str) -> list[Block]:
+def is_regex(pattern: str) -> bool:
+    try:
+        re.compile(pattern)
+    except re.error:
+        return False
+    return True
+
+
+def _page_footers(paragraphs: list[Block], footers: Sequence[str]) -> set[int]:
+    """Positions of the paragraphs that close a page and match a declared footer pattern. A
+    page number the extraction left in (it sits above the margin band) is a paragraph like
+    any other, so without this the next page joins to it."""
+    closing: defaultdict[int, list[int]] = defaultdict(list)
+    for n, block in enumerate(paragraphs):
+        if block.kind == "paragraph":
+            closing[block.page].append(n)
+    out: set[int] = set()
+    for positions in closing.values():
+        for n in reversed(positions):
+            if not any(re.search(p, paragraphs[n].text) for p in footers):
+                break
+            out.add(n)
+    return out
+
+
+def blocks(text: str, footers: Sequence[str] = ()) -> list[Block]:
     """The document's blocks, with footnotes tagged and paragraphs rejoined over page breaks:
     a paragraph with no closing punctuation continues in the next paragraph of a later page
     unless that one opens a list item. Footnotes sit between the two halves and are neither
-    joined nor allowed to block the join. A caption, an all-caps line or a contents line with
-    dot leaders never continues onto the next page: it has no closing punctuation because it
-    is not a sentence, and joining would hide the paragraph that follows it (the 2026-10-31
-    review found in-scope lines lost this way)."""
+    joined nor allowed to block the join, and neither are ``footers``, the patterns
+    conformance/sources.yaml declares for a footer the extraction left in the text, so a
+    sentence crossing a page keeps its first page and never absorbs one. A caption, an
+    all-caps line or a contents line with dot leaders never continues onto the next page: it
+    has no closing punctuation because it is not a sentence, and joining would hide the
+    paragraph that follows it (the 2026-10-31 review found in-scope lines lost this way)."""
     out: list[Block] = []
     last_prose: int | None = None
-    for block in _paragraphs(text):
+    paragraphs = _paragraphs(text)
+    closing = _page_footers(paragraphs, footers)
+    for n, block in enumerate(paragraphs):
+        if n in closing:
+            out.append(replace(block, kind="footer"))
+            continue
         body = block.text.lstrip("# ")
         # A numbered line the extraction tagged as a heading is a footnote only when it reads
         # as a sentence; `# 1 Introduction` is a heading.
@@ -613,6 +647,9 @@ def statement_items(document: list[Block], pages: tuple[int, int], *, tables: bo
             continue
         if not in_scope(block):
             continue
+        if block.kind == "footer":
+            out.rejected.append(Rejected(block.page, trail.locator, "footer", text))
+            continue
         if block.kind == "header":
             trail.pending_body = False
             continue
@@ -760,9 +797,10 @@ def page_count(text: str) -> int:
 
 def extract(text: str, scopes: list[dict[str, Any]], *,
             skip_labels: frozenset[str] = frozenset(),
-            strip_labels: frozenset[str] = frozenset()) -> Extraction:
+            strip_labels: frozenset[str] = frozenset(),
+            footers: Sequence[str] = ()) -> Extraction:
     """Items and rejections of every scope, in document order."""
-    document = blocks(text)
+    document = blocks(text, footers)
     out = Extraction()
     claimed = frozenset(p for s in scopes for p in range(s["pages"][0], s["pages"][1] + 1))
     for scope in scopes:

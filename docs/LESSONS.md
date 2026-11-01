@@ -390,3 +390,24 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the pages were read at import, the CSRMC scope has `tables: false`, and `docs/audits/2026-10-31-operator-imports.md` lists each case for triage.
 - Rule: at import, read the PDF's rendered pages beside its text; a passing extraction proves provenance, not legibility.
 - Promotion: none — legibility of a text layer takes a reader; no offline check can judge it
+
+## L-0056 · 2026-11-01 · run: phase-10 · tags: conformance, extraction, citations
+- Symptom: eight entries of DODCIO-RECIPROCITY and CNSSP22 passed `rmf validate` while `rmf refs show` with the real passage at the cited page exited 1: statements opened with a page number (`3 deployed in the Department...`) or held a footer's phone and email, and the anchor was the footer.
+- Root cause: the extractor strips only margin-band lines and lines recurring on enough pages, so these footers stayed in the text as paragraphs, and `blocks()` joined the next page to them. FW-REQ-001 compares a statement with passages built by the same joiner, so it could not see this.
+- Fix: `footers` in conformance/sources.yaml declares such a footer per document; a match is neither joined nor in the way of a join, and an entry that loses words at its edge keeps its ID and review. Only the three documents with such footers changed.
+- Rule: a check of a citation reads the page as a reader would, not through the code that made the citation.
+- Promotion: check: test_no_statement_starts_on_a_page_number_or_holds_a_footer
+
+## L-0057 · 2026-11-01 · run: phase-10 · tags: refs, ci, fetch
+- Symptom: eight fetch tests passed locally and failed on GitHub with `qpdf: open ...: Permission denied`, on a file the same user had just written, while the importer's tests passed with real qpdf on the same runner.
+- Root cause: Ubuntu 26.04 ships an AppArmor profile for qpdf that denies names not ending in `.pdf`, and fetch validated a `.fetch-*.part` temp file. A probe of name and mode on the runner, with the kernel log, showed the suffix alone decides; the dot prefix and the mode do not.
+- Fix: a downloaded PDF is validated under a `.pdf` name.
+- Rule: when a tool refuses a file its owner can read, suspect mandatory access control, and probe each difference on the failing host before changing more than one.
+- Promotion: check: test_qpdf_reads_the_download_under_a_plain_pdf_name
+
+## L-0058 · 2026-11-01 · run: phase-10 · tags: ci, tests
+- Symptom: pytest workers cut the local gate from 54 minutes to 15 and raised the GitHub run from 49 minutes to 65.
+- Root cause: a private repository's hosted runner has few cores, and workers repeat module fixtures while the fork test runs a nested suite, so they cost more than they save there.
+- Fix: `rmf ci` uses workers only from `MIN_WORKER_CPUS` cores up.
+- Rule: measure a speedup on every host it will run on, not only the one it was built on.
+- Promotion: check: test_ci_runs_pytest_in_series_on_few_cores

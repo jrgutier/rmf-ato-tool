@@ -63,12 +63,14 @@ def build(reg: Register, index: Mapping[str, Any], *,
         removed += [e["id"] for e in doc["requirements"] if e.get("removed")]
         counts = Counter(e["status"] for e in live)
         total.update(counts)
+        real = rules.retired_share(doc)[1]
         row = {"ref": ref, "mode": source["mode"], "tier": entry.get("tier"), "total": len(live),
                **{s: counts[s] for s in STATUSES},
-               # However the statuses were set; over rules.TRIAGE_DOC_SHARE needs a reviewed
-               # record in policy.yaml (FW-REQ-004)
-               "not_applicable_share": round(counts["not-applicable"] / len(live), 3)
-               if live else 0.0,
+               # However the statuses were set; over rules.TRIAGE_DOC_SHARE, or over
+               # rules.NOISE_DOC_SHARE of live entries, needs a reviewed record in policy.yaml
+               # (FW-REQ-004)
+               "noise_share": round(rules.noise_share(doc)[0] / len(live), 3) if live else 0.0,
+               "retired_share": round(rules.retired_share(doc)[0] / real, 3) if real else 0.0,
                "rejected": len(doc.get("rejected", []))}
         rejected_by_reason.update(r["reason"] for r in doc.get("rejected", []))
         if source["mode"] == "catalog":
@@ -117,12 +119,12 @@ def render(report: Mapping[str, Any]) -> list[str]:
     columns = ("total", *STATUSES, "rejected")
     width = max((len(d["ref"]) for d in report["documents"]), default=3)
     lines = [f"{'document':<{width}}  {'mode':<9}  " + "  ".join(f"{c:>9}" for c in columns)
-             + "  n/a share"]
+             + f"  {'noise':>9}  {'retired':>9}"]
     for d in report["documents"]:
         cells = "  ".join(f"{d[c]:>9}" for c in columns)
         note = f"  ({d['ids']} IDs)" if "ids" in d else ""
         lines.append(f"{d['ref']:<{width}}  {d['mode']:<9}  {cells}  "
-                     f"{d['not_applicable_share']:>9.0%}{note}")
+                     f"{d['noise_share']:>9.0%}  {d['retired_share']:>9.0%}{note}")
     lines.append(f"{'total':<{width}}  {'':<9}  " + "  ".join(f"{s[c]:>9}" for c in columns))
     lines.append("entries by kind: " + ", ".join(f"{k} {n}" for k, n in s["kinds"].items()))
     lines.append(f"promoted by a reviewer from the rejected set or a missed passage: "

@@ -10,7 +10,10 @@
 #   excluded   nothing to extract (a web page with no local copy); basis says why
 # Every page of an imported document is in exactly one scope or one exclusion, each with its
 # reason (FW-REQ-001). A scope that yields fewer than one entry per four pages fails FW-REQ-005
-# unless it says why it is `sparse`. A document that is not status: ok in the index is
+# unless it says why it is `sparse`. `footers` are regexes for a footer the extraction left in
+# the text (it sits above the margin band, or recurs on too few pages): matched against the
+# paragraphs closing a page, a match is neither joined nor in the way of a join, so a sentence
+# crossing the page keeps its citation. A document that is not status: ok in the index is
 # unassessed, has no requirements file, and declares its scopes at import.
 schema_version: 1
 documents:
@@ -392,6 +395,9 @@ documents:
       - {pages: [12, 15], reason: "Annex A definitions, Annex B references."}
   - ref: CNSSP22
     mode: statement
+    footers:
+      - {pattern: "^CNSS Secretariat \\(C074\\)", reason: "The address footer of the foreword pages, on too few pages for the extractor to strip."}
+      - {pattern: "^\\(410\\)-854-6805", reason: "The phone and email footer of the foreword pages, on too few pages for the extractor to strip."}
     basis: "A CNSS policy stated in numbered provisions; the foreword and Annex A also bind (reciprocity, and which NIST issuances apply)."
     scopes:
       - {pages: [2, 8], note: "Foreword, Sections I to VIII, and Annex A: which issuances apply to the program"}
@@ -409,6 +415,8 @@ documents:
       - {pages: [24, 26], reason: "Rest of Appendix C, Appendices D acronyms and E references."}
   - ref: DODCIO-CATO-EVAL
     mode: statement
+    footers:
+      - {pattern: "^Continuous Authorization to Operate \\(cATO\\) . Evaluation Criteria Page \\d+$", reason: "The title and page footer sits above the extractor's margin band, so it stays in the text."}
     basis: "Criteria a cATO evaluation applies: bulleted evidence lists in Appendix D with the assessment method in Appendices B and C."
     scopes:
       - {pages: [3, 17], note: "Executive summary and Appendices A to D"}
@@ -418,6 +426,8 @@ documents:
       - {pages: [19, 19], reason: "Rest of the glossary, definitions only."}
   - ref: DODCIO-RECIPROCITY
     mode: statement
+    footers:
+      - {pattern: "^\\d{1,2}$", reason: "The printed page number sits above the extractor's margin band, so it stays in the text."}
     basis: "A playbook of guidance; its requirements are should and indicative sentences and the lettered steps of its use cases."
     scopes:
       - {pages: [3, 23], note: "Sections 1 to 10"}

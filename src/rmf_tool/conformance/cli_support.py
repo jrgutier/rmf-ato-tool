@@ -187,15 +187,20 @@ SAMPLE_KINDS = {"prose": extraction.PROSE_KINDS, "lettered": ("lettered",), "tab
 
 
 def sample(root: Path, *, seed: int, count: int, rejected: bool, kind: str,
-           only: str | None) -> list[str]:
+           only: str | None, status: str | None = None) -> list[str]:
     """A seeded sample of live entries, or of the rejected set, for a reviewer to read against
     the source. The population is the committed register in file order, so the same seed
-    gives the same sample on the same register."""
+    gives the same sample on the same register. ``status`` draws the entries with that status
+    and shows their reasons: the audit of what the marks claim."""
     reg, _ = _load(root)
     if only is not None and only not in reg.sources:
         raise UsageError(f"unknown source {only!r}; see {register.SOURCES}")
     if kind not in SAMPLE_KINDS:
         raise UsageError(f"unknown kind {kind!r}; one of {', '.join(SAMPLE_KINDS)}")
+    if status is not None and status not in register.STATUSES:
+        raise UsageError(f"unknown status {status!r}; one of {', '.join(register.STATUSES)}")
+    if status is not None and rejected:
+        raise UsageError("--status samples entries; a rejection has no status")
     population: list[str] = []
     for ref, doc in sorted(reg.files.items()):
         if only not in (None, ref):
@@ -206,8 +211,10 @@ def sample(root: Path, *, seed: int, count: int, rejected: bool, kind: str,
         else:
             population += [f"{e['id']} p{e['citation']['page']} [{e['kind']}] "
                            f"{e['locator'] or '-'}: {e['statement']}"
+                           + (f" | reason: {e.get('reason', '')}" if status else "")
                            for e in doc["requirements"]
-                           if not e.get("removed") and e["kind"] in SAMPLE_KINDS[kind]]
+                           if not e.get("removed") and e["kind"] in SAMPLE_KINDS[kind]
+                           and status in (None, e["status"])]
     if not population:
         return ["nothing to sample"]
     chosen = random.Random(seed).sample(population, min(count, len(population)))

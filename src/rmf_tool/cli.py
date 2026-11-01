@@ -961,7 +961,8 @@ def conformance_accept_text(
 def conformance_mark(
     ident: Annotated[str, typer.Argument(help="Register entry, REQ-<REF>-<NNNN>.")],
     status: Annotated[str | None, typer.Option("--status", help="candidate, covered, "
-                                               "partial, deferred or not-applicable.")] = None,
+                                               "partial, deferred, not-applicable or "
+                                               "not-a-requirement.")] = None,
     reason: Annotated[str | None, typer.Option("--reason")] = None,
     work_item: Annotated[str | None, typer.Option("--work-item", help="WI-nn.")] = None,
     evidence: Annotated[str | None, typer.Option(
@@ -1105,14 +1106,17 @@ def conformance_sample(
     kind: Annotated[str, typer.Option("--kind", help="prose, lettered, table, promoted or "
                                       "all.")] = "all",
     ref: Annotated[str | None, typer.Option("--id", help="Only this reference.")] = None,
+    status: Annotated[str | None, typer.Option("--status", help="Only entries with this status, "
+                                               "shown with their reasons.")] = None,
 ) -> None:
     """A seeded sample of register entries, or of the rejected paragraphs and rows, to read
-    against the source: noise on the entries, false rejects on the rejected set."""
+    against the source: noise on the entries, false rejects on the rejected set. --status
+    not-a-requirement draws noise marks to audit; FW-REQ-004 cannot judge a reason's truth."""
     from rmf_tool.conformance import cli_support
 
     try:
         lines = cli_support.sample(repo_root(), seed=seed, count=count, rejected=rejected,
-                                   kind=kind, only=ref)
+                                   kind=kind, only=ref, status=status)
     except cli_support.UsageError as exc:
         raise _usage_error(str(exc)) from exc
     for line in lines:

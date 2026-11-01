@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -21,9 +21,13 @@ from rmf_tool.refs.toc import compact
 FAN_OUT_CAP = 25
 # A triage pattern that retires more entries than this was not read entry by entry.
 TRIAGE_CAP = 40
-# A document more than this share of which is not-applicable, however the statuses were set
-# (patterns, mark, a scripted loop of marks), needs a reviewed record in conformance/policy.yaml.
+# A document more than this share of whose real requirements are retired, however the statuses
+# were set (patterns, mark, a scripted loop of marks), needs a reviewed record in
+# conformance/policy.yaml.
 TRIAGE_DOC_SHARE = 0.25
+# Noise leaves that share, so without this a whole document could be marked noise and pass. It
+# is not 25%: noise runs to 40% of a document, and that is not worth an approval each.
+NOISE_DOC_SHARE = 0.5
 TRIAGE_DOC_FLOOR = 10  # a short document may still retire a few entries without a record
 # A pattern needs this many literal words of four or more letters: `.` retires nothing.
 TRIAGE_MIN_WORDS = 2
@@ -74,6 +78,25 @@ def _coverage_problems(ref: str, source: Mapping[str, Any], text: str) -> list[s
     if doubled:
         problems.append(f"{ref}: pages {_pages(doubled)} are in more than one range")
     return problems
+
+
+def _footer_problems(ref: str, source: Mapping[str, Any], text: str) -> list[str]:
+    """A declared footer pattern that cannot work would leave the join it was added to fix."""
+    out = []
+    found = [b.text for b in extract.blocks(text, register.footers_of(source))
+             if b.kind == "footer"]
+    for footer in source.get("footers", []):
+        pattern = footer["pattern"]
+        if not extract.is_regex(pattern):
+            out.append(f"{ref}: footer pattern {pattern!r} is not a regex")
+            continue
+        hits = [line for line in found if re.search(pattern, line)]
+        if not hits:
+            out.append(f"{ref}: footer pattern {pattern!r} matches no page-closing paragraph")
+        if any(extract.MODAL.search(line) or extract.SHOULD.search(line) for line in hits):
+            out.append(f"{ref}: footer pattern {pattern!r} matches a paragraph that states a "
+                       "duty; a footer never does")
+    return out
 
 
 def _pages(pages: list[int]) -> str:
@@ -133,7 +156,8 @@ def _source_problems(reg: Register, index: Mapping[str, Any], repo: Path) -> lis
                             entry["text"]["path"]))
             continue
         out += [_err("FW-REQ-001", m, register.SOURCES)
-                for m in _coverage_problems(ref, source, text)]
+                for m in _coverage_problems(ref, source, text)
+                + _footer_problems(ref, source, text)]
     for item in reg.reference_list:
         if item.get("ref") and item["ref"] not in reg.sources:
             out.append(_err("FW-REQ-001", f"reference list: {item['document']} names unknown "
@@ -152,7 +176,9 @@ def _entry_problems(reg: Register, resolver: Resolver, repo: Path,
         passages: dict[int, str] | None = {}
         if ref in index and index[ref].get("text") and doc["requirements"]:
             try:
-                passages = extract.passages(extract.blocks(register.text_of(repo, index[ref])))
+                footers = register.footers_of(reg.sources.get(ref, {}))
+                text = register.text_of(repo, index[ref])
+                passages = extract.passages(extract.blocks(text, footers))
             except OSError:
                 passages = None  # reported once by _source_problems
         counts = Counter(e["id"] for e in doc["requirements"])
@@ -334,40 +360,78 @@ def retired(entry: Mapping[str, Any]) -> bool:
 
 
 def retired_share(doc: Mapping[str, Any]) -> tuple[int, int]:
-    """(retired, live) entries of a requirements document, however the statuses were set: by
-    pattern, by `rmf conformance mark`, or by a scripted loop of marks."""
+    """(retired, real) requirements of a document, however the statuses were set: by pattern,
+    by `rmf conformance mark`, or by a scripted loop of marks. Extraction noise is neither: a
+    heading marked not-a-requirement retires nothing, and it would otherwise trip the share
+    on nearly every document."""
+    real = [e for e in doc["requirements"]
+            if not e.get("removed") and e["status"] != register.NOT_A_REQUIREMENT]
+    return sum(1 for e in real if retired(e)), len(real)
+
+
+def noise_share(doc: Mapping[str, Any]) -> tuple[int, int]:
+    """(noise, live) entries of a document: the entries retired_share leaves out."""
     live = [e for e in doc["requirements"] if not e.get("removed")]
-    return sum(1 for e in live if retired(e)), len(live)
+    return sum(1 for e in live if e["status"] == register.NOT_A_REQUIREMENT), len(live)
 
 
 RETIRED = "not-applicable, deferred, or partial on evidence that cannot fail"
 
 
-def _retirement_problems(reg: Register) -> list[Finding]:
-    """A document over TRIAGE_DOC_SHARE retired needs a per-document record in
-    conformance/policy.yaml with approved_by user; a record no document needs is stale."""
+def _record_problems(reg: Register, name: str, records: list[dict[str, Any]],
+                     over: Callable[[str, Mapping[str, Any]], str | None]) -> list[Finding]:
+    """A document ``over`` a limit needs a per-document record in conformance/policy.yaml with
+    approved_by user; a record no document needs is stale. ``over`` says why, or None."""
     out = []
-    approved = {r["ref"]: r for r in reg.retirements if r.get("approved_by") == "user"}
+    approved = {r["ref"]: r for r in records if r.get("approved_by") == "user"}
     for ref, doc in sorted(reg.files.items()):
-        count, live = retired_share(doc)
-        cap = max(TRIAGE_DOC_FLOOR, int(live * TRIAGE_DOC_SHARE))
-        if count > cap and ref not in approved:
-            out.append(_err("FW-REQ-004", f"{ref}: {count} of {live} entries are retired "
-                            f"({RETIRED}; {count / live:.0%}), over {TRIAGE_DOC_SHARE:.0%} of "
-                            f"the document; retiring that much of a document needs a "
-                            f"retirements record with approved_by user in {register.POLICY}",
+        message = over(ref, doc)
+        if message and ref not in approved:
+            out.append(_err("FW-REQ-004", message, register.POLICY))
+        elif not message and ref in approved:
+            out.append(_err("FW-REQ-004", f"{ref}: {name} record is not needed; drop it",
                             register.POLICY))
-        elif count <= cap and ref in approved:
-            out.append(_err("FW-REQ-004", f"{ref}: retirements record is not needed ({count} "
-                            f"of {live} retired); drop it", register.POLICY))
-    for record in reg.retirements:
+    for record in records:
         if record.get("approved_by") != "user":
-            out.append(_err("FW-REQ-004", f"retirements record for {record['ref']} needs "
+            out.append(_err("FW-REQ-004", f"{name} record for {record['ref']} needs "
                             "approved_by: user", register.POLICY))
         if record["ref"] not in reg.files:
-            out.append(_err("FW-REQ-004", f"retirements record for unknown document "
+            out.append(_err("FW-REQ-004", f"{name} record for unknown document "
                             f"{record['ref']}", register.POLICY))
     return out
+
+
+def _over_retired(ref: str, doc: Mapping[str, Any]) -> str | None:
+    count, real = retired_share(doc)
+    noise, live = noise_share(doc)
+    half = max(TRIAGE_DOC_FLOOR, int(live * NOISE_DOC_SHARE))
+    if count > max(TRIAGE_DOC_FLOOR, int(real * TRIAGE_DOC_SHARE)):
+        return (f"{ref}: {count} of {real} requirements are retired ({RETIRED}; "
+                f"{count / real:.0%}), over {TRIAGE_DOC_SHARE:.0%} of the document; retiring "
+                f"that much of a document needs a retirements record with approved_by user in "
+                f"{register.POLICY}")
+    # Each noise mark shrinks the base above, so the two limits are read together too.
+    if count and noise <= half < noise + count:
+        return (f"{ref}: {noise} noise and {count} retired entries set aside "
+                f"{(noise + count) / live:.0%} of {live} live entries, over "
+                f"{NOISE_DOC_SHARE:.0%} of the document; that needs a retirements record with "
+                f"approved_by user in {register.POLICY}")
+    return None
+
+
+def _over_noise(ref: str, doc: Mapping[str, Any]) -> str | None:
+    count, live = noise_share(doc)
+    if count <= max(TRIAGE_DOC_FLOOR, int(live * NOISE_DOC_SHARE)):
+        return None
+    return (f"{ref}: {count} of {live} live entries are {register.NOT_A_REQUIREMENT} "
+            f"({count / live:.0%}), over {NOISE_DOC_SHARE:.0%} of the document; that much noise "
+            f"needs a noise record with approved_by user in {register.POLICY}")
+
+
+def _duty_words(text: str) -> set[str]:
+    """The extractor's own obligation and recommendation phrases in ``text``, case-folded."""
+    return {m.group(0).casefold() for rx in (extract.MODAL, extract.SHOULD)
+            for m in rx.finditer(text)}
 
 
 def unresolved_at_close(probe: evidence.Probe, entry: Mapping[str, Any]) -> bool:
@@ -376,7 +440,8 @@ def unresolved_at_close(probe: evidence.Probe, entry: Mapping[str, Any]) -> bool
     no evidence that judges strong (evidence.judge): a citation, prose, a rule that does not
     list the entry, or a rule without a negative fixture cannot fail when the requirement is
     broken."""
-    if entry["status"] in ("candidate", "deferred", "not-applicable"):
+    if entry["status"] in ("candidate", "deferred", "not-applicable",
+                           register.NOT_A_REQUIREMENT):
         return True
     return not any(evidence.judge(probe, item, entry).strength == evidence.STRONG
                    for item in entry.get("evidence") or [])
@@ -444,8 +509,15 @@ def reasons(reg: Register, index: Mapping[str, Any], probe: evidence.Probe) -> l
                 out.append(_err("FW-REQ-004", f"{ident}: a {status} entry left its source; "
                                 "record removal_reason or restore the text", path))
             continue
-        if status in ("partial", "deferred", "not-applicable") and not entry.get("reason"):
+        if status in ("partial", "deferred", "not-applicable",
+                      register.NOT_A_REQUIREMENT) and not entry.get("reason"):
             out.append(_err("FW-REQ-004", f"{ident}: {status} needs a reason", path))
+        elif status == register.NOT_A_REQUIREMENT:
+            words = _duty_words(entry["statement"])
+            if words and not words & _duty_words(entry["reason"]):
+                out.append(_err("FW-REQ-004", f"{ident}: the statement says "
+                                f"{', '.join(sorted(words))}; a not-a-requirement reason must "
+                                "use that word and say why it binds no one", path))
         if status == "partial" and not entry.get("evidence"):
             out.append(_err("FW-REQ-004", f"{ident}: partial needs at least one evidence item "
                             "(a citation or prose at least); with none it is deferred or "
@@ -458,7 +530,9 @@ def reasons(reg: Register, index: Mapping[str, Any], probe: evidence.Probe) -> l
         if status == "covered" and item is not None and item["status"] == "open":
             out.append(_err("FW-REQ-004", f"{ident}: covered with open work item {item['id']}",
                             path))
-    return out + _pattern_problems(reg, index) + _retirement_problems(reg) \
+    return out + _pattern_problems(reg, index) \
+        + _record_problems(reg, "retirements", reg.retirements, _over_retired) \
+        + _record_problems(reg, "noise", reg.noise, _over_noise) \
         + _work_item_problems(reg, probe) + binding_problems(reg)
 
 

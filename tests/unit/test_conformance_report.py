@@ -78,7 +78,7 @@ def test_totals_add_up_per_document_and_overall():
     assert s["kinds"] == {"modal": 13}
 
 
-def test_the_not_applicable_share_of_each_document_is_reported():
+def test_the_retired_share_of_each_document_is_reported():
     """However the statuses were set (FW-REQ-004 reads the same share)."""
     reg, index = small_register(12)
     mark(reg, 5, "not-applicable")  # CAT's one entry and four of DOC's twelve
@@ -86,9 +86,23 @@ def test_the_not_applicable_share_of_each_document_is_reported():
     data = report.build(reg, index)
     row = next(d for d in data["documents"] if d["ref"] == "DOC")
 
-    assert row["not_applicable_share"] == 0.333
+    assert row["retired_share"] == 0.333
     assert any(line.startswith("DOC") and line.rstrip().endswith("33%")
                for line in report.render(data)), report.render(data)[:3]
+    assert report.render(data)[0].rstrip().endswith("noise    retired")
+
+
+def test_the_noise_share_of_each_document_is_its_own_column_and_key():
+    """Noise leaves the retired share, so it needs a figure of its own: a share of live entries."""
+    reg, index = small_register(12)
+    mark(reg, 6, "not-a-requirement")  # CAT's one entry and five of DOC's twelve
+
+    data = report.build(reg, index)
+    row = next(d for d in data["documents"] if d["ref"] == "DOC")
+    line = next(li for li in report.render(data) if li.startswith("DOC"))
+
+    assert row["noise_share"] == round(5 / 12, 3)
+    assert line.split()[-2:] == ["42%", "0%"]
 
 
 def test_a_pending_document_is_unassessed_and_an_excluded_one_is_neither():
@@ -299,3 +313,38 @@ def test_promote_and_page_commands(tmp_path, monkeypatch):
     assert report_.exit_code == 0 and "promoted by a reviewer" in report_.stdout
     assert missing.exit_code == 2 and "in no rejection and no paragraph" in missing.output
     assert unknown.exit_code == 2
+
+
+def test_sample_draws_by_status_with_the_same_seed_the_same_sample(tmp_path, monkeypatch):
+    repo = fx.build(tmp_path)
+    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: repo)
+    monkeypatch.setattr("rmf_tool.conformance.register.index_entries", lambda root: fx.index())
+    reg = fx.load(repo)
+    register.mark(reg, f"REQ-{fx.DOC}-0002", status="not-a-requirement", reason="A heading here.")
+    register.mark(reg, f"REQ-{fx.DOC}-0003", status="not-a-requirement", reason="Another heading.")
+    fx.write(repo, reg)
+    args = ["conformance", "sample", "--seed", "7", "-n", "5", "--status", "not-a-requirement"]
+
+    first = runner.invoke(app, args)
+    second = runner.invoke(app, args)
+    other = runner.invoke(app, [*args[:-1], "candidate"])
+
+    assert first.exit_code == 0, first.output
+    assert first.stdout == second.stdout
+    assert first.stdout.splitlines()[0] == "population 2, seed 7, sample 2"
+    assert f"REQ-{fx.DOC}-0002" in first.stdout and "A heading here." in first.stdout
+    assert f"REQ-{fx.DOC}-0001" not in first.stdout and f"REQ-{fx.DOC}-0002" not in other.stdout
+
+
+@pytest.mark.parametrize("extra, message", [
+    (["--status", "nonsense"], "unknown status"),
+    (["--status", "candidate", "--rejected"], "--status samples entries"),
+])
+def test_sample_refuses_a_status_it_cannot_draw(tmp_path, monkeypatch, extra, message):
+    repo = fx.build(tmp_path)
+    monkeypatch.setattr("rmf_tool.cli.repo_root", lambda: repo)
+    monkeypatch.setattr("rmf_tool.conformance.register.index_entries", lambda root: fx.index())
+
+    result = runner.invoke(app, ["conformance", "sample", "--seed", "1", *extra])
+
+    assert result.exit_code == 2 and message in result.output

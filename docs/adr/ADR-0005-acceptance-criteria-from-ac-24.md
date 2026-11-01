@@ -25,6 +25,7 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-31 | p10 | Every `partial`, `deferred` and `not-applicable` entry has a reason and `partial` carries at least one evidence item; a `deferred` tier 1 entry records `approved_by: user`; a reviewed entry that left its source records `removal_reason`; triage patterns are document-scoped, specific, capped, sampled and never on tier 1; a document over a quarter retired (not-applicable, deferred or partial on evidence that cannot fail), however its statuses were set, has a `retirements` record approved by the user; every register work item binds entries and closes only on evidence that judges strong | FW-REQ-004 |
 | AC-32 | p10 | Each source text matches the hash reviewed in `conformance/text-hashes.yaml`, so any edit to a document fails until it is re-reviewed and accepted; an offline re-extraction equals the register; every scope yields entries or says why not; no entry awaits review | FW-REQ-005 |
 | AC-33 | p10 | A revision agrees with what its document says about itself wherever that sits: the anchor holds the revision's latest full date, and the highest `Change N` with its date, the `INCLUDES UPDATES AS OF` date and the last errata date are all named, unless a `revision_source` reason exempts the entry | REF-007 |
+| AC-34 | p10 | Extraction noise is marked `not-a-requirement` with a reason, and is not counted in a document's retired share, which measures real requirements only; a noise entry whose statement holds one of the extractor's duty phrases (`MODAL`, `SHOULD`) has a reason that uses that phrase and says why it binds no one. That check is a speed bump: a reason can repeat the word and lie. The semantic check is the sampled audit (`rmf conformance sample --status not-a-requirement`), not the rule. A document over half noise needs a `noise` record approved by the user Noise and retired entries together over half of a document's live entries need a retirements record. | FW-REQ-004 |
 
 ## Consequences
 
@@ -63,3 +64,24 @@ Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents i
   session.
 - Extraction is a first pass. Triage reads whole pages and promotes misses with
   `rmf conformance promote`; recall is reported as a measured figure across fresh seeds.
+
+## Decisions taken with the user, 2026-11-01
+
+- The 25% limit counts real requirements only. It was set when entries were assumed to be
+  requirements; about 27% are extraction noise, so nearly every document tripped it and the
+  approvals it forced would have said nothing. `not-a-requirement` separates noise from
+  `not-applicable`, a real requirement the tool has nothing to hold it with.
+- Noise has its own limit, half of a document's live entries, with a `noise` record approved
+  by the user above it. Without one a document could be turned to noise whole and pass. It is
+  not 25%: noise runs to 40% of a document, and the user chose not to approve junk one
+  document at a time.
+- Acquisition process is modelled at its RMF touchpoints only: what a run consumes or produces.
+  A purely acquisition duty is deferred with a reason, and a tier 1 deferral still needs
+  approval. This narrows "everything in the documents" for acquisition process alone.
+- Triage runs on Opus throughout, after a pilot in which Sonnet wrongly retired 3 of 185 real
+  requirements and Opus none of 214.
+- The DoD 5000 series may exceed the 25% limit where that comes solely from the touchpoints
+  decision. The user approved this for DoDI 5000.02, 5000.74, 5000.75, 5000.80, 5000.81, 5000.82,
+  5000.83, 5000.85, 5000.87, 5000.88, 5000.89 and 5000.90, each with its own record in
+  `conformance/policy.yaml`, listed at p13 and reversible there. It does not extend to any other
+  document, to entries retired for another reason, or to tier 1 deferrals.

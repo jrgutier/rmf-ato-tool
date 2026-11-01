@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:conformance-policy",
   "title": "Evidence policy",
-  "description": "Reviewed exceptions: a target that legitimately proves more requirements than the fan-out cap of FW-REQ-003 allows, and a document more of which is not-applicable than FW-REQ-004 allows without review.",
+  "description": "Reviewed exceptions: a target that legitimately proves more requirements than the fan-out cap of FW-REQ-003 allows, and a document more of which is retired or noise than FW-REQ-004 allows without review.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -56,7 +56,16 @@
       }
     },
     "retirements": {
-      "description": "Documents more than a quarter of whose live entries are not-applicable, however the statuses were set (FW-REQ-004); one record per document, reviewed by the user.",
+      "description": "Documents more than a quarter of whose real requirements are retired, however the statuses were set; extraction noise marked not-a-requirement does not count (FW-REQ-004); one record per document, reviewed by the user.",
+      "$ref": "#/$defs/documentRecords"
+    },
+    "noise": {
+      "description": "Documents more than half of whose live entries are marked not-a-requirement (FW-REQ-004); one record per document, reviewed by the user.",
+      "$ref": "#/$defs/documentRecords"
+    }
+  },
+  "$defs": {
+    "documentRecords": {
       "type": "array",
       "items": {
         "type": "object",

@@ -792,3 +792,67 @@ def test_copy_of_the_real_register_round_trips_through_reconcile():
 
         assert built.document == before
         assert not built.changes.added and not built.changes.removed
+
+
+FOOTERS = (r"^\d{1,3}$",)
+CROSSING = ("<!-- page 1 -->\n\nThe organization must review the system already\n\n3\n\n"
+            "<!-- page 2 -->\n\ndeployed in the Component. The AO must sign the plan.\n\n4\n\n"
+            "<!-- page 3 -->\n\nThe AO must also record the decision.\n\n5\n")
+
+
+def test_a_declared_footer_is_neither_joined_nor_in_the_way_of_a_join():
+    """RECIPROCITY p. 5: the page number sat between the two halves of a sentence, and the second
+    half joined to it, so the statement began with `3` and cited the wrong page."""
+    document = extract.blocks(CROSSING, footers=FOOTERS)
+
+    prose = [b for b in document if b.kind == "paragraph"]
+    assert [b.text for b in document if b.kind == "footer"] == ["3", "4", "5"]
+    assert prose[0].text == ("The organization must review the system already deployed in the "
+                             "Component. The AO must sign the plan.")
+    assert (prose[0].page, prose[0].end_page) == (1, 2)
+    assert prose[1].text == "The AO must also record the decision."
+
+
+def test_an_undeclared_page_number_still_absorbs_the_next_page():
+    """What the declaration fixes, and what the check across the registers would catch."""
+    assert "3 deployed in the Component. The AO must sign the plan." in \
+        [b.text for b in extract.blocks(CROSSING)]
+
+
+def test_a_statement_crossing_a_page_cites_its_first_page_and_the_footer_is_rejected():
+    found = extract.extract(CROSSING, [{"pages": [1, 3]}], footers=FOOTERS)
+
+    assert [(i.page, i.anchor) for i in found.items][:1] == \
+        [(1, "The organization must review the system already")]
+    assert not any(i.statement[0].isdigit() for i in found.items)
+    assert [(r.reason, r.text) for r in found.rejected] == \
+        [("footer", "3"), ("footer", "4"), ("footer", "5")]
+
+
+def test_a_footer_of_several_blocks_is_skipped_whole():
+    """CNSSP 22 p. 2: the address and the phone and email close the page in two blocks."""
+    text = ("<!-- page 1 -->\n\nAnnex A identifies the documents, which include\n\n"
+            "CNSS Secretariat (C074) Fort Meade\n\n(410)-854-6805\ncnss@nsa.gov\n\n"
+            "<!-- page 2 -->\n\nNIST publications for a program. Annex A will be updated.\n")
+
+    document = extract.blocks(text, footers=(r"^CNSS Secretariat", r"^\(410\)"))
+
+    assert [b.kind for b in document] == ["paragraph", "footer", "footer"]
+    assert document[0].text == ("Annex A identifies the documents, which include NIST "
+                                "publications for a program. Annex A will be updated.")
+
+
+def test_a_footer_pattern_matches_only_the_close_of_a_page():
+    text = "<!-- page 1 -->\n\n12\n\nThe AO must sign the plan.\n\n3\n"
+
+    assert [(b.text, b.kind) for b in extract.blocks(text, footers=FOOTERS)] == \
+        [("12", "paragraph"), ("The AO must sign the plan.", "paragraph"), ("3", "footer")]
+
+
+def test_a_list_item_keeps_its_place_across_a_footer():
+    text = ("<!-- page 1 -->\n\n4.1 Duties\n\nThe owner:\n\na. Will sign the plan.\n\n3\n\n"
+            "<!-- page 2 -->\n\nb. Will file the plan.\n")
+
+    found = extract.extract(text, [{"pages": [1, 2]}], footers=FOOTERS)
+
+    assert [i.locator for i in found.items] == ["a", "b"]

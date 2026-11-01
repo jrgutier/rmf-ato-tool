@@ -12,7 +12,7 @@ ci:
 ci-release:
 	uv run rmf ci --release
 
-# In series on purpose, for readable order while debugging; rmf ci uses workers.
+# In series on purpose, for readable order while debugging; rmf ci uses workers from 4 cores up.
 test:
 	uv run pytest -q
 

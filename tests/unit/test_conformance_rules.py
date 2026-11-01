@@ -739,7 +739,7 @@ def test_the_fake_scripted_loop_of_deferrals_counts_as_retirement(reg, index, fi
 
     found = reasons(reg, index)
 
-    assert any(f"DOC: 20 of {len(entries)} entries are retired ({rules.RETIRED}; "
+    assert any(f"DOC: 20 of {len(entries)} requirements are retired ({rules.RETIRED}; "
                f"{20 / len(entries):.0%}), over 25% of the document" in m for m in found), found
     assert rules.retired_share(reg.files[DOC]) == (20, len(entries))
 
@@ -847,8 +847,132 @@ def test_patterns_together_cannot_retire_more_than_a_share_of_a_document(reg, in
     found = reasons(reg, index)
 
     assert not any("over the cap of" in m for m in found), "each pattern is under its own cap"
-    assert any(f"DOC: 60 of {len(entries)} entries are retired ({rules.RETIRED}; "
+    assert any(f"DOC: 60 of {len(entries)} requirements are retired ({rules.RETIRED}; "
                f"{60 / len(entries):.0%}), over 25% of the document" in m for m in found), found
+
+
+def test_noise_is_not_counted_in_the_retired_share(reg, index):
+    """About a quarter of all entries are extraction noise; marking them must not trip the
+    per-document limit, and a document of real requirements must still trip it."""
+    entries = _many_entries(reg, 40)
+    for entry in entries[:20]:
+        register.mark(reg, entry["id"], status="not-a-requirement", reason="A heading.")
+    assert not [m for m in reasons(reg, index) if "are retired (" in m]
+
+    for entry in entries[20:31]:
+        register.mark(reg, entry["id"], status="not-applicable", reason="Binds nobody here.")
+    real = len(entries) - 20
+    assert rules.retired_share(reg.files[DOC]) == (11, real)
+    assert any(f"11 of {real} requirements are retired" in m for m in reasons(reg, index))
+
+
+def test_noise_needs_a_reason(reg, index):
+    entry = _many_entries(reg, 1)[0]
+    register.mark(reg, entry["id"], status="not-a-requirement")
+    assert f"{entry['id']}: not-a-requirement needs a reason" in reasons(reg, index)
+
+
+@pytest.mark.parametrize("statement, reason, flagged", [
+    ("The ISSM must review the plan.", "A definition of the plan.", True),
+    ("The ISSM shall review the plan.", "An example; this shall binds no one.", False),
+    ("The ISSM will review the plan.", "The source says what will happen, no duty.", False),
+    ("A topic heading.", "A heading.", False),
+    ("The ISSM should review the plan.", "A definition of the plan.", True),
+    ("The ISSM is responsible for the plan.", "A definition of the plan.", True),
+    ("The ISSM is required to review the plan.", "A definition of the plan.", True),
+    ("The review is required.", "A definition of the plan.", True),
+    ("Reviews are recommended.", "A definition of the plan.", True),
+    ("Reviews are recommended.", "The source says recommended of itself, no duty.", False),
+    ("The ISSM Should review it.", "A quotation; this should binds no one.", False),
+    ("The ISSM is responsible for it.", "A definition: responsible for names the role.", False),
+])
+def test_noise_holding_a_duty_word_must_answer_for_it(reg, index, statement, reason, flagged):
+    entry = _many_entries(reg, 1)[0]
+    entry["statement"] = statement
+    register.mark(reg, entry["id"], status="not-a-requirement", reason=reason)
+    assert any("a not-a-requirement reason must" in m for m in reasons(reg, index)) is flagged
+
+
+def noise_fake(reg, count=30, marked=20):
+    entries = _many_entries(reg, count)
+    for entry in entries[:marked]:
+        register.mark(reg, entry["id"], status="not-a-requirement", reason="A heading.")
+    return entries
+
+
+def test_a_document_cannot_be_turned_to_noise_without_a_record(reg, index):
+    """The fake: every entry marked noise with one reason, and the retired share read (0, 0)."""
+    entries = noise_fake(reg, marked=10**6)
+    live = len([e for e in reg.files[DOC]["requirements"] if not e.get("removed")])
+    assert rules.retired_share(reg.files[DOC]) == (0, 0)
+    assert rules.noise_share(reg.files[DOC]) == (len(entries), live) and len(entries) == live
+
+    assert [m for m in reasons(reg, index) if "not-a-requirement (" in m] == [
+        f"DOC: {live} of {live} live entries are not-a-requirement (100%), over 50% of the "
+        "document; that much noise needs a noise record with approved_by user in "
+        "conformance/policy.yaml"]
+
+
+def test_a_noise_record_lifts_the_limit_and_is_handled_like_a_retirement(reg, index):
+    entries = noise_fake(reg)
+    reg.noise.append({"ref": DOC, "reason": "An appendix of headings the extractor read."})
+    assert any("noise record for DOC needs approved_by: user" in m for m in reasons(reg, index))
+
+    reg.noise[0]["approved_by"] = "user"
+    assert not [m for m in reasons(reg, index) if "not-a-requirement (" in m or "noise rec" in m]
+
+    for entry in entries[:15]:
+        register.mark(reg, entry["id"], status="candidate", reason=None)
+    assert any("DOC: noise record is not needed" in m for m in reasons(reg, index))
+
+    reg.noise.append({"ref": "NOPE", "reason": "No such document here.", "approved_by": "user"})
+    assert any("noise record for unknown document NOPE" in m for m in reasons(reg, index))
+
+
+def test_half_noise_and_a_short_document_are_within_the_limit(reg, index):
+    noise_fake(reg, count=7, marked=10**6)
+    assert rules.noise_share(reg.files[DOC])[0] == 10, "the floor: TRIAGE_DOC_FLOOR"
+    assert not [m for m in reasons(reg, index) if "not-a-requirement (" in m]
+
+
+def test_exactly_half_noise_passes_and_one_more_fails(reg, index):
+    entries = _many_entries(reg, 37)
+    live = len(reg.files[DOC]["requirements"])
+    half = live // 2
+    for entry in entries[:half]:
+        register.mark(reg, entry["id"], status="not-a-requirement", reason="A heading.")
+    assert not [m for m in reasons(reg, index) if "not-a-requirement (" in m]
+
+    register.mark(reg, entries[half]["id"], status="not-a-requirement", reason="A heading.")
+    assert [m for m in reasons(reg, index) if "not-a-requirement (" in m]
+
+
+def test_noise_and_retired_together_cannot_pass_under_each_limit(reg, index):
+    """Each noise mark shrinks the base of the retired share, so 34 noise and 10 retired of 69
+    live entries pass both limits apart while setting aside two thirds of a document."""
+    entries = _many_entries(reg, 40)
+    live = len(entries)
+    noise = live // 2 - 3
+    for entry in entries[:noise]:
+        register.mark(reg, entry["id"], status="not-a-requirement", reason="A heading.")
+    for entry in entries[noise:noise + 2]:
+        register.mark(reg, entry["id"], status="not-applicable", reason="Binds nobody here.")
+    assert not [m for m in reasons(reg, index) if "set aside" in m]
+
+    for entry in entries[noise + 2:noise + 9]:
+        register.mark(reg, entry["id"], status="not-applicable", reason="Binds nobody here.")
+    message = f"{noise} noise and 9 retired entries set aside"
+    assert any(message in m for m in reasons(reg, index))
+
+    reg.retirements.append({"ref": DOC, "approved_by": "user",
+                            "reason": "Reviewed: mostly front matter and outside duties."})
+    assert not [m for m in reasons(reg, index) if "set aside" in m or "not needed" in m]
+
+
+def test_a_work_item_cannot_close_on_noise(reg):
+    entry = _many_entries(reg, 1)[0]
+    register.mark(reg, entry["id"], status="not-a-requirement", reason="A heading.")
+    assert rules.unresolved_at_close(None, entry)
 
 
 def test_the_fake_scripted_loop_of_marks_cannot_retire_a_document_without_a_record(reg, index):
@@ -862,7 +986,7 @@ def test_the_fake_scripted_loop_of_marks_cannot_retire_a_document_without_a_reco
 
     found = reasons(reg, index)
     assert [m for m in found if "are retired (" in m] == [
-        f"DOC: 20 of {len(entries)} entries are retired ({rules.RETIRED}; "
+        f"DOC: 20 of {len(entries)} requirements are retired ({rules.RETIRED}; "
         f"{20 / len(entries):.0%}), over 25% of the document; "
         "retiring that much of a document needs a retirements record with approved_by user in "
         "conformance/policy.yaml"]
@@ -1454,6 +1578,86 @@ def test_promote_sentence_command(glossary, monkeypatch):
 ])
 def test_a_trailing_label_is_dropped_and_an_abbreviation_is_not(sentence, expected):
     assert extract.without_trailing_label(sentence) == expected
+
+
+def test_an_entry_that_loses_a_page_number_keeps_its_id_and_its_review():
+    """A footer dropped from the front of a statement: the shorter statement is the same one."""
+    old = {"id": f"REQ-{DOC}-0001", "citation": {"ref": DOC, "page": 1, "anchor": "3"},
+           "kind": "modal", "locator": "4.1", "context": "", "status": "not-applicable",
+           "reason": "Product behaviour, no duty.",
+           "statement": "3 Users can search for systems in eMASS."}
+    new = extract.Item("modal", 2, "Users can search for systems in eMASS.", "4.1", "",
+                       anchor="Users can search")
+
+    entries, changes = register.reconcile(DOC, [old], [new], [])
+
+    assert [e["id"] for e in entries] == [old["id"]] and changes.removed == []
+    assert changes.changed == [old["id"]]
+    assert entries[0]["status"] == "not-applicable" and entries[0]["needs_review"] is True
+    assert entries[0]["reason"] == old["reason"]
+
+
+def test_a_shorter_statement_inside_two_old_ones_is_not_guessed():
+    olds = [{"id": f"REQ-{DOC}-000{n}", "citation": {"ref": DOC, "page": 1, "anchor": str(n)},
+             "kind": "modal", "locator": "4.1", "context": "", "status": "candidate",
+             "statement": f"{n} Users can search for systems in eMASS."} for n in (1, 2)]
+    new = extract.Item("modal", 2, "Users can search for systems in eMASS.", "4.2", "",
+                       anchor="Users can search")
+
+    entries, changes = register.reconcile(DOC, olds, [new], [])
+
+    assert len(changes.added) == 1 and len(changes.removed) == 2
+
+
+@pytest.mark.parametrize("pattern, message", [
+    ("no footer reads like this", "matches no page-closing paragraph"),
+    ("[", "is not a regex"),
+])
+def test_a_footer_pattern_that_cannot_work_is_a_finding(repo, index, pattern, message):
+    reg = fx.load(repo)
+    reg.sources[DOC]["footers"] = [{"pattern": pattern, "reason": "The page footer of the test."}]
+
+    assert any(message in m for m in shape(repo, reg, index))
+
+
+def containment(old_statement, new_statement, *, page=1, new_page=1, **old_fields):
+    old = {"id": f"REQ-{DOC}-0001", "citation": {"ref": DOC, "page": page, "anchor": "3"},
+           "kind": "modal", "locator": "4.1", "context": "", "status": "candidate",
+           "statement": old_statement, **old_fields}
+    new = extract.Item("modal", new_page, new_statement, "4.2", "", anchor="words")
+    return register.reconcile(DOC, [old], [new], [])
+
+
+SHORT = "The AO must sign."
+
+
+@pytest.mark.parametrize("dead", [f"3 Users can search for systems. {SHORT}", f"3 {SHORT}"])
+def test_a_removed_entry_is_never_resurrected_by_containment(dead):
+    """A short new sentence inside a dead paragraph took its ID and its review."""
+    entries, changes = containment(dead, SHORT, page=9, new_page=9, removed=True,
+                                   status="not-applicable", reason="Product behaviour.")
+
+    assert len(changes.added) == 1 and entries[0].get("removed")
+    assert entries[1]["statement"] == SHORT and entries[1]["status"] == "candidate"
+
+
+def test_a_short_sentence_inside_a_long_old_one_is_a_new_entry():
+    long = f"{SHORT} " + " ".join(f"The owner will file record {n}." for n in range(9))
+    assert len(containment(long, SHORT)[1].added) == 1
+
+
+@pytest.mark.parametrize("new_page, kept", [(1, True), (2, True), (3, False)])
+def test_containment_holds_on_the_same_or_an_adjacent_page(new_page, kept):
+    changes = containment(f"3 {SHORT}", SHORT, new_page=new_page)[1]
+    assert (changes.added == []) is kept
+
+
+def test_a_footer_pattern_refuses_a_paragraph_that_states_a_duty(repo, index):
+    reg = fx.load(repo)
+    reg.sources[DOC]["footers"] = [{"pattern": "authorizing official",
+                                    "reason": "A pattern that catches a duty by mistake."}]
+
+    assert any("matches a paragraph that states a duty" in m for m in shape(repo, reg, index))
 
 
 def test_a_promoted_entry_the_extractor_later_finds_keeps_its_id_and_its_mark():

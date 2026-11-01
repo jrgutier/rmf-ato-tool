@@ -293,3 +293,61 @@ def test_no_raw_line_in_scope_is_dropped_silently():
     assert checked > 0
     assert lost == [], f"{len(lost)} in-scope lines are in no entry and no rejection:\n" \
         + "\n".join(lost[:40])
+
+
+_RAW_MASK = re.compile(r"\d+")
+_FOOTER_SHARE = 0.10  # a footnote that recurs, or a line of a table, stays well under this
+_FOOTER_LENGTH = 6  # "Page 3" and a phone number count; a bare page number has its own check
+
+
+def _footer_lines(text):
+    """(page -> packed text, packed page-closing lines that recur as a footer), read from the
+    text and not through extract: a line with a digit among the last two of a page that closes
+    at least two pages and a tenth of the document."""
+    pages = {}
+    page = 0
+    for raw in text.splitlines():
+        m = _RAW_PAGE.match(raw.strip())
+        if m:
+            page = int(m.group(1))
+            pages[page] = []
+        elif page and raw.strip():
+            pages[page].append(raw.strip())
+    closing = {line for lines in pages.values() for line in lines[-2:]
+               if re.search(r"\d", line) and len(compact(line)) >= _FOOTER_LENGTH
+               and not line.startswith("|")}
+    seen = {key: 0 for key in {_RAW_MASK.sub("#", line) for line in closing}}
+    for lines in pages.values():
+        for key in {_RAW_MASK.sub("#", line) for line in lines[-2:]} & seen.keys():
+            seen[key] += 1
+    least = max(2, _FOOTER_SHARE * len(pages))
+    footers = {compact(line) for line in closing if seen[_RAW_MASK.sub("#", line)] >= least}
+    return {n: compact(" ".join(lines)) for n, lines in pages.items()}, footers
+
+
+def test_no_statement_starts_on_a_page_number_or_holds_a_footer():
+    """An entry whose statement opens with a bare number and whose words sit on the next page
+    is a page number joined to the page after it: `rmf refs show` cannot find it at its cited
+    page, though FW-REQ-001 passes. The statement of any entry holding a recurring page-closing
+    line has absorbed a footer. The cure is `footers` in conformance/sources.yaml."""
+    reg = register.load(REPO_ROOT)
+    index = register.index_entries(REPO_ROOT)
+    bad = []
+    for ref, doc in sorted(reg.files.items()):
+        entry = index.get(ref)
+        if entry is None or not entry.get("text"):
+            continue
+        pages, footers = _footer_lines(register.text_of(REPO_ROOT, entry))
+        for e in doc["requirements"]:
+            if e.get("removed"):
+                continue
+            page, statement = e["citation"]["page"], compact(e["statement"])
+            numbered = re.match(r"\d{1,3} ((?:\S+ ){5}\S+)", e["statement"])
+            if numbered:
+                opening = compact(numbered.group(1))
+                if opening not in pages.get(page, "") and opening in pages.get(page + 1, ""):
+                    bad.append(f"{e['id']} p{page}: starts on a page number")
+            if any(f in statement for f in footers):
+                bad.append(f"{e['id']} p{page}: holds a footer")
+
+    assert bad == [], "\n".join(bad[:40])

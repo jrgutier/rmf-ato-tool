@@ -124,18 +124,12 @@ def test_qpdf_check_failure_rejected(tmp_path, httpserver):
 
 
 def test_qpdf_reads_the_download_under_a_plain_pdf_name(tmp_path, httpserver, monkeypatch):
-    """The ubuntu-26.04 runner's qpdf refused .fetch-*.part (0600) and read *.pdf (0644).
-
-    The cause is unproven, so this holds fetch to the name and mode that were read."""
+    """Ubuntu 26.04's AppArmor profile for qpdf denies names that do not end in .pdf."""
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     fake = bin_dir / "qpdf"
-    fake.write_text('#!/bin/sh\ncase "$(basename "$2")" in\n'
-                    '  .*|*.part) echo "qpdf: open $2: Permission denied"; exit 2;;\n'
-                    "esac\n"
-                    'mode="$(stat -c %a "$2" 2>/dev/null || stat -f %Lp "$2")"\n'
-                    'if [ "$mode" != 644 ]; then echo "qpdf: open $2: Permission denied"; exit 2; '
-                    "fi\nexit 0\n", encoding="utf-8")
+    fake.write_text('#!/bin/sh\ncase "$2" in\n  *.pdf) exit 0;;\nesac\n'
+                    'echo "qpdf: open $2: Permission denied"\nexit 2\n', encoding="utf-8")
     fake.chmod(0o755)
     monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
     httpserver.expect_request("/a.pdf").respond_with_data(make_pdf())

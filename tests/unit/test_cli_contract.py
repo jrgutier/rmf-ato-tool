@@ -123,11 +123,21 @@ def test_ci_profile_p1_json(repo_with_p1):
     assert f"--cov-fail-under={ci.COVERAGE_MIN}" in pytest_argv
 
 
-def test_ci_runs_pytest_on_workers_when_xdist_is_installed(repo_with_p1):
+def test_ci_runs_pytest_on_workers_when_xdist_is_installed(repo_with_p1, monkeypatch):
+    monkeypatch.setattr(ci.os, "cpu_count", lambda: ci.MIN_WORKER_CPUS)
     invoke("ci", "--profile", "p1", "--format", "json")
 
     argv = repo_with_p1.calls[1]
     assert argv[argv.index("-n") + 1] == "auto"
+
+
+def test_ci_runs_pytest_in_series_on_few_cores(repo_with_p1, monkeypatch):
+    monkeypatch.setattr(ci.os, "cpu_count", lambda: ci.MIN_WORKER_CPUS - 1)
+
+    result = invoke("ci", "--profile", "p1", "--format", "json")
+
+    assert result.exit_code == 0
+    assert "-n" not in repo_with_p1.calls[1]
 
 
 def test_ci_runs_pytest_in_series_without_xdist(repo_with_p1, monkeypatch):

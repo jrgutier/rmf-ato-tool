@@ -40,7 +40,10 @@ NIST_TASKS = f"{DIRECTORY}/nist-tasks.yaml"
 NIST_VOCABULARY = f"{DIRECTORY}/nist-vocabulary.yaml"
 NIST_WAIVERS = f"{DIRECTORY}/nist-waivers.yaml"
 
-STATUSES = ("candidate", "covered", "partial", "deferred", "not-applicable")
+# not-a-requirement: extraction noise, such as a heading or a noun list; it holds no duty.
+# not-applicable: a real requirement the tool has nothing to hold it with.
+NOT_A_REQUIREMENT = "not-a-requirement"
+STATUSES = ("candidate", "covered", "partial", "deferred", "not-applicable", NOT_A_REQUIREMENT)
 REVIEWED_STATUSES = ("covered", "partial", "deferred")
 REVIEWED = ("status", "reason", "evidence", "work_item", "approved_by", "triaged_by",
             "needs_review", "removal_reason", "promoted")
@@ -76,6 +79,7 @@ class Register:
     patterns: list[dict[str, Any]] = field(default_factory=list)
     fan_out_exceptions: list[dict[str, Any]] = field(default_factory=list)
     retirements: list[dict[str, Any]] = field(default_factory=list)  # policy.yaml, per document
+    noise: list[dict[str, Any]] = field(default_factory=list)  # policy.yaml, per document
     text_hashes: dict[str, str] = field(default_factory=dict)
     waivers: list[dict[str, Any]] = field(default_factory=list)
     omissions: list[dict[str, Any]] = field(default_factory=list)  # vocabulary `omit` phrases
@@ -194,6 +198,7 @@ def load(repo: Path) -> Register:
     if policy is not None:
         reg.fan_out_exceptions = policy["fan_out_exceptions"]
         reg.retirements = policy.get("retirements", [])
+        reg.noise = policy.get("noise", [])
     hashes = read(repo, TEXT_HASHES, "text-hashes", reg.problems)
     if hashes is not None:
         reg.text_hashes = hashes["hashes"]
@@ -321,7 +326,21 @@ def _pair(old_entries: list[dict[str, Any]], items: list[extract.Item],
             if pos not in matched and old is not None and old["id"] not in used:
                 matched[pos] = old
                 used.add(old["id"])
+    for pos, item in enumerate(items):  # a footer dropped from the edge of a statement
+        wanted = compact(item.statement)
+        olds = [o for o in leftovers() if _lost_an_edge(o, item, wanted)]
+        if pos not in matched and len(olds) == 1:
+            matched[pos] = olds[0]
+            used.add(olds[0]["id"])
     return matched
+
+
+def _lost_an_edge(old: Mapping[str, Any], item: extract.Item, wanted: str) -> bool:
+    """``old`` is live and the new statement is most of it, nearby. A short sentence inside a
+    long or a dead paragraph is another statement, and must not take its ID or its review."""
+    held = compact(old["statement"])
+    return not old.get("removed") and wanted in held and 2 * len(wanted) >= len(held) \
+        and abs(item.page - old["citation"]["page"]) <= 1
 
 
 def _stem(locator: str, anchor: str) -> str:
@@ -403,6 +422,12 @@ def text_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def footers_of(source: Mapping[str, Any]) -> tuple[str, ...]:
+    """The footer patterns a source declares that compile; FW-REQ-001 reports the others."""
+    return tuple(f["pattern"] for f in source.get("footers", [])
+                 if extract.is_regex(f["pattern"]))
+
+
 def labels_for(source: Mapping[str, Any]) -> tuple[frozenset[str], frozenset[str]]:
     if source["mode"] == "pin":
         return PIN_SKIP_LABELS, PIN_STRIP_LABELS
@@ -419,10 +444,11 @@ def build(reg: Register, source: Mapping[str, Any], text: str) -> Built:
         document.update(catalog=source["catalog"], count=len(ids), ids=ids)
     skip, strip = labels_for(source)
     scopes = source.get("scopes", [])
-    found = extract.extract(text, scopes, skip_labels=skip, strip_labels=strip) if scopes \
-        else extract.Extraction()
+    footers = footers_of(source)
+    found = extract.extract(text, scopes, skip_labels=skip, strip_labels=strip,
+                            footers=footers) if scopes else extract.Extraction()
     entries, changes = reconcile(ref, current.get("requirements", []), found.items, reg.patterns)
-    _check_promoted(entries, extract.passages(extract.blocks(text)))
+    _check_promoted(entries, extract.passages(extract.blocks(text, footers)))
     document["requirements"] = [{k: e[k] for k in _ORDER if k in e} for e in entries]
     document["rejected"] = [{"page": r.page, "locator": r.locator, "reason": r.reason,
                              "text": r.text} for r in _not_promoted(found.rejected, entries)]
@@ -490,9 +516,10 @@ def _rejection_at(doc: Mapping[str, Any], page: int, wanted: str) -> dict[str, A
                  if r["page"] == page and wanted in compact(r["text"])), None)
 
 
-def _block_at(text: str, page: int, wanted: str) -> extract.Block | None:
-    for block in extract.blocks(text):
-        if block.kind in ("heading", "header"):
+def _block_at(text: str, page: int, wanted: str,
+              footers: tuple[str, ...]) -> extract.Block | None:
+    for block in extract.blocks(text, footers):
+        if block.kind in ("heading", "header", "footer"):
             continue
         if block.page <= page <= (block.end_page or block.page) \
                 and wanted in compact(block.text):
@@ -532,7 +559,7 @@ def promote(reg: Register, ref: str, text: str, page: int, anchor: str, reason: 
     if rejection is not None:
         statement, locator = rejection["text"], rejection["locator"]
     else:
-        block = _block_at(text, page, wanted)
+        block = _block_at(text, page, wanted, footers_of(reg.sources[ref]))
         if block is None:
             raise MarkError(f"{anchor!r} is in no rejection and no paragraph of {ref} page "
                             f"{page}; see rmf conformance page {ref} {page}")
