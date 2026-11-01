@@ -28,6 +28,7 @@ from rmf_tool.framework.model import Entity, Location
 from rmf_tool.framework.validate import validate
 from rmf_tool.gitutil import resolve_base, show_file
 from rmf_tool.profiles import PHASES, Profile, resolve
+from rmf_tool.refs.toc import compact
 
 P10 = Profile("p10", frozenset({"p1", "p2", "p2x", "p3a", "p10"}))
 DOC, TIER1 = fx.DOC, fx.TIER1
@@ -134,9 +135,15 @@ def test_a_subset_framework_is_not_checked_against_the_whole_pin():
     assert validate(MINI, REPO_ROOT, P10).ok
 
 
+def _reassigned(old: str, new: str) -> bool:
+    """An ID now holds other text. Words gained or lost at an edge, as when a re-extraction
+    drops a footer, keep the ID, and its review clears needs_review."""
+    return compact(old) not in compact(new) and compact(new) not in compact(old)
+
+
 def test_requirement_ids_and_statements_are_pinned_against_the_base():
-    """INV-3: every ID at the base is still in the register, and an ID whose statement
-    changed says so (needs_review) or is removed; an ID is never silently reassigned."""
+    """INV-3: every ID at the base is still in the register, and an ID whose statement now says
+    something else says so (needs_review) or is removed; an ID is never silently reassigned."""
     base = resolve_base(REPO_ROOT)
     if base.ref is None:
         pytest.skip("no merge base")
@@ -150,10 +157,20 @@ def test_requirement_ids_and_statements_are_pinned_against_the_base():
         for ident, statement in ids:
             entry = now.entry(ident)
             assert entry is not None, f"{ident} left the register"
-            if entry["statement"] != json.loads(statement):
+            if _reassigned(json.loads(statement), entry["statement"]):
                 assert entry.get("needs_review") or entry.get("removed"), ident
             checked += 1
     assert checked >= 0
+
+
+@pytest.mark.parametrize("old, new, expected", [
+    ("The AO must sign.", "The AO must sign.", False),
+    ("3 The AO must sign.", "The AO must sign.", False),
+    ("The AO must sign", "The AO must sign the decision.", False),
+    ("The AO must sign.", "The ISSM must review the plan.", True),
+])
+def test_only_a_different_statement_counts_as_reassigning_an_id(old, new, expected):
+    assert _reassigned(old, new) is expected
 
 
 def test_every_audit_finding_has_a_work_item():
