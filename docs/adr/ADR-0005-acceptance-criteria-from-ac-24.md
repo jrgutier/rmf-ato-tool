@@ -85,3 +85,8 @@ Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents i
   5000.83, 5000.85, 5000.87, 5000.88, 5000.89 and 5000.90, each with its own record in
   `conformance/policy.yaml`, listed at p13 and reversible there. It does not extend to any other
   document, to entries retired for another reason, or to tier 1 deferrals.
+- A document over either limit gets its record when Fable's audit confirms it on merit, under
+  this standing approval from the user, and every such record is listed for reversal at p13.
+  Anything Fable cannot confirm stops for the user. Tier 1 deferrals are not covered.
+- The tool models only what a run uses: when a run consumes an outside body's output, the duty that
+  shapes that output stays, and that body's internal procedure is not-applicable.
