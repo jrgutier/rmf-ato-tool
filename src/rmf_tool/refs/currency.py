@@ -2,14 +2,18 @@
 
 REF-007 (error): a pinned PDF's ``revision`` is vague or has no month-and-year or ISO date,
 its ``revision_stamp`` is missing (unless ``revision_source`` exempts it, with a reason), does
-not resolve in the text extraction through ``refs.show.page``, or does not show the year the
-revision states.
+not resolve in the text extraction through ``refs.show.page``, or does not show the revision:
+the anchor must contain the revision's latest full date (the year when it has none). What the
+document says about its own revision is read wherever it sits, so moving the stamp cannot hide
+it: the highest ``Change N`` on pages 1, 2 or the stamp page with its date, the ``INCLUDES
+UPDATES AS OF`` date anywhere, and the latest date of an errata table must all be named.
 REF-008 (warning): a control in the pinned OSCAL catalog is absent from the text of a PDF that
 describes the same catalog and the entry's ``oscal_only_controls`` does not declare it.
 """
 
 from __future__ import annotations
 
+import datetime
 import json
 import re
 from collections.abc import Iterator
@@ -34,6 +38,27 @@ VAGUE = re.compile(
     r"|\bcurrent\b|\blatest\b|\bpending\b|\brecord(?:ed)? (?:the |at )|\bTBD\b|\bunknown\b",
     re.IGNORECASE)
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
+_MONTHS = {m: i for i, m in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"), 1)}
+# The number in "Version 2 March 2024" or "Rev. 5 September 2020" is not a day. Words such as
+# "Effective" or "dated" may precede a real day, so this stays a list of labels.
+_NOT_A_DAY = (r"(?<![.\d])(?<!Rev )(?<!Rev\. )(?<!Revision )(?<!Version )(?<!Vol )(?<!Vol\. )"
+              r"(?<!Volume )(?<!Change )(?<!Release )(?<!Attachment )(?<!Section )")
+_FULL_DATES = (
+    # (regex, groups -> (year, month, day))
+    (re.compile(rf"\b({_MONTH})\.?\s+(\d{{1,2}}),?\s+(\d{{4}})\b", re.I),
+     lambda m: (m[3], _MONTHS[m[1][:3].lower()], m[2])),
+    (re.compile(rf"{_NOT_A_DAY}\b(\d{{1,2}})\s+({_MONTH})\.?,?\s+(\d{{4}})\b", re.I),
+     lambda m: (m[3], _MONTHS[m[2][:3].lower()], m[1])),
+    (re.compile(r"\b(\d{4})[-.](\d{2})[.-](\d{2})\b"), lambda m: (m[1], m[2], m[3])),
+    (re.compile(r"\b(\d{1,2})[-/](\d{1,2})[-/](\d{4})\b"), lambda m: (m[3], m[1], m[2])),
+)
+# A stamp, not a mention: "Incorporating Change 2", "Change 2 Effective", "Change 2," at line start.
+_CHANGE = re.compile(r"\bIncorporating\s+Change\s+(\d+)\b|\bChange\s+(\d+)\s+Effective\b"
+                     r"|^\s*Change\s+(\d+),", re.I | re.M)
+# Upper case only: the lower-case form is a bibliography citing another document.
+_UPDATES_AS_OF = re.compile(r"INCLUDES\s+UPDATES\s+AS\s+OF\s+([^\n]{0,40})")
+_ERRATA_HEADING = re.compile(r"#*\s*Errata(?:\s+(?:Sheet|Updates?))?\s*", re.I)
 _CONTROL = re.compile(r"\b([A-Z]{2})-(\d{1,2})(?:\((\d{1,2})\))?(?!\d)")
 _OSCAL_ID = re.compile(r"([a-z]{2})-(\d+)(?:\.(\d+))?")
 
@@ -42,6 +67,42 @@ def _control(family: str, number: str, enhancement: str | None) -> str:
     """``AC-02(01)`` and ``ac-2.1`` both become ``AC-2(1)``."""
     suffix = f"({int(enhancement)})" if enhancement else ""
     return f"{family.upper()}-{int(number)}{suffix}"
+
+
+def full_dates(text: str) -> set[tuple[int, int, int]]:
+    """Every day-precise date in ``text`` as (year, month, day), in any of four notations."""
+    out: set[tuple[int, int, int]] = set()
+    for rx, conv in _FULL_DATES:
+        for m in rx.finditer(text):
+            year, month, day = (int(x) for x in conv(m))
+            try:
+                datetime.date(year, month, day)
+            except ValueError:
+                continue
+            out.add((year, month, day))
+    return out
+
+
+def _first_line(body: str) -> str:
+    """The first line of a page after its ``<!-- page N -->`` marker."""
+    return next((line for line in body.splitlines()[1:] if line.strip()), "")
+
+
+def _errata_dates(pages: dict[int, str]) -> set[tuple[int, int, int]]:
+    """Dates in an errata table: the page headed Errata and the pages its table runs onto."""
+    out: set[tuple[int, int, int]] = set()
+    for number in sorted(pages):
+        if _ERRATA_HEADING.fullmatch(_first_line(pages[number])):
+            out |= full_dates(pages[number])
+            number += 1
+            while _first_line(pages.get(number, "")).startswith("|"):
+                out |= full_dates(pages[number])
+                number += 1
+    return out
+
+
+def _change_number(match: re.Match[str]) -> int:
+    return int(next(g for g in match.groups() if g))
 
 
 def text_controls(text: str) -> set[str]:
@@ -70,9 +131,11 @@ def _ref007(root: Path, entry: Any) -> list[Finding]:
     if VAGUE.search(revision):
         fail(f"revision {revision!r} is vague; state the edition, date and change number "
              "the text shows")
-    elif not DATED.search(revision):
+        return out
+    if not DATED.search(revision):
         fail(f"revision {revision!r} is vague (no month and year or ISO date); state the "
              "edition, date and change number the text shows")
+        return out
     stamp = entry.get("revision_stamp")
     if stamp is None:
         if "revision_source" not in entry:
@@ -86,10 +149,46 @@ def _ref007(root: Path, entry: Any) -> list[Finding]:
     except show.NotFound as exc:
         fail(f"revision_stamp: {exc}")
         return out
+    anchor = stamp["anchor"]
+    stated = full_dates(revision)
     years = _YEAR.findall(revision)
-    if years and max(years) not in stamp["anchor"]:
-        fail(f"revision_stamp anchor {stamp['anchor']!r} does not show {max(years)}, the latest "
+    if stated:
+        if max(stated) not in full_dates(anchor):
+            y, m, d = max(stated)
+            fail(f"revision_stamp anchor {anchor!r} does not show {y}-{m:02d}-{d:02d}, the "
+                 f"latest date of revision {revision!r}")
+            return out
+    elif years and max(years) not in anchor:
+        fail(f"revision_stamp anchor {anchor!r} does not show {max(years)}, the latest "
              f"year of revision {revision!r}")
+        return out
+    pages = show.pages(root, entry)
+    front = "\n".join(pages.get(n, "") for n in sorted({1, 2, stamp["page"]}))
+    latest = max(_CHANGE.finditer(front), key=_change_number, default=None)
+    if latest is not None:
+        number = _change_number(latest)
+        if not re.search(rf"\bchange\s+{number}\b", revision, re.I):
+            fail(f"the text shows Change {number}; revision {revision!r} does not name it")
+            return out
+        following = [line for line in front[latest.end():].splitlines() if line.strip()][:2]
+        effective = next(filter(None, map(full_dates, following)), set())
+        if effective and not effective & stated:
+            y, mo, d = max(effective)
+            fail(f"the text dates Change {number} {y}-{mo:02d}-{d:02d}; revision {revision!r} "
+                 "does not name that date")
+            return out
+    for m in _UPDATES_AS_OF.finditer("\n".join(pages.values())):
+        listed = sorted(full_dates(m[1]))
+        if listed and listed[-1] not in stated:
+            y, mo, d = listed[-1]
+            fail(f"the text shows updates as of {y}-{mo:02d}-{d:02d}; revision {revision!r} "
+                 "does not name that date")
+            return out
+    errata = _errata_dates(pages)
+    if errata and max(errata) not in stated:
+        y, mo, d = max(errata)
+        fail(f"the errata table runs to {y}-{mo:02d}-{d:02d}; revision {revision!r} does not "
+             "name that date")
     return out
 
 

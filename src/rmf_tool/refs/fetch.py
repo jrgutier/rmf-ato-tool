@@ -151,7 +151,11 @@ def _download(client: httpx.Client, url: str, kind: str, dest_dir: Path,
         if resp.status_code != 200:
             raise FetchFailure(f"HTTP {resp.status_code}")
         final = str(resp.url)
-        fd, tmp_name = tempfile.mkstemp(dir=dest_dir, prefix=".fetch-", suffix=".part")
+        # qpdf on the ubuntu-26.04 runner refused ".fetch-*.part" (mode 0600) and read a plain
+        # "*.pdf" (0644). Which difference matters is unproven, so none of them remain here.
+        suffix = ".pdf" if kind == "pdf" else ".part"
+        fd, tmp_name = tempfile.mkstemp(dir=dest_dir, prefix="fetch-", suffix=suffix)
+        os.fchmod(fd, 0o644)
         tmp = Path(tmp_name)
         try:
             with os.fdopen(fd, "wb") as fh:

@@ -76,6 +76,11 @@ def _split_pages(digest: str, text: str) -> dict[int, tuple[str, str]]:
     return {n: ("\n".join(lines), toc.compact("\n".join(lines))) for n, lines in pages.items()}
 
 
+def pages(root: Path, entry: Any) -> dict[int, str]:
+    """Every page body of the extraction, keyed by page number."""
+    return {n: body for n, (body, _) in _pages(_paths(root, entry)[0]).items()}
+
+
 def page(root: Path, entry: Any, number: int, anchor: str) -> str:
     """Page ``number`` of the extraction, if ``anchor`` resolves on it."""
     md, toc_path = _paths(root, entry)

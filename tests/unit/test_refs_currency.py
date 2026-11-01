@@ -16,7 +16,7 @@ from rmf_tool.refs import currency
 
 P9 = Profile("p9", frozenset({"p1", "p2", "p3a", "p9"}))
 TEXT = "references/text/DOC-A.md"
-PAGES = "<!-- page 1 -->\n\nCover\n\n<!-- page 2 -->\n\nIncludes updates as of 12-10-2020\n"
+PAGES = "<!-- page 1 -->\n\nCover\n\n<!-- page 2 -->\n\nINCLUDES UPDATES AS OF 12-10-2020\n"
 
 
 STAMP = {"page": 2, "anchor": "Includes updates as of 12-10-2020"}
@@ -26,7 +26,7 @@ def ok_pdf(ref_id="DOC-A", **kw):
     text = {"path": f"references/text/{ref_id}.md", "source_sha256": SHA_A,
             "extractor": "pymupdf", "extractor_version": "2.0", "rmf_extract_version": "1",
             "pages": 2, "sha256": SHA_A, "ocr": False, "ocr_pages": []}
-    fields = {"revision": "Rev. 1 (December 2020)", "revision_stamp": STAMP, **kw}
+    fields = {"revision": "Rev. 1 (December 10, 2020)", "revision_stamp": STAMP, **kw}
     fields = {k: v for k, v in fields.items() if v is not None}
     return entry(ref_id, status="ok", sha256=SHA_A, size_bytes=1, downloaded="2026-10-31",
                  text=text, **fields)
@@ -61,19 +61,25 @@ def test_ref_007_requires_a_month_and_year_or_iso_date(tmp_path, revision):
 
 @pytest.mark.parametrize("revision, year", [
     ("Rev. 5 (September 2020, includes updates as of 12-10-2020)", "2020"),
-    ("January 23, 2020, Change 2, April 8, 2026", "2026"),
+    ("Rev. 5 (September 2026, includes updates as of 12-10-2026)", "2026"),
     ("Version 2.5 (approved October 16, 2024)", "2024"),
     ("29 July 2022", "2022"), ("2020-12-10", "2020"),
-    ("Rev. 1 (May 2010, errata through 11/11/2010)", "2010")])
+    ("Rev. 1 (May 2010, errata through 12/10/2010)", "2010")])
 def test_ref_007_accepts_exact_revisions(tmp_path, revision, year):
-    stamp = {"page": 2, "anchor": f"as of 12-10-{year}"}
+    anchor = {"2024": "approved October 16, 2024", "2022": "29 July 2022"}.get(
+        year, f"as of 12-10-{year}")
+    stamp = {"page": 2, "anchor": anchor}
     rr = make_root(tmp_path, [ok_pdf(revision=revision, revision_stamp=stamp)])
-    rr.write(TEXT, PAGES.replace("2020", year))
+    page = PAGES.replace("2020", year)
+    if year in ("2024", "2022"):
+        page = "<!-- page 1 -->\n\nCover\n\n<!-- page 2 -->\n\n"
+    rr.write(TEXT, page + anchor + "\n")
     assert currency.check(rr.root, rr.index()) == []
 
 
 def test_ref_007_does_not_flag_change_n(tmp_path):
-    assert findings(tmp_path, [ok_pdf(revision="June 2020, with Change 1, December 2020")]) == []
+    revision = "June 2020, with Change 1, December 10, 2020"
+    assert findings(tmp_path, [ok_pdf(revision=revision)]) == []
 
 
 def test_ref_007_flags_an_unresolved_stamp(tmp_path):
@@ -101,8 +107,157 @@ def test_the_schema_requires_a_reason_for_revision_source(tmp_path):
 def test_ref_007_flags_a_revision_that_disagrees_with_its_stamp(tmp_path):
     msg = only(findings(tmp_path, [ok_pdf(revision="Rev. 1 (December 2021)")]))
     assert "2021" in msg and "does not show" in msg
-    ok = ok_pdf(revision="Rev. 1 (September 2019, December 2020)")
-    assert findings(tmp_path / "ok", [ok]) == []
+
+
+def test_ref_007_flags_a_revision_that_omits_the_updates_date(tmp_path):
+    stale = ok_pdf(revision="Rev. 1 (September 2019, December 2020)")
+    assert "updates as of 2020-12-10" in only(findings(tmp_path, [stale]))
+
+
+def test_ref_007_reads_updates_as_of_outside_the_stamp_page(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="Rev. 5 (September 2020)",
+                                     revision_stamp={"page": 2, "anchor": "September 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nINCLUDES UPDATES AS OF 12-10-2020\n\n"
+                   "<!-- page 2 -->\n800-53, Rev. 5, 492 pages (September 2020)\n")
+    assert "updates as of 2020-12-10" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_ignores_a_lower_case_updates_citation(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="Rev. 5 (September 2020)",
+                                     revision_stamp={"page": 1, "anchor": "September 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nRev. 5, September 2020\n\n"
+                   "<!-- page 2 -->\nSP 800-34, Includes updates as of November 11, 2010.\n")
+    assert currency.check(rr.root, rr.index()) == []
+
+
+def test_ref_007_takes_the_latest_date_of_an_updates_line(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="Rev. 5 (September 2020, 12-10-2020)",
+                                     revision_stamp={"page": 1, "anchor": "12-10-2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nINCLUDES UPDATES AS OF 12-10-2020; see 2021-01-05\n")
+    assert "updates as of 2021-01-05" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_requires_the_date_of_the_latest_change(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="January 23, 2020, Change 2",
+                                     revision_stamp={"page": 1, "anchor": "January 23, 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nEffective: January 23, 2020\n"
+                   "Change 2 Effective:\nApril 8, 2026\n")
+    assert "dates Change 2 2026-04-08" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_reads_a_change_on_page_1_from_a_later_stamp(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="January 23, 2020",
+                                     revision_stamp={"page": 3, "anchor": "January 23, 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nChange 2 Effective:\nApril 8, 2026\n\n"
+                   "<!-- page 3 -->\nJanuary 23, 2020\n")
+    assert "Change 2" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_reads_a_change_date_across_a_blank_line(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(revision="January 23, 2020, Change 2",
+                                     revision_stamp={"page": 1, "anchor": "January 23, 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\nEffective: January 23, 2020\n"
+                   "Change 2 Effective:\n\nApril 8, 2026\n")
+    assert "dates Change 2 2026-04-08" in only(currency.check(rr.root, rr.index()))
+
+
+@pytest.mark.parametrize("heading", ["ERRATA", "Errata Sheet", "# Errata Updates"])
+def test_ref_007_knows_errata_heading_variants(tmp_path, heading):
+    rr = make_root(tmp_path, [ok_pdf(revision="Rev. 1 (May 2010)",
+                                     revision_stamp={"page": 1, "anchor": "May 2010"})])
+    rr.write(TEXT, f"<!-- page 1 -->\nRev. 1, May 2010\n\n<!-- page 2 -->\n{heading}\n"
+                   "| 11/11/2010 | Substantive |\n")
+    assert "errata table runs to 2010-11-11" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_requires_the_last_errata_date_across_table_pages(tmp_path):
+    errata = ("<!-- page 1 -->\nRev. 1, May 2010\n\n"
+              "<!-- page 2 -->\nErrata\nChanges incorporated.\n| DATE | TYPE |\n"
+              "| 5/21/2010 | Editorial |\n\n"
+              "<!-- page 3 -->\n| 11/11/2010 | Substantive |\n\n"
+              "<!-- page 4 -->\n# Executive Summary\nDated 1/1/2020.\n")
+    rr = make_root(tmp_path, [ok_pdf(revision="Rev. 1 (May 2010)",
+                                     revision_stamp={"page": 1, "anchor": "May 2010"})])
+    rr.write(TEXT, errata)
+    assert "errata table runs to 2010-11-11" in only(currency.check(rr.root, rr.index()))
+
+    named = ok_pdf(revision="Rev. 1 (May 2010, errata through 11/11/2010)",
+                   revision_stamp={"page": 3, "anchor": "11/11/2010"})
+    rr.write_index([named])
+    assert currency.check(rr.root, rr.index()) == []
+
+
+def test_ref_007_requires_the_latest_full_date_in_the_anchor(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(
+        revision="August 6, 2020", revision_stamp={"page": 1, "anchor": "August 6, 2020"})])
+    rr.write(TEXT, "<!-- page 1 -->\n\nAugust 6, 2020\nChange 1 Effective: November 4, 2021\n")
+    msg = only(currency.check(rr.root, rr.index()))
+    assert "Change 1" in msg and "does not name it" in msg
+
+    bad = ok_pdf(revision="August 6, 2020, Change 1, November 4, 2021",
+                 revision_stamp={"page": 1, "anchor": "August 6, 2020"})
+    rr.write_index([bad])
+    assert "2021-11-04" in only(currency.check(rr.root, rr.index()))
+
+    good = {**bad, "revision_stamp": {"page": 1, "anchor": "Change 1 Effective: November 4, 2021"}}
+    rr.write_index([good])
+    assert currency.check(rr.root, rr.index()) == []
+
+
+def test_ref_007_requires_the_highest_change_and_updates_date_on_the_stamp_page(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(
+        revision="June 1, 2020, Change 1, July 2, 2021",
+        revision_stamp={"page": 1, "anchor": "July 2, 2021"})])
+    rr.write(TEXT, "<!-- page 1 -->\nChange 1 Effective: July 2, 2021\nChange 2 Effective: "
+                   "July 2, 2021\n")
+    assert "Change 2" in only(currency.check(rr.root, rr.index()))
+
+    named = ok_pdf(revision="June 1, 2020, Change 2, July 2, 2021",
+                   revision_stamp={"page": 1, "anchor": "July 2, 2021"})
+    rr.write_index([named])
+    assert currency.check(rr.root, rr.index()) == []
+
+    rr.write(TEXT, "<!-- page 1 -->\nINCLUDES UPDATES AS OF 03-04-2022\nJuly 2, 2021\n")
+    assert "updates as of 2022-03-04" in only(currency.check(rr.root, rr.index()))
+
+
+@pytest.mark.parametrize("text, expected", [
+    ("7 March 2024", {(2024, 3, 7)}),
+    ("March 7, 2024", {(2024, 3, 7)}),
+    ("2024-03-07", {(2024, 3, 7)}),
+    ("3/7/2024", {(2024, 3, 7)}),
+    ("Version 1.0 March 2024", set()),
+    ("Rev. 5 September 2020", set()),
+    ("Revision 5 September 2020", set()),
+    ("Volume 2 May 2024", set()),
+    ("Change 2 May 2026", set()),
+    ("Release 2 March 2024", set()),
+    ("Attachment 2 August 2025", set()),
+    ("Effective 7 March 2024", {(2024, 3, 7)}),
+    ("13/7/2024", set()),
+    ("February 30, 2024", set()),
+])
+def test_full_dates_keep_real_days_only(text, expected):
+    assert currency.full_dates(text) == expected
+
+
+def test_ref_007_does_not_read_change_1_inside_change_10(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(
+        revision="June 1, 2020, Change 10, July 2, 2021",
+        revision_stamp={"page": 1, "anchor": "July 2, 2021"})])
+    rr.write(TEXT, "<!-- page 1 -->\nIncorporating Change 1, July 2, 2021\n")
+    assert "does not name it" in only(currency.check(rr.root, rr.index()))
+
+
+def test_ref_007_takes_a_change_from_a_stamp_not_a_mention(tmp_path):
+    rr = make_root(tmp_path, [ok_pdf(
+        revision="June 1, 2020, Change 1, July 2, 2021",
+        revision_stamp={"page": 1, "anchor": "July 2, 2021"})])
+    stamp = "<!-- page 1 -->\nChange 1, July 2, 2021\n"
+    rr.write(TEXT, stamp + "Paragraph 3 of Change 7 to the manual applies.\n")
+    assert currency.check(rr.root, rr.index()) == []
+    rr.write(TEXT, stamp + "Incorporating Change 7, July 2, 2021\n")
+    assert "Change 7" in only(currency.check(rr.root, rr.index()))
 
 
 def test_ref_007_ignores_pdfs_that_are_not_pinned(tmp_path):

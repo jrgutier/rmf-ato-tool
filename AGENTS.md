@@ -127,7 +127,7 @@ and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden 
 p7 `rmf check --final` with every run rule on `examples/uas-gcs/runs/example-synthetic-01`
 (skipped under `--profile fork`); p8 DOC-002, the counts stated in README.md, AGENTS.md
 and the registry header equal the registry, framework and reference index; p9 REF-007
-(exact `revision`, resolving `revision_stamp`), REF-008 (OSCAL-only controls declared) and
+(exact `revision`, resolving `revision_stamp`, every change, updates-as-of and errata date the text shows), REF-008 (OSCAL-only controls declared) and
 FW-CITE-003 (no citation to a `required: false` PDF, run by `rmf validate`); p10 FW-REQ-001
 (register shape, every page scoped or excluded with a reason, citations, statements in their
 passages), FW-REQ-003 (evidence linked both ways through `enforces` and `x-enforces`, `asserts`

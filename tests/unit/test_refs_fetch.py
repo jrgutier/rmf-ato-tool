@@ -1,6 +1,7 @@
 import ast
 import hashlib
 import json
+import os
 import ssl
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -84,7 +85,7 @@ def test_rerun_noop_when_sha_matches(tmp_path, httpserver):
     assert result.status == "unchanged"
     assert (rr.root / "references/index.yaml").read_text() == index_before
     assert pdf.stat().st_mtime_ns == mtime
-    assert not list(pdf.parent.glob(".fetch-*"))
+    assert not list(pdf.parent.glob("*fetch-*"))
 
 
 def test_missing_only_skips_present_files(tmp_path, httpserver):
@@ -120,6 +121,29 @@ def test_qpdf_check_failure_rejected(tmp_path, httpserver):
     assert result.status == "manual-required"
     assert "qpdf --check failed" in result.message
     assert not list((rr.root / "references/pdf").iterdir())
+
+
+def test_qpdf_reads_the_download_under_a_plain_pdf_name(tmp_path, httpserver, monkeypatch):
+    """The ubuntu-26.04 runner's qpdf refused .fetch-*.part (0600) and read *.pdf (0644).
+
+    The cause is unproven, so this holds fetch to the name and mode that were read."""
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    fake = bin_dir / "qpdf"
+    fake.write_text('#!/bin/sh\ncase "$(basename "$2")" in\n'
+                    '  .*|*.part) echo "qpdf: open $2: Permission denied"; exit 2;;\n'
+                    "esac\n"
+                    'mode="$(stat -f %Lp "$2" 2>/dev/null || stat -c %a "$2")"\n'
+                    'if [ "$mode" != 644 ]; then echo "qpdf: open $2: Permission denied"; exit 2; '
+                    "fi\nexit 0\n", encoding="utf-8")
+    fake.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    httpserver.expect_request("/a.pdf").respond_with_data(make_pdf())
+    rr = make_root(tmp_path, [entry(urls=[httpserver.url_for("/a.pdf")])])
+
+    [result] = run(rr)
+
+    assert result.status == "downloaded", result.message
 
 
 def test_redirect_to_disallowed_domain_rejected(tmp_path, httpserver):

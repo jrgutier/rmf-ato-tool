@@ -32,4 +32,5 @@ def test_fork_without_examples_passes_fork_profile(tmp_path):
     assert run.returncode == 0, run.stdout + run.stderr
     ci = subprocess.run([*uv, "rmf", "ci", "--profile", "fork"], cwd=fork,
                         capture_output=True, text=True, env=env)
-    assert ci.returncode == 0, ci.stdout[-4000:] + ci.stderr[-2000:]
+    failed = "\n".join(line for line in ci.stdout.splitlines() if line.startswith("FAILED"))
+    assert ci.returncode == 0, failed + "\n" + ci.stdout[-4000:] + ci.stderr[-2000:]

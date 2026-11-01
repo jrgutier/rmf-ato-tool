@@ -1,6 +1,7 @@
 """`rmf validate` and the p3a `rmf ci` step: exit codes, profiles, --stats JSON, --root."""
 
 import json
+import re
 import shutil
 
 import pytest
@@ -32,7 +33,8 @@ def invoke(*args):
 
 def test_help():
     result = invoke("validate", "--help")
-    assert result.exit_code == 0 and "--stats" in result.stdout
+    # Typer forces a terminal under GITHUB_ACTIONS, so CI output carries ANSI codes.
+    assert result.exit_code == 0 and "--stats" in re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
 
 
 def test_real_framework_stats_json():

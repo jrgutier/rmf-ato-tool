@@ -37,6 +37,20 @@ jobs:
       - name: rmf ci
         run: uv run rmf ci --slow
 
+      - name: Show mandatory access denials
+        if: failure()
+        run: |
+          sudo aa-status || true
+          sudo journalctl -k | grep -i denied | tail -50 || true
+          sudo dmesg | grep -i -E 'apparmor|denied' | tail -20 || true
+          probe="$(mktemp -d)"
+          for name in .probe.part probe.part .probe.pdf probe.pdf; do
+            for mode in 600 644; do
+              install -m "$mode" references/pdf/FIPS200.pdf "$probe/$name"
+              qpdf --check "$probe/$name" > /dev/null 2>&1; echo "$name $mode: exit $?"
+            done
+          done
+
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
