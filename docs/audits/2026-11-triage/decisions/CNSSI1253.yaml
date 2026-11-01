@@ -1,0 +1,402 @@
+# CNSSI1253 triage, tier 1: pages 5 to 16, 22 to 24 and 161 read whole against the source. Pages 17 to
+# 21 and 25 to 160 are excluded in conformance/sources.yaml and hold no entry. 0109 is promoted here.
+# The generator is current (`python -m rmf_tool.cnssi1253 --check`). Transcribed: the X, +, -- and
+# blank cells of Tables D-1 to D-20, the Classified overlay's add list, the four Privacy Overlay sets.
+# Not transcribed: Parameter Value (WI-20), Privacy Implementation Considerations (WI-32), Justification
+# for NSS, Assurance, Resiliency and ATT&CK, the Space overlay (WI-21), CDS and Intelligence (WI-22).
+# Role map from personas.txt: SAOP = PER-PRIV; system owner = PER-PM; risk executive = PER-RE.
+
+# --- Page 5: Section 1, 1.1 ---
+REQ-CNSSI1253-0001:
+  status: not-a-requirement
+  reason: "List item naming SP 800-30 as one of six NIST documents the collaboration produced. Background on where the framework came from."
+REQ-CNSSI1253-0002:
+  status: not-a-requirement
+  reason: "List item naming SP 800-37 Revision 2 among the six publications. A title in a history paragraph; adoption is stated in 0014."
+REQ-CNSSI1253-0003:
+  status: not-a-requirement
+  reason: "List item naming SP 800-39 among the six publications. A title, no action."
+REQ-CNSSI1253-0004:
+  status: not-a-requirement
+  reason: "List item naming SP 800-53 Revision 5 among the six publications. Adoption of the catalog is in 0014."
+REQ-CNSSI1253-0005:
+  status: not-a-requirement
+  reason: "List item naming SP 800-53A among the six publications. A title; CNSSI 1253 sets nothing on assessment."
+REQ-CNSSI1253-0006:
+  status: not-a-requirement
+  reason: "Last list item, naming SP 800-53B. A title only; adoption of the baselines is in 0014."
+REQ-CNSSI1253-0007:
+  x_existing: "src/rmf_tool/baseline.py resolve (method cnssi1253 is the default and high-water-mark is refused unless the CNSSI1253 reference is degraded, so the Instruction wins over SP 800-53B), with framework/tasks/C.yaml C-2 and framework/tasks/S.yaml S-1 purposes naming CNSSI 1253."
+  x_gap: "'parameter values for NIST SP 800-53 controls that are applicable to all NSS': WI-20. The tables' parameter values reach no run, so on that point the Instruction does not yet take precedence."
+  x_note: "The statement runs from page 5 to page 6; page 5 holds it up to 'developing, and applying overlays for the'. Subject and verb: 'CNSSI No. 1253 applies to all NSS'; 'this Instruction takes precedence'. The first sentence, on CNSS collaborating with NIST, is background."
+
+# --- Page 6: 1.2 differences from the NIST publications ---
+REQ-CNSSI1253-0008:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins (each objective selects at its own level) with facts.schema.json categorization c, i, a; the FIPS 200 route survives only as the degraded fallback resolve() refuses otherwise."
+  x_note: "Subject and verb: 'This Instruction does not adopt the high-water mark (HWM) concept from FIPS 200'. Not in conflict with 0050, which keeps a high water mark per objective: what is rejected is one value across all three."
+REQ-CNSSI1253-0009:
+  status: not-a-requirement
+  reason: "Says where the document states the control-to-objective associations (Tables D-1 to D-20). It describes the Instruction; selection from those columns is the duty in 0057, and framework/baselines/cnssi-1253.yaml carries them."
+REQ-CNSSI1253-0010:
+  status: not-a-requirement
+  reason: "Comparison with SP 800-53B: overlay use here is consistent with it but specific to the national security community. A remark about the document; the duties to apply overlays are 0034 and 0061."
+REQ-CNSSI1253-0011:
+  status: not-a-requirement
+  reason: "Says what the NSS privacy baseline stands for. A description; the duty to implement it is 0038 and 0058."
+REQ-CNSSI1253-0012:
+  work_item: WI-17
+  x_note: "Second sentence holds the duty. Subject and verb: 'The determination whether a system processes PII and whether the Privacy Overlay applies must be approved by the Senior Agency Official for Privacy (SAOP) or designee'. P-12 only records it 'for approval'; categorization.approved.approved_by holds one persona, and the steps of playbooks/C/C-2.md and C-3.md have no SAOP approval. No check rule reads infotypes.privacy. The first sentence, PII controls moved to the overlays, is held by the four CNSSI1253F-ATT6-PRIVACY sets in framework/baselines/cnssi-1253.yaml."
+REQ-CNSSI1253-0013:
+  work_item: WI-32
+  x_note: "Subject and verb: 'they may introduce privacy risks and so require coordination with the SAOP or designee'. Inside the WI-32 title; no column of framework/baselines/cnssi-1253.yaml holds these marks."
+
+# --- Page 7: Section 2.1, 2.2 ---
+REQ-CNSSI1253-0014:
+  x_existing: "framework/tasks/S.yaml S-1 inputs ART-ORG-CONTEXT and C-2 exit criterion 1 (consistent with the organization's risk management strategy) for the Prepare decisions; RACI of C-2, C-3 and S-6, which consult PER-RE and PER-CISO on all three and PER-CIO on the last two, for sharing system decisions; facts.schema.json c, i, a for the three discrete components."
+  x_gap: "'must be aware of and incorporate the decisions made during the Prepare step' at C-2 and S-2: WI-05. ART-ORG-CONTEXT is not a task input of either, and conformance/nist-waivers.yaml waives both to WI-05."
+  x_note: "Subject and verb: 'those individuals with the responsibilities of categorizing a system or selecting controls must be aware of and incorporate the decisions made during the Prepare step'; 'Decisions and actions at the system level should be shared with organizational stakeholders'. Adoption sentences are the frame for the whole tool."
+REQ-CNSSI1253-0015:
+  x_existing: "playbooks/P/P-org-context.md P-3 steps 3 and 4 with PER-PRIV responsible (organization level) and templates/artifacts/ART-RA.md '## Privacy risk' at P-14 with PER-PRIV responsible (system level)."
+  x_note: "The statement runs from page 7 to page 8. Subject and verb: 'privacy risk must be addressed at both the organizational and system levels'. The other sentences are background on consequences."
+
+# --- Page 8: 2.2, 2.3, 2.3.1 ---
+REQ-CNSSI1253-0016:
+  x_existing: "framework/tasks/*.yaml raci: PER-PRIV sits beside the security roles on 46 tasks (R on 13, C on 33)."
+  x_note: "Subject and verb: 'It is essential for organizations to take a coordinated approach to identifying and managing security and privacy risks'. The firmer form of the same duty is 0017. Definitions of security and privacy controls fill the rest."
+REQ-CNSSI1253-0017:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins (the privacy baseline is unioned with the security baselines at selection) and framework/tasks/*.yaml raci, PER-PRIV R on 13 tasks and C on 33 across every RMF step."
+  x_note: "Subject and verb: 'the security and privacy control baselines are implemented together'; 'Security and privacy programs must collaborate throughout the organization's RMF implementation'. The rest describes what the baselines contain."
+REQ-CNSSI1253-0018:
+  work_item: WI-32
+  x_note: "The statement runs from page 8 to page 9. Subject and verb: 'the system owner must confer with the SAOP, or designee, to address any privacy risks'. S-1 and S-2 consult PER-PRIV in general, but no run can tell which selected controls carry a checkmark."
+REQ-CNSSI1253-0019:
+  work_item: WI-32
+  x_note: "Footnote 11. The PE-6(3) case is an example, but its last sentence states the timing as a duty: 'the SAOP or designee must be consulted before implementation'. 0081 says the same for the whole column, 'prior to implementation'."
+
+# --- Page 9: 2.4 assumptions ---
+REQ-CNSSI1253-0020:
+  x_new_work_item: "baseline-assumptions"
+  x_home: "Task S-2 step 3, a new bullet, recorded in ART-BASELINE '## Tailoring and allocation'."
+  x_note: "Subject and verb: 'Systems or environments that diverge from the assumptions listed below must tailor their control set to compensate'. S-2 step 3 scopes on technology, environment and mission but tests no assumption. Same slug as SP800-53B 0041, whose x_new_work_item names this section."
+REQ-CNSSI1253-0021:
+  status: not-a-requirement
+  reason: "Assumption under 'The NIST SP 800-53B assumptions are:', that information is relatively persistent. A premise of the baselines; what follows from it is 0020 and 0030."
+REQ-CNSSI1253-0022:
+  status: not-a-requirement
+  reason: "Assumption under the same lead-in, that systems are multi-user. A premise; a system that differs acts under 0020."
+REQ-CNSSI1253-0023:
+  status: not-a-requirement
+  reason: "Assumption under the same lead-in, that some information is not shareable among authorized users. It states a premise and binds no one."
+REQ-CNSSI1253-0024:
+  status: not-a-requirement
+  reason: "Assumption under the same lead-in, that systems are networked and general purpose. A premise tested through 0020."
+REQ-CNSSI1253-0025:
+  status: not-a-requirement
+  reason: "Assumption under the same lead-in, that organizations have the structure and resources to implement the controls. A premise, not a duty to have them."
+REQ-CNSSI1253-0026:
+  status: not-a-requirement
+  reason: "Lead-in to the NSS assumptions: says the baselines reach a degree of 'the minimal protection that should be provided'. That 'should' describes how far the baselines go and binds no one; the items follow and the duty is 0030."
+  x_note: "Subject and verb: 'The NSS baselines are not intended to address these assumptions completely'; 'the minimal protection that should be provided'."
+REQ-CNSSI1253-0027:
+  status: not-a-requirement
+  reason: "NSS assumption that insider threats exist. A threat premise behind the '+' rows; 0030 is what acts on it."
+REQ-CNSSI1253-0028:
+  status: not-a-requirement
+  reason: "NSS assumption that APTs are targeting NSS and may already be inside. A threat premise, with no actor told to do anything."
+REQ-CNSSI1253-0029:
+  status: not-a-requirement
+  reason: "NSS assumption that practices beyond the NIST baselines are necessary. It explains why the '+' controls exist; those are transcribed, and selecting them is 0057."
+REQ-CNSSI1253-0030:
+  x_new_work_item: "baseline-assumptions"
+  x_home: "Task S-2 step 3, a new bullet, recorded in ART-BASELINE '## Tailoring and allocation'."
+  x_note: "Subject and verb: 'If any of the above assumptions are not valid, the control selections must be revisited'. Reads with 0020: same test, for the eight assumptions on this page."
+
+# --- Page 10: 2.4 continued, 2.5, 2.5.1 ---
+REQ-CNSSI1253-0031:
+  status: not-a-requirement
+  reason: "Item under 'These situations are specifically not addressed in the NSS baselines:', classified information. It names a condition; the action on it is the overlay in 0034."
+REQ-CNSSI1253-0032:
+  status: not-a-requirement
+  reason: "Item under the same lead-in: 'Select information requires specialized protection'. This 'requires' names a condition the baselines leave out, footnote 14's overlays cover it through 0034, and it binds no one here."
+  x_note: "Subject and verb: 'Select information requires specialized protection based on federal law, directives, regulations, or policies'."
+REQ-CNSSI1253-0033:
+  status: not-a-requirement
+  reason: "Item under the same lead-in: systems that 'need to communicate' across security domains. The 'need to' describes the system's situation, not a duty; the CDS overlay of footnote 15 reaches a run through 0034."
+  x_note: "Subject and verb: 'Organizational systems need to communicate with other systems across different security domains'."
+REQ-CNSSI1253-0034:
+  x_existing: "playbooks/C/C-2.md step 6 with ART-CAT '## Overlays' (each overlay decided with a reason), playbooks/S/S-2.md step 3, and src/rmf_tool/baseline.py overlay_ids, for the Classified and Privacy overlays."
+  x_gap: "The Space Platform Overlay, not transcribed: WI-21. CDS (footnote 15) and Intelligence (footnote 14), in no reference and refused as unknown IDs: WI-22."
+  x_note: "Subject and verb: 'Overlays specific to these and other situations may be available and should be applied as part of the tailoring process'."
+REQ-CNSSI1253-0035:
+  status: not-a-requirement
+  reason: "Definition of the NSS baselines as a combination of SP 800-53B and NSS controls, and a starting point. Its 'should' is conditional, 'should there be a loss', and binds no one; selection is 0057, and the last sentence repeats 0011."
+  x_note: "Subject and verb: 'NSS security control baselines represent the controls necessary to address the impact should there be a loss of confidentiality, integrity, or availability'."
+REQ-CNSSI1253-0036:
+  x_existing: "playbooks/C/C-2.md step 6, which asks each overlay's own test for the three the references hold (the Privacy Overlay's two questions by page; the Classified and Space tests paraphrased, both faithful to their Section 4), recorded per overlay in ART-CAT '## Overlays'."
+  x_gap: "Applicability questions of overlays the references do not hold, CDS and Intelligence: WI-22."
+  x_note: "Subject and verb: 'The need to apply an overlay is determined by answering the applicability questions in each overlay'. Checked against CNSSI1253E-ATT5-CLASSIFIED and CNSSI1253F-ATT2-SPACE Section 4. The definition around it is background; 'more stringent or less stringent' overlays are WI-21's add-only finding."
+REQ-CNSSI1253-0037:
+  status: not-a-requirement
+  reason: "Explains how the privacy baseline and the Privacy Overlays differ. Description introducing the two bullets, 0038 and 0039, which carry the duties."
+REQ-CNSSI1253-0038:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins (origin privacy-baseline for every row the Privacy Control Baseline column selects, whatever the categorization) and playbooks/S/S-1.md step 4."
+  x_note: "Subject and verb: 'All systems will implement the NSS privacy control baseline'. An S-2 remove can still take one out, which 0041 governs."
+
+# --- Page 11: 2.5.1 continued, 2.6 ---
+REQ-CNSSI1253-0039:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins with overlay_ids over the four CNSSI1253F-ATT6-PRIVACY sets, chosen at playbooks/C/C-2.md step 6 ('applies when the system processes PII')."
+  x_gap: "The trigger: infotypes.schema.json privacy is read by no rule, so a PII type leaves the overlay list free. WI-17."
+  x_note: "Subject and verb: 'Systems that process PII will implement both the NSS Privacy Control Baseline and the appropriate Privacy Overlay'. The WI-17 title says privacy baseline; for NSS the baseline is a default and what PII triggers is this overlay."
+REQ-CNSSI1253-0040:
+  work_item: WI-32
+  x_gap: "'The SAOP or designee must approve the determination': WI-17. 'decisions ... cannot be made once and assumed to be unchangeable': control-sufficiency-recheck."
+  x_home: "control-sufficiency-recheck: Task M-1, a step and an exit criterion: each change is tested against the categorization, overlays and tailoring, not only for a significant modification, and a shortfall re-enters at C-2 or S-2 rather than C-1 alone. No M-task or M-playbook names any of the three."
+  x_note: "Already bound to WI-32, which fits: 'the SAOP or designee must be consulted to determine if additional steps are required to protect privacy'. Held elsewhere: 'a Privacy Overlay must be applied', including the account and log case, by the ACCT set at playbooks/C/C-2.md step 6."
+REQ-CNSSI1253-0041:
+  x_existing: "framework/tasks/S.yaml S-2 exit criteria 2 and 3, tailoring.schema.json rationale and sources required, playbooks/S/S-2.md step 4 (remove on risk only; a control that cannot be implemented stays in the baseline as planned)."
+  x_gap: "'unless required to meet legislative, regulatory, or policy requirements': tailoring-legal-floor. 'security and privacy plan(s)': WI-02."
+  x_note: "The statement runs from page 11 to page 12. Subject and verb: 'All tailoring decisions must be defensible'; 'All decisions ... must be documented in the system security and privacy plan(s) and/or the plan of action and milestones'; 'Controls may not be tailored out due to inability to satisfy a control'; 'need to be documented'."
+
+# --- Page 12: 2.6 continued ---
+REQ-CNSSI1253-0104:
+  status: not-a-requirement
+  reason: "Advisory: defines Assurance, Resiliency and ATT&CK, and says organizations 'may consider' tailoring them in or weighing the effect before tailoring them out. A permission and not a minimum set; 'will impact' only names the effect to weigh. The firm assurance duty is 0074."
+  x_note: "Subject and verb: 'organizations may consider how doing so will impact assurance, resiliency, or the ability to respond to adversary tactics and techniques'."
+
+# --- Page 13: Chapter 3, 3.1, 3.1.1 ---
+REQ-CNSSI1253-0042:
+  status: not-a-requirement
+  reason: "Chapter heading, 'THE CATEGORIZE AND SELECT PROCESSES', read as a numbered item."
+REQ-CNSSI1253-0043:
+  x_existing: "framework/tasks/C.yaml C-1 to C-3 and framework/tasks/S.yaml S-1 to S-6, pinned to SP 800-37 Chapter 3 by FW-TASK-001 and FW-TASK-002 through conformance/nist-tasks.yaml."
+  x_note: "Cut pair with 0044: the extractor split at 'NIST SP 800-' / '37.', so this piece ends mid-reference and holds the duty. Subject and verb: 'the national security community will implement the RMF Categorize and Select steps consistent with NIST SP 800-37'."
+REQ-CNSSI1253-0044:
+  x_existing: "framework/tasks/S.yaml S-1 and S-2 raci, C: PER-AO and PER-PRIV; framework/tasks/C.yaml C-2 raci, C: PER-PRIV and I: PER-AO, and C-3, where the AO decides and PER-PRIV is responsible."
+  x_note: "Cut pair with 0043, both live: the leading '37.' is the tail of that sentence. A soft duty, 'It is advantageous to include individuals with risk decision making responsibilities', kept live because the RACI does carry it. 'consistent with the results of risk assessments': S-2 reads ART-RA."
+REQ-CNSSI1253-0045:
+  x_existing: "playbooks/C/C-2.md steps 4 and 5 and framework/tasks/C.yaml C-2 exit criterion 3; ART-CAT '## Impact per information type' and '## System categorization'."
+  x_note: "Subject and verb: '[the task is to] Determine security impact levels: (i) for the information type(s) ... and (ii) for the system'. Whether the system value derives from the type values is 0050."
+REQ-CNSSI1253-0046:
+  x_existing: "facts.schema.json $defs impact, enum low, moderate, high, on categorization c, i and a."
+  x_note: "Subject and verb: 'Retain the three impact levels of Low, Moderate, or High for each security objective'. See report: WI-13 asks for NA in the enum, and for NSS this keeps the system value at three levels."
+REQ-CNSSI1253-0047:
+  x_existing: "framework/tasks/C.yaml C-2 entry criterion 2, playbooks/C/C-2.md steps 3 and 4 (each owner interviewed and each value the owner's answer), templates/artifacts/ART-INFOTYPES.md '## Information owners'."
+  x_note: "Subject and verb: 'each organization must be consistent with the impact levels established by the information owner'; 'All information owners must be identified'; 'Each information owner sets the impact level'."
+REQ-CNSSI1253-0048:
+  x_existing: "framework/tasks/P.yaml P-12 exit criteria 1 and 2, ART-INFOTYPES '## Information types' and '## Privacy', infotypes.schema.json privacy."
+  x_gap: "'must be approved by the SAOP or designee': WI-17. P-12's exit criterion 3 records the determination only 'for approval'."
+  x_note: "Subject and verb: 'Identify all types of information'; 'The determination whether a system processes PII must be approved by the SAOP or designee'."
+REQ-CNSSI1253-0049:
+  x_existing: "infotypes.schema.json base, selected and adjustment_justification per objective with sp800_60_ids empty for an organization-defined type; playbooks/C/C-2.md step 4 (adjustment with its reason)."
+  x_gap: "'the provisional security impact levels may need to be adjusted to address PII impact levels': pii-impact-adjustment."
+  x_home: "pii-impact-adjustment: Task C-2 step 4, for a type with privacy true: the IO weighs the PII against the value, and the record says so."
+  x_note: "Footnote 22 adds that SP 800-60 Volume II leaves out national security information, whose levels 'can be set' by the Volume I approach; sp800_60_ids allows that. See report: footnote 23 sends the reader to the Privacy Overlays, whose current text replaces the PCIL analysis."
+REQ-CNSSI1253-0107:
+  status: not-a-requirement
+  reason: "Lead-in of two numbered activities: 'the following activities are completed:'. No verb of its own beyond introducing 0048 and 0049, where the duties sit."
+
+# --- Page 14: 3.1.2, 3.2, 3.2.1 ---
+REQ-CNSSI1253-0050:
+  work_item: WI-13
+  x_note: "Subject and verb: 'the overall high water mark for each security objective must be determined which is the security categorization for the system'. Inside the WI-13 title, 'system value derives from type values'. playbooks/C/C-2.md step 5 says it in prose, but no rule reads infotypes.yaml, so facts c, i, a can differ from the types and pass."
+REQ-CNSSI1253-0051:
+  work_item: WI-13
+  x_gap: "'make any necessary adjustments (see NIST SP 800-60, Volume I, Section 4.4.2)': system-categorization-adjustment."
+  x_home: "system-categorization-adjustment: Task C-2 step 5 and ART-CAT '## System categorization': after the high water mark, weigh aggregation, critical system functionality and the other Section 4.4.2 factors, and record each adjustment with its reason. Step 5 today takes the highest value and stops."
+  x_note: "Subject and verb: 'determine the overall high water mark for information types'; 'The security categorization of a system must not be changed or modified to reflect management decisions'. That second duty is held by framework/tasks/C.yaml C-2 exit criterion 4, playbooks/C/C-2.md step 5 and the C-3 review at step 3."
+REQ-CNSSI1253-0052:
+  x_existing: "templates/artifacts/ART-SSP.md rmf:facts block (src/rmf_tool/assemble.py facts_block, label 'Security categorization') and src/rmf_tool/oscal/build_ssp.py security-impact-level in the OSCAL SSP."
+  x_note: "'Document the security categorization results in the security plan.' The working detail stays in ART-CAT."
+REQ-CNSSI1253-0053:
+  work_item: WI-17
+  x_note: "'Obtain the SAOP's, or designee's, approval of the security categorization for systems that process PII.' framework/tasks/C.yaml C-3 purpose and exit criterion 3 say so in prose, but playbooks/C/C-3.md steps 5 and 6 interview only the AO or AODR and approved_by holds one persona; no rule tests it. Same finding as SP800-37R2 0282."
+REQ-CNSSI1253-0054:
+  x_existing: "framework/tasks/C.yaml C-3, playbooks/C/C-3.md steps 5 and 6 (the AO or AODR approves, never simulated for a named human), facts categorization.approved; FACTS-001 (src/rmf_tool/check/rules/content.py) and rmf baseline resolve refuse an unapproved categorization."
+  x_note: "'Obtain AO's or AO's designated representative's approval of the security categorization.' FACTS-001 tests value true, not who approved: facts.schema.json takes any PER-* as approved_by, though playbooks/C/C-2.md step 7 says FACTS-001 holds the approver to the AO or AODR. Held in substance by C-3; see report."
+REQ-CNSSI1253-0055:
+  status: not-a-requirement
+  reason: "Says the Select step is consistent with SP 800-37 and that the guidance here covers its first two tasks. A scope note introducing 0102 and 0103."
+REQ-CNSSI1253-0102:
+  status: not-a-requirement
+  reason: "Label, 'Task S-1, Control Selection', in a list that repeats the heading of Section 3.2.1."
+REQ-CNSSI1253-0103:
+  status: not-a-requirement
+  reason: "Label, 'Task S-2, Control Tailoring', second in that list, repeating the heading of Section 3.2.2."
+REQ-CNSSI1253-0056:
+  status: not-a-requirement
+  reason: "Lead-in of Section 3.2.1: selection starts once categorization is settled, then 'the following activities are completed:'. Sequence is held in 0057's home; the items 0057 to 0059 carry the duties."
+REQ-CNSSI1253-0057:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins over framework/baselines/cnssi-1253.yaml, the union of the C, I and A columns at each objective's level; playbooks/S/S-1.md steps 4 and 5; ART-BASELINE '## Selection basis'."
+  x_note: "'Select the NSS security control baseline contained in Appendix D Tables D-1 through D-20 corresponding to the security categorization of the system.' Cells checked current with `python -m rmf_tool.cnssi1253 --check`."
+REQ-CNSSI1253-0058:
+  x_existing: "src/rmf_tool/baseline.py cnssi_origins, origin privacy-baseline; PRIVACY_BASELINE_QUOTES in src/rmf_tool/cnssi1253.py cites this sentence; framework/tasks/S.yaml S-1 purpose."
+  x_note: "'Include the NSS privacy control baseline ... which is a default for all NSS.'"
+REQ-CNSSI1253-0059:
+  work_item: WI-32
+  x_note: "'As appropriate, coordinate with privacy program officials or representatives to ensure privacy risk is addressed as informed by the Privacy Implementation Considerations column'. PER-PRIV is consulted at S-1, but the column it should be informed by is untranscribed."
+REQ-CNSSI1253-0060:
+  x_existing: "framework/tasks/S.yaml S-2 entry criterion 2 and inputs ART-RA, playbooks/S/S-2.md step 2; ART-RA from P-14, whose purpose keeps it current."
+  x_note: "The statement runs from page 14 to page 15. Subject and verb: 'a risk assessment – either informal or formal – should be conducted'. Its 'the following activities must be completed:' is the lead-in to 0061 to 0076, each decided there. The opening sentence defines tailoring."
+
+# --- Page 15: 3.2.2 activities 1 to 4 ---
+REQ-CNSSI1253-0061:
+  x_existing: "playbooks/C/C-2.md step 6 and facts categorization.overlays, playbooks/S/S-2.md step 3, src/rmf_tool/baseline.py overlay_ids, overlay_problem through FACTS-001, for the Privacy and Classified overlays."
+  x_gap: "'The SAOP or designee must approve the determination': WI-17, S-2's interview row says it but nothing records it. Space overlay: WI-21. CDS and Intelligence: WI-22."
+  x_note: "'Apply any applicable overlay(s). To determine applicability of an overlay, refer to the questions'. The tool decides overlays at C-2 where this places them at S-2; S-2 step 3 revisits them but facts.categorization.overlays has C-2 as its writer."
+REQ-CNSSI1253-0062:
+  x_existing: "framework/tasks/S.yaml S-2 exit criterion 4 and playbooks/S/S-2.md step 3 (the AO and the SAOP resolve a conflict), with a journal DECISION."
+  x_gap: "'in coordination with the information owner/steward, information system owner, and risk executive (function)': overlay-conflict-raci. S-2 has PER-IO and PER-PM, not PER-RE, and step 3 names only the two deciders."
+  x_home: "overlay-conflict-raci: Task S-2 raci gains PER-RE as C, and step 3 names all three coordinating roles."
+  x_note: "Subject and verb: 'the AO (or designee) and SAOP (or designee), in coordination with ... resolve the conflict'. Overlay blocks are add-only today, so a removal conflict cannot arise until WI-21 lands."
+REQ-CNSSI1253-0063:
+  status: not-a-requirement
+  reason: "Lead-in, 'Use tailoring guidance ... to:', over items that each hold their own verb: 0064, 0109, 0068 to 0071. The items are live. playbooks/S/S-2.md step 2 reads SP 800-53B Section 2.4, and the Section 2.6 rules are entries 0041 and 0104."
+REQ-CNSSI1253-0064:
+  x_existing: "playbooks/S/S-2.md step 3 (common controls), framework/tasks/S.yaml S-3 and allocation.yaml type, ART-BASELINE '## Common controls available for inheritance'; P-5 publishes them."
+  x_note: "'Identify and designate common controls, and the common control provider(s)'."
+REQ-CNSSI1253-0109:
+  x_existing: "playbooks/S/S-2.md step 3 scoping (technology, environment, mission, with the reason) and the remove action of tailoring.schema.json; placement by playbooks/S/S-3.md step 4 and allocation.yaml components."
+  x_gap: "'v. Security objective considerations': objective-downgrade. 'vi. Legal and policy considerations': tailoring-legal-floor."
+  x_note: "Promoted: the verb over the six considerations. 0065, 0066 and 0067 point here; iii, iv and vi were rejected as short or unmarked and need no entry of their own."
+REQ-CNSSI1253-0065:
+  status: not-a-requirement
+  reason: "Bare noun item i under 'b. Apply scoping considerations:'. The verb is 0109, promoted here, which holds it."
+REQ-CNSSI1253-0066:
+  status: not-a-requirement
+  reason: "Bare noun item ii under the same lead-in. S-2 step 3 reaches environment through 0109."
+REQ-CNSSI1253-0067:
+  status: not-a-requirement
+  reason: "Bare noun item v under the same lead-in. Its substance is in SP 800-53B Section 2.4, carried by objective-downgrade, and 0109 names that gap."
+REQ-CNSSI1253-0068:
+  x_existing: "playbooks/S/S-2.md steps 3 and 4 and the compensating action with compensating_for in tailoring.schema.json."
+  x_gap: "That the selected control reaches the baseline: compensating-control-record. baseline.py resolve applies add and remove only, so a compensating control gets no entry and no SSP statement."
+  x_note: "'Select compensating controls if baseline controls cannot be implemented'."
+REQ-CNSSI1253-0069:
+  x_existing: "framework/tasks/S.yaml S-2 exit criterion 2, playbooks/S/S-2.md steps 3 and 4, the parameter action of tailoring.schema.json, IDs from rmf catalog show."
+  x_gap: "Values the tables set: WI-20. Step 3 takes values from organizational policy and then the ISSM, and nothing tests one against the Parameter Value column."
+  x_note: "'Assign values to organization-defined control parameters'."
+REQ-CNSSI1253-0070:
+  x_existing: "playbooks/S/S-2.md step 3 supplementation and the add action of tailoring.yaml, applied by baseline.py resolve as origin tailored-in."
+  x_note: "'Supplement baselines with additional controls and control enhancements'."
+REQ-CNSSI1253-0071:
+  x_new_work_item: "tailoring-specification-info"
+  x_home: "Task S-2 step 3, a `specification` action in tailoring.schema.json."
+  x_note: "'Provide specification information for control implementation'. Same duty as SP800-53B 0085 and SP800-37R2, where the slug comes from: no action type or step holds it. Footnote 24 is 0073."
+REQ-CNSSI1253-0072:
+  x_existing: "framework/tasks/S.yaml S-2 inputs ART-RA, exit criterion 3, playbooks/S/S-2.md step 4 ('only on a risk-based determination, never because it is hard to implement'); the playbook's inputs add ART-ORG-CONTEXT for tolerances."
+  x_gap: "'controls that may unnecessarily increase complexity, long term maintenance and assessment costs': tailoring-tradeoffs. No record shows that weighing."
+  x_note: "Subject and verb: 'Use risk assessments ... to inform tailoring'; 'Evaluate the baseline controls'; 'Controls should be removed only because of risk-based determinations'."
+REQ-CNSSI1253-0073:
+  status: not-a-requirement
+  reason: "Footnote 24 to 0071: why controls lack detail, so that extra detail 'may be necessary'. An explanation of the item, which carries the duty."
+
+# --- Page 16: 3.2.2 activities 5 to 7, approval ---
+REQ-CNSSI1253-0074:
+  x_new_work_item: "assurance-tailoring: S-2 asks whether more assurance is needed to reach the trustworthiness the system requires, reads which controls contribute (the Assurance column, or the catalog's contributes-to-assurance mark, which rmf catalog show does not surface), and records the answer in tailoring.yaml or ART-BASELINE."
+  x_home: "Task S-2 step 3, a new bullet."
+  x_note: "'Determine if additional assurance-related controls are needed to increase the level of trustworthiness in the system.' An activity that 'must be completed' per 0060, unlike the permissive 0104. S-2 supplements from risks and requirements only; grep finds no assurance text in S-playbooks or framework/baselines/cnssi-1253.yaml."
+REQ-CNSSI1253-0075:
+  x_existing: "tailoring.yaml and ART-BASELINE '## Tailoring and allocation' (playbooks/S/S-2.md steps 4 and 6), the equivalent document S-4's exit criterion 1 accepts; rationale required on every action."
+  x_gap: "'privacy plans': WI-02."
+  x_note: "'Document in the security and privacy plans the relevant decisions made during the tailoring process, providing a sound risk-based rationale'."
+REQ-CNSSI1253-0076:
+  x_existing: "playbooks/S/S-2.md step 4, ssp-controls status planned and templates/artifacts/ART-SSP.md '## Open items' (each partial or planned control with its gap and plan); SAR-POAM-001 carries an open finding into the POA&M."
+  x_gap: "'security and privacy plans': WI-02."
+  x_note: "Subject and verb: 'Document and justify ... any controls from the selected NSS baseline that cannot or will not be implemented'; 'This information, and the associated risks, must also be included in the corresponding plan of action and milestones'."
+REQ-CNSSI1253-0077:
+  x_existing: "framework/tasks/S.yaml S-6 exit criteria and raci, A: PER-AO, R: PER-AODR, for the AO's approval of the security plan."
+  x_gap: "'the SAOP (privacy plan)': WI-02. 'including all tailoring decisions': tailoring-approval, since S-6 does not read ART-BASELINE."
+  x_note: "Subject and verb: 'The security and privacy plans, including all tailoring decisions, must be approved by the AO (security plan) and the SAOP (privacy plan) or their designees'."
+
+# --- Page 22: Appendix D column legend ---
+REQ-CNSSI1253-0078:
+  status: not-a-requirement
+  reason: "Column legend: what the ID column holds, and that salmon shading marks new Rev. 5 controls."
+REQ-CNSSI1253-0079:
+  status: not-a-requirement
+  reason: "Column legend: the Title column holds the control's name."
+REQ-CNSSI1253-0080:
+  x_existing: "framework/baselines/cnssi-1253.yaml privacy cell of every row, read by src/rmf_tool/baseline.py cnssi_origins with SELECTED 'X+'; PRIVACY_BASELINE_QUOTES in src/rmf_tool/cnssi1253.py cites this sentence."
+  x_note: "Subject and verb: 'Controls indicated with an \"X\" or a \"+\" in this column are required for all NSS'."
+REQ-CNSSI1253-0081:
+  work_item: WI-32
+  x_note: "Lead-in with its own duty, over the numbered 0082 to 0085. Subject and verb: 'Controls that if selected ... require coordination with the SAOP or designee to address privacy considerations prior to implementation'. The subscripted numbers are in the untranscribed column too."
+REQ-CNSSI1253-0082:
+  work_item: WI-32
+  x_note: "Legend of subscript 1, kept live with 0083 to 0085 as one set: each Appendix D checkmark carries these numbers as 'implications to consider when implementing the control', so WI-32's transcription and the SAOP coordination need them."
+REQ-CNSSI1253-0083:
+  work_item: WI-32
+  x_note: "Legend of subscript 2, 'Design choices may mitigate privacy risks'. Decided with the set; see 0082."
+REQ-CNSSI1253-0084:
+  work_item: WI-32
+  x_note: "Legend of subscript 3, 'Implementation choices may create unintended privacy risks'. Decided with the set; see 0082."
+REQ-CNSSI1253-0085:
+  work_item: WI-32
+  x_note: "Legend of subscript 4, and the one item that is a rule by itself: 'PII should not flow through or into a system that is not authorized to process PII'. Decided with the set; see 0082."
+REQ-CNSSI1253-0086:
+  status: not-a-requirement
+  reason: "Label for the group of columns, 'Security Control Baselines Confidentiality (C)/Integrity (I)/Availability (A)'."
+REQ-CNSSI1253-0087:
+  status: not-a-requirement
+  reason: "Column legend: the C, I and A columns show objective and level by an X or a +. It tells a reader how to read the table, which src/rmf_tool/cnssi1253.py already does."
+REQ-CNSSI1253-0088:
+  status: not-a-requirement
+  reason: "Column legend for Justification for NSS: a '+' row gives its reason. It explains a column that assigns no one anything, and no run reads it."
+REQ-CNSSI1253-0089:
+  work_item: WI-20
+  x_note: "Already bound to WI-20, which fits. 'Contains minimum values specified for NSS'; 'Parameter values apply to both privacy and security baselines.'"
+REQ-CNSSI1253-0090:
+  status: not-a-requirement
+  reason: "Column legend for Assurance, Resiliency and ATT&CK, running from page 22 to page 23. It defines the marks: 'will be achieved' is part of the definition of assurance and binds no one. How they bear on tailoring is 0104, and the firm duty is 0074."
+  x_note: "Subject and verb: 'control or control enhancement contributes to the confidence that a security claim has been or will be achieved'."
+
+# --- Page 23: symbols, notation ---
+REQ-CNSSI1253-0091:
+  status: not-a-requirement
+  reason: "Symbol legend, 'X'. framework/baselines/cnssi-1253.yaml restates it under cells: legend."
+REQ-CNSSI1253-0092:
+  status: not-a-requirement
+  reason: "Symbol legend, '+', a control added for NSS. A definition, read as a selecting cell by baseline.py."
+REQ-CNSSI1253-0093:
+  status: not-a-requirement
+  reason: "Symbol legend, '--', a NIST control not selected for NSS. A definition; 'can still be selected' is the permission S-2's add action already gives."
+REQ-CNSSI1253-0094:
+  status: not-a-requirement
+  reason: "Symbol legend, the blank cell. A definition; its 'may still be selected' permits and does not bind."
+REQ-CNSSI1253-0095:
+  status: not-a-requirement
+  reason: "Symbol legend, the checkmark. It says which columns use the mark."
+REQ-CNSSI1253-0096:
+  status: not-a-requirement
+  reason: "Reading notes for the tables: what Withdrawn and its shading mean, where the objectives are defined, and the notation for placing a value in a control. They explain the layout: 'the notation will only identify paragraph a. and c.' tells a reader what to expect and binds no one. 0089 holds the parameter duty, and the notation is what a WI-20 transcription must parse."
+  x_note: "The statement merges three paragraphs of page 23. Subject and verb: 'the notation will only identify paragraph a. and c.'; 'their position will be noted using 1st PV or 2nd PV'."
+REQ-CNSSI1253-0105:
+  status: not-a-requirement
+  reason: "Tail of the notation note: an unannotated value is the only one, and 'It should be noted' that a value starting with 'a' is no paragraph mark. That 'should' warns a reader and binds no one to any act."
+  x_note: "The statement runs from page 23 to page 24; its anchor is the bare 'If the', so it is cited as read. Subject and verb: 'It should be noted that sometimes a parameter value begins with the word \"a\"'; 'which should not be confused with a paragraph annotation'."
+
+# --- Page 24: blank parameter cells ---
+REQ-CNSSI1253-0108:
+  status: not-a-requirement
+  reason: "Lead-in: if no value appears in the tables, then one of three things is true. The items 0097 to 0099 explain a blank cell, and nothing is asked of anyone."
+REQ-CNSSI1253-0097:
+  status: not-a-requirement
+  reason: "First reading of a blank Parameter Value cell: the control has no parameter. An explanation."
+REQ-CNSSI1253-0098:
+  status: not-a-requirement
+  reason: "Second reading of a blank cell: CNSS left the value to organizations. It explains why, and S-2 assigns such values under 0069."
+REQ-CNSSI1253-0099:
+  status: not-a-requirement
+  reason: "Third reading of a blank cell: the control is in no NSS baseline, so CNSS set no value."
+REQ-CNSSI1253-0100:
+  work_item: WI-20
+  x_note: "'Organizations may address a parameter value in organizational policy if the policy meets or exceeds the NSS-defined parameter value.' The permission carries the floor, so it stays live. Inside the WI-20 title: playbooks/S/S-2.md step 3 takes ART-ORG-CONTEXT values first, and nothing compares them with the column."
+
+# --- Page 161: Appendix E ---
+REQ-CNSSI1253-0101:
+  status: not-a-requirement
+  reason: "Appendix E overview: what an overlay is, that overlays 'may or may not be baseline independent', that the CNSS SWG manages CNSS overlays, and that communities 'may develop' their own. 'may not' here describes overlays and forbids nothing. Definition, CNSS's own governance and a permission; the overlay duties are 0034 and 0061, and 0106 is the instruction on this page."
+  x_note: "Subject and verb: 'Overlays may or may not be baseline independent and can be applied to any NSS baseline'; 'The CNSS Safeguarding Working Group (SWG) manages the CNSS overlay initiation, development, approval, publication, and maintenance processes'."
+REQ-CNSSI1253-0106:
+  work_item: WI-22
+  x_note: "'Consult the owning organizations for a copy of overlays not available through the CNSS.' Inside the WI-22 title: CDS and Intelligence overlays reach a fork this way or from the restricted CNSS site, and a fork that holds one still cannot record it, since overlay_problem refuses an unknown ID."

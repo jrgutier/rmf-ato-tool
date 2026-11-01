@@ -178,10 +178,16 @@ def test_every_audit_finding_has_a_work_item():
     imports = (REPO_ROOT / "docs/audits/2026-11-01-import-findings.md").read_text(encoding="utf-8")
     findings = set(re.findall(r"^\| ([NDC]-\d+) \|", audit, re.M))
     added = set(re.findall(r"^\| (I-\d+) \|", imports, re.M))
+    triage = (REPO_ROOT / "docs/audits/2026-11-triage/audit.md").read_text(encoding="utf-8")
+    conflicts, _, later = triage.partition("## Left for later phases")
+    routed = dict(re.findall(r"^\| (I-\d+) \|.*\| (WI-\d+) \| p\d+ \|$", conflicts, re.M))
     linked = {f for w in register.load(REPO_ROOT).work_items.values() for f in w["findings"]}
 
     assert len(findings) == 47
-    assert findings | added == linked
+    assert findings | added <= linked
+    assert linked - findings - added <= set(routed)
+    assert set(re.findall(r"^\| (I-\d+) \|", conflicts, re.M)) == set(routed)
+    assert set(routed.values()) <= set(register.load(REPO_ROOT).work_items)
 
 
 def test_every_open_register_work_item_binds_an_entry():

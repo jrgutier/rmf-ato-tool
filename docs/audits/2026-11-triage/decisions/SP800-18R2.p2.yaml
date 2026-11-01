@@ -1,0 +1,438 @@
+# SP800-18R2 part 2, pages 45 to 53 and 59 to 63, read whole against references/text/SP800-18R2.md. Pages 54 to 58 are excluded (References).
+# Figure 2 (p45) opened in the PDF. "The plan" as in part 1: ART-SSP and its family files, with the package artifacts it rests on.
+# Table 2 (pp 59 to 63) is decided one way: every row is noise. It maps SP 800-37r2 expected outputs to plan elements and holds no duty of its own.
+# --- Chapter 4 and 4.1 Prepare, page 45 ---
+REQ-SP800-18R2-0289:
+  status: not-a-requirement
+  reason: "Chapter heading, 'System Plan Development Through the Risk Management Framework Steps'. The extractor read the number as a list marker."
+REQ-SP800-18R2-0290:
+  status: not-a-requirement
+  reason: "Navigation: says what the subsections give leaders and that Fig. 2 shows the steps. 'responsibilities' only names one thing the RMF methodology supports and binds no one."
+  x_note: "Subject and verb: 'The following subsections provide ... a broader understanding'; 'The RMF provides a methodology ... including responsibilities'."
+REQ-SP800-18R2-0291:
+  x_existing: "ART-ORG-CONTEXT '## RMF role assignments' for security and privacy roles; ssp-controls `responsible_roles`; RACI in framework/tasks"
+  x_gap: "'supply chain risk management' roles, and alignment with the C-SCRM strategy: cscrm-governance."
+  x_note: "The duty is 'the plans designate individuals with roles and responsibilities for security, privacy, and supply chain risk management'. The first sentence is a description. Same substance as 0127."
+REQ-SP800-18R2-0292:
+  x_new_work_item: "ccp-package"
+  x_home: "Task P-5 outputs, read at Task S-3: the provider's plan with implementation details, its privacy protections, and the systems it serves"
+  x_note: "Subject and verb, on PER-CCP: 'Common control providers develop system plan artifacts that identify and provide implementation details for inheritable common controls'; 'A common control plan describes privacy protections'. ART-ORG-CONTEXT lists providers and controls only, no details. 'may be based' is a remark."
+REQ-SP800-18R2-0421:
+  status: not-a-requirement
+  reason: "Permission lead-in: 'Organizations may develop tailored control baselines'. An 'organizations may' sentence with no minimum set; Task P-4 is optional for the same reason. Its noun items 0293 to 0295 follow it."
+  x_note: "Subject and verb: 'Organizations may develop tailored control baselines for systems with specialized or unconventional mission, business, or operational requirements'."
+REQ-SP800-18R2-0293:
+  status: not-a-requirement
+  reason: "Bare noun item of the permission 0421: predetermined ODP values as one detail a tailored baseline can give."
+# --- 4.1, page 46 ---
+REQ-SP800-18R2-0294:
+  status: not-a-requirement
+  reason: "Bare noun item of the permission 0421: additional and compensating controls in a tailored baseline."
+REQ-SP800-18R2-0295:
+  status: not-a-requirement
+  reason: "Bare noun item of the permission 0421: supplemental scoping information on where the tailored controls apply."
+REQ-SP800-18R2-0296:
+  status: not-a-requirement
+  reason: "Subheading 'Prepare — System Level'. The extractor read its first word as an imperative."
+REQ-SP800-18R2-0297:
+  x_existing: "Task P-8 exit criterion, interviews record the supported missions and processes; ART-SD '## Mission and purpose' at C-1"
+  x_note: "Item of the rejected lead-in 'key information is collected to inform initial drafts of system plans, including:'. Each of the five items has its own home, so the items stand and the lead-in stays rejected, as in part 1. WI-19 covers P-8 having no output artifact."
+REQ-SP800-18R2-0415:
+  x_existing: "ART-STAKE, Task P-9"
+REQ-SP800-18R2-0298:
+  x_existing: "ART-INFOTYPES, artifacts/data/infotypes.yaml, Task P-12"
+REQ-SP800-18R2-0299:
+  x_existing: "ART-RA '## Threat sources and events' and '## Privacy risk', Task P-14, which reads ART-INFOTYPES and its life cycle stages from P-13"
+  x_gap: "'managed across the entire data ecosystem', the risk where information leaves the system: ra-external-risk."
+REQ-SP800-18R2-0300:
+  x_existing: "ART-BND '## Authorization boundary' (what is inside, what is outside and why, where the edge is), Task P-11"
+REQ-SP800-18R2-0301:
+  x_existing: "facts.yaml system_id, playbooks/C/C-1.md step 4, from registration at P-18 (ART-REG); printed in every artifact by the rmf:facts block; the OSCAL uuid5 values rest on it"
+  x_note: "Subject and verb: 'The organization assigns a system identifier'. A run is one system, so its inventory and artifacts sit under that identifier; 'device event audit records' are the system's own logs, which no run holds."
+REQ-SP800-18R2-0302:
+  work_item: WI-04
+  x_note: "Subject and verb: 'The system-level C-SCRM plan provides a context ... by enumerating requirements, describing constraints'; 'C-SCRM plans for systems align with the established organization-wide risk tolerances'; 'the organization decides the scope of the C-SCRM plan'. 'Many organizations choose' is a remark."
+REQ-SP800-18R2-0303:
+  x_existing: "ART-SSP rewritten at S-6, I-2, A-5 and M-4; ART-SD and ART-INV at I-2; each lists the task in `touched_by`"
+  x_gap: "'each of the subsequent RMF steps': the Authorize tasks and M-1, M-3 and M-7 list no plan update: WI-07."
+REQ-SP800-18R2-0304:
+  x_existing: "ART-BND '## Data flows' and '## External components', boundary.yaml `data_flow`; ART-SD '## Interconnections and leveraged authorizations'"
+  x_gap: "'through various subsystems': complex-system-subsystems. 'to ensure that privacy risks are managed comprehensively' past the boundary: ra-external-risk."
+  x_note: "Subject and verb: 'The system plans identify how data flows'. 'may require looking beyond the authorization boundary' is the reason given for the duty. The boundary sentence describes; P-11 holds it."
+REQ-SP800-18R2-0437:
+  work_item: WI-04
+  x_note: "Promoted, page 47, the one sentence. 'C-SCRM plan considerations include vendor-controlled SaaS offerings ...'. The sentences before it are 'may include' and 'For example' and stay rejected."
+# --- 4.2 Categorize and 4.3 Select, page 47 ---
+REQ-SP800-18R2-0305:
+  x_existing: "ART-CAT '## Impact per information type' with the basis for each value, and infotypes.yaml `adjustment_justification`, Task C-2; ART-CAT is a core package artifact, so it counts as the plan's categorization information"
+  x_gap: "'including privacy and C-SCRM impacts': a supplier-side impact has no place in the rationale: WI-04."
+  x_note: "Subject and verb: 'Security categorization information in the system plan provides the rationale for categorization decisions'. 'may require additional input from the senior agency official for privacy and the senior procurement official' is a condition: C-3 has PER-PRIV, and no persona carries the senior procurement official. A DoD run categorizes under CNSSI 1253, not FIPS 199."
+REQ-SP800-18R2-0306:
+  x_existing: "ART-CAT '## Impact per information type' per type and objective; Task C-2 reads ART-RA with '## Privacy risk'; C-3 records SAOP approval when PII is processed"
+  x_gap: "'Privacy impacts are informed by ... PIAs, SORNs, MOUs': no PIA exists and C-2 reads none: PIA-FORM."
+REQ-SP800-18R2-0307:
+  work_item: WI-04
+  x_note: "When the plan exists: 'The C-SCRM plan is generally developed for high- and moderate-impact systems'. The low-impact fallback, 'the system security plan can identify', is a permission the same item must carry as a condition."
+REQ-SP800-18R2-0308:
+  x_existing: "ART-BASELINE '## Selection basis' and the method in baseline.json; allocation.yaml; ssp-controls one record per baseline control (SSP-COV-001)"
+  x_note: "Subject and verb: 'The organization determines the approach for selecting, tailoring, and allocating controls'; 'System plans identify the controls that are selected and allocated'. In a DoD run CNSSI 1253 fixes the approach, and ART-BASELINE is in the package. The last sentence introduces 0309 and 0311."
+REQ-SP800-18R2-0309:
+  status: not-a-requirement
+  reason: "Definition of the first of two approaches under 0308, the organization's own selection process. A run uses the CNSSI 1253 baseline approach, and 'Organizations may consider' framework profiles is a permission. Runs from page 47 onto page 48."
+  x_note: "Subject and verb: 'The organization uses its own process to select and tailor the controls'; 'Organizations may consider applicable Cybersecurity and Privacy Framework Profiles'."
+REQ-SP800-18R2-0310:
+  status: not-a-requirement
+  reason: "Footnote 18, a pointer to the Zero Trust guide and SP 800-88. 'recommended' and 'requirements' name what that publication provides and bind no one here."
+  x_note: "Subject and verb: '[SP 800-88] provides minimum sanitization requirements for use in determining recommended sanitization methods'."
+# --- 4.3, page 48 ---
+REQ-SP800-18R2-0311:
+  x_existing: "Task S-1 reads ART-ORG-CONTEXT, where P-4 lists the approved or directed tailored baselines; playbooks/S/S-1.md asks PER-ISSM for organizational additions"
+  x_note: "'Controls in the organizationally tailored control baselines ... are factored into the control selection process.' The sentence on SP 800-53B baselines is description; a DoD run selects from CNSSI 1253."
+REQ-SP800-18R2-0312:
+  x_new_work_item: "privacy-selection-tailoring"
+  x_home: "playbooks/S/S-1.md '## Interviews' and S-2 step 3, with a line in ART-BASELINE '## Tailoring and allocation': PER-PRIV takes part with PER-ISSM in selecting and tailoring privacy controls, and records that tailoring leaves no compliance gap or added privacy risk. Today PER-PRIV is only Consulted and neither playbook interviews the role"
+  x_note: "Subject and verb: 'System privacy and security officials collaborate on the selection of privacy controls'. The first two sentences describe the baseline."
+REQ-SP800-18R2-0313:
+  status: not-a-requirement
+  reason: "Permission: 'Organizations can use a control overlay' as a starting point. No minimum set; the overlays a DoD run applies come from CNSSI 1253 and are recorded in ART-CAT."
+  x_note: "Subject and verb: 'Organizations can use a control overlay (e.g., C-SCRM extended overlay) as a starting point'."
+REQ-SP800-18R2-0314:
+  x_existing: "ssp-controls `statement` per baseline control, SSP-COV-001, at S-4, for security controls"
+  x_gap: "'privacy, and C-SCRM risk management controls': WI-02 and WI-04."
+REQ-SP800-18R2-0315:
+  status: not-a-requirement
+  reason: "Description of tailoring: the activities 'provide flexibility', and tailoring 'can address' supplier impacts. A capability, with no one bound."
+  x_note: "Subject and verb: 'The control tailoring activities in [SP800-53B] provide flexibility'; 'Tailoring can address the impacts'."
+REQ-SP800-18R2-0434:
+  x_existing: "tailoring.yaml `action` and required `rationale`, Task S-2; allocation.yaml for inherited common controls; ART-BASELINE '## Tailoring and allocation', in the package; ssp-controls `parameters`"
+  x_gap: "'Additional specification information' (0322): tailoring.schema.json has no such action: tailoring-specification-info."
+  x_note: "Promoted, page 48. Live lead-in with its own verb over seven bare noun items, 0316 to 0318 and 0320 to 0323, noise pointing here. Subject and verb: 'The system plans record the justification and decision for control tailoring activities'."
+REQ-SP800-18R2-0316:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: inherited common controls as one tailoring decision to record. The duty is 0434."
+REQ-SP800-18R2-0317:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: scoping considerations for selected controls."
+REQ-SP800-18R2-0318:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: compensating controls selected and allocated."
+REQ-SP800-18R2-0319:
+  status: not-a-requirement
+  reason: "Footnote 19, a caveat: implementing the baseline does not settle A-130. 'may be required to take' additional actions names no action and binds no one, and 'can provide' is a benefit of documenting."
+  x_note: "Subject and verb: 'Agencies may be required to take additional, separate actions to fully comply with OMB privacy requirements'."
+# --- 4.3.1 to 4.3.3, page 49 ---
+REQ-SP800-18R2-0320:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: ODP values for assignment and selection operations."
+REQ-SP800-18R2-0321:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: additional controls that supplement the baseline. Footnote 21 is a pointer, left rejected."
+REQ-SP800-18R2-0322:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: additional specification information. The gap it opens is named on 0434."
+REQ-SP800-18R2-0323:
+  status: not-a-requirement
+  reason: "Bare noun item of 0434: controls tailored out of the selected baseline."
+REQ-SP800-18R2-0324:
+  x_existing: "Task S-2 with PER-ISSM responsible and PER-PRIV consulted, and its exit criterion 'Any conflict between overlays is resolved by the AO and the SAOP'; S-6 approves ART-SSP, whose ssp-controls carry the tailored parameters"
+  x_gap: "'supply chain risk management officials': cscrm-control-tailoring. 'only the authorizing official can accept the risks associated with removing controls': a `remove` record names no acceptance, S-6 does not read tailoring.yaml, and PER-AODR is responsible at S-6: tailoring-removal-acceptance."
+  x_home: "tailoring-removal-acceptance: Task S-2 step 4 and Task S-6: a `remove` record in tailoring.yaml names PER-AO's acceptance of the risk, which PER-AODR cannot give, and S-6 reads tailoring.yaml"
+  x_note: "Subject and verb: 'officials coordinate'; 'all decisions are approved through the system plan approval process'; 'only the authorizing official can accept the risks'."
+REQ-SP800-18R2-0325:
+  x_new_work_item: "privacy-selection-tailoring"
+  x_home: "S-2 step 3 and ART-BASELINE '## Tailoring and allocation': the confirmation"
+  x_note: "Subject and verb, on PER-PRIV: 'Privacy officials tailor controls to address system-specific privacy requirements ... and confirm that tailoring decisions do not result in compliance gaps'. 'Tailoring can involve' and 'The C-SCRM PMO can provide input' are advisory."
+REQ-SP800-18R2-0326:
+  x_existing: "ssp-controls `statement`, playbooks/S/S-4.md step 3; allocation.yaml `type: hybrid`; ART-SSP '## Inheritance and shared responsibility', one paragraph per provider saying what it implements and what the system does"
+  x_note: "ssp-controls holds a record for every allocated control, privacy controls of the baseline included, so 'each allocated control' is held."
+REQ-SP800-18R2-0327:
+  x_existing: "ssp-controls `inherited_from`, required for inherited and given for hybrid and common allocations"
+  x_gap: "'Control implementation details in the system privacy plan describe how the controls meet privacy-specific requirements': WI-02."
+  x_note: "Subject and verb: 'system plans reference the source of the common control'. 'Notes may be added' is a permission."
+REQ-SP800-18R2-0435:
+  x_new_work_item: "service-agreement"
+  x_home: "C-1 step 6, an `agreement` field in leveraged-authorizations.schema.json, ART-SD '## Interconnections and leveraged authorizations': the agreement's limits on distributing provider details, which ART-SSP statements then follow"
+  x_note: "Promoted, page 49, footnote 22. Conditional: 'If the common control provider implementation details are considered controlled information ... restrictions in applicable service agreements ... are followed'."
+REQ-SP800-18R2-0328:
+  work_item: WI-02
+  x_gap: "'authorizing officials consult with the C-SCRM PMO as well as acquisitions personnel' and the C-SCRM review: WI-04."
+  x_note: "Subject and verb: 'The senior agency official for privacy is responsible for reviewing and approving the system privacy plan or consolidated plan before it is submitted'. Inside the item's title. The statement runs from page 49 onto page 50; the page cited holds its first part."
+# --- 4.3.3 to 4.6, page 50 ---
+REQ-SP800-18R2-0329:
+  status: not-a-requirement
+  reason: "Permission on PER-AO: the official 'may request additional input'. No minimum set, and S-6 already consults most of those named."
+  x_note: "Subject and verb: 'The authorizing official may request additional input from the senior accountable official for risk management, CIO'."
+REQ-SP800-18R2-0330:
+  x_existing: "S-6 exit criterion and ART-SSP '## Plan Review and Approval (S-6)'; I-1 depends_on S-6, so Implement starts after approval"
+  x_gap: "Approval of the privacy and C-SCRM plans: WI-02 and WI-04."
+REQ-SP800-18R2-0331:
+  x_existing: "S-6 exit criterion: ART-SSP records the AO's approval 'or the changes required before approval'"
+  x_note: "'may recommend changes' is the other branch of 0330, not a free permission; the framework records it."
+REQ-SP800-18R2-0332:
+  x_existing: "framework/decisions.yaml: AD-ATO, AD-ATOC and AD-DATO are decided in R-4; S-6 outputs ART-SSP only; AODM-001"
+  x_gap: "'authorization to use': WI-01."
+  x_note: "Repeats 0429 on page 37."
+REQ-SP800-18R2-0333:
+  x_existing: "Task I-1, controls implemented from ART-SSP; I-2 exit criterion, every SSP statement describes the as-implemented control; tailoring.yaml `compensating`"
+  x_note: "Subject and verb: 'Allocated controls are designed, built, tested, and deployed following the details in the system plans'; 'the system plans are updated'."
+REQ-SP800-18R2-0334:
+  x_existing: "A-2 and A-3 read ART-SSP; A-5 outputs ART-SSP and its exit criterion says the security plan reflects the changes"
+  x_note: "Subject and verb: 'Control assessments are based on the information in system plans'; 'Personnel update the system plans based on remediation actions'."
+REQ-SP800-18R2-0335:
+  x_existing: "Task R-1, R: PER-PM and PER-CCP; ART-PKG, PKG-001; the core artifacts, ART-SSP and ART-POAM among them"
+  x_gap: "'system privacy plans': WI-02. 'signed SBOM artifacts': WI-24. 'signed interconnection agreements': MISSION-PARTNER-AGREEMENT. The C-SCRM plan in the package: WI-04."
+  x_note: "Subject and verb: 'The system owner or common control provider assembles and submits an authorization package'; 'The C-SCRM plan is not required but is recommended if supply chain risk management is a key organizational concern'. Runs from page 50 onto page 51; the page cited holds its first part."
+REQ-SP800-18R2-0336:
+  status: not-a-requirement
+  reason: "Footnote 23, a remark that a system 'may go through' several assessments. Binds no one; the A-5 feedback to I-2 already allows it."
+  x_note: "Subject and verb: 'A system may go through multiple assessments and system plan updates'."
+# --- 4.6 and 4.7, page 51 ---
+REQ-SP800-18R2-0337:
+  x_new_work_item: "saop-package-review"
+  x_home: "Task R-1 exit criterion and a step, with the review recorded in ART-PKG or a Privacy review section read at R-2"
+  x_note: "Subject and verb: 'The senior agency official for privacy reviews the authorization package'. The lead-in clause, 'The authorizing official relies on information in the system plan and feedback', is held by R-4 reading ART-PKG with PER-PM informed and the officials consulted; its items 0338 to 0340 hold their own verbs."
+REQ-SP800-18R2-0338:
+  x_existing: "AD-ATO in framework/decisions.yaml, decision.yaml, ART-AODM, Task R-4"
+  x_gap: "'or be used within the organization', authorization to use: WI-01."
+REQ-SP800-18R2-0339:
+  work_item: WI-01
+  x_note: "'Issue a common control authorization'. Inside the item's title; AODM-001 rejects any decision outside its five."
+REQ-SP800-18R2-0340:
+  x_existing: "AD-DATO, Task R-4, for a system, against the tolerance in ART-ORG-CONTEXT read at R-2"
+  x_gap: "Denial to a common control provider: WI-01."
+REQ-SP800-18R2-0341:
+  x_existing: "ART-AODM, a core package artifact; R-5 and ART-AUTHRPT '## Decision reported', with PER-PM and PER-CCP consulted and the officials it was reported to"
+  x_gap: "'identified in the system plans': ssp-status-section."
+REQ-SP800-18R2-0342:
+  x_new_work_item: "plan-review-records"
+  x_home: "Same M-4 step and ART-SSP section: the organization-defined review schedule. pl-2 and sr-2 carry the frequency as a parameter when selected; no task runs or logs the review"
+  x_note: "Subject and verb: 'System plans are reviewed and revised on an organization-defined schedule'. Live lead-in; 'Reviews may occur in response to events ... such as:' makes its items examples, so 0343 to 0347 and 0349 to 0354 are noise pointing here, and 0348 alone holds a duty."
+REQ-SP800-18R2-0343:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': revisions to the NIST catalog, baselines or assessment procedures."
+REQ-SP800-18R2-0344:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': new laws and policies. The firm duty to update on this event is 0140."
+REQ-SP800-18R2-0345:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': an updated risk assessment report naming new risks."
+REQ-SP800-18R2-0346:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': weaknesses found in assessment or after an incident."
+REQ-SP800-18R2-0347:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': changes that alter the risk posture. M-1 already sends a significant change back into the RMF."
+# --- 4.7, page 52 ---
+REQ-SP800-18R2-0348:
+  x_new_work_item: "ao-change-review"
+  x_home: "Task M-6 step for a change of PER-AO, with a new or updated decision.yaml and ART-AODM"
+  x_note: "An item with its own duty: 'the incoming authorizing official reviews the system plans and artifacts to confirm the existing authorization or issue a new authorization decision'. Same as the SP800-37R2 entry behind the slug."
+REQ-SP800-18R2-0349:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': a change of operational status. Who writes that status is lifecycle-state-update, on 0112."
+REQ-SP800-18R2-0350:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as': agreements for information exchanges renewed, created or ended."
+REQ-SP800-18R2-0351:
+  status: not-a-requirement
+  reason: "Example event under 0342's 'such as', and itself a lead-in: changes to the supply chain risk strategy or inherited C-SCRM controls, due to 0352 to 0354."
+REQ-SP800-18R2-0352:
+  status: not-a-requirement
+  reason: "Sub-example under 0351: changes in critical suppliers, such as ownership or geopolitical activity."
+REQ-SP800-18R2-0353:
+  status: not-a-requirement
+  reason: "Sub-example under 0351: reviews of a supplier's foreign ownership, control or influence."
+REQ-SP800-18R2-0354:
+  status: not-a-requirement
+  reason: "Sub-example under 0351: attacks or breaches that hurt a supplier's ability to support C, I or A."
+REQ-SP800-18R2-0436:
+  x_new_work_item: "plan-review-records"
+  x_home: "Same M-4 step and ART-SSP section, tied to ART-CHG '## Resulting updates' and the change process of ART-CMP: each plan update tracked and noted"
+  x_note: "Promoted, page 52, the one sentence. The next two sentences are 'can'. Near 0251, which adds approval."
+REQ-SP800-18R2-0355:
+  x_existing: "Task M-2 on the frequencies of ART-CONMON, sar/results updated; ART-CONMON"
+  x_gap: "'Authorizing officials can reauthorize the system': WI-08. Privacy in the monitoring: WI-15. 'C-SCRM requirements': cscrm-supplier-monitoring."
+  x_note: "Subject and verb: 'The operation of an authorized system requires periodic or ongoing assessments'."
+REQ-SP800-18R2-0356:
+  work_item: WI-15
+  x_note: "The duty is the middle sentence, on PER-PRIV: 'The system privacy officer is responsible for identifying assessment methodologies and metrics'. Inside the item's title, Metrics and privacy continuous monitoring. 'For example' and 'can define' are advisory."
+REQ-SP800-18R2-0357:
+  status: not-a-requirement
+  reason: "Advisory: the plan 'can identify' a monitoring capability, and new components 'can trigger' reviews, 'which may require system reauthorization'. That 'require' states a possible outcome and binds no one; a firm supplier monitoring duty sits in SP800-161R1, slug cscrm-supplier-monitoring."
+  x_note: "Subject and verb: 'the system C-SCRM plan can identify a continuous monitoring capability'; 'updates to the C-SCRM plan, which may require system reauthorization'."
+# --- Disposal of System Components, page 53 ---
+REQ-SP800-18R2-0358:
+  status: not-a-requirement
+  reason: "Advisory: components 'may be disposed of', plans 'can include or reference' instructions, records 'may be referenced', updates 'may trigger' more updates. All permissions and remarks; 'in accordance with' only qualifies those instructions and binds no one. ART-DISP holds this content anyway."
+  x_note: "Subject and verb: 'System plans can include or reference the instructions for properly disposing of systems or components'; 'in accordance with applicable data and records retention requirements'."
+REQ-SP800-18R2-0359:
+  x_existing: "Task M-7, A: PER-PM; ART-DISP '## Information disposition' and '## Media sanitization and component disposal', for the system owner's part"
+  x_gap: "'the responsibility of the authorizing official for risks associated with data remanence': PER-AO is only Informed at M-7: disposal-remanence-risk."
+  x_home: "disposal-remanence-risk: Task M-7 step and ART-DISP '## Media sanitization and component disposal': the remanence risk left after sanitization goes to PER-AO, who accepts it"
+  x_note: "Subject and verb: 'Key considerations ... include the responsibilities of the system owner for protecting system data, the responsibility of the authorizing official'. A list of considerations, but it places a risk on a persona, so it stays live. 'can address' is a benefit."
+# --- Appendix A, Table 2, pages 59 to 63. A crosswalk of SP 800-37r2 outputs to plan elements. Every row noise ---
+REQ-SP800-18R2-0360:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task P-4's tailored baseline list against the element Control Implementation Details."
+REQ-SP800-18R2-0361:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-4 row: 'Organizationally-Tailored' and 'control baselines.'"
+REQ-SP800-18R2-0362:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-4 row: the rest of the task name, with '(Optional)'."
+REQ-SP800-18R2-0363:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-5's list of providers and plans for common controls against Control Implementation Details. The provider's duty is 0292."
+REQ-SP800-18R2-0364:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task P-8's missions and processes against System Overview."
+REQ-SP800-18R2-0365:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-8 row, adding the element System Type. 'will support' is a fragment of the output's wording and binds no one."
+  x_note: "Subject and verb: 'processes that the system will support', the tail of the output 'Missions, business functions, and mission/business processes'."
+REQ-SP800-18R2-0366:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-9's list of stakeholders against Role Identification and Responsible Personnel. 'Responsible' is part of the element's name and binds no one."
+  x_note: "Subject and verb: there is none; a row reading 'TASK P-9 System Stakeholders | List of system stakeholders. | Role Identification and Responsible Personnel'."
+REQ-SP800-18R2-0367:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task P-10's set of assets against Authorization Boundary Description."
+REQ-SP800-18R2-0368:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-10 row: System Component Inventory and Environment of Operation Diagrams."
+REQ-SP800-18R2-0369:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-11's documented boundary against the boundary description and the diagrams."
+REQ-SP800-18R2-0370:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-12's list of information types against System Information Types."
+REQ-SP800-18R2-0371:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-13's life cycle documentation against four elements. Its 'may include' restates the SP 800-37r2 output and binds no one here."
+  x_note: "Subject and verb: 'Such documentation may include data flow diagrams, entity relationship diagrams, database schemas, and data dictionaries'."
+REQ-SP800-18R2-0372:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task P-15's documented requirements against the laws and policies element."
+  x_note: "This row and 0375, 0386 and 0404 add C-SCRM or supplier words that the SP 800-37r2 output does not hold. The duties sit in WI-04 and cscrm-supplier-monitoring, not in the crosswalk."
+REQ-SP800-18R2-0373:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-15 row: 'requirements.' and the end of the element name."
+REQ-SP800-18R2-0374:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-16's updated architectures and cloud plans against the boundary description and diagrams. WI-12 is the home of those outputs."
+REQ-SP800-18R2-0375:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task P-17's list of allocated requirements against the laws and policies element."
+REQ-SP800-18R2-0376:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the P-17 row: the task name and 'the system, system elements, and environment of operation.'"
+REQ-SP800-18R2-0377:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task P-18's registered system against System Name and Identifier. 'in accordance with' restates the SP 800-37r2 output and binds no one here."
+  x_note: "Subject and verb: there is none; the output reads 'Registered system in accordance with organizational policy.'"
+REQ-SP800-18R2-0378:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task C-1's documented system description against System Overview."
+REQ-SP800-18R2-0379:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the C-1 row: System Information Types and System Operational Status."
+REQ-SP800-18R2-0380:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task C-2's impact levels and high-water mark against System Categorization. The categorizing duty is 0097 to 0099."
+REQ-SP800-18R2-0381:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task C-3's approval of the categorization against System Categorization."
+REQ-SP800-18R2-0382:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task S-1's selected controls against Control Implementation Details."
+REQ-SP800-18R2-0383:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task S-2's list of tailored controls against Control Implementation Details."
+REQ-SP800-18R2-0384:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the S-2 row: the task name and the end of the output."
+REQ-SP800-18R2-0385:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task S-3's list of allocated controls against Control Implementation Details."
+REQ-SP800-18R2-0386:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task S-4's security, privacy and C-SCRM plans against Control Implementation Details."
+REQ-SP800-18R2-0387:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the S-4 row: the task name and Control Implementation Status."
+REQ-SP800-18R2-0388:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task S-5's monitoring strategy, with its time-based trigger, against Control Implementation Details. WI-06 holds the trigger."
+REQ-SP800-18R2-0389:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task S-6's approved plans against System Plan Approval."
+REQ-SP800-18R2-0390:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task I-1's implemented controls against two elements."
+REQ-SP800-18R2-0391:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task I-2's updated plans against Control Implementation Details."
+REQ-SP800-18R2-0392:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the I-2 row: 'sufficient for use by assessors' and Control Implementation Status."
+REQ-SP800-18R2-0393:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the I-2 row: the configuration baseline and three more elements."
+REQ-SP800-18R2-0394:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task A-5's remediation outputs against five elements. The update duty is 0334."
+REQ-SP800-18R2-0395:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task A-6's POA&M against Control Assessment Status."
+REQ-SP800-18R2-0396:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the A-6 row, with Remediation Actions."
+REQ-SP800-18R2-0397:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the A-6 row: 'are to be remediated.' with System Plan Change Records. No one is told to remediate here."
+REQ-SP800-18R2-0398:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task R-1's package with its executive summary, and a tool that 'may' generate it, against Remediation Actions and DIAS. That 'may' restates SP 800-37r2 and binds no one. WI-11 holds the summary."
+  x_note: "Subject and verb: 'Authorization package (with an executive summary), which may be generated from a security or privacy management tool'."
+REQ-SP800-18R2-0399:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task R-2's risk determination against System Authorization Decision."
+REQ-SP800-18R2-0400:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task R-3's risk responses against four elements."
+REQ-SP800-18R2-0401:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task R-4's authorizations against System Authorization Decision. The duty is 0338 to 0340."
+REQ-SP800-18R2-0402:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the R-4 row: the common control authorization and the three denials."
+REQ-SP800-18R2-0403:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task M-1's updated plans, POA&Ms and reports against seven elements. WI-07 holds those outputs."
+REQ-SP800-18R2-0404:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task M-2's updated reports against Control Assessment Status."
+REQ-SP800-18R2-0405:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cell of the M-2 row: 'assessments.', the end of 'updated supplier assessments'."
+REQ-SP800-18R2-0406:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task M-3's mitigation or acceptance decisions against four elements."
+REQ-SP800-18R2-0407:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task M-4's updated reports against Remediation Actions."
+REQ-SP800-18R2-0408:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the M-4 row, with System Authorization Decision."
+REQ-SP800-18R2-0409:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the M-4 row: 'updated system plans.' with the review, change and DIAS elements."
+REQ-SP800-18R2-0410:
+  status: not-a-requirement
+  reason: "Crosswalk row: Task M-6's determination and ongoing decisions. The row names no plan element, so it maps to nothing."
+REQ-SP800-18R2-0411:
+  status: not-a-requirement
+  reason: "Crosswalk row, first line: Task M-7's disposal strategy and inventory against System Component Inventory."
+REQ-SP800-18R2-0412:
+  status: not-a-requirement
+  reason: "Crosswalk row, wrapped cells of the M-7 row: 'up-to-date system plans.' with two more elements."

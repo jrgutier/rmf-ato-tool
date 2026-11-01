@@ -1,0 +1,432 @@
+# SP800-37R2 part 3, pages 163 to 183 (Appendices F, G, H), read whole against references/text/SP800-37R2.md.
+# Figures F-1 (p165) and G-1 (p176) opened in the PDF. Role map from personas.txt.
+# framework/decisions.yaml compared: AD-ATO, AD-ATOC, AD-IATT, AD-DATO, AD-CATO. It has no authorization to use, no
+# common control authorization and no 'continue', so those entries go to WI-01 and WI-06, not to x_existing.
+# --- Appendix F, Authorization to Use, pages 163 to 165 ---
+REQ-SP800-37R2-0580:
+  work_item: WI-01
+  x_note: "Subject and verb: 'An authorization to use is issued by an authorizing official from the customer organization instead of an authorization to operate'; 'The official issuing an authorization to use has the same level of responsibility and authority'. Inside the item's title; decisions.yaml has no such decision."
+REQ-SP800-37R2-0581:
+  work_item: WI-01
+  x_note: "Subject and verb: 'A customer organization can issue an authorization to use only after a valid authorization to operate has been issued by another federal entity'. 'only after' makes this a precondition, not a permission. 0593 repeats it in Figure F-1."
+REQ-SP800-37R2-0740:
+  x_new_work_item: "cloud-cso"
+  x_home: "C-1 step 6, new fields on leveraged-authorizations.yaml (schema leveraged-authorizations), read by S-3 and S-4 for inheritance"
+  x_note: "Promoted, footnote 142. Subject and verb: 'A provisional authorization (to operate) ... is considered a valid authorization to operate'. leveraged-authorizations.yaml decision takes an AD-* only, so it cannot say a FedRAMP provisional authorization stands behind the record."
+REQ-SP800-37R2-0582:
+  work_item: WI-29
+  x_note: "Subject and verb: 'An authorization to use requires the customer organization to review the authorization package from the provider organization'; 'the customer organization considers various risk factors'; 'considers the risk in doing so'. A receiving organization's review, inside the item's title. Runs from page 163 onto page 164."
+REQ-SP800-37R2-0583:
+  x_existing: "artifacts/data/leveraged-authorizations.yaml provider, date_authorized, decision (playbooks/C/C-1.md step 6); boundary.yaml leveraged_authorization on the component; OSCAL ssp system-implementation.leveraged-authorizations, in the package the AO reads"
+  x_gap: "'have valid authorizations to operate': `decision` is optional on the record and nothing tests that it is still current: hosted-interconnect-enforcement."
+  x_note: "Footnote 139. Subject and verb: 'System owners inheriting controls from other than approved common control providers ensure that the systems providing such controls have valid authorizations to operate'; 'The authorizing official of the system inheriting the controls is also made aware'."
+REQ-SP800-37R2-0584:
+  status: not-a-requirement
+  reason: "Footnote 140, the definition of 'provider organization'. Its 'may not be owned' states that a shared system's owner can differ from the package holder, a fact about ownership that binds no one."
+  x_note: "Subject and verb: 'The term provider organization refers to the federal agency or subordinate organization'; 'The shared system, service, or application may not be owned by the organization that owns the authorization package'."
+REQ-SP800-37R2-0585:
+  x_new_work_item: "granting-requirements-coordination"
+  x_home: "P-15 Requirements Definition step, Receiving organizations as a requirements source in ART-REQ, which Task S-2 reads for tailoring"
+  x_note: "Footnote 141, on the provider's side. Subject and verb: 'Risk-based decisions related to control selection and baseline tailoring actions by organizations providing cloud or shared systems ... should consider the protection needs of the customer organizations'; 'organizations hosting cloud or shared systems ... should consider the shared risk'."
+REQ-SP800-37R2-0586:
+  x_new_work_item: "reciprocity-agreement"
+  x_home: "New agreement artifact from the C-1 step on interconnections"
+  x_note: "Footnote 143. Subject and verb: 'The sharing of the authorization package ... is accomplished under terms and conditions agreed upon by all parties'. Who releases what is granting-package-sharing."
+REQ-SP800-37R2-0587:
+  work_item: WI-29
+  x_note: "Subject and verb: 'The additional controls, along with any other controls for which the customer organization is responsible, are documented, implemented, assessed, authorized, and monitored'. Negotiating with the provider and requesting more are 'may', the duty is the last sentence. A receiving organization's duty, inside the item's title."
+REQ-SP800-37R2-0588:
+  work_item: WI-01
+  x_note: "Subject and verb: 'the customer organization issues an authorization to use in which the customer organization explicitly understands and accepts the security or privacy risk'; 'the customer organization is responsible and accountable for the risks'."
+REQ-SP800-37R2-0589:
+  work_item: WI-01
+  x_gap: "'It is incumbent on the customer organization to ensure that information from the monitoring activities ... is shared': WI-29. The provider's notice of significant changes and events: granting-notifications."
+  x_note: "Subject and verb: 'The authorization to use does not require a termination date but remains in effect if the customer organization continues to accept the security and privacy risk'. AD-ATO has atd_required true, so an ATU cannot borrow it. The source's 'even-driven' and 'The provider organization to notifies' are typos in the PDF. Runs from page 164 onto page 165."
+REQ-SP800-37R2-0590:
+  status: not-applicable
+  reason: "Binds the head of each agency: 'In accordance with [FISMA]' it is 'responsible for providing information security protections', and A-130 sets out organizational responsibilities. Footnote to the customer's accountability. PER-CIO checked (it carries Head of Agency): statutory agency-wide duty with no task or record of its own."
+  x_note: "Subject and verb: 'the head of each agency is responsible for providing information security protections commensurate with the risk'; '[OMB A-130] describes organizational responsibilities'. p2 kept the same duty at the role's own entry as not-applicable."
+REQ-SP800-37R2-0591:
+  status: not-a-requirement
+  reason: "Caption sentence: 'Figure F-1 illustrates the types of authorization decisions'. Introduces a picture, and the types are stated in 0570."
+REQ-SP800-37R2-0592:
+  status: not-a-requirement
+  reason: "Advisory: the note in Figure F-1 that common controls 'also can be implemented within a system'. A possibility; page 163 covers them under the system's authorization in 0578."
+REQ-SP800-37R2-0593:
+  work_item: WI-01
+  x_note: "Note in Figure F-1, confirmed in the PDF. Subject and verb: 'An ATU requires a completed ATO by the organization providing the shared or cloud system'. Same condition as 0581, kept live as a statement of its own."
+# --- Denial of Authorization, pages 165 to 166 ---
+REQ-SP800-37R2-0594:
+  x_note: "Already bound to WI-01 by conformance/bindings.yaml, kept. Subject and verb: 'the authorization is not granted'; 'If the system is currently in operation, all activity is halted'; 'The authorizing official or designated representative works with the system owner or the common control provider to revise the plan of action and milestones'; 'Authorizing officials can rescind a previous authorization decision'. AD-DATO holds the system case only. No R-4 or R-5 step has the POA&M revised after a denial. Runs from page 165 onto page 166."
+REQ-SP800-37R2-0595:
+  status: not-a-requirement
+  reason: "Advisory, footnote 145: 'The customer organization may develop memoranda of agreement/understanding'. A permission, not a minimum; the sharing duty is 0589."
+# --- Authorization Decision Information, page 166 ---
+REQ-SP800-37R2-0596:
+  x_existing: "framework/tasks/R.yaml R-5 exit criteria, ART-AUTHRPT '## Decision reported' (decision, terms, recipients), R-5 raci C PER-PM, PER-CCP; decision.yaml decision, conditions, authorization_termination_date; ART-AODM '## Decision', '## Terms and conditions', '## Authorization termination date'"
+  x_gap: "'Time-driven authorization frequency' and 'Events that may trigger a review of the authorization decision': WI-06, in neither decision.yaml nor ART-AODM. 'For common controls, the [FIPS 199] impact level': WI-01."
+  x_note: "Subject and verb: 'The authorization decision is transmitted from the authorizing official to system owners, common control providers, and other key organizational officials'; 'The authorization decision includes the following information:'. Lead-in with its own verb over the bare nouns 0722 and 0597 to 0600."
+REQ-SP800-37R2-0722:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0596: 'Authorization decision', the first listed content. The verb 'includes' is in 0596."
+REQ-SP800-37R2-0597:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0596: the 'Terms and conditions for the authorization'. decision.yaml conditions, recorded at 0596."
+REQ-SP800-37R2-0598:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0596: frequency or termination date as listed content. Its frequency half is the WI-06 gap named on 0596."
+REQ-SP800-37R2-0599:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0596: review events '(if any)'. The missing record is the WI-06 gap named on 0596."
+REQ-SP800-37R2-0600:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0596: the [FIPS 199] impact level for common controls. The WI-01 gap is named on 0596."
+REQ-SP800-37R2-0601:
+  x_existing: "decision.yaml decision and conditions; ART-AODM '## Decision', '## Terms and conditions', '## Authorization termination date'; AODM-001 (termination date and conditions required by type)"
+  x_gap: "'or authorized to be used; or if the common controls are authorized to be provided': WI-01. 'The authorization decision document is transmitted with the original authorization package': authorization-records. Restrictions that 'must be followed' by the owner or provider: terms-conditions-tracking."
+  x_note: "Subject and verb: 'The authorization decision indicates if the system is authorized to operate'; 'limitations or restrictions placed on the operation of the system that must be followed by the system owner'; 'the termination date ... indicates when the authorization expires and reauthorization is required'."
+REQ-SP800-37R2-0602:
+  x_new_work_item: "authorization-records: the system owner and provider receive the decision with the package and retain both, the package is marked and protected, retained under the records policy and available to officials on request; no step or field says so"
+  x_home: "Task R-5 step and ART-AUTHRPT '## Decision reported', with a handling line in the package manifest (ART-PKG)"
+  x_gap: "'the system owner and common control provider acknowledge, implement, and comply with the terms and conditions' and 'The authorizing official verifies on an ongoing basis': terms-conditions-tracking."
+  x_note: "Subject and verb: 'The system owner and common control provider retain the authorization decision and authorization package'; 'The organization ensures that authorization documents are available'; 'The contents of authorization packages ... are marked and protected'; 'Authorization decision information is retained'."
+REQ-SP800-37R2-0603:
+  status: not-a-requirement
+  reason: "Advisory, footnote 146: decision documents 'may be digitally signed'. An option open to the organization; ART-AODM sets no signature form."
+REQ-SP800-37R2-0604:
+  status: not-a-requirement
+  reason: "Advisory, footnote 147: 'Organizations may choose to employ automated tools' for archiving. A choice, no minimum set."
+# --- Authorization to Use Decision, page 167 ---
+REQ-SP800-37R2-0727:
+  work_item: WI-01
+  x_note: "Subject and verb: 'The authorization to use is a streamlined version of the authorization to operate and includes:'. Lead-in with its own verb over the bare nouns 0605 and 0606."
+REQ-SP800-37R2-0605:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0727: 'A risk acceptance statement'. Its content is stated in 0607."
+REQ-SP800-37R2-0606:
+  status: not-a-requirement
+  reason: "Bare noun under the lead-in 0727: time- or event-driven review triggers '(if any)'. The verb 'includes' is in 0727."
+REQ-SP800-37R2-0607:
+  work_item: WI-01
+  x_note: "Subject and verb: 'An authorization to use is issued by an authorizing official from a customer organization in lieu of an authorization to operate'; 'The risk acceptance statement indicates the explicit acceptance of the security and privacy risk'."
+# --- Ongoing authorization, pages 167 to 171 ---
+REQ-SP800-37R2-0608:
+  status: not-a-requirement
+  reason: "Background: 'Continuous monitoring strategies promote effective and efficient risk management'. Says what monitoring achieves for the AO; no actor is told to act, and the strategy duties are Tasks P-7 and S-5."
+REQ-SP800-37R2-0609:
+  work_item: WI-08
+  x_note: "Subject and verb: 'If a reauthorization is required, organizations maximize the use of status reports and relevant information about the security and privacy posture'. The earlier sentences describe ongoing authorization; which RMF steps are revisited is the same reauthorization path."
+REQ-SP800-37R2-0610:
+  work_item: WI-06
+  x_note: "Subject and verb: 'The system and common controls are authorized on a time-driven basis in accordance with the authorization frequency'; 'the authorizing official acknowledges the ongoing acceptance of identified risks'; 'The organization determines the level of formality required'. decision.yaml can record neither the frequency nor the acknowledgement. Runs from page 167 onto page 168."
+REQ-SP800-37R2-0611:
+  status: not-a-requirement
+  reason: "Footnote 148, a pointer to SP 800-137. Its 'will be provided' is NIST's forecast of a future publication, so it binds no one in a run."
+  x_note: "Subject and verb: 'Guidance on privacy continuous monitoring will be provided in future publications'."
+REQ-SP800-37R2-0612:
+  status: not-a-requirement
+  reason: "Advisory, footnote 149: the ISCM and PCM strategies 'may be consolidated'. A permission for efficiency, not a minimum."
+REQ-SP800-37R2-0613:
+  x_new_work_item: "oa-org-process"
+  x_home: "P-7 step 3 and M-6 entry criteria in framework/tasks/M.yaml"
+  x_note: "Subject and verb: 'To do so, the following conditions must be satisfied:'. The two conditions, 0614 and 0615, are clauses and stay live. M-6's entry criteria state conditions for AD-CATO only, so NIST's ongoing authorization has none."
+REQ-SP800-37R2-0614:
+  x_new_work_item: "oa-org-process"
+  x_home: "P-7 step 3 and M-6 entry criteria in framework/tasks/M.yaml"
+  x_note: "First condition under 0613. Subject and verb: 'The system or common control being considered for ongoing authorization has received an initial authorization based on a complete, zero-based review'."
+REQ-SP800-37R2-0615:
+  x_new_work_item: "oa-org-process"
+  x_home: "P-7 step 3 and M-6 entry criteria in framework/tasks/M.yaml"
+  x_note: "Second condition under 0613. Subject and verb: 'An organizational continuous monitoring program is in place that monitors implemented controls with the appropriate degree of rigor and at the required frequencies'."
+REQ-SP800-37R2-0616:
+  x_new_work_item: "oa-org-process"
+  x_home: "P-7 step 3 and M-6 entry criteria in framework/tasks/M.yaml"
+  x_gap: "'The transition to ongoing authorization is documented by the authorizing official by issuing a new authorization decision': WI-06. Information 'provided ... in a timely manner through security and privacy management and reporting tools': oa-automated-reporting."
+  x_note: "Subject and verb: 'The organization establishes and implements a process to designate that the two conditions are satisfied'; 'The process includes the authorizing official acknowledging that the system or common control is now being managed by an ongoing authorization process'."
+REQ-SP800-37R2-0617:
+  x_existing: "conmon.yaml frequencies (family, frequency, method, responsible); playbooks/M/M-2.md step 3 (what is due), step 4.1 (monitoring data) and step 4.2 (interviews for what the data does not show); framework/tasks/M.yaml M-5, ART-SECRPT to the AO"
+  x_gap: "'privacy information': WI-15, conmon has no privacy monitoring."
+  x_note: "Subject and verb: 'security and privacy information for controls is generated and collected at the frequency specified'; 'manual control assessments are conducted at organizationally-determined frequencies to cover any gaps'; 'The manually-generated assessment results are provided to the authorizing official'. Runs from page 168 onto page 169."
+REQ-SP800-37R2-0618:
+  x_new_work_item: "ccp-package"
+  x_home: "Task P-5 outputs, plus a new external input read at Task S-3 and Task R-2"
+  x_note: "Footnote 150. Subject and verb: 'System owners and authorizing officials leverage security and privacy information about inherited common controls from assessments conducted by common control providers'. No input carries the provider's assessment to a run."
+REQ-SP800-37R2-0619:
+  status: not-a-requirement
+  reason: "Footnote 151, a pointer to SP 800-53 and 53A on rigor. 'Future publications will address privacy assessments' is NIST's forecast and binds no one."
+  x_note: "Subject and verb: '[SP 800-53] and [SP 800-53A] provide guidance'; 'Future publications will address privacy assessments'."
+REQ-SP800-37R2-0620:
+  work_item: WI-06
+  x_note: "Footnote 152. Subject and verb: 'organizations have authorization decision documents that include an authorization termination date'; 'By requiring a new authorization decision document ... the system or the common controls are no longer bound to the termination date'. Inside 'no ATD under ongoing authorization'."
+REQ-SP800-37R2-0621:
+  x_existing: "framework/tasks/A.yaml A-1 exit criteria (independence and its basis recorded); sap.yaml team[].independent; playbooks/M/M-2.md step 2 (the independence the AO required at A-1)"
+  x_gap: "'The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy information to the authorizing official': WI-03."
+  x_note: "Subject and verb: 'the security and privacy information provided to the authorizing official ... is produced and analyzed by an entity that meets the independence requirements established by the organization'; 'The independent assessor is impartial and free from any perceived or actual conflicts of interest'."
+REQ-SP800-37R2-0622:
+  x_existing: "conmon.yaml ongoing_authorization.time_trigger_days; ART-CONMON '## Ongoing authorization triggers'; playbooks/P/P-org-context.md Task P-7 step 3; framework/tasks/M.yaml M-6 purpose (whether the risk remains acceptable)"
+  x_gap: "'the authorization for a system and any common controls inherited by the system be updated at an organization-established frequency': WI-06, decision.schema.json has no frequency."
+  x_note: "Subject and verb: 'organizations determine a frequency with which authorizing officials review security and privacy information'; 'The near real-time information ... is used to determine whether the mission or business risk ... continues to be acceptable'."
+REQ-SP800-37R2-0623:
+  x_existing: "framework/tasks/M.yaml M-6 purpose and exit criteria; conmon.yaml time_trigger_days; ART-SECRPT '## Matters for ongoing authorization' (triggers reached)"
+  x_gap: "'whether the approval for continued operation is justified': WI-06, M-6 'continue' has no decision value. The reporting tool's notice to the AO that a review is due: oa-automated-reporting."
+  x_note: "Subject and verb: 'When a time-driven trigger occurs, authorizing officials review security and privacy information'; 'The organizational continuous monitoring process ... provides the appropriate functionality to notify the responsible and accountable authorizing official'. Runs from page 169 onto page 170."
+REQ-SP800-37R2-0624:
+  x_existing: "framework/tasks/P.yaml P-7 (organization-level strategy); framework/tasks/S.yaml S-5, ART-CONMON (system-level strategy); framework/tasks/M.yaml M-2 (ongoing assessment on those frequencies); M-6 depends_on M-5"
+  x_note: "Footnote 153. Subject and verb: 'To employ an ongoing authorization approach ... organizations must have in place, an organization-level and system-level continuous monitoring process to assess implemented controls on an ongoing basis'."
+REQ-SP800-37R2-0625:
+  x_existing: "conmon.yaml ongoing_authorization.event_triggers; ART-CONMON '## Ongoing authorization triggers'; playbooks/M/M-2.md step 3 (event-driven families); ART-SECRPT '## Matters for ongoing authorization'"
+  x_gap: "'event-driven triggers necessitate an immediate review' and the notice to the AO that a trigger occurred: WI-06. M-6 runs only in sequence after M-5, no step reviews out of cycle."
+  x_note: "Subject and verb: 'event-driven triggers necessitate an immediate review of security and privacy information by the authorizing official'; 'the authorizing official is either notified by organizational personnel ... or via automated tools'."
+REQ-SP800-37R2-0626:
+  status: not-a-requirement
+  reason: "Advisory on transition: without automation 'it will not be feasible or practical' to move to ongoing authorization, and a phased approach 'may be necessary'. 'will' here forecasts feasibility; organizations 'may begin' as they see fit, so it binds no one."
+  x_note: "Subject and verb: 'it will not be feasible or practical to move from the current static authorization approach'; 'Organizations may begin by generating security and privacy information from automated tools'."
+REQ-SP800-37R2-0627:
+  status: not-a-requirement
+  reason: "Advisory: a transition 'requires considerable thought and planning', a remark that sets no task, then 'One methodology that organizations may consider' is a low-impact-first phasing. Options, not a minimum; the acknowledgement it ends on is live at 0616."
+  x_note: "Subject and verb: 'Transitioning from a static authorization process to a dynamic, ongoing authorization process requires considerable thought and planning'. Runs from page 170 onto page 171."
+REQ-SP800-37R2-0628:
+  status: not-a-requirement
+  reason: "Advisory, footnote 154: immediate reviews 'may occur simultaneously' with time-driven monitoring and the same reporting structure 'may be used'. Scheduling efficiencies, offered as options."
+# --- Reauthorization, pages 171 to 172 ---
+REQ-SP800-37R2-0629:
+  work_item: WI-08
+  x_note: "Subject and verb: 'Reauthorization actions occur at the discretion of the authorizing official in accordance with federal or organizational policy'; 'organizations maximize the use of security and privacy risk information'; 'Time-driven reauthorizations occur when the authorization termination date is reached'; 'a maximum authorization period can be specified by the authorizing official'. DoD is stricter: AD-ATO's three-year update (DoDI 5000.90)."
+REQ-SP800-37R2-0741:
+  work_item: WI-08
+  x_note: "Promoted, footnote 156. Subject and verb: 'Decisions to initiate a formal reauthorization include inputs from the senior agency information security officer, senior agency official for privacy, and senior accountable official for risk management'. M-6 raci consults those roles, but no decision to initiate is recorded."
+REQ-SP800-37R2-0630:
+  work_item: WI-08
+  x_note: "Subject and verb: 'a reauthorization may be necessary if an event occurs that produces risk above the acceptable organizational risk tolerance'; 'Reauthorization actions may necessitate a review of and changes to the continuous monitoring strategy'. A condition for reauthorization, not an option, so kept live."
+REQ-SP800-37R2-0631:
+  work_item: WI-08
+  x_note: "Subject and verb: 'For security and privacy assessments associated with reauthorization, organizations leverage security and privacy information generated by the continuous monitoring program and fill in gaps with manual assessments'. The reuse conditions also reach ASSESSMENT-REUSE."
+REQ-SP800-37R2-0632:
+  x_new_work_item: "saop-package-review"
+  x_home: "Task R-1 exit criterion and a step, with the review recorded in ART-PKG or a Privacy review section read at R-2; reached again on the WI-08 path"
+  x_gap: "'The senior agency official for privacy is responsible for assessing privacy controls': WI-03. The reauthorization action itself: WI-08."
+  x_note: "Subject and verb: 'The senior agency official for privacy reviews and approves the authorization packages for information systems that process PII prior to the authorizing official making a reauthorization decision'. Stronger duty decides the slug. Runs from page 171 onto page 172."
+REQ-SP800-37R2-0633:
+  x_existing: "framework/tasks/S.yaml S-5 exit criteria; conmon.yaml frequencies; CONMON-001 (a baseline family without a frequency fails); playbooks/M/M-2.md step 3"
+  x_note: "Footnote 157. Subject and verb: 'An ongoing authorization approach requires that a continuous monitoring program is in place to monitor all implemented security controls with a frequency specified in the continuous monitoring strategy'. Security controls only, so WI-15 is not owed here. Frequency per control is conmon-frequency-criteria from p2, a different duty."
+REQ-SP800-37R2-0634:
+  work_item: WI-08
+  x_note: "Subject and verb: 'The authorizing official signs an updated authorization decision document based on the current risk determination and acceptance of risk'; 'the maximum reuse of authorization information is encouraged'. M-6 can rewrite decision.yaml, but R-4 lists no PH-OS, which is the item's gap."
+# --- Event-driven triggers and significant changes, pages 172 to 173 ---
+REQ-SP800-37R2-0635:
+  x_existing: "conmon.yaml ongoing_authorization.event_triggers (required); ART-CONMON '## Ongoing authorization triggers'; playbooks/P/P-org-context.md Task P-7 step 3 (triggers for ongoing authorization); playbooks/M/M-2.md step 5"
+  x_gap: "'for both ongoing authorization and reauthorization': triggers for reauthorization, WI-08."
+  x_note: "Subject and verb: 'Organizations define event-driven triggers'; 'Event-driven triggers may include, but are not limited to:'. Lead-in with its own verb over the bare examples 0636 to 0643, not a minimum set."
+REQ-SP800-37R2-0636:
+  status: not-a-requirement
+  reason: "Example under 'may include, but are not limited to' in 0635: new threat, vulnerability, privacy risk or impact information. Not a minimum set; the duty to define triggers is 0635."
+REQ-SP800-37R2-0637:
+  status: not-a-requirement
+  reason: "Example under 0635: more findings or deficiencies from the monitoring program. One possible trigger an organization can list."
+REQ-SP800-37R2-0638:
+  status: not-a-requirement
+  reason: "Example under 0635: 'New missions/business requirements'. A bare noun; what it triggers is the organization's choice at 0635."
+REQ-SP800-37R2-0639:
+  status: not-a-requirement
+  reason: "Example under 0635: 'Change in the authorizing official'. The noun only; what the new official does is the live 0644."
+REQ-SP800-37R2-0640:
+  status: not-a-requirement
+  reason: "Example under 0635: a significant change in risk assessment findings. Listed as one possible trigger, not required."
+REQ-SP800-37R2-0641:
+  status: not-a-requirement
+  reason: "Example under 0635: significant changes to the system, common controls or environments. Bare noun phrase; significance is set at 0656."
+REQ-SP800-37R2-0642:
+  status: not-a-requirement
+  reason: "Example under 0635: supply chain changes affecting risks to operational systems. An illustrative trigger with no actor."
+REQ-SP800-37R2-0643:
+  status: not-a-requirement
+  reason: "Example under 0635: 'Exceeding organizational thresholds'. The last item of a list that is open by its own words."
+REQ-SP800-37R2-0644:
+  x_new_work_item: "ao-change-review: on a change of AO the new official reviews the decision, package and monitoring updates, then signs a new or updated decision, starts an authorization action, or sets new terms without extending the termination date; no task or trigger handles it"
+  x_home: "Task M-6 step for a change of PER-AO, with a new or updated decision.yaml and ART-AODM"
+  x_note: "Subject and verb: 'the new authorizing official reviews the current authorization decision document'; 'the official signs a new or updated authorization decision document, formally transferring responsibility and accountability'; 'the new authorizing official explicitly accepts the risk'. 'an authorization action ... can be initiated' then joins WI-08."
+REQ-SP800-37R2-0645:
+  status: not-a-requirement
+  reason: "Example of a significant system change, under a rejected 'may include, but are not limited to' lead-in on page 172: a new or upgraded OS, middleware or application. 0656 says it counts only if it affects posture, and holds the criteria duty."
+REQ-SP800-37R2-0646:
+  status: not-a-requirement
+  reason: "Example of a system change under the same open lead-in: 'Modifications to system ports, protocols, or services'. Its significance is judged by 0656."
+REQ-SP800-37R2-0647:
+  status: not-a-requirement
+  reason: "Example of a system change: a new or upgraded hardware platform. Item of an open list, with the duty at 0656."
+REQ-SP800-37R2-0648:
+  status: not-a-requirement
+  reason: "Example of a system change: how information, including PII, is processed. An open-list item; the privacy test it implies is the PIA-CHANGE gap named on 0656."
+REQ-SP800-37R2-0649:
+  status: not-a-requirement
+  reason: "Example of a system change: 'Modifications to cryptographic modules or services'. Noun phrase; 0656 decides when it counts."
+REQ-SP800-37R2-0650:
+  status: not-a-requirement
+  reason: "Example of a system change: information types processed, stored or transmitted. Illustrative only, duty at 0656."
+REQ-SP800-37R2-0651:
+  status: not-a-requirement
+  reason: "Example of a system change: 'Modifications to security and privacy controls'. Last item of the first open list."
+REQ-SP800-37R2-0652:
+  status: not-a-requirement
+  reason: "Example of an environment change under the rejected 'may include, but are not limited to' lead-in on page 173: 'Moving to a new facility'. 0656 says when it is significant."
+REQ-SP800-37R2-0653:
+  status: not-a-requirement
+  reason: "Example of an environment change: 'Adding new core missions or business functions'. An open-list item with no actor."
+REQ-SP800-37R2-0654:
+  status: not-a-requirement
+  reason: "Example of an environment change: credible threat information that the organization is targeted. Illustrative, governed by 0656."
+REQ-SP800-37R2-0655:
+  status: not-a-requirement
+  reason: "Example of an environment change: 'Establishing new/modified laws, directives, policies, or regulations'. Last item of the second open list."
+REQ-SP800-37R2-0656:
+  x_existing: "templates/artifacts/ART-CMP.md '## Security impact analysis' (the criteria that make a change significant enough to report to the AO); ART-CHG '## Change log' (referred to the AO or not); framework/tasks/M.yaml M-1 exit criterion on a significant system modification"
+  x_gap: "'privacy risks' as a factor, and privacy posture in the test: PIA-CHANGE, the analysis is a security impact analysis."
+  x_note: "Subject and verb: 'The examples of changes listed above are only significant when they represent a change that is likely to affect the security and privacy posture'; 'Organizations establish criteria for what constitutes significant change'. It carries the definition rejected on page 172, so nothing there was promoted."
+REQ-SP800-37R2-0657:
+  work_item: WI-08
+  x_note: "Subject and verb: 'If an authorization action is initiated, the organization targets only the specific controls affected by the changes and reuses previous assessment results wherever possible'. The rest is 'may be used' and benefit. ART-CHG holds the impact analysis; the targeted action has no path."
+# --- Type, facility, traditional and joint, pages 173 to 175 ---
+REQ-SP800-37R2-0658:
+  x_note: "Already bound to WI-10 by conformance/bindings.yaml, kept. Subject and verb: 'A type authorization is issued by the authorizing official responsible for the development of the system'; 'the authorizing official who is responsible for the system at the site or facility accepts the risk of deploying the system and issues an authorization to use'. Runs from page 173 onto page 174."
+REQ-SP800-37R2-0659:
+  x_note: "Already bound to WI-10 by conformance/bindings.yaml, kept. Subject and verb: 'A facility authorization addresses common controls within a facility'; 'The facility authorizing official issues a common control authorization'."
+REQ-SP800-37R2-0660:
+  work_item: WI-10
+  x_note: "Subject and verb: 'Organizations can choose from two distinct approaches'; 'a single organizational official in a senior leadership position is responsible and accountable for a system or for common controls'. The single-AO path is AD-* decided_by PER-AO; the choice between the two is what the item lacks, as nothing records it."
+REQ-SP800-37R2-0661:
+  work_item: WI-10
+  x_note: "Subject and verb: 'The organizational officials collectively are responsible and accountable for the system and jointly accept the security and privacy risks'; 'Organizations choosing a joint authorization approach are expected to work together ... and to document their agreement and progress'."
+REQ-SP800-37R2-0662:
+  status: not-a-requirement
+  reason: "Footnote 160, a description with examples: site-specific controls 'are typically implemented by an organization as common controls'. How they usually are, not how they must be."
+REQ-SP800-37R2-0663:
+  status: not-a-requirement
+  reason: "Footnote 161, a description: 'responsible for developing' only identifies the organizations that typically issue type authorizations and a name for their officials. The duty to issue is in the bound 0658, so this binds no one."
+  x_note: "Subject and verb: 'Typically, type authorizations are issued by organizations that are responsible for developing standardized hardware and software capabilities'."
+REQ-SP800-37R2-0664:
+  work_item: WI-10
+  x_note: "Subject and verb: 'Collaboration on security categorization, control selection and tailoring ... is necessary for a successful joint authorization'; 'The terms and conditions of the joint authorization are established by the participating parties'; 'The joint authorization remains in effect only while there is agreement among authorizing officials'."
+# --- Appendix G, complex systems, pages 176 to 178 ---
+REQ-SP800-37R2-0665:
+  status: not-a-requirement
+  reason: "Opening of Appendix G: 'This appendix provides additional considerations'. Says what the appendix covers."
+REQ-SP800-37R2-0666:
+  status: not-a-requirement
+  reason: "Background and a definition: boundaries for complex systems 'can present significant challenges', and what a subsystem is. Ends by pointing at Figure G-1."
+REQ-SP800-37R2-0742:
+  x_new_work_item: "complex-system-subsystems: a complex system names its subsystems and their boundaries, categorizes at their high-water mark without changing the system result, and selects interconnection controls where they differ; nothing in the framework knows a subsystem"
+  x_home: "Task P-11 step, a subsystems list in boundary.yaml and ART-BND '## Authorization boundary'; Task C-2 step 5 for the high-water mark; Task S-3 for the interconnection controls"
+  x_note: "Promoted, the note inside Figure G-1, confirmed in the PDF. Subject and verb: 'The system is categorized at the high-water mark of all designated subsystems'. C-2 step 5 takes the high-water mark over information types only."
+REQ-SP800-37R2-0667:
+  status: not-a-requirement
+  reason: "Advisory: 'Organizations can employ the concept of subsystems'. A permission; a subsystem 'can be defined' within the boundary, and nothing makes it a minimum."
+REQ-SP800-37R2-0668:
+  status: not-a-requirement
+  reason: "Example: 'an organization may find it useful to combine several systems', or to divide one. Two illustrations of drawing a system, no duty."
+REQ-SP800-37R2-0669:
+  status: not-a-requirement
+  reason: "Advisory: dividing a system 'facilitates' targeted controls, and organizations 'may choose to develop individual subsystem security and privacy plans'. A benefit and an option."
+REQ-SP800-37R2-0670:
+  x_new_work_item: "complex-system-subsystems"
+  x_home: "Task P-11 step, a subsystems list in boundary.yaml and ART-BND '## Authorization boundary'; Task C-2 step 5; Task S-3"
+  x_note: "Subject and verb: 'This includes monitoring and controlling communications at internal boundaries among subsystems and selecting, allocating, and implementing controls that meet or exceed the security and privacy requirements'; 'separately categorizing each subsystem does not change the overall categorization of the system'. The two allocation approaches are options; those clauses are not."
+REQ-SP800-37R2-0671:
+  x_new_work_item: "complex-system-subsystems"
+  x_home: "Task P-11 step, a subsystems list in boundary.yaml and ART-BND '## Authorization boundary'; Task C-2 step 5; Task S-3"
+  x_note: "Subject and verb: 'the organization examines the subsystem interfaces, information flows, and security and privacy dependencies among subsystems and selects the appropriate controls for the interconnection'; 'Controls for the interconnection of subsystems are also employed when the subsystems implement different security and privacy policies'. Runs from page 177 onto page 178."
+REQ-SP800-37R2-0743:
+  x_new_work_item: "complex-system-subsystems"
+  x_home: "Task P-11 step, a subsystems list in boundary.yaml and ART-BND '## Authorization boundary'; Task C-2 step 5; Task S-3"
+  x_note: "Promoted, footnote 164, by its sentence. Subject and verb: 'organizations carefully examine the interfaces among subsystems and take appropriate actions to eliminate potential vulnerabilities'. The earlier sentences of the footnote are its reasoning and stay rejected."
+# --- Software applications and external providers, pages 178 to 180 ---
+REQ-SP800-37R2-0672:
+  x_existing: "playbooks/P/P-11.md step 4 (boundary.yaml components: everything inventory points to, external: true outside); inventory.schema.json kinds hardware, software, operating-system, firmware; INV-BND-001; leveraged-authorizations.yaml for what a hosted application inherits"
+  x_gap: "'Application owners coordinate with system owners to help ensure that security and privacy requirements are satisfied among applications and hosting systems': application-host-coordination."
+  x_home: "application-host-coordination: an application-only system and its host's owner agree who selects, assesses and monitors which controls and tell each other of changes. Task C-1 step and ART-SD '## Interconnections and leveraged authorizations', with Task M-1 for changes"
+  x_note: "Subject and verb: 'Authorization boundaries include all system elements, including hardware, firmware, and software'; 'Additional application-level controls are provided by the respective software applications'; 'Application owners coordinate with system owners'. The statement ends on the next section's heading, picked up by the extractor."
+REQ-SP800-37R2-0673:
+  status: not-a-requirement
+  reason: "Background on external systems: their pervasiveness 'can present organizations with significant, new challenges' and their nature 'can vary'. Sets the scene, no actor told to act."
+REQ-SP800-37R2-0674:
+  x_new_work_item: "cscrm-contract-requirements"
+  x_home: "P-17: step 4 of playbooks/P/P-17.md, `## Allocation` of ART-REQ, under the exit criterion on what contracts must carry; that criterion names the development RFP, not an external service"
+  x_gap: "'the assurance or confidence that the risk from using external providers is at an acceptable level depends on the trust': ra-external-risk."
+  x_note: "Subject and verb: 'FISMA and OMB policy require external providers that process, store, or transmit federal information ... to meet the same security and privacy requirements as federal agencies'; 'Federal security and privacy requirements also apply to external systems'. Same duty as 2.8 in p1, but this entry has no WI-04 binding. Runs from page 178 onto page 179."
+REQ-SP800-37R2-0675:
+  status: not-a-requirement
+  reason: "Description, first factor that 'can complicate the level of trust': ownership between provider and organization 'may be blurred'. A circumstance, not an action."
+REQ-SP800-37R2-0676:
+  status: not-a-requirement
+  reason: "Description, second factor: control over the external provider 'may be very limited'. States a limit on the organization and asks nothing of it."
+REQ-SP800-37R2-0677:
+  status: not-a-requirement
+  reason: "Description, third factor: the nature of a service 'may be subject to rapid change'. A property of the service."
+REQ-SP800-37R2-0678:
+  status: not-a-requirement
+  reason: "Description, fourth factor: a service may be so critical that 'it needs to be incorporated' very rapidly. 'needs to' states the service's urgency as a complication of trust, and binds no one to do it."
+  x_note: "Subject and verb: 'The system, subsystem, service, or application may be of such critical nature that it needs to be incorporated into organizational systems very rapidly'."
+REQ-SP800-37R2-0679:
+  status: not-a-requirement
+  reason: "Description and an option: traditional means 'may not be feasible', so organizations 'may be left to depend upon' trust, or 'may allow' use only where risk is acceptable. 'may not' reports a limit on verification and sets no prohibition, so it binds no one."
+  x_note: "Subject and verb: 'some of the traditional means organizations use to verify and validate ... may not be feasible'; 'organizations may allow externally provided systems or services to be used only in those instances'."
+REQ-SP800-37R2-0680:
+  x_new_work_item: "ra-external-risk"
+  x_home: "Task P-14, a new section of templates/artifacts/ART-RA.md, read at R-3 for the response"
+  x_note: "Subject and verb: 'when the level of trust in the external provider does not provide sufficient assurance, the organization employs compensating controls; accepts greater risk; contracts with a more trustworthy external provider; or does not obtain the service'. R-3 holds the responses in general; no record states a level of trust that would start this."
+REQ-SP800-37R2-0681:
+  x_new_work_item: "EXTERNAL-SYSTEM-ASSESSMENT"
+  x_home: "Task A-2 step 4, reading artifacts/data/leveraged-authorizations.yaml; ART-SAR `## Assessment summary`."
+  x_note: "Subject and verb: 'Organizations should exercise caution when attempting to leverage external provider controls and assessment results'; 'such mappings ... should be reviewed carefully by organizations to determine if the controls and requirements addressed by external providers meet the protection needs'."
+REQ-SP800-37R2-0682:
+  x_new_work_item: "EXTERNAL-SYSTEM-ASSESSMENT"
+  x_home: "Task A-2 step 4, reading artifacts/data/leveraged-authorizations.yaml; ART-SAR `## Assessment summary`."
+  x_note: "Subject and verb: 'Similar caution should be exercised when attempting to use or leverage security and privacy assessment results from external providers'; 'the assessment procedures employed by the provider and the independence of the assessors ... should be reviewed and considered by organizations prior to leveraging assessment results'."
+REQ-SP800-37R2-0683:
+  status: not-a-requirement
+  reason: "Explanation of why 0681 and 0682 matter: AO decisions depend on transparency, and 'Transparency is essential' is a reason given for the caution, not a task, so it binds no one."
+  x_note: "Subject and verb: 'Effective risk decisions by authorizing officials depend on the transparency of controls'; 'Transparency is essential to achieve the assurance necessary'."
+# --- Appendix H, pages 181 to 183 ---
+REQ-SP800-37R2-0684:
+  x_existing: "framework/tasks/P.yaml P-15 purpose (security and privacy requirements enter the requirements baseline before the SRR) and exit criteria; P-17 exit criteria; ART-REQ; aligned_with RV-SRR"
+  x_note: "Subject and verb: 'The security and privacy requirements are incorporated into the SDLC simultaneously with the other requirements'. The rest explains the cost of late integration."
+REQ-SP800-37R2-0685:
+  x_new_work_item: "org-rmf-resources"
+  x_home: "Task P-2, section '## Risk management strategy and risk tolerance' of ART-ORG-CONTEXT, with a question for PER-CIO in playbooks/P/P-org-context.md"
+  x_note: "Subject and verb: 'the requirements are integrated into the organization's program, planning, and budgeting activities to help ensure that resources are available when needed'. The rest is why the SDLC is the effective place. SDLC integration itself is held as for 0684."
+REQ-SP800-37R2-0686:
+  x_existing: "framework/tasks/P.yaml primary_phase PH-MSA on sixteen tasks, through framework/tasks/M.yaml PH-OS; framework/phases.yaml"
+  x_note: "Subject and verb: 'Risk management activities begin early in the SDLC and continue throughout the life cycle'. The rest says why these activities are important."
+REQ-SP800-37R2-0687:
+  x_existing: "raci of PER-ISSE, PER-ISSM and PER-PRIV on P-15, P-17, S-3 and I-1; framework/tasks/I.yaml I-1 entry criterion (a system security engineer integrated into the systems engineering process); ART-ORG-CONTEXT '## RMF role assignments'"
+  x_note: "Subject and verb: 'Organizational officials ensure that security and privacy professionals are part of the SDLC activities'. Integrated project teams are one way ('can be accomplished'), and no team is required. Runs from page 181 onto page 182."
+REQ-SP800-37R2-0688:
+  status: not-a-requirement
+  reason: "Advisory, footnote 167: 'Organizations may employ a variety of development processes'. A permission; a run's process is its pathway."
+REQ-SP800-37R2-0689:
+  x_existing: "the inputs field of every task in framework/tasks (each artifact read by later tasks, not rewritten); INV-4 (facts.yaml as the one home); playbooks/M/M-2.md step 4.1 (reuse first)"
+  x_gap: "Reuse of assessment information produced during the SDLC, such as developer test evidence, with a record of each result: ASSESSMENT-REUSE."
+  x_note: "Subject and verb: 'organizations maximize the use of security- and privacy-relevant information generated during the SDLC process to satisfy requirements for similar information'."
+REQ-SP800-37R2-0690:
+  x_existing: "raci C of PER-ISSE and PER-PRIV on S-1 and S-2, R on S-3, under PER-PM A; conformance/nist-vocabulary.yaml (architects and engineers to PER-ISSE and PER-PRIV)"
+  x_note: "Subject and verb: 'Security and privacy architects and engineers provide system owners and authorizing officials with technical advice on the selection and implementation of controls'. 'can play an essential role' is praise."
+REQ-SP800-37R2-0691:
+  x_existing: "framework/tasks/P.yaml P-16 purpose and raci R PER-ISSE, PER-PRIV; S-3 inputs ART-REQ"
+  x_note: "Sub-item under 'Security and Privacy Architects:', a rejected lead-in with no verb, so the items are live. Subject and verb: (architects) 'Ensure that security and privacy requirements ... are adequately addressed in all aspects of enterprise architecture'."
+REQ-SP800-37R2-0692:
+  x_existing: "framework/tasks/P.yaml P-16 raci R PER-LSE, PER-ISSE, PER-PRIV; conformance/nist-vocabulary.yaml, where architect and engineer are one persona each, so the link is PER-LSE to PER-ISSE and PER-PRIV on that task"
+  x_note: "Sub-item under the architects. Subject and verb: (architects) 'Serve as the primary liaison between the enterprise architect and the systems security and privacy engineers'."
+REQ-SP800-37R2-0693:
+  x_existing: "framework/tasks/S.yaml S-3 raci R PER-ISSE, PER-ISSM, PER-PRIV, A PER-PM, C PER-CCP; playbooks/S/S-3.md step 3; allocation.yaml"
+  x_note: "Sub-item under the architects. Subject and verb: (architects) 'Coordinate with system owners, common control providers, and system security and privacy officers on the allocation of controls'. PER-ISSM carries System Security Officer, PER-PRIV System Privacy Officer."
+REQ-SP800-37R2-0694:
+  x_existing: "raci C of PER-ISSE and PER-PRIV on R-3 and M-3; S-5 C PER-ISSE, PER-PRIV; S-3 C PER-CIO, PER-AO, PER-CISO alongside R PER-ISSE, PER-PRIV"
+  x_note: "Sub-item under the architects. Subject and verb: (architects) 'Advise authorizing officials, chief information officers, senior accountable officials for risk management/risk executive (function)'."
+REQ-SP800-37R2-0695:
+  x_existing: "framework/tasks/P.yaml P-17 raci R PER-ISSE, PER-PRIV; framework/tasks/I.yaml I-1 exit criteria and raci R PER-ISSE, C PER-PRIV"
+  x_note: "Sub-item under 'Security and Privacy Engineers:', a rejected lead-in with no verb. Subject and verb: (engineers) 'Ensure that security and privacy requirements are integrated into systems and system elements through purposeful security or privacy architecting, design, development, and configuration'."
+REQ-SP800-37R2-0696:
+  x_existing: "framework/tasks/I.yaml I-1 exit criteria (systems security and privacy engineering methodologies); playbooks/I/I-1.md step 4 (PER-ISSE on the methods followed); personas/PER-ISSE.md"
+  x_note: "Sub-item under the engineers. Subject and verb: (engineers) 'Employ best practices when implementing controls within a system'."
+REQ-SP800-37R2-0697:
+  x_existing: "raci of framework/tasks/I.yaml I-1 (PER-PM, PER-CCP, PER-ISSE R; PER-PRIV, PER-ISSM, PER-ISSO C) and framework/tasks/S.yaml S-3 (PER-CISO C with PER-ISSE, PER-PRIV R)"
+  x_note: "Sub-item under the engineers. Subject and verb: (engineers) 'Coordinate security and privacy activities with senior agency information security officers, senior agency officials for privacy, system owners, common control providers'."

@@ -1,0 +1,151 @@
+# SP800-53AR5 part 2 triage: pages 729 to 733 (Appendices E and F), read whole against the source.
+# 0339 to 0343 are promoted here. Figure 9 (p. 731) is decided as one row set: noise.
+
+# --- Page 729: Appendix E, assessment reports ---
+REQ-SP800-53AR5-0290:
+  x_existing: "framework/artifacts.yaml ART-PKG and Task R-1 (exit criterion PKG-001): the package carries ART-SSP, ART-SAR and ART-POAM for the AO's decision."
+  x_gap: "'privacy assessment report' and 'privacy plan' in the package: WI-02, WI-03. 'an executive summary': WI-11."
+  x_note: "'The security assessment report and privacy assessment report are included in the system authorization package along with'. The opening sentence is purpose, and the closing clause on updating reports frequently describes a trend."
+REQ-SP800-53AR5-0291:
+  x_existing: "framework/tasks/M.yaml outputs: M-2 (ART-SAR, ART-CONMON) and M-4 (ART-SSP, ART-SAR, ART-POAM, ART-RA), run on the frequencies of conmon.yaml."
+  x_gap: "'security and privacy risk posture': the privacy plan and privacy assessment report are not updated at M-2 or M-4 until WI-02 and WI-03 add them."
+  x_note: "'The key artifacts are updated on an ongoing basis in accordance with the continuous monitoring program established by the organization'. The first two sentences describe the package."
+REQ-SP800-53AR5-0292:
+  x_existing: "sar-results `determinations` (`control_id`, `result`) with SAR-COV-001 give the list of controls and each status; ART-SAR '## Assessment summary' opens the report."
+  x_gap: "The per-control content of the template: objects and depth and coverage, see 0298 and 0299 (SAP-TAILORING, WI-14). Privacy controls: WI-03."
+  x_note: "'it is expected that the overall report of an assessment includes information similar to that detailed in the template ... preceded by a summary that provides the list of all security and privacy controls assessed and the overall status of each control'. 'Organizations are not restricted to the specific template format' is why the tool's own format is enough."
+REQ-SP800-53AR5-0293:
+  status: not-a-requirement
+  reason: "Lead-in, 'The following elements are included in security and privacy assessment reports:'. Each element below has a home of its own, so the items are live: 0339, 0340, 0294, 0341, 0295 and 0297 to 0302."
+REQ-SP800-53AR5-0339:
+  x_existing: "ART-SAR `rmf:facts` block, filled from facts.yaml `system_name` by `rmf assemble` (src/rmf_tool/run/facts.py LABELS)."
+  x_note: "Promoted, rejected as a bare label under lead-in 0293."
+REQ-SP800-53AR5-0340:
+  x_existing: "ART-SAR `rmf:facts` block, filled from facts.yaml `categorization` by `rmf assemble` (src/rmf_tool/run/facts.py LABELS)."
+  x_note: "Promoted, rejected as a bare label under lead-in 0293."
+REQ-SP800-53AR5-0294:
+  x_new_work_item: sar-assessment-record
+  x_home: "A-3 step 6, the new ART-SAR section that slug adds: sites assessed and dates. sap.yaml `schedule` plans the dates and feeds the OSCAL assessment results, but ART-SAR states neither."
+  x_note: "Under lead-in 0293. 'Site(s) assessed and assessment date(s)'."
+REQ-SP800-53AR5-0341:
+  x_new_work_item: sar-assessment-record
+  x_home: "A-3 step 6, the new ART-SAR section that slug adds: the assessor's name or identification."
+  x_note: "Promoted, rejected as a bare label under lead-in 0293. ART-SAP '## Team and independence' plans the assessors by persona; the SAR names none."
+REQ-SP800-53AR5-0295:
+  x_existing: "ART-SAR '## Test results reused', which A-3 step 6 fills."
+  x_note: "Under lead-in 0293. 'Previous assessment results (if reused)'. What makes a reuse sound is ASSESSMENT-REUSE, entries 0196 to 0200, not this report element."
+REQ-SP800-53AR5-0296:
+  x_new_work_item: authorization-records
+  x_home: "Task R-5 step, extended: assessment records kept under the same retention, with what is kept for the audit trail and for reuse."
+  x_note: "Footnote 60. 'the rationale for each determination made is a part of the formal security and privacy assessment reports' is sar-results `summary` for security and WI-03 for privacy. 'organizations retain the portion of the records necessary for maintaining an audit trail of assessment evidence, facilitating reuse of evidence, and promoting repeatability of assessor actions'. ART-DISP keeps information types at disposal, not assessment records."
+
+# --- Page 730 ---
+REQ-SP800-53AR5-0297:
+  x_existing: "sar-results.schema.json `determinations[].control_id`, one record per scoped control, A-3 step 4.2."
+REQ-SP800-53AR5-0298:
+  x_existing: "sar-results.schema.json `determinations[].methods` holds the methods used."
+  x_gap: "'and objects': no field names the assessment objects in the report. SAP-TAILORING plans methods and objects in sap.yaml; extend it to carry them into sar-results."
+REQ-SP800-53AR5-0299:
+  work_item: WI-14
+  x_note: "Under lead-in 0293. 'Depth and coverage attributes values'. WI-14 is depth and coverage per control; sar-results has no such field."
+REQ-SP800-53AR5-0300:
+  x_existing: "sar-results.schema.json `determinations[].result`, values `satisfied` and `other-than-satisfied`, with `summary`."
+  x_note: "The tool's third value, `not-applicable`, is a matter for DETERMINATION-RECORD (0328)."
+REQ-SP800-53AR5-0301:
+  x_existing: "sar-results.schema.json `findings[].description`: what the control requires, what was observed, the evidence (A-3 step 4.2); ART-SAR '## Findings overview'."
+REQ-SP800-53AR5-0302:
+  x_existing: "sar-results.schema.json `findings[].recommendation` and `severity`; ART-SAR '## Recommendations', A-3 step 6."
+  x_note: "The statement runs on into the next heading, 'The Assessment Findings', which is no part of it. 'priorities' is read as `severity`."
+REQ-SP800-53AR5-0342:
+  x_new_work_item: DETERMINATION-RECORD
+  x_home: "sar-results.schema.json `determinations`, task A-3 step 4.2, as for 0333."
+  x_note: "Promoted. 'Each determination statement executed by an assessor results in one of the following findings'. Same duty as 0333 on p. 42, stated again where the report is defined; the result is kept per control today."
+REQ-SP800-53AR5-0303:
+  x_existing: "sar-results and ART-SAR are the reporting form; OSCAL assessment results from `rmf oscal build`; framework/tasks/A.yaml A-3 purpose, 'automating where possible'."
+  x_note: "'the assessment findings, comments, and recommendations are documented using appropriate organization-defined reporting forms or platforms'; 'automation is used'. 'Organizations are encouraged to develop standard templates' is advisory, and the tool's templates meet it."
+
+# --- Page 731: Figure 9, a worked example for CP-03; one row set, noise ---
+REQ-SP800-53AR5-0304:
+  status: not-a-requirement
+  reason: "Column header row of Figure 9, 'ASSESSMENT OBJECTIVE Determine if: | ASSESSMENT FINDING | ASSESSOR COMMENTS AND RECOMMENDATIONS'. Labels of an example."
+REQ-SP800-53AR5-0305:
+  status: not-a-requirement
+  reason: "Figure 9 row for CP-03_ODP[01], part of a fictional 'System ABC' example: 'contingency role or responsibility' is the catalog's wording quoted to show an S finding, so that responsibility binds no one here. The control itself is read through EXT-ASSESSMENT-PROCEDURES."
+  x_note: "Subject and verb: 'the time period within which to provide contingency training after assuming a contingency role or responsibility is defined'."
+REQ-SP800-53AR5-0306:
+  status: not-a-requirement
+  reason: "Figure 9 row for CP-03_ODP[02], the training frequency parameter of the example system, set to 'annually'. 'a contingency role or responsibility' only says which users are trained, so that responsibility binds no one here."
+  x_note: "Subject and verb: 'frequency at which to provide training to system users with a contingency role or responsibility is defined'."
+REQ-SP800-53AR5-0307:
+  status: not-a-requirement
+  reason: "Figure 9 row for CP-03_ODP[03]: the example's content review frequency and its S finding. It shows how to fill the form."
+REQ-SP800-53AR5-0308:
+  status: not-a-requirement
+  reason: "Figure 9 row for CP-03_ODP[04]: the example's undefined events and its O finding, 'No assessment artifacts identify events'. It illustrates an other than satisfied result, no duty."
+REQ-SP800-53AR5-0309:
+  status: not-a-requirement
+  reason: "Figure 9 row for objective CP-03a.01, finding S. It quotes a catalog objective to show the form; 'assigned roles and responsibilities' and 'responsibility' name whom the example trains, so that responsibility binds no one here."
+  x_note: "Subject and verb: 'contingency training is provided to system users consistent with assigned roles and responsibilities'."
+REQ-SP800-53AR5-0310:
+  status: not-a-requirement
+  reason: "Figure 9 row for objective CP-03a.02 with the example's O finding on System ABC. 'responsibilities' and 'when required by system changes' are catalog wording quoted to show a comment, so neither that responsibility nor required binds anyone here."
+  x_note: "Subject and verb: 'contingency training is provided to system users consistent with assigned roles and responsibilities when required by system changes'."
+REQ-SP800-53AR5-0311:
+  status: not-a-requirement
+  reason: "Figure 9 row for objective CP-03a.03, finding S with a frequency placeholder. 'roles and responsibilities' is quoted from the catalog to show the form, so the word responsibilities binds no one here."
+  x_note: "Subject and verb: 'contingency training is provided to system users consistent with assigned roles and responsibilities <CP -03_ODP[02] frequency> thereafter'."
+REQ-SP800-53AR5-0312:
+  status: not-a-requirement
+  reason: "Figure 9 row for objective CP-03b.[01], finding S: the example's review of training content, with its frequency placeholder."
+REQ-SP800-53AR5-0313:
+  status: not-a-requirement
+  reason: "Figure 9 row for objective CP-03b.[02], finding O. 'this objective cannot be assessed' is the example assessor's comment on System ABC, so cannot binds no one; the rule on findings is 0333."
+  x_note: "Subject and verb: 'this objective cannot be assessed', an assessor's comment in the example."
+
+# --- Page 732: Appendix F, ongoing assessment and automation ---
+REQ-SP800-53AR5-0314:
+  status: not-a-requirement
+  reason: "Definition and description, cut with 0315: 'Ongoing security and privacy assessment is the continuous evaluation'. 'in accordance with organization-defined frequencies' says when the ISCM step begins and binds no one by itself; the duty on how the information is produced sits in live 0315, and the frequencies are S-5."
+  x_note: "Subject and verb: 'Ongoing assessment encompasses ISCM Steps 3 and 4 and is initiated as part of ISCM Step 3, Implement, when the collection of security-related information begins in accordance with organization-defined frequencies'."
+REQ-SP800-53AR5-0315:
+  x_existing: "conmon.yaml `frequencies[].method` and `reporting` (S-5), M-2 step 4.1 (results from monitoring data), M-5 ART-SECRPT for the report to senior leaders."
+  x_gap: "'using automated tools to the extent that it is possible and practical to do so': no step asks for it outside AD-CATO, and `method` is a free string. automated-assessment-spec."
+  x_note: "Cut with 0314, which ends on 'as part of ISCM Step' before the '4.' this entry opens with. 'security-related information is generated, correlated, analyzed, and reported using automated tools'. Privacy ongoing monitoring rests on WI-15."
+REQ-SP800-53AR5-0316:
+  status: not-a-requirement
+  reason: "Background: 'Automating assessments is a fundamental element in helping organizations manage' risk, and why manual assessment 'has become impractical'. It explains the appendix and tells no one to act."
+REQ-SP800-53AR5-0317:
+  status: not-a-requirement
+  reason: "Advisory, not a minimum set: 'One strategy ... depends on defining a desired state specification', with a worked lockout example. 'user accounts will be locked' is what the example's policy 'may state', so that will binds no one. The closing sentence, runs to p. 733, says what the results count as when the strategy is chosen."
+  x_note: "Subject and verb: 'an organizational policy may state that user accounts will be locked after three unsuccessful logon attempts'."
+
+# --- Page 733 ---
+REQ-SP800-53AR5-0318:
+  x_new_work_item: "automated-assessment-spec: where a system assesses controls by automated tools, S-5 states what each tool assesses, how often, and the analysis and reporting; and for a desired state strategy the actual state and behavior specification, the desired state specification and how defects are computed. Prefer automated collection where practical. ART-CONMON '## Roles and tools' names tools only, and conmon.yaml keys frequency and method by family."
+  x_home: "Task S-5, ART-CONMON '## Roles and tools' and a `tools` block in conmon.yaml"
+  x_note: "Under the rejected lead-in 'it is important to meet the following prerequisites', which makes the three a minimum set for that strategy. 'Automated actual state and behavior specifications are defined'. Applies only where the strategy is used."
+REQ-SP800-53AR5-0319:
+  x_new_work_item: automated-assessment-spec
+  x_home: "Task S-5, `tools` block in conmon.yaml: the desired state a tool compares against."
+  x_note: "Same lead-in as 0318. 'Data-based desired state specifications (comparable to the actual state) are defined'."
+REQ-SP800-53AR5-0320:
+  x_new_work_item: automated-assessment-spec
+  x_home: "Task S-5, `tools` block in conmon.yaml: how a defect is computed."
+  x_note: "Same lead-in as 0318. 'A method to compute or identify defects ... is defined'."
+REQ-SP800-53AR5-0321:
+  x_new_work_item: automated-assessment-spec
+  x_home: "Task S-5, `tools` block in conmon.yaml: per tool, the capabilities and controls, frequency, analysis and reporting."
+  x_note: "'the test assessment method is used' is held by sar-results `methods`, value `test`; the rest is not. 'The organization determines and documents the specific capabilities and privacy controls that are being assessed by the automated tool, the frequency with which the tool will assess the capabilities or controls, and the analysis and reporting requirements'."
+REQ-SP800-53AR5-0322:
+  status: not-a-requirement
+  reason: "Background: NIST and CISA 'collaborated on the development of a process', and NISTIR 8011 and the CDM program are named. It describes outside work and binds no one."
+REQ-SP800-53AR5-0323:
+  status: not-a-requirement
+  reason: "Advisory permission, not a minimum set, footnote 64: 'the automated test method may be supplemented by the use of manual or procedural assessment methods'. It allows an option, which the depth and coverage of WI-14 would judge."
+REQ-SP800-53AR5-0324:
+  x_new_work_item: capability-grouping
+  x_home: "ART-BASELINE at S-1, the capabilities and the controls that produce each; a capability a tool assesses at S-5 reads that map."
+  x_note: "Footnote 65. 'If a security or privacy capability is defined, a mapping of all individual controls that support the capability is documented'. The many-to-many sentence is expectation only."
+REQ-SP800-53AR5-0343:
+  work_item: WI-15
+  x_note: "Promoted, footnote 63. 'Senior Agency Officials for Privacy (SAOPs)/Chief Privacy Officers (CPOs) provide guidance on the ongoing monitoring of privacy controls' is PER-PRIV. Same duty as 0334 on p. 18; WI-15 names privacy continuous monitoring."

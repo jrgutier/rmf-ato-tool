@@ -1,0 +1,960 @@
+# SP800-128 part 1, pages 14 to 58 and 79 to 84 (pages 59 to 78 are excluded in sources.yaml), read whole against
+# references/text/SP800-128.md. Figures 2-1 (p20) and 3-1 (p42) opened in the PDF.
+# Role map from personas.txt: System Owner PER-PM, SSO PER-ISSO and PER-ISSM, SAISO PER-CISO, CIO PER-CIO, CCB PER-CCB,
+# SA and developer PER-DEV. The SecCM Program Manager has no persona. Control cells are CNSSI 1253, column I unless noted.
+# --- Chapter 1, pages 14 to 16 ---
+REQ-SP800-128-0001:
+  status: not-a-requirement
+  reason: "Opening background of Chapter 1: how components are networked 'is critical' to adequate security. 'is critical' rates a topic and places no act on anyone."
+  x_note: "Subject and verb: 'How system components are networked, configured, and managed is critical'."
+REQ-SP800-128-0002:
+  status: not-a-requirement
+  reason: "Chapter 1 introduction ending in the definition of SecCM. 'need to consider' and 'requires the integration' argue for the discipline in general terms, and 'expected to be integrated' states what the document assumes; the duties they point at are stated as steps in Chapter 3."
+  x_note: "Subject and verb: 'Organizations with a robust and effective CM process need to consider information security implications'; 'Effective CM of systems requires the integration'; 'are expected to be integrated as a single process'."
+REQ-SP800-128-0003:
+  x_existing: "Control cm-1 (I XXX, C XXX), a.1 and a.2: agency configuration management policy and procedures, written up at S-4 in the SSP statement; EXT-ORG-POLICY holds the agency's policy as an input to P-1 and P-2."
+  x_note: "Merged paragraphs across pages 14 and 15, cited on page 14. Subject and verb: 'Federal agencies are responsible for including policies and procedures that ensure compliance with minimally acceptable system configuration requirements'. The rest is purpose and audience, including 'organizations responsible for managing' and 'are encouraged to consider using these guidelines'. Applicability: the guidelines exclude national security systems and 'may be used for such systems with the approval of appropriate federal officials'; see the report."
+REQ-SP800-128-0004:
+  status: not-a-requirement
+  reason: "Footnote 1: examples of what a system component is. A definition by example, with no actor."
+REQ-SP800-128-0005:
+  status: not-a-requirement
+  reason: "Audience bullet in 1.2, management and oversight readers. 'responsibilities' names a class of reader of the publication and gives that reader no task."
+  x_note: "Subject and verb: 'Individuals with system and information security management and oversight responsibilities'. Under 'This publication is intended to serve'."
+REQ-SP800-128-0006:
+  status: not-a-requirement
+  reason: "Audience bullet in 1.2, system development readers. 'responsibilities' names a class of reader of the publication and gives that reader no task."
+  x_note: "Subject and verb: 'Individuals with system development responsibilities'. Under 'This publication is intended to serve'."
+REQ-SP800-128-0007:
+  status: not-a-requirement
+  reason: "Audience bullet in 1.2, implementers and operators. 'responsibilities' names a class of reader of the publication and gives that reader no task."
+  x_note: "Subject and verb: 'Individuals with security implementation and operational responsibilities'. Under 'This publication is intended to serve'."
+REQ-SP800-128-0008:
+  status: not-a-requirement
+  reason: "Audience bullet in 1.2, assessors and auditors. 'responsibilities' names a class of reader of the publication and gives that reader no task."
+  x_note: "Subject and verb: 'Individuals with system and information security assessment and monitoring responsibilities'. Under 'This publication is intended to serve'."
+REQ-SP800-128-0009:
+  status: not-a-requirement
+  reason: "Section 1.3, how this publication relates to SP 800-53, SP 800-37 and SP 800-137. Its one activity sentence, 'continuously monitor', paraphrases the Monitor step of another document."
+REQ-SP800-128-0010:
+  status: not-a-requirement
+  reason: "Section 1.3 pointer: the publication refers to SP 800-70 and SP 800-126 'as a potential means of automated support' and lists more in Appendix F. A reference note."
+REQ-SP800-128-0011:
+  status: not-a-requirement
+  reason: "Section 1.4 roadmap of Chapter Two; 'responsibilities' is the name of one of the chapter's topics, not a duty."
+  x_note: "Subject and verb: 'Chapter Two describes the fundamental concepts'."
+REQ-SP800-128-0012:
+  status: not-a-requirement
+  reason: "Section 1.4 roadmap of Chapter Three, listing its contents."
+REQ-SP800-128-0013:
+  status: not-a-requirement
+  reason: "Section 1.4 roadmap of the appendices, listing their contents."
+# --- Chapter 2, pages 17 to 27 ---
+REQ-SP800-128-0014:
+  status: not-a-requirement
+  reason: "Chapter Two's opening sentence listing its contents; 'responsibilities' is a topic in that list and binds no one."
+  x_note: "Subject and verb: 'This chapter presents the fundamentals'. The drop cap T is cut from the entry."
+REQ-SP800-128-0015:
+  status: not-a-requirement
+  reason: "Glossary-style terms 'briefly explained below': CM, CI, baseline configuration, CM Plan. 'responsibilities' sits inside the definition of a CM Plan. The rule that a baseline changes only through change control is live at 0044, and the plan's parts are in ART-CMP through 0115."
+  x_note: "Subject and verb: 'A Configuration Management Plan (CM Plan) is a comprehensive description of the roles, responsibilities, policies, and procedures'."
+REQ-SP800-128-0016:
+  status: not-a-requirement
+  reason: "Two definitions from the same term list, CCB and Configuration Item Identification. 'responsibility' describes what a CCB is and 'need to be placed under CM' describes what the methodology selects; neither sets a task. The CCB duty is live at 0038 and 0172."
+  x_note: "Subject and verb: 'a group of qualified people with responsibility for the process of controlling and approving changes'; 'configuration items that need to be placed under CM'."
+REQ-SP800-128-0017:
+  status: not-a-requirement
+  reason: "End of the term list, then a statement of what a system's configuration is and a summary of CM activities. Describes; the activities are set as steps from 3.1.2 on."
+REQ-SP800-128-0018:
+  status: not-a-requirement
+  reason: "Background in 2.1.2. 'must place greater emphasis' is an exhortation: no act, measure or holder, and the risk program it urges is the subject of SP 800-39, not of this publication."
+  x_note: "Subject and verb: 'an organization must place greater emphasis on the management of risk'."
+REQ-SP800-128-0019:
+  status: not-a-requirement
+  reason: "Background on risk in 2.1.2. 'Organizations cannot control earthquakes' is a statement of fact about threats, which is the reason SecCM addresses vulnerabilities; nothing here is a task."
+  x_note: "Subject and verb: 'Organizations cannot control earthquakes, floods, disgruntled employees, hackers, and other threats'."
+REQ-SP800-128-0020:
+  status: not-a-requirement
+  reason: "Footnote 5: the definition of information security and a note on how the words 'security' and 'system' are used."
+REQ-SP800-128-0021:
+  status: not-a-requirement
+  reason: "Argument for SecCM in 2.1.3. 'requires a disciplined approach' and 'is critical to maintaining a secure state' say why it matters and name no one who acts."
+  x_note: "Subject and verb: 'How the configurations are established and maintained requires a disciplined approach'; 'The security-focused configuration management process is critical to maintaining a secure state'."
+REQ-SP800-128-0022:
+  x_existing: "ART-CMP '## Configuration items and component inventory' and '## Baseline configurations', S-4."
+  x_note: "Item under the rejected lead-in 'SecCM activities include:', which has no duty of its own, so the items are live."
+REQ-SP800-128-0023:
+  x_existing: "ART-CMP '## Baseline configurations', 'the criteria for approving a baseline'; control cm-2 (I XXX)."
+REQ-SP800-128-0024:
+  x_existing: "ART-CHG '## Security impact analyses', M-1; control cm-4 (I XXX)."
+REQ-SP800-128-0025:
+  x_existing: "ART-CHG '## Change log' for the changes; ART-CMP, which S-4 produces in every run whether or not the organization has a CM process, for the second sentence."
+  x_note: "The item joined to the next paragraph: 'In cases where an organization has no existing CM process in place, security-focused configuration management practices ... are developed and implemented from process inception'."
+REQ-SP800-128-0026:
+  status: not-a-requirement
+  reason: "Forecast of cost in 2.1.3: 'may require considerable effort', and the passive list after it says what the initial investment buys. 'require' here estimates effort and sets no task."
+  x_note: "Subject and verb: 'Initial implementation of a SecCM program may require considerable effort'. Runs from page 19 onto page 20."
+REQ-SP800-128-0027:
+  x_existing: "M-1 outputs ART-CMP and ART-INV (updates) and ART-CHG '## Resulting updates'; control cm-2 b.3 (I XXX) and cm-8 b (I XXX) for updating the baseline and inventory."
+  x_note: "Subject and verb: 'As changes to systems are made, baseline configurations are updated, specific configuration settings confirmed, and configuration items tracked, verified, and reported'. 'SecCM requires an ongoing investment' and 'updates require time' around it are comment on cost."
+REQ-SP800-128-0028:
+  x_existing: "ART-CMP '## Purpose and scope', 'what the plan covers'."
+  x_note: "Subject and verb: 'the scope or applicability of SecCM processes are identified'."
+REQ-SP800-128-0029:
+  x_existing: "ART-CMP '## Baseline configurations' and I-1 (ART-STIG) for developing, approving and applying the baseline; I-2 updates ART-CMP; controls cm-2 and cm-6 (I XXX); cm-2.2 (I .XX) for automation."
+  x_note: "Subject and verb: 'a secure baseline configuration for the system is developed, reviewed, approved, and implemented'. 'Where possible, automation is used' is soft and sits with cm-2.2."
+REQ-SP800-128-0030:
+  x_existing: "ART-CMP '## Configuration change control' and '## Access restrictions for change'; controls cm-3 (I +XX), cm-4 (I XXX), cm-5 (I XXX)."
+  x_note: "Subject and verb: 'organizations ensure that changes are formally identified, proposed, reviewed, analyzed for security impact, tested, and approved prior to implementation'."
+REQ-SP800-128-0031:
+  x_existing: "ART-CMP '## Configuration monitoring'; EXT-MONITORING 'configuration compliance'; controls cm-6 (I XXX) and cm-8.3 (I +XX)."
+  x_gap: "'unauthorized changes': the plan says how they are detected, but ART-CHG has no place for one found: unauthorized-change-monitoring."
+REQ-SP800-128-0032:
+  x_existing: "ART-CMP '## Plan maintenance and exceptions'; M-1 and I-2 update ART-CMP; control cm-1 c (review and update) and cm-9 (I +XX)."
+  x_note: "Subject and verb: 'all processes in all four phases are reviewed and revised as needed'."
+REQ-SP800-128-0033:
+  x_existing: "EXT-MONITORING 'configuration compliance', read at M-2; ART-CMP '## Configuration monitoring', 'to whom they are reported'."
+  x_note: "Subject and verb: 'Reports address the secure state of individual system configurations and are used as input to Risk Management Framework information security continuous monitoring requirements'. Metrics are 'can', a permission. Runs from page 21 onto page 22."
+REQ-SP800-128-0034:
+  status: not-a-requirement
+  reason: "Description of what a policy is, in 2.3.1. 'what is required and what is not permitted' names the policy's content in general and sets neither; the duty to have one is live at 0035 and 0058."
+  x_note: "Subject and verb: 'It is a top-down approach which defines what is required and what is not permitted'."
+REQ-SP800-128-0035:
+  x_existing: "Control cm-1 a.2 (procedures to facilitate the implementation of the policy); ART-CMP sections hold the system's own procedures."
+  x_note: "Subject and verb: 'SecCM procedures are developed to describe the methodology and tasks for each activity'. 'what must be done' is in the contrast between policy and procedure and is not itself a duty."
+REQ-SP800-128-0036:
+  status: not-a-requirement
+  reason: "Phase and control mapping: documenting policy 'is performed during the Planning phase and supports' CM-1. The same mapping sentences for other topics were rejected; the duty is at 0035."
+REQ-SP800-128-0037:
+  status: not-a-requirement
+  reason: "Advisory: every sentence after the first says what form a SecCM Plan 'may' take. 'organizations may' style permissions, not a minimum set. The plan's contents are live at 0115."
+REQ-SP800-128-0038:
+  x_existing: "personas/PER-CCB.md (card, cited to 2.3.3) and ART-CMP '## Configuration control board', membership, decision rule, scope of authority; cm-3 g."
+  x_note: "Runs from page 22 onto page 23. Subject and verb: 'The Configuration Control Board (CCB) is a group ... that have the collective responsibility and authority to review and approve changes'; 'assuring that changes are held to organizationally defined criteria'."
+REQ-SP800-128-0039:
+  x_existing: "ART-CMP '## Configuration control board', membership and decision rule, written to the system's size."
+  x_note: "Subject and verb: 'The organization determines the size and formality of the CCB'. PER-CCB states the same."
+REQ-SP800-128-0040:
+  x_existing: "Control cm-8 a.4 (I XXX), 'at the level of granularity deemed necessary'; P-10 step 4, one item per distinct item, and ART-INV."
+  x_note: "Subject and verb: 'The organization determines the level of granularity required for tracking the components'."
+REQ-SP800-128-0041:
+  x_existing: "INV-BND-001 (an inventory item outside the boundary fails) for the boundary; control cm-8 a.3 (I XXX), 'components assigned to any other system'; PER-PM accountable at P-10."
+  x_note: "Subject and verb: 'Each component is associated with only one system and the authority over and responsibility for each component is with only one system owner'."
+REQ-SP800-128-0042:
+  x_new_work_item: ci-record
+  x_home: "S-4, a CI register under ART-CMP '## Configuration items and component inventory': each CI's identifier, label, version and the elements that let it be rebuilt, and SecCM tools and test processes as a CI"
+  x_note: "Mostly a definition, kept live for 'The CI is identified, labeled, and tracked during its life cycle'. ART-CMP maps CIs to inventory items and says nothing on identifiers or tracking."
+REQ-SP800-128-0043:
+  status: not-a-requirement
+  reason: "Definition and example in 2.3.6: what secure configurations are, what they 'may involve', and that one 'could incorporate' least functionality. Advisory; cm-6 and cm-7 are the requirements."
+REQ-SP800-128-0044:
+  x_existing: "Control cm-2 a (I XXX), 'maintain under configuration control'; ART-CMP '## Baseline configurations' and '## Configuration change control'."
+  x_note: "A definition holding one rule, kept live for it: 'which can be changed only through change control procedures'. Same words as in 0015, which is noise."
+REQ-SP800-128-0045:
+  status: not-a-requirement
+  reason: "Description: what a baseline 'may' be at each life-cycle stage and that it 'may also represent' different environments. No one is told to do any of it."
+REQ-SP800-128-0046:
+  x_existing: "Control cm-2.3 (I .XX), retention of previous configurations to support rollback; ART-CMP '## Baseline configurations'."
+  x_note: "Subject and verb: 'Older versions of approved baseline configurations are maintained and made available for review or rollback as needed'. cm-2.3 is not selected at Low."
+REQ-SP800-128-0047:
+  x_existing: "ART-CMP '## Configuration change control', from request through record, with emergency changes; '## Roles and responsibilities'; cm-3."
+  x_note: "Subject and verb: 'Configuration change control is applied to include changes to components'; 'Each step in the change process is clearly articulated along with the responsibilities and authorities of the roles involved'."
+REQ-SP800-128-0048:
+  x_existing: "ART-CMP '## Security impact analysis' and '## Configuration change control', 'verification'; ART-CHG '## Security impact analyses'; controls cm-4 (I XXX) and cm-4.2 (I .XX)."
+  x_note: "Subject and verb: 'a security impact analysis (and/or assessment) is performed to ensure that the changes have been implemented as approved'."
+REQ-SP800-128-0049:
+  status: not-a-requirement
+  reason: "Phase and control mapping: the analysis 'is performed as a part of' a phase 'and supports' CM-4. The duty to analyze is live at 0048 and 0395."
+REQ-SP800-128-0395:
+  x_existing: "ART-CMP '## Security impact analysis', 'who performs the analysis, its steps', inside '## Configuration change control'; cm-4."
+  x_note: "Promoted. Subject and verb: 'Security impact analysis is the analysis conducted by qualified staff'; 'Security impact analysis is incorporated into the documented configuration change control process'."
+REQ-SP800-128-0050:
+  x_existing: "ART-CMP '## Configuration monitoring'; EXT-MONITORING 'configuration compliance'; controls cm-6 (I XXX) and cm-8 (I XXX)."
+  x_note: "Subject and verb: 'Configuration monitoring involves activities to determine whether systems are configured in accordance with the organization's agreed-upon baseline configurations'."
+REQ-SP800-128-0051:
+  status: not-a-requirement
+  reason: "Benefits of monitoring: 'helps to ensure', 'may also help', 'can be used'. 'in accordance with' only describes the staff conduct it may motivate."
+  x_note: "Subject and verb: 'Configuration monitoring may also help to motivate staff members to perform SecCM activities in accordance with policies and procedures'."
+REQ-SP800-128-0052:
+  x_existing: "ART-CMP '## Roles and responsibilities' (system owner, SecCM program manager, AO); PER-CCB, M-1 RACI and ART-CHG 'referred to the AO or not' for the AO's determination that a change stays acceptable; PER-RE consulted at M-1; control cm-1 b for designating the official."
+  x_gap: "'The CIO designates and/or provides a SecCM Program Manager for the organization and approves the organizational SecCM plan and policies': ART-CMP's role list omits the CIO and nothing records that approval: org-crm-policies."
+  x_note: "Extractor split the role list in two; the rest is 0386, both live. Subject and verb: 'The AO manages or participates in the CCB ... and makes the final determination'; 'The system owner identifies, defines, and ensures implementation'; 'The SecCM Program Manager develops SecCM policies and procedures'."
+REQ-SP800-128-0386:
+  x_existing: "ART-CMP '## Roles and responsibilities' (ISSO, administrators, developers, users); M-1 RACI, PER-ISSO R for configuration monitoring; I-1 RACI, PER-DEV R for implementing baselines; EXT-CHANGE-REQUESTS for what the user initiates."
+  x_note: "Continues 0052 across pages 26 and 27. Subject and verb: 'The SSO assists the system owner'; 'SAs are also responsible for complying with SecCM policies'; 'Developers are also responsible'; 'The SU initiates change requests'."
+# --- Chapter 3, organizational planning, pages 28 to 36 ---
+REQ-SP800-128-0053:
+  x_existing: "Control cm-1 a.1, the selection of organization-level, mission/business process-level or system-level policy, which the S-4 statement fills."
+  x_note: "Subject and verb: 'Each organization determines what activities are conducted at the organizational or mission/business process level and what activities are conducted at the system level in accordance with organizational management requirements'."
+REQ-SP800-128-0054:
+  status: not-a-requirement
+  reason: "Section 3.1.1 roadmap: what the subsections describe and that 'organizations have flexibility' over order and level."
+REQ-SP800-128-0055:
+  status: not-a-requirement
+  reason: "Run-in heading of the first organizational activity. The text is 0056."
+REQ-SP800-128-0056:
+  status: not-applicable
+  reason: "Binds the organization and its SecCM program manager: how the organization-wide program is staffed and run, its 'dedicated staff', 'senior management-level staff that meet as a group', dashboard and newsletters. The 'responsibility' and 'responsibilities' it assigns, and the coordination it says consistency 'requires', sit inside an outside program that the run does not perform. Persona checked: PER-CISO, who 'may act as' that manager without holding the duty, and PER-PM. The program's output a run consumes, its policy and procedures, stays live at 0058 and 0071, so what remains is the producer's internal organization and nothing in a run holds it."
+  x_note: "Subject and verb: 'implementing SecCM in a consistent and uniform manner across the organization requires organization-wide coordination of resources'; 'with responsibility assigned to the organization-wide SecCM program'; 'The SecCM program manager provides knowledge and direction ... defined roles and responsibilities'. Runs from page 28 onto page 29."
+REQ-SP800-128-0057:
+  status: not-a-requirement
+  reason: "Run-in heading of the policy activity. The text is 0058."
+REQ-SP800-128-0058:
+  x_existing: "Control cm-1 a and c (develop, disseminate, review and update the policy); EXT-ORG-POLICY, 'DoD and Component security and privacy policies and procedures', read at P-1 and P-2; ART-CMP '## Purpose and scope', its relation to organizational SecCM policy."
+  x_note: "Subject and verb: 'The organization is typically responsible for defining documented policies'; 'The SecCM program manager develops, disseminates, and periodically reviews and updates the SecCM policies'. Items 0059 to 0065 each name content a run reads, so they are live too."
+REQ-SP800-128-0059:
+  x_existing: "Control cm-1 a.1(a), 'Addresses purpose'."
+REQ-SP800-128-0060:
+  x_existing: "Control cm-1 a.1(a), 'scope'."
+REQ-SP800-128-0061:
+  x_existing: "Control cm-1 a.1(a), 'roles'; ART-CMP '## Roles and responsibilities'."
+REQ-SP800-128-0062:
+  x_existing: "Control cm-1 a.1(a), 'responsibilities'; ART-CMP '## Roles and responsibilities'."
+REQ-SP800-128-0063:
+  x_existing: "Control cm-1 a.2 and ART-CMP's activity headings, change control through monitoring."
+REQ-SP800-128-0064:
+  x_existing: "ART-CMP '## Baseline configurations', common secure configurations and deviations; ART-STIG '## Accepted deviations'; control cm-6 a and c (I XXX)."
+REQ-SP800-128-0065:
+  x_existing: "ART-CMP '## Records and tools' (where records are kept) and '## Access restrictions for change' (how they are protected); control cm-3 e (retain records)."
+  x_gap: "'the information to be included in each type of record', 'who is responsible for writing/keeping the records', and 'ultimately deleting such records': cmp-procedures."
+  x_note: "The last sentence, 'SecCM policy may also address the following topics:', is the lead-in of 0066 to 0070."
+REQ-SP800-128-0066:
+  status: not-a-requirement
+  reason: "Advisory item under 'SecCM policy may also address': training requirements as an optional policy topic, not part of the minimum list above. Training itself is live at 0091."
+REQ-SP800-128-0067:
+  status: not-a-requirement
+  reason: "Advisory item under 'SecCM policy may also address': use of templates as an optional policy topic."
+REQ-SP800-128-0068:
+  status: not-a-requirement
+  reason: "Advisory item under 'SecCM policy may also address': use of automated tools as an optional policy topic. Tools are live at 0093."
+REQ-SP800-128-0069:
+  status: not-a-requirement
+  reason: "Advisory item under 'SecCM policy may also address'. 'Prohibited' labels a topic a policy may cover and prohibits nothing itself."
+  x_note: "Subject and verb: none of its own; 'SecCM policy may also address' ... 'Prohibited configuration settings'."
+REQ-SP800-128-0070:
+  x_existing: "Control cm-1 a.1(a), 'management commitment, coordination among organizational entities'; ART-CMP '## Configuration monitoring' for the approach."
+  x_note: "Live for the sentence the item joined: 'The SecCM policy emphasizes management commitment, clarifies the required level of coordination among organizational entities, and defines the configuration monitoring approach'. The item itself is advisory like 0066 to 0069."
+REQ-SP800-128-0071:
+  x_existing: "Control cm-1 a.2 and its dissemination; the system's procedures sit in ART-CMP '## Baseline configurations' for creating, approving and maintaining a baseline."
+  x_gap: "Component inventory procedure, 'how new components are added ... what information about each component is tracked ... removal of retired components', with the tool administration it names; and the templates the organization establishes: cmp-procedures."
+  x_note: "Decided by its stronger duty, 'the procedures are documented and disseminated to relevant staff', 'SecCM procedures address the following, as applicable'. Holds the Templates, Component Inventory and Baseline Configuration paragraphs; the next ones are 0387. 'may require development', 'should be updated', 'will run' sit inside them."
+REQ-SP800-128-0072:
+  status: not-a-requirement
+  reason: "Footnote 14: 'in accordance with' here tells how systems are categorized under FIPS 199 and FIPS 200 in a remark on the words 'high-impact'. A gloss, and categorization is decided in CNSSI 1253 for a run."
+  x_note: "Subject and verb: 'Information systems categorized in accordance with [FIPS 199]'. A fragment with no verb of its own."
+REQ-SP800-128-0387:
+  x_existing: "ART-CMP '## Baseline configurations', 'the common secure configurations used as the basis ... and each deviation with its justification'; I-1 with EXT-STIG; ART-STIG '## Accepted deviations'; control cm-6 c (I XXX)."
+  x_gap: "Patch Management, how patches are prioritized, approved, tested and folded into baselines: cmp-procedures. Sources beyond DISA, such as USGCB and CIS: config-guidance-sources. 'common secure configurations use SCAP-expressed content': seccm-tooling."
+  x_note: "Runs from page 30 onto page 31. Its last sentences lead into 0073 to 0085, which each hold their own home. Subject and verb: 'Deviations from the common secure configurations are also addressed', 'in the event that the configuration for a given system must diverge'."
+REQ-SP800-128-0073:
+  x_existing: "ART-CMP '## Configuration change control', 'the change procedure from request through ... board decision'; EXT-CHANGE-REQUESTS."
+REQ-SP800-128-0074:
+  x_existing: "ART-CMP '## Configuration change control', 'pre-approved routine changes'; control cm-3 a, the types of change that are configuration-controlled."
+REQ-SP800-128-0394:
+  x_existing: "Control cm-3.2 (I .XX), 'Test, validate, and document changes'; ART-CMP '## Configuration change control' and ART-CHG '## Change log'."
+  x_gap: "The test at Low, where cm-3.2 is not selected: cmp-procedures."
+  x_note: "Promoted, footnote 15. Subject and verb: 'Preapproved changes are still tested and documented prior to implementation'."
+REQ-SP800-128-0075:
+  x_existing: "ART-CMP '## Security impact analysis', who and which steps, and '## Configuration change control', 'implementation, verification and record'; control cm-4.2 (I .XX) for the post-implementation check."
+REQ-SP800-128-0076:
+  x_existing: "ART-CMP '## Security impact analysis', 'the criteria that make a change significant enough to report to the AO'; ART-CHG '## Resulting updates', 'whether any change needs a reauthorization decision'."
+REQ-SP800-128-0077:
+  x_new_work_item: cmp-procedures
+  x_home: "S-4, ART-CMP gains the procedures it has no heading or words for: consistency of a change with the enterprise architecture, what a change brings to the CCB, escalation above system level, rollback, retroactive approval, patch management, inventory upkeep, help desk, SDLC use, media library, record content and disposal, coordinating baselines with interconnected systems"
+  x_note: "Bare item under 'The procedure includes, but is not limited to:'. Same duty at 0213."
+REQ-SP800-128-0078:
+  x_existing: "ART-CMP '## Configuration control board'; PER-CCB."
+REQ-SP800-128-0079:
+  x_new_work_item: cmp-procedures
+  x_home: "S-4, ART-CMP '## Configuration change control', what a change brings to the CCB: test plan, schedule and results"
+  x_note: "ART-CMP names testing as a step only."
+REQ-SP800-128-0080:
+  x_new_work_item: cmp-procedures
+  x_home: "S-4, ART-CMP '## Configuration control board', criteria for raising a change from system to organizational approval"
+  x_note: "The template has 'when a change goes to the AO', a different escalation. 'will affect', 'will require' are the examples of the criteria."
+REQ-SP800-128-0081:
+  x_existing: "ART-CMP '## Configuration change control', 'testing'; control cm-3.2 (I .XX)."
+REQ-SP800-128-0082:
+  x_existing: "ART-CMP '## Access restrictions for change', 'who may change configurations and how that is enforced'; control cm-5 (I XXX)."
+REQ-SP800-128-0083:
+  x_new_work_item: cmp-procedures
+  x_home: "S-4, ART-CMP '## Configuration change control', rollback when a change fails"
+  x_note: "cm-2.3 keeps the versions that make a rollback possible; nothing states the procedure."
+REQ-SP800-128-0084:
+  x_existing: "ART-CMP '## Configuration change control', 'emergency changes and their after-the-fact review'."
+REQ-SP800-128-0085:
+  x_new_work_item: cmp-procedures
+  x_home: "S-4, ART-CMP '## Configuration change control', retroactive analysis and approval, help desk intake and SDLC use"
+  x_gap: "Finding those changes in operation: unauthorized-change-monitoring."
+  x_note: "Item joined to the Help Desk and SDLC procedure paragraphs on the same page."
+REQ-SP800-128-0086:
+  x_existing: "ART-CMP '## Configuration monitoring', how drift and unauthorized changes are detected."
+  x_gap: "Media Library Procedures, naming, labeling, tracking and archiving of media: cmp-procedures."
+  x_note: "Also holds the role lines, 'both have responsibility in determining which procedures are needed at their respective levels', and the next heading."
+REQ-SP800-128-0087:
+  x_existing: "ART-CMP '## Configuration monitoring'; ART-CONMON, S-5, implementing the organizational strategy in ART-ORG-CONTEXT's P-7 section."
+  x_note: "Subject and verb: 'The SecCM monitoring strategy is consistent with, and provides input to, the organization's overall continuous monitoring strategy'."
+REQ-SP800-128-0088:
+  x_existing: "ART-CONMON '## Monitoring frequencies' with conmon.yaml, and '## Reporting'; M-2 updates ART-CONMON; ART-CMP '## Configuration monitoring', 'how often'."
+  x_note: "Subject and verb: 'A schedule for SecCM monitoring and associated reporting is established as part of the strategy'; 'the schedule includes provisions for reviewing and revising the SecCM monitoring strategy'."
+REQ-SP800-128-0089:
+  status: not-a-requirement
+  reason: "Role, input and output lines of the monitoring strategy activity with the next heading; 'Require' is a word of that heading, 'Define the Types of Changes That Do Not Require Configuration Change Control'. The strategy is live at 0087 and 0088."
+  x_note: "Subject and verb: none; a role block and a heading."
+REQ-SP800-128-0090:
+  status: not-a-requirement
+  reason: "Advisory: 'the organization may wish to designate' pre-approved and exempt changes, with examples. A permission; the criteria in a plan are live at 0074."
+REQ-SP800-128-0091:
+  x_existing: "Controls at-2 and at-3 (XXX), role-based training on the system, written up at S-4; PER-PM a primary role here."
+  x_note: "Subject and verb: 'Staff is provided training to ensure their understanding of SecCM policies and procedures'; 'SecCM training material is developed'. The source lets it be 'mandatory or optional as appropriate', so it does not add a course."
+REQ-SP800-128-0092:
+  x_existing: "Control cm-7.5 (+XX), authorized software, and cm-11 (XXX) for user-installed software."
+  x_gap: "Hardware products on the list, and CCB approval of a product added for one system: cmp-procedures."
+  x_note: "Subject and verb: 'System owners select and use products from the approved list'; 'additional products required for a particular system may need to be approved by the CCB'. The buying service sentence, 'are required to be purchased', is one organization's option."
+REQ-SP800-128-0093:
+  x_new_work_item: seccm-tooling
+  x_home: "S-4, ART-CMP '## Records and tools' states the tool decisions: automated tools first, SCAP-validated where available, SCAP-expressed content, handling of false positives, and what the tools cannot reach with its manual process; I-1 names the tool in ART-STIG '## Scan results'"
+  x_note: "ART-CMP lists the tools used, no more. Subject and verb: 'system owners are responsible for applying the tools'; 'In accordance with federal government and organizational policy, if automated tools are used, the tools are Security Content Automation Protocol (SCAP)-validated'; 'At a minimum, the organization considers tools that can automatically assess configuration settings'."
+REQ-SP800-128-0388:
+  x_new_work_item: seccm-tooling
+  x_home: "S-4, ART-CMP '## Records and tools', which tools can read every component type and report noncompliance against policy"
+  x_note: "Cut from 0093 by the extractor. Verb lead-in over the bare features 0094 to 0100: 'select automated tools that can scan different system components'."
+REQ-SP800-128-0094:
+  status: not-a-requirement
+  reason: "Bare feature under 'Tools ... are evaluated to determine whether they include requirements such as:', live at 0388: pulling data from many sources, an example of what a selection may weigh."
+REQ-SP800-128-0095:
+  status: not-a-requirement
+  reason: "Bare feature under the same lead-in, live at 0388: use of XML and SCAP. SCAP use is live at 0093."
+REQ-SP800-128-0096:
+  status: not-a-requirement
+  reason: "Bare feature under the same lead-in, live at 0388: integration with help desk, inventory and incident products."
+REQ-SP800-128-0097:
+  status: not-a-requirement
+  reason: "Bare feature under the same lead-in, live at 0388: vendor support for the tool."
+REQ-SP800-128-0098:
+  status: not-a-requirement
+  reason: "Bare feature under the same lead-in, live at 0388: the tool's compliance with federal rules and its links from vulnerabilities to SP 800-53 controls."
+REQ-SP800-128-0099:
+  status: not-a-requirement
+  reason: "Bare feature under the same lead-in, live at 0388: standardized reporting output."
+REQ-SP800-128-0100:
+  status: not-a-requirement
+  reason: "Last bare feature of 0388, SIEM consolidation, joined to the advisory 'Organizations may consider implementation of an all-in-one solution'."
+REQ-SP800-128-0101:
+  status: not-a-requirement
+  reason: "Example function under 'The products may include functions such as:' for an optional all-in-one tool. Advisory."
+REQ-SP800-128-0373:
+  status: not-a-requirement
+  reason: "Example function, software distribution, under the same optional 'may include' list of 0100. Advisory."
+REQ-SP800-128-0374:
+  status: not-a-requirement
+  reason: "Example function, patch management, under the same optional 'may include' list of 0100. Advisory."
+REQ-SP800-128-0102:
+  status: not-a-requirement
+  reason: "Example function, operating system deployment, under the same optional 'may include' list of 0100. Advisory."
+REQ-SP800-128-0375:
+  status: not-a-requirement
+  reason: "Example function, policy management, under the same optional 'may include' list of 0100. Advisory."
+REQ-SP800-128-0103:
+  status: not-a-requirement
+  reason: "Example function, migration to a new baseline, under the same optional 'may include' list of 0100. Advisory."
+REQ-SP800-128-0104:
+  status: not-a-requirement
+  reason: "Last example function of the optional list, backup and recovery, with the role lines of Identify Tools and the next heading. No duty of its own."
+REQ-SP800-128-0105:
+  status: not-a-requirement
+  reason: "Advisory: 'Some organizations may wish to establish and maintain a configuration test environment'. A permission and no minimum set. Where a run must test apart from operations, cm-4.1 carries it."
+REQ-SP800-128-0106:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: IT products proposed for approval."
+REQ-SP800-128-0107:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: settings for approved IT products."
+REQ-SP800-128-0108:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: supplier patches before rollout."
+REQ-SP800-128-0109:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: validating tools that detect unapproved settings."
+REQ-SP800-128-0110:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: verifying test processes."
+REQ-SP800-128-0111:
+  status: not-a-requirement
+  reason: "Use of the optional test environment of 0105: security impact analyses."
+REQ-SP800-128-0112:
+  status: not-a-requirement
+  reason: "Last use of the optional test environment of 0105, with a pointer to SP 800-115 and the activity's role lines."
+# --- System-level planning, pages 36 to 43 ---
+REQ-SP800-128-0113:
+  x_existing: "S-4 output ART-CMP with '## Configuration control board' and '## Configuration items and component inventory'; P-10 output ART-INV."
+  x_note: "Live for 'The system-level planning phase results in a completed SecCM Plan, an established Configuration Control Board, an accurate system component inventory, and defined configuration items'."
+REQ-SP800-128-0114:
+  status: not-a-requirement
+  reason: "Run-in heading of the plan activity. The text is 0115."
+REQ-SP800-128-0115:
+  x_existing: "ART-CMP, S-4 (framework/artifacts.yaml, core package, cited to 2.3.2); control cm-9 (I +XX); PER-PM accountable at S-4."
+  x_note: "Subject and verb: 'a SecCM Plan is completed at the system level and typically covers the following topics'; 'the system owner may be required to define the system SecCM Plan in its entirety'. Each topic has its own home, so 0116 to 0131 are live."
+REQ-SP800-128-0116:
+  x_existing: "The rmf:facts block at the top of ART-CMP, filled from facts.yaml, and ART-CMP '## Purpose and scope'."
+REQ-SP800-128-0117:
+  x_existing: "ART-CMP '## Configuration items and component inventory', mapped to ART-INV by INV-### ID."
+REQ-SP800-128-0118:
+  x_existing: "ART-CMP '## Configuration items and component inventory', 'the configuration items under control'."
+REQ-SP800-128-0119:
+  x_existing: "ART-CMP '## Purpose and scope', 'the rigor applied given the categorization'."
+REQ-SP800-128-0120:
+  x_existing: "ART-CMP '## Roles and responsibilities'."
+REQ-SP800-128-0121:
+  x_existing: "ART-CMP '## Configuration control board', membership and chair."
+REQ-SP800-128-0122:
+  x_existing: "ART-CMP '## Configuration change control'."
+REQ-SP800-128-0123:
+  x_existing: "ART-CMP '## Records and tools', 'where change requests, analyses, approvals and baselines are kept'."
+REQ-SP800-128-0124:
+  status: not-a-requirement
+  reason: "Footnote 16: 'in accordance with' tells how systems are categorized under FIPS 199 and 200, in a remark on 'impact level'. A gloss."
+  x_note: "Subject and verb: 'Systems categorized in accordance with [FIPS 199] and [FIPS 200]'. A fragment with no verb of its own."
+REQ-SP800-128-0125:
+  x_existing: "ART-CMP '## Access restrictions for change'; control cm-5 (I XXX)."
+REQ-SP800-128-0126:
+  x_existing: "ART-CMP '## Access restrictions for change', 'how SecCM records are protected'."
+REQ-SP800-128-0127:
+  x_existing: "ART-CMP '## Records and tools', 'the SecCM tools used'."
+REQ-SP800-128-0128:
+  x_existing: "ART-CMP '## Baseline configurations', 'the common secure configurations used as the basis, such as DISA STIGs and SRGs'."
+REQ-SP800-128-0129:
+  x_existing: "ART-CMP '## Baseline configurations', 'each deviation with its justification'; ART-STIG '## Accepted deviations'."
+REQ-SP800-128-0130:
+  x_existing: "ART-CMP '## Baseline configurations', 'the criteria for approving a baseline'."
+REQ-SP800-128-0131:
+  x_existing: "ART-CMP '## Plan maintenance and exceptions', 'how exceptions to it are handled'."
+  x_note: "Item joined to 'The SecCM Plan may have various representations ... The level of detail for the SecCM plan is commensurate with the impact level', the SDLC and role lines, and the next heading. The level of detail is held at '## Purpose and scope'."
+REQ-SP800-128-0132:
+  x_existing: "ART-INV, P-10, updated at I-2 and M-1, with ART-DISP at M-7 for retirement; control cm-8 (I XXX)."
+  x_note: "Subject and verb: 'All system components are tracked from acquisition to retirement'. 'is essential to record' and 'need to be managed' are the argument for it."
+REQ-SP800-128-0133:
+  x_existing: "INV-BND-001 and inventory.yaml `component` for the boundary; control cm-8 a.3 and a.4 (I XXX); cm-8.2 (++X) for automated upkeep; P-10 step 4 for what is in or out."
+  x_note: "Runs from page 37 onto page 38. Subject and verb: 'Every organizational component is included within the authorization boundary of one, and only one, system and is documented and tracked in an inventory'; 'The organization typically determines the types and granularity'. 'neither authority over, nor responsibility for' states the supported systems' side."
+REQ-SP800-128-0389:
+  x_new_work_item: seccm-tooling
+  x_home: "S-4, ART-CMP '## Records and tools', inventory tools SCAP-validated where available; P-17 for SCAP in contract terms"
+  x_note: "Cut from 0133 by the extractor. Subject and verb: 'Inventory management tools are SCAP-validated, to the extent such tools are available'; 'organizations are well advised to include SCAP requirements in requests for proposals'. Its last sentence is the lead-in of 0134 onward, 'Some data elements typically stored for each component'."
+REQ-SP800-128-0134:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json and ART-INV: extended with the data elements 3.1.2 says are typically stored"
+  x_note: "inventory.yaml has id, not a unique identifier or serial number of the component."
+REQ-SP800-128-0135:
+  x_existing: "A run covers one system, facts.yaml identity, and inventory.yaml `component` places the item inside it."
+REQ-SP800-128-0136:
+  x_existing: "inventory.schema.json kind `virtual-machine` and field `virtual`; ART-CMP '## Configuration items and component inventory' for configuration control."
+  x_note: "Footnote 19, cut by the page: 'Identifying virtual machines' ends in 0155 on page 39, 'and including them in the CM process is important'. Subject and verb: 'virtual machines are included as separate items in system component inventories and are under configuration control'."
+REQ-SP800-128-0137:
+  x_existing: "inventory.schema.json `kind`."
+REQ-SP800-128-0396:
+  x_existing: "inventory.schema.json `vendor` and `product`."
+  x_gap: "Model: inventory-asset-system."
+  x_note: "Promoted."
+REQ-SP800-128-0138:
+  x_existing: "inventory.schema.json kind `operating-system`, `product`, `version`."
+  x_gap: "The Common Platform Enumeration name: inventory-asset-system."
+REQ-SP800-128-0139:
+  x_existing: "inventory.schema.json `virtual` and kind `virtual-machine`."
+REQ-SP800-128-0140:
+  x_existing: "inventory.schema.json `version`."
+  x_gap: "License information and the Common Platform Enumeration name: inventory-asset-system."
+REQ-SP800-128-0141:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: physical location"
+REQ-SP800-128-0142:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: logical location; `hostname` exists, an IP address does not"
+REQ-SP800-128-0143:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: MAC address"
+REQ-SP800-128-0144:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: primary and secondary administrators, and the owner"
+  x_note: "The page's bare item 'Owner;' could not be promoted: promote refuses it because 0154 holds 'System Owner;' in its role line. It sits beside this item and goes in the same field set; see the report."
+REQ-SP800-128-0397:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: operational status"
+  x_note: "Promoted."
+REQ-SP800-128-0145:
+  x_new_work_item: inventory-asset-system
+  x_home: "P-10, inventory.schema.json: primary user, if applicable"
+  x_note: "Its last sentence, 'Some additional data elements may also be recorded', is the advisory lead-in of 0146 to 0154."
+REQ-SP800-128-0146:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': component status such as spare or disposed. Optional, beyond the typical list."
+REQ-SP800-128-0147:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': relationships to other components."
+REQ-SP800-128-0148:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': dependencies on other systems."
+REQ-SP800-128-0149:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': other systems the component supports."
+REQ-SP800-128-0150:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': service-level agreements on the component."
+REQ-SP800-128-0151:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': applicable common secure configurations. ART-STIG's applicability already maps them to INV-### items."
+REQ-SP800-128-0152:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': the CI the component belongs to. The duty to associate each is live at 0158."
+REQ-SP800-128-0153:
+  status: not-a-requirement
+  reason: "Advisory element under 'may also be recorded': controls the component supports."
+REQ-SP800-128-0154:
+  status: not-a-requirement
+  reason: "Last advisory element, incident logs, joined to the SDLC, role and output lines of the inventory activity and the next heading."
+REQ-SP800-128-0155:
+  x_existing: "ART-CMP '## Configuration items and component inventory', S-4, with PER-PM accountable."
+  x_note: "Subject and verb: 'the system owner determines how to best decompose the system into one or more configuration items'; 'which require configuration management'. Ends with the tail of footnote 19, cut from 0136."
+REQ-SP800-128-0156:
+  x_existing: "ART-CMP '## Configuration items and component inventory' and '## Baseline configurations', 'each deviation with its justification'; S-4 scope is one system."
+  x_note: "Subject and verb: 'each CI is part of one, and only one, system'; 'each individual system inherits the common configuration baseline as a CI'; 'The CI is managed for use in that system to include any deviations as justified and recorded'."
+REQ-SP800-128-0157:
+  status: not-a-requirement
+  reason: "Set notation for a CI made of components, one of three representations an example then explains. Describes."
+REQ-SP800-128-0158:
+  x_existing: "ART-CMP '## Configuration items and component inventory', 'how they map to the inventory ... by INV-### ID'."
+  x_gap: "'Every item within the system component inventory is associated with one and only one CI': nothing tests it: ci-record."
+  x_note: "Notation and examples joined to that last sentence. 'the rigor of the review ... may be higher' is held by the rigor in '## Purpose and scope'."
+REQ-SP800-128-0159:
+  x_new_work_item: ci-record
+  x_home: "S-4, the CI register under ART-CMP '## Configuration items and component inventory'"
+  x_note: "Subject and verb: 'Each CI is assigned an unambiguous identifier'; 'the organization manages version numbers for the CI'; 'A set of data elements is maintained for each CI to define and describe the CI to enable it to be rebuilt from scratch'. Verb lead-in over the bare items 0160 to 0168."
+REQ-SP800-128-0160:
+  status: not-a-requirement
+  reason: "Bare item under 'The types of information that are associated with a CI may include:', live at 0159: the CI's system."
+REQ-SP800-128-0161:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: placement within the system."
+REQ-SP800-128-0162:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: ownership and management information."
+REQ-SP800-128-0163:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: inventory of components in the CI."
+REQ-SP800-128-0164:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: inventory of documentation in the CI."
+REQ-SP800-128-0165:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: version numbers."
+REQ-SP800-128-0166:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: dependencies on other CIs."
+REQ-SP800-128-0167:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: custom software in the CI."
+REQ-SP800-128-0168:
+  status: not-a-requirement
+  reason: "Bare item of the same list, live at 0159: common secure configurations of the CI's products."
+REQ-SP800-128-0169:
+  x_new_work_item: ci-record
+  x_home: "S-4, the CI register: SecCM tools and test processes held as a CI"
+  x_note: "Live for the sentence the last item joined: 'Tools and testing processes used to validate deviations from approved system baseline configurations are under configuration control'. Runs on page 41."
+REQ-SP800-128-0170:
+  status: not-a-requirement
+  reason: "SDLC, role, input and output lines of the CI activity with the next heading. 'require' occurs in the input line 'any other system components that require configuration management', which lists an input and sets no task."
+  x_note: "Subject and verb: none; 'Expected Input: ... any other system components that require configuration management'."
+REQ-SP800-128-0171:
+  status: not-a-requirement
+  reason: "Run-in heading of the CCB activity. The text is 0172."
+REQ-SP800-128-0172:
+  x_existing: "ART-CMP '## Configuration control board', membership, decision rule, quorum, scope of authority, cadence; personas/PER-CCB.md, decisions and rationale; ART-CHG 'board decision'; control cm-3 g."
+  x_note: "Subject and verb: 'A CCB or equivalent group is identified for the review and approval of configuration changes'; 'The CCB is established through the creation of a charter'; 'The CCB deliberately considers the potential effect of a proposed change'. The charter need not be a document of its own: ART-CMP in the package holds its substance."
+REQ-SP800-128-0173:
+  x_existing: "ART-CMP '## Configuration control board', membership, and ART-CHG '## Change log', 'requested by' and 'board decision', as the archived record; control ac-5 (C +XX, I +XX) for separation of duties, cm-3.4 (+XX) for the security representative."
+  x_note: "Subject and verb: 'best practices for configuration change control require that changes to the system be vetted by at least one authorized individual who is independent of the requestor'; 'The vetting activity is recorded in an artifact that can be archived'; 'an organization considers roles that represent a range of stakeholders'. Nothing tests that requester and approver differ."
+REQ-SP800-128-0390:
+  x_existing: "ART-CMP '## Configuration control board', S-4, with PER-PM accountable; a board shared by several systems is written into each plan's membership."
+  x_note: "Cut from 0173 by the extractor. Subject and verb: 'the vendor is not given a vote on approval of the change'; 'the set of system owners for all of the participating systems are responsible for implementing the CCB'."
+REQ-SP800-128-0174:
+  status: not-a-requirement
+  reason: "Section 3.2 roadmap: what the subsections describe, that 'organizations have flexibility', and what the phase results in. The same result is live at 0175 and 0201. Runs from page 43 onto page 44."
+# --- 3.2 Identifying and implementing configurations, pages 44 to 47 ---
+REQ-SP800-128-0175:
+  x_existing: "Control cm-6 a (I XXX), ART-CMP '## Baseline configurations' at S-4 and I-1 with EXT-STIG, ART-STIG."
+  x_note: "Subject and verb: 'secure configurations are established for the system and its constituent CIs'. Verb lead-in, 'Secure configurations may include:', over the items 0176 to 0191."
+REQ-SP800-128-0176:
+  status: not-a-requirement
+  reason: "Item under 'Secure configurations may include:', live at 0175: setting secure values, itself a lead-in to the examples 0177 to 0186."
+REQ-SP800-128-0177:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: OS and application features. Illustrates 0175."
+REQ-SP800-128-0178:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: services and ports."
+REQ-SP800-128-0179:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: network protocols and interfaces. The entry stops at the line end; its parenthesis closes on the next line."
+REQ-SP800-128-0180:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: methods of remote access."
+REQ-SP800-128-0181:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: access controls on files and user activity."
+REQ-SP800-128-0182:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: identifiers and accounts."
+REQ-SP800-128-0183:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: authentication settings."
+REQ-SP800-128-0184:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: audit settings."
+REQ-SP800-128-0185:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: session and lock settings."
+REQ-SP800-128-0186:
+  status: not-a-requirement
+  reason: "Example of a secure value under 0176: cryptography, here FIPS-validated protocols. An example only; sc-13 and CNSSP 15 set the rule for a run."
+REQ-SP800-128-0187:
+  status: not-a-requirement
+  reason: "Item under 'Secure configurations may include:', live at 0175: applying vendor patches. si-2 is the requirement."
+REQ-SP800-128-0188:
+  status: not-a-requirement
+  reason: "Item under the same 'may include' list, live at 0175: approved, signed software, 'if supported'."
+REQ-SP800-128-0189:
+  status: not-a-requirement
+  reason: "Item under the same 'may include' list, live at 0175: end-point safeguards in software. si-3 and si-4 are the requirements."
+REQ-SP800-128-0190:
+  status: not-a-requirement
+  reason: "Item under the same 'may include' list, live at 0175: network protections."
+REQ-SP800-128-0191:
+  status: not-a-requirement
+  reason: "Item under the same 'may include' list, live at 0175: where a component resides."
+REQ-SP800-128-0192:
+  x_existing: "ART-CMP '## Baseline configurations'; ART-STIG '## Accepted deviations'; I-1 with EXT-STIG, PER-PM and PER-ISSE responsible; control cm-6 a to c (I XXX)."
+  x_gap: "'organizations consider potential interoperability conflicts with interconnected systems', and coordinating baselines with other systems' CCBs: cmp-procedures."
+  x_note: "The last list item joined to the rest of section 3.2.1, cited on page 44 and read through page 45. Subject and verb: 'Deviations from common secure configurations are justified and recorded'; 'the system owner, in coordination with the SSO, has the responsibility of establishing secure configurations'; 'the secure configurations comply with all applicable federal requirements and are approved in accordance with organizational policy'. Non-DISA sources are config-guidance-sources, noted at 0387."
+REQ-SP800-128-0193:
+  status: not-a-requirement
+  reason: "Lead-in to steps i to v, which each hold their own verb and are live. 'is recommended' introduces them; 'may require' and 'may need to be modified' explain why the task is hard."
+  x_note: "Subject and verb: 'the following structured approach is recommended when implementing the secure configuration'; 'organizations have mission and business process needs which may require'; 'may need to be modified'."
+REQ-SP800-128-0376:
+  status: not-a-requirement
+  reason: "Run-in heading of step i. Its text is 0194 and 0392."
+REQ-SP800-128-0194:
+  status: not-a-requirement
+  reason: "First piece of a sentence cut across pages 45 and 46: 'many organizations may find it' / 'necessary to prioritize'. The rest is 0392, which holds what duty there is; this piece is an ideal and a concession."
+REQ-SP800-128-0392:
+  status: not-applicable
+  reason: "Binds organizations that cannot secure all systems at once: 'organizations consider the following criteria' to choose which systems, products or CIs to target first. Persona checked: PER-CISO. A run covers one system and implements its whole baseline at I-1, so no artifact, decision or check holds an ordering across systems; ART-STIG's 'CAT I first' orders findings, not targets."
+  x_note: "Subject and verb: 'many organizations may find it necessary to prioritize'; 'organizations consider the following criteria'. Second piece of the cut with 0194."
+REQ-SP800-128-0195:
+  status: not-a-requirement
+  reason: "Advisory criterion under 0392: impact level 'may have priority'. An option, not a minimum."
+REQ-SP800-128-0196:
+  status: not-a-requirement
+  reason: "Advisory criterion under 0392: risk assessments 'can be used' to target."
+REQ-SP800-128-0197:
+  status: not-a-requirement
+  reason: "Advisory criterion under 0392: scans and CVSS 'can be used' to help prioritize."
+REQ-SP800-128-0198:
+  status: not-a-requirement
+  reason: "Advisory criterion under 0392: degree of penetration, with an example of 95 percent of workstations."
+REQ-SP800-128-0377:
+  status: not-a-requirement
+  reason: "Run-in heading of step ii. Its text is 0199."
+REQ-SP800-128-0199:
+  x_existing: "Control cm-3.2 (I .XX) and cm-4.1 (I .+X); ART-STIG '## Scan results' for what was applied and found at I-1."
+  x_gap: "The test before production at Low, where neither control is selected: cmp-procedures."
+  x_note: "Subject and verb: 'Organizations fully test secure configurations prior to implementation in the production environment'. 'Virtual environments are recommended' is a tip. Joined to the heading of step iii."
+REQ-SP800-128-0200:
+  x_existing: "ART-STIG '## Accepted deviations', 'approved through configuration management, with the approval and justification'; ART-CMP '## Baseline configurations'."
+  x_note: "Subject and verb: 'These problems are examined individually and either resolved or documented as a deviation'; 'When conflicts between applications and secure configurations cannot be resolved, deviations are documented and approved through the configuration change control process'. Runs from page 46 onto page 47; ends with the heading of step iv."
+REQ-SP800-128-0201:
+  x_existing: "ART-CMP '## Baseline configurations', 'the approved baseline per configuration item, the criteria for approving a baseline'; updated at I-2; control cm-2 a (I XXX); cm-2.2 (I .XX) for automation."
+  x_note: "Subject and verb: 'the preliminary baseline configuration is approved in accordance with organizationally defined policy'; 'The baseline configuration of a system includes the sum total of the secure configurations of its constituent CIs'."
+REQ-SP800-128-0378:
+  status: not-a-requirement
+  reason: "Run-in heading of step v. Its text is 0202."
+REQ-SP800-128-0202:
+  status: not-a-requirement
+  reason: "Advisory: 'Organizations are encouraged to implement baseline configurations in a centralized and automated manner', and media libraries 'may be used'. 'encouraged' binds no one, and the role and output lines that follow set nothing new; deployment is I-1."
+  x_note: "Subject and verb: 'Organizations are encouraged to implement baseline configurations'. Runs from page 47 onto page 48."
+# --- 3.3 Controlling configuration change, pages 48 to 53 ---
+REQ-SP800-128-0203:
+  status: not-a-requirement
+  reason: "Section 3.3 introduction and roadmap. 'need to be managed and controlled' is the reason for the section; its duties are stated from 3.3.1 on."
+  x_note: "Subject and verb: 'changes to system configurations need to be managed and controlled'."
+REQ-SP800-128-0204:
+  status: not-a-requirement
+  reason: "Explains what access restrictions are, ending in 'To implement access restrictions for change:'. A lead-in whose steps, 0205 and 0206, hold the duties."
+REQ-SP800-128-0205:
+  x_existing: "Control cm-3 a (I +XX), types of change, and ART-CMP '## Access restrictions for change'."
+REQ-SP800-128-0206:
+  x_existing: "Control cm-5 (I XXX) and cm-5.1 (I .+X); ART-CMP '## Access restrictions for change'; users.yaml privileged roles."
+  x_note: "Holds steps ii and iii with the role lines. Subject and verb: 'Determine which individuals have privileged access'; 'Implement technical mechanisms'."
+REQ-SP800-128-0207:
+  x_existing: "ART-CMP '## Configuration change control'; control cm-3 (I +XX)."
+  x_note: "Subject and verb: 'configuration change control generally consists of the following steps'; 'are formally requested, evaluated for their security impact, tested for effectiveness, and approved before the changes are implemented'."
+REQ-SP800-128-0208:
+  x_existing: "EXT-CHANGE-REQUESTS, input to M-1; ART-CHG '## Change log', 'requested by'."
+REQ-SP800-128-0209:
+  x_existing: "ART-CHG '## Change log', 'change request reference'; ART-CMP '## Records and tools'."
+  x_note: "Subject and verb: 'A change request is formally entered into the configuration change control process when it is recorded in accordance with organizational procedures'."
+REQ-SP800-128-0210:
+  x_existing: "ART-CMP '## Configuration change control', 'pre-approved routine changes'; ART-CHG '## Resulting updates'; control cm-4 (I XXX) for step iv."
+  x_gap: "'note this on the change request': the ART-CHG row has no exempt or pre-approved mark: change-record."
+  x_note: "Holds steps iii and iv. Subject and verb: 'If the change is exempt or pre-approved, note this on the change request'; 'Analyze the proposed change for its security impact on the system'."
+REQ-SP800-128-0211:
+  x_existing: "Control cm-3.2 (I .XX); ART-CMP '## Configuration change control', 'testing'; ART-CHG 'board decision' and 'referred to the AO or not'."
+  x_gap: "The test result of a change has no column in the ART-CHG row: change-record."
+  x_note: "Subject and verb: 'The impacts of the change are presented to the CCB and to the AO'. ART-CMP sets which changes reach the AO; PER-CCB, from 2.4, says the same."
+REQ-SP800-128-0212:
+  x_existing: "ART-CHG 'board decision', PER-CCB; control cm-3 b and d (I +XX); ART-CMP '## Access restrictions for change' for 'authorized staff'."
+  x_note: "Subject and verb: 'This step is usually performed by the CCB'; 'The CCB may require the implementation of additional controls'; 'Implementation of additional controls is coordinated with the AO and System Owner'; 'authorized staff makes the change'."
+REQ-SP800-128-0213:
+  x_new_work_item: change-record
+  x_home: "M-1, ART-CHG '## Change log' row gains: exempt or pre-approved mark, test result, who was notified, verification and closure of the change"
+  x_gap: "'Changes are also evaluated for consistency with organizational enterprise architecture', and the system owner's refining of organizational procedures: cmp-procedures. Updating system documentation is held by ART-CHG '## Resulting updates'."
+  x_note: "Subject and verb: 'Stakeholders ... are notified about the change'; 'a change request not closed until it has been confirmed that the change was deployed without issues'; 'the change request is closed out in accordance with organizational procedures'; 'are aware of their responsibility for following it'. Runs from page 49 onto page 50, steps vii to ix."
+REQ-SP800-128-0391:
+  x_existing: "ART-CMP '## Configuration change control', 'emergency changes and their after-the-fact review', and '## Configuration monitoring', how they are handled; control si-2 (I XXX) for flaw remediation."
+  x_gap: "'It is incumbent upon system owners to identify all sources of change', so that changes outside the process enter it after the fact: unauthorized-change-monitoring."
+  x_note: "Subject and verb: 'unscheduled changes are still managed and controlled'; 'Organizations include instructions for handling unscheduled changes'; 'Unscheduled changes are reviewed/resolved by the CCB as soon as is practical'."
+REQ-SP800-128-0214:
+  x_existing: "ART-CMP '## Security impact analysis', 'who performs the analysis'; ART-CHG '## Security impact analyses', 'the controls affected and the mitigation'; control cm-4 (I XXX)."
+  x_note: "Subject and verb: 'Changes are examined for impact on security, and for mitigating controls'; 'Security impact analyses are conducted by individuals or teams with technical knowledge of the system'."
+REQ-SP800-128-0215:
+  x_existing: "ART-CMP '## Configuration change control', 'from request through security impact analysis, board decision'; control cm-4, 'prior to change implementation'; control cm-3 b, approval 'with explicit consideration for security and privacy impact analyses'."
+  x_note: "Subject and verb: 'The initial security impact analysis is conducted before the change is approved by the CCB'."
+REQ-SP800-128-0216:
+  x_existing: "Control cm-4 (I XXX), which has no phase limit, and sa-10 (I +XX) for the developer; ART-CMP '## Security impact analysis', S-4."
+  x_gap: "Analysis on design documents during development: M-1 runs in PH-OS and PH-PD and no PH-EMD task writes an analysis: change-record."
+  x_note: "Subject and verb: 'security impact analysis is performed on technical design documents'; 'Developers ensure that security is taken into account'. 'may not be known' and 'will be built' are about the change at the time it is proposed."
+REQ-SP800-128-0217:
+  x_existing: "ART-CHG '## Security impact analyses', M-1; control cm-4.2 (I .XX)."
+  x_gap: "'the security impact of unscheduled and unauthorized changes is analyzed': unauthorized-change-monitoring."
+  x_note: "Ends with the lead-in to steps i to v, 'The process for a security impact analysis consists of the following steps:'."
+REQ-SP800-128-0218:
+  x_existing: "ART-CHG '## Security impact analyses', 'what changed'; ART-CMP '## Security impact analysis', 'its steps'."
+  x_note: "Subject and verb: 'develop a high-level architecture overview which shows how the change will be implemented'; 'request follow-up documentation/information and review it'."
+REQ-SP800-128-0219:
+  x_existing: "ART-CHG '## Security impact analyses', 'the vulnerabilities ... it introduced'; control cm-4; ra-5 (XXX) with EXT-MONITORING."
+  x_note: "Subject and verb: 'identifying vulnerabilities may include ... a search of the National Vulnerability Database'; 'a more in-depth analysis of the security impact is conducted'."
+REQ-SP800-128-0220:
+  x_existing: "ART-CHG '## Security impact analyses', 'the vulnerabilities and risk it introduced'; ART-RA updated at M-3 and M-4 when a change moves the risk."
+  x_note: "Subject and verb: 'a risk assessment is needed to identify the likelihood of a threat exercising the vulnerability and the impact'."
+REQ-SP800-128-0221:
+  x_existing: "ART-CHG '## Security impact analyses', 'the controls affected'."
+  x_note: "Subject and verb: 'organizations analyze whether and how a change will impact existing security controls'."
+REQ-SP800-128-0222:
+  x_existing: "ART-CHG '## Security impact analyses', 'the mitigation'; 'board decision'."
+  x_note: "Subject and verb: 'organizations use the security impact analysis to revise the change or to plan safeguards and countermeasures'."
+REQ-SP800-128-0223:
+  x_existing: "ART-CHG '## Resulting updates', 'the artifacts updated because of these changes (SSP, POA&M, SAR, inventory, CMP) and whether any change needs a reauthorization decision'; M-4 outputs ART-SSP, ART-SAR, ART-POAM, ART-RA; M-1 'Done when' on re-entering the RMF."
+  x_note: "Subject and verb: 'the organization ensures that updates have been made to supporting documents'; 'a system reauthorization may be required'."
+REQ-SP800-128-0224:
+  x_existing: "Control cm-2.3 (I .XX) to support rollback; ART-CMP '## Baseline configurations' with M-1 '## Change updates'."
+  x_note: "Subject and verb: 'the new baseline becomes the current version, and the previous baseline ... is retained for historical purposes'. The output line, 'decision on whether or not a system reauthorization is required', repeats 0223."
+REQ-SP800-128-0226:
+  x_existing: "ART-CMP '## Access restrictions for change', 'how SecCM records are protected'."
+  x_note: "Footnote 23. Subject and verb: 'Archived baseline configurations are protected in accordance with the system impact level'."
+# --- 3.4 SecCM monitoring, pages 53 to 57 ---
+REQ-SP800-128-0225:
+  x_existing: "ART-CMP '## Configuration monitoring', ART-CONMON, M-2 with EXT-MONITORING; controls cm-6 (I XXX) and cm-8.3 (I +XX) for unauthorized components."
+  x_gap: "What a run does with an unapproved component it finds: unauthorized-change-monitoring."
+  x_note: "Runs from page 53 onto page 54. Subject and verb: 'Organizations implement the configuration monitoring strategy'; 'SecCM monitoring activities confirm that the existing configuration is identical to the current approved baseline configuration'."
+REQ-SP800-128-0227:
+  x_existing: "ART-CMP '## Configuration monitoring'; ART-CONMON '## Reporting'."
+  x_gap: "'Care is exercised in collecting and analyzing the results generated by automated tools to account for any false positives': seccm-tooling."
+  x_note: "Subject and verb: 'SecCM monitoring is accomplished through assessment and reporting activities'. Ends with the advisory lead-in 'SecCM monitoring may be supported by numerous means'."
+REQ-SP800-128-0228:
+  status: not-a-requirement
+  reason: "Advisory means under 'SecCM monitoring may be supported by numerous means', with a worked example: scans for components not in the inventory. An option; cm-8.3 carries the duty."
+REQ-SP800-128-0229:
+  status: not-a-requirement
+  reason: "Advisory means under the same 'may be supported' list, with two worked examples: scans for drift from the baseline. cm-6 and EXT-MONITORING carry it."
+REQ-SP800-128-0230:
+  status: not-a-requirement
+  reason: "Advisory means under the same 'may be supported' list: automated change monitoring tools. Runs from page 54 onto page 55."
+REQ-SP800-128-0231:
+  status: not-a-requirement
+  reason: "Advisory means under the same 'may be supported' list: querying audit records for change events."
+REQ-SP800-128-0232:
+  status: not-a-requirement
+  reason: "Advisory means under the same 'may be supported' list: integrity checks. si-7 carries it at Moderate and High."
+REQ-SP800-128-0233:
+  status: not-a-requirement
+  reason: "Advisory means under the same 'may be supported' list, reviewing change records, joined to 'When possible, organizations seek to normalize data'. Both are options."
+REQ-SP800-128-0234:
+  status: not-a-requirement
+  reason: "Advisory: 'the organization may want to take remedial action', and automated tools 'are preferable'. A permission, followed by examples."
+REQ-SP800-128-0235:
+  status: not-a-requirement
+  reason: "'Examples of possible actions' under 0234: nondestructive remediation."
+REQ-SP800-128-0236:
+  status: not-a-requirement
+  reason: "'Examples of possible actions' under 0234: an alert by email."
+REQ-SP800-128-0237:
+  status: not-a-requirement
+  reason: "'Examples of possible actions' under 0234: rollback and restore."
+REQ-SP800-128-0238:
+  status: not-a-requirement
+  reason: "'Examples of possible actions' under 0234: updating the inventory."
+REQ-SP800-128-0239:
+  x_new_work_item: unauthorized-change-monitoring
+  x_home: "M-1, extended: ART-CHG records a change found by monitoring, reconciled against approved changes (who made it, in a maintenance window or not, matching which request or ticket) and its cause"
+  x_note: "Live for the sentence the example joined: 'Changes detected as a result of monitoring activities are reconciled with approved changes'. Verb lead-in, 'reconciliation attempts to answer the following:', over the bare questions 0240 to 0243."
+REQ-SP800-128-0240:
+  status: not-a-requirement
+  reason: "Bare question under the reconciliation lead-in, live at 0239: who made the change."
+REQ-SP800-128-0241:
+  status: not-a-requirement
+  reason: "Bare question under the same lead-in, live at 0239: whether it fell in a maintenance window."
+REQ-SP800-128-0242:
+  status: not-a-requirement
+  reason: "Bare question under the same lead-in, live at 0239: whether it matches an approved change."
+REQ-SP800-128-0243:
+  x_new_work_item: unauthorized-change-monitoring
+  x_home: "M-1, extended: the cause of each unauthorized change"
+  x_note: "Live for the sentence the last question joined: 'the results of monitoring activities are analyzed to determine the reason(s) that an unauthorized change occurred'."
+REQ-SP800-128-0244:
+  status: not-a-requirement
+  reason: "A possible cause under 'They may stem from:', not a task: accidental changes."
+REQ-SP800-128-0379:
+  status: not-a-requirement
+  reason: "A possible cause under the same list: malicious intent."
+REQ-SP800-128-0245:
+  status: not-a-requirement
+  reason: "A possible cause under the same list: people who think the process does not apply to them."
+REQ-SP800-128-0246:
+  status: not-a-requirement
+  reason: "A possible cause under the same list: people unaware of the process."
+REQ-SP800-128-0247:
+  status: not-a-requirement
+  reason: "A possible cause under the same list: errors in implementing a change."
+REQ-SP800-128-0248:
+  x_existing: "ART-CONMON '## Reporting' and ART-CMP '## Configuration monitoring', 'to whom they are reported'; ART-SECRPT at M-5; for the review of strategy and procedures, M-2 updates ART-CONMON and ART-CMP keeps '## Plan maintenance and exceptions'."
+  x_note: "Last cause joined to the rest of 3.4.1, cited on page 56. Subject and verb: 'Results of SecCM monitoring are reported to management as defined by organizational policy and the SecCM strategy'; 'The SecCM monitoring strategy and procedures are reviewed and revised'. Metrics are 'may'. The SAISO role line, 'overseeing monitoring activities', is the organization's side."
+REQ-SP800-128-0249:
+  x_new_work_item: seccm-tooling
+  x_home: "S-4, ART-CMP '## Configuration monitoring' and '## Records and tools': components the tools cannot reach and the manual process for them"
+  x_note: "Subject and verb: 'organizations conduct a security impact analysis to ensure that the tools do not have a negative effect', held by cm-4 since a tool is a change; 'Organizations document the systems and/or components that are not monitored via automated tools and a manual process is developed'. 'may not support' and 'will interface' are remarks."
+REQ-SP800-128-0250:
+  x_new_work_item: seccm-tooling
+  x_home: "S-4, ART-CMP '## Records and tools', and I-1, ART-STIG '## Scan results': SCAP-enabled tools and SCAP-expressed checklists as assessment evidence"
+  x_note: "Mostly a description of SCAP, kept live for 'federal agencies use SCAP-enabled tools along with SCAP-expressed checklists' and 'SCAP-expressed checklists are customized as appropriate'. What 'NIST encourages' of vendors binds no one in a run."
+REQ-SP800-128-0251:
+  status: not-a-requirement
+  reason: "Footnote 26: 'expected to be added or updated' forecasts new SCAP specifications and points at a web page. Binds no one."
+  x_note: "Subject and verb: 'Additional SCAP specifications are expected to be added or updated over time'."
+REQ-SP800-128-0252:
+  status: not-a-requirement
+  reason: "Row of the SCAP 1.3 components table: XCCDF and what it is used for. The table describes SCAP; every row is decided the same way."
+REQ-SP800-128-0253:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: OVAL, a description."
+REQ-SP800-128-0254:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: OCIL, a description, with the next group's label merged in."
+REQ-SP800-128-0255:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: ARF, a description."
+REQ-SP800-128-0256:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: Asset Identification, a description, with the next group's label merged in."
+REQ-SP800-128-0257:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: CPE, a description."
+REQ-SP800-128-0258:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: SWID tags, a description."
+REQ-SP800-128-0259:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: CCE, a description."
+REQ-SP800-128-0260:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: CVE, a description, with the next group's label merged in."
+REQ-SP800-128-0261:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: CVSS, a description."
+REQ-SP800-128-0262:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: CCSS, a description, with the next group's label merged in."
+REQ-SP800-128-0263:
+  status: not-a-requirement
+  reason: "Row of the SCAP components table: TMSAD, a description."
+REQ-SP800-128-0264:
+  status: not-a-requirement
+  reason: "Footnote 27: where the table came from, and 'expected to be added' forecasts more specifications. Binds no one."
+  x_note: "Subject and verb: 'Additional SCAP specifications are expected to be added'."
+# --- Appendix D, sample SecCM plan outline, pages 79 and 80 ---
+REQ-SP800-128-0265:
+  status: not-a-requirement
+  reason: "Introduction to the sample outline: 'Organizations are encouraged to adapt the outline'. 'encouraged' is a permission. The outline's own instruction text is live at 0266 to 0268."
+  x_note: "Subject and verb: 'Organizations are encouraged to adapt the outline'."
+REQ-SP800-128-0266:
+  x_existing: "ART-CMP '## Purpose and scope', its rmf:facts block, and ART-SD at C-1 for the system description the outline allows by reference; EXT-ORG-POLICY for the applicable policies."
+  x_note: "Instruction text naming the content of a plan the framework produces, so live under the brief's rule for appendix outlines. ART-CMP has no list of applicable policies of its own; '## Purpose and scope' states its relation to organizational SecCM policy."
+REQ-SP800-128-0267:
+  x_existing: "ART-CMP '## Roles and responsibilities', '## Configuration control board' and '## Records and tools'."
+  x_gap: "'2.2.5 Schedules and Resource Requirements' and '2.4 ... RETENTION, ARCHIVING, STORAGE AND DISPOSAL': cmp-procedures."
+REQ-SP800-128-0268:
+  x_existing: "ART-CMP '## Baseline configurations', '## Configuration change control', '## Security impact analysis' and '## Configuration monitoring'; ART-CONMON '## Reporting' for report recipients."
+  x_gap: "'3.1.2 Identification Criteria' and '3.1.3 Configuration Item Labeling': ci-record."
+  x_note: "Cited on page 79, and the outline runs through page 80, which has no entry of its own. 'will be included' is inside the instruction text for 3.1.2."
+# --- Appendix E, sample change request, page 81 ---
+REQ-SP800-128-0269:
+  status: not-a-requirement
+  reason: "Introduction to a sample form: 'Organizations are encouraged to adapt the change request'. 'encouraged' is a permission. The form is sample text; ART-CHG holds the record."
+  x_note: "Subject and verb: 'Organizations are encouraged to adapt the change request to suit their needs'."
+REQ-SP800-128-0270:
+  status: not-a-requirement
+  reason: "Field 6 of the sample change request form. A blank on a form called a sample."
+REQ-SP800-128-0271:
+  status: not-a-requirement
+  reason: "Field 8 of the same sample form. A blank."
+REQ-SP800-128-0272:
+  status: not-a-requirement
+  reason: "Field 15 of the same sample form. A blank."
+REQ-SP800-128-0273:
+  status: not-a-requirement
+  reason: "Field 16 and the approval and signature lines of the same sample form. 'Required to' is part of the label 'Funding Required to Implement Change', a blank that puts a task on no one."
+  x_note: "Subject and verb: none; the field label '16. Funding Required to Implement Change:'."
+# --- Appendix F, best practices, pages 82 to 84 ---
+REQ-SP800-128-0393:
+  status: not-a-requirement
+  reason: "Lead-in to Appendix F's practices, which each hold their own verb and are live. Says only that there is 'no one-size-fits-all approach'."
+REQ-SP800-128-0274:
+  x_existing: "Control cm-6 a (I XXX), common secure configurations; ART-CMP '## Baseline configurations'; EXT-STIG at I-1."
+  x_note: "Subject and verb: 'Organizations consider available common secure configurations as the basis for establishing secure configuration settings'."
+REQ-SP800-128-0275:
+  x_existing: "ART-CMP '## Baseline configurations', 'each deviation with its justification', and ART-STIG '## Accepted deviations'; controls cm-1 and cm-6 c (I XXX)."
+  x_note: "Subject and verb: 'Such exceptions are documented and approved as a part of the baseline configuration'. 'Where possible and appropriate' softens the top-down sentence."
+REQ-SP800-128-0276:
+  x_existing: "Control cm-6 (I XXX) and ART-STIG '## Applicability', benchmarks per INV-### item."
+  x_note: "Subject and verb: 'Secure configuration settings are tailored to the system component's function'. Reference list runs onto page 83."
+REQ-SP800-128-0277:
+  x_existing: "Control cm-7 (C XXX, I XXX), least functionality, and cm-7.1 (+XX) for periodic review."
+  x_note: "Subject and verb: 'Devices are configured to allow only the necessary ports, protocols, and services in accordance with functional needs'."
+REQ-SP800-128-0278:
+  x_existing: "Control ac-17 (C XXX, I XXX), remote access."
+  x_note: "Subject and verb: 'Use of remote connections is limited to only those absolutely necessary'."
+REQ-SP800-128-0279:
+  x_existing: "Control ia-5 (C XXX, I XXX), authenticator management."
+  x_note: "Subject and verb: 'Organizations stipulate password policies'."
+REQ-SP800-128-0280:
+  x_existing: "Controls si-3 (I XXX) and si-4 (XXX), written up at S-4; ART-CMP '## Baseline configurations' for what the baseline holds."
+  x_note: "Live for its heading, 'Implement Endpoint Protection Platforms (EPPs)'; the rest is why. Ends with the lead-in to a to c."
+REQ-SP800-128-0380:
+  status: not-a-requirement
+  reason: "Label of item a. Its text is 0281."
+REQ-SP800-128-0281:
+  x_existing: "Control si-3 (I XXX), malicious code protection; ART-CMP '## Baseline configurations'."
+  x_note: "Subject and verb: 'Anti-malware applications are part of the common secure configurations for system components'."
+REQ-SP800-128-0282:
+  status: not-a-requirement
+  reason: "Item b of 'These EPPs include:': describes what personal firewalls provide. A product description; sc-7.12 (+++) carries host-based protection."
+REQ-SP800-128-0283:
+  status: not-a-requirement
+  reason: "Label of item c; its description was rejected. Host monitoring is si-4."

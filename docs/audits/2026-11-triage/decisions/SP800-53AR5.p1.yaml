@@ -1,0 +1,1052 @@
+# SP800-53AR5 part 1 triage: pages 12 to 47 and 718 to 728, read whole against the source.
+# REQ-SP800-53AR5-0120 is `removed: true` (0329 replaced it), so it has no key here.
+# Role map from personas.txt: SAOP/CPO = PER-PRIV; senior information security officer = PER-CISO;
+# system owner = PER-PM; common control provider = PER-CCP; control assessor = PER-SCA;
+# system security officer = PER-ISSM/PER-ISSO; information owner = PER-IO.
+# Where a live entry says "security and privacy" and x_existing is set, the home holds the security
+# half; the privacy half rests on WI-02 and WI-03 and the x_note says so where the entry names a
+# privacy plan or report.
+
+# --- Page 12: Chapter 1, need and purpose ---
+REQ-SP800-53AR5-0001:
+  status: not-a-requirement
+  reason: "Background: 'Today's systems are complex assemblages' and the definitions of security and privacy controls. It explains why assessment matters and tells no one to act."
+REQ-SP800-53AR5-0002:
+  status: not-a-requirement
+  reason: "Background to the chapter. 'Understanding the overall effectiveness ... is essential in determining the risk' says why effectiveness matters; 'is essential' qualifies an understanding, so it binds no one. The duty to assess sits in 0039."
+  x_note: "Subject 'Understanding the overall effectiveness of implemented security and privacy controls', verb 'is essential'."
+REQ-SP800-53AR5-0003:
+  status: not-a-requirement
+  reason: "Purpose clause: 'The purpose of this publication is to provide guidelines'. It describes the document and ends in the lead-in to goals 0004 to 0007."
+REQ-SP800-53AR5-0004:
+  status: not-a-requirement
+  reason: "First of the four goals under 'The guidelines have been developed to help achieve': 'Enabling more consistent' assessments. A hoped-for benefit of the document, no actor."
+REQ-SP800-53AR5-0005:
+  status: not-a-requirement
+  reason: "Second goal under the same lead-in: 'Promoting a better understanding of the risks'. A benefit, no actor."
+REQ-SP800-53AR5-0006:
+  status: not-a-requirement
+  reason: "Third goal under the same lead-in: 'Facilitating more cost-effective assessments'. A benefit, no actor."
+
+# --- Page 13 ---
+REQ-SP800-53AR5-0007:
+  status: not-a-requirement
+  reason: "Fourth goal under the same lead-in: 'Creating more complete, reliable, and trustworthy information for organizational officials'. A benefit, no actor."
+REQ-SP800-53AR5-0008:
+  status: not-a-requirement
+  reason: "Applicability clause: 'The security and privacy guidelines ... are applicable to federal systems other than ... national security systems' and 'may be used for such systems with the approval of' policy officials. It fixes the document's reach and asks nothing of a run: DoDI 8510.01 p. 7 and its reference list name SP 800-53A for DoD systems, and EXT-ASSESSMENT-PROCEDURES consumes it."
+  x_note: "The approval the sentence asks for is given by DoD policy above any run. Opened references/text/DODI8510.01.md page 7: 'NIST SP 800-53A assessment procedures'."
+REQ-SP800-53AR5-0009:
+  x_new_work_item: "SAP-TAILORING: the SAP takes its methods from the catalog (src/rmf_tool/oscal/build_sap.py) and records no tailoring. Add per-control procedure records to sap.yaml: methods and objects chosen and why, risk results used, platform- and organization-specific or additional procedures, consolidation; make ART-RA an A-2 input."
+  x_home: "Task A-2: framework/tasks/A.yaml inputs and exit criteria, playbook step 4, and a `procedures` block in sap.schema.json."
+  x_note: "'Organizations use this publication' with the plans is held (A-2 inputs ART-SSP, EXT-ASSESSMENT-PROCEDURES). What is not held is 'organizations take into consideration existing information about the controls', since A-2 reads no risk assessment and tailors nothing."
+REQ-SP800-53AR5-0010:
+  work_item: WI-14
+  x_note: "Read with the rejected lead-in in `context`: 'the rigor, intensity, and scope of the assessment depend on the following factors'. Rigor and scope are what depth and coverage define (0061, 0062), so the factor sits inside WI-14: first factor, the security categorization."
+REQ-SP800-53AR5-0011:
+  work_item: WI-14
+  x_note: "Second factor under the same lead-in: the privacy risk assessment. Same rule as 0336, footnote 24."
+REQ-SP800-53AR5-0012:
+  x_existing: "templates/artifacts/ART-SD.md `## Interconnections and leveraged authorizations` ('interconnected systems and agreements'); CA-3 reaches the SSP through the baseline."
+  x_note: "Footnote 4. 'Specific information security requirements ... are expressed in Memoranda of Understanding (MOU) and Interconnection Security Agreements (ISAs) established by participating organizations.'"
+REQ-SP800-53AR5-0013:
+  x_existing: "framework/tasks/C.yaml task C-2 citations (CNSSI1253 3.1, DODI8510.01 p. 29) and facts.yaml categorization, approved at C-3."
+  x_note: "Footnote 6, cut by the extractor at 'SP 800-'; the rest is the rejected paragraph 'Vol 2], and the Controlled Unclassified Information (CUI) Registry'. This piece holds the duty. Cites what was read on p. 13."
+
+# --- Page 14 ---
+REQ-SP800-53AR5-0014:
+  work_item: WI-14
+  x_note: "Third factor under the p. 13 lead-in, which `context` here omits: the controls identified in the approved plans."
+REQ-SP800-53AR5-0015:
+  work_item: WI-14
+  x_note: "Fourth factor under the p. 13 lead-in: the assurance requirements the organization intends to meet."
+REQ-SP800-53AR5-0016:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 inputs: add ART-RA, so 'applying the results of risk assessments' has a source."
+  x_note: "The duty is 'Organizations determine the most cost-effective implementation of the assessment process by applying the results of risk assessments'. The rest is description and the lead-in to 0017 to 0023."
+REQ-SP800-53AR5-0017:
+  status: not-a-requirement
+  reason: "First use under 'information produced during control assessments can be used by an organization to': 'Identify potential problems'. A permitted use of the information, no duty on anyone."
+REQ-SP800-53AR5-0018:
+  status: not-a-requirement
+  reason: "Second use under the same 'can be used' lead-in: 'Identify security- and privacy-related weaknesses'. The assessor's duty to report them is 0216; this bullet only lists a use."
+REQ-SP800-53AR5-0019:
+  status: not-a-requirement
+  reason: "Third use under the same lead-in: 'Prioritize risk response decisions'. A use of the information, no actor."
+REQ-SP800-53AR5-0020:
+  status: not-a-requirement
+  reason: "Fourth use under the same lead-in: 'Confirm that identified ... weaknesses ... have been addressed'. A use of the information, no actor."
+REQ-SP800-53AR5-0021:
+  status: not-a-requirement
+  reason: "Fifth use under the same lead-in: 'Support monitoring activities'. A use of the information, no actor."
+REQ-SP800-53AR5-0022:
+  status: not-a-requirement
+  reason: "Sixth use under the same lead-in: 'Facilitate all types of system authorization decisions'. A use of the information, no actor; the authorization itself is R-4."
+REQ-SP800-53AR5-0023:
+  status: not-a-requirement
+  reason: "Last use under the same lead-in: 'Inform budgetary decisions and the capital investment process'. A use of the information, no actor."
+REQ-SP800-53AR5-0024:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 step 4: the per-control procedure record states the level of effort chosen and why."
+  x_note: "Runs to p. 15; cites what was read on both pages. 'Organizations are not expected to employ all of the assessment methods' removes a duty; the live part is 'Determination of the level of effort and required assurance is made based on what is necessary to accomplish the assessment objectives' and 'Organizations balance the resources'."
+REQ-SP800-53AR5-0025:
+  x_existing: "Rule SSP-COV-001 with framework/tasks/S.yaml S-4: every baseline control gets an SSP statement after tailoring (S-2)."
+  x_note: "Footnote 7. Privacy plan half rests on WI-02. Program Management controls in program plans sit above a system run."
+REQ-SP800-53AR5-0026:
+  status: not-a-requirement
+  reason: "Definition, footnote 8: 'the term risk is used to mean risk to organizational operations'."
+
+# --- Page 15 ---
+REQ-SP800-53AR5-0027:
+  status: not-a-requirement
+  reason: "Audience list under 'This publication is intended to serve': 'Individuals with system development responsibilities'. 'Responsibilities' only names a group of readers, so it binds no one."
+  x_note: "Subject 'This publication', verb 'is intended to serve'; 'responsibilities' describes the reader."
+REQ-SP800-53AR5-0028:
+  status: not-a-requirement
+  reason: "Audience list: 'Individuals with information security and privacy assessment and monitoring responsibilities'. 'Responsibilities' labels readers such as assessors, and assigns them nothing."
+  x_note: "Subject 'This publication', verb 'is intended to serve'."
+REQ-SP800-53AR5-0029:
+  status: not-a-requirement
+  reason: "Audience list: 'Individuals with system, security, privacy, risk management, and oversight responsibilities'. 'Responsibilities' labels readers such as authorizing officials, and assigns them nothing."
+  x_note: "Subject 'This publication', verb 'is intended to serve'."
+REQ-SP800-53AR5-0030:
+  status: not-a-requirement
+  reason: "Audience list: 'Individuals with information security and privacy implementation and operational responsibilities'. 'Responsibilities' labels readers such as system owners, and assigns them nothing."
+  x_note: "Subject 'This publication', verb 'is intended to serve'."
+REQ-SP800-53AR5-0031:
+  x_existing: "playbooks/_shared/assessment-batching.md step 4 ('Collect evidence, reuse first') and framework/tasks/A.yaml A-3 purpose and exit criteria."
+  x_note: "Runs to p. 16. 'Organizations are encouraged to take advantage of' prior results and 'evidence produced during the product testing ... is used to the extent that it is applicable'. The checks on such evidence are 0038 and 0196."
+
+# --- Page 15 and 16: 1.3 footnotes, 1.4 ---
+REQ-SP800-53AR5-0032:
+  status: not-a-requirement
+  reason: "Footnote 11 on role names: 'the role is known as the Senior Agency Information Security Officer'. Terminology; personas.txt carries the role as PER-CISO."
+REQ-SP800-53AR5-0033:
+  status: not-a-requirement
+  reason: "Document map: 'Chapter Two describes the fundamental concepts'."
+REQ-SP800-53AR5-0034:
+  status: not-a-requirement
+  reason: "Document map: 'Chapter Three describes the process of assessing'."
+REQ-SP800-53AR5-0035:
+  status: not-a-requirement
+  reason: "Document map: 'Chapter Four provides a catalog of security and privacy assessment procedures'. The procedures are the pinned ID set."
+REQ-SP800-53AR5-0036:
+  status: not-a-requirement
+  reason: "Document map: 'Supporting appendices provide detailed assessment-related information'."
+REQ-SP800-53AR5-0037:
+  x_existing: "playbooks/_shared/assessment-batching.md step 4 ('results the run already holds and that are still current')."
+  x_note: "Tail of footnote 12, cut from the rejected paragraph 'Assessment results can be obtained from many activities' on p. 15, which is an example. This piece holds the permission: 'Organizations can take advantage of previous assessment results whenever possible'."
+REQ-SP800-53AR5-0038:
+  x_new_work_item: "ASSESSMENT-REUSE: ART-SAP has a reuse heading and A-4 a reuse line, but no record of what each reused result is. Add a `reused_results` block to sap.yaml: source, date and type of the original assessment, who approved the reuse, and the credibility, currency, independence and applicability checks."
+  x_home: "Task A-2 step 4, sap.schema.json `reused_results`, ART-SAP `## Reuse of test results`; A-4 step 6 repeats it in ART-SAR."
+  x_note: "Footnote 13: 'Organizations review the available information from component information technology products' against four tests. Applies when a component's product evidence is reused."
+
+# --- Page 17 and 18: 2.1, 2.2 ---
+REQ-SP800-53AR5-0039:
+  x_existing: "Rule SAR-COV-001 (determination for every scoped control), playbooks/M/M-2.md steps 3 and 4 with conmon.yaml frequencies, framework/tasks/S.yaml S-6 purpose (AO approves the monitoring strategy), templates/artifacts/ART-DISP.md `## Information disposition` and `## Media sanitization and component disposal`."
+  x_note: "Runs to p. 18. Each sentence checked: initial assessment A-3; ongoing assessment M-2; 'The frequency ... is determined by the organization, system owner, and/or common control provider and is approved by the authorizing official' is S-5 with S-6; end-of-life purge and retention is M-7. The privacy continuous monitoring strategy rests on WI-15."
+REQ-SP800-53AR5-0040:
+  status: not-applicable
+  reason: "Binds the organization: 'Organizations are encouraged to develop a broad-based, organization-wide strategy for conducting security and privacy assessments'. Checked PER-CISO and task P-7: P-7 is the monitoring strategy, and no task or artifact holds an organization-wide assessment strategy, nor does a run consume one."
+  x_note: "Subject 'Organizations', verb 'are encouraged to develop'."
+REQ-SP800-53AR5-0041:
+  status: not-a-requirement
+  reason: "First benefit in the box 'has many important benefits, including': 'Providing the capability to review assessment results for all systems'. A benefit of sharing results, no actor."
+REQ-SP800-53AR5-0042:
+  status: not-a-requirement
+  reason: "Second benefit in the same box: 'Providing a more global view of systemic weaknesses'. A benefit, no actor."
+REQ-SP800-53AR5-0043:
+  status: not-a-requirement
+  reason: "Third benefit in the same box: 'Increasing the organization's knowledge base'. A benefit, no actor."
+REQ-SP800-53AR5-0044:
+  status: not-applicable
+  reason: "An organization-level option: 'Organizations can also promote a more focused and cost-effective assessment process by developing specific assessment procedures' and organization-wide tools. Checked PER-CISO: no task produces organization-wide procedures or tools; system-level tailoring is 0180."
+  x_note: "Runs to p. 19; cites what was read on both pages."
+REQ-SP800-53AR5-0334:
+  work_item: WI-15
+  x_note: "Promoted, footnote 15. 'Senior Agency Officials for Privacy ... provide guidance on the ongoing monitoring of privacy controls' is PER-PRIV. WI-15 names privacy continuous monitoring, absent from conmon."
+
+# --- Page 19 ---
+REQ-SP800-53AR5-0045:
+  x_existing: "framework/tasks/A.yaml A-2 raci (C: PER-PM, PER-CCP, PER-IO, PER-ISSM) and playbooks/A/A-2.md `## Interviews`."
+  x_note: "'It is imperative that system owners and common control providers identify and coordinate with other parties' is the duty. The roles in the first sentence are the RACI of A-2 and A-3. Inspectors General have no persona and A-2 does not need one."
+REQ-SP800-53AR5-0335:
+  x_existing: "sap.yaml `rules_of_engagement` (required field), playbooks/A/A-2.md step 4 ('no testing on live networks without an IATT'), framework/tasks/A.yaml A-3 entry criteria (AD-IATT for live networks or data)."
+  x_note: "Promoted, cautionary note. 'Organizations carefully consider the potential impacts' and 'take the necessary precautions'."
+REQ-SP800-53AR5-0046:
+  status: not-applicable
+  reason: "An option for the organization: 'Organizations may also provide security and privacy control assessment plans ... to external service providers'. Checked PER-CCP and task A-2: no step hands plans to a service provider; assessing external systems is 0201."
+REQ-SP800-53AR5-0047:
+  work_item: WI-03
+  x_note: "Footnote 17, repeated as footnote 32 in 0161. 'an independent evaluation of privacy program and practices is not required' and 'an organization may choose to employ independent privacy assessments at the organization's discretion' set the independence rule of the privacy assessment WI-03 adds; sap.yaml `independent` has no privacy reading today."
+
+# --- Page 20 and 21: 2.3 ---
+REQ-SP800-53AR5-0048:
+  x_existing: "playbooks/A/A-3.md steps 2 and 4.1 (evidence-first, 'Ask for evidence, not descriptions') and personas/PER-SCA.md `## Red lines`."
+  x_note: "'During the assessment process, assessors obtain the evidence needed'. The rest lists where evidence can come from. PIAs and SORNs as evidence wait on WI-03."
+REQ-SP800-53AR5-0049:
+  x_existing: "playbooks/_shared/assessment-batching.md step 4: the assessor brings together current results, product material and interviews."
+  x_note: "'The assessors or assessment teams bring together available information ... and conduct additional system-level or common control assessments'. The first sentence and the last are description. 'In accordance with' points at the assurance requirements in the plans, a term WI-14 takes up."
+REQ-SP800-53AR5-0050:
+  status: not-a-requirement
+  reason: "Description of assurance: 'Organizations obtain security and privacy assurance by the actions taken by system developers'. It says where assurance comes from and gives no one an action. Runs to p. 21."
+REQ-SP800-53AR5-0051:
+  status: not-a-requirement
+  reason: "Description: 'System developers can increase the strength of security and privacy functionality' and artifacts 'can provide important evidence'. Says what helps, with no duty."
+REQ-SP800-53AR5-0052:
+  status: not-a-requirement
+  reason: "Description of evidence: 'organizations can produce evidence from the operational environment' and 'Operational evidence includes records of remediation actions'. M-2 step 4 uses such evidence; this paragraph says only what it is."
+REQ-SP800-53AR5-0053:
+  status: not-a-requirement
+  reason: "Definition, footnote 19: 'The security or privacy strength of a system component ... is determined by the degree to which' it is correct and resistant."
+
+# --- Page 22: 2.4 ---
+REQ-SP800-53AR5-0054:
+  status: not-a-requirement
+  reason: "Definition: 'An assessment procedure consists of a set of assessment objectives'. Describes the structure of Chapter 4, which is the pinned ID set."
+REQ-SP800-53AR5-0055:
+  status: not-a-requirement
+  reason: "Definition: 'Assessment objects identify the specific items being assessed' and the four object types."
+REQ-SP800-53AR5-0056:
+  status: not-a-requirement
+  reason: "Definition: 'The examine method is the process of reviewing, inspecting, observing'. sar-results `methods` holds the term."
+REQ-SP800-53AR5-0057:
+  status: not-a-requirement
+  reason: "Definition: 'The interview method is the process of holding discussions'."
+REQ-SP800-53AR5-0058:
+  status: not-a-requirement
+  reason: "Definition: 'The test method is the process of exercising one or more assessment objects'."
+
+# --- Page 23 ---
+REQ-SP800-53AR5-0059:
+  status: not-a-requirement
+  reason: "Description: 'In all three assessment methods, the results are used to make specific determinations'. Says what results are for; the duty to reach a determination is 0333."
+REQ-SP800-53AR5-0060:
+  status: not-a-requirement
+  reason: "Description: 'Assessment methods have a set of associated attributes – depth and coverage'. Introduces the terms 0061 and 0062 define."
+REQ-SP800-53AR5-0061:
+  status: not-a-requirement
+  reason: "Definition: 'The depth attribute addresses the rigor and level of detail' with its three values."
+REQ-SP800-53AR5-0062:
+  status: not-a-requirement
+  reason: "Definition: 'The coverage attribute addresses the scope or breadth' with its three values."
+REQ-SP800-53AR5-0063:
+  work_item: WI-14
+  x_note: "Bound by conformance/bindings.yaml. 'The appropriate depth and coverage attribute values ... are based on the assurance requirements specified by the organization'."
+REQ-SP800-53AR5-0336:
+  work_item: WI-14
+  x_note: "Promoted, footnote 24. 'The level of effort ... including the depth and coverage, is primarily determined by the privacy risk assessment or security categorization'. The value a check can compare per control."
+REQ-SP800-53AR5-0064:
+  status: not-a-requirement
+  reason: "Numbering convention: 'The assessment objectives are numbered sequentially, first in accordance with the numbering scheme in [SP 800-53]'. 'In accordance with' here describes how NIST numbered Chapter 4, so it binds no one."
+  x_note: "Subject 'The assessment objectives', verb 'are numbered'."
+
+# --- Page 24: Figure 1, a worked example for AC-17 ---
+REQ-SP800-53AR5-0337:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 step 4, per-control `methods` in sap.yaml instead of the catalog's list."
+  x_note: "Promoted, last sentence of the Figure 1 paragraph. 'The organization determines the assessment methods needed'. personas/PER-SCA.md gives the SCA that decision, but nothing records it."
+REQ-SP800-53AR5-0065:
+  status: not-a-requirement
+  reason: "Figure 1 cell text: the side label 'further granularized 800-53 Corresponds with SP control' run into the header 'ASSESSMENT OBJECTIVE: Determine if:'. Labels of a figure."
+REQ-SP800-53AR5-0066:
+  status: not-a-requirement
+  reason: "Figure 1 callout fragment: 'Control from SP', the first words of the red label, cut by the table reader."
+REQ-SP800-53AR5-0067:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17a.[01], 'usage restrictions are established and documented'. It illustrates granularization; the control's objectives come from the catalog, the pinned ID set."
+REQ-SP800-53AR5-0068:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17a.[02], configuration and connection requirements. An illustration of a catalog objective."
+REQ-SP800-53AR5-0069:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17a.[03], implementation guidance. An illustration of a catalog objective."
+REQ-SP800-53AR5-0070:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17b. with the next heading run into it: 'each type of remote access ... is authorized prior to allowing such connections'. Quoted to show an objective matching the control one to one."
+REQ-SP800-53AR5-0071:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17-Examine: a [SELECT FROM: ...] list of documents, a noun list inside an example."
+REQ-SP800-53AR5-0072:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17-Interview: a [SELECT FROM: ...] list of personnel. 'Responsibilities' here (printed with a ligature) only labels them, so it binds no one."
+  x_note: "No verb; the list names organizational personnel with responsibilities for managing remote access."
+REQ-SP800-53AR5-0073:
+  status: not-a-requirement
+  reason: "Figure 1 example row AC-17-Test: one object, 'Remote access management capability for the system'."
+
+# --- Page 25: Figure 2, a worked example for CM-04 ---
+REQ-SP800-53AR5-0328:
+  x_new_work_item: "DETERMINATION-RECORD: sar-results records one result per control, and assessment-batching step 5 says `satisfied` needs evidence for every objective. Add per-determination-statement results, the parts of the control a finding affects, the potential compromise, and statements that do not apply."
+  x_home: "Task A-3 step 4.2 and assessment-batching step 5; sar-results.schema.json `determinations`."
+  x_note: "'assessors can disregard such non-applicable requirements and still find that the control is satisfied'. Today's step 5 would give such a control other-than-satisfied, which contradicts this sentence."
+REQ-SP800-53AR5-0074:
+  status: not-a-requirement
+  reason: "Figure 2 row: the header 'ASSESSMENT OBJECTIVE: Determine if:', the lead-in to 0075 and 0076."
+REQ-SP800-53AR5-0075:
+  status: not-a-requirement
+  reason: "Figure 2 example row CM-04[01], security impacts of changes. It shows granularization; CM-4 itself comes from the catalog, and ART-CHG holds impact analysis at M-1."
+REQ-SP800-53AR5-0076:
+  status: not-a-requirement
+  reason: "Figure 2 example row CM-04[02], privacy impacts of changes, with the next heading run into it. It shows granularization of a catalog objective."
+REQ-SP800-53AR5-0077:
+  status: not-a-requirement
+  reason: "Figure 2 example row CM-04-Examine: a [SELECT FROM: ...] document list, with a callout ('Granularized to address privacy impacts') run into its end."
+REQ-SP800-53AR5-0078:
+  status: not-a-requirement
+  reason: "Figure 2 example row CM-04-Interview: 'Organizational personnel with responsibility for conducting security impact analyses'. 'Responsibility' selects interviewees in an example list, so it binds no one."
+  x_note: "No verb of its own: '[SELECT FROM: Organizational personnel with responsibility for ...]'."
+REQ-SP800-53AR5-0079:
+  status: not-a-requirement
+  reason: "Figure 2 example row CM-04-Test: a [SELECT FROM: ...] list of two organizational processes."
+REQ-SP800-53AR5-0080:
+  status: not-a-requirement
+  reason: "Definition under 'ODPs include:': 'Assignment operations, where the organization defines a value'. Explains the notation; S-2 sets parameter values."
+REQ-SP800-53AR5-0081:
+  status: not-a-requirement
+  reason: "Definition under 'ODPs include:': 'Selection operations, where the organization selects one or more of the options'. Explains the notation."
+REQ-SP800-53AR5-0082:
+  status: not-a-requirement
+  reason: "Footnote 25 on notation: 'Future revisions of SP 800-53 control identifiers will include a leading zero'. 'Will' forecasts a NIST editorial change, so it binds no one in a run."
+  x_note: "Subject 'Future revisions of SP 800-53 control identifiers', verb 'will include'."
+
+# --- Page 26: Figure 3, a worked example for CM-02 ---
+REQ-SP800-53AR5-0083:
+  status: not-a-requirement
+  reason: "Figure 3 cell text: 'identifier' from a callout run into the header 'ASSESSMENT OBJECTIVE: Determine if:'."
+REQ-SP800-53AR5-0084:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02_ODP[01], 'the frequency of baseline configuration review and update is defined'. Shows an assignment ODP; parameter values are S-2's."
+REQ-SP800-53AR5-0085:
+  status: not-a-requirement
+  reason: "Figure 3 callout: 'Organization- Defined Parameter (ODP)', a label."
+REQ-SP800-53AR5-0086:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02_ODP[02], circumstances requiring review and update. Shows a second assignment ODP."
+REQ-SP800-53AR5-0087:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02a.[01], a current baseline configuration 'is developed and documented'. An illustration of a catalog objective."
+REQ-SP800-53AR5-0088:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02a.[02] with the callout 'Assignment Statement' at its end. An illustration of a catalog objective."
+REQ-SP800-53AR5-0089:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02b.01, reviewed and updated at <CM-02_ODP[01] frequency>. Shows how an ODP is referenced."
+REQ-SP800-53AR5-0090:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02b.02, reviewed due to <CM-02_ODP[02] circumstances>, with callout words run in. Shows how an ODP is referenced."
+REQ-SP800-53AR5-0091:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02b.03, reviewed 'when system components are installed or upgraded', with the next heading and callout words run in. An illustration of a catalog objective."
+REQ-SP800-53AR5-0092:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02-Examine: a [SELECT FROM: ...] document list."
+REQ-SP800-53AR5-0093:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02-Interview: a [SELECT FROM: ...] list of personnel with configuration management duties; the ligature hides the word from the rule, and it only labels them."
+REQ-SP800-53AR5-0094:
+  status: not-a-requirement
+  reason: "Figure 3 example row CM-02-Test: a [SELECT FROM: ...] list of processes and mechanisms."
+
+# --- Page 27: Figure 4, a worked example for MP-07 ---
+REQ-SP800-53AR5-0095:
+  status: not-a-requirement
+  reason: "Figure 4 cell text: the same 'identifier' fragment and header as 0083, on another figure (occurrence 2)."
+REQ-SP800-53AR5-0096:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07_ODP[01]: 'types of system media to be restricted or prohibited from use'. 'Prohibited' sits in a sample ODP and prohibits nothing here, so it binds no one; the control comes from the catalog."
+  x_note: "Subject 'types of system media ...', verb 'are defined'."
+REQ-SP800-53AR5-0097:
+  status: not-a-requirement
+  reason: "Figure 4 callout: 'Organization- Defined Parameter (ODP)', the label again (occurrence 2)."
+REQ-SP800-53AR5-0098:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07_ODP[02]: 'one of the following PARAMETER VALUES is selected'. Shows a selection ODP."
+REQ-SP800-53AR5-0099:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07_ODP[03]: 'systems or system components on which the use ... to be restricted or prohibited are defined'. 'Prohibited' sits in a sample ODP, so it binds no one."
+  x_note: "Subject 'systems or system components ...', verb 'are defined'."
+REQ-SP800-53AR5-0100:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07_ODP[04], controls to restrict or prohibit use, with the callout 'Selection Statement' at its end. Shows an assignment ODP."
+REQ-SP800-53AR5-0101:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07a.: a determination statement built from ODP references, with callout words run in. Shows how selected values are referenced."
+REQ-SP800-53AR5-0102:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07b.: 'the use of portable storage devices ... is prohibited when such devices have no identifiable owner'. 'Prohibited' is quoted from control MP-7 to show a determination statement; as an example it binds no one, and the catalog carries the control."
+  x_note: "Subject 'the use of portable storage devices', verb 'is prohibited'. MP-7 reaches a run through baseline.json."
+REQ-SP800-53AR5-0103:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07-Examine: a [SELECT FROM: ...] document list."
+REQ-SP800-53AR5-0104:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07-Interview: a [SELECT FROM: ...] list of media-use personnel and administrators."
+REQ-SP800-53AR5-0105:
+  status: not-a-requirement
+  reason: "Figure 4 example row MP-07-Test: a [SELECT FROM: ...] list of processes and automated mechanisms."
+
+# --- Page 28: Figure 5, a worked example for CA-03 ---
+REQ-SP800-53AR5-0106:
+  status: not-a-requirement
+  reason: "Figure 5 title row 'CA-03 | INFORMATION EXCHANGE' with a callout fragment beside it."
+REQ-SP800-53AR5-0107:
+  status: not-a-requirement
+  reason: "Figure 5 cell text: the callout 'Organization- Defined Parameter identifier' run into the header 'ASSESSMENT OBJECTIVE: Determine if:'."
+REQ-SP800-53AR5-0108:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03_ODP[01]: a selection of agreement types with an embedded assignment. Shows the notation."
+REQ-SP800-53AR5-0109:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03_ODP[02]: the type of agreement 'is defined (if selected)'. Shows an embedded assignment."
+REQ-SP800-53AR5-0110:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03_ODP[03], review frequency, with the label of row CA-03a. and a callout fused to it. The CA-03a. objective itself lies under the callout in the PDF and is in the catalog."
+REQ-SP800-53AR5-0111:
+  status: not-a-requirement
+  reason: "Figure 5 fragment: 'CA-03b.[01] only | only | the interface agreement; if selected', row text broken by a callout."
+REQ-SP800-53AR5-0112:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03b.[02], 'security requirements are documented', cut by a callout. An illustration of a catalog objective."
+REQ-SP800-53AR5-0113:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03b.[03], 'privacy requirements are documented', cut by a callout. An illustration of a catalog objective."
+REQ-SP800-53AR5-0114:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03b.[04], 'controls are documented as part of each exchange agreement'. An illustration of a catalog objective."
+REQ-SP800-53AR5-0115:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03b.[05], responsibilities for each system documented (printed with a ligature). The word names what an agreement records in a sample, so it binds no one here."
+  x_note: "Subject 'responsibilities for each system', verb 'are documented'. CA-3 reaches a run through baseline.json."
+REQ-SP800-53AR5-0116:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03b.[06], the impact level documented. An illustration of a catalog objective."
+REQ-SP800-53AR5-0117:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03c. with the next heading run into it: agreements reviewed at <CA-03_ODP[03] frequency>."
+REQ-SP800-53AR5-0118:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03-Examine: a [SELECT FROM: ...] document list."
+REQ-SP800-53AR5-0119:
+  status: not-a-requirement
+  reason: "Figure 5 example row CA-03-Interview: a [SELECT FROM: ...] list of personnel for interconnection agreements."
+
+# --- Page 29: depth and coverage, Figure 6 ---
+REQ-SP800-53AR5-0329:
+  work_item: WI-14
+  x_note: "'the attribute values of depth and coverage are assigned by the organization and specified within the assessment plan' and 'The assessor/assessment team applies the depth and coverage attributes'. ART-SAP has a line for them and sap.yaml has no field."
+REQ-SP800-53AR5-0121:
+  status: not-a-requirement
+  reason: "Describes how Chapter 4 was built: 'assessment objectives are developed for each enhancement' and numbered 'first in accordance with the numbering scheme in [SP 800-53]'. 'In accordance with' states a numbering choice by NIST, so it binds no one."
+  x_note: "Subject 'The resulting assessment objectives', verb 'are numbered'. Org-specific procedures are 0202."
+REQ-SP800-53AR5-0122:
+  status: not-a-requirement
+  reason: "Figure 6 header row 'ASSESSMENT OBJECTIVE: Determine if:' (occurrence 2), the lead-in to 0123 and 0124."
+REQ-SP800-53AR5-0123:
+  status: not-a-requirement
+  reason: "Figure 6 example row AC-17(01)[01], automated mechanisms 'to monitor remote access methods'. Shows an enhancement's objective."
+REQ-SP800-53AR5-0124:
+  status: not-a-requirement
+  reason: "Figure 6 example row AC-17(01)[02], mechanisms 'to control remote access methods', with the next heading run in."
+REQ-SP800-53AR5-0125:
+  status: not-a-requirement
+  reason: "Figure 6 example row AC-17(01)-Examine: a [SELECT FROM: ...] document list."
+REQ-SP800-53AR5-0126:
+  status: not-a-requirement
+  reason: "Figure 6 example row AC-17(01)-Interview: a [SELECT FROM: ...] list of administrators, personnel and developers."
+REQ-SP800-53AR5-0127:
+  status: not-a-requirement
+  reason: "Figure 6 example row AC-17(01)-Test: one object, automated mechanisms monitoring and controlling remote access."
+
+# --- Page 30: Chapter 3, Table 1 ---
+REQ-SP800-53AR5-0330:
+  status: not-a-requirement
+  reason: "Chapter opening: 'This chapter describes the process of assessing' and the lead-in 'The process to assess controls includes:' to 0128 to 0130."
+REQ-SP800-53AR5-0128:
+  status: not-a-requirement
+  reason: "Chapter outline, first bullet: 'the activities carried out by organizations and assessors to prepare'. Points at section 3.1, where the duties are."
+REQ-SP800-53AR5-0129:
+  status: not-a-requirement
+  reason: "Chapter outline, second bullet: 'the development of security and privacy assessment plans; the conduct of control assessments'. Points at sections 3.2 and 3.3."
+REQ-SP800-53AR5-0130:
+  status: not-a-requirement
+  reason: "Chapter outline, third bullet: 'post-assessment report analysis and follow-on activities'. Points at section 3.4."
+REQ-SP800-53AR5-0131:
+  status: not-a-requirement
+  reason: "Table 1 label and noun list, first line of a cell cut in two: 'Primary | Authorizing Official, Authorizing Official Designated Representative, system owner,'. Who does what is in 0136 to 0153 and in the A-1 and A-2 RACI."
+  x_note: "Pair with 0132."
+REQ-SP800-53AR5-0132:
+  status: not-a-requirement
+  reason: "Table 1 label and noun list, second line of the cut cell: 'Roles | common control provider, control assessors'. Pairs with 0131."
+REQ-SP800-53AR5-0133:
+  status: not-a-requirement
+  reason: "Table 1 label and noun list: 'Supporting Roles | System security officer, system privacy officer'."
+REQ-SP800-53AR5-0134:
+  x_new_work_item: "ASSESSMENT-PREP: no step does the preparation of section 3.1. Add a `preparation` block to sap.yaml, filled at A-2: officials notified, resources allocated, communication channels and points of contact, the mechanism for settling ambiguities, how access is arranged, what the assessor read about the organization."
+  x_home: "Task A-2 step 3 and sap.schema.json `preparation`; ART-SAP gets a `## Preparation` heading."
+  x_note: "Table 1 outcomes. Scope, timeframe and assessors are held (sap.yaml, A-1); notification, resources and the ambiguity mechanism are the entries 0140, 0146. Kept live because a table of outcomes states what the step must yield."
+
+# --- Page 31: 3.1, organization's preparation ---
+REQ-SP800-53AR5-0135:
+  status: not-a-requirement
+  reason: "Scene-setting: 'success requires the cooperation and collaboration of all parties' states a condition for success with no addressee, and 'oversight responsibilities' describes entities, so neither binds anyone. The named acts are 0136 to 0146."
+  x_note: "Subject 'success', verb 'requires'; 'distinct oversight responsibilities' qualifies 'organizational entities'."
+REQ-SP800-53AR5-0136:
+  x_existing: "Control CA-1 in the baseline (framework/baselines/cnssi-1253.yaml): the catalog holds the assessment policy duty, SSP-COV-001 requires its statement and SAR-COV-001 its determination."
+  x_note: "'Ensuring that appropriate policies covering security and privacy control assessments are in place'. An organization activity, reached through the control."
+REQ-SP800-53AR5-0137:
+  x_existing: "framework/tasks/A.yaml entry criteria of A-1 ('Security plan approved (S-6)') and A-2 ('as-implemented security plan available (I-2)'), enforced by `depends_on` and rmf status."
+REQ-SP800-53AR5-0138:
+  x_existing: "sap.yaml `scope` (required) and templates/artifacts/ART-SAP.md `## Scope and objectives`."
+REQ-SP800-53AR5-0139:
+  x_existing: "framework/tasks/P.yaml P-5 exit criteria (ART-ORG-CONTEXT lists providers and controls) and playbooks/S/S-2.md step 3 common controls."
+  x_note: "Footnote 29 was split off as 0144."
+REQ-SP800-53AR5-0140:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "sap.yaml `preparation.notified` and `preparation.resources`, task A-2."
+  x_note: "'Notifying key organizational officials of impending assessments and allocating necessary resources'. RoE names who is notified of testing, not this."
+REQ-SP800-53AR5-0141:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "sap.yaml `preparation.channels`, task A-2."
+REQ-SP800-53AR5-0142:
+  x_existing: "sap.yaml `schedule` (start, end, events, required) and framework/tasks/A.yaml A-2 aligned with RV-TRR."
+REQ-SP800-53AR5-0143:
+  x_existing: "framework/tasks/A.yaml A-1 purpose and exit criteria (selected, with the appropriate independence, basis recorded)."
+  x_note: "'assessors/assessment teams that will be responsible for conducting the assessments and considering issues of assessor independence'."
+REQ-SP800-53AR5-0144:
+  x_new_work_item: "COMMON-CONTROL-ASSESSMENT: A-2 and A-3 do not treat inherited controls apart. Record per inherited or hybrid control whether provider results are available, assess only the system-specific part, verify the inheritance, and hold the assessment open until those results arrive."
+  x_home: "Task A-2 step 4 (a `common_controls` block in sap.yaml) and task A-3 step 4, with a rule over ssp-controls `inherited_from`."
+  x_note: "Footnote 29: 'Common control assessments ... are the responsibility of the common control providers, not the system owner inheriting the controls'. personas/PER-CCP.md says so in prose; no task carries it, and A-3 and SAR-COV-001 ask a determination of every scoped control, inherited or not."
+
+# --- Page 32: 3.1, continued ---
+REQ-SP800-53AR5-0145:
+  x_existing: "playbooks/A/A-3.md steps 3 and 4.1 and playbooks/_shared/assessment-batching.md step 4: the inputs plus records, settings and results requested from their owners."
+  x_note: "In a run, artifacts reach the assessor through the listed inputs and interviews."
+REQ-SP800-53AR5-0146:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "sap.yaml `preparation.disagreement_path`, task A-2."
+  x_note: "'Establishing a mechanism between the organization and the assessors'. A-3 step 1 sends changes to the AODR, but no path exists for ambiguity about findings."
+REQ-SP800-53AR5-0331:
+  status: not-a-requirement
+  reason: "Lead-in: 'Control assessors/assessment teams begin preparing for their respective assessments by:'. The acts sit in 0147 to 0153, all decided on their own."
+REQ-SP800-53AR5-0147:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "Task A-2 inputs: add ART-ORG-CONTEXT and ART-SD, since the SCA reads neither now; sap.yaml `preparation`."
+  x_note: "'Obtaining a general understanding of the organization's operations'. ART-ORG-CONTEXT is an A-1 input, and A-1 is the AODR's, not the assessor's."
+REQ-SP800-53AR5-0148:
+  x_existing: "playbooks/A/A-2.md steps 2 and `## Inputs` (ART-SSP, ssp/controls, baseline.json, objectives)."
+REQ-SP800-53AR5-0149:
+  x_existing: "framework/schema/ssp-controls.schema.json `inherited_from`, required by playbooks/S/S-4.md for status `inherited`; an A-2 input."
+  x_note: "'Identifying the organizational entities responsible for the development and implementation of the common controls'."
+REQ-SP800-53AR5-0150:
+  x_existing: "playbooks/A/A-2.md step 5 and `## Interviews` (PER-AODR: scope, sufficiency of methods; PER-AO: approval)."
+REQ-SP800-53AR5-0151:
+  x_existing: "playbooks/A/A-2.md `## Inputs` and playbooks/_shared/assessment-batching.md step 4."
+REQ-SP800-53AR5-0152:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "sap.yaml `preparation.points_of_contact`, task A-2."
+  x_note: "'Establishing appropriate organizational points of contact'. sap.yaml `team` lists assessors, not contacts."
+REQ-SP800-53AR5-0153:
+  x_existing: "playbooks/A/A-2.md `## Inputs` (`product/test-results.md`) and playbooks/_shared/assessment-batching.md step 4 (test results, scans, earlier determinations)."
+  x_note: "What makes reuse appropriate is ASSESSMENT-REUSE; this bullet is the obtaining."
+REQ-SP800-53AR5-0332:
+  x_new_work_item: ASSESSMENT-PREP
+  x_home: "sap.yaml `preparation.access`, task A-2."
+  x_note: "'the organization identifies and arranges access to elements of the organization responsible for developing, documenting, disseminating, reviewing, and updating:' holds the duty and takes 0154, 0155, 0157 and 0158 as its objects. Its first sentence, background assembled for assessors, is held by the inputs."
+REQ-SP800-53AR5-0154:
+  status: not-a-requirement
+  reason: "Object of the live lead-in 0332: 'all policies and associated procedures'. A noun phrase; the duty is 0332's."
+REQ-SP800-53AR5-0155:
+  status: not-a-requirement
+  reason: "Object of the live lead-in 0332: 'the policies for the system and any associated implementing procedures, individuals, or groups responsible for the development'. 'Responsible for' only identifies the groups 0332 must reach, so it binds no one here."
+  x_note: "No verb of its own; subject and verb are 0332's 'the organization identifies and arranges access'."
+REQ-SP800-53AR5-0156:
+  x_existing: "framework/tasks/A.yaml A-3 raci (C: PER-PM, PER-CCP) with playbooks/A/A-3.md `## Interviews` and steps 4.1."
+  x_note: "Footnote 30: system owners and common control providers 'are responsible for providing needed information to assessors'."
+
+# --- Page 33: access, assessor skills and independence ---
+REQ-SP800-53AR5-0157:
+  status: not-a-requirement
+  reason: "Object of the live lead-in 0332: 'any artifacts or materials ... associated with the implementation and operation of the controls'. A noun phrase; the duty is 0332's."
+REQ-SP800-53AR5-0158:
+  status: not-a-requirement
+  reason: "Object of the live lead-in 0332: 'the specific objects to be assessed'. A noun phrase; the duty is 0332's."
+REQ-SP800-53AR5-0338:
+  status: not-applicable
+  reason: "Binds the organization across assessments: access to elements, individuals and artifacts 'is centrally managed by the organization' when several run at once. Checked PER-CISO: a run holds one system, and no task or artifact sees other assessments."
+  x_note: "Promoted, footnote 31."
+REQ-SP800-53AR5-0159:
+  work_item: WI-19
+  x_note: "'Organizations ensure that assessors possess the required skills and technical expertise' and 'The authorizing official or designated representative determines the required level of independence ... based on the results of the security categorization'. A-1 asks for independence and no record holds skills, the categorization basis, or the AO's sufficiency decision: this is N-19's task without an output."
+REQ-SP800-53AR5-0160:
+  work_item: WI-19
+  x_note: "Runs to p. 34. Special situations: 'independence in the assessment process can be achieved by ensuring that the assessment results are carefully reviewed and analyzed by an independent team of experts'. No A-1 outcome covers it. 'requires' is the situation's, in the parenthesis."
+REQ-SP800-53AR5-0161:
+  work_item: WI-03
+  x_note: "Footnote 32, same words as 0047 at p. 19: the independence rule of a privacy assessment."
+REQ-SP800-53AR5-0162:
+  status: not-a-requirement
+  reason: "Footnote 33 on a reference: 'NIST [SP 800-181] describes the Workforce Framework', a source 'with which organizations ... can develop additional publications ... that meet their needs to define' guidance. 'Needs to' is the organizations' wish, so it binds no one."
+  x_note: "Subject 'The NICE Framework', verb 'is a reference source'."
+REQ-SP800-53AR5-0163:
+  work_item: WI-19
+  x_note: "Footnote 34: contracted services are independent 'if the system (or program) owner is not directly involved in the contracting process or cannot unduly influence the independence'. The test the A-1 record needs when the SCA is contracted."
+
+# --- Page 34: 3.2, Table 2 ---
+REQ-SP800-53AR5-0164:
+  status: not-a-requirement
+  reason: "Fragment of Table 2's purpose cell: 'a detailed roadmap of how to conduct such assessments'. Its head is the table header row; 0168 says the same in prose."
+REQ-SP800-53AR5-0165:
+  status: not-a-requirement
+  reason: "Table 2 label and noun: 'Primary Roles | Control assessors'. A-2's RACI holds it."
+REQ-SP800-53AR5-0166:
+  status: not-a-requirement
+  reason: "Table 2 label and noun list: 'Supporting Roles | System security officers, system privacy officers, system owners'."
+REQ-SP800-53AR5-0167:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 exit criteria."
+  x_note: "Table 2 outcomes. 'Assessment plan is finalized, and organizational approval is obtained' is held by A-2; 'selected and tailored', additional procedures and 'optimized' are not."
+REQ-SP800-53AR5-0168:
+  work_item: WI-03
+  x_note: "'The security assessment plan and privacy assessment plan provide the objectives' and 'may be developed as one integrated plan or as distinct plans'. ART-SAP holds only the security plan, which is N-3. Also the lead-in to 0169 to 0172, 0175 and 0176."
+REQ-SP800-53AR5-0169:
+  x_existing: "Rule SAP-COV-001 and sap.yaml `scope`, with playbooks/A/A-2.md step 4: the baseline in scope, exclusions with rationale."
+REQ-SP800-53AR5-0170:
+  x_existing: "playbooks/A/A-2.md step 2 (`rmf catalog show --run <run> --fields title,objectives`) and src/rmf_tool/oscal/build_sap.py, which take the procedure per control from the catalog."
+REQ-SP800-53AR5-0171:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml per-control procedure record, task A-2 step 4."
+  x_note: "'Tailor the selected assessment procedures (e.g., select appropriate assessment methods and objects, and assign depth and coverage attribute values)'. The depth and coverage half is WI-14."
+REQ-SP800-53AR5-0172:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml additional procedures, task A-2 step 4."
+REQ-SP800-53AR5-0173:
+  x_existing: "framework/tasks/A.yaml A-1 raci (A: PER-AO; C: PER-CIO, PER-CISO, PER-PRIV)."
+  x_note: "Footnote 35 at p. 34. The Office of the Inspector General has no persona; the three other parties are consulted at A-1."
+REQ-SP800-53AR5-0174:
+  status: not-a-requirement
+  reason: "Footnote 36, a scope note: 'The approach ... also applies to information security program plans and privacy program plans'. It widens what the guidance reaches and tells no run to act; program plans sit above a system."
+
+# --- Page 35: 3.2.1, 3.2.2 ---
+REQ-SP800-53AR5-0175:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 step 4: record consolidated procedures and the sequence in sap.yaml."
+  x_note: "'Optimize the assessment procedures to reduce duplication of effort'. Batched interviews (assessment-batching step 4) reduce some of it at A-3, but the plan records no optimization."
+REQ-SP800-53AR5-0176:
+  x_existing: "playbooks/A/A-2.md steps 5 and 6 and framework/tasks/A.yaml A-2 exit criteria (AO approves after SCA review)."
+REQ-SP800-53AR5-0177:
+  x_existing: "Rule SAP-COV-001 with sap.yaml `scope.include: baseline` for a complete assessment; playbooks/_shared/assessment-batching.md step 2 for partial ones (A-5, M-2)."
+  x_note: "A common control assessment has no run; that gap is COMMON-CONTROL-ASSESSMENT and WI-01's ATOC."
+REQ-SP800-53AR5-0178:
+  x_existing: "playbooks/M/M-2.md step 3 with the M-2 raci (C: PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-IO, PER-AODR); `excluded_controls` with the AODR's agreement at A-2 for a partial assessment before fielding."
+  x_note: "'For partial assessments, system owners and common control providers collaborate with organizational officials ... to determine which controls are to be assessed'; targeted assessments are M-2's event-driven families."
+REQ-SP800-53AR5-0179:
+  x_existing: "src/rmf_tool/oscal/build_sap.py (`method_controls`) and `rmf catalog show`: each scoped control's procedure comes from the catalog."
+REQ-SP800-53AR5-0180:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 step 4, opening with any organizational tailoring guidance from ART-ORG-CONTEXT."
+  x_note: "Runs to p. 36. 'organizations tailor the assessment procedures' and 'Control assessors determine if the organization provides additional tailoring guidance'. Also the lead-in to 0181 to 0186."
+
+# --- Page 36: tailoring ---
+REQ-SP800-53AR5-0181:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml per-control `methods` and `objects`, task A-2 step 4."
+  x_note: "A-2 says 'do not list them by hand', the opposite of selecting."
+REQ-SP800-53AR5-0182:
+  work_item: WI-14
+  x_note: "'Selecting the appropriate depth and coverage attribute values'."
+REQ-SP800-53AR5-0183:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "sap.yaml `common_controls`, task A-2 step 4."
+  x_note: "'Identifying common controls and inherited portions of hybrid controls that have been assessed ... and do not require the repeated execution of the assessment procedures'."
+REQ-SP800-53AR5-0184:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml per-control procedure record, task A-2 step 4."
+REQ-SP800-53AR5-0185:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "sap.yaml `reused_results`, task A-2 step 4."
+REQ-SP800-53AR5-0186:
+  x_new_work_item: "EXTERNAL-SYSTEM-ASSESSMENT: nothing tells the assessor how to treat external systems. Add an A-2 step for reviewing contracts and agreements, adjusting procedures for external providers, and bringing their assessments into ART-SAR."
+  x_home: "Task A-2 step 4, reading artifacts/data/leveraged-authorizations.yaml; ART-SAR `## Assessment summary`."
+REQ-SP800-53AR5-0187:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Per-control `rationale` in sap.yaml, task A-2 step 4."
+  x_note: "Runs to p. 37. 'Organizations select those methods and objects that most cost-effectively manage risk' and 'The quality of assessment results is based on the soundness of the rationale provided for selecting'. Hence the rationale field."
+REQ-SP800-53AR5-0188:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "Task A-3 step 4: determination of an inherited control records that the inheritance was verified."
+  x_note: "Footnote 37: 'The assessor simply verifies that the system being assessed has actually inherited the common control'. A-3 asks PER-CCP for evidence, which is a broader act and no verification record."
+
+# --- Page 37: 3.2.3.2, 3.2.3.3 ---
+REQ-SP800-53AR5-0189:
+  work_item: WI-14
+  x_note: "'The values selected by the organization are based on the characteristics of the system being assessed' and 'the rigor and scope of the assessment increases in direct relationship with the assurance requirements'."
+REQ-SP800-53AR5-0190:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "Task A-2 step 4 and sap.yaml `common_controls`; A-3 input for the provider's results."
+  x_note: "'Assessors note which security and privacy controls ... are designated as common controls', and 'The results from the common control assessment are made available'."
+REQ-SP800-53AR5-0191:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "sap.yaml `common_controls` naming the system-specific part of each hybrid control, task A-2 step 4."
+  x_note: "'For each hybrid control, assessors include in security assessment plans ... the portions of the assessment procedures ... that are system-specific'. ssp-controls has no hybrid status; `partial` is the nearest."
+REQ-SP800-53AR5-0192:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "Task P-5 exit criteria: state that the set offered is commensurate with the categorization of the inheriting systems."
+  x_note: "Footnote 39: 'the organization determines the appropriate set of common controls to ensure that both the strength of the controls ... and level of rigor ... are commensurate'. P-5 lists controls and providers, with no such test."
+REQ-SP800-53AR5-0193:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "A rule over sap.yaml `common_controls`, applied after A-3."
+  x_note: "Footnote 40: 'The assessments cannot be considered complete until the assessment results for the common controls are made available to system owners'. SAR-COV-001 can pass without them."
+
+# --- Page 38: inherited, system-specific, reuse ---
+REQ-SP800-53AR5-0194:
+  x_new_work_item: COMMON-CONTROL-ASSESSMENT
+  x_home: "Task A-3 step 4 and assessment-batching step 2: leave inherited parts to the provider and verify inheritance."
+  x_note: "Box. The first sentence is held by ssp-controls `inherited_from`; 'The system owner is not responsible for assessing common controls' and 'the assessor verifies if the system does, in fact, inherit' are not."
+REQ-SP800-53AR5-0195:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml per-control procedure record, task A-2 step 4."
+  x_note: "'The assessment procedures in SP 800-53A may be adapted to address system-, platform-, or organization-specific dependencies'. The rest is an example."
+REQ-SP800-53AR5-0196:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "sap.yaml `reused_results` (date, type, approver, checks), task A-2 step 4; ART-SAR at A-4 step 6."
+  x_note: "'The acceptability of reusing assessment results ... is coordinated with and approved by the users of the assessment results', 'assessors determine the credibility of the assessment evidence' and 'the date and type of the original assessment are documented in the assessment plan and assessment report'. ART-SAP's reuse heading asks 'why they are sound' and nothing more."
+REQ-SP800-53AR5-0197:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "sap.yaml `reused_results.supplement`, task A-2 step 4; ART-SAR `## Test results reused`."
+  x_note: "Runs to p. 39. 'The decision to reuse assessment results is documented in the security assessment plan or privacy assessment plan and the final security assessment report'. The headings exist in both, the required content does not."
+
+# --- Page 39: reuse criteria, external systems ---
+REQ-SP800-53AR5-0198:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "`reused_results.changes_since`, task A-2 step 4."
+  x_note: "'Applying previous assessment results to a current assessment necessitates the identification of any changes that have occurred since the previous assessment'. The rejected lead-in 'The following items are considered when validating previous assessment results for reuse' gives the duty."
+REQ-SP800-53AR5-0199:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "`reused_results.assessed_on`, task A-2 step 4; assessment-batching step 4 says 'still current' with no test."
+  x_note: "'Amount of time that has transpired since previous assessments' is a criterion to weigh; it sets no limit."
+REQ-SP800-53AR5-0200:
+  x_new_work_item: ASSESSMENT-REUSE
+  x_home: "`reused_results.independence`, task A-2 step 4, checked against the A-1 level."
+  x_note: "'The degree of independence required from assessment to assessment should be consistent' and 'it is not appropriate to reuse results from a previous self-assessment ... when a current assessment requires a greater degree of independence'. M-2 step 4 says this for monitoring; A-3 does not."
+REQ-SP800-53AR5-0201:
+  x_new_work_item: EXTERNAL-SYSTEM-ASSESSMENT
+  x_home: "Task A-2 step 4 and task A-3 step 6, ART-SAR `## Assessment summary`."
+  x_note: "Runs to p. 40. 'The assessment procedures in Chapter 4 need to be adjusted', 'assessors review the contracts or agreements and tailor the assessment procedures' and 'Applicable information from these assessments ... is incorporated into the security assessment report'."
+
+# --- Page 40: 3.2.4, 3.2.5 ---
+REQ-SP800-53AR5-0202:
+  x_new_work_item: SAP-TAILORING
+  x_home: "sap.yaml additional procedures, task A-2 step 4; tailoring.yaml already records supplementation at S-2, which gives the list."
+  x_note: "'To assess the controls not found in SP 800-53, assessors use the guidelines in Chapter 2 to develop assessment procedures'. The opening sentence is an option, S-2 supplementation."
+REQ-SP800-53AR5-0203:
+  x_new_work_item: SAP-TAILORING
+  x_home: "Task A-2 step 4, consolidation recorded in sap.yaml."
+  x_note: "'assessors review the selected assessment procedures for the control families and combine or consolidate the procedures ... whenever possible or practicable'."
+REQ-SP800-53AR5-0204:
+  status: not-a-requirement
+  reason: "Advice with no duty: 'An additional area for consideration ... is the sequence in which controls are assessed' and assessing related controls early 'may provide a basic understanding'. Every verb is 'may'; 0175 holds the sequencing duty. Runs to p. 41."
+
+# --- Page 41: 3.2.6, 3.3, Table 3 ---
+REQ-SP800-53AR5-0205:
+  x_existing: "playbooks/A/A-2.md steps 4 to 6, sap.yaml `schedule`, ART-SAP `## Review and approval`, framework/tasks/A.yaml A-2 exit criteria."
+  x_note: "'the assessment plan is finalized and the schedule is established' and 'the plan is reviewed and approved by appropriate organizational officials'. Its clause 'addressing the potential for unexpected events' has no field: rules_of_engagement is the place, and SAP-TAILORING should pick it up."
+REQ-SP800-53AR5-0212:
+  x_existing: "framework/tasks/A.yaml A-2 raci (A: PER-AO) and playbooks/A/A-2.md step 5: DoD designates the AO, or the AODR by delegation."
+  x_note: "Footnote 42."
+REQ-SP800-53AR5-0206:
+  status: not-a-requirement
+  reason: "Fragment of Table 3's purpose cell: 'assessment plan, and document the results in security and privacy assessment report(s).' Its head is the table header row; 0211 holds the duty."
+REQ-SP800-53AR5-0207:
+  status: not-a-requirement
+  reason: "Table 3 label and noun: 'Primary Roles | Control assessors'. A-3's RACI holds it."
+REQ-SP800-53AR5-0208:
+  status: not-a-requirement
+  reason: "Table 3 label and noun list, first line of a cell cut in two: 'Supporting | System security and privacy officers, system owners, security and privacy engineers,'. Pairs with 0209."
+REQ-SP800-53AR5-0209:
+  status: not-a-requirement
+  reason: "Table 3 label and noun list, second line of the cut cell: 'Roles | security and privacy architects, system administrators, system users'. Pairs with 0208."
+REQ-SP800-53AR5-0210:
+  x_existing: "Rule SAR-COV-001 and framework/tasks/A.yaml A-3 exit criteria (conducted per the plan), A-4 exit criteria (reports with findings)."
+  x_note: "Table 3 outcomes. 'in accordance with the security and privacy assessment plan(s)' is A-3's entry and exit. Privacy half is WI-03."
+REQ-SP800-53AR5-0211:
+  x_existing: "playbooks/A/A-3.md steps 1 and 6, framework/tasks/R.yaml R-1 (ART-SAR in the package), A-4 step 6 `## Executive summary (A-4)` for the assessment summary, sap.yaml `team`."
+  x_note: "Runs to p. 42. 'the assessor(s) or assessment team executes the plan in accordance with the agreed-upon schedule' and 'The results of control assessments are documented in assessment reports'. Appendix E is part 2."
+
+# --- Page 42: findings ---
+REQ-SP800-53AR5-0333:
+  x_new_work_item: DETERMINATION-RECORD
+  x_home: "sar-results.schema.json `determinations`, task A-3 step 4.2."
+  x_note: "'Each determination statement ... executed by an assessor produces one of the following findings:'. Holds the duty; 0213 and 0214 give the two values. The objectives are in the catalog and read at A-3, but the result is kept per control."
+REQ-SP800-53AR5-0213:
+  status: not-a-requirement
+  reason: "Value of the live lead-in 0333: 'satisfied (S); or', a fragment. sar-results `result` holds the term."
+REQ-SP800-53AR5-0214:
+  status: not-a-requirement
+  reason: "Value of the live lead-in 0333: 'other than satisfied (O).', a fragment. sar-results `result` holds the term."
+REQ-SP800-53AR5-0215:
+  x_existing: "playbooks/_shared/assessment-batching.md step 5 (`other-than-satisfied` when an objective fails or has no evidence) and sar-results `severity` for the subcategories."
+  x_note: "'A finding of other than satisfied may also indicate that the assessor was unable to obtain sufficient information' is the 'has no evidence' branch. 'organizations may choose to define subcategories' is taken up as the SP 800-30 scale."
+REQ-SP800-53AR5-0216:
+  x_new_work_item: DETERMINATION-RECORD
+  x_home: "sar-results `findings`: add the part of the control affected and the potential compromise; task A-3 step 4.2."
+  x_note: "Runs to p. 43. 'how the actual state of the control differs' is held by `description`. 'assessors indicate which parts of the control are affected by the finding' and 'The potential for compromises ... are also noted by the assessor' are not."
+REQ-SP800-53AR5-0217:
+  work_item: WI-03
+  x_note: "Footnote 43: 'the authorization package consists of the security plan, privacy plan, security assessment report, privacy assessment report, and plan of action and milestones'. PKG-001 holds the security artifacts, so what remains is the two privacy ones: the report here, the plan in WI-02."
+
+# --- Page 43: post-assessment ---
+REQ-SP800-53AR5-0218:
+  x_existing: "framework/tasks/R.yaml R-2 and R-3 raci and exit criteria (AO determination and response, against the risk strategy) and playbooks/A/A-4.md step 6 with the OSCAL assessment results for the report format."
+  x_note: "Privacy half of the reports is WI-03."
+REQ-SP800-53AR5-0219:
+  x_existing: "sar-results `recommendation` (A-3, A-4 step 4), A-4 step 5 (PER-PM and PER-CCP read the findings) and playbooks/A/A-5.md steps 3 to 5 (quick fixes reassessed before A-6)."
+  x_note: "'Security or privacy controls that are modified, enhanced, or added during this process are reassessed by the assessor prior to the production of the final assessment reports'. A-5's addendum plays that part."
+REQ-SP800-53AR5-0220:
+  x_existing: "playbooks/A/A-5.md step 3 ('Only quick fixes with existing resources belong here; everything else goes to the POA&M at A-6')."
+  x_note: "Footnote 46: quick correction is 'not intended to replace the formal risk response process'."
+
+# --- Page 44: 3.4, Table 4 ---
+REQ-SP800-53AR5-0221:
+  status: not-a-requirement
+  reason: "Table 4 label and noun list: 'Primary Roles | System owners or common control providers, authorizing officials'. 0225 holds who reviews and decides."
+REQ-SP800-53AR5-0222:
+  status: not-a-requirement
+  reason: "Table 4 label and noun list, first line of a cell cut in two: 'Supporting | System security and privacy officers, security and privacy engineers, security and'. Pairs with 0223."
+REQ-SP800-53AR5-0223:
+  status: not-a-requirement
+  reason: "Table 4 fragment, second line of the cut cell: 'Roles | privacy architects'. Pairs with 0222."
+REQ-SP800-53AR5-0224:
+  x_existing: "playbooks/A/A-5.md step 2, playbooks/A/A-6.md steps 2 and 3, framework/tasks/R.yaml R-3 exit criteria, A-5 and M-4 outputs (ART-SSP, ART-SAR, ART-POAM)."
+  x_note: "Table 4 outcomes, printed twice in the entry because two cells hold them."
+REQ-SP800-53AR5-0225:
+  x_existing: "playbooks/A/A-5.md steps 2 and 3, playbooks/A/A-6.md steps 2 to 5 (PER-PM and PER-CCP over every open finding), `status: risk-accepted` in sar-results, R-3."
+  x_note: "'system owners and common control providers review the security assessment reports ... and ... determine the appropriate steps' and 'the organization reviews each assessment finding of other than satisfied'. A-5's RACI consults PER-AODR, PER-CISO, PER-PRIV and PER-IO; those are the concurring officials."
+REQ-SP800-53AR5-0226:
+  x_existing: "framework/tasks/A.yaml A-5 and A-6 outputs, framework/tasks/M.yaml M-4 outputs (ART-SSP, ART-SAR, ART-POAM, ART-RA)."
+  x_note: "'the assessment findings and any subsequent response actions ... trigger updates to the key artifacts'. Senior leadership involvement is 'may be necessary'. Privacy plan and report wait on WI-02 and WI-03."
+
+# --- Page 45 and 46: 3.5, capabilities, an option an organization may take ---
+REQ-SP800-53AR5-0227:
+  status: not-applicable
+  reason: "An option: 'In accordance with [SP 800-53], organizations may define a set of security and privacy capabilities'. Checked PER-ISSE and S-3, where 'capability' means a function of a component: no artifact or task defines capability sets, and a run needs none. 0228 and 0230 hang on this option."
+  x_note: "Subject 'organizations', verb 'may define'."
+REQ-SP800-53AR5-0228:
+  status: not-applicable
+  reason: "Binds only an organization that took the option in 0227: 'the organization revisits the RMF Select step, tailors the control set, and documents the rationale' when a control serves no defined capability. Checked PER-ISSE and S-2: tailoring is held, but no run defines a capability for the trigger to read."
+REQ-SP800-53AR5-0229:
+  status: not-a-requirement
+  reason: "Discussion: 'the failure of multiple controls may not affect the overall ... capability' and a control 'may not necessarily support or need to support' one. 'May not' and 'need to' describe what can be true of a control, so they bind no one."
+  x_note: "Subject 'every implemented security and privacy control', verb 'may not necessarily support or need to support'."
+REQ-SP800-53AR5-0230:
+  status: not-applicable
+  reason: "Conditional on the option: 'When organizations employ the concept of capabilities, automated and manual assessments account for all ... controls that comprise' them. Checked PER-SCA and A-3: nothing names a capability to account for."
+  x_note: "Subject 'assessments', verb 'account for'; root cause analysis finds 'the specific control or controls that are responsible for the failure'. Runs to p. 46."
+REQ-SP800-53AR5-0231:
+  status: not-a-requirement
+  reason: "Box of discussion: grouping controls 'necessitates root cause analyses', and 'This additional precision ... is essential to supporting the continuous monitoring strategies'. 'Is essential' praises the structure of the procedures, so it binds no one."
+  x_note: "Subject 'This additional precision in assessments', verb 'is essential'."
+
+# --- Page 47: Figure 8, the process in one picture ---
+REQ-SP800-53AR5-0232:
+  status: not-a-requirement
+  reason: "Figure 8 summary, organization row, cells run together: 'Ensure assessment plan is appropriately tailored', 'Notify key organizational officials', 'Review assessor findings'. It restates the prose: 0180, 0205, 0140, 0141, 0138, 0142, 0145, 0225, 0226, each live."
+  x_note: "Opened the PDF page. 'Involve senior leadership' and 'Balance schedule, performance, and cost' are 0226 and 0024."
+REQ-SP800-53AR5-0233:
+  status: not-a-requirement
+  reason: "Figure 8 box labels, cut: '1.Initial draft report 2.Final report with', 'Assessment', 'Plans of Action', 'Updated Security and'. The two-stage report is 0219."
+REQ-SP800-53AR5-0234:
+  status: not-a-requirement
+  reason: "Figure 8 summary, assessor row, cells run together: 'Establish organizational points of contact', 'Implement assessment plan(s)', 'Produce initial (draft) and final assessment report(s)', 'Consult with organizational officials'. It restates 0152, 0147, 0148, 0211, 0333, 0219, each live."
+REQ-SP800-53AR5-0235:
+  status: not-a-requirement
+  reason: "Figure 8 fragment: the bullets 'Develop assessment plan based on security and privacy plans' to 'Obtain artifacts for assessment', read a second time from the box in 0234."
+
+# --- Pages 718 to 725: Appendix C, definitions of methods and attribute values ---
+REQ-SP800-53AR5-0325:
+  status: not-a-requirement
+  reason: "List label under 'This appendix defines the three assessment methods': '1. Examine'."
+REQ-SP800-53AR5-0326:
+  status: not-a-requirement
+  reason: "List label under the same lead-in: '2. Interview'."
+REQ-SP800-53AR5-0327:
+  status: not-a-requirement
+  reason: "List label under the same lead-in: '3. Test'."
+REQ-SP800-53AR5-0236:
+  status: not-a-requirement
+  reason: "Definition of Examine: 'The process of checking, inspecting, reviewing, observing, studying, or analyzing'."
+REQ-SP800-53AR5-0237:
+  status: not-a-requirement
+  reason: "Examples under Examine: 'Typical assessor actions may include reviewing information security and privacy policies'. An illustrative list."
+REQ-SP800-53AR5-0238:
+  status: not-a-requirement
+  reason: "Definition: 'The depth attribute addresses the rigor of and level of detail in the examination process', with three values. WI-14 will take its enum from here."
+REQ-SP800-53AR5-0239:
+  status: not-a-requirement
+  reason: "Definition of the depth value basic examination: 'high-level reviews, checks, observations, or inspections'."
+REQ-SP800-53AR5-0240:
+  status: not-a-requirement
+  reason: "Definition of the depth value focused examination: adds 'more in-depth studies/analyses'. Runs to p. 720."
+REQ-SP800-53AR5-0241:
+  status: not-a-requirement
+  reason: "Definition of the depth value comprehensive examination: 'more in-depth, detailed, and thorough studies/analyses'."
+REQ-SP800-53AR5-0242:
+  status: not-a-requirement
+  reason: "Definition: 'The coverage attribute addresses the scope or breadth of the examination process', with three values."
+REQ-SP800-53AR5-0243:
+  status: not-a-requirement
+  reason: "Definition of the coverage value basic examination: 'a representative sample of assessment objects'."
+REQ-SP800-53AR5-0244:
+  status: not-a-requirement
+  reason: "Definition of the coverage value focused examination: a representative sample 'and other specific assessment objects deemed particularly important'."
+REQ-SP800-53AR5-0245:
+  status: not-a-requirement
+  reason: "Definition of the coverage value comprehensive examination: 'a sufficiently large sample'. Runs to p. 721, which holds only its tail."
+REQ-SP800-53AR5-0246:
+  work_item: WI-14
+  x_note: "Footnote 54, for examine: 'The organization considers a variety of factors ..., confers with assessors, and provides direction on the type, number, and specific objects to be examined'. The source of the coverage value per control."
+REQ-SP800-53AR5-0247:
+  status: not-a-requirement
+  reason: "Definition of Interview: 'The process of conducting discussions with individuals or groups'."
+REQ-SP800-53AR5-0248:
+  status: not-a-requirement
+  reason: "Examples under Interview: 'Typical assessor actions may include interviewing agency heads, chief information officers'. An illustrative list of interviewees."
+REQ-SP800-53AR5-0249:
+  status: not-a-requirement
+  reason: "Definition: 'The depth attribute addresses the rigor of and level of detail in the interview process', with three values."
+REQ-SP800-53AR5-0250:
+  status: not-a-requirement
+  reason: "Definition of the depth value basic interview: 'broad-based, high-level discussions'."
+REQ-SP800-53AR5-0251:
+  status: not-a-requirement
+  reason: "Definition of the depth value focused interview: adds 'more in-depth discussions in specific areas'."
+REQ-SP800-53AR5-0252:
+  status: not-a-requirement
+  reason: "Definition of the depth value comprehensive interview: 'more in-depth, probing discussions'. Runs to p. 723."
+REQ-SP800-53AR5-0253:
+  status: not-a-requirement
+  reason: "Definition: 'The coverage attribute addresses the scope or breadth of the interview process' and types of individuals 'by organizational role and associated responsibility'. 'Responsibility' sorts interviewees, so it binds no one."
+  x_note: "Subject 'The coverage attribute', verb 'addresses'."
+REQ-SP800-53AR5-0254:
+  status: not-a-requirement
+  reason: "Definition of the coverage value basic interview: 'a representative sample of individuals in key organizational roles'."
+REQ-SP800-53AR5-0255:
+  status: not-a-requirement
+  reason: "Definition of the coverage value focused interview: adds 'other specific individuals deemed particularly important'."
+REQ-SP800-53AR5-0256:
+  status: not-a-requirement
+  reason: "Definition of the coverage value comprehensive interview: 'a sufficiently large sample of individuals'."
+REQ-SP800-53AR5-0257:
+  work_item: WI-14
+  x_note: "Footnote 55, for interview: the organization 'confers with assessors, and provides direction on the type, number, and specific individuals to be interviewed'."
+REQ-SP800-53AR5-0258:
+  status: not-a-requirement
+  reason: "Definition of Test: 'The process of exercising one or more assessment objects under specified conditions'."
+REQ-SP800-53AR5-0259:
+  status: not-a-requirement
+  reason: "Examples under Test: 'Typical assessor actions may include testing access control'. An illustrative list."
+REQ-SP800-53AR5-0260:
+  status: not-a-requirement
+  reason: "Definition: 'The depth attribute addresses the types of testing to be conducted', with three values."
+REQ-SP800-53AR5-0261:
+  status: not-a-requirement
+  reason: "Definition of the depth value basic testing: 'assumes no knowledge of the internal structure'."
+REQ-SP800-53AR5-0262:
+  status: not-a-requirement
+  reason: "Definition of the depth value focused testing: 'assumes some knowledge of the internal structure'."
+REQ-SP800-53AR5-0263:
+  status: not-a-requirement
+  reason: "Definition of the depth value comprehensive testing: 'assumes explicit and substantial knowledge'. Runs to p. 725."
+REQ-SP800-53AR5-0264:
+  status: not-a-requirement
+  reason: "Footnote 56, description: 'Testing is typically used to determine if mechanisms or activities meet a set of predefined specifications' and points at Appendix D."
+REQ-SP800-53AR5-0265:
+  status: not-a-requirement
+  reason: "Definition: 'The coverage attribute addresses the scope or breadth of the testing process', with three values."
+REQ-SP800-53AR5-0266:
+  status: not-a-requirement
+  reason: "Definition of the coverage value basic testing: 'a representative sample of assessment objects'."
+REQ-SP800-53AR5-0267:
+  status: not-a-requirement
+  reason: "Definition of the coverage value focused testing: adds objects 'deemed particularly important to achieving the assessment objective'."
+REQ-SP800-53AR5-0268:
+  status: not-a-requirement
+  reason: "Definition of the coverage value comprehensive testing: 'a sufficiently large sample of assessment objects'."
+REQ-SP800-53AR5-0269:
+  work_item: WI-14
+  x_note: "Footnote 57, for test: the organization 'provides direction on the type, number, and specific objects to be tested'; coverage also reaches test cases and modules."
+
+# --- Pages 726 to 728: Appendix D, penetration testing ---
+REQ-SP800-53AR5-0270:
+  x_new_work_item: "PENTEST-PLAN: pen testing appears only as DoDI 5000.89's CVPA citation at A-3 and on the PER-OTA card; sap.yaml has no event kind or scope for it. Add a `penetration_test` block to sap.yaml with the scope minimum of Appendix D (environment, attack surface, threat sources, objectives, level of effort, rules of engagement), a schedule event kind, and result fields in ART-SAR."
+  x_home: "Task A-2 step 3 (ask whether the plan adds pen testing) and step 4, sap.schema.json."
+  x_note: "'Organizations may consider adding controlled penetration testing'. Live because DoD's CVPA and adversarial assessment supply such test results to a run (A-3 citations)."
+REQ-SP800-53AR5-0271:
+  status: not-a-requirement
+  reason: "Description of the method: 'Penetration testing is conducted as a controlled attempt to breach' and 'can be viewed ... as a means to enhance the organization's understanding'. 0284 holds the rules of engagement."
+REQ-SP800-53AR5-0272:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "conmon.yaml `event_triggers`, tasks S-5 and M-2: changes that call for out-of-cycle testing."
+  x_note: "'Organizations actively monitor the system environment and threat landscape ... to identify changes that require out-of-cycle penetration testing'. M-1 monitors changes; no trigger leads to a pen test."
+REQ-SP800-53AR5-0273:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `penetration_test`, task A-2 step 4."
+  x_note: "'Organizations specify which components within the system are subject to penetration testing as well as the attacker's profile'. Its training and tool-update sentences bind the testing organization, carried as resources in the plan."
+REQ-SP800-53AR5-0274:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `rules_of_engagement` and `penetration_test`, task A-2 step 4."
+  x_note: "Footnote 58: 'organizations should carefully consider the potential detrimental effects of automated exploits on system availability'."
+REQ-SP800-53AR5-0275:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "Task A-2 step 4: playbook lists the criteria."
+  x_note: "'Organizations consider the following criteria when developing and implementing a controlled penetration testing program', also the lead-in to 0276 to 0278 and 0285 to 0289."
+REQ-SP800-53AR5-0276:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "ART-SAR pen test results section, task A-3 step 6."
+  x_note: "'Goes beyond vulnerability scanning to provide explicit proof of mission risks'. Read with lead-in 0275."
+REQ-SP800-53AR5-0277:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `penetration_test`, task A-2 step 4."
+  x_note: "'Approaches the system as the adversary would'. Read with lead-in 0275."
+REQ-SP800-53AR5-0278:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `penetration_test` required fields, task A-2 step 4."
+  x_note: "'Has a clearly defined scope and contains as a minimum:', the lead-in to 0279 to 0284."
+REQ-SP800-53AR5-0279:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.environment`."
+REQ-SP800-53AR5-0280:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.attack_surface`."
+REQ-SP800-53AR5-0281:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.threat_sources`."
+REQ-SP800-53AR5-0282:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.objectives`."
+REQ-SP800-53AR5-0283:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.level_of_effort`."
+REQ-SP800-53AR5-0284:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "`penetration_test.rules_of_engagement`, or the existing sap.yaml `rules_of_engagement`, which A-2 step 4 does not tie to pen testing."
+REQ-SP800-53AR5-0285:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "ART-SAR pen test results section, task A-3 step 6."
+  x_note: "'Thoroughly documents all activities performed during the test'. Read with lead-in 0275."
+REQ-SP800-53AR5-0286:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "ART-SAR pen test results section; the likelihood feeds ART-RAR at R-2."
+  x_note: "'Produces results indicating a likelihood of occurrence for a given attack'. Read with lead-in 0275."
+REQ-SP800-53AR5-0287:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sar-results findings against the controls validated, task A-3 step 4.2."
+  x_note: "'Validates existing security and privacy controls'. Read with lead-in 0275."
+REQ-SP800-53AR5-0288:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "ART-SAR pen test results section, task A-3 step 6."
+  x_note: "'Provides a verifiable and reproducible log of all the activities performed'. Read with lead-in 0275."
+REQ-SP800-53AR5-0289:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sar-results `recommendation`, task A-3 step 4.2."
+  x_note: "'Provides actionable results with information about possible remediation measures'. Read with lead-in 0275."

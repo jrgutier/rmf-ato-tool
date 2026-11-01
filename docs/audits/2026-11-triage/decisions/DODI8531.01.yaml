@@ -1,0 +1,755 @@
+# DODI8531.01, pages 4 to 20 of 24, read whole against the source, entry by entry.
+# Role map from personas.txt: DoD Component heads = PER-CIO (Head of Agency); the DoD Components in
+# Section 3, when a system does the work = PER-PM (system owner), PER-ISSM, PER-ISSO, PER-CSSP;
+# authorizing officials = PER-AO. No persona: DoD SISO (the DoD CISO of WI-27), DISA, USD(A&S), USD(R&E),
+# USD(I&S), DIRNSA/CHCSS, Director DHA, USD(P), USD(C)/CFO, Secretary of the Air Force and DC3, CJCS,
+# Commander USCYBERCOM and JFHQ-DODIN, researchers.
+# A control named as a home was read in `rmf catalog show` and its cells in
+# framework/baselines/cnssi-1253.yaml; the run writes a statement for it (SSP-COV-001) and A-3 assesses it.
+# Cells checked: ra-5, ra-5.2, ra-5.11 and sa-22 XXX on C, I and A; si-2, cm-2, cm-6, cm-8 XXX on I; si-2.2,
+# cm-3, cm-8.3 +XX on I; mp-6 XXX on C; ca-7 XXX. ca-8 is High only and ra-5.6 is not selected, which is why
+# neither holds a duty here.
+
+# --- Page 4: applicability and policy ---
+REQ-DODI8531.01-0001:
+  status: not-a-requirement
+  reason: "Applicability clause: 'This issuance applies to' lists the DoD Components and defines that term. 'Applies to' sets the document's scope and binds no one to do anything."
+  x_note: "Subject 'This issuance', verb 'applies to'."
+REQ-DODI8531.01-0002:
+  x_new_work_item: "vuln-process-strategy: no task names the DoD vulnerability management process. ra-5 and si-2 are control statements and EXT-MONITORING carries scan data, but nothing lays the five steps (identification, analysis, analysis reporting, remediation and mitigation, verification and monitoring) across a run or integrates them with RMF as DoDI 8510.01 asks."
+  x_home: "S-5, a new ART-CONMON section '## Vulnerability management' naming the five steps and who does each, read at M-2 and M-3."
+  x_note: "Subject from the rejected lead-in 'The DoD will:', verb 'Use'. Read with 3.1, which defines the five steps; DoDI 8510.01 p. 11 'Integrate the vulnerability management process into the RMF process'."
+REQ-DODI8531.01-0003:
+  x_new_work_item: vuln-process-strategy
+  x_home: "S-5, the same ART-CONMON section: how ART-CMP, ART-INV and ART-POAM feed the vulnerability management steps. Each exists, and none says it supports them."
+  x_note: "Subject 'The DoD will', verb 'Ensure ... supports ... in accordance with DoDI 8510.01'."
+REQ-DODI8531.01-0004:
+  x_existing: "framework/tasks/P.yaml P-17 exit criterion 'The cybersecurity requirements that contracts must carry are identified' and sa-4: holds the sentence on enforcement in contract language for a leased system."
+  x_gap: "First sentence, 'efficient vulnerability assessment techniques, procedures, and capabilities' for every system: vuln-process-strategy."
+  x_note: "Subject 'The DoD will', verb 'Support'; second sentence, subject 'enforcement', verb 'is included in contract language'."
+REQ-DODI8531.01-0005:
+  x_new_work_item: "vep-submission: nothing in a run sends a newly discovered, not publicly known vulnerability toward the Vulnerabilities Equities Process. VEP appears nowhere in framework, templates, playbooks or personas."
+  x_home: "M-3, a step and exit criterion: a vulnerability that is new and not publicly known is submitted through the Component to USCYBERCOM, as soon as practicable, and the submission is recorded in ART-POAM."
+  x_note: "Subject 'The DoD will', verbs 'Maintain' and 'ensure ... submit'. The run's duty is the second verb; 'as soon as practicable' is the timing."
+REQ-DODI8531.01-0006:
+  x_existing: "ra-5.11 Public Disclosure Program, XXX on C, I and A: a run writes a statement for 'a public reporting channel for receiving reports of vulnerabilities', and A-3 assesses it. The coordinated VDP is that channel at DoD level."
+  x_note: "Subject 'The DoD will', verb 'Develop and maintain'. Responding to what the channel brings in is vdp-response."
+
+# --- Page 5: DoD SISO; DISA lead-in ---
+REQ-DODI8531.01-0007:
+  x_existing: "EXT-ORG-POLICY ('DoD and Component security and privacy policies and procedures'), an input of P-1, P-2, P-5, P-9 and P-15 in framework/tasks/P.yaml: this is how the DoD SISO's policy and guidance reaches a run."
+  x_note: "Subject from the rejected lead-in 'the DoD SISO', verb 'Develops'. The DoD SISO has no persona (WI-27); the run consumes the output."
+REQ-DODI8531.01-0008:
+  status: not-applicable
+  reason: "Binds the DoD SISO, who 'Ensures DoD Information Security Continuous Monitoring capability incorporates' vulnerability information. Checked PER-CISO, the Component's officer: the design of the DoD-wide capability is the DoD SISO's own, and a system's feed upward is DODIN-STATUS-SHARING."
+  x_note: "Subject 'the DoD SISO', verb 'Ensures'."
+REQ-DODI8531.01-0009:
+  x_existing: "P-7 section '## Organizational continuous monitoring strategy' ('the metrics, frequencies and reporting every system's strategy (S-5) must implement'), conmon.schema.json frequencies with CONMON-001 for the CM family; EXT-ORG-POLICY carries the guidance in."
+  x_note: "Subject 'the DoD SISO', verb 'Establishes guidance'. The run consumes the frequency."
+REQ-DODI8531.01-0010:
+  work_item: WI-15
+  x_note: "Subject 'the DoD SISO', verb 'Specifies'. Sits in WI-15's 'Metrics ... absent from conmon schema and template': these are the metrics P-7 and S-5 would carry, as 0170 computes them."
+REQ-DODI8531.01-0011:
+  status: not-applicable
+  reason: "Binds the DoD SISO, who 'Oversees' enterprise vulnerability, patch and compliance auditing capabilities. Checked PER-CISO: oversight of what is built for the DoD enterprise is above any Component, and no run output goes to it."
+  x_note: "Subject 'the DoD SISO', verb 'Oversees'."
+REQ-DODI8531.01-0012:
+  status: not-applicable
+  reason: "Binds the DoD SISO, who 'Provides policy and guidance' for DC3 and 'oversees operations' of it. Checked PER-CISO: that is the governance of another DoD body. A run's part in the VDP is vdp-response, and its scorecard part is at 0015."
+  x_note: "Subject 'the DoD SISO', verbs 'Provides', 'oversees', 'integrates'."
+REQ-DODI8531.01-0013:
+  status: not-applicable
+  reason: "Binds the DoD SISO, who 'Coordinates with' NIST on standards in collaboration with the DIRNSA/CHCSS. Checked PER-CISO: standards development between national bodies has no task, and the run reads the published standards."
+  x_note: "Subject 'the DoD SISO', verb 'Coordinates'."
+REQ-DODI8531.01-0014:
+  status: not-applicable
+  reason: "Binds the DoD SISO, who 'Provides one or more' SMEs to VEP equities discussions. Checked PER-CISO: staffing the VEP's equities discussion is that body's internal work; a run only submits to it (vep-submission)."
+  x_note: "Subject 'the DoD SISO', verb 'Provides'."
+REQ-DODI8531.01-0015:
+  x_new_work_item: cyber-scorecard
+  x_home: "M-5 step and ART-SECRPT '## Reporting period and recipients': the scorecard is what the run reports into, and this entry adds key VDP metrics to it."
+  x_note: "Subject 'the DoD SISO', verb 'Integrates'. Kept because a run submits to the scorecard; the memo that sets its content is not in the library."
+REQ-DODI8531.01-0016:
+  status: not-a-requirement
+  reason: "Lead-in naming the Director, DISA. 'In addition to the responsibilities in Paragraph 2.10' is a pointer with no verb of its own and binds no one here; the duties are the items 0017 to 0030."
+  x_note: "Subject 'the Director, DISA', no verb before the colon."
+REQ-DODI8531.01-0017:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Maintains' the DoD Patch Repository. Checked PER-CSSP and PER-ISSO: keeping the repository is DISA's own operation; what a run consumes from it, the patches, is 0018."
+  x_note: "Subject 'the Director, DISA', verb 'Maintains'."
+REQ-DODI8531.01-0018:
+  x_new_work_item: "vuln-patch-coverage: si-2 and si-2.2 install and check patches, but nothing names where patches come from, finds gaps in automated patching, or brings non-compliant devices under control. Add the patch source and the coverage check."
+  x_home: "S-5, ART-CONMON '## Roles and tools': the patch source and the automated patching service a system relies on, including the DoD Patch Repository."
+  x_note: "Subject 'the Director, DISA', verb 'Provides access'. The patches are what a run consumes."
+
+# --- Page 6: DISA; USD(A&S) ---
+REQ-DODI8531.01-0019:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Tests and verifies patch source and integrity'. Checked PER-CSSP: this is DISA's own procedure before a patch enters its repository; a system's own testing before install is si-2 b."
+  x_note: "Subject 'the Director, DISA', verb 'Tests and verifies'."
+REQ-DODI8531.01-0020:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Acquires and develops capabilities, standards, and integration frameworks'. Checked PER-CCP: an enterprise service's development. A run sees only the listed tools (0021) and the guides (0022)."
+  x_note: "Subject 'the Director, DISA', verb 'Acquires and develops'."
+REQ-DODI8531.01-0021:
+  x_new_work_item: "vuln-identification: ra-5 and si-2.2 require scanning and EXT-MONITORING holds its results, but nothing names how a system identifies vulnerabilities: SP 800-115 as the scanning reference, CVE, automation before manual work, the DISA list of approved tools, or the historical cross-reference of incident reports and logs."
+  x_home: "S-5, ART-CONMON '## Roles and tools': the tools chosen from the enterprise-designated list."
+  x_note: "Subject 'the Director, DISA', verb 'Maintains a list'. The list is what a run consumes."
+REQ-DODI8531.01-0022:
+  x_existing: "EXT-STIG in framework/external-inputs.yaml, read at I-1; ART-STIG with stig-summary.yaml; STIG-001 and STIG-002. This is the output the run consumes."
+  x_note: "Subject 'the Director, DISA', verb 'Develops'."
+REQ-DODI8531.01-0023:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Establishes contracts and non-disclosure agreements or memorandums of agreement with vendors' for DoD-wide products. Checked PER-PM: an enterprise contract is no system's act, and a run neither reads nor writes these agreements."
+  x_note: "Subject 'the Director, DISA', verb 'Establishes'. Items 0024 to 0026 are this agreement's purposes."
+REQ-DODI8531.01-0024:
+  status: not-applicable
+  reason: "Purpose of the DISA vendor agreements in 0023, binding the Director, DISA: 'Facilitate the exchange' of vulnerability information. Checked PER-PM: nothing in a run holds these agreements."
+  x_note: "Subject from 0023, 'the Director, DISA ... Establishes contracts ... to:', verb 'Facilitate'."
+REQ-DODI8531.01-0025:
+  status: not-applicable
+  reason: "Purpose of the DISA vendor agreements in 0023, binding the Director, DISA: 'Validate and measure compliance' through an automated process. Checked PER-PM: nothing in a run holds these agreements."
+  x_note: "Subject from 0023, verb 'Validate and measure'."
+REQ-DODI8531.01-0026:
+  status: not-applicable
+  reason: "Purpose of the DISA vendor agreements in 0023, binding the Director, DISA: 'Authorize hosting and distribution' of licensed software. Checked PER-PM: nothing in a run holds these agreements."
+  x_note: "Subject from 0023, verb 'Authorize'."
+REQ-DODI8531.01-0027:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Provides operational concepts and guides' for DISA-provided tools. Checked PER-ISSO: operator manuals for a tool shape neither an RMF artifact nor a decision."
+  x_note: "Subject 'the Director, DISA', verb 'Provides'."
+REQ-DODI8531.01-0028:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Maintains the Continuous Monitoring Risk Scoring System'. Checked PER-CSSP: no input, artifact or report in a run names that system or reads from it."
+  x_note: "Subject 'the Director, DISA', verb 'Maintains'."
+REQ-DODI8531.01-0029:
+  status: not-applicable
+  reason: "Binds the Director, DISA, who 'Coordinates' vulnerability and asset issues with USCYBERCOM and JFHQ-DODIN. Checked PER-CSSP: this is coordination between enterprise bodies, with no run step in it."
+  x_note: "Subject 'the Director, DISA', verb 'Coordinates'."
+REQ-DODI8531.01-0030:
+  x_new_work_item: "config-guidance-sources: EXT-STIG names only DISA STIGs and SRGs, and I-1 reads nothing else. Add the other secure configuration sources a system applies: DISA configuration guidance where vendor guidance is insufficient, NSA/CSS implementation and mitigation guidance, NIST mitigation guidelines and Component guidance."
+  x_home: "I-1 inputs and step, EXT-STIG widened, ART-CMP '## Baseline configurations'."
+  x_note: "Subject 'the Director, DISA', verb 'develops cybersecurity configuration guidance pursuant to DoDI 8500.01'. The guidance is what a run consumes."
+REQ-DODI8531.01-0031:
+  status: not-applicable
+  reason: "Binds the USD(A&S), who 'Identifies, develops, updates, and implements policy' for contracting software maintenance and sustainment support. Checked PER-MDA and PER-PM: they apply contracting policy to one program; writing it is OSD's, and no run artifact, decision or check holds that."
+  x_note: "Subject from the rejected lead-in 'The USD(A&S):', verb 'Identifies, develops, updates, and implements'. Its items 0032 to 0034 are bare nouns and point here."
+
+# --- Page 7: USD(A&S); USD(R&E) ---
+REQ-DODI8531.01-0032:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Consistency and coherence of vulnerability assessment', naming one aim of the policy in 0031; the verb sits in 0031."
+REQ-DODI8531.01-0033:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Secure configuration and active responsiveness', naming one aim of the policy in 0031; the verb sits in 0031."
+REQ-DODI8531.01-0034:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Secure software development and reduction of software vulnerabilities', naming one aim of the policy in 0031; the verb sits in 0031."
+REQ-DODI8531.01-0035:
+  status: not-applicable
+  reason: "Binds the USD(A&S), who 'Ensures acquisition policy includes requirements' on unsupported items and developed software components. Checked PER-MDA and PER-PM: the content of OSD policy is set above any program; a system's own duty on unsupported components is sa-22."
+  x_note: "Subject 'The USD(A&S)', verb 'Ensures acquisition policy includes requirements ... in accordance with DoDI 5000.02T'."
+REQ-DODI8531.01-0036:
+  status: not-applicable
+  reason: "Binds the USD(A&S), who 'Incorporates security assurance checks into procurement and acquisition policy'. Checked PER-MDA: that persona works under the policy and does not write it, and nothing in a run records the checks going into it."
+  x_note: "Subject 'The USD(A&S)', verb 'Incorporates'."
+REQ-DODI8531.01-0037:
+  status: not-applicable
+  reason: "Binds the USD(A&S), who 'Provides guidance' through the Defense Federal Acquisition Regulation and its supplement. Checked PER-MDA and PER-DEV: issuing regulation is OSD's act; no task produces it and no run input names it."
+  x_note: "Subject 'The USD(A&S)', verb 'Provides guidance'."
+REQ-DODI8531.01-0038:
+  status: not-applicable
+  reason: "Binds the USD(A&S), who 'Provides one or more SMEs' to the VEP. Checked PER-MDA: an SME loan to the equities discussion touches no program and no run."
+  x_note: "Subject 'The USD(A&S)', verb 'Provides'."
+REQ-DODI8531.01-0039:
+  status: not-applicable
+  reason: "Binds the USD(R&E), who 'Provides one or more SMEs' to the VEP. Checked PER-CISO: research staff lent to the equities discussion; no persona or task involves them."
+  x_note: "Subject 'The Under Secretary of Defense for Research and Engineering', verb 'Provides'."
+REQ-DODI8531.01-0040:
+  status: not-applicable
+  reason: "Binds the USD(R&E), who 'Provides oversight' of FFRDCs, national laboratories and UARCs so they report to the VEP. Checked PER-DEV: a research centre is not a run's developer as such, and this oversight has no step."
+  x_note: "Subject 'The Under Secretary of Defense for Research and Engineering', verb 'Provides oversight ... to ensure they report'."
+REQ-DODI8531.01-0041:
+  status: not-applicable
+  reason: "Binds the USD(R&E), who 'Notifies' the USD(P) VEP contact of vulnerabilities from cyber incident damage assessments. Checked PER-CSSP: an OSD office telling another; a system's incident reporting ends at the CSSP and chain of command."
+  x_note: "Subject 'The Under Secretary of Defense for Research and Engineering', verb 'Notifies'."
+REQ-DODI8531.01-0042:
+  status: not-applicable
+  reason: "Binds the USD(R&E), who 'Ensures the OSD Damage Assessment Management Office provides' damage assessments. Checked PER-CSSP and PER-ISSM: no run input carries that office's assessments."
+  x_note: "Subject 'The Under Secretary of Defense for Research and Engineering', verb 'Ensures'."
+REQ-DODI8531.01-0043:
+  status: not-applicable
+  reason: "Binds the USD(R&E), who 'Maintains the DoD Joint Federated Assurance Center'. Checked PER-ISSE: the Center is an enterprise asset; nothing in a run names it, and a Component's request to it is optional (0075)."
+  x_note: "Subject 'The Under Secretary of Defense for Research and Engineering', verb 'Maintains'. Items 0044 and 0045 are the Center's purposes."
+
+# --- Page 8: USD(I&S); DIRNSA/CHCSS ---
+REQ-DODI8531.01-0044:
+  status: not-applicable
+  reason: "Purpose of the Joint Federated Assurance Center under 0043, binding the USD(R&E): 'Support defense system requirements'. Checked PER-ISSE: no run step or artifact uses the Center."
+  x_note: "Subject from 0043, 'Maintains ... to:', verb 'Support'."
+REQ-DODI8531.01-0045:
+  status: not-applicable
+  reason: "Purpose of the Joint Federated Assurance Center under 0043, binding the USD(R&E): 'Ensure the security of software and hardware'. Checked PER-ISSE: no run step or artifact uses the Center."
+  x_note: "Subject from 0043, verb 'Ensure'."
+REQ-DODI8531.01-0046:
+  status: not-applicable
+  reason: "Binds the USD(I&S), who 'Coordinates with DoD SISO on security policy'. Checked PER-CISO: this is between two OSD offices; a run receives the resulting policy through EXT-ORG-POLICY, and the coordination itself has no output."
+  x_note: "Subject 'The USD(I&S)', verb 'Coordinates'."
+REQ-DODI8531.01-0047:
+  status: not-applicable
+  reason: "Binds the USD(I&S), who 'Provides one or more SMEs' to the VEP. Checked PER-CISO: intelligence staff lent to the equities discussion; no run step holds it."
+  x_note: "Subject 'The USD(I&S)', verb 'Provides'."
+REQ-DODI8531.01-0048:
+  status: not-applicable
+  reason: "Binds the USD(I&S), who 'Approves or denies requests for public disclosure of VDP vulnerabilities'. Checked PER-AO: the request comes from a researcher through DC3, not from a system, and no run decision rests on it."
+  x_note: "Subject 'The USD(I&S)', verb 'Approves or denies'."
+REQ-DODI8531.01-0049:
+  status: not-a-requirement
+  reason: "Lead-in naming the DIRNSA/CHCSS. 'In addition to the responsibilities in Paragraph 2.10' is a pointer with no verb of its own and binds no one here; the duties are the items 0050 to 0056."
+  x_note: "Subject 'the DIRNSA/CHCSS', no verb before the colon."
+REQ-DODI8531.01-0050:
+  x_existing: "EXT-THREAT ('Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM)'), read for risk assessment at P-3 and P-14: holds the dissemination a run consumes."
+  x_note: "Subject 'the DIRNSA/CHCSS', verbs 'Assesses' and 'disseminates'. How NSA assesses the posture is how it produces that information, which stays with NSA and owes the run nothing."
+REQ-DODI8531.01-0051:
+  x_existing: "EXT-STIG and I-1: hold the clause 'in collaboration with DISA, develops security technical implementation guides'."
+  x_gap: "'Establish security implementation specifications', which EXT-STIG does not name: config-guidance-sources."
+  x_note: "Subject 'the DIRNSA/CHCSS', verbs 'Provides cybersecurity support' and 'develops'. NSA's support to Components is a service, with no run step of its own."
+REQ-DODI8531.01-0052:
+  status: not-applicable
+  reason: "Binds the DIRNSA/CHCSS, who 'Identifies, monitors, and analyzes vulnerabilities' in DoD products. Checked PER-CSSP: this is NSA's internal analysis. Its output reaches a run as 0050's disseminated information, not from this duty."
+  x_note: "Subject 'the DIRNSA/CHCSS', verb 'Identifies, monitors, and analyzes'."
+REQ-DODI8531.01-0053:
+  status: not-applicable
+  reason: "Binds the DIRNSA/CHCSS, who 'Serves as the VEP Executive Secretariat'. Checked PER-CISO: running the secretariat is internal to the VEP, and a run's submission stops at USCYBERCOM."
+  x_note: "Subject 'the DIRNSA/CHCSS', verb 'Serves'."
+REQ-DODI8531.01-0054:
+  status: not-applicable
+  reason: "Binds the DIRNSA/CHCSS, who 'Serves as one of four DoD representatives' to National Security Council meetings. Checked PER-CIO: interagency representation has no step in a run."
+  x_note: "Subject 'the DIRNSA/CHCSS', verb 'Serves'."
+REQ-DODI8531.01-0055:
+  status: not-applicable
+  reason: "Binds the DIRNSA/CHCSS, who 'Designates a VEP point of contact' for submissions from NSA. Checked PER-CISO: an NSA appointment for NSA's own submissions; a run submits through USCYBERCOM."
+  x_note: "Subject 'the DIRNSA/CHCSS', verb 'Designates'."
+
+# --- Page 9: DIRNSA/CHCSS; Director, DHA; USD(P) ---
+REQ-DODI8531.01-0056:
+  x_new_work_item: "nsa-crypto-remediation: for a vulnerability in NSA-approved cryptography, NSA sets the risk assessment, mitigation and timeline, not the system; POA&M items and M-3 have no way to record that."
+  x_home: "M-3 step and poam-items.schema.json: an item on NSA-certified or NSA-approved cryptography takes its mitigation and scheduled_completion from NSA."
+  x_note: "Subject 'the DIRNSA/CHCSS', verbs 'Manages' and 'Submit'. Kept for the timelines a run consumes; the VEP sentence is NSA's own (0147)."
+REQ-DODI8531.01-0057:
+  status: not-a-requirement
+  reason: "Lead-in naming the Director, DHA. 'In addition to the responsibilities in Paragraph 2.10' and 'in accordance with DoDI 6530.01' carry no verb of their own and bind no one here; the duties are 0058 and 0059."
+  x_note: "Subject 'the Director, Defense Health Agency', no verb before the colon."
+REQ-DODI8531.01-0058:
+  status: not-applicable
+  reason: "Binds the Director, DHA, who 'Exercises oversight' of vulnerabilities in medical systems. Checked PER-CISO: oversight across a domain of systems is not a run's; a medical system's own run does the ordinary steps."
+  x_note: "Subject 'the Director, Defense Health Agency', verb 'Exercises'."
+REQ-DODI8531.01-0059:
+  x_existing: "EXT-ORG-POLICY, an input of P-15 (ART-REQ '## Sources of requirements' traced to sources): specialized guidance reaches a medical system's run as DoD policy."
+  x_note: "Subject 'the Director, Defense Health Agency', verb 'Provides ... in accordance with FDA-2015-D-5105'. The run consumes the guidance."
+REQ-DODI8531.01-0060:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Ensures the development of VDP's scope and activities' to improve researcher relations. Checked PER-CIO: outreach to researchers, with no system act in it."
+  x_note: "Subject 'The USD(P)', verb 'Ensures'."
+REQ-DODI8531.01-0061:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Ensures VDP is transparent to the public'. Checked PER-CIO: public transparency of a DoD program; a run neither reads nor writes it."
+  x_note: "Subject 'The USD(P)', verb 'Ensures'."
+REQ-DODI8531.01-0062:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Coordinates and approves any requested changes to the VDP scope'. Checked PER-CIO: program scope, set above any Component; a run takes whatever the scope is."
+  x_note: "Subject 'The USD(P)', verb 'Coordinates and approves'."
+REQ-DODI8531.01-0063:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Approves or denies requests for public disclosure' jointly with the USD(I&S) and DC3. Checked PER-AO: no authorization decision or run output rests on this release decision, as at 0048."
+  x_note: "Subject 'The USD(P)', verb 'Approves or denies'."
+REQ-DODI8531.01-0064:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Serves as the primary DoD representative' for the VEP at the National Security Council. Checked PER-CIO: national-level representation."
+  x_note: "Subject 'The USD(P)', verb 'Serves'."
+REQ-DODI8531.01-0065:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Designates a VEP point of contact' for OSD components. Checked PER-CIO: an OSD appointment for OSD's own submissions, outside a system's path through USCYBERCOM."
+  x_note: "Subject 'The USD(P)', verb 'Designates'."
+REQ-DODI8531.01-0066:
+  status: not-applicable
+  reason: "Binds the USD(P), who 'Appoints SMEs from DoD Components' for equities discussions. Checked PER-CIO: the appointment staffs the VEP, not a system."
+  x_note: "Subject 'The USD(P)', verb 'Appoints'."
+
+# --- Page 10: USD(C)/CFO; DoD Component heads ---
+REQ-DODI8531.01-0067:
+  status: not-applicable
+  reason: "Binds the USD(C)/CFO, who 'Exercises oversight' of vulnerabilities in financially significant systems. Checked PER-CISO: oversight across a class of systems; a financial system's own run does the ordinary steps."
+  x_note: "Subject 'The Under Secretary of Defense (Comptroller)/Chief Financial Officer', verb 'Exercises'."
+REQ-DODI8531.01-0068:
+  x_existing: "EXT-ORG-POLICY, an input of P-15 (ART-REQ traced to sources): audit readiness guidance reaches a financial system's run as DoD policy."
+  x_note: "Subject 'The Under Secretary of Defense (Comptroller)/Chief Financial Officer', verb 'Provides ... in accordance with the guidance in the Federal Information Systems Controls Audit Manual'."
+REQ-DODI8531.01-0069:
+  x_new_work_item: "vuln-component-program: ART-ORG-CONTEXT holds no Component vulnerability management program. Add the program, the organizations designated to run it, the plan that prioritizes and schedules deployment, mitigation requirements put on system owners, and audits of patching, so S-5 and M-3 can read them."
+  x_home: "P-7 step 3, a new ART-ORG-CONTEXT section '## Vulnerability management program'; M-3 reads it."
+  x_note: "Subject 'The DoD Component heads' (PER-CIO), verb 'Establish'."
+REQ-DODI8531.01-0070:
+  x_new_work_item: vuln-component-program
+  x_home: "P-7, the same section: which Component programs for asset, configuration, remediation and mitigation management support the process."
+  x_note: "Subject 'The DoD Component heads', verb 'Establish'. P-10 and ART-CMP are the system's records, not these programs."
+REQ-DODI8531.01-0071:
+  x_new_work_item: vuln-component-program
+  x_home: "P-1 and P-7: ART-ORG-CONTEXT names the organization that directs the program and coordinates with JFHQ-DODIN. '## RMF role assignments' has no such row."
+  x_note: "Subject 'The DoD Component heads', verb 'Designate'."
+REQ-DODI8531.01-0072:
+  x_new_work_item: DODIN-STATUS-SHARING
+  x_home: "S-5, ART-CONMON '## Reporting', and M-5, ART-SECRPT recipients: USCYBERCOM and JFHQ-DODIN receive the system's vulnerability reports and assessments."
+  x_note: "Subject 'The DoD Component heads', verb 'Coordinate all vulnerability reports and assessments ... as required'."
+REQ-DODI8531.01-0073:
+  x_new_work_item: vuln-component-program
+  x_home: "P-7, the same section: the prioritization and scheduling plan, which M-3 reads when it sets POA&M scheduled_completion."
+  x_note: "Subject 'The DoD Component heads', verb 'Create'."
+REQ-DODI8531.01-0074:
+  x_new_work_item: DODIN-STATUS-SHARING
+  x_home: "M-5, ART-SECRPT: mitigation and risk acceptance status from poam/items.yaml reported to JFHQ-DODIN. conmon.yaml reporting.recipients takes persona IDs only, and JFHQ-DODIN has none."
+  x_note: "Subject 'The DoD Component heads', verb 'Track and report'."
+REQ-DODI8531.01-0075:
+  status: not-applicable
+  reason: "Binds the DoD Component heads, who 'Request assistance, as needed' from the Joint Federated Assurance Center. Checked PER-CIO: the request is optional and goes to a body no run names; no artifact, decision or check holds it."
+  x_note: "Subject 'The DoD Component heads', verb 'Request assistance, as needed'."
+REQ-DODI8531.01-0076:
+  x_existing: "P-2 section '## Risk management strategy and risk tolerance' in ART-ORG-CONTEXT (the tolerance statement and the organizational remediation period): holds 'DoD Component risk tolerance'."
+  x_gap: "'Mitigation deployment' guidance and the 'designated authority to accept risk' below the AO: vuln-component-program."
+  x_note: "Subject 'The DoD Component heads', verb 'Establish and provide guidance'."
+REQ-DODI8531.01-0077:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the external input for orders, with an exit criterion that each directed patch or upgrade is implemented or tracked."
+  x_note: "Subject 'The DoD Component heads', verb 'Implement ... directed by the Commander, USCYBERCOM, through JFHQ-DODIN'. si-5 d holds implementing directives as a control; the order itself enters no task."
+REQ-DODI8531.01-0078:
+  x_new_work_item: config-guidance-sources
+  x_home: "I-1 inputs and step: Component guidance on security-relevant configurations. EXT-ORG-POLICY holds Component procedures but I-1 does not read it."
+  x_note: "Subject 'The DoD Component heads', verb 'Identify and provide guidance'."
+
+# --- Page 11: DoD Component heads; Secretary of the Air Force through DC3 ---
+REQ-DODI8531.01-0079:
+  x_new_work_item: vuln-component-program
+  x_home: "P-7, the same section, read at M-3: what the Component requires a system owner or PM to mitigate."
+  x_note: "Subject 'The DoD Component heads', verb 'Determine and communicate'."
+REQ-DODI8531.01-0080:
+  x_existing: "cm-8, task P-10 with M-1 as updater, ART-INV and inventory.yaml (kinds hardware, software, operating-system, firmware), INV-BND-001: holds accounting for every item and keeping the inventory current."
+  x_gap: "'in DoD information technology asset management systems': inventory-asset-system."
+  x_note: "Subject 'The DoD Component heads', verbs 'Account for' and 'maintain'."
+REQ-DODI8531.01-0081:
+  x_new_work_item: vuln-component-program
+  x_home: "P-7, the same section: the Component's audit of patching, compliance and reporting, its results reaching M-2 through EXT-MONITORING."
+  x_note: "Subject 'The DoD Component heads', verb 'Ensure ... conducts audits'."
+REQ-DODI8531.01-0082:
+  x_new_work_item: "inventory-asset-system: inventory.yaml carries INV-### IDs of the run's own, with no DoD unique item identifier and no field for the DoD asset management system that holds the record."
+  x_home: "P-10, inventory.schema.json and ART-INV '## How the inventory was compiled'."
+  x_note: "Subject 'The DoD Component heads', verb 'Ensure ... creates and uses unique item identifiers ... in accordance with DoDI 8320.03 and 8320.04'. Neither issuance is in the library."
+REQ-DODI8531.01-0083:
+  status: not-applicable
+  reason: "Binds the DoD Component heads, who 'Provide SMEs' for VEP equities discussions. Checked PER-CIO: staff lent to the VEP, whose discussion a run never joins; only the submission (vep-submission) is the run's."
+  x_note: "Subject 'The DoD Component heads', verb 'Provide'."
+REQ-DODI8531.01-0084:
+  status: not-a-requirement
+  reason: "Lead-in naming the Secretary of the Air Force through DC3. 'In addition to the responsibilities in Paragraph 2.10' has no verb of its own and binds no one here; the duties are 0085 to 0093."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', no verb before the colon."
+REQ-DODI8531.01-0085:
+  status: not-applicable
+  reason: "Binds DC3, which 'Manages the DoD's VDP public engagement efforts'. Checked PER-CSSP: public engagement with researchers is DC3's own work."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Manages'."
+REQ-DODI8531.01-0086:
+  status: not-applicable
+  reason: "Binds DC3, which 'Functions as the single focal point' for researchers. Checked PER-CSSP: how DC3 takes in reports is its internal role; a run meets the report only once 0087 delivers it."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Functions'."
+REQ-DODI8531.01-0087:
+  x_new_work_item: "vdp-response: a VDP report reaching a system has no path in a run. Nothing assesses its severity, validates it, plans its fix, keeps the system owner and AO informed, or reports through VRMN; poam-items source_of_weakness has no value for it."
+  x_home: "M-3 step: a report delivered through JFHQ-DODIN to the system owner enters as a new input and becomes a POA&M item."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Coordinates ... to ensure the delivery of reports to the system's owner'. The report is what a run consumes."
+REQ-DODI8531.01-0088:
+  status: not-applicable
+  reason: "Binds DC3, which 'Coordinates and gains approval' before releasing researchers' disclosure requests. Checked PER-AO: the same release decision as 0048 and 0063, with nothing in a run depending on it."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Coordinates and gains approval'."
+REQ-DODI8531.01-0089:
+  status: not-applicable
+  reason: "Binds DC3, which 'Coordinates with JFHQ-DODIN' so VDP finds are considered for the VEP. Checked PER-CSSP: a handoff between two enterprise bodies after the report has left the system's hands."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Coordinates'."
+REQ-DODI8531.01-0090:
+  status: not-applicable
+  reason: "Binds DC3, which 'Operates, maintains, and provides user training for' VRMN. Checked PER-CSSP: running a platform is DC3's. A Component's reporting in it is at 0143, under vdp-response."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Operates, maintains, and provides'."
+REQ-DODI8531.01-0091:
+  status: not-applicable
+  reason: "Binds DC3, which 'Serves as one of four DoD representatives' for the VEP. Checked PER-CIO: interagency representation with no run step."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Serves'."
+REQ-DODI8531.01-0092:
+  status: not-applicable
+  reason: "Binds DC3, which 'Designates a VEP point of contact' for DC3's submissions. Checked PER-CISO: DC3's own appointment for what DC3 submits."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Designates'."
+REQ-DODI8531.01-0093:
+  status: not-applicable
+  reason: "Binds DC3, which 'Disseminates remediation and mitigation options' to the Defense Industrial Base. Checked PER-DEV: the recipient is the industrial base at large, and nothing in a run takes that feed."
+  x_note: "Subject 'the Secretary of the Air Force, through the Director, DC3', verb 'Disseminates'."
+
+# --- Page 12: CJCS; Commander, USCYBERCOM ---
+REQ-DODI8531.01-0094:
+  status: not-a-requirement
+  reason: "Lead-in naming the CJCS. 'In addition to responsibilities in Paragraph 2.10' has no verb of its own and binds no one here; the duties are 0095 to 0098."
+  x_note: "Subject 'the CJCS', no verb before the colon."
+REQ-DODI8531.01-0095:
+  status: not-applicable
+  reason: "Binds the CJCS, who 'Manages military support to the VEP'. Checked PER-CIO: joint military oversight of USCYBERCOM's VEP role, far above a system."
+  x_note: "Subject 'the CJCS', verbs 'Manages' and 'oversees'."
+REQ-DODI8531.01-0096:
+  status: not-applicable
+  reason: "Binds the CJCS, who 'Ensures that joint equities ... are represented in VEP submissions'. Checked PER-RE: joint operational equities are judged after a submission, and a run neither supplies nor reads them."
+  x_note: "Subject 'the CJCS', verb 'Ensures'."
+REQ-DODI8531.01-0097:
+  status: not-applicable
+  reason: "Binds the CJCS, who 'Coordinates internal reviews' of VEP submissions. Checked PER-CIO: staff review inside the Joint Staff; no output returns to a run."
+  x_note: "Subject 'the CJCS', verb 'Coordinates'."
+REQ-DODI8531.01-0098:
+  status: not-applicable
+  reason: "Binds the CJCS, who 'Coordinates vulnerability submissions from the Combatant Commands'. Checked PER-CIO: this path is the Combatant Commands' own, and a run's submission goes through its Component (0146)."
+  x_note: "Subject 'the CJCS', verb 'Coordinates'."
+REQ-DODI8531.01-0099:
+  status: not-a-requirement
+  reason: "Lead-in naming the Commander, USCYBERCOM. 'In addition to the responsibilities in Paragraph 2.10' has no verb of its own and binds no one here; the duties are 0100 to 0115."
+  x_note: "Subject 'the Commander, USCYBERCOM', no verb before the colon."
+REQ-DODI8531.01-0100:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Establishes and assigns responsibilities for managing DoD-wide vulnerabilities through JFHQ-DODIN'. Checked PER-CSSP: how USCYBERCOM organizes its own command; the orders it issues are 0103."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Establishes and assigns'."
+REQ-DODI8531.01-0101:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the same external input: these procedures set how an order reaches a system and how its implementation is tracked."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Establishes procedures'. Shapes the output a run consumes."
+REQ-DODI8531.01-0102:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the same external input; ART-IRP '## Roles, responsibilities and authorities' for disconnection from DODIN transport."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Directs and prioritizes'. This is the authority behind the orders, including disconnection."
+REQ-DODI8531.01-0103:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the same external input: these orders and directives are what the input holds."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Distributes or produces'."
+REQ-DODI8531.01-0104:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "M-5, ART-SECRPT: the status a system reports up for directed actions, which USCYBERCOM oversees."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Oversees'. Kept because a run reports to this oversight."
+REQ-DODI8531.01-0105:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Manages operational risk' for everything on the DODIN. Checked PER-AO and PER-RE: that is command-level operational risk, not the system risk an AO accepts, and no run input or output carries it."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Manages'."
+REQ-DODI8531.01-0106:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the same external input: an action directed within VRMN from a VDP report."
+  x_note: "Subject 'the Commander, USCYBERCOM', verbs 'Receives' and 'directs'. Read with 0137, where the system owner's team executes it."
+REQ-DODI8531.01-0107:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Appoints SMEs' for equities discussions. Checked PER-CSSP: command staff lent to the VEP."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Appoints'."
+
+# --- Page 13: Commander, USCYBERCOM ---
+REQ-DODI8531.01-0108:
+  x_new_work_item: vep-submission
+  x_home: "M-3, the same step: this office is the addressee of the run's submission."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Establishes an office'. Kept because a run submits to it (0146)."
+REQ-DODI8531.01-0109:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Serves as one of four DoD representatives' at the National Security Council. Checked PER-CIO: national representation, no run step."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Serves'."
+REQ-DODI8531.01-0110:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Designates a VEP point of contact' for USCYBERCOM's own submissions to the Executive Secretariat. Checked PER-CISO: this appointment sits downstream of 0108, the office a run deals with."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Designates'."
+REQ-DODI8531.01-0111:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Coordinates with the CJCS and the USD(P)' to review and submit. Checked PER-CISO: USCYBERCOM's procedure after it holds the submission; a run's step ends at handing it over."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Coordinates'."
+REQ-DODI8531.01-0112:
+  x_new_work_item: vep-submission
+  x_home: "M-3, the same step: mitigation options and deployment plans returned for a submitted vulnerability enter ART-POAM."
+  x_note: "Subject 'the Commander, USCYBERCOM', verbs 'Assists' and 'recommend'. The options are the output a run consumes."
+REQ-DODI8531.01-0113:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Coordinates with' US-CERT and two other centres for threat updates. Checked PER-CSSP: how the command gathers threat data; what a run receives is EXT-THREAT, held at 0050."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Coordinates'."
+REQ-DODI8531.01-0114:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Shares information about vulnerabilities with the DoD US-CERT liaison', as 44 U.S.C. 3556 sets out. Checked PER-CSSP: a federal liaison channel the command holds, and no system uses it."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Shares ... in accordance with Section 3556 of Title 44'."
+REQ-DODI8531.01-0115:
+  status: not-applicable
+  reason: "Binds the Commander, USCYBERCOM, who 'Coordinates with the US-CERT' on possible fixes. Checked PER-CSSP: national coordination; what follows for a system arrives as an order under 0103."
+  x_note: "Subject 'the Commander, USCYBERCOM', verb 'Coordinates ... as required'."
+
+# --- Page 14 has no entries: the 3.1 and 3.2 paragraphs are rejected descriptions, and Figure 1 repeats the five steps. ---
+
+# --- Page 15: Step 1, scanning, penetration testing, assessment, history ---
+REQ-DODI8531.01-0116:
+  status: not-a-requirement
+  reason: "Run-in heading, 'Vulnerability Scanning.', the first of the six methods."
+REQ-DODI8531.01-0117:
+  status: not-a-requirement
+  reason: "Definition of a vulnerability scan, then the lead-in 'The DoD Components will:'. That 'will' has no verb until its items and binds no one here; the duties are 0118 to 0123."
+  x_note: "Subject 'The DoD Components', verb 'will:' with the verb in each item."
+REQ-DODI8531.01-0118:
+  x_existing: "ra-5 a with EXT-MONITORING (vulnerability scans) and the conmon.yaml frequency for the RA family under CONMON-001: hold performing the scans."
+  x_gap: "'using the guidelines in NIST SP 800-115 as reference', named nowhere and not in the library: vuln-identification."
+  x_note: "Subject 'The DoD Components', verb 'Perform'."
+REQ-DODI8531.01-0119:
+  x_new_work_item: vuln-identification
+  x_home: "S-5, ART-CONMON '## Roles and tools'; playbooks/M/M-2.md step 4. ra-5 b asks for standards to enumerate flaws without naming CVE, and no file names it."
+  x_note: "Subject 'The DoD Components', verb 'Use'."
+REQ-DODI8531.01-0120:
+  x_existing: "si-2 a and si-2.2 ('Determine if system components have applicable security-relevant software and firmware updates installed'); si-2 is XXX and si-2.2 +XX on I, so both are in every baseline."
+  x_note: "Subject 'The DoD Components', verb 'Identify'."
+REQ-DODI8531.01-0121:
+  x_existing: "si-2.2 ('using [Assignment: organization-defined automated mechanisms]'): holds identifying unpatched items by automation."
+  x_gap: "'use manual processes only when necessary': vuln-identification. S-5's exit criterion on automation applies only where AD-CATO is a goal."
+  x_note: "Subject 'The DoD Components', verb 'Identify'."
+REQ-DODI8531.01-0122:
+  x_existing: "cm-8 and cm-8.3 (unauthorized software detected); P-10 and M-1 with ART-INV and inventory.yaml kinds software, operating-system and firmware; INV-BND-001. Tracks deployed software per component."
+  x_note: "Subject 'The DoD Components', verbs 'Identify and maintain oversight' and 'track'."
+REQ-DODI8531.01-0123:
+  x_new_work_item: vuln-patch-coverage
+  x_home: "S-5, ART-CONMON, a scan of the patching service's reach, with its result in EXT-MONITORING."
+  x_note: "Subject 'The DoD Components', verb 'Implement scanning programs'. Read with 0174, which corrects the gaps."
+REQ-DODI8531.01-0124:
+  status: not-a-requirement
+  reason: "Run-in heading, 'Penetration Testing.', the second of the six methods."
+REQ-DODI8531.01-0125:
+  status: not-a-requirement
+  reason: "Definition of penetration testing, then the lead-in 'The DoD Components will:'. That 'will' has no verb until its items and binds no one here; the duties are 0126 and 0127."
+  x_note: "Subject 'The DoD Components', verb 'will:' with the verb in each item."
+REQ-DODI8531.01-0126:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `penetration_test` block, task A-3 step 6, and the ART-SAR pen test results section. ca-8 is High only, so it does not hold a duty on every system; 'considering cost and time available' is the scoping the block records."
+  x_note: "Subject 'The DoD Components', verb 'Perform'."
+REQ-DODI8531.01-0127:
+  x_new_work_item: PENTEST-PLAN
+  x_home: "sap.yaml `penetration_test` block: the method names SP 800-115, which is not in the library."
+  x_note: "Subject 'The DoD Components', verb 'Perform'."
+REQ-DODI8531.01-0128:
+  status: not-a-requirement
+  reason: "Run-in heading, 'Security Controls Assessment.', the third method. Its rejected paragraph only points to the RMF Knowledge Service, which EXT-ASSESSMENT-PROCEDURES already names."
+REQ-DODI8531.01-0129:
+  status: not-a-requirement
+  reason: "Run-in heading, 'Historical Documentation.', the fourth method; the duty is 0130."
+REQ-DODI8531.01-0130:
+  x_new_work_item: vuln-identification
+  x_home: "playbooks/M/M-2.md step 4: past incident reports and logs cross-referenced with CVE, ART-RA and vendor bulletins, as an identification source."
+  x_note: "Subject 'The DoD Components', verb 'will cross-reference'."
+
+# --- Page 16: Step 1, VDP and VEP ---
+REQ-DODI8531.01-0131:
+  status: not-a-requirement
+  reason: "Run-in heading, 'Coordinated VDP', the fifth method; the duties are the items below."
+REQ-DODI8531.01-0132:
+  status: not-applicable
+  reason: "Binds ethical hackers, who 'must comply with all applicable' laws to take part. Checked PER-DEV and PER-SCA: outside researchers are no role in a run, and no system step governs them."
+  x_note: "Subject 'Ethical hackers', verb 'must comply'."
+REQ-DODI8531.01-0133:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step: what a system's team receives through the VDP is used only to mitigate or remediate."
+  x_note: "Subject 'Information submitted to DoD through the VDP', verb 'must be used for defensive purposes'."
+REQ-DODI8531.01-0134:
+  status: not-a-requirement
+  reason: "Lead-in, 'During the VDP coordination process, the DoD Components will:'. That 'will' has no verb until its items and binds no one here; the duties are 0135 to 0143."
+  x_note: "Subject 'the DoD Components', verb 'will:' with the verb in each item."
+REQ-DODI8531.01-0135:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step: a severity on the POA&M item, rated as in vuln-analysis-report."
+  x_note: "Subject 'the DoD Components', verb 'Assess'."
+REQ-DODI8531.01-0136:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step, with RACI for the system owner's remediation team; 'Cyber Service Component' has no persona."
+  x_note: "First sentence has the duty, subject 'the DoD Components', verb 'Execute'. The second opens a lead-in over items 1 to 5, whose subject is 'The system owner's remediation team and the Cyber Service Component'."
+REQ-DODI8531.01-0137:
+  x_new_work_item: DIRECTED-ACTIONS
+  x_home: "Task M-3, the same external input; PER-PM's team and PER-CSSP act on it."
+  x_note: "Subject from 0136, 'The system owner's remediation team and the Cyber Service Component', verb 'Execute'."
+REQ-DODI8531.01-0138:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step: validation comes before the item is opened."
+  x_note: "Subject from 0136, verb 'Validate'."
+REQ-DODI8531.01-0139:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step, with the POA&M item as the plan; source_of_weakness needs a value for it."
+  x_note: "Subject from 0136, verb 'Develop, implement, and execute'."
+REQ-DODI8531.01-0140:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step: the system's team asks DC3 through its chain when a report lacks detail."
+  x_note: "Subject from 0136, verb 'Contact ... as required'. The source's parenthesis calls USCYBERCOM part of the Component chain of command."
+REQ-DODI8531.01-0141:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step, informing PER-PM through closure."
+  x_note: "Subject from 0136, verb 'Keep ... informed'."
+REQ-DODI8531.01-0142:
+  x_new_work_item: vdp-response
+  x_home: "M-3, the same step, and ART-SECRPT '## Risks and planned responses' at M-5: both reach PER-AO, and neither names a VDP report."
+  x_note: "Subject 'the DoD Components', verb 'Advise'."
+REQ-DODI8531.01-0143:
+  x_new_work_item: vdp-response
+  x_home: "M-5, ART-SECRPT: closure of the VDP report through the chain to DC3 and USCYBERCOM in VRMN."
+  x_note: "Subject 'the DoD Components', verb 'Report'. The statement ends without a period in the source."
+REQ-DODI8531.01-0144:
+  status: not-a-requirement
+  reason: "Run-in heading, 'VEP', the sixth method; the duties are the items below."
+REQ-DODI8531.01-0145:
+  status: not-a-requirement
+  reason: "Description of what the VEP is for. 'It will be patched' states the vendor's expected result inside the description, so that 'will' binds no one."
+  x_note: "Subject 'The VEP', verb 'is used'; the inner clause is 'it will be patched'."
+REQ-DODI8531.01-0146:
+  x_new_work_item: vep-submission
+  x_home: "M-3, the same step: the system's team identifies the vulnerability and sends it through the Component to USCYBERCOM."
+  x_note: "Subject 'DoD Components ... except NSA', verb 'will ... use ... to identify and submit'."
+
+# --- Page 17: Step 2, analysis; Step 3, reporting ---
+REQ-DODI8531.01-0147:
+  status: not-applicable
+  reason: "Binds NSA, which 'will submit vulnerabilities directly to the VEP'. Checked PER-CISO: NSA's own direct path, excluded from the path a system's Component uses at 0146."
+  x_note: "Subject 'NSA', verb 'will submit'."
+REQ-DODI8531.01-0148:
+  x_new_work_item: "vuln-analysis-report: a run keeps no per-vulnerability analysis. sar-results findings carry a severity on the SP 800-30 scale and a recommendation; no record holds the discovery date, the CVSS score and rating, or the expected loss of confidentiality, integrity and availability, and nothing reports a vulnerability on discovery."
+  x_home: "M-2 step 4 and sar-results.schema.json finding fields. ART-RA holds risks at system level under ra-3, not an impact per vulnerability."
+  x_note: "Second sentence holds the duty: subject 'The DoD Components', verb 'will perform impact assessments'. The first describes an impact assessment."
+REQ-DODI8531.01-0149:
+  x_new_work_item: risk-response-priority
+  x_home: "M-3 exit criteria in framework/tasks/M.yaml: the most critical vulnerability first, by the CVSS rating vuln-analysis-report records."
+  x_note: "Last sentence holds the duty: subject 'DoD Components', verb 'will prioritize'. The Component's plan is 0073."
+REQ-DODI8531.01-0150:
+  status: not-a-requirement
+  reason: "Description of the CVSS and a pointer to NIST IR 7435: 'provides a uniform and standardized' method. Nothing here is asked of anyone."
+REQ-DODI8531.01-0151:
+  status: not-a-requirement
+  reason: "Description of CVSS calculators, 'compute base, temporal, or environmental scores', with a web address for one."
+REQ-DODI8531.01-0152:
+  status: not-a-requirement
+  reason: "Description of the National Vulnerability Database as 'a registry of all known reported vulnerabilities', with its web addresses."
+REQ-DODI8531.01-0153:
+  x_new_work_item: vuln-analysis-report
+  x_home: "M-2 step 4 and sar-results.schema.json finding fields: the analysis report as a record per vulnerability, with the six items of 3.4.a."
+  x_note: "Subjects 'The DoD Components' and 'The analysis report', verbs 'will draft' and 'must include one or more of the following'. Items 0154 to 0159 are bare nouns and point here: name, date of discovery, recommendation, CVSS score, CVSS severity rating, details of the loss. 'One or more' lets a report carry only one of them. Spans pp. 17-18 with its items."
+REQ-DODI8531.01-0154:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Name of the vulnerability.', one field of the report; the duty is the lead-in 0153."
+REQ-DODI8531.01-0155:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Date of discovery.', one field of the report; the duty is the lead-in 0153."
+REQ-DODI8531.01-0156:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Recommendation to correct the vulnerability.', one field of the report; the duty is the lead-in 0153."
+
+# --- Page 18: Step 3 ---
+REQ-DODI8531.01-0157:
+  status: not-a-requirement
+  reason: "Bare noun item, 'The CVSS score.', one field of the report; the duty is the lead-in 0153."
+REQ-DODI8531.01-0158:
+  status: not-a-requirement
+  reason: "Bare noun item, 'The CVSS severity rating.', one field of the report; the duty is the lead-in 0153."
+REQ-DODI8531.01-0159:
+  status: not-a-requirement
+  reason: "Bare noun item, 'Details of how the loss ... could affect DoD operations', one field of the report; the duty is the lead-in 0153."
+REQ-DODI8531.01-0160:
+  status: not-a-requirement
+  reason: "Lead-in, 'When generating the analysis report, the DoD Components will:'. That 'will' has no verb until its items and binds no one here; the duties are 0161 and 0162."
+  x_note: "Subject 'the DoD Components', verb 'will:' with the verb in each item."
+REQ-DODI8531.01-0161:
+  x_new_work_item: vuln-analysis-report
+  x_home: "M-2 step and ART-CONMON '## Reporting': reporting on discovery. The strategy's reporting has a frequency and no event path; ra-5 e shares results with no timing."
+  x_note: "Subject 'the DoD Components', verb 'Report ... immediately upon discovery'. The page does not say to whom."
+REQ-DODI8531.01-0162:
+  x_new_work_item: vuln-analysis-report
+  x_home: "sar-results.schema.json finding fields: a CVSS 3.1 score and rating beside `severity`, whose `level` enum is the SP 800-30 scale."
+  x_note: "Subject 'the DoD Components', verb 'Use'. The scale sits in items 0163 to 0166 and in Table 1, whose rows the extractor rejected; Table 1 alone adds 0.0 None."
+REQ-DODI8531.01-0163:
+  status: not-a-requirement
+  reason: "Definition of Low on the scale 0162 requires: 0.1 to 3.9, a limited adverse effect. It defines a rating and binds no one."
+  x_note: "'Minimum CVSS score of 0.1 and 3.9' reads as a range in Table 1."
+REQ-DODI8531.01-0164:
+  status: not-a-requirement
+  reason: "Definition of Medium on the scale 0162 requires: 4.0 to 6.9, a serious adverse effect. It defines a rating and binds no one."
+REQ-DODI8531.01-0165:
+  status: not-a-requirement
+  reason: "Definition of High on the scale 0162 requires: 7.0 to 8.9, a catastrophic adverse effect. It defines a rating and binds no one."
+  x_note: "FIPS 199 puts 'severe or catastrophic' at High, as here, but this scale's Critical adds 'cataclysmic', which FIPS 199 does not have. Listed under source conflicts."
+REQ-DODI8531.01-0166:
+  status: not-a-requirement
+  reason: "Definition of Critical on the scale 0162 requires: 9.0 to 10.0, a cataclysmic adverse effect. It defines a rating and binds no one."
+
+# --- Page 19: Step 4, remediation and mitigation; Step 5 lead-in ---
+REQ-DODI8531.01-0167:
+  status: not-a-requirement
+  reason: "Definitions of remediation and mitigation, then the lead-in 'the DoD Components will:'. That 'will' has no verb until its items and binds no one here; the duties are 0168 to 0178."
+  x_note: "Subject 'the DoD Components', verb 'will:' with the verb in each item."
+REQ-DODI8531.01-0168:
+  x_new_work_item: "vuln-remediation-selection: M-3 requires a mitigation or an AO acceptance for each risk and ART-POAM records the approach, but nothing has the method chosen case by case against loss of confidentiality, integrity and availability, or against the cost factors the source names."
+  x_home: "M-3 step, recorded in ART-POAM '## Remediation approach and resources'."
+  x_note: "Subject 'the DoD Components', verbs 'Determine' and 'consider'."
+REQ-DODI8531.01-0169:
+  x_new_work_item: vuln-remediation-selection
+  x_home: "M-3 step, the same record: asset value, exposure factor, single loss expectancy, annual rate of occurrence, annualized loss expectancy and total cost of ownership. ART-INV '## Asset priority' ranks assets without those values."
+  x_note: "Subject 'the DoD Components', verb 'Consider'."
+REQ-DODI8531.01-0170:
+  work_item: WI-15
+  x_note: "Subject 'the DoD Components', verb 'Compute and maintain'. Sits in WI-15's 'Metrics ... absent from conmon schema and template': mean time to patch, patch deployment success rate and average exposure would be conmon metrics, reported at M-5."
+REQ-DODI8531.01-0171:
+  x_existing: "cm-6 c and d, ART-CMP '## Configuration monitoring' and '## Baseline configurations' (each deviation with its justification), ART-STIG '## Accepted deviations'; playbooks/M/M-2.md step 3 adds controls with POA&M milestones due, which monitors remediation."
+  x_note: "Subject 'the DoD Components', verbs 'Monitor' and 'document'."
+REQ-DODI8531.01-0172:
+  x_existing: "cm-3 and si-2 d; ART-CMP '## Configuration change control'; ART-CHG '## Change log' at M-1, with EXT-CHANGE-REQUESTS."
+  x_note: "Subject 'the DoD Components', verbs 'Use' and 'implement and track'."
+REQ-DODI8531.01-0173:
+  x_existing: "EXT-CHANGE-REQUESTS, input of M-1, and ART-CHG '## Change log' (requested by); sar-results finding `recommendation` for a change found by assessment."
+  x_note: "Subject 'the DoD Components', verb 'Recommend'."
+REQ-DODI8531.01-0174:
+  x_new_work_item: vuln-patch-coverage
+  x_home: "M-3 step: gaps in automated patching corrected and tracked in ART-POAM."
+  x_note: "Subject 'the DoD Components', verbs 'Use' and 'correct'. Finding devices alone is ra-5 a; correcting the patching system's gaps is not held."
+REQ-DODI8531.01-0175:
+  x_new_work_item: vuln-patch-coverage
+  x_home: "S-5, ART-CONMON '## Roles and tools': how patches reach items outside enterprise patching."
+  x_note: "Subject 'the DoD Components', verb 'Ensure'."
+REQ-DODI8531.01-0176:
+  x_new_work_item: vuln-patch-coverage
+  x_home: "M-1 step and ART-CMP '## Configuration monitoring': discovery and control of non-compliant devices. cm-8.3 b isolates unauthorized components and does not bring them into compliance."
+  x_note: "Subject 'the DoD Components', verb 'Establish ... in accordance with respective device compliance policies'."
+REQ-DODI8531.01-0177:
+  x_existing: "M-7, ART-DISP '## Media sanitization and component disposal' ('sanitized or destroyed and how that is verified and recorded'), mp-6 XXX on C: hold destroying devices and media."
+  x_gap: "'in accordance with CNSSI 4004.1', named nowhere and not in the library, and destruction as a remediation before disposal: cnssi-4004-destruction."
+  x_note: "Subject 'the DoD Components', verb 'Destroy ... in accordance with CNSSI 4004.1'."
+REQ-DODI8531.01-0178:
+  x_existing: "I-1 with EXT-STIG, ART-STIG, STIG-001 and cm-6 a: hold secure configurations under DoD STIGs."
+  x_gap: "'NSA/CSS security implementation and mitigation guidance, and NIST mitigation guidelines': config-guidance-sources."
+  x_note: "Subject 'the DoD Components', verb 'Implement ... in accordance with applicable DoD security technical implementation guides'."
+REQ-DODI8531.01-0179:
+  x_existing: "playbooks/M/M-2.md step 4.3 ('A finding the data shows fixed is closed only on evidence'), A-5 (the assessor reassesses remediated controls), ca-7 and tasks M-2 with S-5 for the continuous monitoring."
+  x_note: "Subject 'DoD Components', verbs 'will verify' and 'perform'. Has its own verbs, so it stays live above its items 0180 to 0185."
+
+# --- Page 20: Step 5 ---
+REQ-DODI8531.01-0180:
+  x_new_work_item: "vuln-verification: M-2 closes a finding on evidence, but no step says what the evidence is. Add the check of the fix on completion and the return to the baseline, comparing successive scans, watching for codependent vulnerabilities, monthly authenticated and non-authenticated scans, and central log storage."
+  x_home: "M-2 step 4: verification of a fix on completion; ART-CMP '## Baseline configurations' for re-establishing the baseline."
+  x_note: "Subject 'DoD Components' from 0179, verb 'Verify'."
+REQ-DODI8531.01-0181:
+  x_new_work_item: vuln-verification
+  x_home: "M-2 step 4.3: the finding closes on a comparison of successive scans. ra-5.6, which would hold this, is not selected in any cell."
+  x_note: "Subject from 0179, verb 'Compare'."
+REQ-DODI8531.01-0182:
+  x_new_work_item: vuln-verification
+  x_home: "M-2 step 3: a remediated system stays on the list of what is due, watched for codependent vulnerabilities."
+  x_note: "Subject from 0179, verb 'Monitor'."
+REQ-DODI8531.01-0183:
+  x_new_work_item: vuln-verification
+  x_home: "S-5 conmon.yaml with a CONMON rule fixing the RA family at monthly or better; M-2 step 3 for the scans. ra-5.5 holds privileged access for authenticated scans only."
+  x_note: "Subject from 0179, verb 'Conduct'. CONMON-001 only needs some frequency. CNSSI 1253's RA-5 parameter value is 'at least every 30 days' (WI-20), which is not the same as 'monthly', and the source here limits this to 'previously affected systems'."
+REQ-DODI8531.01-0184:
+  x_new_work_item: vuln-verification
+  x_home: "S-5, ART-CONMON '## Roles and tools': the central repository or SIEM. au-4.1 is selected on availability only and au-9.2 at High only; ART-IRP's 'logs forwarded to the CSSP' is an example in a prompt."
+  x_note: "Subject from 0179, verb 'Store'."
+REQ-DODI8531.01-0185:
+  x_existing: "P-7 and S-5, ART-CONMON, ca-7, M-2 and M-5: the DoD program reaches a system through the organizational strategy that S-5 must follow, CONMON-001 checking that frequencies exist."
+  x_note: "Subject from 0179, verb 'Comply'."
+
+# --- Promoted at this triage, p. 17 ---
+REQ-DODI8531.01-0186:
+  x_new_work_item: vuln-analysis-report
+  x_home: "M-2 step 4: severity is assigned in the cycle the vulnerability is found, which the same record dates."
+  x_note: "Promoted: the only timing on Step 2. Subject 'Vulnerability analysis', verb 'evaluates ... to assign severity levels ... as quickly as possible'. No duty word; a step's stated aim, kept because 0148 and 0149 state no time."

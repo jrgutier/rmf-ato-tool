@@ -1,0 +1,149 @@
+# FIPS200 triage. Tier 1, so no status: deferred here; nothing in this document needed x_defer.
+# x_existing on a control means: selected in framework/baselines/cnssi-1253.yaml (cell quoted, read
+# in the order low, moderate, high), a statement at S-4 (SSP-COV-001), a determination at A-3
+# (SAR-COV-001). 0005 says the standard is met "through the use of the security controls", so the
+# family entries 0018 to 0034 are held by the controls of their family; each catalog statement was
+# opened with `rmf catalog show`. Every cited cell selects at every level unless the entry says so.
+#
+# --- Page 2: Foreword ---
+REQ-FIPS200-0001:
+  status: not-a-requirement
+  reason: "Foreword: says what the FIPS series is, then that comments 'should be addressed to the Director' of the Information Technology Laboratory. That 'should' gives a mailing address to anyone who chooses to comment, so it binds no one."
+  x_note: "Subject and verb: 'Comments concerning FIPS publications are welcomed and should be addressed to the Director'."
+# --- Page 3: Authority ---
+REQ-FIPS200-0002:
+  status: not-a-requirement
+  reason: "Authority page: FIPS PUBS 'are issued by' NIST 'after approval by the Secretary of Commerce' under Section 5131 of the Information Technology Management Reform Act and FISMA. Says how the series comes out; no reader acts on it."
+# --- Page 4: Announcement, items 1 to 6 ---
+REQ-FIPS200-0003:
+  status: not-a-requirement
+  reason: "First line of the announcement: repeats the issuing authority of the series, citing FISMA alone this time. Publication history that page 3 already gave, with nothing to do."
+REQ-FIPS200-0004:
+  status: not-a-requirement
+  reason: "Item 6, Applicability: 'This standard is applicable to' all federal information and systems except classified information and national security systems. It says who the standard reaches and names no act. 'to require protection' describes the excluded classified information, and 'encouraged' invites state, local, tribal and private bodies to consider the standard; neither binds anyone."
+  x_note: "Subject and verb: 'This standard is applicable to'; 'information that has been determined ... to require protection'; 'state, local, and tribal governments, and private sector organizations ... are encouraged to consider the use of this standard'. The national security systems carve-out matters to 0015 and 0035: see source conflicts in the report."
+# --- Page 5: Announcement, items 8 to 11 ---
+REQ-FIPS200-0005:
+  x_existing: "Task S-1 steps 4 and 7 and rmf baseline resolve: baseline.json takes its controls from the SP 800-53 catalog through framework/baselines/cnssi-1253.yaml, or the SP 800-53B profile under the degraded fallback (src/rmf_tool/baseline.py resolve); S-4 writes a statement for each control (SSP-COV-001) and A-3 assesses it (SAR-COV-001)."
+  x_note: "Subject and verb: 'Federal agencies must meet the minimum security requirements as defined herein through the use of the security controls'. The first sentence only says what the standard specifies."
+REQ-FIPS200-0006:
+  status: not-applicable
+  reason: "Binds federal agencies: they 'must be in compliance' one year after the standard took effect on March 9, 2006, a date that ran out in March 2007, before any run. Checked PER-CIO: a spent deadline has no artifact, decision or check to hold it. The standing duty is 0005."
+  x_note: "Subject and verb: 'Federal agencies must be in compliance with this standard not later than one year from its effective date'. Page 4 gives the date, March 9, 2006, and this item says 'effective immediately'."
+REQ-FIPS200-0007:
+  x_new_work_item: "ref-edition-currency"
+  x_home: "New REF rule run by rmf refs verify, on the new references/index.yaml field recording when each entry was last checked for a newer edition; for SP 800-53 the record adds the date of final publication, which starts the year."
+  x_note: "Two duties, decided by the stronger for a run: 'Federal agencies will have up to one year from the date of final publication to fully comply with the changes', which nothing tracks. The other, 'The security controls will be reviewed by NIST at least annually' and the public review of changes, is NIST's own procedure; a fork only consumes its output. 'are encouraged to initiate compliance activities immediately' is a permission on top of the year. Promotion not used: the sentence is inside this live entry."
+REQ-FIPS200-0008:
+  x_new_work_item: "tailoring-legal-floor"
+  x_home: "tailoring-legal-floor: Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml."
+  x_note: "'No provision is provided under FISMA for waivers to FIPS made mandatory by the Secretary of Commerce.' No duty word, yet a real limit: tailoring under the guidance of SP 800-53 is allowed (0039), a waiver of the standard is not. S-2's exit criterion bars removal because a control is hard to implement, and says nothing of a remove that amounts to a waiver of a legal minimum."
+# --- Page 7: Section 1 Purpose and Section 2 Impact Levels ---
+REQ-FIPS200-0044:
+  status: not-a-requirement
+  reason: "Background: recounts that FISMA 'tasked NIST with the responsibility of developing' standards. A completed act of Congress on NIST, and the 'responsibility' binds no reader; what it produced is FIPS 199, SP 800-60 and this standard, which are pinned in references/. It stops at a colon over three noun items, 0009 to 0011."
+  x_note: "Subject and verb: 'Title III of the E-Government Act ... tasked NIST with the responsibility of developing security standards and guidelines'."
+REQ-FIPS200-0009:
+  status: not-a-requirement
+  reason: "Bare noun item under 0044: 'Standards for categorizing information and information systems', the thing FISMA asked of NIST, which is FIPS 199. No verb on any reader."
+REQ-FIPS200-0010:
+  status: not-a-requirement
+  reason: "Bare noun item under 0044: 'Guidelines' on which information types go in each category, a publication NIST was to write (SP 800-60). It tells no reader to act."
+REQ-FIPS200-0011:
+  status: not-a-requirement
+  reason: "Last noun item under 0044: 'Minimum information security requirements', which is this standard itself. What the minimum is sits in 0018 to 0034."
+REQ-FIPS200-0012:
+  status: not-a-requirement
+  reason: "Background: places FIPS 199 and FIPS 200 as the two mandatory standards and says what this one specifies. 'This standard will promote' more secure systems is a hoped-for effect, so 'will' binds no one; the duties are 0005 and 0035."
+  x_note: "Subject and verb: 'This standard will promote the development, implementation, and operation of more secure information systems'."
+REQ-FIPS200-0013:
+  x_existing: "Task C-2 steps 4, 5 and 7: a value per information type and objective, the highest over all types for each of C, I and A; facts.schema.json categorization c, i, a with the impact enum low, moderate, high; ART-CAT '## Impact per information type' and '## System categorization'."
+  x_note: "Subject and verb: 'FIPS Publication 199 requires agencies to categorize their information systems'; 'The potential impact values ... are the highest values'. Cut pair with 0014: this piece ends in a colon before the formula. A run keeps the format as three fields, not the printed string."
+REQ-FIPS200-0014:
+  status: not-a-requirement
+  reason: "Formula after the colon of 0013: 'SC information system = {(confidentiality, impact), (integrity, impact), (availability, impact)}'. Notation for the security category, and its three 'acceptable values' repeat the levels 0013 names. 0013 is the live piece of this cut pair."
+# --- Page 8: Section 2 end, Section 3 ---
+REQ-FIPS200-0015:
+  x_existing: "'must be accomplished prior to' selection: playbooks/S/S-1.md step 1, src/rmf_tool/baseline.py resolve refuses an unapproved categorization, FACTS-001. 'the high water mark concept must be used': src/rmf_tool/run/facts.py high_water states the three definitions exactly, and baseline.py method high-water-mark uses it, allowed only while CNSSI 1253 is degraded (playbooks/C/C-2.md step 7)."
+  x_note: "Subject and verb: 'the high water mark concept must be used to determine the overall impact level'; 'The determination of information system impact levels must be accomplished prior to the consideration of minimum security requirements'. A default run does not take one overall level: CNSSI 1253 Section 1.2 'does not adopt the high-water mark' for NSS, and DoDI 8510.01 page 8 has every system categorized under CNSSI 1253. Same reading as REQ-SP800-53B-0026. Listed under source conflicts."
+REQ-FIPS200-0016:
+  status: not-a-requirement
+  reason: "Describes coverage: 'The minimum security requirements cover seventeen security-related areas' and lists their names, among them 'audit and accountability', an area title in which 'accountability' binds no one. The duty of each area is its own entry, 0018 to 0034."
+  x_note: "Subject and verb: 'The minimum security requirements cover seventeen security-related areas'; 'The seventeen areas represent a broad-based, balanced information security program'."
+REQ-FIPS200-0017:
+  x_existing: "The first control of each of the seventeen families, ac-1, at-1, au-1, ca-1, cm-1, cp-1, ia-1, ir-1, ma-1, mp-1, pe-1, pl-1, ps-1, ra-1, sa-1, sc-1 and si-1: all XXX on C and on I, part a develops, documents and disseminates policy and procedures. framework/external-inputs.yaml EXT-ORG-POLICY brings the policies into P-1, P-2, P-5, P-9 and P-15."
+  x_note: "Subject and verb: 'organizations must develop and promulgate formal, documented policies and procedures ... and must ensure their effective implementation'. The Component writes them; a run consumes them and assesses each family's first control at A-3."
+REQ-FIPS200-0018:
+  x_existing: "Controls ac-2 (accounts) and ac-3 (enforces approved authorizations), XXX on C and I; ac-6 (only the accesses users and their processes need), +XX on C and I, for 'types of transactions and functions'; ca-3 (XXX on C and I) for other information systems."
+REQ-FIPS200-0019:
+  x_existing: "Clause (i): at-2 (literacy training to system users 'including managers, senior executives, and contractors'), XXX on C, I and A. Clause (ii): at-3 (role-based training before duties begin), XXX on C, I and A. pl-4, XXX, has users acknowledge the rules of behavior."
+REQ-FIPS200-0020:
+  x_existing: "Clause (i): au-2 and au-12 (events and record generation) and au-6 (review, analysis, reporting), XXX on C and I; au-9 (protection), XXX on C, I and A; au-11 (retention for after-the-fact investigations), XXX on A. Clause (ii): au-3 part f (identity in each record) with ia-2 (unique identification), XXX on C and I."
+REQ-FIPS200-0021:
+  x_existing: "Clause (i): ca-2, Task A-3, ART-SAR, and SAR-COV-001. Clause (ii): ca-5, Task A-6, ART-POAM, SAR-POAM-001. Clause (iii): ca-6, Task R-4, ART-AODM, AODM-001, with ca-3 for connections to other systems. Clause (iv): ca-7, Tasks S-5 and M-2, ART-CONMON. ca-2, ca-5, ca-6 and ca-7 are XXX on C, I and A; ca-3 XXX on C and I."
+  x_note: "Subject and verb: 'Organizations must: (i) periodically assess ... (ii) develop and implement plans of action ... (iii) authorize the operation ... (iv) monitor'. ca-3 'Approve and manage the exchange of information' is how the current catalog authorizes a connection."
+REQ-FIPS200-0022:
+  x_existing: "Clause (i): cm-2 and cm-8, XXX on I; ART-CMP '## Baseline configurations' and '## Configuration items and component inventory', Task P-10 ART-INV, kept current through Task M-1. Clause (ii): cm-6, XXX on I; Task I-1 ART-STIG and ART-CMP '## Configuration monitoring'."
+REQ-FIPS200-0023:
+  x_existing: "ART-CP at Task S-4, '## Activation and notification', '## Recovery strategy', '## Recovery' and '## Plan maintenance'; cp-2 (contingency plan, XXX on A), cp-9 (backup, XXX on C, I and A), cp-10 (recovery and reconstitution, XXX on A)."
+REQ-FIPS200-0024:
+  x_existing: "ia-2 (organizational users, and processes acting for them) and ia-8 (other users), XXX on C and I; ia-3 (devices, 'before establishing' a connection), +XX on C and I; ia-9 (services), +++ on C and I."
+REQ-FIPS200-0025:
+  x_existing: "Clause (i): ir-4 (preparation, detection and analysis, containment, eradication, recovery), XXX on C, I and A; ART-IRP at Task S-4, '## Detection and analysis', '## Response and reporting', '## Recovery'. Clause (ii): ir-5 ('Track and document incidents') and ir-6 (report to authorities), XXX on C, I and A."
+REQ-FIPS200-0026:
+  x_existing: "Clause (i): ma-2 (schedule, document and review maintenance), XXX on C, I and A. Clause (ii): ma-3 (tools), +XX on I; ma-5 (personnel), XXX on C, I and A."
+  x_note: "'timely maintenance': ma-6 is .XX on A, so at low availability ma-2's schedule carries it. The standard takes the selection of SP 800-53 at each level (0005), so this is its own minimum."
+REQ-FIPS200-0027:
+  x_existing: "Clause (i): mp-4 and mp-5 (storage and transport, 'digital and/or non-digital'), +XX on C. Clause (ii): mp-2, XXX on C and I. Clause (iii): mp-6 ('prior to disposal, release out of organizational control, or release for reuse'), XXX on C."
+REQ-FIPS200-0028:
+  x_existing: "Clause (i): pe-2 and pe-3, XXX on C, I and A. Clause (ii): pe-2 and pe-3 for the facility, pe-9 (power equipment), .XX on A. Clause (iii): pe-10 and pe-11 (.XX on A) and pe-12 (emergency lighting, XXX on A). Clause (iv): pe-13 and pe-15, XXX on A. Clause (v): pe-14, XXX on A."
+  x_note: "pe-9 to pe-11 start at moderate availability, the selection SP 800-53 makes; the standard takes that as its minimum (0005)."
+REQ-FIPS200-0029:
+  x_existing: "ART-SSP and ssp/controls at Task S-4: one statement per control, with `status` saying implemented or planned (SSP-COV-001); pl-2, XXX on C, I and A, parts c and d for review and update, Task M-4 output ART-SSP. Rules of behavior: pl-4, XXX on C, I and A, a statement in the same plan."
+REQ-FIPS200-0030:
+  x_existing: "Clause (i): ps-2 and ps-3, ps-3 XXX on C and I, ps-2 XXX on C, I and A; ps-7 (external providers), XXX on C and I. Clause (ii): ps-4 and ps-5, XXX on C, I and A. Clause (iii): ps-8 ('a formal sanctions process'), XXX on C, I and A."
+REQ-FIPS200-0031:
+  x_existing: "Task P-14 ART-RA (threats, vulnerabilities, likelihood, impact, '## Privacy risk' for individuals), kept current by Task M-3 and M-4 outputs ART-RA; ra-3, XXX on C, I and A, part f updates it on a set frequency."
+REQ-FIPS200-0032:
+  x_existing: "Clause (i): sa-2 ('Determine, document, and allocate the resources'). Clause (ii): sa-3. Clause (iv): sa-9, with ps-7. All XXX on C, I and A. Clause (iii): cm-10 (XXX on I) and cm-11 (XXX on C and I), where Rev. 5 holds software usage and installation restrictions."
+REQ-FIPS200-0033:
+  x_existing: "Clause (i): sc-7 ('Monitor and control communications at the external managed interfaces ... and at key internal managed interfaces'), XXX on C and I. Clause (ii): pl-8 (architecture), +XX on C, I and A; sa-15 (development process), ++X on C, I and A; sa-8 (engineering principles), XXX on C, I and A."
+REQ-FIPS200-0034:
+  x_existing: "Clause (i): si-2 ('Identify, report, and correct system flaws'). Clause (ii): si-3. Clause (iii): si-5 (receive alerts, advisories and directives; implement them or notify the issuer). All XXX on I."
+  x_note: "Tracking each directive to closure is the further duty DIRECTED-ACTIONS carries from other sources; si-5 holds what this entry says."
+# --- Page 10: Section 4 ---
+REQ-FIPS200-0035:
+  x_existing: 'Task S-1 steps 1, 4 and 7: selection comes after the approved categorization of C-2 and C-3, and baseline.json holds the Appendix D controls at the level of each objective; ART-BASELINE ''## Selection basis''. Task S-2 tailors them. Assurance: SP 800-53 Rev. 5 Section 2.5 puts it in assurance-related controls, so selecting the baseline selects them.'
+  x_note: 'Subject and verb: ''Organizations must meet the minimum security requirements in this standard by selecting the appropriate security controls and assurance requirements''; ''organizations must select an appropriate set of security controls''; ''The selected set of security controls must include one of three, appropriately tailored security control baselines''. A default run takes a per-objective union under CNSSI 1253, not one of three; the literal form is the degraded fallback (baseline_id SP800-53B-<level>). Source conflict, as in 0015.'
+  x_gap: '''selecting the appropriate security controls and assurance requirements'', the per-baseline list: implementation-assurance.'
+REQ-FIPS200-0036:
+  x_existing: 'Low on an objective: the first letter of the Appendix D cell selects (src/rmf_tool/baseline.py cnssi_origins), or the SP 800-53B LOW profile under the degraded fallback; tailored at S-2. Assurance-related controls in the baseline get a statement at S-4 and a determination at A-3.'
+  x_note: 'Subject and verb: ''organizations must, as a minimum, employ appropriately tailored security controls from the low baseline ... and must ensure that the minimum assurance requirements associated with the low baseline are satisfied''. The pinned SP 800-53 holds no list of minimum assurance requirements per baseline: Rev. 5 Section 2.5 identifies assurance-related controls in Appendix C, sa-4 (XXX on C, I and A) part c puts assurance requirements in the contract, and 0040 points at the current version. Judgment, named in the report. implementation-assurance is a further record, not needed for this minimum.'
+  x_gap: '''the minimum assurance requirements associated with the low baseline'', the per-baseline list: implementation-assurance.'
+REQ-FIPS200-0037:
+  x_existing: 'Moderate on an objective: the second letter of the Appendix D cell selects (baseline.py cnssi_origins), or the SP 800-53B MODERATE profile under the degraded fallback; tailored at S-2. The moderate baseline''s assurance-related controls reach S-4 statements and A-3 determinations the same way.'
+  x_note: 'Subject and verb: ''organizations must, as a minimum, employ appropriately tailored security controls from the moderate baseline''. Assurance reading as in 0036.'
+  x_gap: '''the minimum assurance requirements associated with the moderate baseline'', the per-baseline list: implementation-assurance.'
+REQ-FIPS200-0038:
+  x_existing: 'High on an objective: the third letter of the Appendix D cell selects (baseline.py cnssi_origins), or the SP 800-53B HIGH profile under the degraded fallback; tailored at S-2. SSP-COV-001 and SAR-COV-001 reach every control the high column adds, assurance-related ones among them.'
+  x_note: 'Subject and verb: ''organizations must, as a minimum, employ appropriately tailored security controls from the high baseline''. Assurance reading as in 0036.'
+  x_gap: '''the minimum assurance requirements associated with the high baseline'', the per-baseline list: implementation-assurance.'
+REQ-FIPS200-0039:
+  x_existing: "src/rmf_tool/baseline.py resolve drops a baseline control only on a `remove` action in tailoring.yaml; Task S-2 exit criteria (removal only on risk-based determinations) and playbooks/S/S-2.md step 4 (a control with no compensating control stays in); SSP-COV-001 forces a statement for every control that remains."
+  x_note: "Subject and verb: 'Organizations must employ all security controls in the respective security control baselines unless specific exceptions are allowed based on the tailoring guidance'."
+REQ-FIPS200-0040:
+  x_new_work_item: "ref-edition-currency"
+  x_home: "New REF rule run by rmf refs verify, on the new references/index.yaml field recording when each entry was last checked for a newer edition."
+  x_note: "Footnote 5. Subject and verb: 'Organizations must use the most current version of NIST Special Publication 800-53, as amended'. The pin is SP800-53R5, the PDF of 12-10-2020 and the OSCAL catalog of Rev 5.2.0 modified 2026-10-22; a run selects from that catalog, but nothing records that a later edition was looked for, and rmf refs fetch reports a change only at the pinned URL."
+REQ-FIPS200-0041:
+  x_existing: "Task C-2 raci: PER-IO R, PER-PM (system owner) A, PER-CISO (senior agency information security officer) C, with an exit criterion tying the categorization to the enterprise architecture and the organization's risk management strategy. Task C-3 raci: PER-AO A, PER-CIO and PER-CISO C, approval recorded in ART-CAT and facts.categorization.approved."
+  x_note: "Footnote 7. Subject and verb: 'Security categorization must be accomplished as an enterprise-wide activity with the involvement of senior-level organizational officials'. All five named roles are on C-2 or C-3."
+REQ-FIPS200-0042:
+  status: not-a-requirement
+  reason: "Footnote 8: a pointer, tailoring guidance for baselines 'is provided in' SP 800-53. It says where to read; the duty to stay within that guidance is 0039."
+# --- Page 11: Section 4 end ---
+REQ-FIPS200-0043:
+  x_existing: "'documented in the security plan': Task S-4 exit criteria (ssp/controls holds one statement per tailored-baseline control and tailoring actions are documented), SSP-COV-001, ART-SSP. 'coordinated with': Task S-2 raci C PER-AO, one of the officials the page names."
+  x_gap: "'approved by appropriate organizational officials': tailoring-approval. S-2 is accountable to PER-PM, and S-6, the AO's approval, reads ART-SSP, ART-CONMON and ART-RA but not ART-BASELINE, where each remove and compensating action is recorded."
+  x_home: "tailoring-approval: Task S-6 inputs gain ART-BASELINE, with an exit criterion that the AO's approval covers each remove and compensating action."
+  x_note: "Subject and verb: 'security control baseline tailoring activities must be coordinated with and approved by appropriate organizational officials'; 'The resulting set of security controls must be documented in the security plan'. The list after 'e.g.' is illustrative, so the AO alone can satisfy it."

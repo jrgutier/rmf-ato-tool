@@ -1,0 +1,506 @@
+# SP800-53B triage: pages 15 to 28 and 81 to 85 read whole against the source. Pages 29 to 80 are
+# excluded in conformance/sources.yaml and hold no entry. 0130, 0131 and 0132 are promoted here.
+# SP 800-53B is the federal source; CNSSI 1253 Section 3.2 governs a run and adopts the tailoring
+# activities of Section 2.4 by name (Section 3.2.2 item 3, footnote 18 at Section 2.6). So a duty in
+# Section 2.4 reaches a run through S-2. The high-water mark in Section 2.2 does not: CNSSI 1253
+# Section 1.2 rejects it for NSS and baseline.py keeps it only as the degraded fallback.
+# Role map from personas.txt: SAOP = PER-PRIV; senior agency information security officer =
+# PER-CISO; system owner = PER-PM; common control provider = PER-CCP.
+
+# --- Page 15: Chapter 1, need and purpose ---
+REQ-SP800-53B-0001:
+  status: not-a-requirement
+  reason: "Definitions of security and privacy controls and why selecting them matters. 'mission needs to ensure' is the noun 'needs' and a purpose clause, so it binds no one."
+  x_note: "Subject and verb: 'The requirements are derived from applicable laws, ... and mission needs to ensure the confidentiality, integrity, and availability'."
+REQ-SP800-53B-0002:
+  status: not-a-requirement
+  reason: "Background: SP 800-37 'defines two approaches' to selection, and says what a baseline is. It names the approaches; the choice between them is the duty in 0012."
+REQ-SP800-53B-0003:
+  x_existing: "playbooks/S/S-1.md step 4 and baseline.json from rmf baseline resolve (the minimum set), SSP-COV-001 (a statement for every baseline control), framework/tasks/I.yaml I-1 exit criterion (controls in the plans are implemented)."
+  x_note: "The statement runs from page 15 to page 16; page 15 holds it up to 'Whereas use of'. Subject and verb: 'Implementation of a minimum set of controls ... is mandatory'. The privacy clause says the privacy baseline 'is not mandated'; a run applies the NSS privacy baseline regardless, CNSSI 1253 Section 3.2.1 making it a default."
+REQ-SP800-53B-0004:
+  status: not-a-requirement
+  reason: "Applicability footnote 4: NSS 'are not subject to the requirements in [FISMA]', and the controls 'may be selected' where 'otherwise required' by another authority. That points elsewhere and permits; 'required' here binds no one in this document, and the run already takes the CNSSI 1253 route it names."
+  x_note: "Subject and verb: 'the controls established in this publication may be selected for national security systems as otherwise required'."
+
+# --- Page 16: 1.1 continued, 1.2 audience, 1.3 responsibilities ---
+REQ-SP800-53B-0005:
+  status: not-a-requirement
+  reason: "Describes how the publication works: baselines 'serve as a starting point' and tailoring 'can be guided'. The duties to select and tailor sit in 0012 and 0048."
+REQ-SP800-53B-0006:
+  status: not-a-requirement
+  reason: "Audience bullet under 'intended to serve a diverse audience': people with oversight 'responsibilities'. The word names who reads the document, so it binds no one."
+  x_note: "No verb; subject 'Individuals with system, information security, privacy, or risk management and oversight responsibilities'."
+REQ-SP800-53B-0007:
+  status: not-a-requirement
+  reason: "Audience bullet: people with development 'responsibilities', such as program managers and integrators. It lists readers and assigns nothing, so it binds no one."
+  x_note: "No verb; subject 'Individuals with system development responsibilities'."
+REQ-SP800-53B-0008:
+  status: not-a-requirement
+  reason: "Audience bullet: people with logistical or disposition 'responsibilities'. A reader category; the word binds no one."
+  x_note: "No verb; subject 'Individuals with logistical or disposition-related responsibilities'."
+REQ-SP800-53B-0009:
+  status: not-a-requirement
+  reason: "Audience bullet: people with implementation and operations 'responsibilities'. It says who may find the document useful and binds no one."
+  x_note: "No verb; subject 'Individuals with security and privacy implementation and operations responsibilities'."
+REQ-SP800-53B-0010:
+  status: not-a-requirement
+  reason: "Audience bullet: auditors and assessors with monitoring 'responsibilities'. A list of readers, which binds no one."
+  x_note: "No verb; subject 'Individuals with security and privacy assessment and monitoring responsibilities'."
+REQ-SP800-53B-0011:
+  status: not-a-requirement
+  reason: "Last audience bullet: commercial entities who produce products. A reader category with no duty."
+REQ-SP800-53B-0012:
+  x_existing: "playbooks/S/S-1.md steps 4 and 7 (the baseline approach, security and NSS privacy baselines, ART-BASELINE '## Selection basis'; DoDI 8510.01 and CNSSI 1253 fix the approach for a run) and framework/tasks/S.yaml S-2 depends_on S-1 with tailoring.yaml."
+  x_note: "The statement runs from page 16 to page 17. Subject and verb: 'Organizations have the responsibility to choose a control selection approach'; 'organizations select a security control baseline and privacy control baseline'; 'organizations apply the tailoring guidance'."
+REQ-SP800-53B-0013:
+  x_existing: "framework/tasks/P.yaml P-15 exit criteria and templates/artifacts/ART-REQ.md '## Security and privacy requirements'; S-1 takes ART-REQ as an input and playbooks/S/S-1.md step 7 carries uncovered requirements to S-2."
+  x_note: "Footnote 5. Subject and verb: 'organizations develop a well-defined set of security and privacy requirements'."
+
+# --- Page 17: 1.4, 1.5, 1.6 ---
+REQ-SP800-53B-0014:
+  status: not-a-requirement
+  reason: "Relationship note: the baselines 'are in accordance with' OMB A-130 and FIPS 199 and 200. That says what the baselines conform to; 'in accordance with' here binds no reader."
+  x_note: "Subject and verb: 'The control baselines in this publication are in accordance with requirements for federal information'."
+REQ-SP800-53B-0015:
+  status: not-applicable
+  reason: "Binds NIST: how it revises its baselines through public review, 'expected to' change over time. A producer's own procedure that no one in a run performs. Checked PER-CIO and PER-LSE; nothing holds it because the run takes only the pinned result (ADR-0002, references/oscal/VERSIONS.yaml)."
+  x_note: "Subject and verb: 'the security and privacy controls specified in the baselines are also expected to change'; 'requiring that proposed changes to the baseline undergo a rigorous and transparent public review process'."
+REQ-SP800-53B-0016:
+  status: not-a-requirement
+  reason: "Roadmap bullet: what Chapter Two describes."
+REQ-SP800-53B-0017:
+  status: not-a-requirement
+  reason: "Roadmap bullet: Chapter Three holds the baseline tables, which ADR-0002 pins through the OSCAL profiles."
+REQ-SP800-53B-0018:
+  status: not-a-requirement
+  reason: "Roadmap bullet pointing at the References section."
+REQ-SP800-53B-0122:
+  status: not-a-requirement
+  reason: "Label for the glossary appendix in the document's roadmap."
+
+# --- Page 18: end of 1.6 and the chapter callout ---
+REQ-SP800-53B-0019:
+  status: not-a-requirement
+  reason: "Callout defining security and privacy control baselines: 'predefined sets of controls' that 'can be tailored'. It repeats the definition of 0002 with no actor."
+
+# --- Page 19: Chapter 2 opening, 2.1 ---
+REQ-SP800-53B-0020:
+  status: not-a-requirement
+  reason: "Chapter opener: 'This chapter presents the fundamental concepts'. It lists topics."
+REQ-SP800-53B-0021:
+  status: not-a-requirement
+  reason: "Explains why selection is hard. 'requires a fundamental understanding' and 'requires close collaboration' state preconditions of choosing well, with no actor, and 'will' only describes what systems support, so neither word binds anyone. The duty to select is 0012; S-1 reads ART-ORG-CONTEXT and ART-REQ and consults the stakeholders in its RACI."
+  x_note: "Subject and verb: 'choosing the most appropriate controls ... requires a fundamental understanding'; 'It also requires close collaboration with key organizational stakeholders'; 'the systems will support'."
+REQ-SP800-53B-0022:
+  status: not-a-requirement
+  reason: "Introduces the concept: 'A control baseline is a collection of controls' and a starting point. 'Control baselines are tailored based on a variety of factors' lists factors; 2.4 holds the duty."
+REQ-SP800-53B-0023:
+  status: not-a-requirement
+  reason: "Footnote 10: history that the U.S. Government, 'in accordance with' FISMA and OMB A-130, 'has established' mandated baselines. A past act of the government, which binds no reader of this sentence."
+  x_note: "Subject and verb: 'The U.S. Government ... has established federally mandated security control baselines'."
+
+# --- Page 20: 2.2 selecting baselines ---
+REQ-SP800-53B-0024:
+  x_existing: "framework/tasks/C.yaml C-2 and framework/tasks/S.yaml S-1, S-2 raci (PER-PRIV consulted beside PER-ISSM) with playbooks/S/S-2.md interview row PER-PRIV 'when PII is processed'; templates/artifacts/ART-RA.md '## Privacy risk' at P-14 (PER-PRIV responsible)."
+  x_note: "Subject and verb: 'Information security programs are responsible for protecting information'; 'Privacy programs are responsible for managing the risks to individuals'; 'the information security and privacy programs have a shared responsibility ... and collaborate to determine the security categorization and the selection and tailoring of controls'. The first two state program mandates that PER-CISO and PER-PRIV carry; the third is the run's duty."
+REQ-SP800-53B-0025:
+  x_existing: "framework/tasks/C.yaml C-2 exit criteria and facts.schema.json categorization c, i, a, read by playbooks/S/S-1.md step 1, which stops without an approved categorization."
+  x_note: "Subject and verb: 'organizations first determine the criticality and sensitivity of the information'; '[FIPS 199] requires organizations to categorize systems'."
+REQ-SP800-53B-0026:
+  x_existing: "src/rmf_tool/baseline.py resolve: method high-water-mark picks the SP 800-53B profile at facts high_water, allowed only while CNSSI 1253 is degraded (playbooks/S/S-1.md step 4)."
+  x_note: "Subject and verb: 'the high water mark concept ... is used in [FIPS 200] to determine the impact level of the system'. A run takes per-objective selection by default because CNSSI 1253 Section 1.2 'does not adopt the high-water mark' for NSS; see the source conflict in the report."
+REQ-SP800-53B-0027:
+  status: not-a-requirement
+  reason: "Advisory footnote 11, a permission: privacy programs 'may also choose to consider' risks to autonomy and organizations 'may need to take steps'. 'need to' sits under 'may', sets no minimum, and so binds no one."
+  x_note: "Subject and verb: 'Privacy programs may also choose to consider the risks'; 'organizations may need to take steps to manage those risks'."
+REQ-SP800-53B-0028:
+  status: not-a-requirement
+  reason: "Footnote 14 explains why the high water mark exists: dependencies among the objectives. Rationale for 0026, no actor."
+
+# --- Page 21: 2.2 continued, privacy baseline ---
+REQ-SP800-53B-0029:
+  x_existing: "playbooks/S/S-1.md steps 4 and 7: rmf baseline resolve writes baseline.json, method and baseline_id, and ART-BASELINE '## Selection basis' names it. src/rmf_tool/baseline.py resolve (high-water-mark uses the SP 800-53B profile; cnssi1253 uses Appendix D)."
+  x_note: "Subject and verb: 'organizations select the appropriate security control baseline'; 'The organization selects one of three security control baselines'. A run selects from CNSSI 1253 Appendix D by default and from these three only when degraded."
+REQ-SP800-53B-0030:
+  status: not-a-requirement
+  reason: "Describes Chapter Three's privacy baseline and how it is marked. 'privacy program responsibilities under [OMB A-130]' names where the baseline comes from, so 'responsibilities' binds no one here. Selecting it is 0012."
+  x_note: "Subject and verb: 'Chapter Three provides an initial privacy control baseline ... based on privacy program responsibilities under [OMB A-130]'."
+REQ-SP800-53B-0031:
+  x_existing: "templates/artifacts/ART-RA.md '## Privacy risk', filled at P-14 with PER-PRIV responsible; framework/tasks/S.yaml S-2 inputs ART-RA, so the assessment guides tailoring."
+  x_gap: "'Privacy risk assessments include evaluating the applicability of legal and policy requirements': privacy-legal-applicability. The section asks for risks to individuals, and nothing records which legal or policy requirements apply."
+  x_home: "privacy-legal-applicability: P-14 step 4 and ART-RA '## Privacy risk', feeding ART-REQ '## Sources of requirements' at P-15."
+  x_note: "Subject and verb: 'Organizations conduct privacy risk assessments'. The 'For example, organizations may remove' and 'may add' sentences are permissions that tailoring.yaml remove and add already allow."
+REQ-SP800-53B-0032:
+  status: not-a-requirement
+  reason: "Footnote 15, a permission: selection 'may be augmented' by sector-specific guidance. It points at Appendix C."
+REQ-SP800-53B-0033:
+  x_new_work_item: "privacy-legal-applicability: ART-RA '## Privacy risk' states which legal and policy privacy requirements apply, including the OMB A-130 obligations the privacy baseline does not meet, and ART-REQ takes them as sources"
+  x_home: "P-14 step 4 and ART-RA '## Privacy risk', feeding ART-REQ '## Sources of requirements' at P-15."
+  x_note: "Footnote 17. Subject and verb: 'Federal agencies should not assume that the implementation of the privacy control baseline means that they have met all of their obligations'; 'Agencies may need to take additional, separate steps'. Nothing in a run says the privacy baseline is not the whole obligation."
+REQ-SP800-53B-0034:
+  x_existing: "ssp-controls.schema.json responsible_roles, required on every statement, with framework/tasks/S.yaml S-3 raci (PER-ISSM and PER-PRIV responsible): who selects and implements each control is named, third sentence only."
+  x_gap: "'Privacy control enhancements ... cannot be selected and implemented without the selection and implementation of the associated base control': enhancement-needs-base. baseline.py applies add and remove actions without testing that an enhancement's base stays in."
+  x_home: "enhancement-needs-base: Task S-2 step 5, a new run rule on baseline.json: an enhancement whose base control is absent is an error."
+  x_note: "Footnote 18. Subject and verb: 'Privacy control enhancements ... cannot be selected and implemented'; 'Organizations ensure that the responsibility ... is clearly defined'."
+
+# --- Page 22: 2.3 assumptions ---
+REQ-SP800-53B-0035:
+  status: not-a-requirement
+  reason: "Opens Section 2.3: 'certain working assumptions generally underlie the control baselines'. Says what NIST assumed when it built them; 0041 and 0130 say what follows."
+REQ-SP800-53B-0036:
+  status: not-a-requirement
+  reason: "Baseline assumption, first of five: information 'is relatively persistent'. A premise NIST made, tested by 0041."
+REQ-SP800-53B-0037:
+  status: not-a-requirement
+  reason: "Baseline assumption: systems 'are multi-user'. A premise, tested by 0041."
+REQ-SP800-53B-0038:
+  status: not-a-requirement
+  reason: "Baseline assumption: some information 'is not shareable' with other authorized users. A premise about the data, tested by 0041."
+REQ-SP800-53B-0039:
+  status: not-a-requirement
+  reason: "Baseline assumption: systems 'exist in networked environments' and are general purpose. A premise, tested by 0041."
+REQ-SP800-53B-0040:
+  status: not-a-requirement
+  reason: "Last baseline assumption: organizations 'have the necessary structure, resources, and infrastructure'. It assumes a fact and orders nothing; 0041 tests it."
+REQ-SP800-53B-0041:
+  x_new_work_item: "baseline-assumptions: S-2 tests the assumptions of SP 800-53B Section 2.3 and CNSSI 1253 Section 2.4 against the system; one that fails leads to scoping, one of the additional set that applies leads to supplementation, and ART-BASELINE records which"
+  x_home: "Task S-2 step 3, a new bullet, recorded in ART-BASELINE '## Tailoring and allocation'."
+  x_note: "Subject and verb: 'some of the security controls allocated to the control baselines ... may not be applicable'; 'a situation that can be addressed by applying the tailoring guidance'. The second sentence is the lead-in to 0042 to 0046. S-2 step 3 reaches scoping from technology, environment and mission, but no step tests the listed assumptions."
+REQ-SP800-53B-0042:
+  status: not-a-requirement
+  reason: "Additional assumption the baselines leave out: insider threats exist. A condition named by the lead-in in 0041; the consequence is 0130."
+REQ-SP800-53B-0043:
+  status: not-a-requirement
+  reason: "Additional assumption: classified information is processed. A condition; 0130 holds what follows, and the Classified Information overlay answers it at C-2."
+REQ-SP800-53B-0044:
+  status: not-a-requirement
+  reason: "Additional assumption: advanced persistent threats exist. A condition, whose consequence is 0130."
+REQ-SP800-53B-0045:
+  status: not-a-requirement
+  reason: "Additional assumption: information 'requires specialized protection'. The word describes the information in a condition, so it binds no one; the consequence is 0130."
+  x_note: "Subject and verb: 'Information requires specialized protection based on legislation, directives, regulations, or policies'."
+REQ-SP800-53B-0046:
+  status: not-a-requirement
+  reason: "Additional assumption: systems communicate across security domains. A condition, whose consequence is 0130."
+REQ-SP800-53B-0047:
+  status: not-applicable
+  reason: "Footnote 22 binds nonfederal entities such as municipalities and small businesses that may lack the resources the baselines assume; it says federal departments 'satisfy this assumption'. Checked PER-CIO and PER-PM: a DoD Component is federal, so no task, artifact or decision of a run holds it."
+  x_note: "Subject and verb: 'Such entities may not be large enough'; 'Organizations consider such factors in their risk-based decisions'."
+REQ-SP800-53B-0130:
+  x_new_work_item: "baseline-assumptions"
+  x_home: "Task S-2 step 3, a new bullet, recorded in ART-BASELINE '## Tailoring and allocation'."
+  x_note: "Promoted from page 22. Subject and verb: 'additional controls from [SP 800-53] are likely needed to ensure adequate protection'. S-2 step 3 supplements from ART-RA and overlays, but no step tests the five conditions 0042 to 0046."
+
+# --- Page 23: 2.4 tailoring ---
+REQ-SP800-53B-0048:
+  x_existing: "framework/tasks/S.yaml S-2 purpose, entry and exit criteria (tailoring follows selection, reads ART-RA, yields tailored baselines); playbooks/S/S-2.md steps 3 to 5."
+  x_gap: "'Risk-related issues such as cost, schedule, and performance are considered in the determination of which controls to employ': tailoring-tradeoffs. S-2 asks PER-PM about the cost of supplemented controls only, in an optional interview, and no record shows the weighing."
+  x_home: "tailoring-tradeoffs: Task S-2 step 3, and the rationale of a tailoring.yaml record names the cost, schedule or performance factor weighed."
+  x_note: "Subject and verb: 'organizations initiate a tailoring process'; 'Risk-related issues ... are considered'. 'must routinely address' describes other risk issues. The last sentence is the lead-in to 0049 to 0054."
+REQ-SP800-53B-0049:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Common controls are developed in 0058."
+REQ-SP800-53B-0050:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Scoping is developed in 0060 to 0072."
+REQ-SP800-53B-0051:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Compensating controls are developed in 0073 to 0077."
+REQ-SP800-53B-0052:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Parameter values are developed in 0082 and 0083."
+REQ-SP800-53B-0053:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Supplementation is developed in 0084."
+REQ-SP800-53B-0054:
+  status: not-a-requirement
+  reason: "Activity label under the lead-in in 0048. Specification information is developed in 0085."
+REQ-SP800-53B-0055:
+  x_existing: "framework/tasks/S.yaml S-2 exit criteria (every action has a rationale; removal only on risk-based determinations), tailoring.schema.json rationale and sources required on each action, playbooks/S/S-2.md step 4."
+  x_note: "Subject and verb: 'organizations do not arbitrarily remove security and privacy controls from baselines'; 'Tailoring decisions are expected to be defensible'. 'Organizations have the flexibility to tailor' at organization or system level is P-4 and S-2."
+REQ-SP800-53B-0056:
+  x_existing: "tailoring.yaml and ART-BASELINE '## Tailoring and allocation' (playbooks/S/S-2.md steps 4 and 6: every remove and compensating action with its reason), the document S-4's exit criterion accepts as equivalent; rmf baseline resolve accounts for each selected control, in baseline.json or by a remove record."
+  x_gap: "'subsequently approved by the responsible officials ... as part of the approval process for the plans': tailoring-approval. S-6 reads ART-SSP, ART-CONMON and ART-RA, so the AO never sees the record of what was tailored out. Privacy plan half: WI-02."
+  x_home: "tailoring-approval: Task S-6 inputs gain ART-BASELINE, with an exit criterion that the AO's approval covers each remove and compensating action."
+  x_note: "The statement runs from page 23 to page 24. Subject and verb: 'Tailoring decisions ... are documented'; 'Every control from the selected control baseline is accounted for'; 'the rationale is recorded ... and subsequently approved'; 'supports transparency, traceability, and accountability'."
+REQ-SP800-53B-0057:
+  x_new_work_item: "tailoring-legal-floor: S-2 tests every remove and compensating action against the laws, regulations and policies, OMB policy among them, that the control carries; a control they require stays in, and the record says so"
+  x_home: "Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml, on the remove and compensating records of tailoring.yaml."
+  x_note: "Footnote 27. Subject and verb: 'Federal agencies conduct baseline tailoring activities in accordance with OMB policy'; 'OMB may prohibit agencies from tailoring specific security or privacy controls'. 'security and privacy controls may not apply in every situation' is a statement of fact, which S-2 scoping handles."
+REQ-SP800-53B-0131:
+  x_new_work_item: "tailoring-legal-floor"
+  x_home: "Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml."
+  x_note: "Promoted from footnote 24 on page 23. Subject and verb: 'It is inappropriate for organizations to tailor out security or privacy controls'. S-2 forbids removal for difficulty, not for legal cause; CNSSI 1253 Section 2.6 says the same: 'unless required to meet legislative, regulatory, or policy requirements'."
+
+# --- Page 24: common controls and scoping ---
+REQ-SP800-53B-0058:
+  x_new_work_item: "inheritance-determination: the system owner and the AO determine that the common controls on offer protect the inheriting system commensurate with its risk, and the record says so for each provider"
+  x_home: "Task S-3 step 4, a determination per provider in allocation.yaml, shown in ART-BASELINE '## Common controls available for inheritance'."
+  x_gap: "'Common control providers ensure that current implementation information and assessment results are available': ccp-package. P-5 records the provider's authorization status, not its current results."
+  x_note: "Subject and verb: 'Common control providers ensure'; 'System owners and authorizing officials determine if the common controls available for inheritance actually provide protection commensurate with risk'. 'there is no need to implement the control' is held by ssp-controls status inherited; 'responsibilities' names what a designation may change. S-3 step 4 makes a shortfall hybrid, but neither officer decides."
+REQ-SP800-53B-0059:
+  status: not-a-requirement
+  reason: "Explains the cost case: common controls 'can affect' spending and give 'cost savings'. A benefit, with no actor."
+REQ-SP800-53B-0060:
+  status: not-a-requirement
+  reason: "Advisory permission, no minimum set: 'Organizations may apply the scoping considerations'. The rest says what scoping can do. S-2 step 3 runs scoping anyway."
+REQ-SP800-53B-0061:
+  status: not-a-requirement
+  reason: "Heading of a scoping consideration, set as a list item. Its text is 0062."
+REQ-SP800-53B-0062:
+  x_existing: "playbooks/S/S-3.md step 4 ('Allocate a control only to the components that need the capability'), allocation.schema.json components and sources on each record."
+  x_note: "The statement runs from page 24 to page 25. Subject and verb: 'Organizations make explicit risk-based decisions about where to apply or allocate specific controls'; 'requires careful analysis' and 'may not be applicable' lead up to it."
+REQ-SP800-53B-0063:
+  status: not-a-requirement
+  reason: "Footnote 30: a permission, 'Organizations may also leverage the use of hybrid controls', and a definition of them. allocation.yaml already has the type."
+
+# --- Page 25: scoping considerations ---
+REQ-SP800-53B-0064:
+  x_existing: "playbooks/S/S-2.md step 3 scoping ('do not apply to this system's technology, environment or mission, with the reason') and the remove action of tailoring.schema.json."
+  x_note: "Subject and verb: 'Certain controls ... assume the existence of operational or environmental factors'; 'it is justifiable to tailor the baseline'. 'systems that require public access' is a list item."
+REQ-SP800-53B-0065:
+  x_existing: "playbooks/S/S-2.md step 3 scoping (technology) and compensating controls, tailoring.yaml remove and compensating actions with a rationale."
+  x_note: "Subject and verb: 'Controls that refer to specific technologies ... are applicable only if those technologies are implemented'; 'Controls ... do not require the development of such mechanisms if the mechanisms do not already exist'."
+REQ-SP800-53B-0066:
+  x_existing: "playbooks/S/S-2.md step 3 scoping (mission) with a reason on the remove record, first sentence only."
+  x_gap: "'decisions on the appropriateness of control implementation always consider legislative, regulatory, and policy requirements': tailoring-legal-floor."
+  x_home: "tailoring-legal-floor: Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml."
+  x_note: "Subject and verb: 'Certain controls may not be appropriate'; 'decisions ... always consider'."
+REQ-SP800-53B-0067:
+  x_new_work_item: "objective-downgrade: S-2 scoping takes the security objective consideration, and a remove action that downgrades a control states the three conditions: it reflects the FIPS 199 category of the objective it supports, rests on a risk assessment, and leaves security-relevant information as protected"
+  x_home: "Task S-2 step 3, a new scoping bullet, and the remove record of tailoring.yaml. CNSSI 1253 Section 3.2.2 item 3.b.v keeps this consideration for NSS."
+  x_note: "Cut pair with 0132; both live. This one holds the permission and the first condition, 0132 the other two. Subject and verb: 'Controls that support only one or two of the security objectives ... may be downgraded ... only if the downgrading action reflects the [FIPS 199] security category'. Default per-objective selection covers most cases, but S-2 step 3 lists technology, environment and mission only, and the high-water-mark fallback leaves the test to no one."
+REQ-SP800-53B-0132:
+  x_new_work_item: "objective-downgrade"
+  x_home: "Task S-2 step 3, a new scoping bullet, and the remove record of tailoring.yaml."
+  x_note: "Promoted from page 25. Cut pair with 0067: the statement starts mid-sentence, 'is supported by an organizational assessment of risk'. S-2 step 4 holds the risk basis of a removal; the 'does not adversely affect' condition has no home."
+REQ-SP800-53B-0068:
+  status: not-a-requirement
+  reason: "Worked example: 'For example, if a system is categorized as moderate-impact', with CP-2(1). It ends in the lead-in to the candidate lists; the 'only if' test is 0067 and 0132."
+
+# --- Page 26: downgrade candidates, legal, compensating ---
+REQ-SP800-53B-0069:
+  status: not-a-requirement
+  reason: "Candidates for downgrading that support only confidentiality: a list of control IDs. The test is 0067 and 0132."
+REQ-SP800-53B-0070:
+  status: not-a-requirement
+  reason: "Candidates that support only integrity, such as CM-5 and SI-7: a bare ID list under the same test."
+REQ-SP800-53B-0071:
+  status: not-a-requirement
+  reason: "Candidates that support only availability, the CP-family list and a few MA and PE controls: IDs, no verb."
+REQ-SP800-53B-0123:
+  status: not-a-requirement
+  reason: "Heading of the legal and policy scoping consideration, set as a list item. Its text is 0072."
+REQ-SP800-53B-0072:
+  x_new_work_item: "tailoring-legal-floor"
+  x_home: "Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml."
+  x_note: "Subject and verb: 'controls that are used to meet legislative, regulatory, or policy requirements are not to be tailored out of control baselines'; 'It is justifiable to tailor the baseline when these circumstances are not applicable'. CNSSI 1253 Section 3.2.2 item 3.b.vi keeps this for NSS."
+REQ-SP800-53B-0073:
+  x_existing: "playbooks/S/S-2.md step 3 (compensating controls come after scoping, for a baseline control the system cannot implement, giving equivalent protection) and step 4 (a control with no compensating control stays in and reaches the POA&M)."
+  x_note: "Subject and verb: 'The use of compensating controls is appropriate when controls are tailored out ... by necessity'; 'Compensating controls are selected after applying the scoping considerations'. The last sentence is the lead-in to 0074 to 0077, whose items carry their own verbs."
+REQ-SP800-53B-0074:
+  x_new_work_item: "compensating-control-record: a compensating action names its source, catalog or other, states why the baseline control could not be implemented, carries the assessment and acceptance of the risk, and reaches the baseline. Today the schema tests only the ID pattern, and rmf baseline resolve ignores the action, so the compensating control gets no baseline entry and no required SSP statement"
+  x_home: "Task S-2 step 4, tailoring.schema.json compensating fields, and rmf baseline resolve applying the action with a catalog check."
+  x_note: "Item under the lead-in in 0073. Subject and verb: '[organizations] Select compensating controls from the control catalog'. baseline.py checks the catalog only for controls in baseline.json, and handles add and remove actions alone."
+REQ-SP800-53B-0075:
+  x_existing: "tailoring.schema.json rationale, required, on a compensating action with compensating_for; playbooks/S/S-2.md step 3 ('a baseline control the system cannot implement, and the control that gives equivalent protection') and step 6 (every compensating action by control ID with its reason)."
+  x_note: "Item under the lead-in in 0073. Subject and verb: '[organizations] Provide a rationale'. A privacy requirement satisfied this way rests on the same record."
+REQ-SP800-53B-0076:
+  x_new_work_item: "compensating-control-record"
+  x_home: "Task S-2 step 4 and tailoring.schema.json: control_id must match the catalog pattern, so a control from another source cannot be recorded."
+  x_note: "Item under the lead-in in 0073. Subject and verb: '[organizations] Adopt suitable compensating controls from other sources'."
+REQ-SP800-53B-0077:
+  x_new_work_item: "compensating-control-record"
+  x_home: "Task S-2 step 4 and tailoring.schema.json: no field or step records that the risk of a compensating control was assessed and accepted, or by whom."
+  x_note: "Item under the lead-in in 0073. Subject and verb: '[organizations] Assess and accept the security and privacy risks'."
+REQ-SP800-53B-0078:
+  status: not-a-requirement
+  reason: "Footnote 33: examples of substitutes, 'For example, additional physical security controls may be implemented in lieu of a device lock'."
+REQ-SP800-53B-0079:
+  x_new_work_item: "tailoring-legal-floor"
+  x_home: "Task S-2 step 4 and a new exit criterion in framework/tasks/S.yaml."
+  x_note: "Footnote 34. Subject and verb: 'Compensating controls are not used to avoid the need to comply with requirements'."
+REQ-SP800-53B-0080:
+  status: not-a-requirement
+  reason: "Footnote 35 states a possibility: more than one control 'may be required to' give equal protection. It has no actor, so 'required to' binds no one, and several compensating records may name one compensating_for."
+  x_note: "Subject and verb: 'More than one compensating control may be required to provide the equivalent protection'."
+REQ-SP800-53B-0081:
+  x_new_work_item: "compensating-control-record"
+  x_home: "Task S-2 step 4: the record says the catalog held nothing suitable before an organization-defined control is used."
+  x_note: "Footnote 36. Subject and verb: 'Organizations make every attempt to select compensating controls from the consolidated control catalog'; 'Organization-defined compensating controls are employed only when organizations determine'."
+
+# --- Page 27: parameters, supplementing, specification ---
+REQ-SP800-53B-0082:
+  x_existing: "framework/tasks/S.yaml S-2 exit criterion ('parameter values assigned'), playbooks/S/S-2.md steps 3 and 4 and the parameter action of tailoring.schema.json, with IDs from rmf catalog show."
+  x_note: "Subject and verb: 'organizations review the controls and control enhancements for assignment or selection operations and determine the appropriate organization-defined values'. WI-20 tracks the NSS minimum values, a separate check."
+REQ-SP800-53B-0083:
+  x_existing: "ssp-controls.schema.json parameters, filled at playbooks/S/S-4.md step 3 from tailoring.yaml; ART-ORG-CONTEXT for program-wide values (playbooks/S/S-2.md step 3)."
+  x_gap: "'documented in ... privacy plans': WI-02."
+  x_note: "Subject and verb: 'they are documented in security and privacy program plans or system security and privacy plans'. The collaboration sentences are 'can' and 'may be useful', advisory."
+REQ-SP800-53B-0084:
+  x_existing: "playbooks/S/S-2.md step 3 supplementation (risks in ART-RA, requirements the baseline does not cover, from S-1 step 7), tailoring.yaml add, applied by rmf baseline resolve as tailored-in; S-2 takes ART-RA as input."
+  x_note: "Subject and verb: 'additional controls or control enhancements ... may be required to address specific threats'; 'Organizations are encouraged to make maximum use of the control catalog'. The catalog check in baseline.py rejects anything else for an add."
+REQ-SP800-53B-0085:
+  x_new_work_item: "tailoring-specification-info"
+  x_home: "Task S-2 step 3, a `specification` action in tailoring.schema.json."
+  x_note: "The statement runs from page 27 to page 28. Subject and verb: 'Organizations ensure that if existing control information is not sufficient ... such information is provided to system owners and common control providers'; 'organizations are cautioned not to change the intent of the base control'; 'Implementation information is documented'. The last is the SP800-37R2-0305 gap: no action type or step holds specification information."
+
+# --- Page 28: 2.5 capabilities ---
+REQ-SP800-53B-0086:
+  x_new_work_item: "capability-grouping: ART-BASELINE names the capabilities the organization defined ahead of selection and the controls that produce each, so a failed control can be read against its capability"
+  x_home: "Task S-1 step 7, a new ART-BASELINE section read at R-2."
+  x_note: "Subject and verb: 'Organizations consider defining a set of capabilities as a precursor to the control selection process'. A soft duty: 'consider' asks for a decision, so I kept it live; the 'For example' and 'may wish' sentences after it are advisory."
+REQ-SP800-53B-0087:
+  status: not-a-requirement
+  reason: "Argues for capabilities: a failed control 'may not affect the overall capability', and the construct 'allows' better analysis. 'may not' states a possibility and binds no one; 'authorization decisions ... are made based on' describes such decisions. The duty to consider capabilities is 0086."
+  x_note: "Subject and verb: 'the failure of a single control ... may not affect the overall capability'. Risk tolerance in the last sentence is already R-2's exit criterion."
+
+# --- Page 81: Appendix C overlays ---
+REQ-SP800-53B-0088:
+  status: not-a-requirement
+  reason: "Advisory, a permission: 'it may be beneficial' and 'An organization may decide to establish a set of controls'. Examples follow; nothing sets a minimum."
+REQ-SP800-53B-0089:
+  status: not-a-requirement
+  reason: "Defines an overlay: 'An overlay may be a fully specified set of controls'. It ends in the lead-in to what overlays offer, 0090 to 0092."
+REQ-SP800-53B-0090:
+  status: not-a-requirement
+  reason: "First benefit under the definition in 0089: a chance to add, modify or eliminate controls. A gerund with no actor."
+REQ-SP800-53B-0091:
+  status: not-a-requirement
+  reason: "Second benefit under 0089: applicability and interpretations for specific technologies. A description of content."
+REQ-SP800-53B-0092:
+  status: not-a-requirement
+  reason: "Third benefit under 0089: parameter values agreeable to a community of interest. A description of content."
+REQ-SP800-53B-0093:
+  x_existing: "playbooks/C/C-2.md step 6 and facts.categorization.overlays (each overlay decided with a reason), playbooks/S/S-2.md step 3 (overlays and their conflicts), and baseline.py overlay_problem, which refuses an overlay the tables do not list, so one system cannot name its own."
+  x_note: "The statement runs from page 81 to page 82. Subject and verb: 'Organizations use the overlay concept when there is divergence from the basic assumptions'; 'Overlays may require tailoring'. WI-22 covers the overlays still unknown."
+REQ-SP800-53B-0094:
+  status: not-a-requirement
+  reason: "Footnote 38: '[SP 800-82] provides an example of an overlay', and what overlays can include. An example."
+REQ-SP800-53B-0095:
+  status: not-a-requirement
+  reason: "Footnote 39: what 'Control baselines can include', federal, state or private. A description of the term."
+
+# --- Page 82: overlay categories and publication ---
+REQ-SP800-53B-0096:
+  status: not-a-requirement
+  reason: "Advisory: tailoring activities 'can be employed' for overlays and 'Categories of overlays that may be useful include'. No minimum set."
+REQ-SP800-53B-0097:
+  status: not-a-requirement
+  reason: "Example category: communities of interest such as healthcare or finance."
+REQ-SP800-53B-0098:
+  status: not-a-requirement
+  reason: "Example category: information technologies such as cloud and mobile."
+REQ-SP800-53B-0099:
+  status: not-a-requirement
+  reason: "Example category: environments of operation such as space, tactical or sea."
+REQ-SP800-53B-0100:
+  status: not-a-requirement
+  reason: "Example category: system types and operating modes such as weapons systems."
+REQ-SP800-53B-0101:
+  status: not-a-requirement
+  reason: "Example category: mission types such as counterterrorism and research."
+REQ-SP800-53B-0102:
+  status: not-a-requirement
+  reason: "Example category: threat types such as insider threats."
+REQ-SP800-53B-0103:
+  status: not-a-requirement
+  reason: "Example category: statutes. 'Accountability' is part of the name of the Health Insurance Portability and Accountability Act, so it binds no one."
+  x_note: "No verb; the phrase is 'Health Insurance Portability and Accountability Act'."
+REQ-SP800-53B-0104:
+  status: not-a-requirement
+  reason: "Describes what overlays give and how specific they can be. 'responsible for' only identifies the system owners who receive the options, so it binds no one here."
+  x_note: "Subject and verb: 'Overlays provide uniformity ... to system owners responsible for implementing and maintaining such systems'."
+REQ-SP800-53B-0105:
+  status: not-a-requirement
+  reason: "Publication note: overlays 'can be published' in many venues, and SCOR offers voluntary sharing. A permission, with no duty on an author."
+
+# --- Page 83: example overlay outline ---
+REQ-SP800-53B-0106:
+  x_new_work_item: "overlay-justification: an overlay the organization itself develops at P-4 records the justification and rationale for it, including the risk-based decisions made in developing it"
+  x_home: "P-4 step 4, ART-ORG-CONTEXT '## Organizationally tailored baselines and profiles'."
+  x_note: "Subject and verb: 'The level of detail ... should be of sufficient breadth and depth to provide an appropriate justification and rationale for the overlay'. 'at the discretion of the organization' covers the level of detail only; the rest of the outline is 'an example only'. P-4 is optional and records scope and approval; CNSS overlays reach a run as EXT-CNSSI1253-OVERLAYS, so this binds only an organization's own overlay."
+REQ-SP800-53B-0124:
+  status: not-a-requirement
+  reason: "Section name in the example outline, which the page calls 'an example only'; 0110 gives it its text."
+REQ-SP800-53B-0125:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0129."
+REQ-SP800-53B-0126:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0116."
+REQ-SP800-53B-0127:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0117."
+REQ-SP800-53B-0107:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0118."
+REQ-SP800-53B-0128:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0119."
+REQ-SP800-53B-0108:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0120."
+REQ-SP800-53B-0109:
+  status: not-a-requirement
+  reason: "Section name in the example outline; its text is 0121."
+REQ-SP800-53B-0110:
+  status: not-a-requirement
+  reason: "Advisory: the Identification section of the outline that 0106 calls 'an example only' with 'any format' allowed, so it is no minimum set. 'Organizations identify the overlay' describes that example section for an overlay's author."
+REQ-SP800-53B-0129:
+  status: not-a-requirement
+  reason: "Advisory: opens the Overlay Characteristics section of the same example outline, and leads into 0111, 0112, 0114 and 0115. Not a minimum set."
+REQ-SP800-53B-0111:
+  status: not-a-requirement
+  reason: "Advisory item in the example outline: the physical environment where targeted systems 'will be used'. 'will' is the future tense of that example and binds no one."
+  x_note: "Subject and verb: 'A description of the physical environment where the systems ... will be used or operate'."
+REQ-SP800-53B-0112:
+  status: not-a-requirement
+  reason: "Advisory item in the example outline: the information types that 'will be processed'. 'will' describes the target systems and binds no one."
+  x_note: "The statement runs from page 83 to page 84. Subject and verb: 'The type(s) of information that will be processed, stored, or transmitted'."
+REQ-SP800-53B-0113:
+  status: not-a-requirement
+  reason: "Footnote 41, advice on avoiding divergent overlays: organizations 'are encouraged to' use the concept and consensus works best. 'encouraged' is advice to overlay authors, it sets no minimum, and it binds no one in a run."
+  x_note: "Subject and verb: 'organizations are encouraged to use the overlay concept'; 'the development of widely divergent overlays ... may prove to be counterproductive'."
+
+# --- Page 84: example overlay outline continued ---
+REQ-SP800-53B-0114:
+  status: not-a-requirement
+  reason: "Advisory item in the example outline: the functionality of the targeted systems. A description an author might give."
+REQ-SP800-53B-0115:
+  status: not-a-requirement
+  reason: "Advisory item in the example outline: other characteristics. 'may not be addressed' describes the threats and binds no one."
+  x_note: "Subject and verb: 'a specific set of threats that may not be addressed by the assumptions described in Section 2.3'."
+REQ-SP800-53B-0116:
+  status: not-a-requirement
+  reason: "Advisory: the Applicability section of the example outline, for an overlay's author: 'Organizations provide criteria'. Its format is 'Typical', and the page sets no minimum. C-2 step 6 applies the criteria an overlay publishes."
+REQ-SP800-53B-0117:
+  status: not-a-requirement
+  reason: "Advisory: the Overlay Summary section of the example outline, 'Organizations provide a brief summary'; what it holds is 'may include'."
+REQ-SP800-53B-0118:
+  status: not-a-requirement
+  reason: "Advisory: the Overlay Control Specifications section of the example outline; what it holds is again 'may include', for an author."
+REQ-SP800-53B-0119:
+  status: not-a-requirement
+  reason: "Advisory: the Tailoring Considerations section of the example outline, information an author gives system owners. Reading it at S-2, and resolving conflicts between overlays, is held by S-2 step 3."
+
+# --- Page 85: example overlay outline, end ---
+REQ-SP800-53B-0120:
+  status: not-a-requirement
+  reason: "Advisory: the Terms and Definitions section of the example outline, for an overlay's author."
+REQ-SP800-53B-0121:
+  status: not-a-requirement
+  reason: "Advisory: the last section of the example outline, additional information 'not covered in the previous sections'."
+REQ-SP800-53B-0133:
+  work_item: WI-17
+  x_note: '''SAOPs have the responsibility for managing privacy risk''; ''it is important that organizations consider how privacy and security programs collaborate'' on these controls. Same subject as WI-17''s binding.'
+REQ-SP800-53B-0134:
+  status: not-a-requirement
+  reason: 'Says what privacy-only controls are for: ''important for managing privacy program responsibilities''. Description of a column of Tables 3-1 to 3-20, with no act.'
+REQ-SP800-53B-0135:
+  status: not-a-requirement
+  reason: 'Says what controls in both baselines are for: ''used to manage privacy program responsibilities''. ''responsibilities'' describes the column and binds no one here.'
+REQ-SP800-53B-0136:
+  x_existing: 'framework/tasks/S.yaml S-2: supplementing adds controls outside any baseline, with a recorded reason.'
+  x_note: '''Through tailoring, organizations make their own determinations as to whether the controls and control enhancements are needed''.'

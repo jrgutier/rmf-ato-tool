@@ -411,3 +411,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: `rmf ci` uses workers only from `MIN_WORKER_CPUS` cores up.
 - Rule: measure a speedup on every host it will run on, not only the one it was built on.
 - Promotion: check: test_ci_runs_pytest_in_series_on_few_cores
+
+## L-0059 · 2026-11-01 · run: phase-10 · tags: conformance, triage
+- Symptom: `conformance/sources.yaml` excluded the Privacy overlay's Section 6 as "Section 5" and "work item WI-32", Classified's Section 6 as control text a run already had, and chapter-opening prose in SP 800-53, 53A and 53B as tables. 512 entries entered when the reasons were read against their pages, 330 of them per-control values that feed baselines.
+- Root cause: exclusion reasons were written at import from the table of contents, and FW-REQ-001 checks that a reason exists and covers the pages, not that it is true of them.
+- Fix: every exclusion read against its pages; false ones rescoped or rewritten, and the new entries triaged (docs/audits/2026-11-triage/).
+- Rule: an exclusion reason is a claim about pages: write it after opening the first and last page of the range, and treat a range that opens with prose as in scope until read.
+- Promotion: none — whether a reason is true of a page needs a reader; the sampled audit carries it, and a rule could only test that the reason exists.

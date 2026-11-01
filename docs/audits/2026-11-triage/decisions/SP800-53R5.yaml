@@ -1,0 +1,337 @@
+# SP800-53R5 triage: pages 28 to 42 read whole against the source. Pages 43 to 400 are the control
+# catalog, an ID set pinned by REF-008, and hold no entry. 0081 is promoted by this job.
+# Footnote 11 keeps NSS outside FISMA; CNSSI 1253 carries this catalog into a run, so a duty here
+# reaches a run through S-1 and S-2. Role map from personas.txt: authorizing official = PER-AO;
+# designated representative = PER-AODR; system owner = PER-PM; common control provider = PER-CCP;
+# information security program = PER-CISO; privacy program = PER-PRIV.
+
+# --- Page 28: Chapter 1 opening ---
+REQ-SP800-53R5-0001:
+  status: not-a-requirement
+  reason: "Background: what modern information systems 'can include' and the common foundation they share. A list of platforms with no actor."
+REQ-SP800-53R5-0002:
+  status: not-a-requirement
+  reason: "Definitions of security and privacy controls and of where requirements come from. In 'mission needs to ensure', 'needs' is a noun followed by a purpose clause, so 'needs to' binds no one. The duty to select and implement is 0031."
+  x_note: "Subject and verb: 'Security and privacy requirements are derived from applicable laws ... and mission needs to ensure the confidentiality'; 'controls are selected and implemented to satisfy security and privacy requirements'."
+REQ-SP800-53R5-0003:
+  status: not-a-requirement
+  reason: "Lead-in to three questions: 'Organizations should answer several key questions'. The 'should' has no content until the questions, and each question has its own verb and home, so it binds through 0004, 0005 and 0006, which stay live. The first sentence only says the tasks are important."
+  x_note: "Subject and verb: 'Organizations should answer several key questions when addressing information security and privacy controls'."
+REQ-SP800-53R5-0004:
+  x_existing: "playbooks/S/S-1.md step 4 and step 7 (baseline.json and ART-BASELINE '## Selection basis') and playbooks/S/S-2.md step 3 supplementation (controls or enhancements to add for risks in ART-RA or uncovered requirements); framework/tasks/S.yaml S-2 inputs ART-RA, S-1 inputs ART-REQ."
+  x_note: "Question under the lead-in 0003: 'What security and privacy controls are needed to satisfy security and privacy requirements'. S-1 and S-2 are where a run answers it."
+REQ-SP800-53R5-0005:
+  x_existing: "ssp-controls.schema.json status (implemented, partial, planned, alternative, not-applicable, inherited), required on every statement, with SSP-COV-001 and SSP-STAT-001; playbooks/A/A-3.md step 4 turns partial or planned into other-than-satisfied, and ART-POAM carries the plan."
+  x_note: "Question under the lead-in 0003: 'Have the selected controls been implemented or is there a plan in place to do so?'"
+REQ-SP800-53R5-0006:
+  x_new_work_item: "implementation-assurance"
+  x_home: "Task I-1 step 4, an assurance field on inventory.yaml items, read at A-3, as proposed under SP800-37R2 Task I-1."
+  x_note: "The statement runs from page 28 to page 29: the extractor joined the bullet to the first paragraph of page 29. Page 28 holds the question, 'What is the required level of assurance ... that the selected controls ... are effective?', which is the duty, under the lead-in 0003. No step records a required level of assurance; WI-14 is depth and coverage per control, so it is not bound. The tail is description: 'answers ... are not given in isolation', the catalog 'can be viewed as a toolbox', 'controls ... are recommended for use'. That 'recommended' sits against 'mandatory' in 0012; footnote 12 settles it for federal systems."
+REQ-SP800-53R5-0007:
+  status: not-a-requirement
+  reason: "Footnote 2: defines the term organization as an entity of any size or positioning."
+REQ-SP800-53R5-0008:
+  status: not-a-requirement
+  reason: "Footnote 3: a usage note, 'information security' and 'security' are synonyms here."
+REQ-SP800-53R5-0009:
+  status: not-a-requirement
+  reason: "Footnote 5: describes what controls provide in engineering processes, risk reduction during the life cycle. No actor."
+REQ-SP800-53R5-0010:
+  status: not-a-requirement
+  reason: "Footnote 7: defines control effectiveness as the extent controls are implemented correctly, operating as intended and producing the desired outcome."
+
+# --- Page 29: Chapter 1 and 1.1 ---
+REQ-SP800-53R5-0011:
+  x_existing: "framework/tasks/M.yaml M-5 exit criteria and templates/artifacts/ART-SECRPT.md '## Posture summary' and '## Risks and planned responses' (security and privacy posture to the AO and senior leaders); ssp-controls.schema.json status for controls planned or in place; framework/tasks/R.yaml R-2 and ART-RAR for the risk the AO judges against tolerance."
+  x_note: "Subject and verb: 'It is important that responsible officials understand the security and privacy risks'; 'These officials must also understand the current status of their security and privacy programs and the controls planned or in place'. Officials read as PER-AO, PER-CIO, PER-CISO and PER-PRIV. A Component's roll-up of program status across systems is the Component's own work, which no run performs."
+REQ-SP800-53R5-0012:
+  x_existing: "playbooks/S/S-1.md step 4 and baseline.json from rmf baseline resolve (the minimum set, drawn from this catalog through CNSSI 1253), SSP-COV-001 (a statement for every baseline control), framework/tasks/I.yaml I-1 exit criterion (controls in the plans are implemented)."
+  x_note: "Subject and verb: 'The use of these controls is mandatory for federal information systems in accordance with [OMB A-130] and [FISMA], which requires the implementation of minimum controls'. Footnote 11 (0013) takes NSS out of FISMA; the rest describes what the publication is for."
+REQ-SP800-53R5-0013:
+  status: not-a-requirement
+  reason: "Footnote 11, applicability: NSS 'are not subject to the requirements in [FISMA]', and controls 'may be selected' where 'otherwise required' by another authority or with approval. 'Required' points to other authorities and binds no one in this document; a run takes the CNSSI 1253 and DoDI 8510.01 route the footnote names."
+  x_note: "Subject and verb: 'the controls established in this publication may be selected for national security systems as otherwise required'."
+REQ-SP800-53R5-0014:
+  status: not-a-requirement
+  reason: "Footnote 12: state, local and tribal governments and the private sector 'are encouraged to consider' these guidelines. 'Encouraged' is advice to parties outside any run, so it binds no one there. The clause that controls 'are mandatory' repeats the duty in 0012."
+  x_note: "Subject and verb: 'other organizations such as state, local, and tribal governments ... are encouraged to consider using these guidelines'."
+
+# --- Page 30: 1.1 continued, 1.2, 1.3 ---
+REQ-SP800-53R5-0015:
+  status: not-a-requirement
+  reason: "Says the catalog is independent of the selection process: selection 'can be part of' several frameworks and 'can be guided' by many factors. A description of options; DoDI 8510.01 fixes the process for a run."
+REQ-SP800-53R5-0016:
+  status: not-a-requirement
+  reason: "Audience bullet under 'intended to serve a diverse audience': people with oversight 'responsibilities', from authorizing officials to senior agency officials for privacy. It says who reads, so the word binds no one."
+  x_note: "No verb; subject 'Individuals with system, information security, privacy, or risk management and oversight responsibilities'."
+REQ-SP800-53R5-0017:
+  status: not-a-requirement
+  reason: "Audience bullet: people with development 'responsibilities', mission owners through acquisition officials. A reader category that assigns nothing and binds no one."
+  x_note: "No verb; subject 'Individuals with system development responsibilities'."
+REQ-SP800-53R5-0018:
+  status: not-a-requirement
+  reason: "Audience bullet: people with logistical or disposition 'responsibilities', such as property managers. It names readers and binds no one."
+  x_note: "No verb; subject 'Individuals with logistical or disposition-related responsibilities'."
+REQ-SP800-53R5-0019:
+  status: not-a-requirement
+  reason: "Audience bullet: people with implementation and operations 'responsibilities', such as continuity planners and system administrators. A reader list, which binds no one."
+  x_note: "No verb; subject 'Individuals with security and privacy implementation and operations responsibilities'."
+REQ-SP800-53R5-0020:
+  status: not-a-requirement
+  reason: "Audience bullet: auditors, Inspectors General and control assessors with monitoring 'responsibilities'. The word marks who may find the document useful and binds no one."
+  x_note: "No verb; subject 'Individuals with security and privacy assessment and monitoring responsibilities'."
+REQ-SP800-53R5-0021:
+  status: not-a-requirement
+  reason: "Last audience bullet: commercial entities producing components or services. A reader category with no duty."
+REQ-SP800-53R5-0022:
+  x_existing: "framework/tasks/P.yaml P-15 exit criteria (security and privacy requirements defined, prioritized and traced to sources) and templates/artifacts/ART-REQ.md."
+  x_note: "Item under the lead-in 0080, whose 'requires' reaches it: 'Well-defined security and privacy requirements for systems and organizations'."
+REQ-SP800-53R5-0023:
+  x_new_work_item: "implementation-assurance"
+  x_home: "Task I-1 step 4, the assurance field on inventory.yaml items: the development and acquisition process behind each component."
+  x_note: "Item under the lead-in 0080: 'The use of trustworthy information system components based on state-of-the-practice ... development and acquisition processes'. I-1 asks about assurance only as an interview focus for third-party components."
+REQ-SP800-53R5-0024:
+  x_existing: "framework/rmf-steps.yaml with the 47 tasks of framework/tasks/ (FW-TASK-001): a run executes the NIST RMF, and S-1 and S-2 are its selection of controls."
+  x_note: "Footnote 14. Subject and verb: '[OMB A-130] requires federal agencies to implement the NIST Risk Management Framework for the selection of controls'; '[EO 13800] requires federal agencies to implement the NIST Framework for Improving Critical Infrastructure Cybersecurity'. The second is the agency's own program, which no run performs; P-4's CSF profile heading records a profile if the organization has one."
+REQ-SP800-53R5-0080:
+  status: not-a-requirement
+  reason: "Lead-in to six bullets: 'a complex, multifaceted undertaking that requires:'. The 'requires' has no object of its own, and each bullet has its own home, so it binds through 0022, 0023 and 0025 to 0028, which stay live."
+  x_note: "Subject and verb: 'Managing security and privacy risks is a complex, multifaceted undertaking that requires'. The bullets run from page 30 to page 31."
+
+# --- Page 31: 1.3 continued ---
+REQ-SP800-53R5-0025:
+  x_existing: "framework/phases.yaml and framework/milestones.yaml (the RMF tied to the life cycle) and framework/tasks/S.yaml S-4 with ART-SSP, for security planning."
+  x_gap: "'Rigorous ... privacy planning': WI-02, ART-SSP is security-only."
+  x_note: "Item under the lead-in 0080: 'Rigorous security and privacy planning and system development life cycle management'."
+REQ-SP800-53R5-0026:
+  x_new_work_item: "sse-practices"
+  x_home: "Task I-1 exit criterion, whose 'systems security and privacy engineering methodologies' names the practice and nothing more."
+  x_note: "Item under the lead-in 0080: 'The application of system security and privacy engineering principles and practices'."
+REQ-SP800-53R5-0027:
+  x_new_work_item: "org-crm-policies"
+  x_home: "Task P-2, ART-ORG-CONTEXT, where the documented practices and processes would be recorded with their owners; today they exist only as input EXT-ORG-POLICY."
+  x_note: "Item under the lead-in 0080: 'The employment of security and privacy practices that are properly documented and integrated into ... the institutional and operational processes of organizations'."
+REQ-SP800-53R5-0028:
+  x_existing: "framework/tasks/S.yaml S-5 with ART-CONMON and conmon.yaml, framework/tasks/M.yaml M-2 and M-5, and the P-7 section of ART-ORG-CONTEXT for organization-wide state, for security."
+  x_gap: "Privacy monitoring: WI-15, ART-CONMON and conmon.schema.json never name privacy."
+  x_note: "Item under the lead-in 0080: 'Continuous monitoring of information systems and organizations to determine the ongoing effectiveness of controls'."
+REQ-SP800-53R5-0029:
+  x_existing: "framework/tasks/P.yaml P-14 exit criteria and templates/artifacts/ART-RA.md (threats, vulnerabilities, likelihood, impact, '## Privacy risk'), kept current by framework/tasks/M.yaml M-3 and M-4; P-3 for the first organization-level assessment."
+  x_gap: "'continuously assess' at organization level: org-context-upkeep, no task after PH-MSA updates ART-ORG-CONTEXT."
+  x_note: "Subject and verb: 'Organizations continuously assess the security and privacy risks'; 'Realistic assessments of risk require a thorough understanding of the susceptibility to threats'; 'Risk assessments also require an understanding of privacy risks'."
+REQ-SP800-53R5-0030:
+  x_existing: "framework/tasks/P.yaml P-2 exit criteria and ART-ORG-CONTEXT '## Risk management strategy and risk tolerance'; framework/tasks/R.yaml R-2 and framework/tasks/S.yaml S-5 read that strategy, and the run's M tasks are its ongoing process."
+  x_gap: "'The risk management strategy considers the cost, schedule, performance, and supply chain issues' across the life cycle: strategy-tradeoffs. P-2 step 3 asks only for 'the constraints and priorities that shape it'."
+  x_home: "strategy-tradeoffs: Task P-2 step 3 and the ART-ORG-CONTEXT section: the strategy names how cost, schedule, performance and supply chain issues are weighed from design through disposal."
+  x_note: "Subject and verb: 'security and privacy requirements are satisfied with the knowledge and understanding of the organizational risk management strategy'; 'The risk management strategy considers'; 'A risk management process is then applied'. tailoring-tradeoffs is the same factors at S-2, a different home."
+REQ-SP800-53R5-0031:
+  x_existing: "Select: playbooks/S/S-1.md step 4 and playbooks/S/S-2.md, baseline.json and tailoring.yaml. Implement: framework/tasks/I.yaml I-1 exit and ssp-controls statements. Demonstrate, security only: framework/tasks/A.yaml A-3 exit and SAR-COV-001."
+  x_gap: "'to demonstrate the effectiveness of the controls' for privacy: WI-03, ART-SAP and ART-SAR never mention privacy."
+  x_note: "Subject and verb: 'Organizations have the responsibility to select the appropriate security and privacy controls, to implement the controls correctly, and to demonstrate the effectiveness of the controls'. The rest is 'can be used', a permission."
+
+# --- Page 32: 1.3 end, 1.4, 1.5 ---
+REQ-SP800-53R5-0079:
+  x_existing: "framework/tasks/S.yaml S-2 inputs ART-RA and playbooks/S/S-2.md step 3 (risks in ART-RA guide tailoring), with P-14 reading ART-ORG-CONTEXT's tolerance into ART-RA; S-6 approval yields the agreed set."
+  x_note: "Subject and verb: 'Organizational risk assessments are used, in part, to inform the security and privacy control selection process'; 'The selection process results in an agreed-upon set'. 'organizations need' in the last sentence describes threats and binds no one."
+REQ-SP800-53R5-0081:
+  x_existing: "framework/tasks/S.yaml S-6 exit criteria and raci (PER-AODR responsible, PER-AO accountable): ART-SSP records the AO's approval of the plan, for security."
+  x_gap: "Acceptance of 'privacy plans': WI-02, ART-SSP is security-only."
+  x_note: "Footnote 21, promoted by this job from a rejection on page 32. Subject and verb: 'Authorizing officials or their designated representatives, by accepting the security and privacy plans, agree to the security and privacy controls proposed'. The locator says 1.6 because the footnote sits last on the page; its reference mark is in 1.3 (0079)."
+REQ-SP800-53R5-0032:
+  status: not-a-requirement
+  reason: "Background on 1.4: the sources considered in writing the controls, CNSSI 1253's use of them, and the mapping to international standards. History of the publication."
+REQ-SP800-53R5-0033:
+  status: not-a-requirement
+  reason: "Describes the catalog's upkeep: controls 'are reviewed and revised periodically' as law and threats change. NIST maintains its own publication, and no reader acts on this."
+REQ-SP800-53R5-0034:
+  status: not-a-requirement
+  reason: "Describes how NIST changes the catalog: controls 'are also expected to change', and proposals go through public review. 'Expected to' predicts and 'requiring' is NIST's own process, so neither binds a reader."
+  x_note: "Subject and verb: 'The security and privacy controls in the control catalog are also expected to change over time'; 'the need for stability is addressed by requiring that proposed modifications ... go through a rigorous and transparent public review process'."
+
+# --- Page 33: 1.6 ---
+REQ-SP800-53R5-0035:
+  status: not-a-requirement
+  reason: "Outline bullet: 'Chapter Two describes the fundamental concepts'. A table of contents in prose."
+REQ-SP800-53R5-0036:
+  status: not-a-requirement
+  reason: "Outline bullet: 'Chapter Three provides a consolidated catalog' with its discussion, related controls and references."
+REQ-SP800-53R5-0037:
+  status: not-a-requirement
+  reason: "Outline bullet: the back matter 'provide additional information'."
+
+# --- Page 34: 2.1 ---
+REQ-SP800-53R5-0038:
+  status: not-a-requirement
+  reason: "Defines 'requirement' as used in the guideline. 'must comply' sits in an example of what the word means, A-130's hold on federal agencies, so it binds no one here; A-130 reaches a run through 0012 and 0024."
+  x_note: "Subject and verb: '[OMB A-130] imposes information security and privacy requirements with which federal agencies must comply when managing information resources'."
+REQ-SP800-53R5-0039:
+  status: not-a-requirement
+  reason: "Advisory: 'Organizations may divide' requirements and 'may use the term' for each category. An 'organizations may' permission over vocabulary. 'must provide' and 'must be performed' define those terms and bind no one."
+  x_note: "Subject and verb: 'Organizations may use the term capability requirement to describe a capability that the system or organization must provide'; 'statement of work requirements to refer to actions that must be performed operationally'."
+
+# --- Page 35: 2.1 end, 2.2, Table 1 ---
+REQ-SP800-53R5-0040:
+  status: not-a-requirement
+  reason: "Describes what controls are: 'can be viewed as descriptions', 'can include' aspects, 'may necessitate' derived requirements. 'Controls are selected and implemented by the organization' restates 0031 inside the description."
+REQ-SP800-53R5-0041:
+  status: not-a-requirement
+  reason: "Describes the catalog's layout: 20 families and two-character identifiers. Table 1 follows."
+REQ-SP800-53R5-0042:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs AC and PE with their names. A label pair."
+REQ-SP800-53R5-0043:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs AT and PL with their names."
+REQ-SP800-53R5-0044:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs AU and PM with their names. 'Accountability' is part of the name 'Audit and Accountability', so it binds no one."
+  x_note: "No verb; label 'Audit and Accountability | PM | Program Management'."
+REQ-SP800-53R5-0045:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs CA and PS with their names."
+REQ-SP800-53R5-0046:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs CM and PT with their names."
+REQ-SP800-53R5-0047:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs CP and RA with their names."
+REQ-SP800-53R5-0048:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs IA and SA with their names."
+REQ-SP800-53R5-0049:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs IR and SC with their names."
+REQ-SP800-53R5-0050:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs MA and SI with their names."
+REQ-SP800-53R5-0051:
+  status: not-a-requirement
+  reason: "Table 1 row: family IDs MP and SR with their names."
+REQ-SP800-53R5-0052:
+  x_new_work_item: "enhancement-needs-base: an enhancement in the selected set needs its base control selected and implemented. src/rmf_tool/baseline.py applies add and remove actions without testing that the base stays in."
+  x_home: "Task S-2 step 5, a new run rule on baseline.json: an enhancement whose base control is absent is an error."
+  x_note: "The statement runs from page 35 to page 36; page 35 holds it up to 'The'. Subject and verb: 'The selection and implementation of control enhancements always requires the selection and implementation of the base control'. The earlier sentences describe enhancements. 0057 states the same duty; SP800-53B 0034 proposed this slug as a gap."
+
+# --- Page 36: 2.2 continued, Figure 1 ---
+REQ-SP800-53R5-0053:
+  status: not-a-requirement
+  reason: "Describes the catalog's ordering: alphabetical families, order 'does not imply' priority, and designations 'are not re-used'. NIST's numbering convention, with no duty on a reader."
+REQ-SP800-53R5-0054:
+  x_existing: "ssp-controls.schema.json responsible_roles, required on every statement (development and implementation), allocation.yaml type and provider (playbooks/S/S-3.md step 4), sap.schema.json team (assessment), conmon.schema.json frequencies responsible (monitoring)."
+  x_note: "The statement runs from page 36 to page 37; page 36 holds it up to 'Organizations have the'. Subject and verb: 'Organizations designate the responsibility for control development, implementation, assessment, and monitoring'. 'Organizations have the flexibility' is a permission; the opening sentences describe the control section."
+
+# --- Page 37: 2.2 continued ---
+REQ-SP800-53R5-0055:
+  status: not-a-requirement
+  reason: "Describes the discussion section; 'Organizations can use the information as needed' is an advisory permission."
+REQ-SP800-53R5-0056:
+  status: not-a-requirement
+  reason: "Describes the related controls section and how two-way relations are marked in the catalog, including the implicit link to each -1 control. A reader's guide."
+REQ-SP800-53R5-0057:
+  x_new_work_item: "enhancement-needs-base"
+  x_home: "Task S-2 step 5, the run rule on baseline.json proposed at 0052."
+  x_note: "Subject and verb: 'Control enhancements are not intended to be selected independently. That is, if a control enhancement is selected, then the corresponding base control is also selected and implemented'. Same duty as 0052, kept live because both state it. The numbering sentences describe the section."
+REQ-SP800-53R5-0058:
+  status: not-a-requirement
+  reason: "Describes the references section, then says what assignment and selection operations are and that they 'give organizations the capability' to customize. Explains a mechanism; the duty to set values sits in S-2."
+  x_note: "The statement runs from page 37 to page 38; page 37 holds it up to 'embedded within the controls and'."
+REQ-SP800-53R5-0059:
+  status: not-a-requirement
+  reason: "Footnote 26: references 'are provided to assist' and are not complete. A note on the list."
+
+# --- Page 38: 2.2 end, 2.3 ---
+REQ-SP800-53R5-0060:
+  x_existing: "tailoring.schema.json parameter action (playbooks/S/S-2.md step 3, S-2 exit 'parameter values assigned', with ART-RA an input), ssp-controls.schema.json parameters filled at playbooks/S/S-4.md step 3, src/rmf_tool/oscal/build_ssp.py set-parameters, and playbooks/A/A-3.md step 2 (assessed against the SSP as stated)."
+  x_note: "Subject and verb: 'Once specified by the organization, the values for the assignment and selection operations become a part of the control'; 'The implementation of the control is assessed for effectiveness against the completed control statement'. WI-20 tracks NSS minimum values, a separate check. The first sentence is 'can evolve', descriptive."
+REQ-SP800-53R5-0061:
+  status: not-a-requirement
+  reason: "Explains iteration and refinement: 'Iteration allows organizations to use a control multiple times', 'Refinement is the process'. A definition with an example of an organization that 'may have multiple systems'."
+REQ-SP800-53R5-0062:
+  status: not-a-requirement
+  reason: "Names the three implementation approaches and says what they 'define', among them 'the responsibility' for development through authorization. A definition that assigns no responsibility, so the word binds no one. The assignment is in 0065."
+  x_note: "Subject and verb: 'The control implementation approaches define the scope of applicability ... and the responsibility for control development, implementation, assessment, and authorization'. The statement runs from page 38 to page 39; page 38 holds it up to 'assessment, and'."
+
+# --- Page 39: 2.3 continued ---
+REQ-SP800-53R5-0063:
+  status: not-a-requirement
+  reason: "Defines common controls and inheritability. 'the entity responsible for the system' identifies who a provider differs from and assigns nothing, so 'responsible for' binds no one. 'can introduce the risk of a single point of failure' is an observation."
+  x_note: "Subject and verb: 'the control is developed, implemented, assessed, authorized, and monitored by an internal or external entity other than the entity responsible for the system or program'."
+REQ-SP800-53R5-0064:
+  status: not-a-requirement
+  reason: "Examples of controls that 'are good candidates for common control status', and the cost case for amortizing them. Advice with no actor; P-5 identifies a run's common controls. 'Accountability' only names the audit and accountability controls in the list, so it binds no one."
+  x_note: "Subject and verb: 'Common controls can also include technology-based controls, such as ... audit and accountability controls'."
+REQ-SP800-53R5-0065:
+  x_existing: "allocation.schema.json type and provider, playbooks/S/S-3.md step 4 and framework/tasks/S.yaml S-3 raci (PER-PM accountable) with S-6 (PER-AO accountable) for system-specific controls; templates/artifacts/ART-SSP.md '## Inheritance and shared responsibility' (what the provider implements and what the system does); framework/tasks/S.yaml S-5 and M.yaml M-3, M-4 raci (PER-CCP and PER-PM responsible)."
+  x_gap: "'the common control provider is responsible for ensuring the ... assessment ... of the common part': COMMON-CONTROL-ASSESSMENT, A-2 and A-3 do not treat the common part of a hybrid control apart."
+  x_note: "Subject and verb: 'System-specific controls are the primary responsibility of the system owner and the authorizing official'; 'the common control provider is responsible for ensuring the implementation, assessment, and monitoring of the common part'; 'the system owner is responsible for ensuring' the same for the system-specific part. The CP-2 sentence is an example; 'Organizations can implement a control as hybrid' a permission."
+REQ-SP800-53R5-0066:
+  status: not-a-requirement
+  reason: "Observation that the approach is context-dependent: it 'cannot be determined' from a control's language. 'Cannot' states a limit of reading and binds no one; designating is the duty S-3 holds (0068 for how). The rest is cost benefit."
+  x_note: "Subject and verb: 'The control implementation approach cannot be determined to be common, hybrid, or system-specific simply based on the language of the control'. The statement runs from page 39 to page 40; page 39 holds it up to 'language of the'."
+REQ-SP800-53R5-0067:
+  status: not-a-requirement
+  reason: "Footnote 27: a pointer to SP 800-37 for more on implementation approaches."
+
+# --- Page 40: 2.3 end, 2.4 ---
+REQ-SP800-53R5-0068:
+  x_existing: "framework/tasks/P.yaml P-5 raci (PER-CCP, PER-PM consulted) and the ART-ORG-CONTEXT provider table, ahead of allocation; playbooks/S/S-3.md steps 3 and 4 (PER-CCP interviewed; a shortfall in the provider's offer becomes hybrid)."
+  x_gap: "'An inheriting entity cannot assume that controls are the same'; 'It is essential to examine the control parameters': inheritance-determination. Nothing compares a provider's parameter values with the inheriting system's."
+  x_home: "inheritance-determination: Task S-3 step 4, the determination per provider in allocation.yaml also compares parameter values."
+  x_note: "Subject and verb: 'Planning for the implementation approach of a control ... is best carried out early in the system development life cycle and coordinated with the entities providing the control'; 'coordination is required with the inheriting entity'; 'An inheriting entity cannot assume'."
+REQ-SP800-53R5-0069:
+  x_existing: "personas/PER-CISO.md and personas/PER-PRIV.md carry the two programs' mandates; framework/tasks/P.yaml P-1 assigns both roles; framework/tasks/C.yaml C-2 and S.yaml S-1, S-2 raci (PER-PRIV consulted beside PER-ISSM), S-3 (PER-PRIV responsible); templates/artifacts/ART-RA.md '## Privacy risk' at P-14 (PER-PRIV responsible)."
+  x_note: "Subject and verb: 'Federal information security programs are responsible for protecting information'; 'Federal privacy programs are responsible for managing risks to individuals'; 'the information security program and the privacy program have a shared responsibility for managing the security risks for the PII in the system'. Same reading as SP800-53B 0024 and SP800-37R2 0100."
+REQ-SP800-53R5-0070:
+  status: not-a-requirement
+  reason: "Says a control's discussion 'may highlight' considerations so organizations 'can take' them into account. Describes the catalog, with no list of considerations and no duty."
+REQ-SP800-53R5-0071:
+  status: not-a-requirement
+  reason: "Worked example: 'an organization might select AU-3', and AU-3(3) 'could be selected'. It shows one choice and its privacy side effect."
+  x_note: "The statement runs from page 40 to page 41; page 40 holds it up to 'Since the'."
+REQ-SP800-53R5-0072:
+  status: not-a-requirement
+  reason: "Footnote 28: privacy programs 'may also choose to consider' autonomy risks, and organizations 'may need to take steps'. An option with a speculative 'need to', which binds no one. As in SP800-37R2 0099."
+  x_note: "Subject and verb: 'Privacy programs may also choose to consider the risks to individuals'; 'organizations may need to take steps to manage those risks'."
+
+# --- Page 41: 2.4 end, 2.5 ---
+REQ-SP800-53R5-0073:
+  x_existing: "framework/tasks raci: PER-PRIV beside PER-ISSM on S-1 and S-2 (consulted) and S-3 (responsible) for selection, and on I-1 (consulted) for implementation; playbooks/S/S-2.md interview row PER-PRIV 'when PII is processed'; personas/PER-PRIV.md."
+  x_note: "Subject and verb: 'there is a need for close collaboration between programs to select and implement the appropriate controls for information systems processing PII'; 'Organizations consider how to promote and institutionalize collaboration'. A run models the collaboration through RACI and interviews, as at SP800-37R2 0098."
+REQ-SP800-53R5-0074:
+  status: not-a-requirement
+  reason: "Defines trustworthiness and lists attributes 'can include'. 'whatever requirements may be needed' sits inside the definition, addressed to no one."
+REQ-SP800-53R5-0075:
+  status: not-a-requirement
+  reason: "Defines functionality and assurance, the two concepts behind trustworthiness."
+REQ-SP800-53R5-0076:
+  status: not-a-requirement
+  reason: "Says meaningful assurance 'can be enhanced' by narrowing the analysis, and that controls address functionality or assurance. Description with no actor."
+
+# --- Page 42: 2.5 end and sidebar ---
+REQ-SP800-53R5-0077:
+  status: not-a-requirement
+  reason: "Advisory: 'Organizations can select assurance-related controls', a permission, then what the evidence is used for and where Appendix C lists those controls."
+REQ-SP800-53R5-0078:
+  x_existing: "playbooks/S/S-4.md interview rows (PER-ISSO 'evidence kept', PER-CCP 'evidence of the provider's authorization'), playbooks/I/I-1.md step 4 ('Ask for evidence: configuration baselines, scan dates, benchmark versions, open findings'), used at playbooks/A/A-3.md steps 2 and 4."
+  x_note: "Sidebar 'EVIDENCE OF CONTROL IMPLEMENTATION'. Subject and verb: 'it is important for organizations to consider the evidence ... that will be needed to support current and future control assessments'."
+REQ-SP800-53R5-0082:
+  status: not-a-requirement
+  reason: 'Chapter 3 opening: what the catalog provides and why it is neutral. Description; ''It encourages organizations'' leads in benefits, not duties.'
+REQ-SP800-53R5-0083:
+  status: not-a-requirement
+  reason: 'Benefit under lead-in 0082: a neutral catalog encourages this focus. No one is bound.'
+REQ-SP800-53R5-0084:
+  status: not-a-requirement
+  reason: 'Benefit under lead-in 0082: a neutral catalog encourages analysis of applicability. S-2 tailoring holds the act itself.'
+REQ-SP800-53R5-0085:
+  status: not-a-requirement
+  reason: 'Benefit under lead-in 0082: a neutral catalog encourages specifying policies at tailoring. S-2 holds the act itself.'
+REQ-SP800-53R5-0086:
+  status: not-a-requirement
+  reason: '''organizations are cautioned that the need to manage security and privacy risks may go beyond the requirements in a single control''. An advisory caution and a pointer to NIST publications.'
+REQ-SP800-53R5-0087:
+  status: not-a-requirement
+  reason: 'How the catalog changes: controls ''are expected to change over time'', and they are withdrawn and not renumbered. That ''expected to'' is NIST''s forecast and binds no reader.'
+REQ-SP800-53R5-0088:
+  status: not-a-requirement
+  reason: How new controls are developed, 'to meet the needs of organizations'; 'need to' states NIST's reason for revising the catalog and binds no reader.
