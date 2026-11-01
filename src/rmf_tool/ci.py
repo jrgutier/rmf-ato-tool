@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import subprocess
 import sys
 from collections.abc import Callable
@@ -66,7 +67,9 @@ def _ruff(ctx: Context) -> tuple[bool, list[Finding], str]:
 
 def _pytest(ctx: Context) -> tuple[bool, list[Finding], str]:
     marker = "not network and not agent" if ctx.slow else "not slow and not network and not agent"
-    argv = [sys.executable, "-m", "pytest", "-q", "-m", marker,
+    # xdist is a dev dependency; an environment synced without it runs the tests in series.
+    workers = ["-n", "auto"] if importlib.util.find_spec("xdist") else []
+    argv = [sys.executable, "-m", "pytest", "-q", *workers, "-m", marker,
             "--cov=rmf_tool", f"--cov-fail-under={COVERAGE_MIN}"]
     return run_subprocess(argv, ctx)
 
