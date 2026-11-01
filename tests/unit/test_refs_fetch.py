@@ -133,7 +133,7 @@ def test_qpdf_reads_the_download_under_a_plain_pdf_name(tmp_path, httpserver, mo
     fake.write_text('#!/bin/sh\ncase "$(basename "$2")" in\n'
                     '  .*|*.part) echo "qpdf: open $2: Permission denied"; exit 2;;\n'
                     "esac\n"
-                    'mode="$(stat -f %Lp "$2" 2>/dev/null || stat -c %a "$2")"\n'
+                    'mode="$(stat -c %a "$2" 2>/dev/null || stat -f %Lp "$2")"\n'
                     'if [ "$mode" != 644 ]; then echo "qpdf: open $2: Permission denied"; exit 2; '
                     "fi\nexit 0\n", encoding="utf-8")
     fake.chmod(0o755)

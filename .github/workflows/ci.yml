@@ -37,19 +37,20 @@ jobs:
       - name: rmf ci
         run: uv run rmf ci --slow
 
-      - name: Show mandatory access denials
-        if: failure()
+      - name: Probe qpdf under mandatory access control
+        if: always()
+        continue-on-error: true
         run: |
-          sudo aa-status || true
-          sudo journalctl -k | grep -i denied | tail -50 || true
-          sudo dmesg | grep -i -E 'apparmor|denied' | tail -20 || true
           probe="$(mktemp -d)"
           for name in .probe.part probe.part .probe.pdf probe.pdf; do
             for mode in 600 644; do
               install -m "$mode" references/pdf/FIPS200.pdf "$probe/$name"
-              qpdf --check "$probe/$name" > /dev/null 2>&1; echo "$name $mode: exit $?"
+              if qpdf --check "$probe/$name" > /dev/null 2>&1; then code=0; else code=$?; fi
+              echo "$name $mode: exit $code"
             done
           done
+          sudo aa-status | grep -i qpdf || echo "no qpdf profile in aa-status"
+          sudo journalctl -k | grep -i 'DENIED' | grep -i qpdf | tail -20 || true
 
       - name: Upload reports
         if: always()
