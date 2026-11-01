@@ -189,7 +189,7 @@ STEPS: tuple[Step, ...] = (
     Step("rmf render --check", "p4", (manual.RULE,),
          lambda ctx: _findings_step(manual.check(ctx.root))),
     Step("rmf validate (playbooks, persona cards)", "p5", framework_validate.IMPLEMENTED,
-         _framework),
+         _framework, unless="p10"),
     # p6: every run rule on both fixture runs (the p35 step above then stands down).
     Step("rmf check --final valid_minimal (all run rules)", "p6", RUN_RULES, _valid_minimal()),
     Step("rmf check --final hybrid_minimal", "p6", RUN_RULES,
@@ -204,6 +204,10 @@ STEPS: tuple[Step, ...] = (
          lambda ctx: _findings_step(doc_counts.check(ctx.root))),
     # p9: reference currency (FW-CITE-003 runs in the rmf validate steps above).
     Step("refs currency", "p9", currency.RULES, _refs_step(currency.check)),
+    # p10: the register and the NIST task pin, FW-REQ-* and FW-TASK-002 in `rmf validate`, so
+    # this step replaces the p5 one.
+    Step("rmf validate (requirements register, NIST task pin)", "p10",
+         framework_validate.IMPLEMENTED, _framework),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

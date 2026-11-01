@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-nist-vocabulary",
+  "title": "NIST phrase vocabulary",
+  "description": "Maps each Chapter 3 phrase (casefolded) to framework entities: all of `entities`, any one of `any_of`, or an `omit` rationale, optionally with the `work_item` that ends the omission. `planned` lists entity IDs a work item will add.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "planned",
+    "phrases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "planned": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "work_item"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(ART|EXT|PER)-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+          },
+          "work_item": {
+            "type": "string",
+            "pattern": "^WI-\\d{2,}$"
+          }
+        }
+      }
+    },
+    "phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phrase"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "entities"
+            ]
+          },
+          {
+            "required": [
+              "any_of"
+            ]
+          },
+          {
+            "required": [
+              "omit"
+            ]
+          }
+        ],
+        "properties": {
+          "phrase": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entities": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(ART|EXT|PER)-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            }
+          },
+          "any_of": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "pattern": "^(ART|EXT|PER)-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            }
+          },
+          "omit": {
+            "type": "string",
+            "minLength": 10
+          },
+          "work_item": {
+            "type": "string",
+            "pattern": "^WI-\\d{2,}$",
+            "description": "With omit: the open work item that will end the omission (FW-TASK-002)."
+          }
+        }
+      }
+    }
+  }
+}

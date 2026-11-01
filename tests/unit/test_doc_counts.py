@@ -10,13 +10,18 @@ from rmf_tool import doc_counts
 @pytest.fixture
 def tree(tmp_path):
     """A repo whose framework and references are the real ones and whose three documents
-    are copies the test may change."""
+    the test may change. AGENTS.md and the registry are copies. README.md is written here,
+    because a fork rewrites its own and these tests still run there."""
     for name in ("framework", "references"):
         (tmp_path / name).symlink_to(REPO_ROOT / name, target_is_directory=True)
-    for rel in ("README.md", "AGENTS.md", doc_counts.REGISTRY_REL):
+    for rel in ("AGENTS.md", doc_counts.REGISTRY_REL):
         target = tmp_path / rel
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text((REPO_ROOT / rel).read_text(encoding="utf-8"), encoding="utf-8")
+    values = doc_counts.computed(REPO_ROOT)
+    (tmp_path / "README.md").write_text(
+        f"The {values['PDFs']()} reference PDFs: {values['NIST PDFs']()} NIST documents and "
+        f"{values['DoD and CNSS PDFs']()} DoD and CNSS documents.\n", encoding="utf-8")
     return tmp_path
 
 
@@ -77,7 +82,7 @@ def test_a_pending_acquisition_reference_is_not_a_committed_pdf(tree):
     found = doc_counts.check(tree)
 
     assert [f.message for f in found if "PDFs" in f.message]
-    stated = re.search(r"The (\d+) reference PDFs", (REPO_ROOT / "README.md").read_text()).group(1)
+    stated = re.search(r"The (\d+) reference PDFs", (tree / "README.md").read_text()).group(1)
     assert any(f"states {stated} PDFs; computed {int(stated) - 1}" in f.message for f in found)
 
 

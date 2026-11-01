@@ -140,3 +140,7 @@ Recorded so they are resolved deliberately, not by accident.
 - Figures other than DoDI 5000.90 Figure 2; overlay guidance text; Space appendices.
 - DoDI 5000.80, 5000.87, 5000.88 and DevSecOps were keyword-searched, not read in full.
 - Most playbook bodies, persona prose, and citation accuracy beyond existence.
+
+## Resolved after the audit
+
+- **cATO approver:** AO decides, and a recorded DoD CISO approval is also required (ADR-0005).

@@ -19,8 +19,46 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-25 | p9 | The framework cites no PDF reference that is `required: false` | FW-CITE-003 |
 | AC-26 | p9 | Every pinned PDF states an exact revision, and a `revision_stamp` points at the passage in the text that shows it | REF-007 |
 | AC-27 | p9 | Every control in the pinned OSCAL catalog is in the text of the three SP 800-53 PDFs or declared in the entry's `oscal_only_controls` | REF-008 |
+| AC-28 | p10 | Every task holds the entities its SP 800-37r2 Chapter 3 block maps to, or a waiver names the open work item that closes the gap; the SDLC note matches the block | FW-TASK-002 |
+| AC-29 | p10 | The register has the declared shape, every PDF and web reference has a source whose scopes and exclusions cover every page with a reason, every citation resolves and every statement is in its cited passage | FW-REQ-001 |
+| AC-30 | p10 | Every evidence entry resolves and is linked both ways (a rule lists the entries it enforces, a pin names a non-identity field, `asserts` shares the statement's vocabulary, `sentence` equals one marked sentence of the statement, whole), `covered` rests on evidence that can fail and a distinct strong item cites each marked sentence of an entry with several, of any kind, and no target of any kind exceeds its fan-out cap without a reviewed exception | FW-REQ-003 |
+| AC-31 | p10 | Every `partial`, `deferred` and `not-applicable` entry has a reason and `partial` carries at least one evidence item; a `deferred` tier 1 entry records `approved_by: user`; a reviewed entry that left its source records `removal_reason`; triage patterns are document-scoped, specific, capped, sampled and never on tier 1; a document over a quarter retired (not-applicable, deferred or partial on evidence that cannot fail), however its statuses were set, has a `retirements` record approved by the user; every register work item binds entries and closes only on evidence that judges strong | FW-REQ-004 |
+| AC-32 | p10 | Each source text matches the hash reviewed in `conformance/text-hashes.yaml`, so any edit to a document fails until it is re-reviewed and accepted; an offline re-extraction equals the register; every scope yields entries or says why not; no entry awaits review | FW-REQ-005 |
 
 ## Consequences
 
 - `docs/CHECKS.md` lists AC-24 for DOC-002, and this file says what it means.
 - An AC is never renumbered or reused (INV-3).
+
+## FW-REQ-002 at p13: what `candidate` and a later import mean
+
+Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents it.
+
+- p13 freezes the reference set: the `ref` list of `conformance/sources.yaml` at the freeze
+  commit, recorded as `conformance/frozen.yaml` (`refs: [...]`, `frozen_at: <commit>`).
+- FW-REQ-002 fails the freeze on any live `candidate` entry of a frozen reference whose
+  document is `tier: 1` or whose kind states an obligation (`lettered`, `modal`, `indicative`,
+  `imperative`, and every pin field), and on any open register work item. A `should` or
+  `table` candidate in a document without `tier: 1` (most documents carry no tier) warns and
+  stays listed as untriaged. The split is `report.blocks_freeze` and
+  `rmf conformance report` prints the three counts now, so the p13 workload is visible from p10.
+- An entry of a reference imported after the freeze (a fork's import, or a T2 document that
+  arrives later) is a warning through profile severity, like `agent_severity`: `E` under
+  `release`, `W` under `fork`. Such entries stay unassessed and are never reported as covered;
+  `rmf conformance report` lists their references under `unassessed`.
+- The register, the pin and `text-hashes.yaml` already distinguish the two cases (a reference
+  is in or out of the frozen list), so the rule needs only the frozen list and the severity
+  lookup `profiles.py` already provides.
+
+## Decisions taken with the user, 2026-10-31
+
+- FW-REQ-002 at p13: every tier 1 entry and every obligation must be triaged or the freeze
+  fails. `should` and `table` entries in a document without `tier: 1` warn and stay listed as
+  untriaged, so the tool reports them as not reviewed.
+- cATO authority: the sources conflict (DoDI 5000.90 lets the AO authorize; the cATO memo has
+  the DoD CISO approve). AD-CATO stays an AO decision, and AODM-007 will also require a
+  recorded DoD CISO approval, which satisfies both.
+- p14 adds a lifecycle scenario through M-4, M-6 and M-7, so all 47 tasks run in an agent
+  session.
+- Extraction is a first pass. Triage reads whole pages and promotes misses with
+  `rmf conformance promote`; recall is reported as a measured figure across fresh seeds.

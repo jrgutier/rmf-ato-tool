@@ -6,7 +6,9 @@ anchor of a heading on it.
 
 from __future__ import annotations
 
+import hashlib
 import re
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -52,25 +54,38 @@ def section(root: Path, entry: Any, wanted: str) -> str:
     return "\n".join(lines[start:end]).rstrip() + "\n"
 
 
+def _pages(md: Path) -> dict[int, tuple[str, str]]:
+    """Each page's body and its compact form, split once per file content: the register
+    resolves thousands of page citations in one run. Keyed on a hash of the bytes, not on
+    mtime and size, so a same-size rewrite within one clock tick is never served stale."""
+    text = md.read_text(encoding="utf-8")
+    return _split_pages(hashlib.sha256(text.encode("utf-8")).hexdigest(), text)
+
+
+@lru_cache(maxsize=64)
+def _split_pages(digest: str, text: str) -> dict[int, tuple[str, str]]:
+    pages: dict[int, list[str]] = {}
+    current: list[str] | None = None
+    for line in text.splitlines():
+        m = _PAGE.match(line)
+        if m:
+            number = int(m.group(1))
+            current = pages.setdefault(number, [])  # a repeated marker continues its page
+        if current is not None:
+            current.append(line)
+    return {n: ("\n".join(lines), toc.compact("\n".join(lines))) for n, lines in pages.items()}
+
+
 def page(root: Path, entry: Any, number: int, anchor: str) -> str:
     """Page ``number`` of the extraction, if ``anchor`` resolves on it."""
     md, toc_path = _paths(root, entry)
-    out: list[str] = []
-    inside = False
-    for line in md.read_text(encoding="utf-8").splitlines():
-        m = _PAGE.match(line)
-        if m:
-            if inside:
-                break
-            inside = int(m.group(1)) == number
-        if inside:
-            out.append(line)
-    if not out:
+    found = _pages(md).get(number)
+    if found is None:
         raise NotFound(f"{entry['id']}: no page {number}")
-    body = "\n".join(out)
+    body, packed = found
     anchors = {e.anchor for e in toc.load_toc(toc_path) if e.page == number} \
         if toc_path.is_file() else set()
     wanted = toc.compact(anchor)
-    if anchor not in anchors and (not wanted or wanted not in toc.compact(body)):
+    if anchor not in anchors and (not wanted or wanted not in packed):
         raise NotFound(f"{entry['id']}: anchor {anchor!r} not found on page {number}")
     return body.rstrip() + "\n"

@@ -34,6 +34,7 @@ fork owns. A fork may delete `examples/`.
 | `personas/` | upstream | persona cards, one per DoD RMF role |
 | `templates/` | upstream | artifact, interview, journal and workspace templates |
 | `references/` | upstream | `pdf/` (Git LFS), `text/`, `oscal/`, `index.yaml`, generated `INDEX.md` |
+| `conformance/` | upstream | requirements register: `sources.yaml`, `requirements/<REF>.yaml` (generated: entries plus the rejected in-scope paragraphs with reasons; reviewed fields set by `rmf conformance mark`), `text-hashes.yaml`, `policy.yaml`, `triage.yaml`, `bindings.yaml`, NIST task pin, vocabulary, waivers, work items, `schema/`. Outside the upstream hash, so a status change never stales a run |
 | `MANUAL.md`, `docs/manual/` | generated | rendered from `framework/`; never hand-edited |
 | `docs/LESSONS.md` | upstream | append-only lessons log |
 | `docs/CHECKS.md` | generated | the rule catalog rendered from `registry.yaml` (`rmf checks-doc`) |
@@ -98,10 +99,18 @@ error. Commands that report support `--format json`.
 | `rmf checks-doc [--check]` | render `docs/CHECKS.md` from the rule registry; `--check` fails when it is stale |
 | `rmf playbooks sync [--check]` | regenerate playbook headers and generated bodies from framework/, create missing playbooks; `--check` is FW-PB-001/002 |
 | `rmf render [--check]` | render `MANUAL.md` and `docs/manual/PH-*.md` from framework/ (byte-identical on rerun); `--check` is FW-MAN-001 |
+| `rmf conformance extract [--id ID] [--check]` | regenerate `conformance/requirements/*.yaml` and `nist-tasks.yaml` from `references/text/` (offline); reviewed fields survive, a statement gone from its source stays as `removed: true` and its ID is retired, an entry whose statement or pairing changed gets `needs_review`, and `covered` is never assigned; `--check` is FW-REQ-005 |
+| `rmf conformance accept-text [--id ID]` | record the SHA-256 of each imported reference text in `conformance/text-hashes.yaml` after reviewing a change; FW-REQ-005 fails while a text differs from its recorded hash |
+| `rmf conformance mark REQ-ID [--status S] [--reason R] [--work-item WI] [--evidence JSON] [--approved-by user] [--removal-reason R] [--reviewed] [--clear FIELD]` | set reviewed fields on one register entry. Evidence items carry `sentence`, one marked sentence of the statement, whole; an entry of any kind with several marked sentences is `covered` only when a distinct strong item cites each. `partial` needs at least one evidence item. `rmf validate` then judges the evidence (FW-REQ-003) and the reasons (FW-REQ-004) |
+| `rmf conformance bind [--check]` | set `work_item` on the one live entry each binding in `conformance/bindings.yaml` names; a phrase matching no entry or several is a finding (FW-REQ-004), never a guess |
+| `rmf conformance sample --seed N [-n 30] [--kind prose\|lettered\|table\|promoted\|all] [--rejected] [--id REF]` | a seeded sample of entries (noise) or of the rejected in-scope paragraphs and rows (false rejects) to read against the source; the same seed on the same register gives the same sample |
+| `rmf conformance page REF N` | every entry and every rejection on one page of a document, to read against `rmf refs show REF --page N --anchor A` before promoting or marking |
+| `rmf conformance promote REF --page N --anchor WORDS --reason TEXT` | extraction is a first pass: turn the rejection on page N holding the words, else the paragraph of the text that does, into a live candidate with the next ID, kind `promoted` and `promoted: {reason}`; it survives `rmf conformance extract`, is flagged `needs_review` when its passage no longer resolves, is counted by `report`, and FW-REQ-001 checks its citation |
+| `rmf conformance report [--format json]` | status distribution per document and in total (`summary.candidate`, `summary.work_items`, `summary.partial_share`, `summary.kinds`, `summary.promoted`, `summary.freeze` with its `deferred` and `partial_without_evidence` counts, `summary.rejected_by_reason`), the retired share of each document (not-applicable, deferred or partial on evidence that cannot fail over 25% needs a `retirements` record with `approved_by: user` in `conformance/policy.yaml`, FW-REQ-004), open work items, unassessed documents |
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -119,7 +128,21 @@ p7 `rmf check --final` with every run rule on `examples/uas-gcs/runs/example-syn
 (skipped under `--profile fork`); p8 DOC-002, the counts stated in README.md, AGENTS.md
 and the registry header equal the registry, framework and reference index; p9 REF-007
 (exact `revision`, resolving `revision_stamp`), REF-008 (OSCAL-only controls declared) and
-FW-CITE-003 (no citation to a `required: false` PDF, run by `rmf validate`).
+FW-CITE-003 (no citation to a `required: false` PDF, run by `rmf validate`); p10 FW-REQ-001
+(register shape, every page scoped or excluded with a reason, citations, statements in their
+passages), FW-REQ-003 (evidence linked both ways through `enforces` and `x-enforces`, `asserts`
+in the words of the statement and of its target, `covered` needs evidence that can fail and
+cites every marked sentence, whole, with a distinct item; fan-out capped for every evidence kind,
+exceptions approved by the user), FW-REQ-004 (reasons, tier 1 approvals, removal reasons,
+triage patterns bounded per pattern, a user-approved record behind any document over a quarter
+retired, `partial` with evidence, work items that bind entries or waivers and close only on evidence that judges
+strong), FW-REQ-005 (source text hashes
+reviewed, a fresh extraction equals the register, scopes yield) and FW-TASK-002 (tasks hold the
+entities their Chapter 3 block maps to, or a waiver names an open work item or a task-scoped
+rationale), all run by `rmf validate`. Recall of the extractor against hand-read pages, the
+audit probes, and every raw line of every in-scope page landing in an entry or a rejection is
+`tests/unit/test_conformance_recall.py`; prose recall is reported, not guaranteed, and triage
+promotes what the extractor missed.
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 
@@ -169,5 +192,11 @@ Of the seed lessons, L-0003 is promoted to INV-7 and L-0007 is `none`
   `rmf refs extract`, `rmf refs index`, and commit the PDF (LFS), text and index together.
   Set `revision` to what the PDF shows and add a `revision_stamp` (or a `revision_source`
   reason when no passage can show it; REF-007), and flip `required` (with `refs/required.py`)
-  in the commit that obtains the document before anything cites it (FW-CITE-003).
+  in the commit that obtains the document before anything cites it (FW-CITE-003). Give an
+  imported document `scopes` and `excluded` pages in `conformance/sources.yaml` covering every
+  page with a reason, then run `rmf conformance extract` and `rmf conformance accept-text`
+  (FW-REQ-001, FW-REQ-005). A fork that drops a reference removes its index entry, its
+  `sources.yaml` entry, its `requirements/<REF>.yaml` and its text hash in one commit;
+  FW-REQ-001 names whichever is left behind, and a work item or rule that rested on its
+  entries then fails FW-REQ-003/004 rather than passing silently.
   Probe URLs with a ranged GET, never HEAD (L-0001).

@@ -1,5 +1,5 @@
-"""The template forks cleanly (plan §4.3): a local clone without examples/, a new workspace,
-and `rmf ci --profile fork` exits 0."""
+"""The template forks cleanly (plan §4.3): a local clone without examples/ and with its own
+README.md, a new workspace, and `rmf ci --profile fork` exits 0."""
 
 import os
 import shutil
@@ -25,6 +25,7 @@ def test_fork_without_examples_passes_fork_profile(tmp_path):
         shutil.rmtree(fork / "references/pdf", ignore_errors=True)
         shutil.copytree(pdf, fork / "references/pdf")
     shutil.rmtree(fork / "examples")
+    (fork / "README.md").write_text("# Acme\n", encoding="utf-8")
     uv = ["uv", "run", "--project", str(fork)]
     run = subprocess.run([*uv, "rmf", "new", "acme", "--dir", "."], cwd=fork,
                          capture_output=True, text=True, env=env)

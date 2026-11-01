@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-bindings",
+  "title": "Work item bindings",
+  "description": "The source statement each register work item rests on: a phrase of one document that exactly one live entry contains. `rmf conformance bind` sets work_item on that entry; FW-REQ-004 fails when a phrase matches no entry or several, or the entry carries another work item.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bindings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "work_item",
+          "ref",
+          "phrase"
+        ],
+        "properties": {
+          "work_item": {
+            "type": "string",
+            "pattern": "^WI-\\d{2,}$"
+          },
+          "ref": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9.-]+$"
+          },
+          "phrase": {
+            "type": "string",
+            "minLength": 12,
+            "description": "A substring of the document text, matched after refs.toc.compact."
+          },
+          "finding": {
+            "type": "string",
+            "pattern": "^[NDC]-\\d+$",
+            "description": "The audit finding the phrase is the source of."
+          }
+        }
+      }
+    }
+  }
+}

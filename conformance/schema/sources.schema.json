@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-sources",
+  "title": "Conformance sources",
+  "description": "How each reference enters the requirements register, and the disposition of every document in DoDI 8510.01's reference list.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "documents",
+    "reference_list"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/document"
+      }
+    },
+    "reference_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/listed"
+      }
+    }
+  },
+  "$defs": {
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pages",
+        "note"
+      ],
+      "properties": {
+        "pages": {
+          "$ref": "#/$defs/pages"
+        },
+        "tables": {
+          "type": "boolean"
+        },
+        "note": {
+          "description": "What these pages are and why they are read.",
+          "type": "string",
+          "minLength": 5
+        },
+        "sparse": {
+          "description": "Why this scope legitimately yields fewer than one entry per four pages.",
+          "type": "string",
+          "minLength": 10
+        }
+      }
+    },
+    "exclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pages",
+        "reason"
+      ],
+      "properties": {
+        "pages": {
+          "$ref": "#/$defs/pages"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 10
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "mode",
+        "basis"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9.-]+$"
+        },
+        "mode": {
+          "enum": [
+            "statement",
+            "pin",
+            "catalog",
+            "excluded"
+          ]
+        },
+        "basis": {
+          "description": "Why this mode fits the document.",
+          "type": "string",
+          "minLength": 10
+        },
+        "catalog": {
+          "enum": [
+            "controls",
+            "information-types"
+          ]
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scope"
+          },
+          "description": "Page ranges to extract. Required once the document is imported (FW-REQ-001); a pending document has none yet."
+        },
+        "excluded": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/exclusion"
+          },
+          "description": "Page ranges left out, each with its reason. With scopes, they cover every page of the text exactly once."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "catalog"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "catalog"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "catalog"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "excluded"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "scopes"
+                  ]
+                },
+                {
+                  "required": [
+                    "excluded"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "listed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document",
+        "disposition"
+      ],
+      "properties": {
+        "document": {
+          "type": "string",
+          "minLength": 5
+        },
+        "disposition": {
+          "enum": [
+            "library",
+            "excluded"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9.-]+$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 10
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "disposition": {
+            "const": "library"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "ref"
+        ]
+      },
+      "else": {
+        "required": [
+          "reason"
+        ],
+        "not": {
+          "required": [
+            "ref"
+          ]
+        }
+      }
+    }
+  }
+}

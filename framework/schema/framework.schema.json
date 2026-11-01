@@ -23,6 +23,8 @@
   "$defs": {
     "id": {"type": "string", "minLength": 1},
     "ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+    "enforces": {"description": "Register entries (REQ-<REF>-<NNNN>) this entity is pinned or template evidence for; FW-REQ-003 demands each cites the entity back.",
+                 "type": "array", "items": {"type": "string", "pattern": "^REQ-[A-Z][A-Z0-9.-]+-\\d{4}$"}, "uniqueItems": true},
     "text": {"type": "string", "minLength": 1},
     "texts": {"type": "array", "items": {"$ref": "#/$defs/text"}},
     "order": {"type": "integer", "minimum": 1},
@@ -91,7 +93,8 @@
         "exit_milestone": {"type": ["string", "null"], "minLength": 1},
         "entry_criteria": {"$ref": "#/$defs/texts"},
         "exit_criteria": {"$ref": "#/$defs/texts"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "milestone": {
@@ -109,7 +112,8 @@
         "order": {"$ref": "#/$defs/order"},
         "decision_authority": {"type": ["string", "null"], "minLength": 1},
         "purpose": {"$ref": "#/$defs/text"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "review": {
@@ -125,7 +129,8 @@
         "order": {"$ref": "#/$defs/order"},
         "purpose": {"$ref": "#/$defs/text"},
         "rmf_focus": {"$ref": "#/$defs/text"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "decision": {
@@ -144,7 +149,8 @@
         "phases": {"$ref": "#/$defs/ids"},
         "atd_required": {"type": "boolean"},
         "conditions_required": {"type": "boolean"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "step": {
@@ -157,7 +163,8 @@
         "name": {"$ref": "#/$defs/text"},
         "order": {"$ref": "#/$defs/order"},
         "purpose": {"$ref": "#/$defs/text"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "persona": {
@@ -175,7 +182,8 @@
         "appointed_by": {"type": ["string", "null"], "minLength": 1},
         "nist_roles": {"$ref": "#/$defs/texts"},
         "card": {"type": "string", "pattern": "^personas/PER-[A-Z0-9]+\\.md$"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "artifact": {
@@ -211,7 +219,8 @@
           "items": {"type": "string", "pattern": "^(ssp|assessment-plan|assessment-results|poam|profile)#[a-z0-9.\\[\\]-]+$"}
         },
         "template": {"type": ["string", "null"], "pattern": "^templates/artifacts/ART-[A-Z-]+\\.md$"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "external_input": {
@@ -229,7 +238,8 @@
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9._/-]*$"
         },
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "pathway": {
@@ -246,7 +256,8 @@
         "phases": {"$ref": "#/$defs/ids"},
         "description": {"$ref": "#/$defs/text"},
         "rmf_notes": {"$ref": "#/$defs/texts"},
-        "citations": {"$ref": "#/$defs/citations"}
+        "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"}
       }
     },
     "task": {
@@ -298,6 +309,7 @@
         "entry_criteria": {"allOf": [{"$ref": "#/$defs/texts"}, {"minItems": 1}]},
         "exit_criteria": {"allOf": [{"$ref": "#/$defs/texts"}, {"minItems": 1}]},
         "citations": {"$ref": "#/$defs/citations"},
+        "enforces": {"$ref": "#/$defs/enforces"},
         "playbook": {"type": "string", "pattern": "^playbooks/[PCSIARM]/[A-Za-z0-9-]+\\.md(#[a-z0-9-]+)?$"}
       }
     }

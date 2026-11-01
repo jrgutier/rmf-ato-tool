@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-nist-waivers",
+  "title": "FW-TASK-002 waivers",
+  "description": "Tasks known to lack a mapped entity. Each names the open work item that closes it, or a rationale for an omission scoped to that task (an input the task itself produces, which FW-IO-001 forbids as an input); a waiver nothing needs fails FW-TASK-002.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "waivers"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "waivers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task",
+          "field",
+          "entity"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "pattern": "^[PCSIARM]-\\d{1,2}$"
+          },
+          "field": {
+            "enum": [
+              "inputs",
+              "outputs",
+              "primary",
+              "supporting"
+            ]
+          },
+          "entity": {
+            "type": "string",
+            "minLength": 5
+          },
+          "work_item": {
+            "type": "string",
+            "pattern": "^WI-\\d{2,}$"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 20,
+            "description": "Why this task permanently omits the entity; no work item closes it."
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "work_item"
+            ],
+            "not": {
+              "required": [
+                "rationale"
+              ]
+            }
+          },
+          {
+            "required": [
+              "rationale"
+            ],
+            "not": {
+              "required": [
+                "work_item"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

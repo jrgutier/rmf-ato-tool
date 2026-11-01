@@ -320,3 +320,59 @@ with the next ID; never edit or delete an existing entry.
 - Fix: CNSSI 1253 carries the cover date and a stamp. REF-007 now requires a `revision_stamp` on every pinned PDF, and the stamp must show the revision's latest year. ATT5 and ATT6 declare `revision_source` with the reason no passage shows their date, and their `revision_note` says where the date comes from (the page footer, or the listing).
 - Rule: a pinned PDF's `revision_stamp` points at text that states the revision; an entry that cannot have one declares `revision_source` with the reason, and a revision taken from a listing says so in `revision_note`.
 - Promotion: check: REF-007
+
+## L-0046 · 2026-10-31 · run: phase-10 · tags: conformance, rules, audit
+- Symptom: all 63 rules passed while the audit found about 45 gaps; a citation proved a passage exists, and FW-TASK-001 pinned task names but not inputs, outputs or roles.
+- Root cause: the rules checked structure, and nothing recorded which requirement of which document a rule, schema or template actually enforces.
+- Fix: `conformance/` holds a register extracted from the text. FW-REQ-003 requires evidence that can fail before an entry is `covered`, and citations and prose cap at `partial`. FW-TASK-002 compares each task with its Chapter 3 block.
+- Rule: a claim of coverage names a check that fails when the requirement is broken; a citation alone is never coverage.
+- Promotion: check: FW-REQ-003
+
+## L-0047 · 2026-10-31 · run: phase-10 · tags: conformance, extraction, text
+- Symptom: `Organizations must:` was extracted 12 times from FIPS 200 with the requirement itself dropped, and a sentence cited to page 8 opened on page 9, so its one-word anchor did not resolve.
+- Root cause: the sentence splitter broke at colons, separating a modal lead-in from its inline list, and a paragraph rejoined over a page break reported only its first page.
+- Fix: sentences end at `.`, `?` and `!`; a short lead-in is context; an item whose opening words are on the next page cites that page; a rejoined block counts on both pages.
+- Rule: extract into blocks once, use the same blocks to check a statement against its passage, and read the output for a document before trusting its count.
+- Promotion: check: test_a_modal_sentence_list_stays_whole
+
+## L-0048 · 2026-10-31 · run: phase-10 · tags: conformance, toc, text
+- Symptom: `SP800-30R1.toc.yaml` lists 2.4.3 but not 3.1 or 2.4.1, CNSSI 1253's toc holds a footnote as a level 1 heading, and SP 800-37r2's Appendix F, the source of finding N-1, has no numbered headings at all.
+- Root cause: the toc comes from an outline and guarded regexes tuned for citation lookup, so it is neither complete nor clean as a list of document units.
+- Fix: the first fix read headings from the blocks instead of the toc, which made headings the register's unit for 617 entries and still missed every requirement sentence in Appendix F. Section mode is gone: headings are context only, and every prose page is read sentence by sentence in statement mode (`extract.classify`).
+- Rule: use the toc to resolve a citation; do not use it, or any heading list, to enumerate a document's requirements.
+- Promotion: check: test_headings_are_context_and_never_statements
+
+## L-0049 · 2026-10-31 · run: phase-10 · tags: conformance, nist, parser
+- Symptom: FW-TASK-002 reported seven SDLC disagreements on I-1 to A-5, all false: SP 800-37r2 prints `New – Development/Acquisition; Implementation/Assessment.` and the task notes use a comma.
+- Root cause: the parser treated `;` as the end of the `New` value because the notes use it to separate `New` from `Existing`; the two forms differ only in where `Existing` starts.
+- Fix: a value runs to the word `Existing` or the end of the field.
+- Rule: when a new check fires on data that an earlier audit passed, test the parser against the source line before changing the data.
+- Promotion: check: test_the_document_and_the_citation_notes_parse_alike
+
+## L-0050 · 2026-10-31 · run: phase-10 · tags: fork, tests, readme
+- Symptom: `rmf ci --profile fork` failed five `test_doc_counts.py` tests on a fork that had rewritten README.md, though AGENTS.md and doc_counts.py both say the README is the fork's to rewrite.
+- Root cause: the tests copied the real README.md and edited sentences in it, and the e2e fork test deleted examples/ but kept the README, so nothing exercised a rewritten one.
+- Fix: the `tree` fixture writes its own README from computed counts, and `test_fork_without_examples_passes_fork_profile` rewrites README.md.
+- Rule: a test that runs in a fork reads no fork-owned file; the e2e fork test changes every file a fork may change.
+- Promotion: check: test_fork_without_examples_passes_fork_profile
+
+## L-0051 · 2026-10-31 · run: phase-10 · tags: conformance, extraction, recall
+- Symptom: the first extractor passed its tests while recall on nine hand-read pages was 53 of 82 (35% missed), section mode returned headings only, and `Authorization to Use` (31 source mentions) had no entry; the tests asserted counts and sample statements the extractor itself had produced.
+- Root cause: nothing measured the extractor against a label it did not write, so a drop in recall changed no test.
+- Fix: `tests/fixtures/conformance/recall/` holds 26 hand-read pages with 215 requirements and one probe per audit finding; `test_conformance_recall.py` computes recall per unit and per mode (floor 95% on lettered, table, pin and catalog; prose at its measured level, since L-0053), probes (100%) and noise (ceiling 35%) on every run, and checks that every in-scope line of every source is an entry or a recorded rejection.
+- Rule: an extractor's test set is labelled by reading the source before the extractor changes, and a label is never edited to fit the extractor.
+- Promotion: check: test_recall_by_unit_and_by_mode_holds_its_floor
+
+## L-0052 · 2026-10-31 · run: phase-10 · tags: conformance, evidence, rules
+- Symptom: `{kind: pinned, target: AD-ATO, field: id, value: AD-ATO}` was strong evidence, 1,500 copies of it raised no finding because the fan-out warning counted rule evidence only, `asserts: x` satisfied 56 rules, a triage pattern of `.` retired every entry, and closing a work item needed only `closed_by`.
+- Root cause: evidence pointed one way (entry to target) and the target never had to agree, so any well-formed claim counted.
+- Fix: a rule lists the entries it `enforces` and FW-REQ-003 refuses evidence the rule does not list and an `enforces` the entry does not cite back; pins are limited to `evidence.PINNED_FIELDS`; `asserts` must share two content words with the statement; the fan-out cap is an error for every evidence kind with exceptions in `conformance/policy.yaml`; triage patterns are document-scoped, need two literal words, a cap, a sample, and never apply to tier 1; a document over a quarter not-applicable, however the statuses were set, needs a user-approved record; a work item binds entries and closes only when their evidence judges strong.
+- Rule: a claim is linked in both directions, and the thing claimed about names what it proves; a check that counts claims must count every kind of claim.
+- Promotion: check: FW-REQ-003
+
+## L-0053 · 2026-11-01 · run: phase-10 · tags: conformance, extraction, recall, tests
+- Symptom: `test_nothing_in_scope_is_dropped_silently` reported 13,141 of 13,141 blocks accounted for while 139 raw lines of nine sources (1,295 words in paragraphs a caption had absorbed, the SP 800-18r1 Executive Summary joined to a contents line on an excluded page) were in no entry and no rejection. Two regexes added to hit two freshly written recall labels (`was|were`, `contingency planning`) matched 23 noise sentences for 3 hits.
+- Root cause: the test read the document through `extract.blocks()`, `block.page` and `heading_like`, the same reader whose joins it was meant to check, so a paragraph the reader swallowed was invisible to it; and a label written after the extractor change is a target, not a measurement.
+- Fix: the test reads raw page lines from `references/text` with its own stated exclusions and reports 0 lost lines; `blocks()` never continues a caption, an all-caps line or a leader line onto the next page, a caption line is its own paragraph, and a block that starts outside every scope is read by the scope it ends in. The two regexes are gone and their labels count as misses; prose keeps a floor at the level measured (91/94) and is otherwise reported, since extraction is a first pass that `rmf conformance promote` completes.
+- Rule: a recall or completeness test reads the source with its own reader, never the extractor's; a label is written before the extractor is tuned, and a miss stays a miss.
+- Promotion: check: test_no_raw_line_in_scope_is_dropped_silently

@@ -32,6 +32,7 @@ class Rule:
     fixture: str | None = None
     exempt_reason: str | None = None
     severity_note: str | None = None
+    enforces: tuple[str, ...] = ()
 
 
 def registry_errors(data: Any) -> list[str]:
@@ -49,7 +50,8 @@ def load_registry(path: Path = REGISTRY_PATH) -> tuple[Rule, ...]:
     errors = registry_errors(data)
     if errors:
         raise ValueError(f"{path.name}: " + "; ".join(errors[:5]))
-    return tuple(Rule(**{**r, "ac": tuple(r["ac"])}) for r in data["rules"])
+    return tuple(Rule(**{**r, "ac": tuple(r["ac"]), "enforces": tuple(r.get("enforces", ()))})
+                 for r in data["rules"])
 
 
 def rules_by_id() -> dict[str, Rule]:

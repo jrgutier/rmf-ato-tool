@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-policy",
+  "title": "Evidence policy",
+  "description": "Reviewed exceptions: a target that legitimately proves more requirements than the fan-out cap of FW-REQ-003 allows, and a document more of which is not-applicable than FW-REQ-004 allows without review.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fan_out_exceptions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "fan_out_exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "target",
+          "limit",
+          "reason",
+          "approved_by"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "rule",
+              "schema",
+              "pinned",
+              "template",
+              "citation",
+              "prose"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 20
+          },
+          "approved_by": {
+            "const": "user",
+            "description": "The user reviewed the exception; a reason alone does not lift the cap."
+          }
+        }
+      }
+    },
+    "retirements": {
+      "description": "Documents more than a quarter of whose live entries are not-applicable, however the statuses were set (FW-REQ-004); one record per document, reviewed by the user.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "reason",
+          "approved_by"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9.-]+$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 20
+          },
+          "approved_by": {
+            "const": "user"
+          }
+        }
+      }
+    }
+  }
+}

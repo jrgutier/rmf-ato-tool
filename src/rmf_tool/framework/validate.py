@@ -20,6 +20,9 @@ import jsonschema
 
 from rmf_tool import playbooks_sync, refs
 from rmf_tool.check import load_registry
+from rmf_tool.conformance import evidence as conformance_evidence
+from rmf_tool.conformance import register as conformance_register
+from rmf_tool.conformance import rules as conformance_rules
 from rmf_tool.findings import Finding
 from rmf_tool.framework import graph, personas_check
 from rmf_tool.framework.citations import DEFERRED, ERROR, Resolver, describe
@@ -72,6 +75,25 @@ class Context:
     citations: int = 0
     # citing blocks of framework/baselines/*.yaml (not entities: no ID rules apply)
     cited: list[Entity] = field(default_factory=list)
+    _register: conformance_register.Register | None = None
+    _index: dict[str, Any] | None = None
+
+    @property
+    def register(self) -> conformance_register.Register:
+        if self._register is None:
+            self._register = conformance_register.load(self.repo)
+        return self._register
+
+    @property
+    def index(self) -> dict[str, Any]:
+        if self._index is None:
+            self._index = conformance_register.index_entries(self.repo)
+        return self._index
+
+    @property
+    def whole_framework(self) -> bool:
+        """The register and the pin describe the complete task set, not a test subset."""
+        return (self.fw.meta.get("task_set") or {}).get("mode") == "exact"
 
 
 def _err(rule: str, entity: Entity | None, message: str, location: Location | None = None
@@ -351,6 +373,37 @@ def rule_task_set(ctx: Context) -> list[Finding]:
     return out
 
 
+def rule_task_contract(ctx: Context) -> list[Finding]:
+    if not ctx.whole_framework:
+        return []
+    return conformance_rules.contract(ctx.repo, ctx.fw, ctx.register)
+
+
+def rule_req_shape(ctx: Context) -> list[Finding]:
+    assert ctx.resolver is not None
+    if not ctx.whole_framework:
+        return []
+    return conformance_rules.shape(ctx.register, ctx.resolver, ctx.repo, ctx.index)
+
+
+def rule_req_ladder(ctx: Context) -> list[Finding]:
+    if not ctx.whole_framework:
+        return []
+    return conformance_rules.ladder(ctx.register, conformance_evidence.probe(ctx.repo, ctx.fw))
+
+
+def rule_req_reasons(ctx: Context) -> list[Finding]:
+    if not ctx.whole_framework:
+        return []
+    return conformance_rules.reasons(ctx.register, ctx.index,
+                                     conformance_evidence.probe(ctx.repo, ctx.fw))
+
+
+def rule_req_sync(ctx: Context) -> list[Finding]:
+    return conformance_rules.sync(ctx.repo, ctx.register, ctx.index) \
+        if ctx.whole_framework else []
+
+
 def rule_persona_cards(ctx: Context) -> list[Finding]:
     return personas_check.missing_cards(ctx.fw, ctx.repo)
 
@@ -381,6 +434,11 @@ RULES: dict[str, Callable[[Context], list[Finding]]] = {
     "FW-CITE-002": rule_cite_resolve,
     "FW-CITE-003": rule_cite_required,
     "FW-TASK-001": rule_task_set,
+    "FW-TASK-002": rule_task_contract,
+    "FW-REQ-001": rule_req_shape,
+    "FW-REQ-003": rule_req_ladder,
+    "FW-REQ-004": rule_req_reasons,
+    "FW-REQ-005": rule_req_sync,
     "FW-PER-001": rule_persona_cards,
     "FW-PER-002": rule_persona_card_content,
     "FW-PB-001": rule_playbook_coverage,
@@ -470,7 +528,7 @@ def validate(fw_root: Path, repo: Path, profile: Profile) -> Result:
     table_findings, cited = baseline_tables(fw_root, repo)
     findings += table_findings
     resolver = None
-    if any(r.startswith(("FW-CITE-", "FW-PER-")) for r in rules):
+    if any(r.startswith(("FW-CITE-", "FW-PER-", "FW-REQ-")) for r in rules):
         resolver = Resolver(repo, refs.load_index(repo), strict=profile.includes("p2x"))
     ctx = Context(loaded.framework, repo, resolver, cited=cited)
     if not findings:

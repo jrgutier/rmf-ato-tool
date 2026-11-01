@@ -187,8 +187,8 @@ def validate(
     """Validate the framework YAML: every FW-* rule whose phase is in the profile.
 
     FW-SCHEMA-001, FW-ID-*, FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001,
-    FW-DAG-001, FW-CITE-001/002, FW-TASK-001. Citations to pending-acquisition references
-    are counted as deferred until p2x.
+    FW-DAG-001, FW-CITE-001/002, FW-TASK-001/002, FW-REQ-*. Citations to pending-acquisition
+    references are counted as deferred until p2x.
     """
     repo = repo_root()
     try:
@@ -903,6 +903,216 @@ def report_assumptions(run: RunArg = None) -> None:
     r = _open(run)
     wrote = reports.write_assumptions(r)
     typer.echo(f"{reports.ASSUMPTIONS_REPORT} {'written' if wrote else 'unchanged'}")
+
+
+conformance_app = typer.Typer(help="Extract and report the requirements register.",
+                              no_args_is_help=True)
+app.add_typer(conformance_app, name="conformance")
+
+
+@conformance_app.command("extract")
+def conformance_extract(
+    ref: Annotated[str | None, typer.Option("--id", help="Only this reference.")] = None,
+    check: Annotated[
+        bool, typer.Option("--check", help="Fail if the register is stale; write nothing.")
+    ] = False,
+) -> None:
+    """Regenerate conformance/requirements/*.yaml and nist-tasks.yaml from the reference text.
+
+    Reviewed fields survive. A statement gone from its source stays as `removed: true`, so
+    its ID is never reused. --check is FW-REQ-005.
+    """
+    from rmf_tool.conformance import cli_support
+
+    root = repo_root()
+    try:
+        lines, findings = cli_support.extract(root, ref, check=check)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    for line in lines:
+        console.print(line, markup=False)
+    for f in findings:
+        err_console.print(f.render(), markup=False)
+    raise typer.Exit(EXIT_VIOLATIONS if findings else EXIT_OK)
+
+
+@conformance_app.command("accept-text")
+def conformance_accept_text(
+    ref: Annotated[str | None, typer.Option("--id", help="Only this reference.")] = None,
+) -> None:
+    """Record the SHA-256 of each imported reference text as reviewed.
+
+    Written to conformance/text-hashes.yaml. FW-REQ-005 fails while a text differs from its
+    recorded hash, so a changed document is read and re-reviewed before the register claims
+    anything about it.
+    """
+    from rmf_tool.conformance import cli_support
+
+    try:
+        lines = cli_support.accept_text(repo_root(), ref)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    for line in lines:
+        console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
+
+
+@conformance_app.command("mark")
+def conformance_mark(
+    ident: Annotated[str, typer.Argument(help="Register entry, REQ-<REF>-<NNNN>.")],
+    status: Annotated[str | None, typer.Option("--status", help="candidate, covered, "
+                                               "partial, deferred or not-applicable.")] = None,
+    reason: Annotated[str | None, typer.Option("--reason")] = None,
+    work_item: Annotated[str | None, typer.Option("--work-item", help="WI-nn.")] = None,
+    evidence: Annotated[str | None, typer.Option(
+        "--evidence", help="JSON list of evidence items ({kind, target, asserts, ...}).",
+    )] = None,
+    approved_by: Annotated[str | None, typer.Option("--approved-by")] = None,
+    removal_reason: Annotated[str | None, typer.Option("--removal-reason")] = None,
+    reviewed: Annotated[bool, typer.Option("--reviewed", help="Clear needs_review.")] = False,
+    clear: Annotated[list[str] | None, typer.Option(
+        "--clear", help="Delete a reviewed field (repeatable).")] = None,
+) -> None:
+    """Set reviewed fields on one register entry; the only way to edit a requirements file.
+
+    Nothing here is checked beyond the schema: run `rmf validate` afterwards, where FW-REQ-003
+    judges the evidence and FW-REQ-004 the reasons.
+    """
+    from rmf_tool.conformance import cli_support
+
+    fields: dict[str, Any] = {}
+    for key, value in (("status", status), ("reason", reason), ("work_item", work_item),
+                       ("approved_by", approved_by), ("removal_reason", removal_reason)):
+        if value is not None:
+            fields[key] = value
+    if evidence is not None:
+        try:
+            fields["evidence"] = json.loads(evidence)
+        except json.JSONDecodeError as exc:
+            raise _usage_error(f"--evidence is not JSON: {exc}") from exc
+    if reviewed:
+        fields["needs_review"] = None
+    for key in clear or []:
+        fields[key] = None
+    if not fields:
+        raise _usage_error("nothing to mark; give at least one option")
+    try:
+        line = cli_support.mark(repo_root(), ident, **fields)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
+
+
+@conformance_app.command("report")
+def conformance_report(fmt: FormatOption = OutputFormat.text) -> None:
+    """Status distribution per document and in total, open work items, unassessed documents."""
+    from rmf_tool.conformance import cli_support, report
+
+    try:
+        data = cli_support.report_data(repo_root())
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    if fmt is OutputFormat.json:
+        typer.echo(json.dumps(data, indent=2))
+    else:
+        for line in report.render(data):
+            console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
+
+
+@conformance_app.command("bind")
+def conformance_bind(
+    check: Annotated[bool, typer.Option("--check", help="Report bindings that do not name "
+                                        "exactly one entry carrying the work item; write "
+                                        "nothing.")] = False,
+) -> None:
+    """Set work_item on the entry each binding in conformance/bindings.yaml names.
+
+    A phrase must match exactly one live entry of its document; otherwise this is a finding
+    (FW-REQ-004) and nothing is written.
+    """
+    from rmf_tool.conformance import cli_support
+
+    try:
+        lines, findings = cli_support.bind(repo_root(), check=check)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    for line in lines:
+        console.print(line, markup=False)
+    for f in findings:
+        err_console.print(f.render(), markup=False)
+    raise typer.Exit(EXIT_VIOLATIONS if findings else EXIT_OK)
+
+
+@conformance_app.command("promote")
+def conformance_promote(
+    ref: Annotated[str, typer.Argument(help="Reference ID, as in conformance/sources.yaml.")],
+    page: Annotated[int, typer.Option("--page", help="Page of references/text/<REF>.md.")],
+    anchor: Annotated[str, typer.Option("--anchor", help="A few words of the passage; the "
+                                        "rejection on the page that holds them, else the "
+                                        "paragraph of the text that does.")],
+    reason: Annotated[str, typer.Option("--reason", help="Why the passage is a requirement.")],
+) -> None:
+    """Promote a rejected paragraph, or a passage the extractor read as context, into a live
+    candidate entry with a new stable ID and `promoted: {reason}`.
+
+    Extraction is a first pass: triage reads the source pages (`rmf conformance page`) and
+    promotes what the extractor missed. The entry survives `rmf conformance extract`, is
+    flagged needs_review when its passage no longer resolves, is counted by `rmf conformance
+    report`, and its citation is checked by FW-REQ-001 like any other.
+    """
+    from rmf_tool.conformance import cli_support
+
+    try:
+        line = cli_support.promote(repo_root(), ref, page, anchor, reason)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
+
+
+@conformance_app.command("page")
+def conformance_page(
+    ref: Annotated[str, typer.Argument(help="Reference ID, as in conformance/sources.yaml.")],
+    number: Annotated[int, typer.Argument(help="Page of references/text/<REF>.md.")],
+) -> None:
+    """Every entry and every rejection on one page of a document, to read against the source
+    page (`rmf refs show REF --page N --anchor A`) before promoting or marking."""
+    from rmf_tool.conformance import cli_support
+
+    try:
+        lines = cli_support.page(repo_root(), ref, number)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    for line in lines:
+        console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
+
+
+@conformance_app.command("sample")
+def conformance_sample(
+    seed: Annotated[int, typer.Option("--seed", help="Random seed; the same seed on the same "
+                                      "register gives the same sample.")],
+    count: Annotated[int, typer.Option("-n", help="Sample size.")] = 30,
+    rejected: Annotated[bool, typer.Option("--rejected", help="Sample the rejected set "
+                                           "instead of the entries.")] = False,
+    kind: Annotated[str, typer.Option("--kind", help="prose, lettered, table, promoted or "
+                                      "all.")] = "all",
+    ref: Annotated[str | None, typer.Option("--id", help="Only this reference.")] = None,
+) -> None:
+    """A seeded sample of register entries, or of the rejected paragraphs and rows, to read
+    against the source: noise on the entries, false rejects on the rejected set."""
+    from rmf_tool.conformance import cli_support
+
+    try:
+        lines = cli_support.sample(repo_root(), seed=seed, count=count, rejected=rejected,
+                                   kind=kind, only=ref)
+    except cli_support.UsageError as exc:
+        raise _usage_error(str(exc)) from exc
+    for line in lines:
+        console.print(line, markup=False)
+    raise typer.Exit(EXIT_OK)
 
 
 @app.command("checks-doc")

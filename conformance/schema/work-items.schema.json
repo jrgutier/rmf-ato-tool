@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-work-items",
+  "title": "Work items",
+  "description": "Open gaps. A closed item says what closed it. A register item binds the register entries that carry its work_item (FW-REQ-004); an internal item says why it binds none. IDs are stable (INV-3).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "work_items"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "work_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "findings",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^WI-\\d{2,}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 5
+          },
+          "findings": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[NDC]-\\d{1,2}$"
+            }
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed"
+            ]
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^p\\d+$"
+          },
+          "closed_by": {
+            "type": "string",
+            "minLength": 5
+          },
+          "scope": {
+            "enum": [
+              "register",
+              "internal"
+            ],
+            "description": "register (default): closes register entries. internal: a repository defect with no requirement entry."
+          },
+          "scope_reason": {
+            "type": "string",
+            "minLength": 20
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "closed"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "closed_by"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "closed_by"
+                ]
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "scope": {
+                  "const": "internal"
+                }
+              },
+              "required": [
+                "scope"
+              ]
+            },
+            "then": {
+              "required": [
+                "scope_reason"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "scope_reason"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

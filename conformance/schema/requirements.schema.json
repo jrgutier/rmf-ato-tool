@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:conformance-requirements",
+  "title": "Requirements of one reference",
+  "description": "Written by rmf conformance extract; status, reason, evidence, work_item, approved_by and removal_reason are reviewed (rmf conformance mark).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ref",
+    "mode",
+    "requirements",
+    "rejected"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "ref": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9.-]+$"
+    },
+    "mode": {
+      "enum": [
+        "statement",
+        "pin",
+        "catalog"
+      ]
+    },
+    "catalog": {
+      "enum": [
+        "controls",
+        "information-types"
+      ]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "rejected": {
+      "description": "Every in-scope paragraph or table row that is not a candidate, with its reason (rmf_tool.conformance.extract.REJECT_REASONS). Nothing in scope is dropped silently.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "page",
+          "locator",
+          "reason",
+          "text"
+        ],
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "locator": {
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "short",
+              "lead-in",
+              "no-marker",
+              "not-normative",
+              "not-a-statement",
+              "fragment",
+              "leader",
+              "label-only",
+              "legend"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "target"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "rule",
+            "schema",
+            "pinned",
+            "template",
+            "citation",
+            "prose"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asserts": {
+          "type": "string",
+          "minLength": 20
+        },
+        "sentence": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The whole marked sentence of the statement this evidence proves (FW-REQ-003). A prose entry with more than one marked sentence is covered only when strong evidence cites every one."
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {},
+        "heading": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "citation",
+        "kind",
+        "locator",
+        "context",
+        "statement",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^REQ-[A-Z][A-Z0-9.-]+-\\d{4}$"
+        },
+        "citation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref",
+            "page",
+            "anchor"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9.-]+$"
+            },
+            "page": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "anchor": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "kind": {
+          "enum": [
+            "lettered",
+            "table",
+            "modal",
+            "should",
+            "indicative",
+            "imperative",
+            "promoted"
+          ]
+        },
+        "locator": {
+          "type": "string"
+        },
+        "context": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "occurrence": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "covered",
+            "partial",
+            "deferred",
+            "not-applicable"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "work_item": {
+          "type": "string",
+          "pattern": "^WI-\\d{2,}$"
+        },
+        "approved_by": {
+          "const": "user"
+        },
+        "triaged_by": {
+          "type": "string",
+          "pattern": "^TP-\\d{2,}$"
+        },
+        "needs_review": {
+          "const": true
+        },
+        "removed": {
+          "const": true
+        },
+        "removal_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Why a reviewed entry that left its source may stay removed (FW-REQ-004)."
+        },
+        "promoted": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason"
+          ],
+          "description": "Set by rmf conformance promote: a reviewer's entry for a passage the extractor rejected or read as context. It survives re-extraction, and is flagged needs_review when its passage no longer resolves.",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

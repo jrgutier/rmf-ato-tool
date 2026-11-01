@@ -92,6 +92,21 @@ def test_page_with_anchor_is_line_break_insensitive(rr):
     assert out.startswith("<!-- page 1 -->") and "page 2" not in out
 
 
+def test_a_same_size_rewrite_within_one_clock_tick_is_not_served_stale(rr):
+    """The fake: a cache keyed on (path, mtime_ns, size) returned the old text after a
+    rewrite of the same size on a coarse-timestamp filesystem."""
+    import os
+    md = rr.root / rr.entry("DOC-A")["text"]["path"]
+    before = os.stat(md)
+    old = md.read_text(encoding="utf-8")
+    assert "publication" in show.page(rr.root, rr.entry("DOC-A"), 1, "purpose of this")
+    md.write_text(old.replace("publication", "publicatioX"), encoding="utf-8")
+    os.utime(md, ns=(before.st_atime_ns, before.st_mtime_ns))
+    assert os.stat(md).st_size == before.st_size and os.stat(md).st_mtime_ns == before.st_mtime_ns
+
+    assert "publicatioX" in show.page(rr.root, rr.entry("DOC-A"), 1, "purpose of this")
+
+
 def test_page_with_heading_anchor(rr):
     out = show.page(rr.root, rr.entry("DOC-A"), 2, "12-target-audience")
     assert out.startswith('<!-- page 2 label="ii" -->')
