@@ -45,6 +45,7 @@ class Context:
     slow: bool
     capture: bool  # capture subprocess output (json) instead of streaming it (text)
     profile: Profile | None = None  # set by run()
+    tests: bool = True  # False: every check but pytest (`rmf ci --no-tests`)
 
 
 @dataclass(frozen=True)
@@ -70,6 +71,8 @@ def _ruff(ctx: Context) -> tuple[bool, list[Finding], str]:
 
 def _pytest(ctx: Context) -> tuple[bool, list[Finding], str]:
     marker = "not network and not agent" if ctx.slow else "not slow and not network and not agent"
+    if ctx.profile is None or ctx.profile.name != "release":
+        marker += " and not release"
     # Workers repeat module fixtures, so below MIN_WORKER_CPUS they cost more than they save: a
     # 2-core runner took 65 minutes with them and 49 in series. An environment synced without
     # xdist, a dev dependency, also runs in series.
@@ -250,6 +253,8 @@ def run(profile: Profile, ctx: Context, steps: tuple[Step, ...] = STEPS) -> list
         if step.phase is not None and not rule_active(step.phase, profile):
             continue
         if step.unless is not None and profile.includes(step.unless):
+            continue
+        if step.run is _pytest and not ctx.tests:
             continue
         ok, findings, output = step.run(ctx)
         results.append(StepResult(step.name, step.rules, ok, findings, output))

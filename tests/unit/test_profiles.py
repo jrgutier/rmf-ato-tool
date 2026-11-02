@@ -1,6 +1,16 @@
+from pathlib import Path
+
 import pytest
 
-from rmf_tool.profiles import PHASES, ProfileError, closed_phases, resolve, rule_active
+from rmf_tool import ci
+from rmf_tool.profiles import (
+    PHASES,
+    Profile,
+    ProfileError,
+    closed_phases,
+    resolve,
+    rule_active,
+)
 
 
 def close(root, *phases):
@@ -66,3 +76,28 @@ def test_p3b_requires_p2x_closed(tmp_path):
         resolve(tmp_path, "p3b")
     close(tmp_path, "p2x")
     assert "p3b" in resolve(tmp_path, "p3b").phases
+
+
+def _pytest_argv(monkeypatch, profile: str, *, tests: bool = True) -> list[list[str]]:
+    calls: list[list[str]] = []
+
+    def record(argv, ctx):
+        calls.append(argv)
+        return True, [], ""
+
+    monkeypatch.setattr(ci, "run_subprocess", record)
+    steps = tuple(s for s in ci.STEPS if s.run is ci._pytest)
+    ctx = ci.Context(Path("."), None, slow=True, capture=True, tests=tests)
+    ci.run(Profile(profile, frozenset()), ctx, steps)
+    return calls
+
+
+def test_only_a_release_run_repeats_the_suite_in_a_fork(monkeypatch):
+    [argv] = _pytest_argv(monkeypatch, "p11")
+    assert "not release" in " ".join(argv)
+    [argv] = _pytest_argv(monkeypatch, "release")
+    assert "not release" not in " ".join(argv)
+
+
+def test_no_tests_leaves_out_pytest(monkeypatch):
+    assert _pytest_argv(monkeypatch, "p11", tests=False) == []

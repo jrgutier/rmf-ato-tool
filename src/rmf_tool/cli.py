@@ -116,6 +116,9 @@ def ci(
     release: Annotated[
         bool, typer.Option("--release", help="Same as --profile release --slow.")
     ] = False,
+    no_tests: Annotated[
+        bool, typer.Option("--no-tests", help="Run every check but pytest.")
+    ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
     """Run the fast lane (ruff, pytest) plus every check of the active profile."""
@@ -140,7 +143,7 @@ def ci(
         raise typer.Exit(EXIT_USAGE)
 
     capture = fmt is OutputFormat.json
-    ctx = ci_mod.Context(root, typer.main.get_command(app), slow, capture)
+    ctx = ci_mod.Context(root, typer.main.get_command(app), slow, capture, tests=not no_tests)
     if not capture:
         phases = ", ".join(sorted(active.phases)) or "none closed"
         console.print(f"rmf ci: profile {active.name} (phases: {phases})", markup=False)
@@ -151,6 +154,7 @@ def ci(
             "profile": active.name,
             "phases": sorted(active.phases),
             "ok": ok,
+            "tests": not no_tests,
             "steps": [
                 {"name": r.name, "rules": list(r.rules), "ok": r.ok,
                  "findings": report(r.findings, list(r.rules))["findings"], "output": r.output}

@@ -119,8 +119,16 @@ def test_ci_profile_p1_json(repo_with_p1):
     assert [s["name"] for s in data["steps"]] == ["lessons check", "AGENTS.md", "ruff", "pytest"]
     assert data["steps"][0]["rules"] == ["LES-002", "LES-003"]
     pytest_argv = repo_with_p1.calls[1]
-    assert "not slow and not network and not agent" in pytest_argv
+    assert "not slow and not network and not agent and not release" in pytest_argv
     assert f"--cov-fail-under={ci.COVERAGE_MIN}" in pytest_argv
+    assert data["tests"] is True
+
+
+def test_ci_no_tests_says_so_in_json(repo_with_p1):
+    data = json.loads(invoke("ci", "--profile", "p1", "--no-tests", "--format", "json").stdout)
+
+    assert data["tests"] is False
+    assert "pytest" not in [s["name"] for s in data["steps"]]
 
 
 def test_ci_runs_pytest_on_workers_when_xdist_is_installed(repo_with_p1, monkeypatch):
@@ -155,7 +163,7 @@ def test_ci_bare_runs_fast_lane_only_without_closed_phases(repo_with_p1):
     assert result.exit_code == 0
     assert "phases: none closed" in result.stdout
     assert "lessons check" not in result.stdout
-    assert "not network and not agent" in repo_with_p1.calls[1]
+    assert "not network and not agent and not release" in repo_with_p1.calls[1]
 
 
 def test_ci_reports_failures_exit_1(repo_with_p1):
