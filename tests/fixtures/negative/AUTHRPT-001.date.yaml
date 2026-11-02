@@ -1,0 +1,14 @@
+rule: AUTHRPT-001
+bases:
+- minimal
+description: a receipt dated before the decision
+mutations:
+- op: set_field
+  file: artifacts/data/authorization-report.yaml
+  path: receipt.received
+  value: '2026-11-01'
+expect:
+  errors:
+  - AUTHRPT-001
+  messages:
+  - precedes the authorization decision

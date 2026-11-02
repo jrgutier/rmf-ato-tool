@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:leveraged-authorizations",
   "title": "runs/<run-id>/artifacts/data/leveraged-authorizations.yaml",
-  "description": "Authorizations this system inherits from (C-1); OSCAL SSP system-implementation.leveraged-authorizations.",
+  "description": "Authorizations this system inherits from (C-1); OSCAL SSP system-implementation.leveraged-authorizations. `enterprise` marks an Enterprise system this organization receives; ENT-002 judges it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -46,6 +46,58 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          },
+          "enterprise": {
+            "title": "An Enterprise system this organization receives",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "accepted_by",
+              "accepted",
+              "receiving_action",
+              "change_request"
+            ],
+            "properties": {
+              "accepted_by": {
+                "title": "Body that made the enterprise level risk acceptance",
+                "enum": [
+                  "DoD ISRMC",
+                  "Component"
+                ]
+              },
+              "accepted": {
+                "$ref": "#/$defs/date",
+                "title": "Date of the risk acceptance"
+              },
+              "receiving_action": {
+                "title": "What the receiving organization does with the Enterprise system",
+                "enum": [
+                  "deploy",
+                  "refuse"
+                ]
+              },
+              "change_request": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "approved_on"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "approved_on": {
+                    "title": "RMF artifact the change request was approved on",
+                    "enum": [
+                      "isrmc-risk-acceptance",
+                      "local-assessment"
+                    ]
+                  }
+                }
+              }
             }
           }
         }

@@ -1,0 +1,14 @@
+rule: AODM-010
+bases:
+- minimal
+description: a system processing PII with no privacy coordination
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.privacy
+  value: true
+expect:
+  errors:
+  - AODM-010
+  messages:
+  - coordinates the authorization decision with the privacy official

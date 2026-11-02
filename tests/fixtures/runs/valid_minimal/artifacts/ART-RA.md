@@ -7,6 +7,19 @@ sources: [product/architecture.md]
 ---
 # System risk assessment
 
+## Method and scope
+
+The assessment covers the relay appliance and uses the SP 800-30 qualitative scales
+[[product/architecture.md#network]].
+
+## Threat sources and events
+
+An outsider who steals an administrator password logs in to the appliance (TE-1) [[product/architecture.md#network]].
+
+## Vulnerabilities and predisposing conditions
+
+Direct root SSH login and stale accounts make that event more likely [[product/architecture.md#network]].
+
 ## Threats
 
 The main threats are spoofed field reports and compromise of the relay appliance from the

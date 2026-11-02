@@ -155,5 +155,12 @@ an honest `partial` citing where it is built, and the freeze accepts that.
   it refuses an open item whose entries are all covered.
 - FW-REQ-002 at p13 lets a non-tier-1 obligation freeze at `partial` with evidence; a tier 1 entry
   needs `covered` or an approved deferral. FW-REQ-002 itself stays for p13.
+- A marked sentence that is a permission or an open list of examples can never fail, so it is not
+  proof debt, and an agent cannot rule it out. `ruling_sought: [{sentence, reason, approved_by?}]`
+  names it, whole, by the same check as evidence. Without `approved_by: user` the entry stays
+  `partial`, its work item cannot close, and the sentence leaves `unresolved` for
+  `summary.awaiting_ruling`, outside `tier1_debt`. With it, `covered` needs no item on that
+  sentence, but an entry with every marked sentence ruled out is `not-a-requirement`, and FW-REQ-003
+  refuses it as `covered`. Never for a duty that is merely hard to test.
 - AODM-009 split the deciding official, subject and recipients out of AODM-001, which had reached 34
   evidence items against the fan-out cap of 25 once each clause was cited alone.

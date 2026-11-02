@@ -90,6 +90,18 @@ def load(run: Run) -> list[dict[str, Any]] | None:
     return [r for r in data.get("records") or [] if isinstance(r, dict)]
 
 
+def section(run: Run, key: str) -> list[dict[str, Any]]:
+    """The items of a list beside ``records`` in the ledger; none on a pre-ledger run."""
+    if LEDGER_ARTIFACT not in run.artifacts or not run.path(LEDGER_FILE).is_file():
+        return []
+    try:
+        data = run.data(LEDGER_FILE)
+    except YamlError:
+        return []
+    return [i for i in (data.get(key) or []) if isinstance(i, dict)] \
+        if isinstance(data, dict) else []
+
+
 def effects(run: Run) -> dict[str, str]:
     return {e.id: e.data["effect"] for e in run.framework.index("decisions").values()}
 

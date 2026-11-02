@@ -101,7 +101,7 @@ requirements:
     statement: "Reciprocity is designed to expedite authorization through the re-use of assessments and artifacts, which leads to cost reduction. Executed appropriately, reciprocity reduces redundant testing, assessment and documentation, and the associated costs in time and resources. To support reciprocity, DoD Components share security authorization packages with affected information owners and interconnected system owners. The re-use of artifacts allows AOs to accept assessments done on systems they intend to deploy rather than repeat the assessments. Acceptance of relevant artifacts from similar assessments results in fewer costly assessments, allowing systems to be authorized more quickly and efficiently. In some cases, an organization may want to deploy a capability developed by another organization. It can leverage the existing authorization package if both organizations have similar mission requirements and plan to deploy the same system components with similar dataflows and network architectures. In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU). This ATU includes a statement by the Receiving AO granting approval for a Granting system to connect to the hosting/receiving system where the systems are linked through inheritance in the RMF Inventory Tool (e.g., eMASS, Xacta). It also provides a copy of implementing documentation to the Granting AO and notifies and provides guidance to subordinate site(s) that the system is authorized to operate and/or connect only in the authorized configuration. Overall, this re-use can result in significant resource savings."
     status: "partial"
     reason: "Sharing packages, copies to the Granting AO and guidance to sites are outside the ledger (VAR-RECEIVE, p12)"
-    evidence: [{"kind": "rule", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.provider.yaml", "expect": "names the provider and its completed ATO", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}, {"kind": "pinned", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "AD-ATU", "field": "requires", "value": ["provider"], "claim": "constraint", "read_by": "AODM-005", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}, {"kind": "schema", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/provider/properties/date", "claim": "constraint", "read_by": "AODM-005", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}]
+    evidence: [{"kind": "rule", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.provider.yaml", "expect": "names the provider and its completed ATO", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}, {"kind": "pinned", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "AD-ATU", "field": "requires", "value": ["provider", "risk_executive"], "claim": "constraint", "read_by": "AODM-005", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}, {"kind": "schema", "asserts": "The Receiving organization must issue an authorization to use, which names the provider and its completed ATO", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/provider/properties/date", "claim": "constraint", "read_by": "AODM-005", "sentence": "In these cases, the Receiving organization becomes the system owner and, while not needing to re-authorize the system, it must issue an authorization to use (ATU)."}]
     work_item: "WI-01"
   - id: "REQ-DODCIO-RECIPROCITY-0013"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 6, "anchor": "4"}
@@ -189,7 +189,8 @@ requirements:
     locator: "4.2.b"
     context: "ENTERPRISE – ISRMC"
     statement: "b. Provide the Defense Security/Cybersecurity Authorization Working Group (DSAWG), through the organization’s DSAWG Representative, an electronic copy of the SSP, SAR, RAR, the System POA&M, Authorization Decision Document, and list of deployment sites and projected deployment dates."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The DSAWG submission holds the SSP, SAR, RAR, POA&M and Authorization Decision Document, and one lacking any fails", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.documents.yaml", "expect": "the DSAWG submission lacks", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0024"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "Granting AOs must also provide the complete security authorization package and body"}
@@ -261,7 +262,8 @@ requirements:
     locator: "4.2.d"
     context: "ENTERPRISE – ISRMC"
     statement: "d. Provide authorization status briefs to the DSAWG, as requested."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "An authorization status brief the DSAWG requested must follow the request", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.brief.yaml", "expect": "the DSAWG requested an authorization status brief on", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0033"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 9, "anchor": "In coordination with the Receiving organization, ensure security assessments address any and"}
@@ -293,7 +295,8 @@ requirements:
     locator: "4.2.h"
     context: "ENTERPRISE – ISRMC"
     statement: "h. Brief the ISRMC for approval or disapproval of the Enterprise system no later than 60 business days prior to the planned deployment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The ISRMC is briefed no later than 60 business days prior to the planned deployment", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.lead.yaml", "expect": "the ISRMC is briefed no later than", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0037"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "If approved by the ISRMC, the Granting AO can issue an ATO"}
@@ -301,7 +304,8 @@ requirements:
     locator: "4.2.h.(1)"
     context: "ENTERPRISE – ISRMC"
     statement: "(1) If approved by the ISRMC, the Granting AO can issue an ATO for the"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The Granting AO can issue an ATO for an Enterprise system only after the ISRMC approves it", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.field.yaml", "expect": "an Enterprise system receives its ATO only after the ISRMC approves it", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}, {"kind": "pinned", "asserts": "An ATO requires its deployment stated, so an Enterprise system cannot issue without ISRMC approval", "target": "AD-ATO", "field": "requires", "value": ["threat_assessment", "risk_executive", "deployment"], "claim": "constraint", "read_by": "ENT-001"}, {"kind": "schema", "asserts": "The Granting AO can issue an ATO that states whether it is for an Enterprise system", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/deployment/properties/scope", "claim": "constraint", "read_by": "ENT-001"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0038"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "If disapproved by the ISRMC, the Granting AO must work with the"}
@@ -309,7 +313,8 @@ requirements:
     locator: "4.2.h.(2)"
     context: "ENTERPRISE – ISRMC"
     statement: "(2) If disapproved by the ISRMC, the Granting AO must work with the DSAWG to adjust the Enterprise system, as needed, to comply with ISRMC guidance so it can receive an ATO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "After a disapproval the Granting AO works with the DSAWG to adjust the Enterprise system", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.adjust.yaml", "expect": "the Granting AO works with the DSAWG to adjust the Enterprise system", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0039"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "Provide installation and configuration requirements documents to Receiving AOs prior to the"}
@@ -325,7 +330,8 @@ requirements:
     locator: "4.2.a"
     context: "ENTERPRISE – ISRMC"
     statement: "a. Approve or disapprove the Enterprise system connection based on the DSAWG recommendation and other factors identified during the Granting organization’s decision briefing."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The ISRMC approves or disapproves based on the DSAWG recommendation, which must come before it", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.recommendation.yaml", "expect": "the ISRMC decides on the DSAWG recommendation", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0041"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "If approved, the ISRMC will monitor the acceptability of the residual risk"}
@@ -333,7 +339,8 @@ requirements:
     locator: "4.2.b"
     context: "ENTERPRISE – ISRMC"
     statement: "b. If approved, the ISRMC will monitor the acceptability of the residual risk for organizations receiving the Enterprise system at Component sites and authorize connection to the DoD Information Network (DoDIN). Any change in acceptability of risk that cannot be mitigated will require a re-boarding at the ISRMC."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "If approved, the ISRMC monitors the residual risk and authorizes connection to the DoDIN", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.monitor.yaml", "expect": "the ISRMC monitors the residual risk and authorizes connection to the DoDIN", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise", "sentence": "If approved, the ISRMC will monitor the acceptability of the residual risk for organizations receiving the Enterprise system at Component sites and authorize connection to the DoD Information Network (DoDIN)."}, {"kind": "rule", "asserts": "A change in acceptability of risk that cannot be mitigated requires a re-boarding at the ISRMC", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.reboard.yaml", "expect": "requires a re-boarding at the ISRMC", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise", "sentence": "Any change in acceptability of risk that cannot be mitigated will require a re-boarding at the ISRMC."}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0042"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "The Receiving organization would use the ISRMC risk acceptance as an RMF"}
@@ -341,7 +348,8 @@ requirements:
     locator: "4.2.b.(1)"
     context: "ENTERPRISE – ISRMC"
     statement: "(1) The Receiving organization would use the ISRMC risk acceptance as an RMF artifact to approve the change request in adding the Enterprise Capability into their system authorization record."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The ISRMC risk acceptance is the RMF artifact that approves the change request", "target": "ENT-002", "fixture": "tests/fixtures/negative/ENT-002.change.yaml", "expect": "the ISRMC risk acceptance is the RMF artifact", "claim": "constraint", "holds_when": "a leveraged authorization carries enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0043"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "If disapproved, the ISRMC provides guidance through the DSAWG to the Granting"}
@@ -349,7 +357,8 @@ requirements:
     locator: "4.2.c"
     context: "ENTERPRISE – ISRMC"
     statement: "c. If disapproved, the ISRMC provides guidance through the DSAWG to the Granting organization on actions and mitigations that will result in an approval to connect to the DoDIN."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "If disapproved, ISRMC guidance on actions and mitigations reaches the Granting organization through the DSAWG", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.guidance.yaml", "expect": "reaches the Granting organization through the DSAWG", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0044"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "The ISRMC will not grant its approval until the Granting organization documents"}
@@ -357,7 +366,8 @@ requirements:
     locator: "4.2.d"
     context: "ENTERPRISE – ISRMC"
     statement: "d. The ISRMC will not grant its approval until the Granting organization documents and mitigates any remaining risks, as directed by the ISRMC, in the Enterprise system POA&M."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The ISRMC will not grant its approval until the directed risks are mitigated in the POA&M", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.directed.yaml", "expect": "the ISRMC will not grant its approval until", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
   - id: "REQ-DODCIO-RECIPROCITY-0045"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "Maintain situational awareness of the Granting Enterprise system assessment activities via eMASS"}
@@ -470,7 +480,7 @@ requirements:
     statement: "g. Issue a formal authorization to use and operate the Enterprise system. Not a new ATO, this determination includes a statement by the Receiving AO granting approval for a Granting system to connect to the Receiving system."
     status: "partial"
     reason: "The connection-approval statement is free text; the rule holds only that a provider and its ATO are named"
-    evidence: [{"kind": "rule", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.provider.yaml", "expect": "names the provider and its completed ATO", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "pinned", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "AD-ATU", "field": "requires", "value": ["provider"], "claim": "constraint", "read_by": "AODM-005"}, {"kind": "schema", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/provider/properties/date", "claim": "constraint", "read_by": "AODM-005"}]
+    evidence: [{"kind": "rule", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.provider.yaml", "expect": "names the provider and its completed ATO", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "pinned", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "AD-ATU", "field": "requires", "value": ["provider", "risk_executive"], "claim": "constraint", "read_by": "AODM-005"}, {"kind": "schema", "asserts": "An authorization to use names the provider and its completed ATO, approval for the Granting system without a new ATO", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/provider/properties/date", "claim": "constraint", "read_by": "AODM-005"}]
     work_item: "WI-01"
   - id: "REQ-DODCIO-RECIPROCITY-0059"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "This “ATU” differs from the authorization issued by DISA for connection to"}
@@ -1338,7 +1348,8 @@ requirements:
     locator: "4.2.h.(1)"
     context: ""
     statement: "Enterprise system and the version being deployed."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The ATO is for the Enterprise system and the version being deployed, and another version fails", "target": "ENT-001", "fixture": "tests/fixtures/negative/ENT-001.version.yaml", "expect": "the ATO is for the version being deployed", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the ledger holds a boarding or an ATO with deployment.scope enterprise"}]
     work_item: "WI-275"
     promoted: {"reason": "Tail of item 4.2.1.h(1) (REQ-DODCIO-RECIPROCITY-0037), cut by a blank line: the ATO is for the Enterprise system and the version being deployed."}
   - id: "REQ-DODCIO-RECIPROCITY-0167"

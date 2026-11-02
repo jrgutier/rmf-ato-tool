@@ -1,0 +1,14 @@
+rule: ENT-001
+bases:
+- minimal
+description: an ATO for another version than the one approved
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.deployment.version
+  value: '1.1'
+expect:
+  errors:
+  - ENT-001
+  messages:
+  - the ATO is for the version being deployed

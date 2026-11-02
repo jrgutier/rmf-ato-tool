@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:conformance-requirements",
   "title": "Requirements of one reference",
-  "description": "Written by rmf conformance extract; status, reason, evidence, work_item, approved_by and removal_reason are reviewed (rmf conformance mark).",
+  "description": "Written by rmf conformance extract; status, reason, evidence, work_item, approved_by, removal_reason and ruling_sought are reviewed (rmf conformance mark).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -280,6 +280,32 @@
             "reason": {
               "type": "string",
               "minLength": 1
+            }
+          }
+        },
+        "ruling_sought": {
+          "description": "Whole marked sentences that are a permission or an open list of examples, so they can never fail. Pending until approved_by: user; the entry stays partial and its work item open (ADR-0005).",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sentence",
+              "reason"
+            ],
+            "properties": {
+              "sentence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
+              },
+              "approved_by": {
+                "const": "user"
+              }
             }
           }
         }

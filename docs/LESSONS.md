@@ -432,3 +432,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: a rule item names its fixture and failing message, verified statically and proved by `test_negative`; presence caps at partial on prose; pins and optional parents count only beside the rule reading them; `closed-partial` is a status of its own.
 - Rule: Evidence names the test that fails for this clause, or it is partial.
 - Promotion: check: test_a_rule_item_is_tied_to_its_fixture
+
+## L-0062 · 2026-11-02 · run: phase-11 · tags: oscal, fixtures
+- Symptom: the first boundary diagram any fixture listed reached the OSCAL SSP as `product/product/architecture.md`, although the schema says the path is relative to the run directory.
+- Root cause: `_diagrams` prefixed `product/`, and no fixture had ever held a diagram, so the golden never showed it.
+- Fix: the link is the path as written; valid_minimal lists the boundary diagram, and PKG-003 fails when its file is not in the run.
+- Rule: An optional field no fixture sets is untested, however green its golden.
+- Promotion: check: PKG-003

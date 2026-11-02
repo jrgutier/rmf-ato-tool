@@ -2,6 +2,7 @@
 negative fixture cannot express, and the move to the ledger with `rmf run migrate`."""
 
 import datetime as dt
+import shutil
 from pathlib import Path
 
 import pytest
@@ -398,6 +399,9 @@ def test_example_migrates_onto_the_ledger(tmp_path):
     migrate(open_run(run_dir, REPO_ROOT))
     run = open_run(run_dir, REPO_ROOT)
     assert ledger.load(run)
+    assert "have not written their outputs" in _check(run_dir, rules.records_valid)  # R-1's DIAS
+    for rel in ("artifacts/ART-DIAS.md", "artifacts/data/dias.yaml"):
+        shutil.copy(VALID_MINIMAL / rel, run_dir / rel)
     assert _check(run_dir, rules.records_valid) == ""
     assert "needs threat_assessment" in _check(run_dir, rules.threat_assessment)
 
@@ -489,3 +493,27 @@ def test_each_pinned_decision_field_changes_what_the_run_gets(minimal_run, decis
     edit_yaml(minimal_run / "run.yaml", lambda d: d.__setitem__("include_after_stop", ["M-6"]))
     _ledger_with(minimal_run, decision, field)
     assert _observed(minimal_run, decision, field) != _observed(minimal_run)
+
+
+def test_business_days_leave_out_weekends_and_federal_holidays():
+    """DoD CIO reciprocity memo 4.2.1.h: 60 business days, so a holiday does not count."""
+    friday, next_monday = dt.date(2026, 11, 6), dt.date(2026, 11, 9)
+    assert rules.business_days_between(friday, next_monday) == 1
+    veterans_day = dt.date(2026, 11, 11)
+    assert rules.business_days_between(veterans_day - dt.timedelta(1),
+                                       veterans_day + dt.timedelta(1)) == 1
+    july_3_observed = dt.date(2026, 7, 3)
+    assert rules.business_days_between(july_3_observed - dt.timedelta(1),
+                                       july_3_observed + dt.timedelta(3)) == 1
+
+
+def test_a_single_course_of_action_stands_when_evaluated_adequate(minimal_run):
+    """SP 800-39 p. 52: a lone course is evaluated for adequacy, so alternatives are not forced."""
+    def one_course(data):
+        course = data["risks"][0]["courses_of_action"][0]
+        data["risks"][0]["courses_of_action"] = [{**course, "adequacy": "adequate"}]
+
+    edit_yaml(minimal_run / "artifacts/data/rar.yaml", one_course)
+    run = open_run(minimal_run, REPO_ROOT)
+    assert not [f for f in engine.evaluate(run).findings if f.rule == "RAR-003"]
+

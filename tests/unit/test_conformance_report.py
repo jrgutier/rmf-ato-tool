@@ -264,12 +264,18 @@ def test_accept_text_and_mark_commands(tmp_path, monkeypatch):
     marked = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002", "--status",
                                  "partial", "--reason", "Half done.", "--evidence",
                                  '[{"kind": "citation", "target": "P-18", "claim": "presence"}]'])
+    sought = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002", "--ruling-sought",
+                                 '[{"sentence": "s", "reason": "a permission"}]'])
+    bad_ruling = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002",
+                                     "--ruling-sought", "{"])
     again = runner.invoke(app, ["conformance", "accept-text"])
     bad = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002", "--evidence", "{"])
     nothing = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002"])
 
     assert accepted.exit_code == 0 and f"{fx.DOC}: updated" in accepted.stdout
     assert marked.exit_code == 0, marked.output
+    assert sought.exit_code == 0, sought.output
+    assert bad_ruling.exit_code == 2 and "--ruling-sought is not JSON" in bad_ruling.output
     entry = fx.entry(fx.load(repo), 2)
     assert entry["status"] == "partial" and entry["evidence"][0]["target"] == "P-18"
     assert again.exit_code == 0 and "current" in again.stdout

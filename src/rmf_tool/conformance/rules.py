@@ -243,7 +243,7 @@ def uncited_sentences(entry: Mapping[str, Any], strong: list[Mapping[str, Any]])
         return []
     unused = list(strong)
     uncited = []
-    for sentence in marked:
+    for sentence in (s for s in marked if not evidence.ruled_out(entry, s)):
         item = next((i for i in unused if evidence.cites(i, sentence)), None)
         if item is None:
             uncited.append(sentence)
@@ -253,16 +253,42 @@ def uncited_sentences(entry: Mapping[str, Any], strong: list[Mapping[str, Any]])
 
 
 def unresolved_sentences(probe: evidence.Probe, entry: Mapping[str, Any]) -> list[str]:
-    """The sentences of a partial entry that no strong item holds. Computed, never stored:
-    a stored list would drift from the evidence."""
+    """The sentences of a partial entry that no strong item holds and no ruling is sought on.
+    Computed, never stored: a stored list would drift from the evidence."""
     if entry["status"] != "partial":
         return []
     items = entry.get("evidence") or ()
     strong = [i for i in items if evidence.judge(probe, i, entry).strength == evidence.STRONG]
-    sentences = evidence.citable(entry["statement"])
-    if len(sentences) == 1:
+    sentences = [s for s in evidence.citable(entry["statement"])
+                 if evidence.sought(entry, s) is None]
+    if len(evidence.citable(entry["statement"])) == 1:
         return [] if strong else sentences
     return [s for s in sentences if not any(evidence.cites(i, s) for i in strong)]
+
+
+def needs_item(entry: Mapping[str, Any]) -> bool:
+    """Whether a sentence of the entry still needs evidence once the user's rulings are read."""
+    return not all(evidence.ruled_out(entry, s) for s in evidence.citable(entry["statement"]))
+
+
+def ruling_problems(entry: Mapping[str, Any], path: str) -> list[Finding]:
+    """A ruling is sought on a whole marked sentence, as evidence is, and while it is pending
+    the entry cannot be covered: only the user takes a sentence out of what must be proved."""
+    out = []
+    marked = evidence.citable(entry["statement"])
+    for record in entry.get("ruling_sought") or ():
+        if not any(evidence.cites(record, s) for s in marked):
+            out.append(_err("FW-REQ-003", f"{entry['id']}: ruling_sought "
+                            f"{record['sentence'][:40]!r}... is not a whole marked sentence of the "
+                            "statement", path))
+    if entry["status"] == "covered" and not needs_item(entry):
+        out.append(_err("FW-REQ-003", f"{entry['id']}: covered with every marked sentence ruled "
+                        "out; such an entry is not-a-requirement", path))
+    if entry["status"] == "covered" and evidence.pending_rulings(entry):
+        out.append(_err("FW-REQ-003", f"{entry['id']}: covered with a ruling pending; only "
+                        "approved_by: user takes a sentence out of what must be proved; use "
+                        "partial", path))
+    return out
 
 
 def _shared_fixtures(entry: Mapping[str, Any], strong: list[Mapping[str, Any]]) -> list[str]:
@@ -289,6 +315,7 @@ def ladder(reg: Register, probe: evidence.Probe) -> list[Finding]:
     for ref, entry in reg.live():
         path = register.requirements_path(ref)
         items = entry.get("evidence") or []
+        out += ruling_problems(entry, path)
         verdicts = [evidence.judge(probe, item, entry) for item in items]
         cited.update((item["kind"], item["target"]) for item in items)
         for item in items:
@@ -482,6 +509,9 @@ def _closure_problems(ident: str, item: Mapping[str, Any], bound: list[Mapping[s
     """``closed``: every bound entry covered. ``closed-partial``: built, the rest honestly
     partial, none of those in a tier 1 document."""
     status = item["status"]
+    if waiting := [e["id"] for e in bound if evidence.pending_rulings(e)]:
+        return [_err("FW-REQ-004", f"{ident} is {status}, but a ruling is pending on "
+                     f"{_listed(waiting)}; it stays open", register.WORK_ITEMS)]
     if status == "closed":
         unresolved = [e["id"] for e in bound
                       if e["status"] != "covered" or unresolved_at_close(probe, e)]

@@ -25,6 +25,12 @@ class Context:
         return authorization.load(self.run)
 
     @cached_property
+    def processes_pii(self) -> bool:
+        data = self.data("artifacts/data/infotypes.yaml")
+        items = data.get("information_types") if isinstance(data, dict) else None
+        return any(i.get("privacy") is True for i in items or ())
+
+    @cached_property
     def interviews(self) -> list[interviews.Interview]:
         return interviews.load_all(self.run)
 

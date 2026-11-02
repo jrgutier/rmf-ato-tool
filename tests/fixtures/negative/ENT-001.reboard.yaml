@@ -1,0 +1,17 @@
+rule: ENT-001
+bases:
+- minimal
+description: a change in risk that cannot be mitigated with no re-boarding
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: boardings.1.risk_changes
+  value:
+  - date: '2026-11-01'
+    description: A new threat reaches the relay.
+    mitigated: false
+expect:
+  errors:
+  - ENT-001
+  messages:
+  - requires a re-boarding at the ISRMC

@@ -1,0 +1,17 @@
+rule: ENT-001
+bases:
+- minimal
+description: an Enterprise ATO naming no approved boarding
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.deployment
+  value:
+    scope: enterprise
+    version: '1.0'
+    boarding: BRD-001
+expect:
+  errors:
+  - ENT-001
+  messages:
+  - an Enterprise system receives its ATO only after the ISRMC approves it

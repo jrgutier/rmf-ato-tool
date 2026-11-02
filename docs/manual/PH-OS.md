@@ -54,7 +54,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 |---|---|---|---|---|---|
 | [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
 | [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon) | — |
-| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam) | — |
+| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | — |
 | [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
 | [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
@@ -201,6 +201,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
+| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
 
 **Outputs**
 
@@ -208,6 +209,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|---|---|
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
 
 **Entry criteria**
 
@@ -217,6 +219,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - The output of continuous monitoring activities is analyzed and responded to appropriately (DoDI 8510.01 Table 7 outcome).
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
+- Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 
 **Alignment**

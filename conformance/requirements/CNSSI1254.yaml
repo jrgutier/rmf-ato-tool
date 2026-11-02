@@ -26,8 +26,11 @@ requirements:
     locator: "3"
     context: "SECTION II – AUTHORITY"
     statement: "3. The authority to issue this Instruction derives from National Security Directive 42, which outlines the roles and responsibilities for securing NSS consistent with applicable law, Executive Order (E.O.) 12333, United States Intelligence Activities, as amended, and other presidential directives. For NSS, where differences between the NIST publications and this Instruction occur, this Instruction takes precedence."
-    status: "candidate"
+    status: "partial"
+    reason: "Precedence is applied per entry, where a CNSSI 1254 element and a NIST publication differ; no one rule holds it, and the marked sentence states the authority of the Instruction"
+    evidence: [{"kind": "citation", "asserts": "R-1 builds the package from the documents and elements this Instruction specifies", "target": "R-1", "claim": "presence"}]
     work_item: "WI-328"
+    ruling_sought: [{"sentence": "The authority to issue this Instruction derives from National Security Directive 42, which outlines the roles and responsibilities for securing NSS consistent with applicable law, Executive Order (E.O.) 12333, United States Intelligence Activities, as amended, and other presidential directives.", "reason": "States where the authority of the Instruction derives from; it binds no one to anything."}]
   - id: "REQ-CNSSI1254-0004"
     citation: {"ref": "CNSSI1254", "page": 4, "anchor": "Nothing in this Instruction shall alter or supersede the authorities of the"}
     kind: "lettered"
@@ -50,8 +53,11 @@ requirements:
     locator: "6"
     context: "SECTION IV - POLICY"
     statement: "6. A standard set of documents and associated data elements are required for RMF core documents, as specified in this Instruction. The requirements established in this Instruction are necessary to facilitate reciprocity in accordance with Committee on National Security Systems Policy (CNSSP) 22, Policy on Cybersecurity Risk Management for National Security Systems."
-    status: "candidate"
+    status: "partial"
+    reason: "PKG-002 holds the documents and PKG-003 each element with a home, but many Annex C elements are pending in open work items and the second marked sentence states a purpose"
+    evidence: [{"kind": "rule", "asserts": "The core documents carry the standard data elements required for RMF core documents", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.missing.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "sentence": "A standard set of documents and associated data elements are required for RMF core documents, as specified in this Instruction."}]
     work_item: "WI-328"
+    ruling_sought: [{"sentence": "The requirements established in this Instruction are necessary to facilitate reciprocity in accordance with Committee on National Security Systems Policy (CNSSP) 22, Policy on Cybersecurity Risk Management for National Security Systems.", "reason": "States the purpose of the requirements, to facilitate reciprocity; it binds no one to anything."}]
   - id: "REQ-CNSSI1254-0007"
     citation: {"ref": "CNSSI1254", "page": 5, "anchor": "There may be artifacts or information gathered during systems engineering processes that"}
     kind: "lettered"
@@ -97,8 +103,11 @@ requirements:
     locator: "b"
     context: "SECTION IV - POLICY"
     statement: "b. RMF DATA ELEMENTS - An RMF data element is a basic unit of information that has a unique meaning and subcategories (data items) of distinct value. Standardization of data elements documented within the RMF core documents facilitates reciprocity. These data elements may be mapped to other security documentation to avoid duplication of efforts (e.g., test and evaluation, program protection profiles, engineering documents). Annex C contains the list of data elements extracted from the NIST joint transformation documents identified in the Foreword section that must be captured within the RMF documentation."
-    status: "candidate"
+    status: "partial"
+    reason: "framework/artifacts.yaml maps every Annex C element, and PKG-003 holds those with a home; the rest are pending in open work items, and the sentence that elements may be mapped elsewhere is a permission"
+    evidence: [{"kind": "rule", "asserts": "Annex C data elements that must be captured within the RMF documentation are carried by the core documents, and one missing fails", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.missing.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "sentence": "Annex C contains the list of data elements extracted from the NIST joint transformation documents identified in the Foreword section that must be captured within the RMF documentation."}]
     work_item: "WI-328"
+    ruling_sought: [{"sentence": "These data elements may be mapped to other security documentation to avoid duplication of efforts (e.g., test and evaluation, program protection profiles, engineering documents).", "reason": "A permission: the elements may be mapped to other documentation. Nothing is required."}]
   - id: "REQ-CNSSI1254-0013"
     citation: {"ref": "CNSSI1254", "page": 5, "anchor": "Information and data elements defined herein are consistent with and supplemental to the guidance established in Office of Management and"}
     kind: "indicative"
@@ -307,7 +316,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | SSP | Authorization Boundary Diagram | Diagram depicting all components of a system to be authorized for operation by an AO and excludes separately authorized systems, to which the system is connected | NIST SP 800- 53"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The SSP carries the Authorization Boundary Diagram as a data element, whose file exists in the run", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded"}]
     work_item: "WI-328"
   - id: "REQ-CNSSI1254-0040"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "| SSP | Authorization Status | Authorization to Operate (ATO), ATO -"}
@@ -852,7 +862,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | Authorization Decision Document | Risk Executive (Function) Input (If Provided) | The security related-considerations from the Risk Executive which the AO deems relevant and affects the final authorization decision. These considerations are viewed from organization-wide perspective with regard to the overall strategic goals and objectives in carrying out the mission and business functions. (e.g., organizational risk tolerance, organization’s overall risk mitigation strategy, core mission and business requirements, dependencies among systems, ongoing risk monitoring requirements, and other types of risks not directly associated with the system or its environment of operation) | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The risk executive (function) input the authorizing official deems relevant is documented in the authorization decision", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.input.yaml", "expect": "is not documented in the authorization decision", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and the decision is one decided at R-4"}]
     work_item: "WI-273"
   - id: "REQ-CNSSI1254-0110"
     citation: {"ref": "CNSSI1254", "page": 23, "anchor": "| Authorization Decision Document | System Name/Acronym | Full descriptive name of"}

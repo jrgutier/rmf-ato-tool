@@ -1,0 +1,14 @@
+rule: AUTHRPT-001
+bases:
+- minimal
+description: someone other than the system owner receives the decision
+mutations:
+- op: set_field
+  file: artifacts/data/authorization-report.yaml
+  path: receipt.received_by
+  value: PER-ISSM
+expect:
+  errors:
+  - AUTHRPT-001
+  messages:
+  - the authorization decision and package are received by

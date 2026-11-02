@@ -7,6 +7,11 @@ sources: [INT-009.A1]
 ---
 # Security assessment report
 
+## Assessment summary
+
+The assessment covered the controls of the subset; the most significant finding is the root SSH
+login [[INT-009.A1]].
+
 ## Results
 
 Five controls are satisfied; AC-2 is other than satisfied because no quarterly account

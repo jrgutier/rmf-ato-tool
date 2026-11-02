@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:authorizations",
   "title": "runs/<run-id>/artifacts/data/authorizations.yaml",
-  "description": "The authorization ledger behind ART-AUTHREC (A-2; updated by R-4 and M-6). One record per decision; a later decision is a new record, so a cATO, a continuation or a rescission never overwrites the authorization beneath it. An empty list is valid until a decision exists. AODM-001 to AODM-007 judge the records.",
+  "description": "The authorization ledger behind ART-AUTHREC (A-2; updated by R-4 and M-6). One record per decision; a later decision is a new record, so a cATO, a continuation or a rescission never overwrites the authorization beneath it. An empty list is valid until a decision exists. AODM-001 to AODM-011 and ENT-001 judge the records, the issues raised and the Enterprise boardings.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,6 +13,20 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/record"
+      }
+    },
+    "issues": {
+      "title": "Authorization issues and disputes raised, and where each went",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      }
+    },
+    "boardings": {
+      "title": "Enterprise system boardings at the DSAWG and the DoD ISRMC",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/boarding"
       }
     }
   },
@@ -424,6 +438,419 @@
               },
               "minItems": 1
             }
+          }
+        },
+        "risk_executive": {
+          "title": "Consultation of the risk executive (function) before the final decision",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "consulted",
+            "analyzed_by",
+            "sources"
+          ],
+          "properties": {
+            "by": {
+              "$ref": "#/$defs/persona_id",
+              "title": "Risk executive (function) the authorizing official consulted before the final decision",
+              "x-enforces": [
+                "REQ-SP800-37R2-0410"
+              ]
+            },
+            "consulted": {
+              "$ref": "#/$defs/date",
+              "title": "Date the authorizing official consulted the risk executive (function)"
+            },
+            "analyzed_by": {
+              "$ref": "#/$defs/persona_id",
+              "title": "Official who analyzed the risk executive (function) input"
+            },
+            "input": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Risk executive (function) input, the security considerations the authorizing official deems relevant to the authorization decision"
+            },
+            "input_relevant": {
+              "title": "Whether the input from R-2 is relevant to this decision",
+              "type": "boolean"
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "privacy_coordination": {
+          "title": "Coordination with the privacy official on an authorization decision, for a system processing PII",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "date",
+            "sources"
+          ],
+          "properties": {
+            "by": {
+              "$ref": "#/$defs/persona_id",
+              "title": "Senior component official for privacy who coordinated on the authorization decision"
+            },
+            "date": {
+              "$ref": "#/$defs/date",
+              "title": "Date the privacy official coordinated on the authorization decision"
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "deployment": {
+          "title": "What the authorization deploys",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope"
+          ],
+          "properties": {
+            "scope": {
+              "title": "Whether the authorization is for an Enterprise system, deployed to multiple DoD Components",
+              "enum": [
+                "component",
+                "enterprise"
+              ],
+              "x-enforces": [
+                "REQ-DODCIO-RECIPROCITY-0037"
+              ]
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Version of the Enterprise system being deployed"
+            },
+            "boarding": {
+              "title": "Boarding whose ISRMC approval the ATO rests on",
+              "type": "string",
+              "pattern": "^BRD-\\d{3}$"
+            }
+          }
+        }
+      }
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "summary",
+        "raised",
+        "forum",
+        "status",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "title": "Issue ID, never reused",
+          "type": "string",
+          "pattern": "^ISS-\\d{3}$"
+        },
+        "kind": {
+          "title": "Kind of authorization issue or dispute",
+          "enum": [
+            "mission-area",
+            "space-system",
+            "community-risk",
+            "process-dispute",
+            "dsawg-appeal",
+            "isrmc-direction"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "title": "What the authorization issue is"
+        },
+        "raised": {
+          "$ref": "#/$defs/date",
+          "title": "Date the issue was raised or the direction issued"
+        },
+        "forum": {
+          "title": "Who resolves the authorization issue",
+          "description": "PAO: the Principal Authorizing Official of the mission area. USSPACECOM: space systems. DSAWG: shared community risk. DOD-CISO: the DoD CISO's escalation procedures. ISRMC: an appeal of a DSAWG decision, or direction the ISRMC issued.",
+          "enum": [
+            "PAO",
+            "USSPACECOM",
+            "DSAWG",
+            "DOD-CISO",
+            "ISRMC"
+          ]
+        },
+        "status": {
+          "title": "Whether the issue is open or resolved",
+          "enum": [
+            "open",
+            "resolved"
+          ]
+        },
+        "resolved": {
+          "$ref": "#/$defs/date",
+          "title": "Date the issue was resolved or the direction complied with"
+        },
+        "resolution": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How the issue was resolved"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "boarding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "dsawg_submission",
+        "isrmc",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "title": "Boarding ID, never reused",
+          "type": "string",
+          "pattern": "^BRD-\\d{3}$"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Version of the Enterprise system being deployed"
+        },
+        "reboarding_of": {
+          "title": "Boarding this one follows: a disapproval, or a change in risk that cannot be mitigated",
+          "type": "string",
+          "pattern": "^BRD-\\d{3}$"
+        },
+        "dsawg_submission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "documents",
+            "sites"
+          ],
+          "properties": {
+            "date": {
+              "$ref": "#/$defs/date",
+              "title": "Date of the DSAWG submission"
+            },
+            "documents": {
+              "title": "Core documents provided to the DSAWG",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^ART-[A-Z]+$"
+              },
+              "uniqueItems": true
+            },
+            "sites": {
+              "title": "Deployment sites and projected deployment dates",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "site",
+                  "deployment"
+                ],
+                "properties": {
+                  "site": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "deployment": {
+                    "$ref": "#/$defs/date"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "status_briefs": {
+          "title": "Authorization status briefs the DSAWG requested",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "requested"
+            ],
+            "properties": {
+              "requested": {
+                "$ref": "#/$defs/date",
+                "title": "Date the DSAWG requested the brief"
+              },
+              "briefed": {
+                "$ref": "#/$defs/date",
+                "title": "Date the brief was given"
+              }
+            }
+          }
+        },
+        "dsawg_recommendation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "position"
+          ],
+          "properties": {
+            "date": {
+              "$ref": "#/$defs/date",
+              "title": "Date of the DSAWG recommendation"
+            },
+            "position": {
+              "enum": [
+                "recommend",
+                "do-not-recommend"
+              ]
+            }
+          }
+        },
+        "isrmc": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "briefed",
+            "planned_deployment",
+            "outcome"
+          ],
+          "properties": {
+            "briefed": {
+              "$ref": "#/$defs/date",
+              "title": "Date the ISRMC was briefed"
+            },
+            "planned_deployment": {
+              "$ref": "#/$defs/date",
+              "title": "Planned deployment date"
+            },
+            "outcome": {
+              "title": "ISRMC approval or disapproval",
+              "enum": [
+                "pending",
+                "approved",
+                "disapproved"
+              ]
+            },
+            "decided": {
+              "$ref": "#/$defs/date",
+              "title": "Date of the ISRMC decision"
+            },
+            "guidance_via": {
+              "title": "Body through which ISRMC guidance reached the Granting organization",
+              "enum": [
+                "DSAWG",
+                "direct"
+              ]
+            },
+            "guidance": {
+              "type": "string",
+              "minLength": 1,
+              "title": "ISRMC guidance on actions and mitigations"
+            },
+            "directed_risks": {
+              "title": "Remaining risks the ISRMC directed be documented and mitigated in the POA&M",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^POAM-\\d{3}$"
+              },
+              "uniqueItems": true
+            },
+            "monitored_by": {
+              "title": "Who monitors the acceptability of the residual risk at Component sites",
+              "enum": [
+                "ISRMC",
+                "granting-organization"
+              ]
+            },
+            "dodin_connection": {
+              "title": "Whether connection to the DoD Information Network is authorized",
+              "enum": [
+                "authorized",
+                "not-authorized"
+              ]
+            }
+          }
+        },
+        "adjustments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "worked_with",
+            "changes"
+          ],
+          "properties": {
+            "worked_with": {
+              "title": "Body the Granting AO worked with to adjust the Enterprise system",
+              "enum": [
+                "DSAWG",
+                "none"
+              ]
+            },
+            "changes": {
+              "type": "string",
+              "minLength": 1,
+              "title": "How the system was adjusted to comply with ISRMC guidance"
+            }
+          }
+        },
+        "risk_changes": {
+          "title": "Changes in the acceptability of risk after approval",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "description",
+              "mitigated"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mitigated": {
+                "type": "boolean"
+              },
+              "reboarding": {
+                "type": "string",
+                "pattern": "^BRD-\\d{3}$"
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
           }
         }
       }

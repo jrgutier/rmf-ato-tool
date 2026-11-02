@@ -2,7 +2,7 @@
 artifact_id: ART-RAR
 run_id: example-synthetic-01
 produced_by_task: R-2
-touched_by: [R-2, R-3]
+touched_by: [R-2, R-3, M-3]
 sources: [ART-SAR, ART-POAM, ART-RA, ART-ORG-CONTEXT, INT-100.A1, INT-100.A2, INT-100.A3, INT-101.A1, INT-101.A2, INT-101.A3, INT-102.A1, INT-102.A2, INT-103.A1]
 ---
 # Risk assessment report
@@ -93,3 +93,8 @@ GDT activity is unmonitored while disconnected, the GDT management service can b
 the station segment, and response rests on draft plans until 2026-12-18. The ISSM sends the
 notice with the decision and repeats it monthly; the units accept the constraints
 [[INT-102.A2]] [[INT-103.A2]].
+
+## Ongoing Risk Response (M-3)
+
+The first monitoring cycle changed no response: it found no new or changed risk, so no course of
+action was reopened and ART-RA holds the cycle's analysis [[INT-112.A1]].

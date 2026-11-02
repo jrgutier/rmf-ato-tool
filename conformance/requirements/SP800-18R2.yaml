@@ -843,7 +843,9 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Authorize | R-1, Authorization Package | Digital Identity Acceptance Statement (optional) | Provide a Digital Identity Acceptance Statement (DIAS), as"
-    status: "candidate"
+    status: "partial"
+    reason: "ART-DIAS is an R-1 output, and SP 800-63-4 is not in references/index.yaml, so the statement is checked for levels, not against its source"
+    evidence: [{"kind": "citation", "asserts": "The Digital Identity Acceptance Statement is provided in the R-1 authorization package", "target": "ART-DIAS", "claim": "presence"}]
     work_item: "WI-274"
   - id: "REQ-SP800-18R2-0109"
     citation: {"ref": "SP800-18R2", "page": 24, "anchor": "M-4, Authorization Package Updates | described in [SP800-63-4]."}
@@ -1869,7 +1871,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Discussion: Organization- and system-level risk assessments determine the extent to which risk is managed by various processes,15 which in turn drive decisions regarding applicable technologies and mitigation strategies. During the risk management process, the organization determines the assurance levels for identity proofing, authentication, and federation, if applicable; selects appropriate processes and technologies to meet each assurance level; and identifies compensating controls when necessary."
-    status: "candidate"
+    status: "partial"
+    reason: "The levels are an enum and DIAS-001 ties them to the plan; whether processes meet each level is unheld, and SP 800-63-4 is not imported"
+    evidence: [{"kind": "rule", "asserts": "The assurance levels rest on technologies and controls the security plan holds", "target": "DIAS-001", "fixture": "tests/fixtures/negative/DIAS-001.yaml", "expect": "which the security plan does not hold", "claim": "constraint", "holds_when": "ART-DIAS is produced or seeded"}, {"kind": "schema", "asserts": "The organization determines the assurance levels for authentication", "target": "framework/schema/dias.schema.json#/properties/assurance/properties/authentication", "claim": "constraint"}, {"kind": "schema", "asserts": "The organization determines the assurance levels for identity proofing", "target": "framework/schema/dias.schema.json#/properties/assurance/properties/identity_proofing", "claim": "constraint"}]
     work_item: "WI-274"
   - id: "REQ-SP800-18R2-0240"
     citation: {"ref": "SP800-18R2", "page": 39, "anchor": "The DIAS is not required to be included in the system plan"}
@@ -1877,7 +1881,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "The DIAS is not required to be included in the system plan but is required to be included in the system authorization package for federal systems."
-    status: "candidate"
+    status: "partial"
+    reason: "ART-DIAS is core, so RUN-ART-001 and PKG-001 demand it; those rules are generic, so inclusion is built and no rule fails on the DIAS alone"
+    evidence: [{"kind": "citation", "asserts": "The DIAS is included in the system authorization package", "target": "ART-DIAS", "claim": "presence"}]
     work_item: "WI-274"
   - id: "REQ-SP800-18R2-0241"
     citation: {"ref": "SP800-18R2", "page": 39, "anchor": "Discussion: The authorization decision is made by the authorizing official before the"}

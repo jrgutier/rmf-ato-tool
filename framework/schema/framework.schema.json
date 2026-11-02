@@ -157,7 +157,7 @@
         "requires": {"description": "Ledger record fields a record of this type must carry.", "type": "array",
                      "items": {"enum": ["underlying", "review", "threat_assessment", "dod_ciso_approval",
                                         "component_ciso_notification", "provider", "ongoing_acknowledgment",
-                                        "revocation_reason"]}},
+                                        "revocation_reason", "risk_executive", "deployment"]}},
         "atd_forbidden": {"description": "A record of this type carries no authorization termination date.", "type": "boolean"},
         "max_term_days": {"description": "Longest span from decision date to termination date.", "type": "integer", "minimum": 1},
         "allowed_pathways": {"description": "Acquisition pathways a record of this type may be used on.", "$ref": "#/$defs/ids"},
@@ -210,6 +210,27 @@
         "description": {"$ref": "#/$defs/text"},
         "producer": {"$ref": "#/$defs/id"},
         "since": {"description": "Run contract (framework_version) that added this artifact; an older run is not held to it.", "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "data_elements": {
+          "description": "CNSSI 1254 Annex C elements of this core document and where each lives: a heading of this artifact (or of `artifact`), a field at `file` and dotted `path`, a `fact`, a `rule` that already holds it, or `pending`, the open work item building it. PKG-003 reads the map.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["element", "req"],
+            "properties": {
+              "element": {"$ref": "#/$defs/text"},
+              "req": {"type": "string", "pattern": "^REQ-CNSSI1254-\\d{4}$"},
+              "heading": {"$ref": "#/$defs/text"},
+              "artifact": {"$ref": "#/$defs/id"},
+              "file": {"$ref": "#/$defs/text"},
+              "path": {"$ref": "#/$defs/text"},
+              "fact": {"$ref": "#/$defs/text"},
+              "exists": {"description": "The field names a file of the run, and it must be there.", "type": "boolean"},
+              "rule": {"$ref": "#/$defs/id"},
+              "pending": {"type": "string", "pattern": "^WI-\\d+$"}
+            }
+          }
+        },
         "package": {"description": "core: required in the package by AC-16.",
                     "enum": ["core", "supporting"]},
         "generated": {"description": "true: written by the CLI, never by an agent (INV-2).",

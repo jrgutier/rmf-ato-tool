@@ -1,0 +1,14 @@
+rule: AODM-010
+bases:
+- minimal
+description: the input analyzed by someone other than the AO
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.risk_executive.analyzed_by
+  value: PER-AODR
+expect:
+  errors:
+  - AODM-010
+  messages:
+  - the authorizing official analyzes the risk executive (function) input, not PER-AODR

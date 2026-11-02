@@ -1,0 +1,14 @@
+rule: ENT-001
+bases:
+- minimal
+description: an Enterprise ATO on a pending boarding
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: boardings.1.isrmc.outcome
+  value: pending
+expect:
+  errors:
+  - ENT-001
+  messages:
+  - an Enterprise system receives its ATO only after the ISRMC approves it

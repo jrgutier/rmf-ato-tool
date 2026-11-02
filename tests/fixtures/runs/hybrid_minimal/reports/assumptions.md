@@ -11,7 +11,7 @@ Mode: hybrid. Human respondents: PER-ISSM (Dana Reyes (fixture)).
 | ASM-001 | S-4 | PER-ISSE | The enterprise identity provider enforces CAC multi-factor authentication for all FDR users. | The product documents the IdP but not its configuration. |
 | ASM-002 | P-11 | PER-ISSM | The enclave firewall rule set matches the architecture document (only TLS from the relay to the enclave ingest service). | The human ISSM answered from the architecture document and had not reviewed the deployed rule set. |
 
-## Interview answers (13; SIMULATED 10)
+## Interview answers (14; SIMULATED 10)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -25,5 +25,5 @@ Mode: hybrid. Human respondents: PER-ISSM (Dana Reyes (fixture)).
 | A-2 | 1 | 1 | 0 |
 | A-3 | 1 | 1 | 0 |
 | A-6 | 1 | 1 | 0 |
-| R-2 | 1 | 1 | 0 |
+| R-2 | 2 | 1 | 1 |
 | R-4 | 1 | 1 | 0 |

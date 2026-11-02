@@ -21,7 +21,8 @@ PLAN_RUN_SCHEMAS = {
     "ssp-controls", "sap", "sar-results", "poam-items", "stig-summary", "baseline", "decision",
     "authorizations",
 }
-EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar"}  # data named in plan §6.4
+EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
+                     "dias"}  # data named in plan §6.4, then the ones p11 added
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -259,6 +260,28 @@ RUN_EXAMPLES = {
                     "impact": "high", "level": "moderate", "finding_refs": [],
                     "poam_refs": [], "response": "ignore", "sources": SRC}],
          "overall_risk": "moderate", "sources": SRC}),
+    "authorization-report": (
+        {"decision_ref": "AUTH-001",
+         "receipt": {"received_by": "PER-PM", "received": "2026-01-02",
+                     "terms_acknowledged": True},
+         "retention": {"retained_by": "PER-PM", "policy": "p", "retain_until": "2030-01-01"},
+         "available_to": ["PER-PM"], "marking": "CUI",
+         "terms_verification": {"verified_by": "PER-AO", "frequency_days": 90},
+         "assessment_records": ["artifacts/data/sap.yaml"], "sources": SRC},
+        {"decision_ref": "AUTH-001",
+         "receipt": {"received_by": "PER-PM", "received": "2026-01-02",
+                     "terms_acknowledged": False},
+         "retention": {"retained_by": "PER-PM", "policy": "p", "retain_until": "2030-01-01"},
+         "available_to": ["PER-PM"], "marking": "unmarked",
+         "terms_verification": {"verified_by": "PER-AO", "frequency_days": 90},
+         "assessment_records": ["artifacts/data/sap.yaml"], "sources": SRC}),
+    "dias": (
+        {"assurance": {"identity_proofing": "IAL2", "authentication": "AAL2",
+                       "federation": "not-applicable"},
+         "controls": ["ia-2"], "processes": "p", "compensating_controls": [], "sources": SRC},
+        {"assurance": {"identity_proofing": "IAL9", "authentication": "AAL2",
+                       "federation": "not-applicable"},
+         "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
 }
 
 

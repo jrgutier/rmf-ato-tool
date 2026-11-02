@@ -983,6 +983,10 @@ def conformance_mark(
     )] = None,
     approved_by: Annotated[str | None, typer.Option("--approved-by")] = None,
     removal_reason: Annotated[str | None, typer.Option("--removal-reason")] = None,
+    ruling_sought: Annotated[str | None, typer.Option(
+        "--ruling-sought", help="JSON list of {sentence, reason}: whole marked sentences that are "
+        "a permission or an open list of examples. approved_by: user is the user's alone.",
+    )] = None,
     reviewed: Annotated[bool, typer.Option("--reviewed", help="Clear needs_review.")] = False,
     clear: Annotated[list[str] | None, typer.Option(
         "--clear", help="Delete a reviewed field (repeatable).")] = None,
@@ -999,11 +1003,13 @@ def conformance_mark(
                        ("approved_by", approved_by), ("removal_reason", removal_reason)):
         if value is not None:
             fields[key] = value
-    if evidence is not None:
-        try:
-            fields["evidence"] = json.loads(evidence)
-        except json.JSONDecodeError as exc:
-            raise _usage_error(f"--evidence is not JSON: {exc}") from exc
+    for key, value, flag in (("evidence", evidence, "--evidence"),
+                             ("ruling_sought", ruling_sought, "--ruling-sought")):
+        if value is not None:
+            try:
+                fields[key] = json.loads(value)
+            except json.JSONDecodeError as exc:
+                raise _usage_error(f"{flag} is not JSON: {exc}") from exc
     if reviewed:
         fields["needs_review"] = None
     for key in clear or []:

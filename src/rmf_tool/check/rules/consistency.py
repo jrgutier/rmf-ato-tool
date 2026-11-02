@@ -1,5 +1,5 @@
 """Cross-artifact consistency rules: INV-BND-001/002, STIG-001/002, POAM-CTL-001,
-POAM-FLD-001, RAR-001 and TASK-DEF-001. Each reads the run-data files it links
+POAM-FLD-001, RAR-001 to RAR-003, DIAS-001 and TASK-DEF-001. Each reads the run-data files it links
 and stays quiet about a file that is missing or unreadable (RUN-ART-001 and RUN-FM-001
 report those)."""
 
@@ -11,7 +11,7 @@ from rmf_tool import baseline as baseline_mod
 from rmf_tool import catalog
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
-from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
+from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, SSP_DIR, family_records
 from rmf_tool.run import scope
 from rmf_tool.run.model import RUN_FILE
 
@@ -19,6 +19,7 @@ INVENTORY_FILE = "artifacts/data/inventory.yaml"
 BOUNDARY_FILE = "artifacts/data/boundary.yaml"
 STIG_FILE = "artifacts/data/stig-summary.yaml"
 RAR_FILE = "artifacts/data/rar.yaml"
+DIAS_FILE = "artifacts/data/dias.yaml"
 # Inventory kinds that a STIG or SRG covers (STIG-001); hardware is covered through its OS.
 STIG_KINDS = ("software", "operating-system", "database", "firmware", "virtual-machine")
 # Boundary components that carry no inventory items of their own (INV-BND-002).
@@ -147,6 +148,18 @@ def poam_fields(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- DIAS -------------------------------------------------------------------------------
+
+def dias_controls(ctx: Context) -> list[RunFinding]:
+    data = ctx.data(DIAS_FILE)
+    if not scope.produced_or_seeded(ctx.run, "ART-DIAS") or not isinstance(data, dict):
+        return []
+    planned = {c.get("control_id") for _, c in family_records(ctx, SSP_DIR, "controls")}
+    return [make("DIAS-001", f"the DIAS assurance levels rest on {c}, which the security plan does "
+                 "not hold", DIAS_FILE, None, {"R-1"})
+            for c in data.get("controls") or () if c not in planned]
+
+
 # --- RAR --------------------------------------------------------------------------------
 
 def rar_links(ctx: Context) -> list[RunFinding]:
@@ -207,4 +220,74 @@ def deferrals(ctx: Context) -> list[RunFinding]:
                                                                        scope.LIFECYCLE):
             err(f"{producer} produces core artifact {aid} and is in scope, so it cannot be "
                 f"deferred ({state.state})")
+    return out
+
+
+def rar_determination(ctx: Context) -> list[RunFinding]:
+    data = ctx.data(RAR_FILE)
+    if not scope.produced_or_seeded(ctx.run, "ART-RAR") or not isinstance(data, dict):
+        return []
+    found = data.get("determination")
+    if not isinstance(found, dict):
+        return [make("RAR-002", "rar.yaml records no determination of risk", RAR_FILE)]
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("RAR-002", message, RAR_FILE, None, {"R-2"}))
+
+    collaborators = found.get("collaborated_with") or ()
+    advisers = {(i.front or {}).get("persona") for i in ctx.interviews if i.task == "R-2"}
+    if found.get("by") not in ("PER-AO", "PER-AODR"):
+        err("the authorizing official or designated representative finalizes the determination "
+            f"of risk, not {found.get('by')}")
+    if "PER-CISO" not in collaborators:
+        err("the determination of risk is made in collaboration with the senior agency "
+            "information security officer")
+    if ctx.processes_pii and "PER-PRIV" not in collaborators:
+        err("a system processing PII makes the determination of risk in collaboration with the "
+            "senior agency official for privacy")
+    if found.get("technical_advisor") != "PER-ISSM":
+        err("the ISSM is the primary cybersecurity technical advisor to the AO, not "
+            f"{found.get('technical_advisor')}")
+    elif "PER-ISSM" not in advisers:
+        err("the ISSM gave no R-2 interview, so nothing shows the technical advice reached the AO")
+    if "ART-RA" not in (found.get("rests_on") or ()):
+        err("risk assessments provide the information for the risk determination, and ART-RA is "
+            "not among them")
+    return out
+
+
+def rar_courses(ctx: Context) -> list[RunFinding]:
+    """R-3 weighs courses of action and commits to one. A single course stands when it is
+    evaluated as adequate (SP 800-39 p. 52). Deferring R-3 defers this."""
+    run = ctx.run
+    if not scope.produced_or_seeded(run, "ART-RAR") or "R-3" not in scope.active_tasks(run):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("RAR-003", message, RAR_FILE, None, {"R-3"}))
+
+    for r in _items(ctx, RAR_FILE, "risks") or []:
+        courses = r.get("courses_of_action") or []
+        chosen = [c for c in courses if c.get("selected") is True]
+        if len(courses) == 0:
+            err(f"{r.get('id')} weighs no course of action; risk response identifies courses of "
+                "action")
+            continue
+        adequacy = courses[0].get("adequacy")
+        if len(courses) == 1 and adequacy is None:
+            err(f"{r.get('id')} has a single course of action and no evaluation of whether it is "
+                "adequate")
+        elif len(courses) == 1 and adequacy != "adequate":
+            err(f"{r.get('id')} has a single course of action found inadequate; refine it or "
+                "develop alternatives")
+        if len(chosen) != 1:
+            err(f"{r.get('id')} selects {len(chosen)} courses of action, not one")
+        elif chosen[0].get("response") != r.get("response"):
+            err(f"{r.get('id')} responds {r.get('response')}, but the selected course of action "
+                f"is {chosen[0].get('response')}")
+        if not isinstance(r.get("selected_response"), dict):
+            err(f"{r.get('id')} has no selected_response stating who is responsible and how "
+                "effectiveness is judged")
     return out

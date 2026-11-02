@@ -1,0 +1,16 @@
+rule: ENT-002
+bases:
+- minimal
+description: a receiving organization refuses a system the ISRMC accepted
+mutations:
+- op: write_file
+  file: artifacts/data/leveraged-authorizations.yaml
+  content: "leveraged_authorizations:\n- id: LA-01\n  title: Enterprise identity provider ATO\n  provider:\
+    \ Enterprise IT Services\n  date_authorized: '2026-03-01'\n  sources:\n  - INT-003.A1\n  enterprise:\n\
+    \    accepted_by: DoD ISRMC\n    accepted: '2026-02-01'\n    receiving_action: refuse\n    change_request:\n\
+    \      id: CR-012\n      approved_on: isrmc-risk-acceptance\n"
+expect:
+  errors:
+  - ENT-002
+  messages:
+  - the receiving organization may not refuse to deploy

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 80 rules, 36 repo-scope and 44 run-scope. Authoritative;
+# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -486,6 +486,34 @@ rules:
     summary: risk to finding / POA&M linkage broken
     fixture: tests/fixtures/negative/RAR-001.yaml
     hint: Every risk links existing findings and POA&M items; every open finding maps to a risk.
+  - id: RAR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-2
+    summary: the determination of risk is missing, or not made by or with the right officials
+    fixture: tests/fixtures/negative/RAR-002.yaml
+    hint: rar.yaml determination names the AO or AODR, collaboration with PER-CISO (and PER-PRIV for PII), PER-ISSM as technical advisor, and ART-RA among what it rests on.
+    enforces:
+      - REQ-DODI8500.01-0425
+      - REQ-SP800-37R2-0401
+      - REQ-SP800-37R2-0402
+  - id: RAR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-3
+    summary: a risk weighs no course, or one not evaluated as adequate, or its selected course of action does not match its response
+    fixture: tests/fixtures/negative/RAR-003.yaml
+    hint: Each risk lists courses_of_action, a lone one with adequacy adequate, exactly one selected and matching response, and a selected_response.
+    enforces:
+      - REQ-SP800-39-0177
+      - REQ-SP800-39-0291
+      - REQ-SP800-39-0298
   - id: AODM-001
     scope: run
     severity: E
@@ -639,6 +667,87 @@ rules:
       - REQ-SP800-37R2-0596
       - REQ-SP800-37R2-0607
       - REQ-SP800-37R2-0629
+  - id: AODM-010
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: the risk executive (function) was not consulted before the decision, or its input is not in the record
+    fixture: tests/fixtures/negative/AODM-010.yaml
+    hint: An R-4 decision records risk_executive; PER-RE is consulted on or before the decision date, the AO analyzes the input, the input from R-2 is carried unless not relevant, and a system processing PII records privacy_coordination.
+    enforces:
+      - REQ-CNSSI1254-0109
+      - REQ-DODI5400.11-0122
+      - REQ-SP800-37R2-0402
+      - REQ-SP800-37R2-0403
+      - REQ-SP800-37R2-0410
+      - REQ-SP800-39-0059
+      - REQ-SP800-39-0207
+  - id: AODM-011
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an authorization issue went to the wrong forum, is resolved without a resolution, or an ISRMC direction is open at a decision
+    fixture: tests/fixtures/negative/AODM-011.yaml
+    hint: A mission area issue goes to its PAO, a space system issue to USSPACECOM, shared community risk to the DSAWG, a process dispute to the DoD CISO, an appeal or a direction to the ISRMC; a decision follows compliance with any ISRMC direction.
+    enforces:
+      - REQ-DODI8510.01-0076
+      - REQ-DODI8510.01-0158
+      - REQ-DODI8510.01-0165
+      - REQ-DODI8510.01-0189
+      - REQ-DODI8510.01-0218
+  - id: ENT-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an Enterprise system ATO without an ISRMC approval, or a boarding that skips the DSAWG or ISRMC steps
+    fixture: tests/fixtures/negative/ENT-001.yaml
+    hint: An ATO states deployment.scope. An Enterprise ATO names an approved boarding and its version; the boarding gives the DSAWG the core documents and sites and briefs the ISRMC at least 60 business days before deployment.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0023
+      - REQ-DODCIO-RECIPROCITY-0032
+      - REQ-DODCIO-RECIPROCITY-0036
+      - REQ-DODCIO-RECIPROCITY-0037
+      - REQ-DODCIO-RECIPROCITY-0038
+      - REQ-DODCIO-RECIPROCITY-0040
+      - REQ-DODCIO-RECIPROCITY-0041
+      - REQ-DODCIO-RECIPROCITY-0043
+      - REQ-DODCIO-RECIPROCITY-0044
+      - REQ-DODCIO-RECIPROCITY-0166
+  - id: ENT-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a received Enterprise system refused, or not resting on the DoD ISRMC risk acceptance
+    fixture: tests/fixtures/negative/ENT-002.yaml
+    hint: A leveraged Enterprise system rests on the DoD ISRMC risk acceptance, is deployed, and its change request is approved on that acceptance.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0042
+      - REQ-DODI8510.01-0160
+  - id: AUTHRPT-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-5
+    summary: the decision and package are not received, retained, available or verified as required
+    fixture: tests/fixtures/negative/AUTHRPT-001.yaml
+    hint: artifacts/data/authorization-report.yaml names a ledger record; its receiver retains the decision and package, every official told can read them, retention outlasts the termination date, the AO verifies the terms, and the SAP and SAR records are kept.
+    enforces:
+      - REQ-SP800-37R2-0602
+      - REQ-SP800-53AR5-0296
   - id: RUN-VER-001
     scope: run
     severity: W
@@ -792,6 +901,32 @@ rules:
     summary: package manifest missing, or a core artifact absent from it
     fixture: tests/fixtures/negative/PKG-001.yaml
     hint: Run `rmf package <run>`.
+  - id: PKG-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: a core document does not carry a CNSSI 1254 Annex C data element mapped to it
+    fixture: tests/fixtures/negative/PKG-003.yaml
+    hint: Fill the heading or field that `data_elements` in framework/artifacts.yaml names.
+    enforces:
+      - REQ-CNSSI1254-0006
+      - REQ-CNSSI1254-0012
+      - REQ-CNSSI1254-0039
+  - id: DIAS-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: the DIAS rests on a control the security plan does not hold
+    fixture: tests/fixtures/negative/DIAS-001.yaml
+    hint: Name only controls of the ia family that artifacts/ssp/controls/ia.yaml holds.
+    enforces:
+      - REQ-SP800-18R2-0239
   - id: DEGRADED-001
     scope: run
     severity: W

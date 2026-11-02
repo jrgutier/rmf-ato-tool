@@ -611,6 +611,23 @@ def judge(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> Ve
     return verdict
 
 
+def sought(entry: Mapping[str, Any], sentence: str) -> Mapping[str, Any] | None:
+    """The ``ruling_sought`` record on this sentence of the entry, if any."""
+    return next((r for r in entry.get("ruling_sought") or () if cites(r, sentence)), None)
+
+
+def ruled_out(entry: Mapping[str, Any], sentence: str) -> bool:
+    """Whether the user ruled that this sentence needs no evidence (ADR-0005, 2026-11-02)."""
+    record = sought(entry, sentence)
+    return record is not None and record.get("approved_by") == "user"
+
+
+def pending_rulings(entry: Mapping[str, Any]) -> list[str]:
+    """The sentences of an entry that wait on the user's ruling."""
+    return [r["sentence"] for r in entry.get("ruling_sought") or ()
+            if r.get("approved_by") != "user"]
+
+
 def cites(item: Mapping[str, Any], sentence: str) -> bool:
     """Whether an evidence item's ``sentence`` is this sentence of the statement, whole, up to
     case, spacing and punctuation. Containment either way let `the` cite every sentence."""

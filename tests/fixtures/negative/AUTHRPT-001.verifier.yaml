@@ -1,0 +1,15 @@
+rule: AUTHRPT-001
+bases:
+- minimal
+description: nobody named as verifying the terms
+mutations:
+- op: delete_field
+  file: artifacts/data/authorization-report.yaml
+  path: terms_verification.verified_by
+expect:
+  errors:
+  - AUTHRPT-001
+  messages:
+  - the authorizing official verifies the terms and conditions, not None
+  also:
+  - RUN-FM-001

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:rar",
   "title": "runs/<run-id>/artifacts/data/rar.yaml",
-  "description": "Risk assessment report data (R-2; updated by R-3). Risk to finding/POA&M linkage is RAR-001.",
+  "description": "Risk assessment report data (R-2; updated by R-3 and M-3). Risk to finding/POA&M linkage is RAR-001, the determination RAR-002, the courses of action RAR-003.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -81,6 +81,16 @@
             "items": {
               "$ref": "#/$defs/source"
             }
+          },
+          "courses_of_action": {
+            "title": "Alternative courses of action for responding to the risk",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/course_of_action"
+            }
+          },
+          "selected_response": {
+            "$ref": "#/$defs/selected_response"
           }
         }
       }
@@ -94,6 +104,9 @@
       "items": {
         "$ref": "#/$defs/source"
       }
+    },
+    "determination": {
+      "$ref": "#/$defs/determination"
     }
   },
   "$defs": {
@@ -111,6 +124,234 @@
       "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
       "type": "string",
       "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "course_of_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "response",
+        "description",
+        "effectiveness",
+        "feasibility",
+        "cost",
+        "mission_impact",
+        "privacy_impact",
+        "selected",
+        "rationale"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^COA-\\d{2}$"
+        },
+        "response": {
+          "title": "Risk response this course of action takes",
+          "enum": [
+            "accept",
+            "mitigate",
+            "avoid",
+            "share",
+            "transfer"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effectiveness": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Expected effectiveness in achieving the desired risk response",
+          "x-enforces": [
+            "REQ-SP800-39-0299"
+          ]
+        },
+        "feasibility": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Anticipated feasibility of implementation",
+          "x-enforces": [
+            "REQ-SP800-39-0173"
+          ]
+        },
+        "cost": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Cost across the period the course of action is followed",
+          "x-enforces": [
+            "REQ-SP800-30R1-0250"
+          ]
+        },
+        "mission_impact": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Impact on mission and business functions"
+        },
+        "privacy_impact": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Impact on privacy and civil liberties",
+          "x-enforces": [
+            "REQ-SP800-39-0291"
+          ]
+        },
+        "selected": {
+          "title": "Whether this is the selected course of action",
+          "type": "boolean"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Why the course of action was selected or rejected: the risk versus risk-response trade-off",
+          "x-enforces": [
+            "REQ-SP800-39-0174"
+          ]
+        },
+        "adequacy": {
+          "title": "For a single course of action, whether it is adequate",
+          "enum": [
+            "adequate",
+            "inadequate"
+          ]
+        }
+      }
+    },
+    "selected_response": {
+      "title": "What the selected risk response commits to",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responsible",
+        "effectiveness_criteria",
+        "dependencies",
+        "timeline",
+        "monitoring_plan",
+        "triggers",
+        "interim_measures",
+        "informed"
+      ],
+      "properties": {
+        "responsible": {
+          "title": "Individual or organizational element responsible for the selected risk response",
+          "type": "string",
+          "pattern": "^PER-[A-Z0-9]+$"
+        },
+        "effectiveness_criteria": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Indicators and thresholds against which the effectiveness of the risk response is judged",
+          "x-enforces": [
+            "REQ-SP800-160V1R1-1085"
+          ]
+        },
+        "dependencies": {
+          "title": "Dependencies on other risk response measures and other factors",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "timeline": {
+          "title": "Timeline for implementing the risk response",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "monitoring_plan": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Plan for monitoring the effectiveness of the risk response",
+          "x-enforces": [
+            "REQ-SP800-160V1R1-1090"
+          ]
+        },
+        "triggers": {
+          "title": "Monitoring triggers that return the risk to evaluation",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "interim_measures": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Interim risk response measures"
+        },
+        "informed": {
+          "title": "Officials told of the selected risk response",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          }
+        }
+      }
+    },
+    "determination": {
+      "title": "The final determination of risk",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "date",
+        "collaborated_with",
+        "technical_advisor",
+        "rests_on",
+        "sources"
+      ],
+      "properties": {
+        "by": {
+          "title": "Authorizing official or designated representative who finalized the determination of risk",
+          "type": "string",
+          "pattern": "^PER-[A-Z0-9]+$"
+        },
+        "date": {
+          "title": "Date the determination of risk was finalized",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "collaborated_with": {
+          "title": "Officials the determination of risk was made in collaboration with",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          },
+          "uniqueItems": true
+        },
+        "technical_advisor": {
+          "title": "Primary cybersecurity technical advisor to the authorizing official",
+          "type": "string",
+          "pattern": "^PER-[A-Z0-9]+$"
+        },
+        "rests_on": {
+          "title": "Risk assessments the determination rests on",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ART-[A-Z]+$"
+          },
+          "uniqueItems": true
+        },
+        "risk_executive_input": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Additional information the risk executive (function) provided for the determination of risk"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   }
 }

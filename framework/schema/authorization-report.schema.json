@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:authorization-report",
+  "title": "runs/<run-id>/artifacts/data/authorization-report.yaml",
+  "description": "What happens to the authorization decision and package after R-4 (R-5): receipt, retention, availability, marking and verification of the terms. AUTHRPT-001 judges it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision_ref",
+    "receipt",
+    "retention",
+    "available_to",
+    "marking",
+    "terms_verification",
+    "assessment_records",
+    "sources"
+  ],
+  "properties": {
+    "decision_ref": {
+      "title": "Ledger record this report is about",
+      "type": "string",
+      "pattern": "^AUTH-\\d{3}$"
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "received_by",
+        "received",
+        "terms_acknowledged"
+      ],
+      "properties": {
+        "received_by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "System owner or common control provider who received the authorization decision and package"
+        },
+        "received": {
+          "$ref": "#/$defs/date",
+          "title": "Date the authorization decision and package were received"
+        },
+        "terms_acknowledged": {
+          "title": "The receiver acknowledges the terms and conditions of the authorization",
+          "const": true
+        }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retained_by",
+        "policy",
+        "retain_until"
+      ],
+      "properties": {
+        "retained_by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "System owner or common control provider who retains the authorization decision and package"
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Record retention policy the authorization decision information is retained under"
+        },
+        "retain_until": {
+          "$ref": "#/$defs/date",
+          "title": "Date until which the authorization decision information is retained"
+        }
+      }
+    },
+    "available_to": {
+      "title": "Organizational officials to whom authorization documents are available when requested",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/persona_id"
+      }
+    },
+    "marking": {
+      "title": "Marking of the authorization package contents, whose sensitive information is marked and protected",
+      "enum": [
+        "CUI",
+        "CONFIDENTIAL",
+        "SECRET",
+        "TOP SECRET"
+      ],
+      "x-enforces": [
+        "REQ-SP800-37R2-0602"
+      ]
+    },
+    "terms_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verified_by",
+        "frequency_days"
+      ],
+      "properties": {
+        "verified_by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "Authorizing official who verifies the terms and conditions are followed"
+        },
+        "frequency_days": {
+          "title": "How often, in days, the terms and conditions are verified",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "assessment_records": {
+      "title": "Assessment records retained for the audit trail, reuse and repeatability",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^artifacts/[a-z0-9_./-]+$"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

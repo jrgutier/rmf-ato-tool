@@ -1,0 +1,20 @@
+rule: AODM-010
+bases:
+- minimal
+description: a consultation of someone other than the risk executive
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.risk_executive
+  value:
+    by: PER-ISSM
+    consulted: '2026-11-18'
+    analyzed_by: PER-AO
+    input: The enterprise accepts moderate risk on sensor relays while the POA&M items close.
+    sources:
+    - INT-012.A1
+expect:
+  errors:
+  - AODM-010
+  messages:
+  - the risk executive (function) is consulted, not PER-ISSM

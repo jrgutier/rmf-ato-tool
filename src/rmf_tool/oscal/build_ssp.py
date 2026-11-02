@@ -8,6 +8,7 @@ then the reasons are reported.
 
 from __future__ import annotations
 
+import os
 import re
 from typing import Any
 
@@ -90,10 +91,11 @@ def _description(run: Run, fallback: str) -> str:
     return fallback
 
 
-def _diagrams(sid: str, key: str, block: dict[str, Any]) -> dict[str, Any]:
+def _diagrams(run: Run, sid: str, key: str, block: dict[str, Any]) -> dict[str, Any]:
     out: dict[str, Any] = {"description": block["description"].strip()}
     diagrams = [{"uuid": uuid_for(sid, "ssp", f"diagram/{key}/{i}"), "caption": d["caption"],
-                 "links": [{"href": f"product/{d['path']}", "rel": "diagram"}]}
+                 "links": [{"href": os.path.relpath(run.resolve(d["path"]), run.dir),
+                            "rel": "diagram"}]}
                 for i, d in enumerate(block.get("diagrams") or [], start=1)]
     if diagrams:
         out["diagrams"] = diagrams
@@ -274,9 +276,10 @@ def build_ssp(run: Run) -> str:
             "security-objective-availability": f"fips-199-{cat['a']}",
         },
         "status": {"state": lifecycle},
-        "authorization-boundary": _diagrams(sid, "boundary", boundary["authorization_boundary"]),
-        "network-architecture": _diagrams(sid, "network", boundary["network_architecture"]),
-        "data-flow": _diagrams(sid, "data-flow", boundary["data_flow"]),
+        "authorization-boundary": _diagrams(run, sid, "boundary",
+                                            boundary["authorization_boundary"]),
+        "network-architecture": _diagrams(run, sid, "network", boundary["network_architecture"]),
+        "data-flow": _diagrams(run, sid, "data-flow", boundary["data_flow"]),
     }
     if facts_mod.value(facts, "boundary_id"):
         characteristics["props"] = [prop("boundary-id", facts_mod.value(facts, "boundary_id"))]

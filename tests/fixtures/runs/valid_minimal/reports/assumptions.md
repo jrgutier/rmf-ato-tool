@@ -10,7 +10,7 @@ Mode: synthetic. Human respondents: none.
 |---|---|---|---|---|
 | ASM-001 | S-4 | PER-ISSE | The enterprise identity provider enforces CAC multi-factor authentication for all FDR users. | The product documents the IdP but not its configuration. |
 
-## Interview answers (40; SIMULATED 40)
+## Interview answers (41; SIMULATED 41)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -48,7 +48,7 @@ Mode: synthetic. Human respondents: none.
 | A-4 | 1 | 1 | 0 |
 | A-5 | 1 | 1 | 0 |
 | A-6 | 1 | 2 | 0 |
-| R-2 | 1 | 1 | 0 |
+| R-2 | 2 | 2 | 0 |
 | R-3 | 1 | 1 | 0 |
 | R-4 | 1 | 1 | 0 |
 | R-5 | 1 | 1 | 0 |

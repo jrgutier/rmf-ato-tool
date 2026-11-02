@@ -1,0 +1,14 @@
+rule: AODM-010
+bases:
+- minimal
+description: the input from R-2 is changed in the decision
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.risk_executive.input
+  value: The enterprise has no view.
+expect:
+  errors:
+  - AODM-010
+  messages:
+  - is not documented in the authorization decision

@@ -23,6 +23,7 @@ from rmf_tool.framework.load import load
 from rmf_tool.framework.model import FRAMEWORK_DIR, SCHEMA_DIR, Framework, task_sort_key
 from rmf_tool.gitutil import repo_root
 
+PRODUCT_PREFIX = "product/"
 RUN_FILE = "run.yaml"
 FACTS_FILE = "facts.yaml"
 ASSUMPTIONS_FILE = "assumptions.yaml"
@@ -176,6 +177,12 @@ class Run:
 
     def path(self, rel: str) -> Path:
         return self.dir / rel
+
+    def resolve(self, rel: str) -> Path:
+        """A run-relative path, with ``product/`` meaning the product directory, as a trace
+        token does: in a fork that directory is outside the run."""
+        return self.product_dir / rel.removeprefix(PRODUCT_PREFIX) \
+            if rel.startswith(PRODUCT_PREFIX) else self.path(rel)
 
     def rel(self, path: Path) -> str:
         return path.relative_to(self.dir).as_posix()

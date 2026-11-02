@@ -1,8 +1,11 @@
-"""The authorization ledger: AODM-001 to AODM-007 and AODM-009. Each reads the records through
-``rmf_tool.run.authorization`` and stays quiet about a missing or unreadable file (RUN-ART-001
-and RUN-FM-001 report those). A record's findings belong to the task that wrote it. These rules
-test progress, not scope: a decision type has to be reachable in the run as it stands on disk,
-so a task merely being in scope never excuses a record written ahead of it."""
+"""The authorization ledger: AODM-001 to AODM-007 and AODM-009 to AODM-011, the Enterprise boarding
+and receipt of ENT-001 and ENT-002, and AUTHRPT-001 on what follows a decision. Each reads the
+records through ``rmf_tool.run.authorization`` and stays quiet about a missing or unreadable file
+(RUN-ART-001 and RUN-FM-001 report those), except AUTHRPT-001: ART-AUTHRPT is not a core artifact,
+so RUN-ART-001 never demands its data and the rule must. A record's findings belong to the task
+that wrote it. These rules test progress, not scope: a decision type has to be reachable in the
+run as it stands on disk, so a task merely being in scope never excuses a record written ahead
+of it."""
 
 from __future__ import annotations
 
@@ -23,6 +26,15 @@ RECEIVERS = {"system": "PER-PM", "common-controls": "PER-CCP"}
 SAP_FILE = "artifacts/data/sap.yaml"
 RAR_EFFECTS = ("authorize", "deny")
 COMPLETE_REVIEW = ("initial", "reauthorization")  # SP 800-37r2 p. 168: a zero-based review
+ORG_CONTEXT = "artifacts/ART-ORG-CONTEXT.md"  # holds the risk tolerance (P-2)
+RAR_FILE = "artifacts/data/rar.yaml"
+REPORT_FILE = "artifacts/data/authorization-report.yaml"
+LEVERAGED_FILE = "artifacts/data/leveraged-authorizations.yaml"
+POAM_FILE = "artifacts/poam/items.yaml"
+SAR_DIR = "artifacts/sar/"
+# DoD CIO reciprocity memo 4.2.1.b.
+DSAWG_DOCUMENTS = ("ART-SSP", "ART-SAR", "ART-RAR", "ART-POAM", "ART-AODM")
+BRIEF_LEAD_BUSINESS_DAYS = 60  # DoD CIO reciprocity memo 4.2.1.h
 Record = dict[str, Any]
 
 
@@ -340,4 +352,294 @@ def cato_eligible(ctx: Context) -> list[RunFinding]:
                 f"{acquisition.get('pathway')}")
         if acquisition.get("product_kind") in (kind.get("excluded_product_kinds") or ()):
             err(r, f"{acquisition.get('product_kind')} programs cannot hold a cATO")
+    return out
+
+
+# --- AODM-010: the risk executive before the final decision -----------------------------------
+
+def _unconsidered(ctx: Context, record: Record) -> list[str]:
+    """What SP 800-37r2 p. 92 has a decision consider, and the run does not hold."""
+    missing = []
+    if not record.get("risk_level"):
+        missing.append("the current residual risk")
+    if not isinstance(ctx.data(POAM_FILE), dict):
+        missing.append("the plans of action and milestones")
+    if ORG_CONTEXT not in ctx.docs:
+        missing.append("the risk tolerance of the organization")
+    return missing
+
+
+def risk_executive(ctx: Context) -> list[RunFinding]:
+    out, err = _rule(ctx, "AODM-010")
+    rar = ctx.data(RAR_FILE)
+    determination = (rar.get("determination") if isinstance(rar, dict) else None) or {}
+    for r, kind in _typed(ctx):
+        if "risk_executive" not in (kind.get("requires") or ()):
+            continue
+        found = r.get("risk_executive")
+        if not isinstance(found, dict):
+            err(r, f"{r['decision']} needs risk_executive: the authorizing official consults the "
+                "risk executive (function) first")
+            continue
+        date, consulted = _day(r.get("date")), _day(found.get("consulted"))
+        if found.get("by") != "PER-RE":
+            err(r, f"the risk executive (function) is consulted, not {found.get('by')}")
+        if date is not None and consulted is not None and consulted > date:
+            err(r, f"the consultation of {consulted} follows the final authorization decision of "
+                f"{date}")
+        if found.get("analyzed_by") != "PER-AO":
+            err(r, "the authorizing official analyzes the risk executive (function) input, not "
+                f"{found.get('analyzed_by')}")
+        if missing := _unconsidered(ctx, r):
+            err(r, f"the authorization decision does not consider {', '.join(missing)}")
+        given = determination.get("risk_executive_input")
+        if given and found.get("input_relevant", True) and found.get("input") != given:
+            err(r, "the risk executive (function) input from R-2 is not documented in the "
+                "authorization decision")
+        coordinated = (r.get("privacy_coordination") or {}).get("by")
+        if ctx.processes_pii and kind.get("effect") == "authorize" \
+                and coordinated != "PER-PRIV":
+            err(r, "a system processing PII coordinates the authorization decision with the "
+                f"privacy official, not {coordinated}")
+    return out
+
+
+# --- AODM-011: where an authorization issue goes ----------------------------------------------
+
+def issues(ctx: Context) -> list[RunFinding]:
+    out, err = _rule(ctx, "AODM-011")
+    items = ledger.section(ctx.run, "issues")
+    for issue in items:
+        kind, forum = issue.get("kind"), issue.get("forum")
+        if kind == "mission-area" and forum != "PAO":
+            err(issue, f"an authorization issue within a mission area is resolved by its PAO, not "
+                f"{forum}")
+        if kind == "space-system" and forum != "USSPACECOM":
+            err(issue, "an authorization issue for space systems is resolved by USSPACECOM, not "
+                f"{forum}")
+        if kind == "community-risk" and forum != "DSAWG":
+            err(issue, "an authorization issue on sharing community risk goes to the DSAWG forum, "
+                f"not {forum}")
+        if kind == "process-dispute" and forum != "DOD-CISO":
+            err(issue, "a dispute among RMF and other processes follows the escalation procedures "
+                f"of the DoD CISO, not {forum}")
+        if kind in ("dsawg-appeal", "isrmc-direction") and forum != "ISRMC":
+            err(issue, f"a {kind} goes to the DoD ISRMC, not {forum}")
+        resolved, raised = _day(issue.get("resolved")), _day(issue.get("raised"))
+        if issue.get("status") == "resolved" and (
+                resolved is None or not issue.get("resolution")):
+            err(issue, "a resolved issue records its date and its resolution")
+        elif resolved is not None and raised is not None and resolved < raised:
+            err(issue, f"resolved on {resolved}, before it was raised on {raised}")
+    effect_of = ledger.effects(ctx.run)
+    for r, _ in _typed(ctx):
+        date = _day(r.get("date"))
+        if date is None or effect_of.get(r.get("decision")) != "authorize":
+            continue
+        for issue in items:
+            raised = _day(issue.get("raised")) or dt.date.max
+            complied = _day(issue.get("resolved")) if issue.get("status") == "resolved" else None
+            if issue.get("kind") == "isrmc-direction" and raised <= date \
+                    and (complied or dt.date.max) > date:
+                err(r, f"the AO complies with DoD ISRMC direction {issue.get('id')} before this "
+                    "decision")
+    return out
+
+
+# --- ENT-001: Enterprise boarding at the DSAWG and the DoD ISRMC -------------------------------
+
+def _federal_holidays(year: int) -> set[dt.date]:
+    """5 U.S.C. 6103: a fixed date falling on a weekend is observed on the nearest weekday."""
+    def nth(month: int, weekday: int, n: int) -> dt.date:
+        first = dt.date(year, month, 1)
+        return first + dt.timedelta(days=(weekday - first.weekday()) % 7 + 7 * (n - 1))
+
+    def observed(day: dt.date) -> dt.date:
+        return day + dt.timedelta(days={5: -1, 6: 1}.get(day.weekday(), 0))
+
+    fixed = [(1, 1), (6, 19), (7, 4), (11, 11), (12, 25)]
+    last_monday = nth(5, 0, 5) if nth(5, 0, 5).month == 5 else nth(5, 0, 4)
+    return {*(observed(dt.date(year, m, d)) for m, d in fixed), nth(1, 0, 3), nth(2, 0, 3),
+            last_monday, nth(9, 0, 1), nth(10, 0, 2), nth(11, 3, 4)}
+
+
+def business_days_between(start: dt.date, end: dt.date) -> int:
+    """Weekdays after ``start`` up to and including ``end``, federal holidays excepted."""
+    days = (start + dt.timedelta(days=n + 1) for n in range((end - start).days))
+    return sum(1 for d in days if d.weekday() < 5
+               and d not in _federal_holidays(d.year) | _federal_holidays(d.year + 1))
+
+
+def _enterprise_ato(record: Record, deployment: Record, boardings: dict[Any, Record],
+                    err: Callable[[Record, str], None]) -> None:
+    boarding = boardings.get(deployment.get("boarding")) or {}
+    isrmc = boarding.get("isrmc") or {}
+    date, decided = _day(record.get("date")), _day(isrmc.get("decided"))
+    if isrmc.get("outcome") == "approved" and decided is None:
+        err(record, "the ISRMC approval carries no date, so nothing shows it came first")
+    elif isrmc.get("outcome") != "approved" or (decided or dt.date.max) > (date or dt.date.min):
+        err(record, "an Enterprise system receives its ATO only after the ISRMC approves it")
+    elif deployment.get("version") != boarding.get("version"):
+        err(record, f"the ATO is for the version being deployed, {boarding.get('version')}, not "
+            f"{deployment.get('version')}")
+
+
+def _submitted(boarding: Record) -> dt.date:
+    return _day((boarding.get("dsawg_submission") or {}).get("date")) or dt.date.min
+
+
+def _follows_disapproval(boarding: Record, boardings: dict[Any, Record]) -> bool:
+    """Whether this is a re-boarding, named or not: the last decided boarding before it was a
+    disapproval, so leaving out ``reboarding_of`` escapes nothing."""
+    named = boardings.get(boarding.get("reboarding_of")) or {}
+    if (named.get("isrmc") or {}).get("outcome") == "disapproved":
+        return True
+    earlier = sorted((b for b in boardings.values()
+                      if _submitted(b) < _submitted(boarding)), key=_submitted)
+    outcomes = [o for b in earlier
+                if (o := (b.get("isrmc") or {}).get("outcome")) in ("approved", "disapproved")]
+    return outcomes[-1:] == ["disapproved"]
+
+
+def _boarding(boarding: Record, boardings: dict[Any, Record], poam: dict[Any, Record],
+              err: Callable[[str], None]) -> None:
+    submission, isrmc = boarding.get("dsawg_submission") or {}, boarding.get("isrmc") or {}
+    if missing := [d for d in DSAWG_DOCUMENTS if d not in (submission.get("documents") or ())]:
+        err(f"the DSAWG submission lacks {', '.join(missing)}")
+    if not submission.get("sites"):
+        err("the DSAWG submission lists no deployment sites and dates")
+    for brief in boarding.get("status_briefs") or ():
+        requested, briefed = _day(brief.get("requested")), _day(brief.get("briefed"))
+        if briefed is None or (requested is not None and briefed < requested):
+            err(f"the DSAWG requested an authorization status brief on {requested}, and none "
+                "answered it")
+    briefed = _day(isrmc.get("briefed"))
+    dates = [isrmc.get("planned_deployment"),
+             *(s.get("deployment") for s in submission.get("sites") or ())]
+    planned = min((d for d in map(_day, dates) if d is not None), default=None)
+    if briefed is not None and planned is not None and (
+            briefed >= planned
+            or business_days_between(briefed, planned) < BRIEF_LEAD_BUSINESS_DAYS):
+        err(f"the ISRMC is briefed no later than {BRIEF_LEAD_BUSINESS_DAYS} business days before "
+            f"the planned deployment of {planned}, not on {briefed}")
+    outcome = isrmc.get("outcome")
+    decided = _day(isrmc.get("decided"))
+    recommended = _day((boarding.get("dsawg_recommendation") or {}).get("date"))
+    if outcome in ("approved", "disapproved") and (
+            recommended is None or (decided is not None and recommended > decided)):
+        err("the ISRMC decides on the DSAWG recommendation, which must come first")
+    if outcome == "disapproved" and isrmc.get("guidance_via") != "DSAWG":
+        err("ISRMC guidance on actions and mitigations reaches the Granting organization through "
+            "the DSAWG")
+    if _follows_disapproval(boarding, boardings) \
+            and (boarding.get("adjustments") or {}).get("worked_with") != "DSAWG":
+        err("the Granting AO works with the DSAWG to adjust the Enterprise system")
+    if outcome != "approved":
+        return
+    if unmet := [p for p in isrmc.get("directed_risks") or ()
+                 if (poam.get(p) or {}).get("status") != "completed"]:
+        err(f"the ISRMC will not grant its approval until {', '.join(unmet)} are mitigated in the "
+            "POA&M")
+    if isrmc.get("monitored_by") != "ISRMC" or isrmc.get("dodin_connection") != "authorized":
+        err("the ISRMC monitors the residual risk and authorizes connection to the DoDIN")
+    reboarded = {b.get("reboarding_of") for b in boardings.values()}
+    for change in boarding.get("risk_changes") or ():
+        if change.get("mitigated") is not True and boarding.get("id") not in reboarded:
+            err(f"the change in the acceptability of risk of {change.get('date')} cannot be "
+                "mitigated and requires a re-boarding at the ISRMC")
+
+
+def enterprise_boarding(ctx: Context) -> list[RunFinding]:
+    out, err = _rule(ctx, "ENT-001")
+    boardings = {b.get("id"): b for b in ledger.section(ctx.run, "boardings")}
+    for r, kind in _typed(ctx):
+        if "deployment" not in (kind.get("requires") or ()):
+            continue
+        deployment = r.get("deployment")
+        if not isinstance(deployment, dict):
+            err(r, f"{r['decision']} needs deployment: whether this is an Enterprise system")
+        elif deployment.get("scope") == "enterprise":
+            _enterprise_ato(r, deployment, boardings, err)
+    data = ctx.data(POAM_FILE)
+    items = data.get("items") if isinstance(data, dict) else None
+    poam = {i.get("id"): i for i in items or ()}
+    for boarding in boardings.values():
+        _boarding(boarding, boardings, poam,
+                  lambda message, b=boarding: err({**b, "task": "R-4"}, message))
+    return out
+
+
+# --- ENT-002: an Enterprise system this organization receives ---------------------------------
+
+def enterprise_received(ctx: Context) -> list[RunFinding]:
+    data = ctx.data(LEVERAGED_FILE)
+    items = data.get("leveraged_authorizations") if isinstance(data, dict) else None
+    out = []
+
+    def err(item: Record, message: str) -> None:
+        out.append(make("ENT-002", f"{item.get('id')}: {message}", LEVERAGED_FILE))
+
+    for item in items or ():
+        found = item.get("enterprise")
+        if not isinstance(found, dict):
+            continue
+        if found.get("accepted_by") != "DoD ISRMC":
+            err(item, "enterprise level risk acceptance is a determination of the DoD ISRMC, not "
+                f"{found.get('accepted_by')}")
+        elif found.get("receiving_action") == "refuse":
+            err(item, "the receiving organization may not refuse to deploy a system the DoD ISRMC "
+                "accepted")
+        if (found.get("change_request") or {}).get("approved_on") != "isrmc-risk-acceptance":
+            err(item, "the ISRMC risk acceptance is the RMF artifact that approves the change "
+                "request")
+    return out
+
+
+# --- AUTHRPT-001: receipt, retention and verification after the decision ----------------------
+
+def report_valid(ctx: Context) -> list[RunFinding]:
+    run = ctx.run
+    if not scope.produced_or_seeded(run, "ART-AUTHRPT"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("AUTHRPT-001", message, REPORT_FILE, None, {"R-5"}))
+
+    report = ctx.data(REPORT_FILE)
+    if not isinstance(report, dict):
+        err("no authorization report data: R-5 records the receipt, retention and marking")
+        return out
+    records = {r.get("id"): r for r in ctx.ledger or []}
+    record = records.get(report.get("decision_ref"))
+    if record is None:
+        err(f"decision_ref {report.get('decision_ref')} is no record of the ledger")
+        return out
+    receiver = RECEIVERS.get(record.get("subject"))
+    receipt, retention = report.get("receipt") or {}, report.get("retention") or {}
+    if receipt.get("received_by") != receiver:
+        err(f"the authorization decision and package are received by {receiver}, not "
+            f"{receipt.get('received_by')}")
+    date, received = _day(record.get("date")), _day(receipt.get("received"))
+    if date is not None and received is not None and received < date:
+        err(f"the receipt of {received} precedes the authorization decision of {date}")
+    if retention.get("retained_by") != receiver:
+        err(f"{receiver} retains the authorization decision and package, not "
+            f"{retention.get('retained_by')}")
+    available = report.get("available_to") or ()
+    if missing := [p for p in record.get("conveyed_to") or () if p not in available]:
+        err(f"authorization documents are not available to {', '.join(missing)}")
+    until = _day(retention.get("retain_until"))
+    term = _day(record.get("authorization_termination_date"))
+    if until is not None and term is not None and until < term:
+        err(f"authorization decision information is retained only to {until}, before the "
+            f"termination date {term}")
+    verifier = (report.get("terms_verification") or {}).get("verified_by")
+    if verifier != "PER-AO":
+        err(f"the authorizing official verifies the terms and conditions, not {verifier}")
+    kept = report.get("assessment_records") or ()
+    if gone := [p for p in kept if not run.path(p).is_file()]:
+        err(f"the retained assessment records {', '.join(gone)} do not exist")
+    if missing := [d for d in (SAP_FILE, SAR_DIR) if not any(p.startswith(d) for p in kept)]:
+        err(f"the assessment records retained for the audit trail lack {', '.join(missing)}")
     return out

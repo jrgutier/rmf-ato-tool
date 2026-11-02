@@ -1,0 +1,14 @@
+rule: PKG-003
+bases:
+- minimal
+description: a boundary diagram that is not in the run
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: authorization_boundary.diagrams.0.path
+  value: product/nowhere.png
+expect:
+  errors:
+  - PKG-003
+  messages:
+  - ART-SSP does not carry the CNSSI 1254 data element Authorization Boundary Diagram

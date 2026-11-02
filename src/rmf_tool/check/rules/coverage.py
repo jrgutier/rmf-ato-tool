@@ -1,5 +1,5 @@
 """Coverage rules: SSP-COV-002, SSP-DUP-001, SSP-STAT-001, SAP-COV-001, SAR-COV-001,
-CONMON-001 and PKG-001. Like SSP-COV-001 they are scope-aware: an artifact whose producer
+CONMON-001, PKG-001 and PKG-003. Like SSP-COV-001 they are scope-aware: an artifact whose producer
 is out of scope and that is not seeded is never demanded (plan §7.3 ``--final``)."""
 
 from __future__ import annotations
@@ -10,12 +10,18 @@ from rmf_tool import baseline as baseline_mod
 from rmf_tool.catalog import family
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
-from rmf_tool.check.rules.content import SAR_DIR, SSP_DIR, family_records
+from rmf_tool.check.rules.content import SAR_DIR, SSP_DIR, family_records, sections
+from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
 from rmf_tool.run.model import MANIFEST_FILE
 
 SAP_FILE = "artifacts/data/sap.yaml"
 CONMON_FILE = "artifacts/data/conmon.yaml"
+# CNSSI 1254 Section IV: the RMF core documents.
+CORE_DOCUMENTS = {"ART-SSP": "SSP", "ART-SAR": "SAR", "ART-RAR": "RAR", "ART-POAM": "POA&M",
+                  "ART-AODM": "Authorization Decision Document"}
+PLACEHOLDER = "<<FILL"
+UNREAD_HOMES = {"pending", "rule"}  # not built yet, or a rule already holds the element
 SSP_STATUSES = ("implemented", "partial", "planned", "alternative", "not-applicable",
                 "inherited")
 
@@ -154,4 +160,47 @@ def package_complete(ctx: Context) -> list[RunFinding]:
         if on_disk and aid not in listed:
             out.append(make("PKG-001", f"core artifact {aid} is not in the manifest; run "
                             "`rmf build`", MANIFEST_FILE, None, {art.get("producer")}))
+    return out
+
+
+def _value_at(data: Any, path: list[str]) -> list[Any]:
+    """The values at a dotted path; ``*`` walks a list."""
+    if not path:
+        return [data]
+    key, rest = path[0], path[1:]
+    if key == "*":
+        return [v for item in data or () for v in _value_at(item, rest)] \
+            if isinstance(data, list) else []
+    return _value_at(data.get(key), rest) if isinstance(data, dict) else []
+
+
+def _carried(ctx: Context, aid: str, element: dict[str, Any]) -> bool:
+    if "fact" in element:
+        return facts_mod.get(ctx.facts, element["fact"]) is not None
+    if "heading" in element:
+        doc = ctx.docs.get(f"artifacts/{element.get('artifact', aid)}.md")
+        return doc is not None and any(
+            heading == element["heading"]
+            and any(line.strip() and PLACEHOLDER not in line for line in lines)
+            for heading, _, lines in sections(doc.body, 1))
+    files = sorted(ctx.run.dir.glob(element["file"]))
+    path = element["path"].split(".")
+    values = [v for f in files for v in _value_at(ctx.data(ctx.run.rel(f)), path)]
+    if element.get("exists"):
+        return any(isinstance(v, str) and ctx.run.resolve(v).is_file() for v in values)
+    return any(v not in (None, "", [], {}) for v in values)
+
+
+def data_elements(ctx: Context) -> list[RunFinding]:
+    """Each CNSSI 1254 Annex C element a core document has a home for is in that document."""
+    run, out = ctx.run, []
+    for aid in CORE_DOCUMENTS:
+        if aid not in run.artifacts or not scope.produced_or_seeded(run, aid):
+            continue
+        art = run.artifacts[aid]
+        for element in art.get("data_elements") or ():
+            if not element.keys() & UNREAD_HOMES and not _carried(ctx, aid, element):
+                out.append(make("PKG-003", f"{aid} does not carry the CNSSI 1254 data element "
+                                f"{element['element']}", run.rel(run.artifact_md(aid)), None,
+                                {art.get("producer")}))
     return out

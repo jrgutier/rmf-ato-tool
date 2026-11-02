@@ -1,0 +1,14 @@
+rule: ENT-001
+bases:
+- minimal
+description: a status brief older than the request it should answer
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: boardings.1.status_briefs.0.briefed
+  value: '2026-09-01'
+expect:
+  errors:
+  - ENT-001
+  messages:
+  - the DSAWG requested an authorization status brief on

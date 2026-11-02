@@ -2333,3 +2333,75 @@ def test_the_report_counts_conditional_and_tier_1_debt(reg, framework, index):
     assert state["conditional"] == 0 and state["tier1_debt"] == 1
     index[DOC]["tier"] = None
     assert report.evidence_state(reg, index, probe)["tier1_debt"] == 0
+
+
+# --- ruling_sought ------------------------------------------------------------------------
+
+PERMISSION = "The owner must retire the system when its authorization ends."
+HELD = "Will register the system with the component registry before use."
+
+
+def _two_sentences(reg):
+    entry = covered(reg, {"kind": "rule", "target": "REG-001", "asserts": ASSERTS,
+                          "sentence": HELD})
+    entry.update(kind="lettered", statement=f"a. {HELD} {PERMISSION}")
+    return entry
+
+
+def _about(reg, framework):
+    return [m for m in ladder(reg, framework, EXTRA_RULES) if m.startswith(f"REQ-{DOC}")]
+
+
+def test_a_ruling_is_sought_on_a_whole_marked_sentence(reg, framework):
+    """A fragment such as 'The owner' would rule out whatever it was found in."""
+    entry = _two_sentences(reg)
+    entry["ruling_sought"] = [{"sentence": "The owner", "reason": "a fragment of a sentence"}]
+    assert any("is not a whole marked sentence" in m for m in _about(reg, framework))
+
+
+def test_covered_with_a_ruling_pending_is_an_error(reg, framework):
+    """Seeking a ruling is not the ruling: approved_by missing, the sentence is still owed."""
+    entry = _two_sentences(reg)
+    entry["ruling_sought"] = [{"sentence": PERMISSION, "reason": "reads as a permission"}]
+    found = _about(reg, framework)
+    assert any("covered with a ruling pending" in m for m in found), found
+    assert any("1 of its 2 marked sentences are cited by no strong" in m for m in found), found
+
+
+def test_an_approved_ruling_needs_no_item_on_its_sentence(reg, framework):
+    entry = _two_sentences(reg)
+    entry["ruling_sought"] = [{"sentence": PERMISSION, "reason": "reads as a permission",
+                               "approved_by": "user"}]
+    assert _about(reg, framework) == []
+
+
+def test_a_ruling_on_every_sentence_refuses_covered(reg, framework):
+    """Nothing left to prove means no requirement: such an entry is not-a-requirement."""
+    entry = _two_sentences(reg)
+    entry["ruling_sought"] = [
+        {"sentence": s, "reason": "reads as a permission", "approved_by": "user"}
+        for s in (HELD, PERMISSION)]
+    assert any("every marked sentence ruled out; such an entry is not-a-requirement" in m
+               for m in _about(reg, framework))
+
+
+def test_a_pending_ruling_is_counted_apart_from_tier_1_debt(reg, framework, index):
+    entry = _two_sentences(reg)
+    entry.update(status="partial", reason="the second sentence is a permission",
+                 ruling_sought=[{"sentence": PERMISSION, "reason": "reads as a permission"}])
+    _complete(reg)
+    index[DOC]["tier"] = 1
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    assert rules.unresolved_sentences(probe, entry) == []
+    state = report.evidence_state(reg, index, probe)
+    assert state["tier1_debt"] == 0
+    assert state["awaiting_ruling"] == [{"id": entry["id"], "tier": 1, "sentences": [PERMISSION]}]
+
+
+@pytest.mark.parametrize("status", ["closed", "closed-partial"])
+def test_a_work_item_with_a_ruling_pending_cannot_close(reg, index, status):
+    reg.work_items["WI-01"].update(status=status, closed_by="commit abc1234: built")
+    index[DOC]["tier"] = None
+    fx.entry(reg).update(PARTIAL, statement=f"a. {HELD} {PERMISSION}", kind="lettered",
+                         ruling_sought=[{"sentence": PERMISSION, "reason": "a permission"}])
+    assert any("a ruling is pending" in m for m in reasons(reg, index))
