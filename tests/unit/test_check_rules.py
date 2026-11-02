@@ -23,10 +23,16 @@ if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 
+def on_old_contract(run) -> bool:
+    """The example stays on the contract it was run under until p14 re-runs it."""
+    return run.dir.name.startswith("example")
+
+
 def final_findings(run_dir: Path, severity: str) -> set[str]:
     run = open_run(run_dir, REPO_ROOT)
-    return {f.rule for f in engine.select(run, engine.evaluate(run), final=True)
-            if f.severity == severity}
+    found = {f.rule for f in engine.select(run, engine.evaluate(run), final=True)
+             if f.severity == severity}
+    return found - ({"RUN-VER-001"} if on_old_contract(run) else set())
 
 
 @pytest.mark.parametrize("base", sorted(BASES))
@@ -34,7 +40,9 @@ def test_base_has_no_findings(base, tmp_path):
     run_dir = copy_run(BASES[base], tmp_path / base)
     run = open_run(run_dir, REPO_ROOT)
     ev = engine.evaluate(run)
-    assert engine.select(run, ev, final=True) == []
+    found = [f for f in engine.select(run, ev, final=True)
+             if not (f.rule == "RUN-VER-001" and on_old_contract(run))]
+    assert found == []
     assert ev.status.done
 
 
@@ -43,7 +51,8 @@ def test_committed_base_has_no_errors(base):
     """The committed fixture itself; only RUN-STALE-001 may warn, as upstream files move."""
     run = open_run(BASES[base], REPO_ROOT)
     found = engine.select(run, engine.evaluate(run), final=True)
-    assert {f.rule for f in found} <= {"RUN-STALE-001"}
+    allowed = {"RUN-STALE-001", *(["RUN-VER-001"] if on_old_contract(run) else [])}
+    assert {f.rule for f in found} <= allowed
 
 
 @pytest.mark.parametrize(("overlay", "expected"), [
@@ -86,7 +95,7 @@ def test_valid_minimal_is_non_vacuous():
     assert any(c["status"] == "inherited" and c.get("inherited_from") for c in ssp)
     assert any(c["status"] == "not-applicable" and c.get("rationale") for c in ssp)
     assert load((run / "assumptions.yaml").read_text())["assumptions"]
-    decision = load((run / "artifacts/data/decision.yaml").read_text())
+    decision = load((run / "artifacts/data/authorizations.yaml").read_text())["records"][-1]
     assert decision["decision"] == "AD-ATOC" and decision["conditions"]
     assert load((run / "run.yaml").read_text())["scope"]["tasks"] == "all"
 
@@ -103,7 +112,7 @@ def test_hybrid_minimal_exercises_tagging():
 @pytest.mark.parametrize("spec_path", SPECS, ids=[p.stem for p in SPECS])
 def test_negative(spec_path, tmp_path):
     spec = YAML(typ="safe").load(spec_path.read_text(encoding="utf-8"))
-    assert spec["rule"] == spec_path.stem
+    assert spec["rule"] == spec_path.stem.partition(".")[0]
     bases = [b for b in spec.get("bases", ["minimal"]) if b in BASES]
     assert bases, "no base available"
     expect = spec["expect"]
@@ -116,46 +125,54 @@ def test_negative(spec_path, tmp_path):
             build.build(open_run(run_dir, REPO_ROOT))
         errors = set(expect.get("errors") or []) | set(expect.get("also") or [])
         assert final_findings(run_dir, "E") == errors, (base, spec["description"])
+        if "message" in expect:
+            run = open_run(run_dir, REPO_ROOT)
+            assert any(expect["message"] in f.message
+                       for f in engine.select(run, engine.evaluate(run), final=True)), base
         if "warnings" in expect:
             assert final_findings(run_dir, "W") == set(expect["warnings"]), (
                 base, spec["description"])
 
 
-def test_decision_must_be_one_decided_at_r4_or_m6(tmp_path):
-    """C-2: AD-IATT is decided at A-2, so decision.yaml (written at R-4, updated at M-6)
-    cannot carry it, though its other fields are valid."""
-    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    edit_yaml(run_dir / "artifacts/data/decision.yaml",
-              lambda d: d.__setitem__("decision", "AD-IATT"))
-    run = open_run(run_dir, REPO_ROOT)
-    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "AODM-001"]
-    assert len(found) == 1
-    assert "AD-IATT is decided in A-2, not in R-4" in found[0]
+def _edit_ato(run_dir, **fields):
+    edit_yaml(run_dir / "artifacts/data/authorizations.yaml",
+              lambda d: d["records"][1].update(fields))
 
 
-def _decision_findings(run_dir, decision, include_after_stop):
-    edit_yaml(run_dir / "artifacts/data/decision.yaml", lambda d: d.__setitem__(
-        "decision", decision))
-    edit_yaml(run_dir / "run.yaml", lambda d: d.__setitem__(
-        "include_after_stop", include_after_stop))
+def _aodm_001(run_dir):
     run = open_run(run_dir, REPO_ROOT)
     return [f.finding.message for f in engine.evaluate(run).findings if f.rule == "AODM-001"]
 
 
-def test_continuous_ato_needs_m6_in_this_run(tmp_path):
-    """AD-CATO is decided at M-6; a run that stops at R-5 cannot record it (it has no ATD)."""
+def test_decision_must_be_recorded_at_a_task_that_decides_it(tmp_path):
+    """C-2: AD-IATT is decided at A-2, so a record of one written at R-4 is refused, though
+    its other fields are valid. It is recordable at A-2: the fixture holds one."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    found = _decision_findings(run_dir, "AD-CATO", [])
-    assert any("AD-CATO is decided in M-6, not in R-4" in m for m in found), found
-    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run2")
-    found = _decision_findings(run_dir, "AD-CATO", ["M-6"])
-    assert not any("is decided in" in m for m in found), found
+    _edit_ato(run_dir, decision="AD-IATT")
+    found = _aodm_001(run_dir)
+    assert len(found) == 1
+    assert "AD-IATT is decided in A-2, not in R-4" in found[0]
+
+
+def test_cato_at_r4_fails_even_when_m6_is_in_scope(tmp_path):
+    """Progress, not scope: AD-CATO written at R-4 fails whether or not M-6 is in the run."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "run.yaml", lambda d: d.__setitem__("include_after_stop", ["M-6"]))
+    _edit_ato(run_dir, decision="AD-CATO")
+    assert any("AD-CATO is decided in M-6, not in R-4" in m for m in _aodm_001(run_dir))
+
+
+def test_record_at_a_task_outside_the_run_is_refused(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    _edit_ato(run_dir, decision="AD-CATO", task="M-6")
+    assert any("M-6 is not an active task" in m for m in _aodm_001(run_dir))
 
 
 @pytest.mark.parametrize("decision", ["AD-ATO", "AD-ATOC", "AD-DATO"])
 def test_r4_decisions_pass_the_task_check(tmp_path, decision):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    assert not any("is decided in" in m for m in _decision_findings(run_dir, decision, []))
+    _edit_ato(run_dir, decision=decision)
+    assert not any("is decided in" in m for m in _aodm_001(run_dir))
 
 
 def test_task_needing_monitoring_data_reports_its_absence(tmp_path):
@@ -206,6 +223,8 @@ def test_baseline_and_product_profile_are_schema_checked(mutation, needle, tmp_p
 NOT_ON_EXAMPLE = {
     "HYB-003": "needs the named humans of a hybrid run; the example is synthetic",
     "RUN-CFG-001": "the example seeds nothing, so its seeded-file mutation has no target",
+    "RUN-VER-001": "the example is itself on the old contract, so nothing needs mutating",
+    "AODM-001.progress": "the example's contract has no M-6 record to write ahead of M-5",
     "STIG-002": "the example has no open CAT I STIG finding to strip of its POA&M item",
 }
 
@@ -214,10 +233,13 @@ def test_example_base_coverage_ge_80pct():
     """C-5: at least 80% of the mutation fixtures also run on the example, and each one
     left out is listed here with its reason. Every mutation applies to some base."""
     specs = {p.stem: YAML(typ="safe").load(p.read_text(encoding="utf-8")) for p in SPECS}
-    left_out = {rule for rule, spec in specs.items() if "example" not in spec.get("bases", [])}
+    newer = {r.id for r in load_registry() if r.since}  # the example predates their contract
+    left_out = {rule for rule, spec in specs.items()
+                if "example" not in spec.get("bases", [])} - newer
 
     assert left_out == set(NOT_ON_EXAMPLE)
-    assert (len(specs) - len(left_out)) / len(specs) >= 0.8
+    held = len(specs) - len(newer)
+    assert (held - len(left_out)) / held >= 0.8
     for rule, spec in specs.items():
         covered = {b for m in spec["mutations"] for b in m.get("only", spec["bases"])}
         assert covered == set(spec["bases"]), rule

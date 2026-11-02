@@ -9,8 +9,10 @@ from conftest import REPO_ROOT, edit_yaml
 from rmf_tool import build, refs
 from rmf_tool.check import engine
 from rmf_tool.check.context import Context
-from rmf_tool.check.rules import config, consistency, coverage, hybrid, journal
+from rmf_tool.check.rules import authorization, config, consistency, coverage, hybrid, journal
 from rmf_tool.run.model import open_run
+
+LEDGER = "artifacts/data/authorizations.yaml"
 
 
 def messages(run_dir: Path, rule) -> list[str]:
@@ -39,10 +41,10 @@ def test_degraded_reference_warns_and_needs_disclosure(minimal_run, monkeypatch)
     assert any(f.rule == "DEGRADED-001" for f in engine.select(run, ev, task="P-1"))
     assert "DEGRADED-001" in engine.rules_run(["TRACE-001"])
     assert any("degraded_disclosure" in m for m in messages(minimal_run,
-                                                            consistency.decision_valid))
-    edit_yaml(minimal_run / "artifacts/data/decision.yaml", lambda d: d.__setitem__(
+                                                            authorization.records_valid))
+    edit_yaml(minimal_run / LEDGER, lambda d: d["records"][1].__setitem__(
         "degraded_disclosure", "SP 800-37r2 was unobtainable; the fallback edition was used."))
-    assert messages(minimal_run, consistency.decision_valid) == []
+    assert messages(minimal_run, authorization.records_valid) == []
 
 
 def test_no_index_means_no_degraded(minimal_run, monkeypatch):
@@ -67,17 +69,18 @@ def test_stale_upstream_variants(minimal_run):
 
 def test_aodm_decision_checks(minimal_run):
     def edit(d):
-        d["decision"] = "AD-ATO"
-        d["decided_by"] = "PER-AODR"
-        del d["authorization_termination_date"]
-        del d["rar_ref"]
-    edit_yaml(minimal_run / "artifacts/data/decision.yaml", edit)
-    found = " | ".join(messages(minimal_run, consistency.decision_valid))
+        r = d["records"][1]
+        r["decision"] = "AD-ATO"
+        r["decided_by"] = "PER-AODR"
+        del r["authorization_termination_date"]
+        del r["rar_ref"]
+    edit_yaml(minimal_run / LEDGER, edit)
+    found = " | ".join(messages(minimal_run, authorization.records_valid))
     assert "decided by PER-AO, not PER-AODR" in found
     assert "authorization_termination_date" in found and "no rar_ref" in found
-    edit_yaml(minimal_run / "artifacts/data/decision.yaml",
-              lambda d: d.__setitem__("decision", "AD-NOPE"))
-    assert any("not one of" in m for m in messages(minimal_run, consistency.decision_valid))
+    edit_yaml(minimal_run / LEDGER,
+              lambda d: d["records"][1].__setitem__("decision", "AD-NOPE"))
+    assert any("not one of" in m for m in messages(minimal_run, authorization.records_valid))
 
 
 def test_deferring_a_core_producer_is_refused(minimal_run):

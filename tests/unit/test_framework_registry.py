@@ -94,7 +94,7 @@ def test_phases_follow_the_plan():
         "AGENT-001"}
     assert {r.id for r in by_id.values() if r.phase == "p3a"} == {
         r for r in IMPLEMENTED if by_id[r].phase == "p3a"}
-    assert {r.phase for r in by_id.values() if r.scope == "run"} == {"p35", "p6"}
+    assert {r.phase for r in by_id.values() if r.scope == "run"} == {"p35", "p6", "p11"}
     assert all(r.applies_after is None for r in by_id.values() if r.scope == "repo")
 
 

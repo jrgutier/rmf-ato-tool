@@ -138,7 +138,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "name", "short", "description", "decided_by", "decided_in", "phases",
-                   "atd_required", "conditions_required", "citations"],
+                   "atd_required", "conditions_required", "effect", "applies_to", "requires",
+                   "atd_forbidden", "citations"],
       "properties": {
         "id": {"$ref": "#/$defs/id"},
         "name": {"$ref": "#/$defs/text"},
@@ -149,6 +150,18 @@
         "phases": {"$ref": "#/$defs/ids"},
         "atd_required": {"type": "boolean"},
         "conditions_required": {"type": "boolean"},
+        "effect": {"description": "What a ledger record of this type does (rmf_tool.run.authorization.in_force).",
+                   "enum": ["test", "authorize", "deny", "continuous", "continue", "revoke-continuous", "rescind"]},
+        "applies_to": {"description": "What a record of this type decides on.", "type": "array", "minItems": 1,
+                       "items": {"enum": ["system", "common-controls"]}},
+        "requires": {"description": "Ledger record fields a record of this type must carry.", "type": "array",
+                     "items": {"enum": ["underlying", "review", "threat_assessment", "dod_ciso_approval",
+                                        "component_ciso_notification", "provider", "ongoing_acknowledgment",
+                                        "revocation_reason"]}},
+        "atd_forbidden": {"description": "A record of this type carries no authorization termination date.", "type": "boolean"},
+        "max_term_days": {"description": "Longest span from decision date to termination date.", "type": "integer", "minimum": 1},
+        "allowed_pathways": {"description": "Acquisition pathways a record of this type may be used on.", "$ref": "#/$defs/ids"},
+        "excluded_product_kinds": {"description": "Product kinds a record of this type may not be used on.", "type": "array", "items": {"type": "string"}},
         "citations": {"$ref": "#/$defs/citations"},
         "enforces": {"$ref": "#/$defs/enforces"}
       }
@@ -196,6 +209,7 @@
         "name": {"$ref": "#/$defs/text"},
         "description": {"$ref": "#/$defs/text"},
         "producer": {"$ref": "#/$defs/id"},
+        "since": {"description": "Run contract (framework_version) that added this artifact; an older run is not held to it.", "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
         "package": {"description": "core: required in the package by AC-16.",
                     "enum": ["core", "supporting"]},
         "generated": {"description": "true: written by the CLI, never by an agent (INV-2).",
@@ -209,7 +223,8 @@
             "required": ["path", "schema"],
             "properties": {
               "path": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_./<>-]*(#[a-z_]+)?$"},
-              "schema": {"type": ["string", "null"], "pattern": "^[a-z][a-z-]*$"}
+              "schema": {"type": ["string", "null"], "pattern": "^[a-z][a-z-]*$"},
+              "until": {"description": "Run contract from which this file no longer applies.", "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}
             }
           }
         },

@@ -42,7 +42,7 @@ def test_real_framework_stats_json():
     data = json.loads(result.stdout)
 
     assert result.exit_code == 0
-    assert (data["tasks"], data["phases"], data["decisions"]) == (47, 5, 5)
+    assert (data["tasks"], data["phases"], data["decisions"]) == (47, 5, 12)
     assert data["personas"] >= 15
     assert data["summary"]["errors"] == 0
     assert data["summary"]["deferred_citations"] == data["deferred_citations"] == 0

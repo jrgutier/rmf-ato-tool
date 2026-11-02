@@ -1,0 +1,430 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:authorizations",
+  "title": "runs/<run-id>/artifacts/data/authorizations.yaml",
+  "description": "The authorization ledger behind ART-AUTHREC (A-2; updated by R-4 and M-6). One record per decision; a later decision is a new record, so a cATO, a continuation or a rescission never overwrites the authorization beneath it. An empty list is valid until a decision exists. AODM-001 to AODM-007 judge the records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "records"
+  ],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/record"
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "decision",
+        "subject",
+        "basis",
+        "decided_by",
+        "task",
+        "date",
+        "risk_level",
+        "risk_acceptance",
+        "signature",
+        "conveyed_to",
+        "rationale",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "title": "Record ID, never reused within a ledger",
+          "type": "string",
+          "pattern": "^AUTH-\\d{3}$"
+        },
+        "decision": {
+          "title": "Authorization decision type",
+          "description": "An AD-* entry of framework/decisions.yaml: authorization to operate, authorization to use, common control authorization, a denial of each, and the rest.",
+          "type": "string",
+          "pattern": "^AD-[A-Z]{2,6}$",
+          "x-enforces": [
+            "REQ-CNSSI1254-0104",
+            "REQ-SP800-37R2-0412",
+            "REQ-SP800-37R2-0570",
+            "REQ-SP800-37R2-0576",
+            "REQ-SP800-37R2-0596",
+            "REQ-SP800-37R2-0601"
+          ]
+        },
+        "subject": {
+          "title": "What the decision covers",
+          "description": "The system, or the common controls offered for inheritance.",
+          "enum": [
+            "system",
+            "common-controls"
+          ]
+        },
+        "basis": {
+          "title": "Why this decision is being taken",
+          "description": "initial, reauthorization, ongoing authorization time-driven or event-driven trigger, change of authorizing official, or revocation.",
+          "enum": [
+            "test",
+            "initial",
+            "reauthorization",
+            "time-driven",
+            "event-driven",
+            "ao-change",
+            "revocation"
+          ],
+          "x-enforces": [
+            "REQ-SP800-18R2-0355",
+            "REQ-SP800-37R2-0543",
+            "REQ-SP800-37R2-0546",
+            "REQ-SP800-37R2-0576",
+            "REQ-SP800-37R2-0578",
+            "REQ-SP800-37R2-0610",
+            "REQ-SP800-37R2-0630",
+            "REQ-SP800-37R2-0644"
+          ]
+        },
+        "decided_by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "Authorizing official who explicitly accepts the risk"
+        },
+        "task": {
+          "title": "RMF task that recorded the decision",
+          "type": "string",
+          "pattern": "^[PCSIARM]-[1-9]\\d?$"
+        },
+        "date": {
+          "$ref": "#/$defs/date",
+          "title": "Date the authorizing official signed the decision",
+          "x-enforces": [
+            "REQ-CNSSI1254-0106"
+          ]
+        },
+        "risk_level": {
+          "$ref": "#/$defs/level",
+          "title": "Overall risk level the decision accepts",
+          "description": "The risk to organizational operations and assets, individuals, other organizations and the Nation.",
+          "x-enforces": [
+            "REQ-CNSSI1254-0108",
+            "REQ-SP800-37R2-0400"
+          ]
+        },
+        "risk_acceptance": {
+          "title": "The authorizing official's explicit statement on the risk",
+          "description": "That the official understands and accepts the residual risk to organizational operations and assets, individuals, other organizations and the Nation, or finds it unacceptable, for continued operation or use.",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-CNSSI1254-0105",
+            "REQ-SP800-37R2-0203",
+            "REQ-SP800-37R2-0408",
+            "REQ-SP800-37R2-0417",
+            "REQ-SP800-37R2-0580",
+            "REQ-SP800-37R2-0588",
+            "REQ-SP800-37R2-0644",
+            "REQ-SP800-37R2-0727"
+          ]
+        },
+        "signature": {
+          "title": "How the authorizing official signed the decision document",
+          "description": "Manual signature or Public Key Infrastructure certified digital signature.",
+          "enum": [
+            "manual",
+            "pki"
+          ],
+          "x-enforces": [
+            "REQ-CNSSI1254-0105"
+          ]
+        },
+        "conveyed_to": {
+          "title": "Officials the decision is conveyed to",
+          "description": "The system owner or common control provider and other organizational officials who receive the authorization decision.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/persona_id"
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-DODI8510.01-0231",
+            "REQ-SP800-37R2-0411",
+            "REQ-SP800-37R2-0596"
+          ]
+        },
+        "rationale": {
+          "title": "Why the authorizing official decided this",
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "authorization_termination_date": {
+          "$ref": "#/$defs/date"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "description"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^COND-\\d{2}$"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "due": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "rar_ref": {
+          "const": "ART-RAR"
+        },
+        "degraded_disclosure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "underlying": {
+          "title": "Record this one modifies, continues or revokes",
+          "type": "string",
+          "pattern": "^AUTH-\\d{3}$"
+        },
+        "supersedes": {
+          "title": "Record this one replaces at reauthorization or a change of authorizing official",
+          "type": "string",
+          "pattern": "^AUTH-\\d{3}$"
+        },
+        "review": {
+          "title": "When the authorizing official reviews the authorization",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frequency_days",
+            "events"
+          ],
+          "properties": {
+            "frequency_days": {
+              "title": "Time-driven authorization frequency in days",
+              "type": "integer",
+              "minimum": 1
+            },
+            "events": {
+              "title": "Event-driven triggers for review",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0625"
+              ]
+            }
+          }
+        },
+        "cio_concurrence": {
+          "title": "Component CIO concurrence or non-concurrence",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "position",
+            "date"
+          ],
+          "properties": {
+            "by": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "position": {
+              "enum": [
+                "concur",
+                "non-concur"
+              ]
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            },
+            "directions": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "threat_assessment": {
+          "title": "Intelligence Community threat assessment the PM reviewed",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "issued_by",
+            "issued",
+            "reviewed_by",
+            "reviewed",
+            "sources"
+          ],
+          "properties": {
+            "issued_by": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Intelligence Community body that issued the threat assessment",
+              "x-enforces": [
+                "REQ-DODI5000.90-0081"
+              ]
+            },
+            "issued": {
+              "$ref": "#/$defs/date"
+            },
+            "reviewed_by": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "reviewed": {
+              "$ref": "#/$defs/date"
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "dod_ciso_approval": {
+          "title": "DoD CISO approval of the cATO",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "reference"
+          ],
+          "properties": {
+            "date": {
+              "$ref": "#/$defs/date"
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "component_ciso_notification": {
+          "title": "The AO's notice to the Component CISO of the intent to move to a cATO",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date"
+          ],
+          "properties": {
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "provider": {
+          "title": "Provider organization whose authorization package a customer accepts",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "organization",
+            "decision",
+            "date",
+            "package"
+          ],
+          "properties": {
+            "organization": {
+              "type": "string",
+              "minLength": 1
+            },
+            "decision": {
+              "enum": [
+                "AD-ATO",
+                "AD-ATOC"
+              ]
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            },
+            "package": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "ongoing_acknowledgment": {
+          "title": "The AO's acceptance of the ongoing authorization process",
+          "type": "string",
+          "minLength": 1
+        },
+        "revocation_reason": {
+          "title": "Why the authorization or cATO was revoked",
+          "enum": [
+            "poor-posture",
+            "risk-tolerance",
+            "incident",
+            "other"
+          ]
+        },
+        "ao_transfer": {
+          "title": "Transfer of responsibility to a new authorizing official",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "outgoing",
+            "reviewed"
+          ],
+          "properties": {
+            "outgoing": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reviewed": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

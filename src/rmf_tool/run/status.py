@@ -109,6 +109,14 @@ def _artifact_problems(run: Run, task: str) -> list[str]:
     return problems
 
 
+def reached(run: Run, task: str) -> bool:
+    """Progress, not scope: every active task before ``task`` has written its outputs, so a
+    decision recorded at ``task`` cannot precede the work it rests on."""
+    active = set(scope.active_tasks(run))
+    return not any(_artifact_problems(run, t)
+                   for t in run.ancestors.get(task, frozenset()) if t in active)
+
+
 def derive(run: Run, findings: list[RunFinding]) -> Status:
     scopes = scope.task_scopes(run)
     facts = facts_mod.load(run)

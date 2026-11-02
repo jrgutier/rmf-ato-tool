@@ -136,9 +136,14 @@ def _named(fw: Framework, kind: str, ids: list[str] | None) -> list[dict[str, st
             for i in ids or []]
 
 
+def current_data(art: dict[str, Any]) -> list[dict[str, Any]]:
+    """Data files on the current contract; an ``until`` entry serves older runs only."""
+    return [d for d in art.get("data") or [] if "until" not in d]
+
+
 def _data_files(root: Path, art: dict[str, Any]) -> list[dict[str, Any]]:
     out = []
-    for d in art.get("data") or []:
+    for d in current_data(art):
         schema = d.get("schema")
         template = f"templates/data/{schema}.yaml" if schema else None
         out.append({"path": d["path"], "schema": schema,
@@ -166,7 +171,7 @@ def context(fw: Framework, task: dict[str, Any], root: Path) -> dict[str, Any]:
         if name in artifacts:
             art = artifacts[name].data
             files = [] if art.get("generated") else [f"artifacts/{name}.md"]
-            files += [d["path"] for d in art.get("data") or []]
+            files += [d["path"] for d in current_data(art)]
             inputs.append({"id": name, "name": art.get("name", ""), "kind": "artifact",
                            "files": files})
         elif name in externals:

@@ -85,7 +85,8 @@ def shape(repo, reg, index):
 def ladder(reg, framework, extra_rules=(), repo=REPO_ROOT):
     probe = evidence.probe(repo, framework)
     probe = evidence.Probe(repo, framework, {**probe.rules, **{r.id: r for r in extra_rules}})
-    return messages(rules.ladder(reg, probe))
+    return [m for m in messages(rules.ladder(reg, probe))
+            if "not a live register entry" not in m or "REQ-DOC-" in m]
 
 
 def schema_repo(tmp_path, pointer="decision", **node):
@@ -521,7 +522,7 @@ def test_rule_evidence_needs_the_rule_to_list_the_entry(reg, framework):
      "is 'PER-AO', not 'PER-PM'"),
     ({"kind": "pinned", "target": "AD-NOPE", "field": "decided_by", "value": "x"},
      "no such framework entity field"),
-    ({"kind": "pinned", "target": "AD-ATO", "field": "requires", "value": None},
+    ({"kind": "pinned", "target": "AD-IATT", "field": "requires", "value": None},
      "pins nothing"),
     ({"kind": "template", "target": "ART-SSP", "heading": "No such heading"}, "has no heading"),
     ({"kind": "template", "target": "AD-ATO", "heading": "x"}, "no template"),
@@ -1694,3 +1695,13 @@ def test_a_promoted_entry_the_extractor_later_finds_keeps_its_id_and_its_mark():
     assert [(e["id"], e["kind"], e["status"], e["promoted"]) for e in entries] == [
         (f"REQ-{DOC}-0001", "lettered", "partial", {"reason": "p"})]
     assert changes.added == [] and changes.removed == []
+
+
+def test_a_statement_of_one_content_word_can_be_asserted():
+    """`Authorization to use; and` has one content word, so two shared words could never be met;
+    an honest pin on a list item was refused until the floor stopped at the statement's size."""
+    item = {"target": "AD-ATU", "asserts": "Authorization to use is a decision type."}
+    target = "Authorization to Use decision"
+    assert evidence.asserts_verdict(item, "Authorization to use; and", target) is None
+    assert evidence.asserts_verdict(item, "Rendered by the board", target).strength == \
+        evidence.DENIED

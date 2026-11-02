@@ -1,0 +1,32 @@
+# Template: artifacts/data/authorizations.yaml (A-2, updated by R-4 and M-6; schema
+# authorizations). One record per decision. A later decision is a new record: never edit or
+# remove an earlier one. AODM-001 to AODM-007 judge the records (playbooks/R/R-4.md).
+# `records: []` is valid at A-2 when no test event runs live.
+records:
+  - id: AUTH-001
+    decision: AD-ATOC  # framework/decisions.yaml: the task must be one in decided_in
+    subject: system  # system | common-controls
+    basis: initial  # test | initial | reauthorization | time-driven | event-driven | ao-change | revocation
+    decided_by: PER-AO
+    task: R-4
+    date: "2026-01-01"
+    risk_level: moderate
+    risk_acceptance: "<<FILL: the AO's explicit statement that they understand and accept the residual risk>>"
+    signature: pki  # manual | pki
+    conveyed_to: [PER-PM, PER-ISSM]  # the system owner (PER-PM) or provider (PER-CCP), and others
+    authorization_termination_date: "2027-01-01"  # where the type requires it
+    conditions:  # required for AD-ATOC
+      - id: COND-01
+        description: "<<FILL: condition, tied to the POA&M items it depends on>>"
+        due: "2026-06-30"
+    rar_ref: ART-RAR
+    # cio_concurrence: {by: PER-CIO, position: concur, date: "2025-12-20"}  # ATO at High or Very High
+    threat_assessment:  # an ATO: issued within the 12 months before the decision
+      issued_by: "<<FILL: the Intelligence Community issuer>>"
+      issued: "2025-09-01"
+      reviewed_by: PER-PM
+      reviewed: "2025-12-01"
+      sources: [INT-001.A1]
+    # degraded_disclosure: "<<FILL: only when rmf check reports DEGRADED-001>>"
+    rationale: "<<FILL: why the AO decided this>>"
+    sources: [ART-RAR, INT-001.A1]

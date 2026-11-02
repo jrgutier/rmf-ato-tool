@@ -6,7 +6,7 @@ from functools import cached_property
 from typing import Any
 
 from rmf_tool import refs
-from rmf_tool.run import assumptions, frontmatter, interviews, scope
+from rmf_tool.run import assumptions, authorization, frontmatter, interviews, scope
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run.model import ARTIFACTS_DIR, Run
 from rmf_tool.run.trace import Resolver
@@ -19,6 +19,10 @@ class Context:
     @cached_property
     def facts(self) -> dict[str, Any]:
         return facts_mod.load(self.run)
+
+    @cached_property
+    def ledger(self) -> list[dict[str, Any]] | None:
+        return authorization.load(self.run)
 
     @cached_property
     def interviews(self) -> list[interviews.Interview]:

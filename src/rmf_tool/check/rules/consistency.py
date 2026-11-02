@@ -1,5 +1,5 @@
 """Cross-artifact consistency rules: INV-BND-001/002, STIG-001/002, POAM-CTL-001,
-POAM-FLD-001, RAR-001, AODM-001 and TASK-DEF-001. Each reads the run-data files it links
+POAM-FLD-001, RAR-001 and TASK-DEF-001. Each reads the run-data files it links
 and stays quiet about a file that is missing or unreadable (RUN-ART-001 and RUN-FM-001
 report those)."""
 
@@ -19,7 +19,6 @@ INVENTORY_FILE = "artifacts/data/inventory.yaml"
 BOUNDARY_FILE = "artifacts/data/boundary.yaml"
 STIG_FILE = "artifacts/data/stig-summary.yaml"
 RAR_FILE = "artifacts/data/rar.yaml"
-DECISION_FILE = "artifacts/data/decision.yaml"
 # Inventory kinds that a STIG or SRG covers (STIG-001); hardware is covered through its OS.
 STIG_KINDS = ("software", "operating-system", "database", "firmware", "virtual-machine")
 # Boundary components that carry no inventory items of their own (INV-BND-002).
@@ -181,50 +180,6 @@ def rar_links(ctx: Context) -> list[RunFinding]:
     for f in sar:
         if f.get("status") != "closed" and f.get("id") not in covered:
             err(f"open SAR finding {f.get('id')} ({f.get('control_id')}) maps to no risk")
-    return out
-
-
-# --- AO decision ------------------------------------------------------------------------
-
-def decision_valid(ctx: Context) -> list[RunFinding]:
-    run = ctx.run
-    if not scope.produced_or_seeded(run, "ART-AODM"):
-        return []
-    decision = ctx.data(DECISION_FILE)
-    if not isinstance(decision, dict):
-        return []
-    out: list[RunFinding] = []
-
-    def err(message: str) -> None:
-        out.append(make("AODM-001", message, DECISION_FILE))
-
-    kinds = {e.id: e.data for e in run.framework.index("decisions").values()}
-    kind = kinds.get(decision.get("decision"))
-    if kind is None:
-        err(f"decision {decision.get('decision')!r} is not one of {', '.join(kinds)}")
-    else:
-        decided_in = kind.get("decided_in") or []
-        writers = run.writers("ART-AODM")
-        if not any(s.get("artifact") == "ART-AODM" for s in scope.seeded(run)):
-            active = set(scope.active_tasks(run))
-            writers = [t for t in writers if t in active]
-        if not set(decided_in) & set(writers):
-            err(f"{decision.get('decision')} is decided in {', '.join(decided_in)}, not in "
-                f"{' or '.join(writers) or 'any task of this run'}, the tasks of this run that "
-                f"can write {DECISION_FILE}")
-        if decision.get("decided_by") != kind.get("decided_by"):
-            err(f"{decision.get('decision')} is decided by {kind.get('decided_by')}, not "
-                f"{decision.get('decided_by')}")
-        if kind.get("atd_required") and not decision.get("authorization_termination_date"):
-            err(f"{decision.get('decision')} needs an authorization_termination_date")
-        if kind.get("conditions_required") and not decision.get("conditions"):
-            err(f"{decision.get('decision')} needs conditions")
-    if decision.get("rar_ref") != "ART-RAR":
-        err("no rar_ref: ART-RAR (the decision must rest on the risk assessment report)")
-    degraded = ctx.degraded_refs
-    if degraded and not str(decision.get("degraded_disclosure") or "").strip():
-        err(f"the run depends on degraded reference(s) {', '.join(degraded)}; add a "
-            "degraded_disclosure (plan §7.6)")
     return out
 
 

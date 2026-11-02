@@ -107,8 +107,9 @@ def asserts_verdict(item: Mapping[str, Any], statement: str, target_text: str) -
     if not asserts:
         return Verdict(WEAK, f"evidence on {item['target']} does not say what it asserts")
     words = content_words(asserts)
-    shared = words & content_words(statement)
-    if len(shared) < MIN_SHARED_WORDS:
+    spoken = content_words(statement)
+    shared = words & spoken
+    if len(shared) < min(MIN_SHARED_WORDS, len(spoken)):
         return Verdict(DENIED, f"asserts on {item['target']} shares {len(shared)} content "
                        f"word(s) with the statement; it must say what the statement says")
     about = words & content_words(target_text)

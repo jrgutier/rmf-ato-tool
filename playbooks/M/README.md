@@ -23,8 +23,9 @@ through O&S to disposal (`framework/rmf-steps.yaml`).
 - **Assess, then respond, then update.** M-2 records new findings; M-3 gives them POA&M
   items or risk acceptance (SAR-POAM-001 reports open findings against the POA&M until
   then); M-4 brings the package artifacts up to date.
-- **Ongoing authorization is the AO's.** M-6 records the AO's determination in
-  `decision.yaml` (continue, AD-CATO, or denial); the triggers come from `conmon.yaml`.
+- **Ongoing authorization is the AO's.** M-6 adds a record of the AO's determination to
+  `authorizations.yaml` (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial), naming the
+  authorization it rests on, which stays; the triggers come from `conmon.yaml`.
 - **M-7 runs once,** when the system is removed from operation.
 - **Session unit:** one session per task group the prompt names; M-2 over many families
   follows `_shared/assessment-batching.md`, at most 3 families per session.

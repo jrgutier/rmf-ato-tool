@@ -19,6 +19,7 @@ PLAN_RUN_SCHEMAS = {
     "artifact-frontmatter", "run-config", "scenario", "product-profile", "facts", "interview",
     "assumptions", "infotypes", "users", "boundary", "leveraged-authorizations", "inventory",
     "ssp-controls", "sap", "sar-results", "poam-items", "stig-summary", "baseline", "decision",
+    "authorizations",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar"}  # data named in plan §6.4
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
@@ -223,6 +224,14 @@ RUN_EXAMPLES = {
          "risk_level": "moderate", "rar_ref": "ART-RAR", "rationale": "r", "sources": SRC},
         {"decision": "ATO", "decided_by": "PER-AO", "date": "2026-12-01", "rationale": "r",
          "sources": SRC}),
+    "authorizations": (
+        {"records": [{"id": "AUTH-001", "decision": "AD-ATOC", "subject": "system",
+                      "basis": "initial", "decided_by": "PER-AO", "task": "R-4",
+                      "date": "2026-12-01", "risk_level": "moderate",
+                      "risk_acceptance": "I accept the risk.", "signature": "pki",
+                      "conveyed_to": ["PER-PM"], "rationale": "r", "sources": SRC}]},
+        {"records": [{"id": "AUTH-1", "decision": "ATO", "decided_by": "PER-AO",
+                      "date": "2026-12-01", "rationale": "r", "sources": SRC}]}),
     "tailoring": (
         {"actions": [{"control_id": "ac-17", "action": "remove", "rationale": "no remote access",
                       "sources": SRC}]},
@@ -276,7 +285,7 @@ def test_interview_answer_definition():
 def test_fact_paths_come_from_the_facts_schema():
     assert fact_paths(REPO_ROOT) == {
         "system_id", "system_name", "acronym", "aliases", "boundary_id", "lifecycle_state",
-        "categorization", "categorization.approved", "baseline_id"}
+        "categorization", "categorization.approved", "baseline_id", "acquisition"}
 
 
 def test_real_framework_writes_each_fact_once():

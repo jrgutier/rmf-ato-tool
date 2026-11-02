@@ -15,10 +15,11 @@ from rmf_tool import agents_md, doc_counts, lessons, playbooks_sync, refs
 from rmf_tool.check import agent_lane, load_registry
 from rmf_tool.findings import Finding
 from rmf_tool.framework import validate as framework_validate
-from rmf_tool.framework.model import FRAMEWORK_DIR
+from rmf_tool.framework.model import FRAMEWORK_DIR, META_FILE
 from rmf_tool.profiles import PHASES, Profile, rule_active
 from rmf_tool.refs import currency, index_render, verify
 from rmf_tool.render import manual
+from rmf_tool.run.model import RUN_FILE, read_yaml
 
 COVERAGE_MIN = 85
 MIN_WORKER_CPUS = 4
@@ -122,6 +123,19 @@ def _valid_minimal(rules: tuple[str, ...] | None = None,
     return run
 
 
+def _contracts(ctx: Context) -> tuple[bool, list[Finding], str]:
+    """The fixtures live on the current contract, and at release so does the example, so the
+    p14 re-run cannot be skipped behind a warning."""
+    assert ctx.profile is not None
+    current = str(read_yaml(ctx.root / FRAMEWORK_DIR / META_FILE)["framework_version"])
+    runs = [VALID_MINIMAL, HYBRID_MINIMAL]
+    if ctx.profile.name == "release":
+        runs.append(EXAMPLE_RUN)
+    stale = [(r, read_yaml(ctx.root / r / RUN_FILE).get("framework_version")) for r in runs]
+    return _findings_step([Finding("RUN-VER-001", "E", f"on contract {v}, not {current}", r)
+                           for r, v in stale if str(v) != current])
+
+
 def _example(ctx: Context) -> tuple[bool, list[Finding], str]:
     """The example fork run (p7); a fork's own profile does not evaluate examples/."""
     assert ctx.profile is not None
@@ -216,6 +230,8 @@ STEPS: tuple[Step, ...] = (
     # this step replaces the p5 one.
     Step("rmf validate (requirements register, NIST task pin)", "p10",
          framework_validate.IMPLEMENTED, _framework),
+    # p11: run contracts; a run is held to the contract it was created under.
+    Step("run contracts", "p11", ("RUN-VER-001",), _contracts),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )

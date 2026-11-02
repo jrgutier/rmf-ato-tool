@@ -16,7 +16,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 | Ends at | End of the life cycle (disposal) |
 | RMF steps active | [M Monitor](../../MANUAL.md#step-m) |
 | Tasks | 7 with this primary phase |
-| Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato) |
+| Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) |
 
 **Entry criteria**
 
@@ -57,7 +57,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam) | — |
 | [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
-| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato) |
+| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | — | — |
 
 ## <a id="task-m-1"></a>M-1 · System and Environment Changes
@@ -380,6 +380,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | updates | core |
+| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
+
+Writes to `facts.yaml`: `acquisition`.
 
 **Entry criteria**
 
@@ -389,14 +392,14 @@ Not tied to a specific acquisition event; runs as part of its phase.
 **Exit criteria**
 
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
-- decision.yaml records the ongoing authorization determination (continue, AD-CATO, or denial).
+- authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 
-**Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [cATO](../../MANUAL.md#ad-cato) (see [authorization decisions](../../MANUAL.md#decisions)).
+**Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) (see [authorization decisions](../../MANUAL.md#decisions)).
 
 **Alignment**
 
 - Milestones and decision points: [FOC](#ms-foc)
-- Authorization decisions: [cATO](../../MANUAL.md#ad-cato)
+- Authorization decisions: [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca)
 
 **Citations**
 

@@ -1,7 +1,7 @@
 # DoD Risk Management Framework on NIST SP 800-37 Rev. 2, anchored to the DoD acquisition life cycle
 
 > **Generated file. Do not edit.** `uv run rmf render` writes this file from `framework/`
-> (framework version 0.1.0). To change it, edit the YAML and render again;
+> (framework version 0.2.0). To change it, edit the YAML and render again;
 > `rmf ci` fails while the committed manual differs from a fresh render (FW-MAN-001).
 >
 > **Draft guidance, not policy.** This manual arranges public NIST, CNSS and DoD guidance into a
@@ -76,9 +76,9 @@ Conventions:
 |---|---|---|---|---|---|---|---|---|
 | 1 | [MSA](#ph-msa) Materiel Solution Analysis | [MDD](#ms-mdd) | [MS A](#ms-a) | [MDD](#ms-mdd), [MS A](#ms-a) | — | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | [P-16](#task-p-16) | — |
 | 2 | [TMRR](#ph-tmrr) Technology Maturation and Risk Reduction | [MS A](#ms-a) | [MS B](#ms-b) | [Dev RFP RD](#ms-drfprd), [MS B](#ms-b) | [SRR](#rv-srr), [SFR](#rv-sfr), [PDR](#rv-pdr) | [P-16](#task-p-16), [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) | [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | — |
-| 3 | [EMD](#ph-emd) Engineering and Manufacturing Development | [MS B](#ms-b) | [MS C](#ms-c) | [MS C](#ms-c) | [CDR](#rv-cdr), [TRR](#rv-trr), [SVR/FCA](#rv-svr), [PRR](#rv-prr) | [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) | [S-4](#task-s-4), [S-5](#task-s-5) | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato) |
-| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato) |
-| 5 | [O&S](#ph-os) Operations and Support | [IOC](#ms-ioc) | — | [FOC](#ms-foc) | — | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | — | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato) |
+| 3 | [EMD](#ph-emd) Engineering and Manufacturing Development | [MS B](#ms-b) | [MS C](#ms-c) | [MS C](#ms-c) | [CDR](#rv-cdr), [TRR](#rv-trr), [SVR/FCA](#rv-svr), [PRR](#rv-prr) | [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) | [S-4](#task-s-4), [S-5](#task-s-5) | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
+| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
+| 5 | [O&S](#ph-os) Operations and Support | [IOC](#ms-ioc) | — | [FOC](#ms-foc) | — | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | — | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
 
 The flowchart shows the phases in order, joined by the milestones that open and close them. Dotted
 lines lead to events inside a phase and to the tasks where the Authorizing Official makes an
@@ -105,8 +105,18 @@ flowchart LR
   R_4 --> AD_ATO(["ATO"])
   R_4 --> AD_ATOC(["ATO w/ conditions"])
   R_4 --> AD_DATO(["DATO"])
+  R_4 --> AD_ATU(["ATU"])
+  R_4 --> AD_DATU(["DATU"])
+  R_4 --> AD_CCA(["CCA"])
+  R_4 --> AD_DCCA(["DCCA"])
   PH_OS -.-> M_6{"M-6 Ongoing Authorization"}
+  M_6 --> AD_DATO(["DATO"])
   M_6 --> AD_CATO(["cATO"])
+  M_6 --> AD_DATU(["DATU"])
+  M_6 --> AD_DCCA(["DCCA"])
+  M_6 --> AD_CONT(["Continue"])
+  M_6 --> AD_RCATO(["cATO revoked"])
+  M_6 --> AD_RESC(["Rescinded"])
 ```
 
 ### <a id="steps"></a>RMF steps
@@ -1858,7 +1868,7 @@ Develop, build and test the system; implement the controls, assess them through 
 | Ends at | [MS C](#ms-c) Milestone C |
 | RMF steps active | [S Select](#step-s), [I Implement](#step-i), [A Assess](#step-a), [R Authorize](#step-r) |
 | Tasks | 13 with this primary phase; 2 more also run here |
-| Authorization decisions possible | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato) |
+| Authorization decisions possible | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
 
 **Entry criteria**
 
@@ -1917,7 +1927,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [I-1](#task-i-1) Control Implementation | Implement | [PM/SO](#per-pm) | [ART-STIG](#art-stig) | — | [CDR](#rv-cdr) |
 | [I-2](#task-i-2) Update Control Implementation Information | Implement | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SD](#art-sd), [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-CP](#art-cp), [ART-IRP](#art-irp) | [TRR](#rv-trr) |
 | [A-1](#task-a-1) Assessor Selection | Assess | [AO](#per-ao) | — | — | [TRR](#rv-trr) |
-| [A-2](#task-a-2) Assessment Plan | Assess | [AO](#per-ao) | [ART-SAP](#art-sap) | — | [TRR](#rv-trr), [IATT](#ad-iatt) |
+| [A-2](#task-a-2) Assessment Plan | Assess | [AO](#per-ao) | [ART-SAP](#art-sap), [ART-AUTHREC](#art-authrec) | — | [TRR](#rv-trr), [IATT](#ad-iatt) |
 | [A-3](#task-a-3) Control Assessments | Assess | [SCA](#per-sca) | [ART-SAR](#art-sar) | [ART-STIG](#art-stig) | [SVR/FCA](#rv-svr), [IATT](#ad-iatt) |
 | [A-4](#task-a-4) Assessment Reports | Assess | [SCA](#per-sca) | — | [ART-SAR](#art-sar) | [SVR/FCA](#rv-svr) |
 | [A-5](#task-a-5) Remediation Actions | Assess | [PM/SO](#per-pm) | — | [ART-SAR](#art-sar), [ART-SSP](#art-ssp) | [SVR/FCA](#rv-svr) |
@@ -1925,7 +1935,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [R-1](#task-r-1) Authorization Package | Authorize | [PM/SO](#per-pm) | [ART-PKG](#art-pkg) | — | [MS C](#ms-c), [PRR](#rv-prr) |
 | [R-2](#task-r-2) Risk Analysis and Determination | Authorize | [AO](#per-ao) | [ART-RAR](#art-rar) | [ART-RA](#art-ra) | [MS C](#ms-c) |
 | [R-3](#task-r-3) Risk Response | Authorize | [AO](#per-ao) | — | [ART-POAM](#art-poam), [ART-RAR](#art-rar) | [MS C](#ms-c) |
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](#per-ao) | [ART-AODM](#art-aodm) | — | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato) |
+| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](#per-ao) | [ART-AODM](#art-aodm) | [ART-AUTHREC](#art-authrec) | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
 | [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](#per-ao) | [ART-AUTHRPT](#art-authrpt) | — | [MS C](#ms-c) |
 
 Also active in this phase (described in their primary phase): [S-4](#task-s-4), [S-5](#task-s-5).
@@ -2122,6 +2132,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-SAP](#art-sap) | Security assessment plan | produces | core |
+| [ART-AUTHREC](#art-authrec) | Authorization ledger | produces | core |
 
 **Entry criteria**
 
@@ -2132,6 +2143,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+- authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [IATT](#ad-iatt) (see [authorization decisions](#decisions)).
 
@@ -2576,6 +2588,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-AODM](#art-aodm) | AO decision memo | produces | core |
+| [ART-AUTHREC](#art-authrec) | Authorization ledger | updates | core |
 
 **Entry criteria**
 
@@ -2584,16 +2597,16 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - The authorization for the system or the common controls is approved or denied (DoDI 8510.01 Table 6 outcome).
-- decision.yaml names an AD-* decision with its termination date and conditions as required, and references the RAR (AODM-001).
+- authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
 - For a risk level of Very High or High, the Component CIO has documented concurrence or non-concurrence before the ATO is issued.
 - The decision confirms that the system meets cyberspace operational commander requirements.
 
-**Authorization decision.** The [AO](#per-ao) decides here: [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato) (see [authorization decisions](#decisions)).
+**Authorization decision.** The [AO](#per-ao) decides here: [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) (see [authorization decisions](#decisions)).
 
 **Alignment**
 
 - Milestones and decision points: [MS C](#ms-c), [IOC](#ms-ioc)
-- Authorization decisions: [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato)
+- Authorization decisions: [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca)
 
 **Citations**
 
@@ -2670,7 +2683,7 @@ Produce and field the system; operational test and evaluation confirms security 
 | Ends at | [FRP/FD](#ms-frp) Full-Rate Production or Full Deployment Decision |
 | RMF steps active | [R Authorize](#step-r), [M Monitor](#step-m) |
 | Tasks | 0 with this primary phase; 11 more also run here |
-| Authorization decisions possible | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato) |
+| Authorization decisions possible | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
 
 **Entry criteria**
 
@@ -2728,7 +2741,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 | Ends at | End of the life cycle (disposal) |
 | RMF steps active | [M Monitor](#step-m) |
 | Tasks | 7 with this primary phase |
-| Authorization decisions possible | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato) |
+| Authorization decisions possible | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
 
 **Entry criteria**
 
@@ -2769,7 +2782,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](#per-ao) | — | [ART-RA](#art-ra), [ART-POAM](#art-poam) | — |
 | [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](#per-pm) | [ART-SECRPT](#art-secrpt) | — | — |
-| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](#per-ao) | — | [ART-AODM](#art-aodm) | [FOC](#ms-foc), [cATO](#ad-cato) |
+| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](#per-ao) | — | [ART-AODM](#art-aodm), [ART-AUTHREC](#art-authrec) | [FOC](#ms-foc), [cATO](#ad-cato), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc), [DATO](#ad-dato), [DATU](#ad-datu), [DCCA](#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](#per-pm) | [ART-DISP](#art-disp) | — | — |
 
 #### <a id="task-m-1"></a>M-1 · System and Environment Changes
@@ -3092,6 +3105,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-AODM](#art-aodm) | AO decision memo | updates | core |
+| [ART-AUTHREC](#art-authrec) | Authorization ledger | updates | core |
+
+Writes to `facts.yaml`: `acquisition`.
 
 **Entry criteria**
 
@@ -3101,14 +3117,14 @@ Not tied to a specific acquisition event; runs as part of its phase.
 **Exit criteria**
 
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
-- decision.yaml records the ongoing authorization determination (continue, AD-CATO, or denial).
+- authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 
-**Authorization decision.** The [AO](#per-ao) decides here: [cATO](#ad-cato) (see [authorization decisions](#decisions)).
+**Authorization decision.** The [AO](#per-ao) decides here: [DATO](#ad-dato), [cATO](#ad-cato), [DATU](#ad-datu), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) (see [authorization decisions](#decisions)).
 
 **Alignment**
 
 - Milestones and decision points: [FOC](#ms-foc)
-- Authorization decisions: [cATO](#ad-cato)
+- Authorization decisions: [cATO](#ad-cato), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc), [DATO](#ad-dato), [DATU](#ad-datu), [DCCA](#ad-dcca)
 
 **Citations**
 
@@ -3189,8 +3205,15 @@ records it (see the artifact catalog).
 | [IATT](#ad-iatt) Interim Authorization to Test | [AO](#per-ao) | [A-2](#task-a-2) | [EMD](#ph-emd) | yes | no |
 | [ATO](#ad-ato) Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
 | [ATO w/ conditions](#ad-atoc) Authorization to Operate with Conditions | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | yes |
-| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
 | [cATO](#ad-cato) Continuous Authorization to Operate | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [ATU](#ad-atu) Authorization to Use | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [DATU](#ad-datu) Denial of Authorization to Use | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [CCA](#ad-cca) Common Control Authorization | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
+| [DCCA](#ad-dcca) Denial of Common Control Authorization | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [Continue](#ad-cont) Continued Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [cATO revoked](#ad-rcato) Revocation of Continuous Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [Rescinded](#ad-resc) Rescission of Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
 
 ### <a id="ad-iatt"></a>IATT: Interim Authorization to Test
 
@@ -3253,6 +3276,70 @@ Citations:
 - [DODCIO-CATO](#ref-dodcio-cato), p. 3, "The cATO determination does not affect the underlying system ATO"
 - [DODCIO-CATO](#ref-dodcio-cato), p. 3, "A system can temporarily lose its cATO privilege without any loss of existing ATO"
 - [DODCIO-DEVSECOPS](#ref-dodcio-devsecops), p. 28, "cATO includes the need for a Secure Software Supply Chain (SSSC) and requires a Software Bill of Materials (SBOM)"
+
+### <a id="ad-atu"></a>ATU: Authorization to Use
+
+A customer organization accepts the information in an existing authorization package produced by a provider organization, a form of reciprocity for shared or cloud systems, services and applications. It is issued in lieu of an ATO and requires a completed ATO by the provider. It carries the same risk responsibility and needs no termination date, remaining in effect while the customer accepts the risk.
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), p. 163, "An authorization to use is employed when an organization"
+- [SP800-37R2](#ref-sp800-37r2), p. 164, "The authorization to use does not require a termination date"
+- [SP800-37R2](#ref-sp800-37r2), p. 165, "An ATU requires a completed ATO"
+- [SP800-37R2](#ref-sp800-37r2), p. 167, "An authorization to use is issued by an authorizing official from a customer organization in lieu of an authorization to operate"
+
+### <a id="ad-datu"></a>DATU: Denial of Authorization to Use
+
+The customer organization finds the risk of using the provider's system or service unacceptable, so the system, service or application is not authorized for use.
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), p. 165, "denial of authorization"
+
+### <a id="ad-cca"></a>CCA: Common Control Authorization
+
+The risk of providing common controls for inheritance is acceptable. Common controls are authorized by a designated AO before they are made available for inheritance, for a specific period with a termination date set as a condition of the initial authorization. Controls implemented in a system need no separate authorization.
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), p. 51, "Common controls are authorized by designated authorizing officials"
+- [SP800-37R2](#ref-sp800-37r2), p. 162, "A common control authorization is similar to an authorization to operate"
+- [SP800-37R2](#ref-sp800-37r2), p. 162, "Common controls are authorized for a specific time period"
+
+### <a id="ad-dcca"></a>DCCA: Denial of Common Control Authorization
+
+The risk of providing the common controls is unacceptable, so they are not authorized and may not be offered for inheritance.
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), p. 92, "not authorized"
+
+### <a id="ad-cont"></a>Continue: Continued Authorization
+
+Under ongoing authorization the AO reviews security and privacy information on an agreed frequency and on events, determines the risk stays acceptable, and continues the authorization. The first such record marks the transition to ongoing authorization: it is a new authorization decision, frees the authorization from its termination date, and records that the AO accepts the ongoing process. It rests on an initial authorization from a complete review.
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), p. 93, "Organizations may eliminate the authorization termination date"
+- [SP800-37R2](#ref-sp800-37r2), p. 168, "The transition to ongoing authorization is documented by the authorizing official by issuing a new authorization decision"
+- [SP800-37R2](#ref-sp800-37r2), p. 169, "time-driven authorization triggers refer to the frequency"
+- [SP800-37R2](#ref-sp800-37r2), p. 170, "event-driven triggers necessitate an immediate review"
+
+### <a id="ad-rcato"></a>cATO revoked: Revocation of Continuous Authorization
+
+The AO or DoD CISO withdraws a cATO for poor posture, a change in risk tolerance or an incident. The system loses the cATO privilege, and its termination date with it, without losing the underlying ATO.
+
+Citations:
+
+- [DODCIO-CATO](#ref-dodcio-cato), p. 3, "A system can temporarily lose its cATO privilege without any loss of existing ATO"
+
+### <a id="ad-resc"></a>Rescinded: Rescission of Authorization
+
+The AO revokes an authorization in force at any time because the risk is no longer acceptable. The system or common controls stop being authorized from that date, and the record of the earlier decision stays in the ledger.
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 28, "An AO may downgrade or revoke an authorization decision at any time"
 
 ## <a id="pathways"></a>6. Acquisition pathway notes
 
@@ -3387,6 +3474,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-RAR](#art-rar) Risk assessment report | core | [R-2](#task-r-2) | [R-3](#task-r-3) | [R-3](#task-r-3), [R-4](#task-r-4) |
 | [ART-PKG](#art-pkg) Authorization package manifest | supporting | [R-1](#task-r-1) | — | [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4) |
 | [ART-AODM](#art-aodm) AO decision memo | core | [R-4](#task-r-4) | [M-6](#task-m-6) | [R-5](#task-r-5) |
+| [ART-AUTHREC](#art-authrec) Authorization ledger | core | [A-2](#task-a-2) | [R-4](#task-r-4), [M-6](#task-m-6) | — |
 | [ART-AUTHRPT](#art-authrpt) Authorization report | supporting | [R-5](#task-r-5) | — | — |
 | [ART-CHG](#art-chg) Change log and security impact analyses | supporting | [M-1](#task-m-1) | — | — |
 | [ART-SECRPT](#art-secrpt) Security and privacy posture report | supporting | [M-5](#task-m-5) | — | [M-6](#task-m-6) |
@@ -3814,7 +3902,7 @@ The authorization decision, its terms and conditions and the authorization termi
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-AODM.md](templates/artifacts/ART-AODM.md) |
-| Data files | `artifacts/data/decision.yaml` (schema `decision`) |
+| Data files | — |
 | OSCAL | — |
 | Produced by | [R-4](#task-r-4) |
 | Updated by | [M-6](#task-m-6) |
@@ -3824,6 +3912,26 @@ Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK R-4"
 - [DODI8510.01](#ref-dodi8510-01), p. 19, "The authorization decision document"
+
+### <a id="art-authrec"></a>ART-AUTHREC: Authorization ledger
+
+Every authorization decision of the run as one record each, so a cATO, a continuation or a rescission never overwrites the ATO beneath it. The memo in ART-AODM states the decision; this holds what rules can test.
+
+| | |
+|---|---|
+| Package | core |
+| Template | [templates/artifacts/ART-AUTHREC.md](templates/artifacts/ART-AUTHREC.md) |
+| Data files | `artifacts/data/authorizations.yaml` (schema `authorizations`) |
+| OSCAL | — |
+| Produced by | [A-2](#task-a-2) |
+| Updated by | [R-4](#task-r-4), [M-6](#task-m-6) |
+| Used by | — |
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), section "TASK R-4"
+- [SP800-37R2](#ref-sp800-37r2), section "TASK M-6"
+- [DODCIO-CATO](#ref-dodcio-cato), p. 3, "The cATO determination does not affect the underlying system ATO"
 
 ### <a id="art-authrpt"></a>ART-AUTHRPT: Authorization report
 
@@ -3963,7 +4071,7 @@ Senior government official who accepts the risk of operating the system; the sol
 - Accountable for: [P-11](#task-p-11), [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-3](#task-m-3), [M-6](#task-m-6)
 - Consulted on: [P-1](#task-p-1), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5)
 - Informed of: [P-2](#task-p-2), [C-2](#task-c-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
-- Makes the authorization decisions: [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato)
+- Makes the authorization decisions: [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc)
 
 Citations:
 

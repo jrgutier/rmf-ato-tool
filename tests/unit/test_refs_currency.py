@@ -336,6 +336,10 @@ DECISION = """decisions:
     phases: [PH-EMD]
     atd_required: true
     conditions_required: false
+    effect: authorize
+    applies_to: [system]
+    requires: []
+    atd_forbidden: false
     citations:
       - {ref: %s, section: x}
   - id: AD-DATO
@@ -347,6 +351,10 @@ DECISION = """decisions:
     phases: [PH-EMD]
     atd_required: false
     conditions_required: false
+    effect: authorize
+    applies_to: [system]
+    requires: []
+    atd_forbidden: false
     citations:
       - {ref: SP800-37R2, section: "TASK R-4"}
 """

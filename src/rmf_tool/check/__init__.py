@@ -33,6 +33,7 @@ class Rule:
     exempt_reason: str | None = None
     severity_note: str | None = None
     enforces: tuple[str, ...] = ()
+    since: str | None = None
 
 
 def registry_errors(data: Any) -> list[str]:

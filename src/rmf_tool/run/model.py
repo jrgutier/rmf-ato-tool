@@ -37,6 +37,12 @@ RUNS_DIR = "runs"
 FAMILY_TOKEN = "<fam>"  # artifacts.yaml data paths with one file per control family
 
 
+def version_key(version: str) -> tuple[int, ...]:
+    """A dotted version as integers; anything unreadable sorts before every release."""
+    parts = version.split(".")
+    return tuple(int(p) for p in parts) if all(p.isdigit() for p in parts) else (0,)
+
+
 class RunError(Exception):
     """No run found, or run.yaml unreadable (exit code 2)."""
 
@@ -86,13 +92,44 @@ class Run:
     framework: Framework
 
     # --- framework views ------------------------------------------------------------
+    @property
+    def contract(self) -> str:
+        """The framework version the run was created under; it is held to that contract."""
+        return str(self.config.get("framework_version") or "0")
+
+    def holds(self, since: str | None) -> bool:
+        """Whether something added at contract ``since`` applies to this run."""
+        return since is None or version_key(str(since)) <= version_key(self.contract)
+
+    @cached_property
+    def _absent(self) -> frozenset[str]:
+        """Artifacts newer than this run's contract."""
+        return frozenset(e.id for e in self.framework.index("artifacts").values()
+                         if not self.holds(e.data.get("since")))
+
     @cached_property
     def tasks(self) -> dict[str, Any]:
-        return {tid: e.data for tid, e in self.framework.index("tasks").items()}
+        out = {tid: e.data for tid, e in self.framework.index("tasks").items()}
+        if not self._absent:
+            return out
+        def present(ids: list[str] | None) -> list[str]:
+            return [i for i in ids or [] if i not in self._absent]
+
+        return {tid: {**t, "inputs": present(t.get("inputs")),
+                      "outputs": present(t.get("outputs"))} for tid, t in out.items()}
 
     @cached_property
     def artifacts(self) -> dict[str, Any]:
-        return {aid: e.data for aid, e in self.framework.index("artifacts").items()}
+        """The contract's view: newer artifacts absent, data files it retired kept only while
+        the run predates the retirement."""
+        out = {}
+        for aid, e in self.framework.index("artifacts").items():
+            if aid in self._absent:
+                continue
+            data = [d for d in e.data.get("data") or []
+                    if "until" not in d or not self.holds(d["until"])]
+            out[aid] = {**e.data, "data": data}
+        return out
 
     @cached_property
     def personas(self) -> dict[str, Any]:
@@ -135,7 +172,7 @@ class Run:
 
     @property
     def product_dir(self) -> Path:
-        return (self.dir / str(self.config.get("product", "product"))).resolve()
+        return (self.dir / str(self.config.get("product") or "product")).resolve()
 
     def path(self, rel: str) -> Path:
         return self.dir / rel
@@ -185,6 +222,11 @@ class Run:
 
     def schema_errors(self, name: str, data: Any) -> list[str]:
         return schema_errors(self.repo, name, data)
+
+    def schema_required(self, name: str, definition: str) -> list[str]:
+        """The required properties of ``$defs/<definition>`` in a run-data schema."""
+        schema = read_json(self.repo / SCHEMA_DIR / f"{name}.schema.json")
+        return list(schema["$defs"][definition]["required"])
 
 
 def find_run_dir(arg: Path | None, cwd: Path | None = None) -> Path:

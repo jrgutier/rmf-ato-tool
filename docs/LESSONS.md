@@ -418,3 +418,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: every exclusion read against its pages; false ones rescoped or rewritten, and the new entries triaged (docs/audits/2026-11-triage/).
 - Rule: an exclusion reason is a claim about pages: write it after opening the first and last page of the range, and treat a range that opens with prose as in scope until read.
 - Promotion: none — whether a reason is true of a page needs a reader; the sampled audit carries it, and a rule could only test that the reason exists.
+
+## L-0060 · 2026-11-01 · run: phase-11 · tags: conformance, evidence
+- Symptom: `AD-CATO.requires` was judged strong evidence for the DoD CISO approval while AODM-007 hardcoded the approval and never read the field, so changing the pinned value changed nothing a run saw.
+- Root cause: FW-REQ-003 can prove a pinned value equals what the entry says, not that any code consumes it.
+- Fix: AODM-007 reads `requires`; a test takes every decision field the register pins, changes it, and requires the rule output or `in_force` to change.
+- Rule: A pin counts as evidence only if changing the value changes what a run gets.
+- Promotion: check: test_each_pinned_decision_field_changes_what_the_run_gets

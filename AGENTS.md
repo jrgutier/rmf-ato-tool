@@ -86,6 +86,7 @@ error. Commands that report support `--format json`.
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 | `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
 | `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset |
+| `rmf run migrate [RUN]` | move a run to the current framework contract: `decision.yaml` becomes the `authorizations.yaml` ledger plus ART-AUTHREC, `framework_version` is bumped; safe to repeat; what the old contract never recorded is reported by `rmf check`, not invented |
 | `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action; writes `reports/status.md` and `reports/metrics.json` |
 | `rmf baseline resolve [RUN] [--method M]` | `baseline.json` from facts.yaml (approved categorization: CNSSI 1253 per-objective C/I/A selection plus the privacy baseline, then overlays), `tailoring.yaml` and `control_subset` |
 | `rmf catalog show [--family F] [--control C] [--run RUN [--missing]] [--fields F,..] [--chunk i/n]` | compact SP 800-53r5 control text, per family or the run's baseline |
@@ -110,7 +111,7 @@ error. Commands that report support `--format json`.
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 p11 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -142,7 +143,8 @@ entities their Chapter 3 block maps to, or a waiver names an open work item or a
 rationale), all run by `rmf validate`. Recall of the extractor against hand-read pages, the
 audit probes, and every raw line of every in-scope page landing in an entry or a rejection is
 `tests/unit/test_conformance_recall.py`; prose recall is reported, not guaranteed, and triage
-promotes what the extractor missed.
+promotes what the extractor missed. p11 run contracts: the fixtures on the current
+`framework_version`, and at `--release` the example too (RUN-VER-001 as an error).
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 

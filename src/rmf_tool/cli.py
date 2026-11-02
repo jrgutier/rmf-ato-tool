@@ -526,6 +526,15 @@ def new(
                   f"next: fill in product/, then uv run rmf status {run_dir}")
 
 
+@run_app.command("migrate")
+def run_migrate(run: RunArg = None) -> None:
+    """Move a run to the current framework contract; decision.yaml becomes the ledger."""
+    from rmf_tool.run.migrate import migrate
+
+    for line in migrate(_open(run)):
+        typer.echo(line)
+
+
 @run_app.command("init")
 def run_init(
     mode: ModeOption = "synthetic",

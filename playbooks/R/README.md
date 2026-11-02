@@ -22,7 +22,7 @@ networks (`framework/rmf-steps.yaml`).
 - **Only the AO decides.** The authorization decision (R-4, an `AD-*` decision) cannot be
   delegated; R-2, R-3 and R-5 may be done by the AODR. In a hybrid run, a decision reserved
   for a human with no human answer is a stop condition (`00-run-protocol.md`).
-- **The decision is stated once.** `decision.yaml` holds the decision; ART-AODM, ART-AUTHRPT
+- **The decision is stated once.** `authorizations.yaml` holds the decision; ART-AODM, ART-AUTHRPT
   and later reports cite it by ID instead of restating it.
 - **Session unit:** one session for the step.
 

@@ -12,7 +12,8 @@ decision (`AD-*`).
   categorization, personally or through the AODR (Task C-3).
 - Approves the security assessment plan (Task A-2).
 - Renders the risk determination with the AODR's analysis (Task R-2) and issues the
-  authorization decision (Task R-4): ATO, ATO with conditions, or denial. An IATT is
+  authorization decision (Task R-4): ATO, ATO with conditions, authorization to use, common
+  control authorization, or the denial of each. An IATT is
   decided earlier, with plan approval (Task A-2).
 - Monitors and tracks the execution of the system's POA&M (§4.4.a(3)); may downgrade or
   revoke an authorization at any time (§4.4.a(6)).
@@ -57,7 +58,7 @@ decision (`AD-*`).
 ## Artifacts owned-approved
 
 - Approves: ART-BND (boundary), ART-CAT (categorization, or via the AODR), ART-SAP.
-- Owns: ART-AODM and `decision.yaml` (the authorization decision document).
+- Owns: ART-AODM (the authorization decision document) and the records of ART-AUTHREC.
 - Renders: the risk determination recorded in ART-RAR (with the AODR).
 
 ## Role-play guidance

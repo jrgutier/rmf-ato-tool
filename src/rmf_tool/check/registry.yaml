@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 72 rules, 36 repo-scope and 36 run-scope. Authoritative;
+# Rule registry (plan §6.5): 79 rules, 36 repo-scope and 43 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -491,10 +491,139 @@ rules:
     severity: E
     ac: [AC-18]
     phase: p6
-    applies_after: R-4
-    summary: decision not an AD-* type, ATD or conditions missing, no RAR reference, or missing degraded disclosure
+    applies_after: A-2
+    summary: a record's decision type, task, progress, deciding official, subject, recipients, ATD, conditions, RAR reference or degraded disclosure is wrong
     fixture: tests/fixtures/negative/AODM-001.yaml
-    hint: decision.yaml names an AD-* decision; ATO types carry an ATD, AD-ATOC carries conditions.
+    hint: Each record names an AD-* decision at a task that may decide it and that the run has reached, by PER-AO, conveyed to the system owner or common control provider; ATO types carry an ATD, AD-ATOC carries conditions.
+    enforces:
+      - REQ-CNSSI1254-0111
+      - REQ-DODCIO-CATO-EVAL-0193
+      - REQ-DODI5000.90-0087
+      - REQ-DODI8510.01-0130
+      - REQ-DODI8510.01-0143
+      - REQ-DODI8510.01-0222
+      - REQ-SP800-137-0124
+      - REQ-SP800-37R2-0386
+      - REQ-SP800-37R2-0409
+      - REQ-SP800-37R2-0412
+      - REQ-SP800-37R2-0454
+      - REQ-SP800-37R2-0570
+      - REQ-SP800-37R2-0576
+      - REQ-SP800-37R2-0578
+      - REQ-SP800-37R2-0601
+      - REQ-SP800-37R2-0620
+  - id: AODM-002
+    scope: run
+    severity: E
+    ac: [AC-35]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: authorization termination date, term limit, or ongoing review invalid
+    fixture: tests/fixtures/negative/AODM-002.yaml
+    hint: A termination date follows the decision, stays inside the type's max_term_days and is absent where the type forbids it; ongoing authorization records a time-driven frequency and event triggers, and each time-driven review falls within the frequency.
+    enforces:
+      - REQ-CNSSI1254-0107
+      - REQ-DODI5000.90-0080
+      - REQ-SP800-37R2-0411
+      - REQ-SP800-37R2-0415
+      - REQ-SP800-37R2-0417
+      - REQ-SP800-37R2-0576
+      - REQ-SP800-37R2-0578
+      - REQ-SP800-37R2-0589
+      - REQ-SP800-37R2-0601
+      - REQ-SP800-37R2-0610
+      - REQ-SP800-37R2-0616
+      - REQ-SP800-37R2-0622
+      - REQ-SP800-37R2-0623
+      - REQ-SP800-37R2-0635
+  - id: AODM-003
+    scope: run
+    severity: E
+    ac: [AC-36]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an ATO at High or Very High risk has no prior Component CIO position
+    fixture: tests/fixtures/negative/AODM-003.yaml
+    hint: Record cio_concurrence (by PER-CIO, position, date on or before the decision, directions on a non-concurrence).
+    enforces:
+      - REQ-DODI8510.01-0202
+  - id: AODM-004
+    scope: run
+    severity: E
+    ac: [AC-37]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an ATO lacks a threat assessment issued within 12 months and reviewed by the PM
+    fixture: tests/fixtures/negative/AODM-004.yaml
+    hint: Record threat_assessment on an ATO, issued by the Intelligence Community within the 12 months before the decision (DoDI 5000.90 p. 11).
+    enforces:
+      - REQ-DODI5000.90-0081
+  - id: AODM-005
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a record rests on an authorization that is missing, later, or not in force
+    fixture: tests/fixtures/negative/AODM-005.yaml
+    hint: A cATO, continuation, revocation or later denial names its underlying record; a reauthorization or change of AO names what it supersedes; an ATU names the provider's completed ATO.
+    enforces:
+      - REQ-CNSSI1254-0114
+      - REQ-DODCIO-CATO-0011
+      - REQ-DODCIO-CATO-0013
+      - REQ-DODCIO-CATO-EVAL-0030
+      - REQ-DODCIO-RECIPROCITY-0012
+      - REQ-DODCIO-RECIPROCITY-0058
+      - REQ-SP800-18R2-0348
+      - REQ-SP800-37R2-0580
+      - REQ-SP800-37R2-0581
+      - REQ-SP800-37R2-0588
+      - REQ-SP800-37R2-0593
+      - REQ-SP800-37R2-0613
+      - REQ-SP800-37R2-0614
+      - REQ-SP800-37R2-0629
+      - REQ-SP800-37R2-0634
+      - REQ-SP800-37R2-0644
+  - id: AODM-006
+    scope: run
+    severity: E
+    ac: [AC-39]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: a live test event falls under no IATT or authorization in force
+    fixture: tests/fixtures/negative/AODM-006.yaml
+    hint: A sap.yaml event marked live needs an AD-IATT or authorization in force on its date.
+    enforces:
+      - REQ-DODI8510.01-0085
+  - id: AODM-007
+    scope: run
+    severity: E
+    ac: [AC-40]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: a cATO lacks the DoD CISO approval, the Component CISO notice, an ATO, or an allowed pathway
+    fixture: tests/fixtures/negative/AODM-007.yaml
+    hint: A cATO records dod_ciso_approval and component_ciso_notification, rests on an ATO, and needs facts.acquisition on an allowed pathway and product kind.
+    enforces:
+      - REQ-DODCIO-CATO-0010
+      - REQ-DODCIO-CATO-EVAL-0106
+      - REQ-DODCIO-CATO-IG-0007
+      - REQ-DODI5000.90-0101
+  - id: RUN-VER-001
+    scope: run
+    severity: W
+    ac: [AC-41]
+    phase: p11
+    applies_after: null
+    summary: run was created under an older framework contract
+    fixture: tests/fixtures/negative/RUN-VER-001.yaml
+    hint: The run is held to the contract it was created under; `rmf run migrate` moves it to the current one.
   - id: INV-BND-001
     scope: run
     severity: E

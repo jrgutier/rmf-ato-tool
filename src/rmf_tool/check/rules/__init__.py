@@ -10,6 +10,7 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
     artifacts,
+    authorization,
     config,
     consistency,
     content,
@@ -46,7 +47,14 @@ RULES: dict[str, Rule] = {
     "POAM-CTL-001": consistency.poam_controls,
     "POAM-FLD-001": consistency.poam_fields,
     "RAR-001": consistency.rar_links,
-    "AODM-001": consistency.decision_valid,
+    "AODM-001": authorization.records_valid,
+    "AODM-002": authorization.termination_valid,
+    "AODM-003": authorization.cio_concurrence,
+    "AODM-004": authorization.threat_assessment,
+    "AODM-005": authorization.chain,
+    "AODM-006": authorization.live_events,
+    "AODM-007": authorization.cato_eligible,
+    "RUN-VER-001": config.old_contract,
     "INV-BND-001": consistency.inventory_in_boundary,
     "INV-BND-002": consistency.boundary_in_inventory,
     "STIG-001": consistency.stig_mapped,

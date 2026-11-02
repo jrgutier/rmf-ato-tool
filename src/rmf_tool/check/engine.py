@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from rmf_tool.check import rules_by_id
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import IMPLEMENTED, JOURNAL_RULE, RULES, UNFILTERED
@@ -45,7 +46,11 @@ def _owned(ctx: Context, f: RunFinding) -> RunFinding:
 
 def evaluate(run: Run) -> Evaluation:
     ctx = Context(run)
-    findings = [_owned(ctx, f) for rule in RULES.values() for f in rule(ctx)]
+    registry = rules_by_id()
+    if unlisted := sorted(set(RULES) - set(registry)):
+        raise ValueError(f"rule(s) with no entry in registry.yaml: {', '.join(unlisted)}")
+    findings = [_owned(ctx, f) for rid, rule in RULES.items() if run.holds(registry[rid].since)
+                for f in rule(ctx)]
     st = status_mod.derive(run, findings)
     findings += journal(ctx, st.done_tasks)
     findings.sort(key=lambda f: (f.finding.path or "", f.finding.line or 0, f.rule,

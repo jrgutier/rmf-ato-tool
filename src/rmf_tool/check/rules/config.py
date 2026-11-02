@@ -11,10 +11,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from rmf_tool.check import load_registry
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.run import scope, upstream_hash
-from rmf_tool.run.model import RUN_FILE, YamlError, read_yaml
+from rmf_tool.run.model import RUN_FILE, YamlError, read_yaml, version_key
 
 RULE = "RUN-CFG-001"
 
@@ -61,12 +62,13 @@ def run_cfg(ctx: Context) -> list[RunFinding]:
 
 
 def _has_input(directory: Path) -> bool:
-    """A file or directory of material; guidance in a README.md and dot-files such as
-    .DS_Store do not count."""
+    """A file or directory of material; guidance in a README.md and dot-files or dot-directories
+    such as .DS_Store and .git do not count."""
     if directory.is_file():
         return True
     return directory.is_dir() and any(
-        p.is_file() and p.name != "README.md" and not p.name.startswith(".")
+        p.is_file() and p.name != "README.md"
+        and not any(part.startswith(".") for part in p.relative_to(directory).parts)
         for p in directory.rglob("*"))
 
 
@@ -81,10 +83,24 @@ def _missing_external_inputs(ctx: Context, active: set[str]) -> list[RunFinding]
         for ext in run.tasks[t].get("inputs") or []:
             if t in active and ext in paths and not _has_input(run.product_dir / paths[ext]):
                 out.append(make(RULE, f"{t} needs {ext}, expected under "
-                                f"{run.config.get('product')}/{paths[ext]}/ (see its README.md)"
+                                f"{run.product_dir.name}/{paths[ext]}/ (see its README.md)"
                                 " but none is there; add it or defer the task", RUN_FILE,
                                 owners={t}))
     return out
+
+
+def old_contract(ctx: Context) -> list[RunFinding]:
+    """A run is held to the contract it was created under; say what it is not held to."""
+    run = ctx.run
+    current = str(run.framework.meta["framework_version"])
+    if version_key(run.contract) >= version_key(current):
+        return []
+    rules = sorted(r.id for r in load_registry() if not run.holds(r.since))
+    artifacts = sorted(e.id for e in run.framework.index("artifacts").values()
+                       if not run.holds(e.data.get("since")))
+    return [make("RUN-VER-001", f"run contract {run.contract} is older than {current}: not held "
+                 f"to {', '.join(rules + artifacts) or 'anything new'}; `rmf run migrate` moves it",
+                 RUN_FILE)]
 
 
 def stale_upstream(ctx: Context) -> list[RunFinding]:

@@ -1,6 +1,8 @@
 # Authorization decision types. Only the AO decides; the decision cannot be delegated
 # (DoDI 8510.01 4.4.a(5)). DoDI 8510.01 names IATT, ATO, ATO with conditions and denial of
-# ATO; cATO comes from the DoD CIO cATO memo and DoDI 5000.90.
+# ATO; cATO comes from the DoD CIO cATO memo and DoDI 5000.90. The authorization to use, common
+# control authorization and the denial of each come from SP 800-37r2 Appendix F. `effect` says
+# what a record of the type does to the ledger (rmf_tool.run.authorization.in_force).
 decisions:
   - id: AD-IATT
     name: Interim Authorization to Test
@@ -20,6 +22,10 @@ decisions:
     phases: [PH-EMD]
     atd_required: true
     conditions_required: false
+    effect: test
+    applies_to: [system]
+    requires: []
+    atd_forbidden: false
     citations:
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
       - {ref: SP800-37R2, page: 162, anchor: "limited to the time needed to complete the testing objectives"}
@@ -40,6 +46,18 @@ decisions:
     phases: [PH-EMD, PH-PD, PH-OS]
     atd_required: true
     conditions_required: false
+    effect: authorize
+    applies_to: [system]
+    requires: [threat_assessment]
+    atd_forbidden: false
+    max_term_days: 1096
+    enforces:
+      - REQ-DODI5000.90-0080
+      - REQ-DODI8500.01-0409
+      - REQ-SP800-18R1-0001
+      - REQ-SP800-18R2-0332
+      - REQ-SP800-37R2-0409
+      - REQ-SP800-37R2-0629
     citations:
       - {ref: SP800-37R2, section: "Authorization to Operate"}
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
@@ -60,6 +78,11 @@ decisions:
     phases: [PH-EMD, PH-PD, PH-OS]
     atd_required: true
     conditions_required: true
+    effect: authorize
+    applies_to: [system]
+    requires: [threat_assessment]
+    atd_forbidden: false
+    max_term_days: 1096
     citations:
       - {ref: DODI8510.01, page: 18, anchor: "interim authorization to test, ATO, ATO with conditions"}
       - {ref: SP800-37R2, page: 93, anchor: "authorization termination date"}
@@ -73,10 +96,17 @@ decisions:
       operating if it already does. An AO may also downgrade an existing authorization to a
       denial when monitoring shows the risk is no longer acceptable (R-4 or M-6).
     decided_by: PER-AO
-    decided_in: [R-4]
+    decided_in: [R-4, M-6]
     phases: [PH-EMD, PH-PD, PH-OS]
     atd_required: false
     conditions_required: false
+    effect: deny
+    applies_to: [system]
+    requires: []
+    atd_forbidden: true
+    enforces:
+      - REQ-SP800-37R2-0454
+      - REQ-SP800-37R2-0594
     citations:
       - {ref: SP800-37R2, section: "Denial of Authorization"}
       - {ref: DODI8510.01, page: 18, anchor: "and denial ATO"}
@@ -99,6 +129,18 @@ decisions:
     phases: [PH-PD, PH-OS]
     atd_required: false
     conditions_required: false
+    effect: continuous
+    applies_to: [system]
+    requires: [underlying, review, dod_ciso_approval, component_ciso_notification]
+    atd_forbidden: true
+    allowed_pathways: [PW-SWP, PW-DBS]
+    excluded_product_kinds: [software-enabled-hardware]
+    enforces:
+      - REQ-DODCIO-CATO-0011
+      - REQ-DODCIO-CATO-IG-0006
+      - REQ-DODCIO-CATO-IG-0182
+      - REQ-DODCIO-DEVSECOPS-0027
+      - REQ-DODCIO-DEVSECOPS-0072
     citations:
       - {ref: SP800-37R2, section: "TASK M-6"}
       - {ref: SP800-137, section: "2.2"}
@@ -109,3 +151,169 @@ decisions:
       - {ref: DODCIO-CATO, page: 3, anchor: "The cATO determination does not affect the underlying system ATO"}
       - {ref: DODCIO-CATO, page: 3, anchor: "A system can temporarily lose its cATO privilege without any loss of existing ATO"}
       - {ref: DODCIO-DEVSECOPS, page: 28, anchor: "cATO includes the need for a Secure Software Supply Chain (SSSC) and requires a Software Bill of Materials (SBOM)"}
+  - id: AD-ATU
+    name: Authorization to Use
+    short: ATU
+    description: >-
+      A customer organization accepts the information in an existing authorization package
+      produced by a provider organization, a form of reciprocity for shared or cloud systems,
+      services and applications. It is issued in lieu of an ATO and requires a completed ATO by
+      the provider. It carries the same risk responsibility and needs no termination date,
+      remaining in effect while the customer accepts the risk.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: authorize
+    applies_to: [system]
+    requires: [provider]
+    atd_forbidden: false
+    enforces:
+      - REQ-SP800-18R2-0338
+      - REQ-SP800-37R2-0574
+      - REQ-SP800-37R2-0580
+      - REQ-SP800-37R2-0589
+      - REQ-SP800-37R2-0607
+    citations:
+      - {ref: SP800-37R2, page: 163, anchor: "An authorization to use is employed when an organization"}
+      - {ref: SP800-37R2, page: 164, anchor: "The authorization to use does not require a termination date"}
+      - {ref: SP800-37R2, page: 165, anchor: "An ATU requires a completed ATO"}
+      - {ref: SP800-37R2, page: 167, anchor: "An authorization to use is issued by an authorizing official from a customer organization in lieu of an authorization to operate"}
+  - id: AD-DATU
+    name: Denial of Authorization to Use
+    short: DATU
+    description: >-
+      The customer organization finds the risk of using the provider's system or service
+      unacceptable, so the system, service or application is not authorized for use.
+    decided_by: PER-AO
+    decided_in: [R-4, M-6]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: deny
+    applies_to: [system]
+    requires: [provider]
+    atd_forbidden: true
+    citations:
+      - {ref: SP800-37R2, page: 165, anchor: "denial of authorization"}
+  - id: AD-CCA
+    name: Common Control Authorization
+    short: CCA
+    description: >-
+      The risk of providing common controls for inheritance is acceptable. Common controls are
+      authorized by a designated AO before they are made available for inheritance, for a
+      specific period with a termination date set as a condition of the initial authorization.
+      Controls implemented in a system need no separate authorization.
+    decided_by: PER-AO
+    decided_in: [R-4]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: true
+    conditions_required: false
+    effect: authorize
+    applies_to: [common-controls]
+    requires: []
+    atd_forbidden: false
+    enforces:
+      - REQ-SP800-18R2-0339
+      - REQ-SP800-18R2-0429
+      - REQ-SP800-37R2-0200
+      - REQ-SP800-37R2-0203
+      - REQ-SP800-37R2-0577
+      - REQ-SP800-37R2-0578
+    citations:
+      - {ref: SP800-37R2, page: 51, anchor: "Common controls are authorized by designated authorizing officials"}
+      - {ref: SP800-37R2, page: 162, anchor: "A common control authorization is similar to an authorization to operate"}
+      - {ref: SP800-37R2, page: 162, anchor: "Common controls are authorized for a specific time period"}
+  - id: AD-DCCA
+    name: Denial of Common Control Authorization
+    short: DCCA
+    description: >-
+      The risk of providing the common controls is unacceptable, so they are not authorized and
+      may not be offered for inheritance.
+    decided_by: PER-AO
+    decided_in: [R-4, M-6]
+    phases: [PH-EMD, PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: deny
+    applies_to: [common-controls]
+    requires: []
+    atd_forbidden: true
+    enforces:
+      - REQ-SP800-18R2-0340
+    citations:
+      - {ref: SP800-37R2, page: 92, anchor: "not authorized"}
+  - id: AD-CONT
+    name: Continued Authorization
+    short: Continue
+    description: >-
+      Under ongoing authorization the AO reviews security and privacy information on an agreed
+      frequency and on events, determines the risk stays acceptable, and continues the
+      authorization. The first such record marks the transition to ongoing authorization: it
+      is a new authorization decision, frees the authorization from its termination date, and
+      records that the AO accepts the ongoing process. It rests on an initial authorization
+      from a complete review.
+    decided_by: PER-AO
+    decided_in: [M-6]
+    phases: [PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: continue
+    applies_to: [system, common-controls]
+    requires: [underlying, review, ongoing_acknowledgment]
+    atd_forbidden: true
+    enforces:
+      - REQ-SP800-137-0110
+      - REQ-SP800-37R2-0415
+      - REQ-SP800-37R2-0455
+      - REQ-SP800-37R2-0543
+      - REQ-SP800-37R2-0609
+      - REQ-SP800-37R2-0616
+      - REQ-SP800-37R2-0620
+      - REQ-SP800-37R2-0623
+      - REQ-SP800-37R2-0629
+    citations:
+      - {ref: SP800-37R2, page: 93, anchor: "Organizations may eliminate the authorization termination date"}
+      - {ref: SP800-37R2, page: 168, anchor: "The transition to ongoing authorization is documented by the authorizing official by issuing a new authorization decision"}
+      - {ref: SP800-37R2, page: 169, anchor: "time-driven authorization triggers refer to the frequency"}
+      - {ref: SP800-37R2, page: 170, anchor: "event-driven triggers necessitate an immediate review"}
+  - id: AD-RCATO
+    name: Revocation of Continuous Authorization
+    short: cATO revoked
+    description: >-
+      The AO or DoD CISO withdraws a cATO for poor posture, a change in risk tolerance or an
+      incident. The system loses the cATO privilege, and its termination date with it, without
+      losing the underlying ATO.
+    decided_by: PER-AO
+    decided_in: [M-6]
+    phases: [PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: revoke-continuous
+    applies_to: [system]
+    requires: [underlying, revocation_reason]
+    atd_forbidden: true
+    citations:
+      - {ref: DODCIO-CATO, page: 3, anchor: "A system can temporarily lose its cATO privilege without any loss of existing ATO"}
+  - id: AD-RESC
+    name: Rescission of Authorization
+    short: Rescinded
+    description: >-
+      The AO revokes an authorization in force at any time because the risk is no longer
+      acceptable. The system or common controls stop being authorized from that date, and the
+      record of the earlier decision stays in the ledger.
+    decided_by: PER-AO
+    decided_in: [M-6]
+    phases: [PH-PD, PH-OS]
+    atd_required: false
+    conditions_required: false
+    effect: rescind
+    applies_to: [system, common-controls]
+    requires: [underlying, revocation_reason]
+    atd_forbidden: true
+    enforces:
+      - REQ-DODI8510.01-0223
+      - REQ-SP800-37R2-0594
+    citations:
+      - {ref: DODI8510.01, page: 28, anchor: "An AO may downgrade or revoke an authorization decision at any time"}

@@ -16,7 +16,7 @@ Develop, build and test the system; implement the controls, assess them through 
 | Ends at | [MS C](#ms-c) Milestone C |
 | RMF steps active | [S Select](../../MANUAL.md#step-s), [I Implement](../../MANUAL.md#step-i), [A Assess](../../MANUAL.md#step-a), [R Authorize](../../MANUAL.md#step-r) |
 | Tasks | 13 with this primary phase; 2 more also run here |
-| Authorization decisions possible | [IATT](../../MANUAL.md#ad-iatt), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato) |
+| Authorization decisions possible | [IATT](../../MANUAL.md#ad-iatt), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
 
 **Entry criteria**
 
@@ -75,7 +75,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [I-1](#task-i-1) Control Implementation | Implement | [PM/SO](../../MANUAL.md#per-pm) | [ART-STIG](../../MANUAL.md#art-stig) | — | [CDR](#rv-cdr) |
 | [I-2](#task-i-2) Update Control Implementation Information | Implement | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SD](../../MANUAL.md#art-sd), [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-CP](../../MANUAL.md#art-cp), [ART-IRP](../../MANUAL.md#art-irp) | [TRR](#rv-trr) |
 | [A-1](#task-a-1) Assessor Selection | Assess | [AO](../../MANUAL.md#per-ao) | — | — | [TRR](#rv-trr) |
-| [A-2](#task-a-2) Assessment Plan | Assess | [AO](../../MANUAL.md#per-ao) | [ART-SAP](../../MANUAL.md#art-sap) | — | [TRR](#rv-trr), [IATT](../../MANUAL.md#ad-iatt) |
+| [A-2](#task-a-2) Assessment Plan | Assess | [AO](../../MANUAL.md#per-ao) | [ART-SAP](../../MANUAL.md#art-sap), [ART-AUTHREC](../../MANUAL.md#art-authrec) | — | [TRR](#rv-trr), [IATT](../../MANUAL.md#ad-iatt) |
 | [A-3](#task-a-3) Control Assessments | Assess | [SCA](../../MANUAL.md#per-sca) | [ART-SAR](../../MANUAL.md#art-sar) | [ART-STIG](../../MANUAL.md#art-stig) | [SVR/FCA](#rv-svr), [IATT](../../MANUAL.md#ad-iatt) |
 | [A-4](#task-a-4) Assessment Reports | Assess | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar) | [SVR/FCA](#rv-svr) |
 | [A-5](#task-a-5) Remediation Actions | Assess | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp) | [SVR/FCA](#rv-svr) |
@@ -83,7 +83,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [R-1](#task-r-1) Authorization Package | Authorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-PKG](../../MANUAL.md#art-pkg) | — | [MS C](#ms-c), [PRR](#rv-prr) |
 | [R-2](#task-r-2) Risk Analysis and Determination | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-RAR](../../MANUAL.md#art-rar) | [ART-RA](../../MANUAL.md#art-ra) | [MS C](#ms-c) |
 | [R-3](#task-r-3) Risk Response | Authorize | [AO](../../MANUAL.md#per-ao) | — | [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | [MS C](#ms-c) |
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AODM](../../MANUAL.md#art-aodm) | — | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato) |
+| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AODM](../../MANUAL.md#art-aodm) | [ART-AUTHREC](../../MANUAL.md#art-authrec) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
 | [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | — | [MS C](#ms-c) |
 
 Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#task-s-4), [S-5](PH-TMRR.md#task-s-5).
@@ -280,6 +280,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | produces | core |
+| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | produces | core |
 
 **Entry criteria**
 
@@ -290,6 +291,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+- authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [IATT](../../MANUAL.md#ad-iatt) (see [authorization decisions](../../MANUAL.md#decisions)).
 
@@ -734,6 +736,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
+| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
 
 **Entry criteria**
 
@@ -742,16 +745,16 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - The authorization for the system or the common controls is approved or denied (DoDI 8510.01 Table 6 outcome).
-- decision.yaml names an AD-* decision with its termination date and conditions as required, and references the RAR (AODM-001).
+- authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
 - For a risk level of Very High or High, the Component CIO has documented concurrence or non-concurrence before the ATO is issued.
 - The decision confirms that the system meets cyberspace operational commander requirements.
 
-**Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato) (see [authorization decisions](../../MANUAL.md#decisions)).
+**Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) (see [authorization decisions](../../MANUAL.md#decisions)).
 
 **Alignment**
 
 - Milestones and decision points: [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc)
-- Authorization decisions: [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato)
+- Authorization decisions: [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca)
 
 **Citations**
 

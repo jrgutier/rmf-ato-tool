@@ -1,0 +1,26 @@
+rule: RUN-VER-001
+bases: [minimal]
+description: a run on an older contract is warned, and is not held to the newer rules
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: framework_version
+    value: 0.1.0
+  - op: delete_file
+    file: artifacts/data/authorizations.yaml
+  - op: delete_file
+    file: artifacts/ART-AUTHREC.md
+  - op: write_file
+    file: artifacts/data/decision.yaml
+    content: |
+      decision: AD-ATOC
+      decided_by: PER-AO
+      date: '2026-11-20'
+      authorization_termination_date: '2027-11-20'
+      conditions:
+        - {id: COND-01, description: Close POAM-002 by its scheduled completion date., due: '2026-12-20'}
+      risk_level: moderate
+      rar_ref: ART-RAR
+      rationale: Residual risk is moderate and every weakness has a dated POA&M item.
+      sources: [INT-012.A1, ART-RAR]
+expect: {warnings: [RUN-VER-001]}

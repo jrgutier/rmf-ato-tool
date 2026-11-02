@@ -26,6 +26,13 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-32 | p10 | Each source text matches the hash reviewed in `conformance/text-hashes.yaml`, so any edit to a document fails until it is re-reviewed and accepted; an offline re-extraction equals the register; every scope yields entries or says why not; no entry awaits review | FW-REQ-005 |
 | AC-33 | p10 | A revision agrees with what its document says about itself wherever that sits: the anchor holds the revision's latest full date, and the highest `Change N` with its date, the `INCLUDES UPDATES AS OF` date and the last errata date are all named, unless a `revision_source` reason exempts the entry | REF-007 |
 | AC-34 | p10 | Extraction noise is marked `not-a-requirement` with a reason, and is not counted in a document's retired share, which measures real requirements only; a noise entry whose statement holds one of the extractor's duty phrases (`MODAL`, `SHOULD`) has a reason that uses that phrase and says why it binds no one. That check is a speed bump: a reason can repeat the word and lie. The semantic check is the sampled audit (`rmf conformance sample --status not-a-requirement`), not the rule. A document over half noise needs a `noise` record approved by the user Noise and retired entries together over half of a document's live entries need a retirements record. | FW-REQ-004 |
+| AC-35 | p11 | A termination date follows its decision, stays inside the type's term limit and is absent where the type forbids one, and ongoing authorization records its time-driven frequency, event triggers and the AO's acknowledgment | AODM-002 |
+| AC-36 | p11 | An ATO at High or Very High risk records the Component CIO's concurrence or non-concurrence, dated before the decision, with directions on a non-concurrence | AODM-003 |
+| AC-37 | p11 | An ATO records the Intelligence Community threat assessment issued within the 12 months before it and reviewed by the PM | AODM-004 |
+| AC-38 | p11 | A record that modifies, continues, revokes or replaces another names one that exists, is earlier and is in force on its date; a cATO or continuation leaves the ATO in the ledger; an authorization to use names the provider's completed ATO; a new AO cannot extend the termination date | AODM-005 |
+| AC-39 | p11 | A test event on a live network or with live data falls under an IATT or authorization in force on its date | AODM-006 |
+| AC-40 | p11 | A cATO rests on an ATO, records the Component CISO notice and the DoD CISO approval before the decision, and is on an allowed pathway and product kind | AODM-007 |
+| AC-41 | p11 | A run is held to the framework contract it was created under, an older run gets one warning naming the difference, and `--release` fails unless the example is on the current contract | RUN-VER-001 |
 
 ## Consequences
 
@@ -90,3 +97,10 @@ Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents i
   Anything Fable cannot confirm stops for the user. Tier 1 deferrals are not covered.
 - The tool models only what a run uses: when a run consumes an outside body's output, the duty that
   shapes that output stays, and that body's internal procedure is not-applicable.
+
+## Decisions taken with the user, 2026-11-01 (p11)
+
+- `rmf_tool.run.authorization.in_force` is the one reading of what stands on a date. `AD-CONT` and
+  `AD-CATO` lift the termination date by attaching to their ATO, so revoking either restores it.
+- A run older than a rule's `since` is not held to it. Rules read the ledger through one loader, so
+  a pre-ledger run's `decision.yaml` is lifted in memory by the conversion `rmf run migrate` writes.

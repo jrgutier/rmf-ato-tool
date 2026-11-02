@@ -62,7 +62,19 @@
         }
       }
     },
-    "baseline_id": {"$ref": "#/$defs/string_fact"}
+    "baseline_id": {"$ref": "#/$defs/string_fact"},
+    "acquisition": {
+      "description": "Acquisition pathway and kind of product. AODM-007 reads them for a cATO.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pathway", "product_kind", "set_by_task"],
+      "properties": {
+        "pathway": {"type": "string", "pattern": "^PW-[A-Z]+$"},
+        "product_kind": {"enum": ["software", "software-enabled-hardware", "hardware", "service"]},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    }
   },
   "$defs": {
     "task_id": {"type": "string", "pattern": "^[PCSIARM]-[1-9]\\d?$"},

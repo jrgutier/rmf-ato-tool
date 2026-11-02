@@ -16,7 +16,7 @@ Produce and field the system; operational test and evaluation confirms security 
 | Ends at | [FRP/FD](#ms-frp) Full-Rate Production or Full Deployment Decision |
 | RMF steps active | [R Authorize](../../MANUAL.md#step-r), [M Monitor](../../MANUAL.md#step-m) |
 | Tasks | 0 with this primary phase; 11 more also run here |
-| Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato) |
+| Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) |
 
 **Entry criteria**
 
