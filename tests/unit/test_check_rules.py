@@ -125,10 +125,11 @@ def test_negative(spec_path, tmp_path):
             build.build(open_run(run_dir, REPO_ROOT))
         errors = set(expect.get("errors") or []) | set(expect.get("also") or [])
         assert final_findings(run_dir, "E") == errors, (base, spec["description"])
-        if "message" in expect:
-            run = open_run(run_dir, REPO_ROOT)
-            assert any(expect["message"] in f.message
-                       for f in engine.select(run, engine.evaluate(run), final=True)), base
+        run = open_run(run_dir, REPO_ROOT)
+        found = engine.select(run, engine.evaluate(run), final=True)
+        for message in expect.get("messages") or ():
+            assert any(f.rule == spec["rule"] and message in f.message for f in found), (
+                base, message, [f.message for f in found])
         if "warnings" in expect:
             assert final_findings(run_dir, "W") == set(expect["warnings"]), (
                 base, spec["description"])
@@ -224,7 +225,6 @@ NOT_ON_EXAMPLE = {
     "HYB-003": "needs the named humans of a hybrid run; the example is synthetic",
     "RUN-CFG-001": "the example seeds nothing, so its seeded-file mutation has no target",
     "RUN-VER-001": "the example is itself on the old contract, so nothing needs mutating",
-    "AODM-001.progress": "the example's contract has no M-6 record to write ahead of M-5",
     "STIG-002": "the example has no open CAT I STIG finding to strip of its POA&M item",
 }
 
@@ -232,7 +232,8 @@ NOT_ON_EXAMPLE = {
 def test_example_base_coverage_ge_80pct():
     """C-5: at least 80% of the mutation fixtures also run on the example, and each one
     left out is listed here with its reason. Every mutation applies to some base."""
-    specs = {p.stem: YAML(typ="safe").load(p.read_text(encoding="utf-8")) for p in SPECS}
+    specs = {p.stem: YAML(typ="safe").load(p.read_text(encoding="utf-8")) for p in SPECS
+             if "." not in p.stem}  # a dotted spec is one clause of a rule (ADR-0005)
     newer = {r.id for r in load_registry() if r.since}  # the example predates their contract
     left_out = {rule for rule, spec in specs.items()
                 if "example" not in spec.get("bases", [])} - newer

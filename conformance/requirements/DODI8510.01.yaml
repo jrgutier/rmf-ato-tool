@@ -645,8 +645,8 @@ requirements:
     context: "Figure 1. RMF Process"
     statement: "(1) DoD systems (e.g., weapons systems, stand-alone systems, control systems, or any other type of systems with digital capabilities) must receive and maintain a valid authorization before beginning operations. Refer to the RMF KS for additional guidance on authorizations."
     status: "partial"
-    reason: "A live test event must fall under an authorization in force; the start of operations itself is not an event a run records"
-    evidence: [{"kind": "rule", "asserts": "Events on a live system receive an authorization in force on their date", "target": "AODM-006"}]
+    reason: "No run records the start of operations, so nothing can fail when a system operates without a valid authorization; AODM-006 covers live test events only"
+    evidence: [{"kind": "citation", "asserts": "AD-ATO states a fielded system receives a valid authorization before operations", "target": "AD-ATO", "claim": "presence"}]
   - id: "REQ-DODI8510.01-0086"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "Technologies below the system level (e.g., system components, hardware, software, external services)"}
     kind: "lettered"
@@ -979,7 +979,7 @@ requirements:
     context: "Table 6. Authorization Tasks and Outcomes"
     statement: "Task R-4 Authorization Decision | The authorization for the system or the common controls is approved or denied. | • AO"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "R-4 must record a decision that the AO approves or denies, for the system or the common controls", "target": "AODM-001"}]
+    evidence: [{"kind": "rule", "asserts": "R-4 must record a decision on the authorization, approved or denied; touching the ledger with no decision fails", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.norecord.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by"}]
     work_item: "WI-01"
   - id: "REQ-DODI8510.01-0131"
     citation: {"ref": "DODI8510.01", "page": 18, "anchor": "Task R-5 Authorization Reporting | Authorization decisions, significant vulnerabilities, and risks are"}
@@ -1077,8 +1077,8 @@ requirements:
     context: "Table 7. Monitor Tasks and Outcomes"
     statement: "Task M-6 Ongoing Authorization | AOs conduct ongoing authorizations using the results of continuous monitoring activities and communicate changes in risk determination and acceptance decisions. | • AO"
     status: "partial"
-    reason: "That the review used monitoring results and that changes reached anyone is not tested beyond conveyed_to"
-    evidence: [{"kind": "rule", "asserts": "M-6 must record a decision from the AO when it touches the ledger, the outcome of ongoing authorizations", "target": "AODM-001"}]
+    reason: "That the review used monitoring results and that changes reached anyone is not tested"
+    evidence: [{"kind": "citation", "asserts": "AD-CONT records the AO's ongoing determination at M-6", "target": "AD-CONT", "claim": "presence"}]
     work_item: "WI-06"
   - id: "REQ-DODI8510.01-0144"
     citation: {"ref": "DODI8510.01", "page": 19, "anchor": "Task M-7 System Disposal | A system disposal strategy is developed and"}
@@ -1538,7 +1538,7 @@ requirements:
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: Each DoD Component CIO:"
     statement: "(7) Review and document concurrence or non-concurrence, and provide directions as merited, before ATOs are issued for DoD Component systems with a level risk of “Very High” or “High.”"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "An ATO at High or Very High risk needs documented CIO concurrence or non-concurrence, with directions, before the ATO", "target": "AODM-003"}]
+    evidence: [{"kind": "rule", "asserts": "An ATO at High or Very High risk needs documented cio_concurrence or non-concurrence before it is issued", "target": "AODM-003", "fixture": "tests/fixtures/negative/AODM-003.yaml", "expect": "needs cio_concurrence", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "asserts": "The concurrence recorded after the ATO is issued fails: it follows the decision", "target": "AODM-003", "fixture": "tests/fixtures/negative/AODM-003.late.yaml", "expect": "follows the decision", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-23"
   - id: "REQ-DODI8510.01-0203"
     citation: {"ref": "DODI8510.01", "page": 26, "anchor": "Develop and implement the “Prepare” step guidance for their organizational elements."}
@@ -1676,7 +1676,7 @@ requirements:
     statement: "(3) Monitor and track the overall execution of system-level POA&Ms."
     status: "partial"
     reason: "POA&M execution is tracked at M-3 and M-6; AD-ATOC only ties conditions to it"
-    evidence: [{"kind": "citation", "asserts": "AD-ATOC conditions tie to POA&Ms whose execution the AO monitors", "target": "AD-ATOC"}]
+    evidence: [{"kind": "citation", "asserts": "AD-ATOC conditions tie to POA&Ms whose execution the AO monitors", "target": "AD-ATOC", "claim": "presence"}]
   - id: "REQ-DODI8510.01-0221"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Promote reciprocity as much as possible."}
     kind: "lettered"
@@ -1692,7 +1692,7 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(5) Do not delegate authorization decisions. Other AO responsibilities and tasks may be delegated to formally appointed and qualified AODRs."
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "An authorization decision by anyone but the AO is refused: decided by PER-AO, so it cannot be delegated", "target": "AODM-001"}]
+    evidence: [{"kind": "rule", "asserts": "An authorization decision is decided by PER-AO and refused from a delegate, so authorization decisions cannot be delegated", "target": "AODM-009", "fixture": "tests/fixtures/negative/AODM-009.decider.yaml", "expect": "is decided by", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "pinned", "asserts": "Authorization decisions are held by the authorizing official and cannot be delegated", "target": "AD-ATO", "field": "decided_by", "value": "PER-AO", "claim": "constraint", "read_by": "AODM-009"}]
   - id: "REQ-DODI8510.01-0223"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Review the security authorization documentation package in light of mission and information"}
     kind: "lettered"
@@ -1700,8 +1700,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(6) Review the security authorization documentation package in light of mission and information environment indicators and determine a course of action provided to the responsible CIO or CISO for reporting requirements described in FISMA. An AO may downgrade or revoke an authorization decision at any time if risk conditions or concerns so warrant."
     status: "partial"
-    reason: "The AO's course of action to the CIO or CISO for FISMA reporting is not recorded; downgrade and revocation are"
-    evidence: [{"kind": "pinned", "asserts": "An AO may revoke an authorization decision at any time, as a record that rescinds it", "target": "AD-RESC", "field": "effect", "value": "rescind"}]
+    reason: "The AO's course of action to the CIO or CISO for FISMA reporting is not recorded; downgrade and revocation are types with no test of the review"
+    evidence: [{"kind": "pinned", "asserts": "An AO may revoke an authorization decision at any time, as a record that rescinds it", "target": "AD-RESC", "field": "effect", "value": "rescind", "claim": "constraint"}]
   - id: "REQ-DODI8510.01-0224"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Coordinate authorization activities and results with the system acquisition or procurement representatives."}
     kind: "lettered"
@@ -1710,7 +1710,7 @@ requirements:
     statement: "(7) Coordinate authorization activities and results with the system acquisition or procurement representatives."
     status: "partial"
     reason: "Coordination with acquisition staff is a RACI line at R-4, not data a rule reads"
-    evidence: [{"kind": "citation", "asserts": "R-4 informs PER-MDA and PER-PM of authorization results", "target": "R-4"}]
+    evidence: [{"kind": "citation", "asserts": "R-4 informs PER-MDA and PER-PM of authorization results", "target": "R-4", "claim": "presence"}]
   - id: "REQ-DODI8510.01-0225"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Verify the system meets cyberspace operational commander requirements. When risks are not"}
     kind: "lettered"
@@ -1719,7 +1719,7 @@ requirements:
     statement: "(8) Verify the system meets cyberspace operational commander requirements. When risks are not fully mitigated, AOs inform operators of potential impacts."
     status: "partial"
     reason: "No record holds the operational commander's requirements until PER-OPCDR exists"
-    evidence: [{"kind": "citation", "asserts": "R-4's exit criterion confirms the system meets cyberspace operational commander requirements", "target": "R-4"}]
+    evidence: [{"kind": "citation", "asserts": "R-4's exit criterion confirms the system meets cyberspace operational commander requirements", "target": "R-4", "claim": "presence"}]
   - id: "REQ-DODI8510.01-0226"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Verify the cyberspace and functional operational commanders have the necessary cyber risk"}
     kind: "lettered"
@@ -1766,8 +1766,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs: Verify that decisions:"
     statement: "(b) Are recorded, tracked, and made available to all parties throughout the system’s lifecycle."
     status: "partial"
-    reason: "The ledger records each decision and names who receives it; tracking through the lifecycle is M-6 work"
-    evidence: [{"kind": "schema", "asserts": "Each decision is recorded and conveyed to the parties named, so it is available to them", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/conveyed_to"}]
+    reason: "The ledger records each decision and names who receives it; tracking through the lifecycle is M-6 work and nothing tests availability"
+    evidence: [{"kind": "citation", "asserts": "ART-AUTHREC records each decision and names the parties it is conveyed to", "target": "ART-AUTHREC", "claim": "presence"}]
   - id: "REQ-DODI8510.01-0232"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Consists of the policies, procedures, and activities of the SO, PM, UR,"}
     kind: "lettered"

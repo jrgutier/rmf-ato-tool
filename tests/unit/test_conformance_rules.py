@@ -21,7 +21,7 @@ from typer.testing import CliRunner
 from rmf_tool import ci, refs
 from rmf_tool.check import Rule
 from rmf_tool.cli import app
-from rmf_tool.conformance import evidence, extract, register, rules
+from rmf_tool.conformance import evidence, extract, register, report, rules
 from rmf_tool.framework.citations import Resolver
 from rmf_tool.framework.load import load as load_framework
 from rmf_tool.framework.model import Entity, Location
@@ -82,9 +82,50 @@ def shape(repo, reg, index):
     return messages(rules.shape(reg, _Resolver(repo), repo, index))
 
 
-def ladder(reg, framework, extra_rules=(), repo=REPO_ROOT):
+FAKE_FIXTURE = "tests/fixtures/negative/{}.yaml"
+CLAUSES = {"REG-001": "the system is not registered in the component registry",
+           "RET-001": "the system is not retired when its authorization ends",
+           "WARN-001": "the system is not registered in the component registry",
+           "NOFIXTURE-001": "the system is not registered in the component registry"}
+
+
+def source_of(message):
+    """A rule's source: a judge reads the call that fails, and the fields it reads."""
+    return f'err(r, "{message}")\nkind.get("outputs"), kind.get("requires")\n'
+
+
+SOURCES = {rule: source_of(clause) for rule, clause in CLAUSES.items()}
+
+
+@pytest.fixture(autouse=True)
+def fake_specs(monkeypatch):
+    """A synthetic rule's negative fixture, so a test can name one without a run behind it."""
+    real = evidence.fixture_spec
+    specs = {FAKE_FIXTURE.format(rule): {"rule": rule,
+                                         "expect": {"errors": [rule], "messages": [clause]}}
+             for rule, clause in CLAUSES.items()}
+    monkeypatch.setattr(evidence, "fixture_spec", lambda repo, f: specs.get(f) or real(repo, f))
+
+
+def _complete(reg):
+    """Give a synthetic rule item its fixture, message and claim unless a test set them."""
+    for _, entry in reg.entries():
+        for item in entry.get("evidence") or ():
+            if item["kind"] == "rule" and item["target"] in CLAUSES:
+                item.setdefault("fixture", FAKE_FIXTURE.format(item["target"]))
+                item.setdefault("expect", CLAUSES[item["target"]])
+                item.setdefault("claim", "constraint")
+
+
+def _probe(repo, framework, extra_rules):
     probe = evidence.probe(repo, framework)
-    probe = evidence.Probe(repo, framework, {**probe.rules, **{r.id: r for r in extra_rules}})
+    return evidence.Probe(repo, framework, {**probe.rules, **{r.id: r for r in extra_rules}},
+                          {**probe.sources, **SOURCES})
+
+
+def ladder(reg, framework, extra_rules=(), repo=REPO_ROOT):
+    _complete(reg)
+    probe = _probe(repo, framework, extra_rules)
     return [m for m in messages(rules.ladder(reg, probe))
             if "not a live register entry" not in m or "REQ-DOC-" in m]
 
@@ -109,9 +150,8 @@ def _framework():
 def reasons(reg, index, repo=REPO_ROOT):
     """FW-REQ-004 judges closure evidence as FW-REQ-003 does; the synthetic rule REG-001 is
     in the probe so a test can close a work item on strong evidence."""
-    probe = evidence.probe(repo, _framework())
-    probe = evidence.Probe(repo, _framework(), {**probe.rules, **{r.id: r for r in EXTRA_RULES}})
-    return messages(rules.reasons(reg, index, probe))
+    _complete(reg)
+    return messages(rules.reasons(reg, index, _probe(repo, _framework(), EXTRA_RULES)))
 
 
 def sync(repo, index, only=None):
@@ -350,14 +390,17 @@ SCHEMA_TARGET = "framework/schema/decision.schema.json#/properties/decision"
 # entry in enforces (registry.yaml), a schema property in x-enforces, an entity in enforces.
 STRONG_CLAIMS = {
     "rule": ({"kind": "rule", "target": "REG-001", "asserts": ASSERTS}, None),
-    "schema": ({"kind": "schema", "target": SCHEMA_TARGET, "asserts": ASSERTS},
+    "schema": ({"kind": "schema", "target": SCHEMA_TARGET, "asserts": ASSERTS,
+                "claim": "constraint"},
                lambda fw, tmp: schema_repo(tmp, **{"x-enforces": [f"REQ-{DOC}-0001"],
-                                                   "description": "The decision recorded when "
+                                                   "title": "The decision recorded when "
                                                    "the system is registered."})),
     "pinned": ({"kind": "pinned", "target": "P-18", "field": "outputs", "value": ["ART-REG"],
+                "claim": "constraint", "read_by": "REG-001",
                 "asserts": "P-18 registers the system in the component registry."},
                lambda fw, tmp: fw.index("tasks")["P-18"].data.update(LINK)),
     "template": ({"kind": "template", "target": "ART-SSP", "heading": TEMPLATE_HEADING,
+                  "claim": "constraint",
                   "asserts": "The plan records registration with the component registry "
                              "before use."},
                  lambda fw, tmp: fw.index("artifacts")["ART-SSP"].data.update(
@@ -369,7 +412,8 @@ VACUOUS = [
     ("rule", "a rule with no fixture", {"target": "NOFIXTURE-001"},
      "NOFIXTURE-001 has no negative fixture"),
     ("schema", "an optional property", {"target": "framework/schema/decision.schema.json"
-                                        "#/properties/conditions"}, "is optional"),
+                                        "#/properties/conditions", "claim": "presence"},
+     "is optional"),
     ("schema", "a pointer that is not a property",
      {"target": "framework/schema/decision.schema.json#/required"}, "is not a property"),
     ("template", "a heading nothing requires", {"heading": "Open items"},
@@ -386,7 +430,7 @@ EXTRA_RULES = (
 
 def covered(reg, *items):
     entry = fx.entry(reg)
-    entry.update(status="covered", evidence=list(items))
+    entry.update(status="covered", evidence=[dict(item) for item in items])
     return entry
 
 
@@ -400,9 +444,12 @@ def _strong(kind, framework, tmp_path):
 @pytest.mark.parametrize("kind", STRONG_CLAIMS)
 def test_each_evidence_kind_can_carry_covered(reg, framework, tmp_path, kind):
     claim, repo = _strong(kind, framework, tmp_path)
-    covered(reg, claim)
+    if kind == "pinned":
+        covered(reg, claim, {"kind": "rule", "target": "REG-001", "asserts": ASSERTS})
+    else:
+        covered(reg, claim)
 
-    assert ladder(reg, framework, (ENFORCING,) if kind == "rule" else (), repo) == []
+    assert ladder(reg, framework, (ENFORCING,) if kind in ("rule", "pinned") else (), repo) == []
 
 
 @pytest.mark.parametrize("kind, label, change, needle", VACUOUS,
@@ -426,7 +473,7 @@ AO_STATEMENT = ("The authorizing official renders the authorization decision aft
 
 @pytest.mark.parametrize("claim", [
     {"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/"
-     "allocations", "asserts": AO_STATEMENT},
+     "allocations", "asserts": AO_STATEMENT, "claim": "presence"},
     {"kind": "pinned", "target": "ART-SSP", "field": "template", "asserts": AO_STATEMENT},
 ], ids=["schema", "pinned"])
 def test_the_fake_target_about_something_else_is_denied(reg, framework, tmp_path, claim):
@@ -490,8 +537,10 @@ def test_a_pin_that_asserts_a_real_value_must_still_match_the_statement(reg, fra
         found = ladder(reg, framework)
 
         assert any("shares" in m and "content word" in m for m in found), (asserts, found)
-    covered(reg, {**claim, "asserts": "P-18 registers the system in the component registry."})
-    assert ladder(reg, framework) == []
+    covered(reg, {**claim, "asserts": "P-18 registers the system in the component registry.",
+                  "read_by": "REG-001"},
+            {"kind": "rule", "target": "REG-001", "asserts": ASSERTS})
+    assert ladder(reg, framework, (ENFORCING,)) == []
 
 
 def test_rule_evidence_needs_the_rule_to_list_the_entry(reg, framework):
@@ -784,10 +833,11 @@ def test_a_deferral_outside_tier_1_needs_only_a_reason(reg, index):
     assert reasons(reg, index) == []
 
 
-def test_covered_cannot_keep_an_open_work_item(reg, index):
-    fx.entry(reg).update(status="covered")
+def test_an_open_item_with_every_entry_covered_must_close(reg, index):
+    for entry in reg.bound("WI-01"):
+        entry.update(status="covered")
 
-    assert "covered with open work item WI-01" in reasons(reg, index)[0]
+    assert any("WI-01 is open with every bound entry covered" in m for m in reasons(reg, index))
 
 
 def test_the_fake_removal_of_a_reviewed_entry_needs_a_reason(reg, index):
@@ -1050,8 +1100,8 @@ def test_the_fake_work_item_binding_nothing_is_an_error(reg, index):
     assert reasons(reg, index) == [], "a pin field is not an entry; its waiver binds the item"
 
 
-CLOSED = "WI-01 is closed, but bound entries are candidate, deferred, not-applicable, or carry " \
-         f"no evidence that judges strong: REQ-{DOC}-0001"
+CLOSED = "WI-01 is closed, but bound entries are not covered on evidence that judges strong: " \
+         f"REQ-{DOC}-0001; closed-partial or open"
 
 
 @pytest.mark.parametrize("state", [
@@ -1078,13 +1128,39 @@ def test_the_fake_closure_over_an_undecided_entry_is_an_error(reg, index, state)
     assert CLOSED in reasons(reg, index)
 
 
-def test_closing_a_work_item_needs_evidence_that_can_fail_on_its_entries(reg, index):
-    reg.work_items["WI-01"].update(status="closed", closed_by="commit abc1234: registration")
-    fx.entry(reg).update(status="partial", reason="Registered, not before use.",
-                         evidence=[{"kind": "citation", "target": "P-18"},
-                                   {"kind": "rule", "target": "REG-001", "asserts": ASSERTS}])
+PARTIAL = {"status": "partial", "reason": "Registered, not before use.",
+           "evidence": [{"kind": "citation", "target": "P-18"}]}
 
+
+def test_closed_means_every_entry_covered(reg, index):
+    """The fake: WI-01 read closed with 14 of its 28 entries partial."""
+    reg.work_items["WI-01"].update(status="closed", closed_by="commit abc1234: registration")
+    fx.entry(reg).update(PARTIAL)
+    assert CLOSED in reasons(reg, index)
+
+    fx.entry(reg).update(status="covered", reason=None, evidence=[
+        {"kind": "rule", "target": "REG-001", "asserts": ASSERTS}])
     assert reasons(reg, index) == []
+
+
+def test_closed_partial_holds_honest_partials_outside_tier_1(reg, index):
+    reg.work_items["WI-01"].update(status="closed-partial", closed_by="commit abc1234: built")
+    fx.entry(reg).update(PARTIAL)
+    index[DOC]["tier"] = None
+    assert reasons(reg, index) == []
+
+    index[DOC]["tier"] = 1
+    assert any("closed-partial with tier 1 entries partial" in m for m in reasons(reg, index))
+
+
+def test_closed_partial_needs_a_partial_and_no_undecided_entry(reg, index):
+    reg.work_items["WI-01"].update(status="closed-partial", closed_by="commit abc1234: built")
+    index[DOC]["tier"] = None
+    assert any("neither covered nor partial" in m for m in reasons(reg, index))
+
+    fx.entry(reg).update(status="covered", evidence=[
+        {"kind": "rule", "target": "REG-001", "asserts": ASSERTS}])
+    assert any("closed-partial with every entry covered" in m for m in reasons(reg, index))
 
 
 def test_bindings_name_one_entry_each_and_bind_writes_the_work_item(repo, reg, index):
@@ -1705,3 +1781,555 @@ def test_a_statement_of_one_content_word_can_be_asserted():
     assert evidence.asserts_verdict(item, "Authorization to use; and", target) is None
     assert evidence.asserts_verdict(item, "Rendered by the board", target).strength == \
         evidence.DENIED
+
+
+# --- FW-REQ-003: covered means a test fails if the duty is broken (ADR-0005, 2026-11-02) ------
+
+RULE_ITEM = {"kind": "rule", "target": "REG-001", "asserts": ASSERTS}
+PIN = {"kind": "pinned", "target": "P-18", "field": "outputs", "value": ["ART-REG"],
+       "claim": "constraint", "asserts": "P-18 registers the system in the component registry."}
+
+
+def verdict(framework, item, entry, repo=REPO_ROOT):
+    probe = _probe(repo, framework, EXTRA_RULES)
+    return evidence.judge(probe, item, entry)
+
+
+def _fake_entry(reg, *items, kind="modal"):
+    entry = covered(reg, *items)
+    entry["kind"] = kind
+    _complete(reg)
+    return entry
+
+
+def test_a_pin_alone_never_reaches_covered(reg, framework):
+    framework.index("tasks")["P-18"].data.update(LINK)
+    entry = _fake_entry(reg, dict(PIN))
+    assert verdict(framework, entry["evidence"][0], entry).strength == evidence.WEAK
+    entry["evidence"][0]["read_by"] = "REG-001"
+    assert verdict(framework, entry["evidence"][0], entry).strength == evidence.WEAK
+
+
+def test_a_pin_needs_its_rule_to_read_the_field(reg, framework):
+    framework.index("tasks")["P-18"].data.update(LINK)
+    entry = _fake_entry(reg, {**PIN, "read_by": "REG-001"}, dict(RULE_ITEM))
+    pin = entry["evidence"][0]
+    assert verdict(framework, pin, entry).strength == evidence.STRONG
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    silent = evidence.Probe(probe.repo, framework, probe.rules,
+                            {"REG-001": f'err(r, "{CLAUSES["REG-001"]}")'})
+    assert evidence.judge(silent, pin, entry).strength == evidence.WEAK
+
+
+def test_a_rule_item_without_fixture_and_message_is_weak(reg, framework):
+    entry = _fake_entry(reg, {**RULE_ITEM, "fixture": "", "expect": ""})
+    found = verdict(framework, entry["evidence"][0], entry)
+    assert found.strength == evidence.WEAK and "no fixture" in found.message
+
+
+@pytest.mark.parametrize(("change", "strength", "needle"), [
+    ({"fixture": "tests/unit/test_conformance_rules.py"}, evidence.UNRESOLVED, "no negative"),
+    ({"fixture": "tests/fixtures/negative/RET-001.yaml"}, evidence.DENIED, "does not expect"),
+    ({"expect": "component registry"}, evidence.STRONG, ""),
+    ({"expect": "registered"}, evidence.DENIED, "needs 2 content words"),
+    ({"expect": "a message the fixture never sees"}, evidence.DENIED, "does not declare"),
+])
+def test_a_rule_item_is_tied_to_its_fixture(reg, framework, change, strength, needle):
+    entry = _fake_entry(reg, {**RULE_ITEM, **change})
+    found = verdict(framework, entry["evidence"][0], entry)
+    assert found.strength == strength and needle in found.message
+
+
+def test_the_message_must_be_literal_in_the_rules_source(reg, framework):
+    entry = _fake_entry(reg, dict(RULE_ITEM))
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    for source in ('err(r, "something else")',
+                   f'# {CLAUSES["REG-001"]}\nerr(r, "something else")',
+                   f'hint = "{CLAUSES["REG-001"]}"'):
+        other = evidence.Probe(probe.repo, framework, probe.rules, {"REG-001": source})
+        found = evidence.judge(other, entry["evidence"][0], entry)
+        assert found.strength == evidence.DENIED and "not literal" in found.message, source
+
+
+def test_asserts_needs_a_token_of_the_failing_message(reg, framework):
+    entry = _fake_entry(reg, {**RULE_ITEM, "expect": "is not retired"}, kind="modal")
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    source = evidence.Probe(probe.repo, framework, probe.rules,
+                            {"REG-001": 'err(r, "is not retired")'})
+    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["is not retired"]}}
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+        found = evidence.judge(source, entry["evidence"][0], entry)
+    assert found.strength == evidence.DENIED and "shares no content word" in found.message
+
+
+def test_one_fixture_proves_one_clause(reg, framework):
+    first = "The system is registered with the component registry before use."
+    second = "The owner must retire the system when its authorization ends."
+    entry = covered(reg, {**RULE_ITEM, "sentence": first},
+                    {**RETIRE, "sentence": second, "fixture": FAKE_FIXTURE.format("REG-001"),
+                     "target": "REG-001", "expect": "registered in the component registry",
+                     "asserts": "The system is registered: the owner must retire the system."})
+    entry.update(kind="modal", statement=TWO)
+    _complete(reg)
+    entry["evidence"][0]["expect"] = entry["evidence"][1]["expect"]
+    found = ladder(reg, framework, EXTRA_RULES)
+    assert any("backs two sentences with one message" in m for m in found), found
+
+
+def test_presence_caps_at_partial_on_prose_and_holds_a_table_row(reg, framework):
+    entry = _fake_entry(reg, {**RULE_ITEM, "claim": "presence"})
+    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": [CLAUSES["REG-001"]]},
+            "mutations": [{"op": "delete_field", "path": "records.1.registered"}]}
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+        found = verdict(framework, entry["evidence"][0], entry)
+        assert found.strength == evidence.WEAK and "presence" in found.message
+        entry["kind"] = "table"
+        assert verdict(framework, entry["evidence"][0], entry).strength == evidence.STRONG
+        entry["kind"] = "lettered"
+        assert "\n" not in entry["statement"] and len(evidence.citable(entry["statement"])) == 1
+        assert verdict(framework, entry["evidence"][0], entry).strength == evidence.WEAK
+
+
+LEDGER_SCHEMA = "framework/schema/authorizations.schema.json#/$defs/record/properties/"
+
+
+@pytest.mark.parametrize(("prop", "claim"), [
+    ("decision", "constraint"),  # pattern
+    ("basis", "constraint"),  # enum
+    ("date", "constraint"),  # $ref to a format
+    ("risk_level", "constraint"),  # $ref to an enum
+    ("conveyed_to", "constraint"),  # minItems
+    ("review/properties/frequency_days", "constraint"),  # minimum
+    ("rationale", "presence"),  # a string with minLength
+    ("risk_acceptance", "presence"),
+    ("review", "presence"),  # an object refuses nothing by itself
+])
+def test_the_judge_classifies_schema_items(prop, claim):
+    assert evidence.schema_claim(REPO_ROOT, LEDGER_SCHEMA + prop) == claim
+
+
+def _ledger_repo(tmp_path, prop, entry_id):
+    """A copy of the schemas with the property linked back to the synthetic entry."""
+    shutil.copytree(REPO_ROOT / "framework/schema", tmp_path / "framework/schema")
+    path = tmp_path / "framework/schema/authorizations.schema.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    node = data["$defs"]["record"]
+    for part in prop.split("/"):
+        node = node if part == "properties" else node["properties"][part]
+    node["x-enforces"] = [entry_id]
+    path.write_text(json.dumps(data), encoding="utf-8")
+    return tmp_path
+
+
+def test_a_declared_claim_that_disagrees_with_the_schema_is_denied(reg, framework, tmp_path):
+    repo = _ledger_repo(tmp_path, "rationale", f"REQ-{DOC}-0001")
+    item = {"kind": "schema", "target": LEDGER_SCHEMA + "rationale", "claim": "constraint",
+            "asserts": "The registry records why the decision was taken."}
+    entry = _fake_entry(reg, item)
+    found = verdict(framework, item, entry, repo)
+    assert found.strength == evidence.DENIED and "is presence by its schema" in found.message
+
+
+def test_an_optional_parent_cannot_hold_a_required_child(reg, framework, tmp_path):
+    prop = "review/properties/frequency_days"
+    repo = _ledger_repo(tmp_path, prop, f"REQ-{DOC}-0001")
+    item = {"kind": "schema", "target": LEDGER_SCHEMA + prop, "claim": "constraint",
+            "asserts": "The system is registered at a time-driven frequency."}
+    entry = _fake_entry(reg, item)
+    found = verdict(framework, item, entry, repo)
+    assert found.strength == evidence.WEAK and "optional at review" in found.message
+
+
+TRIPLE_SOURCE = ('err(r, "needs review")\nkind.get("requires"), r.get("review"), '
+                 'r.get("frequency_days")\n')
+TERM_SOURCE = f'{TRIPLE_SOURCE}err(r, "days exceeds the limit")\n'
+
+
+def _triple(reg, framework, tmp_path, messages=("needs review",), source=TRIPLE_SOURCE, **rule):
+    """A pin, rule clause and schema shape on `review`, each linked to its entry."""
+    prop = "review/properties/frequency_days"
+    repo = _ledger_repo(tmp_path, prop, f"REQ-{DOC}-0001")
+    framework.index("decisions")["AD-CONT"].data.update(LINK)
+    pin = {"kind": "pinned", "target": "AD-CONT", "field": "requires",
+           "value": ["underlying", "review", "ongoing_acknowledgment"], "claim": "constraint",
+           "read_by": "REG-001", "asserts": "x"}
+    shape = {"kind": "schema", "target": LEDGER_SCHEMA + prop, "claim": "constraint",
+             "read_by": "REG-001", "asserts": "y"}
+    item = {**RULE_ITEM, "fixture": FAKE_FIXTURE.format("REG-001"), "expect": "needs review",
+            "claim": "constraint", **rule}
+    entry = _fake_entry(reg, item, pin, shape)
+    base = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    probe = evidence.Probe(repo, framework, base.rules, {"REG-001": source})
+    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": list(messages)}}
+    return entry, probe, spec
+
+
+@pytest.fixture
+def triple_context():
+    """The synthetic rule's fixture on disk, with word overlap out of the way."""
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_exists", lambda repo, f: True)
+        patch.setattr(evidence, "asserts_verdict", lambda *a: None)
+        yield patch
+
+
+def test_a_requires_field_is_held_by_pin_rule_and_schema(reg, framework, tmp_path, triple_context):
+    entry, probe, spec = _triple(reg, framework, tmp_path)
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    rule, pin, shape = entry["evidence"]
+    for item in (rule, pin, shape):
+        assert evidence.judge(probe, item, entry).strength == evidence.STRONG, item["kind"]
+
+    entry["evidence"].remove(pin)
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the pin on requires" in found.message
+    entry["evidence"].append(pin)
+
+    entry["evidence"].remove(shape)
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the schema shape" in found.message
+    found = evidence.judge(probe, pin, entry)
+    assert found.strength == evidence.WEAK and "the schema shape" in found.message, "by its rule"
+    entry["evidence"].append(shape)
+
+    entry["evidence"].remove(rule)
+    found = evidence.judge(probe, shape, entry)
+    assert found.strength == evidence.WEAK and "optional at review" in found.message
+    shape.pop("read_by")
+    assert evidence.judge(probe, shape, entry).strength == evidence.WEAK
+
+
+def test_a_leg_of_the_triple_must_judge_strong(reg, framework, tmp_path, triple_context):
+    """Probe M3: a leg that only exists held the field."""
+    entry, probe, spec = _triple(reg, framework, tmp_path)
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    rule, pin, shape = entry["evidence"]
+
+    pin["read_by"] = "RET-001"
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the pin on requires" in found.message
+    pin["read_by"] = "REG-001"
+
+    shape["target"] = LEDGER_SCHEMA + "review/properties/events"
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the schema shape" in found.message
+
+
+def test_the_rule_leg_must_break_the_field(reg, framework, tmp_path, triple_context):
+    """Probe M3: any rule item at all stood for the rule clause. The schema item is the one
+    that asks: the rule item beside it breaks another field."""
+    entry, probe, spec = _triple(reg, framework, tmp_path, messages=("days exceeds the limit",),
+                                 source=TERM_SOURCE, expect="days exceeds the limit")
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    rule, _, shape = entry["evidence"]
+    assert evidence.judge(probe, rule, entry).strength == evidence.STRONG
+    found = evidence.judge(probe, shape, entry)
+    assert found.strength == evidence.WEAK and "the rule clause" in found.message
+
+
+def test_the_field_comes_from_the_fixture_not_the_fragment(reg, framework, tmp_path,
+                                                           triple_context):
+    """Probe H3: a fragment that left the field's name out escaped the triple."""
+    entry, probe, _ = _triple(reg, framework, tmp_path, expect="record short",
+                              source="err(r, 'record short')\n")
+    rule = entry["evidence"][0]
+    entry["evidence"][1:] = []
+
+    named = {"rule": "REG-001",
+             "expect": {"errors": ["REG-001"], "messages": ["record short: review"]}}
+    deleted = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
+               "mutations": [{"op": "delete_field", "path": "records.1.review"}]}
+    changed = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
+               "mutations": [{"op": "set_field", "path": "records.1.review", "value": {}}]}
+    for fixture, claim in ((named, "constraint"), (deleted, "presence"), (changed, "constraint")):
+        rule["claim"] = claim
+        entry["kind"] = "table"
+        triple_context.setattr(evidence, "fixture_spec", lambda repo, f, s=fixture: s)
+        found = evidence.judge(probe, rule, entry)
+        assert found.strength == evidence.WEAK and "review is a decision" in found.message, fixture
+
+    gate = evidence.Probe(probe.repo, framework, probe.rules, {
+        "REG-001": 'if "review" in requires:\n    err(r, "record short")\n'})
+    plain = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]}}
+    rule["claim"] = "constraint"
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: plain)
+    found = evidence.judge(gate, rule, entry)
+    assert found.strength == evidence.WEAK and "review is a decision" in found.message
+
+
+def test_a_leg_on_another_sentence_does_not_hold_the_field(reg, framework, tmp_path,
+                                                           triple_context):
+    entry, probe, spec = _triple(reg, framework, tmp_path)
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    first, second = evidence.citable(TWO)
+    entry["statement"] = TWO
+    rule, pin, shape = entry["evidence"]
+    for item in (rule, pin, shape):
+        item["sentence"] = first
+    assert evidence.judge(probe, rule, entry).strength == evidence.STRONG
+    shape["sentence"] = second
+    entry["evidence"].append({**rule, "sentence": second})
+    assert evidence._verdict(probe, shape, entry).strength == evidence.STRONG
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the schema shape" in found.message
+
+
+def test_a_pin_pairs_only_on_its_own_sentence(reg, framework):
+    """Probe L1: a pin citing a sentence paired with a rule item citing none."""
+    framework.index("tasks")["P-18"].data.update(LINK)
+    first = "The system is registered with the component registry before use."
+    pin = {**PIN, "read_by": "REG-001", "sentence": first}
+    entry = covered(reg, pin, dict(RULE_ITEM))
+    entry.update(kind="modal", statement=TWO)
+    _complete(reg)
+    item = entry["evidence"][0]
+    assert verdict(framework, item, entry).strength == evidence.WEAK
+    entry["evidence"][1]["sentence"] = first
+    assert verdict(framework, item, entry).strength == evidence.STRONG
+
+
+def test_a_pin_beside_a_presence_clause_stays_weak_on_prose(reg, framework):
+    framework.index("tasks")["P-18"].data.update(LINK)
+    entry = _fake_entry(reg, {**PIN, "read_by": "REG-001"}, {**RULE_ITEM, "claim": "presence"})
+    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": [CLAUSES["REG-001"]]},
+            "mutations": [{"op": "delete_field", "path": "records.1.registered"}]}
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+        assert verdict(framework, entry["evidence"][0], entry).strength == evidence.WEAK
+        entry["kind"] = "table"
+        assert verdict(framework, entry["evidence"][0], entry).strength == evidence.STRONG
+
+
+def test_an_also_rule_does_not_vouch_for_a_clause(reg, framework):
+    """Probe H1: test_negative proves messages against the fixture's own rule only."""
+    entry = _fake_entry(reg, dict(RULE_ITEM))
+    item = entry["evidence"][0]
+    message = CLAUSES["REG-001"]
+    for spec in ({"rule": "RET-001", "expect": {"errors": ["RET-001"], "also": ["REG-001"],
+                                                "messages": [message]}},
+                 {"rule": "RET-001", "expect": {"errors": ["RET-001", "REG-001"],
+                                                "messages": [message]}},
+                 {"rule": "REG-001", "expect": {"errors": ["RET-001"], "also": ["REG-001"],
+                                                "messages": [message]}}):
+        with pytest.MonkeyPatch.context() as patch:
+            patch.setattr(evidence, "fixture_spec", lambda repo, f, s=spec: s)
+            found = verdict(framework, item, entry)
+        assert found.strength == evidence.DENIED and "does not expect REG-001" in found.message
+
+
+def test_one_word_of_a_message_is_held_only_as_the_whole_declared_message(reg, framework):
+    """Probe L2: `needs` fitted every clause of its rule."""
+    entry = _fake_entry(reg, {**RULE_ITEM, "expect": "registered"})
+    item = entry["evidence"][0]
+    found = verdict(framework, item, entry)
+    assert found.strength == evidence.DENIED and "content words" in found.message
+    whole = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["registered"]}}
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_spec", lambda repo, f: whole)
+        assert verdict(framework, item, entry).strength == evidence.STRONG
+
+
+NEGATIVE = "tests/fixtures/negative/"
+
+
+@pytest.mark.parametrize(("rule", "fixture", "expect", "claim"), [
+    ("AODM-001", "AODM-001.atd", "needs an authorization_termination_date", "presence"),  # deletes
+    ("AODM-001", "AODM-001.rar", "must rest on the risk assessment report", "presence"),  # deletes
+    ("AODM-001", "AODM-001.rarother", "must rest on the risk assessment report", "constraint"),
+    ("AODM-001", "AODM-001.type", "not one of the decision types", "constraint"),
+    ("AODM-001", "AODM-001.progress", "have not written their outputs", "constraint"),
+    ("AODM-002", "AODM-002.review", "needs review", "presence"),  # `not r.get("review")`
+    ("AODM-002", "AODM-002.forbidden", "carries no authorization_termination_date", "constraint"),
+    ("AODM-003", "AODM-003", "needs cio_concurrence", "presence"),  # `not isinstance(...)`
+    ("AODM-005", "AODM-005.provider", "names the provider", "presence"),
+    ("AODM-005", "AODM-005.providerdate", "follows the decision", "constraint"),  # the else side
+    ("AODM-005", "AODM-005", "a reauthorization names the record", "presence"),  # gated absence
+    ("AODM-005", "AODM-005.aochange", "a change of AO names the record", "presence"),  # all of `or`
+    ("AODM-007", "AODM-007", "a cATO needs a recorded dod_ciso_approval", "presence"),  # outer if
+    ("AODM-009", "AODM-009.conveyed", "the decision is not conveyed to", "constraint"),  # `or`
+    ('if r.get("x") is None:\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("x") == "":\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if len(r.get("x") or []) == 0:\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("x") in (None, ""):\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("x"):\n    pass\nelse:\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("x") is not None:\n    pass\nelse:\n    err(r, "x is bad")', None, "x is bad",
+     "presence"),
+    ('x = r.get("x")\nif x is None:\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('a, b = r.get("a"), r.get("b")\nif b == []:\n    err(r, "b is bad")', None, "b is bad",
+     "presence"),
+    ('if 0 == r.get("x"):\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("x") not in (None, ""):\n    pass\nelse:\n    err(r, "x is bad")', None,
+     "x is bad", "presence"),
+    ('if not (r.get("a") and r.get("b")):\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if r.get("a") and r.get("b"):\n    pass\nelse:\n    err(r, "x is bad")', None, "x is bad",
+     "presence"),
+    ('if r.get("a") and y > 1:\n    pass\nelse:\n    err(r, "x is bad")', None, "x is bad",
+     "constraint"),
+    ('if not r.get("a") or not r.get("b"):\n    pass\nelse:\n    err(r, "x is bad")', None,
+     "x is bad", "constraint"),
+    ('kind = kinds.get(r.get("y"))\nif kind is None:\n    err(r, "x is bad")', None, "x is bad",
+     "constraint"),  # a lookup, not a read of the field
+    ('if stands[y].continuous is None:\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if r.get("x") is not None:\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if r.get("x") != "":\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if r.get("x") is None:\n    pass\nelse:\n    err(r, "x is bad")', None, "x is bad",
+     "constraint"),
+    ('if r.get("x") == "PER-AO":\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if r.get("x") in ("a", ""):\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if r.get("x") > 0:\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+])
+def test_the_judge_classifies_rule_items(rule, fixture, expect, claim):
+    spec = evidence.fixture_spec(REPO_ROOT, f"{NEGATIVE}{fixture}.yaml") if fixture else {}
+    source = evidence.rule_sources().get(rule, rule)
+    assert evidence.failing_clauses(source, expect)
+    assert evidence.rule_claim(spec, source, expect) == claim
+
+
+def test_a_rule_item_with_no_clause_to_read_is_presence():
+    assert evidence.rule_claim({}, 'err(r, "something else")', "x is bad") == "presence"
+
+
+def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
+    """A comparison in these rules is a constraint: `kind is None` is a lookup, `atd is not None`
+    refuses a value, and the `else` of a test on a value adds no absence."""
+    sources = evidence.rule_sources()
+    absent = {
+        "AODM-001": ("recorded no decision", "is not an active task of this run",
+                     "needs an authorization_termination_date", "needs conditions",
+                     "the run depends on degraded reference(s)"),
+        "AODM-002": ("records the review that triggered it", "needs ongoing_acknowledgment",
+                     "needs review"),
+        "AODM-003": ("a non-concurrence records", "risk needs cio_concurrence"),
+        "AODM-004": ("needs threat_assessment",),
+        "AODM-005": ("a change of AO names the record", "a reauthorization names the record",
+                     "names the authorization it rests on", "names the provider",
+                     "records its revocation_reason"),
+        "AODM-007": ("a cATO depends on the pathway", "a cATO needs a recorded",
+                     "the AO notifies the Component CISO first"),
+    }
+    for rule, fragments in absent.items():
+        for expect in fragments:
+            assert evidence.rule_claim({}, sources[rule], expect) == "presence", expect
+    for rule, expect in (("AODM-001", "is not one of the decision types"),
+                         ("AODM-001", "have not written their outputs"),
+                         ("AODM-001", "is used twice"),
+                         ("AODM-002", "carries no authorization_termination_date"),
+                         ("AODM-002", "is not after the decision date"),
+                         ("AODM-003", "follows the decision"),
+                         ("AODM-004", "the PM reviews the threat assessment"),
+                         ("AODM-005", "has no cATO to revoke"),
+                         ("AODM-005", "follows the decision"),
+                         ("AODM-005", "is not in force on"),
+                         ("AODM-006", "falls under no IATT or authorization in force"),
+                         ("AODM-007", "notice follows the DoD CISO approval"),
+                         ("AODM-009", "is decided by")):
+        assert evidence.rule_claim({}, sources[rule], expect) == "constraint", expect
+
+
+def _live(framework, ident):
+    """A real register entry and a probe of the real repository, for a bad item on real data."""
+    entry = next(e for _, e in register.load(REPO_ROOT).live() if e["id"] == ident)
+    return copy.deepcopy(entry), evidence.probe(REPO_ROOT, framework)
+
+
+def test_a_declared_claim_that_disagrees_with_the_fixture_is_denied(framework):
+    """Probe H2: 0620 reached covered on a deleted field by writing `claim: constraint`."""
+    entry, probe = _live(framework, "REQ-SP800-37R2-0620")
+    item = next(i for i in entry["evidence"] if i["fixture"].endswith("AODM-001.atd.yaml"))
+    assert evidence.judge(probe, item, entry).strength == evidence.WEAK
+    found = evidence.judge(probe, {**item, "claim": "constraint"}, entry)
+    assert found.strength == evidence.DENIED and "is presence by its fixture" in found.message
+
+
+def test_nothing_on_a_presence_clause_holds_0058(framework):
+    """The pin and schema item on `.provider` lean on a rule item capped at partial."""
+    entry, probe = _live(framework, "REQ-DODCIO-RECIPROCITY-0058")
+    assert [evidence.judge(probe, i, entry).strength for i in entry["evidence"]] == [
+        evidence.WEAK] * 3
+
+
+def test_a_fixture_message_cut_short_keeps_the_triple(framework):
+    """Probe H3 on real data: the notice fragment dodged the triple on component_ciso_notification.
+    The clause's own test names the field, however short the declared message is."""
+    entry, probe = _live(framework, "REQ-DODCIO-CATO-0010")
+    entry["kind"] = "table"
+    item = entry["evidence"][0]
+    assert "component_ciso_notification" not in item["expect"]
+    found = evidence.judge(probe, item, entry)
+    assert found.strength == evidence.WEAK and "component_ciso_notification" in found.message
+
+    real = evidence.fixture_spec
+    def cut(repo, fixture):
+        spec = real(repo, fixture)
+        return {**spec, "expect": {**spec["expect"], "messages": [item["expect"]]}}
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(evidence, "fixture_spec", cut)
+        found = evidence.judge(probe, item, entry)
+    assert found.strength == evidence.WEAK and "component_ciso_notification" in found.message
+
+
+def test_the_real_constraint_fixture_holds_a_requires_field_with_its_triple(framework):
+    """`.providerdate` breaks `provider`, so 0593 stands on the three legs, not the fixture."""
+    entry, probe = _live(framework, "REQ-SP800-37R2-0593")
+    assert entry["status"] == "covered"
+    rule, pin, shape = entry["evidence"]
+    assert evidence.judge(probe, rule, entry).strength == evidence.STRONG
+    entry["evidence"].remove(pin)
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the pin on requires" in found.message
+    entry["evidence"].insert(1, pin)
+    entry["evidence"].remove(shape)
+    found = evidence.judge(probe, rule, entry)
+    assert found.strength == evidence.WEAK and "the schema shape" in found.message
+
+
+def test_a_rule_quiet_unless_in_play_needs_holds_when(reg, framework):
+    entry = _fake_entry(reg, dict(RULE_ITEM))
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    quiet = evidence.Probe(probe.repo, framework, probe.rules, {
+        "REG-001": f"{source_of(CLAUSES['REG-001'])}scope.produced_or_seeded(run, artifact)\n"})
+    item = entry["evidence"][0]
+    found = evidence.judge(quiet, item, entry)
+    assert found.strength == evidence.WEAK and "holds_when" in found.message
+    item["holds_when"] = "ART-AUTHREC is produced or seeded"
+    assert evidence.judge(quiet, item, entry).strength == evidence.STRONG
+
+
+def test_the_real_rule_sources_join_a_message_split_over_lines():
+    source = evidence.rule_sources()["AODM-005"]
+    assert "an initial authorization from a complete review" in source
+    assert evidence.QUIET_UNLESS_IN_PLAY in source
+    assert "days after" in evidence.rule_sources()["AODM-002"], "a helper's message counts"
+    assert "days after" not in evidence.rule_sources()["AODM-004"], "another rule's does not"
+
+
+def test_unresolved_sentences_are_computed_from_the_evidence(reg, framework):
+    first = "The system is registered with the component registry before use."
+    entry = covered(reg, {**RULE_ITEM, "sentence": first})
+    entry.update(kind="modal", statement=TWO, status="partial", reason="Half built.")
+    _complete(reg)
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    assert rules.unresolved_sentences(probe, entry) == [
+        "The owner must retire the system when its authorization ends."]
+    entry["evidence"] = [{"kind": "citation", "target": "P-18", "claim": "presence"}]
+    assert len(rules.unresolved_sentences(probe, entry)) == 2
+    entry["status"] = "candidate"
+    assert rules.unresolved_sentences(probe, entry) == []
+
+
+def test_the_report_counts_conditional_and_tier_1_debt(reg, framework, index):
+    entry = covered(reg, {**RULE_ITEM, "holds_when": "ART-AUTHREC is produced or seeded"})
+    entry["kind"] = "modal"
+    _complete(reg)
+    probe = _probe(REPO_ROOT, framework, EXTRA_RULES)
+    assert report.evidence_state(reg, index, probe)["conditional"] == 1
+
+    entry.update(status="partial", evidence=[{"kind": "citation", "target": "P-18",
+                                              "claim": "presence"}])
+    index[DOC]["tier"] = 1
+    state = report.evidence_state(reg, index, probe)
+    assert state["conditional"] == 0 and state["tier1_debt"] == 1
+    index[DOC]["tier"] = None
+    assert report.evidence_state(reg, index, probe)["tier1_debt"] == 0

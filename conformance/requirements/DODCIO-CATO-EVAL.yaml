@@ -244,7 +244,7 @@ requirements:
     statement: "The approval to implement cATO process within a DevSecOps software factory is granted by following the RMF guidelines identified in CNSSI 1253, NIST SP 800-53 and DoDI 8510.01. In order to receive an approved cATO, the software factory must have a current ATO with no ‘High’ or ‘Very High’ unmitigated findings. The cATO analysis will review the existing authorization, further evaluate the continuous monitoring strategy, ensure active cyber defense is implemented properly, assess the DevSecOps and supply chain processes, and validate that they are following cybersecurity supply chain risk management guidance in accordance with NIST SP 800-161r1."
     status: "partial"
     reason: "The findings test and the cATO analysis are D-5 data at p12"
-    evidence: [{"kind": "rule", "asserts": "A cATO must have a current ATO in force", "target": "AODM-005", "sentence": "In order to receive an approved cATO, the software factory must have a current ATO with no ‘High’ or ‘Very High’ unmitigated findings."}]
+    evidence: [{"kind": "rule", "asserts": "A cATO must have a current ATO: an authorization not in force on the date fails", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.inforce.yaml", "expect": "is not in force on", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "In order to receive an approved cATO, the software factory must have a current ATO with no ‘High’ or ‘Very High’ unmitigated findings."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-EVAL-0031"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 8, "anchor": "Currently, this level of authority is at the DoD-level. Once cATO criteria"}
@@ -844,7 +844,7 @@ requirements:
     statement: "o While cATO approval authority resides with the DoD CISO, this template will be filled out by the cATO Assessment Methodology Working Group and submitted with the Components’ cATO package"
     status: "partial"
     reason: "The assessment template submitted with the package is WI-24"
-    evidence: [{"kind": "rule", "asserts": "A cATO records DoD CISO approval, the authority that resides with the DoD CISO", "target": "AODM-007"}]
+    evidence: [{"kind": "citation", "asserts": "AD-CATO states the DoD CISO approves the cATO", "target": "AD-CATO", "claim": "presence"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0107"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 13, "anchor": "Certified Cybersecurity Service Provider (CSSP)"}
@@ -1538,7 +1538,8 @@ requirements:
     context: ""
     statement: "All the RMF steps must be followed, and the system must be in the Monitor phase of RMF, before a system can apply for a cATO.)"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "A cATO is decided at M-6, and only once the tasks before it have written their outputs, so all RMF steps precede it", "target": "AODM-001"}]
+    evidence: [{"kind": "rule", "asserts": "A cATO is refused until tasks before it have written their outputs, so all RMF steps precede it in the Monitor phase", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.progress.yaml", "expect": "have not written their outputs", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded, and the record's task is active in the run: a seeded ledger excuses a task the run does not carry out"}]
+    work_item: "WI-289"
     promoted: {"reason": "Rejected as a figure caption, but this sentence sets a condition: every RMF step followed and the system in the Monitor phase before a system can apply for a cATO."}
   - id: "REQ-DODCIO-CATO-EVAL-0194"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 7, "anchor": "The next row, with chevrons, indicates the steps taken during the cATO"}

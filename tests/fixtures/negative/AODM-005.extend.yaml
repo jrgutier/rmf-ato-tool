@@ -1,0 +1,31 @@
+rule: AODM-005
+bases: [minimal]
+description: a new AO extending the termination date
+mutations:
+  - op: append_text
+    file: artifacts/data/authorizations.yaml
+    text: |
+      - id: AUTH-003
+        decision: AD-ATOC
+        subject: system
+        basis: ao-change
+        decided_by: PER-AO
+        task: R-4
+        date: '2026-12-15'
+        risk_level: moderate
+        risk_acceptance: I accept the residual risk.
+        signature: pki
+        conveyed_to: [PER-PM]
+        rationale: Continuous monitoring is near real time.
+        sources: [INT-012.A1]
+        authorization_termination_date: '2028-01-01'
+        supersedes: AUTH-002
+        ao_transfer: {outgoing: Col A, reviewed: [decision document]}
+        rar_ref: ART-RAR
+        conditions:
+          - {id: COND-01, description: Close POAM-001., due: '2027-01-29'}
+        threat_assessment: {issued_by: DIA, issued: '2026-06-15', reviewed_by: PER-PM, reviewed: '2026-11-01', sources: [INT-012.A1]}
+expect:
+  errors: [AODM-005]
+  messages:
+    - cannot extend the termination date

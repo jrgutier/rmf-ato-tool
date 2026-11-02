@@ -252,6 +252,33 @@ def uncited_sentences(entry: Mapping[str, Any], strong: list[Mapping[str, Any]])
     return uncited
 
 
+def unresolved_sentences(probe: evidence.Probe, entry: Mapping[str, Any]) -> list[str]:
+    """The sentences of a partial entry that no strong item holds. Computed, never stored:
+    a stored list would drift from the evidence."""
+    if entry["status"] != "partial":
+        return []
+    items = entry.get("evidence") or ()
+    strong = [i for i in items if evidence.judge(probe, i, entry).strength == evidence.STRONG]
+    sentences = evidence.citable(entry["statement"])
+    if len(sentences) == 1:
+        return [] if strong else sentences
+    return [s for s in sentences if not any(evidence.cites(i, s) for i in strong)]
+
+
+def _shared_fixtures(entry: Mapping[str, Any], strong: list[Mapping[str, Any]]) -> list[str]:
+    """One clause per fixture: two strong items on different sentences may share a fixture only
+    with two distinct messages."""
+    seen: dict[tuple[str, str], Any] = {}
+    shared = []
+    for item in strong:
+        if item["kind"] != "rule":
+            continue
+        key = (item["fixture"], item["expect"])
+        if seen.setdefault(key, item.get("sentence")) != item.get("sentence"):
+            shared.append(item["fixture"])
+    return shared
+
+
 def ladder(reg: Register, probe: evidence.Probe) -> list[Finding]:
     """FW-REQ-003: every evidence entry resolves and is linked both ways, ``covered`` has
     strong evidence on every marked sentence, and no target carries more requirements than
@@ -272,11 +299,14 @@ def ladder(reg: Register, probe: evidence.Probe) -> list[Finding]:
                                 f"{verdict.message}", path))
         strong = [i for i, v in zip(items, verdicts, strict=True)
                   if v.strength == evidence.STRONG]
+        for fixture in _shared_fixtures(entry, strong):
+            out.append(_err("FW-REQ-003", f"{entry['id']}: {fixture} backs two sentences with one "
+                            "message; one fixture proves one clause", path))
         if entry["status"] == "covered" and not strong:
             why = "; ".join(v.message for v in verdicts) or "no evidence"
             out.append(_err("FW-REQ-003", f"{entry['id']}: covered needs a rule with a negative "
-                            "fixture, a required schema field, a pinned value or a required "
-                            f"template heading ({why}); use partial", path))
+                            "fixture and a declared message, a constraint on a required schema "
+                            f"field, or a required template heading ({why}); use partial", path))
         elif entry["status"] == "covered" and (uncited := uncited_sentences(entry, strong)):
             out.append(_err("FW-REQ-003", f"{entry['id']}: covered, but {len(uncited)} of its "
                             f"{len(extract.marked_sentences(entry['statement']))} marked "
@@ -447,7 +477,35 @@ def unresolved_at_close(probe: evidence.Probe, entry: Mapping[str, Any]) -> bool
                    for item in entry.get("evidence") or [])
 
 
-def _work_item_problems(reg: Register, probe: evidence.Probe) -> list[Finding]:
+def _closure_problems(ident: str, item: Mapping[str, Any], bound: list[Mapping[str, Any]],
+                      probe: evidence.Probe, index: Mapping[str, Any]) -> list[Finding]:
+    """``closed``: every bound entry covered. ``closed-partial``: built, the rest honestly
+    partial, none of those in a tier 1 document."""
+    status = item["status"]
+    if status == "closed":
+        unresolved = [e["id"] for e in bound
+                      if e["status"] != "covered" or unresolved_at_close(probe, e)]
+        return [_err("FW-REQ-004", f"{ident} is closed, but bound entries are not covered on "
+                     f"evidence that judges strong: {_listed(unresolved)}; closed-partial or "
+                     "open", register.WORK_ITEMS)] if unresolved else []
+    undecided = [e["id"] for e in bound if e["status"] not in ("covered", "partial")]
+    partial = [e for e in bound if e["status"] == "partial"]
+    tier_1 = [e["id"] for e in partial if _tier(index, e["citation"]["ref"]) == TIER_1]
+    out = []
+    if undecided:
+        out.append(_err("FW-REQ-004", f"{ident} is closed-partial, but bound entries are neither "
+                        f"covered nor partial: {_listed(undecided)}", register.WORK_ITEMS))
+    if tier_1:
+        out.append(_err("FW-REQ-004", f"{ident} is closed-partial with tier 1 entries partial: "
+                        f"{_listed(tier_1)}; it stays open", register.WORK_ITEMS))
+    if not partial and not undecided:
+        out.append(_err("FW-REQ-004", f"{ident} is closed-partial with every entry covered; use "
+                        "closed", register.WORK_ITEMS))
+    return out
+
+
+def _work_item_problems(reg: Register, probe: evidence.Probe,
+                        index: Mapping[str, Any]) -> list[Finding]:
     out = []
     for ident, item in sorted(reg.work_items.items()):
         if item.get("scope", "register") != "register":
@@ -458,13 +516,12 @@ def _work_item_problems(reg: Register, probe: evidence.Probe) -> list[Finding]:
                             "and no FW-TASK-002 waiver; set work_item on the entries it closes, "
                             "or scope: internal with the reason", register.WORK_ITEMS))
             continue
-        if item["status"] != "closed":
+        if item["status"] == "open":
+            if bound and all(e["status"] == "covered" for e in bound):
+                out.append(_err("FW-REQ-004", f"{ident} is open with every bound entry covered; "
+                                "close it", register.WORK_ITEMS))
             continue
-        unresolved = [e["id"] for e in bound if unresolved_at_close(probe, e)]
-        if unresolved:
-            out.append(_err("FW-REQ-004", f"{ident} is closed, but bound entries are candidate, "
-                            "deferred, not-applicable, or carry no evidence that judges strong: "
-                            f"{_listed(unresolved)}", register.WORK_ITEMS))
+        out += _closure_problems(ident, item, bound, probe, index)
     return out
 
 
@@ -526,14 +583,10 @@ def reasons(reg: Register, index: Mapping[str, Any], probe: evidence.Probe) -> l
                 entry.get("approved_by") != "user":
             out.append(_err("FW-REQ-004", f"{ident}: deferring a tier 1 document needs "
                             "approved_by: user", path))
-        item = reg.work_items.get(entry.get("work_item"))
-        if status == "covered" and item is not None and item["status"] == "open":
-            out.append(_err("FW-REQ-004", f"{ident}: covered with open work item {item['id']}",
-                            path))
     return out + _pattern_problems(reg, index) \
         + _record_problems(reg, "retirements", reg.retirements, _over_retired) \
         + _record_problems(reg, "noise", reg.noise, _over_noise) \
-        + _work_item_problems(reg, probe) + binding_problems(reg)
+        + _work_item_problems(reg, probe, index) + binding_problems(reg)
 
 
 # --- FW-REQ-005 --------------------------------------------------------------------------

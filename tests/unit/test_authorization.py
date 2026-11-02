@@ -96,7 +96,8 @@ def cato_run(minimal_run: Path) -> Path:
 
 
 def test_complete_cato_passes(cato_run):
-    for rule in (rules.records_valid, rules.termination_valid, rules.chain, rules.cato_eligible):
+    for rule in (rules.records_valid, rules.parties_valid, rules.termination_valid, rules.chain,
+                 rules.cato_eligible):
         assert _check(cato_run, rule) == ""
 
 
@@ -119,7 +120,7 @@ def test_component_ciso_is_notified_first(cato_run):
 
 @pytest.mark.parametrize("pathway, kind, words", [
     ("PW-MCA", "software", "limited to"),
-    ("PW-SWP", "software-enabled-hardware", "not for software-enabled-hardware"),
+    ("PW-SWP", "software-enabled-hardware", "software-enabled-hardware programs cannot"),
 ])
 def test_cato_pathway_limits(cato_run, pathway, kind, words):
     edit_yaml(cato_run / "facts.yaml", lambda d: d["acquisition"].update(
@@ -142,7 +143,7 @@ def test_seeded_ledger_excuses_only_tasks_the_run_does_not_carry_out(cato_run):
 
 def test_conveyed_to_must_be_a_list(minimal_run):
     _set(minimal_run, conveyed_to="PER-PM and others")
-    assert "not conveyed to PER-PM" in _check(minimal_run, rules.records_valid)
+    assert "not conveyed to PER-PM" in _check(minimal_run, rules.parties_valid)
 
 
 def test_a_malformed_review_is_left_to_the_schema(minimal_run):
@@ -248,11 +249,11 @@ def test_atu_needs_the_providers_completed_ato(minimal_run):
 
 def test_common_control_authorization_needs_its_subject_and_provider(minimal_run):
     _set(minimal_run, decision="AD-CCA")
-    assert "decides on common-controls, not system" in _check(minimal_run, rules.records_valid)
+    assert "decides on common-controls, not system" in _check(minimal_run, rules.parties_valid)
     _set(minimal_run, subject="common-controls")
-    assert "not conveyed to PER-CCP" in _check(minimal_run, rules.records_valid)
+    assert "not conveyed to PER-CCP" in _check(minimal_run, rules.parties_valid)
     _set(minimal_run, conveyed_to=["PER-CCP"])
-    assert _check(minimal_run, rules.records_valid) == ""
+    assert _check(minimal_run, rules.parties_valid) == ""
     edit_yaml(minimal_run / FILE, lambda d: d["records"][-1].pop(
         "authorization_termination_date"))
     assert "needs an authorization_termination_date" in _check(minimal_run, rules.records_valid)
@@ -433,7 +434,8 @@ CHANGED = {"decided_by": lambda v: "PER-CIO", "decided_in": lambda v: ["P-1"],
            "max_term_days": lambda v: 10, "requires": lambda v: [],
            "effect": lambda v: "authorize" if v in ("deny", "rescind") else "rescind",
            "atd_forbidden": lambda v: not v,
-           "applies_to": lambda v: ["common-controls"] if v == ["system"] else ["system"]}
+           "applies_to": lambda v: ["common-controls"] if v == ["system"] else ["system"],
+           "allowed_pathways": lambda v: ["PW-MCA"], "excluded_product_kinds": lambda v: []}
 ATD = {"authorization_termination_date": "2027-12-01"}
 AT_R4 = {"AD-ATO": {"decision": "AD-ATO"},
          "AD-ATU": {"decision": "AD-ATU", **ATD, "provider": {
@@ -446,6 +448,9 @@ AT_R4 = {"AD-ATO": {"decision": "AD-ATO"},
 
 
 def _ledger_with(run_dir: Path, decision: str, field: str):
+    edit_yaml(run_dir / "facts.yaml", lambda d: d.__setitem__("acquisition", {
+        "pathway": "PW-SWP", "product_kind": "software-enabled-hardware", "set_by_task": "M-6"}))
+
     def write(data):
         if decision in AT_R4:
             for key, value in AT_R4[decision].items():
@@ -453,6 +458,9 @@ def _ledger_with(run_dir: Path, decision: str, field: str):
                     data["records"][-1].pop(key)
                 else:
                     data["records"][-1][key] = value
+            if field == "requires":
+                data["records"][-1].pop("threat_assessment", None)
+                data["records"][-1].pop("provider", None)
         else:
             record = _m6_record(decision, revocation_reason="incident",
                                 ongoing_acknowledgment="I accept.", **ATD)
@@ -469,8 +477,8 @@ def _observed(run_dir: Path, decision: str = "", field: str = "") -> tuple:
         kind[field] = CHANGED[field](kind[field])
     context = Context(run)
     messages = sorted(f.finding.message for rule in (
-        rules.records_valid, rules.termination_valid, rules.chain, rules.cato_eligible)
-        for f in rule(context))
+        rules.records_valid, rules.parties_valid, rules.termination_valid, rules.chain,
+        rules.threat_assessment, rules.cato_eligible) for f in rule(context))
     stands = ledger.in_force(ledger.load(run), ledger.effects(run))
     return messages, sorted(stands), [bool(s.continuous or s.ongoing) for s in stands.values()]
 

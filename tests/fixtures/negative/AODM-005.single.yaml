@@ -1,0 +1,29 @@
+rule: AODM-005
+bases: [minimal]
+description: a second authorization beside the one in force
+mutations:
+  - op: append_text
+    file: artifacts/data/authorizations.yaml
+    text: |
+      - id: AUTH-003
+        decision: AD-ATOC
+        subject: system
+        basis: initial
+        decided_by: PER-AO
+        task: R-4
+        date: '2026-12-15'
+        risk_level: moderate
+        risk_acceptance: I accept the residual risk.
+        signature: pki
+        conveyed_to: [PER-PM]
+        rationale: Continuous monitoring is near real time.
+        sources: [INT-012.A1]
+        authorization_termination_date: '2027-12-15'
+        rar_ref: ART-RAR
+        conditions:
+          - {id: COND-01, description: Close POAM-001., due: '2027-01-29'}
+        threat_assessment: {issued_by: DIA, issued: '2026-06-15', reviewed_by: PER-PM, reviewed: '2026-11-01', sources: [INT-012.A1]}
+expect:
+  errors: [AODM-005]
+  messages:
+    - a system has a single authorization

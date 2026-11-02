@@ -1,0 +1,13 @@
+rule: AODM-001
+bases: [minimal]
+description: a decision that rests on something other than the RAR
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.rar_ref
+    value: ART-SAR
+expect:
+  errors: [AODM-001]
+  also: [RUN-FM-001]
+  messages:
+    - the decision must rest on the risk assessment report

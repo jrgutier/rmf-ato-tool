@@ -425,3 +425,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: AODM-007 reads `requires`; a test takes every decision field the register pins, changes it, and requires the rule output or `in_force` to change.
 - Rule: A pin counts as evidence only if changing the value changes what a run gets.
 - Promotion: check: test_each_pinned_decision_field_changes_what_the_run_gets
+
+## L-0061 · 2026-11-02 · run: phase-11 · tags: conformance, evidence
+- Symptom: Fable found a quarter of sampled `covered` entries did not hold, though every one judged strong: one rule fixture vouched for every clause, a required free-text field stood for a duty, and an item read closed with half its entries partial.
+- Root cause: the judge asked whether a test could fail somewhere on the target, not whether this clause's test fails when this duty is broken.
+- Fix: a rule item names its fixture and failing message, verified statically and proved by `test_negative`; presence caps at partial on prose; pins and optional parents count only beside the rule reading them; `closed-partial` is a status of its own.
+- Rule: Evidence names the test that fails for this clause, or it is partial.
+- Promotion: check: test_a_rule_item_is_tied_to_its_fixture

@@ -1,0 +1,16 @@
+rule: AODM-005
+bases: [minimal]
+description: a change of AO with no ao_transfer
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.basis
+    value: ao-change
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.supersedes
+    value: AUTH-001
+expect:
+  errors: [AODM-005]
+  messages:
+    - a change of AO names the record it supersedes

@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from rmf_tool.conformance import register, rules
+from rmf_tool.conformance import evidence, register, rules
 from rmf_tool.conformance.register import STATUSES, Register
 
 # `partial` caps what evidence can prove, so a register resting on it must stay visible.
@@ -48,8 +48,26 @@ def freeze_split(reg: Register, index: Mapping[str, Any]) -> dict[str, int]:
     return out
 
 
+def evidence_state(reg: Register, index: Mapping[str, Any],
+                   probe: evidence.Probe) -> dict[str, Any]:
+    """What ``covered`` rests on and what ``partial`` still owes: covered entries that hold only
+    under a precondition, and each partial entry's sentences with no strong item. Tier 1 owes
+    full proof, so its unresolved sentences are the debt the freeze reads."""
+    unresolved = []
+    conditional = debt = 0
+    for ref, entry in reg.live():
+        if entry["status"] == "covered":
+            conditional += any(i.get("holds_when") for i in entry.get("evidence") or ())
+        elif sentences := rules.unresolved_sentences(probe, entry):
+            tier = (index.get(ref) or {}).get("tier")
+            debt += len(sentences) if tier == TIER_1 else 0
+            unresolved.append({"id": entry["id"], "tier": tier, "sentences": sentences})
+    return {"conditional": conditional, "tier1_debt": debt, "unresolved": unresolved}
+
+
 def build(reg: Register, index: Mapping[str, Any], *,
-          waivers: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+          waivers: list[dict[str, Any]] | None = None,
+          probe: evidence.Probe | None = None) -> dict[str, Any]:
     documents = []
     total: Counter[str] = Counter()
     rejected_by_reason: Counter[str] = Counter()
@@ -88,11 +106,18 @@ def build(reg: Register, index: Mapping[str, Any], *,
     live_total = sum(total.values())
     reviewed = live_total - total["candidate"]
     assessed = total["covered"] + total["partial"]
+    state = evidence_state(reg, index, probe) if probe else {
+        "conditional": 0, "tier1_debt": 0, "unresolved": []}
+    closure = Counter(w["status"] for w in reg.work_items.values())
     summary = {
         "total": live_total,
         **{s: total[s] for s in STATUSES},
         "removed": len(removed),
         "work_items": len(open_items),
+        "closed_items": closure["closed"],
+        "closed_partial_items": closure["closed-partial"],
+        "conditional": state["conditional"],
+        "tier1_debt": state["tier1_debt"],
         "unassessed": len(unassessed),
         "waivers": len(waivers or []),
         "reviewed": reviewed,
@@ -108,6 +133,7 @@ def build(reg: Register, index: Mapping[str, Any], *,
         "documents": documents,
         "unassessed": unassessed,
         "work_items": open_items,
+        "unresolved": state["unresolved"],
         "removed": removed,
         "excluded": [{"document": i["document"], "reason": i["reason"]}
                      for i in reg.reference_list if i["disposition"] == "excluded"],
@@ -137,6 +163,11 @@ def render(report: Mapping[str, Any]) -> list[str]:
     if s["partial_share"] > PARTIAL_WARNING_SHARE:
         lines.append("WARNING: the register is mostly partial: most assessed requirements rest on "
                      "citations or prose that cannot fail")
+    lines.append(f"{s['conditional']} of {s['covered']} covered entries hold under a precondition "
+                 f"(holds_when); tier 1 debt: {s['tier1_debt']} unresolved sentences in "
+                 f"{sum(u['tier'] == TIER_1 for u in report['unresolved'])} partial entries")
+    lines.append(f"work items closed {s['closed_items']}, closed-partial "
+                 f"{s['closed_partial_items']}, open {s['work_items']}")
     freeze = s["freeze"]
     lines.append(f"candidates at the p13 freeze: {freeze['tier_1']} in tier 1 documents and "
                  f"{freeze['obligations_elsewhere']} obligations elsewhere block it; "

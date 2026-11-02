@@ -107,7 +107,7 @@ error. Commands that report support `--format json`.
 | `rmf conformance sample --seed N [-n 30] [--kind prose\|lettered\|table\|promoted\|all] [--rejected] [--status S] [--id REF]` | a seeded sample of entries (noise) or of the rejected in-scope paragraphs and rows (false rejects) to read against the source; `--status not-a-requirement` draws noise marks with their reasons, the audit FW-REQ-004 cannot do; the same seed on the same register gives the same sample |
 | `rmf conformance page REF N` | every entry and every rejection on one page of a document, to read against `rmf refs show REF --page N --anchor A` before promoting or marking |
 | `rmf conformance promote REF --page N --anchor WORDS --reason TEXT [--sentence]` | extraction is a first pass: turn the rejection on page N holding the words, else the paragraph of the text that does, into a live candidate with the next ID, kind `promoted` and `promoted: {reason}`; `--sentence` takes only the sentence holding the words and exits 2 when they are in no sentence or several; it survives `rmf conformance extract`, is flagged `needs_review` when its passage no longer resolves, is counted by `report`, and FW-REQ-001 checks its citation |
-| `rmf conformance report [--format json]` | status distribution per document and in total (`summary.candidate`, `summary.work_items`, `summary.partial_share`, `summary.kinds`, `summary.promoted`, `summary.freeze` with its `deferred` and `partial_without_evidence` counts, `summary.rejected_by_reason`), each document's `retired_share` of real requirements (not-applicable, deferred or partial on evidence that cannot fail over 25% needs a `retirements` record with `approved_by: user` in `conformance/policy.yaml`, FW-REQ-004; noise marked `not-a-requirement` does not count) and its `noise_share` of live entries (over 50% needs a `noise` record there), open work items, unassessed documents |
+| `rmf conformance report [--format json]` | status distribution per document and in total (`summary.candidate`, `summary.work_items`, `summary.partial_share`, `summary.kinds`, `summary.promoted`, `summary.freeze` with its `deferred` and `partial_without_evidence` counts, `summary.rejected_by_reason`), each document's `retired_share` of real requirements (not-applicable, deferred or partial on evidence that cannot fail over 25% needs a `retirements` record with `approved_by: user` in `conformance/policy.yaml`, FW-REQ-004; noise marked `not-a-requirement` does not count) and its `noise_share` of live entries (over 50% needs a `noise` record there), open work items, unassessed documents, `summary.conditional` (covered under a `holds_when`), `summary.tier1_debt` and `unresolved` (each partial entry's sentences with no strong item, computed), `summary.closed_items`, `summary.closed_partial_items` |
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
@@ -132,12 +132,18 @@ and the registry header equal the registry, framework and reference index; p9 RE
 FW-CITE-003 (no citation to a `required: false` PDF, run by `rmf validate`); p10 FW-REQ-001
 (register shape, every page scoped or excluded with a reason, citations, statements in their
 passages), FW-REQ-003 (evidence linked both ways through `enforces` and `x-enforces`, `asserts`
-in the words of the statement and of its target, `covered` needs evidence that can fail and
-cites every marked sentence, whole, with a distinct item; fan-out capped for every evidence kind,
-exceptions approved by the user), FW-REQ-004 (reasons, tier 1 approvals, removal reasons,
+in the words of the statement and of the failing message or property title, `covered` means a
+real test fails: a rule item names its negative fixture, which lists the rule in `errors`, and a
+literal `expect` of two content words or a whole declared message, one fixture per clause;
+`claim: presence` caps at partial on prose, and the judge classifies rule and schema items
+itself; a pin or optional schema parent counts only beside the rule item reading it (`read_by`),
+on the same sentence; a decision's `requires` field, read from the fixture and the clause, needs
+pin, rule and schema, each strong on one sentence; `covered` cites every marked sentence, whole,
+with a distinct item; fan-out capped for
+every evidence kind, exceptions approved by the user; ADR-0005, 2026-11-02), FW-REQ-004 (reasons, tier 1 approvals, removal reasons,
 triage patterns bounded per pattern, a user-approved record behind any document over a quarter
-retired or over half noise, a noise reason that answers the extractor's duty words, `partial` with evidence, work items that bind entries or waivers and close only on evidence that judges
-strong), FW-REQ-005 (source text hashes
+retired or over half noise, a noise reason that answers the extractor's duty words, `partial` with evidence, work items that bind entries or waivers: `closed` means every entry covered,
+`closed-partial` leaves honest partials none of them tier 1, and a tier 1 partial stays open), FW-REQ-005 (source text hashes
 reviewed, a fresh extraction equals the register, scopes yield) and FW-TASK-002 (tasks hold the
 entities their Chapter 3 block maps to, or a waiver names an open work item or a task-scoped
 rationale), all run by `rmf validate`. Recall of the extractor against hand-read pages, the

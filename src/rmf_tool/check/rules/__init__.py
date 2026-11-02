@@ -54,6 +54,7 @@ RULES: dict[str, Rule] = {
     "AODM-005": authorization.chain,
     "AODM-006": authorization.live_events,
     "AODM-007": authorization.cato_eligible,
+    "AODM-009": authorization.parties_valid,
     "RUN-VER-001": config.old_contract,
     "INV-BND-001": consistency.inventory_in_boundary,
     "INV-BND-002": consistency.boundary_in_inventory,

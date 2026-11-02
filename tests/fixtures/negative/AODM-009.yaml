@@ -1,0 +1,18 @@
+rule: AODM-009
+bases: [minimal, example]
+description: a decision by anyone but the AO
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.decided_by
+    value: PER-AODR
+    only: [minimal]
+  - op: set_field
+    file: artifacts/data/decision.yaml
+    path: decided_by
+    value: PER-AODR
+    only: [example]
+expect:
+  errors: [AODM-009]
+  messages:
+    - is decided by

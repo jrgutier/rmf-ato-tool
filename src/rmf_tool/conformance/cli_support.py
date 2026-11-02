@@ -8,9 +8,11 @@ from pathlib import Path
 from typing import Any
 
 from rmf_tool import refs
+from rmf_tool.conformance import evidence, nist_pin, register, report, rules
 from rmf_tool.conformance import extract as extraction
-from rmf_tool.conformance import nist_pin, register, report, rules
 from rmf_tool.findings import Finding
+from rmf_tool.framework.load import load
+from rmf_tool.framework.model import FRAMEWORK_DIR
 
 
 class UsageError(Exception):
@@ -166,7 +168,9 @@ def page(root: Path, ref: str, number: int) -> list[str]:
 
 def report_data(root: Path) -> dict[str, Any]:
     reg, index = _load(root)
-    return report.build(reg, index, waivers=report.waivers(root))
+    framework = load(root / FRAMEWORK_DIR, root).framework
+    return report.build(reg, index, waivers=report.waivers(root),
+                        probe=evidence.probe(root, framework))
 
 
 def bind(root: Path, *, check: bool) -> tuple[list[str], list[Finding]]:

@@ -1,0 +1,16 @@
+rule: AODM-005
+bases: [minimal]
+description: a record superseding one that is not earlier
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.supersedes
+    value: AUTH-009
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.basis
+    value: reauthorization
+expect:
+  errors: [AODM-005]
+  messages:
+    - which is not an earlier record

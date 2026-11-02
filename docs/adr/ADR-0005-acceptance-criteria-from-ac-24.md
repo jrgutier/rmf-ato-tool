@@ -21,8 +21,8 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-27 | p9 | Every control in the pinned OSCAL catalog is in the text of the three SP 800-53 PDFs or declared in the entry's `oscal_only_controls` | REF-008 |
 | AC-28 | p10 | Every task holds the entities its SP 800-37r2 Chapter 3 block maps to, or a waiver names the open work item that closes the gap; the SDLC note matches the block | FW-TASK-002 |
 | AC-29 | p10 | The register has the declared shape, every PDF and web reference has a source whose scopes and exclusions cover every page with a reason, every citation resolves and every statement is in its cited passage | FW-REQ-001 |
-| AC-30 | p10 | Every evidence entry resolves and is linked both ways (a rule lists the entries it enforces, a pin names a non-identity field, `asserts` shares the statement's vocabulary, `sentence` equals one marked sentence of the statement, whole), `covered` rests on evidence that can fail and a distinct strong item cites each marked sentence of an entry with several, of any kind, and no target of any kind exceeds its fan-out cap without a reviewed exception | FW-REQ-003 |
-| AC-31 | p10 | Every `partial`, `deferred` and `not-applicable` entry has a reason and `partial` carries at least one evidence item; a `deferred` tier 1 entry records `approved_by: user`; a reviewed entry that left its source records `removal_reason`; triage patterns are document-scoped, specific, capped, sampled and never on tier 1; a document over a quarter retired (not-applicable, deferred or partial on evidence that cannot fail), however its statuses were set, has a `retirements` record approved by the user; every register work item binds entries and closes only on evidence that judges strong | FW-REQ-004 |
+| AC-30 | p10 | Every evidence entry resolves and is linked both ways (a rule lists the entries it enforces, a pin names a non-identity field, `asserts` shares the statement's vocabulary and a token of the failing message or the property's title, `sentence` equals one marked sentence of the statement, whole, a declared `claim` agrees with the judge's classification), `covered` rests on evidence that can fail and a distinct strong item cites each marked sentence of an entry with several, of any kind, and no target of any kind exceeds its fan-out cap without a reviewed exception | FW-REQ-003 |
+| AC-31 | p10 | Every `partial`, `deferred` and `not-applicable` entry has a reason and `partial` carries at least one evidence item; a `deferred` tier 1 entry records `approved_by: user`; a reviewed entry that left its source records `removal_reason`; triage patterns are document-scoped, specific, capped, sampled and never on tier 1; a document over a quarter retired (not-applicable, deferred or partial on evidence that cannot fail), however its statuses were set, has a `retirements` record approved by the user; every register work item binds entries; `closed` means every entry covered on evidence that judges strong, `closed-partial` leaves honest partials none of them tier 1, and an open item cannot have every entry covered | FW-REQ-004 |
 | AC-32 | p10 | Each source text matches the hash reviewed in `conformance/text-hashes.yaml`, so any edit to a document fails until it is re-reviewed and accepted; an offline re-extraction equals the register; every scope yields entries or says why not; no entry awaits review | FW-REQ-005 |
 | AC-33 | p10 | A revision agrees with what its document says about itself wherever that sits: the anchor holds the revision's latest full date, and the highest `Change N` with its date, the `INCLUDES UPDATES AS OF` date and the last errata date are all named, unless a `revision_source` reason exempts the entry | REF-007 |
 | AC-34 | p10 | Extraction noise is marked `not-a-requirement` with a reason, and is not counted in a document's retired share, which measures real requirements only; a noise entry whose statement holds one of the extractor's duty phrases (`MODAL`, `SHOULD`) has a reason that uses that phrase and says why it binds no one. That check is a speed bump: a reason can repeat the word and lie. The semantic check is the sampled audit (`rmf conformance sample --status not-a-requirement`), not the rule. A document over half noise needs a `noise` record approved by the user Noise and retired entries together over half of a document's live entries need a retirements record. | FW-REQ-004 |
@@ -33,6 +33,7 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-39 | p11 | A test event on a live network or with live data falls under an IATT or authorization in force on its date | AODM-006 |
 | AC-40 | p11 | A cATO rests on an ATO, records the Component CISO notice and the DoD CISO approval before the decision, and is on an allowed pathway and product kind | AODM-007 |
 | AC-41 | p11 | A run is held to the framework contract it was created under, an older run gets one warning naming the difference, and `--release` fails unless the example is on the current contract | RUN-VER-001 |
+| AC-42 | p11 | Each record is decided by the official of its type, on a subject the type applies to, and conveyed to the system owner or common control provider | AODM-009 |
 
 ## Consequences
 
@@ -104,3 +105,55 @@ Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents i
   `AD-CATO` lift the termination date by attaching to their ATO, so revoking either restores it.
 - A run older than a rule's `since` is not held to it. Rules read the ledger through one loader, so
   a pre-ledger run's `decision.yaml` is lifted in memory by the conversion `rmf run migrate` writes.
+
+## The evidence bar, decided with the user 2026-11-02
+
+Fable's review of the pilot found 25% of sampled `covered` did not hold: `covered` could rest on a
+word overlap and one fixture per rule. The user set the bar: tier 1 gets full proof, everything else
+an honest `partial` citing where it is built, and the freeze accepts that.
+
+- `covered` means a real test fails if the duty is broken.
+- A rule item carries `fixture` (a negative fixture) and `expect` (a literal fragment of the failing
+  message). FW-REQ-003 checks that the fixture's `rule` is that rule, listed in
+  `expect.errors`, that it declares that fragment in `expect.messages`, and that it sits in one failing call of the rule's source with the
+  same-module helpers it calls. `test_negative` proves messages for the fixture's own rule only, so
+  an `also` rule needs its own fixture. `expect` holds two content words or equals one declared
+  message whole. `test_negative` proves the fixture fails with it, so FW-REQ-003 stays static. A
+  fixture named `<RULE>.<clause>.yaml` is one clause of a rule. One fixture proves one clause: two
+  sentences of an entry share a fixture only with two distinct messages.
+- `asserts` carries a token of `expect`, or of the property's title on a schema item, as well as the
+  word overlap with the statement.
+- Every item carries `claim: presence|constraint`. Presence caps at `partial` on prose kinds and
+  may be `covered` on the `table` kind only. The judge classifies schema items itself (enum, const,
+  pattern, format, numeric bounds and minItems are constraint; the rest is presence) and rule items:
+  a fixture that only deletes, or a clause whose tests read that a value is absent (found in the
+  rule's AST: `not x`, a comparison of a plain field read with None, "", 0 or an empty container,
+  `len(x) == 0`, `x in (None, "")`, or the `else` of a truthiness test), is presence; the rest is
+  constraint, including a lookup that finds nothing. With no clause to read it is presence. A
+  declared claim that disagrees is an error. The
+  cap goes by kind, so a `lettered` entry with no marked sentence is not a table row.
+- A `pinned` item is strong only with `read_by` naming a rule item of the entry, on the same
+  sentence, whose rule reads the field; on an entry with several marked sentences both must name the
+  same one. A pin beside a rule item capped at presence stays weak. A schema item is held only if
+  every property above it is required, or `read_by` names such a rule making the optional parent
+  present.
+- A field a decision type lists in `requires` is held by the triple pin, rule clause and schema
+  shape, each judging strong on the same sentence, and the rule leg's fixture breaks that field;
+  fewer is `partial`. The judge finds the field in the fixture's mutated paths, its declared message
+  and the clause's own tests, never in the `expect` fragment, which an author can cut short. A field
+  named only inside an interpolated or free message, such as `underlying`, rests on the fixture
+  declaring the message in full.
+- `holds_when` states the gate of the clause cited. A rule that calls `produced_or_seeded` needs it.
+  Such an entry is still `covered`, and `rmf conformance report` counts it separately as
+  `conditional`.
+- Unresolved sentences are computed, never stored, because a stored list drifts: a sentence of a
+  `partial` entry with no strong item. `rmf conformance report` lists them and totals tier 1's as
+  `tier1_debt`.
+- Work item status gains `closed-partial`: built, the remaining entries honestly `partial`, none of
+  those tier 1. An item with a tier 1 `partial` entry stays open. `closed` means every entry covered.
+  FW-REQ-004 no longer refuses a `covered` entry on an open item, since such an item now holds both;
+  it refuses an open item whose entries are all covered.
+- FW-REQ-002 at p13 lets a non-tier-1 obligation freeze at `partial` with evidence; a tier 1 entry
+  needs `covered` or an approved deferral. FW-REQ-002 itself stays for p13.
+- AODM-009 split the deciding official, subject and recipients out of AODM-001, which had reached 34
+  evidence items against the fan-out cap of 25 once each clause was cited alone.

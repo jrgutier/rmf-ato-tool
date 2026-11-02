@@ -23,11 +23,11 @@ def test_check_writes_reports_with_the_plan_shape(minimal_run, monkeypatch):
     assert set(data["summary"]) == {"errors", "warnings", "rules_run", "degraded",
                                     "deferred_citations"}
     assert data["summary"]["errors"] == 0 and data["summary"]["degraded"] == []
-    assert len(data["summary"]["rules_run"]) == 43
+    assert len(data["summary"]["rules_run"]) == 44
     written = (minimal_run / reports.CHECK_JSON).read_bytes()
     assert json.loads(written) == data
     md = (minimal_run / reports.CHECK_MD).read_text()
-    assert "Selection: --final. Errors: 0. Warnings: 0. Rules run: 43." in md
+    assert "Selection: --final. Errors: 0. Warnings: 0. Rules run: 44." in md
     assert "No findings." in md
     runner.invoke(app, ["check", str(minimal_run), "--final", "--format", "json"])
     assert (minimal_run / reports.CHECK_JSON).read_bytes() == written  # deterministic

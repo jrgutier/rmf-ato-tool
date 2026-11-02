@@ -631,7 +631,7 @@ requirements:
     context: "CYBERSECURITY DRIVEN BY THREAT"
     statement: "(1) In accordance with DoDI 8510.01, IT and PIT systems will update their ATO at least every 3 years depending on risk."
     status: "covered"
-    evidence: [{"kind": "pinned", "asserts": "Update of the ATO at least every 3 years is the term limit of an ATO", "target": "AD-ATO", "field": "max_term_days", "value": 1096}, {"kind": "rule", "asserts": "AODM-002 refuses an ATO term over the limit, so the ATO update falls within years", "target": "AODM-002"}]
+    evidence: [{"kind": "rule", "asserts": "An ATO whose term days exceeds the limit is refused, so systems update the ATO at least every 3 years", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.term.yaml", "expect": "days exceeds", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "pinned", "asserts": "Update of the ATO at least every 3 years is the term limit of an ATO", "target": "AD-ATO", "field": "max_term_days", "value": 1096, "claim": "constraint", "read_by": "AODM-002"}]
     work_item: "WI-25"
   - id: "REQ-DODI5000.90-0081"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "Before a program receives an ATO, the PM will review the program’s"}
@@ -639,8 +639,9 @@ requirements:
     locator: "3.2.b.(2)"
     context: "CYBERSECURITY DRIVEN BY THREAT"
     statement: "(2) Before a program receives an ATO, the PM will review the program’s most recent threat assessment of the system’s cyber-vulnerabilities that must have been issued by the Intelligence Community within the 12 months before issuance of the ATO."
-    status: "covered"
-    evidence: [{"kind": "rule", "asserts": "An ATO needs a threat assessment issued within the 12 months before the ATO and reviewed by the PM", "target": "AODM-004"}, {"kind": "schema", "asserts": "The threat assessment names the Intelligence Community body that issued it", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/threat_assessment/properties/issued_by"}]
+    status: "partial"
+    reason: "The issuer is free text, so nothing fails when the assessment is not from the Intelligence Community"
+    evidence: [{"kind": "rule", "asserts": "An ATO fails when the threat assessment was not issued within the 12 months before it", "target": "AODM-004", "fixture": "tests/fixtures/negative/AODM-004.yaml", "expect": "was not issued within the 12 months", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "asserts": "An ATO needs threat_assessment recorded, the PM's review of the threat assessment", "target": "AODM-004", "fixture": "tests/fixtures/negative/AODM-004.missing.yaml", "expect": "needs threat_assessment", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "pinned", "asserts": "An ATO requires a threat assessment", "target": "AD-ATO", "field": "requires", "value": ["threat_assessment"], "claim": "constraint", "read_by": "AODM-004"}, {"kind": "schema", "asserts": "The date the threat assessment was issued falls within the 12 months before issuance of the ATO", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/threat_assessment/properties/issued", "claim": "constraint", "read_by": "AODM-004"}, {"kind": "schema", "asserts": "The threat assessment must name the Intelligence Community body that issued it", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/threat_assessment/properties/issued_by", "claim": "presence", "read_by": "AODM-004"}]
     work_item: "WI-25"
   - id: "REQ-DODI5000.90-0082"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "Throughout the acquisition lifecycle of any acquisition pathway, the PM must maintain"}
@@ -687,8 +688,9 @@ requirements:
     locator: "3.2.d.(2)"
     context: "CYBERSECURITY DRIVEN BY THREAT Tailoring"
     statement: "(2) In accordance with DoDI 8510.01, the ATO is issued by an AO based on the technical findings of a security controls assessor."
-    status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The ATO is decided by the AO and rests on the risk assessment report built from the assessor findings, and cannot precede them", "target": "AODM-001"}]
+    status: "partial"
+    reason: "The assessor's technical findings reach the decision through ART-RAR, which no rule traces to the decision"
+    evidence: [{"kind": "rule", "asserts": "The ATO must rest on the risk assessment report the assessor's technical findings feed", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.rar.yaml", "expect": "the decision must rest on the risk assessment report", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-DODI5000.90-0088"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "The PM, with concurrence from the AO and DA, can tailor the"}
     kind: "lettered"
@@ -799,7 +801,7 @@ requirements:
     statement: "(a) While the AO may authorize a continuous ATO (cATO), a cATO is only appropriate for products that have a robust automated monitoring capability that allows real or close to real time situational awareness of their cybersecurity status. At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."
     status: "partial"
     reason: "Robust automated monitoring is D-5 data at p12"
-    evidence: [{"kind": "rule", "asserts": "A cATO is limited to the allowed Software and Defense Business System pathways, and refused for software-enabled hardware programs", "target": "AODM-007", "sentence": "At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."}]
+    evidence: [{"kind": "rule", "asserts": "A cATO is limited to the allowed Software and Defense Business System pathways", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.pathway.yaml", "expect": "a cATO is limited to", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."}, {"kind": "pinned", "asserts": "A cATO may only be appropriate for programs in the Software and Defense Business System pathways", "target": "AD-CATO", "field": "allowed_pathways", "value": ["PW-SWP", "PW-DBS"], "claim": "constraint", "read_by": "AODM-007", "sentence": "At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."}, {"kind": "rule", "asserts": "A cATO is refused for software-enabled hardware programs", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.kind.yaml", "expect": "programs cannot hold a cATO", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."}, {"kind": "pinned", "asserts": "A cATO is not appropriate for software-enabled hardware programs", "target": "AD-CATO", "field": "excluded_product_kinds", "value": ["software-enabled-hardware"], "claim": "constraint", "read_by": "AODM-007", "sentence": "At this time, a cATO may only be appropriate for programs in the Software and Defense Business System pathways and not for software-enabled hardware programs."}]
     work_item: "WI-34"
   - id: "REQ-DODI5000.90-0102"
     citation: {"ref": "DODI5000.90", "page": 13, "anchor": "The iterative ATO process depicted in Figure 2 enables AOs to monitor"}

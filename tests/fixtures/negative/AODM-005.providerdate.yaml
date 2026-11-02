@@ -1,0 +1,16 @@
+rule: AODM-005
+bases: [minimal]
+description: an authorization to use before the provider's ATO
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.decision
+    value: AD-ATU
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.provider
+    value: {organization: DISA, decision: AD-ATO, date: '2026-12-01', package: eMASS 1}
+expect:
+  errors: [AODM-005]
+  messages:
+    - follows the decision

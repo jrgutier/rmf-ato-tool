@@ -263,7 +263,7 @@ def test_accept_text_and_mark_commands(tmp_path, monkeypatch):
     accepted = runner.invoke(app, ["conformance", "accept-text", "--id", fx.DOC])
     marked = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002", "--status",
                                  "partial", "--reason", "Half done.", "--evidence",
-                                 '[{"kind": "citation", "target": "P-18"}]'])
+                                 '[{"kind": "citation", "target": "P-18", "claim": "presence"}]'])
     again = runner.invoke(app, ["conformance", "accept-text"])
     bad = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002", "--evidence", "{"])
     nothing = runner.invoke(app, ["conformance", "mark", f"REQ-{fx.DOC}-0002"])

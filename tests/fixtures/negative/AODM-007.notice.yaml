@@ -1,0 +1,36 @@
+rule: AODM-007
+bases: [minimal]
+description: a cATO with no notice to the Component CISO
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: include_after_stop
+    value: [M-6]
+  - op: set_field
+    file: facts.yaml
+    path: acquisition
+    value: {pathway: PW-SWP, product_kind: software, set_by_task: M-6}
+  - op: append_text
+    file: artifacts/data/authorizations.yaml
+    text: |
+      - id: AUTH-003
+        decision: AD-CATO
+        subject: system
+        basis: time-driven
+        decided_by: PER-AO
+        task: M-6
+        date: '2026-12-15'
+        risk_level: moderate
+        risk_acceptance: I accept the residual risk.
+        signature: pki
+        conveyed_to: [PER-PM]
+        rationale: Continuous monitoring is near real time.
+        sources: [INT-012.A1]
+        underlying: AUTH-002
+        review: {frequency_days: 30, events: [significant change]}
+        dod_ciso_approval: {date: '2026-12-10', reference: DoD CISO memo}
+expect:
+  errors: [AODM-007]
+  also: [RUN-CFG-001]
+  messages:
+    - "the AO notifies the Component CISO first: component_ciso_notification"

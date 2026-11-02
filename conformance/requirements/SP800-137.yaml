@@ -870,8 +870,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES"
     statement: "• Make a determination as to whether or not current risk is within organizational risk tolerance levels [ISCM steps: Analyze/Report, Review/Update]."
-    status: "covered"
-    evidence: [{"kind": "pinned", "asserts": "The determination that current risk is within tolerance continues the authorization", "target": "AD-CONT", "field": "effect", "value": "continue"}]
+    status: "partial"
+    reason: "AD-CONT records the outcome; no test fails when no determination against tolerance was made"
+    evidence: [{"kind": "pinned", "asserts": "The determination that current risk is within tolerance continues the authorization", "target": "AD-CONT", "field": "effect", "value": "continue", "claim": "constraint"}]
     work_item: "WI-06"
   - id: "REQ-SP800-137-0111"
     citation: {"ref": "SP800-137", "page": 28, "anchor": "Take steps to respond to risk as needed (e.g., request new or"}
@@ -978,8 +979,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES"
     statement: "• Review the reported security status of the information system to determine whether the risk to the system and the organization remains within organizational risk tolerances [ISCM step: Analyze/Report; RMF Steps: Authorize, Monitor]."
-    status: "covered"
-    evidence: [{"kind": "rule", "asserts": "An M-6 record cannot precede the tasks that report security status, so the AO reviews it first", "target": "AODM-001"}]
+    status: "partial"
+    reason: "Order is tested; that the AO read the status is not"
+    evidence: [{"kind": "rule", "asserts": "An M-6 record is refused until tasks before it have written their outputs, so the reported status exists to review", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.progress.yaml", "expect": "have not written their outputs", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded, and the record's task is active in the run: a seeded ledger excuses a task the run does not carry out"}]
     work_item: "WI-06"
   - id: "REQ-SP800-137-0125"
     citation: {"ref": "SP800-137", "page": 29, "anchor": "Organizations may find that collecting data from every object of every system"}

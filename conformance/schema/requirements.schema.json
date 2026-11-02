@@ -97,9 +97,37 @@
       "additionalProperties": false,
       "required": [
         "kind",
-        "target"
+        "target",
+        "claim"
       ],
       "properties": {
+        "claim": {
+          "enum": [
+            "presence",
+            "constraint"
+          ],
+          "description": "What the evidence can refuse: that the thing is absent (presence), or that it is wrong (constraint). Presence caps at partial on prose kinds. The judge classifies rule and schema items itself, and a declared claim that disagrees is an error."
+        },
+        "fixture": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Rule item: the negative fixture that fails when this clause goes."
+        },
+        "expect": {
+          "type": "string",
+          "minLength": 5,
+          "description": "Rule item: a literal fragment of one failing message in the rule's source, declared in the fixture's expect.messages, with two content words or as one declared message whole."
+        },
+        "read_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Pin or schema item: the rule, also cited by this entry, that reads the field or makes its parent present."
+        },
+        "holds_when": {
+          "type": "string",
+          "minLength": 5,
+          "description": "The gate of the clause cited, such as a rule staying quiet unless an artifact is in play. A covered entry carrying one counts as conditional."
+        },
         "kind": {
           "enum": [
             "rule",

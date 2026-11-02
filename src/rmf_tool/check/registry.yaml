@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 79 rules, 36 repo-scope and 43 run-scope. Authoritative;
+# Rule registry (plan §6.5): 80 rules, 36 repo-scope and 44 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -164,16 +164,16 @@ rules:
     ac: [AC-30]
     phase: p10
     applies_after: null
-    summary: evidence does not resolve or is denied (a rule, schema property or entity that does not list the entry in enforces or x-enforces, a pin on an identity or prose field, an asserts text that does not share vocabulary with the statement and with what its target is about, a sentence that is not one whole marked sentence of the statement), a covered requirement has only evidence that cannot fail or has several marked sentences one of which no distinct strong item cites, an enforces or x-enforces link names an entry that does not cite it, a fan-out exception lacks approved_by user, or one target of any kind backs more requirements than its cap without such an exception
+    summary: evidence does not resolve or is denied (a rule, schema property or entity that does not list the entry in enforces or x-enforces, a pin on an identity or prose field, an asserts text that does not share vocabulary with the statement and with what its target is about, a sentence that is not one whole marked sentence of the statement, a rule item whose fixture does not list the rule in expect.errors or does not declare its expect, an expect of one content word that is not a whole declared message or that is in no failing message of the rule, a declared claim the judge classifies otherwise), a covered requirement has only evidence that cannot fail or has several marked sentences one of which no distinct strong item cites, an enforces or x-enforces link names an entry that does not cite it, a fan-out exception lacks approved_by user, or one target of any kind backs more requirements than its cap without such an exception
     fixture: tests/unit/test_conformance_rules.py::test_fw_req_003_rejects_each_vacuous_evidence_kind
-    hint: covered needs a rule with a negative fixture that lists the entry in enforces, a schema field its parent requires that lists it in x-enforces, a pinned non-identity value or a required template heading on an entity that lists it in enforces, each with an asserts text in the words of the statement and of the target, and with sentence naming, whole, the one sentence it proves when the entry has several marked sentences. Otherwise use partial with a reason. A target over the fan-out cap needs an exception in conformance/policy.yaml with approved_by user.
+    hint: covered needs a rule with a negative fixture that fails on that rule's own clause on a wrong value (a fixture that only deletes, or a clause that only tests absence, is presence and holds a table row only) and lists the entry in enforces, a schema field its parent requires that lists it in x-enforces, a pinned non-identity value or a required template heading on an entity that lists it in enforces, each with an asserts text in the words of the statement and of the target, and with sentence naming, whole, the one sentence it proves when the entry has several marked sentences. Otherwise use partial with a reason. A target over the fan-out cap needs an exception in conformance/policy.yaml with approved_by user.
   - id: FW-REQ-004
     scope: repo
     severity: E
     ac: [AC-31]
     phase: p10
     applies_after: null
-    summary: a partial, deferred, not-applicable or not-a-requirement entry has no reason, a not-a-requirement reason ignores a duty word of its statement (the extractor's MODAL and SHOULD phrases), or a partial entry has no evidence item; a deferred tier 1 entry lacks approved_by user; a covered entry has an open work item; a reviewed entry left its source without removal_reason; a triage pattern is on a tier 1 document, too broad, over the cap, a repeat of another pattern's regexes, or its sample does not match; more than a quarter of a document is retired (not-applicable, deferred, or partial on evidence that cannot fail), however the statuses were set, with no retirements record approved by the user in conformance/policy.yaml, or more than half of its live entries are not-a-requirement with no noise record there, or such a record is stale; a register work item binds no entry and no waiver, or is closed while bound entries are candidate, deferred, not-applicable, or carry no evidence that judges strong; a binding in conformance/bindings.yaml names no entry, several, or one carrying another work item
+    summary: a partial, deferred, not-applicable or not-a-requirement entry has no reason, a not-a-requirement reason ignores a duty word of its statement (the extractor's MODAL and SHOULD phrases), or a partial entry has no evidence item; a deferred tier 1 entry lacks approved_by user; a reviewed entry left its source without removal_reason; a triage pattern is on a tier 1 document, too broad, over the cap, a repeat of another pattern's regexes, or its sample does not match; more than a quarter of a document is retired (not-applicable, deferred, or partial on evidence that cannot fail), however the statuses were set, with no retirements record approved by the user in conformance/policy.yaml, or more than half of its live entries are not-a-requirement with no noise record there, or such a record is stale; a register work item binds no entry and no waiver, is open with every bound entry covered, is closed while a bound entry is not covered on evidence that judges strong, or is closed-partial with a tier 1 entry partial or a bound entry undecided; a binding in conformance/bindings.yaml names no entry, several, or one carrying another work item
     fixture: tests/unit/test_conformance_rules.py::test_fw_req_004_fires_on_a_tier_1_deferral_without_approval
     hint: Write the reason, through rmf conformance mark, and give partial at least a citation; a tier 1 deferral also needs approved_by user. Narrow a triage pattern to one document and the entries its reviewer read, and review the rest one by one; a document mostly not-applicable needs a retirements record, and one mostly noise a noise record, each with approved_by user. Bind a work item through conformance/bindings.yaml and rmf conformance bind, or through a FW-TASK-002 waiver, and close it only when its entries carry evidence that judges strong.
   - id: FW-REQ-005
@@ -492,18 +492,21 @@ rules:
     ac: [AC-18]
     phase: p6
     applies_after: A-2
-    summary: a record's decision type, task, progress, deciding official, subject, recipients, ATD, conditions, RAR reference or degraded disclosure is wrong
+    summary: a record's decision type, task, progress, ATD, conditions, RAR reference or degraded disclosure is wrong
     fixture: tests/fixtures/negative/AODM-001.yaml
-    hint: Each record names an AD-* decision at a task that may decide it and that the run has reached, by PER-AO, conveyed to the system owner or common control provider; ATO types carry an ATD, AD-ATOC carries conditions.
+    hint: Each record names an AD-* decision at a task that may decide it and that the run has reached; ATO types carry an ATD, AD-ATOC carries conditions.
     enforces:
+      - REQ-CNSSI1254-0107
       - REQ-CNSSI1254-0111
       - REQ-DODCIO-CATO-EVAL-0193
+      - REQ-DODCIO-CATO-IG-0007
       - REQ-DODI5000.90-0087
       - REQ-DODI8510.01-0130
-      - REQ-DODI8510.01-0143
-      - REQ-DODI8510.01-0222
       - REQ-SP800-137-0124
+      - REQ-SP800-18R2-0332
+      - REQ-SP800-18R2-0429
       - REQ-SP800-37R2-0386
+      - REQ-SP800-37R2-0408
       - REQ-SP800-37R2-0409
       - REQ-SP800-37R2-0412
       - REQ-SP800-37R2-0454
@@ -523,19 +526,20 @@ rules:
     fixture: tests/fixtures/negative/AODM-002.yaml
     hint: A termination date follows the decision, stays inside the type's max_term_days and is absent where the type forbids it; ongoing authorization records a time-driven frequency and event triggers, and each time-driven review falls within the frequency.
     enforces:
-      - REQ-CNSSI1254-0107
+      - REQ-DODCIO-CATO-0011
       - REQ-DODI5000.90-0080
-      - REQ-SP800-37R2-0411
+      - REQ-SP800-18R1-0001
       - REQ-SP800-37R2-0415
       - REQ-SP800-37R2-0417
       - REQ-SP800-37R2-0576
       - REQ-SP800-37R2-0578
-      - REQ-SP800-37R2-0589
       - REQ-SP800-37R2-0601
       - REQ-SP800-37R2-0610
-      - REQ-SP800-37R2-0616
+      - REQ-SP800-37R2-0620
       - REQ-SP800-37R2-0622
       - REQ-SP800-37R2-0623
+      - REQ-SP800-37R2-0625
+      - REQ-SP800-37R2-0629
       - REQ-SP800-37R2-0635
   - id: AODM-003
     scope: run
@@ -579,6 +583,7 @@ rules:
       - REQ-DODCIO-RECIPROCITY-0012
       - REQ-DODCIO-RECIPROCITY-0058
       - REQ-SP800-18R2-0348
+      - REQ-SP800-37R2-0574
       - REQ-SP800-37R2-0580
       - REQ-SP800-37R2-0581
       - REQ-SP800-37R2-0588
@@ -598,8 +603,6 @@ rules:
     summary: a live test event falls under no IATT or authorization in force
     fixture: tests/fixtures/negative/AODM-006.yaml
     hint: A sap.yaml event marked live needs an AD-IATT or authorization in force on its date.
-    enforces:
-      - REQ-DODI8510.01-0085
   - id: AODM-007
     scope: run
     severity: E
@@ -612,9 +615,30 @@ rules:
     hint: A cATO records dod_ciso_approval and component_ciso_notification, rests on an ATO, and needs facts.acquisition on an allowed pathway and product kind.
     enforces:
       - REQ-DODCIO-CATO-0010
-      - REQ-DODCIO-CATO-EVAL-0106
       - REQ-DODCIO-CATO-IG-0007
       - REQ-DODI5000.90-0101
+  - id: AODM-009
+    scope: run
+    severity: E
+    ac: [AC-18, AC-42]
+    phase: p11
+    applies_after: A-2
+    summary: a record's deciding official, subject or recipients are wrong
+    fixture: tests/fixtures/negative/AODM-009.yaml
+    hint: Each record is decided by the type's official, on a subject the type applies to, and conveyed to the system owner (PER-PM) or common control provider (PER-CCP).
+    enforces:
+      - REQ-DODI8500.01-0409
+      - REQ-DODI8510.01-0222
+      - REQ-SP800-18R1-0001
+      - REQ-SP800-37R2-0203
+      - REQ-SP800-37R2-0409
+      - REQ-SP800-37R2-0411
+      - REQ-SP800-37R2-0412
+      - REQ-SP800-37R2-0577
+      - REQ-SP800-37R2-0580
+      - REQ-SP800-37R2-0596
+      - REQ-SP800-37R2-0607
+      - REQ-SP800-37R2-0629
   - id: RUN-VER-001
     scope: run
     severity: W

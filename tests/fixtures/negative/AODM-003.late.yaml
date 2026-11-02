@@ -1,0 +1,16 @@
+rule: AODM-003
+bases: [minimal]
+description: the CIO position after the ATO
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.risk_level
+    value: high
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.cio_concurrence
+    value: {by: PER-CIO, position: concur, date: '2026-11-21'}
+expect:
+  errors: [AODM-003]
+  messages:
+    - follows the decision

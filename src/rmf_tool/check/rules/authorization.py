@@ -1,4 +1,4 @@
-"""The authorization ledger: AODM-001 to AODM-007. Each reads the records through
+"""The authorization ledger: AODM-001 to AODM-007 and AODM-009. Each reads the records through
 ``rmf_tool.run.authorization`` and stays quiet about a missing or unreadable file (RUN-ART-001
 and RUN-FM-001 report those). A record's findings belong to the task that wrote it. These rules
 test progress, not scope: a decision type has to be reachable in the run as it stands on disk,
@@ -90,7 +90,7 @@ def records_valid(ctx: Context) -> list[RunFinding]:
         seen.add(r.get("id"))
         kind = kinds.get(r.get("decision"))
         if kind is None:
-            err(r, f"decision {r.get('decision')!r} is not one of {', '.join(kinds)}")
+            err(r, f"{r.get('decision')!r} is not one of the decision types: {', '.join(kinds)}")
             continue
         decided_in, task = kind.get("decided_in") or [], r.get("task")
         if task not in decided_in:
@@ -101,15 +101,6 @@ def records_valid(ctx: Context) -> list[RunFinding]:
         elif not status.reached(run, task):
             err(r, f"{r['decision']} is recorded at {task}, but the tasks before {task} have not "
                 "written their outputs")
-        if r.get("decided_by") != kind.get("decided_by"):
-            err(r, f"{r['decision']} is decided by {kind.get('decided_by')}, not "
-                f"{r.get('decided_by')}")
-        if r.get("subject") not in kind.get("applies_to", ()):
-            err(r, f"{r['decision']} decides on {', '.join(kind['applies_to'])}, not "
-                f"{r.get('subject')}")
-        receivers = r.get("conveyed_to")
-        if not isinstance(receivers, list) or RECEIVERS.get(r.get("subject")) not in receivers:
-            err(r, f"the decision is not conveyed to {RECEIVERS.get(r.get('subject'))}")
         if kind.get("atd_required") and not r.get("authorization_termination_date"):
             err(r, f"{r['decision']} needs an authorization_termination_date")
         if kind.get("conditions_required") and not r.get("conditions"):
@@ -126,6 +117,23 @@ def records_valid(ctx: Context) -> list[RunFinding]:
         if task in touched and task in active and not any(r.get("task") == task for r in records):
             out.append(make("AODM-001", f"{task} touched {ledger.LEDGER_ARTIFACT} but recorded no "
                             "decision", ledger.file_of(run), None, {task}))
+    return out
+
+
+# --- AODM-009: who decides, on what, and who is told ----------------------------------------
+
+def parties_valid(ctx: Context) -> list[RunFinding]:
+    out, err = _rule(ctx, "AODM-009")
+    for r, kind in _typed(ctx):
+        if r.get("decided_by") != kind.get("decided_by"):
+            err(r, f"{r['decision']} is decided by {kind.get('decided_by')}, not "
+                f"{r.get('decided_by')}")
+        if r.get("subject") not in kind.get("applies_to", ()):
+            err(r, f"{r['decision']} decides on {', '.join(kind['applies_to'])}, not "
+                f"{r.get('subject')}")
+        receivers = r.get("conveyed_to")
+        if not isinstance(receivers, list) or RECEIVERS.get(r.get("subject")) not in receivers:
+            err(r, f"the decision is not conveyed to {RECEIVERS.get(r.get('subject'))}")
     return out
 
 
@@ -331,5 +339,5 @@ def cato_eligible(ctx: Context) -> list[RunFinding]:
             err(r, f"a cATO is limited to {', '.join(kind['allowed_pathways'])}, not "
                 f"{acquisition.get('pathway')}")
         if acquisition.get("product_kind") in (kind.get("excluded_product_kinds") or ()):
-            err(r, f"a cATO is not for {acquisition.get('product_kind')} programs")
+            err(r, f"{acquisition.get('product_kind')} programs cannot hold a cATO")
     return out

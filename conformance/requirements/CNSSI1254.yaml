@@ -812,7 +812,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | Authorization Decision Document | Authorization Decision | Indicates the type of authorization decision for the system (i.e., ATO or DATO) | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each record names the type of the authorization decision for the system", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/decision"}]
+    evidence: [{"kind": "schema", "asserts": "Each record names the type of the authorization decision for the system", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/decision", "claim": "constraint"}]
   - id: "REQ-CNSSI1254-0105"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| Authorization Decision Document | Authorizing Official | Includes AO signature (manual"}
     kind: "table"
@@ -820,7 +820,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. | Authorization Decision Document | Authorizing Official | Includes AO signature (manual or Public Key Infrastructure (PKI)-certified digital signature). Include an explicit statement that the AO understands and accepts residual risk | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each record states how the authorizing official signature was made, manual or PKI digital signature", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/signature", "sentence": "2. | Authorization Decision Document | Authorizing Official | Includes AO signature (manual or Public Key Infrastructure (PKI)-certified digital signature)."}, {"kind": "schema", "asserts": "Each record holds the explicit statement that the authorizing official understands and accepts residual risk", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/risk_acceptance", "sentence": "Include an explicit statement that the AO understands and accepts residual risk | NIST SP 800- 37"}]
+    evidence: [{"kind": "schema", "asserts": "Each record states how the authorizing official signed the decision, manual or PKI digital signature", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/signature", "claim": "constraint", "sentence": "2. | Authorization Decision Document | Authorizing Official | Includes AO signature (manual or Public Key Infrastructure (PKI)-certified digital signature)."}, {"kind": "schema", "asserts": "Each record holds the authorizing official's explicit statement that the official understands and accepts residual risk", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/risk_acceptance", "claim": "presence", "sentence": "Include an explicit statement that the AO understands and accepts residual risk | NIST SP 800- 37"}]
   - id: "REQ-CNSSI1254-0106"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| Authorization Decision Document | Authorization Date | Identify the date the"}
     kind: "table"
@@ -828,7 +828,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | Authorization Decision Document | Authorization Date | Identify the date the authorization decision was determined | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each record holds the date the authorization decision was determined and signed", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/date"}]
+    evidence: [{"kind": "schema", "asserts": "Each record holds the date the authorization decision was determined and signed", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/date", "claim": "constraint"}]
   - id: "REQ-CNSSI1254-0107"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| Authorization Decision Document | Authorization Termination Date | Identify the date"}
     kind: "table"
@@ -836,7 +836,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | Authorization Decision Document | Authorization Termination Date | Identify the date the authorization expires | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The authorization termination date of a record is valid and states when the authorization expires", "target": "AODM-002"}]
+    evidence: [{"kind": "rule", "asserts": "A record of an ATO type needs an authorization_termination_date, the date the authorization expires", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-CNSSI1254-0108"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| Authorization Decision Document | Overall Residual Risk | Includes the overall"}
     kind: "table"
@@ -845,7 +845,7 @@ requirements:
     statement: "5. | Authorization Decision Document | Overall Residual Risk | Includes the overall risk posture and listing the number of risks by level (i.e., very low to very high). See the RAR for detailed descriptions on each risk | NIST SP 800- 37"
     status: "partial"
     reason: "The record states the overall risk level; the count of risks by level stays in ART-RAR and no rule compares them"
-    evidence: [{"kind": "schema", "asserts": "Each record states the overall risk level accepted, from very low to very high", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/risk_level"}]
+    evidence: [{"kind": "citation", "asserts": "ART-AUTHREC records the overall risk level; the risks by level stay in ART-RAR", "target": "ART-AUTHREC", "claim": "presence"}]
   - id: "REQ-CNSSI1254-0109"
     citation: {"ref": "CNSSI1254", "page": 23, "anchor": "| Authorization Decision Document | Risk Executive (Function) Input (If Provided) |"}
     kind: "table"
@@ -868,7 +868,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. | Authorization Decision Document | Terms/ Conditions for Authorization Note: This information can only be provided, if a system is given Authorization to Operate. | Provides a description of any specific limitations or restrictions placed on the operation of the system Example terms/conditions for authorization: (i) the required security status reports for the system are submitted to this office every year; (ii) the vulnerabilities reported during the continuous monitoring process do not result in additional agency-level risk which is deemed unacceptable; and (iii) the system has not exceeded the maximum allowable time period between security authorizations in accordance with federal and agency policy | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "AD-ATOC carries conditions, the terms stating restrictions on the authorization to operate", "target": "AODM-001"}]
+    evidence: [{"kind": "rule", "asserts": "AD-ATOC needs conditions, the terms stating restrictions on the authorization", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "needs conditions", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-CNSSI1254-0112"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "Reciprocity helps ensure IT capabilities are developed and fielded rapidly and efficiently"}
     kind: "lettered"
@@ -892,7 +892,7 @@ requirements:
     context: "RECIPROCITY"
     statement: "a. Systems have only a single authorization. Multiple authorizations indicate multiple systems under separate ownership and configuration control."
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "A system has a single authorization: a second one in force is refused unless it supersedes the first, since multiple authorizations mean multiple systems", "target": "AODM-005"}]
+    evidence: [{"kind": "rule", "asserts": "A system has a single authorization: a second in force is refused unless it supersedes the first", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.single.yaml", "expect": "a system has a single authorization", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-CNSSI1254-0115"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "Deploying3 systems with authorizations are intended to be accepted into receiving organizations"}
     kind: "lettered"
