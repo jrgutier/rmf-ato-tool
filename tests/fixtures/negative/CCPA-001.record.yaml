@@ -1,0 +1,13 @@
+rule: CCPA-001
+bases: [minimal]
+description: a package of common controls that are not system-based without their implementation record
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-CCA}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.subject, value: common-controls}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.conveyed_to, value: [PER-CCP]}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.common_controls, value: {system_based: false, implementation_record: artifacts/ssp/controls/zz.yaml}}
+expect:
+  errors: [CCPA-001]
+  also: [AUTHRPT-001, SSPR-001]
+  messages:
+    - the package holds no record of common control implementation details

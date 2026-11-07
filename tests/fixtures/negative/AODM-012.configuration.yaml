@@ -1,0 +1,83 @@
+rule: AODM-012
+bases:
+- minimal
+description: an ATU telling sites of a configuration no artifact holds
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1
+  value:
+    id: AUTH-002
+    subject: system
+    task: R-4
+    basis: initial
+    conveyed_to:
+    - PER-PM
+    - PER-ISSM
+    decision: AD-ATU
+    decided_by: PER-AO
+    date: '2026-11-20'
+    authorization_termination_date: '2027-11-20'
+    conditions:
+    - id: COND-01
+      description: Close POAM-002 and POAM-003 (root SSH login) by their scheduled completion date.
+      due: '2026-12-20'
+    - id: COND-02
+      description: Close POAM-001 by its scheduled completion date.
+      due: '2027-01-29'
+    risk_level: moderate
+    rar_ref: ART-RAR
+    rationale: Residual risk is moderate and within the component's tolerance; every weakness has a dated POA&M item and the CAT I item is a condition.
+    sources:
+    - INT-012.A1
+    - ART-RAR
+    threat_assessment:
+      issued_by: Defense Intelligence Agency
+      issued: '2026-06-15'
+      reviewed_by: PER-PM
+      reviewed: '2026-11-01'
+      sources:
+      - INT-012.A1
+    risk_executive:
+      by: PER-RE
+      consulted: '2026-11-18'
+      analyzed_by: PER-AO
+      input: The enterprise accepts moderate risk on sensor relays while the POA&M items close.
+      sources:
+      - INT-012.A1
+    deployment:
+      scope: enterprise
+      version: '1.0'
+      boarding: BRD-002
+    risk_acceptance: I understand and accept the residual risk stated in the rationale.
+    signature: pki
+    provider:
+      organization: DISA
+      decision: AD-ATO
+      date: '2026-01-01'
+      package: eMASS 1
+      termination_date: '2029-01-01'
+    connection_approval:
+      by: PER-AO
+      granting_system: DISA relay service
+      receiving_system: Sensor relay
+      date: '2026-11-20'
+      sources:
+      - INT-012.A1
+    granting_ao_copy:
+      to: DISA AO
+      documents:
+      - ART-AUTHREC
+      date: '2026-11-21'
+    site_guidance:
+      sites:
+      - Component A relay enclave
+      configuration: ART-NOPE
+      date: '2026-11-21'
+expect:
+  errors:
+  - AODM-012
+  also:
+  - SSPR-001
+  messages:
+  - the authorized configuration ART-NOPE given to subordinate sites is not an artifact of this run

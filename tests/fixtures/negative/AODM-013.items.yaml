@@ -1,0 +1,13 @@
+rule: AODM-013
+bases: [minimal]
+description: a denial revising POA&M items the POA&M does not hold
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-DATO}
+  - {op: delete_field, file: artifacts/data/authorizations.yaml, path: records.1.authorization_termination_date}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.halts, value: [AUTH-001]}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.poam_revision, value: {by: PER-AODR, with: PER-PM, items: [POAM-999], date: '2026-11-21'}}
+expect:
+  errors: [AODM-013]
+  also: [SSPR-001]
+  messages:
+    - the revised POA&M items POAM-999 are not in

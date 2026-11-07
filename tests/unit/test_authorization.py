@@ -19,7 +19,8 @@ from rmf_tool.run.migrate import migrate
 from rmf_tool.run.model import open_run
 
 FILE = "artifacts/data/authorizations.yaml"
-EFFECTS = {"AD-IATT": "test", "AD-ATO": "authorize", "AD-DATO": "deny", "AD-CATO": "continuous",
+EFFECTS = {"AD-IATT": "test", "AD-ATO": "authorize", "AD-ATU": "authorize", "AD-DATO": "deny",
+           "AD-CATO": "continuous",
            "AD-CONT": "continue", "AD-RCATO": "revoke-continuous", "AD-RESC": "rescind"}
 ATO = {"id": "AUTH-001", "decision": "AD-ATO", "date": "2026-01-10",
        "authorization_termination_date": "2027-01-10"}
@@ -43,6 +44,45 @@ def test_revoking_a_cato_restores_the_ato_and_its_date():
     assert held.record == ATO and held.continuous is None
     assert held.expires == dt.date(2027, 1, 10)
     assert stands([ATO, CATO, REVOKED], "2027-02-01") == {}
+
+
+def test_an_atu_lapses_with_the_provider_ato_it_rests_on():
+    """SP 800-37r2 p. 164: the ATU remains in effect while the provider's ATO meets the
+    requirements; it carries no date of its own, so the provider's ends it."""
+    atu = {"id": "AUTH-001", "decision": "AD-ATU", "date": "2026-01-10",
+           "provider": {"termination_date": "2026-06-30"}}
+    assert list(stands([atu], "2026-06-30")) == ["AUTH-001"]
+    assert stands([atu], "2026-07-01") == {}
+    assert stands([{**atu, "provider": {"continuous": True}}], "2030-01-01")
+
+
+def test_a_denial_halts_what_it_lists():
+    """SP 800-37r2 p. 165: a denial halts all activity, so what it lists in halts stops."""
+    test = {"id": "AUTH-001", "decision": "AD-IATT", "date": "2026-01-10",
+            "authorization_termination_date": "2026-12-31"}
+    denial = {"id": "AUTH-002", "decision": "AD-DATO", "date": "2026-02-01"}
+    assert list(stands([test, denial], "2026-03-01")) == ["AUTH-001"]
+    assert stands([test, {**denial, "halts": ["AUTH-001"]}], "2026-03-01") == {}
+
+
+def test_a_package_lists_the_record_of_common_control_implementation(minimal_run):
+    """SP 800-37r2 p. 159: the record a not system-based common control decision names is an
+    element of the package, and CCPA-001 accepts it once a file of an artifact holds it."""
+    from rmf_tool import build
+
+    def common_controls(data):
+        data["records"][1].update({
+            "decision": "AD-CCA", "subject": "common-controls", "conveyed_to": ["PER-CCP"],
+            "common_controls": {"system_based": False,
+                                "implementation_record": "artifacts/data/ssp-records.yaml"}})
+    edit_yaml(minimal_run / FILE, common_controls)
+    build.build(open_run(minimal_run, REPO_ROOT))
+    manifest = YAML(typ="safe").load((minimal_run / "package/manifest.yaml").read_text())
+    element = manifest["package"]["authorization_package"][-1]
+    assert element == {"element": "common-control-implementation", "record": "AUTH-002",
+                       "path": "artifacts/data/ssp-records.yaml", "artifact_id": "ART-SSP",
+                       "status": "present"}
+    assert rules.common_control_package(Context(open_run(minimal_run, REPO_ROOT))) == []
 
 
 def test_rescission_ends_the_authorization_on_its_date():
@@ -245,6 +285,10 @@ def test_atu_needs_the_providers_completed_ato(minimal_run):
     assert "follows the decision" in _check(minimal_run, rules.chain)
     _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
                                 "date": "2026-01-01", "package": "eMASS 1"})
+    assert "termination_date of the provider's ATO" in _check(minimal_run, rules.chain)
+    _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
+                                "date": "2026-01-01", "package": "eMASS 1",
+                                "termination_date": "2029-01-01"})
     assert _check(minimal_run, rules.chain) == ""
 
 
@@ -483,7 +527,8 @@ def _observed(run_dir: Path, decision: str = "", field: str = "") -> tuple:
     context = Context(run)
     messages = sorted(f.finding.message for rule in (
         rules.records_valid, rules.parties_valid, rules.termination_valid, rules.chain,
-        rules.threat_assessment, rules.cato_eligible) for f in rule(context))
+        rules.threat_assessment, rules.cato_eligible, rules.atu_connection, rules.denial)
+        for f in rule(context))
     stands = ledger.in_force(ledger.load(run), ledger.effects(run))
     return messages, sorted(stands), [bool(s.continuous or s.ongoing) for s in stands.values()]
 

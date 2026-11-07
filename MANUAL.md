@@ -3499,6 +3499,7 @@ A customer organization accepts the information in an existing authorization pac
 
 Citations:
 
+- [DODCIO-RECIPROCITY](#ref-dodcio-reciprocity), p. 12, "this determination includes a statement by the Receiving AO granting approval"
 - [SP800-37R2](#ref-sp800-37r2), p. 163, "An authorization to use is employed when an organization"
 - [SP800-37R2](#ref-sp800-37r2), p. 164, "The authorization to use does not require a termination date"
 - [SP800-37R2](#ref-sp800-37r2), p. 165, "An ATU requires a completed ATO"
