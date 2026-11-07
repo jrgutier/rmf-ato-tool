@@ -1,0 +1,15 @@
+rule: SCRM-022
+bases:
+- minimal
+description: level-1 does not inform level-2
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: levels.0.informs
+  value:
+  - level-1
+expect:
+  errors:
+  - SCRM-022
+  messages:
+  - level-1 C-SCRM outputs do not inform level-2

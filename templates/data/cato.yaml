@@ -1,0 +1,233 @@
+# Template: artifacts/data/cato.yaml (M-6; schema cato). Written whole (INV-8).
+# What a cATO application shows, per the DoD CIO cATO Implementation Guide (IG) and the
+# cATO Evaluation Criteria (EVAL). Write it when a cATO is sought; CATO-001 requires it once
+# authorizations.yaml holds an AD-CATO record, and CATO-001..014 judge it whenever it exists.
+# Replace every example value with the run's own, each traced through `sources`.
+#   use_case: production-in-factory | production-outside-factory (IG Appendix A).
+#   assessment: the steps of EVAL Figure 4, the team the AO (or AODR) approves, the plan
+#     coordinated with PER-PM and the AO, the four high level criteria, evidence with a
+#     demonstration, interviews of org chart roles, every threshold row of IG Table 2 scored,
+#     and the recommendation reviewed with PER-PM, the AO and PER-CISO.
+#   platform: the approved DoD Enterprise DevSecOps Reference Design, the DSOP's own ATO,
+#     hosting, pipelines with guardrails and control gates (each on a tolerance), zero trust,
+#     the access point, CNAPP on a cloud host, IaC and CaC, scanning and adjudication.
+#   monitoring and strategy: SIEM analytics, CSSP watch, SOC and CSSP, vulnerability
+#     management, the software supply chain, the development pipeline and every environment
+#     monitored, triggers on AO-approved thresholds within the audit and IR plans.
+#   metrics, people, training, process, tolerances, activities_mapping, sbom: see the schema.
+use_case: production-in-factory
+underlying: AUTH-002
+assessment:
+  date: '2026-11-25'
+  steps: [identify-assessors, develop-plan, assess-platform, assess-teams, assess-processes, develop-recommendation, authorize, monitor]
+  team:
+    approved_by: PER-AO
+    skills: [platform, process, people]
+    members:
+      - {name: Platform assessor, trained_on_method: true}
+      - {name: Process and people assessor, trained_on_method: true}
+  plan:
+    key_practices: [IC02, SA02, CM02, RM01, PP08, TP05]
+    criteria_basis: DODCIO-CATO-EVAL
+    weighting: {platform: 40, process: 35, people: 25}
+    coordinated_with: [PER-PM, PER-AO]
+    reviewed_with: [PER-AO]
+    briefed_on: [critical-practices, assessment-process, evaluation-criteria]
+  criteria:
+    - {criterion: defined-documented, result: met}
+    - {criterion: evidence-of-use, result: met}
+    - {criterion: workforce-knowledge, result: met}
+    - {criterion: implementation-level, result: met}
+  evidence:
+    - {practice: SA02, kind: documentation, reference: Pipeline tolerance register}
+    - {practice: PP08, kind: demonstration, reference: Control gate demonstration in staging}
+  interviews:
+    - {role: DSOP security lead, practices: [PP08, SA02]}
+    - {role: Application team lead, practices: [TP05]}
+  analysis: [existing-authorization, conmon-strategy, active-cyber-defense, devsecops-processes, supply-chain-processes, scrm-guidance]
+  competencies: [conmon, active-cyber-defense, secure-supply-chain]
+  scores:
+    - {requirement: IC01, area: process, result: met}
+    - {requirement: IC02, area: process, result: met}
+    - {requirement: IC03, area: process, result: met}
+    - {requirement: IC04, area: process, result: met}
+    - {requirement: RA01, area: platform, result: met}
+    - {requirement: RA02, area: platform, result: met}
+    - {requirement: SA01, area: process, result: met}
+    - {requirement: SA02, area: platform, result: met}
+    - {requirement: SA04, area: platform, result: met}
+    - {requirement: SA05, area: process, result: met}
+    - {requirement: SA06, area: process, result: met}
+    - {requirement: SA07, area: process, result: met}
+    - {requirement: SA08, area: platform, result: met}
+    - {requirement: SA09, area: process, result: met}
+    - {requirement: SA10, area: platform, result: met}
+    - {requirement: CM02, area: platform, result: met}
+    - {requirement: CM03, area: platform, result: met}
+    - {requirement: CM05, area: platform, result: met}
+    - {requirement: CM06, area: process, result: met}
+    - {requirement: CM07, area: process, result: met}
+    - {requirement: RM01, area: people, result: met}
+    - {requirement: RM02, area: process, result: met}
+    - {requirement: RM03, area: process, result: met}
+    - {requirement: RM04, area: platform, result: met}
+    - {requirement: RM05, area: process, result: met}
+    - {requirement: PP02, area: platform, result: met}
+    - {requirement: PP04, area: platform, result: met}
+    - {requirement: PP05, area: platform, result: not-applicable, reason: The reference design uses no sidecar security stack.}
+    - {requirement: PP06, area: platform, result: met}
+    - {requirement: PP07, area: platform, result: met}
+    - {requirement: PP08, area: platform, result: met}
+    - {requirement: PP10, area: platform, result: met}
+    - {requirement: TP01, area: people, result: met}
+    - {requirement: TP03, area: people, result: met}
+    - {requirement: TP05, area: people, result: met}
+    - {requirement: TP06, area: people, result: met}
+    - {requirement: TP07, area: people, result: met}
+    - {requirement: TP08, area: people, result: partially-met}
+    - {requirement: SA03, area: platform, result: met}
+    - {requirement: PP03, area: platform, result: met}
+    - {requirement: TP02, area: people, result: met}
+    - {requirement: TP04, area: people, result: met}
+  findings:
+    - {id: CF-01, requirement: TP08, description: Threat actor analysis training is not yet given to the application team.}
+  recommendation:
+    recommend: authorize
+    readiness: moderate
+    briefing: ao-cato-decision-briefing
+    conditions: [Train the application team in threat actor analysis by 2027-03-01.]
+    reviewed_with: [PER-PM, PER-AO, PER-CISO]
+platform:
+  reference_design: {name: 'DoD Enterprise DevSecOps Reference Design: CNCF Kubernetes', approved: true}
+  authorization: {status: authorized, continuous_monitoring: true, inherited: [continuous-monitoring]}
+  delivery: own-system-as-a-service
+  hosting: {kind: hyperscale-cloud, cloud: true, environments: [development, test, staging, production]}
+  enables: [conmon, active-cyber-defense, secure-supply-chain]
+  pipelines:
+    - {id: PL-01, guardrails: [GR-01], control_gates: [CG-01], collects_evidence: true}
+  control_gates:
+    - id: CG-01
+      description: Blocks promotion from test to staging on an open finding above tolerance.
+      opens_on: No finding above tolerance TOL-01
+      closes_on: A finding above tolerance TOL-01
+      alert_trigger: The gate closes
+      alert_responder: PER-ISSM
+      alert_response: The DSOP security team adjudicates the finding within the sprint.
+      demonstrated: demonstration
+      tolerance: TOL-01
+      trigger_routing: PER-ISSM
+      described_in: ART-IRP
+  guardrails:
+    - {id: GR-01, description: Dependency age limit in the build stage., out_of_tolerance: The build warns and opens a backlog item for the team., tolerance: TOL-02, described_in: ART-IRP}
+  as_code: [infrastructure, configuration]
+  configuration_validation: automated
+  cnapp: [software-composition-analysis, application-security-testing, cspm, ciem, iac-scanning, cwpp, cdr]
+  zero_trust: [ingress-egress, east-west]
+  access_point: cnap
+  scanning: [dependency-analysis, static-analysis, dynamic-analysis, prioritization, adjudication]
+  adjudication: {false_positives: captured-and-analyzed}
+  thresholds: [guardrail, control-gate, notification]
+  pipeline_findings: [capture, visualize, feedback]
+monitoring:
+  environments: [development, test, production]
+  siem_analytics: {developed_by: application-manager, provided_to: PER-CSSP}
+  traffic_inspection: unique-application
+  sidecar: {used: false}
+  cssp_application_monitoring: [non-approved-actions, malicious-actions]
+  soc: local
+  cssp: external
+  acd_methodology: documented
+  vulnerability_tracking: all-assets
+  assessment_scope: full-lifecycle
+  assessment_covers: [threat-modeling, vulnerability-analysis, independent-verification, penetration-testing, attack-surface-reviews, manual-code-reviews, te-scope, sast, dast, iast]
+  audit_ir_coupling: [audit, incident-response]
+  pipeline_monitored: true
+  attack_events: evaluated
+  artifact_reassessment: continuous
+  soc_strategy: software-factory
+  vulnerability_management:
+    expectations_published: true
+    remediation_timelines_published: true
+    staffing_plan_published: true
+    tracked_in: [deficiency-reports, poam]
+    documented_on: discovery
+    timeframe_accepted_by: PER-AO
+strategy:
+  triggers:
+    - {id: TRG-01, on: findings, threat: external, threshold: Any CAT I finding, approved_by: PER-AO, plan: incident-response}
+    - {id: TRG-02, on: risk-tolerance, threat: insider, threshold: Privileged access outside the change window, approved_by: PER-AO, plan: audit}
+    - {id: TRG-03, on: threat-change, threat: external, threshold: A new advisory for a product in the SBOM, approved_by: PER-AO, plan: incident-response}
+    - {id: TRG-04, on: mitigation-effectiveness, threat: external, threshold: A mitigation fails its retest, approved_by: PER-AO, plan: incident-response}
+  issue_investigation: [PER-CSSP, PER-SCA]
+metrics:
+  - {id: MET-01, kind: hygiene, measure: Mean time to patch high and moderate vulnerabilities, collection: automated, trend_analysis: true}
+  - {id: MET-02, kind: trend, measure: Guardrail and control gate results per sprint, collection: automated, trend_analysis: true}
+  - {id: MET-03, kind: feedback-frequency, measure: Feedback communications per release, collection: automated, trend_analysis: true}
+  - {id: MET-04, kind: mitigation-effectiveness, measure: Mitigations holding against new threats, collection: manual, trend_analysis: true}
+  - {id: MET-05, kind: posture-dashboard, measure: Application stage and posture against tolerances, collection: automated, trend_analysis: true}
+people:
+  risk_governance_group:
+    members: [application-development-team, ao-risk-assessment-team, dsop-security-team, mission-owner, platform-team]
+    periodic_review: quarterly
+    ad_hoc_resolution: The group meets within a week of a risk that exceeds a threshold.
+  threats_tracked: [insider, external]
+  insider_threat:
+    working_group: {established: true, active: true, chair: senior-leadership}
+    critical_areas: [Privileged pipeline access]
+    thresholds: [TRG-02]
+  org_chart:
+    - {role: DSOP security lead, team: security}
+    - {role: Application team lead, team: product}
+    - {role: Pipeline engineer, team: dsop}
+  ir_program: [policies, plans, procedures, defined-roles, training, communication]
+  tabletop_exercises:
+    - {date: '2026-10-15', participants: whole-team, after_action_report: AAR-2026-10, subjects: [incident-response, control-gate-trigger, security-alert, elevated-privileges]}
+  onboarding: {by_role: true, offboarding: true, completed_by: all-personnel}
+  experience: [secure-applications, devsecops-culture, security-automation-tools, authorizations, assessing-security-practices]
+  culture_change: {challenges: [Security reviews seen as a gate at the end], means: [training, forums, senior-leadership], approach: Monthly forums led by the program manager.}
+  position_descriptions: dcwf
+training:
+  process: {documented: true, certification: true, validation: true}
+  records:
+    - {member: DSOP security lead, team: security, subjects: [reference-design, security-automation-tools, gates-and-tolerances, finding-adjudication, root-cause-analysis, feedback-loops, poam-and-dashboard, threat-actor-analysis, mitigation, secure-code, mitigation-effectiveness, software-factory, continuous-monitoring, risk-management]}
+    - {member: Application team lead, team: product, subjects: [reference-design, security-automation-tools, gates-and-tolerances, finding-adjudication, root-cause-analysis, feedback-loops, poam-and-dashboard, secure-code]}
+    - {member: Pipeline engineer, team: dsop, subjects: [reference-design, security-automation-tools, gates-and-tolerances, finding-adjudication, root-cause-analysis, feedback-loops, poam-and-dashboard]}
+    - {member: CSSP analyst, team: cssp, subjects: [devsecops-principles]}
+    - {member: Program manager, team: leadership, subjects: [software-modernization, cato-method]}
+  cross_functional: [{member: Application team lead, shadowed: DSOP security lead}]
+process:
+  active_testing:
+    basis: real-world-adversary-tactics
+    cadence: ongoing
+    strategy: Automated DAST and threat emulation on every release candidate.
+    budget: Funded in the program's sustainment line.
+    iterations: [{date: '2026-10-01', kind: penetration-test}, {date: '2026-11-01', kind: analysis}]
+  control_effectiveness: [dynamic-vulnerability-tools, threat-actor-emulation, penetration-testing, operations-analysis]
+  pen_testing: [threat-modeling, methods, assets]
+  feedback:
+    environments: [internal, external]
+    from_cyber_operations: [configuration-changes, incident-analysis, mitigation-effectiveness, threat-change, non-approved-behavior]
+    incident_reviews_with: devsecops-team
+    cssp_monitoring: [non-approved-behavior, incident-forensics, threat-landscape]
+  compliance_monitoring: changing-threat
+  business_rules: [Establish a vulnerability coordination point of contact.]
+tolerances:
+  - {id: TOL-01, threshold: No open high finding at promotion, basis: component-risk-posture-guidance, developed_by: [PER-PM, mission-owner, PER-SCA, PER-AO], criticality: mission, applies_to: dsop, set_by: dsop-team}
+  - {id: TOL-02, threshold: Dependencies under two years old, basis: component-risk-posture-guidance, developed_by: [PER-PM, mission-owner, PER-SCA, PER-AO], criticality: system, applies_to: application, set_by: dsop-team}
+activities_mapping:
+  guidebook: DevSecOps Fundamentals Guidebook Activities and Tools
+  activities:
+    - {activity: Static code scan before commit, kind: required, implemented: true, demonstrated: true}
+    - {activity: Container image signing, kind: preferred, implemented: false, roadmap: POAM-CATO-01}
+  additional_documentation: [Pipeline runbook]
+  roadmap: [{id: POAM-CATO-01, activity: Container image signing, due: '2027-03-01'}]
+sbom:
+  dsop: {provided: true, statement: Generated by the platform build from its container images.}
+  applications: automated-export
+  format: spdx
+  frequency: every-build
+  archive: with-assessment-evidence
+  analysis: Each SBOM is matched against the vulnerability feed daily.
+  new_cve: A new CVE is matched against every archived SBOM and opens a finding where it applies.
+  composition_analysis: in-sbom-creation
+sources: [INT-012.A1]

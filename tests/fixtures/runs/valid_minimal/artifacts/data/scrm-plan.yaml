@@ -1,0 +1,63 @@
+plan:
+  requirements: [REQ-07]
+  policy_implementations: The Component C-SCRM policy applies through REQ-07 and the sustainment contract; no system-specific exception.
+  approach: Supply chain risk is managed from development through disposal by the developer's sustainment contract, the vetted package library and yearly supplier reviews.
+  risk_tolerance: The system sits inside the Component's Level 3 tolerance; supply chain risk above moderate goes to the AO.
+  suppliers:
+    - {supplier: SUP-01, criticality: non-critical, roles: [PER-PM]}
+    - {supplier: SUP-02, criticality: non-critical, roles: [PER-PM]}
+    - {supplier: SUP-03, criticality: critical, roles: [PER-PM, PER-ISSE]}
+    - {supplier: SUP-04, criticality: non-critical, roles: [PER-ISSE]}
+    - {supplier: SUP-05, criticality: non-critical, roles: [PER-PM]}
+  relationships:
+    - {supplier: SUP-03, responsibilities: The PM manages the developer's performance against the sustainment contract; the ISSE reviews each release.}
+  control_considerations: Supply chain controls of the relay service are implemented in the build pipeline shown in the boundary diagram.
+  profile: Domestic suppliers; one open-source dependency, the report store; no vendor-managed service.
+  offboarding: When a supplier relationship ends, its access is revoked, Government data is returned or destroyed and the plan's inventory is updated.
+  considerations:
+    - {kind: vendor-saas, applies: false, treatment: No vendor-controlled SaaS is used.}
+    - {kind: hybrid-or-cloud, applies: false, treatment: The system runs on premises only.}
+    - {kind: open-source, applies: true, treatment: PostgreSQL comes from the vetted Component package library.}
+    - {kind: non-taa-ict-ot, applies: false, treatment: Every supplier is in a Trade Agreements Act nation.}
+    - {kind: unauthorized-resellers, applies: false, treatment: Hardware is bought from the OEM.}
+    - {kind: emerging-technology, applies: false, treatment: No AI or other emerging technology.}
+  information_types: [INF-01, INF-02]
+  approval: {approved_by: PER-AODR, pmo: coordinated, date: '2026-10-01'}
+  review_interval: P1Y
+  sources: [INT-007.A1]
+controls:
+  decisions:
+    - {control: sr-3, decision: selected, rationale: The developer's supply chain needs documented controls., cost: Two days of developer time a year., cost_of_not_implementing: An altered relay build could go undetected., owner: PER-ISSE, plan: In place before the sustainment contract starts.}
+    - {control: sr-11, decision: tailored, rationale: Counterfeit checks are tailored to hardware only., cost: Inspection at receipt., cost_of_not_implementing: Counterfeit hardware could reach the relay., owner: PER-PM}
+    - {control: sr-9, decision: removed, rationale: No tamper-resistant hardware is procured., cost: None., cost_of_not_implementing: Negligible for commodity hardware., accepted_by: PER-AO}
+  procurement:
+    - {supplier: SUP-03, controls: [sr-3, sa-4], consulted: [PER-ISSM], source_selection: best-value-tradeoff}
+  cloud: []
+  coordinated: true
+  sources: [INT-028.A1]
+contingency:
+  activities:
+    - {activity: contingency-planning, suppliers: [SUP-03]}
+    - {activity: incident-response, suppliers: [SUP-03]}
+    - {activity: disaster-recovery, suppliers: [SUP-03]}
+    - {activity: testing, suppliers: [SUP-03]}
+  root_cause: Incident handling traces a tampered relay build to the developer's pipeline or the code host.
+  compromise_criteria: An incident is a supply chain compromise when its root cause lies in a supplied item or a supplier's process.
+  sources: [INT-007.A1]
+monitoring:
+  suppliers:
+    - {supplier: SUP-03, monitors: [compliance, effectiveness, change], interval: P1Y, triggers: [A change of ownership of the developer, A breach at the code host], disclosure: The developer's vulnerability disclosures are checked against each release's scan.}
+  software: Deployed software is scanned for vulnerabilities and supply chain risks each week.
+  conmon: Supplier reviews feed the conmon.yaml monitoring schedule.
+  sources: [INT-030.A1]
+training:
+  awareness: AT-2 literacy training covers supply chain risk and how to report a suspect component.
+  role_based:
+    - {role: PER-PM, content: Supplier risk in acquisition and contract management.}
+    - {role: PER-ISSE, content: Supply chain controls in the build pipeline.}
+  sources: [INT-007.A1]
+reporting:
+  - {level: level-3, audience: [PER-PM, PER-AO], content: [implementation, efficiency, effectiveness, exposure, metrics, urgent-conditions], frequency: P90D, format: A supply chain section of the quarterly posture report.}
+  - {level: level-1, audience: [PER-RE], content: [extent, effectiveness, urgent-conditions, top-risks, metrics], frequency: P1Y, format: The yearly report to the risk executive function.}
+urgent: {notified: [PER-MDA, PER-AO, dod-cio], sources: [INT-007.A1]}
+sources: [INT-007.A1]

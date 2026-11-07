@@ -1,0 +1,19 @@
+rule: SCRM-001
+bases:
+- minimal
+description: a supplier of a mission-critical item rated non-critical
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.2.criticality
+  value: non-critical
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.suppliers.2.criticality
+  value: non-critical
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - SUP-03 supplies INV-003, which performs mission-critical function CF-01, yet is rated 
+    non-critical

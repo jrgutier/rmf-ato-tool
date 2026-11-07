@@ -1,0 +1,14 @@
+rule: CATO-014
+bases:
+- minimal
+description: an SBOM in no common format
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: sbom.format
+  value: spreadsheet
+expect:
+  errors:
+  - CATO-014
+  messages:
+  - the SBOM is in one of the common formats SPDX, SWID or CycloneDX, not spreadsheet, or the record states why another format is used

@@ -60,7 +60,9 @@ requirements:
     locator: "1.2.f"
     context: "POLICY"
     statement: "f. Programs will require government and contractor software teams to use modern iterative software development methodologies (e.g., agile or lean), modern tools and techniques (e.g., development, security, and operations (DevSecOps)), and human-centered design processes to iteratively deliver software to meet the users’ priority needs. These modern approaches will also instrument software such that critical monitoring functions related to the health, security, and operational effectiveness of the software can be automated to the maximum extent practicable."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. Instrumented monitoring is the cATO monitoring record; modern methodologies and human-centered design are not modelled."
+    evidence: [{"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "Critical monitoring functions of the software are recorded in cato.yaml", "claim": "presence"}]
     work_item: "WI-293"
   - id: "REQ-DODI5000.87-0008"
     citation: {"ref": "DODI5000.87", "page": 4, "anchor": "Software development will be done in active collaboration with end users, representing"}
@@ -76,7 +78,9 @@ requirements:
     locator: "1.2.h"
     context: "POLICY"
     statement: "h. Leveraging existing enterprise services, if available, is preferred over creating unique software services for individual programs. These may be procured from the DoD, the DoD components, other government agencies, or commercial providers, and leverage category management solutions and enterprise software agreements."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: hosting.enterprise_services records the enterprise services considered (HOST-001). Unheld: the preference itself is not tested against unique services the program builds"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "hosting.enterprise_services records the enterprise services considered", "claim": "constraint"}]
     work_item: "WI-309"
   - id: "REQ-DODI5000.87-0010"
     citation: {"ref": "DODI5000.87", "page": 4, "anchor": "Cybersecurity and program protection will be addressed from program inception throughout the"}
@@ -420,7 +424,9 @@ requirements:
     locator: "3.2.b.(3).(b)"
     context: "PLANNING PHASE Phase Description"
     statement: "(b) The chosen software development methodology will incorporate continuous testing and evaluation, resiliency, and cybersecurity, with maximum possible automation, as persistent requirements and include a risk-based lifecycle management approach to address software vulnerabilities, supply chain and development environment risk, and intelligence threats throughout the entire lifecycle."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. SWLC-001 requires a software pathway strategy's lifecycle approach to address vulnerabilities, supply chain, development environment and threats; how persistent testing, resiliency and automation are is not tested."
+    evidence: [{"kind": "rule", "target": "SWLC-001", "fixture": "tests/fixtures/negative/SWLC-001.yaml", "expect": "the risk-based lifecycle management approach does not address", "asserts": "The methodology includes a risk-based lifecycle management approach to address software vulnerabilities, supply chain and development environment risk, and intelligence threats", "claim": "constraint", "sentence": "(b) The chosen software development methodology will incorporate continuous testing and evaluation, resiliency, and cybersecurity, with maximum possible automation, as persistent requirements and include a risk-based lifecycle management approach to address software vulnerabilities, supply chain and development environment risk, and intelligence threats throughout the entire lifecycle."}]
     work_item: "WI-299"
   - id: "REQ-DODI5000.87-0052"
     citation: {"ref": "DODI5000.87", "page": 10, "anchor": "The program may develop prototypes or initial capabilities to explore possible solutions,"}
@@ -883,7 +889,9 @@ requirements:
     locator: "3.3.b.(1)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(1) Programs will assemble software architecture, infrastructure, services, pipelines, development and test platforms, and related resources from enterprise services and development contracts. Leveraging existing services from enterprise services and development contracts will be preferred over acquiring new services to the extent consistent with the program acquisition strategy and IP strategy."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: hosting.enterprise_services records the enterprise services and contracts the program assembles from (HOST-001). Unheld: pipelines and development platforms are not listed"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "hosting.enterprise_services records the enterprise services and contracts the program assembles from", "claim": "constraint"}]
     work_item: "WI-309"
   - id: "REQ-DODI5000.87-0108"
     citation: {"ref": "DODI5000.87", "page": 16, "anchor": "Programs will maximize use of automated software testing and security accreditation, continuous"}
@@ -898,7 +906,9 @@ requirements:
     locator: "3.3.b.(3)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(3) The sponsor and program office will develop and maintain a product roadmap to plan regular and iterative deliveries of software capabilities. The product owner and program office will also develop and maintain program backlogs that identify detailed user needs in prioritized lists. The backlogs allow for dynamic reallocation of current and planned software releases. Issues, errors, threats, and defects identified during development and operations, including software updates from third parties or suppliers, should be captured in the program’s backlogs to address in future iterations and releases. Regular stakeholder feedback and inputs will shape the product roadmap and program backlogs."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. SWLC-001 requires the backlogs to capture issues, errors, threats and defects; the product roadmap and stakeholder feedback are not modelled."
+    evidence: [{"kind": "rule", "target": "SWLC-001", "fixture": "tests/fixtures/negative/SWLC-001.backlog.yaml", "expect": "the program backlogs do not capture", "asserts": "Issues, errors, threats, and defects identified during development and operations are captured in the program backlogs", "claim": "constraint", "sentence": "Issues, errors, threats, and defects identified during development and operations, including software updates from third parties or suppliers, should be captured in the program’s backlogs to address in future iterations and releases."}]
     work_item: "WI-299"
   - id: "REQ-DODI5000.87-0110"
     citation: {"ref": "DODI5000.87", "page": 16, "anchor": "The PM and the sponsor will use an iterative, human-centered design process to define the minimum"}
@@ -924,7 +934,9 @@ requirements:
     locator: "3.3.b.(5).(a)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(a) Subsequent capability releases will be delivered at least annually. Software updates to address cybersecurity vulnerabilities will be released in a timely manner, potentially including out of release cycle as needed, per the program’s risk based lifecycle management approach."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. SWLC-001 requires the approach to say when a vulnerability fix leaves the release cycle, held present only; the annual release is not tested."
+    evidence: [{"kind": "rule", "target": "SWLC-001", "fixture": "tests/fixtures/negative/SWLC-001.cycle.yaml", "expect": "vulnerability fix is released out of the release", "asserts": "Software updates for cybersecurity vulnerabilities are released out of release cycle per the risk based lifecycle management approach", "claim": "presence", "sentence": "Software updates to address cybersecurity vulnerabilities will be released in a timely manner, potentially including out of release cycle as needed, per the program’s risk based lifecycle management approach."}]
     work_item: "WI-299"
   - id: "REQ-DODI5000.87-0113"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "Programs should deploy embedded software upgrades at least annually to an environment"}
@@ -958,7 +970,9 @@ requirements:
     locator: "3.3.b.(8)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(8) Automated cyber testing and continuous monitoring of operational software will be designed and implemented to support a cATO or an accelerated accreditation process to the maximum extent practicable; and will be augmented with additional testing where appropriate in accordance with cybersecurity policies, and in coordination with the assigned authorizing official. All safety critical software standards and guidance apply for programs using the software acquisition pathway. Programs will implement recurring cybersecurity assessments of the development environment, processes and tools."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-004 requires the security assessment to cover the development pipeline; augmented testing in coordination with the AO is not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.scope.yaml", "expect": "does not cover the DSOP full lifecycle and the delivery", "asserts": "Automated cyber testing and recurring assessments cover the development environment, processes and tools", "claim": "constraint", "sentence": "Programs will implement recurring cybersecurity assessments of the development environment, processes and tools."}]
     work_item: "WI-293"
   - id: "REQ-DODI5000.87-0117"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "Cybersecurity and software assurance will be integral to strategies, designs, development environment,"}
@@ -966,7 +980,9 @@ requirements:
     locator: "3.3.b.(9)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(9) Cybersecurity and software assurance will be integral to strategies, designs, development environment, processes, supply chain, architectures, enterprise services, tests, and operations. Continuous and automated cybersecurity and cyber threat testing will identify vulnerabilities to help ensure software resilience throughout the lifecycle. PMs will work with stakeholders to provide sufficient controls to enable a cATO where appropriate. Ensuring software security includes:"
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. The controls that enable a cATO are what CATO-* judge; integral software assurance is not tested."
+    evidence: [{"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "Controls sufficient to enable a cATO are recorded in cato.yaml", "claim": "presence"}]
     work_item: "WI-289"
   - id: "REQ-DODI5000.87-0118"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "Secure development (e.g., development environment, vetted personnel, coding, test, identity and access"}
@@ -974,7 +990,9 @@ requirements:
     locator: "3.3.b.(9).(a)"
     context: "EXECUTION PHASE Phase Description Cybersecurity and software assurance will be integral to strategies, designs, development environment, processes, supply chain, architectures, enterprise services, te"
     statement: "(a) Secure development (e.g., development environment, vetted personnel, coding, test, identity and access management, and supply chain risk management)."
-    status: "candidate"
+    status: "partial"
+    reason: "Secure development, supply chain risk management among it, is held for mission-critical items by SCRM-002's minimum technical mitigations; DoDI 5000.87 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.software-assurance.yaml", "expect": "critical components do not include", "asserts": "Secure development includes software assurance and supply chain risk management for critical components", "claim": "constraint"}]
     work_item: "WI-112"
   - id: "REQ-DODI5000.87-0119"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "Cybersecurity and assurance capabilities (e.g., software updates and patching, encryption, runtime monitoring,"}

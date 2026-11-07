@@ -750,6 +750,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).
 - Where risks are not fully mitigated, the operators are told the potential impacts.
 - On urgent capability acquisition the MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment is read from EXT-ADM; it does not accept security risk, which only the AO does, and a mission-critical cybersecurity vulnerability is still eliminated before fielding.
+- Each supply chain risk outside tolerance has an R-3 response in scrm.yaml with two or more alternatives and their acceptable level, and a decision among them taken at the level its reach calls for (SCRM-013).
 
 **Alignment**
 

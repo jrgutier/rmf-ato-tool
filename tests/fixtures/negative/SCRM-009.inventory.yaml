@@ -1,0 +1,14 @@
+rule: SCRM-009
+bases:
+- minimal
+description: a supplier missing from the plan's inventory
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.suppliers.4.supplier
+  value: SUP-04
+expect:
+  errors:
+  - SCRM-009
+  messages:
+  - SUP-05 is missing from the plan's supplier and component inventory

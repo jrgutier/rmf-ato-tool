@@ -1,0 +1,14 @@
+rule: CATO-002
+bases:
+- minimal
+description: a trigger outside the audit and incident response plans
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: strategy.triggers.0.plan
+  value: none
+expect:
+  errors:
+  - CATO-002
+  messages:
+  - 'TRG-01: automated triggers sit within the auditing and incident response plans, not none'

@@ -1,0 +1,16 @@
+rule: SCRM-011
+bases:
+- minimal
+description: an activity names a supplier scrm.yaml lacks
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: contingency.activities.0.suppliers
+  value:
+  - SUP-03
+  - SUP-09
+expect:
+  errors:
+  - SCRM-011
+  messages:
+  - contingency-planning includes SUP-09, which is no supplier in scrm.yaml

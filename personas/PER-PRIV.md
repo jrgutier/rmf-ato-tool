@@ -67,6 +67,10 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
   them?
 - **C (C-3):** Do you approve the categorization for this PII system? Which Privacy Overlays
   apply, and does the system's logging bring in the accountability overlay?
+- **S (S-2):** Which of the Privacy Overlays' optional Privacy Enhancing controls do we tailor
+  in for this system's privacy risk, read with their justification to recommend
+  (`rmf catalog show --run <run> --fields overlay`)? Before AC-2(8) or any control the
+  overlays justify not selecting is selected, what do you find on coordinating it?
 - **S (S-3):** Which privacy controls are common, hybrid or system-specific for this system?
 - **R (R-1):** Is the privacy part of the package complete enough for authorization? Did you
   review the package for compliance with privacy requirements and for privacy risk before
