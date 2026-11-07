@@ -33,7 +33,8 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
                      "cybersecurity-strategy",
                      "test-strategy", "registration", "pia", "cato", "cloud",
-                     "scrm", "scrm-acquisition", "scrm-plan", "scrm-org"}
+                     "scrm", "scrm-acquisition", "scrm-plan", "scrm-org",
+                     "reciprocity"}
 # framework/baselines/*.yaml (ADR-0002)
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs",
                           "privacy-considerations"}
@@ -341,6 +342,11 @@ RUN_EXAMPLES = {
                       "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
          "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-1"},
          "sources": SRC}),
+    "reciprocity": (
+        {"receiving_organizations": [], "received_systems": [], "agreements": [],
+         "sources": SRC},
+        {"receiving_organizations": [{"id": "ORG-1"}], "received_systems": [],
+         "agreements": [], "sources": SRC}),
     "registration": (
         {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
                   "connections": ["CONN-01"]}, "sources": SRC},
