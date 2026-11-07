@@ -26,7 +26,9 @@ PLAN_RUN_SCHEMAS = {
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
-                     "changes", "posture-reports", "plan-reviews", "capabilities", "sar-report"}
+                     "changes", "posture-reports", "plan-reviews", "capabilities", "sar-report",
+                     "protection", "st-protection", "protection-requirements", "nss-assessments",
+                     "test-strategy"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -345,8 +347,15 @@ RUN_EXAMPLES.update({
         ("contingency", "exercises", [{"id": "EX-1", "type": "drill"}]),
         ("incident-response", "reporting_paths", [{"case": "unknown"}]),
         ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
-        ("ssp-records", "space_nss", "maybe"))
+        ("ssp-records", "space_nss", "maybe"),
+        ("protection", "program", {"acat": "IV", "mda": "DAE"}),
+        ("protection-requirements", "read", {"ppp": "PPP-1"}),
+        ("nss-assessments", "nss", "perhaps"),
+        ("test-strategy", "approvals", []))
 })
+_ST = YAML(typ="safe").load(
+    (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
 
 
 def test_every_run_schema_has_examples():

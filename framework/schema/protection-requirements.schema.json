@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:protection-requirements",
+  "title": "runs/<run-id>/artifacts/data/protection-requirements.yaml",
+  "description": "What P-15 read from the capability document and the protection plans, the protection requirements it derived, and the solicitations and reassessments P-17 records. PPROT-004 judges it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "read",
+    "capability_document",
+    "requirements",
+    "solicitations",
+    "reassessments",
+    "sources"
+  ],
+  "properties": {
+    "read": {
+      "title": "The PPP, S&T protection plans, TAPPs and horizontal protection guidance P-15 read",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ppp",
+        "date",
+        "st_protection_plans",
+        "tapps",
+        "horizontal_protection"
+      ],
+      "properties": {
+        "ppp": {
+          "$ref": "#/$defs/text"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "st_protection_plans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "tapps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "horizontal_protection": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "capability_document": {
+      "title": "The capability document P-15 read and the protection content it holds",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "protection_content"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/text"
+        },
+        "protection_content": {
+          "title": "SCRM, export control, anti-tamper, counterintelligence and security support, and threat information in the capability requirements",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "topic",
+              "included",
+              "addressed_by"
+            ],
+            "properties": {
+              "topic": {
+                "title": "Protection content the CJCS puts in JCIDS capability requirements",
+                "enum": [
+                  "scrm",
+                  "export-control",
+                  "anti-tamper",
+                  "counterintelligence-security-support",
+                  "threat-information"
+                ]
+              },
+              "included": {
+                "title": "Whether the capability document includes it",
+                "type": "boolean"
+              },
+              "raised_to": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "addressed_by": {
+                "title": "Protection requirements that address it during capability development",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^PRQ-\\d{3}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "requirements": {
+      "title": "Security design and process requirements informed by TAPPs, S&T protection plans and the PPP",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "statement",
+          "kind",
+          "derived_from"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^PRQ-\\d{3}$"
+          },
+          "statement": {
+            "$ref": "#/$defs/text"
+          },
+          "kind": {
+            "enum": [
+              "design",
+              "process"
+            ]
+          },
+          "derived_from": {
+            "title": "Countermeasures, TAPPs, S&T protection plans or capability content the requirement is derived from",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      }
+    },
+    "solicitations": {
+      "title": "Requests for proposals, contracts and other legally binding agreements",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "countermeasures",
+          "cyber_resilient_requirements",
+          "assurance_remediation"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/text"
+          },
+          "kind": {
+            "enum": [
+              "rfp",
+              "contract",
+              "agreement"
+            ]
+          },
+          "countermeasures": {
+            "title": "PPP countermeasures the solicitation carries",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^CM-\\d{3}$"
+            }
+          },
+          "cyber_resilient_requirements": {
+            "title": "Cyber resilient engineering requirements in the solicitation",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "assurance_remediation": {
+            "title": "Software and hardware assurance remediation strategies translated into contract requirements",
+            "type": "array",
+            "items": {
+              "enum": [
+                "software-assurance",
+                "hardware-assurance"
+              ]
+            }
+          },
+          "deviation": {
+            "title": "Why an RFP leaves out the PPP countermeasures or cyber resilient engineering requirements (the source says should)",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "reassessments": {
+      "title": "Reassessments of technology and system security vulnerabilities",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "trigger",
+          "date",
+          "mitigations",
+          "incorporated_in"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/text"
+          },
+          "trigger": {
+            "enum": [
+              "periodic",
+              "engineering-modification",
+              "technology-refresh"
+            ]
+          },
+          "change": {
+            "$ref": "#/$defs/text"
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "mitigations": {
+            "title": "Technical and process mitigations of the reassessment",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "incorporated_in": {
+            "title": "Solicitations, contracts and agreements the mitigations are incorporated into",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_point": {
+      "description": "A milestone of framework/milestones.yaml or a decision point of framework/pathways.yaml.",
+      "type": "string",
+      "pattern": "^(MS|DP)-[A-Z0-9-]+$"
+    }
+  }
+}

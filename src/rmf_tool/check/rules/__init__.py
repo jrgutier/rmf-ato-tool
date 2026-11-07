@@ -22,7 +22,9 @@ from rmf_tool.check.rules import (
     journal,
     monitor,
     plans,
+    protection,
     tailoring,
+    teststrategy,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -124,6 +126,8 @@ RULES: dict[str, Rule] = {
     "DEGRADED-001": config.degraded,
     "TASK-DEF-001": consistency.deferrals,
     **dict(plans.rules()),
+    **dict(protection.rules()),
+    **dict(teststrategy.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

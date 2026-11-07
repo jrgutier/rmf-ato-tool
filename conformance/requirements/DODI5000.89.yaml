@@ -90,7 +90,9 @@ requirements:
     locator: "2.1.g"
     context: "DIRECTOR OF OT&E (DOT&E) The DOT&E:"
     statement: "g. Approves the OT&E and LFT&E planned activities in test and evaluation master plans (TEMPs), test strategies, or other overarching program test planning documents for programs on the T&E oversight list."
-    status: "candidate"
+    status: "covered"
+    reason: "TSTRAT-001 fails an oversight program whose OT&E or LFT&E planned activities are not approved by the DOT&E or a designee."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dote.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "the DOT&E approves the OT&E planned activities in TEMPs or test strategies for programs on the T&E oversight list: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "g. Approves the OT&E and LFT&E planned activities in test and evaluation master plans (TEMPs), test strategies, or other overarching program test planning documents for programs on the T&E oversight list."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0012"
     citation: {"ref": "DODI5000.89", "page": 5, "anchor": "Approves, in writing, the adequacy of operational test (OT) plans for those"}
@@ -202,7 +204,9 @@ requirements:
     locator: "2.2.e"
     context: "USD(R&E) Pursuant to Section 133a of Title 10, U.S.C. and DoDD 5137.02, the USD(R&E):"
     statement: "e. Approves the DT&E plan within TEMPs and delegates approval authority, as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 requires the USD(R&E) or a designee for an ACAT ID DT&E plan. Unheld: where else the USD(R&E) delegates is its choice."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dt.yaml", "expect": "the USD(R&E) is the approval authority for the DT&E plan of an ACAT ID program", "claim": "constraint", "asserts": "the USD(R&E) approves the DT&E plan within TEMPs and delegates approval authority: the USD(R&E) is the approval authority for the DT&E plan of an ACAT ID program", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "e. Approves the DT&E plan within TEMPs and delegates approval authority, as appropriate."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0026"
     citation: {"ref": "DODI5000.89", "page": 6, "anchor": "Develops governing policy and advances practices and workforce competencies for DT&E."}
@@ -233,7 +237,9 @@ requirements:
     locator: "3.1.c"
     context: "OVERVIEW"
     statement: "c. Programs will incorporate integrated testing at the earliest opportunity when developing program strategies, plans with program protection, documentation, and T&E strategies or the TEMPs. Developing and adopting integrated testing early in the process increases the effectiveness and efficiency of the overall T&E program."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: test-strategy.yaml records integrated events, and penetration testing must cover DT&E and OT&E. Unheld: 'at the earliest opportunity' has no measure."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.phases.yaml", "expect": "penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "claim": "constraint", "asserts": "integrated testing is planned across DT and OT in the TEMP: penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Programs will incorporate integrated testing at the earliest opportunity when developing program strategies, plans with program protection, documentation, and T&E strategies or the TEMPs."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0030"
     citation: {"ref": "DODI5000.89", "page": 7, "anchor": "If done correctly, integrated testing provides greater opportunity for early identification of"}
@@ -321,7 +327,9 @@ requirements:
     locator: "3.1.f.(2)"
     context: "OVERVIEW The T&E WIPT, chaired by the CDT:"
     statement: "(2) Develops the TEMP for the PM. Requires all key stakeholders to be afforded an opportunity to contribute to TEMP development."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: A-2 reads the TEMP. Unheld: the stakeholders' opportunity to contribute is not recorded."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "stakeholders contribute to TEMP development", "sentence": "Requires all key stakeholders to be afforded an opportunity to contribute to TEMP development."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0041"
     citation: {"ref": "DODI5000.89", "page": 8, "anchor": "Includes representatives of test data stakeholders such as systems engineering, DT&E, OT&E,"}
@@ -417,7 +425,9 @@ requirements:
     locator: "3.1.h.(2)"
     context: "Figure 1. Integrated T&E Framework"
     statement: "(2) The CDT will develop the developmental evaluation framework (DEF) that focuses on the correlation between technical requirements, decision points, and data requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails DT events with no DEF. Unheld: the CDT as author and the DEF's content."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.def.yaml", "expect": "the test strategy includes a developmental evaluation framework for its DT events", "claim": "constraint", "asserts": "the developmental evaluation framework covers the DT events and decision points: the test strategy includes a developmental evaluation framework for its DT events", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(2) The CDT will develop the developmental evaluation framework (DEF) that focuses on the correlation between technical requirements, decision points, and data requirements."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0053"
     citation: {"ref": "DODI5000.89", "page": 9, "anchor": "The OTA representative will develop the operational evaluation framework (OEF) that focuses"}
@@ -425,7 +435,9 @@ requirements:
     locator: "3.1.h.(3)"
     context: "Figure 1. Integrated T&E Framework"
     statement: "(3) The OTA representative will develop the operational evaluation framework (OEF) that focuses on the correlation between operational issues, decision points, and data requirements. The linkage between the OEF and the DEF shows that technical requirements support operational capabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails OT events with no OEF or OT concept. Unheld: the OTA as author and the OEF's content."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.oef.yaml", "expect": "the test strategy includes an OT concept or an operational evaluation framework", "claim": "constraint", "asserts": "the operational evaluation framework covers the OT events and decision points: the test strategy includes an OT concept or an operational evaluation framework", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(3) The OTA representative will develop the operational evaluation framework (OEF) that focuses on the correlation between operational issues, decision points, and data requirements."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0054"
     citation: {"ref": "DODI5000.89", "page": 10, "anchor": "As part of the digital engineering strategy, models and data will be"}
@@ -441,7 +453,9 @@ requirements:
     locator: "3.1.j"
     context: "Figure 1. Integrated T&E Framework"
     statement: "j. The T&W WIPT documents the configuration of the test asset and the actual test conditions under which each element of test data was obtained. It indicates whether the test configuration represented operationally realistic or representative conditions."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event records its configuration, its conditions and whether the environment was operationally representative. Unheld: configuration and conditions are free text, so presence."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/events/items/properties/environment", "claim": "constraint", "asserts": "the test configuration represented operationally realistic conditions: Environment of the test", "sentence": "j. The T&W WIPT documents the configuration of the test asset and the actual test conditions under which each element of test data was obtained. It indicates whether the test configuration represented operationally realistic or representative conditions."}]
     work_item: "WI-92"
   - id: "REQ-DODI5000.89-0056"
     citation: {"ref": "DODI5000.89", "page": 10, "anchor": "Before the start of testing for any acquisition path, the T&E WIPT"}
@@ -449,7 +463,9 @@ requirements:
     locator: "3.1.k"
     context: "Figure 1. Integrated T&E Framework"
     statement: "k. Before the start of testing for any acquisition path, the T&E WIPT will develop and document a TEMP or similar strategic document to capture DT, OT, and LFT&E requirements; the rationale for those requirements (e.g., Joint Capabilities Integration and Development System and concept of operations (CONOPS)); and resources, to be approved by the DOT&E and USD(R&E), or their designee, as appropriate. The TEMP, or similar strategic document for programs not under T&E oversight, is approved at the Service level. At a minimum, the document details:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 fails test documentation with no approval. Unheld: the TEMP's requirement rationale and resources, and its timing before testing."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.component.yaml", "expect": "the test strategy documentation requires DoD Component approval, and none is recorded", "claim": "presence", "asserts": "the TEMP or similar strategic document is approved at the Service level: the test strategy documentation requires DoD Component approval, and none is recorded", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The TEMP, or similar strategic document for programs not under T&E oversight, is approved at the Service level."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0057"
     citation: {"ref": "DODI5000.89", "page": 10, "anchor": "The resources and test support requirements needed for all test phases."}
@@ -481,7 +497,9 @@ requirements:
     locator: "3.1.k.(4)"
     context: "Figure 1. Integrated T&E Framework Before the start of testing for any acquisition path, the T&E WIPT will develop and document a TEMP or similar strategic document to capture DT, OT, and LFT&E requir"
     statement: "(4) Test phase objectives, including entrance and exit criteria and cybersecurity test objectives."
-    status: "candidate"
+    status: "covered"
+    reason: "test-strategy.yaml requires the cybersecurity test objectives (at least one) and the entrance and exit criteria."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/objectives/properties/cybersecurity", "claim": "constraint", "asserts": "test phase objectives include cybersecurity test objectives: Cybersecurity test objectives of the test phases", "sentence": "(4) Test phase objectives, including entrance and exit criteria and cybersecurity test objectives."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0061"
     citation: {"ref": "DODI5000.89", "page": 10, "anchor": "Program decisions and data requirements to support those decisions."}
@@ -513,7 +531,9 @@ requirements:
     locator: "3.1.l"
     context: "Figure 1. Integrated T&E Framework"
     statement: "l. The PM will use the TEMP, test strategy, or other pathway-appropriate test strategy documentation as the planning and management tool for the integrated T&E program. The test strategy documentation requires DoD Component approval. Documentation for programs under USD(R&E) or DOT&E oversight will require USD(R&E), or their designee, and DOT&E approval respectively. Documentation for programs not under T&E oversight is approved at the Service level."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 fails test documentation without approval and oversight OT&E without DOT&E. Unheld: the PM's use of it as the management tool (sentence 1); the document clause holds presence."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.component.yaml", "expect": "the test strategy documentation requires DoD Component approval, and none is recorded", "claim": "presence", "asserts": "the test strategy documentation requires DoD Component approval: the test strategy documentation requires DoD Component approval, and none is recorded", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The test strategy documentation requires DoD Component approval."}, {"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dote.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "documentation for programs under DOT&E oversight requires DOT&E approval: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Documentation for programs under USD(R&E) or DOT&E oversight will require USD(R&E), or their designee, and DOT&E approval respectively."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0065"
     citation: {"ref": "DODI5000.89", "page": 11, "anchor": "The DOT&E will manage the T&E oversight list used jointly by the"}
@@ -593,7 +613,9 @@ requirements:
     locator: "3.2.e"
     context: "T&E OVERSIGHT LIST"
     statement: "e. The DOT&E is the approval authority for the respective OT&E and LFT&E planned activities in TEMPs, test strategies, or other overarching program test planning documents for programs on the T&E oversight list."
-    status: "candidate"
+    status: "covered"
+    reason: "TSTRAT-001 fails an oversight program's OT&E planning not approved by the DOT&E or a designee, and its LFT&E planning where it has live fire testing or live fire oversight."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.lfte.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "the DOT&E is the approval authority for the OT&E and LFT&E planned activities of programs on the T&E oversight list: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "e. The DOT&E is the approval authority for the respective OT&E and LFT&E planned activities in TEMPs, test strategies, or other overarching program test planning documents for programs on the T&E oversight list."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0075"
     citation: {"ref": "DODI5000.89", "page": 11, "anchor": "The USD(R&E) is the approval authority for the DT&E plan in the"}
@@ -601,7 +623,9 @@ requirements:
     locator: "3.2.f"
     context: "T&E OVERSIGHT LIST"
     statement: "f. The USD(R&E) is the approval authority for the DT&E plan in the TEMP, test strategy, or other overarching program test planning documents for all acquisition category (ACAT) ID programs. The USD(R&E) reviews and advises the MDA on the DT&E plan in the TEMP, test strategy, or other overarching program test planning documents for ACAT IB and IC programs."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 holds the ACAT ID approval. Unheld: the USD(R&E)'s review and advice to the MDA on ACAT IB and IC DT&E plans."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dt.yaml", "expect": "the USD(R&E) is the approval authority for the DT&E plan of an ACAT ID program", "claim": "constraint", "asserts": "the USD(R&E) is the approval authority for the DT&E plan in the TEMP for ACAT ID programs: the USD(R&E) is the approval authority for the DT&E plan of an ACAT ID program", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The USD(R&E) reviews and advises the MDA on the DT&E plan in the TEMP, test strategy, or other overarching program test planning documents for ACAT IB and IC programs."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0076"
     citation: {"ref": "DODI5000.89", "page": 11, "anchor": "If an Under Secretary or Service Secretary has a significant objection to"}
@@ -696,7 +720,9 @@ requirements:
     locator: "3.3.c"
     context: "T&E MANAGEMENT"
     statement: "c. For each program, a lead OTA, lead DT organization, and lead test organization (LTO) will be designated to plan and conduct OTs, DTs, and LFT&E; report results; and provide an independent and objective evaluation of operational effectiveness, operational suitability, survivability (including cybersecurity), or lethality. They also conduct additional testing and evaluation, as required."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event records who conducts it and whether they are independent. Unheld: the lead OTA, DT and test organization designations."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/events/items/properties/independent", "claim": "presence", "asserts": "test organizations provide an independent evaluation: Whether the testers are independent of the developer and program", "sentence": "For each program, a lead OTA, lead DT organization, and lead test organization (LTO) will be designated to plan and conduct OTs, DTs, and LFT&E; report results; and provide an independent and objective evaluation of operational effectiveness, operational suitability, survivability (including cybersecurity), or lethality."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0088"
     citation: {"ref": "DODI5000.89", "page": 12, "anchor": "A program may use several different acquisition pathways, such as the major"}
@@ -752,7 +778,9 @@ requirements:
     locator: "3.4.a.(1)"
     context: "T&E PROGRAM PLANNING The following are key considerations in developing the TEMP or other test planning documentation:"
     statement: "(1) The PM and the T&E WIPT will use the TEMP or other planning documentation starting at Milestone A or the decision point to enter the applicable acquisition pathway. The PM and the T&E WIPT will prepare and update the planning documentation as needed to support acquisition milestones or decision points. For FRP decision review, full deployment decision review, and thereafter, the MDA, the senior DoD Component leadership, or DOT&E (for programs on T&E oversight), may require planning documentation updates or addendums to address changes to planned or additional testing."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event names a decision point of the pathway (TSTRAT-002). Unheld: use from Milestone A and the FRP updates."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.yaml", "expect": "which is no decision point of the program's pathway", "claim": "constraint", "asserts": "the planning documentation supports acquisition milestones or decision points: which is no decision point of the program's pathway", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The PM and the T&E WIPT will prepare and update the planning documentation as needed to support acquisition milestones or decision points."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0095"
     citation: {"ref": "DODI5000.89", "page": 13, "anchor": "Draft TEMPs will be available to program stakeholders as early and as"}
@@ -760,16 +788,22 @@ requirements:
     locator: "3.4.a.(2)"
     context: "T&E PROGRAM PLANNING The following are key considerations in developing the TEMP or other test planning documentation:"
     statement: "(2) Draft TEMPs will be available to program stakeholders as early and as frequently as possible. For oversight programs, TEMPs approved by the DoD Components will be submitted to the OSD for approval not later than 45 calendar days before the supported decision point. The PMs will ensure programs containing Information Technology (IT) are properly deconflicted with those programs’ post implementation review described in DoD Instruction (DoDI) 5000.82. To support agile acquisition, the timeline for TEMP delivery may be tailored with mutual consent between the DOT&E, OTA, and program office."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 fails an oversight TEMP reaching the OSD fewer than 45 calendar days before a decision point passed. Unheld: draft TEMP availability and the IT post implementation review deconfliction."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.osd.yaml", "expect": "the TEMP of an oversight program is submitted to the OSD for approval 45 calendar days before", "claim": "constraint", "asserts": "for oversight programs TEMPs approved by the DoD Components are submitted to the OSD for approval 45 calendar days before the supported decision point: the TEMP of an oversight program is submitted to the OSD for approval 45 calendar days before", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "For oversight programs, TEMPs approved by the DoD Components will be submitted to the OSD for approval not later than 45 calendar days before the supported decision point."}]
     work_item: "WI-90"
+    ruling_sought: [{"sentence": "To support agile acquisition, the timeline for TEMP delivery may be tailored with mutual consent between the DOT&E, OTA, and program office.", "reason": "Permission: the TEMP delivery timeline 'may be tailored with mutual consent'."}]
   - id: "REQ-DODI5000.89-0096"
     citation: {"ref": "DODI5000.89", "page": 13, "anchor": "A TEMP may be waived or other tailored test strategy documentation be"}
     kind: "lettered"
     locator: "3.4.a.(3)"
     context: "T&E PROGRAM PLANNING The following are key considerations in developing the TEMP or other test planning documentation:"
     statement: "(3) A TEMP may be waived or other tailored test strategy documentation be specified for certain acquisition pathways. In cases where a TEMP is not needed, early briefings to Service stakeholders (as well as the USD(R&E) and DOT&E for oversight programs) are required to facilitate cross-organizational alignment and subsequent approval of test planning documentation."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 lets each pathway use the document its policy names. Unheld: the early briefings to stakeholders where no TEMP is needed (sentence 2)."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.yaml", "expect": "T&E planning, resourcing and documentation follow the", "claim": "constraint", "asserts": "a TEMP may be waived or other tailored test strategy documentation specified for certain acquisition pathways: T&E planning, resourcing and documentation follow the", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(3) A TEMP may be waived or other tailored test strategy documentation be specified for certain acquisition pathways."}]
     work_item: "WI-90"
+    ruling_sought: [{"sentence": "(3) A TEMP may be waived or other tailored test strategy documentation be specified for certain acquisition pathways.", "reason": "Permission: 'A TEMP may be waived or other tailored test strategy documentation be specified for certain acquisition pathways'."}]
   - id: "REQ-DODI5000.89-0097"
     citation: {"ref": "DODI5000.89", "page": 14, "anchor": "The TEMP or other test strategy documentation will:"}
     kind: "lettered"
@@ -784,7 +818,9 @@ requirements:
     locator: "3.4.b.(1)"
     context: "T&E PROGRAM PLANNING The TEMP or other test strategy documentation will:"
     statement: "(1) Contain an integrated test program summary and master schedule of all major test events or test phases to evaluate. The schedule should include the key programmatic decision points supported by the planned testing."
-    status: "candidate"
+    status: "covered"
+    reason: "TSTRAT-002 fails a test event that supports no decision point of the program's pathway."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.yaml", "expect": "which is no decision point of the program's pathway", "claim": "constraint", "asserts": "the schedule includes the key programmatic decision points supported by the planned testing: which is no decision point of the program's pathway", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The schedule should include the key programmatic decision points supported by the planned testing."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0099"
     citation: {"ref": "DODI5000.89", "page": 14, "anchor": "Describe DT test events designed to evaluate performance interoperability, reliability, and cybersecurity."}
@@ -792,7 +828,9 @@ requirements:
     locator: "3.4.b.(1).(a)"
     context: "T&E PROGRAM PLANNING The TEMP or other test strategy documentation will:"
     statement: "(a) Describe DT test events designed to evaluate performance interoperability, reliability, and cybersecurity."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails a strategy with no DT event evaluating cybersecurity. Unheld: performance, interoperability and reliability, recorded but not required."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.dtcyber.yaml", "expect": "the test strategy describes no DT event designed to evaluate cybersecurity", "claim": "presence", "asserts": "describe DT test events designed to evaluate cybersecurity: the test strategy describes no DT event designed to evaluate cybersecurity", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(a) Describe DT test events designed to evaluate performance interoperability, reliability, and cybersecurity."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0100"
     citation: {"ref": "DODI5000.89", "page": 14, "anchor": "Describe OT test events designed to evaluate operational effectiveness, operational suitability, survivability,"}
@@ -800,7 +838,9 @@ requirements:
     locator: "3.4.b.(1).(b)"
     context: "T&E PROGRAM PLANNING The TEMP or other test strategy documentation will:"
     statement: "(b) Describe OT test events designed to evaluate operational effectiveness, operational suitability, survivability, and cybersecurity."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails OT events none of which evaluates cybersecurity. Unheld: effectiveness, suitability and survivability, recorded but not required."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.otcyber.yaml", "expect": "the test strategy describes no OT event designed to evaluate cybersecurity", "claim": "presence", "asserts": "describe OT test events designed to evaluate cybersecurity: the test strategy describes no OT event designed to evaluate cybersecurity", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(b) Describe OT test events designed to evaluate operational effectiveness, operational suitability, survivability, and cybersecurity."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0101"
     citation: {"ref": "DODI5000.89", "page": 14, "anchor": "Include an event-driven testing schedule that will allow adequate time to support"}
@@ -832,7 +872,9 @@ requirements:
     locator: "3.4.b.(5)"
     context: "T&E PROGRAM PLANNING The TEMP or other test strategy documentation will:"
     statement: "(5) Include a DEF, live fire strategy, and an OT concept or OEF. The DEF, live fire strategy, and the OT concept identify the key data that will contribute to assessing whether the DoD is acquiring a system that supports the warfighter in accomplishing the mission."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 requires the DEF with DT events and an OEF or OT concept with OT events. Unheld: the live fire strategy and the key data they identify."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.oef.yaml", "expect": "the test strategy includes an OT concept or an operational evaluation framework", "claim": "constraint", "asserts": "include an OT concept and the DEF: the test strategy includes an OT concept or an operational evaluation framework", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The DEF, live fire strategy, and the OT concept identify the key data that will contribute to assessing whether the DoD is acquiring a system that supports the warfighter in accomplishing the mission."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0105"
     citation: {"ref": "DODI5000.89", "page": 14, "anchor": "Examples of DT measures of program progress include key performance parameters (KPPs),"}
@@ -896,7 +938,9 @@ requirements:
     locator: "3.5.a"
     context: "CYBERSECURITY T&E"
     statement: "a. Cybersecurity planning and execution occurs throughout the entire life cycle. All DoD acquisition programs and systems (e.g., DBS, national security systems, weapon systems, non-developmental items), regardless of acquisition pathway, will execute the cybersecurity DT and OT iterative T&E process detailed in the DoD Cybersecurity T&E Guidebook throughout the program’s life cycle, including new increments of capability. The DoD Cybersecurity T&E Guidebook provides the latest in data-driven, mission-impact-based analysis and assessment methods for cybersecurity T&E and supports assessment of cybersecurity, survivability, and resilience within a mission context and encourages planning for tighter integration with traditional system T&E."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 requires DT and OT cybersecurity events. Unheld: the guidebook's process steps."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.dtcyber.yaml", "expect": "the test strategy describes no DT event designed to evaluate cybersecurity", "claim": "presence", "asserts": "all programs execute the cybersecurity DT and OT iterative T&E process: the test strategy describes no DT event designed to evaluate cybersecurity", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "All DoD acquisition programs and systems (e.g., DBS, national security systems, weapon systems, non-developmental items), regardless of acquisition pathway, will execute the cybersecurity DT and OT iterative T&E process detailed in the DoD Cybersecurity T&E Guidebook throughout the program’s life cycle, including new increments of capability."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0113"
     citation: {"ref": "DODI5000.89", "page": 15, "anchor": "Develop a cybersecurity strategy as part of the program protection plan based"}
@@ -928,7 +972,9 @@ requirements:
     locator: "3.5.b.(4)"
     context: "CYBERSECURITY T&E The PMs will:"
     statement: "(4) Plan to conduct contractor and government integrated tailored cooperative vulnerability identification (T&E activities to identify vulnerabilities and plan the means to mitigate or resolve them, including system scans, analysis, and architectural reviews. These activities begin with prototypes."
-    status: "candidate"
+    status: "covered"
+    reason: "TSTRAT-002 fails a strategy with DT events and no cooperative vulnerability identification."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvi.yaml", "expect": "the test strategy plans no cooperative vulnerability identification", "claim": "constraint", "asserts": "plan to conduct cooperative vulnerability identification to identify vulnerabilities and plan the means to mitigate them: the test strategy plans no cooperative vulnerability identification", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(4) Plan to conduct contractor and government integrated tailored cooperative vulnerability identification (T&E activities to identify vulnerabilities and plan the means to mitigate or resolve them, including system scans, analysis, and architectural reviews. These activities begin with prototypes."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0117"
     citation: {"ref": "DODI5000.89", "page": 16, "anchor": "Plan to conduct integrated tailored cybersecurity DT&E events using realistic threat exploitation"}
@@ -936,7 +982,9 @@ requirements:
     locator: "3.5.b.(5)"
     context: "CYBERSECURITY T&E The PMs will:"
     statement: "(5) Plan to conduct integrated tailored cybersecurity DT&E events using realistic threat exploitation techniques in representative operating environments and scenarios to exercise critical missions within a cyber-contested environment to identify any vulnerabilities and assess system cyber resilience. Whenever possible, plan threat-based testing as part of integrated contractor and government T&E."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event records whether it is threat representative and its environment. Unheld: no clause requires a threat-representative DT&E event beyond penetration testing."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/events/items/properties/threat_representative", "claim": "presence", "asserts": "cybersecurity DT&E events use realistic threat exploitation techniques: Whether the test uses threat-representative techniques", "sentence": "(5) Plan to conduct integrated tailored cybersecurity DT&E events using realistic threat exploitation techniques in representative operating environments and scenarios to exercise critical missions within a cyber-contested environment to identify any vulnerabilities and assess system cyber resilience. Whenever possible, plan threat-based testing as part of integrated contractor and government T&E."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0118"
     citation: {"ref": "DODI5000.89", "page": 16, "anchor": "The April 3, 2018 DOT&E Memorandum directs OTAs to perform a cybersecurity"}
@@ -944,7 +992,9 @@ requirements:
     locator: "3.5.c"
     context: "CYBERSECURITY T&E"
     statement: "c. The April 3, 2018 DOT&E Memorandum directs OTAs to perform a cybersecurity cooperative vulnerability and penetration assessment (CVPA) and an adversarial assessment (AA) of all acquisition programs. The January 21, 2015 DOT&E Memorandum directs OTAs to modify their cybersecurity T&E processes as appropriate for DoD systems whose functions include financial or fiscal/business activities or the management of funds. The January 21, 2015 DOT&E Memorandum also directs the OTAs to add cyber economic threat analysis, cyber economic scenario testing, and financial transaction analysis to their cybersecurity test planning for DBS."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails OT events without a CVPA and an AA. Unheld: 'of all acquisition programs' also covers programs with no OT planned, and the financial-system modifications of the 2015 memorandum."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvpa.yaml", "expect": "OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "claim": "constraint", "asserts": "OTAs perform a CVPA and an adversarial assessment: OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml, and the strategy plans OT events", "sentence": "c. The April 3, 2018 DOT&E Memorandum directs OTAs to perform a cybersecurity cooperative vulnerability and penetration assessment (CVPA) and an adversarial assessment (AA) of all acquisition programs. The January 21, 2015 DOT&E Memorandum directs OTAs to modify their cybersecurity T&E processes as appropriate for DoD systems whose functions include financial or fiscal/business activities or the management of funds. The January 21, 2015 DOT&E Memorandum also directs the OTAs to add cyber economic threat analysis, cyber economic scenario testing, and financial transaction analysis to their cybersecurity test planning for DBS."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0119"
     citation: {"ref": "DODI5000.89", "page": 16, "anchor": "The DOT&E requires testing of cybersecurity during OT&E to include the representative"}
@@ -952,7 +1002,9 @@ requirements:
     locator: "3.5.d"
     context: "CYBERSECURITY T&E"
     statement: "d. The DOT&E requires testing of cybersecurity during OT&E to include the representative users and an operationally representative environment. This may include hardware; software (including embedded software and firmware); operators; maintainers; operational cyber and network defense; end users; network and system administrators; help desk; training; support documentation; tactics, techniques, and procedures; cyber threats; and other systems that input or exchange information with the system under test, as applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: reused results must come from an operationally representative environment (TSTRAT-003). Unheld: representative users, and OT events not reused."
+    evidence: [{"kind": "rule", "target": "TSTRAT-003", "fixture": "tests/fixtures/negative/TSTRAT-003.environment.yaml", "expect": "results reused as assessment evidence come from an operationally representative environment", "claim": "constraint", "asserts": "testing of cybersecurity uses an operationally representative environment: results reused as assessment evidence come from an operationally representative environment", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The DOT&E requires testing of cybersecurity during OT&E to include the representative users and an operationally representative environment."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0120"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "The OTAs will evaluate cybersecurity in OT&E via two assessments: a cybersecurity"}
@@ -960,7 +1012,9 @@ requirements:
     locator: "3.5.d.(1)"
     context: "CYBERSECURITY T&E"
     statement: "(1) The OTAs will evaluate cybersecurity in OT&E via two assessments: a cybersecurity CVPA and an AA. The CVPA and AA should be designed to identify cyber vulnerabilities, examine attack paths, evaluate operational cyber defense capabilities, and establish the operational mission effects (e.g., loss of critical operational capability) in a cyber threat environment while conducting operational missions."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails OT events without a CVPA or an adversarial assessment. Unheld: sentence 2, what they should be designed to do, a should with no outcome a rule can test."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvpa.yaml", "expect": "OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "claim": "constraint", "asserts": "the OTAs will evaluate cybersecurity in OT&E via a CVPA and an AA: OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml, and the strategy plans OT events", "sentence": "(1) The OTAs will evaluate cybersecurity in OT&E via two assessments: a cybersecurity CVPA and an AA."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0121"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "The OTA, with DOT&E review and approval, should integrate developmental and operational"}
@@ -976,7 +1030,9 @@ requirements:
     locator: "3.5.e"
     context: "CYBERSECURITY T&E"
     statement: "e. All programs should plan for periodic integrated government cybersecurity test events before beginning operational testing or initial production, with the goal of increasing efficiency and effectiveness of cybersecurity T&E."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: integrated penetration testing must span DT&E and OT&E. Unheld: 'periodic' events before OT, a should with no interval."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.phases.yaml", "expect": "penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "claim": "constraint", "asserts": "integrated government cybersecurity test events are planned before operational testing: penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "All programs should plan for periodic integrated government cybersecurity test events before beginning operational testing or initial production, with the goal of increasing efficiency and effectiveness of cybersecurity T&E."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0123"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "Understanding that the objectives and knowledge requirements of DT&E and OT&E must"}
@@ -984,7 +1040,9 @@ requirements:
     locator: "3.5.e.(1)"
     context: "CYBERSECURITY T&E"
     statement: "(1) Understanding that the objectives and knowledge requirements of DT&E and OT&E must be met, it is critical that the conditions of the test event and the maturity of the system under test are acceptable to both stakeholders."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event records the system's maturity and the conditions. Unheld: acceptability to both DT and OT stakeholders."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/events/items/properties/system", "claim": "constraint", "asserts": "the maturity of the system under test is recorded for each test event: Maturity of the system under test", "sentence": "(1) Understanding that the objectives and knowledge requirements of DT&E and OT&E must be met, it is critical that the conditions of the test event and the maturity of the system under test are acceptable to both stakeholders."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0124"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "The system under test must be mature enough to represent the production"}
@@ -992,7 +1050,9 @@ requirements:
     locator: "3.5.e.(2)"
     context: "CYBERSECURITY T&E"
     statement: "(2) The system under test must be mature enough to represent the production version. The test conditions should be realistic enough to adequately represent the operational environment, while still being flexible enough to allow a wide range of penetration and adversarial activities. The goal is to maximize assessment of vulnerabilities, evaluate adversarial exploitability of those vulnerabilities, as well as evaluate recovery and restoral processes."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-003 fails an adversarial assessment, or reused results, on a system short of production-representative. Unheld: other events, and realistic test conditions (a should)."
+    evidence: [{"kind": "rule", "target": "TSTRAT-003", "fixture": "tests/fixtures/negative/TSTRAT-003.aa.yaml", "expect": "the system under test is mature enough to represent the production version", "claim": "constraint", "asserts": "the system under test must be mature enough to represent the production version: the system under test is mature enough to represent the production version", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(2) The system under test must be mature enough to represent the production version."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0125"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "Testing must include evaluating appropriate defensive cyberspace operations in accordance with DoDI"}
@@ -1000,7 +1060,9 @@ requirements:
     locator: "3.5.e.(3)"
     context: "CYBERSECURITY T&E"
     statement: "(3) Testing must include evaluating appropriate defensive cyberspace operations in accordance with DoDI 8530.01. The result of cybersecurity testing should be an understanding of mission critical cybersecurity vulnerabilities, each of which should then be eliminated before fielding the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails OT events without a DCO evaluation. Unheld: sentence 2, the understanding of mission critical vulnerabilities, a should."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.dco.yaml", "expect": "cybersecurity testing includes evaluating defensive cyberspace operations", "claim": "constraint", "asserts": "testing must include evaluating defensive cyberspace operations: cybersecurity testing includes evaluating defensive cyberspace operations", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml, and the strategy plans OT events", "sentence": "(3) Testing must include evaluating appropriate defensive cyberspace operations in accordance with DoDI 8530.01."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0126"
     citation: {"ref": "DODI5000.89", "page": 17, "anchor": "Interoperability testing is governed by DoDI 8330.01. All programs or acquisition paths"}
@@ -1088,7 +1150,9 @@ requirements:
     locator: "4.2.a"
     context: "T&E FOR URGENT CAPABILITY ACQUISITION PATHWAY"
     statement: "a. The DOT&E will monitor all programs using the urgent capability pathway to determine placement under T&E oversight. A TEMP is not normally required. Designated programs for DOT&E operational and live fire oversight will adhere to the policies established by the DOT&E for oversight programs. These include:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PW-UCA accepts an abbreviated test plan or test strategy (TSTRAT-001). Unheld: DOT&E's monitoring of UCA programs for oversight placement."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "a TEMP is not normally required on the urgent capability pathway", "sentence": "A TEMP is not normally required."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0137"
     citation: {"ref": "DODI5000.89", "page": 20, "anchor": "Approval by the DOT&E of OTPs and live fire test plans (LFTPs)"}
@@ -1096,7 +1160,9 @@ requirements:
     locator: "4.2.a.(1)"
     context: "T&E FOR URGENT CAPABILITY ACQUISITION PATHWAY The DOT&E will monitor all programs using the urgent capability pathway to determine placement under T&E oversight. A TEMP is not normally required. Desig"
     statement: "(1) Approval by the DOT&E of OTPs and live fire test plans (LFTPs) at the production and development milestone. The Military Services are required to deliver test plans to the DOT&E 60 days before the start of testing."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 requires the DOT&E approval of an oversight program's OT&E and LFT&E planning. Unheld: the 60-day delivery before testing; test-strategy.yaml does not record the plan's delivery date."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dote.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "the DOT&E approves the test plans delivered by the Military Services: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The Military Services are required to deliver test plans to the DOT&E 60 days before the start of testing."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.89-0138"
     citation: {"ref": "DODI5000.89", "page": 20, "anchor": "Approval by the DOT&E of post-deployment assessment plans at the production and"}
@@ -1151,7 +1217,9 @@ requirements:
     locator: "4.3.b.(2)"
     context: "T&E FOR MTA PATHWAY"
     statement: "(2) DoDI 5000.80 requires both rapid prototyping and rapid fielding programs using the MTA pathway to develop a test strategy. Programs under T&E oversight will submit this test strategy, to include plans for operational testing and operational demonstrations (ops demos), to the DOT&E for approval. MTA ops demos offer a unique opportunity to “fly before you buy” by involving the operational user early in the acquisition process, before the initial production decision is made. The lead OTA will incorporate operational user inputs and participation in program test strategies. The DOT&E encourages tailoring MTA ops demos, and other T&E, to enable rapid fielding while maintaining acceptable risk to the warfighter."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: on PW-MTA TSTRAT-001 requires a test strategy, and DOT&E approval on oversight. Unheld: the ops demos and the lead OTA's use of user input."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.yaml", "expect": "T&E planning, resourcing and documentation follow the", "claim": "constraint", "asserts": "rapid prototyping and rapid fielding programs on the MTA pathway develop a test strategy: T&E planning, resourcing and documentation follow the", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(2) DoDI 5000.80 requires both rapid prototyping and rapid fielding programs using the MTA pathway to develop a test strategy."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0145"
     citation: {"ref": "DODI5000.89", "page": 21, "anchor": "The program’s decision authority will designate a DoD Component OTA to serve"}
@@ -1183,7 +1251,9 @@ requirements:
     locator: "4.3.c.(2)"
     context: "T&E FOR MTA PATHWAY Test Strategy"
     statement: "(2) Rapid prototyping test strategies will set evaluation criteria and milestones for technology maturity and prototype performance, culminating in an ops demo of the fieldable prototype in an operational environment. The test strategy will describe the testing that will produce the data necessary to measure technology maturity and prototype performance as well as a description of how the program will achieve a residual operational capability. Evaluation criteria should include performance, safety, interoperability, reliability, and cybersecurity. Progressive operational and live-fire assessments of capabilities and limitations, based on data from incremental integrated test events during the prototype development program, should be included in the test strategy."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: A-2 records the test strategy's cybersecurity objectives. Unheld: the evaluation criteria, milestones and ops demo of rapid prototyping."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "rapid prototyping test strategies set evaluation criteria including cybersecurity", "sentence": "(2) Rapid prototyping test strategies will set evaluation criteria and milestones for technology maturity and prototype performance, culminating in an ops demo of the fieldable prototype in an operational environment."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0149"
     citation: {"ref": "DODI5000.89", "page": 22, "anchor": "Rapid fielding test strategies will set evaluation criteria and milestones to demonstrate"}
@@ -1191,7 +1261,9 @@ requirements:
     locator: "4.3.c.(3)"
     context: "T&E FOR MTA PATHWAY Test Strategy"
     statement: "(3) Rapid fielding test strategies will set evaluation criteria and milestones to demonstrate performance of the proposed products or technologies for current operational purposes. Rapid fielding decisions should be based on integrated developmental and operational testing that demonstrates how the capability contributes to fulfilling the warfighter’s mission or the CONOPS. As rapid fielding programs will begin production within 6 months of program start, they typically will rely heavily on previous testing to support this accelerated timeline. The test strategy will identify all prior testing used, and will specify the additional testing necessary to address differences between the tested prototype and the planned production configuration."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: reused results must come from a production-representative system (TSTRAT-003). Unheld: the evaluation criteria of rapid fielding and the list of prior tests."
+    evidence: [{"kind": "rule", "target": "TSTRAT-003", "fixture": "tests/fixtures/negative/TSTRAT-003.yaml", "expect": "results reused as assessment evidence come from a system that represents the production version", "claim": "constraint", "asserts": "the test strategy identifies prior testing and the differences between the tested prototype and the production configuration: results reused as assessment evidence come from a system that represents the production version", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The test strategy will identify all prior testing used, and will specify the additional testing necessary to address differences between the tested prototype and the planned production configuration."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0150"
     citation: {"ref": "DODI5000.89", "page": 22, "anchor": "The ops demo will inform the decision whether to transition from a"}
@@ -1279,7 +1351,9 @@ requirements:
     locator: "4.4.d"
     context: "T&E FOR MAJOR CAPABILITY ACQUISITION PATHWAY"
     statement: "d. Service OTAs will conduct OT on all programs to support development, fielding decisions, and warfighter understanding of capabilities and limitations. Following initial fielding, any capability upgrades, alterations that materially change system performance, and alterations that pose substantial risk of degrading fielded military capabilities if they fail will be tested by the OTA."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 requires a CVPA and AA with OT. Unheld: OT on every program and testing of later upgrades."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvpa.yaml", "expect": "OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "claim": "constraint", "asserts": "Service OTAs conduct OT, a CVPA and an adversarial assessment among it: OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Service OTAs will conduct OT on all programs to support development, fielding decisions, and warfighter understanding of capabilities and limitations."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0161"
     citation: {"ref": "DODI5000.89", "page": 24, "anchor": "Unless specifically waived, the test-related documentation that is required for MDAP programs"}
@@ -1287,7 +1361,9 @@ requirements:
     locator: "4.4.e"
     context: "T&E FOR MAJOR CAPABILITY ACQUISITION PATHWAY"
     statement: "e. Unless specifically waived, the test-related documentation that is required for MDAP programs will be required for all programs on DOT&E oversight, including, but not limited to, submission of Defense Intelligence Agency or DoD Component validated on-line life-cycle threat reports, test strategies, TEMPs, OTPs, LFTPs, and reporting of test results."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: test-strategy.yaml records oversight. Unheld: the documentation list (VOLT, OTPs, LFTPs, reports)."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "test-related documentation of oversight programs: test strategies and TEMPs", "sentence": "Unless specifically waived, the test-related documentation that is required for MDAP programs will be required for all programs on DOT&E oversight, including, but not limited to, submission of Defense Intelligence Agency or DoD Component validated on-line life-cycle threat reports, test strategies, TEMPs, OTPs, LFTPs, and reporting of test results."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0162"
     citation: {"ref": "DODI5000.89", "page": 24, "anchor": "The software pathway focuses on modern iterative software development techniques such as"}
@@ -1303,7 +1379,9 @@ requirements:
     locator: "4.5.b"
     context: "T&E FOR SOFTWARE ACQUISITION PATHWAY"
     statement: "b. The software pathway policy includes a requirement to create a test strategy. The program CDT or T&E lead, in collaboration with the other T&E stakeholders, should develop the test strategy and discuss the approach to developing measurable criteria derived from requirements (e.g., user features, user stories, use cases). The software pathway policy additionally requires the identification of test platforms and infrastructure be included in the acquisition strategy; the estimated T&E costs be included in the cost estimate; and the periodic delivery of the technical baseline to include scripts, tools, libraries, and other software executables necessary to test the software. Taken as whole, the test strategy for software intensive systems should include:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PW-SWP requires a test strategy (TSTRAT-001). Unheld: the measurable criteria, test platforms in the acquisition strategy and T&E costs."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.yaml", "expect": "T&E planning, resourcing and documentation follow the", "claim": "constraint", "asserts": "the software pathway requires a test strategy: T&E planning, resourcing and documentation follow the", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The program CDT or T&E lead, in collaboration with the other T&E stakeholders, should develop the test strategy and discuss the approach to developing measurable criteria derived from requirements (e.g., user features, user stories, use cases)."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0164"
     citation: {"ref": "DODI5000.89", "page": 24, "anchor": "Characterization of proposed test platforms and infrastructure, including automated testing tools and"}
@@ -1399,7 +1477,9 @@ requirements:
     locator: "4.5.d.(2)"
     context: "T&E FOR SOFTWARE ACQUISITION PATHWAY"
     statement: "(2) Automated testing tools and automated security tools should be accredited by an OTA as “fit for purpose.”"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: nothing beyond the playbook. Unheld: OTA accreditation of tools, a should."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "automated testing tools accredited by an OTA as fit for purpose", "sentence": "(2) Automated testing tools and automated security tools should be accredited by an OTA as “fit for purpose.”"}]
     work_item: "WI-92"
   - id: "REQ-DODI5000.89-0176"
     citation: {"ref": "DODI5000.89", "page": 25, "anchor": "Cybersecurity developmental and operational T&E assessments should consider, and reference, the DoD"}
@@ -1407,7 +1487,9 @@ requirements:
     locator: "4.5.d.(3)"
     context: "T&E FOR SOFTWARE ACQUISITION PATHWAY"
     statement: "(3) Cybersecurity developmental and operational T&E assessments should consider, and reference, the DoD Cybersecurity T&E Guidebook to assist in the planning and execution of cybersecurity T&E activities needed beyond just the authority to operate (which is a necessary but not sufficient mechanism to assess cybersecurity). Automation, organic to the software acquisition pathway, provides data collection opportunities to develop cybersecurity T&E assessments in an incremental and iterative fashion."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: A-2 records cybersecurity events beyond the ATO. Unheld: 'should consider' the guidebook names no outcome."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "cybersecurity DT and OT assessments plan cybersecurity T&E beyond the ATO", "sentence": "(3) Cybersecurity developmental and operational T&E assessments should consider, and reference, the DoD Cybersecurity T&E Guidebook to assist in the planning and execution of cybersecurity T&E activities needed beyond just the authority to operate (which is a necessary but not sufficient mechanism to assess cybersecurity)."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0177"
     citation: {"ref": "DODI5000.89", "page": 26, "anchor": "Information gleaned from automated tests, such as those detailed above, as well"}
@@ -1439,7 +1521,9 @@ requirements:
     locator: "4.6.b"
     context: "T&E FOR THE DBS PATHWAY"
     statement: "b. DBS PMs will develop a TEMP or other test strategy documentation. The PM will describe the test strategy and essential elements of the TEMP in the DBS implementation plan. Specific T&E management content requirements in the implementation plan include:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PW-DBS accepts the implementation plan or a TEMP (TSTRAT-001). Unheld: the TEMP's essential elements in the plan."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.yaml", "expect": "T&E planning, resourcing and documentation follow the", "claim": "constraint", "asserts": "DBS PMs develop a TEMP or other test strategy documentation in the implementation plan: T&E planning, resourcing and documentation follow the", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "DBS PMs will develop a TEMP or other test strategy documentation."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0181"
     citation: {"ref": "DODI5000.89", "page": 26, "anchor": "Test events to collect data must be defined, scheduled, and resourced in"}
@@ -1447,7 +1531,9 @@ requirements:
     locator: "4.6.b.(1)"
     context: "T&E FOR THE DBS PATHWAY DBS PMs will develop a TEMP or other test strategy documentation. The PM will describe the test strategy and essential elements of the TEMP in the DBS implementation plan. Spec"
     statement: "(1) Test events to collect data must be defined, scheduled, and resourced in the implementation plan, including a DEF matrix for DT events."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: events are recorded with date, decision point and resources, and DT events need a DEF. Unheld: the implementation plan itself."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.def.yaml", "expect": "the test strategy includes a developmental evaluation framework for its DT events", "claim": "constraint", "asserts": "test events are defined and scheduled including a DEF matrix for DT events: the test strategy includes a developmental evaluation framework for its DT events", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(1) Test events to collect data must be defined, scheduled, and resourced in the implementation plan, including a DEF matrix for DT events."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.89-0182"
     citation: {"ref": "DODI5000.89", "page": 26, "anchor": "Cybersecurity operational T&E must also include a cyber economic vulnerability analysis as"}
@@ -1455,7 +1541,9 @@ requirements:
     locator: "4.6.b.(2)"
     context: "T&E FOR THE DBS PATHWAY DBS PMs will develop a TEMP or other test strategy documentation. The PM will describe the test strategy and essential elements of the TEMP in the DBS implementation plan. Spec"
     statement: "(2) Cybersecurity operational T&E must also include a cyber economic vulnerability analysis as outlined in the September 14, 2010 and January 21, 2015 DOT&E Memoranda. The MDA will not tailor cybersecurity T&E solely to meet authority to operate requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-002 fails a system with financial or fiscal/business functions and no cyber economic vulnerability analysis. Unheld: sentence 2, the MDA not tailoring cybersecurity T&E to the ATO alone."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.ceva.yaml", "expect": "includes a cyber economic vulnerability analysis", "claim": "constraint", "asserts": "cybersecurity operational T&E must also include a cyber economic vulnerability analysis: includes a cyber economic vulnerability analysis", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(2) Cybersecurity operational T&E must also include a cyber economic vulnerability analysis as outlined in the September 14, 2010 and January 21, 2015 DOT&E Memoranda."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0183"
     citation: {"ref": "DODI5000.89", "page": 26, "anchor": "T&E planning will include mission-oriented developmental T&E with actual operators performing end-to-end"}
@@ -1679,7 +1767,9 @@ requirements:
     locator: "5.2.b.(17)"
     context: "DT&E ACTIVITIES A robust DT&E program will provide the data and assessments for independent evaluations and decision-making. The DT&E program will:"
     statement: "(17) Include T&E activities to detect cyber vulnerabilities within custom and commodity hardware and software."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: cooperative vulnerability identification is required with DT events. Unheld: custom and commodity hardware and software are not distinguished."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvi.yaml", "expect": "the test strategy plans no cooperative vulnerability identification", "claim": "constraint", "asserts": "T&E activities detect cyber vulnerabilities: the test strategy plans no cooperative vulnerability identification", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "(17) Include T&E activities to detect cyber vulnerabilities within custom and commodity hardware and software."}]
     work_item: "WI-81"
   - id: "REQ-DODI5000.89-0211"
     citation: {"ref": "DODI5000.89", "page": 28, "anchor": "Support cybersecurity assessments and authorization, including RMF security controls."}
@@ -1717,7 +1807,9 @@ requirements:
     locator: "5.3.c.(1)"
     context: "DT&E EXECUTION, EVALUATION, AND REPORTING DT&E Reports and Data"
     statement: "(1) The USD(R&E) and the acquisition chain of command and their designated representatives will have full and prompt access to all ongoing developmental testing and integrated testing, and all DT and integrated test records and reports, including but not limited to: data from all tests, recurring test site status and execution reports, system logs, execution logs, test director notes, certifications, user and operator assessments, and surveys. This applies to all government-accessible data including classified, unclassified, and competition sensitive or proprietary data. Data may be preliminary and identified as such, when applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "Unheld: the USD(R&E)'s access to test data is an access right the run cannot observe."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-3.md", "claim": "presence", "asserts": "access to developmental test records and data reused as assessment evidence", "sentence": "(1) The USD(R&E) and the acquisition chain of command and their designated representatives will have full and prompt access to all ongoing developmental testing and integrated testing, and all DT and integrated test records and reports, including but not limited to: data from all tests, recurring test site status and execution reports, system logs, execution logs, test director notes, certifications, user and operator assessments, and surveys."}]
     work_item: "WI-92"
   - id: "REQ-DODI5000.89-0216"
     citation: {"ref": "DODI5000.89", "page": 29, "anchor": "The PM and test agencies for all T&E oversight programs will provide"}
@@ -2029,7 +2121,9 @@ requirements:
     locator: "6.4.c.(1)"
     context: "Figure 3. Operational or Major Live Fire Test Event: Planning, Approval, Execution, and"
     statement: "(1) The DOT&E, the PM, and their designated representatives who have been properly authorized access, will have full and prompt access to all records, reports, and data, including but not limited to data from tests, system logs, execution logs, test director notes, and user and operator assessments and surveys. Data include, but are not limited to, classified, unclassified, and (when available) competition sensitive or proprietary data. Data may be preliminary and will be identified as such."
-    status: "candidate"
+    status: "partial"
+    reason: "Unheld: the DOT&E's and PM's access to test records is an access right the run cannot observe."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-3.md", "claim": "presence", "asserts": "access to records, reports and data from tests", "sentence": "(1) The DOT&E, the PM, and their designated representatives who have been properly authorized access, will have full and prompt access to all records, reports, and data, including but not limited to data from tests, system logs, execution logs, test director notes, and user and operator assessments and surveys."}]
     work_item: "WI-92"
   - id: "REQ-DODI5000.89-0255"
     citation: {"ref": "DODI5000.89", "page": 35, "anchor": "OTAs and other T&E agencies will record every OT&E and LFT&E event"}
@@ -2037,7 +2131,9 @@ requirements:
     locator: "6.4.c.(2)"
     context: "Figure 3. Operational or Major Live Fire Test Event: Planning, Approval, Execution, and"
     statement: "(2) OTAs and other T&E agencies will record every OT&E and LFT&E event in writing. Full reports will often contain multiple test events and will be accomplished in the timeliest manner practicable. Interim summaries or catalogues of individual events will be prepared as results become available."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event is recorded with who conducted it. Unheld: the written report of each event and its timeliness."
+    evidence: [{"kind": "schema", "target": "framework/schema/test-strategy.schema.json#/properties/events/items/properties/conducted_by", "claim": "presence", "asserts": "OT&E and LFT&E agencies record every event with who conducted the test event: Who conducted the test event", "sentence": "(2) OTAs and other T&E agencies will record every OT&E and LFT&E event in writing."}]
     work_item: "WI-92"
   - id: "REQ-DODI5000.89-0256"
     citation: {"ref": "DODI5000.89", "page": 35, "anchor": "Significant problems will be reported promptly by the acquisition decision authority to"}

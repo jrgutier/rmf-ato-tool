@@ -175,6 +175,9 @@ Purpose: Establish the organization's risk management strategy, including how it
    maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
    M-4 applies it. Keep the risk tolerance
    concrete; R-2 and R-4 compare the system's risk with it.
+   Record also the Component CIO's process for designated approval authorities to make
+   certification determinations and issue an IATT or ATO expeditiously for a capability fielded
+   under urgent capability acquisition (DoDI 5000.81), so a UCA program knows whom to ask.
 5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews

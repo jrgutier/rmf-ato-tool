@@ -103,6 +103,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [EXT-NSA-ASSESSMENT](../../MANUAL.md#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
 
 **Outputs**
 
@@ -118,6 +119,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
+- nss-assessments.yaml records, for a National Security System, NSA's assessment with the cognizant AO of its cybersecurity requirements and security architecture before each milestone passed, and for a space NSS the coordination of its architecture, the check of pre-existing components and the compliance reports to the AO and NSA (PPROT-006).
 
 **Alignment**
 
@@ -172,6 +174,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
 
 **Alignment**
 

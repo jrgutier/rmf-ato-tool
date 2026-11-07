@@ -1,0 +1,47 @@
+rule: PPROT-005
+bases:
+- minimal
+description: an ACAT ID ITRA approved by the Component
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.acat
+  value: ID
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.approval.authority
+  value: USD(R&E)
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: inputs.itras
+  value:
+  - id: ITRA-1
+    decision_point: MS-A
+    conducted_by: OUSD(R&E)
+    approved_by: USD(R&E)
+    covers:
+    - adversarial-risk
+    - program-protection
+    - cyber-vulnerabilities
+    informs:
+    - TR-001
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals
+  value:
+  - part: document
+    by: component
+    date: '2026-04-15'
+    decision_point: MS-B
+  - part: dt-e
+    by: USD(R&E)
+    date: '2026-04-15'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: inputs.itras.0.approved_by
+  value: component-independent
+expect:
+  errors:
+  - PPROT-005
+  messages:
+  - the USD(R&E) conducts and approves the ITRA of an ACAT ID program
