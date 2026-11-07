@@ -216,7 +216,7 @@ headings link to the persona catalog; each persona's card describes the role in 
 | [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R |  | C | C | R | C | C |  |
 | [M-4](#task-m-4) Authorization Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |
 | [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |
-| [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | I | I |  |  |  |  |  | C |  |
+| [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  |
 | [M-7](#task-m-7) System Disposal | I | C |  |  | C |  | R/A | R | C |  | C |  |  | C |  |
 
 ## <a id="phases"></a>4. Phases and tasks
@@ -1852,6 +1852,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every family's monitoring frequency is at least the organizational minimum in ART-ORG-CONTEXT, and conmon.yaml minimum_review records the system owner's review of those minimums (OCTX-009).
 - A continuous monitoring strategy for the system that reflects the organizational risk management strategy is developed (DoDI 8510.01 Table 3 outcome).
 - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization triggers (CONMON-001).
+- On the software pathway (PW-SWP), conmon.yaml states the risk-based lifecycle management approach, what it addresses, what the program backlogs capture, and when a vulnerability fix is released out of the release cycle (SWLC-001).
 - conmon.yaml states the criteria behind each frequency, established by the system owner or common control provider with other officials, or cites ART-ORG-CONTEXT for a family organizational_frequencies lists as set by the organizational strategy (ISCM-003).
 - Each automated tool names the baseline controls it assesses by the test method, with its frequency (continuous where it carries a continuously monitored control), analysis, reporting, selection criteria, upkeep and strategy; a desired-state tool defines an automated actual state, a data-based comparable desired state and its defect method; a continuously monitored control no tool covers gets a manual frequency (ISCM-002).
 - conmon.yaml states the data architecture, compliance, effectiveness and change monitoring, event criteria with thresholds and what each triggers, a periodic boundary review, threat monitoring of threat actors, protective techniques and the deployed environment (EXT-THREAT), metrics and the tasks using them, activities delegated to external partners and how the risk assessment is kept current (ISCM-001, ISCM-005, ISCM-006); posture reports reach the AO (ISCM-005).
@@ -3282,8 +3283,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [AO](personas/PER-AO.md) Authorizing Official |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
-| Informed | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner |
+| Informed | [ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -3310,6 +3311,7 @@ Writes to `facts.yaml`: `acquisition`.
 
 - Posture reports available (M-5); the monitoring strategy sets the ongoing-authorization triggers.
 - For AD-CATO, an ATO is in place and the system shows robust continuous monitoring of its RMF controls, active cyber defense and use of an approved DevSecOps reference design.
+- For AD-CATO, the program is in one of the use cases of the DoD CIO cATO Implementation Guide (Appendix A), and its current ATO carries no High or Very High unmitigated finding (CATO-002).
 
 **Exit criteria**
 
@@ -3319,6 +3321,7 @@ Writes to `facts.yaml`: `acquisition`.
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 - A change of AO is an `ao-change` record whose ao_transfer states what the new official reviewed, finds and does about it (AOCHG-001).
 - An ISCM program assessment report the determination reads is in iscm_assessments of the ledger (MISCM-001).
+- Where a cATO is sought, artifacts/data/cato.yaml records the cATO assessment (the team the AO approves, the plan coordinated with the PMO and AO, Table 2 of the cATO Implementation Guide scored, the recommendation reviewed with the PMO, AO and CISO and briefed with its conditions), the DevSecOps platform and its control gates and guardrails, monitoring and active cyber defense, the strategy's triggers, metrics, people, training, testing and feedback, risk tolerances, the activities mapping and the SBOM (CATO-001 to CATO-014).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [DATO](#ad-dato), [cATO](#ad-cato), [DATU](#ad-datu), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) (see [authorization decisions](#decisions)).
 
@@ -3340,6 +3343,9 @@ Writes to `facts.yaml`: `acquisition`.
 - [DODI5000.90](#ref-dodi5000-90), p. 13, "While the AO may authorize a continuous ATO (cATO)"
 - [SP800-37R2](#ref-sp800-37r2), p. 172, "When there is a change in authorizing officials"
 - [SP800-137A](#ref-sp800-137a), section 3.1
+- [DODCIO-CATO-IG](#ref-dodcio-cato-ig), p. 9, "Identify the team to perform the process assessment"
+- [DODCIO-CATO-IG](#ref-dodcio-cato-ig), p. 19, "A threshold requirement"
+- [DODCIO-CATO-EVAL](#ref-dodcio-cato-eval), p. 10, "The following list of activities associated with the Continuous Authorization to Operate"
 
 **Playbook:** [playbooks/M/M-6.md](playbooks/M/M-6.md)
 
@@ -4169,7 +4175,7 @@ The authorization decision, its terms and conditions and the authorization termi
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-AODM.md](templates/artifacts/ART-AODM.md) |
-| Data files | — |
+| Data files | `artifacts/data/cato.yaml` (schema `cato`) |
 | OSCAL | — |
 | Produced by | [R-4](#task-r-4) |
 | Updated by | [M-6](#task-m-6) |
@@ -4323,7 +4329,7 @@ simulated stakeholders.
 | [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 30 / 2 |
 | [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 16 / 0 |
 | [SCA](#per-sca) Security Control Assessor | rmf | DoD Component CISO (the Component SCA, who may formally delegate the role) | [PER-SCA.md](personas/PER-SCA.md) | 5 / 3 / 4 / 1 |
-| [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 8 / 7 |
+| [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 9 / 6 |
 | [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 19 / 0 / 12 / 6 |
 | [ISSO](#per-isso) Information System Security Officer | rmf | PM or SO | [PER-ISSO.md](personas/PER-ISSO.md) | 1 / 0 / 8 / 0 |
 | [ISSE](#per-isse) Information Systems Security Engineer | engineering | — | [PER-ISSE.md](personas/PER-ISSE.md) | 5 / 0 / 11 / 0 |
@@ -4454,8 +4460,8 @@ Accountable for the system and for implementing the RMF in step with the acquisi
 - SP 800-37 Rev. 2 roles: System Owner, Mission or Business Owner
 - Responsible for: [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-5](#task-s-5), [I-1](#task-i-1), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-3](#task-r-3), [M-1](#task-m-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
 - Accountable for: [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
-- Consulted on: [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [R-5](#task-r-5), [M-2](#task-m-2)
-- Informed of: [P-1](#task-p-1), [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [R-2](#task-r-2), [R-4](#task-r-4), [M-6](#task-m-6)
+- Consulted on: [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-6](#task-m-6)
+- Informed of: [P-1](#task-p-1), [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [R-2](#task-r-2), [R-4](#task-r-4)
 
 Citations:
 
@@ -4765,6 +4771,8 @@ the whole library with checksums.
 | <a id="ref-dodi8531-01"></a>**DODI8531.01** | DoD Vulnerability Management | DoD | September 15, 2020 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/853101p.pdf> | [DODI8531.01.md](references/text/DODI8531.01.md) |
 | <a id="ref-cnssi1254"></a>**CNSSI1254** | Risk Management Framework Documentation, Data Element Standards, and Reciprocity Process for National Security Systems | CNSS | August 2016 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1254.md](references/text/CNSSI1254.md) |
 | <a id="ref-cnssp12"></a>**CNSSP12** | Cybersecurity Policy for Space Systems Used to Support National Security Missions | CNSS | August 2025 | <https://www.cnss.gov/CNSS/issuances/Policies.cfm> | [CNSSP12.md](references/text/CNSSP12.md) |
+| <a id="ref-dodcio-cato-ig"></a>**DODCIO-CATO-IG** | DevSecOps Continuous Authorization Implementation Guide | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/DoDCIO-ContinuousAuthorizationImplementationGuide.pdf> | [DODCIO-CATO-IG.md](references/text/DODCIO-CATO-IG.md) |
+| <a id="ref-dodcio-cato-eval"></a>**DODCIO-CATO-EVAL** | Continuous Authorization to Operate (cATO) Evaluation Criteria: DevSecOps Use Case | DoD CIO | 29 May 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/cATO-EvaluationCriteria.pdf> | [DODCIO-CATO-EVAL.md](references/text/DODCIO-CATO-EVAL.md) |
 | <a id="ref-dodcio-reciprocity"></a>**DODCIO-RECIPROCITY** | DoD Cybersecurity Reciprocity Playbook | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/(U)%202024-01-02%20DoD%20Cybersecurity%20Reciprocity%20Playbook.pdf> | [DODCIO-RECIPROCITY.md](references/text/DODCIO-RECIPROCITY.md) |
 | <a id="ref-dodi5000-74"></a>**DODI5000.74** | Defense Acquisition of Services | DoD | January 10, 2020, Change 1, June 24, 2021 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500074p.pdf> | [DODI5000.74.md](references/text/DODI5000.74.md) |
 | <a id="ref-dodi5000-81"></a>**DODI5000.81** | Urgent Capability Acquisition | DoD | December 31, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500081p.PDF> | [DODI5000.81.md](references/text/DODI5000.81.md) |

@@ -1,0 +1,16 @@
+rule: CATO-010
+bases:
+- minimal
+description: only penetration tests documented
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: process.active_testing.iterations
+  value:
+  - date: '2026-10-01'
+    kind: penetration-test
+expect:
+  errors:
+  - CATO-010
+  messages:
+  - the ongoing iterations of cybersecurity analysis and penetration testing are not documented

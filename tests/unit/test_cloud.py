@@ -49,7 +49,7 @@ def _page9_cells() -> dict[str, list[str]]:
 
 
 def test_table_1_page_9_matches_the_text():
-    """L-0076: the CSSP star is extracted as a private-use code point that shows as blank; each
+    """L-0077: the CSSP star is extracted as a private-use code point that shows as blank; each
     row's marks must match its TABLE_1 key."""
     rows = _page9_cells()
     assert set(rows) == set(P9_ROWS.values())

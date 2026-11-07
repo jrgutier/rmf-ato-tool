@@ -31,8 +31,9 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "requirements", "software", "system-description", "sar-summary",
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
-                     "test-strategy", "registration", "pia", "cloud"}
-FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
+                     "test-strategy", "registration", "pia", "cato", "cloud"}
+# framework/baselines/*.yaml (ADR-0002)
+FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs"}
 
 
 def schema(name):
@@ -405,6 +406,8 @@ RUN_EXAMPLES["cloud"] = (_CLOUD, {**_CLOUD, "mission_impact_level": {"level": "I
 _ST = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
+_CATO = YAML(typ="safe").load((REPO_ROOT / "templates/data/cato.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["cato"] = (_CATO, {**_CATO, "metrics": []})
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
      "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},

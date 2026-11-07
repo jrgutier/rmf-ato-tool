@@ -1,0 +1,15 @@
+rule: CATO-006
+bases:
+- minimal
+description: zero trust on ingress and egress only
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.zero_trust
+  value:
+  - ingress-egress
+expect:
+  errors:
+  - CATO-006
+  messages:
+  - DSOP zero trust does not enforce east-west traffic

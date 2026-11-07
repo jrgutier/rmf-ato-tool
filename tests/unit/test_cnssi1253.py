@@ -9,7 +9,7 @@ from _framework_fixtures import P3A, REAL
 from conftest import REPO_ROOT
 from ruamel.yaml import YAML
 
-from rmf_tool import baseline, catalog, cnssi1253
+from rmf_tool import baseline, catalog, cnssi1253, overlay_specs
 from rmf_tool.framework.validate import baseline_tables, validate
 from rmf_tool.run.model import schema_errors
 
@@ -119,7 +119,10 @@ def test_every_block_cites_a_page_that_resolves(tables):
     assert overlay_pages == 5 + 55  # Classified System Overlay, Privacy Overlay control sets
     inputs = baseline.load_inputs(REPO_ROOT)  # tailoring-inputs.yaml: one block per entry
     blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"])
-    assert len(cited) == 1 + 136 + overlay_pages + blocks  # file, tables, overlays, inputs
+    specs = sum(len(controls) for controls in overlay_specs.load(REPO_ROOT).values())
+    assert specs == 108 + 315  # overlay-specs.yaml: one block per Section 6 control
+    # file, tables, overlays, overlay specifications, inputs
+    assert len(cited) == 1 + 136 + overlay_pages + specs + blocks
     assert all("page" in e.data["citations"][0] for e in cited[1:])
     result = validate(REAL, REPO_ROOT, P3A)
     assert not [f for f in result.findings if "baselines" in (f.path or "")]

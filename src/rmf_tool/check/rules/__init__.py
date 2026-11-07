@@ -14,6 +14,7 @@ from rmf_tool.check.rules import (
     assets,
     authorization,
     categorize,
+    cato,
     cloud,
     config,
     connections,
@@ -28,6 +29,7 @@ from rmf_tool.check.rules import (
     journal,
     monitor,
     org_context,
+    overlays,
     pentest,
     plans,
     privacy,
@@ -87,6 +89,9 @@ RULES: dict[str, Rule] = {
     "RAR-003": consistency.rar_courses,
     "DIAS-001": consistency.dias_controls,
     "PKG-003": coverage.data_elements,
+    "OVS-001": overlays.removal_authorities,
+    "OVS-002": overlays.not_selected,
+    "OVS-003": overlays.parameter_values,
     "TLR-001": tailoring.compensating,
     "TLR-002": tailoring.removal,
     "TLR-003": tailoring.assumptions,
@@ -194,6 +199,7 @@ RULES: dict[str, Rule] = {
     **dict(secureconfig.rules()),
     **dict(governance.rules()),
     **dict(cloud.rules()),
+    **dict(cato.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

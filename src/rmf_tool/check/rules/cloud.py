@@ -42,8 +42,8 @@ DATA_FLOOR = {"cui": "IL4", "mission-operations": "IL4", "cui-above-il4": "IL5",
               "unclassified-nss": "IL5", "classified-secret": "IL6"}
 ABOVE_SECRET = "classified-above-secret"
 
-# DTM 24-001 Table 1 (pp. 8-9, read from the page images: the extraction drops the CSSP star,
-# L-0076), the same for IaaS, PaaS and SaaS: the key of each activity.
+# DTM 24-001 Table 1 (pp. 8-9, read from the page images; the extraction shows the CSSP star as a
+# blank private-use code point, L-0077), the same for IaaS, PaaS and SaaS: each activity's key.
 ANY, DOW, CSSP, DCRT = "any", "dow", "cssp", "dcrt"
 TABLE_1 = {
     "external-vulnerability-scans": ANY, "web-vulnerability-scans": ANY,

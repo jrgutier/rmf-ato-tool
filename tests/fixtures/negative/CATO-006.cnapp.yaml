@@ -1,0 +1,20 @@
+rule: CATO-006
+bases:
+- minimal
+description: a cloud-hosted platform with no CDR in its CNAPP
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.cnapp
+  value:
+  - software-composition-analysis
+  - application-security-testing
+  - cspm
+  - ciem
+  - iac-scanning
+  - cwpp
+expect:
+  errors:
+  - CATO-006
+  messages:
+  - an environment hosted on a cloud deploys a CNAPP, and it lacks cdr
