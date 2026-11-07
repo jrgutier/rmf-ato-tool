@@ -1,0 +1,15 @@
+rule: SCRM-020
+bases:
+- minimal
+description: a threat source kind both addressed and not addressed
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: frame.threat_sources.not_addressed
+  value:
+  - structural
+expect:
+  errors:
+  - SCRM-020
+  messages:
+  - the frame lists structural threat sources as both addressed and not addressed

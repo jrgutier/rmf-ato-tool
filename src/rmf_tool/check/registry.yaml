@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 249 rules, 36 repo-scope and 213 run-scope. Authoritative;
+# Rule registry (plan §6.5): 298 rules, 36 repo-scope and 262 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1291,6 +1291,7 @@ rules:
       - REQ-DODI8531.01-0051
       - REQ-DODI8500.01-0173
       - REQ-DODI8531.01-0178
+      - REQ-DODCIO-RECIPROCITY-0150
   - id: STIG-002
     scope: run
     severity: E
@@ -2440,6 +2441,523 @@ rules:
       - REQ-DODI5400.11-0140
       - REQ-DODI5400.11-0146
       - REQ-DODI5400.11-0147
+  - id: SCRM-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a supplied item without a supplier, a supplier rated against the items it supplies, a critical supplier without an assessment, or a critical supplier ranked below a non-critical one with no external driver recorded
+    fixture: tests/fixtures/negative/SCRM-001.yaml
+    hint: "Write artifacts/data/scrm.yaml from templates/data/scrm.yaml: one supplier per source of each inventory item, tied to its ra.yaml supply chain record, rated critical when it supplies an item of a mission-critical function, and an assessment for each critical supplier, prioritized ahead of the non-critical ones."
+    enforces:
+      - REQ-SP800-161R1-0112
+      - REQ-SP800-161R1-0174
+      - REQ-SP800-161R1-0203
+      - REQ-SP800-161R1-0224
+      - REQ-SP800-161R1-0226
+      - REQ-SP800-161R1-0227
+      - REQ-SP800-161R1-0272
+      - REQ-SP800-161R1-0277
+      - REQ-SP800-161R1-0731
+      - REQ-SP800-161R1-0898
+      - REQ-SP800-161R1-0899
+      - REQ-SP800-161R1-0904
+      - REQ-SP800-161R1-0905
+      - REQ-SP800-161R1-0910
+      - REQ-SP800-161R1-1261
+      - REQ-SP800-61R3-0111
+      - REQ-SP800-61R3-0118
+      - REQ-SP800-61R3-0149
+  - id: SCRM-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a system with mission-critical functions that applies no trusted systems and networks practice DoDI 8500.01, 5000.82 or 5000.83 names
+    fixture: tests/fixtures/negative/SCRM-002.yaml
+    hint: "List the TSN practices applied in criticality.tsn: criticality analysis, all-source threat assessment, cyber T&E, assured suppliers or SCRM countermeasures, and software assurance for mission-critical software; seek threat analysis of critical suppliers through the Component TSN focal point."
+    enforces:
+      - REQ-DODI5000.82-0116
+      - REQ-DODI5000.82-0120
+      - REQ-DODI5000.82-0121
+      - REQ-DODI5000.82-0122
+      - REQ-DODI5000.82-0162
+      - REQ-DODI5000.83-0197
+      - REQ-DODI5000.87-0118
+      - REQ-DODI8500.01-0144
+      - REQ-DODI8500.01-0231
+      - REQ-DODI8500.01-0326
+      - REQ-DODI8500.01-0329
+      - REQ-DODI8500.01-0416
+      - REQ-DOWI8430.01-0040
+      - REQ-SP800-161R1-1219
+  - id: SCRM-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an assessment of a critical supplier leaves out a baseline risk factor of SP 800-161 Table 28
+    fixture: tests/fixtures/negative/SCRM-003.yaml
+    hint: "Give each assessment of a critical supplier a factors record for every Table 28 factor, each mapped to the agency's own factor; note no-information where nothing was found; only counterfeit and non-conforming products may be marked not relevant."
+    enforces:
+      - REQ-SP800-161R1-0220
+      - REQ-SP800-161R1-0911
+      - REQ-SP800-161R1-0923
+      - REQ-SP800-161R1-0924
+      - REQ-SP800-161R1-0925
+      - REQ-SP800-161R1-0926
+      - REQ-SP800-161R1-0927
+      - REQ-SP800-161R1-0928
+      - REQ-SP800-161R1-0929
+      - REQ-SP800-161R1-0930
+      - REQ-SP800-161R1-0931
+      - REQ-SP800-161R1-0932
+      - REQ-SP800-161R1-0933
+      - REQ-SP800-161R1-0934
+      - REQ-SP800-161R1-0935
+      - REQ-SP800-161R1-0936
+      - REQ-SP800-161R1-0937
+      - REQ-SP800-161R1-0938
+      - REQ-SP800-161R1-0939
+      - REQ-SP800-161R1-0940
+      - REQ-SP800-161R1-0941
+      - REQ-SP800-161R1-0942
+      - REQ-SP800-161R1-0943
+      - REQ-SP800-161R1-0944
+  - id: SCRM-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an assessment record names an unknown supplier or article, or a substantial risk is not cleared by senior leadership and legal counsel
+    fixture: tests/fixtures/negative/SCRM-004.yaml
+    hint: "Name a supplier of scrm.yaml and only articles it provides; at SCRSS level 3 and above, have senior leadership and legal counsel clear the record."
+    enforces:
+      - REQ-SP800-161R1-0986
+      - REQ-SP800-161R1-0991
+      - REQ-SP800-161R1-0995
+      - REQ-SP800-161R1-0997
+  - id: SCRM-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an SCRSS level that Table 29 does not give to the risk assessed, or escalation and FASC sharing that do not follow the level
+    fixture: tests/fixtures/negative/SCRM-005.yaml
+    hint: "Map the assessment's own score to the Table 29 level that describes it: levels 3 to 5 for adversarial-related risk, level 2 for non-adversarial high risk of a critical supplier. At level 3 and above share with the FASC as mandatory, escalate to senior officials and legal counsel, and weigh law enforcement, counter-intelligence and legal equities first."
+    enforces:
+      - REQ-SP800-161R1-0969
+      - REQ-SP800-161R1-0970
+      - REQ-SP800-161R1-0971
+      - REQ-SP800-161R1-0976
+      - REQ-SP800-161R1-0977
+      - REQ-SP800-161R1-1550
+  - id: SCRM-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the supply chain threat analysis or likelihood determination leaves out what SP 800-161 says it captures or considers
+    fixture: tests/fixtures/negative/SCRM-006.yaml
+    hint: "List in threat_analysis.data every kind of threat data of p. 290 and in likelihood_inputs every consideration of p. 292."
+    enforces:
+      - REQ-SP800-161R1-0112
+      - REQ-SP800-161R1-1145
+      - REQ-SP800-161R1-1219
+      - REQ-SP800-161R1-1235
+      - REQ-SP800-161R1-1236
+      - REQ-SP800-161R1-1247
+      - REQ-SP800-161R1-1248
+      - REQ-SP800-161R1-1536
+      - REQ-SP800-161R1-1537
+  - id: SCRM-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-17
+    summary: the contract's C-SCRM requirements are not in requirements.yaml or not allocated to the contract, or a term carries a requirement that is not one of them
+    fixture: tests/fixtures/negative/SCRM-007.yaml
+    hint: "Write artifacts/data/scrm-acquisition.yaml from templates/data/scrm-acquisition.yaml: C-SCRM requirements of requirements.yaml allocated to the contract, and terms that carry only those."
+    enforces:
+      - REQ-DODI5000.90-0089
+      - REQ-SP800-161R1-0036
+      - REQ-SP800-161R1-0078
+      - REQ-SP800-161R1-0225
+      - REQ-SP800-161R1-0297
+      - REQ-SP800-161R1-0341
+      - REQ-SP800-161R1-1299
+      - REQ-SP800-37R2-0674
+  - id: SCRM-008
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-17
+    summary: a supplier without a selection record, a selected supplier on a list it was screened against, an exclusion without authority or approvals, or open source from no vetted library
+    fixture: tests/fixtures/negative/SCRM-008.yaml
+    hint: "Give every supplier a selection record with due diligence and the prohibited supplier lists screened that apply (SP 800-161 pp. 254-255 are not inclusive); never select a listed supplier; take open source software from a vetted and approved library."
+    enforces:
+      - REQ-DODI5000.83-0197
+      - REQ-SP800-161R1-0211
+      - REQ-SP800-161R1-0212
+      - REQ-SP800-161R1-0214
+      - REQ-SP800-161R1-0949
+      - REQ-SP800-161R1-0950
+  - id: SCRM-009
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a moderate- or high-impact system without a C-SCRM plan, a low-impact one without the inheritance its SSP states, or a plan that misses a requirement, supplier, relationship, consideration or information type, or is approved without the PMO
+    fixture: tests/fixtures/negative/SCRM-009.yaml
+    hint: "Write artifacts/data/scrm-plan.yaml from templates/data/scrm-plan.yaml: the contracts' C-SCRM requirements, every supplier with the criticality scrm.yaml gives it, a relationship for each critical supplier, each SP 800-18r2 consideration, every information type, and approval coordinated with the organization's PMO."
+    enforces:
+      - REQ-SP800-161R1-0178
+      - REQ-SP800-161R1-0179
+      - REQ-SP800-161R1-0182
+      - REQ-SP800-161R1-0684
+      - REQ-SP800-161R1-0927
+      - REQ-SP800-161R1-1331
+      - REQ-SP800-18R2-0012
+      - REQ-SP800-18R2-0067
+      - REQ-SP800-18R2-0069
+      - REQ-SP800-18R2-0139
+      - REQ-SP800-18R2-0213
+      - REQ-SP800-18R2-0291
+      - REQ-SP800-18R2-0302
+      - REQ-SP800-18R2-0305
+      - REQ-SP800-18R2-0307
+      - REQ-SP800-18R2-0437
+      - REQ-SP800-61R3-0121
+  - id: SCRM-010
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a removed C-SCRM control accepted by anyone but the AO, a cloud service provider without FedRAMP first, a procurement selection without security personnel, or uncoordinated tailoring
+    fixture: tests/fixtures/negative/SCRM-010.yaml
+    hint: "Record in controls who accepts each removal (the AO), a FedRAMP record per cloud service provider, the information security personnel each procurement's selection consulted, and coordinated: true."
+    enforces:
+      - REQ-SP800-161R1-0021
+      - REQ-SP800-161R1-0221
+      - REQ-SP800-161R1-1304
+      - REQ-SP800-161R1-1554
+      - REQ-SP800-18R2-0324
+  - id: SCRM-011
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: once the organization implements a sustaining practice, a critical supplier left out of contingency planning, incident response, disaster recovery or their testing
+    fixture: tests/fixtures/negative/SCRM-011.yaml
+    hint: "Name every critical supplier in each contingency.activities record."
+    enforces:
+      - REQ-SP800-161R1-0298
+      - REQ-SP800-61R3-0119
+      - REQ-SP800-61R3-0152
+  - id: SCRM-012
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a critical supplier that is not monitored after award for compliance, effectiveness and change
+    fixture: tests/fixtures/negative/SCRM-012.yaml
+    hint: "Give every critical supplier a monitoring.suppliers record covering compliance, effectiveness and change, with an interval and off-cycle triggers."
+    enforces:
+      - REQ-DODI5000.82-0118
+      - REQ-SP800-160V1R1-1191
+      - REQ-SP800-160V1R1-1339
+      - REQ-SP800-161R1-0114
+      - REQ-SP800-161R1-0202
+      - REQ-SP800-161R1-0226
+      - REQ-SP800-161R1-0228
+      - REQ-SP800-161R1-0291
+      - REQ-SP800-161R1-1337
+      - REQ-SP800-161R1-1394
+      - REQ-SP800-161R1-1556
+      - REQ-SP800-61R3-0118
+  - id: SCRM-013
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-3
+    summary: a supply chain risk outside tolerance without alternatives evaluated, a decision outside them, or a decision below the level its reach calls for with no delegation recorded
+    fixture: tests/fixtures/negative/SCRM-013.yaml
+    hint: "For each assessment that requires mitigation or sharing, record two or more alternatives with their acceptable level, decide one of them, and decide it at the level the impact reaches."
+    enforces:
+      - REQ-SP800-161R1-0113
+      - REQ-SP800-161R1-0180
+      - REQ-SP800-161R1-0350
+      - REQ-SP800-161R1-0899
+      - REQ-SP800-161R1-0946
+      - REQ-SP800-161R1-1273
+      - REQ-SP800-161R1-1300
+      - REQ-SP800-161R1-1301
+      - REQ-SP800-161R1-1303
+      - REQ-SP800-161R1-1307
+      - REQ-SP800-161R1-1551
+      - REQ-SP800-161R1-1552
+      - REQ-SP800-161R1-1553
+  - id: SCRM-014
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the C-SCRM plan sets no supply chain reporting, a Level 1 report does not reach the risk executive function with what p. 43 lists, a Level 3 report leaves out what p. 47 lists or the system owner, or urgent threats do not reach the MDA, AO and DoD CIO
+    fixture: tests/fixtures/negative/SCRM-014.yaml
+    hint: "Give scrm-plan.yaml reporting records per level with audience, content, frequency and format, and name in urgent.notified the MDA, the AO (or AODR) and dod-cio."
+    enforces:
+      - REQ-DODI5000.82-0123
+      - REQ-DODI5000.82-0125
+      - REQ-DODI8510.01-0142
+      - REQ-SP800-161R1-0166
+      - REQ-SP800-161R1-0181
+      - REQ-SP800-161R1-0294
+      - REQ-SP800-161R1-0300
+      - REQ-SP800-161R1-0321
+      - REQ-SP800-161R1-1398
+  - id: SCRM-020
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the organization's C-SCRM frame leaves OT suppliers out, leaves out a kind of assumption or its refinement at P-14, or is silent on a kind of threat source
+    fixture: tests/fixtures/negative/SCRM-020.yaml
+    hint: "Write artifacts/data/scrm-org.yaml from templates/data/scrm-org.yaml (playbooks/P/P-org-context.md) and fill frame per SP 800-161 Tasks 1-1 and 1-2."
+    enforces:
+      - REQ-SP800-161R1-0007
+      - REQ-SP800-161R1-0111
+      - REQ-SP800-161R1-0162
+      - REQ-SP800-161R1-1075
+      - REQ-SP800-161R1-1080
+      - REQ-SP800-161R1-1099
+      - REQ-SP800-161R1-1100
+      - REQ-SP800-161R1-1124
+      - REQ-SP800-161R1-1130
+      - REQ-SP800-161R1-1139
+      - REQ-SP800-161R1-1237
+      - REQ-SP800-161R1-1243
+      - REQ-SP800-161R1-1248
+      - REQ-SP800-161R1-1259
+  - id: SCRM-021
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: a C-SCRM lead who is not an executive-level official, office or group, no PMO or dedicated function, ownership not delegated to the AO, or a role the run has without the C-SCRM duty SP 800-161 gives it
+    fixture: tests/fixtures/negative/SCRM-021.yaml
+    hint: "Name an executive persona as governance.lead, a dedicated, matrixed or team pmo, PER-AO among owners, and a C-SCRM duty for PER-PM, PER-DEV, PER-LSE or PER-ISSE, PER-CIO, PER-CISO and PER-RE."
+    enforces:
+      - REQ-SP800-161R1-0012
+      - REQ-SP800-161R1-0145
+      - REQ-SP800-161R1-0152
+      - REQ-SP800-161R1-0153
+      - REQ-SP800-161R1-0156
+      - REQ-SP800-161R1-0158
+      - REQ-SP800-161R1-0160
+      - REQ-SP800-161R1-0195
+      - REQ-SP800-161R1-0253
+      - REQ-SP800-161R1-0257
+      - REQ-SP800-161R1-0258
+      - REQ-SP800-161R1-0260
+      - REQ-SP800-161R1-0268
+      - REQ-SP800-161R1-0269
+      - REQ-SP800-161R1-0279
+      - REQ-SP800-18R2-0074
+      - REQ-SP800-37R2-0137
+  - id: SCRM-022
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: no C-SCRM strategy, policy or implementation plan at Level 1 or Level 2, no C-SCRM plan at Level 3, or a level that does not inform those SP 800-161 says it informs
+    fixture: tests/fixtures/negative/SCRM-022.yaml
+    hint: "Record what each level delivers (the strategy, policy and implementation plan at Level 1 and/or Level 2, one document may hold several) and the levels each informs."
+    enforces:
+      - REQ-SP800-161R1-0009
+      - REQ-SP800-161R1-0137
+      - REQ-SP800-161R1-0139
+      - REQ-SP800-161R1-0140
+      - REQ-SP800-161R1-0141
+      - REQ-SP800-161R1-0146
+      - REQ-SP800-161R1-0148
+      - REQ-SP800-161R1-0149
+      - REQ-SP800-161R1-0163
+      - REQ-SP800-161R1-0167
+      - REQ-SP800-161R1-0169
+      - REQ-SP800-161R1-0170
+      - REQ-SP800-161R1-0172
+      - REQ-SP800-161R1-0173
+      - REQ-SP800-161R1-0177
+      - REQ-SP800-161R1-0183
+      - REQ-SP800-161R1-0538
+      - REQ-SP800-161R1-1040
+  - id: SCRM-023
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-3
+    summary: no information-sharing processes in the C-SCRM program, a FASC liaison persona who is not a senior official, or shared information that does not reach P-3 and P-14
+    fixture: tests/fixtures/negative/SCRM-023.yaml
+    hint: "Record the information-sharing processes, a senior official (or the Department's liaison by name) as FASC liaison, and P-3 and P-14 in sharing.feeds."
+    enforces:
+      - REQ-SP800-161R1-0238
+      - REQ-SP800-161R1-0289
+      - REQ-SP800-161R1-0974
+  - id: SCRM-024
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: a sustaining or enhancing C-SCRM practice under way while no practice of the tier below is implemented, or a next practice the record does not hold
+    fixture: tests/fixtures/negative/SCRM-024.yaml
+    hint: "Take up practices in order: foundational, then sustaining, then enhancing; name in next only practices the record lists."
+    enforces:
+      - REQ-SP800-161R1-0266
+      - REQ-SP800-161R1-0288
+      - REQ-SP800-161R1-0301
+      - REQ-SP800-161R1-0344
+  - id: SCRM-025
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-7
+    summary: C-SCRM measures without each kind, without a measure against appetite and tolerance, or goals validated outside the stakeholders
+    fixture: tests/fixtures/negative/SCRM-025.yaml
+    hint: "Give measures of implementation, efficiency and effectiveness, and mission impact, KPIs or KRIs against appetite and tolerance, and validate each goal with a listed stakeholder."
+    enforces:
+      - REQ-SP800-161R1-0300
+      - REQ-SP800-161R1-0306
+      - REQ-SP800-161R1-0326
+      - REQ-SP800-161R1-0327
+      - REQ-SP800-161R1-0328
+      - REQ-SP800-161R1-0332
+      - REQ-SP800-161R1-0345
+      - REQ-SP800-161R1-1171
+      - REQ-SP800-61R3-0120
+  - id: SCRM-026
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-4
+    summary: Level 1 or Level 2 keeps no C-SCRM Risk Response Framework
+    fixture: tests/fixtures/negative/SCRM-026.yaml
+    hint: "Record a response_framework entry at level-1 and level-2."
+    enforces:
+      - REQ-SP800-161R1-1305
+      - REQ-SP800-161R1-1308
+  - id: SCRM-015
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-17
+    summary: a C-SCRM contract term of SP 800-161 is missing; flow-down is owed only when the contract has subcontractors
+    fixture: tests/fixtures/negative/SCRM-015.yaml
+    hint: "Give scrm-acquisition.yaml a qualifying-condition, flow-down, revalidation, reporting, response-roles and termination term."
+    enforces:
+      - REQ-DOWI8430.01-0188
+      - REQ-SP800-161R1-0036
+      - REQ-SP800-161R1-0208
+      - REQ-SP800-161R1-0227
+      - REQ-SP800-161R1-0228
+      - REQ-SP800-161R1-0230
+      - REQ-SP800-161R1-0231
+      - REQ-SP800-161R1-0232
+      - REQ-SP800-161R1-0233
+      - REQ-SP800-161R1-0234
+      - REQ-SP800-161R1-1523
+      - REQ-SP800-18R2-0205
+      - REQ-SP800-61R3-0112
+  - id: SCRM-027
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: risk appetite not set at Level 1, tolerance missing at Level 2 or 3, or appetite, tolerance or priorities that do not weigh what SP 800-161 names
+    fixture: tests/fixtures/negative/SCRM-027.yaml
+    hint: "Set frame.appetite at level-1 with the four inputs it considers, tolerance with thresholds at level-2 and level-3, and priorities that together consider appetite, tolerance, threats, vulnerabilities, constraints and criticality."
+    enforces:
+      - REQ-SP800-161R1-0292
+      - REQ-SP800-161R1-1160
+      - REQ-SP800-161R1-1161
+      - REQ-SP800-161R1-1172
+      - REQ-SP800-161R1-1173
+      - REQ-SP800-161R1-1547
+      - REQ-SP800-161R1-1548
+  - id: SCRM-028
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the risk framing step leaves out an output SP 800-161 lists
+    fixture: tests/fixtures/negative/SCRM-028.yaml
+    hint: "Give frame.outputs a record, with where it is held, for each of the nine outputs of p. 285."
+    enforces:
+      - REQ-SP800-161R1-1081
+      - REQ-SP800-161R1-1176
+      - REQ-SP800-161R1-1535
+  - id: SCRM-029
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: a risk management step C-SCRM does not reach
+    fixture: tests/fixtures/negative/SCRM-029.yaml
+    hint: "Give process.steps a record for frame, assess, respond and monitor."
+    enforces:
+      - REQ-SP800-161R1-0110
+      - REQ-SP800-161R1-0118
+      - REQ-SP800-161R1-0200
+      - REQ-SP800-61R3-0110
   - id: DEGRADED-001
     scope: run
     severity: W
@@ -4264,3 +4782,280 @@ rules:
       - REQ-DODCIO-CATO-IG-0124
       - REQ-DODCIO-CATO-IG-0188
       - REQ-DODCIO-DEVSECOPS-0042
+  - id: CLOUD-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a CSO-hosted system has no cloud.yaml, or an offering lacks a leveraged FedRAMP or DoD provisional authorization fit for the mission impact level, its package review, SSP and SRTM inheritance, STIG/SRG guidance or contracted additional measures
+    fixture: tests/fixtures/negative/CLOUD-001.yaml
+    hint: "S-4 writes artifacts/data/cloud.yaml once service-agreements.yaml names the cloud; each offering names its leveraged authorization."
+    enforces:
+      - REQ-CNSSI1254-0123
+      - REQ-DODCIO-RECIPROCITY-0002
+      - REQ-DODCIO-RECIPROCITY-0015
+      - REQ-DODCIO-RECIPROCITY-0016
+      - REQ-DODCIO-RECIPROCITY-0017
+      - REQ-DODCIO-RECIPROCITY-0018
+      - REQ-DODCIO-RECIPROCITY-0150
+      - REQ-DODI5000.82-0153
+      - REQ-DODI5000.82-0154
+      - REQ-DODI5000.82-0155
+      - REQ-DODI5000.82-0158
+      - REQ-DODI5000.82-0159
+      - REQ-DOWI8430.01-0021
+      - REQ-DOWI8430.01-0244
+      - REQ-DTM-24-001-0022
+      - REQ-DTM-24-001-0025
+      - REQ-SP800-18R2-0201
+      - REQ-SP800-37R2-0740
+  - id: CLOUD-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the mission impact level is not set by the mission AO, or does not accommodate the mission data
+    fixture: tests/fixtures/negative/CLOUD-002.yaml
+    hint: "mission_impact_level in cloud.yaml: the level, the kinds of data and the AO who set it."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0002
+      - REQ-DODCIO-RECIPROCITY-0003
+      - REQ-DODCIO-RECIPROCITY-0005
+      - REQ-DODCIO-RECIPROCITY-0006
+  - id: CLOUD-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the DTM 24-001 activity tracking checklist misses a Table 1 activity, names a performer the key forbids, leaves a gap the AO has not accepted, or is not generated, coordinated and validated as required
+    fixture: tests/fixtures/negative/CLOUD-003.yaml
+    hint: "checklist.activities in cloud.yaml: one row per Table 1 activity and offering."
+    enforces:
+      - REQ-DTM-24-001-0023
+      - REQ-DTM-24-001-0024
+      - REQ-DTM-24-001-0028
+      - REQ-DTM-24-001-0029
+      - REQ-DTM-24-001-0069
+      - REQ-DTM-24-001-0070
+      - REQ-DTM-24-001-0089
+      - REQ-DTM-24-001-0119
+      - REQ-DTM-24-001-0122
+      - REQ-DTM-24-001-0124
+      - REQ-DTM-24-001-0151
+      - REQ-DTM-24-001-0159
+      - REQ-DTM-24-001-0184
+      - REQ-DTM-24-001-0214
+      - REQ-DTM-24-001-0221
+  - id: CLOUD-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a CSO contract leaves out a cybersecurity clause DTM 24-001 lists, DFARS 239.76, or the sharing of CSSP DCO data
+    fixture: tests/fixtures/negative/CLOUD-004.yaml
+    hint: "offerings[].contract.clauses in cloud.yaml."
+    enforces:
+      - REQ-DODI5000.82-0152
+      - REQ-DTM-24-001-0015
+      - REQ-DTM-24-001-0016
+      - REQ-DTM-24-001-0017
+      - REQ-DTM-24-001-0020
+      - REQ-DTM-24-001-0026
+      - REQ-DTM-24-001-0027
+      - REQ-DTM-24-001-0093
+      - REQ-DTM-24-001-0126
+  - id: CLOUD-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the CSSP of a CSO-hosted system has no agreement covering the cloud, lacks a duty, or is not given visibility
+    fixture: tests/fixtures/negative/CLOUD-005.yaml
+    hint: "cssp in cloud.yaml names the CSSP agreement, its duties and the visibility it gets."
+    enforces:
+      - REQ-DODI5000.82-0157
+      - REQ-DTM-24-001-0160
+      - REQ-DTM-24-001-0168
+      - REQ-DTM-24-001-0169
+      - REQ-DTM-24-001-0170
+      - REQ-DTM-24-001-0171
+      - REQ-DTM-24-001-0172
+      - REQ-DTM-24-001-0173
+      - REQ-DTM-24-001-0179
+      - REQ-DTM-24-001-0180
+      - REQ-DTM-24-001-0181
+      - REQ-DTM-24-001-0183
+      - REQ-DTM-24-001-0188
+      - REQ-DTM-24-001-0218
+      - REQ-DTM-24-001-0250
+      - REQ-DTM-24-001-0251
+  - id: CLOUD-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the CSSP is not the cybersecurity POC, the cyber protection team does not report to it, or a shared incident response duty has no holder DTM 24-001 allows
+    fixture: tests/fixtures/negative/CLOUD-006.yaml
+    hint: "incident_response in cloud.yaml lists who does what."
+    enforces:
+      - REQ-DTM-24-001-0182
+      - REQ-DTM-24-001-0224
+      - REQ-DTM-24-001-0225
+      - REQ-DTM-24-001-0226
+      - REQ-DTM-24-001-0227
+      - REQ-DTM-24-001-0229
+      - REQ-DTM-24-001-0230
+      - REQ-DTM-24-001-0231
+      - REQ-DTM-24-001-0232
+      - REQ-DTM-24-001-0233
+      - REQ-DTM-24-001-0234
+      - REQ-DTM-24-001-0235
+      - REQ-DTM-24-001-0236
+      - REQ-DTM-24-001-0249
+      - REQ-DTM-24-001-0255
+      - REQ-DTM-24-001-0256
+      - REQ-DTM-24-001-0257
+      - REQ-DTM-24-001-0258
+      - REQ-DTM-24-001-0259
+      - REQ-DTM-24-001-0260
+  - id: CLOUD-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: external assessments of a CSO system have no request process, are not identified with the PM and AO, do not share results, or a DCRT report is late to JFHQ-DODIN or incomplete
+    fixture: tests/fixtures/negative/CLOUD-007.yaml
+    hint: "external_assessments in cloud.yaml."
+    enforces:
+      - REQ-DTM-24-001-0072
+      - REQ-DTM-24-001-0082
+      - REQ-DTM-24-001-0084
+      - REQ-DTM-24-001-0085
+      - REQ-DTM-24-001-0086
+      - REQ-DTM-24-001-0087
+      - REQ-DTM-24-001-0088
+      - REQ-DTM-24-001-0091
+      - REQ-DTM-24-001-0092
+  - id: CLOUD-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a DCAT event, penetration test or intrusion assessment lacks its description, written approval, constraints, mission details, results, lessons learned or FedRAMP demonstration
+    fixture: tests/fixtures/negative/CLOUD-008.yaml
+    hint: "events in cloud.yaml, one per event."
+    enforces:
+      - REQ-DTM-24-001-0096
+      - REQ-DTM-24-001-0097
+      - REQ-DTM-24-001-0098
+      - REQ-DTM-24-001-0099
+      - REQ-DTM-24-001-0100
+      - REQ-DTM-24-001-0101
+      - REQ-DTM-24-001-0102
+      - REQ-DTM-24-001-0104
+      - REQ-DTM-24-001-0105
+      - REQ-DTM-24-001-0106
+      - REQ-DTM-24-001-0107
+      - REQ-DTM-24-001-0108
+      - REQ-DTM-24-001-0109
+      - REQ-DTM-24-001-0110
+      - REQ-DTM-24-001-0111
+      - REQ-DTM-24-001-0113
+      - REQ-DTM-24-001-0114
+      - REQ-DTM-24-001-0115
+      - REQ-DTM-24-001-0116
+      - REQ-DTM-24-001-0117
+  - id: CLOUD-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a performer of a Table 1 activity owes a report or notice the record does not hold, or it misses a recipient or its cadence
+    fixture: tests/fixtures/negative/CLOUD-009.yaml
+    hint: "deliverables in cloud.yaml, one per activity and kind."
+    enforces:
+      - REQ-DTM-24-001-0074
+      - REQ-DTM-24-001-0075
+      - REQ-DTM-24-001-0076
+      - REQ-DTM-24-001-0078
+      - REQ-DTM-24-001-0079
+      - REQ-DTM-24-001-0081
+      - REQ-DTM-24-001-0123
+      - REQ-DTM-24-001-0128
+      - REQ-DTM-24-001-0129
+      - REQ-DTM-24-001-0132
+      - REQ-DTM-24-001-0133
+      - REQ-DTM-24-001-0134
+      - REQ-DTM-24-001-0148
+      - REQ-DTM-24-001-0156
+      - REQ-DTM-24-001-0158
+      - REQ-DTM-24-001-0164
+      - REQ-DTM-24-001-0167
+      - REQ-DTM-24-001-0187
+      - REQ-DTM-24-001-0191
+  - id: CLOUD-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: user activity monitoring on a CSO system is outsourced without the legal review and AO decision, or lacks its procedures, data sharing, chain of custody or correlation partners
+    fixture: tests/fixtures/negative/CLOUD-010.yaml
+    hint: "uam in cloud.yaml."
+    enforces:
+      - REQ-DTM-24-001-0166
+      - REQ-DTM-24-001-0193
+      - REQ-DTM-24-001-0194
+      - REQ-DTM-24-001-0196
+      - REQ-DTM-24-001-0197
+      - REQ-DTM-24-001-0198
+      - REQ-DTM-24-001-0199
+      - REQ-DTM-24-001-0200
+      - REQ-DTM-24-001-0201
+      - REQ-DTM-24-001-0203
+      - REQ-DTM-24-001-0204
+      - REQ-DTM-24-001-0205
+      - REQ-DTM-24-001-0206
+      - REQ-DTM-24-001-0207
+      - REQ-DTM-24-001-0208
+  - id: HOST-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: boundary.yaml records no hosting, or a new major application is not in a DECC without an infeasibility reason, ignores an existing enclave, or a new or modernized system has no cloud hosting assessment
+    fixture: tests/fixtures/negative/HOST-001.yaml
+    hint: "P-16 adds hosting to boundary.yaml."
+    enforces:
+      - REQ-DODCIO-DEVSECOPS-0004
+      - REQ-DODI5000.75-0025
+      - REQ-DODI5000.75-0054
+      - REQ-DODI5000.75-0241
+      - REQ-DODI5000.82-0148
+      - REQ-DODI5000.82-0149
+      - REQ-DODI5000.87-0009
+      - REQ-DODI5000.87-0107
+      - REQ-DODI8500.01-0297
+      - REQ-DODI8500.01-0299
+      - REQ-DOWI8430.01-0130

@@ -1,0 +1,200 @@
+# Derived base `cloud` of tests/unit/test_check_rules.py: valid_minimal plus these mutations.
+base: minimal
+description: "valid_minimal with its report archive on a commercial IaaS offering under a DoD provisional
+  authorization at IL5 (mission IL4): the CSP's leveraged authorization, external entity and external
+  provider, and cloud.yaml."
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: system_environments
+  value:
+  - on-premises
+  - cloud
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.environments
+  value:
+  - on-premises
+  - cloud
+- op: append_text
+  file: artifacts/data/leveraged-authorizations.yaml
+  text: "- id: LA-02\n  title: Example Cloud IaaS DoD provisional authorization\n  provider: Example Cloud
+    Provider\n  date_authorized: '2025-11-01'\n  decision: AD-ATO\n  arrangement: external-service\n \
+    \ authorization_termination_date: '2028-11-01'\n  ao_aware:\n    official: PER-AO\n    date: '2026-03-15'\n\
+    \  sources:\n  - INT-007.A1\n  service:\n    kind: external\n    agreement:\n      instrument: contract\n\
+    \      reference: Contract W00000-26-C-0001\n      enterprise: false\n      security_requirements:
+    true\n"
+- op: replace_text
+  file: artifacts/data/org-context.yaml
+  old: "sources: [INT-014.A1]}\ncommon_controls:"
+  new: "sources: [INT-014.A1]}\n  - {id: EXT-02, name: Example Cloud Provider, relationship: actual, trust_model:
+    validated, sharing: Incident and vulnerability data for CSSP DCO, control_degree: Contract with DFARS
+    239.76 clauses, trust_evidence: DoD provisional authorization package in eMASS, risk_acceptable: true,
+    accepted_by: PER-AO, accepted_on: '2026-03-15', sources: [INT-014.A1]}\ncommon_controls:"
+- op: replace_text
+  file: artifacts/data/sap.yaml
+  old: "penetration_test:\n"
+  new: "- id: EXT-003\n  provider: Example Cloud Provider\n  kind: commercial\n  under_usg_authority:
+    false\n  arrangement:\n    type: contract\n    reference: Contract W00000-26-C-0001\n  covers:\n \
+    \ - LA-02\n  agreement_review:\n    by: PER-SCA\n    date: '2026-10-29'\n    assurances: The contract
+    carries the DTM 24-001 clauses.\n  procedure_adjustment: Inherited controls are assessed from the
+    CSO's eMASS package and its SRTM.\n  provider_assessment:\n    scope: The DoD provisional authorization
+    at IL5.\n    independence: independent\n    procedures_reviewed_by: PER-SCA\n    evidence: received\n\
+    \    meets_protection_needs: true\n    other_assessments: None in progress.\n  third_party:\n    organization:
+    FedRAMP-recognized 3PAO\n    accepted_by: PER-AO\n    accepted: '2026-03-15'\n  sources:\n  - INT-008.A1\n\
+    penetration_test:\n"
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.external_service
+  value:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.1.external_service
+  value:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.2.external_service
+  value:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.3.external_service
+  value:
+- op: replace_text
+  file: artifacts/ART-SAR.md
+  old: brings in the provider ATO assessment [[ART-SAP]].
+  new: brings in the provider ATO assessment, and EXT-003 the assessment behind the CSO's DoD 
+    provisional authorization [[ART-SAP]].
+- op: write_file
+  file: artifacts/data/cloud.yaml
+  content: "# The CSO the report archive is hosted on and the DTM 24-001 activities (S-4).\nmission_impact_level:\n\
+    \  level: IL4\n  data:\n    - cui\n  disclosure_effect: serious\n  determined_by: PER-AO\n  date:
+    '2026-03-01'\n  sources:\n    - INT-005.A1\nofferings:\n  - id: CSO-01\n    name: Example IaaS (report
+    archive)\n    provider: Example Cloud Provider\n    service_model: iaas\n    leveraged_authorization:
+    LA-02\n    authorization:\n      basis: dod-pa\n      path: new\n      impact_level: IL5\n      issued_by:
+    DISA\n      conditions:\n        - Mission traffic passes a Boundary Cloud Access Point\n      package_location:
+    emass\n    package_review:\n      reviewed_by:\n        - PER-SPONSOR\n        - PER-PM\n        -
+    PER-AO\n      covers:\n        - data-types\n        - impact-level\n        - conditions\n      \
+    \  - inherited-risks\n        - csp-cybersecurity-services\n        - supporting-evaluations\n   \
+    \   accepted_by: PER-AO\n      date: '2026-03-15'\n    inheritance:\n      documents:\n        - ssp\n\
+    \        - srtm\n        - cis-crm\n      reference: eMASS package of CSO-01 and its SRTM\n    configuration_guidance:\n\
+    \      - cc-srg\n      - stig\n    additional_measures:\n      - measure: Customer-managed encryption
+    keys\n        in_contract: true\n        assessed: true\n        approved_by: PER-AO\n    contract:\n\
+    \      reference: Contract W00000-26-C-0001\n      dfars_239_76: true\n      clauses:\n        - accreditation-boundary\n\
+    \        - licensing\n        - cssp-incident-notification\n        - threat-representative-testing\n\
+    \        - csp-dco-data\n        - corrective-action-process\n        - inspection-access\n      \
+    \  - report-delivery\n      dco_data_shared_with:\n        - cssp\n        - authorizing-official\n\
+    \        - dow-sponsor\n    sources: &id001\n      - INT-007.A1\nchecklist:\n  generated_by:\n   \
+    \ - PER-SPONSOR\n    - PER-PM\n  coordinated_with:\n    - PER-CSSP\n    - PER-PM\n    - PER-AO\n \
+    \ validated_by: PER-AO\n  date: '2026-04-01'\n  nss_policies: []\n  activities:\n    - activity: external-vulnerability-scans\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n    - activity: web-vulnerability-scans\n      offering: CSO-01\n      performer:\n    \
+    \    entity: commercial\n        name: Example Cloud Provider\n    - activity: dcrt-operations\n \
+    \     offering: CSO-01\n      performer:\n        entity: dcrt\n        name: Component DCRT\n   \
+    \ - activity: dcat-operations\n      offering: CSO-01\n      performer:\n        entity: dow-entity\n\
+    \        name: Component DCAT\n    - activity: penetration-testing\n      offering: CSO-01\n     \
+    \ performer:\n        entity: commercial\n        name: Example Cloud Provider\n    - activity: intrusion-assessment\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n    - activity: awareness-and-training\n      offering: CSO-01\n      performer:\n     \
+    \   entity: commercial\n        name: Example Cloud Provider\n      dow_retains:\n        - training-requirement\n\
+    \        - compliance-oversight\n        - effectiveness-criteria\n    - activity: endpoint-security\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n      approved_by: PER-AO\n    - activity: apply-security-configurations\n      offering:
+    CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud Provider\n    -
+    activity: mitigate-vulnerabilities\n      offering: CSO-01\n      performer:\n        entity: commercial\n\
+    \        name: Example Cloud Provider\n    - activity: monitor-vulnerability-compliance\n      offering:
+    CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud Provider\n    -
+    activity: malware-protection\n      offering: CSO-01\n      performer:\n        entity: commercial\n\
+    \        name: Example Cloud Provider\n    - activity: asw-boundary\n      offering: CSO-01\n    \
+    \  performer:\n        entity: dow-entity\n        name: DISA BCAP\n    - activity: asw-application\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n    - activity: warning-intelligence\n      offering: CSO-01\n      performer:\n       \
+    \ entity: dow-entity\n        name: Component intelligence cell\n    - activity: endpoint-visibility\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n    - activity: correlate-threat-data\n      offering: CSO-01\n      performer:\n      \
+    \  entity: cssp\n        name: Component CSSP\n    - activity: malware-notification\n      offering:
+    CSO-01\n      performer:\n        entity: cssp\n        name: Component CSSP\n    - activity: nsm-boundary\n\
+    \      offering: CSO-01\n      performer:\n        entity: cssp\n        name: Component CSSP\n  \
+    \  - activity: enclave-monitoring\n      offering: CSO-01\n      performer:\n        entity: commercial\n\
+    \        name: Example Cloud Provider\n    - activity: uam-detect\n      offering: CSO-01\n      performer:\n\
+    \        entity: commercial\n        name: Example Cloud Provider\n    - activity: uam-audit-data\n\
+    \      offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud
+    Provider\n    - activity: uam-correlate\n      offering: CSO-01\n      performer:\n        entity:
+    dow-entity\n        name: Component insider threat hub\n    - activity: cpcon-implementation\n   \
+    \   offering: CSO-01\n      performer:\n        entity: commercial\n        name: Example Cloud Provider\n\
+    \    - activity: cpcon-notification\n      offering: CSO-01\n      performer:\n        entity: cssp\n\
+    \        name: Component CSSP\n    - activity: incident-categorization\n      offering: CSO-01\n \
+    \     performer:\n        entity: cssp\n        name: Component CSSP\n    - activity: incident-reporting\n\
+    \      offering: CSO-01\n      performer:\n        entity: cssp\n        name: Component CSSP\n  \
+    \  - activity: incident-handling\n      offering: CSO-01\n      performer:\n        entity: commercial\n\
+    \        name: Example Cloud Provider\n    - activity: incident-law-enforcement\n      offering: CSO-01\n\
+    \      performer:\n        entity: cssp\n        name: Component CSSP\n    - activity: incident-counterintelligence\n\
+    \      offering: CSO-01\n      performer:\n        entity: cssp\n        name: Component CSSP\n  \
+    \  - activity: incident-analysis\n      offering: CSO-01\n      performer:\n        entity: cssp\n\
+    \        name: Component CSSP\n  sources: *id001\ncssp:\n  agreement: SVA-001\n  duties:\n    - correlate-threat-data\n\
+    \    - aggregate-csp-information\n    - dodin-status\n    - incident-handling-support\n    - community-awareness\n\
+    \    - risk-decision-support\n    - malware-notification\n    - anti-malware-vendor-contact\n    -
+    detection-processes\n    - cpcon-compliance-monitoring\n    - incident-analysis\n    - adequacy-determination\n\
+    \  visibility:\n    - endpoint-devices\n    - audit-logs\n    - csp-supporting-information\n    -
+    csp-findings\n  detection_tested: '2026-06-01'\n  sources: *id001\nexternal_assessments:\n  request_process:
+    The mission owner's VAA request and authorization procedure.\n  identified_with:\n    - PER-PM\n \
+    \   - PER-AO\n  types:\n    - dcrt\n    - dcat\n    - penetration-test\n  sources_considered:\n  \
+    \  - Component DCRT\n    - Component DCAT\n    - Example Cloud Provider\n  ccri_coordination: Remote
+    assessments are scheduled with the mission owner before each CCRI or CORI.\n  results_shared_with:\n\
+    \    - mission-owner\n    - authorizing-official\n    - cssp\n  dcrt_reports:\n    - id: DCRT-01\n\
+    \      briefed: '2026-07-01'\n      released_to_jfhq_dodin: '2026-07-20'\n      covers:\n        -
+    all-findings\n        - significant-vulnerabilities\n        - exploited-vulnerability-analysis\n\
+    \  sources: *id001\nevents:\n  - id: EVT-01\n    kind: penetration-test\n    performer: commercial\n\
+    \    date: '2026-08-10'\n    description:\n      reference: Penetration test plan PT-01\n      architecture_diagrams:
+    true\n      delivered_to: &id002\n        - mission-owner\n        - cssp\n    approval:\n      by:
+    PER-SPONSOR\n      written: true\n      date: '2026-08-01'\n    constraints_basis:\n      - safety\n\
+    \      - real-world-mission-execution\n      - operational-security\n    mission_details:\n      submitted_by:
+    mission-owner\n      date: '2026-08-05'\n    results:\n      delivered_to: *id002\n      remediation_recommendations:
+    true\n    lessons_learned_to: *id002\n    fedramp_demonstrated: true\n  - id: EVT-02\n    kind: dcat\n\
+    \    performer: dow-entity\n    date: '2026-09-10'\n    description:\n      reference: DCAT event
+    description\n      architecture_diagrams: true\n      delivered_to: *id002\n    approval:\n      by:
+    PER-SPONSOR\n      written: true\n      date: '2026-09-01'\n    constraints_basis:\n      - safety\n\
+    \      - real-world-mission-execution\n      - operational-security\n    mission_details:\n      submitted_by:
+    performer\n      date: '2026-09-05'\n    results:\n      delivered_to:\n        - mission-owner\n\
+    \        - cssp\n        - jfhq-dodin\n      remediation_recommendations: true\n    lessons_learned_to:
+    *id002\ndeliverables:\n  - activity: external-vulnerability-scans\n    kind: scan-notification\n \
+    \   recipients: *id002\n    cadence: each-event\n  - activity: external-vulnerability-scans\n    kind:
+    scan-executive-summary\n    recipients: *id002\n    cadence: each-event\n  - activity: external-vulnerability-scans\n\
+    \    kind: situational-awareness\n    recipients:\n      - mission-owner\n      - cssp\n      - authorizing-official\n\
+    \    cadence: upon-request\n  - activity: web-vulnerability-scans\n    kind: scan-executive-summary\n\
+    \    recipients: *id002\n    cadence: each-event\n  - activity: web-vulnerability-scans\n    kind:
+    situational-awareness\n    recipients: *id002\n    cadence: continuous\n  - activity: endpoint-security\n\
+    \    kind: endpoint-alerts\n    recipients:\n      - authorizing-official\n      - cssp\n    cadence:
+    immediately\n  - activity: mitigate-vulnerabilities\n    kind: correlation-analysis\n    recipients:
+    *id002\n    cadence: each-event\n  - activity: monitor-vulnerability-compliance\n    kind: compliance-statistics\n\
+    \    recipients:\n      - mission-owner\n    cadence: each-event\n  - activity: malware-protection\n\
+    \    kind: malware-procedures\n    recipients:\n      - mission-owner\n    cadence: upon-request\n\
+    \  - activity: malware-protection\n    kind: malware-incident-report\n    recipients:\n      - mission-owner\n\
+    \    cadence: immediately\n  - activity: malware-protection\n    kind: malware-trend-report\n    recipients:\n\
+    \      - mission-owner\n      - authorizing-official\n    cadence: annually\n  - activity: malware-protection\n\
+    \    kind: corrective-action-report\n    recipients: *id002\n    cadence: each-event\n  - activity:
+    asw-application\n    kind: violation-report\n    recipients:\n      - mission-owner\n    cadence:
+    immediately\n  - activity: asw-application\n    kind: action-report\n    recipients: *id002\n    cadence:
+    each-event\n  - activity: endpoint-visibility\n    kind: control-state-change\n    recipients: *id002\n\
+    \    cadence: continuous\n  - activity: endpoint-visibility\n    kind: threat-report\n    recipients:
+    *id002\n    cadence: continuous\n  - activity: enclave-monitoring\n    kind: anomalous-event-report\n\
+    \    recipients: *id002\n    cadence: immediately\n  - activity: enclave-monitoring\n    kind: action-report\n\
+    \    recipients: *id002\n    cadence: each-event\nuam:\n  legal_review:\n    by: Component legal advisor\n\
+    \    date: '2026-04-01'\n  ao_decision:\n    by: PER-AO\n    date: '2026-04-15'\n  procedures:\n \
+    \   - uam-procedures\n    - anomalous-activity-response\n    - chain-of-custody\n    - audit-data-preservation\n\
+    \  data_shared_with: *id002\n  correlation:\n    coordinates_with:\n      - component-insider-threat-program\n\
+    \      - law-enforcement\n      - counterintelligence\n    analysts_trained: true\n  sources: *id001\n\
+    incident_response:\n  cssp_poc: SVA-001\n  cpt_reports_to: cssp\n  responsibilities:\n    - duty:
+    support-cssp-incident-handling\n      party: mission-owner\n      recipients: []\n    - duty: report-events-and-incidents\n\
+    \      party: mission-owner\n      recipients:\n        - cssp\n    - duty: provide-incident-artifacts\n\
+    \      party: mission-owner\n      recipients: *id002\n    - duty: safeguard-incident-information\n\
+    \      party: mission-owner\n      recipients:\n        - cssp\n    - duty: report-csp-findings\n\
+    \      party: csp\n      recipients:\n        - cssp\n    - duty: damage-assessment\n      party:
+    incident-handler\n      recipients: *id002\n    - duty: post-incident-feedback\n      party: incident-handler\n\
+    \      recipients: *id002\n    - duty: countermeasures\n      party: incident-handler\n      recipients:\n\
+    \        - cssp\n    - duty: corrective-actions\n      party: incident-handler\n      recipients:
+    *id002\n    - duty: deliver-ir-artifacts\n      party: mission-owner\n      recipients:\n        -
+    cssp\n    - duty: operational-impact\n      party: mission-owner\n      recipients:\n        - cssp\n\
+    \    - duty: passive-countermeasures\n      party: mission-owner\n      recipients: *id002\n    -
+    duty: retain-incident-artifacts\n      party: mission-owner\n      recipients: *id002\n    - duty:
+    make-data-available\n      party: csp\n      recipients:\n        - cssp\n  sources: *id001\nsources:
+    *id001\n"

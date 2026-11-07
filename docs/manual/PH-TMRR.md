@@ -43,13 +43,11 @@ Reduce technology, engineering, integration and life-cycle cost risk and mature 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-cddv"></a>**CDD validation** Capability Development Document validation | event | — | During TMRR the requirements validation authority validates the CDD, or the equivalent requirements document that replaced it once JCIDS was disestablished, before the Development RFP release decision point (ACQLC-002). | — |
 | <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](../../MANUAL.md#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [P-17](#task-p-17) |
 | <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) |
 
 Sources:
 
-- **CDD validation**: [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "During the TMRR phase, the requirements validation authority will validate the CDD"; [DODI5000.02](../../MANUAL.md#ref-dodi5000-02), p. 6, "Updates the issuance to reflect the disestablishment of the Joint Capabilities Integration"
 - **Dev RFP RD**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Require that contracts and other agreements include specific requirements"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "3.9. DEVELOPMENT RFP RELEASE DECISION POINT."; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "that program security has been accommodated"
 - **MS B**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 8, "before program initiation for new systems and all acquisition milestones"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 15, "The Milestone B decision authorizes a program to enter into the EMD phase"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 15, "Risk sources include, but are not limited to, technology, threat projections, security"
 
@@ -123,6 +121,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
 - boundary.yaml records each external connection with its detail and the approvals it needs, any cross-domain solution and mission partner terms, and whether the system is on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
+- boundary.yaml records where the system is hosted and why, a new major application in a Defense Enterprise Computing Center unless operationally infeasible, why it is not an application in an existing authorized enclave, and the cloud hosting assessment of a new or modernized system (HOST-001).
 - nss-assessments.yaml records, for a National Security System, NSA's assessment with the cognizant AO of its cybersecurity requirements and security architecture before each milestone passed, and for a space NSS the coordination of its architecture, the check of pre-existing components and the compliance reports to the AO and NSA (PPROT-006).
 
 **Alignment**
@@ -136,6 +135,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - [SP800-39](../../MANUAL.md#ref-sp800-39), section 2.4.2
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), p. 183, "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING"
+- [DODI8500.01](../../MANUAL.md#ref-dodi8500-01), p. 38, "When operationally feasible all new major applications will be hosted"
 
 **Playbook:** [playbooks/P/P-16.md](../../playbooks/P/P-16.md)
 
@@ -151,9 +151,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -179,9 +179,10 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
-- The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
+- artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
 
 **Alignment**
 
@@ -306,7 +307,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
-- Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
+- The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
 
 **Alignment**
 
@@ -337,9 +338,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -367,7 +368,6 @@ Writes to `facts.yaml`: `baseline_id`.
 - allocation.yaml gives every tailored-baseline control a type and the components that implement it.
 - Every requirement of ART-REQ is satisfied by a control that names it (TLR-009).
 - The system owner and the AO determine, for each common control provider, that its controls protect the system commensurate with risk (TLR-010).
-- The ISSO, a primary role (DoDI 8510.01 Table 3), gives an S-3 interview (WFQ-002).
 
 **Alignment**
 
@@ -408,6 +408,9 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
 | [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -429,9 +432,11 @@ Writes to `facts.yaml`: `baseline_id`.
 - ssp/controls holds one statement per tailored-baseline control (SSP-COV-001, SSP-DUP-001).
 - ART-CMP, ART-CP and ART-IRP written.
 - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control board and the baseline configuration process.
+- A CSO-hosted system has artifacts/data/cloud.yaml with its offerings and their FedRAMP or DoD provisional authorization, the mission impact level, the DTM 24-001 activity tracking checklist, contract clauses, the CSSP's part and the incident response split (CLOUD-001 to CLOUD-010).
 - For a system processing PII, ART-SSP holds the privacy plan with the security plan (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
+- artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM control decisions, critical suppliers in contingency and incident planning, supplier monitoring after award, training content and the supply chain reporting M-5 follows (SCRM-009 to SCRM-012, SCRM-014).
 
 **Alignment**
 
@@ -500,6 +505,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
 - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
+- The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring strategy.
 
 **Alignment**
 

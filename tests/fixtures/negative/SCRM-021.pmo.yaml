@@ -1,0 +1,18 @@
+rule: SCRM-021
+bases:
+- minimal
+description: no C-SCRM PMO or dedicated function
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: governance.pmo
+  value: none
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.approval.pmo
+  value: no-pmo
+expect:
+  errors:
+  - SCRM-021
+  messages:
+  - the organization has no C-SCRM PMO or other dedicated C-SCRM function

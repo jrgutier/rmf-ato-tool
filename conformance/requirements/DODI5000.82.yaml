@@ -949,7 +949,8 @@ requirements:
     locator: "3.5.c.(2).(a)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(a) Having the Component trusted systems and network focal point(s) determine and prioritize requests for threat analysis of suppliers of critical components."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/criticality/properties/focal_point/properties/threat_analysis", "asserts": "The Component trusted systems and network focal point determines requests for threat analysis of suppliers of critical components", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.focal.yaml", "expect": "threat analysis of suppliers of critical components is marked not required", "asserts": "Threat analysis of suppliers of critical components is requested through the trusted systems and network focal point", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI5000.82-0117"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Assigning DoD Component specialists to assist the Director, Defense Intelligence Agency in"}
@@ -965,7 +966,8 @@ requirements:
     locator: "3.5.c.(2).(c)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(c) Leveraging basic supply chain risk due diligence capabilities for decision support and continuous monitoring of suppliers for both ICT and critical items, in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-012", "fixture": "tests/fixtures/negative/SCRM-012.yaml", "expect": "has no monitoring after award", "asserts": "Continuous monitoring of suppliers of critical items after award", "claim": "constraint"}]
     work_item: "WI-123"
   - id: "REQ-DODI5000.82-0119"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Engaging the relevant trusted systems and network focal point for guidance on"}
@@ -973,7 +975,9 @@ requirements:
     locator: "3.5.c.(2).(d)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(d) Engaging the relevant trusted systems and network focal point for guidance on managing identified risk using DoD Components and enterprise risk management resources, in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "partial"
+    reason: "The focal point's guidance on managing identified risk is recorded (criticality.focal_point.guidance), free text; DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/criticality/properties/focal_point/properties/guidance", "asserts": "Engaging the trusted systems and network focal point for guidance on managing identified risk", "claim": "presence"}]
     work_item: "WI-130"
   - id: "REQ-DODI5000.82-0120"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Applying assurance best practices, processes, techniques, and procurement tools before acquiring or"}
@@ -981,7 +985,8 @@ requirements:
     locator: "3.5.c.(2).(e)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(e) Applying assurance best practices, processes, techniques, and procurement tools before acquiring or integrating critical components into applicable systems at any point in the system life cycle, in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.assured.yaml", "expect": "neither assured suppliers nor SCRM countermeasures", "asserts": "Applying assurance best practices, such as assured suppliers or SCRM countermeasures, before acquiring or integrating critical components", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI5000.82-0121"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Implementing cyber T&E at the earliest opportunity for mission critical components and"}
@@ -989,7 +994,8 @@ requirements:
     locator: "3.5.c.(2).(f)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(f) Implementing cyber T&E at the earliest opportunity for mission critical components and functions and potential supply chain risks, in accordance with DoDI 5200.44 and DoDI 5000.89."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.cyber-te.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "Implementing cyber T&E for mission critical components and functions", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI5000.82-0122"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Implementing tailored acquisition strategies, contract tools, and procurement methods for critical components"}
@@ -997,7 +1003,9 @@ requirements:
     locator: "3.5.c.(2).(g)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(g) Implementing tailored acquisition strategies, contract tools, and procurement methods for critical components in applicable systems, including to ensure that Sections 252.239-7018 of the Defense Federal Acquisition Regulation Supplement (DFARS) as prescribed by Section 239.7306 of the DFARS is appropriately applied."
-    status: "candidate"
+    status: "partial"
+    reason: "Tailored acquisition strategies for critical components are recorded as the procurement-strategies mitigation (SCRM-002); DFARS 252.239-7018 is not in references/, so its application is not checked. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.procurement-strategies.yaml", "expect": "critical components do not include", "asserts": "Tailored acquisition strategies and procurement methods for critical components", "claim": "constraint"}]
     work_item: "WI-105"
   - id: "REQ-DODI5000.82-0123"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Notifying the relevant MDA, authorizing official, and the DoD CIO of mission"}
@@ -1005,7 +1013,8 @@ requirements:
     locator: "3.5.c.(2).(h)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(h) Notifying the relevant MDA, authorizing official, and the DoD CIO of mission critical threats and vulnerabilities that cannot be reasonably addressed and verified through regular testing, technical mitigation, countermeasures, or risk management procedures in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-014", "fixture": "tests/fixtures/negative/SCRM-014.mda.yaml", "expect": "threats that cannot be addressed are not", "asserts": "Mission critical threats that cannot be reasonably addressed are notified to the relevant MDA", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-014", "fixture": "tests/fixtures/negative/SCRM-014.ao.yaml", "expect": "threats that cannot be addressed are not", "asserts": "Mission critical threats that cannot be reasonably addressed are notified to the authorizing official", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-014", "fixture": "tests/fixtures/negative/SCRM-014.cio.yaml", "expect": "threats that cannot be addressed are not", "asserts": "Mission critical threats that cannot be reasonably addressed are notified to the DoD CIO", "claim": "constraint"}]
     work_item: "WI-116"
   - id: "REQ-DODI5000.82-0124"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Reducing supply chain risk in accordance with Section 3252 of Title 10,"}
@@ -1021,7 +1030,9 @@ requirements:
     locator: "3.5.c.(2).(j)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(j) Coordinating and collaborating with the DoD CIO to ensure supply chain risks that impact cybersecurity posture will be considered, tested, analyzed, and mitigated if possible, during cybersecurity assessments. This requires that applicable intelligence, counterintelligence, and security-related threats inform DoD CIO for deliberate and mitigating actions to reduce overall risks to DoD in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "partial"
+    reason: "Urgent threats reach the DoD CIO (SCRM-014); coordinating with the DoD CIO so supply chain risks are considered in cybersecurity assessments is outside a run's record. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-014", "fixture": "tests/fixtures/negative/SCRM-014.cio.yaml", "expect": "threats that cannot be addressed are not", "asserts": "Security-related threats inform the DoD CIO", "sentence": "This requires that applicable intelligence, counterintelligence, and security-related threats inform DoD CIO for deliberate and mitigating actions to reduce overall risks to DoD in accordance with DoDI 5200.44.", "claim": "constraint"}]
     work_item: "WI-116"
   - id: "REQ-DODI5000.82-0126"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "Integrating operations security into the planning, execution, and assessment of supply chain"}
@@ -1029,7 +1040,9 @@ requirements:
     locator: "3.5.c.(2).(k)"
     context: "Table 2. CSS Review Requirements C-SCRM DoD Components will manage C-SCRM risk by:"
     statement: "(k) Integrating operations security into the planning, execution, and assessment of supply chain risk management activities in accordance with DoDD 5205.02E and DoDI 4140.01."
-    status: "candidate"
+    status: "partial"
+    reason: "process.opsec states how OPSEC is integrated into SCRM activities, free text; DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/process/properties/opsec", "asserts": "Integrating operations security into the planning, execution and assessment of supply chain risk management", "claim": "presence"}]
     work_item: "WI-119"
   - id: "REQ-DODI5000.82-0127"
     citation: {"ref": "DODI5000.82", "page": 17, "anchor": "Operational Resilience for Digital Capabilities."}
@@ -1205,7 +1218,9 @@ requirements:
     locator: "3.7.b.(1)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(1) DoD Components will take full advantage of cloud services in alignment with and to achieve the goals of the DoD Digital Modernization Strategy and the requirements of Section 1064(d) of Public Law 115-232."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: hosting.cloud records the cloud hosting assessment (HOST-001). Unheld: taking full advantage of cloud services is a goal no rule measures"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "hosting.cloud records the cloud hosting assessment", "claim": "constraint"}]
     work_item: "WI-309"
   - id: "REQ-DODI5000.82-0149"
     citation: {"ref": "DODI5000.82", "page": 19, "anchor": "DoD Components will ensure that no new system or application will be"}
@@ -1213,7 +1228,9 @@ requirements:
     locator: "3.7.b.(2)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(2) DoD Components will ensure that no new system or application will be approved for development or modernization without an assessment that such a system or application is already, or can and would be, cloud-hosted without compromising the security or integrity of the capability or service delivery."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: a new or modernized system with no cloud hosting assessment fails HOST-001 (HOST-001). Unheld: whether the assessment is sound, and its approval, are not checked"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "a new or modernized system with no cloud hosting assessment fails HOST-001", "claim": "constraint"}]
     work_item: "WI-309"
   - id: "REQ-DODI5000.82-0150"
     citation: {"ref": "DODI5000.82", "page": 19, "anchor": "DoD Components will ensure that their respective program executive offices take steps"}
@@ -1237,7 +1254,9 @@ requirements:
     locator: "3.7.b.(5)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(5) PMs and FSMs will follow Subpart 239.76 of the DFARS when contracting for cloud services."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: a CSO contract that does not follow DFARS Subpart 239.76 fails CLOUD-004 (CLOUD-004). Unheld: the clauses of Subpart 239.76 are not checked one by one"
+    evidence: [{"kind": "rule", "target": "CLOUD-004", "asserts": "a CSO contract that does not follow DFARS Subpart 239.76 fails CLOUD-004", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0153"
     citation: {"ref": "DODI5000.82", "page": 19, "anchor": "PMs and FSMs will refer to and implement the current version of"}
@@ -1245,7 +1264,9 @@ requirements:
     locator: "3.7.b.(6)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(6) PMs and FSMs will refer to and implement the current version of the DoD Cloud Computing Security Requirements Guide (CC SRG) when deciding to acquire, use, or implement any application, system, or service that leverages cloud services. The Defense Information Systems Agency publishes the CC SRG, which establishes the DoD security requirements for cloud services."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each offering names the configuration guidance, the CC SRG or STIGs/SRGs, its CSP systems follow (CLOUD-001). Unheld: the PM's use of the CC SRG when deciding to acquire is not recorded"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "each offering names the configuration guidance, the CC SRG or STIGs/SRGs, its CSP systems follow", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0154"
     citation: {"ref": "DODI5000.82", "page": 19, "anchor": "PMs and FSMs will only acquire and use cloud services from a"}
@@ -1253,7 +1274,9 @@ requirements:
     locator: "3.7.b.(6).(a)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(a) PMs and FSMs will only acquire and use cloud services from a DoD or non-DoD cloud service provider that has been granted provisional authorization (PA) by the Defense Information Systems Agency at or above the information impact level required for the DoD information being processed or stored by the cloud service, in accordance with Subpart 239.76 of the DFARS. Cloud services possessing a PA are listed in the Defense Information Systems Agency’s DoD Cloud Service Catalog at https://dod365.sharepoint-mil.us/sites/DISA-RE- Apps/cas/SitePages/CASHome.aspx."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: an offering authorized below the mission impact level fails CLOUD-001 (CLOUD-001). Unheld: the DoD Cloud Service Catalog listing is not checked"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "an offering authorized below the mission impact level fails CLOUD-001", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0155"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "PMs and FSMs will ensure cloud services of non-DoD providers are securely"}
@@ -1261,7 +1284,9 @@ requirements:
     locator: "3.7.b.(6).(b)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(b) PMs and FSMs will ensure cloud services of non-DoD providers are securely connected to DoD networks in accordance with the CC SRG and ensure via testing that the cybersecurity posture of the DoD is not compromised. Cybersecurity developmental, operational, or integrated T&E is required in emulated and live environments before operational use of any cloud service."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the offering's PA conditions are recorded (CLOUD-001). Unheld: the secure connection per the CC SRG and the T&E before operational use are not recorded"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "the offering's PA conditions are recorded", "claim": "constraint"}, {"kind": "prose", "target": "playbooks/S/S-4.md", "asserts": "PMs ensure cloud services are securely connected and tested before use", "claim": "presence"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0156"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "PMs and FSMs will analyze cloud options and report all appropriate information"}
@@ -1277,7 +1302,9 @@ requirements:
     locator: "3.7.b.(8)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(8) PMs and FSMs that acquire or use cloud services remain responsible for testing end-to-end security and computer network defense requirements before use to ensure that requirements are met and adequately supported by a cybersecurity service provider in accordance with DoDI 8530.01."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the CSSP agreement must cover the cloud environment (CLOUD-005). Unheld: end-to-end security testing before use is not recorded"
+    evidence: [{"kind": "rule", "target": "CLOUD-005", "asserts": "the CSSP agreement must cover the cloud environment", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0158"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "Before operational use, all applications, services, and information systems being delivered using"}
@@ -1285,7 +1312,9 @@ requirements:
     locator: "3.7.b.(8).(a)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(a) Before operational use, all applications, services, and information systems being delivered using a cloud service will conduct cybersecurity developmental, operational, or integrated T&E in emulated and live environments in accordance with DoDI 5000.89, and will have or be covered by an interim approval to test or ATO granted by the PM’s or FSM’s authorizing official."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the offering is leveraged under the system's own authorization (CLOUD-001). Unheld: the cybersecurity T&E in emulated and live environments before operational use is not recorded"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "the offering is leveraged under the system's own authorization", "claim": "constraint"}, {"kind": "prose", "target": "playbooks/S/S-4.md", "asserts": "Cloud-delivered systems conduct cybersecurity T&E and hold an IATT or ATO before operational use", "claim": "presence"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0159"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "Leveraging the DoD PA for the cloud service, the ATO will cover"}
@@ -1293,7 +1322,9 @@ requirements:
     locator: "3.7.b.(8).(b)"
     context: "DATA CENTERS AND CLOUD SERVICES Cloud Services"
     statement: "(b) Leveraging the DoD PA for the cloud service, the ATO will cover the use of the cloud service and any DoD-provided software, data, networks, system connections, and processes that comprise the application, service, or information system."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each offering names the leveraged authorization the ATO builds on (CLOUD-001). Unheld: what the ATO covers beyond the cloud service is not listed"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "each offering names the leveraged authorization the ATO builds on", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DODI5000.82-0160"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "Operations and sustainment for cloud services will include a plan for recurring"}
@@ -1316,7 +1347,8 @@ requirements:
     locator: "3.8.b"
     context: "SOFTWARE"
     statement: "b. PMs will verify that software assurance for software development and testing, software development and test environments, processes, and tools are consistent with DoDI 5200.44."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.software-assurance.yaml", "expect": "critical components do not include", "asserts": "PMs verify that software assurance is among the technical mitigations for mission-critical software and critical components, consistent with DoDI 5200.44", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI5000.82-0163"
     citation: {"ref": "DODI5000.82", "page": 20, "anchor": "When appropriate, PMs will use development security operations as the preferred approach"}

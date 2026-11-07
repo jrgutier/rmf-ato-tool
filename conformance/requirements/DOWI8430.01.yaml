@@ -182,7 +182,9 @@ requirements:
     locator: "2.2.b"
     context: "DIRECTOR, DEFENSE INFORMATION SYSTEMS AGENCY (DISA) Under the authority, direction, and control of the DoW CIO, and in addition to the responsibilities in Paragraph 2.8., the Director, DISA:"
     statement: "b. Manages the provisional authorization process and issues provisional authorizations for cloud service offerings."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: authorization.issued_by records who issued the provisional authorization (CLOUD-001). Unheld: managing the PA process is DISA's duty, outside a run"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "authorization.issued_by records who issued the provisional authorization", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DOWI8430.01-0022"
     citation: {"ref": "DOWI8430.01", "page": 6, "anchor": "Develops and manages repositories for software assets in accordance with DoW CIO"}
@@ -338,7 +340,9 @@ requirements:
     locator: "2.5.c"
     context: "UNDER SECRETARY OF WAR FOR INTELLIGENCE AND SECURITY The USW(I&S):"
     statement: "c. Directs all-source intelligence and counterintelligence analysis of information and communications technology supply chain threats and ensures methods for sharing threat information are integrated into development processes in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "partial"
+    reason: "All-source intelligence analysis is directed by USW(I&S), outside a run; the run consumes it as the all-source threat assessment SCRM-002 asks. DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "All-source intelligence analysis of supply chain threats informs the all-source threat assessment practice for mission-critical functions", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DOWI8430.01-0041"
     citation: {"ref": "DOWI8430.01", "page": 8, "anchor": "Under the authority, direction, and control of the USW(I&S); under the authority,"}
@@ -480,7 +484,9 @@ requirements:
     locator: "2.8.g.(1)"
     context: "DOW COMPONENT HEADS The DoW Component heads: Ensure that:"
     statement: "(1) Software that provides a mission critical function or is a critical component in accordance with DoDI 5200.44, is protected to a level of assurance consistent with system criticality and its function in the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Each mission-critical function states the assurance its software is protected to (criticality.functions.assurance), free text; whether that is consistent with criticality is a judgment."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/criticality/properties/functions/items/properties/assurance", "asserts": "Software that provides a mission critical function is protected to a level of assurance consistent with system criticality", "claim": "presence"}]
     work_item: "WI-130"
   - id: "REQ-DOWI8430.01-0057"
     citation: {"ref": "DOWI8430.01", "page": 10, "anchor": "Such protections and the generation of assurance evidence are automated to the"}
@@ -1110,7 +1116,9 @@ requirements:
     locator: "3.4.b.(2)"
     context: "DOW ENTERPRISE DIGITAL ARSENAL DoW Components will:"
     statement: "(2) Leverage the DoW enterprise digital arsenal to reduce cost and speed time to delivery."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: hosting.enterprise_services records the enterprise offerings leveraged (HOST-001). Unheld: the DoW enterprise digital arsenal is not named as such"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "hosting.enterprise_services records the enterprise offerings leveraged", "claim": "constraint"}]
     work_item: "WI-309"
   - id: "REQ-DOWI8430.01-0131"
     citation: {"ref": "DOWI8430.01", "page": 17, "anchor": "Military Departments and DISA, as enterprise providers, will:"}
@@ -1614,7 +1622,9 @@ requirements:
     locator: "3.5.h.(1)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(1) DoW Components will continuously monitor software (e.g., COTS, custom-developed) deployed on DoW networks for vulnerabilities and supply chain risks in alignment with supply chain risk management policies."
-    status: "candidate"
+    status: "partial"
+    reason: "monitoring.software states how deployed software is continuously monitored for vulnerabilities and supply chain risks, free text; DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/monitoring/properties/software", "asserts": "Continuously monitor deployed software for vulnerabilities and supply chain risks", "claim": "presence"}]
     work_item: "WI-123"
   - id: "REQ-DOWI8430.01-0188"
     citation: {"ref": "DOWI8430.01", "page": 21, "anchor": "DoW Components will require vendors and developers to report any discovery of"}
@@ -1622,7 +1632,9 @@ requirements:
     locator: "3.5.h.(2)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(2) DoW Components will require vendors and developers to report any discovery of critical or actively exploited vulnerabilities to the designated authority within a timeframe specified by the DoW CIO as a condition for deployment or continued use."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRM-007 asks a reporting term of the contract for vulnerabilities and incidents; the DoW CIO's timeframe and the condition for deployment are in the term's text, which no rule reads. DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-015", "fixture": "tests/fixtures/negative/SCRM-015.reporting.yaml", "expect": "the contract carries no", "asserts": "Vendors and developers are required by a reporting term the contract carries to report discovery of critical or actively exploited vulnerabilities", "claim": "constraint"}]
     work_item: "WI-105"
   - id: "REQ-DOWI8430.01-0189"
     citation: {"ref": "DOWI8430.01", "page": 21, "anchor": "Risk Management Considerations for Third-Party and Open-Source Software."}
@@ -2124,7 +2136,9 @@ requirements:
     locator: "3.7.b.(4)"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "SaaS offerings must meet Federal Risk and Authorization Management Program, also known as FedRAMP, authorization appropriate to the information IL and comply with the Cloud Service Provider Security Requirements Guide. Authorizing officials will issue and maintain an Authorization to Operate in accordance with risk management processes. In accordance with applicable policy, SaaS contracts should include government data rights, data portability/export in non-proprietary formats, incident reporting, continuous monitoring, and termination/exit assistance, including timely return and destruction of data. Additional guidance will be provided on the Cybersecurity Knowledge Service at https://cybersecurityks.osd.mil."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: an offering's authorization must reach the mission impact level (CLOUD-001). Unheld: the SaaS contract terms (data rights, portability, exit) are not listed among the clauses"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "an offering's authorization must reach the mission impact level", "claim": "constraint"}]
     work_item: "WI-302"
   - id: "REQ-DOWI8430.01-0245"
     citation: {"ref": "DOWI8430.01", "page": 27, "anchor": "DoW Components will ensure license and subscription terms comply with Section 1653"}

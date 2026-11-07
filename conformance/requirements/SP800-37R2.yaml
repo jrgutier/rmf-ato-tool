@@ -1041,7 +1041,9 @@ requirements:
     locator: "2.8"
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "To address supply chain risks, organizations develop an SCRM policy, which is an important vehicle for directing SCRM activities. Guided and informed by applicable laws, executive orders, directives, policies, and regulations, the SCRM policy supports applicable organizational policies (e.g., acquisition and procurement, information security and privacy, logistics, quality, and supply chain). The policy addresses the goals and objectives in the organization’s strategic plan, missions and business functions, and the internal and external customer requirements. It also defines the integration points for SCRM with the risk management and the SDLC processes for the organization. Finally, the SCRM policy defines the SCRM roles and responsibilities within the organization, any dependencies among those roles, and the interaction among the roles. SCRM roles specify the responsibilities for procurement, conducting risk assessments, collecting supply chain threat intelligence, identifying and implementing risk-based mitigations, and performing monitoring functions."
-    status: "candidate"
+    status: "partial"
+    reason: "The first two sentences are held: the organization's C-SCRM policy has mandatory statements and defines roles (at least one of each). The third describes."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/policy/properties/statements", "asserts": "Organizations develop an SCRM policy for directing SCRM activities", "sentence": "To address supply chain risks, organizations develop an SCRM policy, which is an important vehicle for directing SCRM activities.", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/policy/properties/roles", "asserts": "The SCRM policy defines the SCRM roles and responsibilities within the organization", "sentence": "Finally, the SCRM policy defines the SCRM roles and responsibilities within the organization, any dependencies among those roles, and the interaction among the roles.", "claim": "constraint"}]
     work_item: "WI-114"
   - id: "REQ-SP800-37R2-0133"
     citation: {"ref": "SP800-37R2", "page": 39, "anchor": "[OMB A-130] defines supply chain risk and requires federal agencies to consider"}
@@ -1067,7 +1069,9 @@ requirements:
     locator: "2.8"
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "Managing supply chain risk is a complex, multifaceted undertaking requiring a coordinated effort across an organization—building trust relationships and communicating with both internal and external stakeholders. SCRM activities involve identifying and assessing applicable risks, determining appropriate mitigating actions, developing appropriate SCRM plans to document selected mitigating actions, and monitoring performance against SCRM plans. Because supply chains differ across and within organizations, SCRM plans are tailored to the individual program, organizational, and operational contexts. Tailored plans provide the basis for determining whether a system is “fit for purpose” and as such, the controls need to be tailored accordingly. Tailored SCRM plans help organizations to focus their resources on the most critical missions and business functions based on mission and business requirements and their risk environment."
-    status: "candidate"
+    status: "partial"
+    reason: "The system's C-SCRM plan (scrm-plan.yaml) is its own and records tailored control decisions; that plans are tailored to context and fit for purpose is a judgment."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/controls/properties/decisions", "asserts": "SCRM plans are tailored and the controls tailored accordingly", "sentence": "Tailored plans provide the basis for determining whether a system is “fit for purpose” and as such, the controls need to be tailored accordingly.", "claim": "constraint"}]
     work_item: "WI-114"
   - id: "REQ-SP800-37R2-0136"
     citation: {"ref": "SP800-37R2", "page": 40, "anchor": "The determination that the risk from acquiring products, systems, or services from"}
@@ -1083,7 +1087,9 @@ requirements:
     locator: "2.8"
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "The degree of control is established by the specific terms and conditions of the contract or service-level agreement. Some organizations have extensive control through contract vehicles or other agreements that specify the security and privacy requirements for the external provider. Other organizations, in contrast, have limited control because they are purchasing commodity services or commercial off-the-shelf products. The level of assurance can also be based on many other factors that convince the organization that the requisite controls have been implemented and that a credible determination of control effectiveness exists. For example, an authorized external cloud service provided to an organization through a well-established line-of-business relationship may provide a level of trust in the service that is within the risk tolerance of the organization. Ultimately, the responsibility for responding to risks from the use of component products, systems, and services from external providers remains with the organization and the authorizing official. Organizations require that an appropriate chain of trust be established with external providers when dealing with the issues associated with system security or privacy risks."
-    status: "candidate"
+    status: "partial"
+    reason: "The second sentence is held by SCRM-021: ownership of supply chain risk is delegated to the authorizing official. The chain of trust with providers is ra.yaml's trust per provider (SRA-002), outside this cluster; the first sentence describes."
+    evidence: [{"kind": "rule", "target": "SCRM-021", "fixture": "tests/fixtures/negative/SCRM-021.owners.yaml", "expect": "delegated to no authorizing official", "asserts": "Responsibility for responding to risks from external providers remains with the organization and the authorizing official", "sentence": "Ultimately, the responsibility for responding to risks from the use of component products, systems, and services from external providers remains with the organization and the authorizing official.", "claim": "constraint"}]
     work_item: "WI-114"
   - id: "REQ-SP800-37R2-0138"
     citation: {"ref": "SP800-37R2", "page": 40, "anchor": "While authorization (i.e., the acceptance of risk) of federal information systems is"}
@@ -4426,7 +4432,9 @@ requirements:
     locator: "SYSTEM AND COMMON CONTROL AUTHORIZATIONS"
     context: "AUTHORIZATION PACKAGE"
     statement: "The authorizing official determines what additional supporting information, artifacts, or references may be required in the authorization package. The additional documentation may include, for example, risk assessments, contingency plans, or SCRM plans."
-    status: "candidate"
+    status: "partial"
+    reason: "scrm-plan.yaml is part of ART-SSP and so of the package manifest; what more the AO asks for is the AO's call, which no rule can foresee."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan", "asserts": "The authorization package carries supporting information the authorizing official determines, such as the C-SCRM plan", "claim": "presence"}]
     work_item: "WI-112"
   - id: "REQ-SP800-37R2-0551"
     citation: {"ref": "SP800-37R2", "page": 159, "anchor": "[SP 800-18] provides guidance on system security plans. Guidance on privacy plans"}
@@ -5499,7 +5507,9 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: "AUTHORIZATION BOUNDARIES FOR SOFTWARE APPLICATIONS"
     statement: "FISMA and OMB policy require external providers that process, store, or transmit federal information or operate information systems on behalf of the federal government to meet the same security and privacy requirements as federal agencies. Federal security and privacy requirements also apply to external systems storing, processing, or transmitting federal information and any services provided by or associated with the external system. Furthermore, the assurance or confidence that the risk from using external providers is at an acceptable level depends on the trust that the organization places in the provider. In some instances, the level of trust is based on the amount of direct control the organization can exert on the provider regarding the employment of controls necessary to protect federal information and protect the privacy of individuals."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRM-007 carries the system's C-SCRM requirements into contracts, and ra.yaml (SRA-002) the trust in each external provider; that providers meet the same security and privacy requirements as agencies is a FISMA and OMB rule the record cannot test whole."
+    evidence: [{"kind": "rule", "target": "SCRM-007", "fixture": "tests/fixtures/negative/SCRM-007.allocation.yaml", "expect": "is not allocated to the contract in", "asserts": "External providers meet federal security requirements carried to them in the contract", "sentence": "FISMA and OMB policy require external providers that process, store, or transmit federal information or operate information systems on behalf of the federal government to meet the same security and privacy requirements as federal agencies.", "claim": "constraint"}]
     work_item: "WI-105"
   - id: "REQ-SP800-37R2-0675"
     citation: {"ref": "SP800-37R2", "page": 179, "anchor": "The delineation between what is owned by the external provider and the"}
@@ -5952,7 +5962,9 @@ requirements:
     locator: "2.8"
     context: ""
     statement: "When system elements process PII, SCRM practices address both information security and privacy risk."
-    status: "candidate"
+    status: "partial"
+    reason: "Privacy is among the C-SCRM policy's purpose and roles (PER-PRIV may hold one), but nothing ties SCRM practices to privacy risk when elements process PII."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/policy/properties/purpose", "asserts": "SCRM practices address both information security and privacy risk when elements process PII, within the purpose and scope of the policy", "claim": "presence"}]
     work_item: "WI-114"
     promoted: {"reason": "Footnote 47 states a duty on SCRM practice for systems processing PII: address both information security and privacy risk."}
   - id: "REQ-SP800-37R2-0731"
@@ -6047,7 +6059,8 @@ requirements:
     locator: "Authorization to Use"
     context: ""
     statement: "A provisional authorization (to operate) issued by the General Services Administration (GSA) as part of the Federal Risk and Authorization Management Program (FedRAMP) is considered a valid authorization to operate for customer organizations desiring to issue an authorization to use for cloud-based systems, services, or applications."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "A FedRAMP provisional authorization is considered a valid authorization to operate", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.decision.yaml", "expect": "is considered a valid authorization to operate", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope"}]
     work_item: "WI-302"
     promoted: {"reason": "Footnote 142 sets what counts as the valid authorization to operate behind an authorization to use: a FedRAMP provisional authorization. A leveraged cloud authorization rests on it."}
   - id: "REQ-SP800-37R2-0741"

@@ -1,0 +1,82 @@
+criticality:
+  method: Each inventory item is rated by whether it performs a mission-critical function; its supplier takes the item's rating.
+  functions:
+    - {id: CF-01, function: Relay signed sensor reports to the analysis enclave, items: [INV-003], assurance: 'The relay service is protected to the assurance its criticality calls for, with signed builds and code review.', sources: [INT-023.A1]}
+  focal_point: {threat_analysis: received, guidance: The Component TSN focal point advised a developer site review for the relay service., sources: [INT-023.A1]}
+  tsn: [criticality-analysis, all-source-threat-assessment, software-assurance, hardware-assurance, procurement-strategies, anti-counterfeit, scrm-countermeasures, cyber-test-and-evaluation]
+  sources: [INT-023.A1]
+suppliers:
+  - {id: SUP-01, name: Dell, kind: oem, items: [INV-001], supply_chain: SC-01, criticality: non-critical, priority: 2, sources: [product/inventory.md#items]}
+  - {id: SUP-02, name: Red Hat, kind: oem, items: [INV-002], supply_chain: SC-02, criticality: non-critical, priority: 2, sources: [product/inventory.md#items]}
+  - {id: SUP-03, name: Program developer, kind: developer, items: [INV-003], supply_chain: SC-03, criticality: critical, functions: [CF-01], priority: 1, fourth_parties: [Code hosting service], sources: [product/inventory.md#items, INT-023.A1]}
+  - {id: SUP-04, name: PostgreSQL Global Development Group, kind: open-source, items: [INV-004], supply_chain: SC-04, criticality: non-critical, priority: 3, sources: [product/inventory.md#items]}
+  - {id: SUP-05, name: Microsoft, kind: oem, items: [INV-005], supply_chain: SC-04, criticality: non-critical, priority: 3, sources: [product/inventory.md#items]}
+threat_analysis:
+  data: [attacks-observed, incident-data, ttps, disasters]
+  vulnerability_approach: Supply chain weaknesses are characterized on the same SP 800-30 scale as the threat sources and events of ra.yaml.
+  likelihood_inputs: [threat-assumptions, threat-information, peer-history, expert-perspective, external-exposure]
+  likelihood_horizon: P1Y
+  acceptable_level: moderate
+  sources: [INT-023.A1]
+assessments:
+  - id: SA-01
+    supplier: SUP-03
+    conducted_by: {points_of_contact: [PER-ISSM], non_federal_support: [Commercial due diligence database]}
+    date: '2026-09-15'
+    temporal_findings: [The developer's code hosting service is under review for a new region.]
+    source_profile: {legal_name: Program Developer LLC, domicile: Arlington VA, identifiers: [UEI ABC123DEF456], family_tree: Wholly owned by its founders.}
+    covered_articles:
+      - {item: INV-003, name: fdr-relay, identifier: version 1.3, description: The relay service.}
+    purpose: {life_cycle_phase: development, context: Assessment of the developer of the mission-critical relay service before award of the sustainment contract.}
+    methodology: {reference: 'Component SCRA methodology, version 2', deviations: [The site visit was replaced by a remote review.]}
+    factors:
+      - {factor: purpose, status: assessed, finding: The relay service is needed for the mission; no market alternative fits., agency_factor: Need, sources: [INT-023.A1]}
+      - {factor: criticality, status: assessed, finding: The relay performs CF-01., agency_factor: Criticality, sources: [INT-023.A1]}
+      - {factor: information-and-data, status: assessed, finding: 'The developer sees build artifacts only, no report data.', agency_factor: Data access, sources: [INT-023.A1]}
+      - {factor: reliance, status: assessed, finding: High reliance; one developer maintains the relay., agency_factor: Dependency, sources: [INT-023.A1]}
+      - {factor: operational-environment, status: assessed, finding: The relay runs inside the boundary; the SSP describes the environment., agency_factor: Environment, sources: [INT-023.A1]}
+      - {factor: external-interdependencies, status: assessed, finding: The developer depends on a code hosting service., agency_factor: Interdependency, sources: [INT-023.A1]}
+      - {factor: functionality, status: assessed, finding: The relay is fit for purpose., agency_factor: Fitness, sources: [INT-023.A1]}
+      - {factor: company-information, status: assessed, finding: 'Small, founder-owned, financially stable.', agency_factor: Company, sources: [INT-023.A1]}
+      - {factor: quality-past-performance, status: assessed, finding: Two prior deliveries on time., agency_factor: Performance, sources: [INT-023.A1]}
+      - {factor: personnel, status: assessed, finding: All developers are vetted U.S. persons., agency_factor: Personnel, sources: [INT-023.A1]}
+      - {factor: physical, status: assessed, finding: The development site is access controlled., agency_factor: Facilities, sources: [INT-023.A1]}
+      - {factor: geopolitical, status: assessed, finding: Domestic only., agency_factor: Location, sources: [INT-023.A1]}
+      - {factor: foci, status: no-information, finding: 'No foreign ownership, control or influence was found in the corporate records searched.', agency_factor: Ownership, sources: [INT-023.A1]}
+      - {factor: compliance-legal, status: assessed, finding: No litigation., agency_factor: Legal, sources: [INT-023.A1]}
+      - {factor: fraud-corruption-sanctions, status: assessed, finding: 'Not debarred, sanctioned or excluded.', agency_factor: Integrity, sources: [INT-023.A1]}
+      - {factor: cybersecurity, status: assessed, finding: Signed builds; one past incident at the code host., agency_factor: Cyber posture, sources: [INT-023.A1]}
+      - {factor: counterfeit-nonconforming, status: not-relevant, finding: The relay is software built from source; no hardware is supplied., agency_factor: Counterfeit, sources: [INT-023.A1]}
+      - {factor: supply-chain-relationships, status: assessed, finding: The code hosting service is the one fourth party., agency_factor: Supply chain, sources: [INT-023.A1]}
+    findings:
+      summary: The developer is sound; its one dependency on a code hosting service is the main exposure.
+      analysis: A compromise of the code host could alter the relay's source before signing.
+      rationale: Moderate likelihood and moderate impact give a low or moderate agency risk.
+      threat_type: adversarial
+      assumptions: [The code host keeps its present access controls.]
+      confidence: moderate
+    impact: An altered relay could forward tampered reports; signing limits the scope.
+    tolerance: requires-mitigation
+    mitigation: [Require the developer to mirror its source to a Government-controlled repository.]
+    severity: {level: 1, agency_score: moderate, explanation: An agency low or moderate risk meets no higher SCRSS description.}
+    escalation: {officials: [PER-ISSM], legal_counsel: false, fasc: none}
+    response: mitigate
+    review: {reviewed_by: [PER-ISSM, PER-PM], senior_leadership: false, legal_counsel: false}
+    services_agreement: The database subscription limits use of its data to this assessment and requires disposal after six years.
+    handling: {marking: CUI//SP-PROCURE, retention: Six years after contract close., dissemination: Program office and contracting officer only.}
+    sources: [INT-023.A1]
+aggregation:
+  method: SCRA results are normalized to the SP 800-30 scale and given to the risk executive function with the system's other risks.
+  reported_to: [level-1, level-2]
+  sources: [INT-023.A1]
+response:
+  - assessment: SA-01
+    acceptable_level: low
+    alternatives:
+      - {action: mitigate, acceptable_level: low, evaluation: A Government mirror of the source removes the code host from the trust path.}
+      - {action: accept, acceptable_level: moderate, evaluation: 'Accepting leaves the code host in the trust path, above the acceptable level.'}
+    reach: system
+    decision: {action: mitigate, decided_by: PER-AODR, level: system}
+    enterprise_response: The mitigation is reported to the risk executive function with the system's other responses.
+    sources: [INT-037.A1]
+sources: [INT-023.A1]

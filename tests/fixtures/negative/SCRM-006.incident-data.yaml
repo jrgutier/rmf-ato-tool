@@ -1,0 +1,17 @@
+rule: SCRM-006
+bases:
+- minimal
+description: threat analysis without incident-data data
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: threat_analysis.data
+  value:
+  - attacks-observed
+  - ttps
+  - disasters
+expect:
+  errors:
+  - SCRM-006
+  messages:
+  - the supply chain threat analysis captures no incident-data data

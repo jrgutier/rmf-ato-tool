@@ -1,0 +1,18 @@
+rule: SCRM-013
+bases:
+- minimal
+description: a below-reach decision delegated by someone other than the risk executive
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: response.0.reach
+  value: mission
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: response.0.decision.delegated_by
+  value: PER-PM
+expect:
+  errors:
+  - SCRM-013
+  messages:
+  - the response to SA-01 is decided at system level for an impact that reaches the mission

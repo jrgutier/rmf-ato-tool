@@ -1,0 +1,15 @@
+rule: SCRM-001
+bases:
+- minimal
+description: a supplier names a function the criticality analysis lacks
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.0.functions
+  value:
+  - CF-09
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - SUP-01 names mission-critical function CF-09, which the criticality analysis does not hold

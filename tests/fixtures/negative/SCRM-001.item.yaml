@@ -1,0 +1,16 @@
+rule: SCRM-001
+bases:
+- minimal
+description: a supplier provides an item that is not in the inventory
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.0.items
+  value:
+  - INV-001
+  - INV-009
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - SUP-01 provides INV-009, which is no inventory item

@@ -1145,7 +1145,8 @@ requirements:
     locator: "ENCLOSURE 2.e"
     context: "RESPONSIBILITIES"
     statement: "e. Ensure that SSE and trusted systems and networks (TSN) processes, tools, and techniques described in DoDI 5200.44 (Reference (bh)) are used in the acquisition of all applicable IT under their purview."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "Trusted systems and networks processes and practices of DoDI 5200.44, such as criticality analysis of mission-critical functions, are used in the acquisition of applicable IT", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0145"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Ensure that organizational solutions that support cybersecurity objectives acquired and developed via"}
@@ -1833,7 +1834,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "a. Using TSN requirements and best practices to protect mission-critical functions and components and manage risks to the integrity of critical information and communications technology in accordance with Reference (bh) for the sustainment of IT. This includes the use of criticality analysis, all-source threat informed acquisition, and engineering mitigations, and the authorities prescribed in section 806 of the Ike Skelton National Defense Authorization Act for Fiscal Year 2011(Reference (ce)). TSN processes and best practices must be applied early and across the system development life cycle, and be applied to system acquisitions and the purchase and integration of replacement IT as described in Reference (bh)."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held by SCRM-002: a system with mission-critical functions uses the TSN practices and the minimum mitigations. That TSN is applied early, across the life cycle and to replacement IT, is not something a rule over one record can see."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "Using TSN best practices to protect mission-critical functions and components, including all-source threat informed acquisition", "sentence": "Using TSN requirements and best practices to protect mission-critical functions and components and manage risks to the integrity of critical information and communications technology in accordance with Reference (bh) for the sustainment of IT.", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0232"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Performing developmental T&E of cybersecurity in accordance with Reference (at) and OT&E"}
@@ -2374,7 +2377,8 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. Major applications include any application that is a product or deliverable of an Acquisition Category I through III program as defined in Enclosure 3 of Reference (at). When operationally feasible all new major applications will be hosted in a Defense Enterprise Computing Center."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "When operationally feasible, all new major applications are hosted in a Defense Enterprise Computing Center", "claim": "constraint", "fixture": "tests/fixtures/negative/HOST-001.decc.yaml", "expect": "is hosted in a Defense Enterprise Computing Center when operationally feasible", "holds_when": "the hosting record is in play once P-16 is in scope; an existing authorized enclave meets it, and a cloud-hosted system recording decc: cloud is excused under DoDI 5000.82 3.7.b (cloud first), a reading the user rules on"}]
     work_item: "WI-309"
   - id: "REQ-DODI8500.01-0298"
     citation: {"ref": "DODI8500.01", "page": 38, "anchor": "All applications, regardless of whether they rise to the level of major"}
@@ -2389,7 +2393,8 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. When possible, capabilities should be developed as applications hosted in existing authorized computing environments (i.e., enclaves) rather than designated as major applications requiring new and separate authorizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "HOST-001", "asserts": "Capabilities are developed as applications hosted in an existing authorized enclave rather than designated as major applications requiring new and separate authorizations", "claim": "constraint", "fixture": "tests/fixtures/negative/HOST-001.enclave.yaml", "expect": "is designated a major application requiring a new and separate authorization", "holds_when": "the hosting record is in play once P-16 is in scope; the designation is judged while the system is under development or major modification"}]
     work_item: "WI-309"
   - id: "REQ-DODI8500.01-0300"
     citation: {"ref": "DODI8500.01", "page": 38, "anchor": "DoD Component CIOs will resolve disputes regarding whether an application rises to"}
@@ -2613,7 +2618,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(4).(d)"
     context: "Figure 2. DoD Information Technology IT Product"
     statement: "(d) Products will comply with the requirements of Reference (bh), as applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "'The requirements of Reference (bh), as applicable' are DoDI 5200.44's, which is not in references/; SCRM-002 holds the TSN practices the framework's sources name, not a product's compliance with that instruction."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.procurement-strategies.yaml", "expect": "critical components do not include", "asserts": "Products comply with the DoDI 5200.44 requirements such as procurement strategies for critical components", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0327"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "IT Considerations. These are general considerations that apply to IT."}
@@ -2637,7 +2644,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(2)"
     context: "Figure 2. DoD Information Technology"
     statement: "(2) SMs and PMs must use TSN tools, techniques, and practices, including the use of all-source threat assessments to inform acquisition and engineering mitigation decisions, for all IT when required in accordance with Reference (bh). During sustainment, TSN practices will be applied prior to integrating IT into operational IS."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held by SCRM-002: all-source threat assessment is among the TSN practices of a system with mission-critical functions. Applying TSN before integrating IT during sustainment needs a change record the framework does not tie to TSN."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "SMs and PMs use TSN practices, including all-source threat assessments to inform acquisition and engineering mitigation decisions", "sentence": "(2) SMs and PMs must use TSN tools, techniques, and practices, including the use of all-source threat assessments to inform acquisition and engineering mitigation decisions, for all IT when required in accordance with Reference (bh).", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0330"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Cybersecurity will be implemented in all system and service acquisitions at levels"}
@@ -3352,7 +3361,8 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. Coordinate with the DoD Component TSN focal point to ensure that TSN best practices, processes, techniques, and procurement tools are applied prior to the acquisition of IT or the integration of IT into ISs when required in compliance with Reference (bh)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.focal.yaml", "expect": "threat analysis of suppliers of critical components is marked not required", "asserts": "Coordinate with the DoD Component TSN focal point so TSN practices are applied prior to acquisition of IT", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0417"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Develop and maintain an organizational or system-level cybersecurity program that includes cybersecurity"}

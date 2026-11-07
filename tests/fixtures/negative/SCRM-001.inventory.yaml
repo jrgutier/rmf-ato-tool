@@ -1,0 +1,16 @@
+rule: SCRM-001
+bases:
+- minimal
+description: an inventory item has no supplier
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.0.items
+  value:
+  - INV-002
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - inventory item INV-001 has no supplier in scrm.yaml, so the supplier and component inventory is 
+    incomplete
