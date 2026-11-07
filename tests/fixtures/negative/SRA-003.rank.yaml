@@ -1,0 +1,11 @@
+rule: SRA-003
+bases: [minimal]
+description: the priority order ranks a lower risk first
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: prioritization.order
+  value: [TE-02, TE-01]
+expect:
+  errors: [SRA-003]
+  messages: ['prioritization.order ranks a lower risk above a higher one: TE-02 (low) before TE-01 (moderate)']

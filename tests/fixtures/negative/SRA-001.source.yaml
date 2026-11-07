@@ -1,0 +1,11 @@
+rule: SRA-001
+bases: [minimal]
+description: a threat event names a threat source that is not listed
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: threat_events.0.threat_sources
+  value: [TS-09]
+expect:
+  errors: [SRA-001]
+  messages: ['TE-01 names threat source TS-09, which ra.yaml does not list']

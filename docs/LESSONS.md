@@ -474,3 +474,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: a rule that needs the present uses the latest date the run vouches for, its newest authorization record, and a rule that bounds an event compares it with the plan's own schedule.
 - Rule: Compare a run's dates with each other, never with as_of as if it were now.
 - Promotion: none — it shapes how a rule is written, and test_valid_minimal fails at once on the mistake.
+
+## L-0068 · 2026-11-07 · run: phase-11 · tags: run-data, rules
+- Symptom: a run could delete the new `artifacts/data/ra.yaml` and pass every check, and its PKG-003 data elements for the RAR were the only sign.
+- Root cause: RUN-ART-001 checks the files of core artifacts only; ART-RA is `package: supporting`, so a data file added to it is required by nothing.
+- Fix: SRA-001 reports a missing ra.yaml whenever ART-RA is produced or seeded on a contract that has the file, with a negative fixture.
+- Rule: A data file added to a supporting artifact needs a rule that reports it missing; RUN-ART-001 does not.
+- Promotion: check: SRA-001

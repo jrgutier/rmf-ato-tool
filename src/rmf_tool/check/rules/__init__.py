@@ -22,6 +22,7 @@ from rmf_tool.check.rules import (
     journal,
     monitor,
     plans,
+    risk_assessment,
     tailoring,
 )
 
@@ -93,6 +94,10 @@ RULES: dict[str, Rule] = {
     "ASMT-011": assessment.poam_status,
     "ASMT-012": assessment.poam_priority,
     "ASMT-013": assessment.users,
+    "SRA-001": risk_assessment.threat_model,
+    "SRA-002": risk_assessment.external_risk,
+    "SRA-003": risk_assessment.prioritization,
+    "SRA-004": risk_assessment.rar_residual,
     "RUN-VER-001": config.old_contract,
     "AOCHG-001": authorization.ao_change,
     "MCHG-001": monitor.change_lifecycle,

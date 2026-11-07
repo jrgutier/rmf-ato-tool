@@ -26,7 +26,8 @@ PLAN_RUN_SCHEMAS = {
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
-                     "changes", "posture-reports", "plan-reviews", "capabilities", "sar-report"}
+                     "changes", "posture-reports", "plan-reviews", "capabilities",
+                     "sar-report", "ra"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -86,6 +87,7 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 
 SRC = ["INT-001.A1"]
+_RA = YAML(typ="safe").load((REPO_ROOT / "templates/data/ra.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -329,6 +331,7 @@ RUN_EXAMPLES = {
         {"methodology": {"standard": "NIST SP 800-53A Rev. 5"},
          "delivered": [{"to": "PER-PM", "date": "2026-02-01"}], "sources": SRC},
         {"methodology": {"standard": ""}, "sources": SRC}),
+    "ra": (_RA, {**_RA, "risk_model": {**_RA["risk_model"], "analysis_approach": "guess"}}),
 }
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"

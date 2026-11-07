@@ -1,0 +1,8 @@
+rule: SRA-001
+bases: [minimal]
+description: a threat event initiated only by an out-of-scope threat source
+mutations:
+- {op: set_field, file: artifacts/data/ra.yaml, path: threat_sources.0.in_scope, value: false}
+expect:
+  errors: [SRA-001]
+  messages: [TE-01 is initiated only by threat sources judged not relevant or out of scope]

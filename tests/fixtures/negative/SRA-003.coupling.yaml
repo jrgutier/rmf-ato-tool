@@ -1,0 +1,11 @@
+rule: SRA-003
+bases: [minimal]
+description: a coupling names a threat event that is not listed
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: prioritization.couplings.0.events
+  value: [TE-01, TE-09]
+expect:
+  errors: [SRA-003]
+  messages: ['a coupling names threat event TE-09, which ra.yaml does not list']
