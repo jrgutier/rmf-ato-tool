@@ -28,7 +28,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements"}
+                     "requirements", "software"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -97,6 +97,16 @@ REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["
 AGREEMENT = {"analysis": "a", "feedback": "f",
              "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
              "sources": SRC}
+DERIVATION = {
+    "informed_by": [{"kind": "concept-of-operations", "document": "CONOPS"}],
+    "methods": [{"method": "misuse cases", "addresses": ["design"], "requirements": ["REQ-01"]}],
+    "key_performance": [{"name": "Survivability KPP", "establishes": ["survivability"]}],
+    "exportability": ["REQ-01"], "sources": SRC}
+ENGINEERING = {
+    "practices": [{"area": "cybersecurity", "stages": ["design"], "practice": "p"}],
+    "assurance": {"level": "l", "requirements": ["REQ-01"], "commensurate_with": {
+        "technology": "t", "program": "p", "system": "s", "mission": "m"}},
+    "sources": SRC}
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -345,10 +355,13 @@ RUN_EXAMPLES = {
         {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
          "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
                             "sources": SRC}],
-         "agreement": AGREEMENT},
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING},
         {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
             "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
-         "agreement": AGREEMENT}),
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING}),
+    "software": (
+        {"covered_software": False, "sources": SRC},
+        {"covered_software": True, "pipeline": {"automated": True}, "sources": SRC}),
 }
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"

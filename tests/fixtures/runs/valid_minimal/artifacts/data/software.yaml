@@ -1,0 +1,63 @@
+covered_software: true
+pipeline:
+  automated: true
+  location: factory:Enterprise software factory (authorized under its own ATO)
+  authorization: The factory and its pipeline hold their own authorization.
+  monitoring: Pipeline logs forward to the enclave SIEM.
+  protection: Two-person approval for pipeline changes; the relay is mission critical.
+  build:
+    trusted_sources: Builds pull only from the mirrored repositories.
+    tamper_protection: Artifacts are signed in the build and verified on deployment.
+    observability: Every build step is logged with its inputs.
+  provenance: {format: SLSA provenance, attestations: In-toto attestations per build, signed: true}
+  supply_chain_links: Source, build, artifact store and deployment are each signed and logged.
+  production_deployment: manual-decision
+  practices: The factory follows the SSDF practices.
+  development_tools: Build and test tools run inside the factory boundary.
+ai_development:
+  used: false
+  tools: []
+  accountability: Developers own every change they merge.
+  human_review: Every change to the relay gets a human review.
+  review_and_test: All code is reviewed and scanned the same way.
+  data_protection: No code leaves the factory for external AI services.
+  training: Developers complete the factory's secure coding course.
+evidence:
+  sbom:
+    standard: CycloneDX
+    custom_generated: true
+    cots_captured: true
+    third_party_included: true
+    transitive_included: true
+    maintained: Regenerated on every build.
+    gaps: None.
+  assurance: [static-analysis, dynamic-analysis, secure-code-review]
+  automation: Scans run in the pipeline on every build.
+  protections_and_risks: Each release lists open weaknesses and the protections applied.
+  ai_record: []
+  formats: The formats the DoW CIO publishes.
+  marking: Evidence is marked CUI where it holds configuration detail; it holds no PII.
+  sharing: Evidence is published to the program's evidence store for the AO.
+  assessment_input: The SCA reads scan and SBOM results at A-3.
+test_and_evaluation:
+  approach: Developmental and operational testing share one test plan.
+  pipeline_integration: Automated test results feed the operational assessment.
+  operational_data: Monitoring data and the cyber range inform evaluations.
+  sharing: Test findings are shared with the test community under CUI handling.
+  contract_performance: Contract cybersecurity requirements are verified by test.
+  cyber_risk_assessments: The mission-based cyber risk assessment informs the test events.
+  mission_capability: Each release is evaluated against the mission thread.
+  fielding_evidence: The test report supports the fielding decision.
+  standards: The relay meets the DoD test standards for its category.
+  cyber_dte:
+    - {event: Cooperative vulnerability identification, date: "2026-08-10", independent: true}
+program:
+  governance: The program's cybersecurity and test reviews run on each release, not each milestone.
+  decision_authority: The product owner approves releases; the pipeline evidence shows compliance.
+  workforce: The team fills the software developer, secure software assessor and DevSecOps roles of the DoW Cyber Workforce Framework.
+  training: Developers take the factory's DevSecOps and secure coding courses.
+  career_paths: The Component's software career field covers the team.
+  performance: Release metrics and quarterly reviews tie skills to mission outcomes.
+  records: Relay records follow the Component's approved disposition schedule.
+  exceptions: None requested.
+sources: [INT-007.A1]

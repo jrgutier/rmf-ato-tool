@@ -3,9 +3,10 @@ artifacts/data/requirements.yaml (ART-REQ) once its task is in the run's scope, 
 about a file that is unreadable (RUN-FM-001 reports it).
 
 The design policy statements are the DoDI 8500.01 and DoDI 5000.82 statements on system design
-that no control of the baseline carries (triage, WI-209). Each key names one sentence of the
-source; a conditional one may be marked not applicable with a reason, an unconditional one
-binds every system those instructions cover."""
+that no control of the baseline carries (triage, WI-209), and the DoWI 8430.01 policy, tenet and
+common security and resilience requirements for covered software (WI-99). Each key names one
+sentence of the source; a conditional one may be marked not applicable with a reason, an
+unconditional one binds every system those instructions cover."""
 
 from __future__ import annotations
 
@@ -59,6 +60,26 @@ DESIGN_POLICY: dict[str, tuple[str, bool]] = {
                                 False),
     "DP-DATA-PROTECTION": ("REQ-DODI5000.82-0169: industry practice for authentication, "
                            "access, encryption, monitoring and data protection", True),
+    # DoWI 8430.01 binds DoW software development and deployment efforts and covered software,
+    # so each holds where the system includes software the DoW develops or deploys.
+    "DP-SW-PRACTICES": ("REQ-DOWI8430.01-0006: modern, secure, human-centric practices such "
+                        "as Agile and DevSecOps", True),
+    "DP-SW-TRACEABLE": ("REQ-DOWI8430.01-0007: measurable, testable requirements traceable to "
+                        "mission critical functions, with cybersecurity, cyber resilience and "
+                        "zero trust suitability", True),
+    "DP-SW-SECURITY-QUALITY": ("REQ-DOWI8430.01-0090: security and quality integrated into "
+                               "every step of the lifecycle", True),
+    "DP-SW-COMMON-REQUIREMENTS": ("REQ-DOWI8430.01-0175: covered software developed, tested "
+                                  "and validated against a common set of verifiable security "
+                                  "and resilience requirements", True),
+    "DP-SW-SECURE-ARCH": ("REQ-DOWI8430.01-0176: secure architecture and design: least "
+                          "privilege, defense-in-depth, modularization", True),
+    "DP-SW-INPUT-VALIDATION": ("REQ-DOWI8430.01-0178: input validation, output encoding and "
+                               "injection prevention", True),
+    "DP-SW-SAFETY": ("REQ-DOWI8430.01-0181: software safety, especially for operational "
+                     "technology and mission-critical systems", True),
+    "DP-SW-RESILIENCE": ("REQ-DOWI8430.01-0182: operational resilience: runtime protection, "
+                         "fault tolerance, rollback and recovery", True),
 }
 
 

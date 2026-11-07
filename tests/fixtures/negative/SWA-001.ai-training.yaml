@@ -1,0 +1,22 @@
+rule: SWA-001
+bases:
+- minimal
+description: an AI application used in development that fails 3.6 (no_training_on_data)
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: ai_development
+  value:
+    used: true
+    tools:
+    - {name: CodeAssist, authorized_by: DoW AI tailoring guide approval, on_dow_system: true, no_training_on_data: false, auditable: true}
+    accountability: Developers own every change they merge.
+    human_review: Every change to the relay gets a human review.
+    review_and_test: All code is reviewed and scanned the same way.
+    data_protection: No code leaves the factory for external AI services.
+    training: Developers complete the factory's secure coding course.
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - AI application CodeAssist has no contractual guarantee that government data and prompts are not used to train external models

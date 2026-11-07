@@ -17,6 +17,7 @@ from rmf_tool.check.rules import (
     consistency,
     content,
     coverage,
+    engineering,
     generated,
     hybrid,
     iscm,
@@ -25,6 +26,7 @@ from rmf_tool.check.rules import (
     plans,
     requirements,
     risk_assessment,
+    software,
     tailoring,
 )
 
@@ -136,6 +138,11 @@ RULES: dict[str, Rule] = {
     "REQS-002": requirements.design_policy,
     "REQS-003": requirements.needs_and_agreement,
     "REQS-004": requirements.workforce,
+    "SSE-001": engineering.derivation,
+    "SSE-002": engineering.practices,
+    "SSE-003": engineering.control_assurance,
+    "SWA-001": software.software,
+    "SWA-002": software.components,
     "DEGRADED-001": config.degraded,
     "TASK-DEF-001": consistency.deferrals,
     **dict(plans.rules()),

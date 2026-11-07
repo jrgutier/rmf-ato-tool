@@ -1,0 +1,661 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:software",
+  "title": "runs/<run-id>/artifacts/data/software.yaml",
+  "description": "Software development and its evidence under DoWI 8430.01 (S-4, with ART-CMP): the CI/CD pipeline and build, AI in development, the machine-readable software evidence and integrated test and evaluation. SWA-001 and SWA-002 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "covered_software",
+    "sources"
+  ],
+  "properties": {
+    "covered_software": {
+      "title": "Whether the system includes software the DoW develops, modifies or deploys (covered software)",
+      "type": "boolean"
+    },
+    "pipeline": {
+      "title": "The CI/CD pipeline and build process the software is produced by, treated as critical infrastructure",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "automated",
+        "location",
+        "authorization",
+        "monitoring",
+        "protection",
+        "build",
+        "provenance",
+        "supply_chain_links",
+        "production_deployment",
+        "practices",
+        "development_tools"
+      ],
+      "properties": {
+        "automated": {
+          "title": "Whether a secure, automated CI/CD pipeline integrates, tests, secures and delivers the software",
+          "type": "boolean"
+        },
+        "location": {
+          "title": "Where the pipeline runs: a boundary component, or the authorization of the software factory that hosts it",
+          "type": "string",
+          "pattern": "^(CMP-[A-Z0-9-]+|factory:.+)$"
+        },
+        "authorization": {
+          "title": "How the pipeline is authorized as critical infrastructure",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0051"
+          ]
+        },
+        "monitoring": {
+          "title": "How the pipeline is monitored",
+          "type": "string",
+          "minLength": 1
+        },
+        "protection": {
+          "title": "How the pipeline is protected commensurate with mission impact",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0051"
+          ]
+        },
+        "build": {
+          "title": "The secure, automated and observable build process",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "trusted_sources",
+            "tamper_protection",
+            "observability"
+          ],
+          "properties": {
+            "trusted_sources": {
+              "title": "How the build ensures the software originates from trusted sources",
+              "type": "string",
+              "minLength": 1
+            },
+            "tamper_protection": {
+              "title": "How the software is protected from tampering during its creation and distribution",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-DOWI8430.01-0146"
+              ]
+            },
+            "observability": {
+              "title": "How the build process is observable",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "provenance": {
+          "title": "Machine-readable build provenance and the attestations that give pedigree",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "format",
+            "attestations",
+            "signed"
+          ],
+          "properties": {
+            "format": {
+              "title": "The machine-readable provenance format",
+              "type": "string",
+              "minLength": 1
+            },
+            "attestations": {
+              "title": "The attestations that give a cryptographically verifiable chain of custody",
+              "type": "string",
+              "minLength": 1
+            },
+            "signed": {
+              "title": "Whether the attestations are cryptographically signed",
+              "type": "boolean"
+            }
+          }
+        },
+        "supply_chain_links": {
+          "title": "How every link of the software supply chain between writing source code and production deployment is addressed",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0054"
+          ]
+        },
+        "production_deployment": {
+          "title": "How deployment to production is decided: a manual decision, or automated",
+          "enum": [
+            "manual-decision",
+            "automated"
+          ],
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0040"
+          ]
+        },
+        "practices": {
+          "title": "The secure software development practices the software factory follows",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0076",
+            "REQ-DOWI8430.01-0140"
+          ]
+        },
+        "development_tools": {
+          "title": "Development, test, modeling and other enabling systems whose behaviors have security implications for the system, and how they are addressed",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0193"
+          ]
+        }
+      }
+    },
+    "ai_development": {
+      "title": "Use of AI to write, modify or test the software",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "used",
+        "accountability",
+        "human_review",
+        "review_and_test",
+        "data_protection",
+        "training"
+      ],
+      "properties": {
+        "used": {
+          "title": "Whether AI applications or services generate or modify code, scripts or tests for the system",
+          "type": "boolean"
+        },
+        "tools": {
+          "title": "AI applications or services used for software development",
+          "type": "array",
+          "items": {
+            "title": "One AI application or service",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "authorized_by",
+              "on_dow_system",
+              "no_training_on_data",
+              "auditable"
+            ],
+            "properties": {
+              "name": {
+                "title": "The AI application or service",
+                "type": "string",
+                "minLength": 1
+              },
+              "authorized_by": {
+                "title": "The formal DoW cybersecurity approval that authorizes it for DoW software development",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0209",
+                  "REQ-DOWI8430.01-0215"
+                ]
+              },
+              "on_dow_system": {
+                "title": "Whether it resides on a DoW information system",
+                "type": "boolean"
+              },
+              "no_training_on_data": {
+                "title": "Whether contracts guarantee that government data and prompts are not shared or used to train external models",
+                "type": "boolean"
+              },
+              "auditable": {
+                "title": "Whether its use can be audited and monitored by designated authorities",
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "accountability": {
+          "title": "How developers remain accountable for the security, functionality and integrity of code generated or modified using AI",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0207"
+          ]
+        },
+        "human_review": {
+          "title": "The risk-based review that requires human review and approval of AI-generated changes to security- or safety-critical functionality",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0208"
+          ]
+        },
+        "review_and_test": {
+          "title": "How AI-generated code is reviewed and security tested as manually written code, for vulnerabilities, safety, logic errors, intellectual property and license obligations",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0212",
+            "REQ-DOWI8430.01-0213"
+          ]
+        },
+        "data_protection": {
+          "title": "How non-public DoW information and information about individuals are kept out of unapproved generative AI",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0210"
+          ]
+        },
+        "training": {
+          "title": "Training of the development team on AI-generated vulnerability patterns, prompt engineering and license contamination",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0226"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "title": "Machine-readable evidence for the software: composition, build integrity and application security",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sbom",
+        "assurance",
+        "automation",
+        "protections_and_risks",
+        "formats",
+        "marking",
+        "sharing",
+        "assessment_input"
+      ],
+      "properties": {
+        "sbom": {
+          "title": "The software bill of materials",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "standard",
+            "custom_generated",
+            "cots_captured",
+            "third_party_included",
+            "transitive_included",
+            "maintained",
+            "gaps"
+          ],
+          "properties": {
+            "standard": {
+              "title": "The DoW-approved SBOM standard or format",
+              "type": "string",
+              "minLength": 1
+            },
+            "custom_generated": {
+              "title": "Whether an SBOM is generated and maintained for custom software",
+              "type": "boolean"
+            },
+            "cots_captured": {
+              "title": "Whether SBOMs are captured for COTS software",
+              "type": "boolean"
+            },
+            "third_party_included": {
+              "title": "Whether every third-party component, including open-source software and COTS, is in the SBOM",
+              "type": "boolean"
+            },
+            "transitive_included": {
+              "title": "Whether transitive dependencies are in the SBOM",
+              "type": "boolean"
+            },
+            "maintained": {
+              "title": "How the SBOM is kept accurate and current",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-DOWI8430.01-0144"
+              ]
+            },
+            "gaps": {
+              "title": "Where the inventory could not be comprehensive, or none",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-DOWI8430.01-0265"
+              ]
+            }
+          }
+        },
+        "assurance": {
+          "title": "Verifiable assurance evidence produced: static and dynamic code analysis, fuzz testing, penetration testing and secure code review",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0055",
+            "REQ-DOWI8430.01-0142"
+          ],
+          "items": {
+            "enum": [
+              "static-analysis",
+              "dynamic-analysis",
+              "fuzz-testing",
+              "penetration-testing",
+              "secure-code-review",
+              "other"
+            ]
+          }
+        },
+        "automation": {
+          "title": "How protections and the generation of assurance evidence are automated",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0057"
+          ]
+        },
+        "protections_and_risks": {
+          "title": "The applied protections and residual risks, including weaknesses and vulnerabilities, the evidence identifies",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0136"
+          ]
+        },
+        "ai_record": {
+          "title": "Record of models, versions and significant datasets used to generate or test software",
+          "type": "array",
+          "x-enforces": [
+            "REQ-DOWI8430.01-0225"
+          ],
+          "items": {
+            "title": "One model",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "model",
+              "version",
+              "datasets"
+            ],
+            "properties": {
+              "model": {
+                "title": "The model",
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "title": "Its version",
+                "type": "string",
+                "minLength": 1
+              },
+              "datasets": {
+                "title": "Significant datasets used",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "formats": {
+          "title": "The DoW CIO evidence format standards the evidence follows",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0029",
+            "REQ-DOWI8430.01-0143"
+          ]
+        },
+        "marking": {
+          "title": "How evidence, SBOMs, provenance and telemetry with sensitive information are marked and handled, and how PII in them is minimized",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0147"
+          ]
+        },
+        "sharing": {
+          "title": "How the machine-readable evidence is shared to support continuous authorization and reciprocity",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0135"
+          ]
+        },
+        "assessment_input": {
+          "title": "How the evidence enters risk management and control assessment under the Assess Only construct",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0185"
+          ]
+        }
+      }
+    },
+    "test_and_evaluation": {
+      "title": "Integrated and continuous test and evaluation of the software",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approach",
+        "pipeline_integration",
+        "operational_data",
+        "sharing",
+        "contract_performance",
+        "cyber_risk_assessments",
+        "mission_capability",
+        "fielding_evidence",
+        "standards",
+        "cyber_dte"
+      ],
+      "properties": {
+        "approach": {
+          "title": "The integrated and continuous T&E approach that unifies DT&E and OT&E",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0148"
+          ]
+        },
+        "pipeline_integration": {
+          "title": "How operational evaluations integrate with the CI/CD pipeline and accept validated automated test artifacts, scans, performance data and telemetry",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODI5000.87-0115",
+            "REQ-DOWI8430.01-0047",
+            "REQ-DOWI8430.01-0058"
+          ]
+        },
+        "operational_data": {
+          "title": "How continuous monitoring, adversarial testing and cyber range data inform operational evaluations of mission risk and resilience",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0048",
+            "REQ-DOWI8430.01-0059"
+          ]
+        },
+        "sharing": {
+          "title": "How test data and findings are shared for continuous improvement while protecting sensitive information",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0049",
+            "REQ-DOWI8430.01-0060"
+          ]
+        },
+        "contract_performance": {
+          "title": "How testing substantiates contract technical performance requirements, including cybersecurity and cyber resilience",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0151"
+          ]
+        },
+        "cyber_risk_assessments": {
+          "title": "The mission-based cyber risk assessments that inform the cyber test activities",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0155"
+          ]
+        },
+        "mission_capability": {
+          "title": "The ongoing evaluations of mission capability, including cybersecurity and cyber resilience",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0166"
+          ]
+        },
+        "fielding_evidence": {
+          "title": "The formal evidence that supports risk-based fielding decisions",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0167"
+          ]
+        },
+        "standards": {
+          "title": "The technical standards for security test and validation the software meets",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0043"
+          ]
+        },
+        "cyber_dte": {
+          "title": "Periodic, independent government cyber DT&E events",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "title": "One cyber DT&E event",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event",
+              "date",
+              "independent"
+            ],
+            "properties": {
+              "event": {
+                "title": "The event",
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "independent": {
+                "title": "Whether the event is an independent government event",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "program": {
+      "title": "The software program: governance adapted to continuous delivery, workforce, records and exceptions to the issuance",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governance",
+        "decision_authority",
+        "workforce",
+        "training",
+        "career_paths",
+        "performance",
+        "records",
+        "exceptions"
+      ],
+      "properties": {
+        "governance": {
+          "title": "How acquisition, cybersecurity and T&E governance is adapted to iterative development and continuous delivery, and the governance framework that keeps compliance, risk management and accountability",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0104",
+            "REQ-DOWI8430.01-0105"
+          ]
+        },
+        "decision_authority": {
+          "title": "Where decision-making authority is delegated and how operational capability and compliance are verified through automated evidence",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0106"
+          ]
+        },
+        "workforce": {
+          "title": "The work roles of the DoW Cyber Workforce Framework the software development, security and operations teams fill, and how skill gaps are closed",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0139",
+            "REQ-DOWI8430.01-0255",
+            "REQ-DOWI8430.01-0256"
+          ]
+        },
+        "training": {
+          "title": "Training and education in modern software practices, Agile and DevSecOps, and the continuous learning environment",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0101",
+            "REQ-DOWI8430.01-0257",
+            "REQ-DOWI8430.01-0260"
+          ]
+        },
+        "career_paths": {
+          "title": "Career paths and development opportunities for the software professionals",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODCIO-DEVSECOPS-0102"
+          ]
+        },
+        "performance": {
+          "title": "How skills are linked to performance and mission outcomes through regular assessments and clear metrics",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0261"
+          ]
+        },
+        "records": {
+          "title": "How data and records the software creates or receives are managed through and after its lifespan under approved disposition schedules",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0066"
+          ]
+        },
+        "exceptions": {
+          "title": "Any exception to DoWI 8430.01 requested through the E2P Portal, or none",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DOWI8430.01-0262"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token.",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

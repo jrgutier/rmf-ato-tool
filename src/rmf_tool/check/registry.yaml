@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 158 rules, 36 repo-scope and 122 run-scope. Authoritative;
+# Rule registry (plan §6.5): 163 rules, 36 repo-scope and 127 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -396,6 +396,15 @@ rules:
     summary: generated output differs from a fresh rmf build, baseline resolve or package
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-18R1-0197
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -1780,6 +1789,9 @@ rules:
       - REQ-SP800-160V1R1-0624
       - REQ-SP800-160V1R1-0645
       - REQ-SP800-160V1R1-0646
+      - REQ-DODI5000.90-0052
+      - REQ-SP800-160V1R1-0049
+      - REQ-SP800-160V1R1-0247
   - id: REQS-002
     scope: run
     severity: E
@@ -1798,6 +1810,14 @@ rules:
       - REQ-DODI8500.01-0275
       - REQ-DODI8500.01-0341
       - REQ-DODI8500.01-0352
+      - REQ-DOWI8430.01-0006
+      - REQ-DOWI8430.01-0007
+      - REQ-DOWI8430.01-0090
+      - REQ-DOWI8430.01-0175
+      - REQ-DOWI8430.01-0176
+      - REQ-DOWI8430.01-0178
+      - REQ-DOWI8430.01-0181
+      - REQ-DOWI8430.01-0182
   - id: REQS-003
     scope: run
     severity: E
@@ -1819,6 +1839,10 @@ rules:
       - REQ-SP800-160V1R1-0615
       - REQ-SP800-160V1R1-0616
       - REQ-SP800-160V1R1-0643
+      - REQ-SP800-160V1R1-0218
+      - REQ-SP800-160V1R1-0579
+      - REQ-SP800-160V1R1-0608
+      - REQ-SP800-160V1R1-1386
   - id: REQS-004
     scope: run
     severity: E
@@ -1833,6 +1857,109 @@ rules:
       - REQ-DODD8140.01-0022
       - REQ-DODD8140.01-0053
       - REQ-DODD8140.01-0054
+  - id: SSE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: security requirements derived without the informing documents, derivation methods, key performance measures, exportability or inclusion in the specifications
+    fixture: tests/fixtures/negative/SSE-001.yaml
+    hint: At P-15 record requirements.yaml derivation (DoDI 5000.83 3.3.c.(1)) and each requirement's included_in.
+    enforces:
+      - REQ-DODI5000.83-0169
+      - REQ-DODI5000.83-0175
+      - REQ-DODI5000.83-0176
+      - REQ-DODI5000.83-0177
+      - REQ-DODI5000.83-0178
+      - REQ-DODI5000.83-0285
+      - REQ-CNSSP12-0015
+      - REQ-DODI5000.90-0072
+      - REQ-DODI5000.82-0095
+      - REQ-DODI5000.90-0052
+  - id: SSE-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: system security engineering practices that miss an area, a life cycle activity, program protection, privacy, a design principle or the assurance level
+    fixture: tests/fixtures/negative/SSE-002.yaml
+    hint: At P-15 record requirements.yaml engineering (DoDI 5000.83 1.2.c); name principles of SP 800-160v1r1 Appendix E.
+    enforces:
+      - REQ-DODI5000.83-0010
+      - REQ-DODI5000.83-0283
+      - REQ-CNSSP12-0015
+      - REQ-SP800-53R5-0026
+      - REQ-DODI5000.82-0128
+      - REQ-DODI5000.90-0094
+      - REQ-SP800-160V1R1-0050
+      - REQ-SP800-160V1R1-0263
+      - REQ-SP800-18R2-0042
+      - REQ-SP800-39-0080
+      - REQ-SP800-160V1R1-0246
+      - REQ-SP800-160V1R1-0493
+      - REQ-SP800-160V1R1-0473
+      - REQ-SP800-37R2-0330
+      - REQ-SP800-53R5-0006
+  - id: SSE-003
+    scope: run
+    severity: E
+    ac: [AC-16, AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an assurance-related baseline control whose SSP statement does not address its assurance requirements, or leaves them unsatisfied once in place
+    fixture: tests/fixtures/negative/SSE-003.yaml
+    hint: "For each control `rmf catalog show --fields assurance` marks, record assurance.addressed in its SSP statement and assurance.status: satisfied once it is implemented."
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-37R2-0331
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-39-0308
+  - id: SWA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: covered software without an automated pipeline, signed provenance, a complete SBOM, approved AI tools or independent cyber DT&E
+    fixture: tests/fixtures/negative/SWA-001.yaml
+    hint: At S-4 write artifacts/data/software.yaml (DoWI 8430.01 2.8, 3.5 and 3.6).
+    enforces:
+      - REQ-DOWI8430.01-0095
+      - REQ-DOWI8430.01-0209
+      - REQ-DOWI8430.01-0215
+      - REQ-DOWI8430.01-0216
+      - REQ-DOWI8430.01-0217
+      - REQ-DOWI8430.01-0051
+      - REQ-DOWI8430.01-0146
+      - REQ-DOWI8430.01-0061
+      - REQ-DOWI8430.01-0142
+      - REQ-DOWI8430.01-0144
+      - REQ-DOWI8430.01-0204
+      - REQ-DOWI8430.01-0169
+  - id: SWA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an open-source component without its governance, community and license review, or a COTS component that declines a validated product without a reason
+    fixture: tests/fixtures/negative/SWA-002.yaml
+    hint: At P-14 record ra.yaml components with the six risk factors of DoWI 8430.01 3.5.i.(2) and, for open source, the review of 3.5.i.(3).
+    enforces:
+      - REQ-DOWI8430.01-0198
+      - REQ-SP800-37R2-0330
   - id: DEGRADED-001
     scope: run
     severity: W
