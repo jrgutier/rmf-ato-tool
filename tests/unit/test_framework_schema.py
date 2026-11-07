@@ -32,7 +32,8 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
                      "test-strategy", "registration", "pia"}
-FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
+# framework/baselines/*.yaml (ADR-0002)
+FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs"}
 
 
 def schema(name):
