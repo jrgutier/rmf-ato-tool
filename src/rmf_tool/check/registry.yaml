@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 269 rules, 36 repo-scope and 233 run-scope. Authoritative;
+# Rule registry (plan §6.5): 280 rules, 36 repo-scope and 244 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1239,6 +1239,7 @@ rules:
       - REQ-DODI8531.01-0051
       - REQ-DODI8500.01-0173
       - REQ-DODI8531.01-0178
+      - REQ-DODCIO-RECIPROCITY-0150
   - id: STIG-002
     scope: run
     severity: E
@@ -4476,3 +4477,280 @@ rules:
       - REQ-DODCIO-CATO-IG-0124
       - REQ-DODCIO-CATO-IG-0188
       - REQ-DODCIO-DEVSECOPS-0042
+  - id: CLOUD-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a CSO-hosted system has no cloud.yaml, or an offering lacks a leveraged FedRAMP or DoD provisional authorization fit for the mission impact level, its package review, SSP and SRTM inheritance, STIG/SRG guidance or contracted additional measures
+    fixture: tests/fixtures/negative/CLOUD-001.yaml
+    hint: "S-4 writes artifacts/data/cloud.yaml once service-agreements.yaml names the cloud; each offering names its leveraged authorization."
+    enforces:
+      - REQ-CNSSI1254-0123
+      - REQ-DODCIO-RECIPROCITY-0002
+      - REQ-DODCIO-RECIPROCITY-0015
+      - REQ-DODCIO-RECIPROCITY-0016
+      - REQ-DODCIO-RECIPROCITY-0017
+      - REQ-DODCIO-RECIPROCITY-0018
+      - REQ-DODCIO-RECIPROCITY-0150
+      - REQ-DODI5000.82-0153
+      - REQ-DODI5000.82-0154
+      - REQ-DODI5000.82-0155
+      - REQ-DODI5000.82-0158
+      - REQ-DODI5000.82-0159
+      - REQ-DOWI8430.01-0021
+      - REQ-DOWI8430.01-0244
+      - REQ-DTM-24-001-0022
+      - REQ-DTM-24-001-0025
+      - REQ-SP800-18R2-0201
+      - REQ-SP800-37R2-0740
+  - id: CLOUD-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the mission impact level is not set by the mission AO, or does not accommodate the mission data
+    fixture: tests/fixtures/negative/CLOUD-002.yaml
+    hint: "mission_impact_level in cloud.yaml: the level, the kinds of data and the AO who set it."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0002
+      - REQ-DODCIO-RECIPROCITY-0003
+      - REQ-DODCIO-RECIPROCITY-0005
+      - REQ-DODCIO-RECIPROCITY-0006
+  - id: CLOUD-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the DTM 24-001 activity tracking checklist misses a Table 1 activity, names a performer the key forbids, leaves a gap the AO has not accepted, or is not generated, coordinated and validated as required
+    fixture: tests/fixtures/negative/CLOUD-003.yaml
+    hint: "checklist.activities in cloud.yaml: one row per Table 1 activity and offering."
+    enforces:
+      - REQ-DTM-24-001-0023
+      - REQ-DTM-24-001-0024
+      - REQ-DTM-24-001-0028
+      - REQ-DTM-24-001-0029
+      - REQ-DTM-24-001-0069
+      - REQ-DTM-24-001-0070
+      - REQ-DTM-24-001-0089
+      - REQ-DTM-24-001-0119
+      - REQ-DTM-24-001-0122
+      - REQ-DTM-24-001-0124
+      - REQ-DTM-24-001-0151
+      - REQ-DTM-24-001-0159
+      - REQ-DTM-24-001-0184
+      - REQ-DTM-24-001-0214
+      - REQ-DTM-24-001-0221
+  - id: CLOUD-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a CSO contract leaves out a cybersecurity clause DTM 24-001 lists, DFARS 239.76, or the sharing of CSSP DCO data
+    fixture: tests/fixtures/negative/CLOUD-004.yaml
+    hint: "offerings[].contract.clauses in cloud.yaml."
+    enforces:
+      - REQ-DODI5000.82-0152
+      - REQ-DTM-24-001-0015
+      - REQ-DTM-24-001-0016
+      - REQ-DTM-24-001-0017
+      - REQ-DTM-24-001-0020
+      - REQ-DTM-24-001-0026
+      - REQ-DTM-24-001-0027
+      - REQ-DTM-24-001-0093
+      - REQ-DTM-24-001-0126
+  - id: CLOUD-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the CSSP of a CSO-hosted system has no agreement covering the cloud, lacks a duty, or is not given visibility
+    fixture: tests/fixtures/negative/CLOUD-005.yaml
+    hint: "cssp in cloud.yaml names the CSSP agreement, its duties and the visibility it gets."
+    enforces:
+      - REQ-DODI5000.82-0157
+      - REQ-DTM-24-001-0160
+      - REQ-DTM-24-001-0168
+      - REQ-DTM-24-001-0169
+      - REQ-DTM-24-001-0170
+      - REQ-DTM-24-001-0171
+      - REQ-DTM-24-001-0172
+      - REQ-DTM-24-001-0173
+      - REQ-DTM-24-001-0179
+      - REQ-DTM-24-001-0180
+      - REQ-DTM-24-001-0181
+      - REQ-DTM-24-001-0183
+      - REQ-DTM-24-001-0188
+      - REQ-DTM-24-001-0218
+      - REQ-DTM-24-001-0250
+      - REQ-DTM-24-001-0251
+  - id: CLOUD-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the CSSP is not the cybersecurity POC, the cyber protection team does not report to it, or a shared incident response duty has no holder DTM 24-001 allows
+    fixture: tests/fixtures/negative/CLOUD-006.yaml
+    hint: "incident_response in cloud.yaml lists who does what."
+    enforces:
+      - REQ-DTM-24-001-0182
+      - REQ-DTM-24-001-0224
+      - REQ-DTM-24-001-0225
+      - REQ-DTM-24-001-0226
+      - REQ-DTM-24-001-0227
+      - REQ-DTM-24-001-0229
+      - REQ-DTM-24-001-0230
+      - REQ-DTM-24-001-0231
+      - REQ-DTM-24-001-0232
+      - REQ-DTM-24-001-0233
+      - REQ-DTM-24-001-0234
+      - REQ-DTM-24-001-0235
+      - REQ-DTM-24-001-0236
+      - REQ-DTM-24-001-0249
+      - REQ-DTM-24-001-0255
+      - REQ-DTM-24-001-0256
+      - REQ-DTM-24-001-0257
+      - REQ-DTM-24-001-0258
+      - REQ-DTM-24-001-0259
+      - REQ-DTM-24-001-0260
+  - id: CLOUD-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: external assessments of a CSO system have no request process, are not identified with the PM and AO, do not share results, or a DCRT report is late to JFHQ-DODIN or incomplete
+    fixture: tests/fixtures/negative/CLOUD-007.yaml
+    hint: "external_assessments in cloud.yaml."
+    enforces:
+      - REQ-DTM-24-001-0072
+      - REQ-DTM-24-001-0082
+      - REQ-DTM-24-001-0084
+      - REQ-DTM-24-001-0085
+      - REQ-DTM-24-001-0086
+      - REQ-DTM-24-001-0087
+      - REQ-DTM-24-001-0088
+      - REQ-DTM-24-001-0091
+      - REQ-DTM-24-001-0092
+  - id: CLOUD-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a DCAT event, penetration test or intrusion assessment lacks its description, written approval, constraints, mission details, results, lessons learned or FedRAMP demonstration
+    fixture: tests/fixtures/negative/CLOUD-008.yaml
+    hint: "events in cloud.yaml, one per event."
+    enforces:
+      - REQ-DTM-24-001-0096
+      - REQ-DTM-24-001-0097
+      - REQ-DTM-24-001-0098
+      - REQ-DTM-24-001-0099
+      - REQ-DTM-24-001-0100
+      - REQ-DTM-24-001-0101
+      - REQ-DTM-24-001-0102
+      - REQ-DTM-24-001-0104
+      - REQ-DTM-24-001-0105
+      - REQ-DTM-24-001-0106
+      - REQ-DTM-24-001-0107
+      - REQ-DTM-24-001-0108
+      - REQ-DTM-24-001-0109
+      - REQ-DTM-24-001-0110
+      - REQ-DTM-24-001-0111
+      - REQ-DTM-24-001-0113
+      - REQ-DTM-24-001-0114
+      - REQ-DTM-24-001-0115
+      - REQ-DTM-24-001-0116
+      - REQ-DTM-24-001-0117
+  - id: CLOUD-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a performer of a Table 1 activity owes a report or notice the record does not hold, or it misses a recipient or its cadence
+    fixture: tests/fixtures/negative/CLOUD-009.yaml
+    hint: "deliverables in cloud.yaml, one per activity and kind."
+    enforces:
+      - REQ-DTM-24-001-0074
+      - REQ-DTM-24-001-0075
+      - REQ-DTM-24-001-0076
+      - REQ-DTM-24-001-0078
+      - REQ-DTM-24-001-0079
+      - REQ-DTM-24-001-0081
+      - REQ-DTM-24-001-0123
+      - REQ-DTM-24-001-0128
+      - REQ-DTM-24-001-0129
+      - REQ-DTM-24-001-0132
+      - REQ-DTM-24-001-0133
+      - REQ-DTM-24-001-0134
+      - REQ-DTM-24-001-0148
+      - REQ-DTM-24-001-0156
+      - REQ-DTM-24-001-0158
+      - REQ-DTM-24-001-0164
+      - REQ-DTM-24-001-0167
+      - REQ-DTM-24-001-0187
+      - REQ-DTM-24-001-0191
+  - id: CLOUD-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: user activity monitoring on a CSO system is outsourced without the legal review and AO decision, or lacks its procedures, data sharing, chain of custody or correlation partners
+    fixture: tests/fixtures/negative/CLOUD-010.yaml
+    hint: "uam in cloud.yaml."
+    enforces:
+      - REQ-DTM-24-001-0166
+      - REQ-DTM-24-001-0193
+      - REQ-DTM-24-001-0194
+      - REQ-DTM-24-001-0196
+      - REQ-DTM-24-001-0197
+      - REQ-DTM-24-001-0198
+      - REQ-DTM-24-001-0199
+      - REQ-DTM-24-001-0200
+      - REQ-DTM-24-001-0201
+      - REQ-DTM-24-001-0203
+      - REQ-DTM-24-001-0204
+      - REQ-DTM-24-001-0205
+      - REQ-DTM-24-001-0206
+      - REQ-DTM-24-001-0207
+      - REQ-DTM-24-001-0208
+  - id: HOST-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: boundary.yaml records no hosting, or a new major application is not in a DECC without an infeasibility reason, ignores an existing enclave, or a new or modernized system has no cloud hosting assessment
+    fixture: tests/fixtures/negative/HOST-001.yaml
+    hint: "P-16 adds hosting to boundary.yaml."
+    enforces:
+      - REQ-DODCIO-DEVSECOPS-0004
+      - REQ-DODI5000.75-0025
+      - REQ-DODI5000.75-0054
+      - REQ-DODI5000.75-0241
+      - REQ-DODI5000.82-0148
+      - REQ-DODI5000.82-0149
+      - REQ-DODI5000.87-0009
+      - REQ-DODI5000.87-0107
+      - REQ-DODI8500.01-0297
+      - REQ-DODI8500.01-0299
+      - REQ-DOWI8430.01-0130

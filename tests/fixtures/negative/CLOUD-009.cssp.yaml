@@ -1,0 +1,22 @@
+rule: CLOUD-009
+bases:
+- cloud
+description: a CSSP runs the external scans and owes no notification
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: checklist.activities.0.performer
+  value:
+    entity: cssp
+    name: Component CSSP
+- op: delete_list_item
+  file: artifacts/data/cloud.yaml
+  path: deliverables
+  where:
+    activity: external-vulnerability-scans
+    kind: scan-notification
+expect:
+  errors:
+  - CLOUD-009
+  messages:
+  - the performer of external-vulnerability-scans owes a scan-notification and the record holds none

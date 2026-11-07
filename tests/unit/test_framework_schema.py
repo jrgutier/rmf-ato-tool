@@ -31,7 +31,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "requirements", "software", "system-description", "sar-summary",
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
-                     "test-strategy", "registration", "pia", "cato",
+                     "test-strategy", "registration", "pia", "cato", "cloud",
                      "scrm", "scrm-acquisition", "scrm-plan", "scrm-org"}
 # framework/baselines/*.yaml (ADR-0002)
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs"}
@@ -404,6 +404,10 @@ RUN_EXAMPLES.update({
         ("scrm-plan", "plan", {"approval": {"pmo": "maybe"}}),
         ("scrm-org", "levels", [{"level": "level-9"}]))
 })
+# cloud.yaml lives in the derived `cloud` base, not valid_minimal; its template is a valid record.
+_CLOUD = YAML(typ="safe").load(
+    (REPO_ROOT / "templates/data/cloud.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["cloud"] = (_CLOUD, {**_CLOUD, "mission_impact_level": {"level": "IL3"}})
 _ST = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})

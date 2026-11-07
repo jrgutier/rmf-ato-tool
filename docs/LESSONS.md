@@ -538,7 +538,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
 - Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
 
-## L-0077 · 2026-11-07 · run: phase-11 · tags: framework, runs
+## L-0077 · 2026-11-07 · run: phase-11 · tags: references, rules
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities look empty in a terminal or editor, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the extractor maps to the private-use code point U+F0E9, which renders as blank, while the ● and ○ keys come through as themselves; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
+- Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
+- Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
+
+## L-0078 · 2026-11-07 · run: phase-11 · tags: framework, runs
 - Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
 - Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
 - Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.

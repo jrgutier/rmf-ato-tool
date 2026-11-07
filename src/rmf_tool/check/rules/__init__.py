@@ -15,6 +15,7 @@ from rmf_tool.check.rules import (
     authorization,
     categorize,
     cato,
+    cloud,
     config,
     connections,
     consistency,
@@ -224,6 +225,7 @@ RULES: dict[str, Rule] = {
     **dict(pentest.rules()),
     **dict(secureconfig.rules()),
     **dict(governance.rules()),
+    **dict(cloud.rules()),
     **dict(cato.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
