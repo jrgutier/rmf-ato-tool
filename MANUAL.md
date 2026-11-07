@@ -456,7 +456,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14).
+**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
 
 #### <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
 
@@ -1022,6 +1022,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
+- artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 
 **Alignment**
@@ -1040,7 +1041,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
 
 #### <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -3600,7 +3601,7 @@ System-level security and privacy risk assessment, updated as the system and thr
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-RA.md](templates/artifacts/ART-RA.md) |
-| Data files | — |
+| Data files | `artifacts/data/ra.yaml` (schema `ra`) |
 | OSCAL | — |
 | Produced by | [P-14](#task-p-14) |
 | Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
@@ -4055,7 +4056,7 @@ content and operational data.
 | <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [C-1](#task-c-1), [I-1](#task-i-1), [I-2](#task-i-2) |
 | <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | JCIDS documents (for example the initial capabilities document and capability development document) that state the capability need and record the categorization. | [P-8](#task-p-8), [P-9](#task-p-9), [P-15](#task-p-15) |
 | <a id="ext-org-policy"></a>**EXT-ORG-POLICY** Organizational policy and Prepare-step guidance | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [P-1](#task-p-1), [P-2](#task-p-2), [P-5](#task-p-5), [P-9](#task-p-9), [P-15](#task-p-15) |
-| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions. | [P-3](#task-p-3), [P-14](#task-p-14), [R-2](#task-r-2) |
+| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions: Intelligence Community products such as DIA cyber threat assessments and the Defense Intelligence Threat Library cyber threat modules, the USD(I&S) cyber threat assessment capability, threat intelligence on third party providers and environments, and the USCYBERCOM and NSA/CSS cyber operational risk tolerances. ART-RA records which product, its date and the credentialed professionals consulted. | [P-3](#task-p-3), [P-14](#task-p-14), [R-2](#task-r-2) |
 | <a id="ext-registry"></a>**EXT-REGISTRY** Component system registry | organization | The DoD Component registry in which programs register their systems. | [P-18](#task-p-18) |
 | <a id="ext-baselines"></a>**EXT-BASELINES** Control baselines | reference | CNSSI 1253 security control baselines for national security systems and the SP 800-53B baselines (OSCAL profiles in references/oscal/profiles). | [P-4](#task-p-4), [S-1](#task-s-1) |
 | <a id="ext-cnssi1253-overlays"></a>**EXT-CNSSI1253-OVERLAYS** CNSSI 1253 overlays | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [P-4](#task-p-4), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2) |

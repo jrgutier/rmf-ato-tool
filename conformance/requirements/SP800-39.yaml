@@ -754,7 +754,9 @@ requirements:
     locator: "2.5"
     context: "TIER THREE—INFORMATION SYSTEMS VIEW"
     statement: "Once approved for operation, information systems move into the operations/maintenance phase of the system development life cycle. The monitoring of security control effectiveness and any changes to organizational information systems and the environments in which those systems operate ensure that selected risk response measures are operating as intended on an ongoing basis. Ongoing monitoring is paramount to maintaining situational awareness of risk to organizational missions and business functions—an awareness that is critical to making the necessary course corrections when risk exceeds organizational risk tolerance. During the disposal phase of the system development life cycle, it is standard procedure for organizations to verifiably remove prior to disposal, any information from information systems that may cause adverse impacts, if compromised, and also assess any risk associated with these activities.45"
-    status: "candidate"
+    status: "partial"
+    reason: "ART-RA is updated at R-2 and M-3 (framework/tasks); ongoing monitoring of control effectiveness is M-2's and not held by ra.yaml"
+    evidence: [{"kind": "prose", "asserts": "Ongoing monitoring of changes keeps the risk assessment and risk response current", "target": "playbooks/M/M-3.md", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0096"
     citation: {"ref": "SP800-39", "page": 32, "anchor": "The overall resilience of organizational information systems (i.e., how well systems operate"}
@@ -842,7 +844,9 @@ requirements:
     locator: "2.6.1.•"
     context: "Establishing Trust Among Organizations Effectively addressing the risk associated with the growing dependence on external service providers and partnerships with domestic and international public and"
     statement: "• Appropriately balance mission/business-based requirements to support information sharing while considering the risk of working with competing or hostile entities and the risk that other organizations, while neither competing or hostile, may be a path through which such entities attack;"
-    status: "candidate"
+    status: "partial"
+    reason: "The risk of each connection and provider is recorded (SRA-002); the balance of information sharing against the risk from competing or hostile entities is prose"
+    evidence: [{"kind": "rule", "asserts": "The risk of information sharing with other organizations is considered for every connection", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.yaml", "expect": "has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-SP800-39-0107"
     citation: {"ref": "SP800-39", "page": 34, "anchor": "Determine if the ongoing risk to organizational operations and assets, individuals, other"}
@@ -1217,7 +1221,9 @@ requirements:
     locator: "3.2"
     context: "ASSESSING RISK"
     statement: "Organizations benefit significantly from conducting risk assessments as part of an organization-wide risk management process. However, once risk assessments are complete, it is prudent for organizations to invest some time in keeping the assessments current. Maintaining currency of risk assessments requires support from the risk monitoring step (e.g., observing changes in organizational information systems and environments of operation or analyzing monitoring results to maintain awareness of the risk). Keeping risk assessments up to date provides many potential benefits such as timely, relevant information that enables senior leaders/executives to perform near real-time risk management. Maintaining risk assessments also reduces future assessment costs and supports ongoing risk monitoring efforts. Organizations may determine that conducting comprehensive risk assessments as a way of maintaining current risk assessments do not provide sufficient value. In such situations, organizations consider conducting incremental and/or differential risk assessments. Incremental risk assessments consider only new information (e.g., the effects of using a new information system on mission/business risk), whereas differential risk assessments consider how changes affect the overall risk determination. Incremental or differential risk assessments are useful if organizations require a more targeted review of risk, seek an expanded understanding of risk, or desire an expanded understanding of the risk in relation to missions/business functions."
-    status: "candidate"
+    status: "partial"
+    reason: "R-2 and M-3 update ART-RA (framework/tasks); whether an update reflects monitoring results is prose"
+    evidence: [{"kind": "prose", "asserts": "Organizations keep risk assessments current with the risk monitoring step", "target": "playbooks/M/M-3.md", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0154"
     citation: {"ref": "SP800-39", "page": 47, "anchor": "Inputs to the risk assessment step from the risk framing step include,"}
@@ -1240,7 +1246,9 @@ requirements:
     locator: "3.2"
     context: "THREAT AND VULNERABILITY IDENTIFICATION"
     statement: "Supplemental Guidance: Threat identification requires an examination of threat sources and events. For examining threat sources and events, organizations identify threat capabilities, intentions, and targeting information from all available sources. Organizations can leverage a number of sources for threat information at strategic or tactical levels. Threat information generated at any tier can be used to inform or refine the risk-related activities in any other tier. For example, specific threats (i.e., tactics, techniques, and procedures) identified during Tier 1 threat assessments may directly affect mission/business process and architectural design decisions at Tier 2. Specific threat information generated at Tiers 2 and 3 can be used by organizations to refine threat information generated during initial threat assessments carried out at Tier 1."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat sources are rated and threat information sources are required (SRA-001); drawing on all available sources across tiers is prose"
+    evidence: [{"kind": "schema", "asserts": "Threat identification draws on sources of threat information", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/kind", "claim": "constraint"}, {"kind": "schema", "asserts": "Organizations identify threat capabilities of threat sources", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0157"
     citation: {"ref": "SP800-39", "page": 48, "anchor": "Vulnerability identification occurs at all tiers. Vulnerabilities related to organizational governance (e.g.,"}
@@ -1263,7 +1271,9 @@ requirements:
     locator: "3.2"
     context: "RISK DETERMINATION"
     statement: "Risk Determination and Uncertainty Risk determinations require analysis of threat, vulnerability, likelihood, and impact-related information. Organizations also need to examine mission/business vulnerabilities and threats where safeguards and/or countermeasures do not exist. The nature of the inputs provided to this step (e.g., general, specific, strategic, tactical) directly affects the type of outputs or risk determinations made. The reliability and accuracy of risk determinations are dependent on the currency, accuracy, completeness, and integrity of information collected to support the risk assessment process. In addition, the components of risk assessment results that affect reliability and accuracy of risk determinations also affect the amount of uncertainty associated with those risk determinations and subsequent determinations. Organizations also consider additional insights related to the anticipated time frames associated with particular risks. Time horizons associated with potential threats can shape future risk responses (e.g., risk may not be a concern if the time horizon for the risk is in the distant future)."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat, vulnerability, likelihood and impact are required for each threat event, and information sources carry dates; the reliability of the information is prose"
+    evidence: [{"kind": "schema", "asserts": "The currency of information collected to support the risk determination is shown by its date", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/date", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0160"
     citation: {"ref": "SP800-39", "page": 49, "anchor": "Organizational guidance for determining risk under uncertainty indicates how combinations of likelihood"}
@@ -1271,7 +1281,9 @@ requirements:
     locator: "3.2"
     context: "RISK DETERMINATION"
     statement: "Organizational guidance for determining risk under uncertainty indicates how combinations of likelihood and impact are combined into a determination of the risk level or risk score/rating. Organizations need to understand the type and amount of uncertainty surrounding risk decisions so that risk determinations can be understood. During the risk framing step, organizations may have provided guidance on how to analyze risk and how to determine risk when a high degree of uncertainty exists. Uncertainty is particularly a concern when the risk assessment considers advanced persistent threats, for which analysis of interacting vulnerabilities may be needed, the common body of knowledge is sparse, and past behavior may not be predictive."
-    status: "candidate"
+    status: "partial"
+    reason: "The combination of likelihood and impact and the uncertainty are stated; the guidance for determining risk under uncertainty is prose"
+    evidence: [{"kind": "schema", "asserts": "Organizational guidance indicates how likelihood and impact are combined into a determination of risk level", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/combination", "claim": "presence"}, {"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0161"
     citation: {"ref": "SP800-39", "page": 49, "anchor": "While threat and vulnerability determinations apply frequently to missions and business functions,"}
@@ -1279,7 +1291,9 @@ requirements:
     locator: "3.2"
     context: "RISK DETERMINATION"
     statement: "While threat and vulnerability determinations apply frequently to missions and business functions, the specific requirements associated with the missions/business functions, including the environments of operation, may lead to different assessment results. Different missions, business functions, and environments of operation can lead to differences in the applicability of specific threat information considered and the likelihood of threats causing potential harm. Understanding the threat component of the risk assessment requires insight into the particular threats facing specific missions or business functions. Such awareness of threats includes understanding the capability, intent, and targeting of particular adversaries. The risk tolerance of organizations and underlying beliefs associated with how the risk tolerance is formed (including the culture within organizations) may shape the perception of impact and likelihood in the context of identified threats and vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat events name their threat sources and harms to missions; differences across missions and environments of operation are prose"
+    evidence: [{"kind": "schema", "asserts": "Understanding threats facing specific missions requires the harm to those missions", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impacts", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0162"
     citation: {"ref": "SP800-39", "page": 49, "anchor": "Even with the establishment of explicit criteria, risk assessments are influenced by"}
@@ -2311,7 +2325,9 @@ requirements:
     locator: "3.2"
     context: "THREAT AND VULNERABILITY IDENTIFICATION"
     statement: "When selecting between approaches, organizations consider whether the overall objective is identifying each specific instance or symptom of a problem or understanding the underlying root causes of problems. Understanding specific exploitable weaknesses or deficiencies is helpful when problems are first identified or when quick fixes are required. This specific understanding also provides organizations with necessary sources of information for eventually diagnosing potential root causes of problems, especially those problems that are systemic in nature."
-    status: "candidate"
+    status: "partial"
+    reason: "The analysis approach is recorded with its rationale; whether it targets instances or root causes is prose"
+    evidence: [{"kind": "schema", "asserts": "When selecting between approaches, organizations consider the objective of the approach", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/rationale", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-39-0291"
     citation: {"ref": "SP800-39", "page": 52, "anchor": "The second and third options are considerably less expensive. From a mission"}

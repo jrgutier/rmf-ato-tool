@@ -16,7 +16,8 @@ from rmf_tool.oscal import build_ssp
 from rmf_tool.run.model import open_run
 
 YAMLS = YAML(typ="safe")
-FILE_SCHEMAS = {"artifacts/data/rar.yaml": "rar", "artifacts/poam/items.yaml": "poam-items",
+FILE_SCHEMAS = {"artifacts/data/rar.yaml": "rar", "artifacts/data/ra.yaml": "ra",
+                "artifacts/poam/items.yaml": "poam-items",
                 "artifacts/data/authorizations.yaml": "authorizations",
                 "artifacts/data/boundary.yaml": "boundary", "artifacts/data/sap.yaml": "sap",
                 "artifacts/data/infotypes.yaml": "infotypes",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:rar",
   "title": "runs/<run-id>/artifacts/data/rar.yaml",
-  "description": "Risk assessment report data (R-2; updated by R-3 and M-3). Risk to finding/POA&M linkage is RAR-001, the determination RAR-002, the courses of action RAR-003.",
+  "description": "Risk assessment report data (R-2; updated by R-3 and M-3). Risk to finding/POA&M linkage is RAR-001, the determination RAR-002, the courses of action RAR-003, the residual levels and control counts SRA-004.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -49,6 +49,13 @@
           },
           "level": {
             "$ref": "#/$defs/level"
+          },
+          "residual_level": {
+            "title": "Residual risk level expected after the mitigations in the POA&M are implemented",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-CNSSI1254-0089"
+            ]
           },
           "finding_refs": {
             "type": "array",
@@ -97,6 +104,40 @@
     },
     "overall_risk": {
       "$ref": "#/$defs/level"
+    },
+    "controls_by_level": {
+      "title": "Number of controls with risks identified at each level of risk",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ],
+      "properties": {
+        "very-low": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "low": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "moderate": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "high": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "very-high": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
     },
     "sources": {
       "type": "array",

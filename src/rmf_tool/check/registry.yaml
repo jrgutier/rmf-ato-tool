@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 93 rules, 36 repo-scope and 57 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -927,6 +927,89 @@ rules:
     hint: Name only controls of the ia family that artifacts/ssp/controls/ia.yaml holds.
     enforces:
       - REQ-SP800-18R2-0239
+  - id: SRA-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the system risk assessment data is missing, or its threat sources, events and information sources do not hold together
+    fixture: tests/fixtures/negative/SRA-001.yaml
+    hint: Write artifacts/data/ra.yaml from templates/data/ra.yaml; rate capability, intent and targeting of each adversarial source and range of effects of each other one, name only listed sources, vulnerabilities and conditions, and cite threat, vulnerability and impact information.
+    enforces:
+      - REQ-CNSSI1254-0079
+      - REQ-CNSSI1254-0080
+      - REQ-CNSSI1254-0081
+      - REQ-SP800-30R1-0106
+      - REQ-SP800-30R1-0130
+      - REQ-SP800-30R1-0149
+      - REQ-SP800-30R1-0150
+      - REQ-SP800-30R1-0151
+      - REQ-SP800-30R1-0152
+      - REQ-SP800-30R1-0153
+      - REQ-SP800-30R1-0154
+      - REQ-SP800-30R1-0174
+      - REQ-SP800-30R1-0191
+      - REQ-SP800-30R1-0201
+      - REQ-SP800-30R1-0279
+      - REQ-SP800-30R1-0287
+      - REQ-SP800-30R1-0289
+      - REQ-SP800-30R1-0290
+  - id: SRA-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a connection, external provider or supplier carries no risk in the system risk assessment
+    fixture: tests/fixtures/negative/SRA-002.yaml
+    hint: Give ra.yaml external a connection per external boundary component, a provider per external service with a response when trust or risk falls short, and a supply chain record holding every inventory item; under the space overlay coordinate non-NSS connections with the NSA.
+    enforces:
+      - REQ-CNSSI1253F-ATT2-SPACE-0013
+      - REQ-CNSSI1254-0044
+      - REQ-CNSSP12-0012
+      - REQ-CNSSP12-0013
+      - REQ-DODI5000.83-0003
+      - REQ-DODI5000.83-0212
+      - REQ-DODI5000.90-0044
+      - REQ-SP800-18R2-0004
+      - REQ-SP800-37R2-0112
+      - REQ-SP800-37R2-0133
+      - REQ-SP800-37R2-0256
+      - REQ-SP800-37R2-0680
+      - REQ-SP800-39-0106
+      - REQ-SP800-60V1R1-0197
+  - id: SRA-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the priority order of risks leaves out or misranks a threat event
+    fixture: tests/fixtures/negative/SRA-003.yaml
+    hint: List every threat event once in prioritization.order, highest risk first, and couple only listed events.
+    enforces:
+      - REQ-SP800-30R1-0065
+      - REQ-SP800-30R1-0132
+      - REQ-SP800-30R1-0206
+      - REQ-SP800-30R1-0238
+      - REQ-SP800-30R1-0245
+  - id: SRA-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-2
+    summary: a RAR risk has no residual level, or the RAR miscounts the controls with risks at each level
+    fixture: tests/fixtures/negative/SRA-004.yaml
+    hint: Give each rar.yaml risk a residual_level, and controls_by_level the number of distinct controls of the findings linked at each level.
+    enforces:
+      - REQ-CNSSI1254-0089
+      - REQ-CNSSI1254-0090
   - id: DEGRADED-001
     scope: run
     severity: W

@@ -439,3 +439,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the link is the path as written; valid_minimal lists the boundary diagram, and PKG-003 fails when its file is not in the run.
 - Rule: An optional field no fixture sets is untested, however green its golden.
 - Promotion: check: PKG-003
+
+## L-0063 · 2026-11-07 · run: phase-11 · tags: run-data, rules
+- Symptom: a run could delete the new `artifacts/data/ra.yaml` and pass every check, and its PKG-003 data elements for the RAR were the only sign.
+- Root cause: RUN-ART-001 checks the files of core artifacts only; ART-RA is `package: supporting`, so a data file added to it is required by nothing.
+- Fix: SRA-001 reports a missing ra.yaml whenever ART-RA is produced or seeded on a contract that has the file, with a negative fixture.
+- Rule: A data file added to a supporting artifact needs a rule that reports it missing; RUN-ART-001 does not.
+- Promotion: check: SRA-001

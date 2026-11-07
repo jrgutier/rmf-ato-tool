@@ -18,6 +18,7 @@ from rmf_tool.check.rules import (
     generated,
     hybrid,
     journal,
+    risk_assessment,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -64,6 +65,10 @@ RULES: dict[str, Rule] = {
     "RAR-003": consistency.rar_courses,
     "DIAS-001": consistency.dias_controls,
     "PKG-003": coverage.data_elements,
+    "SRA-001": risk_assessment.threat_model,
+    "SRA-002": risk_assessment.external_risk,
+    "SRA-003": risk_assessment.prioritization,
+    "SRA-004": risk_assessment.rar_residual,
     "RUN-VER-001": config.old_contract,
     "INV-BND-001": consistency.inventory_in_boundary,
     "INV-BND-002": consistency.boundary_in_inventory,

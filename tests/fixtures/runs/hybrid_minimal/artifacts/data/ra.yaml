@@ -1,0 +1,119 @@
+purpose:
+  statement: The threats, weaknesses and risks of the relay that drive its security requirements and tailoring.
+  decisions: [security requirements, control tailoring, the authorization decision]
+  kind: initial
+point_of_contact:
+  persona: PER-ISSM
+  name: Information System Security Manager, Field Data Relay
+  phone: 555-0100
+  email: issm.fdr@example.mil
+scope:
+  applicability: The Field Data Relay at Tier 3, inside its authorization boundary and its one external service.
+  time_frame: Until the next major release or a change in the threat information.
+  architecture: The relay appliance, report store and console on the field and enclave networks.
+assumptions: [The enclave firewall and the enterprise identity provider work as authorized.]
+constraints: [No penetration test results exist before development test.]
+information_sources:
+  - {id: SRC-01, kind: threat, title: Component cyber threat assessment for tactical relays, provider: DoD Component intelligence, date: '2026-02-01', sources: [product/architecture.md#network]}
+  - {id: SRC-02, kind: vulnerability, title: Design review of the relay appliance, provider: Program engineering, date: '2026-02-15', sources: [product/architecture.md#components]}
+  - {id: SRC-03, kind: impact, title: Mission analysis of field reporting, provider: Program office, date: '2026-01-20', sources: [product/architecture.md#data-flow]}
+consultations:
+  - {professional: Program intelligence support officer, organization: DoD Component intelligence, date: '2026-02-03', sources: [product/architecture.md#network]}
+risk_model:
+  defined_in: risk-management-strategy
+  factors: [threat, vulnerability, impact, likelihood, predisposing-condition]
+  scales: {likelihood: SP 800-30 Table G-5, impact: SP 800-30 Table H-3, risk: SP 800-30 Table I-2}
+  assessment_approach: qualitative
+  analysis_approach: threat-oriented
+  combination: Overall likelihood by Table G-5 from initiation and impact likelihood; risk by Table I-2.
+  time_period: The next twelve months of development and test.
+  rationale: The strategy prescribes the SP 800-30 qualitative model for Tier 3 assessments.
+risk_tolerance:
+  statement: Moderate risk is accepted for development; high risk needs an AO decision.
+  consequences: [loss of field report integrity, delayed reports]
+  tiers:
+    - {tier: 1, tolerance: Moderate for systems in development, sources: [product/architecture.md#overview]}
+  operational: No USCYBERCOM or NSA/CSS operational risk tolerance applies beyond the Component's.
+threat_sources:
+  - {id: TS-01, title: Outsider with stolen credentials, type: adversarial, in_scope: true, capability: moderate, intent: moderate, targeting: low, range_of_effects: not-applicable, sources: [product/architecture.md#network]}
+  - {id: TS-02, title: Operator error, type: accidental, in_scope: true, capability: not-applicable, intent: not-applicable, targeting: not-applicable, range_of_effects: low, sources: [product/architecture.md#network]}
+threat_events:
+  - id: TE-01
+    description: An outsider logs in to the appliance with a stolen administrator password.
+    threat_sources: [TS-01]
+    relevance: expected
+    vulnerabilities: [VUL-01]
+    conditions: [PC-01]
+    likelihood_initiation: moderate
+    likelihood_impact: moderate
+    likelihood: moderate
+    likelihood_rationale: Direct root login and stale accounts lower the effort needed.
+    impacts:
+      - {harm: operations, asset: field report integrity}
+    impact: moderate
+    risk: moderate
+    uncertainty: Targeting of tactical relays is inferred from one assessment.
+    sources: [product/architecture.md#network]
+  - id: TE-02
+    description: An operator deletes stored reports by mistake.
+    threat_sources: [TS-02]
+    relevance: possible
+    vulnerabilities: []
+    conditions: [PC-01]
+    likelihood_initiation: low
+    likelihood_impact: moderate
+    likelihood: low
+    likelihood_rationale: Few operators hold delete rights.
+    impacts:
+      - {harm: operations, asset: stored field reports}
+    impact: low
+    risk: low
+    uncertainty: No operator error history exists yet.
+    sources: [product/architecture.md#network]
+threat_scenarios:
+  - {id: SCN-01, description: A stolen login is used to delete reports under an operator's name., events: [TE-01, TE-02]}
+level_of_detail: Threat events, with one scenario where two events chain.
+vulnerabilities:
+  - {id: VUL-01, description: Direct root SSH login and stale accounts., severity: moderate, sources: [product/architecture.md#network]}
+predisposing_conditions:
+  - {id: PC-01, description: The appliance sits on the radio-side field network., pervasiveness: moderate, sources: [product/architecture.md#network]}
+external:
+  services_provided: true
+  connections:
+    - {component: CMP-IDP, information_exchange: Sign-in assertions for operators., nss: true, introduces: [PC-01], risk: low, sources: [product/architecture.md#components]}
+  providers:
+    - id: EXP-01
+      name: Enterprise IT Services
+      kind: service-provider
+      component: CMP-IDP
+      services: [enterprise sign-in with CAC multi-factor authentication]
+      meets_requirements: true
+      assurance: The provider holds its own ATO (LA-01).
+      loss: Operators cannot sign in, or a forged assertion is accepted.
+      impact: moderate
+      trust: sufficient
+      response: none
+      compensating_controls: []
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [product/architecture.md#components]
+  supply_chain:
+    - {id: SC-01, supplier: Dell, items: [INV-001], vulnerabilities: [PC-01], risk: low, sources: [product/inventory.md#items]}
+    - {id: SC-02, supplier: Red Hat, items: [INV-002], vulnerabilities: [VUL-01], risk: low, sources: [product/inventory.md#items]}
+    - {id: SC-03, supplier: Program developer, items: [INV-003], vulnerabilities: [VUL-01], risk: moderate, sources: [product/inventory.md#items]}
+    - {id: SC-04, supplier: PostgreSQL and Microsoft, items: [INV-004, INV-005], vulnerabilities: [PC-01], risk: low, sources: [product/inventory.md#items]}
+  nonconforming: []
+prioritization:
+  method: Risks of the same level are ordered by their effect on report integrity, the mission's first need.
+  factors: [immediate-impact, coupling]
+  borderline: A value between bins goes to the higher bin.
+  order: [TE-01, TE-02]
+  couplings:
+    - {events: [TE-01, TE-02], effect: increases, note: A stolen login makes deletion under another name likelier.}
+communication:
+  recipients: [PER-AO, PER-PM, PER-RE]
+  method: risk-assessment-report
+  shared: [source-information, intermediate-results, supporting-evidence]
+  policy: The Component shares risk assessments through the authorization package.
+executive_summary: Stolen administrator credentials are the main risk; closing direct root login and stale accounts lowers it.
+sources: [product/architecture.md#network]

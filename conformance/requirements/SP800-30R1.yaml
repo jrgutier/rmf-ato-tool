@@ -378,7 +378,9 @@ requirements:
     locator: "2.3"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS"
     statement: "Risk models define the risk factors to be assessed and the relationships among those factors.20 Risk factors are characteristics used in risk models as inputs to determining levels of risk in risk assessments. Risk factors are also used extensively in risk communications to highlight what strongly affects the levels of risk in particular situations, circumstances, or contexts. Typical risk factors include threat, vulnerability, impact, likelihood, and predisposing condition. Risk factors can be decomposed into more detailed characteristics (e.g., threats decomposed into threat sources and threat events).21 These definitions are important for organizations to document prior to conducting risk assessments because the assessments rely upon well-defined attributes of threats, vulnerabilities, impact, and other risk factors to effectively determine risk."
-    status: "candidate"
+    status: "partial"
+    reason: "The risk factors of the model are recorded; their relationships are stated as prose in risk_model.combination"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0048"
     citation: {"ref": "SP800-30R1", "page": 17, "anchor": "the intent and method targeted at the exploitation of a vulnerability; or"}
@@ -410,7 +412,9 @@ requirements:
     locator: "2.3.(ii)"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS A threat source is characterized as:"
     statement: "(ii) identification of the relationships among those risk factors (both conceptual relationships, presented descriptively, and algorithms for combining values). The risk model presented in this section (and described in Appendices D-I) does not specify algorithms for combining values."
-    status: "candidate"
+    status: "partial"
+    reason: "How values combine is a required prose field; no rule recomputes the algorithm"
+    evidence: [{"kind": "schema", "asserts": "The relationships among risk factors include the algorithms for combining values", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/combination", "claim": "presence"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0052"
     citation: {"ref": "SP800-30R1", "page": 17, "anchor": "A risk factor can have a single assessable characteristic (e.g., impact severity)"}
@@ -457,7 +461,9 @@ requirements:
     locator: "2.3.(ii)"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS A threat source is characterized as:"
     statement: "The likelihood of occurrence is a weighted risk factor based on an analysis of the probability that a given threat is capable of exploiting a given vulnerability (or set of vulnerabilities). The likelihood risk factor combines an estimate of the likelihood that the threat event will be initiated with an estimate of the likelihood of impact (i.e., the likelihood that the threat event results in adverse impacts). For adversarial threats, an assessment of likelihood of occurrence is typically based on: (i) adversary intent; (ii) adversary capability; and (iii) adversary targeting. For other than adversarial threat events, the likelihood of occurrence is estimated using historical evidence, empirical data, or other factors. Note that the likelihood that a threat event will be initiated or will occur is assessed with respect to a specific time frame (e.g., the next six months, the next year, or the period until a specified milestone is reached). If a threat event is almost certain to be initiated or occur in the (specified or implicit) time frame, the risk assessment may take into consideration the estimated frequency of the event. The likelihood of threat occurrence can also be based on the state of the organization (including for example, its core mission/business processes, enterprise architecture, information security architecture, information systems, and environments in which those systems operate)—taking into consideration predisposing conditions and the presence and effectiveness of deployed security controls to protect against unauthorized/undesirable behavior, detect and limit damage, and/or maintain or restore mission/business capabilities. The likelihood of impact addresses the probability (or possibility) that the threat event will result in an adverse impact, regardless of the magnitude of harm that can be expected."
-    status: "candidate"
+    status: "partial"
+    reason: "The three likelihood steps are required fields; the combination of their values is the organization's algorithm, stated as prose in risk_model.combination, which no rule recomputes"
+    evidence: [{"kind": "schema", "asserts": "Each threat event assesses the likelihood of initiation or occurrence", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event assesses the likelihood that it results in adverse impacts once initiated or occurring", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}, {"kind": "schema", "asserts": "For adversarial threats, likelihood of occurrence is based on adversary capability, intent and targeting", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0058"
     citation: {"ref": "SP800-30R1", "page": 19, "anchor": "The concept of predisposing condition is also related to the term susceptibility"}
@@ -473,7 +479,9 @@ requirements:
     locator: "2.3.(ii)"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS A threat source is characterized as:"
     statement: "Organizations typically employ a three-step process to determine the overall likelihood of threat events. First, organizations assess the likelihood that threat events will be initiated (for adversarial threat events) or will occur (for non-adversarial threat events). Second, organizations assess the likelihood that the threat events once initiated or occurring, will result in adverse impacts or harm to organizational operations and assets, individuals, other organizations, or the Nation. Finally, organizations assess the overall likelihood as a combination of likelihood of initiation/occurrence and likelihood of resulting in adverse impact."
-    status: "candidate"
+    status: "partial"
+    reason: "The three likelihood steps are required fields; the combination of their values is the organization's algorithm, stated as prose in risk_model.combination, which no rule recomputes"
+    evidence: [{"kind": "schema", "asserts": "Each threat event assesses the likelihood of initiation or occurrence", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event assesses the likelihood that it results in adverse impacts once initiated or occurring", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event assesses the overall likelihood", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0060"
     citation: {"ref": "SP800-30R1", "page": 20, "anchor": "The level of impact from a threat event is the magnitude of"}
@@ -481,7 +489,9 @@ requirements:
     locator: "2.3.(ii)"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS A threat source is characterized as:"
     statement: "The level of impact from a threat event is the magnitude of harm that can be expected to result from the consequences of unauthorized disclosure of information, unauthorized modification of information, unauthorized destruction of information, or loss of information or information system availability. Such harm can be experienced by a variety of organizational and non-organizational stakeholders including, for example, heads of agencies, mission and business owners, information owners/stewards, mission/business process owners, information system owners, or individuals/groups in the public or private sectors relying on the organization—in essence, anyone with a vested interest in the organization’s operations, assets, or individuals, including other organizations in partnership with the organization, or the Nation.28 Organizations make explicit: (i) the process used to conduct impact determinations; (ii) assumptions related to impact determinations; (iii) sources and methods for obtaining impact information; and (iv) the rationale for conclusions reached with regard to impact determinations."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event records its impact level and the harm and asset affected; the stakeholders who experience the harm are prose"
+    evidence: [{"kind": "schema", "asserts": "The level of impact from a threat event is the magnitude of harm that can be expected", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impact", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0061"
     citation: {"ref": "SP800-30R1", "page": 20, "anchor": "Organizations may explicitly define how established priorities and values guide the identification"}
@@ -521,7 +531,9 @@ requirements:
     locator: "2.3"
     context: "FIGURE 3: GENERIC RISK MODEL WITH KEY RISK FACTORS"
     statement: "When aggregating risk, organizations consider the relationship among various discrete risks. For example, there may be a cause and effect relationship in that if one risk materializes, another risk is more or less likely to materialize. If there is a direct or inverse relationship among discrete risks, then the risks can be coupled (in a qualitative sense) or correlated (in a quantitative sense) either in a positive or negative manner. Risk coupling or correlation (i.e., finding relationships among risks that increase or decrease the likelihood of any specific risk materializing) can be done at Tiers 1, 2, or 3."
-    status: "candidate"
+    status: "partial"
+    reason: "Couplings among risks are recorded and name listed events (SRA-003); the cause and effect relationship itself is prose"
+    evidence: [{"kind": "rule", "asserts": "The relationship among discrete risks is recorded as coupling of listed risks", "target": "SRA-003", "fixture": "tests/fixtures/negative/SRA-003.coupling.yaml", "expect": "a coupling names threat event", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0066"
     citation: {"ref": "SP800-30R1", "page": 22, "anchor": "Uncertainty is inherent in the evaluation of risk, due to such considerations"}
@@ -632,7 +644,9 @@ requirements:
     locator: "2.4"
     context: "FIGURE 4: RISK MANAGEMENT HIERARCHY"
     statement: "It is important to note that information security risk contributes to non-security risks at each tier. Thus, the results of a risk assessment at a given tier serve as inputs to, and are aligned with, non-security risk management activities at that tier.35 In addition, the results of risk assessments at lower tiers serve as inputs to risk assessments at higher tiers. Risks can arise on different time scales (e.g., the disclosure of information about current organizational operations can compromise the effectiveness of those operations immediately, while the disclosure of strategic planning information can compromise future operational capabilities). Risk response decisions can also take effect in different time frames (e.g., changes in organizational policies or investment strategies can sometimes require years to take effect, while configuration changes in an individual system can often be implemented immediately). In general, the risk management process tends to move more slowly at Tiers 1 and 2 than at Tier 3. This is due to how organizations typically respond to risks that potentially affect widespread organizational operations and assets—where such risk responses may need to address systemic or institutional issues. However, some Tier 1 decisions (e.g., newly discovered threats or vulnerabilities requiring the implementation of an organization-wide mandate for mitigation) can involve immediate action."
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients, method and what is shared are recorded, and P-14 feeds back to P-3 so a system's results reach the organization-level assessment; no rule checks that P-3 reads them, or that P-3 reads Tier 2 results and mission-essential functions"
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are communicated to designated organizational stakeholders", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0080"
     citation: {"ref": "SP800-30R1", "page": 27, "anchor": "At Tier 1, risk assessments support organizational strategies, policies, guidance, and processes"}
@@ -648,7 +662,9 @@ requirements:
     locator: "2.4"
     context: "FIGURE 4: RISK MANAGEMENT HIERARCHY"
     statement: "At Tier 2, risk assessments support the determination of mission/business process protection and resiliency requirements, and the allocation of those requirements to the enterprise architecture as part of mission/business segments (that support mission/business processes). This allocation is accomplished through an information security architecture embedded within the enterprise architecture. Tier 2 risk assessments also inform and guide decisions on whether, how, and when to use information systems for specific mission/business processes, in particular for alternative mission/business processing in the face of compromised information systems. Risk management and associated risk assessment activities at Tier 2 are closely aligned with the development of Business Continuity Plans (BCPs). Tier 2 risk assessments focus on mission/business segments, which typically include multiple information systems, with varying degrees of criticality and/or sensitivity with regard to core organizational missions/business functions.37 Risk assessments at Tier 2 can also focus on information security architecture as a critical component of enterprise architecture to help organizations select common controls inherited by organizational information systems at Tier 3. Risk assessment results produced at Tier 2 are communicated to and shared with organizational entities at Tier 3 to help inform and guide the allocation of security controls to information systems and environments in which those systems operate. Tier 2 risk assessments also provide assessments of the security and risk posture of organizational mission/business processes, which inform assessments of organizational risks at Tier 1. Thus, risk assessment results at Tier 2 are routinely communicated to organizational entities at Tier 1 and Tier 3."
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients, method and what is shared are recorded, and P-14 feeds back to P-3 so a system's results reach the organization-level assessment; no rule checks that P-3 reads them, or that P-3 reads Tier 2 results and mission-essential functions"
+    evidence: [{"kind": "prose", "asserts": "Tier 2 risk assessments inform decisions on the use of information systems for mission processes", "target": "templates/artifacts/ART-RA.md", "claim": "presence"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0082"
     citation: {"ref": "SP800-30R1", "page": 28, "anchor": "The Tier 2 context and the system development life cycle determine the"}
@@ -656,7 +672,9 @@ requirements:
     locator: "2.4.3"
     context: "Risk Assessments at the Information System Tier"
     statement: "The Tier 2 context and the system development life cycle determine the purpose and define the scope of risk assessment activities at Tier 3. While initial risk assessments (i.e., risk assessments performed for the first time, rather than updating prior risk assessments) can be performed at any phase in the system development life cycle, ideally these assessments should be performed in the Initiation phase.38 In the Initiation phase, risk assessments evaluate the anticipated vulnerabilities and predisposing conditions affecting the confidentiality, integrity, and availability of information systems in the context of the planned environments of operation. Such assessments inform risk response, enabling information system owners/program managers, together with mission/business owners to make the final decisions about the security controls necessary based on the security categorization and the environment of operation. Risk assessments are also conducted at later phases in the system development life cycle, updating risk assessment results from earlier phases. These risk assessment results for as-built or as-deployed information systems typically include descriptions of vulnerabilities in the systems, an assessment of the risks associated with each vulnerability (thereby updating the assessment of vulnerability severity), and corrective actions that can be taken to mitigate the risks. The risk assessment results also include an assessment of the overall risk to the organization and the information contained in the information systems by operating the systems as evaluated. Risk assessment results at Tier 3 are communicated to organizational entities at Tier 1 and Tier 2."
-    status: "candidate"
+    status: "partial"
+    reason: "Whether the assessment is initial or subsequent is recorded; the Tier 2 context that sets the Tier 3 purpose and scope is prose"
+    evidence: [{"kind": "schema", "asserts": "Risk assessments state whether they are initial risk assessments or updates of prior risk assessments", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/kind", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0083"
     citation: {"ref": "SP800-30R1", "page": 28, "anchor": "The criticality of information systems to organizational missions/business functions may be identified"}
@@ -743,7 +761,9 @@ requirements:
     locator: "2.4.3"
     context: "Risk Assessments at the Information System Tier"
     statement: "The risk assessment process entails ongoing communications and information sharing among stakeholders to ensure that: (i) the inputs to such assessments are as accurate as possible; (ii) intermediate assessment results can be used, for example, to support risk assessments at other tiers; and (iii) the results are meaningful and useful inputs to the risk response step in the risk management process. The manner and form in which risks are communicated are an expression of organizational culture as well as legal, regulatory, and contractual constraints. To be effective, communication of information security risks and other risk-related information produced during the risk assessment is consistent with other forms of risk communication within organizations. To maximize the benefit of risk assessments, organizations should establish policies, procedures, and implementing mechanisms to ensure that the information produced during such assessments is effectively communicated and shared across all three risk management tiers.42 To reinforce the importance of risk communication and information sharing within organizations, the input tables in Appendices D, E, F, G, H, and I (i.e., threat sources, threat events, vulnerabilities, predisposing conditions, likelihood, impact, and risk) and the recommended elements of a risk assessment report (Appendix K) provide recommendations for risk communication/sharing among the tiers."
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients, method and what is shared are recorded, and P-14 feeds back to P-3 so a system's results reach the organization-level assessment; no rule checks that P-3 reads them, or that P-3 reads Tier 2 results and mission-essential functions"
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are communicated to designated organizational stakeholders", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}, {"kind": "schema", "asserts": "Share source information, intermediate results and supporting evidence of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0094"
     citation: {"ref": "SP800-30R1", "page": 31, "anchor": "Organizations can use targeted risk assessments, in which the scope is narrowly"}
@@ -822,7 +842,9 @@ requirements:
     locator: "3.1.•"
     context: "PREPARING FOR THE RISK ASSESSMENT Preparing for a risk assessment includes the following tasks:"
     statement: "• Identify the purpose of the assessment;"
-    status: "candidate"
+    status: "partial"
+    reason: "The purpose statement and at least one supported decision are required; whether the purpose is stated in sufficient detail is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the purpose of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "The purpose of the assessment names the decisions it supports", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/decisions", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0104"
     citation: {"ref": "SP800-30R1", "page": 33, "anchor": "Identify the scope of the assessment;"}
@@ -837,7 +859,8 @@ requirements:
     locator: "3.1.•"
     context: "PREPARING FOR THE RISK ASSESSMENT Preparing for a risk assessment includes the following tasks:"
     statement: "• Identify the assumptions and constraints associated with the assessment;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify the assumptions associated with the assessment: at least one", "target": "framework/schema/ra.schema.json#/properties/assumptions", "claim": "constraint"}, {"kind": "schema", "asserts": "Identify the constraints associated with the assessment: at least one", "target": "framework/schema/ra.schema.json#/properties/constraints", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0106"
     citation: {"ref": "SP800-30R1", "page": 33, "anchor": "Identify the sources of information to be used as inputs to the"}
@@ -845,7 +868,8 @@ requirements:
     locator: "3.1.•"
     context: "PREPARING FOR THE RISK ASSESSMENT Preparing for a risk assessment includes the following tasks:"
     statement: "• Identify the sources of information to be used as inputs to the assessment; and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify the sources of information to be used as inputs to the assessment", "target": "framework/schema/ra.schema.json#/properties/information_sources", "claim": "constraint"}, {"kind": "rule", "asserts": "The sources of information used as inputs include threat, vulnerability and impact sources", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.information.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0107"
     citation: {"ref": "SP800-30R1", "page": 33, "anchor": "Identify the risk model and analytic approaches (i.e., assessment and analysis approaches)"}
@@ -853,7 +877,8 @@ requirements:
     locator: "3.1.•"
     context: "PREPARING FOR THE RISK ASSESSMENT Preparing for a risk assessment includes the following tasks:"
     statement: "• Identify the risk model and analytic approaches (i.e., assessment and analysis approaches) to be employed during the assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the assessment approach: quantitative, qualitative or semi-quantitative", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/assessment_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the analysis approach: threat-oriented, asset/impact-oriented or vulnerability-oriented", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0108"
     citation: {"ref": "SP800-30R1", "page": 33, "anchor": "Supplemental Guidance: The purpose of the risk assessment is explicitly stated in"}
@@ -861,7 +886,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY PURPOSE"
     statement: "Supplemental Guidance: The purpose of the risk assessment is explicitly stated in sufficient detail to ensure that the assessment produces the appropriate information and supports the intended decisions. Organizations can provide guidance on how to capture and present information produced during the risk assessment (e.g., using a defined organizational template). Appendix K provides an exemplary template for a risk assessment report or the preferred vehicle for risk communication. At Tier 3, risk assessments support: (i) authorization-related decisions throughout the system development life cycle; (ii) reciprocity, particularly for reuse of assessment information; (iii) risk management activities at Tier 2; and (iv) programmatic risk management activities throughout the system development life cycle. At Tier 2, risk assessments enable organizations to: (i) understand dependencies and ways in which risks are accepted, rejected, shared, transferred, or mitigated among information systems that support organizational mission/business processes; (ii) support architectural and operational decisions for organizational risk responses (e.g., reducing dependencies, limiting connectivity, enhancing or focusing monitoring, and enhancing information/system resiliency); (iii) identify trends, so that proactive risk response strategies and courses of action for mission/business processes can be defined; and (iv) support reciprocity, particularly to enable information sharing. At Tier 1, risk assessments: (i) support the risk executive (function); and (ii) serve as a key input to the risk management strategy. In addition to these common purposes, risk assessments may have a very specific purpose, to answer a specific question (e.g., What are the risk implications of a newly discovered vulnerability or class of vulnerabilities, allowing new connectivity, outsourcing a specific function, or adopting a new technology?). Risk assessment results from all tiers can be used by organizations to inform the acquisition process by helping to ensure information security requirements are clearly specified."
-    status: "candidate"
+    status: "partial"
+    reason: "The purpose statement and at least one supported decision are required; whether the purpose is stated in sufficient detail is prose; whether it is initial or subsequent is recorded"
+    evidence: [{"kind": "schema", "asserts": "The purpose of the risk assessment is explicitly stated", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "The purpose of the risk assessment states whether it is an initial or subsequent assessment", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/kind", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0109"
     citation: {"ref": "SP800-30R1", "page": 33, "anchor": "The purpose of the risk assessment is influenced by whether the assessment"}
@@ -893,7 +920,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY SCOPE"
     statement: "Effectiveness Time Frame Organizations determine how long the results of particular risk assessments can be used to legitimately inform risk-based decisions. The time frame is usually related to the purpose of the assessment. For example, a risk assessment to inform Tier 1 policy-related decisions needs to be relevant for an extended period of time since the governance process for policy changes can be time-consuming in many organizations. A risk assessment conducted to inform a Tier 3 decision on the use of a compensating security control for an information system may be relevant only until the next release of the information technology product providing the required security capability. Organizations determine the useful life of risk assessment results and under what conditions the current assessment results become ineffective or irrelevant. Risk monitoring can be used to help determine the effectiveness of time frames for risk assessments. In addition to risk assessment results, organizations also consider the currency/timeliness (i.e., latency or age) of all types of information/data used in assessing risk. This is of particular concern in information reuse and evaluating the validity of assessment results."
-    status: "candidate"
+    status: "partial"
+    reason: "The effectiveness time frame is a required field; how long results stay legitimate is prose"
+    evidence: [{"kind": "schema", "asserts": "Organizations determine the effectiveness time frame: how long the results can inform risk-based decisions", "target": "framework/schema/ra.schema.json#/properties/scope/properties/time_frame", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0113"
     citation: {"ref": "SP800-30R1", "page": 34, "anchor": "Architectural/Technology Considerations Organizations use architectural and technology considerations to clarify the scope"}
@@ -908,7 +937,8 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY ASSUMPTIONS AND CONSTRAINTS"
     statement: "TASK 1-3: Identify the specific assumptions and constraints under which the risk assessment is conducted."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify the specific assumptions under which the risk assessment is conducted", "target": "framework/schema/ra.schema.json#/properties/assumptions", "claim": "constraint"}, {"kind": "schema", "asserts": "Identify the specific constraints under which the risk assessment is conducted", "target": "framework/schema/ra.schema.json#/properties/constraints", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0115"
     citation: {"ref": "SP800-30R1", "page": 34, "anchor": "Supplemental Guidance: As part of the risk framing step in the risk"}
@@ -972,7 +1002,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY ASSUMPTIONS AND CONSTRAINTS"
     statement: "Analytic Approach Risk assessments include both assessment approaches (i.e., quantitative, qualitative, semi-quantitative) and analysis approaches (i.e., threat-oriented, asset/impact-oriented, vulnerability-oriented). Together, the assessment and analysis approaches form the analytic approach for the risk assessment. Organizations determine the level of detail and in what form, threats are analyzed including the level of granularity to describe threat events or threat scenarios. Different analysis approaches can lead to different levels of detail in characterizing adverse events for which likelihoods are determined. For example, an adverse event could be characterized in several ways (with increasing levels of detail): (i) a threat event (for which the likelihood is determined by taking the maximum overall threat sources); (ii) a pairing of a threat event and a threat source; or (iii) a detailed threat scenario/attack tree. In general, organizations can be expected to require more detail for highly critical missions/business functions, common infrastructures, or shared services on which multiple missions or business functions depend (as common points of failure), and information systems with high criticality or sensitivity. Mission/business owners may amplify this guidance for risk hot spots (information systems, services, or critical infrastructure components of particular concern) in mission/business segments."
-    status: "candidate"
+    status: "partial"
+    reason: "The assessment and analysis approaches and the level of detail are recorded; the granularity is prose"
+    evidence: [{"kind": "schema", "asserts": "The analytic approach identifies the assessment approach: quantitative, qualitative or semi-quantitative", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/assessment_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the analysis approach: threat-oriented, asset/impact-oriented or vulnerability-oriented", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "Organizations determine the level of detail in which threats are analyzed, as threat events or threat scenarios", "target": "framework/schema/ra.schema.json#/properties/level_of_detail", "claim": "presence"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0123"
     citation: {"ref": "SP800-30R1", "page": 36, "anchor": "Supplemental Guidance: Descriptive information enables organizations to be able to determine the"}
@@ -988,7 +1020,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY INFORMATION SOURCES"
     statement: "Sources of information as described in Tables D-1, E-1, F-1, H-1, and I-1 can be either internal or external to organizations. Internal sources of information that can provide insights into both threats and vulnerabilities can include, for example, risk assessment reports, incident reports, security logs, trouble tickets, and monitoring results. Note that internally, information from risk assessment reports at one tier can serve as input to risk assessments at other tiers. Mission/business owners are encouraged to identify not only common infrastructure and/or support services they depend on, but also those they might use under specific operational circumstances. External sources of threat information can include cross-community organizations (e.g., US Computer Emergency Readiness Team [US-CERT], sector partners (e.g., Defense Industrial Base [DIB] using the DoD-Defense Industrial Base Collaborative Information Sharing Environment [DCISE], Information Sharing and Analysis Centers [ISACs] for critical infrastructure sectors), research and nongovernmental organizations (e.g. Carnegie Mellon University, Software Engineering Institute-CERT), and security service providers). Organizations using external sources, consider the timeliness, specificity, and relevance of threat information. Similar to sources of threat information, sources of vulnerability information can also be either internal or external to organizations (see Table F-1). Internal sources can include, for example, vulnerability assessment reports. External sources of vulnerability information are similar to the sources identified above for threat information. As described in Table F-1, information about predisposing conditions can be found in a variety of sources including, for example, descriptions of information systems, environments of operation, shared services, common infrastructures, and enterprise architecture. As described in Table H-1, sources of impact information can include, for example, mission/business impact analyses, information system component inventories, and security categorizations."
-    status: "candidate"
+    status: "partial"
+    reason: "Each information source records its provider and date; whether sources are internal or external is prose"
+    evidence: [{"kind": "schema", "asserts": "Sources of information record the provider that produced them, internal or external to organizations", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/provider", "claim": "presence"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0125"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Supplemental Guidance: Organizations define one or more risk models for use in"}
@@ -996,7 +1030,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "Supplemental Guidance: Organizations define one or more risk models for use in conducting risk assessments (see Section 2.3.1) and identify which model is to be used for the risk assessment. To facilitate reciprocity of assessment results, organization-specific risk models include, or can be translated into, the risk factors (i.e., threat, vulnerability, impact, likelihood, and predisposing condition) defined in the appendices. Organizations also identify the specific analytic approach to be used for the risk assessment including the assessment approach (i.e., quantitative, qualitative, semi-quantitative) and the analysis approach (i.e., threat-oriented, asset/impact-oriented, vulnerability-oriented). For each assessable risk factor, the appendices include three assessment scales (one qualitative and two semi-quantitative scales) with correspondingly different representations. Organizations typically define (or select and tailor from the appendices) the assessment scales to be used in their risk assessments, annotating with organizationally-meaningful examples for specific values and defining break points between bins for semi-quantitative approaches. In addition, mission/business owners can provide further annotations with mission/business-specific examples. Organizations can identify different assessment scales to be used in different circumstances. For example, for low-impact information systems, organizations could use qualitative values, while for moderate- and high-impact systems, the most granular semi-quantitative values (0-100) could be used. As discussed in Special Publication 800-39, Task 1-1, Risk Assumptions, organizations vary in the relative weights applied to risk factors. Therefore, this guideline does not specify algorithms for combining semi-quantitative values. Organization-specific risk models include algorithms (e.g., formulas, tables, rules) for combining risk factors. If an organization-specific risk model is not provided in the risk management strategy as part of the risk framing step, then part of this task is to specify the algorithms for combining values. Algorithms for combining risk factors reflect organizational risk tolerance (see the supplemental guidance to Task 2-4 for examples)."
-    status: "candidate"
+    status: "partial"
+    reason: "The model, its factors and approaches are recorded; translation into the SP 800-30 factors for reciprocity is prose"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the assessment approach: quantitative, qualitative or semi-quantitative", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/assessment_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the analysis approach: threat-oriented, asset/impact-oriented or vulnerability-oriented", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0126"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "providing additional examples for values of risk factors; and (iii) identifying any"}
@@ -1004,7 +1040,9 @@ requirements:
     locator: "3.1.(ii)"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "(ii) providing additional examples for values of risk factors; and (iii) identifying any assessment-specific algorithms (e.g., algorithms specific to the use of an attack graph analysis technique). In the absence of pre-existing organization-specific risk models or analytic approaches defined in the organizational risk management strategy, the risk model and analytic approaches to be used in the risk assessment are defined and documented in this task."
-    status: "candidate"
+    status: "partial"
+    reason: "Where the risk model is defined, and its combination rules, are recorded; examples of factor values are prose"
+    evidence: [{"kind": "schema", "asserts": "The risk model and analytic approaches are defined in the risk management strategy or documented in this task", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/defined_in", "claim": "constraint"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0127"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Identify the purpose of the risk assessment."}
@@ -1012,7 +1050,9 @@ requirements:
     locator: "3.1.(ii).•"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "• Identify the purpose of the risk assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "The purpose statement and at least one supported decision are required; whether the purpose is stated in sufficient detail is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the purpose of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "The purpose of the risk assessment names the decisions it supports", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/decisions", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0128"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Identify the scope of the risk assessment."}
@@ -1027,7 +1067,8 @@ requirements:
     locator: "3.1.(ii).•"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "• Identify the assumptions and constraints under which the risk assessment is conducted."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify the assumptions under which the risk assessment is conducted", "target": "framework/schema/ra.schema.json#/properties/assumptions", "claim": "constraint"}, {"kind": "schema", "asserts": "Identify the constraints under which the risk assessment is conducted", "target": "framework/schema/ra.schema.json#/properties/constraints", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0130"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Identify sources of threat, vulnerability, and impact information to be used in"}
@@ -1035,7 +1076,8 @@ requirements:
     locator: "3.1.(ii).•"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "• Identify sources of threat, vulnerability, and impact information to be used in the risk assessment (see Tables D-1, E-1, F-1, H-1, and I-1 as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identify sources of threat information to be used in the risk assessment", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.information.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Identify sources of vulnerability information to be used in the risk assessment", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.vulnsource.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Identify sources of impact information to be used in the risk assessment", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.impactsource.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0131"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Define or refine the risk model, assessment approach, and analysis approach to"}
@@ -1043,7 +1085,8 @@ requirements:
     locator: "3.1.(ii).•"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "• Define or refine the risk model, assessment approach, and analysis approach to be used in the risk assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the assessment approach: quantitative, qualitative or semi-quantitative", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/assessment_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the analysis approach: threat-oriented, asset/impact-oriented or vulnerability-oriented", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0132"
     citation: {"ref": "SP800-30R1", "page": 38, "anchor": "The second step in the risk assessment process is to conduct the"}
@@ -1051,7 +1094,9 @@ requirements:
     locator: "3.2"
     context: "CONDUCTING THE RISK ASSESSMENT"
     statement: "The second step in the risk assessment process is to conduct the assessment. The objective of this step is to produce a list of information security risks that can be prioritized by risk level and used to inform risk response decisions. To accomplish this objective, organizations analyze threats and vulnerabilities, impacts and likelihood, and the uncertainty associated with the risk assessment process. This step also includes the gathering of essential information as a part of each task and is conducted in accordance with the assessment context established in the Prepare step of the risk assessment process. The expectation for risk assessments is to adequately cover the entire threat space in accordance with the specific definitions, guidance, and direction established during the Prepare step. However, in practice, adequate coverage within available resources may dictate generalizing threat sources, threat events, and vulnerabilities to ensure full coverage and assessing specific, detailed sources, events, and vulnerabilities only as necessary to accomplish risk assessment objectives. Conducting risk assessments includes the following specific tasks:"
-    status: "candidate"
+    status: "partial"
+    reason: "Threats, vulnerabilities, impacts, likelihood, risk and uncertainty are required fields and the list is prioritized (SRA-003); the analysis itself is judgment"
+    evidence: [{"kind": "rule", "asserts": "The risk assessment produces a list of information security risks prioritized by risk level", "target": "SRA-003", "fixture": "tests/fixtures/negative/SRA-003.rank.yaml", "expect": "ranks a lower risk above a higher one", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0133"
     citation: {"ref": "SP800-30R1", "page": 38, "anchor": "Identify threat sources that are relevant to organizations;"}
@@ -1080,7 +1125,8 @@ requirements:
     locator: "3.2.•"
     context: "CONDUCTING THE RISK ASSESSMENT Conducting risk assessments includes the following specific tasks:"
     statement: "• Determine the likelihood that the identified threat sources would initiate specific threat events and the likelihood that the threat events would be successful;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Determine for each threat event the likelihood that threat sources would initiate it", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}, {"kind": "schema", "asserts": "Determine for each threat event the likelihood that it would be successful in adverse impact", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0137"
     citation: {"ref": "SP800-30R1", "page": 38, "anchor": "Determine the adverse impacts to organizational operations and assets, individuals, other organizations,"}
@@ -1095,7 +1141,9 @@ requirements:
     locator: "3.2.•"
     context: "CONDUCTING THE RISK ASSESSMENT Conducting risk assessments includes the following specific tasks:"
     statement: "• Determine information security risks as a combination of likelihood of threat exploitation of vulnerabilities and the impact of such exploitation, including any uncertainties associated with the risk determinations."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event carries a risk level and its uncertainty; that the level is the organization's combination of likelihood and impact is stated as prose in risk_model.combination and not recomputed"
+    evidence: [{"kind": "schema", "asserts": "Determine information security risks as a combination of likelihood and impact", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/risk", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0139"
     citation: {"ref": "SP800-30R1", "page": 38, "anchor": "The specific tasks are presented in a sequential manner for clarity. However,"}
@@ -1103,7 +1151,9 @@ requirements:
     locator: "3.2"
     context: "CONDUCTING THE RISK ASSESSMENT Conducting risk assessments includes the following specific tasks:"
     statement: "The specific tasks are presented in a sequential manner for clarity. However, in practice, some iteration among the tasks is both necessary and expected.45 Depending on the purpose of the risk assessment, organizations may find reordering the tasks advantageous.46 Whatever adjustments organizations make to the tasks described below, risk assessments should meet the stated purpose, scope, assumptions, and constraints established by the organizations initiating the assessments. To assist organizations in executing the individual tasks in the risk assessment process, a set of templates is provided in Appendices D through I. These appendices provide useful information for organizations in assessing risk and can also be used to record assessment results produced during essential calculations and analyses. The templates are exemplary and can be tailored by organizations in accordance with specific organizational mission/business requirements. The use of the templates is not required in order to conduct risk assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "The purpose, scope, assumptions and constraints are required fields; whether the assessment meets them is judgment"
+    evidence: [{"kind": "schema", "asserts": "Risk assessments meet the stated purpose established by the organizations", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}]
     work_item: "WI-202"
   - id: "REQ-SP800-30R1-0140"
     citation: {"ref": "SP800-30R1", "page": 38, "anchor": "For example, as vulnerabilities are identified, additional threat events might be identified"}
@@ -1119,7 +1169,9 @@ requirements:
     locator: "3.2"
     context: "IDENTIFY THREAT SOURCES"
     statement: "Supplemental Guidance: Organizations identify threat sources of concern and determine the characteristics associated with those threat sources. For adversarial threat sources, assess the capabilities, intentions, and targeting associated with the threat sources. For non-adversarial threat sources, assess the potential range of effects from the threat sources. The risk management strategy and the results of the Prepare step provide organizational direction and guidance for conducting threat source identification and characterization including, for example: (i) sources for obtaining threat information; (ii) threat sources to consider (by type/name); (iii) threat taxonomy to be used; and (iv) the process for identifying which threat sources are of concern for the risk assessment. As identified in Task 1-3, organizations make explicit any assumptions concerning threat sources including decisions regarding the identification of threat sources when specific and credible threat information is unavailable. Organizations can also view adversarial threat sources from a broad-based perspective, considering the time such threat sources may have to exploit identified organizational vulnerabilities, the scale of the attack, and the potential use of multiple attack vectors. The identification and characterization of Advanced Persistent Threats (APTs) can involve considerable uncertainty. Organizations annotate such threat sources with appropriate rationale and references (and providing classifications as necessary)."
-    status: "candidate"
+    status: "partial"
+    reason: "Capability, intent and targeting of each adversarial source and range of effects of each other one are rated (SRA-001); the strategy's direction on threat sources is prose"
+    evidence: [{"kind": "schema", "asserts": "For adversarial threat sources, assess the capabilities of the threat sources", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}, {"kind": "schema", "asserts": "For non-adversarial threat sources, assess the potential range of effects", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/range_of_effects", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0142"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Table D-1 provides a set of exemplary inputs to the threat source"}
@@ -1181,7 +1233,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY THREAT SOURCES"
     statement: "• Determine if threat sources are relevant to the organization and in scope (see Table D-1, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Determine if each threat source is relevant to the organization and in scope", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/in_scope", "claim": "presence"}, {"kind": "rule", "asserts": "Threat events of concern come from threat sources determined relevant and in scope", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.scope.yaml", "expect": "is initiated only by threat sources judged not relevant or out of scope", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0150"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Create or update the assessment of threat sources (see Table D-7 for"}
@@ -1189,7 +1242,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY THREAT SOURCES"
     statement: "• Create or update the assessment of threat sources (see Table D-7 for adversarial threat sources and Table D-8 for non-adversarial threat sources, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Create or update the assessment of threat sources, adversarial and non-adversarial", "target": "framework/schema/ra.schema.json#/properties/threat_sources", "claim": "constraint"}, {"kind": "rule", "asserts": "The assessment of adversarial threat sources rates each source", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.capability.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0151"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Assess adversary capability (see Table D-3, as tailored by the organization)."}
@@ -1197,7 +1251,8 @@ requirements:
     locator: "3.2.-"
     context: "IDENTIFY THREAT SOURCES"
     statement: "- Assess adversary capability (see Table D-3, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assess adversary capability of each adversarial threat source", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.capability.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0152"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Assess adversary intent (see Table D-4, as tailored by the organization)."}
@@ -1205,7 +1260,8 @@ requirements:
     locator: "3.2.-"
     context: "IDENTIFY THREAT SOURCES"
     statement: "- Assess adversary intent (see Table D-4, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assess adversary intent of each adversarial threat source", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.intent.yaml", "expect": "is an adversarial threat source with no assessed intent", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0153"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Assess adversary targeting (see Table D-5, as tailored by the organization)."}
@@ -1213,7 +1269,8 @@ requirements:
     locator: "3.2.-"
     context: "IDENTIFY THREAT SOURCES"
     statement: "- Assess adversary targeting (see Table D-5, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assess adversary targeting of each adversarial threat source", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.targeting.yaml", "expect": "is an adversarial threat source with no assessed targeting", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0154"
     citation: {"ref": "SP800-30R1", "page": 39, "anchor": "Assess the range of effects from threat sources (see Table D-6, as"}
@@ -1221,7 +1278,8 @@ requirements:
     locator: "3.2.-"
     context: "IDENTIFY THREAT SOURCES"
     statement: "- Assess the range of effects from threat sources (see Table D-6, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assess the range of effects from each non-adversarial threat source", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.range.yaml", "expect": "is a non-adversarial threat source with no assessed range of effects", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0155"
     citation: {"ref": "SP800-30R1", "page": 40, "anchor": "Supplemental Guidance: Threat events are characterized by the threat sources that could"}
@@ -1229,7 +1287,9 @@ requirements:
     locator: "3.2"
     context: "IDENTIFY THREAT EVENTS"
     statement: "Supplemental Guidance: Threat events are characterized by the threat sources that could initiate the events, and for adversarial events, the TTPs used to carry out attacks. Organizations define these threat events with sufficient detail to accomplish the purpose of the risk assessment. At Tier 1, threat events that could affect the organizational level are of particular interest. At Tier 2, threat events that cross or span information system boundaries, exploit functional dependencies or connectivity among systems, or affect mission/business owners, are of particular interest. At Tier 3, threat events that can be described in terms of specific information systems, technologies, or environments of operation are of particular interest. Multiple threat sources can initiate a single threat event. Conversely, a single threat source can potentially initiate any of multiple threat events. Therefore, there can be a many-to-many relationship among threat events and threat sources that can potentially increase the complexity of the risk assessment. To enable effective use and communication of risk assessment results, organizations tailor the general descriptions of threat events in Tables E- 2 and E-3 to identify how each event could potentially harm organizational operations (including mission, functions, image, or reputation) and assets, individuals, other organizations, or the Nation. For each threat event identified, organizations determine the relevance of the event. Table E-4 provides a range of values for relevance of threat events. The values selected by organizations have a direct linkage to organizational risk tolerance. The more risk averse, the greater the range of values considered. Organizations accepting greater risk or having a greater risk tolerance are more likely to require substantive evidence before giving serious consideration to threat events. If a threat event is deemed to be irrelevant, no further consideration is given."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat events name the threat sources that could initiate them (SRA-001); the level of detail and the TTPs are prose"
+    evidence: [{"kind": "schema", "asserts": "Threat events are characterized by the threat sources that could initiate the events", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/threat_sources", "claim": "constraint"}, {"kind": "schema", "asserts": "Organizations define threat events with sufficient detail, as events or scenarios", "target": "framework/schema/ra.schema.json#/properties/level_of_detail", "claim": "presence"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0156"
     citation: {"ref": "SP800-30R1", "page": 40, "anchor": "Table E-1 provides a set of exemplary inputs to the threat event"}
@@ -1298,7 +1358,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY THREAT EVENTS"
     statement: "• Assess the relevance of threat events to the organization (see Table E-4, as tailored by the organization); update Table E-5."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the relevance of each threat event to the organization", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/relevance", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0165"
     citation: {"ref": "SP800-30R1", "page": 40, "anchor": "Update Columns 1-6 in Table I-5 for adversarial risk (see Table E-5"}
@@ -1322,7 +1383,9 @@ requirements:
     locator: "3.2"
     context: "IDENTIFY VULNERABILITIES AND PREDISPOSING CONDITIONS"
     statement: "Due to the ever-increasing size and complexity of organizations, mission/business processes, and the information systems supporting those processes, the number of vulnerabilities tends to be large and can increase the overall complexity of the analysis. Therefore, organizations have the option of using the vulnerability identification task to understand the general nature of the vulnerabilities (including scope, number, and type) relevant to the assessment (see Task 1-3) and performing a cataloging of specific vulnerabilities as necessary to do so. Organizations determine which vulnerabilities are relevant to which threat events in order to reduce the space of potential risks to be assessed. In addition to identifying vulnerabilities, organizations also identify any predisposing conditions which may affect susceptibility to certain vulnerabilities. Predisposing conditions that exist within organizations (including mission/business processes, information systems, and environments of operation) can contribute to (i.e., increase or decrease) the likelihood that one or more threat events, once initiated by threat sources, result in adverse impacts to organizational operations, organizational assets, individuals, other organizations, or the Nation. Organizations determine which predisposing conditions are relevant to which threat events in order to reduce the space of potential risks to be assessed. Organizations assess the pervasiveness of predisposing conditions to support determination of the tier(s) at which risk response could be most effective."
-    status: "candidate"
+    status: "partial"
+    reason: "Vulnerabilities are listed with their severity and the level of detail is recorded; the general nature of vulnerabilities (scope, number, type) is prose"
+    evidence: [{"kind": "schema", "asserts": "Organizations determine the level of detail of the vulnerabilities relevant to the assessment", "target": "framework/schema/ra.schema.json#/properties/level_of_detail", "claim": "presence"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0168"
     citation: {"ref": "SP800-30R1", "page": 41, "anchor": "Table F-1 provides a set of exemplary inputs to the vulnerability and"}
@@ -1378,7 +1441,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY VULNERABILITIES AND PREDISPOSING CONDITIONS"
     statement: "• Identify vulnerability and predisposing condition inputs (see Table F-1, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identify vulnerability and predisposing condition inputs: a source of vulnerability information", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.vulnsource.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0175"
     citation: {"ref": "SP800-30R1", "page": 42, "anchor": "Identify vulnerabilities using organization-defined information sources; create or update Table F-3."}
@@ -1393,7 +1457,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY VULNERABILITIES AND PREDISPOSING CONDITIONS"
     statement: "• Assess the severity of identified vulnerabilities (see Table F-2, as tailored by the organization); update Table F-3."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the severity of identified vulnerabilities", "target": "framework/schema/ra.schema.json#/properties/vulnerabilities/items/properties/severity", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0177"
     citation: {"ref": "SP800-30R1", "page": 42, "anchor": "Identify predisposing conditions (see Table F-4, as tailored by the organization); create"}
@@ -1408,7 +1473,8 @@ requirements:
     locator: "3.2.•"
     context: "IDENTIFY VULNERABILITIES AND PREDISPOSING CONDITIONS"
     statement: "• Assess the pervasiveness of predisposing conditions (see Table F-5, as tailored by the organization); update Table F-6."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the pervasiveness of predisposing conditions", "target": "framework/schema/ra.schema.json#/properties/predisposing_conditions/items/properties/pervasiveness", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0179"
     citation: {"ref": "SP800-30R1", "page": 42, "anchor": "Update Column 8 in Table I-5 for adversarial risk; or update Column"}
@@ -1432,7 +1498,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE LIKELIHOOD"
     statement: "Supplemental Guidance: Organizations employ a three-step process to determine the overall likelihood of threat events. First, organizations assess the likelihood that threat events will be initiated (for adversarial threat events) or will occur (for non-adversarial threat events). Second, organizations assess the likelihood that threat events once initiated or occurring, will result in adverse impacts to organizational operations and assets, individuals, other organizations, or the Nation. Finally, organizations assess the overall likelihood as a combination of likelihood of initiation/occurrence and likelihood of resulting in adverse impact."
-    status: "candidate"
+    status: "partial"
+    reason: "The three likelihood steps are required fields; the combination of their values is the organization's algorithm, stated as prose in risk_model.combination, which no rule recomputes"
+    evidence: [{"kind": "schema", "asserts": "Each threat event assesses the likelihood of initiation or occurrence", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event assesses the likelihood that it results in adverse impacts once initiated or occurring", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event assesses the overall likelihood", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0182"
     citation: {"ref": "SP800-30R1", "page": 42, "anchor": "Organizations assess the likelihood of threat event initiation by taking into consideration"}
@@ -1440,7 +1508,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE LIKELIHOOD"
     statement: "Organizations assess the likelihood of threat event initiation by taking into consideration the characteristics of the threat sources of concern including capability, intent, and targeting (see Task 2-1 and Appendix D). If threat events require more capability than adversaries possess (and adversaries are cognizant of this fact), then the adversaries are not expected to initiate the events. If adversaries do not expect to achieve intended objectives by executing threat events, then the adversaries are not expected to initiate the events. And finally, if adversaries are not actively targeting specific organizations or their missions/business functions, adversaries are not expected to initiate threat events. Organizations use the assessment scale in Table G-2 and provide a rationale for the assessment allowing explicit consideration of deterrence and threat shifting. Organizations can assess the likelihood of threat event occurrence (non-adversarial) using Table G-3 and provide a similar rationale for the assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "Capability, intent and targeting of each adversarial source are rated (SRA-001); that initiation likelihood follows from them is judgment"
+    evidence: [{"kind": "schema", "asserts": "Organizations assess the likelihood of threat event initiation from the capability of threat sources", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0183"
     citation: {"ref": "SP800-30R1", "page": 42, "anchor": "Organizations assess the likelihood that threat events result in adverse impacts by"}
@@ -1448,7 +1518,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE LIKELIHOOD"
     statement: "Organizations assess the likelihood that threat events result in adverse impacts by taking into consideration the set of identified vulnerabilities and predisposing conditions (see Task 2-3 and Appendix F). For threat events initiated by adversaries, organizations consider characteristics of associated threat sources. For non-adversarial threat events, organizations take into account the anticipated severity and duration of the event (as included in the description of the event). Organizations use the assessment scale in Table G-4 and provide a rationale for the assessment allowing explicit consideration as stated above. Threat events for which no vulnerabilities or predisposing conditions are identified, have a very low likelihood of resulting in adverse impacts. Such threat events can be highlighted and moved to the end of the table (or to a separate table), so that they can be tracked for consideration in follow-on risk assessments. However, no further consideration during the current assessment is warranted."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event names the vulnerabilities and predisposing conditions it exploits and gives a rationale; the use of Table G-4 and the content of the rationale are prose"
+    evidence: [{"kind": "schema", "asserts": "The likelihood that threat events result in adverse impacts considers the identified vulnerabilities", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/vulnerabilities", "claim": "presence"}, {"kind": "schema", "asserts": "Organizations provide a rationale for the likelihood assessment", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_rationale", "claim": "presence"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0184"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "The overall likelihood of a threat event is a combination of: (i)"}
@@ -1456,7 +1528,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE LIKELIHOOD"
     statement: "The overall likelihood of a threat event is a combination of: (i) the likelihood that the event will occur (e.g., due to human error or natural disaster) or be initiated by an adversary; and (ii) the likelihood that the initiation/occurrence will result in adverse impacts. Organizations assess the overall likelihood of threat events by using inputs from Tables G-2, G-3, and G-4. Any specific algorithm or rule for combining the determined likelihood values depends on: (i) general organizational attitudes toward risk, including overall risk tolerance and tolerance for uncertainty; (ii) specific tolerances toward uncertainty in different risk factors; and (iii) organizational weighting of risk factors. For example, organizations could use any of the following rules (or could define a different rule): (i) use the maximum of the two likelihood values; (ii) use the minimum of the two likelihood values; (iii) consider likelihood of initiation/occurrence only, assuming that if threat events are initiated or occur, the events will result in adverse impacts; (iv) consider likelihood of impact only, assuming that if threat events could result in adverse impacts, adversaries will initiate the events; or (v) take a weighted average of the two likelihood values. Organizations make explicit the rules used."
-    status: "candidate"
+    status: "partial"
+    reason: "The three likelihood steps are required fields; the combination of their values is the organization's algorithm, stated as prose in risk_model.combination, which no rule recomputes"
+    evidence: [{"kind": "schema", "asserts": "Each threat event assesses the overall likelihood", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood", "claim": "constraint"}, {"kind": "schema", "asserts": "The specific algorithm or rule for combining the determined likelihood values is stated", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/combination", "claim": "presence"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0185"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Table G-1 provides a set of exemplary inputs to the likelihood determination"}
@@ -1504,7 +1578,9 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE LIKELIHOOD"
     statement: "• Identify likelihood determination inputs (see Table G-1, as tailored by the organization)."
-    status: "candidate"
+    status: "partial"
+    reason: "Likelihood inputs are the information sources and the likelihood scale; that Table G-1 was tailored is prose"
+    evidence: [{"kind": "schema", "asserts": "The likelihood determination inputs include the likelihood scale", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/scales/properties/likelihood", "claim": "presence"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0191"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Identify likelihood determination factors using organization-defined information sources (e.g., threat source characteristics,"}
@@ -1512,7 +1588,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE LIKELIHOOD"
     statement: "• Identify likelihood determination factors using organization-defined information sources (e.g., threat source characteristics, vulnerabilities, predisposing conditions)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat event identifies the threat source characteristics among its likelihood determination factors", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/threat_sources", "claim": "constraint"}, {"kind": "rule", "asserts": "Likelihood determination factors name only identified vulnerabilities and predisposing conditions", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.weakness.yaml", "expect": "which is no vulnerability or predisposing condition in ra.yaml", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0192"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Assess the likelihood of threat event initiation for adversarial threats and the"}
@@ -1520,7 +1597,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE LIKELIHOOD"
     statement: "• Assess the likelihood of threat event initiation for adversarial threats and the likelihood of threat event occurrence for non-adversarial threats (see Table G-2 and Table G-3, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the likelihood of threat event initiation for adversarial threats and of occurrence for non-adversarial threats", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0193"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Assess the likelihood of threat events resulting in adverse impacts, given likelihood"}
@@ -1528,7 +1606,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE LIKELIHOOD"
     statement: "• Assess the likelihood of threat events resulting in adverse impacts, given likelihood of initiation or occurrence (see Table G-4, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the likelihood of threat events resulting in adverse impacts given initiation or occurrence", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0194"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Assess the overall likelihood of threat event initiation/occurrence and likelihood of threat"}
@@ -1536,7 +1615,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE LIKELIHOOD"
     statement: "• Assess the overall likelihood of threat event initiation/occurrence and likelihood of threat events resulting in adverse impacts (see Table G-5, as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the overall likelihood of threat event initiation or occurrence resulting in adverse impacts", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0195"
     citation: {"ref": "SP800-30R1", "page": 43, "anchor": "Update Columns 7, 10, and 11 in Table I-5 for adversarial risk"}
@@ -1552,7 +1632,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE IMPACT"
     statement: "Supplemental Guidance: Organizations describe adverse impacts in terms of the potential harm caused to organizational operations and assets, individuals, other organizations, or the Nation. Where the threat event occurs and whether the effects of the event are contained or spread, influences the severity of the impact. Assessing impact can involve identifying assets or potential targets of threat sources, including information resources (e.g., information, data repositories, information systems, applications, information technologies, communications links), people, and physical resources (e.g., buildings, power supplies), which could be affected by threat events. Organizational impacts are defined and prioritized at Tiers 1 and 2, and communicated to Tier 3 as part of risk framing. At Tier 3, impacts are associated with information system capabilities (e.g., processing, display, communications, storage, and retrieval) and resources (e.g., databases, services, components) that could be compromised."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event names the harm and affected asset; whether effects are contained or spread is prose"
+    evidence: [{"kind": "schema", "asserts": "Organizations describe adverse impacts in terms of potential harm and the affected assets", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impacts", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0197"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Table H-1 provides a set of exemplary inputs to the impact determination"}
@@ -1592,7 +1674,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE IMPACT"
     statement: "• Identify impact determination inputs (see Table H-1 as tailored by the organization)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identify impact determination inputs: a source of impact information", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.impactsource.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0202"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Identify impact determination factors using organization-defined information sources."}
@@ -1600,7 +1683,9 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE IMPACT"
     statement: "• Identify impact determination factors using organization-defined information sources."
-    status: "candidate"
+    status: "partial"
+    reason: "Impact information sources are required (SRA-001); which factors were drawn from them is prose"
+    evidence: [{"kind": "schema", "asserts": "Impact determination factors are identified using organization-defined information sources of impact", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/kind", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0203"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Identify adverse impacts and affected assets (see Table H-2, as tailored by"}
@@ -1608,7 +1693,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE IMPACT"
     statement: "• Identify adverse impacts and affected assets (see Table H-2, as tailored by the organization); create or update Table H-4."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify adverse impacts and affected assets for each threat event", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impacts", "claim": "constraint"}, {"kind": "schema", "asserts": "Each adverse impact identifies who is harmed", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impacts/items/properties/harm", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0204"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Assess the maximum impact associated with the affected assets (see Table H-3,"}
@@ -1616,7 +1702,8 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE IMPACT"
     statement: "• Assess the maximum impact associated with the affected assets (see Table H-3, as tailored by the organization); update Table H-4."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Assess the maximum impact associated with the affected assets", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impact", "claim": "constraint"}]
     work_item: "WI-200"
   - id: "REQ-SP800-30R1-0205"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Update Column 12 in Table I-5 for adversarial risk; or update Column"}
@@ -1632,7 +1719,9 @@ requirements:
     locator: "3.2"
     context: "DETERMINE RISK"
     statement: "Supplemental Guidance: Organizations assess the risks from threat events as a combination of likelihood and impact. The level of risk associated with identified threat events represents a determination of the degree to which organizations are threatened by such events. Organizations make explicit the uncertainty in the risk determinations, including, for example, organizational assumptions and subjective judgments/decisions. Organizations can order the list of threat events of concern by the level of risk determined during the risk assessment—with the greatest attention going to high-risk events. Organizations can further prioritize risks at the same level or with similar scores (see Appendix J). Each risk corresponds to a specific threat event with a level of impact if that event occurs. In general, the risk level is typically not higher than the impact level, and likelihood can serve to reduce risk below that impact level. However, when addressing organization-wide risk management issues with a large number of missions/business functions, mission/business processes, and supporting information systems, impact as an upper bound on risk may not hold. For example, when multiple risks materialize, even if each risk is at the moderate level, the set of those moderate-level risks could aggregate to a higher level of risk for organizations. To address situations where harm occurs multiple times, organizations can define a threat event as multiple occurrences of harm and an impact level associated with the cumulative degree of harm. During the execution of Tasks 2-1 through 2-5, organizations capture key information related to uncertainties in risk assessments. These uncertainties arise from sources such as missing information, subjective determinations, and assumptions made. The effectiveness of risk assessment results is in part determined by the ability of decision makers to be able to determine the continued applicability of assumptions made as part of the assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event carries its risk level and uncertainty, and the events are ordered by risk (SRA-003); the assumptions and subjective judgments behind them are prose"
+    evidence: [{"kind": "rule", "asserts": "Organizations order the list of threat events of concern by the level of risk", "target": "SRA-003", "fixture": "tests/fixtures/negative/SRA-003.rank.yaml", "expect": "ranks a lower risk above a higher one", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0207"
     citation: {"ref": "SP800-30R1", "page": 44, "anchor": "Table I-1 provides a set of exemplary inputs to the risk and"}
@@ -1672,7 +1761,9 @@ requirements:
     locator: "3.2.•"
     context: "DETERMINE RISK"
     statement: "• Identify risk and uncertainty determination inputs (see Table I-1, as tailored by the organization)."
-    status: "candidate"
+    status: "partial"
+    reason: "Risk inputs are the threat events' likelihood and impact and the risk scale; that Table I-1 was tailored is prose"
+    evidence: [{"kind": "schema", "asserts": "Risk and uncertainty determination inputs include the risk scale", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/scales/properties/risk", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-30R1-0212"
     citation: {"ref": "SP800-30R1", "page": 45, "anchor": "Determine risk (see Table I-2 and Table I-3, as tailored by the"}
@@ -1687,7 +1778,8 @@ requirements:
     locator: "3.3.•"
     context: "COMMUNICATING AND SHARING RISK ASSESSMENT INFORMATION Communicating and sharing information consists of the following specific tasks:"
     statement: "• Communicate the risk assessment results; and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are communicated to designated organizational stakeholders", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0214"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Share information developed in the execution of the risk assessment, to support"}
@@ -1695,7 +1787,8 @@ requirements:
     locator: "3.3.•"
     context: "COMMUNICATING AND SHARING RISK ASSESSMENT INFORMATION Communicating and sharing information consists of the following specific tasks:"
     statement: "• Share information developed in the execution of the risk assessment, to support other risk management activities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Share source information, intermediate results and supporting evidence of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0215"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Supplemental Guidance: Organizations can communicate risk assessment results in a variety of"}
@@ -1703,7 +1796,9 @@ requirements:
     locator: "3.3"
     context: "COMMUNICATE RISK ASSESSMENT RESULTS"
     statement: "Supplemental Guidance: Organizations can communicate risk assessment results in a variety of ways (e.g., executive briefings, risk assessment reports, dashboards). Such risk communications can be formal or informal with the content and format determined by organizations initiating and conducting the assessments. Organizations provide guidance on specific risk communication and reporting requirements, included as part of preparing for the risk assessment (if not provided in the risk management strategy as part of the risk framing task). Organizations prioritize risks at the same level or with similar scores (see Appendix J). Appendix K provides an example of type of information that may be included in a risk assessment report or the preferred vehicle for risk communication."
-    status: "candidate"
+    status: "partial"
+    reason: "The method of communication is recorded; content, format and reporting requirements are prose"
+    evidence: [{"kind": "schema", "asserts": "Organizations communicate risk assessment results as executive briefings, risk assessment reports or dashboards", "target": "framework/schema/ra.schema.json#/properties/communication/properties/method", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0216"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Supplemental Guidance: Organizations share source information and intermediate results and provide guidance"}
@@ -1711,7 +1806,9 @@ requirements:
     locator: "3.3"
     context: "SHARE RISK-RELATED INFORMATION"
     statement: "Supplemental Guidance: Organizations share source information and intermediate results and provide guidance on sharing risk-related information. Information sharing occurs primarily within organizations, via reports and briefings, and by updating risk-related data repositories with supporting evidence for the risk assessment results. Information sharing is also supported by documenting the sources of information, analytical processes, and intermediate results (e.g., the completed tables in Appendices D-I), so that risk assessments can be easily maintained. Information sharing may also occur with other organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "What is shared and the sources of information are recorded; sharing guidance and repositories are prose"
+    evidence: [{"kind": "schema", "asserts": "Share source information, intermediate results and supporting evidence of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0217"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Determine the appropriate method (e.g., executive briefing, risk assessment report, or dashboard)"}
@@ -1719,7 +1816,8 @@ requirements:
     locator: "3.3.•"
     context: "SHARE RISK-RELATED INFORMATION"
     statement: "• Determine the appropriate method (e.g., executive briefing, risk assessment report, or dashboard) to communicate risk assessment results."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Determine the method to communicate risk assessment results: executive briefing, risk assessment report or dashboard", "target": "framework/schema/ra.schema.json#/properties/communication/properties/method", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0218"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Communicate risk assessment results to designated organizational stakeholders."}
@@ -1727,7 +1825,8 @@ requirements:
     locator: "3.3.•"
     context: "SHARE RISK-RELATED INFORMATION"
     statement: "• Communicate risk assessment results to designated organizational stakeholders."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are communicated to designated organizational stakeholders", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0219"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "Share the risk assessment results and supporting evidence in accordance with organizational"}
@@ -1735,7 +1834,9 @@ requirements:
     locator: "3.3.•"
     context: "SHARE RISK-RELATED INFORMATION"
     statement: "• Share the risk assessment results and supporting evidence in accordance with organizational policies and guidance."
-    status: "candidate"
+    status: "partial"
+    reason: "The results and evidence shared and the policy followed are recorded; compliance with that policy is prose"
+    evidence: [{"kind": "schema", "asserts": "Share source information, intermediate results and supporting evidence of the risk assessment", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "claim": "constraint"}, {"kind": "schema", "asserts": "Share the risk assessment results in accordance with organizational policies and guidance", "target": "framework/schema/ra.schema.json#/properties/communication/properties/policy", "claim": "presence"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0220"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "The risk assessment process entails ongoing communications and information sharing between those"}
@@ -1743,7 +1844,9 @@ requirements:
     locator: "3.3"
     context: "SHARE RISK-RELATED INFORMATION"
     statement: "The risk assessment process entails ongoing communications and information sharing between those personnel performing assessment activities, subject matter experts, and key organizational stakeholders (e.g., mission/business owners, risk executive [function], chief information security officers, information system owners/program managers). This communication and information sharing ensures that: (i) the inputs to risk assessments are as accurate as possible;"
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients, method and what is shared are recorded, and P-14 feeds back to P-3 so a system's results reach the organization-level assessment; no rule checks that P-3 reads them, or that P-3 reads Tier 2 results and mission-essential functions"
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are communicated to designated organizational stakeholders", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0221"
     citation: {"ref": "SP800-30R1", "page": 46, "anchor": "intermediate results can be used (e.g., to support risk assessments at other"}
@@ -1836,7 +1939,9 @@ requirements:
     locator: "3.4.•"
     context: "UPDATE RISK ASSESSMENT"
     statement: "• Communicate the subsequent risk assessment results to specified organizational personnel."
-    status: "candidate"
+    status: "partial"
+    reason: "R-2 and M-3 update ART-RA and its recipients; no rule ties a subsequent assessment's update to a new communication"
+    evidence: [{"kind": "schema", "asserts": "Communicate the subsequent risk assessment results to specified organizational personnel", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
   - id: "REQ-SP800-30R1-0233"
     citation: {"ref": "SP800-30R1", "page": 69, "anchor": "his appendix provides: (i) a description of potentially useful inputs to the"}
@@ -1884,7 +1989,9 @@ requirements:
     locator: "INFORMING RISK RESPONSE"
     context: "APPROACHES TO REFINING RISK ASSESSMENT RESULTS"
     statement: "risk assessment may identify a number of risks that have similar scores (e.g., 78, 82, 83) or levels (e.g., moderate, high). When too many risks are clustered at or about the same value, organizations need a method to refine the presentation of risk assessment results, prioritizing within sets of risks with similar values, to better inform the risk response component of the risk management process.56 Such a method should be associated with the mission/business requirements of the organization, consistent with the organizational risk tolerance, and maximize the use of available resources. Prioritization is a key component of risk-based protection and becomes necessary when requirements cannot be fully satisfied or when resources do not allow all risks to be mitigated within a reasonable time frame. To facilitate informed risk response decisions by senior leaders/executives (e.g., why certain risks were or were not mitigated), the risk assessment results are annotated to enable those decision makers to know or obtain the answers to the following questions about each risk in a set with similar scores:"
-    status: "candidate"
+    status: "partial"
+    reason: "The priority order and the method for risks of similar level are recorded, and the order never puts a lower risk first (SRA-003); that the method fits the mission and risk tolerance is prose"
+    evidence: [{"kind": "rule", "asserts": "Risks are prioritized: the order never ranks a lower risk above a higher one", "target": "SRA-003", "fixture": "tests/fixtures/negative/SRA-003.rank.yaml", "expect": "ranks a lower risk above a higher one", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "A method to refine the presentation of risks with similar values, associated with mission requirements and risk tolerance", "target": "framework/schema/ra.schema.json#/properties/prioritization/properties/method", "claim": "presence"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0239"
     citation: {"ref": "SP800-30R1", "page": 90, "anchor": "How high would the immediate impact be to organizational operations (including mission,"}
@@ -1908,7 +2015,9 @@ requirements:
     locator: "INFORMING RISK RESPONSE"
     context: "APPROACHES TO REFINING RISK ASSESSMENT RESULTS"
     statement: "The answers to the above questions, together with the risk tolerance of the organization, provide the basis for a risk prioritization that is based on current and future organizational needs. When weighing immediate impacts versus future impacts, senior leaders must decide whether a critical mission/business need today warrants jeopardizing the future capabilities of the organization. Mission/business owners and mission/business subject matter experts can be consulted to obtain the most complete and up-to-date information on mission/business impacts. Other subject matter experts or stakeholder representatives can be consulted to obtain information on immediate versus future impacts (e.g., consulting the Privacy Office for impacts to individuals)."
-    status: "candidate"
+    status: "partial"
+    reason: "The factors that refined the order, including immediate and future impact, are recorded; the senior leaders' weighing is judgment"
+    evidence: [{"kind": "schema", "asserts": "Risk prioritization weighs immediate impacts versus future impacts", "target": "framework/schema/ra.schema.json#/properties/prioritization/properties/factors", "claim": "presence"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0242"
     citation: {"ref": "SP800-30R1", "page": 90, "anchor": "What is the expected impact from a single occurrence of the threat?"}
@@ -1939,7 +2048,9 @@ requirements:
     locator: "INFORMING RISK RESPONSE"
     context: "APPROACHES TO REFINING RISK ASSESSMENT RESULTS"
     statement: "If a risk materializes that is closely related to multiple risks, it is likely that a cluster of risks will materialize at or near the same time. Managing the adverse impact from one risk materializing may be possible; managing multiple risks of high impact that materialize at the same time may challenge the capacity of the organization and therefore needs to be managed much more closely. The following questions address relationships among risks."
-    status: "candidate"
+    status: "partial"
+    reason: "Couplings among risks are recorded (SRA-003); managing clusters of risks is judgment"
+    evidence: [{"kind": "rule", "asserts": "Relationships among risks that materialize together are recorded as couplings", "target": "SRA-003", "fixture": "tests/fixtures/negative/SRA-003.coupling.yaml", "expect": "a coupling names threat event", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0246"
     citation: {"ref": "SP800-30R1", "page": 91, "anchor": "A high likelihood or virtual certainty of other identified risks materializing?"}
@@ -1971,7 +2082,9 @@ requirements:
     locator: "INFORMING RISK RESPONSE"
     context: "APPROACHES TO REFINING RISK ASSESSMENT RESULTS Will the materialization of a particular risk result in:"
     statement: "If a risk is highly coupled to other risks or seen as likely to lead to other risks materializing (whether the risk is the cause or materializes concurrently), the risk should be given higher priority than a risk that has no particular effect on other risks. If a risk materializing actually decreases the likelihood of other risks materializing, then further analysis is warranted to determine which risks become a lower priority to mitigate."
-    status: "candidate"
+    status: "partial"
+    reason: "Couplings and their effect are recorded; no rule ranks a coupled risk above an uncoupled one of the same level"
+    evidence: [{"kind": "schema", "asserts": "Whether a coupled risk makes other risks more likely or decreases their likelihood", "target": "framework/schema/ra.schema.json#/properties/prioritization/properties/couplings/items/properties/effect", "claim": "constraint"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0250"
     citation: {"ref": "SP800-30R1", "page": 91, "anchor": "In conclusion, organizations can benefit significantly by refining risk assessment results in"}
@@ -1989,7 +2102,9 @@ requirements:
     locator: "INFORMING RISK RESPONSE"
     context: "CAUTIONARY NOTE"
     statement: "Organizations are cautioned that risk assessments are often not precise instruments of measurement and reflect the limitations of the specific assessment methodologies, tools, and techniques employed— as well as the subjectivity, quality, and trustworthiness of the data used. Risk determinations may be very coarse due to the assessment approach selected, the uncertainty in the likelihood of occurrence and impact values, and the potential mischaracterization of threats. Risks that are on the borderline between bins using the organization-defined binning scales, must ultimately be assigned to one bin. This determination could have a significant effect on the risk prioritization process. Thus, organizations should incorporate as much information as practical on particular risks during the prioritization process to ensure that the values for risks are appropriately determined (e.g., very low, low, moderate, high, very high)."
-    status: "candidate"
+    status: "partial"
+    reason: "How borderline values were assigned is a required field; its content is prose"
+    evidence: [{"kind": "schema", "asserts": "Risks on the borderline between bins are assigned to one bin, and how is recorded", "target": "framework/schema/ra.schema.json#/properties/prioritization/properties/borderline", "claim": "presence"}]
     work_item: "WI-204"
   - id: "REQ-SP800-30R1-0252"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "his appendix provides the essential elements of information that organizations can use"}
@@ -2207,7 +2322,9 @@ requirements:
     locator: "2.3.(ii)"
     context: "FIGURE 2: RELATIONSHIP AMONG RISK FRAMING COMPONENTS A threat source is characterized as:"
     statement: "In general, risks materialize as a result of a series of threat events, each of which takes advantage of one or more vulnerabilities. Organizations define threat scenarios to describe how the events caused by a threat source can contribute to or cause harm. Development of threat scenarios is analytically useful, since some vulnerabilities may not be exposed to exploitation unless and until other vulnerabilities have been exploited. Analysis that illuminates how a set of vulnerabilities, taken together, could be exploited by one or more threat events is therefore more useful than the analysis of individual vulnerabilities. In addition, a threat scenario tells a story, and hence is useful for risk communication as well as for analysis."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat scenarios chain two or more listed threat events (SRA-001); a run may record none, since the analysis may stop at events"
+    evidence: [{"kind": "rule", "asserts": "Threat scenarios describe how threat events chain: each names listed events", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.scenario.yaml", "expect": "names threat event", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "Organizations define threat scenarios as a series of threat events", "target": "framework/schema/ra.schema.json#/properties/threat_scenarios/items/properties/events", "claim": "constraint"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0280"
     citation: {"ref": "SP800-30R1", "page": 37, "anchor": "Security categorization constitutes a determination of the potential impacts should certain events"}
@@ -2222,7 +2339,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY RISK MODEL AND ANALYTIC APPROACH"
     statement: "Organization-specific risk models are refined as part of preparation for a risk assessment by: (i) identifying the risk model and the rationale for using it (when multiple organization-specific risk models are provided);"
-    status: "candidate"
+    status: "partial"
+    reason: "The rationale for the risk model is a required field; its content is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the risk model and the rationale for using it", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/rationale", "claim": "presence"}]
     work_item: "WI-203"
   - id: "REQ-SP800-30R1-0282"
     citation: {"ref": "SP800-30R1", "page": 40, "anchor": "For relevant threat events, organizations identify all potential threat sources that could"}
@@ -2237,7 +2356,9 @@ requirements:
     locator: "3.2"
     context: "IDENTIFY VULNERABILITIES AND PREDISPOSING CONDITIONS"
     statement: "The level of detail provided in any particular vulnerability assessment is consistent with the purpose of the risk assessment and the type of inputs needed to support follow-on likelihood and impact determinations."
-    status: "candidate"
+    status: "partial"
+    reason: "The level of detail is a required field; whether it fits the purpose is prose"
+    evidence: [{"kind": "schema", "asserts": "The level of detail provided in the vulnerability assessment is consistent with the purpose", "target": "framework/schema/ra.schema.json#/properties/level_of_detail", "claim": "presence"}]
     work_item: "WI-205"
   - id: "REQ-SP800-30R1-0284"
     citation: {"ref": "SP800-30R1", "page": 91, "anchor": "Will the materialization of a particular risk result in:"}
@@ -2253,7 +2374,9 @@ requirements:
     locator: "3.1"
     context: ""
     statement: "TASK 1-1: Identify the purpose of the risk assessment in terms of the information that the assessment is intended to produce and the decisions the assessment is intended to support."
-    status: "candidate"
+    status: "partial"
+    reason: "The purpose statement and at least one supported decision are required; whether the purpose is stated in sufficient detail is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the purpose of the risk assessment in terms of the information it is intended to produce", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "Identify the decisions the risk assessment is intended to support", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/decisions", "claim": "constraint"}]
     work_item: "WI-202"
     promoted: {"reason": "Numbered Task 1-1 of Step 1, the task statement itself; rejected as no-marker, and it is what the supplemental guidance amplifies"}
   - id: "REQ-SP800-30R1-0286"
@@ -2262,7 +2385,9 @@ requirements:
     locator: "3.1"
     context: ""
     statement: "TASK 1-2: Identify the scope of the risk assessment in terms of organizational applicability, time frame supported, and architectural/technology considerations."
-    status: "candidate"
+    status: "partial"
+    reason: "Applicability, time frame and architecture are required fields of the scope; their content is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the scope of the risk assessment in terms of organizational applicability", "target": "framework/schema/ra.schema.json#/properties/scope/properties/applicability", "claim": "presence"}, {"kind": "schema", "asserts": "Identify the scope of the risk assessment in terms of the time frame supported", "target": "framework/schema/ra.schema.json#/properties/scope/properties/time_frame", "claim": "presence"}, {"kind": "schema", "asserts": "Identify the scope of the risk assessment in terms of architectural and technology considerations", "target": "framework/schema/ra.schema.json#/properties/scope/properties/architecture", "claim": "presence"}]
     work_item: "WI-201"
     promoted: {"reason": "Numbered Task 1-2 of Step 1, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0287"
@@ -2271,7 +2396,9 @@ requirements:
     locator: "3.1"
     context: ""
     statement: "TASK 1-4: Identify the sources of descriptive, threat, vulnerability, and impact information to be used in the risk assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "Sources of threat, vulnerability and impact information are required (SRA-001); a descriptive source is allowed but not required"
+    evidence: [{"kind": "rule", "asserts": "Identify the sources of threat, vulnerability and impact information to be used in the risk assessment", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.information.yaml", "expect": "the sources of threat, vulnerability and impact information are identified", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-202"
     promoted: {"reason": "Numbered Task 1-4 of Step 1, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0288"
@@ -2280,7 +2407,8 @@ requirements:
     locator: "3.1"
     context: ""
     statement: "TASK 1-5: Identify the risk model and analytic approach to be used in the risk assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the assessment approach: quantitative, qualitative or semi-quantitative", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/assessment_approach", "claim": "constraint"}, {"kind": "schema", "asserts": "The analytic approach identifies the analysis approach: threat-oriented, asset/impact-oriented or vulnerability-oriented", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}]
     work_item: "WI-203"
     promoted: {"reason": "Numbered Task 1-5 of Step 1, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0289"
@@ -2289,7 +2417,8 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "TASK 2-1: Identify and characterize threat sources of concern, including capability, intent, and targeting characteristics for adversarial threats and range of effects for non-adversarial threats."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Characterize threat sources of concern including capability for adversarial threats", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.capability.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Characterize threat sources of concern including intent for adversarial threats", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.intent.yaml", "expect": "is an adversarial threat source with no assessed intent", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Characterize threat sources of concern including targeting for adversarial threats", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.targeting.yaml", "expect": "is an adversarial threat source with no assessed targeting", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Characterize threat sources of concern including range of effects for non-adversarial threats", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.range.yaml", "expect": "is a non-adversarial threat source with no assessed range of effects", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-201"
     promoted: {"reason": "Numbered Task 2-1 of Step 2, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0290"
@@ -2298,7 +2427,8 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "TASK 2-2: Identify potential threat events, relevance of the events, and the threat sources that could initiate the events."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Identify potential threat events", "target": "framework/schema/ra.schema.json#/properties/threat_events", "claim": "constraint"}, {"kind": "schema", "asserts": "Identify the relevance of the threat events", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/relevance", "claim": "constraint"}, {"kind": "rule", "asserts": "Identify the threat sources that could initiate the events: each event names listed threat sources", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.source.yaml", "expect": "names threat source", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-205"
     promoted: {"reason": "Numbered Task 2-2 of Step 2, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0291"
@@ -2315,7 +2445,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "TASK 2-4: Determine the likelihood that threat events of concern result in adverse impacts, considering: (i) the characteristics of the threat sources that could initiate the events; (ii) the vulnerabilities/predisposing conditions identified; and (iii) the organizational susceptibility reflecting the safeguards/countermeasures planned or implemented to impede such events."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event names its threat sources, vulnerabilities and predisposing conditions and rates the likelihood of adverse impact; susceptibility from the safeguards planned or implemented is prose"
+    evidence: [{"kind": "schema", "asserts": "Determine the likelihood that threat events of concern result in adverse impacts", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}, {"kind": "schema", "asserts": "The threat sources that could initiate the threat events are named", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/threat_sources", "claim": "constraint"}]
     work_item: "WI-200"
     promoted: {"reason": "Numbered Task 2-4 of Step 2, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0293"
@@ -2324,7 +2456,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "TASK 2-5: Determine the adverse impacts from threat events of concern considering: (i) the characteristics of the threat sources that could initiate the events; (ii) the vulnerabilities/predisposing conditions identified; and (iii) the susceptibility reflecting the safeguards/countermeasures planned or implemented to impede such events."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event names its threat sources, vulnerabilities and conditions and rates impact by harm and asset; susceptibility from safeguards is prose"
+    evidence: [{"kind": "schema", "asserts": "Determine the adverse impacts from threat events of concern", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/impacts", "claim": "constraint"}]
     work_item: "WI-200"
     promoted: {"reason": "Numbered Task 2-5 of Step 2, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0294"
@@ -2341,7 +2475,9 @@ requirements:
     locator: "3.3"
     context: ""
     statement: "TASK 3-1: Communicate risk assessment results to organizational decision makers to support risk responses."
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients are recorded as personas; that they include the decision makers for risk response is not checked"
+    evidence: [{"kind": "schema", "asserts": "Communicate risk assessment results to organizational decision makers", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
     promoted: {"reason": "Numbered Task 3-1 of Step 3, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0296"
@@ -2350,7 +2486,8 @@ requirements:
     locator: "3.3"
     context: ""
     statement: "TASK 3-2: Share risk-related information produced during the risk assessment with appropriate organizational personnel."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Share risk-related information produced during the risk assessment: source information and intermediate results", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "claim": "constraint"}, {"kind": "schema", "asserts": "Share risk-related information with appropriate organizational personnel", "target": "framework/schema/ra.schema.json#/properties/communication/properties/recipients", "claim": "constraint"}]
     work_item: "WI-198"
     promoted: {"reason": "Numbered Task 3-2 of Step 3, the task statement itself; rejected as no-marker"}
   - id: "REQ-SP800-30R1-0297"
@@ -2376,7 +2513,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "Information related to uncertainty is compiled and presented in a manner that readily supports informed risk management decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Uncertainty is recorded per threat event; how it is presented to decision makers is prose"
+    evidence: [{"kind": "schema", "asserts": "Each threat event records the uncertainty associated with its risk determination", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
     promoted: {"reason": "States how uncertainty information reaches decision makers; rejected as no-marker though it binds the assessor"}
   - id: "REQ-SP800-30R1-0300"
@@ -2385,7 +2524,9 @@ requirements:
     locator: "2.3"
     context: ""
     statement: "Independent of the type of value scale selected, assessments make explicit the temporal element of risk factors. For example, organizations can associate a specific time period with assessments of likelihood of occurrence and assessments of impact severity."
-    status: "candidate"
+    status: "partial"
+    reason: "The time period of likelihood and impact assessments is a required field; its content is prose"
+    evidence: [{"kind": "schema", "asserts": "Assessments make explicit the temporal element of risk factors: the time period of likelihood and impact", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/time_period", "claim": "presence"}]
     work_item: "WI-201"
     promoted: {"reason": "Assessments make the temporal element of risk factors explicit; rejected as not-normative though the verb binds the assessment"}
   - id: "REQ-SP800-30R1-0301"
@@ -2394,7 +2535,9 @@ requirements:
     locator: ""
     context: ""
     statement: "At Tier 1, risk assessments support organizational strategies, policies, guidance, and processes for managing risk. Risk assessments conducted at Tier 1 focus on organizational operations, assets, and individuals—comprehensive assessments across mission/business lines. For example, Tier 1 risk assessments may address: (i) the specific types of threats directed at organizations that may be different from other organizations and how those threats affect policy decisions; (ii) systemic weaknesses or deficiencies discovered in multiple organizational information systems capable of being exploited by adversaries; (iii) the potential adverse impact on organizations from the loss or compromise of organizational information (either intentionally or unintentionally); and (iv) the use of new information and computing technologies such as mobile and cloud and the potential effect on the ability of organizations to successfully carry out their missions/business operations while using those technologies. Organization-wide assessments of risk can be based solely on the assumptions, constraints, risk tolerances, priorities, and trade-offs established in the risk framing step (i.e., derived primarily from Tier 1 activities). However, more realistic and meaningful risk assessments are based on assessments conducted across multiple mission/business lines (i.e., derived primarily from Tier 2 activities). The ability of organizations to effectively use Tier 2 risk assessments as inputs to Tier 1 risk assessments is shaped by such considerations as: (i) the similarity of organizational missions/business functions and mission/business processes; and (ii) the degree of autonomy that organizational entities or subcomponents have with respect to parent organizations. In decentralized organizations or organizations with varied missions/business functions and/or environments of operation, expert analysis may be needed to normalize the results from Tier 2 risk assessments. Finally, risk assessments at Tier 1 take into consideration the identification of mission-essential functions from Continuity of Operations Plans (COOP)36 prepared by organizations when determining the contribution of Tier 2 risks. Risk assessment results at Tier 1 are communicated to organizational entities at Tier 2 and Tier 3."
-    status: "candidate"
+    status: "partial"
+    reason: "Recipients, method and what is shared are recorded, and P-14 feeds back to P-3 so a system's results reach the organization-level assessment; no rule checks that P-3 reads them, or that P-3 reads Tier 2 results and mission-essential functions"
+    evidence: [{"kind": "prose", "asserts": "Tier 1 risk assessments support organizational strategies and processes for managing risk", "target": "templates/artifacts/ART-RA.md", "claim": "presence"}]
     work_item: "WI-198"
     promoted: {"reason": "Tier 1 results go down to Tiers 2 and 3; rejected as no-marker though Tiers 2 and 3 carry the same duty in live entries"}
   - id: "REQ-SP800-30R1-0302"
@@ -2403,7 +2546,9 @@ requirements:
     locator: "2.3.(i)"
     context: ""
     statement: "Documentation of a risk model includes: (i) identification of risk factors (definitions, descriptions, value scales); and"
-    status: "candidate"
+    status: "partial"
+    reason: "The risk factors and their value scales are recorded; the scale definitions are prose"
+    evidence: [{"kind": "schema", "asserts": "The risk model identifies its risk factors: threat, vulnerability, impact, likelihood and predisposing condition", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "claim": "constraint"}, {"kind": "schema", "asserts": "Documentation of the risk model includes the value scales of the risk factors", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/scales", "claim": "presence"}]
     work_item: "WI-203"
     promoted: {"reason": "First half of the sentence REQ-SP800-30R1-0051 finishes: what documentation of a risk model holds"}
   - id: "REQ-SP800-30R1-0303"
@@ -2412,7 +2557,9 @@ requirements:
     locator: "2.3.(ii)"
     context: ""
     statement: "In assessing likelihoods, organizations examine vulnerabilities that threat events could exploit and also the mission/business function susceptibility to events for which no security controls or viable implementations of security controls exist (e.g., due to functional dependencies, particularly external dependencies)."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event names the vulnerabilities it could exploit (SRA-001); susceptibility where no control exists, such as external dependencies, is prose"
+    evidence: [{"kind": "schema", "asserts": "In assessing likelihoods, organizations examine vulnerabilities that threat events could exploit", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/vulnerabilities", "claim": "presence"}]
     work_item: "WI-200"
     promoted: {"reason": "Role-indicative duty inside a paragraph rejected as no-marker: what organizations examine when they assess likelihood"}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

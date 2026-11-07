@@ -31,7 +31,8 @@ requirements:
     locator: "Executive Summary.•"
     context: "System plans:"
     statement: "• Account for risks associated with the sharing of information outside the scope of the system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The risks associated with the sharing of information outside the scope of the system are accounted for in a connection record", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.yaml", "expect": "has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "Each connection records the sharing of information outside the scope of the system", "target": "framework/schema/ra.schema.json#/properties/external/properties/connections/items/properties/information_exchange", "claim": "presence"}]
     work_item: "WI-199"
   - id: "REQ-SP800-18R2-0005"
     citation: {"ref": "SP800-18R2", "page": 11, "anchor": "The elements described in this publication provide building blocks for an organization"}
@@ -2353,7 +2354,9 @@ requirements:
     locator: "4.1.•"
     context: "Prepare When the system life cycle is initiated, key information is collected to inform initial drafts of system plans, including:"
     statement: "• Unique security and privacy risks in the information life cycle that are managed across the entire data ecosystem"
-    status: "candidate"
+    status: "partial"
+    reason: "Risks from information exchanged outside the boundary are recorded per connection; risks across the wider data ecosystem are prose no rule can judge"
+    evidence: [{"kind": "schema", "asserts": "Each connection records information exchanged across the data ecosystem and its risks", "target": "framework/schema/ra.schema.json#/properties/external/properties/connections/items/properties/information_exchange", "claim": "presence"}]
     work_item: "WI-199"
   - id: "REQ-SP800-18R2-0300"
     citation: {"ref": "SP800-18R2", "page": 46, "anchor": "How the authorization boundary is defined within the organizational infrastructure or enterprise"}

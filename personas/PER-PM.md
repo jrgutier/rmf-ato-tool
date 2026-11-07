@@ -43,6 +43,9 @@ act when no PM is assigned.
   not yet fielded?
 - **P (P-11), optional:** What does the program control and fund? Which sites and units are
   in scope?
+- **P (P-14):** What is the risk assessment for, which decisions will it support, and for how
+  long? Which assumptions and constraints hold? Who receives the results, by what method, and
+  what may be shared? Which risks of similar level come first for the mission, and why?
 - **C (C-1):** Confirm the official name, acronym and identifier. What is the lifecycle
   state? What does the system do, for whom, where? What does it connect to, under which
   agreements?

@@ -241,7 +241,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](../../playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14).
+**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
 
 ## <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
 
@@ -807,6 +807,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
+- artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 
 **Alignment**
@@ -825,7 +826,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
 
 ## <a id="task-p-15"></a>P-15 · Requirements Definition
 

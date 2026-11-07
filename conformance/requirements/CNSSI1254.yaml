@@ -357,7 +357,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | SSP | External Security Services | Are external security services provided? If yes, list the provider, list the services provided, identify if services are in accordance with security requirements of the organization. Document that the necessary assurances have been obtained and the risk to organizational operations and assets, individuals, other organizations, and the Nation arising from the use of the external services is acceptable | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Each external service lists the provider and the services provided", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.provider.yaml", "expect": "has no record in external.providers, so who supplies it, its services and assurances are not documented", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "If yes, list the provider, list the services provided, identify if services are in accordance with security requirements of the organization.", "claim": "constraint"}, {"kind": "schema", "asserts": "Each provider identifies if services are in accordance with the security requirements of the organization", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/meets_requirements", "sentence": "If yes, list the provider, list the services provided, identify if services are in accordance with security requirements of the organization.", "claim": "presence"}, {"kind": "schema", "asserts": "The record states whether external security services are provided", "target": "framework/schema/ra.schema.json#/properties/external/properties/services_provided", "sentence": "If yes, list the provider, list the services provided, identify if services are in accordance with security requirements of the organization.", "claim": "presence"}, {"kind": "rule", "asserts": "The risk arising from the use of the external services is acceptable, or a response is documented", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.acceptable.yaml", "expect": "the risk arising from use of the external services is not acceptable", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "Document that the necessary assurances have been obtained and the risk to organizational operations and assets, individuals, other organizations, and the Nation arising from the use of the external services is acceptable | NIST SP 800- 37", "claim": "presence"}, {"kind": "schema", "asserts": "Each provider documents the necessary assurances obtained from the external provider", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/assurance", "sentence": "Document that the necessary assurances have been obtained and the risk to organizational operations and assets, individuals, other organizations, and the Nation arising from the use of the external services is acceptable | NIST SP 800- 37", "claim": "presence"}]
     work_item: "WI-199"
   - id: "REQ-CNSSI1254-0045"
     citation: {"ref": "CNSSI1254", "page": 14, "anchor": "| SSP | Hardware/Software Inventory | Provides hardware and software inventory -"}
@@ -576,7 +577,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | RAR | Purpose for Risk Assessment | Describe the purpose of the risk assessment. The purpose may be to determine risk at various system life cycle phases, to include the security categorization, to tailor security controls, to assess the risk of non-compliant security controls, to assess the impact of actual or proposed changes to the system in operations, etc. | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk assessment describes its purpose: the information it is to produce", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "The purpose of the risk assessment names the decisions it supports, such as tailoring controls or assessing changes", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/decisions", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0073"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Risk Assessment POC | Risk Assessment POC contact information"}
@@ -584,7 +586,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. | RAR | Risk Assessment POC | Risk Assessment POC contact information (e.g., name, phone number, email) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk assessment POC contact information carries the name", "target": "framework/schema/ra.schema.json#/properties/point_of_contact/properties/name", "claim": "presence"}, {"kind": "schema", "asserts": "The risk assessment POC contact information carries the phone number", "target": "framework/schema/ra.schema.json#/properties/point_of_contact/properties/phone", "claim": "presence"}, {"kind": "schema", "asserts": "The risk assessment POC contact information carries an email address", "target": "framework/schema/ra.schema.json#/properties/point_of_contact/properties/email", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0074"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Scope | The scope of the risk assessment can"}
@@ -606,7 +609,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "5. | RAR | Risk Analysis Approach | Threat-based, Vulnerability Based, or Asset Impact Based | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk analysis approach is threat-based, vulnerability based or asset impact based", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/analysis_approach", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0077"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Organizational Risk Tolerance | Risk Tolerance (including a list"}
@@ -614,7 +618,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | RAR | Organizational Risk Tolerance | Risk Tolerance (including a list of the range of consequences to be considered) –The level of risk an entity is willing to assume in order to achieve a potential desired result; Identify any organization risk tolerance levels set at Tier 1, Tier 2, and Tier 3 | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The organizational risk tolerance states the level of risk the entity is willing to assume", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance/properties/statement", "claim": "presence"}, {"kind": "schema", "asserts": "The risk tolerance lists the range of consequences considered", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance/properties/consequences", "claim": "constraint"}, {"kind": "schema", "asserts": "The risk tolerance identifies the tolerance levels set at Tier 1, Tier 2 and Tier 3", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance/properties/tiers", "claim": "presence"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0078"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Threat Sources | Identifies threat sources that could initiate"}
@@ -629,7 +634,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. | RAR | Threat Source Capability | Indicates the adversarial threat source's capability to initiate a threat event | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source capability to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed capability to initiate a threat event", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.capability.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0080"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Source Intent | Indicates the adversarial threat source's"}
@@ -637,7 +643,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "9. | RAR | Threat Source Intent | Indicates the adversarial threat source's intent to initiate a threat event | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source intent to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/intent", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed intent to initiate a threat event", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.intent.yaml", "expect": "is an adversarial threat source with no assessed intent", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0081"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Source Targeting | Indicates if the adversarial threat"}
@@ -645,7 +652,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "10. | RAR | Threat Source Targeting | Indicates if the adversarial threat source has historically targeted or is actively targeting the system | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat source records whether the adversarial threat source has targeted or is actively targeting the system", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/targeting", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed targeting of the system", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.targeting.yaml", "expect": "is an adversarial threat source with no assessed targeting", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0082"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Event | Identifies the potential threat event |"}
@@ -667,7 +675,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "13. | RAR | Vulnerability Severity or Pervasiveness of Predisposing Condition | Identifies the severity of vulnerabilities or the pervasiveness of the predisposing conditions as very low, low, moderate, high, very high | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each vulnerability identifies its severity as very low, low, moderate, high or very high", "target": "framework/schema/ra.schema.json#/properties/vulnerabilities/items/properties/severity", "claim": "constraint"}, {"kind": "schema", "asserts": "Each predisposing condition identifies its pervasiveness as very low, low, moderate, high or very high", "target": "framework/schema/ra.schema.json#/properties/predisposing_conditions/items/properties/pervasiveness", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0085"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Likelihood of Threat Event Initiation/Occurrence | Indicates the likelihood"}
@@ -675,7 +684,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "14. | RAR | Likelihood of Threat Event Initiation/Occurrence | Indicates the likelihood the threat event will be initiated or occur, taking into consideration the adversarial threat source's capability, intent, and targeting; non-adversarial threat source's historical evidence and empirical data; timeframe and frequency of event; state of the organization (e.g., environment, architecture, system, and presence/effectiveness of security controls); vulnerabilities; and predisposing conditions | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat event indicates the likelihood it will be initiated or occur", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_initiation", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0086"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Likelihood of Threat Event Success | Determine the likelihood"}
@@ -683,7 +693,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "15. | RAR | Likelihood of Threat Event Success | Determine the likelihood the threat event, once it is initiated or occurs, will result in an adverse impact, regardless of the magnitude of harm (i.e., impact) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "Each threat event determines the likelihood that, once initiated or occurring, it will result in an adverse impact", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/likelihood_impact", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0087"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Overall Likelihood | Indicates the likelihood the threat event"}
@@ -705,7 +716,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "18. | RAR | Residual Risk Level | For individual entries in the RAR, indicates the residual risk level expected after mitigations are implemented (as described in the POA&M). Identifies the risk level as one of the following: very low, low, moderate, high, and very high) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Each RAR risk entry indicates the residual risk level expected after mitigations are implemented", "target": "SRA-004", "fixture": "tests/fixtures/negative/SRA-004.yaml", "expect": "records no residual risk level expected after the mitigations", "holds_when": "ART-RAR is produced or seeded on a 0.2.0 contract", "claim": "presence"}, {"kind": "schema", "asserts": "Each RAR risk identifies the residual risk level expected after mitigations in the POA&M", "target": "framework/schema/rar.schema.json#/properties/risks/items/properties/residual_level", "read_by": "SRA-004", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0090"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| RAR | Number of Controls with Risks Identified | Indicates the"}
@@ -713,7 +725,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "19. | RAR | Number of Controls with Risks Identified | Indicates the number of controls identified for each level of risk (i.e., very low, low, moderate, high, or very high) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The RAR indicates the number of controls identified for each level of risk, and the risks identify that number", "target": "SRA-004", "fixture": "tests/fixtures/negative/SRA-004.count.yaml", "expect": "the risks identify", "holds_when": "ART-RAR is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "The RAR indicates the number of controls with risks identified at each level of risk", "target": "SRA-004", "fixture": "tests/fixtures/negative/SRA-004.missing.yaml", "expect": "records no number of controls with risks identified at each level", "holds_when": "ART-RAR is produced or seeded on a 0.2.0 contract", "claim": "presence"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0091"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| RAR | Overall Risk Posture | Describe the overall level of"}
@@ -728,7 +741,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "21. POA&M Data Elements | RAR | RAR Executive Summary | Executive summary from the detailed findings generated during risk assessment. An executive summary provides an AO with an abbreviated version of the risk assessment report focusing on the highlights of the assessment, purpose, synopsis of key findings, and/or recommendations for addressing risk | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "The risk assessment executive summary gives the AO the purpose, key findings and recommendations for addressing risk", "target": "framework/schema/ra.schema.json#/properties/executive_summary", "claim": "presence"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0093"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| POA&M | Vulnerability (Weaknesses or Deficiency) | A short description of"}

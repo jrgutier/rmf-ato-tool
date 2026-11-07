@@ -26,7 +26,9 @@ requirements:
     locator: "1.2.a"
     context: "POLICY"
     statement: "a. As a means to counter the threat from strategic competitor nations, the DoD will employ risk-based measures to protect systems and technologies from adversarial exploitation and compromise of U.S. military vulnerabilities and weaknesses in:"
-    status: "candidate"
+    status: "partial"
+    reason: "ART-RA rates threats and vulnerabilities and holds supply chain risk for every inventory item (SRA-001, SRA-002); that the risk-based measures chosen at S-2 rest on it is tailoring no rule ties to ART-RA"
+    evidence: [{"kind": "rule", "asserts": "Risk-based measures protect systems from compromise of vulnerabilities and weaknesses in supply chains: every component is in a supply chain record", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.chain.yaml", "expect": "is in no supply chain record, so its supply chain risk is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0004"
     citation: {"ref": "DODI5000.83", "page": 4, "anchor": "Systems."}
@@ -534,7 +536,9 @@ requirements:
     locator: "2.4.a"
     context: "DOD CHIEF INFORMATION OFFICER In accordance with DoDD 5144.02, the DoD Chief Information Officer:"
     statement: "a. Provides guidance to the DoD Components on the risks that DoD systems are subjected to when connected to the DoD information enterprise, to the extent that the DoD information enterprise:"
-    status: "candidate"
+    status: "partial"
+    reason: "The guidance is the DoD CIO's to give; a run only reads it for each connection in ra.yaml external.connections, and no field records the guidance used"
+    evidence: [{"kind": "prose", "asserts": "The risk assessment weighs the risks DoD systems are subjected to when connected outside the boundary", "target": "templates/artifacts/ART-RA.md", "claim": "presence"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0068"
     citation: {"ref": "DODI5000.83", "page": 8, "anchor": "Is effective."}
@@ -1684,7 +1688,9 @@ requirements:
     locator: "3.3.d.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(1) Identify all system interfaces to all enabling and supporting systems and assess cybersecurity vulnerabilities. S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "Every interface to an enabling or supporting system outside the boundary has a connection record naming the vulnerabilities it introduces (SRA-002); support activities such as test tools and environments are not forced into a record"
+    evidence: [{"kind": "rule", "asserts": "All system interfaces to enabling and supporting systems are identified, each with a connection record", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.yaml", "expect": "has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "(1) Identify all system interfaces to all enabling and supporting systems and assess cybersecurity vulnerabilities.", "claim": "constraint"}, {"kind": "rule", "asserts": "Each connection to an enabling and supporting system names the vulnerabilities it introduces", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.introduces.yaml", "expect": "which is no vulnerability or predisposing condition in ra.yaml", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:", "claim": "constraint"}, {"kind": "schema", "asserts": "Each connection records the vulnerabilities introduced by the enabling and supporting systems", "target": "framework/schema/ra.schema.json#/properties/external/properties/connections/items/properties/introduces", "sentence": "S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0213"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "Engineering, simulation, and test tools and environments."}
@@ -1724,7 +1730,9 @@ requirements:
     locator: "3.3.d.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(2) Use threat intelligence from the Defense Intelligence Agency, DoD Component intelligence and counterintelligence activities, the Defense Counterintelligence and Security Agency, and the Joint Acquisition Protection and Exploitation Cell to assess third party service providers and environments (e.g., training, testing, logistics, or certification)."
-    status: "candidate"
+    status: "partial"
+    reason: "Each external provider names the threat intelligence used to assess it, from DIA, Component intelligence and counterintelligence, DCSA or JAPEC; only external services are forced into the provider list, so third party environments (training, testing, logistics) can be left out"
+    evidence: [{"kind": "schema", "asserts": "Each third party service provider or environment is assessed with threat intelligence from DIA, Component intelligence, DCSA or JAPEC", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/threat_intelligence", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0218"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "S&T protection and program protection measures implemented during concept development, engineering, and"}

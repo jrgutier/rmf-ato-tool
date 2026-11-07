@@ -1,0 +1,11 @@
+rule: SRA-002
+bases: [minimal]
+description: a supply chain record names an item that is not in the inventory
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: external.supply_chain.0.items
+  value: [INV-001, INV-009]
+expect:
+  errors: [SRA-002]
+  messages: ['supply chain record SC-01 names INV-009, which is no inventory item']

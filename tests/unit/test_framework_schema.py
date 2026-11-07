@@ -9,6 +9,7 @@ import jsonschema
 import pytest
 from _framework_fixtures import MINI, P3A, REAL
 from conftest import REPO_ROOT
+from ruamel.yaml import YAML
 
 from rmf_tool.framework.load import load
 from rmf_tool.framework.model import SCHEMA_DIR
@@ -22,7 +23,7 @@ PLAN_RUN_SCHEMAS = {
     "authorizations",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias"}  # data named in plan §6.4, then the ones p11 added
+                     "dias", "ra"}  # data named in plan §6.4, then the ones p11 added
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -82,6 +83,7 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 
 SRC = ["INT-001.A1"]
+_RA = YAML(typ="safe").load((REPO_ROOT / "templates/data/ra.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES = {
     "run-config": (
         {"mode": "hybrid", "run_id": "example-synthetic-01", "product": "../../product",
@@ -282,6 +284,7 @@ RUN_EXAMPLES = {
         {"assurance": {"identity_proofing": "IAL9", "authentication": "AAL2",
                        "federation": "not-applicable"},
          "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
+    "ra": (_RA, {**_RA, "risk_model": {**_RA["risk_model"], "analysis_approach": "guess"}}),
 }
 
 
