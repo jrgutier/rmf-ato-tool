@@ -1,0 +1,22 @@
+rule: CATG-003
+bases:
+- minimal
+description: CTI agreements without the DoDI 8582.01 terms
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.handling.cti
+  value: true
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: cti
+  value:
+    exposure: Design data on the contractor's unclassified network; exposure would aid an adversary's countermeasures.
+    protection: dfars-252.204-7012
+    agreements_include_8582: false
+    incident_losses: No incident reported under the contract.
+expect:
+  errors:
+  - CATG-003
+  messages:
+  - the legally binding agreements do not include the DoDI 8582.01 requirements for CTI

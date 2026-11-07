@@ -1,0 +1,14 @@
+rule: SYSD-005
+bases:
+- minimal
+description: an external service held by an SLA
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.service.kind
+  value: external
+expect:
+  errors:
+  - SYSD-005
+  messages:
+  - an external IT service is held by an interagency agreement or a government statement of work, not sla

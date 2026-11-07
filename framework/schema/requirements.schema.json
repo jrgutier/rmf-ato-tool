@@ -1,0 +1,556 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:requirements",
+  "title": "runs/<run-id>/artifacts/data/requirements.yaml",
+  "description": "Security and privacy requirements (ART-REQ): protection needs, the requirement matrix with verification methods, measures and allocation, constraints, the DoD design policy statements, stakeholder agreement and contract workforce terms (P-15, updated by P-16 and P-17). REQS-001 to REQS-005 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "needs",
+    "requirements",
+    "constraints",
+    "design_policy",
+    "agreement"
+  ],
+  "properties": {
+    "needs": {
+      "title": "Stakeholder protection needs",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/need"
+      }
+    },
+    "requirements": {
+      "title": "Security and privacy requirements, the requirements traceability verification matrix",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/requirement"
+      }
+    },
+    "constraints": {
+      "title": "Security-relevant constraints on the system solution",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "design_policy": {
+      "title": "DoD design policy statements no control carries, each addressed",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/policy"
+      }
+    },
+    "agreement": {
+      "$ref": "#/$defs/agreement"
+    },
+    "workforce": {
+      "$ref": "#/$defs/workforce"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "need": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "stakeholder",
+        "kind",
+        "concern",
+        "success_criteria",
+        "priority",
+        "rationale",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^NEED-\\d{2,3}$"
+        },
+        "stakeholder": {
+          "$ref": "#/$defs/persona_id",
+          "title": "Stakeholder persona who holds the concern"
+        },
+        "kind": {
+          "title": "Security concern, loss concern for an asset, or trust expectation of users",
+          "enum": [
+            "security-concern",
+            "loss-concern",
+            "trust-expectation"
+          ],
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0572",
+            "REQ-SP800-160V1R1-0592"
+          ]
+        },
+        "concern": {
+          "title": "The concern as the stakeholder states it",
+          "type": "string",
+          "minLength": 1
+        },
+        "assets": {
+          "title": "Assets or asset classes a loss concern is about",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "success_criteria": {
+          "title": "Success criteria of the protection need, such as measures of effectiveness",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0604",
+            "REQ-SP800-160V1R1-1391"
+          ]
+        },
+        "priority": {
+          "title": "Priority of the protection need after down-selection (1 highest)",
+          "type": "integer",
+          "minimum": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0577",
+            "REQ-SP800-160V1R1-0605"
+          ]
+        },
+        "rationale": {
+          "title": "Rationale for the protection need and its priority",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0606"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "kind",
+        "sources",
+        "priority",
+        "criticality",
+        "measure",
+        "verification"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^REQ-\\d{2,3}$"
+        },
+        "statement": {
+          "title": "The requirement, one testable statement",
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "security",
+            "privacy"
+          ]
+        },
+        "needs": {
+          "title": "Protection needs the requirement traces to",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^NEED-\\d{2,3}$"
+          }
+        },
+        "policy": {
+          "title": "Design policy statements the requirement carries",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^DP-[A-Z0-9-]+$"
+          }
+        },
+        "derived_from": {
+          "title": "Requirements a derived requirement is derived from",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^REQ-\\d{2,3}$"
+          }
+        },
+        "priority": {
+          "title": "Priority of the requirement (1 highest)",
+          "type": "integer",
+          "minimum": 1
+        },
+        "criticality": {
+          "title": "Relative criticality of the requirement's measure (1 most critical)",
+          "type": "integer",
+          "minimum": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0610"
+          ]
+        },
+        "measure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "statement"
+          ],
+          "properties": {
+            "kind": {
+              "title": "Performance or assurance measure",
+              "enum": [
+                "performance",
+                "assurance"
+              ],
+              "x-enforces": [
+                "REQ-SP800-160V1R1-0580",
+                "REQ-SP800-160V1R1-0610",
+                "REQ-SP800-160V1R1-0621",
+                "REQ-SP800-160V1R1-0639",
+                "REQ-SP800-160V1R1-0640"
+              ]
+            },
+            "statement": {
+              "title": "How technical achievement of the requirement is measured",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "description"
+          ],
+          "properties": {
+            "method": {
+              "title": "Verification method that demonstrates the requirement is met",
+              "enum": [
+                "inspection",
+                "analysis",
+                "demonstration",
+                "test",
+                "other"
+              ],
+              "x-enforces": [
+                "REQ-DODI5000.75-0244",
+                "REQ-DODI5000.83-0179",
+                "REQ-DODI5000.83-0189",
+                "REQ-SP800-160V1R1-0166",
+                "REQ-SP800-160V1R1-0200",
+                "REQ-SP800-160V1R1-0769",
+                "REQ-SP800-160V1R1-0802",
+                "REQ-SP800-160V1R1-0804",
+                "REQ-SP800-160V1R1-0806",
+                "REQ-SP800-160V1R1-0807",
+                "REQ-SP800-160V1R1-0808",
+                "REQ-SP800-160V1R1-0810",
+                "REQ-SP800-160V1R1-0822",
+                "REQ-SP800-160V1R1-0823",
+                "REQ-SP800-160V1R1-0867",
+                "REQ-SP800-160V1R1-0884",
+                "REQ-SP800-160V1R1-1389"
+              ]
+            },
+            "description": {
+              "title": "What the verification action verifies and its success criteria",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allocated_to": {
+          "title": "Boundary components, the environment of operation, a common control provider or the contract the requirement is allocated to (P-17)",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(CMP-[A-Z0-9-]+|environment|common-control-provider|contract)$"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "origin",
+        "statement",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CON-\\d{2,3}$"
+        },
+        "origin": {
+          "title": "Where the constraint comes from: the stakeholders, security, or a later life cycle process that raised it",
+          "enum": [
+            "stakeholder",
+            "security",
+            "implementation",
+            "integration",
+            "verification",
+            "transition",
+            "validation",
+            "operation",
+            "maintenance",
+            "disposal"
+          ],
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0223",
+            "REQ-SP800-160V1R1-0578",
+            "REQ-SP800-160V1R1-0596",
+            "REQ-SP800-160V1R1-0607",
+            "REQ-SP800-160V1R1-0620",
+            "REQ-SP800-160V1R1-0633",
+            "REQ-SP800-160V1R1-0751",
+            "REQ-SP800-160V1R1-0759",
+            "REQ-SP800-160V1R1-0775",
+            "REQ-SP800-160V1R1-0785",
+            "REQ-SP800-160V1R1-0800",
+            "REQ-SP800-160V1R1-0813",
+            "REQ-SP800-160V1R1-0826",
+            "REQ-SP800-160V1R1-0837",
+            "REQ-SP800-160V1R1-0862",
+            "REQ-SP800-160V1R1-0873",
+            "REQ-SP800-160V1R1-0889",
+            "REQ-SP800-160V1R1-0905",
+            "REQ-SP800-160V1R1-0926",
+            "REQ-SP800-160V1R1-0941",
+            "REQ-SP800-160V1R1-0967",
+            "REQ-SP800-160V1R1-0977"
+          ]
+        },
+        "statement": {
+          "title": "The constraint on the system solution",
+          "type": "string",
+          "minLength": 1
+        },
+        "raised_by": {
+          "title": "Task that raised the constraint, for one fed back from a later task",
+          "type": "string",
+          "pattern": "^[PCSIARM]-\\d+$"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "applies",
+        "sources"
+      ],
+      "properties": {
+        "statement": {
+          "title": "Design policy statement key (REQS-002 lists them)",
+          "type": "string",
+          "pattern": "^DP-[A-Z0-9-]+$"
+        },
+        "applies": {
+          "title": "Whether the statement applies to this system",
+          "type": "boolean"
+        },
+        "requirements": {
+          "title": "Requirements that carry the statement",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^REQ-\\d{2,3}$"
+          }
+        },
+        "reason": {
+          "title": "Why a conditional statement does not apply",
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "agreement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analysis",
+        "feedback",
+        "agreed",
+        "sources"
+      ],
+      "properties": {
+        "analysis": {
+          "title": "How the requirement set was analyzed against the protection needs",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0609",
+            "REQ-SP800-160V1R1-0622",
+            "REQ-SP800-160V1R1-0638",
+            "REQ-SP800-160V1R1-1392",
+            "REQ-SP800-160V1R1-1395"
+          ]
+        },
+        "feedback": {
+          "title": "Feedback given to the stakeholders from the analyzed requirements",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0611",
+            "REQ-SP800-160V1R1-0641"
+          ]
+        },
+        "issues": {
+          "title": "Requirements issues raised and their resolution",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "issue",
+              "resolution"
+            ],
+            "properties": {
+              "issue": {
+                "title": "The issue",
+                "type": "string",
+                "minLength": 1
+              },
+              "resolution": {
+                "title": "How it was resolved",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "agreed": {
+          "title": "Explicit agreement of each stakeholder that the requirements address their protection needs",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stakeholder",
+              "date",
+              "decisions"
+            ],
+            "properties": {
+              "stakeholder": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "decisions": {
+                "title": "Key security-relevant requirement decisions agreed and their rationale",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "workforce": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contracted_work_roles",
+        "sources"
+      ],
+      "properties": {
+        "contracted_work_roles": {
+          "title": "Cyberspace work roles performed by contractor personnel under the system's contracts",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "qualification_requirement": {
+          "title": "Requirement allocated to the contract that specifies workforce qualifications",
+          "type": "string",
+          "pattern": "^REQ-\\d{2,3}$"
+        },
+        "dfars_239_71": {
+          "title": "Whether the contract applies the DFARS Subpart 239.71 qualification standards",
+          "enum": [
+            "applied",
+            "not-applied"
+          ]
+        },
+        "qualifications_documented": {
+          "title": "Whether contractor personnel qualifications are documented",
+          "type": "boolean"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    }
+  }
+}

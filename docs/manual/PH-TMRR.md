@@ -118,6 +118,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
+- boundary.yaml records each external connection with its detail and the approvals it needs, any cross-domain solution and mission partner terms, and whether the system is on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
 
 **Alignment**
 
@@ -172,6 +173,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 
 **Alignment**
 

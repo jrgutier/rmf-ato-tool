@@ -1,0 +1,15 @@
+rule: REQS-001
+bases:
+- minimal
+description: a requirement allocated to a component the boundary lacks
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.1.allocated_to
+  value:
+  - CMP-GONE
+expect:
+  errors:
+  - REQS-001
+  messages:
+  - REQ-02 is allocated to CMP-GONE, which is not a boundary component

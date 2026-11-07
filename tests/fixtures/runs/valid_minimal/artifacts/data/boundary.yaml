@@ -1,13 +1,17 @@
 authorization_boundary:
   description: The boundary encloses the relay appliance (relay service and report store) and the operator console.
   diagrams:
-    - {path: product/architecture.md, caption: Authorization boundary}
+    - {path: product/architecture.md, caption: Authorization boundary, shows: [components, internal-boundaries, third-party-services, physical-protections, isolated-components]}
   sources: [INT-002.A1, product/architecture.md#boundary]
 network_architecture:
   description: The appliance has a radio-side interface on the field network and an enclave-side interface behind the enclave firewall; the console is on the management VLAN.
+  diagrams:
+    - {path: product/architecture.md, caption: Network architecture, shows: [components, external-connections, routing-controls, data-stores]}
   sources: [product/architecture.md#network]
 data_flow:
   description: Field units send signed reports to the relay service, which stores them and forwards them over TLS to the analysis enclave.
+  diagrams:
+    - {path: product/architecture.md, caption: Data flows, shows: [data-types, data-direction, external-flows]}
   sources: [product/architecture.md#data-flow]
 components:
   - {id: CMP-FDR, title: Field Data Relay, type: this-system, description: The Field Data Relay as a whole., status: under-development, sources: [product/architecture.md#components]}
@@ -15,3 +19,12 @@ components:
   - {id: CMP-STORE, title: Report store, type: software, description: The PostgreSQL report store., status: under-development, sources: [product/architecture.md#components]}
   - {id: CMP-CONSOLE, title: Operator console, type: hardware, description: The operator console workstation., status: under-development, sources: [product/architecture.md#components]}
   - {id: CMP-IDP, title: Enterprise identity provider, type: service, description: Enterprise sign-in with CAC multi-factor authentication., status: operational, external: true, leveraged_authorization: LA-01, sources: [product/architecture.md#components, INT-003.A1]}
+dodin: {position: inside, sources: [INT-025.A1]}
+connections:
+  - id: CONN-01
+    component: CMP-IDP
+    network: other  # reached through the enclave's own DISN attachment, approved for the enclave, not per peer
+    cross_domain: false
+    detail: {ports_protocols: HTTPS 443 for SAML sign-in, data: Authentication assertions (CUI), direction: bidirectional}
+    approvals: []
+    sources: [INT-025.A1, product/architecture.md#network]

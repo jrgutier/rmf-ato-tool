@@ -217,11 +217,16 @@ Purpose: Establish the organization's risk management strategy, including how it
      people, and who determines the allocation (the CIO and the AOs, with the privacy
      official when the system processes PII).
    - `risk_frame` (assumptions, constraints, priorities, trade-offs, tolerance by type of loss
-     and what shaped them), `governance` (model, reserved decisions, autonomy, the risk
-     executive led and structured by the SAORM, or led by the official it delegated to,
-     forums, oversight, communication, how differing tolerances are resolved), `risk_assessment_guidance` (methods, tools, roles,
-     rigor, form of results, threat, vulnerability, impact and likelihood approach,
-     uncertainty, aggregation, information sources) and `risk_response` (types used,
+     and what shaped them), `governance` (model, reserved decisions, how differing tolerances
+     are resolved, and `risk_executive`: led and structured by the SAORM, or led by the
+     official it delegated to; formed as an individual or a group with its members; its
+     forums for all types and sources of risk including aggregated risk; its oversight of
+     risk decisions; its broad-based view of risk; the vehicles that share risk information
+     with AOs, senior leaders and internal and external stakeholders; the autonomy it gives
+     subordinate organizations for framing, assessing, responding to and monitoring risk; and
+     how it handles authorizations with shared responsibility, SP 800-37r2 Appendix D.3,
+     RISKX-001; ask PER-RE), `risk_assessment_guidance` (methods, tools, roles, rigor,
+     form of results, threat, vulnerability, impact and likelihood approach, uncertainty, aggregation, information sources) and `risk_response` (types used,
      selection, the four strategies, course-of-action tools, communication).
    - `external_entities`: each external organization with an actual or potential risk
      relationship, its trust model, how risk information is shared, the degree of control,

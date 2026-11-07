@@ -1,0 +1,42 @@
+needs:
+  - {id: NEED-01, stakeholder: PER-IO, kind: loss-concern, concern: Field reports must not be read or altered on the way to the analysis enclave., assets: [field reports], success_criteria: No report reaches the enclave unsigned or in clear text., priority: 1, rationale: The reports drive targeting decisions., sources: [INT-024.A1]}
+  - {id: NEED-02, stakeholder: PER-PM, kind: trust-expectation, concern: Only authorized operators use the console., success_criteria: Every console session is tied to a CAC holder., priority: 2, rationale: The console can delete reports., sources: [INT-024.A1]}
+requirements:
+  - {id: REQ-01, statement: FDR authenticates every interactive user with multi-factor authentication through the enterprise identity provider., kind: security, needs: [NEED-02], policy: [DP-IDENTITY-ASSURANCE, DP-ASSISTIVE-TECH], priority: 1, criticality: 1, measure: {kind: assurance, statement: Every console logon in the audit log carries a CAC authentication.}, verification: {method: test, description: Logon attempts without a CAC are refused.}, allocated_to: [CMP-IDP, CMP-CONSOLE], sources: [product/security.md#authentication]}
+  - {id: REQ-02, statement: FDR protects reports in transit with FIPS-validated TLS and keeps each report's marking and metadata., kind: security, needs: [NEED-01], policy: [DP-CRYPTO-INTEROP, DP-MARKING-METADATA, DP-DATA-PROTECTION], priority: 1, criticality: 1, measure: {kind: performance, statement: Share of reports forwarded over TLS 1.2 or higher.}, verification: {method: inspection, description: The relay's TLS configuration and a captured session are inspected.}, allocated_to: [CMP-RELAY], sources: [product/security.md#boundary-protection]}
+  - {id: REQ-03, statement: Every FDR host is hardened to its STIG with SCAP-validated content and follows the DoD cybersecurity reference architectures., kind: security, policy: [DP-SCAP, DP-ARCH-PRINCIPLES, DP-CYBER-ARCH, DP-ENTERPRISE-ARCH, DP-STANDARDS-REGISTRY, DP-STANDARDS-SUFFICIENT], priority: 2, criticality: 2, measure: {kind: assurance, statement: SCAP scan score of each host.}, verification: {method: test, description: A SCAP scan of each host shows no open CAT I finding.}, allocated_to: [CMP-RELAY, CMP-STORE, CMP-CONSOLE], sources: [product/security.md#configuration]}
+  - {id: REQ-04, statement: The relay records each self-protective restart or failover in its audit log., kind: security, derived_from: [REQ-03], policy: [DP-RESILIENCE-AUDIT], priority: 3, criticality: 3, measure: {kind: assurance, statement: Restarts in the audit log match restarts in the service manager.}, verification: {method: demonstration, description: A forced restart appears in the audit log.}, allocated_to: [CMP-RELAY], sources: [product/security.md#audit]}
+constraints:
+  - {id: CON-01, origin: stakeholder, statement: The relay runs on the existing field appliance; no new hardware., sources: [INT-024.A1]}
+design_policy:
+  - {statement: DP-RESILIENCE-AUDIT, applies: true, requirements: [REQ-04], sources: [INT-024.A1]}
+  - {statement: DP-ARCH-PRINCIPLES, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-BIOMETRICS, applies: false, reason: FDR uses no biometrics; authentication is by CAC., sources: [product/security.md#authentication]}
+  - {statement: DP-ASSISTIVE-TECH, applies: true, requirements: [REQ-01], sources: [INT-024.A1]}
+  - {statement: DP-CRYPTO-INTEROP, applies: true, requirements: [REQ-02], sources: [INT-024.A1]}
+  - {statement: DP-CYBER-ARCH, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-MARKING-METADATA, applies: true, requirements: [REQ-02], sources: [INT-024.A1]}
+  - {statement: DP-IDENTITY-ASSURANCE, applies: true, requirements: [REQ-01], sources: [INT-024.A1]}
+  - {statement: DP-ENTERPRISE-ARCH, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-BIOS-MANAGE, applies: false, reason: FDR procures no hardware; it runs on the existing field appliance., sources: [INT-024.A1]}
+  - {statement: DP-BIOS-SPEC, applies: false, reason: FDR specifies no personal computer client system., sources: [INT-024.A1]}
+  - {statement: DP-TPM, applies: false, reason: FDR procures no new computer asset., sources: [INT-024.A1]}
+  - {statement: DP-TPM-TCG, applies: false, reason: FDR procures no new computer asset., sources: [INT-024.A1]}
+  - {statement: DP-TPM-ON, applies: false, reason: FDR procures no new computer asset., sources: [INT-024.A1]}
+  - {statement: DP-TPM-JUSTIFY, applies: false, reason: FDR procures no new computer asset., sources: [INT-024.A1]}
+  - {statement: DP-SCAP, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-STANDARDS-REGISTRY, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-STANDARDS-SUFFICIENT, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
+  - {statement: DP-DATA-PROTECTION, applies: true, requirements: [REQ-02], sources: [INT-024.A1]}
+agreement:
+  analysis: Each need was checked against the requirements that trace to it; NEED-01 needed both transport protection and marking.
+  feedback: The program manager and the information owner reviewed the requirement table.
+  issues:
+    - {issue: Hardware TPM was proposed for the appliance., resolution: Dropped; the appliance is existing equipment.}
+  agreed:
+    - {stakeholder: PER-IO, date: "2026-03-02", decisions: Transport protection and marking meet the loss concern on field reports.}
+    - {stakeholder: PER-PM, date: "2026-03-02", decisions: CAC sign-in through the enterprise identity provider meets the console concern.}
+  sources: [INT-024.A1]
+workforce:
+  contracted_work_roles: []
+  sources: [INT-026.A1]

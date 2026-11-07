@@ -2,8 +2,8 @@
 # whole (INV-8). P-1 writes roles, manpower_structure, open_functions and code_signing; P-2 adds
 # program, policies, resources, risk_frame, governance, risk_assessment_guidance, risk_response
 # and external_entities; P-5 adds common_controls; P-7 adds iscm; P-3 adds posture_reviews once
-# the system operates. OCTX-001..011 judge it. Enum values and persona IDs below are examples to
-# replace; the schema lists every allowed value.
+# the system operates. OCTX-001..013 and RISKX-001 judge it. Enum values and persona IDs below
+# are examples to replace; the schema lists every allowed value.
 roles:
 - id: RA-02
   role: PER-CISO
@@ -143,15 +143,25 @@ governance:
   model: hybrid
   reserved_decisions:
   - {decision: '<<FILL: decision>>', reserved_to: PER-CIO}
-  autonomy: '<<FILL: autonomy>>'
   risk_executive:
-    form: group
+    form: group  # individual | group
     led_by: saorm
     structured_by: saorm
-    members: [PER-CIO, PER-CISO]
-  forums: ['<<FILL: forums>>']
-  oversight: '<<FILL: oversight>>'
-  communication: ['<<FILL: communication>>']
+    members: [PER-RE, PER-CIO, PER-CISO]
+    forums:
+    - name: '<<FILL: the organization-wide forum>>'
+      considers: [all-types-and-sources, aggregated-risk]
+    oversight: '<<FILL: how it oversees risk management activities so risk decisions are consistent>>'
+    strategic_view: '<<FILL: how it builds a broad-based understanding of risk across integrated operations>>'
+    communication:
+    - vehicle: '<<FILL: the vehicle that shares risk information>>'
+      audience: [authorizing-officials, senior-leaders, internal-stakeholders, external-stakeholders]
+    subordinate_autonomy:  # one per risk activity
+    - {activity: frame, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: assess, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: respond, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: monitor, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    shared_authorizations: '<<FILL: how it promotes cooperation among AOs on joint authorizations>>'
   tolerance_resolution: '<<FILL: tolerance_resolution>>'
   sources: [INT-014.A1]
 risk_assessment_guidance:

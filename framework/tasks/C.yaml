@@ -15,7 +15,11 @@ tasks:
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-LSE], I: []}
     inputs: [ART-BND, ART-REQ, ART-INV, EXT-PRODUCT]
     outputs: [ART-SD, ART-BND]
-    writes_facts: [system_id, system_name, acronym, aliases, lifecycle_state]
+    writes_facts: [system_id, system_name, acronym, aliases, lifecycle_state, classification,
+                   system_type, owning_organization, system_version, operational_environment,
+                   lifecycle_phase]
+    facts_since: {classification: 0.2.0, system_type: 0.2.0, owning_organization: 0.2.0,
+                  system_version: 0.2.0, operational_environment: 0.2.0, lifecycle_phase: 0.2.0}
     depends_on: [P-15, P-18]
     feeds_back_to: []
     min_interviews: 1
@@ -27,8 +31,10 @@ tasks:
         org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
       - The characteristics of the system are described and documented (DoDI 8510.01 Table 2
         outcome).
-      - ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts
-        system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+      - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml
+        describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state,
+        classification, system_type, owning_organization, system_version,
+        operational_environment and lifecycle_phase set_by C-1.
     citations:
       - {ref: SP800-37R2, section: "TASK C-1", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 15, anchor: "Task C-1 System Description"}

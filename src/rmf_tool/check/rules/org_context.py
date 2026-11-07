@@ -159,9 +159,11 @@ def roles(ctx: Context) -> list[RunFinding]:
         return out
     active = set(scope.active_tasks(ctx.run))
     _absent(data, active, ("roles", "manpower_structure", "open_functions"), err)
-    if "PER-UR" not in _holders(data):
+    # The appointments are P-1's to make; a context seeded from outside the run is judged on
+    # the records it holds, not on the ones it leaves out.
+    if "P-1" in active and "PER-UR" not in _holders(data):
         err("no user representative is appointed for the system")
-    if "PER-ISSM" not in _holders(data):
+    if "P-1" in active and "PER-ISSM" not in _holders(data):
         err("no ISSM is appointed for the system")
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))

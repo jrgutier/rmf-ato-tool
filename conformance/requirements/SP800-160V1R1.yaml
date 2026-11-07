@@ -50,7 +50,9 @@ requirements:
     locator: "References"
     context: "CRITICAL SYSTEM BEHAVIORS OF THE FUTURE"
     statement: "The term security is used in this publication to mean freedom from the conditions that can cause a loss of assets with unacceptable consequences.4 Stakeholders must define the scope of security in terms of the assets to which security applies and the consequences against which security is assessed.5 Systems engineering provides a foundation for a disciplined and structured approach to building assured, trustworthy secure systems. As a systems engineering subdiscipline, systems security engineering addresses security-relevant considerations intended to produce secure outcomes. The engineering efforts are conducted at the appropriate level of fidelity and rigor needed to achieve trustworthiness and assurance objectives."
-    status: "candidate"
+    status: "partial"
+    reason: "The scope of assets is held class by class; the consequences against which security is assessed are the asset priorities, as free text."
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Stakeholders define the scope of security in terms of the assets to which security applies", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0007"
     citation: {"ref": "SP800-160V1R1", "page": 17, "anchor": "“By trustworthiness, we mean simply worthy of being trusted to fulfill whatever"}
@@ -930,7 +932,9 @@ requirements:
     locator: "2.1.2"
     context: "Table 1. Common Asset Classes"
     statement: "Assets may also be considered as individual items or as an aggregate or group of items that spans asset types or asset classes (e.g., personnel data, fire control function, environmental sensor capability). This publication uses the term asset of interest to emphasize and establish bounds on the scope of reasoning for a specific asset, asset type, or asset class. The valuation of an asset is a key input in decision-making about investments to protect an asset (Section 3.6). For those cases where an asset is associated with multiple stakeholders, there may be differing, contradictory, competing, or conflicting views about the valuation that must be resolved."
-    status: "candidate"
+    status: "partial"
+    reason: "Assets may be recorded singly or by class; valuation is the priority and its basis, as free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets", "claim": "presence", "asserts": "Assets considered individually or as an asset class, with a priority from their valuation"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0117"
     citation: {"ref": "SP800-160V1R1", "page": 34, "anchor": "Loss is the experience of having an asset taken away or destroyed"}
@@ -1330,7 +1334,9 @@ requirements:
     locator: "2.1.2"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS"
     statement: "Requirements provide a formal and clear expression of the needs, concerns, priorities, and constraints to be satisfied for system function, operation, and maintenance. Each requirement is accompanied by verification methods for demonstrating that the requirement is satisfied. Requirements must be accurate, unambiguous, comprehensive, evaluatable, and achievable."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement carries a verification method (schema). That a requirement is accurate, unambiguous, comprehensive, evaluatable and achievable is a quality of its words no rule can judge."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Each requirement is accompanied by the verification method that demonstrates it is satisfied"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0167"
     citation: {"ref": "SP800-160V1R1", "page": 42, "anchor": "Assets have different classes and types."}
@@ -1602,7 +1608,9 @@ requirements:
     locator: "2.1.2.•"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS"
     statement: "• Defines system security requirements48 and associated verification methods"
-    status: "candidate"
+    status: "covered"
+    reason: "Each security requirement of requirements.yaml carries a verification method, required and one of inspection, analysis, demonstration, test or other."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "System security requirements are defined with their associated verification methods"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0201"
     citation: {"ref": "SP800-160V1R1", "page": 47, "anchor": "Develops security views and viewpoints of the system architecture and design"}
@@ -1785,7 +1793,9 @@ requirements:
     locator: "2.1.2"
     context: "SECURITY – AN EMERGING PROPERTY OF AN ENGINEERING PROCESS The solution context includes:"
     statement: "The term life cycle security concept refers to the processes and activities associated with the system throughout the life cycle (from concept development through retirement) with specific security considerations. It is an extension of the concept of operation and includes the processes and activities related to development, prototyping, assessment of alternative solutions, training, logistics, maintenance, sustainment, evolution, modernization, refurbishment, and disposal. Each life cycle concept has one or more security considerations and constraints that must be fully integrated into the life cycle to ensure that the system security objectives can be met. Life cycle security concepts include those applied during acquisition and program management. Life cycle security concepts can affect such things as Requests for Information, Requests for Proposal, Statements of Work, source selections, development and test environments, operating environments, supply chains, supporting infrastructures, distribution, logistics, maintenance, training, clearances, and background checks."
-    status: "candidate"
+    status: "partial"
+    reason: "The life cycle security concept is held only as constraints by origin across the life cycle processes; no record of the concept itself is kept."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security considerations through the life cycle processes are recorded as constraints by origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0224"
     citation: {"ref": "SP800-160V1R1", "page": 50, "anchor": "The system security protection strategy is consistent with the overall concept of"}
@@ -4578,7 +4588,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Security concerns of stakeholders are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "Each need names the stakeholder persona holding the concern (REQS-003) and its kind; that every concern a stakeholder holds is recorded cannot fail."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.yaml", "expect": "is not a framework persona", "claim": "constraint", "asserts": "Security concerns of stakeholders are identified as needs held by a stakeholder who is a framework persona; any other holder fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/kind", "claim": "constraint", "asserts": "Each stakeholder concern is identified as a protection need of a recorded kind: security concern, loss concern or trust expectation"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0573"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Required characteristics and context for the secure use of capabilities for system"}
@@ -4594,7 +4606,8 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Stakeholder assets and asset classes are identified."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Stakeholder assets and asset classes are identified in the asset scope", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0575"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Adversities presented by the environment are characterized."}
@@ -4609,7 +4622,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Asset protection priorities are determined."
-    status: "candidate"
+    status: "partial"
+    reason: "Each asset record carries a priority; nothing compares priorities with consequences."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets/items/properties/priority", "claim": "constraint", "asserts": "Asset protection priorities are determined for each asset"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0577"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Stakeholder protection needs are defined."}
@@ -4617,7 +4632,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Stakeholder protection needs are defined."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml needs at least one protection need with success criteria, priority and rationale; that they are the stakeholders' own cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/priority", "claim": "constraint", "asserts": "Each stakeholder protection need is defined with its priority (1 highest)"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0578"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Security-driven and security-informed constraints on a system are identified."}
@@ -4625,7 +4642,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Security-driven and security-informed constraints on a system are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-driven and security-informed constraints on the system are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0579"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Prioritized stakeholder protection needs are transformed into stakeholder requirements."}
@@ -4641,7 +4660,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Security-oriented performance measures and quality characteristics are defined."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement carries a performance or assurance measure; quality characteristics are not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Security-oriented performance measures are defined for each requirement"}]
     work_item: "WI-214"
   - id: "REQ-SP800-160V1R1-0581"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Stakeholder agreement that their protection needs and expectations are adequately reflected in"}
@@ -4649,7 +4670,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Stakeholder agreement that their protection needs and expectations are adequately reflected in the requirements is achieved."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a stakeholder who holds a protection need and whose agreement that the requirements address it is not recorded."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.agreed.yaml", "expect": "holds a protection need but has not agreed that the requirements address it", "claim": "constraint", "asserts": "Stakeholder agreement that their protection needs are reflected in the requirements is achieved: a stakeholder who has not agreed fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0582"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Enabling systems or services needed for the security aspects of stakeholder needs"}
@@ -4665,7 +4688,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Traceability of stakeholder requirements to stakeholders and their protection needs is established."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a requirement tracing to a protection need the file does not record; REQS-003 fails a protection need no requirement traces; each need names the stakeholder persona who holds it."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.need.yaml", "expect": "which the requirements do not record", "claim": "constraint", "asserts": "Traceability of stakeholder requirements to their protection needs: a requirement tracing to a protection need the requirements do not record fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Traceability of stakeholder protection needs to requirements is established: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0584"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Identify the stakeholders and their security concerns."}
@@ -4673,7 +4698,9 @@ requirements:
     locator: "H.2.3. Security Activities and Tasks.SN-1.1"
     context: "SN-1 PREPARE FOR STAKEHOLDER NEEDS AND REQUIREMENTS DEFINITION"
     statement: "SN-1.1 Identify the stakeholders and their security concerns."
-    status: "candidate"
+    status: "partial"
+    reason: "Stakeholders come from ART-STAKE and each need names its stakeholder persona (REQS-003); identifying all of them cannot fail."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.yaml", "expect": "is not a framework persona", "claim": "constraint", "asserts": "Stakeholders and their security concerns are identified: a concern held by a stakeholder who is not a framework persona fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0585"
     citation: {"ref": "SP800-160V1R1", "page": 134, "anchor": "Note 1: All stakeholders have security concerns. Some concerns are explicitly known"}
@@ -4681,7 +4708,9 @@ requirements:
     locator: "H.2.3. Security Activities and Tasks.SN-1.1"
     context: "SN-1 PREPARE FOR STAKEHOLDER NEEDS AND REQUIREMENTS DEFINITION"
     statement: "Note 1: All stakeholders have security concerns. Some concerns are explicitly known and can be stated; others are initially implicit, not necessarily known, and must be made explicit through discourse."
-    status: "candidate"
+    status: "partial"
+    reason: "P-9 records the explicit concerns and P-15 the protection needs; making implicit concerns explicit through discourse is interview practice."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-STAKE.md", "claim": "presence", "asserts": "Stakeholder security concerns are recorded explicitly in the stakeholder register"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0586"
     citation: {"ref": "SP800-160V1R1", "page": 134, "anchor": "Note 2: This includes stakeholders who represent milestone decision authority, regulatory, certification,"}
@@ -4737,7 +4766,9 @@ requirements:
     locator: "References: [4] [30] [61] [86] [97] [98] [99] [100].SN-2.2"
     context: "SN-2 DEVELOP THE OPERATIONAL AND OTHER LIFE CYCLE CONCEPTS"
     statement: "SN-2.2 Characterize the security aspects of the operational environments and the intended users."
-    status: "candidate"
+    status: "partial"
+    reason: "Trust expectations of the intended users are a kind of protection need; the security aspects of the operational environments are ART-SD prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/kind", "claim": "constraint", "asserts": "Security aspects of the intended users are characterized as trust expectations, a kind of protection need"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0593"
     citation: {"ref": "SP800-160V1R1", "page": 134, "anchor": "Note 2: This includes the trust expectations for users to address insider"}
@@ -4768,7 +4799,9 @@ requirements:
     locator: "References: [4] [30] [61] [86] [97] [98] [99] [100].SN-2.4"
     context: "SN-2 DEVELOP THE OPERATIONAL AND OTHER LIFE CYCLE CONCEPTS"
     statement: "SN-2.4 Identify the security-relevant constraints on a system solution."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints on a system solution are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0597"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Define the rules capturing authorized and intended interactions, behaviors, and outcomes."}
@@ -4784,7 +4817,8 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.2"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.2 Identify stakeholder assets and asset classes."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Identify stakeholder assets and asset classes in the asset scope", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0599"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Identify loss concerns for each identified asset and each asset class."}
@@ -4792,7 +4826,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.3"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.3 Identify loss concerns for each identified asset and each asset class."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-003 fails a loss concern that names no asset; that every asset and asset class has its loss concerns cannot fail."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.assets.yaml", "expect": "is a loss concern that names no asset", "claim": "presence", "asserts": "Loss concerns are identified for each asset: a loss concern that names no asset fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0600"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Prioritize assets based on the adverse consequences of asset loss."}
@@ -4800,7 +4836,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.4"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.4 Prioritize assets based on the adverse consequences of asset loss."
-    status: "candidate"
+    status: "partial"
+    reason: "Priorities are recorded with a basis; that they follow the adverse consequences of loss is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets/items/properties/priority", "claim": "constraint", "asserts": "Prioritize assets based on the adverse consequences of asset loss"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0601"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Characterize adversities present in the environment."}
@@ -4823,7 +4861,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.6"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.6 Identify uncertainty associated with each identified adversity."
-    status: "candidate"
+    status: "partial"
+    reason: "Uncertainty is a required field of each threat event; its content is prose"
+    evidence: [{"kind": "schema", "asserts": "Identify the uncertainty associated with each identified adversity or threat event", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "claim": "presence"}]
     work_item: "WI-201"
   - id: "REQ-SP800-160V1R1-0604"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Identify stakeholder protection needs."}
@@ -4831,7 +4871,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.7"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.7 Identify stakeholder protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records the protection needs with their stakeholders; that the needs are complete cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/success_criteria", "claim": "presence", "asserts": "Each stakeholder protection need is identified with its success criteria"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0605"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Prioritize and down-select the stakeholder protection needs."}
@@ -4839,7 +4881,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.8"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.8 Prioritize and down-select the stakeholder protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "Each need carries a priority rank; the down-selection of needs is recorded only by which needs remain."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/priority", "claim": "constraint", "asserts": "Stakeholder protection needs are prioritized with a rank after down-selection"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0606"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Record the stakeholder protection needs and rationale."}
@@ -4847,7 +4891,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.9"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.9 Record the stakeholder protection needs and rationale."
-    status: "candidate"
+    status: "partial"
+    reason: "Each need records its rationale (required); its content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/rationale", "claim": "presence", "asserts": "Each stakeholder protection need is recorded with its rationale"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0607"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Identify the security-relevant constraints on a system solution."}
@@ -4855,7 +4901,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [98] [99] [100] [101] [103].SN-4.1"
     context: "SN-4 TRANSFORM STAKEHOLDER NEEDS INTO STAKEHOLDER REQUIREMENTS"
     statement: "SN-4.1 Identify the security-relevant constraints on a system solution."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints on a system solution are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0608"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Define stakeholder requirements in a manner consistent with security aspects and protection"}
@@ -4871,7 +4919,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.1"
     context: "SN-5 ANALYZE STAKEHOLDER NEEDS AND REQUIREMENTS"
     statement: "SN-5.1 Analyze the set of stakeholder requirements with respect to the protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-003 fails a need no requirement traces and agreement.analysis records the analysis; its content cannot fail."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "The stakeholder requirements are analyzed against the protection needs: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "How the set of requirements was analyzed against the protection needs is recorded"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0610"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Define security-relevant performance and assurance measures that enable the assessment of technical"}
@@ -4879,7 +4929,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.2"
     context: "SN-5 ANALYZE STAKEHOLDER NEEDS AND REQUIREMENTS"
     statement: "SN-5.2 Define security-relevant performance and assurance measures that enable the assessment of technical achievement and their relative criticality."
-    status: "candidate"
+    status: "covered"
+    reason: "Each requirement carries a performance or assurance measure and its relative criticality, both required and constrained by the schema."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Security-relevant performance and assurance measures are defined for each requirement"}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/criticality", "claim": "constraint", "asserts": "The relative criticality of each requirement's measure is defined as a rank"}]
     work_item: "WI-214"
   - id: "REQ-SP800-160V1R1-0611"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Provide feedback to applicable stakeholders from the analyzed requirements to validate that"}
@@ -4887,7 +4939,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.3"
     context: "SN-5 ANALYZE STAKEHOLDER NEEDS AND REQUIREMENTS"
     statement: "SN-5.3 Provide feedback to applicable stakeholders from the analyzed requirements to validate that their protection needs and expectations have been adequately captured and expressed."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.feedback records the feedback given; its content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/feedback", "claim": "presence", "asserts": "Feedback to the stakeholders from the analyzed requirements is recorded"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0612"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Resolve stakeholder requirements issues related to protection needs."}
@@ -4895,7 +4949,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.4"
     context: "SN-5 ANALYZE STAKEHOLDER NEEDS AND REQUIREMENTS"
     statement: "SN-5.4 Resolve stakeholder requirements issues related to protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.issues records each issue with its resolution; that every issue was raised cannot fail."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-REQ.md", "claim": "presence", "asserts": "Stakeholder requirements issues related to protection needs are recorded with their resolution"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0613"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Note: Any change to stakeholder requirements signifies a need to reassess protection"}
@@ -4903,7 +4959,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.4"
     context: "SN-5 ANALYZE STAKEHOLDER NEEDS AND REQUIREMENTS"
     statement: "Note: Any change to stakeholder requirements signifies a need to reassess protection needs and determine whether any subsequent changes are required."
-    status: "candidate"
+    status: "partial"
+    reason: "P-15's exit criteria ask that a change to the requirements reassesses the protection needs; no record shows the reassessment, so nothing fails when it is skipped."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-15.md", "claim": "presence", "asserts": "A change to the stakeholder requirements reassesses the protection needs"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0614"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Obtain explicit agreement that the stakeholder requirements satisfactorily address protection needs."}
@@ -4911,7 +4969,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [98] [99] [100] [110].SN-6.1"
     context: "SN-6 MANAGE THE STAKEHOLDER NEEDS AND REQUIREMENTS DEFINITION"
     statement: "SN-6.1 Obtain explicit agreement that the stakeholder requirements satisfactorily address protection needs."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a stakeholder holding a protection need whose explicit agreement is not recorded."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.agreed.yaml", "expect": "holds a protection need but has not agreed that the requirements address it", "claim": "constraint", "asserts": "Explicit agreement that the stakeholder requirements address protection needs is obtained: a stakeholder who has not agreed fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0615"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Record asset protection data."}
@@ -4919,7 +4979,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [98] [99] [100] [110].SN-6.2"
     context: "SN-6 MANAGE THE STAKEHOLDER NEEDS AND REQUIREMENTS DEFINITION"
     statement: "SN-6.2 Record asset protection data."
-    status: "candidate"
+    status: "partial"
+    reason: "A loss concern names its assets (REQS-003); other asset protection data is not recorded."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.assets.yaml", "expect": "is a loss concern that names no asset", "claim": "presence", "asserts": "Asset protection data is recorded: a loss concern that names no asset fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-210"
   - id: "REQ-SP800-160V1R1-0616"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Maintain traceability between stakeholder protection needs and stakeholder requirements."}
@@ -4927,7 +4989,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [98] [99] [100] [110].SN-6.3"
     context: "SN-6 MANAGE THE STAKEHOLDER NEEDS AND REQUIREMENTS DEFINITION"
     statement: "SN-6.3 Maintain traceability between stakeholder protection needs and stakeholder requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a protection need traced by no requirement and REQS-001 a requirement tracing to an unrecorded need, so the trace holds both ways."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Traceability between stakeholder protection needs and requirements is maintained: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.need.yaml", "expect": "which the requirements do not record", "claim": "constraint", "asserts": "Traceability between stakeholder requirements and protection needs: a requirement tracing to a protection need the requirements do not record fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0617"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Provide the security-relevant artifacts that have been selected for baselines."}
@@ -4957,7 +5021,9 @@ requirements:
     locator: "H.3.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant system requirements and security-driven design constraints are defined."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-driven design constraints are defined with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0621"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Security performance measures are defined."}
@@ -4965,7 +5031,9 @@ requirements:
     locator: "H.3.2. Security Outcomes.-"
     context: ""
     statement: "- Security performance measures are defined."
-    status: "candidate"
+    status: "covered"
+    reason: "Each security requirement carries a performance or assurance measure, required and constrained by the schema."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Security performance measures are defined for each requirement"}]
     work_item: "WI-214"
   - id: "REQ-SP800-160V1R1-0622"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Security aspects of the system requirements are analyzed."}
@@ -4973,7 +5041,9 @@ requirements:
     locator: "H.3.2. Security Outcomes.-"
     context: ""
     statement: "- Security aspects of the system requirements are analyzed."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.analysis records the analysis of the requirements; its content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "The security aspects of the system requirements are analyzed and the analysis recorded"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0623"
     citation: {"ref": "SP800-160V1R1", "page": 136, "anchor": "Enabling systems or services needed for the security aspects of the system"}
@@ -4989,7 +5059,9 @@ requirements:
     locator: "H.3.2. Security Outcomes.-"
     context: ""
     statement: "- Traceability of the security aspects of system requirements and associated security-relevant constraints to stakeholder requirements is established."
-    status: "candidate"
+    status: "partial"
+    reason: "Requirements trace to needs, policy statements or parents (REQS-001); the constraints of requirements.yaml carry no trace to stakeholder requirements."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.trace.yaml", "expect": "traces to no protection need, design policy statement or parent requirement", "claim": "presence", "asserts": "Traceability of the system requirements to stakeholder requirements and needs is established, and a requirement that traces to no protection need fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0625"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Define the security aspects of the intended behavior and outcomes at the"}
@@ -5061,7 +5133,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.3"
     context: "SR-2 DEFINE SYSTEM REQUIREMENTS"
     statement: "SR-2.3 Define necessary security-driven implementation constraints."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-driven implementation constraints are defined with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0634"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Note: Security-driven constraints on the system are from adversity, uncertainty, and risk,"}
@@ -5099,7 +5173,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.1"
     context: "SR-3 ANALYZE SYSTEM REQUIREMENTS"
     statement: "SR-3.1 Analyze the complete set of system requirements in consideration of security concerns."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.analysis records the analysis of the requirement set; its completeness cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "The complete set of system requirements is analyzed against the security concerns and recorded"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0639"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Define security-driven performance and assurance measures that enable the assessment of technical"}
@@ -5107,7 +5183,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.2"
     context: "SR-3 ANALYZE SYSTEM REQUIREMENTS"
     statement: "SR-3.2 Define security-driven performance and assurance measures that enable the assessment of technical achievement."
-    status: "candidate"
+    status: "covered"
+    reason: "Each requirement carries a performance or assurance measure of its technical achievement, required and constrained by the schema."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Security-driven performance and assurance measures enabling assessment of technical achievement are defined"}]
     work_item: "WI-214"
   - id: "REQ-SP800-160V1R1-0640"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Note: Each security-driven performance measure (e.g., measure of performance and technical performance"}
@@ -5115,7 +5193,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.2"
     context: "SR-3 ANALYZE SYSTEM REQUIREMENTS"
     statement: "Note: Each security-driven performance measure (e.g., measure of performance and technical performance measure) is analyzed to help ensure that system requirements are met, and that project cost, schedule, or performance risks associated with any non-compliance are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "Each measure is recorded and A-2 reads it; that each is analyzed for non-compliance risk is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Each security-driven performance measure is recorded for analysis"}]
     work_item: "WI-214"
   - id: "REQ-SP800-160V1R1-0641"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Provide feedback from the analyzed system requirements to applicable stakeholders for security-relevant"}
@@ -5123,7 +5203,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.3"
     context: "SR-3 ANALYZE SYSTEM REQUIREMENTS"
     statement: "SR-3.3 Provide feedback from the analyzed system requirements to applicable stakeholders for security-relevant reviews."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.feedback records the feedback to the stakeholders; its content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/feedback", "claim": "presence", "asserts": "Feedback from the analyzed system requirements to applicable stakeholders is recorded"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0642"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Resolve system requirements security issues."}
@@ -5131,7 +5213,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.4"
     context: "SR-3 ANALYZE SYSTEM REQUIREMENTS"
     statement: "SR-3.4 Resolve system requirements security issues."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.issues records each security issue with its resolution; that every issue was raised cannot fail."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-REQ.md", "claim": "presence", "asserts": "System requirements security issues are recorded with how each was resolved"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0643"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Obtain explicit agreement that system requirements express protection needs."}
@@ -5139,7 +5223,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [97] [98] [99] [100] [110].SR-4.1"
     context: "SR-4 MANAGE THE SYSTEM REQUIREMENTS"
     statement: "SR-4.1 Obtain explicit agreement that system requirements express protection needs."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a stakeholder holding a protection need whose explicit agreement is not recorded."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.agreed.yaml", "expect": "holds a protection need but has not agreed that the requirements address it", "claim": "constraint", "asserts": "Explicit agreement that the system requirements express protection needs is obtained: a stakeholder who has not agreed fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0644"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Record key security-relevant system requirement decisions and the rationale."}
@@ -5147,7 +5233,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [97] [98] [99] [100] [110].SR-4.2"
     context: "SR-4 MANAGE THE SYSTEM REQUIREMENTS"
     statement: "SR-4.2 Record key security-relevant system requirement decisions and the rationale."
-    status: "candidate"
+    status: "partial"
+    reason: "Each agreement records the key decisions and their rationale (required); their content cannot fail."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-REQ.md", "claim": "presence", "asserts": "Key security-relevant system requirement decisions and their rationale are recorded with each agreement"}]
     work_item: "WI-211"
   - id: "REQ-SP800-160V1R1-0645"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Maintain traceability of system requirements to their security-relevant aspects."}
@@ -5155,7 +5243,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [97] [98] [99] [100] [110].SR-4.3"
     context: "SR-4 MANAGE THE SYSTEM REQUIREMENTS"
     statement: "SR-4.3 Maintain traceability of system requirements to their security-relevant aspects."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-001 fails a requirement that traces to nothing; which of its security-relevant aspects each requirement traces to is not recorded."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.trace.yaml", "expect": "traces to no protection need, design policy statement or parent requirement", "claim": "presence", "asserts": "Traceability of system requirements is maintained: a requirement that traces to no protection need, design policy statement or parent requirement fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0646"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Note: The traceability of system requirements to protection needs; stakeholder requirements; architecture"}
@@ -5163,7 +5253,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [79] [86] [97] [98] [99] [100] [110].SR-4.3"
     context: "SR-4 MANAGE THE SYSTEM REQUIREMENTS"
     statement: "Note: The traceability of system requirements to protection needs; stakeholder requirements; architecture elements; interface definitions; analysis results; verification methods; allocated, decomposed, and derived requirements (in their system, system element, security protection, and security-driven constraint forms); risk and loss tolerance; and assurance and trustworthiness objectives is maintained."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml traces each requirement to protection needs, policy, parents, allocated components and its verification method; interface definitions and analysis results are not traced."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": "which is not a boundary component", "claim": "constraint", "asserts": "The traceability of system requirements to architecture elements and allocated requirements: an allocation to something not a boundary component fails", "holds_when": "P-17 is in the run's scope"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0647"
     citation: {"ref": "SP800-160V1R1", "page": 138, "anchor": "Provide the security-relevant artifacts that have been selected for baselines."}
@@ -5996,7 +6088,9 @@ requirements:
     locator: "H.7.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant implementation constraints that influence the requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant implementation constraints that influence the requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0752"
     citation: {"ref": "SP800-160V1R1", "page": 145, "anchor": "A trustworthy secure system element is realized."}
@@ -6060,7 +6154,9 @@ requirements:
     locator: "H.7.3. Security Activities and Tasks.IP-1.2"
     context: "IP-1 PREPARE FOR IMPLEMENTATION"
     statement: "IP-1.2 Identify security-relevant constraints and objectives from implementation in the system security requirements, architecture and design characteristics, or implementation techniques."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints from implementation are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0760"
     citation: {"ref": "SP800-160V1R1", "page": 146, "anchor": "Identify the security aspects for enabling systems, services, and materials needed to support implementation."}
@@ -6116,7 +6212,9 @@ requirements:
     locator: "References: [4] [30] [61] [98] [99] [111] [112] [113].IP-2.1.-"
     context: "IP-2 PERFORM IMPLEMENTATION Note: System elements can include:"
     statement: "- Services: System elements implemented by obtaining or leasing services are subject to the same criteria used to acquire hardware, firmware, and software but must also address the security considerations associated with utilization and support resources."
-    status: "candidate"
+    status: "partial"
+    reason: "Leased services carry an agreement with security requirements; the acquisition criteria for services are not modelled."
+    evidence: [{"kind": "rule", "target": "SYSD-005", "fixture": "tests/fixtures/negative/SYSD-005.security.yaml", "expect": "the agreement for the external service does not incorporate the security requirements of DoDI 8500.01", "asserts": "Services obtained or leased must address security considerations in the agreement", "claim": "constraint"}]
     work_item: "WI-195"
   - id: "REQ-SP800-160V1R1-0767"
     citation: {"ref": "SP800-160V1R1", "page": 146, "anchor": "Utilization and Support Resources: The security considerations of acquired or leased services"}
@@ -6124,7 +6222,9 @@ requirements:
     locator: "References: [4] [30] [61] [98] [99] [111] [112] [113].IP-2.1.-"
     context: "IP-2 PERFORM IMPLEMENTATION Note: System elements can include:"
     statement: "- Utilization and Support Resources: The security considerations of acquired or leased services account for the specific roles and responsibilities of individuals of the service/lease provider and their ability to account for all of the security requirements and constraints associated with the delivery, utilization, and sustainment of the service or capability being leased."
-    status: "candidate"
+    status: "partial"
+    reason: "Provider roles and responsibilities are recorded for CSSP services (SVCA-001), not for every leased service."
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.parties.yaml", "expect": "CSSP and subscriber responsibilities are each assigned for every service", "asserts": "The roles and responsibilities of the service provider are assigned for each leased service", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded"}]
     work_item: "WI-195"
   - id: "REQ-SP800-160V1R1-0768"
     citation: {"ref": "SP800-160V1R1", "page": 147, "anchor": "Place the system element in a secure state for future use, as"}
@@ -6140,7 +6240,9 @@ requirements:
     locator: "References: [4] [30] [61] [98] [99] [111] [112] [113].IP-2.3"
     context: "IP-2 PERFORM IMPLEMENTATION"
     statement: "IP-2.3 Record objective evidence that system elements meet the system security requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Objective evidence that system elements meet the system security requirements is recorded by assessment results, not by requirements.yaml."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Each system security requirement names the verification method by which objective evidence shows the elements meet it"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0770"
     citation: {"ref": "SP800-160V1R1", "page": 147, "anchor": "Record the security aspects of implementation results and any anomalies encountered."}
@@ -6188,7 +6290,9 @@ requirements:
     locator: "H.8.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant integration constraints that influence requirements, architecture, design, or interfaces and interactions are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant integration constraints that influence requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0776"
     citation: {"ref": "SP800-160V1R1", "page": 147, "anchor": "Approaches and checkpoints for the correct secure activation of the identified interfaces"}
@@ -6268,7 +6372,9 @@ requirements:
     locator: "H.8.3. Security Activities and Tasks.IN-1.3"
     context: "IN-1 PREPARE FOR INTEGRATION"
     statement: "IN-1.3 Identify the security-relevant constraints and objectives from integration to be incorporated into the system requirements, architecture, or design."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints from integration are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0786"
     citation: {"ref": "SP800-160V1R1", "page": 148, "anchor": "Identify the security aspects for enabling systems, services, and materials needed to support integration."}
@@ -6388,7 +6494,9 @@ requirements:
     locator: "H.9.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant verification constraints that influence requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant verification constraints that influence requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0801"
     citation: {"ref": "SP800-160V1R1", "page": 149, "anchor": "Enabling systems or services for the security aspects of verification are available."}
@@ -6404,7 +6512,9 @@ requirements:
     locator: "H.9.2. Security Outcomes.-"
     context: ""
     statement: "- Security aspects of the system, system element, or artifact are verified."
-    status: "candidate"
+    status: "partial"
+    reason: "Security aspects of the system are verified at A-3 against controls; requirements.yaml names how each requirement is verified, not its result."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "The security aspects of each requirement are verified by a named verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0803"
     citation: {"ref": "SP800-160V1R1", "page": 149, "anchor": "Security-relevant data that provides information for corrective actions is reported."}
@@ -6419,7 +6529,9 @@ requirements:
     locator: "H.9.2. Security Outcomes.-"
     context: ""
     statement: "- Objective evidence that the realized system fulfills the security requirements and security aspects of the architecture and design is provided."
-    status: "candidate"
+    status: "partial"
+    reason: "Objective evidence that the realized system fulfills the security requirements comes from A-3 results against controls, not against requirements.yaml."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Each requirement names the verification method that is to provide objective evidence it is fulfilled"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0805"
     citation: {"ref": "SP800-160V1R1", "page": 149, "anchor": "Security aspects of verification results and anomalies are identified."}
@@ -6434,7 +6546,9 @@ requirements:
     locator: "H.9.2. Security Outcomes.-"
     context: ""
     statement: "- Traceability of the security aspects of the verified system elements is established."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement names its verification method; traceability of the verified system elements to their results is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Traceability of verified security aspects starts from each requirement's verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0807"
     citation: {"ref": "SP800-160V1R1", "page": 149, "anchor": "Identify the security aspects within the verification scope and corresponding security verification"}
@@ -6442,7 +6556,9 @@ requirements:
     locator: "H.9.3. Security Activities and Tasks.VE-1.1"
     context: "VE-1 PREPARE FOR VERIFICATION"
     statement: "VE-1.1 Identify the security aspects within the verification scope and corresponding security verification actions."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement names its verification method and action; the verification scope of system elements is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Security verification actions are identified per requirement by its verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0808"
     citation: {"ref": "SP800-160V1R1", "page": 149, "anchor": "Note: Scope includes the system, system elements, information items, or artifacts that"}
@@ -6450,7 +6566,9 @@ requirements:
     locator: "H.9.3. Security Activities and Tasks.VE-1.1"
     context: "VE-1 PREPARE FOR VERIFICATION"
     statement: "Note: Scope includes the system, system elements, information items, or artifacts that will be verified against applicable requirements, security characteristics, or other security properties. Each verification action description includes what will be verified (e.g., actual system, model, mock-up, prototype, procedure, plan, or other information item), the verification method (including any adversity emulation), and the expected result as defined by the success criteria. The security criteria may reflect considerations of strength of function/mechanism, resistance to tamper, misuse or abuse, penetration resistance, level of assurance, absence of flaws, weaknesses, and the absence of unspecified behavior and outcomes."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement names what is verified and how; the scope and each verification action description are prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Security verification of each requirement is named by its verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0809"
     citation: {"ref": "SP800-160V1R1", "page": 150, "anchor": "Identify the constraints that can potentially limit the feasibility of the security-focused"}
@@ -6466,7 +6584,9 @@ requirements:
     locator: "H.9.3. Security Activities and Tasks.VE-1.3"
     context: "VE-1 PREPARE FOR VERIFICATION"
     statement: "VE-1.3 Select appropriate security verification methods and the associated success criteria for each security verification action."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement carries a verification method and a description of its success criteria; that the method is appropriate cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Security verification of each requirement is named by its verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0811"
     citation: {"ref": "SP800-160V1R1", "page": 150, "anchor": "Note: The methods and techniques are selected to provide the evidence required"}
@@ -6490,7 +6610,9 @@ requirements:
     locator: "H.9.3. Security Activities and Tasks.VE-1.5"
     context: "VE-1 PREPARE FOR VERIFICATION"
     statement: "VE-1.5 Identify the security-relevant constraints and objectives that result from the security aspects of the verification strategy to be incorporated into the system requirements, architecture, and design."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints that result from the verification strategy are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0814"
     citation: {"ref": "SP800-160V1R1", "page": 150, "anchor": "Identify the security aspects for enabling systems or services needed to support verification."}
@@ -6560,7 +6682,9 @@ requirements:
     locator: "References: [4] [86] [97] [100] [109].VE-3.3"
     context: "VE-3 MANAGE RESULTS OF VERIFICATION"
     statement: "VE-3.3 Maintain traceability of the security aspects of verification."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement names its verification method; traceability of the verification results is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Traceability of the security aspects of verification starts from each requirement's verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0823"
     citation: {"ref": "SP800-160V1R1", "page": 151, "anchor": "Note: Bidirectional traceability is maintained between the verified security aspects of system"}
@@ -6568,7 +6692,9 @@ requirements:
     locator: "References: [4] [86] [97] [100] [109].VE-3.3"
     context: "VE-3 MANAGE RESULTS OF VERIFICATION"
     statement: "Note: Bidirectional traceability is maintained between the verified security aspects of system elements and the system security requirements, architecture, design, and interface requirements. This traceability includes verification results or evidence, such as security-relevant anomalies, deviations, or requirement satisfaction."
-    status: "candidate"
+    status: "partial"
+    reason: "Each requirement names its verification method; bidirectional traceability to verification results, anomalies and deviations is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Security verification of each requirement is named by its verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0824"
     citation: {"ref": "SP800-160V1R1", "page": 151, "anchor": "Provide the security-relevant artifacts that have been selected for baselines."}
@@ -6592,7 +6718,9 @@ requirements:
     locator: "H.10.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant transition constraints that influence system requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant transition constraints that influence system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0827"
     citation: {"ref": "SP800-160V1R1", "page": 151, "anchor": "Enabling systems or services for the security aspects of transition are available."}
@@ -6679,7 +6807,9 @@ requirements:
     locator: "H.10.3. Security Activities and Tasks.TR-1.3"
     context: "TR-1 PREPARE FOR TRANSITION"
     statement: "TR-1.3 Identify the security-relevant constraints and objectives from the security aspects of transition to be incorporated into the system requirements, architecture, and design."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant constraints from transition are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0838"
     citation: {"ref": "SP800-160V1R1", "page": 152, "anchor": "Identify and arrange the security training of operators, users, and other stakeholders"}
@@ -6875,7 +7005,9 @@ requirements:
     locator: "H.11.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant validation constraints that influence system requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant validation constraints that influence system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0863"
     citation: {"ref": "SP800-160V1R1", "page": 154, "anchor": "Security aspects of the system, system element, or artifact are validated."}
@@ -6912,7 +7044,9 @@ requirements:
     locator: "H.11.2. Security Outcomes.-"
     context: ""
     statement: "- Traceability of the validated security aspects of the system, system elements, and artifacts is established."
-    status: "candidate"
+    status: "partial"
+    reason: "Validation of the security aspects is not recorded per requirement; only the verification method is."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Traceability of validated security aspects of system elements starts from each requirement's verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0868"
     citation: {"ref": "SP800-160V1R1", "page": 154, "anchor": "Identify the security aspects within the validation scope and corresponding security validation"}
@@ -6960,7 +7094,9 @@ requirements:
     locator: "H.11.3. Security Activities and Tasks.VA-1.5"
     context: "VA-1 PREPARE FOR VALIDATION"
     statement: "VA-1.5 Identify the security-relevant system constraints that result from the security aspects of the validation strategy to be incorporated in the stakeholder protection needs and the requirements transformed from those needs."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Security-relevant system constraints from the validation strategy are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0874"
     citation: {"ref": "SP800-160V1R1", "page": 155, "anchor": "Identify the security aspects for enabling systems or services needed to support validation."}
@@ -7045,7 +7181,9 @@ requirements:
     locator: "References: [4] [86] [97] [100] [118].VA-3.4"
     context: "VA-3 MANAGE RESULTS OF VALIDATION"
     statement: "VA-3.4 Maintain traceability of the security aspects of validation."
-    status: "candidate"
+    status: "partial"
+    reason: "Validation traceability is not recorded per requirement; only the verification method is."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Traceability of the security aspects of validation starts from each requirement's verification method"}]
     work_item: "WI-212"
   - id: "REQ-SP800-160V1R1-0885"
     citation: {"ref": "SP800-160V1R1", "page": 156, "anchor": "Note: Bidirectional traceability of the security aspects of validated system elements to"}
@@ -7085,7 +7223,9 @@ requirements:
     locator: "H.12.2. Security Outcomes.-"
     context: ""
     statement: "- Security aspects of operation constraints that influence system requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Constraints of operation that influence system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0890"
     citation: {"ref": "SP800-160V1R1", "page": 156, "anchor": "Enabling systems, services, and material for the security aspects of operation are"}
@@ -7212,7 +7352,9 @@ requirements:
     locator: "H.12.3. Security Activities and Tasks.OP-1.2"
     context: "OP-1 PREPARE FOR OPERATION"
     statement: "OP-1.2 Identify the constraints and objectives that result from the security aspects of operation to be incorporated into the system requirements, architecture, and design."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Constraints that result from operation are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0906"
     citation: {"ref": "SP800-160V1R1", "page": 157, "anchor": "Identify the security aspects for enabling systems and services needed to support"}
@@ -7379,7 +7521,9 @@ requirements:
     locator: "H.13.2. Security Outcomes.-"
     context: ""
     statement: "- Security aspects of maintenance and logistics constraints that influence system requirements, architecture, or design are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Maintenance and logistics constraints that influence system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0927"
     citation: {"ref": "SP800-160V1R1", "page": 159, "anchor": "Enabling systems or services needed for the security aspects of system maintenance"}
@@ -7499,7 +7643,9 @@ requirements:
     locator: "MA-1 PREPARE FOR MAINTENANCE AND LOGISTICS.MA-1.3"
     context: ""
     statement: "MA-1.3 Identify the security-relevant constraints and objectives that result from the security aspects of maintenance and logistics to be incorporated into the system requirements, architecture, and design."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Constraints that result from maintenance and logistics are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0942"
     citation: {"ref": "SP800-160V1R1", "page": 160, "anchor": "Identify trade-offs such that the security aspects of the system and associated"}
@@ -7701,7 +7847,9 @@ requirements:
     locator: "H.14.2. Security Outcomes.-"
     context: ""
     statement: "- Secure disposal constraints that influence system requirements, architecture, design, and implementation are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Secure disposal constraints that influence system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0968"
     citation: {"ref": "SP800-160V1R1", "page": 162, "anchor": "Enabling systems or services for the security aspects of disposal are available."}
@@ -7724,7 +7872,9 @@ requirements:
     locator: "H.14.2. Security Outcomes.-"
     context: ""
     statement: "- The environment is securely returned to its original secure or an agreed-upon secure state."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it while M-7 is outside every fixture's scope."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/environment/properties/restored_to", "claim": "constraint", "asserts": "The environment is securely returned to its original secure or an agreed-upon secure state"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0971"
     citation: {"ref": "SP800-160V1R1", "page": 162, "anchor": "Records of the security aspects of disposal actions and analysis are available."}
@@ -7778,7 +7928,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-1.2"
     context: "DS-1 PREPARE FOR DISPOSAL"
     statement: "DS-1.2 Identify the security-relevant constraints and objectives of disposal on the system requirements, architecture and design characteristics, and implementation techniques."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records each constraint with its origin among the life cycle processes; that every constraint a process raises is recorded cannot fail, and a constraint raised after P-17 reaches the file only when P-15 is revisited (I-2 exit criteria)."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Constraints of disposal on the system requirements are identified with their origin"}]
     work_item: "WI-213"
   - id: "REQ-SP800-160V1R1-0978"
     citation: {"ref": "SP800-160V1R1", "page": 163, "anchor": "Identify the security aspects for enabling systems or services needed to support disposal."}
@@ -7810,7 +7962,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-1.6"
     context: "DS-1 PREPARE FOR DISPOSAL"
     statement: "DS-1.6 Specify security criteria for containment facilities, storage locations, inspection, and storage periods (if the system is to be stored)."
-    status: "candidate"
+    status: "partial"
+    reason: "Storage criteria are optional fields of disposal.yaml; no rule reads them."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/storage", "claim": "presence", "asserts": "Specify security criteria for containment facilities, storage locations, inspection and storage periods"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0982"
     citation: {"ref": "SP800-160V1R1", "page": 163, "anchor": "Define the security aspects of preventive methods to preclude disposed elements and"}
@@ -7818,7 +7972,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-1.7"
     context: "DS-1 PREPARE FOR DISPOSAL"
     statement: "DS-1.7 Define the security aspects of preventive methods to preclude disposed elements and materials that should not be repurposed, reclaimed, or reused from re-entering the supply chain."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/supply_chain/properties/prevention", "claim": "presence", "asserts": "Preventive methods preclude disposed elements from re-entering the supply chain"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0983"
     citation: {"ref": "SP800-160V1R1", "page": 163, "anchor": "Securely deactivate the system or system element to prepare it for secure"}
@@ -7864,7 +8020,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-2.5"
     context: "DS-2 PERFORM DISPOSAL"
     statement: "DS-2.5 Securely handle system elements and their parts that are not intended for reuse in a manner that will help ensure that they do not get back into the supply chain."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/supply_chain/properties/non_reuse_elements", "claim": "presence", "asserts": "System elements not intended for reuse are handled so they do not get back into the supply chain"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0989"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Conduct secure sanitization and destruction of the system elements and life cycle"}
@@ -7879,7 +8037,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-3.1"
     context: "DS-3 FINALIZE THE DISPOSAL"
     statement: "DS-3.1 Confirm that no detrimental security factors exist following disposal."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/residual_check/properties/no_detrimental_factors", "claim": "presence", "asserts": "Confirm that no detrimental security factors exist following disposal"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0991"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Return the environment to its original secure state or to a secure"}
@@ -7887,7 +8047,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-3.2"
     context: "DS-3 FINALIZE THE DISPOSAL"
     statement: "DS-3.2 Return the environment to its original secure state or to a secure state specified by agreement."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/environment/properties/restored_to", "claim": "constraint", "asserts": "Return the environment to its original secure state or to a secure state specified by agreement"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0992"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Securely archive data and information gathered through the lifetime of the system"}
@@ -11045,7 +11207,9 @@ requirements:
     locator: "C.3. Distinguishing Requirements, Policy, and Mechanisms"
     context: ""
     statement: "Each system security requirement, like any system requirement, is expressed in a manner that makes verification possible via inspection, analysis, demonstration, testing, or other defined and achievable means [31]."
-    status: "candidate"
+    status: "covered"
+    reason: "Each system security requirement carries a verification method, one of inspection, analysis, demonstration, test or other."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Each system security requirement is expressed so that verification is possible via inspection, analysis, demonstration, testing or other means"}]
     work_item: "WI-212"
     promoted: {"reason": "Footnote 62: each system security requirement is expressed so it can be verified, a duty on ART-REQ content rejected for no marker."}
   - id: "REQ-SP800-160V1R1-1390"
@@ -11063,7 +11227,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.7"
     context: ""
     statement: "Note: Protection needs include their success criteria, such as measures of effectiveness (MOEs)."
-    status: "candidate"
+    status: "partial"
+    reason: "Each protection need records its success criteria (required); their content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/success_criteria", "claim": "presence", "asserts": "Protection needs include their success criteria, such as measures of effectiveness"}]
     work_item: "WI-210"
     promoted: {"reason": "Note to SN-3.7, rejected for no marker: a protection need carries its success criteria, content a record of protection needs at P-15 must hold."}
   - id: "REQ-SP800-160V1R1-1392"
@@ -11072,7 +11238,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [98] [99] [100] [105] [106] [107] [108] [109].SN-5.1"
     context: ""
     statement: "Note: The stakeholder requirements are analyzed to determine whether the protection needs are accurately and comprehensively expressed in both individual requirements and the set of requirements. Potential analysis characteristics include that the requirements are (1) necessary, complete, succinct, and implementation-free and (2) comprehensively address the protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.analysis records the analysis; the characteristics the note lists are an open list for the analyst, which no rule can judge."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "The stakeholder requirements are analyzed to determine whether the protection needs are expressed"}]
     work_item: "WI-211"
     promoted: {"reason": "Note to SN-5.1, rejected for no marker: requirements are analyzed against protection needs, and it names the characteristics of that analysis, a duty that shapes ART-REQ."}
   - id: "REQ-SP800-160V1R1-1393"
@@ -11099,7 +11267,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [86] [97] [98] [99] [100] [105] [106] [107] [108] [109] [111] [112].SR-3.1"
     context: ""
     statement: "Note: Requirements are analyzed to ensure that they fully and properly capture security protection and security-constraint considerations. Rationale is captured to support analysis conclusions and provide a basis to conclude that the analysis has the proper perspective and is fully aware of assumptions made. See Appendix C."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement.analysis records the analysis and its rationale; its content cannot fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "Requirements are analyzed to capture security protection and constraint considerations, and the analysis recorded"}]
     work_item: "WI-211"
     promoted: {"reason": "Note to SR-3.1, rejected for no marker: requirements are analyzed so they capture protection and constraint considerations, with rationale captured, a duty on ART-REQ."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

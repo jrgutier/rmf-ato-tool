@@ -1,0 +1,18 @@
+rule: PKG-003
+bases:
+- minimal
+description: no user categories
+mutations:
+- op: delete_field
+  file: artifacts/data/users.yaml
+  path: users.0.category
+- op: delete_field
+  file: artifacts/data/users.yaml
+  path: users.1.category
+expect:
+  errors:
+  - PKG-003
+  also:
+  - SYSD-004
+  messages:
+  - does not carry the CNSSI 1254 data element System User Categories

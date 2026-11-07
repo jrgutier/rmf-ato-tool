@@ -1,0 +1,30 @@
+rule: CATG-002
+bases:
+- minimal
+description: software artifacts with a military application at low integrity
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.i
+  value: low
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.integrity
+  value:
+    base: low
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.1.integrity
+  value:
+    base: low
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.handling.software_artifacts
+  value: true
+expect:
+  errors:
+  - CATG-002
+  also:
+  - GEN-STALE-001
+  messages:
+  - software artifacts with a military or space application (INF-01) are protected at a minimum of moderate integrity, not low

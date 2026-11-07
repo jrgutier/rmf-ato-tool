@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:system-description",
+  "title": "runs/<run-id>/artifacts/data/system-description.yaml",
+  "description": "System characteristics C-1 records beside facts.yaml: ownership and operation, function, physical environment, NOSC and CSSP alignment, and interconnections with their agreements (M-1 updates them). SYSD-002 and SYSD-003 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ownership",
+    "function",
+    "physical_environment",
+    "interconnections",
+    "sources"
+  ],
+  "properties": {
+    "ownership": {
+      "title": "Ownership and operation of the system",
+      "enum": [
+        "government-owned-government-operated",
+        "government-owned-contractor-operated",
+        "contractor-owned-contractor-operated",
+        "non-federal"
+      ],
+      "x-enforces": [
+        "REQ-SP800-18R2-0123"
+      ]
+    },
+    "function": {
+      "title": "Narrative description of the system, its function and uses",
+      "type": "string",
+      "minLength": 1,
+      "x-enforces": [
+        "REQ-SP800-18R2-0119",
+        "REQ-SP800-18R2-0424",
+        "REQ-SP800-18R1-0119"
+      ]
+    },
+    "physical_environment": {
+      "title": "Physical environment: building composition and physical security",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "building",
+        "walls_and_ceilings",
+        "physical_security",
+        "validation"
+      ],
+      "properties": {
+        "building": {
+          "title": "The building that houses the system",
+          "type": "string",
+          "minLength": 1
+        },
+        "walls_and_ceilings": {
+          "title": "Exterior wall, interior wall and ceiling compositions",
+          "type": "string",
+          "minLength": 1
+        },
+        "physical_security": {
+          "title": "Physical security provided for the building, such as guards, cameras and access pads",
+          "type": "string",
+          "minLength": 1
+        },
+        "validation": {
+          "title": "TEMPEST accreditation or SCIF assessment used as validation of the physical environment protections, or none",
+          "enum": [
+            "none",
+            "tempest-accreditation",
+            "scif-assessment"
+          ]
+        }
+      }
+    },
+    "service_alignment": {
+      "title": "Alignment of the system to a NOSC and its supporting cybersecurity service provider",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nosc",
+        "designation",
+        "cssp_agreement",
+        "authorized_by",
+        "registered_in",
+        "mission_criticality",
+        "ip_ranges",
+        "locations"
+      ],
+      "properties": {
+        "nosc": {
+          "title": "The joint or DoD Component network operations and security center the system is aligned to",
+          "type": "string",
+          "minLength": 1
+        },
+        "designation": {
+          "title": "GENSER or special enclave (SE) designation of the system, or both",
+          "enum": [
+            "genser",
+            "se",
+            "both"
+          ],
+          "x-enforces": [
+            "REQ-DODI8530.01-0153",
+            "REQ-DODI8530.01-0310"
+          ]
+        },
+        "cssp_agreement": {
+          "title": "The service-agreements.yaml agreement with the CSSP",
+          "type": "string",
+          "pattern": "^SVA-\\d{3}$"
+        },
+        "authorized_by": {
+          "title": "Who authorized the CSSP to offer the services of that designation",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "CDRUSSTRATCOM",
+              "USCYBERCOM",
+              "DIA"
+            ]
+          }
+        },
+        "registered_in": {
+          "title": "The DoD Component register that records the system's alignment",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-DODI8530.01-0276"
+          ]
+        },
+        "mission_criticality": {
+          "title": "Mission criticality of the system as the CSSP record holds it",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-18R2-0122"
+          ]
+        },
+        "ip_ranges": {
+          "title": "Internet protocol address ranges of the system",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "locations": {
+          "title": "Physical location of each owned or operated part of the system",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "changes": {
+          "title": "Changes of cybersecurity service provider and whom each was reported to (M-1)",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "from",
+              "to",
+              "reported_to"
+            ],
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "from": {
+                "type": "string",
+                "minLength": 1
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reported_to": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "CDRUSSTRATCOM",
+                    "USCYBERCOM",
+                    "DISA",
+                    "DIA"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-DODI8530.01-0275"
+      ]
+    },
+    "interconnections": {
+      "title": "One record per interconnection with another system: the interface, the agreement, and what a mission partner agreement states",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "component",
+          "system",
+          "organization",
+          "partner",
+          "interface",
+          "agreement",
+          "authorization",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ICX-\\d{2,3}$"
+          },
+          "component": {
+            "title": "The boundary component (type interconnection) the record describes",
+            "type": "string",
+            "pattern": "^CMP-[A-Z0-9-]+$"
+          },
+          "system": {
+            "title": "Name of the interconnected system or provider of the communication service",
+            "type": "string",
+            "minLength": 1
+          },
+          "organization": {
+            "title": "Organization that owns the interconnected system",
+            "type": "string",
+            "minLength": 1
+          },
+          "partner": {
+            "title": "Kind of party on the other side",
+            "enum": [
+              "dod-component",
+              "federal-mission-partner",
+              "defense-contractor",
+              "foreign-mission-partner",
+              "other-mission-partner"
+            ]
+          },
+          "interface": {
+            "title": "The communications interface",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "ports_protocols_services",
+              "provider",
+              "boundaries_crossed"
+            ],
+            "properties": {
+              "kind": {
+                "title": "Type of communications or interconnection used",
+                "type": "string",
+                "minLength": 1
+              },
+              "ports_protocols_services": {
+                "title": "Ports, protocols and services",
+                "type": "string",
+                "minLength": 1
+              },
+              "provider": {
+                "title": "Provider of the communications services",
+                "type": "string",
+                "minLength": 1
+              },
+              "boundaries_crossed": {
+                "title": "Boundaries the interconnection crosses",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "agreement": {
+            "title": "The agreement that governs the interconnection",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "instrument",
+              "reference",
+              "date",
+              "signed_by"
+            ],
+            "properties": {
+              "instrument": {
+                "title": "Kind of agreement",
+                "enum": [
+                  "isa",
+                  "mou",
+                  "moa",
+                  "contract",
+                  "support-agreement",
+                  "international-agreement",
+                  "sla"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "signed_by": {
+                "title": "Who signed the agreement",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "authorization": {
+            "title": "Security authorization of the other system",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "authorizing_official"
+            ],
+            "properties": {
+              "status": {
+                "title": "Approval, registration or authorization status of the interconnected system",
+                "type": "string",
+                "minLength": 1
+              },
+              "authorizing_official": {
+                "title": "Name of its authorizing official",
+                "type": "string",
+                "minLength": 1
+              },
+              "categorization": {
+                "title": "Its security categorization",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "terms": {
+            "title": "What a mission partner agreement states",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "dodin-operations-responsibilities",
+                "cybersecurity-requirements",
+                "data-protection-requirements",
+                "incident-reporting-contacts"
+              ]
+            }
+          },
+          "based_on": {
+            "title": "What the mission partner agreement is based on",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "component-risk-assessment",
+                "risk-tolerance-guidance",
+                "interconnection-policy"
+              ]
+            }
+          },
+          "cybersecurity_services": {
+            "title": "How a federal mission partner directly connected to the DODIN obtains cybersecurity services",
+            "enum": [
+              "dod-cssp-subscription",
+              "equivalent-capability-assessed"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

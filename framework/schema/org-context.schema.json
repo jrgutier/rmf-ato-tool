@@ -946,7 +946,7 @@
       ]
     },
     "governance": {
-      "title": "Risk governance: model, reserved decisions, autonomy, the risk executive (function), forums, oversight and communication",
+      "title": "Risk governance: model, reserved decisions, the risk executive (function) with its forums, oversight, communication and the autonomy of subordinate organizations, and how differing tolerances are resolved",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -1003,20 +1003,13 @@
             "REQ-SP800-39-0137"
           ]
         },
-        "autonomy": {
-          "title": "Degree of autonomy of subordinate organizations in framing, assessing, responding to and monitoring risk",
-          "type": "string",
-          "minLength": 1,
-          "x-enforces": [
-            "REQ-SP800-39-0057",
-            "REQ-SP800-39-0205"
-          ]
-        },
         "risk_executive": {
+          "title": "The risk executive (function): who leads and structures it and how it works (OCTX-004, RISKX-001)",
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "form": {
+              "title": "Whether the risk executive function is an individual or a group",
               "enum": [
                 "individual",
                 "group"
@@ -1081,6 +1074,7 @@
               ]
             },
             "members": {
+              "title": "Who fills the function",
               "type": "array",
               "items": {
                 "anyOf": [
@@ -1100,53 +1094,156 @@
                     ]
                   }
                 ]
-              }
+              },
+              "minItems": 1
+            },
+            "forums": {
+              "title": "Organization-wide forums to consider all types and sources of risk, including aggregated risk",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "considers"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "considers": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "all-types-and-sources",
+                        "aggregated-risk"
+                      ]
+                    }
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-39-0023",
+                "REQ-SP800-39-0052",
+                "REQ-SP800-39-0058",
+                "REQ-SP800-39-0200",
+                "REQ-SP800-39-0206"
+              ]
+            },
+            "oversight": {
+              "title": "How the function oversees the risk management activities of the organization so risk-based decisions are consistent and effective",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0493",
+                "REQ-SP800-37R2-0504",
+                "REQ-SP800-39-0054",
+                "REQ-SP800-39-0064",
+                "REQ-SP800-39-0202"
+              ]
+            },
+            "strategic_view": {
+              "title": "How the function develops a broad-based understanding of risk across the organization's integrated operations",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0505"
+              ]
+            },
+            "communication": {
+              "title": "Vehicles for communicating and sharing risk information among key stakeholders, internally and externally",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "vehicle",
+                  "audience"
+                ],
+                "properties": {
+                  "vehicle": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "audience": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "authorizing-officials",
+                        "senior-leaders",
+                        "internal-stakeholders",
+                        "external-stakeholders"
+                      ]
+                    }
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-37R2-0472",
+                "REQ-SP800-39-0056",
+                "REQ-SP800-39-0204"
+              ]
+            },
+            "subordinate_autonomy": {
+              "title": "The degree of autonomy subordinate organizations have for framing, assessing, responding to and monitoring risk",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "activity",
+                  "autonomy"
+                ],
+                "properties": {
+                  "activity": {
+                    "enum": [
+                      "frame",
+                      "assess",
+                      "respond",
+                      "monitor"
+                    ]
+                  },
+                  "autonomy": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-39-0057",
+                "REQ-SP800-39-0205"
+              ]
+            },
+            "shared_authorizations": {
+              "title": "How the function promotes cooperation among authorizing officials on authorizations requiring shared responsibility, such as joint authorizations",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0508"
+              ]
             }
           },
           "required": [
             "form",
             "led_by",
-            "structured_by"
+            "structured_by",
+            "members",
+            "forums",
+            "oversight",
+            "strategic_view",
+            "communication",
+            "subordinate_autonomy",
+            "shared_authorizations"
           ],
           "x-enforces": [
             "REQ-CNSSP22-0016",
             "REQ-SP800-39-0307"
-          ]
-        },
-        "forums": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "x-enforces": [
-            "REQ-SP800-39-0023",
-            "REQ-SP800-39-0052",
-            "REQ-SP800-39-0058",
-            "REQ-SP800-39-0200",
-            "REQ-SP800-39-0206"
-          ]
-        },
-        "oversight": {
-          "type": "string",
-          "minLength": 1,
-          "x-enforces": [
-            "REQ-SP800-37R2-0493",
-            "REQ-SP800-39-0054",
-            "REQ-SP800-39-0064",
-            "REQ-SP800-39-0202"
-          ]
-        },
-        "communication": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "x-enforces": [
-            "REQ-SP800-37R2-0472",
-            "REQ-SP800-39-0056",
-            "REQ-SP800-39-0204"
           ]
         },
         "tolerance_resolution": {
@@ -1168,11 +1265,7 @@
       "required": [
         "model",
         "reserved_decisions",
-        "autonomy",
         "risk_executive",
-        "forums",
-        "oversight",
-        "communication",
         "tolerance_resolution",
         "sources"
       ]

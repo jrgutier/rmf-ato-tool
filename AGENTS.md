@@ -86,7 +86,7 @@ error. Commands that report support `--format json`.
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 | `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
 | `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset |
-| `rmf run migrate [RUN]` | move a run to the current framework contract: `decision.yaml` becomes the `authorizations.yaml` ledger plus ART-AUTHREC, `framework_version` is bumped; safe to repeat; what the old contract never recorded (the R-2 determination, the risk executive, the deployment scope, ART-DIAS, the R-5 report, the ledger's `system_status`, the conmon.yaml sections ISCM-001..006 read) is reported by `rmf check`, not invented |
+| `rmf run migrate [RUN]` | move a run to the current framework contract: `decision.yaml` becomes the `authorizations.yaml` ledger plus ART-AUTHREC, `framework_version` is bumped; safe to repeat; what the old contract never recorded (the R-2 determination, the risk executive, the deployment scope, ART-DIAS, the R-5 report, the ledger's `system_status`, the conmon.yaml sections ISCM-001..006 read, the P-14 `ra.yaml`, the RAR residual levels and control counts, `requirements.yaml` for ART-REQ, the `connections` and `dodin` of `boundary.yaml`) is reported by `rmf check`, not invented |
 | `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action; writes `reports/status.md` and `reports/metrics.json` |
 | `rmf baseline resolve [RUN] [--method M]` | `baseline.json` from facts.yaml (approved categorization: CNSSI 1253 per-objective C/I/A selection plus the privacy baseline, then overlays), `tailoring.yaml` and `control_subset` |
 | `rmf catalog show [--family F] [--control C] [--run RUN [--missing]] [--fields F,..] [--chunk i/n]` | compact SP 800-53r5 control text, per family or the run's baseline |
@@ -175,7 +175,9 @@ interview, write whole files, then `rmf build` and `rmf check --task T` until 0 
 and append a journal CHECKPOINT. S-4 writes each plan as Markdown beside a judged record
 (`artifacts/data/cm-plan.yaml`, `contingency.yaml`, `incident-response.yaml`,
 `service-agreements.yaml`, `ssp-records.yaml`). Session units are one RMF step (at most 3 control
-families). State is always derived from disk, so a fresh session can resume.
+families). State is always derived from disk, so a fresh session can resume. C-1 writes
+`artifacts/data/system-description.yaml`, P-2 `org-context.yaml`, A-3 `sar-summary.yaml`;
+a run entering past P-1 records `entry` in run.yaml first (ENTRY-001).
 
 ## Learned rules
 

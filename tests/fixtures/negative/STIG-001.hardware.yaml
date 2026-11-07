@@ -1,0 +1,15 @@
+rule: STIG-001
+bases:
+- minimal
+description: hardware with no benchmark and no not-applicable rationale
+mutations:
+- op: delete_list_item
+  file: artifacts/data/stig-summary.yaml
+  path: not_applicable
+  where:
+    inventory_item: INV-001
+expect:
+  errors:
+  - STIG-001
+  messages:
+  - INV-001 (hardware) has no STIG/SRG benchmark and no not_applicable rationale

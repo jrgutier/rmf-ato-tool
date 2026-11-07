@@ -62,6 +62,17 @@ directory, for example `runs/20261105-synthetic-01`.
 9. **Loop.** Go back to step 1. End the session after the CHECKPOINT that completes the
    session unit (step 2), or when `rmf status` reports the run done.
 
+## Entering past P-1
+
+A run starts at P-1 unless an assessment of risk and of the Prepare tasks puts it at a later
+step (SP 800-37r2 2.4; DoDI 5000.90 lets the PM tailor the RMF with the AO's and DA's
+concurrence). Record that determination in `run.yaml` as `entry` before the first task:
+`step` and `task` entered, the `current_state` of the system, the tasks whose activities are
+already `completed` (each before the entry task), the `gaps` found, the `decision` and its
+rationale, the personas `notified`, and `approved_by` (PER-AO, or PER-AODR on the AO's
+behalf). ENTRY-001 checks it. Then seed the artifacts of the completed tasks (`seeded`) and
+defer the rest (`deferred`), so `rmf status` names the entry task next.
+
 ## Stop conditions
 
 Stop and journal a NOTE (do not guess) when:

@@ -29,3 +29,8 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 ## External components
 
 <<FILL: each external system or service, how it is authorized, and (after C-1) its leveraged authorization, with tokens>>
+
+<!-- P-16 appends "## Connections and approvals": each external connection of
+     artifacts/data/boundary.yaml by CONN ID, the approvals it needs and their status, any
+     cross-domain solution and mission partner terms, and whether the system is on the DODIN or
+     outside it under a waiver; it adds P-16 to touched_by. -->
