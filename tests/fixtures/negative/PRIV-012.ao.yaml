@@ -1,0 +1,14 @@
+rule: PRIV-012
+bases:
+- pii
+description: S-6 wrote ART-SSP and the plans are approved by the ISSM, not the AO or AODR
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: approvals.0.system_role
+  value: PER-ISSM
+expect:
+  errors:
+  - PRIV-012
+  messages:
+  - S-6 wrote ART-SSP, and no approval of the security and privacy plans by the authorizing official or designated representative is on record

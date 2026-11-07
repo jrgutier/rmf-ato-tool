@@ -104,7 +104,8 @@ tasks:
       threat, vulnerability, technology and mission changes against the organizational risk
       posture.
     raci: {R: [PER-RE, PER-CISO, PER-PRIV], A: PER-RE, C: [PER-CIO, PER-SPONSOR, PER-AO, PER-PAO, PER-JCACPM], I: []}
-    inputs: [ART-ORG-CONTEXT, EXT-THREAT]
+    inputs: [ART-ORG-CONTEXT, EXT-THREAT, EXT-ORG-POLICY]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0}
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
     depends_on: [P-2]
@@ -142,7 +143,8 @@ tasks:
       (optional); in DoD they build on the CNSSI 1253 baselines, overlays and DoD assignment
       values.
     raci: {R: [PER-SPONSOR, PER-RE], A: PER-RE, C: [PER-CIO, PER-AO, PER-CISO, PER-PRIV, PER-PAO, PER-JCACPM], I: []}
-    inputs: [ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS]
+    inputs: [ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS, EXT-ORG-POLICY, EXT-PRODUCT]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
     depends_on: [P-3]
@@ -210,7 +212,8 @@ tasks:
       Prioritize organizational systems that share an impact level into low-, moderate- and
       high-impact sub-categories (optional), to guide where resources go first.
     raci: {R: [PER-RE], A: PER-RE, C: [PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO, PER-PAO, PER-JCACPM], I: []}
-    inputs: [ART-ORG-CONTEXT]
+    inputs: [ART-ORG-CONTEXT, EXT-ORG-POLICY]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0}
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
     depends_on: [P-3]
@@ -246,7 +249,8 @@ tasks:
       Develop and implement the organization-wide strategy for continuously monitoring control
       effectiveness, which every system strategy (S-5) must follow.
     raci: {R: [PER-RE], A: PER-RE, C: [PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO, PER-PAO, PER-JCACPM], I: [PER-CSSP]}
-    inputs: [ART-ORG-CONTEXT]
+    inputs: [ART-ORG-CONTEXT, EXT-ORG-POLICY]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0}
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
     depends_on: [P-2, P-3]
@@ -281,8 +285,10 @@ tasks:
       Identify the missions, business functions and mission/business processes the system will
       support, so that categorization and requirements trace to mission impact.
     raci: {R: [PER-SPONSOR], A: PER-PM, C: [PER-AO, PER-IO, PER-UR, PER-CIO, PER-CISO, PER-PRIV], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-ORG-CONTEXT, EXT-CAPDOC, EXT-PRODUCT]
-    outputs: []
+    inputs: [ART-ORG-CONTEXT, EXT-CAPDOC, EXT-PRODUCT, EXT-ORG-POLICY]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0}
+    outputs: [ART-BIA]
+    outputs_since: {ART-BIA: 0.2.0}
     writes_facts: []
     depends_on: [P-2]
     feeds_back_to: []
@@ -300,6 +306,9 @@ tasks:
         to support are identified (DoDI 8510.01 Table 1 outcome).
       - Interviews record the supported missions and mission/business processes, citable by P-9,
         P-10 and C-1.
+      - artifacts/data/bia.yaml records whether mission critical functions are present and which,
+        and each supported process with the impact of its disruption, the users' recovery time
+        requirement and its interdependencies (BIA-001).
     citations:
       - {ref: SP800-37R2, section: "TASK P-8", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-8 Mission or Business Focus"}
@@ -318,7 +327,8 @@ tasks:
       Identify the stakeholders with an interest in the system across its life cycle, including
       every information owner and the user representative.
     raci: {R: [PER-PM, PER-SPONSOR], A: PER-PM, C: [PER-CIO, PER-AO, PER-IO, PER-CISO, PER-PRIV, PER-MDA], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
-    inputs: [EXT-PRODUCT, EXT-CAPDOC, EXT-ORG-POLICY]
+    inputs: [EXT-PRODUCT, EXT-CAPDOC, EXT-ORG-POLICY, ART-ORG-CONTEXT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0}
     outputs: [ART-STAKE]
     writes_facts: []
     depends_on: [P-8]
@@ -353,7 +363,8 @@ tasks:
       Identify and prioritize the assets that require protection, as the system hardware and
       software inventory, including the components that perform mission-critical functions.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-SPONSOR, PER-IO, PER-CISO, PER-PRIV, PER-DEV], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-STAKE, EXT-PRODUCT]
+    inputs: [ART-STAKE, ART-BIA, EXT-PRODUCT, ART-ORG-CONTEXT]
+    inputs_since: {ART-BIA: 0.2.0, ART-ORG-CONTEXT: 0.2.0}
     outputs: [ART-INV]
     writes_facts: []
     depends_on: [P-9]
@@ -384,7 +395,8 @@ tasks:
       Determine the authorization boundary of the system, its network architecture and data
       flows; the AO is accountable for the boundary.
     raci: {R: [PER-PM, PER-ISSM], A: PER-AO, C: [PER-CIO, PER-SPONSOR, PER-CISO, PER-PRIV, PER-LSE, PER-ISSE], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-INV, ART-STAKE, EXT-PRODUCT]
+    inputs: [ART-INV, ART-STAKE, EXT-PRODUCT, EXT-ORG-POLICY]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0}
     outputs: [ART-BND]
     writes_facts: [boundary_id]
     depends_on: [P-10]
@@ -416,7 +428,8 @@ tasks:
       Identify the types of information the system processes, stores and transmits, including
       whether it processes PII.
     raci: {R: [PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-ISSM, PER-ISSO, PER-SPONSOR], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-INV, EXT-PRODUCT]
+    inputs: [ART-INV, EXT-PRODUCT, EXT-CAPDOC]
+    inputs_since: {EXT-CAPDOC: 0.2.0}
     outputs: [ART-INFOTYPES]
     writes_facts: []
     depends_on: [P-10]
@@ -456,7 +469,8 @@ tasks:
       Identify and understand every stage of the information life cycle (creation or collection,
       processing, dissemination, use, storage and disposition) for each information type.
     raci: {R: [PER-PRIV, PER-PM, PER-IO], A: PER-PM, C: [PER-CIO, PER-SPONSOR, PER-ISSE, PER-LSE], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-INFOTYPES, ART-BND, EXT-PRODUCT]
+    inputs: [ART-INFOTYPES, ART-BND, EXT-PRODUCT, ART-INV, ART-ORG-CONTEXT, ART-STAKE]
+    inputs_since: {ART-INV: 0.2.0, ART-ORG-CONTEXT: 0.2.0, ART-STAKE: 0.2.0}
     outputs: [ART-INFOTYPES]
     writes_facts: []
     depends_on: [P-11, P-12]
@@ -489,7 +503,8 @@ tasks:
       the supplier risk assessment once the impact level is defined, and C-3 feeds back to P-14
       once the categorization is approved.
     raci: {R: [PER-PM, PER-ISSM, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
+    inputs: [ART-ORG-CONTEXT, ART-BIA, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP, ART-STAKE, EXT-PRODUCT]
+    inputs_since: {ART-BIA: 0.2.0, ART-STAKE: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: [ART-RA, ART-PIA]
     writes_facts: []
     depends_on: [P-3, P-13]
@@ -556,7 +571,8 @@ tasks:
       environment, including cyber survivability, so they enter the requirements baseline before
       the SRR.
     raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR, PER-ISSO], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
+    inputs: [ART-RA, ART-BIA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP, ART-INV, ART-ORG-CONTEXT, EXT-PRODUCT, EXT-THREAT]
+    inputs_since: {ART-BIA: 0.2.0, ART-INV: 0.2.0, ART-ORG-CONTEXT: 0.2.0, EXT-PRODUCT: 0.2.0, EXT-THREAT: 0.2.0}
     outputs: [ART-REQ]
     writes_facts: []
     depends_on: [P-14]
@@ -619,7 +635,8 @@ tasks:
       Determine the placement of the system within the enterprise, security and privacy
       architecture.
     raci: {R: [PER-LSE, PER-ISSE, PER-SPONSOR, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-CISO, PER-IO], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-REQ, ART-BND, ART-INV, EXT-NSA-ASSESSMENT]
+    inputs: [ART-REQ, ART-BND, ART-INV, EXT-NSA-ASSESSMENT, ART-ORG-CONTEXT, ART-RA, EXT-PRODUCT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0, ART-RA: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: [ART-BND]
     writes_facts: []
     depends_on: [P-15]
@@ -664,7 +681,8 @@ tasks:
       environment of operation, including common control providers, so the development RFP
       carries them.
     raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-REQ, ART-ORG-CONTEXT, ART-INV]
+    inputs: [ART-REQ, ART-ORG-CONTEXT, ART-INV, ART-RA, EXT-ORG-POLICY]
+    inputs_since: {ART-RA: 0.2.0, EXT-ORG-POLICY: 0.2.0}
     outputs: [ART-REQ]
     writes_facts: []
     depends_on: [P-5, P-16]
@@ -714,7 +732,8 @@ tasks:
       Register the system in the DoD Component registry for management, accountability and
       oversight, so the Component CIO and CISO can track its authorization status.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-SPONSOR], I: [PER-CISO, PER-CIO]}
-    inputs: [ART-BND, EXT-REGISTRY]
+    inputs: [ART-BND, EXT-REGISTRY, EXT-ORG-POLICY, EXT-PRODUCT]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: [ART-REG]
     writes_facts: []
     depends_on: [P-11]
@@ -728,6 +747,9 @@ tasks:
       - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
       - An Enterprise system registers the ports, protocols and services of every boundary
         connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
+      - registration.yaml registry records where the system is reported (reported_in, eMASS or
+        ERS) and the Component's tool; an alternate tool records how its system data is imported
+        into ERS (ers_import, UPD-001).
       - registration.yaml lists every deployment site of reciprocity.yaml, an update after each
         received system accepted, and an exemption justification when reciprocity listing is
         deselected (RCP-008).
@@ -738,4 +760,5 @@ tasks:
       - {ref: DODI8510.01, page: 29, anchor: "Register the system in the DoD Component registry"}
       - {ref: SP800-37R2, section: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"}
       - {ref: DODI8510.01, page: 26, anchor: "Maintains visibility of assessment and authorization status"}
+    enforces: [REQ-DODI5000.82-0075, REQ-DOWI8430.01-0232, REQ-DODCIO-CATO-EVAL-0073]
     playbook: playbooks/P/P-18.md

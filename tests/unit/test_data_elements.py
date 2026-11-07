@@ -26,7 +26,8 @@ FILE_SCHEMAS = {"artifacts/data/rar.yaml": "rar", "artifacts/data/ra.yaml": "ra"
                 "artifacts/data/sar-report.yaml": "sar-report",
                 "artifacts/data/system-description.yaml": "system-description",
                 "artifacts/data/users.yaml": "users", "artifacts/data/inventory.yaml": "inventory",
-                "artifacts/data/sar-summary.yaml": "sar-summary"}
+                "artifacts/data/sar-summary.yaml": "sar-summary",
+                "artifacts/data/bia.yaml": "bia"}
 
 
 def _load(name):

@@ -84,7 +84,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [R-2](#task-r-2) Risk Analysis and Determination | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-RAR](../../MANUAL.md#art-rar) | [ART-RA](../../MANUAL.md#art-ra) | [MS C](#ms-c) |
 | [R-3](#task-r-3) Risk Response | Authorize | [AO](../../MANUAL.md#per-ao) | — | [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | [MS C](#ms-c) |
 | [R-4](#task-r-4) Authorization Decision | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AODM](../../MANUAL.md#art-aodm) | [ART-AUTHREC](../../MANUAL.md#art-authrec) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
-| [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | — | [MS C](#ms-c) |
+| [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | [ART-REG](../../MANUAL.md#art-reg) | [MS C](#ms-c) |
 
 Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#task-s-4), [S-5](PH-TMRR.md#task-s-5).
 
@@ -108,8 +108,14 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -229,6 +235,8 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -286,6 +294,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [EXT-TEST-STRATEGY](../../MANUAL.md#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -301,6 +311,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- For a system processing PII, sap.yaml privacy scopes every privacy control of the baseline, assessed by the senior agency official for privacy or an independent assessor on the team (PASM-001).
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
 - Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
@@ -429,6 +440,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- For a system processing PII, sar-report.yaml privacy documents the privacy control assessment by the plan's privacy assessors, provided by the senior agency official for privacy to the AO or AODR (PASM-002).
 - Assessment reports with findings and recommendations are completed and include results from developer, engineering, developmental and operational test events (DoDI 8510.01 Table 5 outcome).
 - ART-SAR summarizes the determinations and states each finding with its severity and recommendation.
 - sar-report.yaml states the methodology, the system owner has the results, and the CISO has assessed the quality, capacity, visibility and effectiveness of the assessment (ASMT-008).
@@ -473,6 +485,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -531,6 +544,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
+| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
@@ -854,6 +868,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | Authorization report | produces | supporting |
+| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 **Entry criteria**
 
@@ -864,6 +879,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Authorization decisions, significant vulnerabilities and risks are reported to organizational officials (DoDI 8510.01 Table 6 outcome).
 - ART-AUTHRPT records the decision, significant risks and the registry annotation.
 - authorization-report.yaml records that the system owner or common control provider received and retains the decision and package, how the package is marked and how long it is retained, who can read it, and that the AO verifies the terms (AUTHRPT-001).
+- The system registry is annotated with the decision; ART-REG lists R-5 in touched_by and registration.yaml updates holds the authorization update by R-5 (UPD-001).
 
 **Alignment**
 

@@ -1,0 +1,12 @@
+rule: CCPA-001
+bases: [minimal]
+description: a common control authorization that does not say whether the controls are system-based
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-CCA}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.subject, value: common-controls}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.conveyed_to, value: [PER-CCP]}
+expect:
+  errors: [CCPA-001]
+  also: [AUTHRPT-001, SSPR-001]
+  messages:
+    - states in common_controls whether the controls are system-based

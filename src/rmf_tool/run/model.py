@@ -111,14 +111,17 @@ class Run:
 
     @cached_property
     def tasks(self) -> dict[str, Any]:
-        out = {tid: e.data for tid, e in self.framework.index("tasks").items()}
-        if not self._absent:
-            return out
-        def present(ids: list[str] | None) -> list[str]:
-            return [i for i in ids or [] if i not in self._absent]
+        """The contract's view: an artifact newer than the run is absent, and an input or output
+        a task's ``inputs_since`` or ``outputs_since`` dates after the run's contract is not held
+        against it, so a task done under an older contract stays done (L-0065)."""
+        def present(t: dict[str, Any], key: str) -> list[str]:
+            since = t.get(f"{key}_since") or {}
+            return [i for i in t.get(key) or []
+                    if i not in self._absent and self.holds(since.get(i))]
 
-        return {tid: {**t, "inputs": present(t.get("inputs")),
-                      "outputs": present(t.get("outputs"))} for tid, t in out.items()}
+        return {tid: {**e.data, "inputs": present(e.data, "inputs"),
+                      "outputs": present(e.data, "outputs")}
+                for tid, e in self.framework.index("tasks").items()}
 
     @cached_property
     def artifacts(self) -> dict[str, Any]:

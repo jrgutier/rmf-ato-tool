@@ -17,7 +17,7 @@ handling: CUI  # at a minimum CUI, or the classification level of the system (Do
 
 ## Assessment summary
 
-<<FILL: what was assessed, how, and the result mix; results live in artifacts/sar/results/FAM.yaml; with tokens>>
+<<FILL: what was assessed, how, and the result mix; results live in artifacts/sar/results/FAM.yaml; for a system processing PII, the privacy assessment results and how the senior agency official for privacy provides them to the AO (sar-report.yaml privacy); with tokens>>
 
 ## Test results reused
 

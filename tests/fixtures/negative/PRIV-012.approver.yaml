@@ -1,0 +1,14 @@
+rule: PRIV-012
+bases:
+- pii
+description: the privacy plan approved by the ISSM, not the SAOP
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: privacy_plan.approvals.0.by
+  value: PER-ISSM
+expect:
+  errors:
+  - PRIV-012
+  messages:
+  - the privacy plan is reviewed and approved by PER-ISSM, not the senior agency official for privacy (PER-PRIV)

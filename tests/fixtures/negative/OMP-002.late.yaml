@@ -1,0 +1,24 @@
+rule: OMP-002
+bases: [minimal]
+description: an input to the reauthorization dated after it
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.basis
+    value: reauthorization
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.supersedes
+    value: AUTH-001
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.initiation_inputs
+    value:
+      - {by: PER-CISO, date: '2026-11-10'}
+      - {by: PER-PRIV, date: '2026-11-10'}
+      - {by: PER-RE, date: '2026-11-25'}
+expect:
+  errors: [OMP-002]
+  also: [RCP-002]
+  messages:
+    - is dated after the reauthorization

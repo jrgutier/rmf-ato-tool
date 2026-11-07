@@ -1366,10 +1366,10 @@ def test_a_supporting_role_may_hold_any_raci_letter(framework, real_reg):
 
 def test_closing_a_gap_makes_its_waiver_an_error(framework, real_reg):
     """The rule tightens: p11 cannot close a gap and leave the waiver behind."""
-    framework.index("tasks")["M-1"].data["outputs"].append("ART-SSP")
+    framework.index("tasks")["P-8"].data["outputs"].append("ART-ORG-CONTEXT")
 
     assert messages(contract(framework, real_reg)) == [
-        "waiver no longer needed: M-1 outputs: lacks ART-SSP"]
+        "waiver no longer needed: P-8 outputs: lacks ART-ORG-CONTEXT"]
 
 
 def test_a_forward_ordered_input_is_a_task_scoped_omission_with_a_rationale(real_reg):
@@ -2316,10 +2316,11 @@ def test_a_declared_claim_that_disagrees_with_the_fixture_is_denied(framework):
 
 
 def test_nothing_on_a_presence_clause_holds_0058(framework):
-    """The pin and schema item on `.provider` lean on a rule item capped at partial."""
+    """The pin and schema item on `.provider` lean on a rule item capped at partial; the entry is
+    held by the AODM-012 triple on connection_approval beside them."""
     entry, probe = _live(framework, "REQ-DODCIO-RECIPROCITY-0058")
     assert [evidence.judge(probe, i, entry).strength for i in entry["evidence"]] == [
-        evidence.WEAK] * 3
+        evidence.WEAK] * 3 + [evidence.STRONG] * 3
 
 
 def test_a_fixture_message_cut_short_keeps_the_triple(framework):

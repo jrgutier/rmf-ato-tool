@@ -33,10 +33,15 @@ class Standing:
 
     @property
     def expires(self) -> dt.date | None:
-        """No date under a cATO or ongoing authorization, which lift the termination date."""
+        """No date under a cATO or ongoing authorization, which lift the termination date. An
+        authorization to use stands only while the provider's ATO it rests on holds (SP 800-37r2
+        p. 164), so the earlier of its own date and that ATO's termination date ends it."""
         if self.continuous or self.ongoing:
             return None
-        return parse_date(self.record.get("authorization_termination_date"))
+        own = parse_date(self.record.get("authorization_termination_date"))
+        provider = self.record.get("provider")
+        ends = parse_date(provider.get("termination_date")) if isinstance(provider, dict) else None
+        return min((d for d in (own, ends) if d is not None), default=None)
 
 
 def parse_date(value: Any) -> dt.date | None:
@@ -126,6 +131,9 @@ def in_force(records: list[dict[str, Any]], effect_of: dict[str, str],
             stands[ident] = Standing(r)
         elif effect in ("deny", "rescind"):
             stands.pop(base, None)
+            halted = r.get("halts")
+            for held in halted if isinstance(halted, list) else ():
+                stands.pop(str(held), None)
         elif base in stands:
             held = stands[base]
             if effect == "continuous":

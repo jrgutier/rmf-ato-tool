@@ -3,7 +3,7 @@ artifact_id: ART-CAT
 run_id: hybrid-minimal
 produced_by_task: C-2
 touched_by: [C-2, C-3]
-sources: [INT-004.A1, ART-INFOTYPES]
+sources: [INT-004.A1, ART-INFOTYPES, ART-ORG-CONTEXT]
 ---
 # Security categorization
 
