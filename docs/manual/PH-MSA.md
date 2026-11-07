@@ -65,7 +65,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [P-5](#task-p-5) Common Control Identification | Prepare | [Component CISO](../../MANUAL.md#per-ciso) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
 | [P-6](#task-p-6) Impact-Level Prioritization *(optional)* | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
 | [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | — | [MS A](#ms-a) |
+| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-BIA](../../MANUAL.md#art-bia) | — | [MS A](#ms-a) |
 | [P-9](#task-p-9) System Stakeholders | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-STAKE](../../MANUAL.md#art-stake) | — | [MS A](#ms-a) |
 | [P-10](#task-p-10) Asset Identification | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-INV](../../MANUAL.md#art-inv) | — | [MS A](#ms-a) |
 | [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](../../MANUAL.md#per-ao) | [ART-BND](../../MANUAL.md#art-bnd) | — | [MS A](#ms-a) |
@@ -75,7 +75,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [P-15](#task-p-15) Requirements Definition | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REQ](../../MANUAL.md#art-req) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 | [P-18](#task-p-18) System Registration | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REG](../../MANUAL.md#art-reg) | — | [MS A](#ms-a) |
 | [C-1](#task-c-1) System Description | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-SD](../../MANUAL.md#art-sd) | [ART-BND](../../MANUAL.md#art-bnd) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-CAT](../../MANUAL.md#art-cat) | — | [MS A](#ms-a) |
+| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-CAT](../../MANUAL.md#art-cat) | [ART-BIA](../../MANUAL.md#art-bia) | [MS A](#ms-a) |
 | [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](../../MANUAL.md#per-ao) | — | [ART-CAT](../../MANUAL.md#art-cat) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 
 Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#task-p-16).
@@ -480,7 +480,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Outputs**
 
-No artifact. The task is done when its interviews are recorded and its checks pass.
+| Output | What it is | This task | Package |
+|---|---|---|---|
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | produces | supporting |
 
 **Entry criteria**
 
@@ -491,6 +493,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Missions, business functions and mission/business processes that the system is intended to support are identified (DoDI 8510.01 Table 1 outcome).
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
+- artifacts/data/bia.yaml records whether mission critical functions are present and which, and each supported process with the impact of its disruption, the users' recovery time requirement and its interdependencies (BIA-001).
 
 **Alignment**
 
@@ -584,6 +587,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
@@ -800,6 +804,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
@@ -870,6 +875,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 | [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
@@ -1051,6 +1057,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
@@ -1060,6 +1067,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | produces | core |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -1074,6 +1082,7 @@ Writes to `facts.yaml`: `categorization`.
 - facts.categorization (c, i, a, overlays) set_by C-2.
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
+- A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
 
 **Alignment**
 

@@ -264,7 +264,7 @@ tasks:
       support, so that categorization and requirements trace to mission impact.
     raci: {R: [PER-SPONSOR], A: PER-PM, C: [PER-AO, PER-IO, PER-UR, PER-CIO, PER-CISO, PER-PRIV], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, EXT-CAPDOC, EXT-PRODUCT]
-    outputs: []
+    outputs: [ART-BIA]
     writes_facts: []
     depends_on: [P-2]
     feeds_back_to: []
@@ -282,6 +282,9 @@ tasks:
         to support are identified (DoDI 8510.01 Table 1 outcome).
       - Interviews record the supported missions and mission/business processes, citable by P-9,
         P-10 and C-1.
+      - artifacts/data/bia.yaml records whether mission critical functions are present and which,
+        and each supported process with the impact of its disruption, the users' recovery time
+        requirement and its interdependencies (BIA-001).
     citations:
       - {ref: SP800-37R2, section: "TASK P-8", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-8 Mission or Business Focus"}
@@ -335,7 +338,7 @@ tasks:
       Identify and prioritize the assets that require protection, as the system hardware and
       software inventory, including the components that perform mission-critical functions.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-SPONSOR, PER-IO, PER-CISO, PER-PRIV, PER-DEV], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-STAKE, EXT-PRODUCT]
+    inputs: [ART-STAKE, ART-BIA, EXT-PRODUCT]
     outputs: [ART-INV]
     writes_facts: []
     depends_on: [P-9]
@@ -468,7 +471,7 @@ tasks:
       Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community
       threat information, and keep its results current through the life cycle.
     raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
+    inputs: [ART-ORG-CONTEXT, ART-BIA, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
     outputs: [ART-RA, ART-PIA]
     writes_facts: []
     depends_on: [P-3, P-13]
@@ -530,7 +533,7 @@ tasks:
       environment, including cyber survivability, so they enter the requirements baseline before
       the SRR.
     raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
+    inputs: [ART-RA, ART-BIA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
     outputs: [ART-REQ]
     writes_facts: []
     depends_on: [P-14]

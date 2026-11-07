@@ -280,7 +280,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [P-5](#task-p-5) Common Control Identification | Prepare | [Component CISO](#per-ciso) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
 | [P-6](#task-p-6) Impact-Level Prioritization *(optional)* | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
 | [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](#per-pm) | — | — | [MS A](#ms-a) |
+| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](#per-pm) | [ART-BIA](#art-bia) | — | [MS A](#ms-a) |
 | [P-9](#task-p-9) System Stakeholders | Prepare | [PM/SO](#per-pm) | [ART-STAKE](#art-stake) | — | [MS A](#ms-a) |
 | [P-10](#task-p-10) Asset Identification | Prepare | [PM/SO](#per-pm) | [ART-INV](#art-inv) | — | [MS A](#ms-a) |
 | [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](#per-ao) | [ART-BND](#art-bnd) | — | [MS A](#ms-a) |
@@ -290,7 +290,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [P-15](#task-p-15) Requirements Definition | Prepare | [PM/SO](#per-pm) | [ART-REQ](#art-req) | — | [MS A](#ms-a), [SRR](#rv-srr) |
 | [P-18](#task-p-18) System Registration | Prepare | [PM/SO](#per-pm) | [ART-REG](#art-reg) | — | [MS A](#ms-a) |
 | [C-1](#task-c-1) System Description | Categorize | [PM/SO](#per-pm) | [ART-SD](#art-sd) | [ART-BND](#art-bnd) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](#per-pm) | [ART-CAT](#art-cat) | — | [MS A](#ms-a) |
+| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](#per-pm) | [ART-CAT](#art-cat) | [ART-BIA](#art-bia) | [MS A](#ms-a) |
 | [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](#per-ao) | — | [ART-CAT](#art-cat) | [MS A](#ms-a), [SRR](#rv-srr) |
 
 Also active in this phase (described in their primary phase): [P-16](#task-p-16).
@@ -695,7 +695,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Outputs**
 
-No artifact. The task is done when its interviews are recorded and its checks pass.
+| Output | What it is | This task | Package |
+|---|---|---|---|
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | produces | supporting |
 
 **Entry criteria**
 
@@ -706,6 +708,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Missions, business functions and mission/business processes that the system is intended to support are identified (DoDI 8510.01 Table 1 outcome).
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
+- artifacts/data/bia.yaml records whether mission critical functions are present and which, and each supported process with the impact of its disruption, the users' recovery time requirement and its interdependencies (BIA-001).
 
 **Alignment**
 
@@ -799,6 +802,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
@@ -1015,6 +1019,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
@@ -1085,6 +1090,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 | [EXT-CAPDOC](#ext-capdoc) | Capability requirements documents | outside input (product) |
@@ -1266,6 +1272,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
@@ -1275,6 +1282,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-CAT](#art-cat) | Security categorization | produces | core |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -1289,6 +1297,7 @@ Writes to `facts.yaml`: `categorization`.
 - facts.categorization (c, i, a, overlays) set_by C-2.
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
+- A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
 
 **Alignment**
 
@@ -1578,6 +1587,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
 | [EXT-BASELINES](#ext-baselines) | Control baselines | outside input (reference) |
@@ -1642,6 +1652,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|---|
 | [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
 
 **Outputs**
@@ -1763,6 +1774,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-CATALOG](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
 
 **Outputs**
@@ -2035,6 +2047,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-STIG](#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
 
@@ -3656,6 +3669,7 @@ listed data files; OSCAL documents are built from that data.
 |---|---|---|---|---|
 | [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
 | [ART-STAKE](#art-stake) Stakeholder register | supporting | [P-9](#task-p-9) | — | [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15) |
+| [ART-BIA](#art-bia) Business impact and criticality analysis | supporting | [P-8](#task-p-8) | [C-2](#task-c-2) | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
 | [ART-INV](#art-inv) Hardware and software inventory | core | [P-10](#task-p-10) | [I-2](#task-i-2), [M-1](#task-m-1) | [P-11](#task-p-11), [P-12](#task-p-12), [P-14](#task-p-14), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-4](#task-s-4), [M-1](#task-m-1), [M-7](#task-m-7) |
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2) |
@@ -3722,6 +3736,26 @@ Stakeholders with an interest in the system and the personas who represent them 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-9"
+
+### <a id="art-bia"></a>ART-BIA: Business impact and criticality analysis
+
+Whether mission critical functions are present within the system and which, the mission and business processes it supports with the impact of their disruption, the users' recovery time requirements and interdependencies, the external stakeholders that depend on them, and the reevaluations by the mission and data owners that a conflict with the categorization triggers. Made at P-8 so the tasks that read a business impact or criticality analysis have one before S-4, where the contingency plan BIA refines it.
+
+| | |
+|---|---|
+| Package | supporting |
+| Template | [templates/artifacts/ART-BIA.md](templates/artifacts/ART-BIA.md) |
+| Data files | `artifacts/data/bia.yaml` (schema `bia`) |
+| OSCAL | — |
+| Produced by | [P-8](#task-p-8) |
+| Updated by | [C-2](#task-c-2) |
+| Used by | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
+
+Citations:
+
+- [SP800-37R2](#ref-sp800-37r2), section "TASK P-10"
+- [SP800-34R1](#ref-sp800-34r1), p. 27, "Developing contingency planning policy and performing system BIA(s) are accomplished early in the SDLC"
+- [CNSSI1254](#ref-cnssi1254), p. 15, "Identify if there are mission critical functions present within the system"
 
 ### <a id="art-inv"></a>ART-INV: Hardware and software inventory
 

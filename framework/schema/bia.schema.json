@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:bia",
+  "title": "runs/<run-id>/artifacts/data/bia.yaml",
+  "description": "The system business impact and criticality analysis (P-8, ART-BIA; C-2 adds reevaluations): whether mission critical functions are present and which, the mission and business processes the system supports with the impact of their disruption, the users' recovery time requirement and interdependencies, the external stakeholders that depend on them, and the reevaluations a conflict with the categorization triggers. P-10, P-14, P-15, C-2, S-1, S-2, S-4 and I-1 read it; the S-4 contingency BIA (contingency.yaml bia) refines it. BIA-001 and BIA-002 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mission_critical",
+    "functions",
+    "processes",
+    "external_dependents",
+    "reevaluations",
+    "sources"
+  ],
+  "properties": {
+    "mission_critical": {
+      "title": "Whether mission critical functions are present within the system",
+      "type": "boolean"
+    },
+    "functions": {
+      "title": "Mission critical functions the system supports, none when mission_critical is false",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "function", "processes", "sources"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^MCF-\\d{2}$"},
+          "function": {"title": "Mission critical function", "type": "string", "minLength": 1},
+          "processes": {
+            "title": "The processes below that carry the function",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^BP-\\d{2}$"}
+          },
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "processes": {
+      "title": "Mission and business processes the system supports, with the impact of their disruption",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "disruption_impact", "recovery_time_hours", "interdependencies", "sources"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^BP-\\d{2}$"},
+          "name": {"type": "string", "minLength": 1},
+          "disruption_impact": {
+            "title": "Impact on the process if the system is disrupted, in FIPS 199 levels",
+            "enum": ["low", "moderate", "high"],
+            "x-enforces": ["REQ-SP800-34R1-0111"]
+          },
+          "recovery_time_hours": {
+            "title": "The users' recovery time requirement for the process",
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "x-enforces": ["REQ-SP800-34R1-0544"]
+          },
+          "interdependencies": {
+            "title": "Systems, components and services the process depends on through the system",
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "external_dependents": {
+      "title": "External stakeholders that depend on the system's critical functions or processes, and how that is communicated",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stakeholder", "depends_on", "communicated", "sources"],
+        "properties": {
+          "stakeholder": {"type": "string", "minLength": 1},
+          "depends_on": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^(MCF|BP)-\\d{2}$"}
+          },
+          "communicated": {
+            "title": "How the dependency is understood and communicated to the stakeholder",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": ["REQ-SP800-61R3-0080"]
+          },
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "reevaluations": {
+      "title": "Reevaluations by the mission and data owners of a process whose disruption impact exceeds the availability impact of the categorization",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["process", "date", "by", "outcome", "rationale", "sources"],
+        "properties": {
+          "process": {"type": "string", "pattern": "^BP-\\d{2}$"},
+          "date": {"type": "string", "format": "date"},
+          "by": {
+            "title": "Who reevaluated: the mission owner (PER-SPONSOR) and the data owner (PER-IO)",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^PER-[A-Z]+$"}
+          },
+          "outcome": {
+            "title": "What the reevaluation changed",
+            "enum": ["categorization-revised", "bia-revised", "both-retained"]
+          },
+          "rationale": {"type": "string", "minLength": 1},
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "source": {
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

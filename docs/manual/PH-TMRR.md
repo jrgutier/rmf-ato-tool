@@ -217,6 +217,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [EXT-BASELINES](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
@@ -281,6 +282,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|---|
 | [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
 
 **Outputs**
@@ -402,6 +404,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
 
 **Outputs**
