@@ -1,0 +1,77 @@
+rule: TLR-001
+bases:
+- minimal
+description: a compensating control that names no source
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: actions
+  value:
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.10
+      value: quarterly
+    rationale: The program reviews accounts quarterly.
+    sources:
+    - product/security.md#accounts
+  - control_id: ac-2
+    action: specification
+    specification:
+      text: Accounts are managed through the identity provider's FDR group.
+      placement: addendum
+    rationale: The control statement does not say where accounts are managed.
+    sources:
+    - INT-028.A3
+  - control_id: cp-3.1
+    action: remove
+    basis: scoping
+    scoping:
+      consideration: security-objective
+    downgrade:
+      objectives:
+      - a
+      sources:
+      - ART-RA
+      - INT-028.A3
+      security_relevant_unaffected: true
+    law_policy:
+      reviewed:
+      - legislation
+      - regulation
+      - policy
+      - omb-policy
+      requires_control: false
+      sources:
+      - INT-028.A3
+    rationale: Simulated-event training supports only availability, which is low.
+    sources:
+    - INT-028.A3
+  - control_id: si-4
+    action: compensating
+    compensating_for: sc-15
+    cannot_implement: The relay has no collaborative computing devices to configure.
+    equivalence: System monitoring detects any device activation.
+    risk:
+      assessment: Low residual risk while monitoring alerts on activation.
+      accepted_by: PER-AO
+      sources:
+      - ART-RA
+      - INT-028.A3
+    law_policy:
+      reviewed:
+      - legislation
+      - regulation
+      - policy
+      - omb-policy
+      requires_control: false
+      sources:
+      - INT-028.A3
+    rationale: Monitoring stands in for collaborative device control.
+    sources:
+    - INT-028.A3
+expect:
+  errors:
+  - TLR-001
+  messages:
+  - does not say whether the compensating control comes from the control catalog

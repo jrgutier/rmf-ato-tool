@@ -1,7 +1,15 @@
 allocations:
-  - {control_id: ac-2, type: hybrid, components: [CMP-RELAY, CMP-IDP], sources: [product/security.md#accounts]}
+  - {control_id: ac-2, type: hybrid, components: [CMP-RELAY, CMP-IDP], requirements: [REQ-01], sources: [product/security.md#accounts]}
   - {control_id: au-2, type: system-specific, components: [CMP-RELAY], sources: [product/security.md#audit]}
-  - {control_id: cm-6, type: system-specific, components: [CMP-RELAY], sources: [product/security.md#configuration]}
-  - {control_id: ia-2, type: hybrid, components: [CMP-IDP], sources: [product/security.md#authentication]}
-  - {control_id: sc-7, type: common, components: [this-system], provider: Analysis enclave, sources: [product/security.md#boundary-protection]}
+  - {control_id: cm-6, type: system-specific, components: [CMP-RELAY], requirements: [REQ-03], sources: [product/security.md#configuration]}
+  - {control_id: ia-2, type: hybrid, components: [CMP-IDP], requirements: [REQ-01], sources: [product/security.md#authentication]}
+  - {control_id: sc-7, type: common, components: [this-system], provider: Analysis enclave, requirements: [REQ-02], sources: [product/security.md#boundary-protection]}
   - {control_id: si-2, type: system-specific, components: [CMP-RELAY], sources: [product/security.md#patching]}
+providers:
+  - provider: Analysis enclave
+    determination:
+      by: [PER-PM, PER-AO]
+      commensurate: true
+      parameters_examined: true
+      implementation_info: [ART-ORG-CONTEXT]
+      sources: [INT-029.A2]

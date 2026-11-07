@@ -1,0 +1,14 @@
+rule: TLR-010
+bases:
+- minimal
+description: a common control inherited from a provider not commensurate with risk
+mutations:
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: providers.0.determination.commensurate
+  value: false
+expect:
+  errors:
+  - TLR-010
+  messages:
+  - sc-7 is inherited whole from Analysis enclave, whose common controls are not determined to provide protection commensurate with risk

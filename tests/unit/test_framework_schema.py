@@ -26,8 +26,8 @@ PLAN_RUN_SCHEMAS = {
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
-                     "changes", "posture-reports", "plan-reviews"}
-FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
+                     "changes", "posture-reports", "plan-reviews", "capabilities"}
+FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
 def schema(name):
@@ -87,6 +87,10 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 SRC = ["INT-001.A1"]
 RUN_EXAMPLES = {
+    "capabilities": (
+        {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
+                           "controls": ["ia-2.1", "ia-2.2", "sc-8.1"], "sources": SRC}]},
+        {"capabilities": [{"id": "CAP-01", "name": "x", "controls": [], "sources": SRC}]}),
     "run-config": (
         {"mode": "hybrid", "run_id": "example-synthetic-01", "product": "../../product",
          "as_of": "2026-10-29T12:00:00Z", "framework_version": "0.1.0", "git_sha": "abc1234",

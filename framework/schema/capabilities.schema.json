@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:capabilities",
+  "title": "runs/<run-id>/artifacts/data/capabilities.yaml",
+  "description": "Security and privacy capabilities the organization defined ahead of control selection (S-1; part of ART-BASELINE), each mapped to every control that supports it. Optional: written only when capabilities are defined. A control may support several capabilities (TLR-008).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capabilities"
+  ],
+  "properties": {
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "controls",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CAP-\\d{2,3}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "title": "The mapping of every individual control that supports the capability",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+            },
+            "x-enforces": [
+              "REQ-SP800-53AR5-0324"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

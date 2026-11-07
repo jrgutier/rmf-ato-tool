@@ -481,11 +481,15 @@ def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
     return out
 
 
+TAILORING_INPUTS = "tailoring-inputs.yaml"  # what S-2 tests a system against (TLR-003, TLR-005)
+
+
 def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Entity]]:
     """``baselines/*.yaml`` under the framework root (CNSSI 1253 tables, ADR-0002): schema
     errors as FW-SCHEMA-001 findings, and each citing block (the file, every table block and
     every overlay block) as a pseudo-entity for the FW-CITE rules. ``*.overrides.yaml`` files
-    are generator input, not tables."""
+    are generator input, not tables; ``tailoring-inputs.yaml`` has its own schema, and each of
+    its assumptions and overlay conditions is a citing block."""
     findings: list[Finding] = []
     cited: list[Entity] = []
     for path in sorted((fw_root / BASELINES_DIR).glob("*.yaml")):
@@ -495,9 +499,16 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
         data = read_yaml_rt(path, shown, findings)
         if data is None:
             continue
-        errors = schema_errors(repo, "baselines", data)
+        inputs = path.name == TAILORING_INPUTS
+        errors = schema_errors(repo, "tailoring-inputs" if inputs else "baselines", data)
         findings += [Finding("FW-SCHEMA-001", "E", e, shown) for e in errors]
         if errors:
+            continue
+        if inputs:
+            cited += [Entity("baselines", {"id": f"{path.stem} {i['id']}",
+                                           "citations": [i["citation"]]},
+                             Location(shown, i.lc.line + 1))
+                      for i in [*data["assumptions"], *data["overlay_conditions"]]]
             continue
         cited.append(Entity("baselines", {"id": data["baseline"],
                                           "citations": data["citations"]},

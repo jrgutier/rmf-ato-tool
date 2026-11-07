@@ -1,0 +1,34 @@
+rule: TLR-007
+bases:
+- minimal
+description: an enhancement implemented while its base control is planned
+mutations:
+- op: set_field
+  file: run.yaml
+  path: control_subset
+  value:
+  - ac-2
+  - au-2
+  - cm-6
+  - ia-2
+  - sc-7
+  - ia-2.1
+  - si-2
+- op: append_text
+  file: artifacts/ssp/controls/ia.yaml
+  text: "  - control_id: ia-2.1\n    status: implemented\n    statement: Fixture statement for ia-2.1.\n    responsible_roles: [PER-ISSE]\n    components: [CMP-IDP]\n    sources: [product/security.md#authentication]\n"
+- op: replace_text
+  file: artifacts/ssp/controls/ia.yaml
+  old: "status: implemented\n    statement: All interactive"
+  new: "status: planned\n    statement: All interactive"
+- op: replace_text
+  file: artifacts/sar/results/ia.yaml
+  old: "determinations:\n"
+  new: "determinations:\n  - control_id: ia-2.1\n    result: satisfied\n    methods: [examine]\n    summary: Fixture determination.\n    sources: [INT-009.A1]\n"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - TLR-007
+  messages:
+  - the control enhancement ia-2.1 is implemented, and the implementation of its base control ia-2 is planned

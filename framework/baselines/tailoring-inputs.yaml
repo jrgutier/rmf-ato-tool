@@ -1,0 +1,106 @@
+# framework/baselines/tailoring-inputs.yaml: what Task S-2 tests the system against before it
+# tailors. Hand-authored (not generated). Schema: framework/schema/tailoring-inputs.schema.json.
+#
+# assumptions: the assumptions under the baselines and overlays. A run records in
+# artifacts/data/tailoring.yaml whether each one holds for the system (TLR-003). `when`
+# says what an answer obliges:
+#   holds-false: the assumption is one the baselines rest on; a system where it does not
+#     hold revisits the selection (scoping, compensating, supplementing or an overlay).
+#   holds-true: the assumption is one the baselines do not address; a system where it holds
+#     supplements the baseline or applies an overlay.
+# An assumption with `overlay` applies only to a run that applies that overlay.
+#
+# overlay_conditions: conditions an overlay names under which a control must be selected
+# (TLR-005). A run applying the overlay answers each; a condition that applies selects
+# every control it lists.
+assumptions:
+  - id: AS-BL-1
+    text: Information in organizational systems is relatively persistent.
+    when: holds-false
+    citation: {ref: SP800-53B, page: 22, anchor: "Information in organizational systems is relatively persistent."}
+  - id: AS-BL-2
+    text: Organizational systems are multi-user (either serially or concurrently) in operation.
+    when: holds-false
+    citation: {ref: SP800-53B, page: 22, anchor: "Organizational systems are multi-user (either serially or concurrently) in operation."}
+  - id: AS-BL-3
+    text: Some information in organizational systems is not shareable with other users who have authorized access to the same systems.
+    when: holds-false
+    citation: {ref: SP800-53B, page: 22, anchor: "Some information in organizational systems is not shareable with other users who have"}
+  - id: AS-BL-4
+    text: Organizational systems exist in networked environments and are general purpose in nature.
+    when: holds-false
+    citation: {ref: SP800-53B, page: 22, anchor: "Organizational systems exist in networked environments and are general purpose in nature."}
+  - id: AS-BL-5
+    text: Organizations have the necessary structure, resources, and infrastructure to implement the controls.
+    when: holds-false
+    citation: {ref: SP800-53B, page: 22, anchor: "Organizations have the necessary structure, resources, and infrastructure to implement the"}
+  - id: AS-NSS-1
+    text: Insider threats exist within NSS organizations.
+    when: holds-false
+    citation: {ref: CNSSI1253, page: 9, anchor: "Insider threats exist within NSS organizations."}
+  - id: AS-NSS-2
+    text: Advanced persistent threats (APTs) are targeting NSS and may already exist within NSS.
+    when: holds-false
+    citation: {ref: CNSSI1253, page: 9, anchor: "Advanced persistent threats (APTs) are targeting NSS and may already exist within NSS."}
+  - id: AS-NSS-3
+    text: Additional best practices beyond those defined in the NIST baselines are necessary to protect NSS.
+    when: holds-false
+    citation: {ref: CNSSI1253, page: 9, anchor: "Additional best practices beyond those defined in the NIST baselines are necessary to"}
+  - id: AS-ADD-1
+    text: Classified information is processed, stored, or transmitted by organizational systems.
+    when: holds-true
+    citation: {ref: CNSSI1253, page: 10, anchor: "Classified information is processed, stored, or transmitted by organizational systems."}
+  - id: AS-ADD-2
+    text: Select information requires specialized protection based on federal law, directives, regulations, or policies.
+    when: holds-true
+    citation: {ref: CNSSI1253, page: 10, anchor: "Select information requires specialized protection based on federal law, directives,"}
+  - id: AS-ADD-3
+    text: Organizational systems need to communicate with other systems across different security domains.
+    when: holds-true
+    citation: {ref: CNSSI1253, page: 10, anchor: "Organizational systems need to communicate with other systems across different security"}
+  - id: AS-CLS-1
+    text: The system does not store, process, or transmit classified information that requires protection within any Special Access Program (SAP), which includes sensitive compartmented information (SCI).
+    when: holds-false
+    overlay: CNSSI1253E-ATT5-CLASSIFIED
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 4, anchor: "The system does not store, process, or transmit classified information that requires"}
+  - id: AS-CLS-2
+    text: All persons authorized for access to the system have been granted a security clearance for the highest classification of information stored, processed, or transmitted by the system; however, all may not have a need to know.
+    when: holds-false
+    overlay: CNSSI1253E-ATT5-CLASSIFIED
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 4, anchor: "All persons authorized for access to the system have been granted a security clearance for"}
+  - id: AS-CLS-3
+    text: All persons authorized for access to the system are U.S. citizens.
+    when: holds-false
+    overlay: CNSSI1253E-ATT5-CLASSIFIED
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 4, anchor: "All persons authorized for access to the system are U.S. citizens."}
+  - id: AS-CLS-4
+    text: The organization provides facility and personnel security to ensure only personnel with security clearances for all information stored, processed, or transmitted by the system are allowed unescorted access to the facility and/or areas within the facility where the system resides.
+    when: holds-false
+    overlay: CNSSI1253E-ATT5-CLASSIFIED
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 4, anchor: "The organization provides facility and personnel security to ensure only personnel with"}
+  - id: AS-PRV-1
+    text: Workforce is required to complete privacy training and receive access permissions before accessing systems that have PII.
+    when: holds-false
+    overlay: CNSSI1253F-ATT6-PRIVACY
+    citation: {ref: CNSSI1253F-ATT6-PRIVACY, page: 11, anchor: "Workforce is required to complete privacy training and receive access permissions before"}
+overlay_conditions:
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    id: wireless
+    question: Does the organization intend to use wireless access for the system of interest?
+    controls: [ac-18.1, ac-18.5]
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 42, anchor: "If the organization intends to use wireless access for the system of interest, this"}
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    id: mobile-devices
+    question: Does the organization intend to allow mobile devices as part of the system of interest?
+    controls: [ac-19.5]
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 42, anchor: "If the organization intends to allow mobile devices as part of the system of interest,"}
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    id: external-outside-us
+    question: Does the organization intend to process and store classified information on an external system outside of the United States?
+    controls: [sa-9.8]
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 42, anchor: "If the organization intends to process and store classified information on an external"}
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    id: data-tainting
+    question: Does the organization intend to implement capabilities to determine if organizational data has been exfiltrated or improperly removed from the organization?
+    controls: [si-20]
+    citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 43, anchor: "If the organization intends to implement capabilities on its systems or system components"}

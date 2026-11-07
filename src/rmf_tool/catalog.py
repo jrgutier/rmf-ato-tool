@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Any
 
 CATALOG_PATH = "references/oscal/catalog/NIST_SP-800-53_rev5_catalog.json"
-FIELDS = ("title", "statement", "guidance", "objectives", "params")
+FIELDS = ("title", "statement", "guidance", "objectives", "params", "assurance")
+ASSURANCE_PROP = "contributes-to-assurance"  # SP 800-53r5 Appendix C, the Assurance column
 DEFAULT_FIELDS = ("title", "statement")
 _INSERT = re.compile(r"\{\{\s*insert:\s*param,\s*([^\s}]+)\s*\}\}")
 _CONTROL_NUM = re.compile(r"^([a-z]{2})-(\d+)(?:\.(\d+))?$")
@@ -94,6 +95,12 @@ def _part(control: dict[str, Any], name: str) -> dict[str, Any] | None:
     return next((p for p in control.get("parts") or [] if p.get("name") == name), None)
 
 
+def contributes_to_assurance(cat: Catalog, control_id: str) -> bool:
+    """Whether the catalog marks the control as contributing to assurance."""
+    props = cat.controls.get(control_id, {}).get("props") or []
+    return any(p.get("name") == ASSURANCE_PROP and p.get("value") == "true" for p in props)
+
+
 def view(cat: Catalog, control_id: str, fields: tuple[str, ...]) -> dict[str, Any]:
     c = cat.controls[control_id]
     out: dict[str, Any] = {"id": control_id}
@@ -106,11 +113,14 @@ def view(cat: Catalog, control_id: str, fields: tuple[str, ...]) -> dict[str, An
             out[name] = "\n".join(_part_lines(cat, part, 0)) if part else ""
     if "params" in fields:
         out["params"] = {p["id"]: _param_text(cat, p["id"]) for p in c.get("params") or []}
+    if "assurance" in fields:
+        out["assurance"] = contributes_to_assurance(cat, control_id)
     return out
 
 
 def render_text(v: dict[str, Any]) -> str:
-    lines = [f"{v['id']}" + (f" {v['title']}" if v.get("title") else "")]
+    lines = [f"{v['id']}" + (f" {v['title']}" if v.get("title") else "")
+             + (" [contributes to assurance]" if v.get("assurance") else "")]
     for name in ("statement", "guidance", "objectives"):
         if v.get(name):
             lines.append(f"  {name}:")

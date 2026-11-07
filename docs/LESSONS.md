@@ -460,3 +460,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the approval lives in conmon.yaml from S-5, which SP 800-37 Task S-5 places it in (the AO approves the strategy, possibly with the plan); ISCM-004 is gated with `since`.
 - Rule: Never add an output to an existing task; put the new record in an artifact the task already writes, or in a new task.
 - Promotion: none — the example check (p7) already fails on it; the rule saves the round trip.
+
+## L-0066 · 2026-11-06 · run: phase-11 · tags: tailoring, baseline
+- Symptom: tailoring.yaml accepted compensating actions, but `rmf baseline resolve` ignored them, so a compensating control had no baseline entry and no required SSP statement, and nothing checked its source, reason or risk acceptance.
+- Root cause: the schema admitted an action kind that no reader consumed; validating the shape passed for a record that changed nothing.
+- Fix: from contract 0.2.0 a catalog compensating control joins baseline.json (origin `compensating`), and TLR-001 checks the action's target, source, reason and AO risk acceptance.
+- Rule: Every action kind a run-data schema admits is read by the resolver or a rule; one that only passes the schema is a gap.
+- Promotion: check: TLR-001 and test_catalog_compensating_control_reaches_the_baseline_from_its_contract

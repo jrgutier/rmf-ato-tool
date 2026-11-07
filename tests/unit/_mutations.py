@@ -67,5 +67,14 @@ def apply(run_dir: Path, mutation: dict[str, Any]) -> None:
             index = next(i for i, item in enumerate(items) if _matches(item, mutation["where"]))
             del items[index]
         _edit_yaml(file, delete_item)
+    elif op == "resolve_baseline":
+        # Regenerate baseline.json as `rmf baseline resolve` would, after the mutations before
+        # it changed facts.yaml, run.yaml or tailoring.yaml; never hand-written (INV-2).
+        from rmf_tool import baseline
+        from rmf_tool.run.model import open_run
+
+        repo = Path(__file__).resolve().parents[2]
+        file.write_text(baseline.render(baseline.resolve(open_run(run_dir, repo))),
+                        encoding="utf-8")
     else:
         raise ValueError(f"unknown mutation op {op!r}")

@@ -1,0 +1,60 @@
+rule: TLR-004
+bases:
+- minimal
+description: an add action claiming assurance for a control the catalog does not mark
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: actions
+  value:
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.10
+      value: quarterly
+    rationale: The program reviews accounts quarterly.
+    sources:
+    - product/security.md#accounts
+  - control_id: ac-2
+    action: specification
+    specification:
+      text: Accounts are managed through the identity provider's FDR group.
+      placement: addendum
+    rationale: The control statement does not say where accounts are managed.
+    sources:
+    - INT-028.A3
+  - control_id: cp-3.1
+    action: remove
+    basis: scoping
+    scoping:
+      consideration: security-objective
+    downgrade:
+      objectives:
+      - a
+      sources:
+      - ART-RA
+      - INT-028.A3
+      security_relevant_unaffected: true
+    law_policy:
+      reviewed:
+      - legislation
+      - regulation
+      - policy
+      - omb-policy
+      requires_control: false
+      sources:
+      - INT-028.A3
+    rationale: Simulated-event training supports only availability, which is low.
+    sources:
+    - INT-028.A3
+  - control_id: ac-2
+    action: add
+    assurance: true
+    rationale: Adds trustworthiness.
+    sources:
+    - INT-028.A3
+expect:
+  errors:
+  - TLR-004
+  messages:
+  - the catalog does not mark it as contributing to assurance

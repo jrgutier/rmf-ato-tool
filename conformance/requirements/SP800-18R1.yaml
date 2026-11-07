@@ -692,7 +692,9 @@ requirements:
     locator: "Risk-related considerations—.-"
     context: ""
     statement: "- Security controls that uniquely support the confidentiality, integrity, or availability security objectives can be downgraded to the corresponding control in a lower baseline (or appropriately modified or eliminated if not defined in a lower baseline) if, and only if, the downgrading action: (i) is consistent with the FIPS 199 security categorization for the corresponding security objectives of confidentiality, integrity, or availability before moving to the high watermark;14"
-    status: "candidate"
+    status: "covered"
+    reason: "A downgrade fails when the CNSSI 1253 column of an objective it supports selects the control at that objective's FIPS 199 level"
+    evidence: [{"kind": "rule", "asserts": "Security controls are downgraded only if the downgrading action is consistent with the FIPS 199 security categorization of the security objectives", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.category.yaml", "expect": "the downgrade does not reflect the FIPS 199 security category", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-223"
   - id: "REQ-SP800-18R1-0092"
     citation: {"ref": "SP800-18R1", "page": 22, "anchor": "is supported by an agency’s assessment of risk; and (iii) does not"}
@@ -700,7 +702,9 @@ requirements:
     locator: "Risk-related considerations—.(ii)"
     context: ""
     statement: "(ii) is supported by an agency’s assessment of risk; and (iii) does not affect the security-relevant information within the information system.15"
-    status: "candidate"
+    status: "covered"
+    reason: "A downgrade fails unless it rests on ART-RA and leaves security-relevant information unaffected"
+    evidence: [{"kind": "rule", "asserts": "The downgrading action is supported by the agency's assessment of risk", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.risk.yaml", "expect": "not supported by the organizational assessment of risk ART-RA", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "The downgrading action does not affect the security-relevant information", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.relevant.yaml", "expect": "affects the protection of the security-relevant information", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-223"
   - id: "REQ-SP800-18R1-0093"
     citation: {"ref": "SP800-18R1", "page": 22, "anchor": "Compensating security controls are the management, operational, or technical controls employed by"}
@@ -708,7 +712,9 @@ requirements:
     locator: "2.5.2"
     context: "Compensating Controls"
     statement: "Compensating security controls are the management, operational, or technical controls employed by an agency in lieu of prescribed controls in the low, moderate, or high security control baselines, which provide equivalent or comparable protection for an information system. Compensating security controls for an information system will be employed by an agency only under the following conditions: (i) the agency selects the compensating controls from the security control catalog in NIST SP 800-53; (ii) the agency provides a complete and convincing rationale and justification for how the compensating controls provide an equivalent security capability or level of protection for the information system; and (iii) the agency assesses and formally accepts the risk associated with employing the compensating controls in the information system. The use of compensating security controls must be reviewed, documented in the system security plan, and approved by the authorizing official for the information system."
-    status: "candidate"
+    status: "partial"
+    reason: "Equivalent protection, the risk and the AO's acceptance are required and checked; SP 800-18r1 limits the source to the catalog where SP 800-53B also allows other sources, and the SSP review is not held"
+    evidence: [{"kind": "rule", "asserts": "Compensating security controls state how they provide equivalent or comparable protection", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.equivalence.yaml", "expect": "does not state how it provides equivalent or comparable protection", "claim": "presence", "holds_when": "S-2 is active", "sentence": "Compensating security controls for an information system will be employed by an agency only under the following conditions: (i) the agency selects the compensating controls from the security control catalog in NIST SP 800-53; (ii) the agency provides a complete and convincing rationale and justification for how the compensating controls provide an equivalent security capability or level of protection for the information system; and (iii) the agency assesses and formally accepts the risk associated with employing the compensating controls in the information system."}, {"kind": "rule", "asserts": "The use of compensating security controls is approved by the authorizing official", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.acceptor.yaml", "expect": "not the authorizing official", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "The use of compensating security controls must be reviewed, documented in the system security plan, and approved by the authorizing official for the information system."}]
     work_item: "WI-220"
   - id: "REQ-SP800-18R1-0094"
     citation: {"ref": "SP800-18R1", "page": 22, "anchor": "When employing the “high watermark” concept, some of the security objectives (i.e.,"}
@@ -716,7 +722,9 @@ requirements:
     locator: "2.5.2"
     context: "Compensating Controls"
     statement: "When employing the “high watermark” concept, some of the security objectives (i.e., confidentiality, integrity, or availability) may have been increased to a higher impact level. As such, the security controls that uniquely support these security objectives will have been upgraded as well. Consequently, organizations must consider appropriate and allowable downgrading actions to ensure cost-effective, risk-based application of security controls."
-    status: "candidate"
+    status: "partial"
+    reason: "An allowable downgrade is checked against the objectives' levels; the high watermark sentence describes what the CNSSI 1253 per-objective selection already avoids"
+    evidence: [{"kind": "rule", "asserts": "Organizations consider appropriate and allowable downgrading actions that reflect the security objectives", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.category.yaml", "expect": "the downgrade does not reflect the FIPS 199 security category", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Consequently, organizations must consider appropriate and allowable downgrading actions to ensure cost-effective, risk-based application of security controls."}]
     work_item: "WI-223"
   - id: "REQ-SP800-18R1-0095"
     citation: {"ref": "SP800-18R1", "page": 22, "anchor": "Information that is security-relevant at the system level (e.g., password files, network"}
@@ -724,7 +732,9 @@ requirements:
     locator: "2.5.2"
     context: "Compensating Controls"
     statement: "Information that is security-relevant at the system level (e.g., password files, network routing tables, cryptographic key management information) must be distinguished from user-level information within an information system. Certain security controls within an information system are used to support the security objectives of confidentiality and integrity for both user-level and system-level information. Organizations must exercise caution in downgrading confidentiality or integrity-related security controls to ensure that the downgrading action does not affect the security-relevant information within the information system."
-    status: "candidate"
+    status: "partial"
+    reason: "A downgrade must record that security-relevant information is unaffected; distinguishing that information from user-level information is not recorded"
+    evidence: [{"kind": "rule", "asserts": "Downgrading confidentiality or integrity-related security controls must not affect the security-relevant information", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.relevant.yaml", "expect": "affects the protection of the security-relevant information", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Organizations must exercise caution in downgrading confidentiality or integrity-related security controls to ensure that the downgrading action does not affect the security-relevant information within the information system."}]
     work_item: "WI-223"
   - id: "REQ-SP800-18R1-0096"
     citation: {"ref": "SP800-18R1", "page": 23, "anchor": "An agency-wide view of the information security program facilitates the identification of"}

@@ -1,0 +1,17 @@
+rule: TLR-008
+bases:
+- minimal
+description: a capability mapped to a control the catalog does not contain
+mutations:
+- op: set_field
+  file: artifacts/data/capabilities.yaml
+  path: capabilities.0.controls
+  value:
+  - ac-2
+  - ia-2
+  - zz-99
+expect:
+  errors:
+  - TLR-008
+  messages:
+  - maps zz-99, which the control catalog does not contain, so the mapping of the controls that support it is not documented
