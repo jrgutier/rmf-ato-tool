@@ -172,6 +172,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 - A risk management strategy for the organization that includes a determination and expression of organizational risk tolerance is established (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT states the risk management strategy and the organizational risk tolerance.
+- ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
 
 **Alignment**
 
@@ -482,7 +483,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Entry criteria**
 
 - A capability need is documented (EXT-CAPDOC) and the organizational context is available.
-- The program has entered MSA at the Materiel Development Decision.
+- The program has entered its pathway at its first decision point - the Materiel Development Decision on major capability acquisition; receipt of a validated UON, an approved critical warfighter issue statement or an RAA determination on urgent capability acquisition; an approved CNS on the software pathway; the validated services requirement on an acquisition of services.
 
 **Exit criteria**
 
@@ -794,6 +795,10 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [EXT-ITRA](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
+| [EXT-SEP](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
 
 **Outputs**
 
@@ -811,6 +816,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
 - artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
+- protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
 
 **Alignment**
 
@@ -853,6 +859,8 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 | [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
 | [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
 
 **Outputs**
 
@@ -872,6 +880,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
 - Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
 - The security-relevant constraints on the solution are recorded with their origin.
+- protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
 
 **Alignment**
 

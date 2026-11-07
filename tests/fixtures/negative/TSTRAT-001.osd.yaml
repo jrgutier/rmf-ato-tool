@@ -1,0 +1,62 @@
+rule: TSTRAT-001
+bases:
+- minimal
+description: an oversight TEMP reaching the OSD ten days before Milestone B
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: MS-B
+    date: '2026-06-01'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.submissions
+  value:
+  - decision_point: MS-A
+    date: '2026-03-10'
+  - decision_point: MS-B
+    date: '2026-05-20'
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: assessments
+  value:
+  - decision_point: MS-A
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-03-01'
+  - decision_point: MS-B
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-05-15'
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: oversight.usdre
+  value: true
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals.0
+  value:
+    part: document
+    by: component
+    date: '2026-04-15'
+    decision_point: MS-B
+    submitted_to_osd: '2026-05-22'
+expect:
+  errors:
+  - TSTRAT-001
+  messages:
+  - the TEMP of an oversight program is submitted to the OSD for approval 45 calendar days before 
+    MS-B

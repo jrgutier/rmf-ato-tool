@@ -49,7 +49,7 @@ tasks:
       and operational test events, before the TRR for the first event that supplies assessment
       evidence.
     raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: []}
-    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ]
+    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ, EXT-TEST-STRATEGY]
     outputs: [ART-SAP, ART-AUTHREC]
     writes_facts: []
     depends_on: [A-1, I-2]
@@ -71,6 +71,10 @@ tasks:
       - Each scoped control has procedures selected and tailored from the risk results
         (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider
         is reviewed before its controls or results are leveraged (ASMT-004).
+      - test-strategy.yaml records the TEMP or test strategy the pathway calls for, who approved
+        each part of it, its schedule against decision points, its cybersecurity test objectives
+        and the cybersecurity test events, including independent threat-representative
+        penetration and exploitation testing (TSTRAT-001, TSTRAT-002).
       - The assessment plan reads each requirement's verification method and measure from
         requirements.yaml.
       - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live
@@ -115,6 +119,9 @@ tasks:
         considered (DoDI 8510.01 Table 5 outcome).
       - sar/results holds a determination for every scoped control (SAR-COV-001), with a finding
         for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
+      - Test results reused as assessment evidence come from a test event in test-strategy.yaml
+        run on a production-representative system in an operationally representative environment,
+        with its configuration and conditions recorded (TSTRAT-003).
     citations:
       - {ref: SP800-37R2, section: "TASK A-3", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-3 Control Assessments"}

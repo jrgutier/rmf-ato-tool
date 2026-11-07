@@ -28,12 +28,14 @@ from rmf_tool.check.rules import (
     org_context,
     pentest,
     plans,
+    protection,
     requirements,
     risk_assessment,
     secureconfig,
     subsystems,
     system,
     tailoring,
+    teststrategy,
     vulnerability,
 )
 
@@ -161,6 +163,8 @@ RULES: dict[str, Rule] = {
     "DEGRADED-001": config.degraded,
     "TASK-DEF-001": consistency.deferrals,
     **dict(plans.rules()),
+    **dict(protection.rules()),
+    **dict(teststrategy.rules()),
     **vulnerability.RULES,
     **dict(system.rules()),
     **dict(assets.rules()),

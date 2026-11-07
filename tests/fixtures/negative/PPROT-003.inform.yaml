@@ -1,0 +1,23 @@
+rule: PPROT-003
+bases:
+- minimal
+description: a TAPP read that informs nothing
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: inputs.tapps
+  value:
+  - id: TAPP-ME
+    area: microelectronics
+    title: Microelectronics TAPP
+    date: '2026-02-01'
+- op: set_field
+  file: artifacts/data/protection-requirements.yaml
+  path: read.tapps
+  value:
+  - TAPP-ME
+expect:
+  errors:
+  - PPROT-003
+  messages:
+  - TAPP TAPP-ME is read and does not inform the program protection activities

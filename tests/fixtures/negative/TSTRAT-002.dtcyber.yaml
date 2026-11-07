@@ -1,0 +1,20 @@
+rule: TSTRAT-002
+bases:
+- minimal
+description: no DT event evaluates cybersecurity
+mutations:
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.0.evaluates
+  value:
+  - performance
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.1.evaluates
+  value:
+  - survivability
+expect:
+  errors:
+  - TSTRAT-002
+  messages:
+  - the test strategy describes no DT event designed to evaluate cybersecurity
