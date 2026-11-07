@@ -1,0 +1,14 @@
+rule: SCRM-009
+bases:
+- minimal
+description: the plan rates a supplier against scrm.yaml
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.suppliers.0.criticality
+  value: critical
+expect:
+  errors:
+  - SCRM-009
+  messages:
+  - the plan rates SUP-01 critical but scrm.yaml rates it non-critical

@@ -182,6 +182,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
 
 **Alignment**
 
@@ -306,6 +307,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
 
 **Alignment**
 
@@ -406,6 +408,9 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
 | [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -431,6 +436,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - For a system processing PII, ART-SSP holds the privacy plan with the security plan (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
+- artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM control decisions, critical suppliers in contingency and incident planning, supplier monitoring after award, training content and the supply chain reporting M-5 follows (SCRM-009 to SCRM-012, SCRM-014).
 
 **Alignment**
 
@@ -499,6 +505,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
 - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
+- The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring strategy.
+- With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP maintaining every service the DoD CIO reciprocity playbook names, and each implemented directed action as a patch provided in time and communicated to every Receiving organization (RCP-003).
 
 **Alignment**
 

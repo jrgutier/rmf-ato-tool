@@ -1,0 +1,169 @@
+receiving_organizations:
+  - id: RO-01
+    organization: Component A
+    receiving_ao: Component A authorizing official
+    poc: Component A ISSM
+    joined: '2026-01-15'
+    kind: deployment
+    visibility: {via: emass, record_keeping: compatible}
+    sites:
+      - {site: Component A relay enclave, projected: '2027-01-15'}
+    requirements:
+      gathered: '2026-02-01'
+      coordinated: ['2026-02-01', '2026-05-01', '2026-08-01']
+      additional_controls: [ia-2]
+    issues:
+      - {id: RI-01, summary: Component A asked for flaw remediation reporting., raised: '2026-05-01', resolved: '2026-05-20'}
+    deliveries:
+      - {document: ssp, date: '2026-11-23', via: emass}
+      - {document: sar, date: '2026-11-23', via: emass}
+      - {document: rar, date: '2026-11-23', via: emass}
+      - {document: poam, date: '2026-11-23', via: emass}
+      - {document: authorization-decision, date: '2026-11-23', via: emass}
+      - {document: deployment-sites, date: '2026-11-23', via: emass}
+      - {document: body-of-evidence, date: '2026-11-23', via: emass}
+      - {document: deployment-instructions, date: '2026-11-23', via: emass}
+      - {document: installation-configuration, date: '2026-12-01', via: emass}
+      - {document: poam, date: '2026-12-03', via: emass}
+    installation_stigs: [BM-01, BM-02, BM-03, BM-04]
+    status_updates:
+      - {date: '2026-09-01', covers: rmf-activities}
+      - {date: '2026-10-01', covers: planned-deployment}
+    notices:
+      - {kind: change, change: CHG-001, date: '2026-12-02'}
+      - {kind: change, change: CHG-002, date: '2026-12-16'}
+      - {kind: change, change: CHG-005, date: '2026-12-21'}
+      - {kind: change, change: CHG-003, date: '2027-01-06'}
+      - {kind: change, change: CHG-004, date: '2027-01-11'}
+      - {kind: finding, poam_item: POAM-004, date: '2026-12-03'}
+      - {kind: reauthorization, event: '2027-11-20', date: '2026-11-23', acknowledged: '2026-11-30'}
+      - {kind: plan, plan: version-change, date: '2026-12-01', acknowledged: '2026-12-03'}
+    agreement: AGR-01
+    sources: [INT-012.A1]
+package_sharing:
+  shared_with: [PER-IO, CONN-01]
+  date: '2026-11-23'
+granting:
+  cssp:
+    provider: Component A CSSP
+    accredited_by: JFHQ-DODIN
+    services: [continuous-monitoring, patch-management, iavm, ess, siem, operational-orders, poams, annual-reviews, periodic-reviews]
+  patches:
+    - {id: PAT-01, directed_action: DIR-001, required_by: '2026-12-15', provided: '2026-12-08', communicated_to: [RO-01]}
+received_systems:
+  - id: RS-01
+    system: Enterprise audit collector
+    granting_organization: DISA
+    granting_ao: DISA authorizing official
+    enterprise: true
+    coordination_point: PER-CISO
+    awareness: [{date: '2026-11-25', via: emass}]
+    package:
+      requested: '2026-11-24'
+      requested_documents: [ssp, sar, rar, poam, authorization-decision, deployment-instructions]
+      received: '2026-11-28'
+      received_documents: [ssp, sar, rar, poam, authorization-decision, deployment-instructions]
+      poam_items: [EAC-POAM-07]
+    own_package_shared: '2026-12-01'
+    review: {by: PER-AO, date: '2026-12-09'}
+    guide_reviewed: '2026-12-11'
+    impact:
+      determined: '2026-12-10'
+      via: dsawg
+      augmenting_controls: [{control: si-2, implemented: '2026-12-12'}]
+    controls:
+      - {control: au-2, origin: built-in, retested: false}
+      - {control: cm-6, origin: deployment-configured, tested_by: receiving, tested: '2026-12-20'}
+      - {control: sc-7, origin: inherited, validated_by: PER-PM, evidence: [ART-SAR]}
+    outcome: accepted
+    atu:
+      issued: '2026-12-18'
+      by: PER-AO
+      risk: acceptable
+      copy_to_granting_ao: '2026-12-19'
+      sites_notified: {date: '2026-12-19', scope: authorized-configuration}
+    hosting_update: {change: CHG-005, date: '2026-12-20', controls: [si-2], documents: [installation-configuration, difference-tests]}
+    installation: {implemented: '2026-12-19', differences: [{item: Syslog listener port, tested: '2026-12-16'}]}
+    provided_controls: [sc-7]
+    mitigations: [{poam_item: EAC-POAM-07, implemented: '2026-12-19'}]
+    patches: [{id: RP-01, released: '2026-12-20', pm_due: '2027-01-10', applied: '2027-01-05'}]
+    configuration_updates:
+      - {id: IAVA 2026-A-0050, kind: iava, released: '2026-12-22', outcome: applied}
+      - {id: RHEL 9 STIG V2R2, kind: stig, released: '2026-12-02', outcome: poam, poam_item: POAM-004}
+    findings: [{poam_item: POAM-004, reported: '2026-12-03'}]
+    agreement: AGR-02
+    sources: [INT-012.A1]
+  - id: RS-02
+    system: Contractor analytics appliance
+    granting_organization: Vendor program office
+    granting_ao: Vendor program authorizing official
+    enterprise: false
+    awareness: [{date: '2026-11-26', via: other-tool}]
+    package:
+      requested: '2026-11-26'
+      requested_documents: [ssp, sar, rar, poam, authorization-decision, deployment-instructions]
+      received: '2026-11-30'
+      received_documents: [ssp, poam]
+    body_of_evidence:
+      considered:
+        - {item: poam, status: considered}
+        - {item: residual-risk, status: unavailable}
+        - {item: boundary-diagram, status: considered}
+        - {item: data-flows, status: considered}
+        - {item: high-risk-justification, status: unavailable}
+        - {item: plans, status: considered}
+        - {item: hardware-software, status: considered}
+        - {item: test-results, status: unavailable}
+      requests:
+        - {document: Penetration test report, endorsed_by: PER-CISO, endorsed: '2026-12-02', forwarded: '2026-12-03'}
+    review: {by: PER-AODR, date: '2026-12-08'}
+    outcome: refused
+    refusal:
+      decided_by: PER-AO
+      grounds: insufficient-content
+      documented: '2026-12-10'
+      reported_to_granting_ao: '2026-12-15'
+      requests: [{by: deploying-ao, requested: '2026-12-16', provided: '2026-12-17'}]
+      rework: ['2026-12-20']
+      escalation:
+        - {level: ao, date: '2027-01-05', result: unresolved}
+        - {level: rmf-tag-chair, date: '2027-01-20', result: resolved, notified: rmf-tag-secretariat}
+    sources: [INT-012.A1]
+agreements:
+  - id: AGR-01
+    instrument: moa
+    party: RO-01
+    executed: '2026-11-15'
+    topics: [operating-constraints, operating-environment, monitoring-requirements, security-maintenance, vulnerability-scanning, iavm-compliance, lifecycle-replacement, roles-responsibilities]
+    covers: [package-sharing]
+    pocs:
+      granting: PER-ISSM
+      receiving: Component A ISSM
+      technical: [{party: granting, poc: PER-ISSO}, {party: receiving, poc: Component A relay administrator}]
+    notification: {processes: Notices go through the eMASS record and the ISSM mailboxes., timing: Within one business day of the event., requirements: 'Security incidents, contingencies and material configuration changes.', recipients: [pm, original-ao]}
+    termination_factors: [Loss of the Granting ATO., Component A no longer hosting the relay.]
+    pre_agreement_tasks:
+      - {task: resources, responsible: granting, completed: '2026-11-01'}
+      - {task: task-documentation, responsible: both, completed: '2026-11-10'}
+    deviations:
+      - {element: RAR residual risk format, raised: '2026-11-05', resolved: '2026-11-12', accepted_by: [granting, receiving]}
+    documents: [ART-SSP, ART-SAR, ART-RAR, ART-POAM]
+    sources: [INT-012.A1]
+  - id: AGR-02
+    instrument: sla
+    party: RS-01
+    executed: '2026-12-05'
+    topics: [operating-constraints, operating-environment, monitoring-requirements, security-maintenance, vulnerability-scanning, iavm-compliance, lifecycle-replacement, roles-responsibilities]
+    covers: [package-sharing]
+    pocs:
+      granting: DISA collector program ISSM
+      receiving: PER-ISSM
+      technical: [{party: granting, poc: DISA collector engineer}, {party: receiving, poc: PER-ISSO}]
+    notification: {processes: Notices go through the eMASS record., timing: Within one business day of the event., requirements: Security incidents and material configuration changes., recipients: [pm, original-ao]}
+    termination_factors: []
+    pre_agreement_tasks:
+      - {task: controls-and-mitigations, responsible: receiving, completed: '2026-12-01'}
+    deviations: []
+    documents: [ART-SSP, ART-SAR, ART-RAR, ART-POAM]
+    sources: [INT-012.A1]
+sources: [INT-012.A1]

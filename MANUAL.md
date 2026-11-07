@@ -332,6 +332,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- artifacts/data/scrm-org.yaml names an executive C-SCRM lead, a PMO or other dedicated C-SCRM function, the authorizing officials who own supply chain risk, the council and its charter, and the C-SCRM duty of each run role (SCRM-021).
 
 **Alignment**
 
@@ -389,6 +390,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - ART-ORG-CONTEXT states the risk management strategy and the organizational risk tolerance.
 - ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI 8430.01 for the software it develops or deploys.
 - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
+- artifacts/data/scrm-org.yaml states the C-SCRM frame of SP 800-161 Tasks 1-1 to 1-4 (OT suppliers in scope, each assumption refined at P-14, threat sources addressed, appetite at Level 1, tolerance at Levels 2 and 3, priorities and the nine framing outputs), the C-SCRM policy and strategy, what each level holds and informs, the process steps and the maturity of the key practices (SCRM-020, SCRM-022, SCRM-024, SCRM-027 to SCRM-029).
 
 **Alignment**
 
@@ -444,6 +446,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - An organization-wide risk assessment is completed, or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT summarizes the organization-level risk assessment results.
 - Once the system operates, org-context.yaml posture_reviews records each review of threat, vulnerability, technology and mission changes against the organizational risk posture, and the sections it updated (OCTX-011).
+- scrm-org.yaml sharing follows each SP 800-150 key practice, has an executive FASC liaison and feeds P-3 and P-14 as EXT-THREAT (SCRM-023).
 
 **Alignment**
 
@@ -498,6 +501,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 - Organizationally-tailored control baselines and/or CSF profiles are established and made available (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT lists the approved or directed tailored baselines and overlays, or records that none apply.
+- scrm-org.yaml keeps a C-SCRM Risk Response Framework at Levels 1 and 2 (SCRM-026).
 
 **Alignment**
 
@@ -653,6 +657,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 - An organization-wide strategy for monitoring control effectiveness is developed and implemented (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT summarizes the organizational continuous monitoring strategy that system strategies (S-5) must follow.
+- scrm-org.yaml measures the C-SCRM program by implementation, efficiency and effectiveness, and mission impact, against appetite and tolerance, with goals validated by its stakeholders (SCRM-025).
 
 **Alignment**
 
@@ -1045,6 +1050,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- artifacts/data/scrm.yaml records the criticality analysis and TSN practices, a supplier for every inventory item tied to its ra.yaml supply chain record, the threat analysis, and an assessment of every critical supplier covering each Table 28 factor, with its SCRSS level, escalation and FASC sharing (SCRM-001 to SCRM-006).
 
 **Alignment**
 
@@ -1116,6 +1122,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- Each Receiving organization that joined before the system's release has its requirements in reciprocity.yaml gathered and coordinated before release, and each control it asks for is assessed (RCP-002).
 
 **Alignment**
 
@@ -1170,6 +1177,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
 - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
 - An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
+- registration.yaml lists every deployment site of reciprocity.yaml, an update after each received system accepted, and an exemption justification when reciprocity listing is deselected (RCP-008).
 
 **Alignment**
 
@@ -1230,6 +1238,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 - The provider of each leveraged authorization is an external entity in org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
 - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
+- reciprocity.yaml names each Receiving organization and received system, each resting on an executed agreement with its minimum content (RCP-006).
 
 **Alignment**
 
@@ -1545,6 +1554,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
 
 **Alignment**
 
@@ -1669,6 +1679,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
 
 **Alignment**
 
@@ -1769,6 +1780,9 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [EXT-CATALOG](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
+| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -1794,6 +1808,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - For a system processing PII, ART-SSP holds the privacy plan with the security plan (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
+- artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM control decisions, critical suppliers in contingency and incident planning, supplier monitoring after award, training content and the supply chain reporting M-5 follows (SCRM-009 to SCRM-012, SCRM-014).
 
 **Alignment**
 
@@ -1862,6 +1877,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
 - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
+- The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring strategy.
+- With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP maintaining every service the DoD CIO reciprocity playbook names, and each implemented directed action as a patch provided in time and communicated to every Receiving organization (RCP-003).
 
 **Alignment**
 
@@ -2122,6 +2139,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
 - A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 - plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010).
+- Each received system accepted in reciprocity.yaml has the Receiving AO's authorization to use on an acceptable risk, its copy to the Granting AO, notice to subordinate sites, this system's authorization documentation updated through the change log, the installation implemented and the inherited controls provided (RCP-005).
 
 **Alignment**
 
@@ -2542,6 +2560,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - ART-DIAS states the assurance levels chosen with the ia family at S-4 (DIAS-001).
 - For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
 - The package carries the PPP approval recorded in protection.yaml, and that approval was made by the authority the program's ACAT, decision authority and pathway call for (PPROT-001).
+- Each Receiving organization in reciprocity.yaml has the package, a current POA&M, the body of evidence, the deployment instructions and, before its first site, the installation and configuration requirements with every STIG, and visibility of the package; the package is shared with the information owners and every interconnected system (RCP-001).
 
 **Alignment**
 
@@ -2648,6 +2667,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-PKG](#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-ADM](#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -2668,6 +2688,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).
 - Where risks are not fully mitigated, the operators are told the potential impacts.
 - On urgent capability acquisition the MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment is read from EXT-ADM; it does not accept security risk, which only the AO does, and a mission-critical cybersecurity vulnerability is still eliminated before fielding.
+- Each supply chain risk outside tolerance has an R-3 response in scrm.yaml with two or more alternatives and their acceptable level, and a decision among them taken at the level its reach calls for (SCRM-013).
 
 **Alignment**
 
@@ -3118,6 +3139,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in directed_actions of poam/items.yaml with who implements it and its response, implemented, tracked in a POA&M item or withheld after coordination, and its compliance status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002); for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and the mission owner, with the CSSP, prioritizes its requirements and passes them to the CSP.
 - Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and reported within VRMN (VULN-003).
 - Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of confidentiality, integrity and availability (VULN-004); its fix is chosen case by case and tracked, and verified by successive scans once completed (VULN-005); one not publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
+- Each accepted received system's Granting POA&M mitigations, patches, IAVAs and STIGs are kept up and new findings reported back (RCP-009).
 
 **Alignment**
 
@@ -3252,6 +3274,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
 - For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 - The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
+- The posture reports carry the supply chain reporting scrm-plan.yaml sets.
+- Each Receiving organization in reciprocity.yaml is updated on the RMF activities and before deployment, and notified of changes, new findings, plans and reauthorization, with receipt acknowledged (RCP-002).
 
 **Alignment**
 
@@ -3664,14 +3688,14 @@ listed data files; OSCAL documents are built from that data.
 
 | Artifact | Package | Produced by | Updated by | Used by |
 |---|---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
+| [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
 | [ART-STAKE](#art-stake) Stakeholder register | supporting | [P-9](#task-p-9) | — | [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15) |
 | [ART-INV](#art-inv) Hardware and software inventory | core | [P-10](#task-p-10) | [I-2](#task-i-2), [M-1](#task-m-1) | [P-11](#task-p-11), [P-12](#task-p-12), [P-14](#task-p-14), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-4](#task-s-4), [M-1](#task-m-1), [M-7](#task-m-7) |
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2) |
-| [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 | [ART-PIA](#art-pia) Privacy impact assessment | supporting | [P-14](#task-p-14) | — | [R-1](#task-r-1) |
-| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
+| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
 | [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | — | — |
 | [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
 | [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1) |
@@ -3704,11 +3728,11 @@ RMF role assignments, risk management strategy and risk tolerance, organization-
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-ORG-CONTEXT.md](templates/artifacts/ART-ORG-CONTEXT.md) |
-| Data files | `artifacts/data/org-context.yaml` (schema `org-context`) |
+| Data files | `artifacts/data/org-context.yaml` (schema `org-context`)<br>`artifacts/data/scrm-org.yaml` (schema `scrm-org`) |
 | OSCAL | — |
 | Produced by | [P-1](#task-p-1) |
 | Updated by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
-| Used by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
+| Used by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
 
 Citations:
 
@@ -3798,11 +3822,11 @@ System-level security and privacy risk assessment, updated as the system and thr
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-RA.md](templates/artifacts/ART-RA.md) |
-| Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`) |
+| Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`)<br>`artifacts/data/scrm.yaml` (schema `scrm`) |
 | OSCAL | — |
 | Produced by | [P-14](#task-p-14) |
 | Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| Used by | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 
 Citations:
 
@@ -3838,11 +3862,11 @@ Security and privacy requirements for the system and its environment, from the s
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-REQ.md](templates/artifacts/ART-REQ.md) |
-| Data files | `artifacts/data/requirements.yaml` (schema `requirements`)<br>`artifacts/data/protection-requirements.yaml` (schema `protection-requirements`) |
+| Data files | `artifacts/data/requirements.yaml` (schema `requirements`)<br>`artifacts/data/protection-requirements.yaml` (schema `protection-requirements`)<br>`artifacts/data/scrm-acquisition.yaml` (schema `scrm-acquisition`) |
 | OSCAL | — |
 | Produced by | [P-15](#task-p-15) |
 | Updated by | [P-17](#task-p-17) |
-| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
+| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
 
 Citations:
 
@@ -3870,13 +3894,13 @@ Citations:
 
 ### <a id="art-sd"></a>ART-SD: System description, users and leveraged authorizations
 
-The documented characteristics of the system, its users and privileges, and the authorizations it leverages.
+The documented characteristics of the system, its users and privileges, the authorizations it leverages, and its reciprocity records: the Receiving organizations it is deployed into, the systems it receives, and the agreements between them.
 
 | | |
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
-| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`) |
+| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`)<br>`artifacts/data/reciprocity.yaml` (schema `reciprocity`) |
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
 | Produced by | [C-1](#task-c-1) |
 | Updated by | [I-2](#task-i-2) |
@@ -3934,7 +3958,7 @@ The security plan with a statement for every control in the tailored baseline.
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SSP.md](templates/artifacts/ART-SSP.md) |
-| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`)<br>`artifacts/data/plan-reviews.yaml` (schema `plan-reviews`) |
+| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`)<br>`artifacts/data/plan-reviews.yaml` (schema `plan-reviews`)<br>`artifacts/data/scrm-plan.yaml` (schema `scrm-plan`) |
 | OSCAL | `ssp#control-implementation.implemented-requirements` |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-4](#task-m-4) |

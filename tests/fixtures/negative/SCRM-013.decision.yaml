@@ -1,0 +1,14 @@
+rule: SCRM-013
+bases:
+- minimal
+description: a decision outside the alternatives
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: response.0.decision.action
+  value: avoid
+expect:
+  errors:
+  - SCRM-013
+  messages:
+  - the response to SA-01 decides avoid, which is not among the alternatives evaluated

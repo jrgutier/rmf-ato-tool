@@ -545,7 +545,21 @@ with the next ID; never edit or delete an existing entry.
 - Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
 - Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
 
-## L-0078 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
+## L-0078 · 2026-11-07 · run: phase-11 · tags: framework, runs
+- Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
+- Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
+- Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.
+- Rule: Add an artifact to a task's outputs only with a `framework_version` bump and `rmf run migrate` handling; a later task that fills a section of an existing data file takes the artifact as input.
+- Promotion: none — the p7 example check and test_base_has_no_findings already fail on it; the lesson records why.
+
+## L-0079 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
+- Symptom: a first cut of RCP-001 tested `tool.get("compatible") is False` and FW-REQ-003 read the clause as presence, while `len(early) < 1` in RCP-002 read as a constraint though it only asks that a list be non-empty.
+- Root cause: the judge's absence test compares against None, "" and 0, and `False == 0` in Python, so `is False` counts as a read of absence; a comparison it does not know, such as `< 1`, counts as a constraint.
+- Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.
+- Rule: Write each failing clause in the form the judge reads truthfully: presence as `not x` on a plain read, a constraint as a comparison of the value; never pick a spelling to change the claim.
+- Promotion: none — changing how the judge reads booleans would reclassify the evidence of rules already merged; the RCP clauses follow the rule and their claims are computed, not declared.
+
+## L-0080 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
 - Symptom: joining a list item cut by a blank line inside a page (I-7) across the whole register changed 175 statements, retired 110 entries and flagged 127 for review in 22 documents, most of them NIST bullets wrongly joined to the paragraph after them.
 - Root cause: a layout quirk of one PDF (DODCIO-RECIPROCITY breaks a step after its first line; CNSSP12's OCR layer does the same and repeats a running header) looks like ordinary prose structure in every other document, so a global rule cannot tell them apart.
 - Fix: the reader takes per-document options from conformance/sources.yaml, each with a reason: `cut_items`, `run_in_headings` and `headers`; only the documents that declare them change, and register diffs are measured before marking.

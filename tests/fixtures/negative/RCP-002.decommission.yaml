@@ -1,0 +1,27 @@
+rule: RCP-002
+bases:
+- minimal
+description: a disposal plan never notified
+mutations:
+- op: set_field
+  file: run.yaml
+  path: seeded
+  value:
+  - artifact: ART-CHG
+    from_task: M-1
+    path: artifacts/data/changes.yaml
+  - artifact: ART-SECRPT
+    from_task: M-5
+    path: artifacts/data/posture-reports.yaml
+  - artifact: ART-DISP
+    from_task: M-7
+    path: artifacts/data/disposal.yaml
+- op: write_file
+  file: artifacts/data/disposal.yaml
+  content: "end_state: The relay is wiped and its keys destroyed.\nenvironment:\n  restored_to: original\nresidual_check:\n  date: '2027-12-01'\n  no_detrimental_factors: true\nstorage:\n  stored: false\n\
+    supply_chain:\n  non_reuse_elements: [Relay appliance disks]\n  prevention: The disks are shredded.\nsources: [INT-012.A1]\n"
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: the plan to decommission the system is not notified to the receiving organization'

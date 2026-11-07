@@ -1,0 +1,17 @@
+rule: SCRM-020
+bases:
+- minimal
+description: the frame is silent on environmental threat sources
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: frame.threat_sources.addressed
+  value:
+  - adversarial
+  - accidental
+  - structural
+expect:
+  errors:
+  - SCRM-020
+  messages:
+  - the frame does not say whether environmental threat sources are addressed

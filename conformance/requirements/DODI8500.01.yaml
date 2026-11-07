@@ -112,7 +112,8 @@ requirements:
     locator: "INSTRUCTION.a.(5)"
     context: "Risk Management"
     statement: "(5) Documentation regarding the security posture of DoD IS and PIT systems will be made available to promote reciprocity as described in DoDI 8510.01 (Reference (q)) and to assist authorizing officials (AOs) from other organizations in making credible, risk-based decisions regarding the acceptance and use of systems and the information that they process, store, or transmit."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "Documentation regarding the security posture of the system is delivered to the AOs of other organizations to promote reciprocity", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-DODI8500.01-0015"
     citation: {"ref": "DODI8500.01", "page": 2, "anchor": "Operational Resilience. DoD IT will be planned, developed, tested, implemented, evaluated, and"}
@@ -1141,7 +1142,8 @@ requirements:
     locator: "ENCLOSURE 2.e"
     context: "RESPONSIBILITIES"
     statement: "e. Ensure that SSE and trusted systems and networks (TSN) processes, tools, and techniques described in DoDI 5200.44 (Reference (bh)) are used in the acquisition of all applicable IT under their purview."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "Trusted systems and networks processes and practices of DoDI 5200.44, such as criticality analysis of mission-critical functions, are used in the acquisition of applicable IT", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0145"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Ensure that organizational solutions that support cybersecurity objectives acquired and developed via"}
@@ -1809,7 +1811,9 @@ requirements:
     locator: "ENCLOSURE 3.h.(2)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Cybersecurity Reciprocity"
     statement: "(2) Cybersecurity reciprocity is best achieved through transparency (i.e., making sufficient evidence regarding the security posture of an IS or PIT system available, so that an AO from another organization can use that evidence to make credible, risk-based decisions regarding the acceptance and use of that system or the information it processes, stores, or transmits). DoD Components must share security authorization packages with affected information owners or stewards and interconnected ISOs to support cybersecurity reciprocity. The reciprocal acceptance of DoD and other federal agency and department security authorizations will be implemented in accordance with the procedures in Reference (q)."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence says how reciprocity is best achieved and binds no act; RCP-001 holds delivery of the evidence, which is more than the sentence asks. The second and third sentences are held."
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "Evidence regarding the security posture of the system is delivered to the organization whose AO decides on its acceptance and use", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "(2) Cybersecurity reciprocity is best achieved through transparency (i.e., making sufficient evidence regarding the security posture of an IS or PIT system available, so that an AO from another organization can use that evidence to make credible, risk-based decisions regarding the acceptance and use of that system or the information it processes, stores, or transmits)."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.owners.yaml", "expect": "the security authorization package is not shared with the affected information owners or stewards", "asserts": "Security authorization packages are shared with the affected information owners or stewards", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "DoD Components must share security authorization packages with affected information owners or stewards and interconnected ISOs to support cybersecurity reciprocity."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.interconnected.yaml", "expect": "the security authorization package is not shared with the ISO of the interconnected system behind", "asserts": "Security authorization packages are shared with the ISO of each interconnected system", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "DoD Components must share security authorization packages with affected information owners or stewards and interconnected ISOs to support cybersecurity reciprocity."}, {"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.yaml", "expect": "no authorization to use or connect is issued by the Receiving AO", "asserts": "Reciprocal acceptance of another authorization is implemented through the authorization to use issued by the Receiving AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "The reciprocal acceptance of DoD and other federal agency and department security authorizations will be implemented in accordance with the procedures in Reference (q)."}]
     work_item: "WI-311"
   - id: "REQ-DODI8500.01-0230"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "OPERATIONAL RESILIENCE. Operational resilience requires three conditions to be met: information resources"}
@@ -1825,7 +1829,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "a. Using TSN requirements and best practices to protect mission-critical functions and components and manage risks to the integrity of critical information and communications technology in accordance with Reference (bh) for the sustainment of IT. This includes the use of criticality analysis, all-source threat informed acquisition, and engineering mitigations, and the authorities prescribed in section 806 of the Ike Skelton National Defense Authorization Act for Fiscal Year 2011(Reference (ce)). TSN processes and best practices must be applied early and across the system development life cycle, and be applied to system acquisitions and the purchase and integration of replacement IT as described in Reference (bh)."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held by SCRM-002: a system with mission-critical functions uses the TSN practices and the minimum mitigations. That TSN is applied early, across the life cycle and to replacement IT, is not something a rule over one record can see."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "Using TSN best practices to protect mission-critical functions and components, including all-source threat informed acquisition", "sentence": "Using TSN requirements and best practices to protect mission-critical functions and components and manage risks to the integrity of critical information and communications technology in accordance with Reference (bh) for the sustainment of IT.", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0232"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Performing developmental T&E of cybersecurity in accordance with Reference (at) and OT&E"}
@@ -2607,7 +2613,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(4).(d)"
     context: "Figure 2. DoD Information Technology IT Product"
     statement: "(d) Products will comply with the requirements of Reference (bh), as applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "'The requirements of Reference (bh), as applicable' are DoDI 5200.44's, which is not in references/; SCRM-002 holds the TSN practices the framework's sources name, not a product's compliance with that instruction."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.procurement-strategies.yaml", "expect": "critical components do not include", "asserts": "Products comply with the DoDI 5200.44 requirements such as procurement strategies for critical components", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0327"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "IT Considerations. These are general considerations that apply to IT."}
@@ -2631,7 +2639,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(2)"
     context: "Figure 2. DoD Information Technology"
     statement: "(2) SMs and PMs must use TSN tools, techniques, and practices, including the use of all-source threat assessments to inform acquisition and engineering mitigation decisions, for all IT when required in accordance with Reference (bh). During sustainment, TSN practices will be applied prior to integrating IT into operational IS."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held by SCRM-002: all-source threat assessment is among the TSN practices of a system with mission-critical functions. Applying TSN before integrating IT during sustainment needs a change record the framework does not tie to TSN."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "SMs and PMs use TSN practices, including all-source threat assessments to inform acquisition and engineering mitigation decisions", "sentence": "(2) SMs and PMs must use TSN tools, techniques, and practices, including the use of all-source threat assessments to inform acquisition and engineering mitigation decisions, for all IT when required in accordance with Reference (bh).", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0330"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Cybersecurity will be implemented in all system and service acquisitions at levels"}
@@ -3342,7 +3352,8 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. Coordinate with the DoD Component TSN focal point to ensure that TSN best practices, processes, techniques, and procurement tools are applied prior to the acquisition of IT or the integration of IT into ISs when required in compliance with Reference (bh)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.focal.yaml", "expect": "threat analysis of suppliers of critical components is marked not required", "asserts": "Coordinate with the DoD Component TSN focal point so TSN practices are applied prior to acquisition of IT", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DODI8500.01-0417"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Develop and maintain an organizational or system-level cybersecurity program that includes cybersecurity"}

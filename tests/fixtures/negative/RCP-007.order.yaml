@@ -1,0 +1,18 @@
+rule: RCP-007
+bases:
+- minimal
+description: a dispute taken from the AO level straight to the AO Council
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.1.refusal.escalation.1.level
+  value: ao-council
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.1.refusal.escalation.1.chair
+  value: DoD CISO
+expect:
+  errors:
+  - RCP-007
+  messages:
+  - 'RS-02: the dispute is not raised from the AO level to the RMF TAG Chair and then to the AO Council, in that order'

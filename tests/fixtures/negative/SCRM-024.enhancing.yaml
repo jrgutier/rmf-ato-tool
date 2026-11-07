@@ -1,0 +1,23 @@
+rule: SCRM-024
+bases:
+- minimal
+description: an enhancing practice under way before a sustaining one
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: maturity.practices.1.status
+  value: not-started
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: maturity.practices.2.status
+  value: in-progress
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: maturity.practices.3.status
+  value: in-progress
+expect:
+  errors:
+  - SCRM-024
+  messages:
+  - 'a practice is under way before the tier below it is implemented: enhancing practice Automated C-SCRM
+    processes while no sustaining practice is implemented'
