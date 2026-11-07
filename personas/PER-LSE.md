@@ -19,6 +19,13 @@ architecture and the authorization boundary consistent.
 - Determines the system's placement in the enterprise architecture with the security
   architect (Task P-16, responsible) and supports boundary, requirements and implementation
   tasks (P-11, P-13, P-15, C-1, I-1, I-2, consulted).
+- Prepares the program protection plan (with the PM under DoDI 5000.88): its critical items,
+  their threats, vulnerabilities and countermeasures, exportability and anti-tamper, the
+  cybersecurity strategy as its appendix; updates it after each contract award and each
+  significant threat activity or compromise, and hands it to the sustainment PM after the
+  full-rate production or full-deployment decision (P-14, protection.yaml).
+- Receives the S&T protection plan when a technology transitions from S&T, and reads the TAPPs
+  and horizontal protection guidance for the program's critical technology.
 
 ## Decision authority
 

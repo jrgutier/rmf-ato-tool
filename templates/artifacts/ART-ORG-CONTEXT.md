@@ -12,7 +12,9 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <!-- Template for ART-ORG-CONTEXT (playbook: playbooks/P/P-org-context.md). Replace every <<FILL: ...>> placeholder with traced
      prose; each ## section needs at least one [[TOKEN]] (playbooks/_shared/tagging-and-traceability.md).
-     Never write between the rmf:facts markers and never restate system facts. Delete this comment. -->
+     Never write between the rmf:facts markers and never restate system facts. The checkable
+     record is artifacts/data/org-context.yaml (template templates/data/org-context.yaml);
+     this Markdown states the same context in prose. Delete this comment. -->
 
 ## RMF role assignments
 
@@ -28,6 +30,13 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
        risk assessments are maintained: what triggers an update, how often, what is
        updated and how results are communicated (S-5 records it in conmon.yaml
        risk_assessment, M-4 applies it).
+       P-2 also appends "## Software program": the Component's direction under DoWI 8430.01
+       for software the organization develops or deploys: governance adapted to iterative
+       development and continuous delivery, delegated decisions verified by automated
+       evidence, the software workforce (DoW Cyber Workforce Framework work roles, training,
+       career paths, performance assessments), records of software assets, and any exception
+       to the issuance requested through the E2P Portal. Each system's software.yaml program
+       section (S-4) applies it.
      - P-3 "## Organization-level risk assessment": enterprise threats, dependencies and
        aggregated risks, and when the assessment was last updated.
      - P-4 "## Organizationally tailored baselines and profiles": approved or directed
@@ -37,4 +46,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
      - P-6 "## Impact-level prioritization": how systems of the same impact level are
        placed in low, moderate and high sub-categories.
      - P-7 "## Organizational continuous monitoring strategy": the metrics, frequencies and
-       reporting every system's strategy (S-5) must implement. -->
+       reporting every system's strategy (S-5) must implement; and the Component's
+       vulnerability management program (DoDI 8531.01 2.10) that S-5 and M-3 read: the
+       organizations designated to direct and manage it and to coordinate with JFHQ-DODIN, the
+       asset, configuration, remediation and mitigation programs that support it, the
+       prioritization and scheduling plan for deploying patches, updates and directed
+       actions, the guidance to system owners on mitigation deployment and who may accept
+       risk, what the Component requires system owners to mitigate, and its audits of
+       patching, compliance and reporting. -->

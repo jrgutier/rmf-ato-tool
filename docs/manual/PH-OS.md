@@ -14,8 +14,8 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 |---|---|
 | Starts at | [IOC](PH-PD.md#ms-ioc) Initial Operational Capability |
 | Ends at | End of the life cycle (disposal) |
-| RMF steps active | [M Monitor](../../MANUAL.md#step-m) |
-| Tasks | 7 with this primary phase |
+| RMF steps active | [P Prepare](../../MANUAL.md#step-p), [M Monitor](../../MANUAL.md#step-m) |
+| Tasks | 7 with this primary phase; 1 more also run here |
 | Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) |
 
 **Entry criteria**
@@ -59,6 +59,8 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
 | [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | — | — |
+
+Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#task-p-3).
 
 ## <a id="task-m-1"></a>M-1 · System and Environment Changes
 
@@ -219,8 +221,11 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [EXT-INSPECTIONS](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [EXT-DIRECTIVES](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
+| [EXT-VDP](../../MANUAL.md#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
 
 **Outputs**
 
@@ -236,6 +241,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Exit criteria**
 
+- Courses of action are selected and their responses communicated as the organization's risk response strategy in ART-ORG-CONTEXT (org-context.yaml risk_response) directs.
 - The output of continuous monitoring activities is analyzed and responded to appropriately (DoDI 8510.01 Table 7 outcome).
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
@@ -244,6 +250,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
+- Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in directed_actions of poam/items.yaml with who implements it and its response, implemented, tracked in a POA&M item or withheld after coordination, and its compliance status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002); for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and the mission owner, with the CSSP, prioritizes its requirements and passes them to the CSP.
+- Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and reported within VRMN (VULN-003).
+- Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of confidentiality, integrity and availability (VULN-004); its fix is chosen case by case and tracked, and verified by successive scans once completed (VULN-005); one not publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
 
 **Alignment**
 
@@ -258,6 +267,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 11, "the PM will initiate a risk assessment to identify the risk to the platform"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 7, "decisions to withhold or delay vulnerability remediation"
 - [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 36, "verify POA&Ms to correct deficiencies or weaknesses"
+- [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 29, "Verifies DoD Component organizations and individuals take directed actions, maintain POA&Ms"
+- [DODI8531.01](../../MANUAL.md#ref-dodi8531-01), p. 19, "Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial"
+- [DODI8531.01](../../MANUAL.md#ref-dodi8531-01), p. 16, "During the VDP coordination process, the DoD Components will:"
 
 **Playbook:** [playbooks/M/M-3.md](../../playbooks/M/M-3.md)
 
@@ -370,6 +382,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 
 **Alignment**
 
@@ -434,6 +447,7 @@ Writes to `facts.yaml`: `acquisition`.
 
 **Exit criteria**
 
+- Before the first continued authorization, ART-ORG-CONTEXT records the organization-wide ongoing authorization process with both transition conditions and an ISCM program in place (OCTX-010).
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
 - authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.

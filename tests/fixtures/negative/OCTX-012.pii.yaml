@@ -1,0 +1,22 @@
+rule: OCTX-012
+bases:
+- minimal
+description: a PII system whose protection allocation skips the privacy official
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.privacy
+  value: true
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: resources.allocation.coordinated_with
+  value: []
+expect:
+  errors:
+  - OCTX-012
+  also:
+  - AODM-010
+  - CATG-003
+  messages:
+  - the system processes PII and the allocation of resources protecting it is not coordinated with 
+    the senior agency official for privacy

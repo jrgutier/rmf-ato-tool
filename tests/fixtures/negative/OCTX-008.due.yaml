@@ -1,0 +1,14 @@
+rule: OCTX-008
+bases:
+- minimal
+description: a finding due before its assessment
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.assessments.0.findings.0.due
+  value: '2026-01-01'
+expect:
+  errors:
+  - OCTX-008
+  messages:
+  - 'ISCM assessment finding IF-01: the time frame for completion ends before the assessment'

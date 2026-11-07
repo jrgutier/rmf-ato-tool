@@ -1,0 +1,14 @@
+rule: OCTX-012
+bases:
+- minimal
+description: a policy owned by someone with no role
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: policies.0.owner
+  value: PER-SPONSOR
+expect:
+  errors:
+  - OCTX-012
+  messages:
+  - 'POL-01: its owner PER-SPONSOR holds no role in roles'

@@ -149,6 +149,13 @@ tasks:
       - ART-CMP, ART-CP and ART-IRP written.
       - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control
         board and the baseline configuration process.
+      - The statement of each baseline control the catalog marks as contributing to assurance
+        (`rmf catalog show --fields assurance`) says how its assurance requirements are
+        addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
+      - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build
+        with signed provenance, AI used in development, the SBOM and other machine-readable
+        evidence, integrated test and evaluation and the software program (SWA-001; DoWI
+        8430.01).
     citations:
       - {ref: SP800-37R2, section: "TASK S-4", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-4 Documentation of Planned Control Implementations"}
@@ -181,6 +188,9 @@ tasks:
     entry_criteria:
       - Security plan drafted (S-4); organizational monitoring strategy available (P-7).
     exit_criteria:
+      - Every family's monitoring frequency is at least the organizational minimum in
+        ART-ORG-CONTEXT, and conmon.yaml minimum_review records the system owner's review
+        of those minimums (OCTX-009).
       - A continuous monitoring strategy for the system that reflects the organizational risk
         management strategy is developed (DoDI 8510.01 Table 3 outcome).
       - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization
@@ -206,6 +216,11 @@ tasks:
         frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
       - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and
         manual controls have defined timelines.
+      - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability
+        management process across the system, the records that support it, how vulnerabilities
+        are identified, the analysis tools from development to retirement, monthly
+        authenticated and non-authenticated scans, the patch sources and the reach of
+        automated patching, and the central log repository (VULN-007).
     citations:
       - {ref: SP800-37R2, section: "TASK S-5", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-5 Continuous Monitoring Strategy – System"}
@@ -214,6 +229,7 @@ tasks:
       - {ref: SP800-137, section: "3.2.2"}
       - {ref: DODI8510.01, page: 10, anchor: "Ensure acquisition programs develop evaluation metrics for DT&E and OT&E, and continuous monitoring"}
       - {ref: DODCIO-CATO, page: 1, anchor: "RMF requires a CONMON strategy for each system"}
+      - {ref: DODI8531.01, page: 20, anchor: "Conduct monthly non-authenticated and authenticated vulnerability scans"}
     playbook: playbooks/S/S-5.md
   - id: S-6
     name: Plan Review and Approval

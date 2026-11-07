@@ -1,0 +1,22 @@
+rule: OCTX-013
+bases:
+- minimal
+description: a non-U.S. citizen is the ISSO
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.8.citizenship
+  value: non-us
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: open_functions.0.open_to
+  value:
+  - contractor
+  - non-dod
+  - non-us-citizen
+expect:
+  errors:
+  - OCTX-013
+  messages:
+  - 'RA-09: a non-U.S. citizen may not serve as ISSM, ISSO, in a supervisory cybersecurity position or
+    be responsible for PKI certificate issuance'

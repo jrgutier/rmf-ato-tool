@@ -1,0 +1,14 @@
+rule: VULN-003
+bases:
+- minimal
+description: a valid VDP report with no POA&M item
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vdp_reports.0.poam_item
+  value: POAM-099
+expect:
+  errors:
+  - VULN-003
+  messages:
+  - has no remediation or mitigation plan in a POA&M item

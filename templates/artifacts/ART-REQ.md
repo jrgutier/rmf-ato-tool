@@ -26,6 +26,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: table: REQ-## ID | requirement | traces to (NEED, DP or parent REQ) | priority | measure and criticality | verification method, one testable requirement per row as in requirements.yaml, with tokens>>
 
+## Derivation and security engineering
+
+<<FILL: how the lead systems engineer derived the security and exportability requirements (the capability requirements document, CONOPS, operational mode summary and mission profiles that informed it, the methods used and what they cover), the key performance parameters and attributes and the measures they establish, where the requirements enter the system performance specification and the product support needs, the system security engineering practices by area and life cycle activity with the design principles they apply, and the level of assurance and why it is commensurate with the technology, program, system and mission objectives, summarizing requirements.yaml derivation and engineering by ID, with tokens>>
+
 ## Operational constraints
 
 <<FILL: the security-relevant constraints on the solution by CON ID: those the security analysis drives, those from the stakeholders and the mission, and those implementation, integration, verification and transition raise, with tokens>>

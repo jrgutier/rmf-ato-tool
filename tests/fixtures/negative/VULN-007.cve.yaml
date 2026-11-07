@@ -1,0 +1,16 @@
+rule: VULN-007
+bases:
+- minimal
+description: identification without the CVE list
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.identification.identified_from
+  value:
+  - scans
+  - vendor-bulletins
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - does not use the CVE list to identify publicly known vulnerabilities

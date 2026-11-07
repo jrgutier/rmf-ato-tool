@@ -1,0 +1,16 @@
+rule: OCTX-001
+bases:
+- minimal
+description: the AO is not a U.S. citizen
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.2.citizenship
+  value: non-us
+expect:
+  errors:
+  - OCTX-001
+  also:
+  - OCTX-013
+  messages:
+  - 'RA-03: the AO must be a U.S. citizen and a DoD official, not non-us dod-civilian'

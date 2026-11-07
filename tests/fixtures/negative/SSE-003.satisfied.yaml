@@ -1,0 +1,62 @@
+rule: SSE-003
+bases:
+- minimal
+description: an implemented assurance-related control whose assurance requirements are not satisfied
+mutations:
+- op: set_field
+  file: run.yaml
+  path: control_subset
+  value: [ac-2, au-2, cm-6, ia-2, sc-7, sc-15, si-2, sa-8]
+- op: resolve_baseline
+  file: baseline.json
+- op: write_file
+  file: artifacts/ssp/controls/sa.yaml
+  content: |
+    family: sa
+    controls:
+      - control_id: sa-8
+        status: implemented
+        statement: The relay applies the security engineering principles of its design review.
+        responsible_roles: [PER-ISSE]
+        components: [CMP-RELAY]
+        assurance: {addressed: Independent design review of the relay against its principles., status: not-satisfied}
+        sources: [INT-007.A1]
+- op: set_field
+  file: facts.yaml
+  path: baseline_id.value
+  value: CNSSI1253-M-M-L-SUBSET-8
+- op: replace_text
+  file: artifacts/data/conmon.yaml
+  old: "  - {family: si,"
+  new: "  - {family: sa, frequency: annually, method: Design review of the relay, responsible: PER-ISSE, criteria: [FC-02]}\n  - {family: si,"
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: procedures.0.controls
+  value: [ac-2, au-2, ia-2, sc-7, si-2, sa-8]
+- op: write_file
+  file: artifacts/sar/results/sa.yaml
+  content: |
+    family: sa
+    determinations:
+    - control_id: sa-8
+      result: satisfied
+      methods: [examine, interview]
+      summary: Implemented as described in the SSP.
+      sources: [INT-009.A1]
+      statements:
+      - {id: 'SA-08[01]', result: satisfied}
+      - {id: 'SA-08[02]', result: satisfied}
+      - {id: 'SA-08[03]', result: satisfied}
+      - {id: 'SA-08[04]', result: satisfied}
+      - {id: 'SA-08[05]', result: satisfied}
+      - {id: 'SA-08[06]', result: satisfied}
+      - {id: 'SA-08[07]', result: satisfied}
+      - {id: 'SA-08[08]', result: satisfied}
+      - {id: 'SA-08[09]', result: satisfied}
+      - {id: 'SA-08[10]', result: satisfied}
+    findings: []
+expect:
+  errors:
+  - SSE-003
+  messages:
+  - sa-8 is in place, and the minimum assurance requirements it carries for the baseline are not satisfied
