@@ -1,0 +1,22 @@
+rule: PRIV-001
+bases:
+- pii
+description: an NSS exclusion from the PIA with no Privacy Overlay and no privacy implications
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.determination
+  value: not-required
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.basis
+  value: nss
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - the NSS exclusion from the PIA rests on no Privacy Overlay control set in the categorization overlays
+  - the NSS is excluded from the PIA requirement, and the record does not say how its privacy implications
+    were considered
+  also:
+  - PRIV-005

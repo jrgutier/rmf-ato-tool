@@ -1,0 +1,19 @@
+rule: PRIV-003
+bases:
+- pii
+description: the PM approves the PIA it prepared, as reviewing official
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: approval
+  value:
+    by: PER-PM
+    role: reviewing-official
+    date: '2026-09-10'
+    sources:
+    - INT-042.A1
+expect:
+  errors:
+  - PRIV-003
+  messages:
+  - PER-PM prepared or coordinated the PIA and cannot also give it final review and approval

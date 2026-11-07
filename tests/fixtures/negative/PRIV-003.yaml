@@ -1,0 +1,15 @@
+rule: PRIV-003
+bases:
+- pii
+description: a PIA not coordinated with the records management office
+mutations:
+- op: delete_list_item
+  file: artifacts/data/pia.yaml
+  path: coordination
+  where:
+    party: records-management
+expect:
+  errors:
+  - PRIV-003
+  messages:
+  - the PM does not coordinate the PIA through the records management office

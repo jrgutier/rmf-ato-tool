@@ -1,0 +1,15 @@
+rule: PRIV-007
+bases:
+- pii
+description: a system of records whose requirements leave out direct collection
+mutations:
+- op: delete_list_item
+  file: artifacts/data/requirements.yaml
+  path: privacy_act
+  where:
+    rule: direct-collection
+expect:
+  errors:
+  - PRIV-007
+  messages:
+  - the system keeps a system of records, and ART-REQ does not address the Privacy Act rule direct-collection

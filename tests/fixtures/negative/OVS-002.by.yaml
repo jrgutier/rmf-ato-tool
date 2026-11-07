@@ -1,0 +1,53 @@
+rule: OVS-002
+description: dynamic account management, which the Privacy Overlay justifies not selecting, is tailored in after coordinating with the ISSO instead of the SAOP
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253F-ATT6-PRIVACY-ACCT
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: "assurance:"
+  new: "  - {id: AS-PRV-1, holds: true, rationale: Users complete privacy training before their accounts are enabled., sources: [INT-028.A2]}\nassurance:"
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: "  - control_id: cp-3.1"
+  new: |2-
+      - control_id: ac-2.8
+        action: add
+        privacy_coordination:
+          by: PER-ISSO
+          finding: Dynamic accounts are limited to coalition partners with a need for the data.
+          sources: [INT-028.A3]
+        rationale: Accounts for coalition partners are created at first sign-in.
+        sources: [INT-028.A3]
+      - control_id: cp-3.1
+- op: set_field
+  file: run.yaml
+  path: control_subset
+  value: [ac-2, ac-2.8, au-2, cm-6, ia-2, sc-7, sc-15, si-2]
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.parameters
+  value:
+    ac-02_odp.04: annual privacy training
+    ac-02_odp.05: account managers and the ISSO
+    ac-02_odp.06: 24 hours
+    ac-02_odp.07: 24 hours
+    ac-02_odp.08: 24 hours
+    ac-02_odp.09: a demonstrated need for the PII the duties require
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - OVS-002
+  also:
+  - ASMT-002
+  - FACTS-001
+  - SAR-COV-001
+  - SSP-COV-001
+  messages:
+  - "ac-2.8: the coordination before selecting it is with PER-ISSO, not the SAOP or designee (PER-PRIV)"

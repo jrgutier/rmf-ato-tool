@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 230 rules, 36 repo-scope and 194 run-scope. Authoritative;
+# Rule registry (plan §6.5): 244 rules, 36 repo-scope and 208 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -414,6 +414,12 @@ rules:
     summary: baseline control without an SSP statement
     fixture: tests/fixtures/negative/SSP-COV-001.yaml
     hint: Use `rmf catalog show --missing` and write the whole family file.
+    enforces:
+      - REQ-DODI8510.01-0113
+      - REQ-SP800-37R2-0292
+      - REQ-SP800-37R2-0310
+      - REQ-SP800-37R2-0556
+      - REQ-SP800-53B-0056
   - id: SSP-COV-002
     scope: run
     severity: W
@@ -920,9 +926,13 @@ rules:
     enforces:
       - REQ-CNSSI1254-0109
       - REQ-DODI5400.11-0122
+      - REQ-SP800-18R2-0337
+      - REQ-SP800-37R2-0393
       - REQ-SP800-37R2-0402
       - REQ-SP800-37R2-0403
       - REQ-SP800-37R2-0410
+      - REQ-SP800-37R2-0524
+      - REQ-SP800-37R2-0632
       - REQ-SP800-39-0059
       - REQ-SP800-39-0207
   - id: AODM-011
@@ -1489,14 +1499,17 @@ rules:
     hint: "A remove names its basis and scoping consideration; a security-objective downgrade names its objectives, rests on ART-RA and leaves security-relevant information protected; remove and compensating actions record law_policy against legislation, regulation, policy and OMB policy, and a required control stays."
     enforces:
       - REQ-CNSSI1253-0041
+      - REQ-CNSSI1253-0075
       - REQ-CNSSI1253-0109
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0001
+      - REQ-DODI8510.01-0113
       - REQ-FIPS200-0008
       - REQ-SP800-18R1-0091
       - REQ-SP800-18R1-0092
       - REQ-SP800-18R1-0094
       - REQ-SP800-18R1-0095
       - REQ-SP800-37R2-0305
+      - REQ-SP800-53B-0056
       - REQ-SP800-53B-0057
       - REQ-SP800-53B-0066
       - REQ-SP800-53B-0067
@@ -1582,6 +1595,7 @@ rules:
     hint: "Keep the base control of every selected enhancement, and implement it before or with the enhancement."
     enforces:
       - REQ-CNSSI1253E-ATT1-TEMPLATE-0080
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0059
       - REQ-SP800-53B-0034
       - REQ-SP800-53R5-0052
       - REQ-SP800-53R5-0057
@@ -1636,6 +1650,88 @@ rules:
     summary: a capability maps to a control the baseline does not select
     fixture: tests/fixtures/negative/TLR-011.yaml
     hint: "S-2 weighs supplementing the control, or the capability is recorded as not fully held."
+  - id: OVS-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control an applied overlay selects is removed without law_policy naming each law, regulation or policy the overlay's references cite for it
+    fixture: tests/fixtures/negative/OVS-001.yaml
+    hint: "Name in law_policy.authorities every authority framework/baselines/overlay-specs.yaml lists for the control (`rmf catalog show --run RUN --control C --fields title,overlay`)."
+    enforces:
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0059
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0060
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0061
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0062
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0086
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0087
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0142
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0151
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0152
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0153
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0154
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0178
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0179
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0149
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0150
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0151
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0214
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0215
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0216
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0217
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0218
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0242
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0297
+  - id: OVS-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control the applied Privacy Overlays control set justifies not selecting is selected without coordination with the SAOP or designee
+    fixture: tests/fixtures/negative/OVS-002.yaml
+    hint: "Record privacy_coordination (by PER-PRIV, or by a designee with designee_of: PER-PRIV, with its sources) on the tailoring action that adds or keeps the control, or remove it."
+    enforces:
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0112
+  - id: OVS-003
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an SSP control statement records no value for an organization-defined parameter an applied overlay assigns a value to
+    fixture: tests/fixtures/negative/OVS-003.yaml
+    hint: "Record a value under parameters for each ODP `rmf catalog show --run RUN --fields params,overlay` names."
+    enforces:
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0086
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0098
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0107
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0093
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0094
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0095
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0096
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0097
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0098
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0099
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0100
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0101
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0102
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0103
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0104
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0105
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0106
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0107
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0115
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0122
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0124
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0130
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0167
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0170
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0297
   - id: DIAS-001
     scope: run
     severity: E
@@ -1981,6 +2077,234 @@ rules:
     enforces:
       - REQ-DOWI8430.01-0198
       - REQ-SP800-37R2-0330
+  - id: PRIV-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: "a system processing PII without its privacy compliance record, or with a PIA determination DoDI 5400.16 does not allow"
+    fixture: tests/fixtures/negative/PRIV-001.yaml
+    hint: "At P-12 give each PII information type its pii subjects, PHI and SSN flags, and record infotypes.yaml privacy: the issuances complied with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN, the SSN justification, records coordination and the PIA determination with its DoDI 5400.16 basis and due date. An NSS exclusion needs a Privacy Overlay control set, no ra-8 in the baseline and the privacy implications considered."
+    enforces:
+      - REQ-DODI5000.82-0177
+      - REQ-DODI5000.82-0178
+      - REQ-DODI5400.11-0053
+      - REQ-DODI5400.11-0075
+      - REQ-DODI5400.11-0101
+      - REQ-DODI5400.11-0144
+      - REQ-DODI5400.11-0145
+      - REQ-DODI5400.11-0178
+      - REQ-DODI5400.16-0009
+      - REQ-DODI5400.16-0010
+      - REQ-DODI5400.16-0037
+      - REQ-DODI5400.16-0039
+      - REQ-DODI5400.16-0040
+      - REQ-DODI5400.16-0041
+      - REQ-DODI5400.16-0049
+      - REQ-DODI5400.16-0050
+      - REQ-DODI5400.16-0051
+      - REQ-DODI5400.16-0056
+      - REQ-DODI8500.01-0276
+      - REQ-DODI8500.01-0277
+      - REQ-SP800-60V1R1-0164
+  - id: PRIV-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a required or adapted PIA that does not exist or is not on its DoD form"
+    fixture: tests/fixtures/negative/PRIV-002.yaml
+    hint: "Write artifacts/data/pia.yaml at P-14 when P-12 found a PIA required (DD Form 2930) or adapted (DD Form 2930A)."
+    enforces:
+      - REQ-DODI5400.11-0142
+      - REQ-DODI5400.16-0005
+      - REQ-DODI5400.16-0006
+      - REQ-DODI5400.16-0007
+      - REQ-DODI5400.16-0008
+      - REQ-DODI5400.16-0029
+      - REQ-DODI5400.16-0033
+      - REQ-DODI5400.16-0056
+  - id: PRIV-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a PIA not coordinated, reviewed or approved by the officials DoDI 5400.16 names, or approved after the decision that took it"
+    fixture: tests/fixtures/negative/PRIV-003.yaml
+    hint: "Coordinate the PIA through the ISSM, the privacy representative and the records management office; PER-CISO (or a designee, designee_of) confirms cybersecurity policy and PER-PRIV privacy policy; PER-CIO (or the reviewing official, never the PM or another party who coordinated it) approves after them and before the authorization decision."
+    enforces:
+      - REQ-DODI5400.11-0141
+      - REQ-DODI5400.16-0027
+      - REQ-DODI5400.16-0032
+      - REQ-DODI5400.16-0034
+      - REQ-DODI5400.16-0057
+      - REQ-DODI5400.16-0058
+      - REQ-DODI5400.16-0059
+      - REQ-DODI5400.16-0060
+      - REQ-DODI5400.16-0067
+  - id: PRIV-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "an approved PIA not sent to the DoD CIO, or with section 1 neither published nor restricted for a reason"
+    fixture: tests/fixtures/negative/PRIV-004.yaml
+    hint: "Record the submission of the approved PIA to the DoD CIO, on or after its approval, and the publication of section 1 in the Component repository or the reason it is restricted."
+    enforces:
+      - REQ-DODI5400.11-0143
+      - REQ-DODI5400.16-0020
+      - REQ-DODI5400.16-0061
+      - REQ-DODI5400.16-0062
+      - REQ-DODI5400.16-0063
+      - REQ-DODI5400.16-0065
+  - id: PRIV-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: "a change not tested for new privacy risk, or one that changes the privacy posture with no PIA review"
+    fixture: tests/fixtures/negative/PRIV-005.yaml
+    hint: "State privacy_impact on every change of a system processing PII; a change with privacy_impact true needs a pia.yaml updates entry naming it; on a system with no PIA it needs a new P-12 determination (infotypes.yaml privacy.redetermined_after)."
+    enforces:
+      - REQ-DODI5400.16-0042
+      - REQ-DODI5400.16-0043
+      - REQ-DODI5400.16-0044
+      - REQ-DODI5400.16-0045
+      - REQ-DODI5400.16-0046
+      - REQ-DODI5400.16-0047
+      - REQ-DODI5400.16-0048
+      - REQ-DODI5400.16-0069
+      - REQ-SP800-37R2-0656
+  - id: PRIV-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: "a privacy control without an assessment frequency in the PCM strategy, guidance not from the SAOP, or an added control without the SAOP consulted"
+    fixture: tests/fixtures/negative/PRIV-006.yaml
+    hint: "Record conmon.yaml privacy: guidance_by PER-PRIV, every privacy control of the baseline with its frequency, and for a control added to the strategy the SAOP's consultation finding it appropriate."
+    enforces:
+      - REQ-SP800-37R2-0320
+      - REQ-SP800-37R2-0526
+      - REQ-SP800-53AR5-0334
+      - REQ-SP800-53AR5-0343
+  - id: PRIV-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a privacy risk assessment that does not evaluate the legal requirements or OMB A-130, or an applicable requirement or Privacy Act rule ART-REQ does not carry"
+    fixture: tests/fixtures/negative/PRIV-007.yaml
+    hint: "Record ra.yaml privacy with the nature of the processing, its impact on individuals and each legal and policy requirement evaluated (OMB A-130 applies, with what the privacy baseline leaves unmet or why it leaves nothing; the FIPPs considered); carry each applicable one, and each Privacy Act rule of a system of records (with the contract provisions when a contractor operates it), by an ART-REQ requirement."
+    enforces:
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0075
+      - REQ-DODI5000.82-0176
+      - REQ-DODI5400.11-0004
+      - REQ-DODI5400.11-0043
+      - REQ-DODI5400.11-0097
+      - REQ-DODI5400.11-0136
+      - REQ-DODI5400.11-0160
+      - REQ-DODI5400.11-0164
+      - REQ-DODI5400.11-0173
+      - REQ-DODI5400.11-0174
+      - REQ-DODI5400.11-0180
+      - REQ-SP800-53B-0031
+      - REQ-SP800-53B-0033
+  - id: PRIV-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: "a system processing PII with no privacy plan record"
+    fixture: tests/fixtures/negative/PRIV-008.yaml
+    hint: "Record ssp-records.yaml privacy_plan with the privacy requirements and the methods and metrics that assess the privacy controls; the plans may be consolidated or separate."
+    enforces:
+      - REQ-DODI8510.01-0108
+      - REQ-SP800-37R2-0556
+  - id: PRIV-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: "a role primary only for a system processing PII that does not take part where the system processes PII"
+    fixture: tests/fixtures/negative/PRIV-009.yaml
+    hint: "For a system processing PII, give each role the RACI makes primary under when: processes-pii an interview at that task."
+    enforces:
+      - REQ-SP800-37R2-0732
+      - REQ-SP800-37R2-0733
+      - REQ-SP800-37R2-0736
+  - id: PRIV-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: I-2
+    summary: "I-2, A-5 or M-4 wrote ART-SSP without an update in the plan change log, or one that leaves out the privacy plan"
+    fixture: tests/fixtures/negative/PRIV-010.yaml
+    hint: "Log each update of the plans in plan-reviews.yaml changes with the task that made it and the plans it changed (security, privacy)."
+    enforces:
+      - REQ-DODI8510.01-0118
+      - REQ-DODI8510.01-0124
+      - REQ-SP800-37R2-0327
+      - REQ-SP800-37R2-0336
+      - REQ-SP800-37R2-0344
+      - REQ-SP800-37R2-0371
+      - REQ-SP800-37R2-0406
+      - REQ-SP800-37R2-0556
+  - id: PRIV-011
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: "P-2 wrote ART-ORG-CONTEXT without its section on the Component privacy program"
+    fixture: tests/fixtures/negative/PRIV-011.yaml
+    hint: "At P-2 append `## Privacy program` to ART-ORG-CONTEXT: the Component privacy and civil liberties program, its SCOP and PCLO with their staffing and reporting lines, complaint procedures, training, how privacy controls are designated, and whether the SCOP approves or, in an OSD Component, primarily advises."
+    enforces:
+      - REQ-DODI5400.11-0003
+      - REQ-DODI5400.11-0009
+      - REQ-DODI5400.11-0033
+      - REQ-DODI5400.11-0036
+      - REQ-DODI5400.11-0037
+      - REQ-DODI5400.11-0090
+      - REQ-DODI5400.11-0093
+      - REQ-DODI5400.11-0094
+      - REQ-DODI5400.11-0096
+      - REQ-DODI5400.11-0102
+      - REQ-DODI5400.11-0104
+      - REQ-DODI5400.11-0109
+      - REQ-DODI5400.11-0112
+      - REQ-DODI5400.11-0113
+      - REQ-DODI5400.11-0114
+      - REQ-DODI5400.11-0117
+      - REQ-DODI5400.11-0125
+      - REQ-DODI5400.11-0127
+      - REQ-DODI5400.11-0128
+      - REQ-DODI5400.11-0130
+      - REQ-DODI5400.11-0139
+      - REQ-DODI5400.11-0140
+      - REQ-DODI5400.11-0146
+      - REQ-DODI5400.11-0147
   - id: DEGRADED-001
     scope: run
     severity: W
@@ -3170,6 +3494,7 @@ rules:
     fixture: tests/fixtures/negative/VULN-004.yaml
     hint: Each vulnerabilities record carries cvss version 3.1 with a score and the Table 1 rating for it, the expected loss of confidentiality, integrity and availability, and the date it was reported, not before its discovery.
     enforces:
+      - REQ-DODI8531.01-0002
       - REQ-DODI8531.01-0135
       - REQ-DODI8531.01-0148
       - REQ-DODI8531.01-0153
@@ -3189,6 +3514,7 @@ rules:
     hint: Record remediation with the method chosen among the options weighed, the loss of confidentiality, integrity and availability considered, the six cost factors and the POA&M item; once the item is completed, verify on or after completion, restoring the baseline, with at least two successive scans, the last on or after completion finding it absent.
     enforces:
       - REQ-DODI5000.90-0105
+      - REQ-DODI8531.01-0002
       - REQ-DODI8531.01-0077
       - REQ-DODI8531.01-0112
       - REQ-DODI8531.01-0168
@@ -3227,7 +3553,6 @@ rules:
       - REQ-DODI5000.87-0120
       - REQ-DODI5000.90-0104
       - REQ-DODI8510.01-0079
-      - REQ-DODI8531.01-0002
       - REQ-DODI8531.01-0003
       - REQ-DODI8531.01-0004
       - REQ-DODI8531.01-0119

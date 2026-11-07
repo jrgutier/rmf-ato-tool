@@ -828,7 +828,9 @@ requirements:
     locator: "3.2"
     context: "Table 2. Categorize Tasks and Outcomes"
     statement: "Task C-2 Security Categorization | • A security categorization of the system, including the information processed by the system represented by the organization-identified information types, is completed. [CSF: ID.AM-1; ID.AM-2; ID.AM-3; ID.AM-4; ID.AM-5] • Security categorization results are documented in the security, privacy, and supply chain risk management plans. [CSF: Profile] • Security categorization results are consistent with the enterprise architecture and commitment to protecting organizational missions, business functions, and mission or business processes. [CSF: Profile] • Security categorization results reflect the organization’s risk management strategy. | • SO • IO or Steward"
-    status: "candidate"
+    status: "partial"
+    reason: "The categorization is in the plan's rmf:facts block (FACTS-001 holds it complete and approved); the supply chain plan is WI-04's and consistency with the enterprise architecture is unheld."
+    evidence: [{"kind": "rule", "target": "PRIV-008", "fixture": "tests/fixtures/negative/PRIV-008.yaml", "expect": "ART-SSP holds no privacy plan", "claim": "presence", "asserts": "Security categorization results are documented in the privacy plan held in ART-SSP"}]
     work_item: "WI-141"
   - id: "REQ-DODI8510.01-0109"
     citation: {"ref": "DODI8510.01", "page": 15, "anchor": "Task C-3 Security Categorization Review and Approval | The security categorization results"}
@@ -865,7 +867,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. Select Tasks and Outcomes, Continued"
     statement: "Task S-4 Documentation of Planned Control Implementations | Controls and associated tailoring actions are documented in security and privacy plans or equivalent documents. [CSF: Profile] | • SO • Common Control Provider"
-    status: "candidate"
+    status: "covered"
+    reason: "SSP-COV-001 fails a control with no statement in the plan, TLR-002 a tailoring action with no basis in tailoring.yaml, an equivalent document of ART-BASELINE."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Controls are documented in security and privacy plans, and a control with no plan statement fails"}, {"kind": "rule", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.yaml", "expect": "is removed with no basis", "claim": "presence", "asserts": "Tailoring actions are documented with their basis, and a removed control with no basis fails"}]
     work_item: "WI-141"
   - id: "REQ-DODI8510.01-0114"
     citation: {"ref": "DODI8510.01", "page": 16, "anchor": "Task S-5 Continuous Monitoring Strategy – System | A continuous monitoring strategy"}
@@ -895,7 +899,9 @@ requirements:
     locator: "3.2"
     context: "Table 4. Implement Tasks and Outcomes"
     statement: "Task I-1 Control Implementation | • Controls specified in the security and privacy plans are implemented. [CSF: PR.IP-1] • Systems security and privacy engineering methodologies are used to implement the controls in system security and privacy plans. [CSF: PR.IP-2] | • SO • Common Control Provider"
-    status: "candidate"
+    status: "partial"
+    reason: "I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "I-1 implements the controls in the security and privacy plans", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-DODI8510.01-0118"
     citation: {"ref": "DODI8510.01", "page": 16, "anchor": "Task I-2 Update Control Implementation Information | • Changes to the planned"}
@@ -903,7 +909,9 @@ requirements:
     locator: "3.2"
     context: "Table 4. Implement Tasks and Outcomes"
     statement: "Task I-2 Update Control Implementation Information | • Changes to the planned implementation of controls are documented. [CSF: PR.IP-1] • The security and privacy plans are updated based on information obtained during the implementation of the controls. [CSF: Profile] | • SO • Common Control Provider"
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-010 fails an I-2 that wrote ART-SSP with no update in the plan change log, and an update of a PII system's plans that leaves out the privacy plan."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Changes to the planned implementation of controls are documented: the security and privacy plans are updated at I-2, and an I-2 with no update fails"}, {"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.privacy.yaml", "expect": "update of the plans leaves out the privacy plan of a system processing PII", "claim": "constraint", "asserts": "The security and privacy plans are updated based on the implementation of the controls, and an update leaving out the privacy plan fails"}]
     work_item: "WI-142"
   - id: "REQ-DODI8510.01-0119"
     citation: {"ref": "DODI8510.01", "page": 17, "anchor": "Assess the controls to determine whether they are being correctly implemented, operating"}
@@ -950,7 +958,9 @@ requirements:
     locator: "3.2"
     context: "Table 5. Assessment Tasks and Outcomes, Continued"
     statement: "Task A-5 Remediation Actions | • Remediation actions to address deficiencies in the controls implemented in the system and environment of operation are taken. • Security and privacy plans are updated to reflect control implementation changes made based on the assessments and subsequent remediation actions. [CSF: Profile] | • SO • Common Control Provider • Control Assessor"
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 fails an A-5 that wrote ART-SSP with no plan update; whether remediation actions are taken is ASMT-006's triage, not held here."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.a5.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Security and privacy plans are updated to reflect implementation changes from the assessments and remediation actions at A-5"}]
     work_item: "WI-142"
   - id: "REQ-DODI8510.01-0125"
     citation: {"ref": "DODI8510.01", "page": 18, "anchor": "Task A-6 A Plan of Actions and Milestones | POA&M detailing remediation"}

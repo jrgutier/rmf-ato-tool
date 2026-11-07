@@ -14,7 +14,7 @@ FIXTURE_DIRS = sorted(p for p in NEG.iterdir() if p.is_dir())
 @pytest.mark.parametrize("overlay", FIXTURE_DIRS, ids=lambda p: p.name)
 def test_negative_fixture_fires_exactly_its_rules(overlay, tmp_path):
     expect = expectation(overlay)
-    assert expect["rule"] == overlay.name
+    assert expect["rule"] == overlay.name.partition(".")[0]
 
     result = validate(compose(overlay, tmp_path / "fw"), REPO_ROOT, P3A)
 
@@ -25,7 +25,7 @@ def test_negative_fixture_fires_exactly_its_rules(overlay, tmp_path):
 
 def test_every_p3a_framework_rule_has_a_fixture():
     p3a_rules = {r.id for r in load_registry() if r.id.startswith("FW-") and r.phase == "p3a"}
-    assert p3a_rules == {p.name for p in FIXTURE_DIRS} <= set(IMPLEMENTED)
+    assert p3a_rules == {p.name.partition(".")[0] for p in FIXTURE_DIRS} <= set(IMPLEMENTED)
 
 
 def test_registry_points_at_the_fixture_dirs():

@@ -1,0 +1,13 @@
+rule: PRIV-007
+bases:
+- pii
+description: a system processing PII with no privacy risk assessment
+mutations:
+- op: delete_field
+  file: artifacts/data/ra.yaml
+  path: privacy
+expect:
+  errors:
+  - PRIV-007
+  messages:
+  - the system processes PII and the risk assessment has no privacy risk assessment
