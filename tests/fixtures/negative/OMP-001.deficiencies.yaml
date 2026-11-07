@@ -1,0 +1,22 @@
+rule: OMP-001
+bases: [minimal]
+description: an entry at monitoring after a gap analysis that found deficiencies
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: entry
+    value:
+      step: M
+      task: M-1
+      current_state: An existing system in operations and maintenance.
+      completed: []
+      gaps: The gap analysis compared the implemented controls with the baseline.
+      decision: Enter at M-1.
+      notified: [PER-ISSM, PER-PM]
+      approved_by: PER-AO
+      deficiencies: [AC-2 account review not implemented]
+expect:
+  errors: [OMP-001]
+  also: [ENTRY-001]
+  messages:
+    - the gap analysis found control deficiencies
