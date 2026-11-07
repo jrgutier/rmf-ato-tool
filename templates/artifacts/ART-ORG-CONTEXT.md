@@ -31,7 +31,8 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
      - P-3 "## Organization-level risk assessment": enterprise threats, dependencies and
        aggregated risks, and when the assessment was last updated.
      - P-4 "## Organizationally tailored baselines and profiles": approved or directed
-       tailored baselines, overlays and CSF profiles systems must start from.
+       tailored baselines, overlays and CSF profiles systems must start from; an overlay the
+       organization develops itself also goes in org-context.yaml developed_overlays.
      - P-5 "## Common controls available for inheritance": table: provider | persona ID |
        controls offered | full or partial | provider authorization and its status.
      - P-6 "## Impact-level prioritization": how systems of the same impact level are

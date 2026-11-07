@@ -495,3 +495,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
 - Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
 - Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: references, extraction
+- Symptom: the first transcription of the Privacy Overlays' Section 6 gave AC-16 no guidance and AC-16(3) one, against Table 2's marks, and ran the rest of AC-16's guidance into its justification.
+- Root cause: the PDF prints AC-16's Guidance as a two-column box; the text extraction made it a table and placed it after the next heading, so reading Section 6 in line order files it under the wrong control.
+- Fix: rmf_tool.overlay_specs checks every specification against its summary-table marks (G, V, R, E per control set), and a named repair puts the box back under AC-16, failing when the text no longer matches it.
+- Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
+- Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
