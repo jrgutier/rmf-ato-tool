@@ -1,0 +1,16 @@
+rule: CATO-004
+bases:
+- minimal
+description: a sidecar used and not configured for the application
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: monitoring.sidecar
+  value:
+    used: true
+    configured_for: generic
+expect:
+  errors:
+  - CATO-004
+  messages:
+  - the security sidecar is not configured for unique application traffic inspection and handling of events

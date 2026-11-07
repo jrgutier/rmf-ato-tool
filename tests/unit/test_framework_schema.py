@@ -31,7 +31,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "requirements", "software", "system-description", "sar-summary",
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
-                     "test-strategy", "registration", "pia"}
+                     "test-strategy", "registration", "pia", "cato"}
 # framework/baselines/*.yaml (ADR-0002)
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs"}
 
@@ -402,6 +402,8 @@ RUN_EXAMPLES.update({
 _ST = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
+_CATO = YAML(typ="safe").load((REPO_ROOT / "templates/data/cato.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["cato"] = (_CATO, {**_CATO, "metrics": []})
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
      "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},

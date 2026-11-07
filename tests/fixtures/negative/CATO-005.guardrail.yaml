@@ -1,0 +1,14 @@
+rule: CATO-005
+bases:
+- minimal
+description: a guardrail on no risk tolerance
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.guardrails.0.tolerance
+  value: TOL-99
+expect:
+  errors:
+  - CATO-005
+  messages:
+  - 'GR-01: guardrail promotion rules rest on an agreed risk tolerance, and TOL-99 is no tolerance'

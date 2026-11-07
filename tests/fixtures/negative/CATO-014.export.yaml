@@ -1,0 +1,14 @@
+rule: CATO-014
+bases:
+- minimal
+description: application SBOMs written by hand
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: sbom.applications
+  value: manual
+expect:
+  errors:
+  - CATO-014
+  messages:
+  - the SBOM of applications passing through the DSOP is an automated export, not manual

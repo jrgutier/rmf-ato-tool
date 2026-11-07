@@ -1,0 +1,18 @@
+rule: CATO-010
+bases:
+- minimal
+description: feedback that ignores non-approved behavior
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: process.feedback.from_cyber_operations
+  value:
+  - configuration-changes
+  - incident-analysis
+  - mitigation-effectiveness
+  - threat-change
+expect:
+  errors:
+  - CATO-010
+  messages:
+  - feedback from cyber operations on non-approved-behavior is not monitored for the risk response

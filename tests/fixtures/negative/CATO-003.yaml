@@ -1,0 +1,14 @@
+rule: CATO-003
+bases:
+- minimal
+description: a reference design that is not approved
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.reference_design.approved
+  value: false
+expect:
+  errors:
+  - CATO-003
+  messages:
+  - 'the DSOP implements an approved DevSecOps Reference Design, and DoD Enterprise DevSecOps Reference Design: CNCF Kubernetes is not one'

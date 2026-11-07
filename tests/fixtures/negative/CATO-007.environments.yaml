@@ -1,0 +1,16 @@
+rule: CATO-007
+bases:
+- minimal
+description: no monitoring of development
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: monitoring.environments
+  value:
+  - test
+  - production
+expect:
+  errors:
+  - CATO-007
+  messages:
+  - continuous monitoring is not implemented in the development environment
