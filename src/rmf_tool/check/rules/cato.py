@@ -44,6 +44,7 @@ CRITERIA = ("defined-documented", "evidence-of-use", "workforce-knowledge",
 EVIDENCE = ("documentation", "demonstration")
 BRIEFED = ("critical-practices", "assessment-process", "evaluation-criteria")
 MET, UNMET = "met", ("not-met", "partially-met")
+RESULTS = (MET, *UNMET, "not-applicable")
 ANALYSIS = ("existing-authorization", "conmon-strategy", "active-cyber-defense",
             "devsecops-processes", "supply-chain-processes", "scrm-guidance")  # EVAL p. 8
 COMPETENCIES = ("conmon", "active-cyber-defense", "secure-supply-chain")
@@ -180,7 +181,7 @@ def assessment(ctx: Context) -> list[RunFinding]:
             err(f"{m.get('name')} is not trained on the cATO assessment process")
     plan = _mapping(a.get("plan"))
     unknown = [p for p in _strs(plan.get("key_practices")) if p not in TABLE_2]
-    if unknown or not _list(plan.get("key_practices")):
+    if unknown or not plan.get("key_practices"):
         err(f"the assessment plan identifies key practices that are no cATO requirement of "
             f"Table 2: {', '.join(map(str, unknown)) or 'none named'}")
     if plan.get("criteria_basis") != "DODCIO-CATO-EVAL":
@@ -199,8 +200,14 @@ def assessment(ctx: Context) -> list[RunFinding]:
         err("the assessment plan is not reviewed with the AO for key practices and concerns")
     if gaps := lacks(plan.get("briefed_on"), BRIEFED):
         err(f"the assessed organization is not briefed on: {', '.join(gaps)}")
-    for gap in lacks([c.get("criterion") for c in _dicts(a.get("criteria"))], CRITERIA):
+    criteria = _dicts(a.get("criteria"))
+    for gap in lacks([c.get("criterion") for c in criteria], CRITERIA):
         err(f"the assessment does not judge the high level criterion {gap}")
+    recommend = _mapping(a.get("recommendation")).get("recommend")
+    for c in criteria:
+        if c.get("result") != MET and (recommend == "authorize" or _sought(ctx)):
+            err(f"the high level criterion {c.get('criterion')} is {c.get('result')}, and a "
+                "cATO is recommended or decided")
     kinds = [e.get("kind") for e in _dicts(a.get("evidence"))]
     for gap in lacks(kinds, EVIDENCE):
         err(f"the evidence gathered on the practices includes no {gap}")
@@ -208,9 +215,6 @@ def assessment(ctx: Context) -> list[RunFinding]:
     for i in _dicts(a.get("interviews")):
         if i.get("role") not in roles:
             err(f"the interview of {i.get('role')} represents no key role of the DSO team")
-    scores = _dicts(a.get("scores"))
-    sidecar = _mapping(_mapping(data.get("monitoring")).get("sidecar")).get("used") is True
-    _scoring(scores, _mapping(a.get("recommendation")), sidecar, err)
     return out
 
 
@@ -238,37 +242,62 @@ def recommendation(ctx: Context) -> list[RunFinding]:
     if rec.get("briefing") != "ao-cato-decision-briefing":
         err(f"the recommendation reaches the AO in an AO cATO decision briefing, not "
             f"{rec.get('briefing')}")
-    conditions = {str(c.get("description")) for r in _sought(ctx)
-                  for c in _dicts(r.get("conditions"))}
+    standing = ledger.in_force(_dicts(ctx.ledger), ledger.effects(ctx.run))
+    conditions = {str(c.get("description")) for held in standing.values() if held.continuous
+                  for c in _dicts(held.continuous.get("conditions"))}
     if left := sorted(conditions - set(map(str, _list(rec.get("conditions"))))):
         err(f"the decision briefing leaves out conditions of the authorization: {'; '.join(left)}")
     return out
 
 
-def _scoring(scores: list[dict[str, Any]], rec: dict[str, Any], sidecar: bool,
-             err: Callable[[str], None]) -> None:
-    """Table 2: each threshold row scored, a threshold requirement met before an authorize
-    recommendation, every area assessed. A threshold row is not-applicable only where the guide
-    makes it conditional: the sidecar of PP05 depends on the reference design (IG p. 12)."""
+# --- CATO-015: Table 2 scoring -----------------------------------------------------------------
+
+def scoring(ctx: Context) -> list[RunFinding]:
+    """CATO-015: the assessment scores Table 2 of the IG (p. 19) as _scoring says."""
+    data, out, err = _record(ctx, "CATO-015")
+    if data is None:
+        return out
+    a = _mapping(data.get("assessment"))
+    _scoring(_dicts(a.get("scores")), _mapping(a.get("recommendation")),
+             _strs(_mapping(a.get("plan")).get("key_practices")), bool(_sought(ctx)), err)
+    return out
+
+
+def _scoring(scores: list[dict[str, Any]], rec: dict[str, Any], selected: list[str],
+             decided: bool, err: Callable[[str], None]) -> None:
+    """Table 2 (IG p. 19): it is no conformance checklist, so the organization chooses its
+    practices. Every threshold row is scored, and an objective row the plan selects; any row
+    may be not-applicable with a reason. A threshold requirement must be met before a cATO is
+    recommended or decided; an objective one may not be fully met initially."""
     for s in scores:
         ident = str(s.get("requirement"))
         if ident not in TABLE_2:
             err(f"{ident} is no cATO requirement of Table 2")
-        elif s.get("result") == "not-applicable" and TABLE_2[ident] == "T" \
-                and (ident != "PP05" or sidecar):
-            err(f"{ident} is a threshold requirement and must be met; it is not-applicable only "
-                "where the guide makes it conditional")
+        if s.get("result") not in RESULTS:
+            err(f"{ident} is scored {s.get('result')}, not met, partially-met, not-met or "
+                "not-applicable")
+        elif s.get("result") == "not-applicable" and not s.get("reason"):
+            err(f"{ident} is scored not-applicable with no reason")
     scored = {str(s.get("requirement")) for s in scores}
-    unscored = [r for r, level in TABLE_2.items() if level == "T" and r not in scored]
+    unscored = [r for r, level in TABLE_2.items()
+                if (level == "T" or r in selected) and r not in scored]
     if unscored:
-        err(f"threshold requirements are not scored: {', '.join(unscored)}")
+        err(f"threshold requirements and the objective ones the plan selects are not scored: "
+            f"{', '.join(unscored)}")
     unmet = [str(s.get("requirement")) for s in scores
              if TABLE_2.get(str(s.get("requirement"))) == "T" and s.get("result") in UNMET]
-    if unmet and rec.get("recommend") == "authorize":
-        err(f"a threshold requirement must be met: {', '.join(unmet)} unmet and the "
-            "recommendation is to authorize")
+    if unmet and (rec.get("recommend") == "authorize" or decided):
+        err(f"a threshold requirement must be met: {', '.join(unmet)} unmet and a cATO is "
+            "recommended or decided")
     for gap in lacks([s.get("area") for s in scores], AREAS):
         err(f"the assessment scores no {gap} against the evaluation and weighting criteria")
+
+
+def met(data: dict[str, Any], row: str) -> bool:
+    """Whether the assessment scores a Table 2 row met: an objective row is held to its
+    practice only then, since it may not be fully met initially (IG p. 19)."""
+    return any(str(s.get("requirement")) == row and s.get("result") == MET
+               for s in _dicts(_mapping(data.get("assessment")).get("scores")))
 
 
 # --- CATO-002: entry conditions ----------------------------------------------------------------
@@ -289,12 +318,16 @@ def entry(ctx: Context) -> list[RunFinding]:
             f"{a.get('date')}")
     items = _dicts(_mapping(ctx.data(POAM_FILE)).get("items")) \
         if ctx.run.path(POAM_FILE).is_file() else []
-    # Before the decision only: once AD-CATO is recorded, a new finding is a revocation matter,
-    # and today's POA&M is not the state the cATO was approved on.
+    # The pursuit this assessment serves: its AD-CATO decision, the first on or after the
+    # assessment. Before it, today's POA&M is the state the cATO is sought on; after it, only
+    # findings identified by the decision date count, as later ones are a revocation matter.
+    decision = min((d for r in _sought(ctx) if (d := _day(r.get("date"))) is not None
+                    and day is not None and d >= day), default=None)
     open_high = [str(i.get("id")) for i in items
                  if i.get("residual_risk") in UNMITIGATED and i.get("status") != "completed"
-                 and day is not None and not _sought(ctx)
-                 and (_day(_mapping(i.get("identified")).get("date")) or day) <= day]
+                 and (decision is None
+                      or (_day(_mapping(i.get("identified")).get("date")) or decision)
+                      <= decision)]
     if open_high:
         err(f"{', '.join(open_high)}: a cATO needs a current ATO with no High or Very High "
             "unmitigated findings")
@@ -423,6 +456,7 @@ def gates(ctx: Context) -> list[RunFinding]:
         return out
     p = _mapping(data.get("platform"))
     tolerances = {str(t.get("id")): t for t in _dicts(data.get("tolerances"))}
+    irp = ctx.run.artifact_md("ART-IRP").is_file()
     for g in _dicts(p.get("control_gates")):
         ident = g.get("id")
         for name, what in (("opens_on", "opens"), ("closes_on", "closes")):
@@ -446,6 +480,9 @@ def gates(ctx: Context) -> list[RunFinding]:
         if g.get("described_in") != "ART-IRP":
             err(f"{ident}: control gate processes are described in the incident response "
                 f"management material, not {g.get('described_in')}")
+        elif not irp:
+            err(f"{ident}: control gate processes are described in the incident response plan, "
+                "and the run has no ART-IRP")
     for g in _dicts(p.get("guardrails")):
         ident = g.get("id")
         if not str(g.get("out_of_tolerance") or "").strip():
@@ -457,6 +494,9 @@ def gates(ctx: Context) -> list[RunFinding]:
         if g.get("described_in") != "ART-IRP":
             err(f"{ident}: guardrail processes are described in the incident response management "
                 f"material, not {g.get('described_in')}")
+        elif not irp:
+            err(f"{ident}: guardrail processes are described in the incident response plan, and "
+                "the run has no ART-IRP")
     if data.get("use_case") == "production-in-factory" and all(
             t.get("applies_to") != "dsop" for t in tolerances.values()):
         err("the DSOP's single authorization boundary has no risk tolerance to set the "
@@ -486,12 +526,16 @@ def supply_chain(ctx: Context) -> list[RunFinding]:
     if p.get("access_point") not in ACCESS_POINTS:
         err(f"the platform leverages a Cloud Native Access Point or Boundary Cloud Access Point, "
             f"not {p.get('access_point')}")
-    cloud = _mapping(p.get("hosting")).get("cloud") is not False
+    hosting = _mapping(p.get("hosting"))
+    if hosting.get("kind") == "hyperscale-cloud" and hosting.get("cloud") is not True:
+        err("the hosting environment is a hyperscale cloud, so it is hosted on a cloud: "
+            f"cloud is {hosting.get('cloud')}")
+    cloud = hosting.get("kind") == "hyperscale-cloud" or hosting.get("cloud") is True
     if cloud and (gaps := lacks(p.get("cnapp"), CNAPP)):
         err(f"an environment hosted on a cloud deploys a CNAPP, and it lacks {', '.join(gaps)}")
     if gaps := lacks(p.get("as_code"), AS_CODE):
         err(f"the platform does not rely on {', '.join(gaps)} as code to avoid environment drift")
-    if p.get("configuration_validation") != "automated":
+    if met(data, "SA03") and p.get("configuration_validation") != "automated":
         err("security control configurations and their validation are not automated")
     if gaps := lacks(p.get("scanning"), SCANNING):
         err(f"security scanning leaves out {', '.join(gaps)}")
@@ -556,7 +600,7 @@ def strategy(ctx: Context) -> list[RunFinding]:
             "risk")
     if gaps := lacks(m.get("environments"), MONITORED_ENVIRONMENTS):
         err(f"continuous monitoring is not implemented in the {', '.join(gaps)} environment")
-    if m.get("soc_strategy") != "software-factory":
+    if met(data, "PP03") and m.get("soc_strategy") != "software-factory":
         err("the SOC continuous monitoring strategy does not use the software factory")
     metrics = _dicts(data.get("metrics"))
     for gap in lacks([x.get("kind") for x in metrics], METRIC_KINDS):
@@ -598,7 +642,7 @@ def people(ctx: Context) -> list[RunFinding]:
             or wg.get("chair") != "senior-leadership":
         err("no insider threat working group is established, active, and chaired by senior "
             "leadership")
-    if not _list(insider.get("critical_areas")):
+    if not insider.get("critical_areas"):
         err("the insider threat working group identifies no critical areas for review")
     triggers = {str(t.get("id")): t
                 for t in _dicts(_mapping(data.get("strategy")).get("triggers"))}
@@ -628,14 +672,15 @@ def people(ctx: Context) -> list[RunFinding]:
     if onboarding.get("completed_by") != "all-personnel":
         err(f"all personnel have gone through onboarding without regard to rank or position, "
             f"not {onboarding.get('completed_by')}")
-    if gaps := lacks(p.get("experience"), EXPERIENCE):
+    if gaps := lacks(p.get("experience"), EXPERIENCE[:-1] + (
+            EXPERIENCE[-1:] if met(data, "TP04") else ())):
         err(f"no member of the team has experience in {', '.join(gaps)}")
     culture = _mapping(p.get("culture_change"))
-    if not _list(culture.get("challenges")) or not str(culture.get("approach") or "").strip():
+    if not culture.get("challenges") or not str(culture.get("approach") or "").strip():
         err("cultural change challenges and the change management approach are not identified")
     if gaps := lacks(culture.get("means"), CULTURE_MEANS):
         err(f"cultural change challenges are not addressed with {', '.join(gaps)}")
-    if p.get("position_descriptions") != "dcwf":
+    if met(data, "TP02") and p.get("position_descriptions") != "dcwf":
         err(f"hiring position descriptions and certification requirements follow the DCWF, not "
             f"{p.get('position_descriptions')}")
     return out
@@ -666,10 +711,11 @@ def training(ctx: Context) -> list[RunFinding]:
     if all(r.get("team") != "cssp" or "devsecops-principles" not in _list(r.get("subjects"))
            for r in records):
         err("no evidence that the CSSP received training on DevSecOps principles")
-    if all(r.get("team") != "leadership" or "cato-method" not in _list(r.get("subjects"))
-           for r in records):
+    if lacks([s for r in records if r.get("team") == "leadership"
+              for s in _list(r.get("subjects"))], ("software-modernization", "cato-method")):
         err("leadership training on software modernization and cATO methods is not tracked")
-    if gaps := lacks([s for r in records for s in _list(r.get("subjects"))], TP08_SUBJECTS):
+    if met(data, "TP08") and (
+            gaps := lacks([s for r in records for s in _list(r.get("subjects"))], TP08_SUBJECTS)):
         err(f"the team is not trained in {', '.join(gaps)}")
     if all(x.get("shadowed") not in members for x in _dicts(t.get("cross_functional"))):
         err("cross-functional team training and shadowing are not documented")
@@ -731,7 +777,7 @@ def process(ctx: Context) -> list[RunFinding]:
     if p.get("compliance_monitoring") != "changing-threat":
         err("control compliance and continued effectiveness are not monitored against the "
             "changing threat")
-    if not _list(p.get("business_rules")):
+    if not p.get("business_rules"):
         err("the system establishes no business rules")
     return out
 
@@ -780,7 +826,7 @@ def tolerances(ctx: Context) -> list[RunFinding]:
                 "and tools roadmap")
     if all(a.get("demonstrated") is not True for a in activities):
         err("no activity of the Activities and Tools Guidebook is demonstrated")
-    if not _list(mapping.get("additional_documentation")):
+    if not mapping.get("additional_documentation"):
         err("the additional documentation listed with the mapped activities is not included")
     return out
 
@@ -824,4 +870,5 @@ def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
                 ("CATO-004", monitoring), ("CATO-005", gates), ("CATO-006", supply_chain),
                 ("CATO-007", strategy), ("CATO-008", people), ("CATO-009", training),
                 ("CATO-010", process), ("CATO-011", tolerances), ("CATO-012", recommendation),
-                ("CATO-013", method_training), ("CATO-014", sbom), ("SWLC-001", lifecycle))
+                ("CATO-013", method_training), ("CATO-014", sbom), ("CATO-015", scoring),
+                ("SWLC-001", lifecycle))
