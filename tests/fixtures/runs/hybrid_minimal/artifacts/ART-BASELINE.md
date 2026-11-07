@@ -3,7 +3,7 @@ artifact_id: ART-BASELINE
 run_id: hybrid-minimal
 produced_by_task: S-1
 touched_by: [S-1]
-sources: [INT-006.A1]
+sources: [INT-006.A1, ART-ORG-CONTEXT]
 ---
 # Control baseline
 

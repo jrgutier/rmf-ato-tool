@@ -1,0 +1,21 @@
+rule: OMP-001
+bases: [hybrid]
+description: an existing system entering at A-2 that has not completed the Prepare tasks
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: entry
+    value:
+      step: A
+      task: A-2
+      current_state: An existing system in operations and maintenance.
+      completed: [P-1, P-9, C-2, S-1, S-2, I-1]
+      gaps: The gap analysis compared the implemented controls with the baseline.
+      decision: Enter at A-2.
+      notified: [PER-ISSM, PER-PM]
+      approved_by: PER-AO
+expect:
+  errors: [OMP-001]
+  also: [ENTRY-001]
+  messages:
+    - has not completed the Prepare tasks

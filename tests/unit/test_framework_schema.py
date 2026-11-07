@@ -34,7 +34,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "cybersecurity-strategy",
                      "test-strategy", "registration", "pia", "cato", "cloud",
                      "scrm", "scrm-acquisition", "scrm-plan", "scrm-org",
-                     "reciprocity"}
+                     "reciprocity", "bia"}
 # framework/baselines/*.yaml (ADR-0002)
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs",
                           "privacy-considerations", "cnssi-1253-parameters"}
@@ -384,6 +384,8 @@ RUN_EXAMPLES = {
 
 _PIA = YAML(typ="safe").load((REPO_ROOT / "templates/data/pia.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["pia"] = (_PIA, {**_PIA, "form": "DD-9999"})
+_BIA = YAML(typ="safe").load((REPO_ROOT / "templates/data/bia.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["bia"] = (_BIA, {**_BIA, "mission_critical": "yes"})
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
 

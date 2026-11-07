@@ -1,6 +1,6 @@
 # Template: artifacts/data/authorizations.yaml (A-2, updated by R-4 and M-6; schema
 # authorizations). One record per decision. A later decision is a new record: never edit or
-# remove an earlier one. AODM-001 to AODM-007 judge the records (playbooks/R/R-4.md).
+# remove an earlier one. AODM-001 to AODM-013 and CCPA-001/002 judge the records (playbooks/R/R-4.md).
 # `records: []` is valid at A-2 when no test event runs live.
 # What the security plan states of the system, restated whole with each record; SSPR-001
 # compares it with what the records hold.
@@ -54,6 +54,20 @@ records:
       scope: component  # component | enterprise, deployed to multiple DoD Components
       # version: "1.0"  # enterprise: the version the ISRMC approved
       # boarding: BRD-001  # enterprise: an approved boarding below
+    # provider:  # AD-ATU or AD-DATU: the provider's completed ATO (AODM-005)
+    #   {organization: "<<FILL>>", decision: AD-ATO, date: "2025-06-01", package: "<<FILL: eMASS ID>>",
+    #    termination_date: "2028-06-01"}  # or continuous: true under a cATO; the ATU lapses with it
+    # connection_approval:  # AD-ATU: the Receiving AO's approval for the Granting system (AODM-012)
+    #   {by: PER-AO, granting_system: "<<FILL>>", receiving_system: "<<FILL>>", date: "2026-01-01",
+    #    sources: [INT-001.A1]}  # by the deciding AO, not after the ATU
+    # granting_ao_copy: {to: "<<FILL: Granting AO>>", documents: [ART-AUTHREC], date: "2026-01-02"}
+    # site_guidance: {sites: ["<<FILL: site>>"], configuration: ART-SSP, date: "2026-01-02"}  # not before the ATU
+    # common_controls:  # subject common-controls (CCPA-001)
+    #   system_based: false  # true: the system's security plan documents them
+    #   implementation_record: artifacts/ssp/controls/ac.yaml  # false: a run file the package lists
+    # halts: [AUTH-000]  # a denial: every authorization of the subject in force on its date (AODM-013)
+    # poam_revision:  # AD-DATO, AD-DCCA (AODM-013)
+    #   {by: PER-AODR, with: PER-PM, items: [POAM-001], date: "2026-01-05"}  # with PER-CCP for common controls
     # degraded_disclosure: "<<FILL: only when rmf check reports DEGRADED-001>>"
     rationale: "<<FILL: why the AO decided this>>"
     sources: [ART-RAR, INT-001.A1]
@@ -104,4 +118,12 @@ records:
 #     differences: []  # {issue, status: open | resolved}
 #     results: [{element: "<<FILL: assessment element>>", judgment: other-than-satisfied, further_action: REC-01}]
 #     recommendations: [{id: REC-01, action: "<<FILL: action>>", based_on: "<<FILL: the element>>"}]
+#     sources: [INT-001.A1]
+# offerings:  # common controls made available for inheritance (CCPA-002)
+#   - id: OFR-001
+#     controls: [AC-2]
+#     offered: "2026-01-10"  # an AD-CCA (or the system ATO of system-based controls) is in force
+#     authorization: AUTH-001
+#     indicated: [implemented, assessed, authorized, available]
+#     access: {documentation: [ART-SSP, ART-SAR], tools: ["<<FILL: e.g. eMASS>>"]}  # artifacts of the run
 #     sources: [INT-001.A1]

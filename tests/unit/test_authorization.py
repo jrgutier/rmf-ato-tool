@@ -19,7 +19,8 @@ from rmf_tool.run.migrate import migrate
 from rmf_tool.run.model import open_run
 
 FILE = "artifacts/data/authorizations.yaml"
-EFFECTS = {"AD-IATT": "test", "AD-ATO": "authorize", "AD-DATO": "deny", "AD-CATO": "continuous",
+EFFECTS = {"AD-IATT": "test", "AD-ATO": "authorize", "AD-ATU": "authorize", "AD-DATO": "deny",
+           "AD-CATO": "continuous",
            "AD-CONT": "continue", "AD-RCATO": "revoke-continuous", "AD-RESC": "rescind"}
 ATO = {"id": "AUTH-001", "decision": "AD-ATO", "date": "2026-01-10",
        "authorization_termination_date": "2027-01-10"}
@@ -43,6 +44,45 @@ def test_revoking_a_cato_restores_the_ato_and_its_date():
     assert held.record == ATO and held.continuous is None
     assert held.expires == dt.date(2027, 1, 10)
     assert stands([ATO, CATO, REVOKED], "2027-02-01") == {}
+
+
+def test_an_atu_lapses_with_the_provider_ato_it_rests_on():
+    """SP 800-37r2 p. 164: the ATU remains in effect while the provider's ATO meets the
+    requirements; it carries no date of its own, so the provider's ends it."""
+    atu = {"id": "AUTH-001", "decision": "AD-ATU", "date": "2026-01-10",
+           "provider": {"termination_date": "2026-06-30"}}
+    assert list(stands([atu], "2026-06-30")) == ["AUTH-001"]
+    assert stands([atu], "2026-07-01") == {}
+    assert stands([{**atu, "provider": {"continuous": True}}], "2030-01-01")
+
+
+def test_a_denial_halts_what_it_lists():
+    """SP 800-37r2 p. 165: a denial halts all activity, so what it lists in halts stops."""
+    test = {"id": "AUTH-001", "decision": "AD-IATT", "date": "2026-01-10",
+            "authorization_termination_date": "2026-12-31"}
+    denial = {"id": "AUTH-002", "decision": "AD-DATO", "date": "2026-02-01"}
+    assert list(stands([test, denial], "2026-03-01")) == ["AUTH-001"]
+    assert stands([test, {**denial, "halts": ["AUTH-001"]}], "2026-03-01") == {}
+
+
+def test_a_package_lists_the_record_of_common_control_implementation(minimal_run):
+    """SP 800-37r2 p. 159: the record a not system-based common control decision names is an
+    element of the package, and CCPA-001 accepts it once a file of an artifact holds it."""
+    from rmf_tool import build
+
+    def common_controls(data):
+        data["records"][1].update({
+            "decision": "AD-CCA", "subject": "common-controls", "conveyed_to": ["PER-CCP"],
+            "common_controls": {"system_based": False,
+                                "implementation_record": "artifacts/data/ssp-records.yaml"}})
+    edit_yaml(minimal_run / FILE, common_controls)
+    build.build(open_run(minimal_run, REPO_ROOT))
+    manifest = YAML(typ="safe").load((minimal_run / "package/manifest.yaml").read_text())
+    element = manifest["package"]["authorization_package"][-1]
+    assert element == {"element": "common-control-implementation", "record": "AUTH-002",
+                       "path": "artifacts/data/ssp-records.yaml", "artifact_id": "ART-SSP",
+                       "status": "present"}
+    assert rules.common_control_package(Context(open_run(minimal_run, REPO_ROOT))) == []
 
 
 def test_rescission_ends_the_authorization_on_its_date():
@@ -245,7 +285,19 @@ def test_atu_needs_the_providers_completed_ato(minimal_run):
     assert "follows the decision" in _check(minimal_run, rules.chain)
     _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
                                 "date": "2026-01-01", "package": "eMASS 1"})
+    assert "termination_date of the provider's ATO" in _check(minimal_run, rules.chain)
+    _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
+                                "date": "2026-01-01", "package": "eMASS 1",
+                                "termination_date": "2029-01-01"})
     assert _check(minimal_run, rules.chain) == ""
+
+
+def test_atu_rests_on_a_provider_ato_under_ongoing_authorization(minimal_run):
+    """Ongoing authorization lifts the provider's termination date (SP 800-37r2 p. 163)."""
+    _set(minimal_run, decision="AD-ATU")
+    _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
+                                "date": "2026-01-01", "package": "eMASS 1", "ongoing": True})
+    assert "termination_date of the provider's ATO" not in _check(minimal_run, rules.chain)
 
 
 def test_common_control_authorization_needs_its_subject_and_provider(minimal_run):
@@ -401,7 +453,8 @@ def test_example_migrates_onto_the_ledger(tmp_path):
     assert ledger.load(run)
     assert "have not written their outputs" in _check(run_dir, rules.records_valid)  # DIAS SVCA PIA
     for rel in ("artifacts/ART-DIAS.md", "artifacts/data/dias.yaml", "artifacts/ART-SVCA.md",
-                "artifacts/data/service-agreements.yaml", "artifacts/ART-PIA.md"):
+                "artifacts/data/service-agreements.yaml", "artifacts/ART-PIA.md",
+                "artifacts/ART-BIA.md", "artifacts/data/bia.yaml", "artifacts/ART-REG.md"):
         shutil.copy(VALID_MINIMAL / rel, run_dir / rel)
     assert _check(run_dir, rules.records_valid) == ""
     assert "needs threat_assessment" in _check(run_dir, rules.threat_assessment)
@@ -483,7 +536,8 @@ def _observed(run_dir: Path, decision: str = "", field: str = "") -> tuple:
     context = Context(run)
     messages = sorted(f.finding.message for rule in (
         rules.records_valid, rules.parties_valid, rules.termination_valid, rules.chain,
-        rules.threat_assessment, rules.cato_eligible) for f in rule(context))
+        rules.threat_assessment, rules.cato_eligible, rules.atu_connection, rules.denial)
+        for f in rule(context))
     stands = ledger.in_force(ledger.load(run), ledger.effects(run))
     return messages, sorted(stands), [bool(s.continuous or s.ongoing) for s in stands.values()]
 
@@ -518,3 +572,22 @@ def test_a_single_course_of_action_stands_when_evaluated_adequate(minimal_run):
     run = open_run(minimal_run, REPO_ROOT)
     assert not [f for f in engine.evaluate(run).findings if f.rule == "RAR-003"]
 
+
+
+def test_site_guidance_may_name_the_granting_systems_package(tmp_path):
+    """DoD reciprocity memo 4.2.2: sites connect in the configuration the Granting AO
+    authorized, which lives in the package the receiving organization received."""
+    import yaml
+    from _mutations import apply
+    from test_check_rules import base_copy
+
+    run_dir = base_copy("minimal", tmp_path / "run")
+    spec = yaml.safe_load((REPO_ROOT / "tests/fixtures/negative/AODM-012.configuration.yaml")
+                          .read_text(encoding="utf-8"))
+    for mutation in spec["mutations"]:
+        apply(run_dir, mutation)
+    def package(d):
+        atu = next(r for r in d["records"] if r.get("site_guidance"))
+        atu["site_guidance"]["configuration"] = atu["provider"]["package"]
+    edit_yaml(run_dir / FILE, package)
+    assert "is not an artifact of this run" not in _check(run_dir, rules.atu_connection)

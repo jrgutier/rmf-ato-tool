@@ -312,7 +312,7 @@ P-2 writes no facts.
 | Step | P Prepare (organization level) |
 | Phases | PH-MSA (primary), PH-OS |
 | Depends on | P-2 |
-| Inputs | ART-ORG-CONTEXT, EXT-THREAT |
+| Inputs | ART-ORG-CONTEXT, EXT-THREAT, EXT-ORG-POLICY |
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
@@ -401,7 +401,7 @@ P-3 writes no facts.
 | Step | P Prepare (organization level, optional) |
 | Phases | PH-MSA (primary) |
 | Depends on | P-3 |
-| Inputs | ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS |
+| Inputs | ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS, EXT-ORG-POLICY, EXT-PRODUCT |
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
@@ -579,7 +579,7 @@ P-5 writes no facts.
 | Step | P Prepare (organization level, optional) |
 | Phases | PH-MSA (primary) |
 | Depends on | P-3 |
-| Inputs | ART-ORG-CONTEXT |
+| Inputs | ART-ORG-CONTEXT, EXT-ORG-POLICY |
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
@@ -656,7 +656,7 @@ P-6 writes no facts.
 | Step | P Prepare (organization level) |
 | Phases | PH-MSA (primary) |
 | Depends on | P-2, P-3 |
-| Inputs | ART-ORG-CONTEXT |
+| Inputs | ART-ORG-CONTEXT, EXT-ORG-POLICY |
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |

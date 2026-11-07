@@ -1,0 +1,13 @@
+rule: AODM-013
+bases: [minimal]
+description: a denial whose POA&M is revised with someone other than the system owner
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-DATO}
+  - {op: delete_field, file: artifacts/data/authorizations.yaml, path: records.1.authorization_termination_date}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.halts, value: [AUTH-001]}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.poam_revision, value: {by: PER-AODR, with: PER-ISSM, items: [POAM-001], date: '2026-11-21'}}
+expect:
+  errors: [AODM-013]
+  also: [CATO-002, SSPR-001]
+  messages:
+    - the plan of action and milestones is revised with PER-PM, not PER-ISSM

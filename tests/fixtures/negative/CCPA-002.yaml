@@ -1,0 +1,10 @@
+rule: CCPA-002
+bases: [minimal]
+description: common controls offered before their authorization
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: offerings, value: [{id: OFR-001, controls: [AC-2], offered: '2026-11-01', authorization: AUTH-002, indicated: [implemented, assessed, authorized, available], access: {documentation: [ART-SSP, ART-SAR], tools: [eMASS]}, sources: [INT-012.A1]}]}
+expect:
+  errors: [CCPA-002]
+  also: []
+  messages:
+    - "AUTH-002 is not an authorization in force on 2026-11-01: common controls are authorized before they are made available for inheritance"

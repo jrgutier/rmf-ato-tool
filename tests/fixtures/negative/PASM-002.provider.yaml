@@ -1,0 +1,14 @@
+rule: PASM-002
+bases:
+- pii
+description: privacy information reaches the AO from the ISSO, not the SAOP
+mutations:
+- op: set_field
+  file: artifacts/data/sar-report.yaml
+  path: privacy.provided.by
+  value: PER-ISSO
+expect:
+  errors:
+  - PASM-002
+  messages:
+  - privacy information goes to the authorizing official from the senior agency official for privacy, not PER-ISSO

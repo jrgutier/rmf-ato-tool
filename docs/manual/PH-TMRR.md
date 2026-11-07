@@ -107,6 +107,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
 | [EXT-NSA-ASSESSMENT](../../MANUAL.md#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -165,6 +168,8 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -224,11 +229,15 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [EXT-BASELINES](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
 | [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -288,7 +297,12 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|---|
 | [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -355,6 +369,12 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -412,10 +432,13 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
 | [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -486,6 +509,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -543,9 +567,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
+| Responsible | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -556,6 +580,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -572,6 +597,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Security and privacy plans reflecting the controls needed to protect the system and its environment commensurate with risk are reviewed and approved by the AO (DoDI 8510.01 Table 3 outcome).
 - ART-SSP records the AO's approval (or the changes required before approval), and `approvals` in ssp-records.yaml holds each approver's full name, system role, title, signature and date, with the concurrences.
 - conmon.yaml records the AO's or AODR's approval of the monitoring strategy, if S-5 did not, with conmon.yaml rewritten whole (ISCM-004).
+- For a system processing PII, the senior agency official for privacy (PER-PRIV) has reviewed and approved the privacy plan before it went to the AO or AODR, recorded in ssp-records.yaml privacy_plan.approvals (PRIV-012).
 
 **Alignment**
 

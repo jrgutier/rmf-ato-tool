@@ -1,5 +1,6 @@
-"""The authorization ledger: AODM-001 to AODM-007, AODM-009 to AODM-011 and AOCHG-001, the
-Enterprise boarding and receipt of ENT-001 and ENT-002, and AUTHRPT-001 on what follows a decision.
+"""The authorization ledger: AODM-001 to AODM-007, AODM-009 to AODM-013 and AOCHG-001, the
+Enterprise boarding and receipt of ENT-001 and ENT-002, the common controls of CCPA-001 and
+CCPA-002, and AUTHRPT-001 on what follows a decision.
 Each reads the records through ``rmf_tool.run.authorization`` and stays quiet about a missing
 or unreadable file (RUN-ART-001 and RUN-FM-001 report those), except AUTHRPT-001: ART-AUTHRPT is
 not a core artifact, so RUN-ART-001 never demands its data and the rule must. A record's findings
@@ -15,10 +16,11 @@ from typing import Any
 
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
+from rmf_tool.package import CC_IMPLEMENTATION
 from rmf_tool.run import authorization as ledger
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope, status
-from rmf_tool.run.model import YamlError
+from rmf_tool.run.model import MANIFEST_FILE, YamlError
 
 ATO_TYPES = ("AD-ATO", "AD-ATOC")
 ELEVATED_RISK = ("high", "very-high")  # DoDI 8510.01 4.3.c(7): "Very High" or "High"
@@ -45,6 +47,9 @@ AO_RESPONSES = {"acceptable": ("signed-decision",),
 AO_ACTIONS = ("ongoing-authorization", "reauthorization")
 AO_ACCEPTS = frozenset({"organizational-operations", "organizational-assets", "individuals",
                         "other-organizations", "the-nation"})
+PACKAGED = ("present", "seeded")
+OFFERING_BASES = ("AD-CCA", *ATO_TYPES)  # system-based controls inherit the system's ATO
+INDICATED = ("implemented", "assessed", "authorized", "available")  # SP 800-37r2 p. 162
 Record = dict[str, Any]
 NSS_DESIGNATION_FILE = "artifacts/data/nss-assessments.yaml"  # P-16: nss true or false
 
@@ -190,16 +195,22 @@ def termination_valid(ctx: Context) -> list[RunFinding]:
 
 def _late_review(record: Record, date: dt.date, prior: list[Record],
                  err: Callable[[Record, str], None]) -> None:
-    """A time-driven review falls within the frequency the last review on this authorization
-    set."""
-    last = [r for r in prior if isinstance(r.get("review"), dict)
-            and r.get("underlying") == record.get("underlying")]
-    if not last:
+    """A time-driven review falls within the frequency the last time-driven review on this
+    authorization set. An event-driven review is in addition to it (SP 800-37r2 p. 168), so it
+    does not reset the clock."""
+    reviews = [r for r in prior if isinstance(r.get("review"), dict)
+               and r.get("underlying") == record.get("underlying")]
+    timed = [r for r in reviews if r.get("basis") != "event-driven"]
+    if not timed:
         return
-    since, days = _day(last[-1].get("date")), last[-1]["review"].get("frequency_days")
+    last = timed[-1]
+    since, days = _day(last.get("date")), last["review"].get("frequency_days")
     if since is not None and days and (date - since).days > days:
-        err(record, f"this review comes {(date - since).days} days after {last[-1].get('id')}, "
-            f"past its {days}-day frequency")
+        between = reviews[reviews.index(last) + 1:]
+        event = any(r.get("basis") == "event-driven" for r in between)
+        err(record, f"this review comes {(date - since).days} days after {last.get('id')}, "
+            f"past its {days}-day frequency"
+            + ("; an event-driven review is in addition to it, not instead" if event else ""))
 
 
 # --- AODM-003: Component CIO position before an ATO at High or Very High --------------------
@@ -281,6 +292,8 @@ def chain(ctx: Context) -> list[RunFinding]:
                 err(r, f"{r['decision']} names the provider and its completed ATO")
             elif date is not None and (_day(provider.get("date")) or date) > date:
                 err(r, f"the provider's ATO of {provider.get('date')} follows the decision")
+            elif effect == "authorize":
+                _provider_valid(r, provider, date, err)
         replaced = by_id.get(r.get("supersedes"))
         if effect == "authorize":
             standing = [i for i, held in ledger.in_force(prior, effect_of, date).items()
@@ -301,6 +314,21 @@ def chain(ctx: Context) -> list[RunFinding]:
             if atd is not None and old is not None and atd > old:
                 err(r, f"a new AO's terms cannot extend the termination date {old} to {atd}")
     return out
+
+
+def _provider_valid(record: Record, provider: Record, date: dt.date | None,
+                    err: Callable[[Record, str], None]) -> None:
+    """An authorization to use rests on a valid ATO of the provider (SP 800-37r2 pp. 163-164):
+    one with a termination date not passed on the decision date, or one whose termination date
+    is lifted, under a cATO or under ongoing authorization."""
+    ends = _day(provider.get("termination_date"))
+    lifted = provider.get("continuous") is True or provider.get("ongoing") is True
+    if ends is None and not lifted:
+        err(record, f"{record['decision']} records the termination_date of the provider's ATO, "
+            "or continuous: true under a cATO")
+    elif ends is not None and date is not None and ends < date:
+        err(record, f"the provider's ATO ended on {ends}, before the decision of {date}: an "
+            "authorization to use rests on a valid ATO")
 
 
 # --- AOCHG-001: the new authorizing official's review, finding and response -----------------
@@ -647,6 +675,170 @@ def enterprise_received(ctx: Context) -> list[RunFinding]:
         if (found.get("change_request") or {}).get("approved_on") != "isrmc-risk-acceptance":
             err(item, "the ISRMC risk acceptance is the RMF artifact that approves the change "
                 "request")
+    return out
+
+
+# --- AODM-012: an authorization to use in DoD: connection, copy and site guidance -------------
+
+def atu_connection(ctx: Context) -> list[RunFinding]:
+    """DoD CIO reciprocity memo p. 6 and 4.2.2.g: the ATU includes the Receiving AO's approval
+    for the Granting system to connect, provides a copy of implementing documentation to the
+    Granting AO, and tells subordinate sites to operate or connect only in the authorized
+    configuration."""
+    out, err = _rule(ctx, "AODM-012")
+    artifacts = ctx.run.artifacts
+    for r, kind in _typed(ctx):
+        requires, date = kind.get("requires") or (), _day(r.get("date"))
+        if "connection_approval" in requires:
+            approval = r.get("connection_approval")
+            if not isinstance(approval, dict):
+                err(r, f"{r['decision']} records connection_approval: the Receiving AO's approval "
+                    "for the Granting system to connect")
+            else:
+                approved = _day(approval.get("date"))
+                if approval.get("by") != r.get("decided_by"):
+                    err(r, f"the connection approval is by {approval.get('by')}, not "
+                        f"{r.get('decided_by')}: the Receiving AO who issues the ATU grants it")
+                if approved is not None and date is not None and approved > date:
+                    err(r, f"the connection approval of {approved} comes after the ATU of {date} "
+                        "that includes it")
+        if "granting_ao_copy" in requires:
+            copy = r.get("granting_ao_copy")
+            if not isinstance(copy, dict):
+                err(r, f"{r['decision']} records granting_ao_copy: the implementing documentation "
+                    "provided to the Granting AO")
+            elif (sent := _day(copy.get("date"))) is not None and date is not None \
+                    and sent < date:
+                err(r, f"the copy of implementing documentation is provided on {sent}, before "
+                    f"the ATU of {date} exists")
+        if "site_guidance" in requires:
+            guidance = r.get("site_guidance")
+            if not isinstance(guidance, dict):
+                err(r, f"{r['decision']} records site_guidance: the notice to subordinate sites "
+                    "of the authorized configuration")
+                continue
+            # The configuration is the Granting system's: an artifact of this run, a product
+            # file, or the provider's package the receiving organization holds.
+            configuration = guidance.get("configuration")
+            provider = r.get("provider")
+            package = provider.get("package") if isinstance(provider, dict) else None
+            if not isinstance(configuration, str) or not (
+                    configuration in artifacts or configuration.startswith("product/")
+                    or configuration == package):
+                err(r, f"the authorized configuration {configuration} given to "
+                    "subordinate sites is not an artifact of this run")
+            notified = _day(guidance.get("date"))
+            if notified is not None and date is not None and notified < date:
+                err(r, f"subordinate sites are notified on {notified} that the system is "
+                    f"authorized, before the ATU of {date}")
+    return out
+
+
+# --- AODM-013: a denial halts what operates and revises the POA&M -----------------------------
+
+def denial(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 p. 165: if the system is in operation, all activity is halted, and the AO or
+    designated representative works with the system owner or common control provider to revise
+    the POA&M. A denial of use (AD-DATU) does not list poam_revision: the POA&M of the
+    provider's system is not the customer's."""
+    out, err = _rule(ctx, "AODM-013")
+    records, effect_of = _records(ctx), ledger.effects(ctx.run)
+    data = ctx.data(POAM_FILE)
+    items = data.get("items") if isinstance(data, dict) else None
+    poam = {str(i.get("id")) for i in items or () if isinstance(i, dict)} if items else None
+    for r, kind in _typed(ctx):
+        if kind.get("effect") != "deny":
+            continue
+        date, receiver = _day(r.get("date")), RECEIVERS.get(r.get("subject"))
+        base, halts = r.get("underlying"), r.get("halts")
+        named = {str(h) for h in halts} if isinstance(halts, list) else set()
+        stands = ledger.in_force(_before(records, r), effect_of, date)
+        # In operation means an authorization to operate stands: an IATT is a test, and testing
+        # under it may run to its own date (SP 800-37r2 p. 165).
+        running = sorted(i for i, held in stands.items()
+                         if held.record.get("subject") == r.get("subject") and i != base
+                         and effect_of.get(held.record.get("decision")) == "authorize")
+        if gap := [i for i in running if i not in named]:
+            err(r, f"in force on {date}: {', '.join(gap)}; if the subject is in operation, all "
+                "activity is halted, so list it in halts")
+        if "poam_revision" not in (kind.get("requires") or ()):
+            continue
+        revision = r.get("poam_revision")
+        if not isinstance(revision, dict):
+            err(r, f"{r['decision']} records poam_revision: the POA&M revised with {receiver}")
+            continue
+        if revision.get("with") != receiver:
+            err(r, f"the plan of action and milestones is revised with {receiver}, not "
+                f"{revision.get('with')}")
+        if poam is not None and (absent := sorted(
+                {str(i) for i in revision.get("items") or ()} - poam)):
+            err(r, f"the revised POA&M items {', '.join(absent)} are not in {POAM_FILE}")
+    return out
+
+
+# --- CCPA-001: the package of common controls that are not system-based ----------------------
+
+def common_control_package(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 p. 159: a package for common controls that are not system-based may leave out
+    the security plan but includes a record of common control implementation details. PKG-001
+    holds the security plan of system-based ones, which are documented in their system's plan."""
+    out, err = _rule(ctx, "CCPA-001")
+    decisions = [r for r, _ in _typed(ctx) if r.get("subject") == "common-controls"]
+    if not decisions:
+        return out
+    manifest = ctx.data(MANIFEST_FILE)
+    package = manifest.get("package") if isinstance(manifest, dict) else None
+    elements = package.get("authorization_package") if isinstance(package, dict) else None
+    held = {str(e.get("path")): e.get("status") for e in elements or ()
+            if isinstance(e, dict) and e.get("element") == CC_IMPLEMENTATION}
+    for r in decisions:
+        controls = r.get("common_controls")
+        if not isinstance(controls, dict) or not isinstance(controls.get("system_based"), bool):
+            err(r, "a common control decision states in common_controls whether the controls "
+                "are system-based")
+            continue
+        if controls["system_based"]:
+            continue
+        path = controls.get("implementation_record")
+        if held.get(str(path)) not in PACKAGED:
+            err(r, f"the package holds no record of common control implementation details at "
+                f"{path}: run rmf build after naming a file of the run")
+    return out
+
+
+# --- CCPA-002: common controls offered for inheritance ----------------------------------------
+
+def offerings(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 pp. 51 and 162: common controls are authorized before they are made available
+    for inheritance; the provider indicates they are implemented, assessed, authorized and
+    available, and gives inheriting system owners access to documentation and tools."""
+    out, err = _rule(ctx, "CCPA-002")
+    if not scope.produced_or_seeded(ctx.run, ledger.artifact_of(ctx.run)):
+        return out
+    records, effect_of = ctx.ledger or [], ledger.effects(ctx.run)
+    for offering in ledger.section(ctx.run, "offerings"):
+        def say(message: str, o: Record = offering) -> None:
+            err({**o, "task": "R-4"}, message)
+
+        day, ident = _day(offering.get("offered")), str(offering.get("authorization"))
+        held = ledger.in_force(records, effect_of, day).get(ident) if day else None
+        if held is None:
+            say(f"{ident} is not an authorization in force on {offering.get('offered')}: common "
+                "controls are authorized before they are made available for inheritance")
+        elif held.record.get("decision") not in OFFERING_BASES:
+            say(f"{ident} is a {held.record.get('decision')}, not a common control authorization "
+                "or the ATO of the system the controls reside in")
+        indicated = offering.get("indicated")
+        listed = indicated if isinstance(indicated, list) else ()
+        if gap := [s for s in INDICATED if s not in listed]:
+            say(f"the common control provider does not indicate the controls are "
+                f"{', '.join(gap)}")
+        access = offering.get("access")
+        shared = access.get("documentation") if isinstance(access, dict) else None
+        given = shared if isinstance(shared, list) else ()
+        if unknown := [a for a in given if str(a) not in ctx.run.artifacts]:
+            say(f"inheriting system owners are given access to {', '.join(map(str, unknown))}, "
+                "which is no artifact of this run")
     return out
 
 

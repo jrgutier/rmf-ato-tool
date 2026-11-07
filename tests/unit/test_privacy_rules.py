@@ -145,3 +145,20 @@ def test_malformed_privacy_data_is_a_finding_not_a_crash(pii, rel, path, value):
     edit_yaml(pii / rel, set_value)
     run = open_run(pii, REPO_ROOT)
     assert engine.evaluate(run).findings  # schema findings at least, and no exception
+
+
+def test_an_earlier_ato_in_the_ledger_is_not_the_authorization_the_plan_feeds(pii):
+    """PRIV-012: a reauthorization run carries the system's old ATO; the SAOP approves the
+    revised privacy plan before the AO approves the plans and before the decision they feed,
+    not before an authorization of years ago (DoDI 5400.11 3.1.b.(4))."""
+    def old_ato(d):
+        first = dict(next(r for r in d["records"] if r["decision"] != "AD-IATT"))
+        first.update(id="AUTH-000", date="2022-01-03",
+                     authorization_termination_date="2025-01-03")
+        d["records"].insert(0, first)
+        renewed = next(r for r in d["records"][1:] if r["decision"] != "AD-IATT")
+        renewed.update(basis="reauthorization", supersedes="AUTH-000")
+    edit_yaml(pii / "artifacts/data/authorizations.yaml", old_ato)
+    run = open_run(pii, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PRIV-012"]
+    assert not any("after the authorization decision" in m for m in found), found

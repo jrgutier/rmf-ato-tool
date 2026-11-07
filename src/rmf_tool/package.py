@@ -17,6 +17,7 @@ from typing import Any
 
 from ruamel.yaml import YAML
 
+from rmf_tool.run import authorization as ledger
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
 from rmf_tool.run.assumptions import REPORT_FILE
@@ -30,6 +31,7 @@ AUTHORIZATION_PACKAGE = (("security-plan", "ART-SSP"), ("security-assessment-rep
 OSCAL_ARTIFACT = {"profile": "ART-BASELINE", "ssp": "ART-SSP", "assessment-plan": "ART-SAP",
                   "assessment-results": "ART-SAR", "poam": "ART-POAM"}
 INDEX_FILE = "references/index.yaml"
+CC_IMPLEMENTATION = "common-control-implementation"
 
 
 def _sha(path: Path) -> str:
@@ -62,6 +64,24 @@ def _degraded(run: Run) -> list[dict[str, str]]:
             for e in index.get("references") or [] if e.get("status") == "degraded"]
 
 
+def _common_control_records(run: Run, artifacts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """SP 800-37r2 p. 159: the package for common controls that are not system-based includes a
+    record of common control implementation details, a file of the run its ledger record names.
+    It is present only when an artifact of the package holds that file (CCPA-001)."""
+    owner = {f["path"]: a["artifact_id"] for a in artifacts for f in a["files"]}
+    out = []
+    for record in ledger.load(run) or []:
+        controls = record.get("common_controls")
+        if record.get("subject") != "common-controls" or not isinstance(controls, dict) \
+                or controls.get("system_based") is not False:
+            continue
+        path = str(controls.get("implementation_record"))
+        out.append({"element": CC_IMPLEMENTATION, "record": record.get("id"), "path": path,
+                    "artifact_id": owner.get(path), "status":
+                    "present" if path in owner else "missing"})
+    return out
+
+
 def manifest(run: Run) -> dict[str, Any]:
     facts = facts_mod.load(run)
     scopes = scope.task_scopes(run)
@@ -82,6 +102,7 @@ def manifest(run: Run) -> dict[str, Any]:
     authorization = [{"element": element, "artifact_id": aid, "status": by_id[aid]["status"],
                       "oscal": by_id[aid]["oscal"]}
                      for element, aid in AUTHORIZATION_PACKAGE if aid in by_id]
+    authorization += _common_control_records(run, artifacts)
     oscal = []
     for path in sorted(run.path(OSCAL_DIR).glob("*.json")):
         oscal.append({"path": run.rel(path), "model": path.stem,

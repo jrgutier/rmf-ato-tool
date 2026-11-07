@@ -1,0 +1,23 @@
+rule: OMP-002
+bases: [minimal]
+description: a decision to reauthorize without the risk executive's input
+mutations:
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.basis
+    value: reauthorization
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.supersedes
+    value: AUTH-001
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.initiation_inputs
+    value:
+      - {by: PER-CISO, date: '2026-11-10'}
+      - {by: PER-PRIV, date: '2026-11-10'}
+expect:
+  errors: [OMP-002]
+  also: [RCP-002]
+  messages:
+    - includes no input from the risk executive (function)

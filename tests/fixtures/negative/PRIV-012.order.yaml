@@ -1,0 +1,14 @@
+rule: PRIV-012
+bases:
+- pii
+description: the SAOP approves the privacy plan after the AO approved the plans
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: privacy_plan.approvals.0.date
+  value: '2026-09-20'
+expect:
+  errors:
+  - PRIV-012
+  messages:
+  - the senior agency official for privacy approved the privacy plan on 2026-09-20, after the authorizing official's approval of the plans on 2026-09-15
