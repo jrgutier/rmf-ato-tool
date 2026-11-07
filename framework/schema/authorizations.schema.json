@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:authorizations",
   "title": "runs/<run-id>/artifacts/data/authorizations.yaml",
-  "description": "The authorization ledger behind ART-AUTHREC (A-2; updated by R-4 and M-6). One record per decision; a later decision is a new record, so a cATO, a continuation or a rescission never overwrites the authorization beneath it. An empty list is valid until a decision exists. AODM-001 to AODM-011, AOCHG-001, ENT-001 and MISCM-001 judge the records, the issues raised, the Enterprise boardings and the ISCM program assessments read.",
+  "description": "The authorization ledger behind ART-AUTHREC (A-2; updated by R-4 and M-6). One record per decision; a later decision is a new record, so a cATO, a continuation or a rescission never overwrites the authorization beneath it. An empty list is valid until a decision exists. AODM-001 to AODM-011, AOCHG-001, OAUTH-001, OMP-002, ENT-001 and MISCM-001 judge the records, the issues raised, the Enterprise boardings and the ISCM program assessments read.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -266,6 +266,30 @@
           "type": "string",
           "pattern": "^AUTH-\\d{3}$"
         },
+        "initiation_inputs": {
+          "title": "Inputs to the decision to initiate a formal reauthorization",
+          "description": "One per official whose input the decision to reauthorize includes. OMP-002 reads it.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date"
+            ],
+            "properties": {
+              "by": {
+                "title": "Official who gave input to the decision to reauthorize",
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "title": "Date of the input",
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
         "review": {
           "title": "When the authorizing official reviews the authorization",
           "type": "object",
@@ -297,6 +321,39 @@
                 "REQ-SP800-37R2-0625",
                 "REQ-SP800-37R2-0635"
               ]
+            }
+          }
+        },
+        "trigger": {
+          "title": "Event that triggered an event-driven review",
+          "description": "Who raised it (organizational personnel, an automated tool, or the authorizing official on their own determination) and when. OAUTH-001 reads it.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event",
+            "raised_by",
+            "date"
+          ],
+          "properties": {
+            "event": {
+              "title": "Trigger event that occurred",
+              "type": "string",
+              "minLength": 1
+            },
+            "raised_by": {
+              "title": "Who notified the authorizing official of the trigger event",
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/persona_id"
+                },
+                {
+                  "const": "automated-tool"
+                }
+              ]
+            },
+            "date": {
+              "title": "Date the trigger event was raised",
+              "$ref": "#/$defs/date"
             }
           }
         },
