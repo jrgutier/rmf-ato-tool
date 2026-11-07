@@ -18,6 +18,7 @@ from rmf_tool.check.rules import (
     generated,
     hybrid,
     journal,
+    monitor,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -65,6 +66,18 @@ RULES: dict[str, Rule] = {
     "DIAS-001": consistency.dias_controls,
     "PKG-003": coverage.data_elements,
     "RUN-VER-001": config.old_contract,
+    "AOCHG-001": authorization.ao_change,
+    "MCHG-001": monitor.change_lifecycle,
+    "MCHG-002": monitor.unauthorized_changes,
+    "MCHG-003": monitor.le_ci,
+    "MCON-001": monitor.connections,
+    "MLEV-001": monitor.inheritance,
+    "MPOA-001": monitor.poam_sources,
+    "MRPT-001": monitor.posture_reports,
+    "MRPT-002": monitor.organization_tier,
+    "MISCM-001": monitor.iscm_assessments,
+    "MMEAS-001": monitor.measurement,
+    "MPLAN-001": monitor.plan_reviews,
     "INV-BND-001": consistency.inventory_in_boundary,
     "INV-BND-002": consistency.boundary_in_inventory,
     "STIG-001": consistency.stig_mapped,

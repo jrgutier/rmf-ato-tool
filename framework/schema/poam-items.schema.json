@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:poam-items",
   "title": "runs/<run-id>/artifacts/poam/items.yaml",
-  "description": "POA&M items (A-6; updated by R-3, M-3). DoD-required fields (severity, point of contact, resources, scheduled completion, milestones) are POAM-FLD-001, so a partial item fails that rule rather than the schema.",
+  "description": "POA&M items (A-6; updated by R-3, M-3). DoD-required fields (severity, point of contact, resources, scheduled completion, milestones) are POAM-FLD-001, so a partial item fails that rule rather than the schema. MPOA-001 judges the recommendation, the AO review and the outside findings.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -27,9 +27,9 @@
             "pattern": "^POAM-\\d{3}$"
           },
           "finding_ref": {
-            "description": "A SAR finding (FND-###) or STIG finding (STG-###).",
+            "description": "A SAR finding (FND-###), a STIG finding (STG-###) or an outside finding (EXF-###).",
             "type": "string",
-            "pattern": "^(FND|STG)-\\d{3}$"
+            "pattern": "^(FND|STG|EXF)-\\d{3}$"
           },
           "control_id": {
             "$ref": "#/$defs/control_id"
@@ -47,6 +47,8 @@
               "sar",
               "stig",
               "conmon",
+              "inspection",
+              "audit",
               "other"
             ]
           },
@@ -97,6 +99,127 @@
           "comments": {
             "type": "string",
             "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "recommended_completion": {
+            "title": "Recommendation for completion of the task before or after system authorization",
+            "enum": [
+              "before-authorization",
+              "after-authorization"
+            ]
+          }
+        }
+      }
+    },
+    "ao_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "reviewed",
+        "agreed"
+      ],
+      "properties": {
+        "by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "Authorizing official who reviews the plan of action and milestones"
+        },
+        "reviewed": {
+          "$ref": "#/$defs/date"
+        },
+        "agreed": {
+          "title": "Agreement with the remediation actions planned",
+          "const": true,
+          "x-enforces": [
+            "REQ-SP800-37R2-0377"
+          ]
+        }
+      }
+    },
+    "external_findings": {
+      "title": "Findings of readiness inspections and outside evaluations, a named POA&M source (M-3)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "body",
+          "event",
+          "date",
+          "summary",
+          "verified",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EXF-\\d{3}$"
+          },
+          "body": {
+            "title": "Who made the finding",
+            "enum": [
+              "DoD-Component",
+              "CDRUSSTRATCOM",
+              "DISA",
+              "DIRNSA",
+              "DIA",
+              "Inspector-General",
+              "other"
+            ]
+          },
+          "event": {
+            "title": "What found it",
+            "enum": [
+              "readiness-inspection",
+              "joint-compliance-inspection",
+              "evaluation",
+              "penetration-assessment",
+              "red-team",
+              "audit"
+            ],
+            "x-enforces": [
+              "REQ-DODI8530.01-0208",
+              "REQ-DOWI8430.01-0077"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "poam_item": {
+            "title": "POA&M item that carries the finding",
+            "type": "string",
+            "pattern": "^POAM-\\d{3}$"
+          },
+          "accepted_in": {
+            "title": "Ledger record that accepts the deficiency as residual risk",
+            "type": "string",
+            "pattern": "^AUTH-\\d{3}$"
+          },
+          "verified": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date"
+            ],
+            "properties": {
+              "by": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
           },
           "sources": {
             "type": "array",

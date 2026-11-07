@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 101 rules, 36 repo-scope and 65 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -459,6 +459,8 @@ rules:
     summary: open SAR finding neither closed nor linked to a POA&M item
     fixture: tests/fixtures/negative/SAR-POAM-001.yaml
     hint: Add a POA&M item whose finding_ref is the finding ID, or close the finding with evidence.
+    enforces:
+      - REQ-SP800-37R2-0377
   - id: POAM-CTL-001
     scope: run
     severity: E
@@ -610,7 +612,6 @@ rules:
       - REQ-DODCIO-CATO-EVAL-0030
       - REQ-DODCIO-RECIPROCITY-0012
       - REQ-DODCIO-RECIPROCITY-0058
-      - REQ-SP800-18R2-0348
       - REQ-SP800-37R2-0574
       - REQ-SP800-37R2-0580
       - REQ-SP800-37R2-0581
@@ -735,6 +736,205 @@ rules:
     enforces:
       - REQ-DODCIO-RECIPROCITY-0042
       - REQ-DODI8510.01-0160
+  - id: AOCHG-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: a change of AO does not state what the new official reviewed, finds or does about it
+    fixture: tests/fixtures/negative/AOCHG-001.yaml
+    hint: An ao-change record states in ao_transfer who hands over to whom, what was reviewed (the decision document and the package, or the automated posture report alone), what the new official finds and does, and the risk accepted; an acceptable finding is a signed authorizing or continuous decision, and an unacceptable one starts an authorization action, sets new terms or denies.
+    enforces:
+      - REQ-SP800-18R2-0348
+      - REQ-SP800-37R2-0644
+  - id: MCHG-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: a change is not carried through control, test, decision and close-out
+    fixture: tests/fixtures/negative/MCHG-001.yaml
+    hint: artifacts/data/changes.yaml carries each controlled change through its test, the impacts presented to the CCB and the AO or AODR, the decision told to the requester, and verification before close-out.
+    enforces:
+      - REQ-DTM-24-001-0212
+      - REQ-DTM-24-001-0213
+      - REQ-SP800-128-0211
+      - REQ-SP800-128-0213
+      - REQ-SP800-128-0342
+      - REQ-SP800-137-0194
+  - id: MCHG-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: unauthorized changes are not monitored for, analyzed to a root cause or answered at M-3
+    fixture: tests/fixtures/negative/MCHG-002.yaml
+    hint: Monitoring runs from the first authorization and reconciles against baseline, inventory and change requests; an unauthorized change has a root cause and a POA&M item or risk that responds.
+    enforces:
+      - REQ-SP800-128-0031
+      - REQ-SP800-128-0225
+      - REQ-SP800-128-0239
+      - REQ-SP800-128-0243
+      - REQ-SP800-128-0391
+      - REQ-SP800-37R2-0437
+      - REQ-SP800-37R2-0438
+  - id: MCHG-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: a lawful LE/CI deployment is refused, or not coordinated with the AO through change control
+    fixture: tests/fixtures/negative/MCHG-003.yaml
+    hint: An le-ci change names the AO or AODR it was coordinated with, on or before implementation, through change control; a lawful one is not disapproved.
+    enforces:
+      - REQ-DODI8500.01-0260
+  - id: MCON-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: an AO decision on a hosted or interconnected system is not enforced
+    fixture: tests/fixtures/negative/MCON-001.yaml
+    hint: changes.yaml connections holds each interconnection of the boundary and its AO decision; a denied, rescinded or lapsed one stands disconnected.
+    enforces:
+      - REQ-DODI8510.01-0245
+  - id: MLEV-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: inherited controls rest on no valid authorization, or the AO was not told
+    fixture: tests/fixtures/negative/MLEV-001.yaml
+    hint: Each leveraged record names its arrangement; an organizational system holds a valid authorization and the inheriting AO is aware; a common control provider is the provider of a common allocation.
+    enforces:
+      - REQ-SP800-37R2-0583
+  - id: MPOA-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-6
+    summary: a POA&M item or outside finding is not traced, recommended or reviewed
+    fixture: tests/fixtures/negative/MPOA-001.yaml
+    hint: Each item recommends completion before or after authorization and names a documented deficiency; the AO reviews the POA&M; each outside finding reaches a POA&M item or an accepted risk and is verified.
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0125
+      - REQ-DODI8530.01-0273
+      - REQ-DODI8530.01-0278
+      - REQ-SP800-37R2-0377
+  - id: MRPT-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-5
+    summary: a posture report misses a recipient, a marking or the status its designation requires
+    fixture: tests/fixtures/negative/MRPT-001.yaml
+    hint: Each report reaches its conmon.yaml recipients and carries scorecard reporting dated by its issue; conmon.yaml names the GENSER or SE designation, and the DoD bodies in reporting.dodin.required_by receive the POA&M updates and vulnerability coordination they required; a change names its external service, or null, once one is leveraged.
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0068
+      - REQ-DODCIO-CATO-EVAL-0069
+      - REQ-DODI5000.82-0134
+      - REQ-DODI8500.01-0282
+      - REQ-DODI8500.01-0321
+      - REQ-DODI8530.01-0033
+      - REQ-DODI8530.01-0034
+      - REQ-DODI8530.01-0035
+      - REQ-DODI8530.01-0223
+      - REQ-DODI8530.01-0238
+      - REQ-DODI8530.01-0278
+      - REQ-DODI8531.01-0072
+      - REQ-DODI8531.01-0074
+      - REQ-DTM-24-001-0103
+      - REQ-DTM-24-001-0112
+      - REQ-DTM-24-001-0139
+      - REQ-DTM-24-001-0165
+  - id: MRPT-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-5
+    summary: the organization tier has not reviewed the status reports
+    fixture: tests/fixtures/negative/MRPT-002.yaml
+    hint: The risk executive (function) and the CISO review after the last report, and the organization tier records the aggregate count of open POA&M items.
+    enforces:
+      - REQ-SP800-137-0050
+      - REQ-SP800-137-0067
+      - REQ-SP800-137-0108
+      - REQ-SP800-137-0115
+      - REQ-SP800-137-0177
+      - REQ-SP800-137-0198
+      - REQ-SP800-137-0208
+      - REQ-SP800-137-0229
+  - id: MISCM-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: an ISCM program assessment report is incomplete, or a decision reads one that does not exist
+    fixture: tests/fixtures/negative/MISCM-001.yaml
+    hint: "iscm_assessments of the ledger: parties considered, expectations, the sponsor's review of the draft, a final report that follows it with differences resolved, every shortfall tied to a recommendation, and a single score once elements are scored."
+    enforces:
+      - REQ-SP800-137A-0177
+      - REQ-SP800-137A-0201
+      - REQ-SP800-137A-0278
+      - REQ-SP800-137A-0311
+      - REQ-SP800-137A-0357
+      - REQ-SP800-137A-0358
+      - REQ-SP800-137A-0360
+  - id: MMEAS-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-2
+    summary: a security measure, result or user is not tied to its need, parameters or report
+    fixture: tests/fixtures/negative/MMEAS-001.yaml
+    hint: "conmon.yaml measurement: each measure serves a need, each result is of a measure, is a number judged against its acceptable parameters and reaches its users."
+    enforces:
+      - REQ-SP800-160V1R1-0916
+      - REQ-SP800-160V1R1-0917
+      - REQ-SP800-160V1R1-1151
+      - REQ-SP800-160V1R1-1154
+      - REQ-SP800-160V1R1-1159
+      - REQ-SP800-160V1R1-1170
+  - id: MPLAN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-4
+    summary: the system plan is not reviewed on schedule, or an update is not approved and tracked
+    fixture: tests/fixtures/negative/MPLAN-001.yaml
+    hint: plan-reviews.yaml logs reviews within the organization-defined interval, and each update names an approver under change management and a change in the log.
+    enforces:
+      - REQ-SP800-18R1-0015
+      - REQ-SP800-18R1-0157
+      - REQ-SP800-18R2-0047
+      - REQ-SP800-18R2-0215
+      - REQ-SP800-18R2-0251
+      - REQ-SP800-18R2-0342
+      - REQ-SP800-18R2-0436
   - id: AUTHRPT-001
     scope: run
     severity: E
@@ -901,6 +1101,8 @@ rules:
     summary: package manifest missing, or a core artifact absent from it
     fixture: tests/fixtures/negative/PKG-001.yaml
     hint: Run `rmf package <run>`.
+    enforces:
+      - REQ-SP800-37R2-0377
   - id: PKG-003
     scope: run
     severity: E

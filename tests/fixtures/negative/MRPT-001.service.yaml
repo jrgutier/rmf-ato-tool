@@ -1,0 +1,18 @@
+rule: MRPT-001
+bases:
+- minimal
+description: an external service status change kept from the chain of command
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.arrangement
+  value: external-service
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.external_service
+  value: LA-01
+expect:
+  errors:
+  - MRPT-001
+  messages:
+  - through the network operations chain of command to the Commander, USCYBERCOM

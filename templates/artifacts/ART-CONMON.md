@@ -30,6 +30,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: who receives posture reports, how often and in what form, as in conmon.yaml reporting, with tokens>>
 
+## Security measurement
+
+<<FILL: the security-relevant information needs, the measures that satisfy them with their acceptable parameters and users, and the procedures for collection, analysis, access and reporting, as in conmon.yaml measurement, with tokens>>
+
 ## Roles and tools
 
 <<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and the tools used, with tokens>>

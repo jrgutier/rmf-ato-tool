@@ -1,0 +1,18 @@
+rule: PKG-001
+bases:
+- minimal
+build: false
+description: a manifest that leaves the POA&M out of the authorization package
+mutations:
+- op: delete_list_item
+  file: package/manifest.yaml
+  path: package.artifacts
+  where:
+    artifact_id: ART-POAM
+expect:
+  errors:
+  - PKG-001
+  also:
+  - GEN-STALE-001
+  messages:
+  - is not in the manifest; run `rmf build`

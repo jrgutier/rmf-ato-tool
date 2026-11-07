@@ -83,6 +83,9 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
+| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
+| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
+| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
 | [EXT-CHANGE-REQUESTS](../../MANUAL.md#ext-change-requests) | Configuration change requests | outside input (operational) |
 
 **Outputs**
@@ -101,6 +104,10 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 - The system and environment of operation are monitored in accordance with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
 - ART-CHG records each change with its security impact analysis and disposition; inventory and CM plan updated.
+- changes.yaml carries each change through control, test, decision, notice, verification and close-out, or marks it exempt or pre-approved (MCHG-001).
+- Monitoring looks for unauthorized changes as well as requested ones, each with its root cause and the POA&M item or risk that responds at M-3 (MCHG-002).
+- A lawful LE/CI deployment is accommodated and coordinated with the AO through change control (MCHG-003).
+- The AO decision on each hosted or interconnected system is enforced (MCON-001).
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
 
 **Alignment**
@@ -116,6 +123,10 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [SP800-128](../../MANUAL.md#ref-sp800-128), section 2.3.9
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 12, "and for any significant system modifications"
+- [SP800-128](../../MANUAL.md#ref-sp800-128), section 3.3.2
+- [SP800-128](../../MANUAL.md#ref-sp800-128), section 3.4.1
+- [DODI8500.01](../../MANUAL.md#ref-dodi8500-01), p. 33, "accommodate all applicable legitimate and lawful deployment of LE/CI tools"
+- [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "Enforce AO authorization decisions for hosted or interconnected systems"
 
 **Playbook:** [playbooks/M/M-1.md](../../playbooks/M/M-1.md)
 
@@ -162,6 +173,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 - Ongoing testing and assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
 - sar/results updated with the ongoing assessment results; conmon.yaml adjusted where frequencies changed.
+- conmon.yaml records the security measurement results of the cycle, each against its measure's acceptable parameters, with the measurement users informed (MMEAS-001).
 
 **Alignment**
 
@@ -175,6 +187,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually"
 - [DODCIO-DEVSECOPS](../../MANUAL.md#ref-dodcio-devsecops), section 3.2.5
+- [SP800-160V1R1](../../MANUAL.md#ref-sp800-160v1r1), p. 177, "Security-relevant information needs are identified"
 
 **Playbook:** [playbooks/M/M-2.md](../../playbooks/M/M-2.md)
 
@@ -202,6 +215,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
+| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [EXT-INSPECTIONS](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 
 **Outputs**
 
@@ -221,6 +236,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
+- Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
+- The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
 
 **Alignment**
 
@@ -234,6 +251,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-137](../../MANUAL.md#ref-sp800-137), section 3.5
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 11, "the PM will initiate a risk assessment to identify the risk to the platform"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 7, "decisions to withhold or delay vulnerability remediation"
+- [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 36, "verify POA&Ms to correct deficiencies or weaknesses"
 
 **Playbook:** [playbooks/M/M-3.md](../../playbooks/M/M-3.md)
 
@@ -262,6 +280,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 
 **Outputs**
 
@@ -280,6 +299,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - Risk management documents are updated based on continuous monitoring activities (DoDI 8510.01 Table 7 outcome).
 - Authorization package artifacts reflect the current state of the system.
+- plan-reviews.yaml logs the review of the system plan on the organization-defined schedule and each update, approved and tracked by change management (MPLAN-001).
 
 **Alignment**
 
@@ -292,6 +312,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [SP800-18R2](../../MANUAL.md#ref-sp800-18r2), section 4.7
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 13, "Each iteration should conclude with the AO validating the PM's cybersecurity strategy and updated POA&M"
+- [SP800-18R2](../../MANUAL.md#ref-sp800-18r2), section 3.1
 
 **Playbook:** [playbooks/M/M-4.md](../../playbooks/M/M-4.md)
 
@@ -309,7 +330,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider<br>[RE](../../personas/PER-RE.md) Risk Executive Function |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer |
 
 **Inputs**
@@ -320,6 +341,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
 
 **Outputs**
 
@@ -335,6 +358,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - A process is in place to report the security, privacy and supply chain risk management posture to the AO and other senior leaders and executives (DoDI 8510.01 Table 7 outcome).
 - ART-SECRPT reports posture, open POA&M items and trends to the recipients in conmon.yaml.
+- posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
+- POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
+- The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
 
 **Alignment**
 
@@ -348,10 +374,13 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 30, "Maintain and report systems assessment and authorization status"
 - [DODCIO-CATO](../../MANUAL.md#ref-dodcio-cato), p. 1, "all security controls will need to be fed into a system level dashboard view"
+- [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 4, "Data on the cybersecurity status of the DODIN and connected mission partner systems"
+- [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 36, "POA&Ms and subsequent updates will be provided to"
+- [SP800-137](../../MANUAL.md#ref-sp800-137), section 3.4.2
 
 **Playbook:** [playbooks/M/M-5.md](../../playbooks/M/M-5.md)
 
-**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6).
+**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6); feeds back to [P-7](PH-MSA.md#task-p-7).
 
 ## <a id="task-m-6"></a>M-6 · Ongoing Authorization
 
@@ -377,6 +406,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
+| [EXT-ISCM-ASSESSMENT](../../MANUAL.md#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
 
 **Outputs**
 
@@ -396,6 +426,8 @@ Writes to `facts.yaml`: `acquisition`.
 
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
+- A change of AO is an `ao-change` record whose ao_transfer states what the new official reviewed, finds and does about it (AOCHG-001).
+- An ISCM program assessment report the determination reads is in iscm_assessments of the ledger (MISCM-001).
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) (see [authorization decisions](../../MANUAL.md#decisions)).
 
@@ -415,6 +447,8 @@ Writes to `facts.yaml`: `acquisition`.
 - [DODCIO-CATO](../../MANUAL.md#ref-dodcio-cato), p. 1, "the Authorizing Official (AO) must be able to demonstrate three main"
 - [DODCIO-CATO](../../MANUAL.md#ref-dodcio-cato), p. 2, "the AO will notify the component CISO of the intention to move that system to a cATO"
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 13, "While the AO may authorize a continuous ATO (cATO)"
+- [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), p. 172, "When there is a change in authorizing officials"
+- [SP800-137A](../../MANUAL.md#ref-sp800-137a), section 3.1
 
 **Playbook:** [playbooks/M/M-6.md](../../playbooks/M/M-6.md)
 

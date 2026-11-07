@@ -1,0 +1,16 @@
+rule: MMEAS-001
+bases:
+- minimal
+description: a measurement result that is no number
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: measurement.results.0.value
+  value: about three weeks
+expect:
+  errors:
+  - MMEAS-001
+  also:
+  - RUN-FM-001
+  messages:
+  - is no number the acceptable parameters can judge

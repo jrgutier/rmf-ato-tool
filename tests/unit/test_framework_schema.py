@@ -22,7 +22,8 @@ PLAN_RUN_SCHEMAS = {
     "authorizations",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias"}  # data named in plan §6.4, then the ones p11 added
+                     # data named in plan §6.4, then the ones p11 added
+                     "dias", "changes", "posture-reports", "plan-reviews"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -275,6 +276,41 @@ RUN_EXAMPLES = {
          "available_to": ["PER-PM"], "marking": "unmarked",
          "terms_verification": {"verified_by": "PER-AO", "frequency_days": 90},
          "assessment_records": ["artifacts/data/sap.yaml"], "sources": SRC}),
+    "changes": (
+        {"monitoring": {"unauthorized_changes": {
+            "from": "2026-01-01", "to": "2026-02-01", "method": "drift scan",
+            "reconciled_against": ["baseline"]}},
+         "changes": [{"id": "CHG-001", "origin": "requested", "date": "2026-01-02",
+                      "summary": "s", "requested_by": "PER-ISSO", "control": "exempt",
+                      "security_impact": {"result": "none", "analysis": "a"}, "sources": SRC}],
+         "sources": SRC},
+        {"monitoring": {"unauthorized_changes": {
+            "from": "2026-01-01", "to": "2026-02-01", "method": "drift scan",
+            "reconciled_against": []}},
+         "changes": [{"id": "CHG-001", "origin": "walk-in", "date": "2026-01-02",
+                      "summary": "s", "requested_by": "PER-ISSO", "control": "exempt",
+                      "security_impact": {"result": "none", "analysis": "a"}, "sources": SRC}],
+         "sources": SRC}),
+    "posture-reports": (
+        {"reports": [{"id": "SPR-001", "period": {"from": "2026-01-01", "to": "2026-02-01"},
+                      "issued": "2026-02-02", "marking": "CUI",
+                      "deliveries": [{"recipient": "DISA", "date": "2026-02-02",
+                                      "content": ["poam"]}],
+                      "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
+         "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-7"},
+         "sources": SRC},
+        {"reports": [{"id": "SPR-001", "period": {"from": "2026-01-01", "to": "2026-02-01"},
+                      "issued": "2026-02-02", "marking": "SECRET//NOFORN",
+                      "deliveries": [{"recipient": "NSA", "date": "2026-02-02",
+                                      "content": ["poam"]}],
+                      "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
+         "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-1"},
+         "sources": SRC}),
+    "plan-reviews": (
+        {"schedule": {"interval_days": 365, "set_by": "policy"}, "reviews": [], "changes": [],
+         "sources": SRC},
+        {"schedule": {"interval_days": 0, "set_by": "policy"}, "reviews": [], "changes": [],
+         "sources": SRC}),
     "dias": (
         {"assurance": {"identity_proofing": "IAL2", "authentication": "AAL2",
                        "federation": "not-applicable"},

@@ -1,0 +1,14 @@
+rule: MISCM-001
+bases:
+- minimal
+description: a decision reading an assessment that does not exist
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.iscm_assessment
+  value: ISCMA-009
+expect:
+  errors:
+  - MISCM-001
+  messages:
+  - which is no ISCM program assessment

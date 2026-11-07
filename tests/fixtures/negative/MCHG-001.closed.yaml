@@ -1,0 +1,14 @@
+rule: MCHG-001
+bases:
+- minimal
+description: a change closed on a failed verification
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.verification.result
+  value: fail
+expect:
+  errors:
+  - MCHG-001
+  messages:
+  - a change request is not closed until the change is confirmed deployed without issues

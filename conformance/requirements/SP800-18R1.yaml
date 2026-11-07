@@ -121,7 +121,9 @@ requirements:
     locator: "1.7"
     context: "System Security Plan Responsibilities"
     statement: "Agencies should develop policy on the system security planning process. System security plans are living documents that require periodic review, modification, and plans of action and milestones for implementing security controls. Procedures should be in place outlining who reviews the plans, keeps the plan current, and follows up on planned security controls. In addition, procedures should require that system security plans be developed and reviewed prior to proceeding with the security certification and accreditation process for the system. During the security certification and accreditation process, the system security plan is analyzed, updated, and accepted. The certification agent confirms that the security controls described in the system security plan are consistent with the FIPS 199 security category determined for the information system, and that the threat and vulnerability identification and initial risk determination are identified and documented in the system security plan, risk assessment, or equivalent document. The results of a security certification are used to reassess the risks, develop the plan of action and milestones (POA&Ms) which are required to track remedial actions, and update the system security plan, thus providing the factual basis for an authorizing official to render a security accreditation decision. For additional information on the certification and accreditation process, see NIST SP 800-37. Figure 1, depicts the key inputs/outputs into the security planning process."
-    status: "candidate"
+    status: "partial"
+    reason: "plan-reviews.yaml holds periodic review; the rest describes the superseded certification and accreditation process"
+    evidence: [{"kind": "rule", "asserts": "System security plans are living documents that require periodic review on a schedule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists", "sentence": "System security plans are living documents that require periodic review, modification, and plans of action and milestones for implementing security controls."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R1-0016"
     citation: {"ref": "SP800-18R1", "page": 10, "anchor": "NIST Special Publication 800-37 defines a minor application as an application, other"}
@@ -1202,7 +1204,9 @@ requirements:
     locator: "3.15"
     context: "Completion and Approval Dates"
     statement: "The completion date of the system security plan should be provided. The completion date should be updated whenever the plan is periodically reviewed and updated. When the system is updated, a version number should be added. The system security plan should also contain the date the authorizing official or the designated approving authority approved the plan. Approval documentation, i.e., accreditation letter, approval memorandum, should be on file or attached as part of the plan."
-    status: "candidate"
+    status: "partial"
+    reason: "Update dates and versions are held by the change records; the approval document is not"
+    evidence: [{"kind": "schema", "asserts": "A version number is added when the plan is updated", "target": "framework/schema/plan-reviews.schema.json#/properties/changes/items/properties/version", "claim": "presence", "sentence": "When the system is updated, a version number should be added."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R1-0157"
     citation: {"ref": "SP800-18R1", "page": 33, "anchor": "Once the information system security plan is developed, it is important to"}
@@ -1210,7 +1214,9 @@ requirements:
     locator: "3.16"
     context: "Ongoing System Security Plan Maintenance"
     statement: "Once the information system security plan is developed, it is important to periodically assess the plan, review any change in system status, functionality, design, etc., and ensure that the plan continues to reflect the correct information about the system. This documentation and its correctness are critical for system certification activity. All plans should be reviewed and updated, if appropriate, at least annually. Some items to include in the review are:"
-    status: "candidate"
+    status: "partial"
+    reason: "The organization-defined schedule of Rev. 2 is held, not the annual floor of Rev. 1"
+    evidence: [{"kind": "rule", "asserts": "Plans are reviewed and updated periodically on a schedule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists", "sentence": "All plans should be reviewed and updated, if appropriate, at least annually."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R1-0158"
     citation: {"ref": "SP800-18R1", "page": 33, "anchor": "Change in information system owner;"}
@@ -1395,7 +1401,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.14.•"
     context: ""
     statement: "• Enter the completion date of the plan."
-    status: "candidate"
+    status: "partial"
+    reason: "The change record dates the plan; no element names a completion date"
+    evidence: [{"kind": "schema", "asserts": "The date of the plan is entered with each change", "target": "framework/schema/plan-reviews.schema.json#/properties/changes/items/properties/date", "claim": "constraint"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R1-0182"
     citation: {"ref": "SP800-18R1", "page": 37, "anchor": "Information System Security Plan Approval Date: _______________________"}

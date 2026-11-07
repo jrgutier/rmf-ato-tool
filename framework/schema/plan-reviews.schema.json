@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:plan-reviews",
+  "title": "runs/<run-id>/artifacts/data/plan-reviews.yaml",
+  "description": "System plan review and change records behind ART-SSP (S-4 sets the schedule; M-4 logs each review and change). MPLAN-001 judges it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schedule",
+    "reviews",
+    "changes",
+    "sources"
+  ],
+  "properties": {
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interval_days",
+        "set_by"
+      ],
+      "properties": {
+        "interval_days": {
+          "title": "Organization-defined schedule for reviewing the system plans, in days",
+          "type": "integer",
+          "minimum": 1
+        },
+        "set_by": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "reviews": {
+      "title": "System plan review log",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "role",
+          "date",
+          "trigger",
+          "feedback"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "$ref": "#/$defs/persona_id",
+            "title": "Role of the individual performing the review",
+            "x-enforces": [
+              "REQ-SP800-18R2-0248"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "trigger": {
+            "title": "Why the review happened",
+            "enum": [
+              "scheduled",
+              "event"
+            ],
+            "x-enforces": [
+              "REQ-SP800-18R2-0140"
+            ]
+          },
+          "feedback": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R2-0433"
+            ],
+            "title": "Feedback generated during the review"
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-18R2-0113"
+      ]
+    },
+    "changes": {
+      "title": "System plan change records",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "date",
+          "description",
+          "approved_by"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R1-0156"
+            ],
+            "title": "Version number of the updated system plan"
+          },
+          "date": {
+            "$ref": "#/$defs/date",
+            "title": "Date of the plan update, entered with each change",
+            "x-enforces": [
+              "REQ-SP800-18R1-0181"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approved_by": {
+            "$ref": "#/$defs/persona_id",
+            "title": "Who approved the update to the system plan"
+          },
+          "change_ref": {
+            "title": "Change management record that tracks the update",
+            "type": "string",
+            "pattern": "^CHG-\\d{3}$"
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-18R2-0114"
+      ]
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  }
+}

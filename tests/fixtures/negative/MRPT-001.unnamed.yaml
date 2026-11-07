@@ -1,0 +1,14 @@
+rule: MRPT-001
+bases:
+- minimal
+description: changes silent on the external service the system leverages
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.arrangement
+  value: external-service
+expect:
+  errors:
+  - MRPT-001
+  messages:
+  - the change does not say which external service it touches

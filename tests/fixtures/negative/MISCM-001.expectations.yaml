@@ -1,0 +1,18 @@
+rule: MISCM-001
+bases:
+- minimal
+description: no expectations set during the assessment
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: iscm_assessments.0.expectations
+  value:
+  - stage: before
+    date: '2026-06-01'
+  - stage: after
+    date: '2026-08-01'
+expect:
+  errors:
+  - MISCM-001
+  messages:
+  - no expectations are set

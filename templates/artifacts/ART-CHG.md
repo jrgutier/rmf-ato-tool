@@ -20,7 +20,15 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Change log
 
-<<FILL: table: change request reference | date | change | requested by | security impact result | board decision | referred to the AO or not, with tokens>>
+<<FILL: table: change request reference | origin (requested, unscheduled, unauthorized or LE/CI) | date | change | requested by | exempt or pre-approved mark | security impact result | test result | board decision | who was notified | verification | closed, as in artifacts/data/changes.yaml, with tokens>>
+
+## Unauthorized changes and root causes
+
+<<FILL: how monitoring looked for unauthorized changes since the authorization and what it reconciled against; for each one its root cause and the POA&M item or risk that responds at M-3, or a sentence saying none; with tokens>>
+
+## Hosted and interconnected systems
+
+<<FILL: each hosted or interconnected system, the AO decision on it and what the program did to enforce it, as in changes.yaml connections, or a sentence saying none, with tokens>>
 
 ## Security impact analyses
 

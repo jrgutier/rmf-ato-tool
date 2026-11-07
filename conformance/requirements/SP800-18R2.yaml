@@ -370,7 +370,9 @@ requirements:
     locator: "1.3.2.•"
     context: "Document Organization Based on the organization’s risk management strategy and NIST guidelines (e.g., [SP800-37], [SP800-53], [SP800-161]), system plans:"
     statement: "• Require methodical reviews and periodic updates to maintain information about the system’s mission, technologies, components, personnel, and the status of controls that are selected and allocated for system implementation."
-    status: "candidate"
+    status: "partial"
+    reason: "Periodic review is held; the review contents are not"
+    evidence: [{"kind": "rule", "asserts": "System plans require methodical reviews and periodic updates on a schedule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0048"
     citation: {"ref": "SP800-18R2", "page": 16, "anchor": "The system security plan identifies the system’s security requirements and describes the"}
@@ -883,7 +885,8 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Monitor | M-4, Authorization Package Updates | M-4, Authorization Package Updates | System Plan Review Records | Provide a method for recording system plan reviews over the course of the system life cycle."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "A method for recording system plan reviews over the life cycle: the review log", "target": "framework/schema/plan-reviews.schema.json#/properties/reviews", "claim": "presence"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0114"
     citation: {"ref": "SP800-18R2", "page": 25, "anchor": "Monitor | I-2, Update Control Implementation | System Plan Change Records |"}
@@ -891,7 +894,8 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Monitor | I-2, Update Control Implementation | System Plan Change Records | Provide a method for recording system plan changes over the course of the system life cycle. | Provide a method for recording system plan changes over the"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "A method for recording system plan changes: the change records", "target": "framework/schema/plan-reviews.schema.json#/properties/changes", "claim": "presence"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0115"
     citation: {"ref": "SP800-18R2", "page": 25, "anchor": "Information"}
@@ -1095,7 +1099,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details Discussion: Identify the sources of specific requirements for the:"
     statement: "Organizational policies may identify the laws, regulations, and policies that are applicable to all systems within the organization or include a standardized list of requirement sources in an organizational template for system plans. As the legal and regulatory landscape evolves, the system plans are updated to adapt to new security, privacy, and cybersecurity supply chain risk management requirements, such as those that arise from the use of emerging technologies, automated decision-making, and data analytics. For example, privacy laws that govern data subject rights directly influence the development of the system privacy plan, including how data is handled and how the system protects individual rights, frames broader privacy risks, and addresses organizational privacy goals. The C-SCRM plan identifies suppliers or products that are prohibited by law, subject to regulatory exclusions, and constrained by organization- or system-specific policies."
-    status: "candidate"
+    status: "partial"
+    reason: "Updates are logged; what triggers one on a change in law is prose"
+    evidence: [{"kind": "schema", "asserts": "The review happened on an event when system plans are updated, as well as on schedule", "target": "framework/schema/plan-reviews.schema.json#/properties/reviews/items/properties/trigger", "claim": "constraint", "sentence": "As the legal and regulatory landscape evolves, the system plans are updated to adapt to new security, privacy, and cybersecurity supply chain risk management requirements, such as those that arise from the use of emerging technologies, automated decision-making, and data analytics."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0141"
     citation: {"ref": "SP800-18R2", "page": 30, "anchor": "Enabling systems that may provide services or functionalities used or inherited by"}
@@ -1681,7 +1687,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "The system owner or common control provider is responsible for updates to the system plan. System plan reviews and change records, along with the subsequent reauthorization or ongoing authorization of the system, ensure that updates to the system plan based on the “as-implemented” state of the controls are reviewed and approved [SP800-37] by the authorizing official."
-    status: "candidate"
+    status: "partial"
+    reason: "An approver under change management is held; that the AO reviews the as-implemented state at reauthorization is not"
+    evidence: [{"kind": "rule", "asserts": "Updates to the system plan are reviewed and approved", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists", "sentence": "System plan reviews and change records, along with the subsequent reauthorization or ongoing authorization of the system, ensure that updates to the system plan based on the “as-implemented” state of the controls are reviewed and approved [SP800-37] by the authorizing official."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0216"
     citation: {"ref": "SP800-18R2", "page": 37, "anchor": "Discussion: Identify the implementation status of the control following the system plan"}
@@ -1947,7 +1955,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Discussion: System plan reviews ensure accountability for periodic (e.g., life cycle milestones, gate reviews, significant contracting activities) and ad hoc changes. Organization-designated individuals can verify the accuracy and completeness of the information in the system plans and alignment between system plans."
-    status: "candidate"
+    status: "partial"
+    reason: "Review and change records exist; verifying alignment between plans is not held"
+    evidence: [{"kind": "schema", "asserts": "Reviews record the individuals who verify the accuracy of the system plans", "target": "framework/schema/plan-reviews.schema.json#/properties/reviews/items/properties/role", "claim": "constraint"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0249"
     citation: {"ref": "SP800-18R2", "page": 40, "anchor": "Dates of review"}
@@ -1971,7 +1981,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details The review record may include additional information, such as:"
     statement: "Updates to the system plan are approved and applied as part of organizational or system-specific change management processes. The records help management understand the content updates that have been implemented and verify that the authorization package contains the most current revision of the system plans."
-    status: "candidate"
+    status: "partial"
+    reason: "Approval is held; the records verifying the package revision are not"
+    evidence: [{"kind": "rule", "asserts": "Updates to the system plan are applied as part of change management processes", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.tracked.yaml", "expect": "is not tracked by change management", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists", "sentence": "Updates to the system plan are approved and applied as part of organizational or system-specific change management processes."}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0252"
     citation: {"ref": "SP800-18R2", "page": 41, "anchor": "Discussion: A system plan change record focuses on specific updates that are"}
@@ -2696,7 +2708,8 @@ requirements:
     locator: "4.7"
     context: "Monitor"
     statement: "System plans are reviewed and revised on an organization-defined schedule24 to ensure their continued accuracy and relevancy after authorization. Reviews may occur in response to events that affect security, privacy, or C-SCRM risks, such as:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "System plans are reviewed on an organization-defined schedule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists"}]
     work_item: "WI-282"
   - id: "REQ-SP800-18R2-0343"
     citation: {"ref": "SP800-18R2", "page": 51, "anchor": "Revisions to the [SP800-53] security and privacy control catalog, [SP800-53B] control baselines,"}
@@ -2744,9 +2757,8 @@ requirements:
     locator: "4.7.•"
     context: "Monitor"
     statement: "• Changes to key system personnel (e.g., if the authorizing official changes, the incoming authorizing official reviews the system plans and artifacts to confirm the existing authorization or issue a new authorization decision)"
-    status: "partial"
-    reason: "The new official's review is a free list in ao_transfer"
-    evidence: [{"kind": "rule", "asserts": "A change of AO names the record it supersedes and the ao_transfer, so the incoming official confirms or issues a new authorization", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.aochange.yaml", "expect": "a change of AO names the record it supersedes", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The incoming authorizing official reviews the artifacts of the existing authorization before a change of official stands", "target": "AOCHG-001", "fixture": "tests/fixtures/negative/AOCHG-001.yaml", "expect": "the new authorizing official has not reviewed the current authorization decision document", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and a record has basis ao-change"}, {"kind": "rule", "asserts": "The official confirms the existing authorization or issues a new authorization decision according to what the official finds", "target": "AOCHG-001", "fixture": "tests/fixtures/negative/AOCHG-001.acceptable.yaml", "expect": "finds the current risk", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded and a record has basis ao-change"}]
     work_item: "WI-277"
   - id: "REQ-SP800-18R2-0349"
     citation: {"ref": "SP800-18R2", "page": 52, "anchor": "Changes to the operational status of the system (e.g., promoting the system"}
@@ -3434,7 +3446,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "A system plan review log records the name and role of the individual performing the review, the review date, the feedback generated during the review process, and associated notes."
-    status: "candidate"
+    status: "partial"
+    reason: "The shape holds each field; no rule tests the log beyond that"
+    evidence: [{"kind": "schema", "asserts": "The review log records the feedback generated during the review", "target": "framework/schema/plan-reviews.schema.json#/properties/reviews/items/properties/feedback", "claim": "presence"}]
     work_item: "WI-282"
     promoted: {"reason": "Rejected as no-marker. States the fixed content of the review log, unlike the optional items that follow it."}
   - id: "REQ-SP800-18R2-0434"
@@ -3461,7 +3475,8 @@ requirements:
     locator: "4.7"
     context: ""
     statement: "Change management processes ensure that updates to system plans are tracked and noted."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Change management processes ensure that updates to system plans are tracked and noted", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.tracked.yaml", "expect": "is not tracked by change management", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists"}]
     work_item: "WI-282"
     promoted: {"reason": "The one firm sentence of the paragraph: change management processes ensure that updates to system plans are tracked and noted. The sentences after it are 'can'."}
   - id: "REQ-SP800-18R2-0437"

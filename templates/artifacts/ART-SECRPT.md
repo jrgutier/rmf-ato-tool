@@ -16,7 +16,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Reporting period and recipients
 
-<<FILL: the period covered, the recipients and the reporting frequency from ART-CONMON, with tokens>>
+<<FILL: the period covered, the marking, and the recipients and frequency from ART-CONMON, with the DoD bodies this system's GENSER or SE designation adds; the records live in artifacts/data/posture-reports.yaml; with tokens>>
 
 ## Posture summary
 
@@ -33,3 +33,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 ## Matters for ongoing authorization
 
 <<FILL: triggers reached and items the AO needs for the ongoing authorization decision, or a sentence saying none, with tokens>>
+
+## Status to DoD bodies
+
+<<FILL: what reached each body in the period (POA&M updates, inspection findings, vulnerability and risk acceptance status, external service status changes, scorecard and CMRS statistics) and how the data is shared, with tokens>>
+
+## Organization tier review
+
+<<FILL: the review of these reports by the risk executive (function) and the CISO, the aggregate POA&M position and what it feeds into the organizational strategy at P-7, with tokens>>

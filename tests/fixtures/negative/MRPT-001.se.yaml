@@ -1,0 +1,18 @@
+rule: MRPT-001
+bases:
+- minimal
+description: an SE system whose POA&M never reaches DIA
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: reporting.dodin.designation
+  value: SE
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: reporting.dodin.required_by.DIA
+  value: DIA tasking order
+expect:
+  errors:
+  - MRPT-001
+  messages:
+  - POA&Ms and subsequent updates are not provided to

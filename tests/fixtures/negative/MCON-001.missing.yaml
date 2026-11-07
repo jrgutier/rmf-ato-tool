@@ -1,0 +1,17 @@
+rule: MCON-001
+bases:
+- minimal
+description: an interconnection with no AO decision recorded
+mutations:
+- op: replace_text
+  file: artifacts/data/boundary.yaml
+  old: 'components:
+
+    '
+  new: "components:\n  - {id: CMP-LINK, title: Analysis enclave link, type: interconnection, description:\
+    \ Link to the analysis enclave., status: operational, sources: [product/architecture.md#components]}\n"
+expect:
+  errors:
+  - MCON-001
+  messages:
+  - no AO authorization decision is recorded for the interconnected system

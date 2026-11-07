@@ -1,0 +1,14 @@
+rule: MCHG-002
+bases:
+- minimal
+description: an unauthorized change with no root cause analysis
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.origin
+  value: unauthorized
+expect:
+  errors:
+  - MCHG-002
+  messages:
+  - information about the unauthorized change is not analyzed to determine the root cause

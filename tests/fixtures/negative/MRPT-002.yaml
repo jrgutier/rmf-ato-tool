@@ -1,0 +1,14 @@
+rule: MRPT-002
+bases:
+- minimal
+description: the CISO never reviewed the status reports
+mutations:
+- op: set_field
+  file: artifacts/data/posture-reports.yaml
+  path: organization_tier.reviews.1.by
+  value: PER-ISSM
+expect:
+  errors:
+  - MRPT-002
+  messages:
+  - the organization tier review of status reports lacks

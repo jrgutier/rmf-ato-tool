@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:conmon",
   "title": "runs/<run-id>/artifacts/data/conmon.yaml",
-  "description": "System continuous monitoring strategy (S-5; updated by M-2). Every baseline family needs a frequency (CONMON-001).",
+  "description": "System continuous monitoring strategy (S-5; updated by M-2). Every baseline family needs a frequency (CONMON-001). MRPT-001 reads reporting.dodin, MMEAS-001 the measurement block.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -96,6 +96,55 @@
             "quarterly",
             "annually"
           ]
+        },
+        "dodin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "designation"
+          ],
+          "properties": {
+            "designation": {
+              "title": "GENSER or SE designation of the system, which sets who receives POA&M updates, or not-connected",
+              "enum": [
+                "GENSER",
+                "SE",
+                "not-connected"
+              ]
+            },
+            "awareness": {
+              "title": "What ISCM gives awareness of for DODIN operations",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "threats",
+                  "traffic",
+                  "fault",
+                  "performance",
+                  "bandwidth",
+                  "route",
+                  "network-management",
+                  "employee-use"
+                ]
+              }
+            },
+            "required_by": {
+              "title": "DoD bodies that required POA&M updates or vulnerability coordination of this system, each with who required it (the duty is owed as required)",
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "CDRUSSTRATCOM",
+                  "DISA",
+                  "DIA",
+                  "JFHQ-DODIN"
+                ]
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
         }
       }
     },
@@ -104,6 +153,194 @@
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/source"
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "information_needs",
+        "measures",
+        "procedures"
+      ],
+      "properties": {
+        "information_needs": {
+          "title": "Security-relevant information needs",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "need",
+              "priority"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^NEED-\\d{2,3}$"
+              },
+              "need": {
+                "type": "string",
+                "minLength": 1
+              },
+              "priority": {
+                "title": "Priority of the information need",
+                "enum": [
+                  "high",
+                  "moderate",
+                  "low"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-160V1R1-1157"
+                ]
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-160V1R1-1150"
+          ]
+        },
+        "measures": {
+          "title": "Security measures selected to satisfy the needs",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "need",
+              "description",
+              "acceptable",
+              "users"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^MSR-\\d{2,3}$"
+              },
+              "need": {
+                "title": "Information need the measure satisfies",
+                "type": "string",
+                "pattern": "^NEED-\\d{2,3}$"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "acceptable": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [],
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                },
+                "title": "Acceptable parameters of security performance",
+                "minProperties": 1
+              },
+              "users": {
+                "title": "Measurement users",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona_id"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "procedures": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "collection",
+            "analysis",
+            "access",
+            "reporting"
+          ],
+          "properties": {
+            "collection": {
+              "type": "string",
+              "minLength": 1
+            },
+            "analysis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "access": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reporting": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "title": "Procedures for the collection, analysis, access and reporting of security-relevant data",
+          "x-enforces": [
+            "REQ-SP800-160V1R1-1155",
+            "REQ-SP800-160V1R1-1160"
+          ]
+        },
+        "results": {
+          "title": "Security measurement results",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "measure",
+              "date",
+              "value",
+              "within_parameters",
+              "analysis",
+              "informed"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^MRS-\\d{2,3}$"
+              },
+              "measure": {
+                "title": "Measure the result is of",
+                "type": "string",
+                "pattern": "^MSR-\\d{2,3}$"
+              },
+              "date": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "number"
+              },
+              "within_parameters": {
+                "title": "Whether system security performance is within acceptable parameters",
+                "type": "boolean",
+                "x-enforces": [
+                  "REQ-SP800-160V1R1-1153",
+                  "REQ-SP800-160V1R1-1169"
+                ]
+              },
+              "analysis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "informed": {
+                "title": "Measurement users informed of the result",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona_id"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

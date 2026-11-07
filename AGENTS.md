@@ -149,7 +149,9 @@ entities their Chapter 3 block maps to, or a waiver names an open work item or a
 rationale), all run by `rmf validate`. Recall of the extractor against hand-read pages, the
 audit probes, and every raw line of every in-scope page landing in an entry or a rejection is
 `tests/unit/test_conformance_recall.py`; prose recall is reported, not guaranteed, and triage
-promotes what the extractor missed. p11 run contracts: the fixtures on the current
+promotes what the extractor missed. p11 Monitor records: `changes.yaml`, `posture-reports.yaml`
+and `plan-reviews.yaml`, judged by MCHG, MCON, MRPT and MPLAN once their artifact is in play.
+p11 run contracts: the fixtures on the current
 `framework_version`, and at `--release` the example too (RUN-VER-001 as an error).
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.

@@ -1,0 +1,52 @@
+monitoring:
+  unauthorized_changes:
+    from: '2026-11-20'
+    to: '2027-02-28'
+    method: Weekly comparison of the running configuration with the approved baseline.
+    reconciled_against: [baseline, inventory, change-requests]
+changes:
+  - id: CHG-001
+    origin: requested
+    date: '2026-12-01'
+    summary: Update the relay service to 2.4.
+    requested_by: PER-ISSO
+    control: required
+    security_impact: {result: limited, analysis: The update replaces a TLS library.}
+    test: {result: pass, date: '2026-12-03', presented_to: [PER-CCB, PER-AO]}
+    decision: {by: PER-CCB, outcome: approved, date: '2026-12-05', communicated_to: [PER-ISSO, PER-PM]}
+    implementation: {date: '2026-12-08', notified: [operators, help desk]}
+    verification: {method: Post-deployment STIG scan., date: '2026-12-09', result: pass}
+    closed: '2026-12-10'
+    sources: [INT-030.A1]
+  - id: CHG-002
+    origin: unauthorized
+    date: '2026-12-15'
+    summary: A debug port was opened on the appliance outside change control.
+    requested_by: PER-ISSO
+    control: required
+    security_impact: {result: limited, analysis: The port exposed a management interface to the VLAN.}
+    test: {result: pass, date: '2026-12-16', presented_to: [PER-CCB, PER-AO]}
+    root_cause: {cause: process-failure, determined: '2026-12-18', response: POAM-002}
+    sources: [INT-030.A1]
+  - id: CHG-003
+    origin: requested
+    date: '2027-01-05'
+    summary: Rotate the operator banner text.
+    requested_by: PER-ISSO
+    control: exempt
+    security_impact: {result: none, analysis: The text is not security relevant.}
+    sources: [INT-030.A1]
+  - id: CHG-004
+    origin: le-ci
+    date: '2027-01-10'
+    summary: Deployment of an LE/CI sensor on the enclave segment.
+    requested_by: PER-CSSP
+    control: required
+    security_impact: {result: limited, analysis: Passive tap with no route to the relay.}
+    test: {result: pass, date: '2027-01-11', presented_to: [PER-CCB, PER-AO]}
+    decision: {by: PER-CCB, outcome: approved, date: '2027-01-12', communicated_to: [PER-CSSP]}
+    implementation: {date: '2027-01-13', notified: [network administrators]}
+    le_ci: {lawful: true, basis: Component counterintelligence authority., coordinated_with: PER-AO, attempted: '2027-01-10', outcome: coordinated}
+    sources: [INT-030.A1]
+connections: []
+sources: [INT-030.A1]

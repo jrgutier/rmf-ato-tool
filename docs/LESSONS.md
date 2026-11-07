@@ -439,3 +439,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the link is the path as written; valid_minimal lists the boundary diagram, and PKG-003 fails when its file is not in the run.
 - Rule: An optional field no fixture sets is untested, however green its golden.
 - Promotion: check: PKG-003
+
+## L-0063 · 2026-11-02 · run: phase-11 · tags: fixtures, rules
+- Symptom: every rule on M-1 and M-5 was silent on both fixture runs, which stop at R-5, so a clause could pass its negative test only with a fixture that first built a monitoring cycle by hand.
+- Root cause: a supporting artifact out of play holds nothing a rule reads, and no fixture seeded one.
+- Fix: valid_minimal seeds ART-CHG and ART-SECRPT, so `test_base_has_no_findings` proves the positive case of each Monitor rule and each negative fixture needs one mutation.
+- Rule: A rule's positive case runs in a base run, not only its negative one.
+- Promotion: none — a fixture habit, already enforced for this cluster by test_base_has_no_findings; it binds no fork.
