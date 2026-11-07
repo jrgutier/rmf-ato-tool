@@ -11,7 +11,7 @@ through O&S to disposal (`framework/rmf-steps.yaml`).
 | M-1 | System and Environment Changes | [M-1.md](M-1.md) | generated | ART-CHG (produces), ART-INV, ART-CMP |
 | M-2 | Ongoing Assessments | [M-2.md](M-2.md) | authored | ART-SAR, ART-CONMON |
 | M-3 | Ongoing Risk Response | [M-3.md](M-3.md) | generated | ART-RA, ART-POAM |
-| M-4 | Authorization Updates | [M-4.md](M-4.md) | generated | ART-SSP, ART-SAR, ART-POAM, ART-RA |
+| M-4 | Authorization Package Updates | [M-4.md](M-4.md) | generated | ART-SSP, ART-SAR, ART-POAM, ART-RA |
 | M-5 | Security and Privacy Reporting | [M-5.md](M-5.md) | generated | ART-SECRPT (produces) |
 | M-6 | Ongoing Authorization | [M-6.md](M-6.md) | generated | ART-AODM |
 | M-7 | System Disposal | [M-7.md](M-7.md) | generated | ART-DISP (produces) |
