@@ -1500,6 +1500,390 @@
     },
     "sources": {
       "$ref": "#/$defs/sources"
+    },
+    "ai_capabilities": {
+      "title": "AI-enabled capabilities of the system and their use case risk",
+      "type": "array",
+      "items": {
+        "title": "One AI-enabled capability",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "use_case_risks",
+          "benchmarks",
+          "verified_before_deployment",
+          "monitoring",
+          "bias"
+        ],
+        "properties": {
+          "name": {
+            "title": "The AI-enabled capability",
+            "type": "string",
+            "minLength": 1
+          },
+          "use_case_risks": {
+            "title": "The use case-specific risks and mitigation requirements",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-DOWI8430.01-0219"
+            ]
+          },
+          "benchmarks": {
+            "title": "Measurable performance benchmarks, aligned to DoW AI policy and NIST or industry AI standards",
+            "type": "array",
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-DOWI8430.01-0220"
+            ],
+            "items": {
+              "title": "One benchmark",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "metric",
+                "standard"
+              ],
+              "properties": {
+                "metric": {
+                  "title": "The measurable performance benchmark",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "standard": {
+                  "title": "The DoW, NIST or industry AI standard it aligns to",
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "verified_before_deployment": {
+            "title": "How benchmarks and risk remediation are verified satisfactory before deployment",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-DOWI8430.01-0221"
+            ]
+          },
+          "monitoring": {
+            "title": "How the benchmarks are continuously monitored in operation",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-DOWI8430.01-0222"
+            ]
+          },
+          "bias": {
+            "title": "Unintended bias: how it is minimized, detected and monitored, and how stakeholders are notified",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "minimization",
+              "detection",
+              "notification"
+            ],
+            "properties": {
+              "minimization": {
+                "title": "How the AI is designed and deployed to minimize unintended bias",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0223"
+                ]
+              },
+              "detection": {
+                "title": "The techniques that detect and monitor for unintended bias",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0224"
+                ]
+              },
+              "notification": {
+                "title": "How appropriate stakeholders are notified of detected model bias",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0224"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "title": "Suitability of third-party and open-source software components, documented with the risk assessment",
+      "type": "array",
+      "items": {
+        "title": "One third-party software component",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind",
+          "factors",
+          "suitable"
+        ],
+        "properties": {
+          "name": {
+            "title": "The component",
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "title": "The kind of component",
+            "enum": [
+              "open-source",
+              "cots",
+              "gots",
+              "other-third-party"
+            ]
+          },
+          "factors": {
+            "title": "The risk factors addressed when determining suitability",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "support",
+              "distribution_integrity",
+              "sub_components",
+              "developer_practices",
+              "integrity_mechanisms",
+              "adversarial_control"
+            ],
+            "properties": {
+              "support": {
+                "title": "The stability, activity level and availability of technical support for the component",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0266"
+                ]
+              },
+              "distribution_integrity": {
+                "title": "The integrity of the distribution source and the provenance of the software",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0267"
+                ]
+              },
+              "sub_components": {
+                "title": "The security and license obligations of all sub-components",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0268"
+                ]
+              },
+              "developer_practices": {
+                "title": "Verifiable evidence of the developer's security practices, including vulnerability management and timely remediation",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0269",
+                  "REQ-SP800-53R5-0023"
+                ]
+              },
+              "integrity_mechanisms": {
+                "title": "Strong integrity validation mechanisms, such as signed releases and reproducible builds",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0270"
+                ]
+              },
+              "adversarial_control": {
+                "title": "The potential for adversarial ownership, investment, contribution or control over the project or vendor",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0271"
+                ]
+              }
+            },
+            "x-enforces": [
+              "REQ-DOWI8430.01-0191"
+            ]
+          },
+          "trivial": {
+            "title": "Why an open-source component is trivial, so the further review of a non-trivial one does not apply",
+            "type": "string",
+            "minLength": 1
+          },
+          "open_source": {
+            "title": "The further review of a non-trivial open-source component",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "governance",
+              "community",
+              "license"
+            ],
+            "properties": {
+              "governance": {
+                "title": "The structure of the project's leadership and commit authority: an established foundation or individuals",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0200"
+                ]
+              },
+              "community": {
+                "title": "Community activity, the contribution and pull-request review process, the security disclosure policy and the maintainers' track record",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0272"
+                ]
+              },
+              "license": {
+                "title": "Legal obligations, license compatibility, copyleft and usage that may trigger undesirable conditions, evaluated with security and operational risk",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0203"
+                ]
+              }
+            }
+          },
+          "validation": {
+            "title": "Independent third-party testing, evaluation or validation of a commercial product",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "outcome"
+            ],
+            "properties": {
+              "outcome": {
+                "title": "Whether a validated product is used",
+                "enum": [
+                  "validated",
+                  "in-evaluation",
+                  "none-available",
+                  "not-selected"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-53R5-0023"
+                ]
+              },
+              "program": {
+                "title": "The approved independent assessment program, such as the NIST CMVP or NIAP Common Criteria",
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "title": "Why no validated product is used",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "suitable": {
+            "title": "Whether the component is suitable",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy risk assessment of a system processing PII (PRIV-007)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processing",
+        "impact_on_individuals",
+        "legal_requirements",
+        "sources"
+      ],
+      "properties": {
+        "processing": {
+          "title": "The nature of the PII processing the privacy risk assessment considers",
+          "type": "string",
+          "minLength": 1
+        },
+        "impact_on_individuals": {
+          "title": "The impact of the processing on individuals",
+          "type": "string",
+          "minLength": 1
+        },
+        "legal_requirements": {
+          "title": "Legal and policy privacy requirements evaluated for applicability",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "authority",
+              "applies",
+              "reason",
+              "sources"
+            ],
+            "properties": {
+              "authority": {
+                "title": "Law, regulation or policy evaluated",
+                "enum": [
+                  "OMB-A-130",
+                  "PRIVACY-ACT",
+                  "E-GOV-ACT-208",
+                  "OMB-A-108",
+                  "DODI5400.11",
+                  "DOD5400.11-R",
+                  "DODI5400.16",
+                  "HIPAA",
+                  "DOD8580.02",
+                  "DODM5240.01",
+                  "FIPPS",
+                  "OTHER"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "applies": {
+                "title": "Whether the requirement applies to the system",
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "beyond_baseline": {
+                "title": "Obligations the privacy control baseline does not meet, and the separate steps taken for them",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "baseline_sufficient": {
+                "title": "Why the privacy control baseline meets every obligation of the requirement, when beyond_baseline is empty",
+                "type": "string",
+                "minLength": 1
+              },
+              "requirements": {
+                "title": "ART-REQ requirements that carry the applicable requirement",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^REQ-\\d{2,3}$"
+                }
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
     }
   },
   "$defs": {

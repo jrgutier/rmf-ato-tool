@@ -1,16 +1,13 @@
 rule: CATG-003
 bases:
-- minimal
+- pii
 description: PII with no account of how it was identified
 mutations:
-- op: set_field
+- op: delete_field
   file: artifacts/data/infotypes.yaml
-  path: information_types.0.privacy
-  value: true
+  path: information_types.1.pii_identification
 expect:
   errors:
   - CATG-003
-  also:
-  - AODM-010
   messages:
-  - INF-01 holds PII and does not say how the PII was identified
+  - INF-02 holds PII and does not say how the PII was identified

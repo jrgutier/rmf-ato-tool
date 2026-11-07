@@ -26,6 +26,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: the criteria (frequency_criteria FC-nn: volatility, impact level, critical functions, known weaknesses, threat and vulnerability information, risk assessment results, reporting requirements, risk tolerance, resources) behind each frequency the organizational strategy does not set, who established them and with which officials, and the approval of the strategy and minimum frequencies by the AO or AODR (conmon.yaml approval), with tokens>>
 
+## Privacy continuous monitoring
+
+<<FILL: for a system processing PII, the privacy continuous monitoring strategy: the SAOP's guidance on the ongoing monitoring of privacy controls, each privacy control of the baseline with its organization-defined assessment frequency, and each control added to the strategy with the SAOP's consultation (conmon.yaml privacy; PRIV-006); or a sentence saying the system processes no PII, with tokens>>
+
 ## Automated tools and data
 
 <<FILL: each automated tool (TOOL-nn): the controls it assesses by the test method, how often, the analysis and reporting of its results, why it was chosen and how it is validated and kept up; for a desired state strategy the actual state, the comparable desired state and how defects are computed; how monitoring data is collected, stored, analyzed, retrieved and delivered within and between tiers, where monitoring is automated and where it is not, and why (conmon.yaml tools and architecture), with tokens>>
@@ -49,6 +53,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 ## Security measurement
 
 <<FILL: the security-relevant information needs, the measures that satisfy them with their acceptable parameters and users, and the procedures for collection, analysis, access and reporting, as in conmon.yaml measurement, with tokens>>
+
+## Vulnerability management
+
+<<FILL: how the system runs the five steps of the DoD vulnerability management process (DoDI 8531.01 Section 3) and which records support it; how vulnerabilities are identified (scans with NIST SP 800-115 as reference, CVE, automation before manual work and why each manual activity is manual, incident reports and logs cross-referenced with CVE, risk assessment data and vendor bulletins); the analysis tools from development through operational test, operations and sustainment to retirement, and where JFAC assistance or licenses are used; the monthly authenticated and non-authenticated scans; where patches come from for what enterprise patching does not reach, the scan of its reach and how non-compliant devices are brought into compliance; the central log repository or SIEM; a provider's plan and the AO's approval of it, as in conmon.yaml vulnerability_management, with tokens>>
 
 ## Roles and tools
 

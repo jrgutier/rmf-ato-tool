@@ -1,0 +1,24 @@
+rule: TSTRAT-001
+bases:
+- minimal
+description: an oversight program with no DOT&E approval of OT&E
+mutations:
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: oversight.dote
+  value: true
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals.0
+  value:
+    part: document
+    by: component
+    date: '2026-04-15'
+    decision_point: MS-B
+    submitted_to_osd: '2026-03-01'
+expect:
+  errors:
+  - TSTRAT-001
+  messages:
+  - the DOT&E is the approval authority for the ot-e planned activities of a program on T&E 
+    oversight

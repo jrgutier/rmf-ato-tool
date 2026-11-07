@@ -28,8 +28,10 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements", "system-description", "sar-summary",
-                     "org-context", "disposal", "cloud"}
+                     "requirements", "software", "system-description", "sar-summary",
+                     "org-context", "disposal",
+                     "protection", "st-protection", "protection-requirements", "nss-assessments",
+                     "test-strategy", "registration", "pia", "cloud"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -98,6 +100,16 @@ REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["
 AGREEMENT = {"analysis": "a", "feedback": "f",
              "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
              "sources": SRC}
+DERIVATION = {
+    "informed_by": [{"kind": "concept-of-operations", "document": "CONOPS"}],
+    "methods": [{"method": "misuse cases", "addresses": ["design"], "requirements": ["REQ-01"]}],
+    "key_performance": [{"name": "Survivability KPP", "establishes": ["survivability"]}],
+    "exportability": ["REQ-01"], "sources": SRC}
+ENGINEERING = {
+    "practices": [{"area": "cybersecurity", "stages": ["design"], "practice": "p"}],
+    "assurance": {"level": "l", "requirements": ["REQ-01"], "commensurate_with": {
+        "technology": "t", "program": "p", "system": "s", "mission": "m"}},
+    "sources": SRC}
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -325,6 +337,11 @@ RUN_EXAMPLES = {
                       "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
          "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-1"},
          "sources": SRC}),
+    "registration": (
+        {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
+                  "connections": ["CONN-01"]}, "sources": SRC},
+        {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
+                  "connections": ["link-1"]}, "sources": SRC}),
     "plan-reviews": (
         {"schedule": {"interval_days": 365, "set_by": "policy"}, "reviews": [], "changes": [],
          "sources": SRC},
@@ -346,11 +363,17 @@ RUN_EXAMPLES = {
         {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
          "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
                             "sources": SRC}],
-         "agreement": AGREEMENT},
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING},
         {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
             "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
-         "agreement": AGREEMENT}),
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING}),
+    "software": (
+        {"covered_software": False, "sources": SRC},
+        {"covered_software": True, "pipeline": {"automated": True}, "sources": SRC}),
 }
+
+_PIA = YAML(typ="safe").load((REPO_ROOT / "templates/data/pia.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["pia"] = (_PIA, {**_PIA, "form": "DD-9999"})
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
 
@@ -370,8 +393,15 @@ RUN_EXAMPLES.update({
         ("system-description", "ownership", "leased"),
         ("sar-summary", "assessment_type", "spot-check"),
         ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]),
+        ("protection", "program", {"acat": "IV", "mda": "DAE"}),
+        ("protection-requirements", "read", {"ppp": "PPP-1"}),
+        ("nss-assessments", "nss", "perhaps"),
+        ("test-strategy", "approvals", []),
         ("cloud", "mission_impact_level", {"level": "IL3"}))
 })
+_ST = YAML(typ="safe").load(
+    (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
      "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},
@@ -452,3 +482,35 @@ def test_schema_error_names_entity_and_field(tmp_path):
     assert any("tasks/C.yaml:2: C-1: min_interviews: -1 is less than the minimum" in r
                for r in rendered), rendered
     assert any("meta.yaml:1: meta/task_set/mode: 'some' is not one of" in r for r in rendered)
+
+
+def _sources_properties(node, pointer=""):
+    if isinstance(node, dict):
+        for key, child in (node.get("properties") or {}).items():
+            if key == "sources":
+                yield f"{pointer}/properties/sources", child
+        for key, child in node.items():
+            yield from _sources_properties(child, f"{pointer}/{key}")
+    elif isinstance(node, list):
+        for n, child in enumerate(node):
+            yield from _sources_properties(child, f"{pointer}/{n}")
+
+
+# baseline.json is written by `rmf baseline resolve`; its sources are the files it read.
+TRACED = sorted(p for p in SCHEMAS.glob("*.schema.json") if p.name != "baseline.schema.json")
+
+
+@pytest.mark.parametrize("path", TRACED, ids=lambda p: p.name)
+def test_sources_properties_hold_trace_tokens(path):
+    """L-0073: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
+    origin kinds named `sources` fails every run that fills it."""
+    root = json.loads(path.read_text(encoding="utf-8"))
+
+    def resolve(node):
+        while isinstance(node, dict) and "$ref" in node:
+            node = root["$defs"][node["$ref"].rpartition("/")[2]]
+        return node
+
+    for pointer, node in _sources_properties(root):
+        token = resolve(resolve(node).get("items"))
+        assert str((token or {}).get("pattern", "")).startswith("^(INT-"), pointer

@@ -109,3 +109,25 @@ detection_coverage:
   - {asset_class: external-providers, means: Identity provider audit feed}
   - {asset_class: computing, means: Endpoint agent on the appliance and console}
 tuning: The CSSP reviews alert thresholds monthly against false positives and missed detections.
+vulnerability_management:
+  process: [identification, analysis, analysis-reporting, remediation-mitigation, verification-monitoring]
+  supported_by: {configuration: ART-CMP, asset: ART-INV, remediation: ART-POAM, mitigation: ART-POAM}
+  identification:
+    scanning_reference: SP800-115
+    identified_from: [cve, vendor-bulletins, scans, vdp, directed-actions, incident-history, risk-assessment]
+    cross_reference: [cve, risk-assessment, vendor-bulletins]
+    manual:
+    - {activity: Review of the appliance firmware against vendor bulletins, reason: No scanner reads the appliance firmware.}
+  tools:
+  - {tool: TOOL-01, phases: [development, operational-test, operations-sustainment, retirement]}
+  scans:
+  - {kind: authenticated, frequency: monthly}
+  - {kind: non-authenticated, frequency: monthly}
+  patching:
+    patch_sources:
+    - {covers: Operating system and relay service packages, source: dod-enterprise}
+    - {covers: Appliance firmware outside enterprise patching, source: vendor}
+    coverage_scan: {tool: TOOL-01, frequency: monthly}
+    noncompliant_devices: Network access control quarantines a device missing patches until the ISSO brings it to the baseline.
+  log_repository: The enclave SIEM keeps scan results and logs.
+  sources: [INT-030.A1]

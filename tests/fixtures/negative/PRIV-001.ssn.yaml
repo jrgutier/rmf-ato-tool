@@ -1,0 +1,14 @@
+rule: PRIV-001
+bases:
+- pii
+description: SSNs without a justification
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.1.pii.ssn
+  value: true
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - the system holds SSNs and records no SSN use and justification memorandum

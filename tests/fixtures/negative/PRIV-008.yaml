@@ -1,0 +1,13 @@
+rule: PRIV-008
+bases:
+- pii
+description: a system processing PII with no privacy plan
+mutations:
+- op: delete_field
+  file: artifacts/data/ssp-records.yaml
+  path: privacy_plan
+expect:
+  errors:
+  - PRIV-008
+  messages:
+  - the system processes PII and ART-SSP holds no privacy plan

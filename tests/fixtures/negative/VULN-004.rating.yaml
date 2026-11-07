@@ -1,0 +1,14 @@
+rule: VULN-004
+bases:
+- minimal
+description: a CVSS rating that disagrees with its score
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.cvss.rating
+  value: high
+expect:
+  errors:
+  - VULN-004
+  messages:
+  - a CVSS score of 6.5 has the severity rating medium, not high

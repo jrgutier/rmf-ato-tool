@@ -1,0 +1,65 @@
+rule: GATE-001
+bases:
+- minimal
+description: a software MVCR fielded after the ATO with conditions expired
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.submissions
+  value:
+  - decision_point: DP-SWP-PATHWAY
+    date: '2026-03-10'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.tailoring.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: document
+  value:
+    id: TS-1
+    kind: test-strategy
+    pathway: PW-SWP
+    date: '2026-04-01'
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals.0.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.0.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.1.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.2.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.3.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.4.decision_point
+  value: DP-SWP-EXECUTION
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: DP-SWP-PATHWAY
+    date: '2026-03-15'
+  - id: DP-SWP-MVCR
+    date: '2028-01-01'
+expect:
+  errors:
+  - GATE-001
+  messages:
+  - the system is fielded at DP-SWP-MVCR, and no ATO or ATO with conditions of the system stands on 
+    that date

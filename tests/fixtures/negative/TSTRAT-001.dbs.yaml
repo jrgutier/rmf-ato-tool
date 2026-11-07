@@ -1,0 +1,59 @@
+rule: TSTRAT-001
+bases:
+- minimal
+description: a business system on DOT&E oversight with its T&E only in the implementation plan
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-DBS
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: document
+  value:
+    id: IP-1
+    kind: implementation-plan
+    pathway: PW-DBS
+    date: '2026-04-01'
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: oversight.dote
+  value: true
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals
+  value:
+  - part: document
+    by: component
+    date: '2026-04-15'
+    decision_point: DP-DBS-ACQUISITION
+    submitted_to_osd: '2026-03-01'
+  - part: ot-e
+    by: DOT&E
+    date: '2026-04-15'
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.0.decision_point
+  value: DP-DBS-ACQUISITION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.1.decision_point
+  value: DP-DBS-ACQUISITION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.2.decision_point
+  value: DP-DBS-ACQUISITION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.3.decision_point
+  value: DP-DBS-ACQUISITION
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: events.4.decision_point
+  value: DP-DBS-ACQUISITION
+expect:
+  errors:
+  - TSTRAT-001
+  messages:
+  - a business system on the DOT&E oversight list documents its T&E management content in a test and
+    evaluation master plan

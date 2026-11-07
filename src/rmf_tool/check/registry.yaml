@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 202 rules, 36 repo-scope and 166 run-scope. Authoritative;
+# Rule registry (plan §6.5): 236 rules, 36 repo-scope and 200 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -396,6 +396,15 @@ rules:
     summary: generated output differs from a fresh rmf build, baseline resolve or package
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-18R1-0197
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -405,6 +414,12 @@ rules:
     summary: baseline control without an SSP statement
     fixture: tests/fixtures/negative/SSP-COV-001.yaml
     hint: Use `rmf catalog show --missing` and write the whole family file.
+    enforces:
+      - REQ-DODI8510.01-0113
+      - REQ-SP800-37R2-0292
+      - REQ-SP800-37R2-0310
+      - REQ-SP800-37R2-0556
+      - REQ-SP800-53B-0056
   - id: SSP-COV-002
     scope: run
     severity: W
@@ -911,9 +926,13 @@ rules:
     enforces:
       - REQ-CNSSI1254-0109
       - REQ-DODI5400.11-0122
+      - REQ-SP800-18R2-0337
+      - REQ-SP800-37R2-0393
       - REQ-SP800-37R2-0402
       - REQ-SP800-37R2-0403
       - REQ-SP800-37R2-0410
+      - REQ-SP800-37R2-0524
+      - REQ-SP800-37R2-0632
       - REQ-SP800-39-0059
       - REQ-SP800-39-0207
   - id: AODM-011
@@ -1216,11 +1235,11 @@ rules:
     fixture: tests/fixtures/negative/STIG-001.yaml
     hint: Map the item to a benchmark in stig-summary.yaml or list it under not_applicable with a rationale.
     enforces:
-      - REQ-DODCIO-RECIPROCITY-0150
-      - REQ-DODI8500.01-0173
-      - REQ-DODI8531.01-0051
       - REQ-DODI8531.01-0078
+      - REQ-DODI8531.01-0051
+      - REQ-DODI8500.01-0173
       - REQ-DODI8531.01-0178
+      - REQ-DODCIO-RECIPROCITY-0150
   - id: STIG-002
     scope: run
     severity: E
@@ -1481,14 +1500,17 @@ rules:
     hint: "A remove names its basis and scoping consideration; a security-objective downgrade names its objectives, rests on ART-RA and leaves security-relevant information protected; remove and compensating actions record law_policy against legislation, regulation, policy and OMB policy, and a required control stays."
     enforces:
       - REQ-CNSSI1253-0041
+      - REQ-CNSSI1253-0075
       - REQ-CNSSI1253-0109
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0001
+      - REQ-DODI8510.01-0113
       - REQ-FIPS200-0008
       - REQ-SP800-18R1-0091
       - REQ-SP800-18R1-0092
       - REQ-SP800-18R1-0094
       - REQ-SP800-18R1-0095
       - REQ-SP800-37R2-0305
+      - REQ-SP800-53B-0056
       - REQ-SP800-53B-0057
       - REQ-SP800-53B-0066
       - REQ-SP800-53B-0067
@@ -1802,6 +1824,9 @@ rules:
       - REQ-SP800-160V1R1-0624
       - REQ-SP800-160V1R1-0645
       - REQ-SP800-160V1R1-0646
+      - REQ-DODI5000.90-0052
+      - REQ-SP800-160V1R1-0049
+      - REQ-SP800-160V1R1-0247
   - id: REQS-002
     scope: run
     severity: E
@@ -1820,6 +1845,14 @@ rules:
       - REQ-DODI8500.01-0275
       - REQ-DODI8500.01-0341
       - REQ-DODI8500.01-0352
+      - REQ-DOWI8430.01-0006
+      - REQ-DOWI8430.01-0007
+      - REQ-DOWI8430.01-0090
+      - REQ-DOWI8430.01-0175
+      - REQ-DOWI8430.01-0176
+      - REQ-DOWI8430.01-0178
+      - REQ-DOWI8430.01-0181
+      - REQ-DOWI8430.01-0182
   - id: REQS-003
     scope: run
     severity: E
@@ -1841,6 +1874,10 @@ rules:
       - REQ-SP800-160V1R1-0615
       - REQ-SP800-160V1R1-0616
       - REQ-SP800-160V1R1-0643
+      - REQ-SP800-160V1R1-0218
+      - REQ-SP800-160V1R1-0579
+      - REQ-SP800-160V1R1-0608
+      - REQ-SP800-160V1R1-1386
   - id: REQS-004
     scope: run
     severity: E
@@ -1855,6 +1892,337 @@ rules:
       - REQ-DODD8140.01-0022
       - REQ-DODD8140.01-0053
       - REQ-DODD8140.01-0054
+  - id: SSE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: security requirements derived without the informing documents, derivation methods, key performance measures, exportability or inclusion in the specifications
+    fixture: tests/fixtures/negative/SSE-001.yaml
+    hint: At P-15 record requirements.yaml derivation (DoDI 5000.83 3.3.c.(1)) and each requirement's included_in.
+    enforces:
+      - REQ-DODI5000.83-0169
+      - REQ-DODI5000.83-0175
+      - REQ-DODI5000.83-0176
+      - REQ-DODI5000.83-0177
+      - REQ-DODI5000.83-0178
+      - REQ-DODI5000.83-0285
+      - REQ-CNSSP12-0015
+      - REQ-DODI5000.90-0072
+      - REQ-DODI5000.82-0095
+      - REQ-DODI5000.90-0052
+  - id: SSE-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: system security engineering practices that miss an area, a life cycle activity, program protection, privacy, a design principle or the assurance level
+    fixture: tests/fixtures/negative/SSE-002.yaml
+    hint: At P-15 record requirements.yaml engineering (DoDI 5000.83 1.2.c); name principles of SP 800-160v1r1 Appendix E.
+    enforces:
+      - REQ-DODI5000.83-0010
+      - REQ-DODI5000.83-0283
+      - REQ-CNSSP12-0015
+      - REQ-SP800-53R5-0026
+      - REQ-DODI5000.82-0128
+      - REQ-DODI5000.90-0094
+      - REQ-SP800-160V1R1-0050
+      - REQ-SP800-160V1R1-0263
+      - REQ-SP800-18R2-0042
+      - REQ-SP800-39-0080
+      - REQ-SP800-160V1R1-0246
+      - REQ-SP800-160V1R1-0493
+      - REQ-SP800-160V1R1-0473
+      - REQ-SP800-37R2-0330
+      - REQ-SP800-53R5-0006
+  - id: SSE-003
+    scope: run
+    severity: E
+    ac: [AC-16, AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an assurance-related baseline control whose SSP statement does not address its assurance requirements, or leaves them unsatisfied once in place
+    fixture: tests/fixtures/negative/SSE-003.yaml
+    hint: "For each control `rmf catalog show --fields assurance` marks, record assurance.addressed in its SSP statement and assurance.status: satisfied once it is implemented."
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-37R2-0331
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-39-0308
+  - id: SWA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: covered software without an automated pipeline, signed provenance, a complete SBOM, approved AI tools or independent cyber DT&E
+    fixture: tests/fixtures/negative/SWA-001.yaml
+    hint: At S-4 write artifacts/data/software.yaml (DoWI 8430.01 2.8, 3.5 and 3.6).
+    enforces:
+      - REQ-DOWI8430.01-0095
+      - REQ-DOWI8430.01-0209
+      - REQ-DOWI8430.01-0215
+      - REQ-DOWI8430.01-0216
+      - REQ-DOWI8430.01-0217
+      - REQ-DOWI8430.01-0051
+      - REQ-DOWI8430.01-0146
+      - REQ-DOWI8430.01-0061
+      - REQ-DOWI8430.01-0142
+      - REQ-DOWI8430.01-0144
+      - REQ-DOWI8430.01-0204
+      - REQ-DOWI8430.01-0169
+  - id: SWA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an open-source component without its governance, community and license review, or a COTS component that declines a validated product without a reason
+    fixture: tests/fixtures/negative/SWA-002.yaml
+    hint: At P-14 record ra.yaml components with the six risk factors of DoWI 8430.01 3.5.i.(2) and, for open source, the review of 3.5.i.(3).
+    enforces:
+      - REQ-DOWI8430.01-0198
+      - REQ-SP800-37R2-0330
+  - id: PRIV-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: "a system processing PII without its privacy compliance record, or with a PIA determination DoDI 5400.16 does not allow"
+    fixture: tests/fixtures/negative/PRIV-001.yaml
+    hint: "At P-12 give each PII information type its pii subjects, PHI and SSN flags, and record infotypes.yaml privacy: the issuances complied with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN, the SSN justification, records coordination and the PIA determination with its DoDI 5400.16 basis and due date. An NSS exclusion needs a Privacy Overlay control set, no ra-8 in the baseline and the privacy implications considered."
+    enforces:
+      - REQ-DODI5000.82-0177
+      - REQ-DODI5000.82-0178
+      - REQ-DODI5400.11-0053
+      - REQ-DODI5400.11-0075
+      - REQ-DODI5400.11-0101
+      - REQ-DODI5400.11-0144
+      - REQ-DODI5400.11-0145
+      - REQ-DODI5400.11-0178
+      - REQ-DODI5400.16-0009
+      - REQ-DODI5400.16-0010
+      - REQ-DODI5400.16-0037
+      - REQ-DODI5400.16-0039
+      - REQ-DODI5400.16-0040
+      - REQ-DODI5400.16-0041
+      - REQ-DODI5400.16-0049
+      - REQ-DODI5400.16-0050
+      - REQ-DODI5400.16-0051
+      - REQ-DODI5400.16-0056
+      - REQ-DODI8500.01-0276
+      - REQ-DODI8500.01-0277
+      - REQ-SP800-60V1R1-0164
+  - id: PRIV-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a required or adapted PIA that does not exist or is not on its DoD form"
+    fixture: tests/fixtures/negative/PRIV-002.yaml
+    hint: "Write artifacts/data/pia.yaml at P-14 when P-12 found a PIA required (DD Form 2930) or adapted (DD Form 2930A)."
+    enforces:
+      - REQ-DODI5400.11-0142
+      - REQ-DODI5400.16-0005
+      - REQ-DODI5400.16-0006
+      - REQ-DODI5400.16-0007
+      - REQ-DODI5400.16-0008
+      - REQ-DODI5400.16-0029
+      - REQ-DODI5400.16-0033
+      - REQ-DODI5400.16-0056
+  - id: PRIV-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a PIA not coordinated, reviewed or approved by the officials DoDI 5400.16 names, or approved after the decision that took it"
+    fixture: tests/fixtures/negative/PRIV-003.yaml
+    hint: "Coordinate the PIA through the ISSM, the privacy representative and the records management office; PER-CISO (or a designee, designee_of) confirms cybersecurity policy and PER-PRIV privacy policy; PER-CIO (or the reviewing official, never the PM or another party who coordinated it) approves after them and before the authorization decision."
+    enforces:
+      - REQ-DODI5400.11-0141
+      - REQ-DODI5400.16-0027
+      - REQ-DODI5400.16-0032
+      - REQ-DODI5400.16-0034
+      - REQ-DODI5400.16-0057
+      - REQ-DODI5400.16-0058
+      - REQ-DODI5400.16-0059
+      - REQ-DODI5400.16-0060
+      - REQ-DODI5400.16-0067
+  - id: PRIV-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "an approved PIA not sent to the DoD CIO, or with section 1 neither published nor restricted for a reason"
+    fixture: tests/fixtures/negative/PRIV-004.yaml
+    hint: "Record the submission of the approved PIA to the DoD CIO, on or after its approval, and the publication of section 1 in the Component repository or the reason it is restricted."
+    enforces:
+      - REQ-DODI5400.11-0143
+      - REQ-DODI5400.16-0020
+      - REQ-DODI5400.16-0061
+      - REQ-DODI5400.16-0062
+      - REQ-DODI5400.16-0063
+      - REQ-DODI5400.16-0065
+  - id: PRIV-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: "a change not tested for new privacy risk, or one that changes the privacy posture with no PIA review"
+    fixture: tests/fixtures/negative/PRIV-005.yaml
+    hint: "State privacy_impact on every change of a system processing PII; a change with privacy_impact true needs a pia.yaml updates entry naming it; on a system with no PIA it needs a new P-12 determination (infotypes.yaml privacy.redetermined_after)."
+    enforces:
+      - REQ-DODI5400.16-0042
+      - REQ-DODI5400.16-0043
+      - REQ-DODI5400.16-0044
+      - REQ-DODI5400.16-0045
+      - REQ-DODI5400.16-0046
+      - REQ-DODI5400.16-0047
+      - REQ-DODI5400.16-0048
+      - REQ-DODI5400.16-0069
+      - REQ-SP800-37R2-0656
+  - id: PRIV-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: "a privacy control without an assessment frequency in the PCM strategy, guidance not from the SAOP, or an added control without the SAOP consulted"
+    fixture: tests/fixtures/negative/PRIV-006.yaml
+    hint: "Record conmon.yaml privacy: guidance_by PER-PRIV, every privacy control of the baseline with its frequency, and for a control added to the strategy the SAOP's consultation finding it appropriate."
+    enforces:
+      - REQ-SP800-37R2-0320
+      - REQ-SP800-37R2-0526
+      - REQ-SP800-53AR5-0334
+      - REQ-SP800-53AR5-0343
+  - id: PRIV-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "a privacy risk assessment that does not evaluate the legal requirements or OMB A-130, or an applicable requirement or Privacy Act rule ART-REQ does not carry"
+    fixture: tests/fixtures/negative/PRIV-007.yaml
+    hint: "Record ra.yaml privacy with the nature of the processing, its impact on individuals and each legal and policy requirement evaluated (OMB A-130 applies, with what the privacy baseline leaves unmet or why it leaves nothing; the FIPPs considered); carry each applicable one, and each Privacy Act rule of a system of records (with the contract provisions when a contractor operates it), by an ART-REQ requirement."
+    enforces:
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0075
+      - REQ-DODI5000.82-0176
+      - REQ-DODI5400.11-0004
+      - REQ-DODI5400.11-0043
+      - REQ-DODI5400.11-0097
+      - REQ-DODI5400.11-0136
+      - REQ-DODI5400.11-0160
+      - REQ-DODI5400.11-0164
+      - REQ-DODI5400.11-0173
+      - REQ-DODI5400.11-0174
+      - REQ-DODI5400.11-0180
+      - REQ-SP800-53B-0031
+      - REQ-SP800-53B-0033
+  - id: PRIV-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: "a system processing PII with no privacy plan record"
+    fixture: tests/fixtures/negative/PRIV-008.yaml
+    hint: "Record ssp-records.yaml privacy_plan with the privacy requirements and the methods and metrics that assess the privacy controls; the plans may be consolidated or separate."
+    enforces:
+      - REQ-DODI8510.01-0108
+      - REQ-SP800-37R2-0556
+  - id: PRIV-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: "a role primary only for a system processing PII that does not take part where the system processes PII"
+    fixture: tests/fixtures/negative/PRIV-009.yaml
+    hint: "For a system processing PII, give each role the RACI makes primary under when: processes-pii an interview at that task."
+    enforces:
+      - REQ-SP800-37R2-0732
+      - REQ-SP800-37R2-0733
+      - REQ-SP800-37R2-0736
+  - id: PRIV-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: I-2
+    summary: "I-2, A-5 or M-4 wrote ART-SSP without an update in the plan change log, or one that leaves out the privacy plan"
+    fixture: tests/fixtures/negative/PRIV-010.yaml
+    hint: "Log each update of the plans in plan-reviews.yaml changes with the task that made it and the plans it changed (security, privacy)."
+    enforces:
+      - REQ-DODI8510.01-0118
+      - REQ-DODI8510.01-0124
+      - REQ-SP800-37R2-0327
+      - REQ-SP800-37R2-0336
+      - REQ-SP800-37R2-0344
+      - REQ-SP800-37R2-0371
+      - REQ-SP800-37R2-0406
+      - REQ-SP800-37R2-0556
+  - id: PRIV-011
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: "P-2 wrote ART-ORG-CONTEXT without its section on the Component privacy program"
+    fixture: tests/fixtures/negative/PRIV-011.yaml
+    hint: "At P-2 append `## Privacy program` to ART-ORG-CONTEXT: the Component privacy and civil liberties program, its SCOP and PCLO with their staffing and reporting lines, complaint procedures, training, how privacy controls are designated, and whether the SCOP approves or, in an OSD Component, primarily advises."
+    enforces:
+      - REQ-DODI5400.11-0003
+      - REQ-DODI5400.11-0009
+      - REQ-DODI5400.11-0033
+      - REQ-DODI5400.11-0036
+      - REQ-DODI5400.11-0037
+      - REQ-DODI5400.11-0090
+      - REQ-DODI5400.11-0093
+      - REQ-DODI5400.11-0094
+      - REQ-DODI5400.11-0096
+      - REQ-DODI5400.11-0102
+      - REQ-DODI5400.11-0104
+      - REQ-DODI5400.11-0109
+      - REQ-DODI5400.11-0112
+      - REQ-DODI5400.11-0113
+      - REQ-DODI5400.11-0114
+      - REQ-DODI5400.11-0117
+      - REQ-DODI5400.11-0125
+      - REQ-DODI5400.11-0127
+      - REQ-DODI5400.11-0128
+      - REQ-DODI5400.11-0130
+      - REQ-DODI5400.11-0139
+      - REQ-DODI5400.11-0140
+      - REQ-DODI5400.11-0146
+      - REQ-DODI5400.11-0147
   - id: DEGRADED-001
     scope: run
     severity: W
@@ -2713,6 +3081,417 @@ rules:
       - REQ-DODI8500.01-0406
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
+  - id: PPROT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the PPP is approved by the wrong authority, misses a decision point, or carries the cybersecurity strategy apart
+    fixture: tests/fixtures/negative/PPROT-001.yaml
+    hint: "protection.yaml ppp.approval names the authority the ACAT, MDA and pathway call for; ppp.submissions holds one per decision point passed."
+    enforces:
+      - REQ-DODI5000.83-0046
+      - REQ-DODI5000.83-0047
+      - REQ-DODI5000.83-0048
+      - REQ-DODI5000.83-0049
+      - REQ-DODI5000.83-0078
+      - REQ-DODI5000.83-0253
+      - REQ-DODI5000.83-0254
+      - REQ-DODI5000.85-0059
+      - REQ-DODI5000.87-0010
+      - REQ-DODI5000.90-0045
+      - REQ-DODI8500.01-0098
+  - id: PPROT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the PPP lacks a preparer, countermeasure, threat, risk source, AT basis, update or transition the source requires
+    fixture: tests/fixtures/negative/PPROT-002.yaml
+    hint: "Give every critical item its threats and countermeasures, update the PPP after each award or significant event, and record its transition."
+    enforces:
+      - REQ-DODI5000.83-0077
+      - REQ-DODI5000.83-0086
+      - REQ-DODI5000.83-0100
+      - REQ-DODI5000.83-0131
+      - REQ-DODI5000.83-0194
+      - REQ-DODI5000.83-0195
+      - REQ-DODI5000.83-0196
+      - REQ-DODI5000.83-0221
+      - REQ-DODI5000.83-0248
+      - REQ-DODI5000.83-0249
+      - REQ-DODI5000.83-0250
+      - REQ-DODI5000.83-0251
+      - REQ-DODI5000.83-0256
+      - REQ-DODI5000.83-0257
+      - REQ-DODI5000.83-0258
+      - REQ-DODI5000.83-0263
+      - REQ-DODI5000.83-0267
+      - REQ-DODI5000.83-0272
+      - REQ-DODI5000.83-0276
+      - REQ-DODI5000.88-0125
+      - REQ-DODI8500.01-0233
+  - id: PPROT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a modernization priority area has no TAPP, or the S&T protection plan is missing, incomplete, late or not transitioned
+    fixture: tests/fixtures/negative/PPROT-003.yaml
+    hint: "protection.yaml inputs.tapps covers each area; st-protection.yaml holds the S&T plan of an S&T transition."
+    enforces:
+      - REQ-DODI5000.83-0009
+      - REQ-DODI5000.83-0011
+      - REQ-DODI5000.83-0045
+      - REQ-DODI5000.83-0077
+      - REQ-DODI5000.83-0078
+      - REQ-DODI5000.83-0228
+      - REQ-DODI5000.83-0235
+      - REQ-DODI5000.83-0238
+      - REQ-DODI5000.83-0239
+      - REQ-DODI5000.83-0240
+      - REQ-DODI5000.83-0245
+      - REQ-DODI5000.83-0246
+      - REQ-DODI5000.83-0247
+      - REQ-DODI5000.83-0258
+      - REQ-DODI5000.83-0265
+      - REQ-DODI5000.83-0266
+      - REQ-DODI5000.83-0270
+      - REQ-DODI5000.83-0271
+  - id: PPROT-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: the capability document's protection content, the plans read, or the solicitations fall short of the PPP
+    fixture: tests/fixtures/negative/PPROT-004.yaml
+    hint: "protection-requirements.yaml records each JCIDS protection topic, the plans read, and what each RFP and contract carries."
+    enforces:
+      - REQ-DODI5000.83-0082
+      - REQ-DODI5000.83-0083
+      - REQ-DODI5000.83-0084
+      - REQ-DODI5000.83-0085
+      - REQ-DODI5000.83-0174
+      - REQ-DODI5000.83-0209
+      - REQ-DODI5000.83-0219
+      - REQ-DODI5000.83-0255
+  - id: PPROT-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: security risk stays out of technical risk management, or an ITRA is missing, unapproved or informs nothing
+    fixture: tests/fixtures/negative/PPROT-005.yaml
+    hint: "protection.yaml technical_risks holds the security risks, drawn from what was read and assessed at technical reviews."
+    enforces:
+      - REQ-DODI5000.02-0033
+      - REQ-DODI5000.02-0034
+      - REQ-DODI5000.80-0060
+      - REQ-DODI5000.80-0065
+      - REQ-DODI5000.83-0180
+      - REQ-DODI5000.83-0190
+      - REQ-DODI5000.83-0191
+      - REQ-DODI5000.83-0193
+      - REQ-DODI5000.83-0223
+      - REQ-DODI5000.83-0259
+      - REQ-DODI5000.85-0051
+      - REQ-DODI5000.85-0086
+      - REQ-DODI5000.85-0096
+      - REQ-DODI5000.88-0012
+      - REQ-DODI5000.88-0024
+      - REQ-DODI5000.88-0103
+      - REQ-DODI5000.88-0120
+      - REQ-DODI5000.88-0126
+      - REQ-DODI5000.88-0136
+      - REQ-DODI5000.88-0137
+      - REQ-DODI5000.88-0139
+      - REQ-DODI5000.88-0148
+      - REQ-DODI5000.90-0003
+      - REQ-DODI5000.90-0034
+  - id: PPROT-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: an NSS lacks NSA's assessment with the AO before a milestone, or a space NSS lacks coordination, verification or reports
+    fixture: tests/fixtures/negative/PPROT-006.yaml
+    hint: "nss-assessments.yaml holds one assessment per decision point passed, by NSA and the cognizant AO."
+    enforces:
+      - REQ-CNSSP12-0026
+      - REQ-CNSSP12-0044
+      - REQ-CNSSP12-0054
+      - REQ-CNSSP12-0056
+      - REQ-CNSSP12-0058
+      - REQ-DODI8510.01-0037
+  - id: TSTRAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the test planning document does not fit the pathway or lacks the approval its oversight calls for
+    fixture: tests/fixtures/negative/TSTRAT-001.yaml
+    hint: "test-strategy.yaml document.kind follows the pathway; approvals names DOT&E, USD(R&E) or the Component as the source requires."
+    enforces:
+      - REQ-DODI5000.02-0036
+      - REQ-DODI5000.75-0189
+      - REQ-DODI5000.75-0194
+      - REQ-DODI5000.81-0013
+      - REQ-DODI5000.81-0065
+      - REQ-DODI5000.81-0083
+      - REQ-DODI5000.81-0084
+      - REQ-DODI5000.81-0085
+      - REQ-DODI5000.82-0041
+      - REQ-DODI5000.87-0025
+      - REQ-DODI5000.87-0098
+      - REQ-DODI5000.89-0011
+      - REQ-DODI5000.89-0025
+      - REQ-DODI5000.89-0056
+      - REQ-DODI5000.89-0064
+      - REQ-DODI5000.89-0074
+      - REQ-DODI5000.89-0075
+      - REQ-DODI5000.89-0095
+      - REQ-DODI5000.89-0096
+      - REQ-DODI5000.89-0137
+      - REQ-DODI5000.89-0144
+      - REQ-DODI5000.89-0163
+      - REQ-DODI5000.89-0180
+      - REQ-DODI8510.01-0251
+  - id: TSTRAT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the test strategy omits a cybersecurity test event, framework or penetration test the source requires
+    fixture: tests/fixtures/negative/TSTRAT-002.yaml
+    hint: "Plan DT and OT cybersecurity events, a CVPA and AA, DCO evaluation and independent penetration and exploitation testing."
+    enforces:
+      - REQ-DODI5000.75-0190
+      - REQ-DODI5000.75-0191
+      - REQ-DODI5000.89-0029
+      - REQ-DODI5000.89-0052
+      - REQ-DODI5000.89-0053
+      - REQ-DODI5000.89-0094
+      - REQ-DODI5000.89-0098
+      - REQ-DODI5000.89-0099
+      - REQ-DODI5000.89-0100
+      - REQ-DODI5000.89-0104
+      - REQ-DODI5000.89-0112
+      - REQ-DODI5000.89-0116
+      - REQ-DODI5000.89-0118
+      - REQ-DODI5000.89-0120
+      - REQ-DODI5000.89-0122
+      - REQ-DODI5000.89-0125
+      - REQ-DODI5000.89-0160
+      - REQ-DODI5000.89-0181
+      - REQ-DODI5000.89-0182
+      - REQ-DODI5000.89-0210
+      - REQ-DODI8500.01-0256
+  - id: TSTRAT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: reused test results or an adversarial assessment come from an unrepresentative system or environment
+    fixture: tests/fixtures/negative/TSTRAT-003.yaml
+    hint: "Reuse only results of events on a production-representative system in an operationally representative environment."
+    enforces:
+      - REQ-DODI5000.89-0119
+      - REQ-DODI5000.89-0124
+      - REQ-DODI5000.89-0149
+  - id: GATE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the system passes a pathway decision point that fields it with no authorization dated before
+    fixture: tests/fixtures/negative/GATE-001.yaml
+    hint: "Decide the ATO at R-4 before the MVCR, the UCA production milestone or a DBS deployment ATP (pathways.yaml authorization_gate)."
+    enforces:
+      - REQ-DODCIO-DEVSECOPS-0067
+      - REQ-DODI5000.81-0090
+  - id: VULN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action the system received has no response, or is implemented, tracked or withheld without what each needs
+    fixture: tests/fixtures/negative/VULN-001.yaml
+    hint: In poam/items.yaml directed_actions, record each order, alert or bulletin with response implemented (with its date, and a dow-order change where one made it), poam (with the POA&M item) withheld (coordinated with the requirements sponsor, the AO or AODR and the Component cyberspace operations forces), or not-applicable with not_applicable_reason.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0034
+      - REQ-DODCIO-RECIPROCITY-0165
+      - REQ-DODI8500.01-0148
+      - REQ-DODI8530.01-0144
+      - REQ-DODI8530.01-0145
+      - REQ-DODI8530.01-0184
+      - REQ-DODI8530.01-0196
+      - REQ-DODI8530.01-0229
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0262
+      - REQ-DODI8530.01-0265
+      - REQ-DODI8530.01-0266
+      - REQ-DODI8530.01-0314
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0101
+      - REQ-DODI8531.01-0102
+      - REQ-DODI8531.01-0103
+      - REQ-DODI8531.01-0137
+      - REQ-DOWI8430.01-0075
+      - REQ-DTM-24-001-0211
+      - REQ-DTM-24-001-0217
+  - id: VULN-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action names no one who implements it, or its compliance status is not reported up the chain
+    fixture: tests/fixtures/negative/VULN-002.yaml
+    hint: Name the implementers of each directed action (personas, or the roles DoDI 8530.01 names without one, commander, supervisor, project-lead, network-administrator, system-administrator, user) and report its compliance status to CDRUSCYBERCOM through the Component reporting chain, on or after receipt, the last report agreeing with the response.
+    enforces:
+      - REQ-DODI8530.01-0027
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0255
+      - REQ-DODI8530.01-0256
+      - REQ-DODI8530.01-0268
+      - REQ-DODI8531.01-0104
+      - REQ-DTM-24-001-0215
+  - id: VULN-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability disclosure report is not validated, rated, planned, communicated or reported within VRMN
+    fixture: tests/fixtures/negative/VULN-003.yaml
+    hint: Validate each VDP report and report it within VRMN on or after validation, a not-valid one as not-valid; a valid one links a vulnerabilities record, a POA&M item with source_of_weakness vdp opened no earlier than receipt, owner notices through completion, the AO or AODR advised, and a VRMN report after completion.
+    enforces:
+      - REQ-DODI8531.01-0087
+      - REQ-DODI8531.01-0106
+      - REQ-DODI8531.01-0133
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0136
+      - REQ-DODI8531.01-0138
+      - REQ-DODI8531.01-0139
+      - REQ-DODI8531.01-0141
+      - REQ-DODI8531.01-0142
+      - REQ-DODI8531.01-0143
+      - REQ-SP800-61R3-0146
+  - id: VULN-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: an analyzed vulnerability is not rated on CVSS 3.1, its rating disagrees with its score, its impact is unassessed or it is not reported
+    fixture: tests/fixtures/negative/VULN-004.yaml
+    hint: Each vulnerabilities record carries cvss version 3.1 with a score and the Table 1 rating for it, the expected loss of confidentiality, integrity and availability, and the date it was reported, not before its discovery.
+    enforces:
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0148
+      - REQ-DODI8531.01-0153
+      - REQ-DODI8531.01-0161
+      - REQ-DODI8531.01-0162
+      - REQ-DODI8531.01-0186
+      - REQ-SP800-61R3-0138
+  - id: VULN-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: the fix of a vulnerability is not chosen case by case, not tracked, or not verified by successive scans on completion
+    fixture: tests/fixtures/negative/VULN-005.yaml
+    hint: Record remediation with the method chosen among the options weighed, the loss of confidentiality, integrity and availability considered, the six cost factors and the POA&M item; once the item is completed, verify on or after completion, restoring the baseline, with at least two successive scans, the last on or after completion finding it absent.
+    enforces:
+      - REQ-DODI5000.90-0105
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0112
+      - REQ-DODI8531.01-0168
+      - REQ-DODI8531.01-0169
+      - REQ-DODI8531.01-0180
+      - REQ-DODI8531.01-0181
+      - REQ-SP800-18R2-0198
+  - id: VULN-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability that is not publicly known is not submitted toward the VEP, or one called public cites nothing
+    fixture: tests/fixtures/negative/VULN-006.yaml
+    hint: A vulnerabilities record with publicly_known false carries vep_submission to USCYBERCOM (NSA-direct for NSA), dated on or after discovery when newly_discovered is true, or for one not new prior set true with the reference of the earlier submission; publicly_known true cites a CVE or a public advisory.
+    enforces:
+      - REQ-DODI8531.01-0005
+      - REQ-DODI8531.01-0108
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0146
+  - id: VULN-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the continuous monitoring strategy lacks the vulnerability management process, its identification sources, tools across the life cycle, monthly scans or patch reach
+    fixture: tests/fixtures/negative/VULN-007.yaml
+    hint: conmon.yaml vulnerability_management lists the five DoD steps, the artifact behind configuration, asset, remediation and mitigation management, CVE as a source, incident reports cross-referenced with CVE, risk assessment data and vendor bulletins, tools of the strategy covering development to retirement, authenticated and non-authenticated scans at least monthly, and a patch coverage scan by a tool of the strategy; a provider's plan recorded there is approved by the AO or AODR.
+    enforces:
+      - REQ-DODI5000.83-0206
+      - REQ-DODI5000.83-0220
+      - REQ-DODI5000.87-0120
+      - REQ-DODI5000.90-0104
+      - REQ-DODI8510.01-0079
+      - REQ-DODI8531.01-0002
+      - REQ-DODI8531.01-0003
+      - REQ-DODI8531.01-0004
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0123
+      - REQ-DODI8531.01-0130
+      - REQ-DODI8531.01-0174
+      - REQ-DODI8531.01-0183
+      - REQ-DTM-24-001-0127
+  - id: PPSM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-18
+    summary: an Enterprise system is not registered in the DoD PPSM Registry for every connection of its boundary
+    fixture: tests/fixtures/negative/PPSM-001.yaml
+    hint: When an authorization deploys the system at enterprise scope, record ppsm in artifacts/data/registration.yaml with its registration date, number and every boundary connection.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0035
+      - REQ-DODI8500.01-0087
+      - REQ-DODI8500.01-0333
   - id: CLOUD-001
     scope: run
     severity: E

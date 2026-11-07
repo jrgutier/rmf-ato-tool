@@ -329,7 +329,9 @@ requirements:
     locator: "2.6.b"
     context: "DOT&E The DOT&E:"
     statement: "b. Approves T&E plans for programs under their purview."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: test-strategy.yaml records who approved the test plan, and TSTRAT-001 fails one without a document approval. Unheld: the approver's purview is not modeled, and the clause holds presence."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.component.yaml", "expect": "the test strategy documentation requires DoD Component approval, and none is recorded", "claim": "presence", "asserts": "T&E plans for programs under their purview require an approval: the test strategy documentation requires DoD Component approval, and none is recorded", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "b. Approves T&E plans for programs under their purview."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.82-0042"
     citation: {"ref": "DODI5000.82", "page": 9, "anchor": "In coordination with the USD(R&E), provides support to acquisition program managers (PMs)"}
@@ -762,7 +764,9 @@ requirements:
     locator: "3.5"
     context: "CYBERSECURITY, OPERATIONAL RESILIENCE, AND CYBER SURVIVABILITY"
     statement: "All acquisition of digital capabilities, as defined in this issuance, must incorporate cyber requirements, in accordance with DoDIs 8500.01 and 8530.01, including the operational mission-based design and assessment of survivability, operational resilience, cybersecurity risk management, and cyberspace defense. All cyber relevant requirements must be engineered into the design and specifications of the system and software based on mission risk to withstand cyber threats. PMs must apply all engineering policy, guidance, and principles to integrate and balance requirements, including cyber relevant requirements in accordance with DoDIs 5000.83 and 5000.88."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-001 fails derivation methods that leave a vulnerability source uncovered and a security requirement in no specification; mission risk as the basis and the balancing of requirements are narrative."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cyber relevant requirements are engineered into the design and specifications of the system: a security requirement included in neither the performance specification nor the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.82-0096"
     citation: {"ref": "DODI5000.82", "page": 14, "anchor": "Cybersecurity Risk Management Framework (RMF) for Digital Capabilities."}
@@ -1025,7 +1029,9 @@ requirements:
     locator: "3.5.d.(1)"
     context: "Table 2. CSS Review Requirements"
     statement: "(1) The operational resilience requirements for digital capabilities, as defined in this issuance, will be integrated and implemented with other systems engineering and systems security engineering requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment, or apply no principle of SP 800-160v1r1 Appendix E; how the operational resilience requirements are integrated with the other engineering requirements is narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.resilience.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Operational resilience requirements are integrated with systems security engineering: no engineering practice that addresses cyber-resilience in test fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.82-0129"
     citation: {"ref": "DODI5000.82", "page": 17, "anchor": "Operational resilience must be verified and validated through rigorous developmental and operational"}
@@ -1430,7 +1436,9 @@ requirements:
     locator: "3.9.d"
     context: "DATA AND INFORMATION"
     statement: "PMs will ensure personally identifiable information is managed in a manner that protects privacy and conforms to applicable legal, regulatory, and policy requirements regarding privacy."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-007 has the privacy risk assessment evaluate each legal and policy requirement and carry each applicable one into ART-REQ; which apply is the run's own record."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.carried.yaml", "expect": "is carried by no requirement of ART-REQ", "claim": "constraint", "asserts": "PII is managed to conform to applicable legal and policy requirements regarding privacy, each carried by a requirement"}]
     work_item: "WI-140"
   - id: "REQ-DODI5000.82-0177"
     citation: {"ref": "DODI5000.82", "page": 22, "anchor": "Personally identifiable information will be collected, maintained, disseminated, and used in accordance"}
@@ -1438,7 +1446,9 @@ requirements:
     locator: "3.9.d.(1)"
     context: "DATA AND INFORMATION"
     statement: "(1) Personally identifiable information will be collected, maintained, disseminated, and used in accordance with DoDI 5400.11 and DoD 5400.11-R."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-001 asks DoD 5400.11-R among the issuances complied with; DoDI 5400.11 itself is prose."
+    evidence: [{"kind": "rule", "target": "PRIV-001", "fixture": "tests/fixtures/negative/PRIV-001.compliance.yaml", "expect": "complies with DoD 5400.11-R and DoDI 5400.16", "claim": "constraint", "asserts": "PII is collected, maintained and used in accordance with DoD 5400.11-R, which the system complies with"}]
     work_item: "WI-140"
   - id: "REQ-DODI5000.82-0178"
     citation: {"ref": "DODI5000.82", "page": 22, "anchor": "Privacy impact assessments will be completed on DoD IT and electronic collections"}
@@ -1446,7 +1456,9 @@ requirements:
     locator: "3.9.d.(2)"
     context: "DATA AND INFORMATION"
     statement: "(2) Privacy impact assessments will be completed on DoD IT and electronic collections in accordance with DoDI 5400.16."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-001 fails a no-PIA determination for PII about these subjects on a basis DoDI 5400.16 does not give; the subjects and basis are the run's own record."
+    evidence: [{"kind": "rule", "target": "PRIV-001", "fixture": "tests/fixtures/negative/PRIV-001.required.yaml", "expect": "a PIA is required for a DoD IS that collects PII about members of the public", "claim": "constraint", "asserts": "Privacy impact assessments are completed on DoD IT under DoDI 5400.16: one is required for IT that collects PII about personnel"}]
     work_item: "WI-135"
   - id: "REQ-DODI5000.82-0179"
     citation: {"ref": "DODI5000.82", "page": 22, "anchor": "The quality of information publicly distributed by PMs will meet basic information"}
@@ -1470,7 +1482,9 @@ requirements:
     locator: "3.9.f"
     context: "DATA AND INFORMATION"
     statement: "PMs in defense intelligence components will require that IT acquisitions for systems that process or handle U.S. person information enable the collection, retention, and dissemination of U.S. person information in accordance with DoDM 5240.01, and that intelligence data systems maintain data in accordance with DoDI 5200.01."
-    status: "candidate"
+    status: "partial"
+    reason: "ra.yaml can evaluate DoDM 5240.01 for a defense intelligence component; nothing asks it."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-RA.md", "asserts": "ART-RA evaluates DoDM 5240.01 for U.S. person information", "claim": "presence"}]
     work_item: "WI-140"
   - id: "REQ-DODI5000.82-0182"
     citation: {"ref": "DODI5000.82", "page": 22, "anchor": "PMs will comply with the records management requirements of:"}
@@ -1532,7 +1546,9 @@ requirements:
     locator: "3.9.g.(3)"
     context: "DATA AND INFORMATION Records Management"
     statement: "(3) DoD Component CIOs will ensure that records management requirements are integrated into the Component IT governance processes for portfolio management, risk management, capital planning, enterprise architecture, business process design, system development, and lifecycle management. PMs will work with DoD Component records officers early and throughout the acquisition process to properly address records management requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "P-12 records the records management office and schedule (infotypes.yaml privacy.records, required by schema once the record exists); integration into IT governance is the Component CIO's and is prose."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-INFOTYPES.md", "asserts": "ART-INFOTYPES names the records management office and schedule coordinated with", "claim": "presence"}]
     work_item: "WI-132"
   - id: "REQ-DODI5000.82-0190"
     citation: {"ref": "DODI5000.82", "page": 23, "anchor": "For financial or non-financial systems or applications impacting internal controls relevant to"}

@@ -13,7 +13,7 @@ tasks:
     purpose: >-
       Select an assessor or assessment team with the level of independence the assessment
       requires; the Component CISO is the SCA or formally delegates the role.
-    raci: {R: [PER-AODR], A: PER-AO, C: [PER-CIO, PER-CISO, PER-PRIV], I: [PER-PM, PER-SCA]}
+    raci: {R: [PER-AODR], A: PER-AO, C: [PER-CIO, PER-CISO, PER-PRIV], I: [PER-PM, PER-SCA], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, ART-ORG-CONTEXT]
     outputs: []
     writes_facts: []
@@ -48,8 +48,8 @@ tasks:
       Develop, review and approve the security assessment plan, coordinated with developmental
       and operational test events, before the TRR for the first event that supplies assessment
       evidence.
-    raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: []}
-    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ]
+    raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: [], when: {PER-PRIV: processes-pii}}
+    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ, EXT-TEST-STRATEGY]
     outputs: [ART-SAP, ART-AUTHREC]
     writes_facts: []
     depends_on: [A-1, I-2]
@@ -71,6 +71,10 @@ tasks:
       - Each scoped control has procedures selected and tailored from the risk results
         (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider
         is reviewed before its controls or results are leveraged (ASMT-004).
+      - test-strategy.yaml records the TEMP or test strategy the pathway calls for, who approved
+        each part of it, its schedule against decision points, its cybersecurity test objectives
+        and the cybersecurity test events, including independent threat-representative
+        penetration and exploitation testing (TSTRAT-001, TSTRAT-002).
       - The assessment plan reads each requirement's verification method and measure from
         requirements.yaml.
       - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live
@@ -95,8 +99,8 @@ tasks:
     purpose: >-
       Assess the controls per the approved plan, reusing developer, developmental and
       operational test results and prior assessments, and automating where possible.
-    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CDT, PER-OTA, PER-DEV], I: [PER-AO, PER-CISO]}
-    inputs: [ART-SAP, ART-SSP, ART-STIG, EXT-TEST-RESULTS, EXT-ASSESSMENT-PROCEDURES]
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CDT, PER-OTA, PER-DEV], I: [PER-AO, PER-CISO], when: {PER-PRIV: processes-pii}}
+    inputs: [ART-SAP, ART-SSP, ART-STIG, EXT-TEST-RESULTS, EXT-ASSESSMENT-PROCEDURES, EXT-SOFTWARE-EVIDENCE]
     outputs: [ART-SAR, ART-STIG]
     writes_facts: []
     depends_on: [A-2]
@@ -115,6 +119,9 @@ tasks:
         considered (DoDI 8510.01 Table 5 outcome).
       - sar/results holds a determination for every scoped control (SAR-COV-001), with a finding
         for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
+      - Test results reused as assessment evidence come from a test event in test-strategy.yaml
+        run on a production-representative system in an operationally representative environment,
+        with its configuration and conditions recorded (TSTRAT-003).
     citations:
       - {ref: SP800-37R2, section: "TASK A-3", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-3 Control Assessments"}
@@ -136,7 +143,7 @@ tasks:
     purpose: >-
       Prepare the security assessment report with findings and recommendations, including
       test-event results, for the AO and the program.
-    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV, PER-CISO], I: [PER-AO, PER-AODR]}
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV, PER-CISO], I: [PER-AO, PER-AODR], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SAR]
     outputs: [ART-SAR]
     writes_facts: []
@@ -172,7 +179,7 @@ tasks:
     purpose: >-
       Take initial remediation actions on deficient controls and have the assessor reassess
       them.
-    raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SAR, ART-SSP, ART-SAP, ART-RA]
     outputs: [ART-SAR, ART-SSP]
     writes_facts: []
@@ -188,6 +195,8 @@ tasks:
         the changes.
       - Every finding is triaged from the risk assessment; only substantive findings go on to the
         POA&M (ASMT-006).
+      - plan-reviews.yaml changes logs the A-5 update of the plans after the assessments and
+        remediation, covering the privacy plan for a system processing PII (PRIV-010).
     citations:
       - {ref: SP800-37R2, section: "TASK A-5", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-5 Remediation Actions"}
@@ -205,7 +214,7 @@ tasks:
     purpose: >-
       Prepare the POA&M for every open finding from the assessment report and every open CAT I
       STIG finding.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-PRIV, PER-CISO, PER-SCA, PER-MDA], I: [PER-AO]}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-PRIV, PER-CISO, PER-SCA, PER-MDA], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SAR, ART-RA, ART-ORG-CONTEXT, ART-STIG]
     outputs: [ART-POAM]
     writes_facts: []

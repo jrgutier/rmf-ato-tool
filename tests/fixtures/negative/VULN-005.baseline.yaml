@@ -1,0 +1,14 @@
+rule: VULN-005
+bases:
+- minimal
+description: a verification that does not restore the baseline
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.verification.baseline_restored
+  value: false
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - the verification of the fix does not re-establish the baseline configuration

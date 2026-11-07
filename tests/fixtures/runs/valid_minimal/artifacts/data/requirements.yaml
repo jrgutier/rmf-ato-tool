@@ -2,10 +2,12 @@ needs:
   - {id: NEED-01, stakeholder: PER-IO, kind: loss-concern, concern: Field reports must not be read or altered on the way to the analysis enclave., assets: [field reports], success_criteria: No report reaches the enclave unsigned or in clear text., priority: 1, rationale: The reports drive targeting decisions., sources: [INT-024.A1]}
   - {id: NEED-02, stakeholder: PER-PM, kind: trust-expectation, concern: Only authorized operators use the console., success_criteria: Every console session is tied to a CAC holder., priority: 2, rationale: The console can delete reports., sources: [INT-024.A1]}
 requirements:
-  - {id: REQ-01, statement: FDR authenticates every interactive user with multi-factor authentication through the enterprise identity provider., kind: security, needs: [NEED-02], policy: [DP-IDENTITY-ASSURANCE, DP-ASSISTIVE-TECH], priority: 1, criticality: 1, measure: {kind: assurance, statement: Every console logon in the audit log carries a CAC authentication.}, verification: {method: test, description: Logon attempts without a CAC are refused.}, allocated_to: [CMP-IDP, CMP-CONSOLE], sources: [product/security.md#authentication]}
-  - {id: REQ-02, statement: FDR protects reports in transit with FIPS-validated TLS and keeps each report's marking and metadata., kind: security, needs: [NEED-01], policy: [DP-CRYPTO-INTEROP, DP-MARKING-METADATA, DP-DATA-PROTECTION], priority: 1, criticality: 1, measure: {kind: performance, statement: Share of reports forwarded over TLS 1.2 or higher.}, verification: {method: inspection, description: The relay's TLS configuration and a captured session are inspected.}, allocated_to: [CMP-RELAY], sources: [product/security.md#boundary-protection]}
-  - {id: REQ-03, statement: Every FDR host is hardened to its STIG with SCAP-validated content and follows the DoD cybersecurity reference architectures., kind: security, policy: [DP-SCAP, DP-ARCH-PRINCIPLES, DP-CYBER-ARCH, DP-ENTERPRISE-ARCH, DP-STANDARDS-REGISTRY, DP-STANDARDS-SUFFICIENT], priority: 2, criticality: 2, measure: {kind: assurance, statement: SCAP scan score of each host.}, verification: {method: test, description: A SCAP scan of each host shows no open CAT I finding.}, allocated_to: [CMP-RELAY, CMP-STORE, CMP-CONSOLE], sources: [product/security.md#configuration]}
-  - {id: REQ-04, statement: The relay records each self-protective restart or failover in its audit log., kind: security, derived_from: [REQ-03], policy: [DP-RESILIENCE-AUDIT], priority: 3, criticality: 3, measure: {kind: assurance, statement: Restarts in the audit log match restarts in the service manager.}, verification: {method: demonstration, description: A forced restart appears in the audit log.}, allocated_to: [CMP-RELAY], sources: [product/security.md#audit]}
+  - {id: REQ-01, statement: FDR authenticates every interactive user with multi-factor authentication through the enterprise identity provider., kind: security, needs: [NEED-02], policy: [DP-IDENTITY-ASSURANCE, DP-ASSISTIVE-TECH], priority: 1, criticality: 1, measure: {kind: assurance, statement: Every console logon in the audit log carries a CAC authentication.}, verification: {method: test, description: Logon attempts without a CAC are refused.}, allocated_to: [CMP-IDP, CMP-CONSOLE], included_in: [performance-specification], sources: [product/security.md#authentication]}
+  - {id: REQ-02, statement: FDR protects reports in transit with FIPS-validated TLS and keeps each report's marking and metadata., kind: security, needs: [NEED-01], policy: [DP-CRYPTO-INTEROP, DP-MARKING-METADATA, DP-DATA-PROTECTION], priority: 1, criticality: 1, measure: {kind: performance, statement: Share of reports forwarded over TLS 1.2 or higher.}, verification: {method: inspection, description: The relay's TLS configuration and a captured session are inspected.}, allocated_to: [CMP-RELAY], included_in: [performance-specification], sources: [product/security.md#boundary-protection]}
+  - {id: REQ-03, statement: Every FDR host is hardened to its STIG with SCAP-validated content and follows the DoD cybersecurity reference architectures., kind: security, policy: [DP-SCAP, DP-ARCH-PRINCIPLES, DP-CYBER-ARCH, DP-ENTERPRISE-ARCH, DP-STANDARDS-REGISTRY, DP-STANDARDS-SUFFICIENT], priority: 2, criticality: 2, measure: {kind: assurance, statement: SCAP scan score of each host.}, verification: {method: test, description: A SCAP scan of each host shows no open CAT I finding.}, allocated_to: [CMP-RELAY, CMP-STORE, CMP-CONSOLE], included_in: [performance-specification, product-support], sources: [product/security.md#configuration]}
+  - {id: REQ-04, statement: The relay records each self-protective restart or failover in its audit log., kind: security, derived_from: [REQ-03], policy: [DP-RESILIENCE-AUDIT], priority: 3, criticality: 3, measure: {kind: assurance, statement: Restarts in the audit log match restarts in the service manager.}, verification: {method: demonstration, description: A forced restart appears in the audit log.}, allocated_to: [CMP-RELAY], included_in: [product-support], sources: [product/security.md#audit]}
+  - {id: REQ-05, statement: FDR releases carry no technology beyond what the program protection plan clears for foreign release., kind: security, derived_from: [REQ-02], priority: 3, criticality: 3, measure: {kind: assurance, statement: Each release passes the program protection release review.}, verification: {method: inspection, description: The release review record of each build is inspected.}, allocated_to: [CMP-RELAY], included_in: [product-support], sources: [INT-024.A1]}
+  - {id: REQ-06, statement: "The relay software is built in the DevSecOps factory and verified against its secure coding standard for least privilege and defense in depth, input validation and output encoding, safety of the relay functions, and runtime protection with rollback.", kind: security, needs: [NEED-01], policy: [DP-SW-PRACTICES, DP-SW-TRACEABLE, DP-SW-SECURITY-QUALITY, DP-SW-COMMON-REQUIREMENTS, DP-SW-SECURE-ARCH, DP-SW-INPUT-VALIDATION, DP-SW-SAFETY, DP-SW-RESILIENCE], priority: 2, criticality: 2, measure: {kind: assurance, statement: Pipeline scan results against the secure coding standard.}, verification: {method: test, description: Static and dynamic scans in the pipeline show no open high finding.}, allocated_to: [CMP-RELAY], included_in: [performance-specification], sources: [INT-024.A1]}
 constraints:
   - {id: CON-01, origin: stakeholder, statement: The relay runs on the existing field appliance; no new hardware., sources: [INT-024.A1]}
 design_policy:
@@ -28,6 +30,14 @@ design_policy:
   - {statement: DP-STANDARDS-REGISTRY, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
   - {statement: DP-STANDARDS-SUFFICIENT, applies: true, requirements: [REQ-03], sources: [INT-024.A1]}
   - {statement: DP-DATA-PROTECTION, applies: true, requirements: [REQ-02], sources: [INT-024.A1]}
+  - {statement: DP-SW-PRACTICES, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-TRACEABLE, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-SECURITY-QUALITY, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-COMMON-REQUIREMENTS, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-SECURE-ARCH, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-INPUT-VALIDATION, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-SAFETY, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
+  - {statement: DP-SW-RESILIENCE, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}
 agreement:
   analysis: Each need was checked against the requirements that trace to it; NEED-01 needed both transport protection and marking.
   feedback: The program manager and the information owner reviewed the requirement table.
@@ -40,3 +50,30 @@ agreement:
 workforce:
   contracted_work_roles: []
   sources: [INT-026.A1]
+derivation:
+  informed_by:
+    - {kind: capability-requirements, document: Draft capability development document v0.4, sources: [INT-024.A1]}
+    - {kind: concept-of-operations, document: FDR concept of operations, sources: [INT-024.A1]}
+    - {kind: operational-mode-summary, document: FDR operational mode summary and mission profile, sources: [INT-024.A1]}
+    - {kind: mission-profiles, document: FDR operational mode summary and mission profile, sources: [INT-024.A1]}
+  methods:
+    - {method: misuse cases for the relay and console, addresses: [design, interfaces, access-points], requirements: [REQ-01, REQ-02], sources: [INT-024.A1]}
+    - {method: vulnerability analysis of the hardened hosts, addresses: [implementation], requirements: [REQ-03, REQ-04], sources: [INT-024.A1]}
+  key_performance:
+    - {name: System survivability KPP, kind: kpp, establishes: [survivability], requirements: [REQ-04], sources: [INT-024.A1]}
+    - {name: Sustainment KPP, kind: kpp, establishes: [sustainment], requirements: [REQ-03], sources: [INT-024.A1]}
+    - {name: Report protection attribute, kind: kpp-attribute, establishes: [security], based_on: [confidentiality, integrity], measures: FIPS-validated TLS and signed reports, requirements: [REQ-02], sources: [INT-024.A1]}
+  exportability: [REQ-05]
+  sources: [INT-024.A1]
+engineering:
+  practices:
+    - {area: cybersecurity, stages: [design, test, manufacture, sustainment], practice: STIG hardening and secure configuration in each build, principles: [least-functionality, protective-defaults], sources: [INT-024.A1]}
+    - {area: cyber-resilience, stages: [design, test, manufacture, sustainment], practice: Relay failover and restart with audit, principles: [protective-recovery], sources: [INT-024.A1]}
+    - {area: cyber-survivability, stages: [design, test, manufacture, sustainment], practice: Survivability attributes tested in cyber DT&E, principles: [defense-in-depth], sources: [INT-024.A1]}
+    - {area: program-protection, stages: [design, sustainment], practice: Release review against the program protection plan, sources: [INT-024.A1]}
+    - {area: privacy-engineering, stages: [design], practice: Reports hold no PII by design; the privacy threshold analysis is revisited each release, sources: [INT-024.A1]}
+  assurance:
+    level: Moderate assurance, from independent test of the relay and console
+    commensurate_with: {technology: Commodity hardware and open protocols carry no critical technology., program: A small program with one release a quarter., system: Moderate confidentiality and integrity impact., mission: Reports drive targeting decisions.}
+    requirements: [REQ-01, REQ-03]
+  sources: [INT-024.A1]

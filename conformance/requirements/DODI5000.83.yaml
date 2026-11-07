@@ -76,7 +76,9 @@ requirements:
     locator: "1.2.b"
     context: "POLICY"
     statement: "b. Risk of adversarial exploitation and compromise of defense technology and programs will be managed, beginning with early S&T investment and continuing throughout the entire Defense Acquisition System (DAS) lifecycle, until disposal."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the S&T protection plan of a transitioning technology must be present (PPROT-003) and the PPP managed through its updates and transition (PPROT-002). Unheld: management 'throughout the entire DAS lifecycle, until disposal' spans tasks after the run's stop."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stplan.yaml", "expect": "the technology transitions from S&T, and st-protection.yaml holds no S&T protection plan", "claim": "presence", "asserts": "risk of adversarial exploitation is managed beginning with early S&T through the S&T protection plan: the technology transitions from S&T, and st-protection.yaml holds no S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "Risk of adversarial exploitation and compromise of defense technology and programs will be managed, beginning with early S&T investment and continuing throughout the entire Defense Acquisition System (DAS) lifecycle, until disposal."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0010"
     citation: {"ref": "DODI5000.83", "page": 4, "anchor": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber"}
@@ -84,7 +86,9 @@ requirements:
     locator: "1.2.c"
     context: "POLICY"
     statement: "c. Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment. Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held: SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment (manufacture only for a product that is manufactured: a software product or service has no manufacture activity of its own). The second is not: requirements.yaml engineering.assurance records the level of assurance, why it is commensurate with the technology, program, system and mission objectives, and the requirements with an assurance measure that carry it (SSE-002 fails a level carried by none), but no source gives a scale of assurance levels, so whether the level is commensurate is a judgment no rule can fail."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.stage.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cybersecurity in design, test, manufacture, and sustainment: no practice that addresses cybersecurity in test fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.manufacture.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices in manufacture: a hardware product with no practice that addresses cybersecurity in manufacture fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.resilience.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cyber resilience in test: no practice that addresses cyber-resilience in test fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.survivability.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cyber survivability in design: no practice that addresses cyber-survivability in design fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "The practices provide a level of assurance carried into the requirements: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope", "sentence": "Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/assurance/properties/commensurate_with", "claim": "presence", "asserts": "The level of assurance is commensurate with the technology, program, system, and mission objectives", "sentence": "Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.83-0011"
     citation: {"ref": "DODI5000.83", "page": 4, "anchor": "TAPPs, S&T protection, and PPPs will be used to manage activities to"}
@@ -92,7 +96,9 @@ requirements:
     locator: "1.2.d"
     context: "POLICY"
     statement: "d. TAPPs, S&T protection, and PPPs will be used to manage activities to protect and enable technology innovation for present and future warfighting capabilities and programs."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. A TAPP the run read and the S&T protection plan of a transitioning technology must each inform the PPP (PPROT-003), and the PPP manages the protection activities through its countermeasures (PPROT-002)."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.inform.yaml", "expect": "is read and does not inform the program protection activities", "claim": "constraint", "asserts": "TAPPs are used to manage the program protection activities: is read and does not inform the program protection activities", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "TAPPs, S&T protection, and PPPs will be used to manage activities to protect and enable technology innovation for present and future warfighting capabilities and programs."}, {"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stinform.yaml", "expect": "the S&T protection plan", "claim": "constraint", "asserts": "S&T protection plans are used to manage the PPP protection activities: the S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "TAPPs, S&T protection, and PPPs will be used to manage activities to protect and enable technology innovation for present and future warfighting capabilities and programs."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0012"
     citation: {"ref": "DODI5000.83", "page": 5, "anchor": "This issuance incorporates and cancels, or cancels portions of, DoD Instruction (DoDI)"}
@@ -260,7 +266,9 @@ requirements:
     locator: "2.1.a"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "a. Establishes and maintains S&T and program protection policy, guidance, education, and training to manage technical risk, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the USD(R&E) to establish and maintain S&T and program protection policy, guidance, education and training. A run reads the PPP made under that guidance (P-14) but cannot fail when the USD(R&E) does not issue it."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-14.md", "claim": "presence", "asserts": "S&T and program protection policy and guidance shape the PPP the run reads at P-14", "sentence": "a. Establishes and maintains S&T and program protection policy, guidance, education, and training to manage technical risk, including:"}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0033"
     citation: {"ref": "DODI5000.83", "page": 6, "anchor": "Anti-tamper (AT)."}
@@ -364,7 +372,9 @@ requirements:
     locator: "2.1.c"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "c. Establishes and maintains TAPPs and associated policy, guidance, education, and training for designated modernization priorities as a means to achieve objectives for horizontal protection."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the USD(R&E) to establish and maintain TAPPs. The run must read the TAPP of each modernization priority area it is associated with (PPROT-003), but cannot fail when the USD(R&E) has not issued one."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.yaml", "expect": "is a modernization priority area with no applicable TAPP read", "claim": "constraint", "asserts": "TAPPs established for designated modernization priorities are read by the program: is a modernization priority area with no applicable TAPP read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "c. Establishes and maintains TAPPs and associated policy, guidance, education, and training for designated modernization priorities as a means to achieve objectives for horizontal protection."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0046"
     citation: {"ref": "DODI5000.83", "page": 6, "anchor": "Is the PPP approval authority for Acquisition Category (ACAT) 1D Acquisition Programs."}
@@ -372,7 +382,9 @@ requirements:
     locator: "2.1.d"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "d. Is the PPP approval authority for Acquisition Category (ACAT) 1D Acquisition Programs."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. protection.yaml records the program's ACAT and the PPP's approval authority; PPROT-001 fails an ACAT ID PPP approved by anyone but the USD(R&E)."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.yaml", "expect": "the USD(R&E) is the PPP approval authority for an ACAT ID program", "claim": "constraint", "asserts": "the USD(R&E) is the PPP approval authority for ACAT ID acquisition programs: the USD(R&E) is the PPP approval authority for an ACAT ID program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "d. Is the PPP approval authority for Acquisition Category (ACAT) 1D Acquisition Programs."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0047"
     citation: {"ref": "DODI5000.83", "page": 6, "anchor": "Delegates approval authority to the Component acquisition executives or their designees for:"}
@@ -380,7 +392,9 @@ requirements:
     locator: "2.1.e"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "e. Delegates approval authority to the Component acquisition executives or their designees for:"
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. Where the source delegates, PPROT-001 fails a PPP approved by anyone but the CAE or a designee (the delegated cases are 0048 and 0049)."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.delegated.yaml", "expect": "the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "claim": "constraint", "asserts": "PPP approval authority is delegated to the Component acquisition executives or their designees: the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "e. Delegates approval authority to the Component acquisition executives or their designees for:"}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0048"
     citation: {"ref": "DODI5000.83", "page": 6, "anchor": "ACAT 1B, ACAT 1C, ACAT II, and ACAT III PPPs for major"}
@@ -388,7 +402,9 @@ requirements:
     locator: "2.1.e.(1)"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E): Delegates approval authority to the Component acquisition executives or their designees for:"
     statement: "(1) ACAT 1B, ACAT 1C, ACAT II, and ACAT III PPPs for major capability programs."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-001 fails an ACAT IB to III major capability PPP approved by anyone but the CAE or a designee, unless the DAE is the MDA, where 0254 gives it to the USD(R&E)."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.delegated.yaml", "expect": "the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "claim": "constraint", "asserts": "ACAT 1B, 1C, II and III PPPs for major capability programs are approved by the Component acquisition executive or a designee: the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) ACAT 1B, ACAT 1C, ACAT II, and ACAT III PPPs for major capability programs."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0049"
     citation: {"ref": "DODI5000.83", "page": 7, "anchor": "The PPPs for urgent, middle-tier programs (where the Component acquisition executive is"}
@@ -396,7 +412,9 @@ requirements:
     locator: "2.1.e.(2)"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E): Delegates approval authority to the Component acquisition executives or their designees for:"
     statement: "(2) The PPPs for urgent, middle-tier programs (where the Component acquisition executive is the approval authority) and software acquisitions."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-001 fails a PPP on the urgent, middle tier or software pathway approved by anyone but the CAE or a designee, unless the DAE is the MDA."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.pathway.yaml", "expect": "the Component acquisition executive or a designee approves the PPP of an urgent, middle tier or software program", "claim": "constraint", "asserts": "PPPs for urgent, middle-tier programs and software acquisitions are approved by the Component acquisition executive or designees: the Component acquisition executive or a designee approves the PPP of an urgent, middle tier or software program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(2) The PPPs for urgent, middle-tier programs (where the Component acquisition executive is the approval authority) and software acquisitions."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0050"
     citation: {"ref": "DODI5000.83", "page": 7, "anchor": "Establishes policy, guidance, education, and training for marking and disseminating controlled technical"}
@@ -411,7 +429,9 @@ requirements:
     locator: "2.1.g"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "g. Establishes and maintains the DoD Joint Federated Assurance Center (JFAC) to develop and provide software and hardware assurance capabilities and expertise, as required by:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is USD(R&E)'s, which no record of a run can fail on. It establishes JFAC; the strategy can say where JFAC assistance or licenses are used."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "JFAC software and hardware assurance capabilities, where assistance or licenses are used", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.83-0052"
     citation: {"ref": "DODI5000.83", "page": 7, "anchor": "DoD Policy Memorandum 15-001."}
@@ -443,7 +463,9 @@ requirements:
     locator: "2.2.a"
     context: "UNDER SECRETARY OF DEFENSE FOR ACQUISITION AND SUSTAINMENT As the DAE, the USD(A&S):"
     statement: "a. Includes technology area protection and program protection planning activities in the DAS to inform program and sustainment risk decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the USD(A&S), as DAE, to include technology area and program protection planning in the DAS. The run reads the PPP and TAPPs (EXT-PPP, EXT-STPP) and its risk decisions draw on them, but the DAS content is not a run record."
+    evidence: [{"kind": "citation", "target": "EXT-PPP", "claim": "presence", "asserts": "program protection planning activities informing program and sustainment risk decisions reach the run as the PPP input", "sentence": "a. Includes technology area protection and program protection planning activities in the DAS to inform program and sustainment risk decisions."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0056"
     citation: {"ref": "DODI5000.83", "page": 7, "anchor": "Considers technology area protection and program protection planning activities when developing and"}
@@ -617,7 +639,9 @@ requirements:
     locator: "2.6.b.(1)"
     context: "DOD COMPONENT HEADS The DoD Component heads: Ensure:"
     statement: "(1) S&T, PPPs, and planning activities, when associated with critical technology or modernization priority areas, are consistent with applicable TAPPs and horizontal protection guidance."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-003 fails a program associated with critical technology whose modernization priority area has no TAPP read, and a TAPP read that does not inform the PPP. Unheld: consistency with horizontal protection guidance, held only for AT and exportability (PPROT-002, 0195); a program with no applicable guidance is allowed."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.yaml", "expect": "is a modernization priority area with no applicable TAPP read", "claim": "constraint", "asserts": "PPPs associated with modernization priority areas are consistent with the applicable TAPPs: is a modernization priority area with no applicable TAPP read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) S&T, PPPs, and planning activities, when associated with critical technology or modernization priority areas, are consistent with applicable TAPPs and horizontal protection guidance."}, {"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.basis.yaml", "expect": "AT and exportability requirements for technology outside U.S. control are determined by applying DoD horizontal protection guidance the run read", "claim": "constraint", "asserts": "AT and exportability planning is consistent with the horizontal protection guidance read: AT and exportability requirements for technology outside U.S. control are determined by applying DoD horizontal protection guidance the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) S&T, PPPs, and planning activities, when associated with critical technology or modernization priority areas, are consistent with applicable TAPPs and horizontal protection guidance."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0078"
     citation: {"ref": "DODI5000.83", "page": 9, "anchor": "S&T and PPPs are approved by the appropriate authorities."}
@@ -625,7 +649,9 @@ requirements:
     locator: "2.6.b.(2)"
     context: "DOD COMPONENT HEADS The DoD Component heads: Ensure:"
     statement: "(2) S&T and PPPs are approved by the appropriate authorities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the PPP half is held by PPROT-001's authority clauses. Unheld: who the appropriate authority for an S&T protection plan is; DoDI 5000.83 leaves it to the DoD Component, so st-protection.yaml records the approver as text and only its timing is judged."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.delegated.yaml", "expect": "the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "claim": "constraint", "asserts": "PPPs are approved by the appropriate authorities for their ACAT and pathway: the Component acquisition executive or a designee approves the PPP of an ACAT IB, IC, II or III major capability program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(2) S&T and PPPs are approved by the appropriate authorities."}, {"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stapproval.yaml", "expect": "the S&T protection plan is submitted for approval before project approval", "claim": "constraint", "asserts": "the S&T protection plan is submitted for approval by the appropriate authorities before project approval: the S&T protection plan is submitted for approval before project approval", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(2) S&T and PPPs are approved by the appropriate authorities."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0079"
     citation: {"ref": "DODI5000.83", "page": 9, "anchor": "Military Department counterintelligence organizations use the Critical Program and Technology List to"}
@@ -657,7 +683,9 @@ requirements:
     locator: "2.7.a.(1)"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In addition to the responsibilities in Paragraph 2.6., the Chairman of the Joint Chiefs of Staff ensures that: SCRM, export control, and AT requirements to achiev"
     statement: "(1) Included in capability requirements in the Joint Capability Integration and Development System (JCIDS)."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. P-15 records in protection-requirements.yaml whether the capability document holds the SCRM, export control and AT requirements; PPROT-004 fails a topic missing with the gap not raised to the sponsor. The clause applies where JCIDS documents do (a lead default to confirm): major capability acquisition, and the middle tier and urgent pathways when the run's capability document is a JCIDS document."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.scrm.yaml", "expect": "requirements to achieve technology and program protection are not in the JCIDS capability requirements", "claim": "constraint", "asserts": "SCRM, export control and AT requirements are included in the JCIDS capability requirements or the gap is raised: requirements to achieve technology and program protection are not in the JCIDS capability requirements", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and the capability document is a JCIDS document: always on PW-MCA, and on PW-MTA or PW-UCA when its kind is jcids", "sentence": "(1) Included in capability requirements in the Joint Capability Integration and Development System (JCIDS)."}]
     work_item: "WI-80"
   - id: "REQ-DODI5000.83-0083"
     citation: {"ref": "DODI5000.83", "page": 9, "anchor": "Addressed during capability development."}
@@ -665,7 +693,9 @@ requirements:
     locator: "2.7.a.(2)"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In addition to the responsibilities in Paragraph 2.6., the Chairman of the Joint Chiefs of Staff ensures that: SCRM, export control, and AT requirements to achiev"
     statement: "(2) Addressed during capability development."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. A protection topic the capability document includes must be addressed by a protection requirement P-15 derives; PPROT-004 fails one addressed by none. The clause applies where JCIDS documents do (a lead default to confirm): major capability acquisition, and the middle tier and urgent pathways when the run's capability document is a JCIDS document."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.addressed.yaml", "expect": "is in the capability requirements and addressed by no protection requirement during capability development", "claim": "constraint", "asserts": "SCRM, export control and AT requirements are addressed during capability development by a protection requirement: is in the capability requirements and addressed by no protection requirement during capability development", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and the capability document is a JCIDS document: always on PW-MCA, and on PW-MTA or PW-UCA when its kind is jcids", "sentence": "(2) Addressed during capability development."}]
     work_item: "WI-80"
   - id: "REQ-DODI5000.83-0084"
     citation: {"ref": "DODI5000.83", "page": 9, "anchor": "Counterintelligence and security support necessary to achieve technology and program protection throughout"}
@@ -673,7 +703,9 @@ requirements:
     locator: "2.7.b"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In addition to the responsibilities in Paragraph 2.6., the Chairman of the Joint Chiefs of Staff ensures that:"
     statement: "b. Counterintelligence and security support necessary to achieve technology and program protection throughout the lifecycle is identified in the JCIDS processes."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-004 fails a capability document without counterintelligence and security support when the gap is not raised to the sponsor. The clause applies where JCIDS documents do (a lead default to confirm): major capability acquisition, and the middle tier and urgent pathways when the run's capability document is a JCIDS document."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.ci.yaml", "expect": "counterintelligence and security support for technology and program protection is not identified in the JCIDS processes", "claim": "constraint", "asserts": "Counterintelligence and security support for technology and program protection is identified in the JCIDS processes: counterintelligence and security support for technology and program protection is not identified in the JCIDS processes", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and the capability document is a JCIDS document: always on PW-MCA, and on PW-MTA or PW-UCA when its kind is jcids", "sentence": "Counterintelligence and security support necessary to achieve technology and program protection throughout the lifecycle is identified in the JCIDS processes."}]
     work_item: "WI-80"
   - id: "REQ-DODI5000.83-0085"
     citation: {"ref": "DODI5000.83", "page": 9, "anchor": "Information on foreign intelligence entity and cyber and supply chain threats are"}
@@ -681,7 +713,9 @@ requirements:
     locator: "2.7.c"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In addition to the responsibilities in Paragraph 2.6., the Chairman of the Joint Chiefs of Staff ensures that:"
     statement: "c. Information on foreign intelligence entity and cyber and supply chain threats are included in JCIDS capability requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-004 fails a capability document without the foreign intelligence entity, cyber and supply chain threat information when the gap is not raised to the sponsor. The clause applies where JCIDS documents do (a lead default to confirm): major capability acquisition, and the middle tier and urgent pathways when the run's capability document is a JCIDS document."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.threat.yaml", "expect": "foreign intelligence entity, cyber and supply chain threat information is not in the JCIDS capability requirements", "claim": "constraint", "asserts": "Foreign intelligence entity, cyber and supply chain threat information is included in JCIDS capability requirements: foreign intelligence entity, cyber and supply chain threat information is not in the JCIDS capability requirements", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and the capability document is a JCIDS document: always on PW-MCA, and on PW-MTA or PW-UCA when its kind is jcids", "sentence": "Information on foreign intelligence entity and cyber and supply chain threats are included in JCIDS capability requirements."}]
     work_item: "WI-80"
   - id: "REQ-DODI5000.83-0086"
     citation: {"ref": "DODI5000.83", "page": 10, "anchor": "The overarching management policies governing the DAS are described in DoDD 5000.01"}
@@ -689,7 +723,9 @@ requirements:
     locator: "3.1"
     context: "GENERAL"
     statement: "The overarching management policies governing the DAS are described in DoDD 5000.01 and DoDI 5000.02. The purpose of the DAS is to deliver effective and affordable solutions to the end user while enabling execution at the speed of relevance. To achieve that objective, the DoD employs an adaptive acquisition framework comprised of acquisition pathways (provided at https://aaf.dau.edu/aaf/), each tailored for the unique characteristics and risk profile of the capability being acquired. Technology area and program protection planning procedures will also be tailored for the:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 2 is held, PPROT-002 fails program protection tailored to a pathway other than the program's. Unheld: sentence 1 says the DoD employs an adaptive acquisition framework of tailored pathways; it describes the DAS and binds no run."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.tailoring.yaml", "expect": "program protection is tailored to the program's pathway", "claim": "constraint", "asserts": "technology area and program protection planning procedures are tailored to the acquisition pathway: program protection is tailored to the program's pathway", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Technology area and program protection planning procedures will also be tailored for the:"}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0087"
     citation: {"ref": "DODI5000.83", "page": 10, "anchor": "Selected acquisition pathway."}
@@ -801,7 +837,9 @@ requirements:
     locator: "3.2.b"
     context: "TECHNOLOGY AND PROGRAM PROTECTION"
     statement: "DoD technology, programs, systems, networks, supporting contract facilities, and activities are at risk of attacks by state and non-state threat actors. S&T managers and lead systems engineers, assisted by supporting organizations to the S&T and engineering community, are responsible for risk informed protection planning and management of their technology, programs, systems, and technical information to mitigate adversary impacts. Risks include:"
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. The PPP's countermeasures must each mitigate a technical risk of the design and technical risk assessment (PPROT-002), and every critical item must have threats and countermeasures, so the protection planning is risk informed."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.mitigates.yaml", "expect": "which is no technical risk of the design and technical risk assessment process", "claim": "constraint", "asserts": "S&T managers and lead systems engineers are responsible for risk informed protection planning and management to mitigate adversary impacts on the technical risk: which is no technical risk of the design and technical risk assessment process", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "S&T managers and lead systems engineers, assisted by supporting organizations to the S&T and engineering community, are responsible for risk informed protection planning and management of their technology, programs, systems, and technical information to mitigate adversary impacts."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0101"
     citation: {"ref": "DODI5000.83", "page": 11, "anchor": "Technical Information."}
@@ -1049,7 +1087,9 @@ requirements:
     locator: "3.3"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS"
     statement: "S&T managers and engineering teams will employ and tailor S&T and program protection measures. S&T managers and engineering teams will assess technology and program risks and opportunities to determine necessary protections. Protection measures include operations security, information safeguarding, research protection, designed-in system protections, SCRM, software assurance, hardware assurance, anti-counterfeit practices, AT, and program security related and engineering cyber-resilient activities. S&T managers and lead systems engineers will be responsible for the procedures as assigned in this paragraph."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentences 1 and 2 are held by PPROT-002 (tailoring to the pathway, countermeasures mitigating assessed technical risks). Unheld: sentence 3 assigns the procedures of the paragraph to S&T managers and lead systems engineers; the run checks who prepares the PPP (0248) but not each procedure's owner."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.tailoring.yaml", "expect": "program protection is tailored to the program's pathway", "claim": "constraint", "asserts": "engineering teams employ and tailor program protection measures to the pathway: program protection is tailored to the program's pathway", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "S&T managers and engineering teams will employ and tailor S&T and program protection measures."}, {"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.mitigates.yaml", "expect": "which is no technical risk of the design and technical risk assessment process", "claim": "constraint", "asserts": "engineering teams assess program risks to determine necessary protections that mitigate them: which is no technical risk of the design and technical risk assessment process", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "S&T managers and engineering teams will assess technology and program risks and opportunities to determine necessary protections."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0132"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "To safeguard classified and unclassified CTI—starting with the application of appropriate classification"}
@@ -1362,7 +1402,9 @@ requirements:
     locator: "3.3.c.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(1) Include cybersecurity, security, and other system requirements into system performance specifications and product support needs that:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a security requirement included in neither the system performance specification nor the product support needs, and a matrix none of whose requirements enters one of them."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cybersecurity and security requirements are included into system performance specifications and product support needs: a security requirement included in neither fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.support.yaml", "expect": "no requirement is included in the", "claim": "constraint", "asserts": "Security requirements are included into the product support needs as well as the system performance specifications: a matrix with no requirement included in the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0170"
     citation: {"ref": "DODI5000.83", "page": 15, "anchor": "Draft or validated capability development document or equivalent capability requirements document."}
@@ -1402,7 +1444,9 @@ requirements:
     locator: "3.3.c.(1).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(b) Use TAPPs, S&T program protection, and relevant PPPs to inform security design and process requirements, as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: protection-requirements.yaml traces each protection requirement to the countermeasure, TAPP or plan it is derived from, and PPROT-004 fails one derived from something not read. Unheld: 'as appropriate' leaves which protections become requirements to the engineers, so no rule requires each to."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.derived.yaml", "expect": "which is no countermeasure, TAPP, protection plan or capability document the run read", "claim": "constraint", "asserts": "TAPPs, S&T program protection and PPPs inform the security design and process requirements derived from them: which is no countermeasure, TAPP, protection plan or capability document the run read", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml", "sentence": "(b) Use TAPPs, S&T program protection, and relevant PPPs to inform security design and process requirements, as appropriate."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0175"
     citation: {"ref": "DODI5000.83", "page": 15, "anchor": "Ensure that key performance parameters and attributes establish:"}
@@ -1410,7 +1454,9 @@ requirements:
     locator: "3.3.c.(1).(c)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(c) Ensure that key performance parameters and attributes establish:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no survivability, no sustainment or no information system security measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.kpp.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "Key performance parameters and attributes establish the measures they must: a set where no key performance parameter or attribute establishes sustainment fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0176"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "System survivability and sustainment measures."}
@@ -1418,7 +1464,9 @@ requirements:
     locator: "3.3.c.(1).(c).1"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "1. System survivability and sustainment measures."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no survivability measures, and one that establishes no sustainment measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.survivability.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "System survivability measures are established: a set where no key performance parameter or attribute establishes survivability fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.kpp.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "System sustainment measures are established: a set where no key performance parameter or attribute establishes sustainment fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0177"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Information system security measures, such as cryptography and key distribution, based on"}
@@ -1426,7 +1474,9 @@ requirements:
     locator: "3.3.c.(1).(c).2"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "2. Information system security measures, such as cryptography and key distribution, based on confidentiality, integrity, and availability needs."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no information system security measures, and a security measure based on no confidentiality, integrity or availability need. Cryptography and key distribution are examples ('such as'), recorded in measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.security.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "Information system security measures, such as cryptography and key distribution, are established by key performance parameters or attributes: a set where none establishes security measures fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.cia.yaml", "expect": "based on no confidentiality, integrity or availability need", "claim": "constraint", "asserts": "Information system security measures are based on confidentiality, integrity, and availability needs: a security measure based on no confidentiality, integrity or availability need fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0178"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Use requirements derivation methods, such as system modeling and analysis, security use"}
@@ -1434,7 +1484,9 @@ requirements:
     locator: "3.3.c.(1).(d)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(d) Use requirements derivation methods, such as system modeling and analysis, security use and abuse or misuse cases, criticality analysis, and vulnerability analysis to derive system security and exportability requirements that are sufficient to minimize vulnerabilities introduced by design, implementation, system interfaces, and access points."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails derivation methods that together leave design, implementation, interfaces or access points without derived requirements, a method that names a requirement the traceability matrix does not hold, an exportability requirement the matrix does not hold, and a derivation with no exportability requirement that does not say why none is derived (exportability_none, for a program with nothing planned for foreign release); that last clause is presence. The methods named are examples ('such as'): any method may be recorded."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.methods.yaml", "expect": "no derivation method derives requirements that minimize vulnerabilities introduced by", "claim": "constraint", "asserts": "Requirements derivation methods derive system security requirements sufficient to minimize vulnerabilities introduced by design, implementation, system interfaces, and access points: methods that leave implementation uncovered fail", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "The requirements a derivation method derives are system security requirements of the matrix: a method that derives a requirement the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.export.yaml", "expect": "is not a requirement of the traceability matrix", "claim": "constraint", "asserts": "Exportability requirements are derived as requirements of the matrix: an exportability requirement that is not a requirement of the traceability matrix fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0179"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Incorporate the derived requirements into the system requirements traceability verification matrix."}
@@ -1452,7 +1504,9 @@ requirements:
     locator: "3.3.c.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(2) Allocate cybersecurity and related system security requirements to the system architecture and design and assess the design for vulnerabilities. The system architecture and design will address, at a minimum, how the system:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-005 fails a design_assessment that does not record the security requirements allocated to the architecture and design. Unheld: 'assess the design for vulnerabilities' rests on a date and a free list, and the design topics after 'at a minimum, how the system:' are other entries."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.allocated.yaml", "expect": "cybersecurity and related system security requirements are allocated to the system architecture and design", "claim": "constraint", "asserts": "cybersecurity and related system security requirements are allocated to the system architecture and design: cybersecurity and related system security requirements are allocated to the system architecture and design", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "The system architecture and design will address, at a minimum, how the system:"}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.83-0181"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Manages access to, and use of, the system and system resources."}
@@ -1528,7 +1582,9 @@ requirements:
     locator: "3.3.c.(4)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(4) Include cybersecurity and related system security in the conduct of technical risk management activities and change management processes to address risk identification, analysis, mitigation planning, mitigation implementation, and tracking. Use evolving technology, program, and system threats to inform operational impacts. The goal is to mitigate risks that could have an impact on meeting performance objectives as well as thresholds. Technical risks, and opportunities as applicable, will:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: protection.yaml holds the security technical risks, each drawn from the SEP, an ITRA or a threat assessment read (PPROT-005), and sentence 2 leads into 0191 and 0192, both held. Unheld: sentence 1 asks that threats inform operational impacts; the rule ties risks to threat sources but holds no operational impact."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.drawn.yaml", "expect": "which is no SEP, ITRA or threat assessment the run read", "claim": "constraint", "asserts": "evolving technology, program and system threats inform the security risks: which is no SEP, ITRA or threat assessment the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Use evolving technology, program, and system threats to inform operational impacts."}, {"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.review.yaml", "expect": "a security technical risk is assessed at technical reviews, and it names none of the framework", "claim": "constraint", "asserts": "technical risks will be assessed at technical reviews: a security technical risk is assessed at technical reviews, and it names none of the framework", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Technical risks, and opportunities as applicable, will:"}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.83-0191"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Be assessed at technical reviews."}
@@ -1536,7 +1592,9 @@ requirements:
     locator: "3.3.c.(4).(a)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(a) Be assessed at technical reviews."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-005 fails a security technical risk assessed at no technical review of the framework."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.review.yaml", "expect": "a security technical risk is assessed at technical reviews, and it names none of the framework", "claim": "constraint", "asserts": "technical risks will be assessed at technical reviews: a security technical risk is assessed at technical reviews, and it names none of the framework", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) Be assessed at technical reviews."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.83-0192"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Include cost and schedule implications."}
@@ -1544,7 +1602,9 @@ requirements:
     locator: "3.3.c.(4).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(b) Include cost and schedule implications."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. protection.yaml requires every technical risk to rate its cost and its schedule implications (none, low, moderate, high)."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/technical_risks/items/properties/impact/properties/cost", "claim": "constraint", "asserts": "technical risks include cost implications: Cost implications of the technical risk", "sentence": "(b) Include cost and schedule implications."}, {"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/technical_risks/items/properties/impact/properties/schedule", "claim": "constraint", "asserts": "technical risks include schedule implications: Schedule implications of the technical risk", "sentence": "(b) Include cost and schedule implications."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.83-0193"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Request technology, program, and system threat assessments from appropriate intelligence, counterintelligence, and"}
@@ -1552,7 +1612,9 @@ requirements:
     locator: "3.3.c.(5)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(5) Request technology, program, and system threat assessments from appropriate intelligence, counterintelligence, and security entities to continuously assess risks to the technology, programs, and the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: protection.yaml records the threat assessments requested and from which entity, and PPROT-005 fails a security risk drawn from one not read. Unheld: that assessments are requested from each kind of entity and 'continuously'; the source sets no cadence."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.drawn.yaml", "expect": "which is no SEP, ITRA or threat assessment the run read", "claim": "constraint", "asserts": "technology, program and system threat assessments from intelligence and security entities inform the risks: which is no SEP, ITRA or threat assessment the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(5) Request technology, program, and system threat assessments from appropriate intelligence, counterintelligence, and security entities to continuously assess risks to the technology, programs, and the system."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0194"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Identify and protect capabilities contributing to the warfighters’ technical advantage, throughout the"}
@@ -1560,7 +1622,9 @@ requirements:
     locator: "3.3.c.(6)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(6) Identify and protect capabilities contributing to the warfighters’ technical advantage, throughout the lifecycle, in accordance with DoDD 5200.47E. S&T managers and lead systems engineers will:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 1 is held, each critical item the PPP identifies must have a countermeasure (PPROT-002). Unheld: sentence 2, 'S&T managers and lead systems engineers will:', is a lead-in whose duties are 0195 and 0196."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.countermeasure.yaml", "expect": "has no planned countermeasure to mitigate its risks", "claim": "constraint", "asserts": "capabilities contributing to the warfighters' technical advantage are identified and protected by countermeasures: has no planned countermeasure to mitigate its risks", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(6) Identify and protect capabilities contributing to the warfighters’ technical advantage, throughout the lifecycle, in accordance with DoDD 5200.47E."}]
     work_item: "WI-87"
   - id: "REQ-DODI5000.83-0195"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Apply DoD horizontal protection guidance to determine requirements for planning, designing, implementing"}
@@ -1568,7 +1632,9 @@ requirements:
     locator: "3.3.c.(6).(a)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(a) Apply DoD horizontal protection guidance to determine requirements for planning, designing, implementing AT and exportability features, as appropriate, to technology and systems when outside of U.S. control."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-002 fails AT for technology outside U.S. control determined by no horizontal protection guidance, or by guidance the run did not read."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.basis.yaml", "expect": "AT and exportability requirements for technology outside U.S. control are determined by applying DoD horizontal protection guidance the run read", "claim": "constraint", "asserts": "DoD horizontal protection guidance is applied to determine AT and exportability requirements for technology outside of U.S. control: AT and exportability requirements for technology outside U.S. control are determined by applying DoD horizontal protection guidance the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) Apply DoD horizontal protection guidance to determine requirements for planning, designing, implementing AT and exportability features, as appropriate, to technology and systems when outside of U.S. control."}]
     work_item: "WI-87"
   - id: "REQ-DODI5000.83-0196"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Coordinate with the applicable DoD Component office of primary responsibility for DoD"}
@@ -1576,7 +1642,9 @@ requirements:
     locator: "3.3.c.(6).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(b) Coordinate with the applicable DoD Component office of primary responsibility for DoD AT to coordinate activities to mitigate reverse engineering opportunities, where appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-002 fails required AT with no coordination recorded, but the office is free text, so the rule holds presence, which caps at partial."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.coordinate.yaml", "expect": "AT is coordinated with the DoD Component office of primary responsibility for DoD AT", "claim": "presence", "asserts": "required AT is coordinated with the DoD Component office of primary responsibility for DoD AT: AT is coordinated with the DoD Component office of primary responsibility for DoD AT", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(b) Coordinate with the applicable DoD Component office of primary responsibility for DoD AT to coordinate activities to mitigate reverse engineering opportunities, where appropriate."}]
     work_item: "WI-87"
   - id: "REQ-DODI5000.83-0197"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "Use assured suppliers or appropriate SCRM countermeasures for system elements that perform"}
@@ -1632,8 +1700,11 @@ requirements:
     locator: "3.3.c.(9)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(9) Request assistance, when appropriate, from the JFAC, established in accordance with DoD Policy Memorandum 15-001, to support software and hardware assurance requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: 'when appropriate' leaves the request to the LSE's judgment, so no record can fail; ruling sought. The strategy can say where JFAC assistance is used."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Request JFAC assistance to support software and hardware assurance requirements", "claim": "presence"}]
     work_item: "WI-154"
+    ruling_sought: [{"sentence": "(9) Request assistance, when appropriate, from the JFAC, established in accordance with DoD Policy Memorandum 15-001, to support software and hardware assurance requirements.", "reason": "'When appropriate' leaves the request to the LSE's judgment: a permission, not a duty a record could break."}]
   - id: "REQ-DODI5000.83-0204"
     citation: {"ref": "DODI5000.83", "page": 17, "anchor": "A process for the identification and prioritization of security vulnerabilities, based on"}
     kind: "lettered"
@@ -1656,7 +1727,8 @@ requirements:
     locator: "3.3.c.(11)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(11) Incorporate automated software vulnerability analysis tools throughout the lifecycle of the system, including during development, operational test, operations and sustainment phases, and retirement, to:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.phase.yaml", "expect": "no automated software vulnerability analysis tool serves the", "claim": "constraint", "asserts": "Incorporate automated software vulnerability analysis tools throughout the lifecycle to retirement: no tool serving retirement fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.83-0207"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "Evaluate software vulnerabilities."}
@@ -1671,15 +1743,20 @@ requirements:
     locator: "3.3.c.(11).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(b) When appropriate, use software vulnerability analysis enterprise licenses provided by the JFAC."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: 'when appropriate' leaves the use of JFAC licenses to the LSE's judgment, so no record can fail; ruling sought."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Use software vulnerability analysis enterprise licenses provided by the JFAC", "claim": "presence"}]
     work_item: "WI-154"
+    ruling_sought: [{"sentence": "(b) When appropriate, use software vulnerability analysis enterprise licenses provided by the JFAC.", "reason": "'When appropriate' leaves the use of licenses to the LSE's judgment: a permission, not a duty a record could break."}]
   - id: "REQ-DODI5000.83-0209"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "Translate S&T protection and program protection, including software and hardware assurance remediation"}
     kind: "lettered"
     locator: "3.3.c.(12)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(12) Translate S&T protection and program protection, including software and hardware assurance remediation strategies, into contract requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-004 fails RFPs and contracts that, as a set, translate none of the software or hardware assurance remediation strategies the PPP's SSE activities include into contract requirements."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.assurance.yaml", "expect": "remediation strategies of program protection into contract requirements", "claim": "constraint", "asserts": "S&T protection and program protection, including software and hardware assurance remediation strategies, are translated into contract requirements: remediation strategies of program protection into contract requirements", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and P-17 is in scope", "sentence": "(12) Translate S&T protection and program protection, including software and hardware assurance remediation strategies, into contract requirements."}]
     work_item: "WI-86"
   - id: "REQ-DODI5000.83-0210"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "Protect the System Against Cyber Attacks from Enabling and Supporting Systems."}
@@ -1762,7 +1839,9 @@ requirements:
     locator: "3.3.e.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(1) Conduct periodic reassessments of technology and system security vulnerabilities to the technology, system, and support systems. These reassessments must be conducted, at a minimum, for any engineering modifications or technology refreshes. Technical and process mitigations will be incorporated into engineering, test, and logistics documentation, and related solicitations, contracts, and other legal binding agreements."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 2 is held, PPROT-004 fails a reassessment whose mitigations reach no solicitation, contract or agreement. Unheld: sentence 1, a reassessment for every engineering modification or technology refresh; the change log (changes.yaml) does not say which changes are engineering modifications or refreshes, so no rule can pair them."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.reassessment.yaml", "expect": "the technical and process mitigations of the reassessment are incorporated into no solicitation, contract or agreement", "claim": "constraint", "asserts": "technical and process mitigations of reassessments are incorporated into related solicitations, contracts and agreements: the technical and process mitigations of the reassessment are incorporated into no solicitation, contract or agreement", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and P-17 is in scope", "sentence": "Technical and process mitigations will be incorporated into engineering, test, and logistics documentation, and related solicitations, contracts, and other legal binding agreements."}]
     work_item: "WI-86"
   - id: "REQ-DODI5000.83-0220"
     citation: {"ref": "DODI5000.83", "page": 19, "anchor": "Ensure technology, program, and system information is protected and the process for"}
@@ -1770,7 +1849,9 @@ requirements:
     locator: "3.3.e.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(2) Ensure technology, program, and system information is protected and the process for identification, prioritization, and mitigation of weaknesses and vulnerabilities, including use of automated tools, remains consistent from development to sustainment to minimize vulnerabilities introduced by depot and other sustainment activities (e.g., training, maintenance manuals, and supply)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: one process serves every phase by construction (VULN-007 process and tools by phase); depot and other sustainment activities are not named in any record."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.phase.yaml", "expect": "no automated software vulnerability analysis tool serves the", "claim": "constraint", "asserts": "Identification and mitigation of vulnerabilities with automated tools remains consistent to sustainment: no tool serving a phase fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.83-0221"
     citation: {"ref": "DODI5000.83", "page": 19, "anchor": "Monitor considerations for AT protections that are implemented in fielded systems."}
@@ -1778,7 +1859,9 @@ requirements:
     locator: "3.3.e.(3)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(3) Monitor considerations for AT protections that are implemented in fielded systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: once a fielding decision point is passed PPROT-002 fails required AT not marked monitored, but monitored is a flag the run sets, so the clause holds presence, not monitoring."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.monitor.yaml", "expect": "AT protections implemented in fielded systems are monitored", "claim": "constraint", "asserts": "considerations for AT protections implemented in fielded systems are monitored: AT protections implemented in fielded systems are monitored", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(3) Monitor considerations for AT protections that are implemented in fielded systems."}]
     work_item: "WI-87"
   - id: "REQ-DODI5000.83-0222"
     citation: {"ref": "DODI5000.83", "page": 19, "anchor": "Enhance Protection for Critical Programs and Technologies."}
@@ -1794,7 +1877,9 @@ requirements:
     locator: "3.3.f"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS"
     statement: "S&T managers and lead systems engineers should employ risk informed enhanced protection measures to mitigate targeted threats and vulnerabilities in selected technologies and programs. S&T managers and lead systems engineers will engage with security, counterintelligence, and intelligence resources to inform:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: protection.yaml records threat assessments from intelligence, counterintelligence and security entities, and PPROT-005 ties risks to them. Unheld: sentence 1 'should employ risk informed enhanced protection measures ... in selected technologies' leaves the selection to the engineers, so nothing fails without it."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.drawn.yaml", "expect": "which is no SEP, ITRA or threat assessment the run read", "claim": "constraint", "asserts": "engage with security, counterintelligence and intelligence resources whose threat assessments inform the risks: which is no SEP, ITRA or threat assessment the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "S&T managers and lead systems engineers will engage with security, counterintelligence, and intelligence resources to inform:"}]
     work_item: "WI-87"
   - id: "REQ-DODI5000.83-0224"
     citation: {"ref": "DODI5000.83", "page": 19, "anchor": "Design development."}
@@ -1834,7 +1919,9 @@ requirements:
     locator: "3.4.a"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "A TAPP will be established for each S&T modernization priority area. The TAPP will inform S&T research at the appropriate BA level, or at Technology Readiness Levels 1-6 and PPPs. The TAPP is designed to reduce compromise or loss of critical technologies and protect against unwanted technology transfer. In addition, it will guide DoD:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentences 1 and 2 are held (PPROT-003: a modernization priority area with no TAPP read, a TAPP that does not inform the PPP). Unheld: sentence 3, 'it will guide DoD:', is a lead-in whose items follow."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.yaml", "expect": "is a modernization priority area with no applicable TAPP read", "claim": "constraint", "asserts": "a TAPP is established for each S&T modernization priority area: is a modernization priority area with no applicable TAPP read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "A TAPP will be established for each S&T modernization priority area."}, {"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.inform.yaml", "expect": "is read and does not inform the program protection activities", "claim": "constraint", "asserts": "the TAPP will inform PPPs: is read and does not inform the program protection activities", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "The TAPP will inform S&T research at the appropriate BA level, or at Technology Readiness Levels 1-6 and PPPs."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0229"
     citation: {"ref": "DODI5000.83", "page": 20, "anchor": "S&T."}
@@ -1890,7 +1977,9 @@ requirements:
     locator: "3.4.b"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "S&T managers will prepare protection plans as a management tool to guide S&T protection activities. S&T projects, when associated with critical technology or modernization priority areas, will be consistent with their applicable TAPPs and all available horizontal protection guidance."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 2's TAPP half is held (PPROT-003 fails a modernization priority area with no TAPP read); its horizontal guidance half is held only for AT. Sentence 1 rests on a clause that tests only that st-protection.yaml exists for an S&T transition, which is presence."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stplan.yaml", "expect": "the technology transitions from S&T, and st-protection.yaml holds no S&T protection plan", "claim": "presence", "asserts": "S&T managers prepare protection plans: the technology transitions from S&T, and st-protection.yaml holds no S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "S&T managers will prepare protection plans as a management tool to guide S&T protection activities."}, {"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.yaml", "expect": "is a modernization priority area with no applicable TAPP read", "claim": "constraint", "asserts": "S&T projects associated with modernization priority areas are consistent with their applicable TAPPs: is a modernization priority area with no applicable TAPP read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "S&T projects, when associated with critical technology or modernization priority areas, will be consistent with their applicable TAPPs and all available horizontal protection guidance."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0236"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "At a minimum, the S&T protection plan will include:"}
@@ -1898,7 +1987,9 @@ requirements:
     locator: "3.4.b.(1)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(1) At a minimum, the S&T protection plan will include:"
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. st-protection.yaml requires the critical technology elements, their threats and the selected countermeasures (0237 to 0239)."
+    evidence: [{"kind": "schema", "target": "framework/schema/st-protection.schema.json#/properties/critical_technology_elements", "claim": "constraint", "asserts": "at a minimum the S&T protection plan will include critical technology elements: Critical technology elements and enabling technologies the S&T protection plan includes", "sentence": "(1) At a minimum, the S&T protection plan will include:"}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0237"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Critical technology elements and enabling technologies."}
@@ -1906,7 +1997,9 @@ requirements:
     locator: "3.4.b.(1).(a)"
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the S&T protection plan will include:"
     statement: "(a) Critical technology elements and enabling technologies."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. st-protection.yaml requires at least one critical technology element or enabling technology."
+    evidence: [{"kind": "schema", "target": "framework/schema/st-protection.schema.json#/properties/critical_technology_elements", "claim": "constraint", "asserts": "the S&T protection plan includes critical technology elements and enabling technologies: Critical technology elements and enabling technologies the S&T protection plan includes", "sentence": "(a) Critical technology elements and enabling technologies."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0238"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Threats to, and vulnerabilities of, these items."}
@@ -1914,7 +2007,9 @@ requirements:
     locator: "3.4.b.(1).(b)"
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the S&T protection plan will include:"
     statement: "(b) Threats to, and vulnerabilities of, these items."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-003 fails a critical technology element with no threat and vulnerability in the S&T protection plan."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stthreat.yaml", "expect": "has no threat and vulnerability in the S&T protection plan", "claim": "constraint", "asserts": "the S&T protection plan includes threats to, and vulnerabilities of, these items: has no threat and vulnerability in the S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(b) Threats to, and vulnerabilities of, these items."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0239"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Selected countermeasures to mitigate associated risks."}
@@ -1922,7 +2017,9 @@ requirements:
     locator: "3.4.b.(1).(c)"
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the S&T protection plan will include:"
     statement: "(c) Selected countermeasures to mitigate associated risks."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-003 fails a critical technology element with no countermeasure selected."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stcounter.yaml", "expect": "has no countermeasure selected in the S&T protection plan", "claim": "constraint", "asserts": "the S&T protection plan includes selected countermeasures to mitigate associated risks: has no countermeasure selected in the S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(c) Selected countermeasures to mitigate associated risks."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0240"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "The S&T protection plan will be submitted for approval before project approval"}
@@ -1930,7 +2027,9 @@ requirements:
     locator: "3.4.b.(2)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(2) The S&T protection plan will be submitted for approval before project approval and at intervals as defined by the DoD Component."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-003 fails an S&T protection plan submitted after project approval. Unheld: 'at intervals as defined by the DoD Component' has no interval the run can read."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stapproval.yaml", "expect": "the S&T protection plan is submitted for approval before project approval", "claim": "constraint", "asserts": "the S&T protection plan will be submitted for approval before project approval: the S&T protection plan is submitted for approval before project approval", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(2) The S&T protection plan will be submitted for approval before project approval and at intervals as defined by the DoD Component."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0241"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Ensure S&T protection requirements are included in solicitations, broad agency announcements, as"}
@@ -1970,7 +2069,9 @@ requirements:
     locator: "3.4.b.(b)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(b) S&T managers will transition the S&T protection plan to the lead systems engineer responsible for system development when:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (transition.to: PER-LSE), so it holds presence."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stto.yaml", "expect": "S&T managers transition the S&T protection plan to the lead systems engineer responsible for system development", "claim": "constraint", "asserts": "S&T managers will transition the S&T protection plan to the lead systems engineer responsible for system development: S&T managers transition the S&T protection plan to the lead systems engineer responsible for system development", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(b) S&T managers will transition the S&T protection plan to the lead systems engineer responsible for system development when:"}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0246"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "A technology transition decision has been made."}
@@ -1978,7 +2079,9 @@ requirements:
     locator: "3.4.b.(b).1"
     context: "Figure 1. Technology and Program Protection Framework S&T managers will transition the S&T protection plan to the lead systems engineer responsible for system development when:"
     statement: "1. A technology transition decision has been made."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (the transition conditions list), so it holds presence of the condition, not that the decision was made."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stdecision.yaml", "expect": "the S&T protection plan transitions once a technology transition decision has been made", "claim": "constraint", "asserts": "the S&T protection plan transitions when a technology transition decision has been made: the S&T protection plan transitions once a technology transition decision has been made", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "1. A technology transition decision has been made."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0247"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Technology transfer requirements have been met to inform the PPP."}
@@ -1986,7 +2089,9 @@ requirements:
     locator: "3.4.b.(b).2"
     context: "Figure 1. Technology and Program Protection Framework S&T managers will transition the S&T protection plan to the lead systems engineer responsible for system development when:"
     statement: "2. Technology transfer requirements have been met to inform the PPP."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (the transition conditions list), so it holds presence of the condition, not that transfer requirements were met."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.sttransfer.yaml", "expect": "the S&T protection plan transitions once technology transfer requirements have been met to inform the PPP", "claim": "constraint", "asserts": "the S&T protection plan transitions when technology transfer requirements have been met to inform the PPP: the S&T protection plan transitions once technology transfer requirements have been met to inform the PPP", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "2. Technology transfer requirements have been met to inform the PPP."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0248"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Lead systems engineers will prepare a PPP as a management tool to"}
@@ -1994,7 +2099,9 @@ requirements:
     locator: "3.4.c"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "Lead systems engineers will prepare a PPP as a management tool to guide the systems security engineering activities, to include cyber resilient engineering, across the lifecycle."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (prepared_by: PER-LSE, cyber-resilient-engineering in sse_activities), so it holds presence; who prepares the PPP and what it guides are self-declared."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.yaml", "expect": "the lead systems engineer prepares the PPP (the PM under DoDI 5000.88)", "claim": "constraint", "asserts": "lead systems engineers prepare the PPP: the lead systems engineer prepares the PPP (the PM under DoDI 5000.88)", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Lead systems engineers will prepare a PPP as a management tool to guide the systems security engineering activities, to include cyber resilient engineering, across the lifecycle."}, {"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.cre.yaml", "expect": "the PPP guides the systems security engineering activities, to include cyber resilient engineering", "claim": "constraint", "asserts": "the PPP is a management tool to guide the systems security engineering activities, to include cyber resilient engineering: the PPP guides the systems security engineering activities, to include cyber resilient engineering", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Lead systems engineers will prepare a PPP as a management tool to guide the systems security engineering activities, to include cyber resilient engineering, across the lifecycle."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0249"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "At a minimum, the PPP will include the:"}
@@ -2002,7 +2109,9 @@ requirements:
     locator: "3.4.c.(1)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(1) At a minimum, the PPP will include the:"
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. The lead-in's items are 0250 to 0252; protection.yaml requires the PPP's critical items, threats, countermeasures and exportability planning, and PPROT-002 fails an item without its threats or countermeasures."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.countermeasure.yaml", "expect": "has no planned countermeasure to mitigate its risks", "claim": "constraint", "asserts": "at a minimum the PPP will include countermeasures for each critical item: has no planned countermeasure to mitigate its risks", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) At a minimum, the PPP will include the:"}, {"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/critical_items", "claim": "constraint", "asserts": "at a minimum the PPP will include the critical items it protects: Critical program information, critical components and functions the PPP protects", "sentence": "(1) At a minimum, the PPP will include the:"}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0250"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Plan to apply countermeasure as described in the PPP outline and guidance"}
@@ -2010,7 +2119,9 @@ requirements:
     locator: "3.4.c.(1).(a)"
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the PPP will include the:"
     statement: "(a) Plan to apply countermeasure as described in the PPP outline and guidance template to mitigate associated risks."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-002 fails a critical item with no planned countermeasure, and a countermeasure for an item the PPP does not have."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.countermeasure.yaml", "expect": "has no planned countermeasure to mitigate its risks", "claim": "constraint", "asserts": "the PPP includes a plan to apply countermeasures to mitigate associated risks: has no planned countermeasure to mitigate its risks", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) Plan to apply countermeasure as described in the PPP outline and guidance template to mitigate associated risks."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0251"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Threats to, and vulnerabilities of, these items."}
@@ -2019,7 +2130,9 @@ requirements:
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the PPP will include the:"
     statement: "(b) Threats to, and vulnerabilities of, these items."
     occurrence: 2
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-002 fails a critical item with no threat and vulnerability recorded in the PPP."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.threat.yaml", "expect": "has no threat and vulnerability recorded in the PPP", "claim": "constraint", "asserts": "the PPP includes threats to, and vulnerabilities of, these items: has no threat and vulnerability recorded in the PPP", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(b) Threats to, and vulnerabilities of, these items."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0252"
     citation: {"ref": "DODI5000.83", "page": 21, "anchor": "Planning for exportability and potential foreign involvement."}
@@ -2027,7 +2140,9 @@ requirements:
     locator: "3.4.c.(1).(c)"
     context: "Figure 1. Technology and Program Protection Framework At a minimum, the PPP will include the:"
     statement: "(c) Planning for exportability and potential foreign involvement."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. protection.yaml requires ppp.exportability with foreign_involvement from none, potential or planned and the planning text; PPROT-002 also fails AT for technology outside U.S. control decided without horizontal protection guidance (0195)."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/exportability/properties/foreign_involvement", "claim": "constraint", "asserts": "the PPP includes planning for exportability and potential foreign involvement: Planning for exportability and potential foreign involvement: what foreign involvement is expected", "sentence": "(c) Planning for exportability and potential foreign involvement."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0253"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "The PPP will be submitted for approval, in accordance with Major Capability"}
@@ -2035,7 +2150,9 @@ requirements:
     locator: "3.4.c.(2)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(2) The PPP will be submitted for approval, in accordance with Major Capability Acquisition, Operation of Middle Tier Acquisition, Urgent Operation Needs, and Software Acquisition at each acquisition pathway decision points. The cybersecurity strategy will be submitted as an appendix, in accordance with DoDI 5000.82."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 1 is held, PPROT-001 fails a decision point passed after the MDD with no PPP submission on or before it (milestones and decision points of the pathway, not events such as IOC or the MVCR). Sentence 2 rests on cybersecurity_strategy: appendix, a literal the template supplies, so it holds presence."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.submission.yaml", "expect": "the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "claim": "constraint", "asserts": "the PPP is submitted for approval at each acquisition pathway decision point: the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(2) The PPP will be submitted for approval, in accordance with Major Capability Acquisition, Operation of Middle Tier Acquisition, Urgent Operation Needs, and Software Acquisition at each acquisition pathway decision points."}, {"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.appendix.yaml", "expect": "the cybersecurity strategy is submitted as an appendix to the PPP", "claim": "constraint", "asserts": "the cybersecurity strategy is submitted as an appendix to the PPP: the cybersecurity strategy is submitted as an appendix to the PPP", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "The cybersecurity strategy will be submitted as an appendix, in accordance with DoDI 5000.82."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0254"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "For all programs where the DAE is the milestone decision authority, the"}
@@ -2043,7 +2160,9 @@ requirements:
     locator: "3.4.c.(2).(a)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(a) For all programs where the DAE is the milestone decision authority, the USD(R&E) is the PPP approval authority."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-001 fails a PPP of a program whose MDA is the DAE approved by anyone but the USD(R&E)."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.dae.yaml", "expect": "where the DAE is the milestone decision authority, the USD(R&E) is the PPP approval authority", "claim": "constraint", "asserts": "where the DAE is the milestone decision authority the USD(R&E) is the PPP approval authority: where the DAE is the milestone decision authority, the USD(R&E) is the PPP approval authority", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) For all programs where the DAE is the milestone decision authority, the USD(R&E) is the PPP approval authority."}]
     work_item: "WI-84"
   - id: "REQ-DODI5000.83-0255"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient"}
@@ -2051,7 +2170,9 @@ requirements:
     locator: "3.4.c.(2).(b)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(b) Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient engineering requirements are included in request for proposals and prepare updates to the PPP after:"
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-004 fails RFPs without a recorded deviation that, taken together, carry no PPP countermeasure; since the source says should, an RFP recording a deviation with its reason answers for itself, and the others are still judged. The cyber resilient requirement clause holds presence. The PPP updates after are 0256 and 0257."
+    evidence: [{"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.rfp.yaml", "expect": "no request for proposal carries a PPP countermeasure", "claim": "constraint", "asserts": "lead systems engineers should ensure the PPP countermeasures are included in request for proposals: no request for proposal carries a PPP countermeasure", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and P-17 is in scope", "sentence": "(b) Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient engineering requirements are included in request for proposals and prepare updates to the PPP after:"}, {"kind": "rule", "target": "PPROT-004", "fixture": "tests/fixtures/negative/PPROT-004.cre.yaml", "expect": "no request for proposal carries a cyber resilient engineering requirement", "claim": "presence", "asserts": "cyber resilient engineering requirements are included in request for proposals: no request for proposal carries a cyber resilient engineering requirement", "holds_when": "P-15 is in scope or the run holds protection-requirements.yaml, and P-17 is in scope", "sentence": "(b) Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient engineering requirements are included in request for proposals and prepare updates to the PPP after:"}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0256"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Any contract award to reflect the contractor’s approved technical approach."}
@@ -2059,7 +2180,9 @@ requirements:
     locator: "3.4.c.(2).(b).1"
     context: "Figure 1. Technology and Program Protection Framework Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient engineering requirements are included in request for"
     statement: "1. Any contract award to reflect the contractor’s approved technical approach."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-002 fails a contract award with no PPP update made on or after it; the lead-in says should, so an award recording why the PPP was not updated passes."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.award.yaml", "expect": "to reflect the contractor's approved technical approach", "claim": "constraint", "asserts": "updates to the PPP after any contract award reflect the contractor's approved technical approach: to reflect the contractor's approved technical approach", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "1. Any contract award to reflect the contractor’s approved technical approach."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0257"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Identification of any significant threat activity or compromise."}
@@ -2067,7 +2190,9 @@ requirements:
     locator: "3.4.c.(2).(b).2"
     context: "Figure 1. Technology and Program Protection Framework Lead systems engineers should ensure the appropriate PPP countermeasures and cyber resilient engineering requirements are included in request for"
     statement: "2. Identification of any significant threat activity or compromise."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-002 fails a significant threat activity or compromise recorded in protection.yaml with no PPP update made on or after it; the lead-in says should, so an event recording why the PPP was not updated passes."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.event.yaml", "expect": "a significant threat activity or compromise", "claim": "constraint", "asserts": "updates to the PPP after identification of any significant threat activity or compromise: a significant threat activity or compromise", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "2. Identification of any significant threat activity or compromise."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0258"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Program protection planning responsibilities will transition over the lifecycle. After the full-rate"}
@@ -2075,7 +2200,9 @@ requirements:
     locator: "3.4.c.(3)"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "(3) Program protection planning responsibilities will transition over the lifecycle. After the full-rate production or full-deployment decision, the PPP will transition to the program manager responsible for system sustainment and disposal."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: both clauses fail only on literals the template supplies (transition.to: PER-LSE for the S&T plan, to: sustainment-pm, the one value the schema allows, for the PPP), so they hold presence of the transition, not who took it over."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stto.yaml", "expect": "S&T managers transition the S&T protection plan to the lead systems engineer responsible for system development", "claim": "constraint", "asserts": "program protection planning responsibilities transition over the lifecycle from the S&T manager to the lead systems engineer: S&T managers transition the S&T protection plan to the lead systems engineer responsible for system development", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(3) Program protection planning responsibilities will transition over the lifecycle."}, {"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.transition.yaml", "expect": "after the full-rate production or full-deployment decision the PPP transitions to the program manager responsible for system sustainment and disposal", "claim": "constraint", "asserts": "after the full-rate production or full-deployment decision the PPP transitions to the program manager responsible for sustainment: after the full-rate production or full-deployment decision the PPP transitions to the program manager responsible for system sustainment and disposal", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "After the full-rate production or full-deployment decision, the PPP will transition to the program manager responsible for system sustainment and disposal."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0259"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Refer to DoDI 5000.88 for requirements to conduct and approve independent technical"}
@@ -2083,7 +2210,9 @@ requirements:
     locator: "3.4.d"
     context: "Figure 1. Technology and Program Protection Framework"
     statement: "Refer to DoDI 5000.88 for requirements to conduct and approve independent technical risk assessments on system designs and interfaces for adversarial risks, program protection, and cyber vulnerabilities. The results must inform technical baselines and risk management activities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-005 fails ITRA results that inform no technical risk, so the risk management half is held. Unheld: the results informing the technical baselines, which no run record holds (the baselines are the LSE's, outside the run)."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.itra.yaml", "expect": "inform no technical risk; ITRA results inform risk management activities", "claim": "constraint", "asserts": "ITRA results must inform risk management activities through the technical risks: inform no technical risk; ITRA results inform risk management activities", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "The results must inform technical baselines and risk management activities."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.83-0260"
     citation: {"ref": "DODI5000.83", "page": 22, "anchor": "Test and Evaluation Master Plan."}
@@ -2115,7 +2244,9 @@ requirements:
     locator: "3.5"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS"
     statement: "Engineers will tailor program protection strategies and oversight, content, timing and scope of countermeasures, based on the characteristics of the capability being acquired, including complexity, risk, and urgency to satisfy user requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (tailoring.pathway as the template's default pathway, and the factors complexity, risk and urgency), so the tailoring itself is unheld."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.tailoring.yaml", "expect": "program protection is tailored to the program's pathway", "claim": "constraint", "asserts": "engineers tailor program protection strategies to the characteristics of the capability being acquired and its pathway: program protection is tailored to the program's pathway", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Engineers will tailor program protection strategies and oversight, content, timing and scope of countermeasures, based on the characteristics of the capability being acquired, including complexity, risk, and urgency to satisfy user requirements."}, {"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/tailoring/properties/factors", "claim": "constraint", "asserts": "program protection is tailored on complexity, risk, and urgency: Characteristics of the capability that tailor program protection", "sentence": "Engineers will tailor program protection strategies and oversight, content, timing and scope of countermeasures, based on the characteristics of the capability being acquired, including complexity, risk, and urgency to satisfy user requirements."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0264"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "In accordance with DoDI 5000.02, S&T managers and lead systems engineers will:"}
@@ -2131,7 +2262,9 @@ requirements:
     locator: "3.5.a.(1).(a)"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.02, S&T managers and lead systems engineers will: Use relevant:"
     statement: "(a) TAPPs to inform program protection activities, as appropriate."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-003 fails a TAPP the run read that does not inform the PPP."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.inform.yaml", "expect": "is read and does not inform the program protection activities", "claim": "constraint", "asserts": "relevant TAPPs inform program protection activities: is read and does not inform the program protection activities", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) TAPPs to inform program protection activities, as appropriate."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0266"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "S&T protection plans, as appropriate."}
@@ -2139,7 +2272,9 @@ requirements:
     locator: "3.5.a.(1).(b)"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.02, S&T managers and lead systems engineers will: Use relevant:"
     statement: "(b) S&T protection plans, as appropriate."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. PPROT-003 fails an S&T protection plan of a transitioning technology that does not inform the PPP."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stinform.yaml", "expect": "the S&T protection plan", "claim": "constraint", "asserts": "relevant S&T protection plans inform the program protection activities of the PPP: the S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(b) S&T protection plans, as appropriate."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0267"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "Develop program protection planning and implementation as part of the design and"}
@@ -2147,7 +2282,9 @@ requirements:
     locator: "3.5.a.(2)"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.02, S&T managers and lead systems engineers will:"
     statement: "(2) Develop program protection planning and implementation as part of the design and technical risk assessment process."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. Each PPP countermeasure must mitigate a technical risk of the design and technical risk assessment in protection.yaml (PPROT-002)."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.mitigates.yaml", "expect": "which is no technical risk of the design and technical risk assessment process", "claim": "constraint", "asserts": "program protection planning and implementation is developed as part of the design and technical risk assessment process: which is no technical risk of the design and technical risk assessment process", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(2) Develop program protection planning and implementation as part of the design and technical risk assessment process."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0268"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "Ensure operators are informed of operational risks when the system is fielded."}
@@ -2171,7 +2308,9 @@ requirements:
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.81, S&T managers and lead systems engineers will: Use relevant:"
     statement: "(a) TAPPs to inform program protection activities, as appropriate."
     occurrence: 2
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. As 0265, for urgent capability acquisition: PPROT-003 fails a TAPP read that does not inform the PPP."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.inform.yaml", "expect": "is read and does not inform the program protection activities", "claim": "constraint", "asserts": "relevant TAPPs inform program protection activities on the urgent pathway: is read and does not inform the program protection activities", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(a) TAPPs to inform program protection activities, as appropriate."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0271"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "S&T protection plans, as appropriate."}
@@ -2180,7 +2319,9 @@ requirements:
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.81, S&T managers and lead systems engineers will: Use relevant:"
     statement: "(b) S&T protection plans, as appropriate."
     occurrence: 2
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. As 0266, for urgent capability acquisition: PPROT-003 fails an S&T protection plan that does not inform the PPP."
+    evidence: [{"kind": "rule", "target": "PPROT-003", "fixture": "tests/fixtures/negative/PPROT-003.stinform.yaml", "expect": "the S&T protection plan", "claim": "constraint", "asserts": "relevant S&T protection plans inform the PPP on the urgent pathway: the S&T protection plan", "holds_when": "P-14 is in scope or the run holds protection.yaml, and program.origin is st-transition", "sentence": "(b) S&T protection plans, as appropriate."}]
     work_item: "WI-88"
   - id: "REQ-DODI5000.83-0272"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "Develop program protection planning and implementation as part of the design and"}
@@ -2189,7 +2330,9 @@ requirements:
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.81, S&T managers and lead systems engineers will:"
     statement: "(2) Develop program protection planning and implementation as part of the design and technical risk assessment process."
     occurrence: 2
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. As 0267, for urgent capability acquisition: each PPP countermeasure must mitigate a technical risk of the design and technical risk assessment (PPROT-002)."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.mitigates.yaml", "expect": "which is no technical risk of the design and technical risk assessment process", "claim": "constraint", "asserts": "program protection planning and implementation is developed as part of the design and technical risk assessment process on the urgent pathway: which is no technical risk of the design and technical risk assessment process", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(2) Develop program protection planning and implementation as part of the design and technical risk assessment process."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0273"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "Ensure operators are informed of operational risks when the system is fielded."}
@@ -2221,7 +2364,9 @@ requirements:
     locator: "3.5.c.(1)"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.80, S&T managers and lead systems engineers will:"
     statement: "(1) Determine program protection planning and implementation risks and mitigation as part of the design and technical risk assessment process."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. On the MTA pathway as elsewhere, each PPP countermeasure must mitigate a technical risk recorded in the design and technical risk assessment (PPROT-002)."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.mitigates.yaml", "expect": "which is no technical risk of the design and technical risk assessment process", "claim": "constraint", "asserts": "program protection planning risks and mitigation are determined as part of the design and technical risk assessment process: which is no technical risk of the design and technical risk assessment process", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) Determine program protection planning and implementation risks and mitigation as part of the design and technical risk assessment process."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0277"
     citation: {"ref": "DODI5000.83", "page": 23, "anchor": "Ensure operators are informed of the operational risks when the system is"}
@@ -2244,7 +2389,9 @@ requirements:
     locator: "3.5.d.(1)"
     context: "TAILORED PROGRAM PROTECTION FOR SELECTED ACQUISITION PATHS In accordance with DoDI 5000.87, S&T managers and lead systems engineers will:"
     statement: "(1) Consider mitigations that promote automated continuous integration and continuous delivery for adoption of agile, lean, or development security operations methodologies to determine:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: protection.yaml can record automated-ci-cd among the PPP's protection measures. Unheld: 'consider mitigations ... to determine:' asks for a consideration whose outcome is in the sub-items; a consideration that ends in no CI/CD mitigation is allowed, so no rule can fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/sse_activities", "claim": "constraint", "asserts": "mitigations that promote automated continuous integration and continuous delivery are recorded among the protection measures: Systems security engineering activities and protection measures the PPP guides", "sentence": "(1) Consider mitigations that promote automated continuous integration and continuous delivery for adoption of agile, lean, or development security operations methodologies to determine:"}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.83-0280"
     citation: {"ref": "DODI5000.83", "page": 24, "anchor": "Program protection planning."}
@@ -2276,7 +2423,9 @@ requirements:
     locator: "3.2.a"
     context: ""
     statement: "Mitigating adversary impact on technological advantage and employing system security engineering practices for program protection is a requirement for all DoD research, technology, and programs."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-002 fails a run whose recorded system security engineering practices include none for program protection, the discipline that mitigates adversary impact on technological advantage; it applies to every run with P-15 in scope."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.protection.yaml", "expect": "employs no system security engineering practice for program protection", "claim": "constraint", "asserts": "Employing system security engineering practices for program protection is a requirement for all programs: a program that employs no such practice for program protection fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
     promoted: {"reason": "The sentence says mitigating adversary impact and employing system security engineering practices 'is a requirement for all DoD research, technology, and programs'; the extractor rejected the paragraph as no-marker."}
   - id: "REQ-DODI5000.83-0284"
@@ -2293,7 +2442,9 @@ requirements:
     locator: "3.3.c.(1).(a)"
     context: ""
     statement: "(a) Inform requirements derivation activities using the:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a requirements derivation not informed by each of the draft or validated capability requirements document (or equivalent), the concept of operations, the operational mode summary and the mission profiles, the four items 0170 to 0173 list under this sentence."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.informed.yaml", "expect": "requirements derivation is not informed by the", "claim": "constraint", "asserts": "Requirements derivation activities are informed using the capability requirements document, concept of operations, operational mode summary and mission profiles: a derivation not informed by the mission profiles fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
     promoted: {"reason": "The lead-in holds the lead systems engineers' verb over bare noun items 0170 to 0173, which name the inputs to requirements derivation."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

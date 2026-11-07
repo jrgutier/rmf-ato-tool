@@ -1,0 +1,14 @@
+rule: VULN-003
+bases:
+- minimal
+description: a valid VDP report with no vulnerability analysis record
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vdp_reports.0.vulnerability
+  value: VUL-099
+expect:
+  errors:
+  - VULN-003
+  messages:
+  - the severity of the validated vulnerability is not assessed

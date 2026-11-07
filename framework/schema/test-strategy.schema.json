@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:test-strategy",
+  "title": "runs/<run-id>/artifacts/data/test-strategy.yaml",
+  "description": "The TEMP or test strategy A-2 read, with its approvals, schedule, cybersecurity test objectives and events, and the configuration and conditions under which each event's data was obtained. TSTRAT-001 to TSTRAT-003 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document",
+    "oversight",
+    "financial_functions",
+    "approvals",
+    "objectives",
+    "evaluation_frameworks",
+    "events",
+    "sources"
+  ],
+  "properties": {
+    "document": {
+      "title": "The TEMP or other test planning document",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "pathway",
+        "date"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/text"
+        },
+        "kind": {
+          "title": "Test planning document the pathway calls for: a TEMP, a test strategy, an abbreviated test plan or the implementation plan of a business system",
+          "enum": [
+            "temp",
+            "test-strategy",
+            "abbreviated-test-plan",
+            "implementation-plan"
+          ]
+        },
+        "pathway": {
+          "type": "string",
+          "pattern": "^PW-[A-Z]+$"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        }
+      }
+    },
+    "oversight": {
+      "title": "T&E oversight of the program",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dote",
+        "usdre"
+      ],
+      "properties": {
+        "dote": {
+          "title": "Whether the program is on the DOT&E T&E oversight list",
+          "type": "boolean"
+        },
+        "usdre": {
+          "title": "Whether the program is under USD(R&E) developmental test oversight",
+          "type": "boolean"
+        },
+        "lfte": {
+          "title": "Whether the program is on DOT&E live fire oversight",
+          "type": "boolean"
+        }
+      }
+    },
+    "financial_functions": {
+      "title": "Whether the system's functions include financial or fiscal/business activities or the management of funds",
+      "type": "boolean"
+    },
+    "approvals": {
+      "title": "Approvals of the test planning document and its parts",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "part",
+          "by",
+          "date"
+        ],
+        "properties": {
+          "part": {
+            "title": "Part of the test planning approved",
+            "enum": [
+              "dt-e",
+              "ot-e",
+              "lft-e",
+              "document"
+            ]
+          },
+          "by": {
+            "title": "Approval authority",
+            "enum": [
+              "USD(R&E)",
+              "USD(R&E)-designee",
+              "DOT&E",
+              "DOT&E-designee",
+              "component",
+              "MDA",
+              "DA"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "decision_point": {
+            "$ref": "#/$defs/decision_point"
+          },
+          "submitted_to_osd": {
+            "$ref": "#/$defs/date"
+          }
+        }
+      }
+    },
+    "objectives": {
+      "title": "Test phase objectives, including entrance and exit criteria and cybersecurity test objectives",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cybersecurity",
+        "entrance_exit"
+      ],
+      "properties": {
+        "cybersecurity": {
+          "title": "Cybersecurity test objectives of the test phases",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "x-enforces": [
+            "REQ-DODI5000.89-0060"
+          ]
+        },
+        "entrance_exit": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "evaluation_frameworks": {
+      "title": "Developmental and operational evaluation frameworks of the test strategy",
+      "type": "array",
+      "items": {
+        "enum": [
+          "def",
+          "oef",
+          "live-fire-strategy",
+          "ot-concept"
+        ]
+      }
+    },
+    "events": {
+      "title": "Test events, scheduled against the decision points they support",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "phase",
+          "conducted_by",
+          "independent",
+          "threat_representative",
+          "scope",
+          "includes_cssp",
+          "evaluates",
+          "date",
+          "decision_point",
+          "resources",
+          "system",
+          "environment",
+          "configuration",
+          "conditions",
+          "results_reused"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TE-\\d{3}$"
+          },
+          "kind": {
+            "title": "Kind of test event",
+            "enum": [
+              "cooperative-vulnerability-identification",
+              "cybersecurity-dt",
+              "cvpa",
+              "adversarial-assessment",
+              "cyber-economic-vulnerability-analysis",
+              "dco-evaluation",
+              "penetration-exploitation",
+              "dt",
+              "ot",
+              "lft",
+              "operational-demonstration"
+            ]
+          },
+          "phase": {
+            "enum": [
+              "dt",
+              "ot",
+              "integrated"
+            ]
+          },
+          "conducted_by": {
+            "title": "Who conducted the test event",
+            "$ref": "#/$defs/text",
+            "x-enforces": [
+              "REQ-DODI5000.89-0255"
+            ]
+          },
+          "independent": {
+            "title": "Whether the testers are independent of the developer and program",
+            "type": "boolean",
+            "x-enforces": [
+              "REQ-DODI5000.89-0087"
+            ]
+          },
+          "threat_representative": {
+            "title": "Whether the test uses threat-representative techniques",
+            "type": "boolean",
+            "x-enforces": [
+              "REQ-DODI5000.89-0117"
+            ]
+          },
+          "scope": {
+            "title": "What the event tests: the complete system cyberspace defenses, or part of it",
+            "enum": [
+              "complete-system",
+              "component",
+              "subsystem"
+            ]
+          },
+          "includes_cssp": {
+            "title": "Whether the event covers the controls and protection of the cybersecurity service providers",
+            "type": "boolean"
+          },
+          "evaluates": {
+            "title": "What the event evaluates",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "performance",
+                "interoperability",
+                "reliability",
+                "cybersecurity",
+                "effectiveness",
+                "suitability",
+                "survivability",
+                "lethality"
+              ]
+            }
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "decision_point": {
+            "$ref": "#/$defs/decision_point"
+          },
+          "resources": {
+            "$ref": "#/$defs/text"
+          },
+          "system": {
+            "title": "Maturity of the system under test",
+            "enum": [
+              "production-representative",
+              "prototype",
+              "development-build"
+            ],
+            "x-enforces": [
+              "REQ-DODI5000.89-0123"
+            ]
+          },
+          "environment": {
+            "title": "Environment of the test",
+            "enum": [
+              "operationally-representative",
+              "laboratory",
+              "range"
+            ],
+            "x-enforces": [
+              "REQ-DODI5000.89-0055"
+            ]
+          },
+          "configuration": {
+            "$ref": "#/$defs/text"
+          },
+          "conditions": {
+            "$ref": "#/$defs/text"
+          },
+          "results_reused": {
+            "title": "Whether A-3 reuses the event's results as assessment evidence",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_point": {
+      "description": "A milestone of framework/milestones.yaml or a decision point of framework/pathways.yaml.",
+      "type": "string",
+      "pattern": "^(MS|DP)-[A-Z0-9-]+$"
+    }
+  }
+}

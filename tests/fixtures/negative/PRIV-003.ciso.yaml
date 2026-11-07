@@ -1,0 +1,14 @@
+rule: PRIV-003
+bases:
+- pii
+description: no review by the senior information security officer
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: reviews.0.by
+  value: PER-ISSM
+expect:
+  errors:
+  - PRIV-003
+  messages:
+  - PER-CISO does not review the completed PIA and confirm its compliance with cybersecurity policy
