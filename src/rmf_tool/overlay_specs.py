@@ -128,8 +128,7 @@ def _join(lines: list[str]) -> str:
         line = line.strip()
         if not line:
             continue
-        if out.endswith("-") and out[-2:-1].isalnum() and (line[:1].islower()
-                                                           or line[:1].isdigit()):
+        if out.endswith("-") and out[-2:-1].isalnum() and line[:1].isalnum():
             out += line  # a word or compound broken at the line end
         else:
             out = f"{out} {line}" if out else line
@@ -257,6 +256,16 @@ def parse(md: Path, ref: str, known: set[str]) -> list[Spec]:
     return specs
 
 
+# References the overlays cite that are guidance, not a law, regulation or policy that can
+# require a control: the overlay legend's "R" covers both an authority that "requires the control
+# selection" and one the control "helps to meet". A removal tests only the requiring ones.
+GUIDANCE = re.compile(r"^(NIST SP |NISTIR |NARA GRS$|Privacy and Civil Liberties Implementation)")
+
+
+def is_guidance(name: str) -> bool:
+    return bool(GUIDANCE.match(name))
+
+
 def authorities(references: str) -> list[str]:
     """The authorities a reference string names, normalized and in order of first mention."""
     found: list[tuple[int, str]] = []
@@ -281,9 +290,10 @@ class Applied:
     control: str
     disposition: str  # select, not-select or recommend
     statements: tuple[dict, ...]  # guidance, extension and parameter statements that apply
-    authorities: tuple[str, ...]
+    authorities: tuple[str, ...]  # the laws, regulations and policies, which can require it
     references: str
     citation: dict
+    guidance: tuple[str, ...] = ()  # guidance documents the references name
 
     @property
     def title(self) -> str:
@@ -354,7 +364,8 @@ def applied(repo: Path, overlays: list[str]) -> dict[str, list[Applied]]:
                          or (st["kind"] != "justification" and _applies(st, sets, selecting)))
             out.setdefault(cid, []).append(Applied(
                 ref, cid, disposition, rest, tuple(spec.get("authorities") or ()),
-                spec.get("references") or "", spec["citation"]))
+                spec.get("references") or "", spec["citation"],
+                tuple(spec.get("guidance_references") or ())))
     return out
 
 
@@ -563,8 +574,9 @@ def render(parsed: dict[str, list[Spec]]) -> str:
         "# Section 6 of each transcribed overlay, per control, checked against the overlay's",
         "# summary table. Schema: framework/schema/overlay-specs.schema.json.",
         "# sets: the Privacy Overlays control sets a statement applies to (none: every set,",
-        "# or an overlay without sets). authorities: what the references name, in the form",
-        "# tailoring.yaml law_policy.authorities names them (OVS-001).",
+        "# or an overlay without sets). authorities: the laws, regulations and policies the",
+        "# references name, in the form tailoring.yaml law_policy.authorities names them",
+        "# (OVS-001); guidance_references: the guidance they name, which requires nothing.",
         "overlays:",
     ]
     for ref, specs in parsed.items():
@@ -588,7 +600,13 @@ def render(parsed: dict[str, list[Spec]]) -> str:
             if s.references:
                 out.append(f"        references: {_q(s.references)}")
                 names = authorities(s.references)
-                out.append(f"        authorities: [{', '.join(_q(n) for n in names)}]")
+                required = [n for n in names if not is_guidance(n)]
+                guidance = [n for n in names if is_guidance(n)]
+                if required:
+                    out.append(f"        authorities: [{', '.join(_q(n) for n in required)}]")
+                if guidance:
+                    out.append(f"        guidance_references: "
+                               f"[{', '.join(_q(n) for n in guidance)}]")
     return "\n".join(out) + "\n"
 
 

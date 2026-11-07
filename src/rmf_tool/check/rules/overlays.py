@@ -18,7 +18,7 @@ from rmf_tool.check.rules.content import SSP_DIR, family_records
 from rmf_tool.check.rules.tailoring import TAILORING, _actions, _active, _categorization, _tailoring
 
 # Who coordinates a control the Privacy Overlays say not to select: the SAOP, whom PER-PRIV
-# plays, or a designee in that office (CNSSI 1253F Att. 6, AC-2(8)).
+# plays, or a designee, who records designee_of: PER-PRIV (CNSSI 1253F Att. 6, AC-2(8)).
 SAOP = "PER-PRIV"
 # An SSP status under which the system sets no parameter of its own: the provider does, or the
 # control does not apply.
@@ -65,7 +65,8 @@ def removal_authorities(ctx: Context) -> list[RunFinding]:
 def not_selected(ctx: Context) -> list[RunFinding]:
     """A control the applied Privacy Overlays control set justifies not selecting is selected
     only after coordinating with the SAOP or designee: the tailoring action that keeps or adds
-    it records privacy_coordination by PER-PRIV (CNSSI 1253F Att. 6, AC-2(8))."""
+    it records privacy_coordination by PER-PRIV or a designee of PER-PRIV (CNSSI 1253F Att. 6,
+    AC-2(8))."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
@@ -84,7 +85,7 @@ def not_selected(ctx: Context) -> list[RunFinding]:
             out.append(make("OVS-002", f"{cid} is selected, and no tailoring action records "
                             "the coordination with the SAOP or designee that the Privacy "
                             "Overlays require before it is selected", TAILORING, None, {"S-2"}))
-        elif record.get("by") != SAOP:
+        elif SAOP not in (record.get("by"), record.get("designee_of")):
             out.append(make("OVS-002", f"{cid}: the coordination before selecting it is with "
                             f"{record.get('by')}, not the SAOP or designee ({SAOP})", TAILORING,
                             None, {"S-2"}))

@@ -5,7 +5,9 @@
   "description": "Section 6 of each transcribed CNSSI 1253 overlay, per control: the justification, guidance, control extension, parameter values and regulatory/statutory references, written by `uv run python -m rmf_tool.overlay_specs` and checked against the overlay's summary table (never hand-edited, INV-2). Read by OVS-001 to OVS-003 and `rmf catalog show --fields overlay`.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["overlays"],
+  "required": [
+    "overlays"
+  ],
   "properties": {
     "overlays": {
       "type": "array",
@@ -13,27 +15,56 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["overlay", "specs"],
+        "required": [
+          "overlay",
+          "specs"
+        ],
         "properties": {
-          "overlay": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
+          "overlay": {
+            "type": "string",
+            "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+          },
           "specs": {
             "type": "array",
             "minItems": 1,
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["control", "heading", "citation"],
+              "required": [
+                "control",
+                "heading",
+                "citation"
+              ],
               "properties": {
-                "control": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"},
-                "heading": {"type": "string", "minLength": 1},
+                "control": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+                },
+                "heading": {
+                  "type": "string",
+                  "minLength": 1
+                },
                 "citation": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["ref", "page", "anchor"],
+                  "required": [
+                    "ref",
+                    "page",
+                    "anchor"
+                  ],
                   "properties": {
-                    "ref": {"type": "string", "minLength": 1},
-                    "page": {"type": "integer", "minimum": 1},
-                    "anchor": {"type": "string", "minLength": 1}
+                    "ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "page": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "anchor": {
+                      "type": "string",
+                      "minLength": 1
+                    }
                   }
                 },
                 "in_privacy_baseline": {
@@ -46,29 +77,70 @@
                   "items": {
                     "type": "object",
                     "additionalProperties": false,
-                    "required": ["kind", "text"],
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
                     "properties": {
-                      "kind": {"enum": ["justification", "extension", "guidance", "parameter"]},
+                      "kind": {
+                        "enum": [
+                          "justification",
+                          "extension",
+                          "guidance",
+                          "parameter"
+                        ]
+                      },
                       "disposition": {
                         "description": "On a justification: select (+), not-select (--) or recommend (a Privacy Enhancing control, optional).",
-                        "enum": ["select", "not-select", "recommend"]
+                        "enum": [
+                          "select",
+                          "not-select",
+                          "recommend"
+                        ]
                       },
                       "sets": {
                         "description": "The Privacy Overlays control sets the statement applies to; absent, every set the control is specified for.",
                         "type": "array",
                         "minItems": 1,
                         "uniqueItems": true,
-                        "items": {"enum": ["ACCT", "LOW", "MODERATE", "HIGH", "ENHANCING"]}
+                        "items": {
+                          "enum": [
+                            "ACCT",
+                            "LOW",
+                            "MODERATE",
+                            "HIGH",
+                            "ENHANCING"
+                          ]
+                        }
                       },
-                      "text": {"type": "string", "minLength": 1}
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      }
                     }
                   }
                 },
-                "references": {"type": "string", "minLength": 1},
+                "references": {
+                  "type": "string",
+                  "minLength": 1
+                },
                 "authorities": {
                   "type": "array",
                   "minItems": 1,
-                  "items": {"type": "string", "minLength": 1}
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": "The laws, regulations and policies the references name; a removal names each (OVS-001)."
+                },
+                "guidance_references": {
+                  "description": "The guidance documents the references name (NIST SPs, NISTIRs, NARA GRS, the ISE guide); they help to meet a requirement and require nothing.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
                 }
               }
             }

@@ -70,6 +70,11 @@ def test_spot_checks_against_the_pdf(data):
     assert "not to exceed 15 minutes of inactivity" in ac11["statements"][1]["text"]
     assert ac11["authorities"] == ["EO 13526", "EO 13587"]
     assert ac11["citation"] == {"ref": CLASSIFIED, "page": 12, "anchor": "AC-11, Device Lock"}
+    assert by[(CLASSIFIED, "ia-2.1")]["heading"].endswith("| Multi-Factor Authentication to "
+                                                          "Privileged Accounts")
+    ac17 = by[(PRIVACY, "ac-17")]
+    assert ac17["authorities"] == ["5 U.S.C. 552a", "OMB M-17-12"]
+    assert ac17["guidance_references"] == ["NIST SP 800-46"]
     ac28 = by[(PRIVACY, "ac-2.8")]["statements"][0]
     assert ac28["disposition"] == "not-select"
     assert ac28["sets"] == ["ACCT", "LOW", "MODERATE", "HIGH"]
@@ -145,6 +150,12 @@ def test_privacy_run_with_values_and_named_authorities_is_clean(tmp_path):
         "scoping": {"consideration": "technology"},
         "law_policy": {**LAW, "authorities": ["5 U.S.C. 552a(b)", "EO 14028 Sec 3(a)"]},
         "rationale": "No records to protect.", "sources": ["INT-028.A3"]})
+    # NIST SP 800-46 is guidance among AC-17's references and requires nothing
+    _add_action(run_dir, {
+        "control_id": "ac-17", "action": "remove", "basis": "scoping",
+        "scoping": {"consideration": "technology"},
+        "law_policy": {**LAW, "authorities": ["5 U.S.C. 552a(e)(10)", "OMB M-17-12"]},
+        "rationale": "No remote access.", "sources": ["INT-028.A3"]})
     # a recommended (Privacy Enhancing) control is optional, so its removal names nothing
     _add_action(run_dir, {
         "control_id": "ac-2.6", "action": "remove", "basis": "no-risk", "law_policy": LAW,
@@ -170,8 +181,8 @@ def test_coordinated_not_select_control_and_malformed_input_report_no_crash(tmp_
     edit_yaml(run_dir / "run.yaml", lambda d: d["control_subset"].append("ac-2.8"))
     _add_action(run_dir, {
         "control_id": "ac-2.8", "action": "add", "rationale": "Coalition accounts.",
-        "privacy_coordination": {"by": "PER-PRIV", "finding": "Limited to need.",
-                                 "sources": ["INT-028.A3"]},
+        "privacy_coordination": {"by": "PER-ISSM", "designee_of": "PER-PRIV",
+                                 "finding": "Limited to need.", "sources": ["INT-028.A3"]},
         "sources": ["INT-028.A3"]})
     from rmf_tool import baseline
 
@@ -192,7 +203,7 @@ def test_catalog_show_prints_the_overlay_specification(tmp_path, monkeypatch):
     result = runner.invoke(app, ["catalog", "show", "--run", str(run_dir), "--control", "ac-2",
                                  "--fields", "title,overlay"])
     assert result.exit_code == 0, result.stdout
-    assert f"overlay {PRIVACY} (select):" in result.stdout
+    assert f"overlay {PRIVACY} (select), page 28: AC-2, ACCOUNT MANAGEMENT" in result.stdout
     assert "authorities: 5 U.S.C. 552a; FISA; EO 12333" in result.stdout
     assert runner.invoke(app, ["catalog", "show", "--family", "ac", "--fields",
                                "overlay"]).exit_code == 2

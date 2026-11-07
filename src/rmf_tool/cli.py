@@ -710,6 +710,7 @@ def catalog_show(
             v[catalog_mod.OVERLAY_FIELD] = [
                 {"overlay": a.overlay, "disposition": a.disposition,
                  "statements": list(a.statements), "authorities": list(a.authorities),
+                 "guidance_references": list(a.guidance),
                  "citation": dict(a.citation)} for a in specs.get(v["id"], [])]
     if fmt is OutputFormat.json:
         typer.echo(json.dumps({"controls": views}, indent=2))

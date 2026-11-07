@@ -141,10 +141,14 @@ def render_text(v: dict[str, Any]) -> str:
     for pid, text in (v.get("params") or {}).items():
         lines.append(f"  param {pid}: {text}")
     for spec in v.get(OVERLAY_FIELD) or ():
-        lines.append(f"  overlay {spec['overlay']} ({spec['disposition']}):")
+        cite = spec["citation"]
+        lines.append(f"  overlay {spec['overlay']} ({spec['disposition']}), page {cite['page']}: "
+                     f"{cite['anchor']}")
         lines += [f"    {st['kind']}: {st['text']}" for st in spec["statements"]]
         if spec["authorities"]:
             lines.append(f"    authorities: {'; '.join(spec['authorities'])}")
+        if spec.get("guidance_references"):
+            lines.append(f"    guidance references: {'; '.join(spec['guidance_references'])}")
     return "\n".join(lines)
 
 
