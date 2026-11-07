@@ -9,6 +9,7 @@ from collections.abc import Callable
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
+    acquisition,
     artifacts,
     assess_only,
     assessment,
@@ -20,9 +21,11 @@ from rmf_tool.check.rules import (
     cloud,
     config,
     connections,
+    considerations,
     consistency,
     content,
     coverage,
+    css_strategy,
     dashboard,
     engineering,
     generated,
@@ -38,8 +41,10 @@ from rmf_tool.check.rules import (
     overlays,
     pentest,
     plans,
+    pm_scrm,
     privacy,
     protection,
+    receiving,
     reciprocity,
     requirements,
     rigor,
@@ -52,8 +57,10 @@ from rmf_tool.check.rules import (
     system,
     tailoring,
     teststrategy,
+    threat,
     updates,
     vulnerability,
+    workforce,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -111,6 +118,10 @@ RULES: dict[str, Rule] = {
     "OVS-001": overlays.removal_authorities,
     "OVS-002": overlays.not_selected,
     "OVS-003": overlays.parameter_values,
+    "PIC-001": considerations.coordinated,
+    "WFQ-001": workforce.qualification,
+    "WFQ-002": workforce.isso_primary,
+    "THREAT-001": threat.designation,
     "SPCOV-001": overlays.space_scope,
     "SPCOV-002": overlays.space_policy_controls,
     "SPCOV-003": overlays.tailored_baseline,
@@ -159,6 +170,10 @@ RULES: dict[str, Rule] = {
     "MCHG-003": monitor.le_ci,
     "MCON-001": monitor.connections,
     "MLEV-001": monitor.inheritance,
+    "RECIP-001": receiving.package_review,
+    "RECIP-002": receiving.additional_controls,
+    "RECIP-003": receiving.support_ended,
+    "RECIP-004": receiving.origin,
     "MPOA-001": monitor.poam_sources,
     "MRPT-001": monitor.posture_reports,
     "MRPT-002": monitor.organization_tier,
@@ -254,6 +269,8 @@ RULES: dict[str, Rule] = {
     **dict(ongoing.rules()),
     **dict(plans.rules()),
     **dict(protection.rules()),
+    **dict(css_strategy.rules()),
+    **dict(pm_scrm.rules()),
     **dict(teststrategy.rules()),
     **updates.RULES,
     **vulnerability.RULES,
@@ -267,6 +284,7 @@ RULES: dict[str, Rule] = {
     **dict(governance.rules()),
     **dict(cloud.rules()),
     **dict(cato.rules()),
+    **dict(acquisition.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

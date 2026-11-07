@@ -15,6 +15,11 @@ mutations:
     pathway: PW-SWP
     product_kind: software
     set_by_task: M-6
+    covered_dbs: false
+- op: set_field
+  file: artifacts/data/protection-requirements.yaml
+  path: capability_document.kind
+  value: cns
 - op: set_field
   file: artifacts/data/authorizations.yaml
   path: system_status
@@ -40,11 +45,15 @@ mutations:
 - op: set_field
   file: artifacts/data/protection.yaml
   path: program.decision_points
-  value: [{id: DP-SWP-PATHWAY, date: "2026-03-15"}]
+  value:
+  - id: DP-SWP-PATHWAY
+    date: '2026-03-15'
 - op: set_field
   file: artifacts/data/protection.yaml
   path: ppp.submissions
-  value: [{decision_point: DP-SWP-PATHWAY, date: "2026-03-10"}]
+  value:
+  - decision_point: DP-SWP-PATHWAY
+    date: '2026-03-10'
 - op: set_field
   file: artifacts/data/protection.yaml
   path: ppp.tailoring.pathway
@@ -56,7 +65,11 @@ mutations:
 - op: set_field
   file: artifacts/data/test-strategy.yaml
   path: document
-  value: {id: TS-1, kind: test-strategy, pathway: PW-SWP, date: "2026-04-01"}
+  value:
+    id: TS-1
+    kind: test-strategy
+    pathway: PW-SWP
+    date: '2026-04-01'
 - op: set_field
   file: artifacts/data/test-strategy.yaml
   path: events.0.decision_point
@@ -86,5 +99,7 @@ expect:
   - SVCA-001
   also:
   - ASMT-010
+  - CSSTRAT-001
+  - CSSTRAT-003
   messages:
   - no CSSP sensors and tools detect vulnerabilities

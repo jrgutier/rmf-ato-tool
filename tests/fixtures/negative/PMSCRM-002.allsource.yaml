@@ -1,0 +1,20 @@
+rule: PMSCRM-002
+bases:
+- minimal
+description: a space NSS mitigation not informed by all-source threat information
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.threat_information.0.kind
+  value: other
+expect:
+  errors:
+  - PMSCRM-002
+  messages:
+  - mitigation SCM-1 of a space NSS is not informed by all-source supply chain threat information
+  also:
+  - SPCOV-001

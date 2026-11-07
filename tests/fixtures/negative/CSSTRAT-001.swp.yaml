@@ -1,0 +1,28 @@
+rule: CSSTRAT-001
+bases:
+- minimal
+description: a software pathway program with no DA-approved acquisition strategy
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: facts.yaml
+  path: acquisition.covered_dbs
+  value: false
+- op: set_field
+  file: artifacts/data/protection-requirements.yaml
+  path: capability_document.kind
+  value: cns
+expect:
+  errors:
+  - CSSTRAT-001
+  messages:
+  - on the software pathway the DA approves the acquisition strategy that includes the CSS
+  also:
+  - CSSTRAT-003
+  - PPROT-001
+  - PPROT-002
+  - TSTRAT-001
+  - TSTRAT-002

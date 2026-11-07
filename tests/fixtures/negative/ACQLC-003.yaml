@@ -1,0 +1,32 @@
+rule: ACQLC-003
+bases:
+- minimal
+description: IOC is recorded with no first fielding before it
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: MS-FIELD
+    date: '2026-10-01'
+  - id: MS-IOC
+    date: '2026-09-01'
+- op: set_field
+  file: facts.yaml
+  path: lifecycle_phase.value
+  value: PH-OS
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.pss
+  value:
+    approved_by: PER-MDA
+    date: '2026-05-01'
+expect:
+  errors:
+  - ACQLC-003
+  messages:
+  - the O&S phase begins upon fielding of the first system, which may precede IOC

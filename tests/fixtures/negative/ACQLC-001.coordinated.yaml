@@ -1,0 +1,38 @@
+rule: ACQLC-001
+bases:
+- minimal
+description: an information requirement at the entry point is coordinated with no one
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathways
+  value:
+  - PW-MCA
+  - PW-SWP
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.transitions
+  value:
+  - from: PW-MCA
+    to: PW-SWP
+    at: MS-B
+    entry: DP-SWP-PATHWAY
+    date: '2026-06-01'
+    information_requirements:
+    - id: EXT-CAPDOC
+      coordinated_with: []
+    approach:
+      identified_by:
+      - PER-PM
+      - PER-ISSM
+      approved_by: PER-MDA
+      date: '2026-05-01'
+      tailors:
+      - processes
+      - reviews
+      - documentation
+expect:
+  errors:
+  - ACQLC-001
+  messages:
+  - the information requirement is coordinated with no persona

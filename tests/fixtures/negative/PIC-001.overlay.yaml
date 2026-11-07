@@ -1,0 +1,30 @@
+rule: PIC-001
+description: the relay applies the Classified System Overlay, whose Table 1 marks au-6 with implication 1, and au-6 is implemented with no coordination with the SAOP
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253E-ATT5-CLASSIFIED
+- op: set_field
+  file: run.yaml
+  path: control_subset
+  value: [ac-2, au-2, au-6, cm-6, ia-2, sc-7, sc-15, si-2]
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - PIC-001
+  also:
+  - RECIP-001
+  - ASMT-002
+  - FACTS-001
+  - SAR-COV-001
+  - SSP-COV-001
+  - SYSD-001
+  - TLR-003
+  - TLR-005
+  messages:
+  - au-6 is selected with a Privacy Implementation Considerations checkmark, and no privacy_implementation record shows the coordination with the SAOP or designee before it is implemented

@@ -1,0 +1,14 @@
+rule: PIC-001
+description: the coordination on sc-7 addresses design choices but not the implication its checkmark carries, that PII should not flow into a system not authorized to process PII
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: privacy_implementation.2.implications
+  value: [2]
+expect:
+  errors:
+  - PIC-001
+  messages:
+  - "sc-7: the coordination does not address implication 4 of its checkmark (PII should not flow through or into a system that is not authorized to process PII)"

@@ -2,25 +2,27 @@ rule: OVLX-001
 bases: [minimal]
 description: an overlay of kind other tailors controls out with no law and policy test
 mutations:
-  - op: set_field
-    file: artifacts/data/org-context.yaml
-    path: obtained_overlays
-    value:
-      - id: OBT-OVL-LOCAL
-        title: Local overlay
-        kind: other
-        owner: Program office
-        obtained_from: owning-organization
-        applicability: [{question: Does the system run the relay?, answer: true, sources: [INT-028.A2]}]
-        controls: {remove: [au-2]}
-        sources: [INT-028.A2]
-  - op: set_field
-    file: facts.yaml
-    path: categorization.overlays
-    value: [OBT-OVL-LOCAL]
-  - op: resolve_baseline
-    file: baseline.json
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: obtained_overlays
+  value:
+  - id: OBT-OVL-LOCAL
+    title: Local overlay
+    kind: other
+    owner: Program office
+    obtained_from: owning-organization
+    applicability: [{question: Does the system run the relay?, answer: true, sources: [INT-028.A2]}]
+    controls: {remove: [au-2]}
+    sources: [INT-028.A2]
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [OBT-OVL-LOCAL]
+- op: resolve_baseline
+  file: baseline.json
 expect:
   errors: [OVLX-001]
   messages:
-    - "OBT-OVL-LOCAL (other) tailors out au-2; a removal outside an overlay authority's own specifications is S-2 tailoring, tested by TLR-002"
+  - "OBT-OVL-LOCAL (other) tailors out au-2; a removal outside an overlay authority's own specifications is S-2 tailoring, tested by TLR-002"
+  also:
+  - RECIP-001

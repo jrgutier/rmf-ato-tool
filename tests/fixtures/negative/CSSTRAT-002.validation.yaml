@@ -1,0 +1,20 @@
+rule: CSSTRAT-002
+bases:
+- minimal
+description: a monitoring-driven CSS review with no AO validation or reason
+mutations:
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: reviews.0.prompted_by
+  value:
+  - continuous-monitoring
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: reviews.0.coordinated_with
+  value:
+  - PER-AODR
+expect:
+  errors:
+  - CSSTRAT-002
+  messages:
+  - the iteration concludes with the AO validating the CSS and updated POA&M, or the record says why not

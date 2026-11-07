@@ -35,6 +35,13 @@ by the PM or SO.
 
 ## Question bank by step
 
+- **P (P-14), a primary role (DoDI 8510.01 Table 1):** Which operational weaknesses and
+  workarounds should the risk assessment carry? Which component faces the most severe threat,
+  and is the system's designated risk at least that level?
+- **P (P-17), a primary role:** Which security requirements fall to the system and which to the
+  environment it runs in, as operated today?
+- **S (S-3), a primary role (DoDI 8510.01 Table 3):** Which controls does the system run itself,
+  which does a provider supply, and on which elements does each run?
 - **S (S-4):** How are accounts requested, approved, created, reviewed and removed? How often
   are they reviewed, and when was the last review? Which events are logged, where do they
   go, and who reviews them how often? How are updates installed, and how current is each

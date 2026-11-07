@@ -1,5 +1,6 @@
 rule: OVS-001
-description: a control the Privacy Overlay selects is removed with law_policy naming only one of the authorities the overlay cites for it
+description: a control the Privacy Overlay selects is removed with law_policy naming only one of the authorities
+  the overlay cites for it
 bases:
 - minimal
 mutations:
@@ -10,24 +11,19 @@ mutations:
   - CNSSI1253F-ATT6-PRIVACY-ACCT
 - op: replace_text
   file: artifacts/data/tailoring.yaml
-  old: "assurance:"
-  new: "  - {id: AS-PRV-1, holds: true, rationale: Users complete privacy training before their accounts are enabled., sources: [INT-028.A2]}\nassurance:"
+  old: 'assurance:'
+  new: '  - {id: AS-PRV-1, holds: true, rationale: Users complete privacy training before their accounts
+    are enabled., sources: [INT-028.A2]}
+
+    assurance:'
 - op: replace_text
   file: artifacts/data/tailoring.yaml
-  old: "  - control_id: cp-3.1"
-  new: |2-
-      - control_id: ac-3
-        action: remove
-        basis: scoping
-        scoping: {consideration: technology}
-        law_policy:
-          reviewed: [legislation, regulation, policy, omb-policy]
-          requires_control: false
-          authorities: ["5 U.S.C. 552a(b), (e)(9)-(10)"]
-          sources: [INT-028.A3]
-        rationale: The relay holds no records that access enforcement would protect.
-        sources: [INT-028.A3]
-      - control_id: cp-3.1
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ac-3\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:\
+    \ false\n      authorities: [\"5 U.S.C. 552a(b), (e)(9)-(10)\"]\n      sources: [INT-028.A3]\n   \
+    \ rationale: The relay holds no records that access enforcement would protect.\n    sources: [INT-028.A3]\n\
+    \  - control_id: cp-3.1"
 - op: set_field
   file: artifacts/ssp/controls/ac.yaml
   path: controls.0.parameters
@@ -45,5 +41,7 @@ expect:
   - OVS-001
   also:
   - PIIC-001
+  - RECIP-001
   messages:
-  - ac-3 is removed, and law_policy.authorities does not name EO 14028, which the Privacy Overlay references cite for it
+  - ac-3 is removed, and law_policy.authorities does not name EO 14028, which the Privacy Overlay references
+    cite for it

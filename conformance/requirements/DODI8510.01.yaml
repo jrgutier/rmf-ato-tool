@@ -54,7 +54,9 @@ requirements:
     locator: "1.2.f"
     context: "POLICY"
     statement: "f. The DoD Information Enterprise will use cybersecurity reciprocity to reduce redundant testing, assessing, documenting, and the associated costs in time and resources."
-    status: "candidate"
+    status: "partial"
+    reason: "Reciprocity reducing redundant documenting is held by RECIP-004 (the core documents reused, or the reason given); reducing redundant testing is RCP-004's built-in re-test clause, and RCP-004 is at its fan-out cap."
+    evidence: [{"kind": "rule", "target": "RECIP-004", "fixture": "tests/fixtures/negative/RECIP-004.reuse.yaml", "expect": "is neither reused nor explained", "asserts": "Cybersecurity reciprocity reduces redundant documenting: a core document neither reused nor explained fails", "claim": "constraint", "sentence": "The DoD Information Enterprise will use cybersecurity reciprocity to reduce redundant testing, assessing, documenting, and the associated costs in time and resources.", "holds_when": "ART-SD is produced or seeded"}]
     work_item: "WI-29"
   - id: "REQ-DODI8510.01-0008"
     citation: {"ref": "DODI8510.01", "page": 4, "anchor": "The RMF system authorization information will be shared to support system to"}
@@ -478,7 +480,9 @@ requirements:
     locator: "2.7.s"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "s. Oversee and verify that personnel engaged in, or supporting, the RMF are appropriately trained and possess professional certifications in accordance with DoDD 8140.01 and supporting issuances."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. WFQ-001 fails training and qualification verified by no official other than the appointee, and an appointee not meeting the DoDD 8140.01 qualification, of which certification is one path."
+    evidence: [{"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.verified.yaml", "expect": "are not verified by another official", "claim": "constraint", "asserts": "Verify that personnel engaged in the RMF are appropriately trained: a training verified by no other official fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}, {"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Personnel possess professional certifications in accordance with DoDD 8140.01: an appointee not meeting its qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0063"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Ensure Component information SOs appoint user representatives (URs) for DoD systems under"}
@@ -532,7 +536,9 @@ requirements:
     locator: "2.8.a"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In coordination with the DoD CISO, and in addition to the responsibilities in Paragraph 2.7., the Chairman of the Joint Chiefs of Staff:"
     statement: "a. Requires the Joint Capabilities Integration and Development System process to support and document system categorization in accordance with this issuance."
-    status: "candidate"
+    status: "covered"
+    reason: "What reaches a run of the requirements process documenting categorization: ACQLC-005 refuses a categorization documented in another document than the capability document P-15 read."
+    evidence: [{"kind": "rule", "target": "ACQLC-005", "fixture": "tests/fixtures/negative/ACQLC-005.yaml", "expect": "not in the capability document", "claim": "constraint", "asserts": "The requirements process documents the system categorization in the capability document, and a categorization documented elsewhere fails"}]
     work_item: "WI-33"
   - id: "REQ-DODI8510.01-0070"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Maps systems to dependent missions."}
@@ -789,7 +795,9 @@ requirements:
     locator: "3.2"
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Task P-14 Mission-Based Cyber Risk Assessment | A system-level risk assessment is completed or an existing risk assessment is updated. [CSF: ID.RA; ID.SC-2] | • SO • Information System Security Officer (ISSO) • System Privacy Officer"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: PER-ISSO is in the RACI's R in place of PER-ISSM (now consulted), and its FW-TASK-002 waiver is gone; WFQ-002 fails a P-14 written without an ISSO interview. The outcome is held by P-14's exit criteria and rules as before."
+    evidence: [{"kind": "rule", "target": "WFQ-002", "fixture": "tests/fixtures/negative/WFQ-002.yaml", "expect": "and the ISSO gave no", "claim": "constraint", "asserts": "The ISSO is a primary role of Task P-14: a P-14 with no ISSO interview fails", "holds_when": "the task has written its outputs"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0102"
     citation: {"ref": "DODI8510.01", "page": 14, "anchor": "Task P-15 Requirements Definition | Security and privacy requirements are defined and"}
@@ -811,7 +819,9 @@ requirements:
     locator: "3.2"
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Task P-17 Requirements Allocation | Security and privacy requirements are allocated to the system and to the environment in which the system operates. [CSF: ID.GV] | • Security Architect • Privacy Architect • ISSO • System Privacy Officer"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: PER-ISSO is in the RACI's R in place of PER-ISSM (now consulted), and its FW-TASK-002 waiver is gone; WFQ-002 fails a P-17 written without an ISSO interview. The outcome is held by P-17's exit criteria and rules as before."
+    evidence: [{"kind": "rule", "target": "WFQ-002", "fixture": "tests/fixtures/negative/WFQ-002.P-17.yaml", "expect": "and the ISSO gave no", "claim": "constraint", "asserts": "The ISSO is a primary role of Task P-17: a P-17 with no ISSO interview fails", "holds_when": "the task has written its outputs"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0105"
     citation: {"ref": "DODI8510.01", "page": 14, "anchor": "Task P-18 System Registration | The system is registered for purposes of"}
@@ -871,7 +881,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. Select Tasks and Outcomes, Continued"
     statement: "Task S-3 Control Allocation | • Controls are designated as system-specific, hybrid, or common controls. • Controls are allocated to the specific system elements (i.e., machine, physical, or human elements). [CSF: Profile; PR.IP] | • Security Architect • Privacy Architect • ISSO • System Privacy Officer"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: PER-ISSO is in the RACI's R in place of PER-ISSM (now consulted), and its FW-TASK-002 waiver is gone; WFQ-002 fails a S-3 written without an ISSO interview. The outcome is held by S-3's exit criteria and rules as before."
+    evidence: [{"kind": "rule", "target": "WFQ-002", "fixture": "tests/fixtures/negative/WFQ-002.S-3.yaml", "expect": "and the ISSO gave no", "claim": "constraint", "asserts": "The ISSO is a primary role of Task S-3: a S-3 with no ISSO interview fails", "holds_when": "the task has written its outputs"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0113"
     citation: {"ref": "DODI8510.01", "page": 16, "anchor": "Task S-4 Documentation of Planned Control Implementations | Controls and associated tailoring"}
@@ -1155,7 +1167,9 @@ requirements:
     locator: "3.3.a.(3)"
     context: "INTEGRATING THE RMF INTO THE DEFENSE ACQUISITION MANAGEMENT SYSTEM"
     statement: "(3) Risks to systems must be designated consistent with the most severe threat to any individual component or subcomponent for consideration of requirements, acquisition, and T&E."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: ra.yaml system_risk, the P-14 exit criterion and template. THREAT-001 fails a system risk designated below the highest risk ra.yaml rates against any component (threat events, connections, supply chain), and a missing designation."
+    evidence: [{"kind": "rule", "target": "THREAT-001", "fixture": "tests/fixtures/negative/THREAT-001.yaml", "expect": "the most severe threat to any individual component", "claim": "constraint", "asserts": "Risks to systems are designated consistent with the most severe threat to any individual component: a designation below it fails", "holds_when": "ART-RA is produced or seeded"}, {"kind": "rule", "target": "THREAT-001", "fixture": "tests/fixtures/negative/THREAT-001.supply.yaml", "expect": "the most severe threat to any individual component", "claim": "constraint", "asserts": "The most severe threat to any individual component or subcomponent includes a supply chain risk to a component", "holds_when": "ART-RA is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0148"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "The Adaptive Acquisition Framework is defined and illustrated in DoDI 5000.02."}
@@ -1554,7 +1568,9 @@ requirements:
     locator: "4.3.c.(1).(d)"
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: Each DoD Component CIO: Supported by the DoD Component CISO appointed in accordance with DoDI 8500.01,"
     statement: "(d) Enforcing training requirements for persons participating in the RMF."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. WFQ-001 fails an appointee participating in the RMF with no training recorded."
+    evidence: [{"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.verified.yaml", "expect": "are not verified by another official", "claim": "constraint", "asserts": "Enforcing training requirements for persons participating in the RMF: training verified by no official other than the person fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8510.01-0197"
     citation: {"ref": "DODI8510.01", "page": 26, "anchor": "Maintains visibility of assessment and authorization status of DoD Component systems through"}
@@ -1862,7 +1878,9 @@ requirements:
     locator: "4.4.b.(4).(a)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: SOs:"
     statement: "(a) In coordination with the IOs, data owners or stewards, categorize systems in accordance with CNSSI 1253 and document the categorization in the appropriate Joint Capabilities Integration and Development System capabilities document (e.g., capabilities development document)."
-    status: "candidate"
+    status: "covered"
+    reason: "C-2 categorizes per CNSSI 1253 with the IOs (CATG-001 to CATG-003); ACQLC-005 holds that the categorization is documented in the program's capability document and ACQLC-004 that the document is the kind the pathway uses (the CDD or, after JCIDS, its equivalent)."
+    evidence: [{"kind": "rule", "target": "ACQLC-005", "fixture": "tests/fixtures/negative/ACQLC-005.yaml", "expect": "not in the capability document", "claim": "constraint", "asserts": "The categorization is documented in the capabilities document of the program, and another document fails"}, {"kind": "rule", "target": "ACQLC-004", "fixture": "tests/fixtures/negative/ACQLC-004.kind.yaml", "expect": "document is not the capability document of the", "claim": "constraint", "asserts": "The appropriate capabilities document is the kind the pathway uses; a capabilities document of another kind fails"}]
     work_item: "WI-33"
   - id: "REQ-DODI8510.01-0236"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Appoint a UR for assigned systems."}

@@ -1,0 +1,17 @@
+rule: CSSTRAT-002
+bases:
+- minimal
+description: a contract award with no CSS review before it
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: contract_awards
+  value:
+  - id: K-001
+    date: '2026-05-01'
+    no_update_reason: Award for spares only.
+expect:
+  errors:
+  - CSSTRAT-002
+  messages:
+  - the CSS is reviewed prior to contract award K-001

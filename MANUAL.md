@@ -75,10 +75,10 @@ Conventions:
 | # | Phase | Starts at | Ends at | Milestones and decision points | Technical reviews | RMF tasks (primary phase) | Also active | Authorization decisions |
 |---|---|---|---|---|---|---|---|---|
 | 1 | [MSA](#ph-msa) Materiel Solution Analysis | [MDD](#ms-mdd) | [MS A](#ms-a) | [MDD](#ms-mdd), [MS A](#ms-a) | — | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | [P-16](#task-p-16) | — |
-| 2 | [TMRR](#ph-tmrr) Technology Maturation and Risk Reduction | [MS A](#ms-a) | [MS B](#ms-b) | [Dev RFP RD](#ms-drfprd), [MS B](#ms-b) | [SRR](#rv-srr), [SFR](#rv-sfr), [PDR](#rv-pdr) | [P-16](#task-p-16), [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) | [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | — |
+| 2 | [TMRR](#ph-tmrr) Technology Maturation and Risk Reduction | [MS A](#ms-a) | [MS B](#ms-b) | [CDD validation](#ms-cddv), [Dev RFP RD](#ms-drfprd), [MS B](#ms-b) | [SRR](#rv-srr), [SFR](#rv-sfr), [PDR](#rv-pdr) | [P-16](#task-p-16), [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) | [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | — |
 | 3 | [EMD](#ph-emd) Engineering and Manufacturing Development | [MS B](#ms-b) | [MS C](#ms-c) | [MS C](#ms-c) | [CDR](#rv-cdr), [TRR](#rv-trr), [SVR/FCA](#rv-svr), [PRR](#rv-prr) | [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) | [S-4](#task-s-4), [S-5](#task-s-5) | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
-| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
-| 5 | [O&S](#ph-os) Operations and Support | [IOC](#ms-ioc) | — | [FOC](#ms-foc) | — | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | [P-3](#task-p-3) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
+| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [First fielding](#ms-field), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
+| 5 | [O&S](#ph-os) Operations and Support | [First fielding](#ms-field) | — | [FOC](#ms-foc) | — | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | [P-3](#task-p-3) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
 
 The flowchart shows the phases in order, joined by the milestones that open and close them. Dotted
 lines lead to events inside a phase and to the tasks where the Authorizing Official makes an
@@ -90,14 +90,16 @@ flowchart LR
   MS_MDD --> PH_MSA["MSA: Materiel Solution Analysis<br/>RMF: Prepare, Categorize"]
   PH_MSA --> MS_A{{"MS A"}}
   MS_A --> PH_TMRR["TMRR: Technology Maturation and Risk Reduction<br/>RMF: Prepare, Categorize, Select"]
+  PH_TMRR -.- MS_CDDV{{"CDD validation"}}
   PH_TMRR -.- MS_DRFPRD{{"Dev RFP RD"}}
   PH_TMRR --> MS_B{{"MS B"}}
   MS_B --> PH_EMD["EMD: Engineering and Manufacturing Development<br/>RMF: Select, Implement, Assess, Authorize"]
   PH_EMD --> MS_C{{"MS C"}}
   MS_C --> PH_PD["P#amp;D: Production and Deployment<br/>RMF: Authorize, Monitor"]
+  PH_PD -.- MS_IOC{{"IOC"}}
   PH_PD --> MS_FRP{{"FRP/FD"}}
-  MS_FRP --> MS_IOC{{"IOC"}}
-  MS_IOC --> PH_OS["O#amp;S: Operations and Support<br/>RMF: Prepare, Monitor"]
+  MS_FRP --> MS_FIELD{{"First fielding"}}
+  MS_FIELD --> PH_OS["O#amp;S: Operations and Support<br/>RMF: Prepare, Monitor"]
   PH_OS -.- MS_FOC{{"FOC"}}
   PH_EMD -.-> A_2{"A-2 Assessment Plan"}
   A_2 --> AD_IATT(["IATT"])
@@ -332,6 +334,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- Each role record carries a qualification with the training completed and the official other than the appointee who verified it; an appointee in a cyberspace work role names its DCWF code and meets, or is pending by a due date, the qualification standard of the DoD cyberspace workforce policy (DoDD 8140.01, WFQ-001).
 - artifacts/data/scrm-org.yaml names an executive C-SCRM lead, a PMO or other dedicated C-SCRM function, the authorizing officials who own supply chain risk, the council and its charter, and the C-SCRM duty of each run role (SCRM-021).
 
 **Alignment**
@@ -1047,6 +1050,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
 | [EXT-PPP](#ext-ppp) | Program protection plan | outside input (product) |
+| [EXT-CSS](#ext-css) | Cybersecurity strategy | outside input (product) |
 | [EXT-STPP](#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
 | [EXT-ITRA](#ext-itra) | Independent technical risk assessments | outside input (organization) |
 | [EXT-SEP](#ext-sep) | Systems engineering plan | outside input (product) |
@@ -1074,6 +1078,9 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- protection.yaml program.decision_points records the CDD validation (MS-CDDV) during TMRR before the Development RFP release (ACQLC-002) and first fielding (MS-FIELD), where O&S begins, by IOC (ACQLC-003); a program that combines pathways defines each transition point, entry point, information requirement and approved transition approach in program.transitions (ACQLC-001).
+- cybersecurity-strategy.yaml records the CSS with its content, the approvals DoDI 5000.82 Table 2 calls for by ACAT or BCAT (on the software pathway the DA's approval of the acquisition strategy holding it), and its reviews before each milestone decision and contract award (CSSTRAT-001 to CSSTRAT-003); scrm.yaml pm_actions records the PM's SCRM actions of DoDI 5000.90 3.4 (market research, illumination, the Table 1 due diligence of the risk tolerance level, DIA SCRM TAC requests and flagged reports, the assured supplier or countermeasure of each mission-critical item and validated products) (PMSCRM-001, PMSCRM-002).
+- ra.yaml system_risk designates the system's risk consistent with the most severe threat to any individual component or subcomponent, no lower than the highest risk ra.yaml rates against one, for requirements, acquisition and T&E (DoDI 8510.01 3.3.a(3), THREAT-001); the ISSO, a primary role, gives a P-14 interview (WFQ-002).
 - artifacts/data/scrm.yaml records the criticality analysis and TSN practices, a supplier for every inventory item tied to its ra.yaml supply chain record, the threat analysis, and an assessment of every critical supplier covering each Table 28 factor, with its SCRSS level, escalation and FASC sharing (SCRM-001 to SCRM-006).
 
 **Alignment**
@@ -1151,6 +1158,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- The capability document is of a kind the program's pathway uses, and a JCIDS document carries its validation date, on or before JCIDS was disestablished (ACQLC-004).
 - Each Receiving organization that joined before the system's release has its requirements in reciprocity.yaml gathered and coordinated before release, and each control it asks for is assessed (RCP-002).
 
 **Alignment**
@@ -1339,7 +1347,7 @@ Writes to `facts.yaml`: `categorization`.
 **Exit criteria**
 
 - A security categorization of the system, including its information types, is completed and is consistent with the enterprise architecture and the organization's risk management strategy (DoDI 8510.01 Table 2 outcome).
-- facts.categorization (c, i, a, overlays) set_by C-2.
+- facts.categorization (c, i, a, overlays) set_by C-2, and categorization.documented_in names the capability document (the CDD or its equivalent) it is documented in (ACQLC-005).
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
 - A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
@@ -1357,7 +1365,7 @@ Writes to `facts.yaml`: `categorization`.
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
 - [CNSSI1253](#ref-cnssi1253), section 3.1.1
 - [CNSSI1253](#ref-cnssi1253), p. 14, "The security categorization of a system must not be changed or modified to reflect management decisions"
-- [DODI8510.01](#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the JCIDS capabilities document (for example the CDD).)
+- [DODI8510.01](#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the capabilities document (for example the CDD); JCIDS was disestablished on August 20, 2025 (DoDI 5000.02 Change 2), so a later program uses the requirements document that replaced it.)
 - [SP800-60V1R1](#ref-sp800-60v1r1), section 4.3
 
 **Playbook:** [playbooks/C/C-2.md](playbooks/C/C-2.md)
@@ -1461,11 +1469,13 @@ Reduce technology, engineering, integration and life-cycle cost risk and mature 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
+| <a id="ms-cddv"></a>**CDD validation** Capability Development Document validation | event | — | During TMRR the requirements validation authority validates the CDD, or the equivalent requirements document that replaced it once JCIDS was disestablished, before the Development RFP release decision point (ACQLC-002). | — |
 | <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [P-17](#task-p-17) |
 | <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) |
 
 Sources:
 
+- **CDD validation**: [DODI5000.85](#ref-dodi5000-85), p. 14, "During the TMRR phase, the requirements validation authority will validate the CDD"; [DODI5000.02](#ref-dodi5000-02), p. 6, "Updates the issuance to reflect the disestablishment of the Joint Capabilities Integration"
 - **Dev RFP RD**: [DODI8510.01](#ref-dodi8510-01), p. 10, "Require that contracts and other agreements include specific requirements"; [DODI5000.85](#ref-dodi5000-85), p. 14, "3.9. DEVELOPMENT RFP RELEASE DECISION POINT."; [DODI5000.85](#ref-dodi5000-85), p. 14, "that program security has been accommodated"
 - **MS B**: [DODI8510.01](#ref-dodi8510-01), p. 8, "before program initiation for new systems and all acquisition milestones"; [DODI5000.85](#ref-dodi5000-85), p. 15, "The Milestone B decision authorizes a program to enter into the EMD phase"; [DODI5000.85](#ref-dodi5000-85), p. 15, "Risk sources include, but are not limited to, technology, threat projections, security"
 
@@ -1605,6 +1615,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 - artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
 
 **Alignment**
@@ -1739,6 +1750,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
 
 **Alignment**
@@ -1806,6 +1818,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - allocation.yaml gives every tailored-baseline control a type and the components that implement it.
 - Every requirement of ART-REQ is satisfied by a control that names it (TLR-009).
 - The system owner and the AO determine, for each common control provider, that its controls protect the system commensurate with risk (TLR-010).
+- The ISSO, a primary role (DoDI 8510.01 Table 3), gives an S-3 interview (WFQ-002).
 
 **Alignment**
 
@@ -2955,11 +2968,13 @@ Produce and field the system; operational test and evaluation confirms security 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
 | <a id="ms-frp"></a>**FRP/FD** Full-Rate Production or Full Deployment Decision | decision point | [MDA](#per-mda) | Approve full-rate production or full deployment after operational test and evaluation, including its cybersecurity results. The operational cybersecurity assessments (CVPA and adversarial assessment) and any new validated threat environment inform the decision. | — |
-| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | The first units are fielded and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](#task-r-4), [M-1](#task-m-1) |
+| <a id="ms-field"></a>**First fielding** First fielding | event | — | The first system or systems are fielded, under a current authorization. The O&S phase begins here, which may precede IOC; production and deployment continue alongside (ACQLC-003). | — |
+| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](#task-r-4), [M-1](#task-m-1) |
 
 Sources:
 
 - **FRP/FD**: [DODI8510.01](#ref-dodi8510-01), p. 10, "Ensure acquisition programs submit cybersecurity T&E results to the appropriate AO"; [DODI5000.85](#ref-dodi5000-85), p. 17, "3.14. FRP DECISION OR FD DECISION."; [DODI5000.85](#ref-dodi5000-85), p. 17, "informed by consideration of any new validated threat environments"; [DODI5000.89](#ref-dodi5000-89), p. 16, "cooperative vulnerability and penetration assessment (CVPA) and an adversarial assessment"
+- **First fielding**: [DODI5000.85](#ref-dodi5000-85), p. 18, "The O&S phase begins upon fielding of the first system"; [DODI8510.01](#ref-dodi8510-01), p. 10, "Operate only authorized DoD systems with a current authorization to operate"
 - **IOC**: [DODI8510.01](#ref-dodi8510-01), p. 10, "Operate only authorized DoD systems with a current authorization to operate"; [DODI5000.85](#ref-dodi5000-85), p. 17, "will declare initial operational capability (IOC)"; [DODI5000.89](#ref-dodi5000-89), p. 17, "each of which should then be eliminated before fielding the system"
 
 #### P&D technical reviews
@@ -2984,7 +2999,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 
 | | |
 |---|---|
-| Starts at | [IOC](#ms-ioc) Initial Operational Capability |
+| Starts at | [First fielding](#ms-field) First fielding |
 | Ends at | End of the life cycle (disposal) |
 | RMF steps active | [P Prepare](#step-p), [M Monitor](#step-m) |
 | Tasks | 7 with this primary phase; 1 more also run here |
@@ -3960,7 +3975,7 @@ System-level security and privacy risk assessment, updated as the system and thr
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-RA.md](templates/artifacts/ART-RA.md) |
-| Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`)<br>`artifacts/data/scrm.yaml` (schema `scrm`) |
+| Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`)<br>`artifacts/data/cybersecurity-strategy.yaml` (schema `cybersecurity-strategy`)<br>`artifacts/data/scrm.yaml` (schema `scrm`) |
 | OSCAL | — |
 | Produced by | [P-14](#task-p-14) |
 | Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
@@ -4454,7 +4469,7 @@ content and operational data.
 | Input | Kind | What it is | Used by |
 |---|---|---|---|
 | <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [P-4](#task-p-4), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [M-1](#task-m-1) |
-| <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | The document that states and validates the capability need for the pathway: JCIDS documents (initial capabilities document, capability development document) on major capability acquisition; a validated JUON, JEON or DoD Component UON, a critical warfighter issue statement approved by the Warfighter SIG, or a SecDef or DepSecDef RAA determination document on urgent capability acquisition; the capability needs statement and user agreement on the software pathway; business requirements on defense business systems; and the services requirement validated by the SRRB for an acquisition of services. P-15 records in protection-requirements.yaml whether it holds the SCRM, export control, anti-tamper, counterintelligence and security support, and threat content the CJCS puts in JCIDS capability requirements (PPROT-004), and the information requirements of the milestone or decision point it supports. | [P-8](#task-p-8), [P-9](#task-p-9), [P-12](#task-p-12), [P-15](#task-p-15) |
+| <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | The document that states and validates the capability need for the pathway: on major capability acquisition the CDD or the equivalent requirements document (JCIDS documents validated before JCIDS was disestablished on August 20, 2025, the requirements document that replaced them after; ACQLC-004); a validated JUON, JEON or DoD Component UON, a critical warfighter issue statement approved by the Warfighter SIG, or a SecDef or DepSecDef RAA determination document on urgent capability acquisition; the capability needs statement and user agreement on the software pathway; business requirements on defense business systems; and the services requirement validated by the SRRB for an acquisition of services. P-15 records in protection-requirements.yaml whether it holds the SCRM, export control, anti-tamper, counterintelligence and security support, and threat content the CJCS puts in JCIDS capability requirements (PPROT-004), and the information requirements of the milestone or decision point it supports. | [P-8](#task-p-8), [P-9](#task-p-9), [P-12](#task-p-12), [P-15](#task-p-15) |
 | <a id="ext-org-policy"></a>**EXT-ORG-POLICY** Organizational policy and Prepare-step guidance | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-11](#task-p-11), [P-15](#task-p-15), [P-17](#task-p-17), [P-18](#task-p-18), [C-2](#task-c-2), [C-3](#task-c-3), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [A-1](#task-a-1), [A-2](#task-a-2), [M-1](#task-m-1) |
 | <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions: Intelligence Community products such as DIA cyber threat assessments and the Defense Intelligence Threat Library cyber threat modules, the USD(I&S) cyber threat assessment capability, threat intelligence on third party providers and environments, and the USCYBERCOM and NSA/CSS cyber operational risk tolerances. ART-RA records which product, its date and the credentialed professionals consulted. | [P-3](#task-p-3), [P-14](#task-p-14), [P-15](#task-p-15), [S-5](#task-s-5), [R-2](#task-r-2), [M-1](#task-m-1), [M-3](#task-m-3) |
 | <a id="ext-registry"></a>**EXT-REGISTRY** Component system registry | organization | The DoD Component registry in which programs register their systems. | [P-18](#task-p-18) |
@@ -4473,6 +4488,7 @@ content and operational data.
 | <a id="ext-iscm-assessment"></a>**EXT-ISCM-ASSESSMENT** ISCM program assessment report | organization | The final report of an SP 800-137A assessment of the organization's ISCM program, which may bear on the decision to continue operation under ongoing authorization. | [M-6](#task-m-6) |
 | <a id="ext-adm"></a>**EXT-ADM** Acquisition decisions and determinations | organization | Acquisition decision memoranda and the decision authority's determinations at each milestone or decision point of the pathway (framework/milestones.yaml for major capability acquisition, `decision_points` in framework/pathways.yaml for the others), including the urgent capability MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment, which R-3 reads. | [R-3](#task-r-3), [R-4](#task-r-4) |
 | <a id="ext-ppp"></a>**EXT-PPP** Program protection plan | product | The program protection plan prepared by the lead systems engineer and approved by the USD(R&E) where the DAE is the milestone decision authority, or by the Component acquisition executive or a designee for ACAT IB to III, urgent, middle tier and software programs, with the cybersecurity strategy as an appendix. P-14 records in protection.yaml its approval, its critical items, their threats, vulnerabilities and countermeasures, exportability, anti-tamper, its updates and its transition (PPROT-001, PPROT-002); P-15 and P-17 carry its countermeasures into requirements and solicitations (PPROT-004). | [P-14](#task-p-14), [P-15](#task-p-15), [R-1](#task-r-1) |
+| <a id="ext-css"></a>**EXT-CSS** Cybersecurity strategy | product | The program's cybersecurity strategy (CSS): plans for, and implementation status of, its cybersecurity activities across the life cycle, an appendix to the PPP where the program has one and a stand-alone document otherwise. DoDI 5000.82 Table 2 sets who approves it by ACAT or BCAT; on the software pathway the DA approves the acquisition strategy that holds it. P-14 records it with its approvals and reviews in cybersecurity-strategy.yaml (CSSTRAT-001 to CSSTRAT-003). | [P-14](#task-p-14) |
 | <a id="ext-stpp"></a>**EXT-STPP** Technology and S&T protection guidance | organization | Technology area protection plans (TAPPs) for each S&T modernization priority area, DoD horizontal protection guidance, and the S&T protection plan of a technology that transitions from S&T into the program. P-14 records the ones it read in protection.yaml and the S&T protection plan in st-protection.yaml (PPROT-003); P-15 names them in protection-requirements.yaml. | [P-14](#task-p-14), [P-15](#task-p-15) |
 | <a id="ext-itra"></a>**EXT-ITRA** Independent technical risk assessments | organization | Independent technical risk assessments of the system design and interfaces for adversarial risk, program protection and cyber vulnerabilities, with who conducted and approved them; their results inform the technical risks P-14 records (PPROT-005). | [P-14](#task-p-14) |
 | <a id="ext-sep"></a>**EXT-SEP** Systems engineering plan | product | The systems engineering plan, where the lead systems engineer documents the program's major technical risks, issues, opportunities and mitigations; P-14 carries the security ones into the technical risks of protection.yaml (PPROT-005). | [P-14](#task-p-14) |
@@ -5036,6 +5052,7 @@ the whole library with checksums.
 | <a id="ref-dodcio-reciprocity"></a>**DODCIO-RECIPROCITY** | DoD Cybersecurity Reciprocity Playbook | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/(U)%202024-01-02%20DoD%20Cybersecurity%20Reciprocity%20Playbook.pdf> | [DODCIO-RECIPROCITY.md](references/text/DODCIO-RECIPROCITY.md) |
 | <a id="ref-dodi5000-74"></a>**DODI5000.74** | Defense Acquisition of Services | DoD | January 10, 2020, Change 1, June 24, 2021 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500074p.pdf> | [DODI5000.74.md](references/text/DODI5000.74.md) |
 | <a id="ref-dodi5000-81"></a>**DODI5000.81** | Urgent Capability Acquisition | DoD | December 31, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500081p.PDF> | [DODI5000.81.md](references/text/DODI5000.81.md) |
+| <a id="ref-dodi5000-82"></a>**DODI5000.82** | Requirements for the Acquisition of Digital Capabilities | DoD | June 1, 2023 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500082p.pdf> | [DODI5000.82.md](references/text/DODI5000.82.md) |
 | <a id="ref-dowi8430-01"></a>**DOWI8430.01** | Accelerated Mission Software | DoD | September 8, 2026 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/843001p.PDF> | [DOWI8430.01.md](references/text/DOWI8430.01.md) |
 | <a id="ref-dodi5400-16"></a>**DODI5400.16** | DoD Privacy Impact Assessment (PIA) Guidance | DoD | July 14, 2015, Change 1, August 11, 2017 | <https://www.esd.whs.mil/DD/DoD-Issuances/DoDI/> | [DODI5400.16.md](references/text/DODI5400.16.md) |
 | <a id="ref-dtm-24-001"></a>**DTM-24-001** | DoW Cybersecurity Activities Performed for Cloud Service Offerings | DoD | February 27, 2024, Change 2, May 7, 2026 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dtm/DTM-24-001.PDF> | [DTM-24-001.md](references/text/DTM-24-001.md) |

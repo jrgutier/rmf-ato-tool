@@ -1,0 +1,15 @@
+rule: RECIP-001
+bases:
+- minimal
+description: the provider package reviewed after the decision
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.date
+  value: '2026-12-01'
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the provider''s authorization package is reviewed on 2026-12-01, after the authorization decision
+    of 2026-11-20 that relies on it'

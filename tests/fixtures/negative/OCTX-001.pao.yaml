@@ -1,14 +1,21 @@
 rule: OCTX-001
-bases: [minimal]
+bases:
+- minimal
 description: the PAO for the warfighting mission area is appointed by the DoD CIO, not the CJCS
 mutations:
-  - op: replace_text
-    file: artifacts/data/org-context.yaml
-    old: "manpower_structure:"
-    new: |2-
-        - {id: RA-14, role: PER-PAO, name: X (fixture), title: T, organization: DoD, contact: {email: x@example.mil}, appointed_by: dod-cio, citizenship: us, affiliation: dod-civilian, mission_area: wma, sources: [INT-013.A1]}
-      manpower_structure:
+- op: replace_text
+  file: artifacts/data/org-context.yaml
+  old: 'manpower_structure:'
+  new: '  - {id: RA-14, role: PER-PAO, name: X (fixture), title: T, organization: DoD, contact: {email:
+    x@example.mil}, appointed_by: dod-cio, citizenship: us, affiliation: dod-civilian, mission_area: wma,
+    sources: [INT-013.A1]}
+
+    manpower_structure:'
 expect:
-  errors: [OCTX-001]
+  errors:
+  - OCTX-001
   messages:
-    - 'RA-14: the PAO for mission area wma is appointed by dod-cio, not the DoD MA owner of that mission area'
+  - 'RA-14: the PAO for mission area wma is appointed by dod-cio, not the DoD MA owner of that mission
+    area'
+  also:
+  - WFQ-001

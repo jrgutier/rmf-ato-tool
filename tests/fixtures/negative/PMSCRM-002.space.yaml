@@ -1,0 +1,25 @@
+rule: PMSCRM-002
+bases:
+- minimal
+description: a space NSS without engineering mitigations
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.mitigations
+  value:
+  - id: SCM-1
+    kind: acquisition
+    measure: Buy from the OEM only.
+    informed_by:
+    - TA-001
+expect:
+  errors:
+  - PMSCRM-002
+  messages:
+  - a space NSS manages supply chain risk through engineering mitigations, and the record has none
+  also:
+  - SPCOV-001

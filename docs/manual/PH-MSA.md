@@ -117,6 +117,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- Each role record carries a qualification with the training completed and the official other than the appointee who verified it; an appointee in a cyberspace work role names its DCWF code and meets, or is pending by a due date, the qualification standard of the DoD cyberspace workforce policy (DoDD 8140.01, WFQ-001).
 - artifacts/data/scrm-org.yaml names an executive C-SCRM lead, a PMO or other dedicated C-SCRM function, the authorizing officials who own supply chain risk, the council and its charter, and the C-SCRM duty of each run role (SCRM-021).
 
 **Alignment**
@@ -832,6 +833,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 | [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [EXT-CSS](../../MANUAL.md#ext-css) | Cybersecurity strategy | outside input (product) |
 | [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
 | [EXT-ITRA](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
 | [EXT-SEP](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
@@ -859,6 +861,9 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- protection.yaml program.decision_points records the CDD validation (MS-CDDV) during TMRR before the Development RFP release (ACQLC-002) and first fielding (MS-FIELD), where O&S begins, by IOC (ACQLC-003); a program that combines pathways defines each transition point, entry point, information requirement and approved transition approach in program.transitions (ACQLC-001).
+- cybersecurity-strategy.yaml records the CSS with its content, the approvals DoDI 5000.82 Table 2 calls for by ACAT or BCAT (on the software pathway the DA's approval of the acquisition strategy holding it), and its reviews before each milestone decision and contract award (CSSTRAT-001 to CSSTRAT-003); scrm.yaml pm_actions records the PM's SCRM actions of DoDI 5000.90 3.4 (market research, illumination, the Table 1 due diligence of the risk tolerance level, DIA SCRM TAC requests and flagged reports, the assured supplier or countermeasure of each mission-critical item and validated products) (PMSCRM-001, PMSCRM-002).
+- ra.yaml system_risk designates the system's risk consistent with the most severe threat to any individual component or subcomponent, no lower than the highest risk ra.yaml rates against one, for requirements, acquisition and T&E (DoDI 8510.01 3.3.a(3), THREAT-001); the ISSO, a primary role, gives a P-14 interview (WFQ-002).
 - artifacts/data/scrm.yaml records the criticality analysis and TSN practices, a supplier for every inventory item tied to its ra.yaml supply chain record, the threat analysis, and an assessment of every critical supplier covering each Table 28 factor, with its SCRSS level, escalation and FASC sharing (SCRM-001 to SCRM-006).
 
 **Alignment**
@@ -936,6 +941,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- The capability document is of a kind the program's pathway uses, and a JCIDS document carries its validation date, on or before JCIDS was disestablished (ACQLC-004).
 - Each Receiving organization that joined before the system's release has its requirements in reciprocity.yaml gathered and coordinated before release, and each control it asks for is assessed (RCP-002).
 
 **Alignment**
@@ -1124,7 +1130,7 @@ Writes to `facts.yaml`: `categorization`.
 **Exit criteria**
 
 - A security categorization of the system, including its information types, is completed and is consistent with the enterprise architecture and the organization's risk management strategy (DoDI 8510.01 Table 2 outcome).
-- facts.categorization (c, i, a, overlays) set_by C-2.
+- facts.categorization (c, i, a, overlays) set_by C-2, and categorization.documented_in names the capability document (the CDD or its equivalent) it is documented in (ACQLC-005).
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
 - A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
@@ -1142,7 +1148,7 @@ Writes to `facts.yaml`: `categorization`.
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
 - [CNSSI1253](../../MANUAL.md#ref-cnssi1253), section 3.1.1
 - [CNSSI1253](../../MANUAL.md#ref-cnssi1253), p. 14, "The security categorization of a system must not be changed or modified to reflect management decisions"
-- [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the JCIDS capabilities document (for example the CDD).)
+- [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the capabilities document (for example the CDD); JCIDS was disestablished on August 20, 2025 (DoDI 5000.02 Change 2), so a later program uses the requirements document that replaced it.)
 - [SP800-60V1R1](../../MANUAL.md#ref-sp800-60v1r1), section 4.3
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)

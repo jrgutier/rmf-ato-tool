@@ -1,0 +1,14 @@
+rule: WFQ-001
+description: the ISSM is pending qualification and the record names no date by which the policy requires it
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.7.qualification.status
+  value: pending
+expect:
+  errors:
+  - WFQ-001
+  messages:
+  - "RA-08: PER-ISSM is pending qualification with no date by which the DoD cyberspace workforce policy requires it"

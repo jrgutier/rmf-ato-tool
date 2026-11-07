@@ -1,0 +1,39 @@
+rule: ACQLC-001
+bases:
+- minimal
+description: the PM does not identify the transition approach
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathways
+  value:
+  - PW-MCA
+  - PW-SWP
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.transitions
+  value:
+  - from: PW-MCA
+    to: PW-SWP
+    at: MS-B
+    entry: DP-SWP-PATHWAY
+    date: '2026-06-01'
+    information_requirements:
+    - id: EXT-CAPDOC
+      coordinated_with:
+      - PER-PM
+      - PER-MDA
+    approach:
+      identified_by:
+      - PER-ISSM
+      approved_by: PER-MDA
+      date: '2026-05-01'
+      tailors:
+      - processes
+      - reviews
+      - documentation
+expect:
+  errors:
+  - ACQLC-001
+  messages:
+  - the PM and applicable stakeholders identify the transition approach

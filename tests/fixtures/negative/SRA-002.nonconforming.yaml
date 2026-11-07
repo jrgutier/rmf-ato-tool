@@ -1,5 +1,6 @@
 rule: SRA-002
-bases: [minimal]
+bases:
+- minimal
 description: under the space overlay, a component not built to the policy whose review of alternatives was not coordinated with the NSA
 mutations:
 - op: set_field
@@ -10,19 +11,26 @@ mutations:
 - op: set_field
   file: facts.yaml
   path: categorization.overlays
-  value: [CNSSI1253F-ATT2-SPACE]
+  value:
+  - CNSSI1253F-ATT2-SPACE
 - op: set_field
   file: artifacts/data/ra.yaml
   path: external.nonconforming
   value:
   - component: CMP-IDP
-    alternatives: [keep the enterprise provider, build a program provider]
+    alternatives:
+    - keep the enterprise provider
+    - build a program provider
     selected: keep the enterprise provider
     coordinated_with: []
-    sources: [INT-003.A1]
+    sources:
+    - INT-003.A1
 expect:
-  errors: [SRA-002]
-  messages: ['CMP-IDP is not built to fully meet the policy, and its comparison of alternatives was not coordinated with the NSA']
+  errors:
+  - SRA-002
+  messages:
+  - CMP-IDP is not built to fully meet the policy, and its comparison of alternatives was not coordinated with the NSA
   also:
   - GEN-STALE-001
+  - RECIP-001
   - TLR-003
