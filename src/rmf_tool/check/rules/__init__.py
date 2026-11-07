@@ -17,6 +17,7 @@ from rmf_tool.check.rules import (
     cato,
     config,
     connections,
+    considerations,
     consistency,
     content,
     coverage,
@@ -41,7 +42,9 @@ from rmf_tool.check.rules import (
     system,
     tailoring,
     teststrategy,
+    threat,
     vulnerability,
+    workforce,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -91,6 +94,10 @@ RULES: dict[str, Rule] = {
     "OVS-001": overlays.removal_authorities,
     "OVS-002": overlays.not_selected,
     "OVS-003": overlays.parameter_values,
+    "PIC-001": considerations.coordinated,
+    "WFQ-001": workforce.qualification,
+    "WFQ-002": workforce.isso_primary,
+    "THREAT-001": threat.designation,
     "TLR-001": tailoring.compensating,
     "TLR-002": tailoring.removal,
     "TLR-003": tailoring.assumptions,

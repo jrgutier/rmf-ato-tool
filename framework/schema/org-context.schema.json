@@ -314,6 +314,53 @@
             "type": "string",
             "minLength": 1
           },
+          "qualification": {
+            "title": "The appointee's training and, in a cyberspace work role, qualification under the DoD cyberspace workforce policy (DoDD 8140.01), and who verified them (WFQ-001)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "training", "verified_by"],
+            "properties": {
+              "status": {
+                "title": "Whether the appointee meets the qualification standard of the cyberspace workforce policy for the role",
+                "enum": ["met", "pending", "not-met", "not-a-work-role"]
+              },
+              "standard": {
+                "title": "The qualification standard met or pursued (DoDM 8140.03 for the DCWF work role, or a Component standard)",
+                "type": "string",
+                "minLength": 1
+              },
+              "due": {
+                "title": "For a pending qualification, the date by which the policy requires it",
+                "type": "string",
+                "format": "date"
+              },
+              "training": {
+                "title": "Training the appointee completed for the role",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["course"],
+                  "properties": {
+                    "course": {"type": "string", "minLength": 1},
+                    "completed": {"type": "string", "format": "date"}
+                  }
+                }
+              },
+              "certifications": {
+                "title": "Professional certifications the appointee holds",
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "verified_by": {
+                "title": "The official who verified the training and qualification",
+                "anyOf": [
+                  {"type": "string", "pattern": "^PER-[A-Z]+$"},
+                  {"enum": ["head-of-agency", "dod-component-head", "saorm"]}
+                ]
+              }
+            }
+          },
           "coordinates_with": {
             "title": "Officials the appointee coordinates with",
             "type": "array",

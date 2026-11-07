@@ -117,6 +117,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- Each role record carries a qualification with the training completed and the official other than the appointee who verified it; an appointee in a cyberspace work role names its DCWF code and meets, or is pending by a due date, the qualification standard of the DoD cyberspace workforce policy (DoDD 8140.01, WFQ-001).
 
 **Alignment**
 
@@ -790,9 +791,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor |
+| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[RE](../../personas/PER-RE.md) Risk Executive Function<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -829,6 +830,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- ra.yaml system_risk designates the system's risk consistent with the most severe threat to any individual component or subcomponent, no lower than the highest risk ra.yaml rates against one, for requirements, acquisition and T&E (DoDI 8510.01 3.3.a(3), THREAT-001); the ISSO, a primary role, gives a P-14 interview (WFQ-002).
 
 **Alignment**
 

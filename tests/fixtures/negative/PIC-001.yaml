@@ -1,0 +1,14 @@
+rule: PIC-001
+description: the boundary control sc-7, whose Privacy Implementation Considerations checkmark warns that PII must not flow into a system not authorized to process it, is selected with no coordination with the SAOP
+bases:
+- minimal
+mutations:
+- op: delete_list_item
+  file: artifacts/data/tailoring.yaml
+  path: privacy_implementation
+  where: {control_id: sc-7}
+expect:
+  errors:
+  - PIC-001
+  messages:
+  - sc-7 is selected with a Privacy Implementation Considerations checkmark, and no privacy_implementation record shows the coordination with the SAOP or designee before it is implemented

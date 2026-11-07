@@ -31,6 +31,9 @@ REF = "CNSSI1253"
 PDF_PATH = "references/pdf/CNSSI1253.pdf"
 TEXT_PATH = "references/text/CNSSI1253.md"
 YAML_PATH = "framework/baselines/cnssi-1253.yaml"
+# Kept apart from the tables: a mark selects nothing, so a change to it must not stale a run's
+# baseline.json, which pins the tables' SHA-256.
+PIC_PATH = "framework/baselines/privacy-considerations.yaml"
 OVERRIDES_PATH = "framework/baselines/cnssi-1253.overrides.yaml"
 PROFILE_PATHS = {
     level: f"references/oscal/profiles/NIST_SP-800-53_rev5_{level.upper()}-baseline_profile.json"
@@ -47,6 +50,9 @@ _ID = re.compile(r"^([A-Z]{2})-(\d+)(?:\((\d+)\))?$")
 _TEXT_ID = re.compile(r"^([A-Z]{2}-\d+(?:\(\d+\))?)(?:\s|$)")
 _TABLE = re.compile(r"^Table (D-\d+): (.+)$")
 _PAGE = re.compile(r"^<!-- page (\d+)(?: [^>]*)? -->$")
+# A Privacy Implementation Considerations checkmark: the column's only cells with subscripts,
+# the implications (page 22) the control's selection raises.
+_PIC = re.compile(r"^√(\d(?:,\d)*)$")
 _TOLERANCE = 6.0  # points between a symbol's centre and its column centre
 _ID_MAX_X = 90.0  # the ID column's right edge
 
@@ -107,6 +113,7 @@ class Row:
     page: int
     table_id: str  # as printed: AC-2(4)
     privacy: str = BLANK
+    pic: tuple[int, ...] = ()  # Privacy Implementation Considerations implications
     cells: dict[str, str] = field(default_factory=lambda: dict.fromkeys(COLUMNS, BLANK))
     withdrawn: bool = False
     y: float = 0.0
@@ -144,10 +151,17 @@ def _header(words: list[Any]) -> list[float] | None:
     return None
 
 
-def _privacy_column(words: list[Any]) -> float | None:
-    """The rotated "Privacy Control Baseline" header is the leftmost rotated "Privacy"."""
-    rotated = [w for w in words if w[4] == "Privacy" and (w[3] - w[1]) > (w[2] - w[0])]
-    return min(_centre(w)[0] for w in rotated) if rotated else None
+def _privacy_columns(words: list[Any]) -> tuple[float, float] | None:
+    """The rotated "Privacy Control Baseline" header is the leftmost rotated "Privacy", the
+    "Privacy Implementation Considerations" header the next one."""
+    rotated = sorted(_centre(w)[0] for w in words
+                     if w[4] == "Privacy" and (w[3] - w[1]) > (w[2] - w[0]))
+    return (rotated[0], rotated[1]) if len(rotated) >= 2 else None
+
+
+def pic_marks(cell: str) -> tuple[int, ...] | None:
+    m = _PIC.match(cell)
+    return tuple(int(n) for n in m.group(1).split(",")) if m else None
 
 
 def pdf_rows(pdf: Path) -> list[Row]:
@@ -155,18 +169,19 @@ def pdf_rows(pdf: Path) -> list[Row]:
 
     rows: list[Row] = []
     centres: list[float] | None = None
-    privacy_x: float | None = None
+    columns: tuple[float, float] | None = None
     with pymupdf.open(pdf) as doc:
         for pno in range(FIRST_TABLE_PAGE, doc.page_count + 1):
             words: Any = doc[pno - 1].get_text("words")
             centres = _header(words) or centres  # a continuation page repeats no header
-            privacy_x = _privacy_column(words) or privacy_x
+            columns = _privacy_columns(words) or columns
             ids = sorted((w for w in words if _ID.match(w[4]) and w[2] < _ID_MAX_X),
                          key=lambda w: w[1])
             if not ids:
                 continue
-            if centres is None or privacy_x is None:
+            if centres is None or columns is None:
                 raise ExtractError(f"page {pno}: no L/M/H column header found")
+            privacy_x, pic_x = columns
             page_rows = [Row(pno, w[4], y=_centre(w)[1]) for w in ids]
             top = min(r.y for r in page_rows) - 15
             for w in words:
@@ -176,6 +191,14 @@ def pdf_rows(pdf: Path) -> list[Row]:
                 row = min(page_rows, key=lambda r: abs(r.y - y))
                 if w[4] == "Withdrawn":
                     row.withdrawn = True
+                marks = pic_marks(w[4])
+                if marks is not None:
+                    if abs(x - pic_x) >= _TOLERANCE or row.pic:
+                        raise ExtractError(f"page {pno} {row.table_id}: implication mark "
+                                           f"{w[4]!r} at x={x:.1f} is not the one under the "
+                                           "Privacy Implementation Considerations column")
+                    row.pic = marks
+                    continue
                 if w[4] not in SYMBOLS:
                     continue
                 dist = [abs(x - c) for c in centres]
@@ -200,11 +223,13 @@ def pdf_rows(pdf: Path) -> list[Row]:
 @dataclass
 class TextTables:
     sequences: dict[tuple[int, str], list[str]]  # (page, table id) -> symbols in order
+    pic: dict[tuple[int, str], tuple[int, ...]]  # (page, table id) -> implication numbers
     titles: dict[str, tuple[int, str]]  # family (AC) -> (page, "Table D-1: ... Family")
 
 
 def text_tables(md: Path) -> TextTables:
     sequences: dict[tuple[int, str], list[str]] = {}
+    pic: dict[tuple[int, str], tuple[int, ...]] = {}
     titles: dict[str, tuple[int, str]] = {}
     page = 0
     current: tuple[int, str] | None = None
@@ -230,12 +255,24 @@ def text_tables(md: Path) -> TextTables:
             sequences.setdefault(current, [])
         if current is not None:
             sequences[current] += [SYMBOLS[c] for c in cells if c in SYMBOLS]
-    return TextTables(sequences, titles)
+            for c in cells:
+                marks = pic_marks(c)
+                if marks is not None:
+                    pic[current] = (*pic.get(current, ()), *marks)
+    return TextTables(sequences, pic, titles)
 
 
-def classified_overlay(md: Path) -> dict[int, list[str]]:
-    """Table 1 of the Classified System Overlay: page -> controls marked ``+`` (select)."""
+@dataclass
+class Classified:
+    pages: dict[int, list[str]]  # page -> controls marked ``+`` (select)
+    pic: dict[str, tuple[int, ...]]  # printed ID -> Privacy Implementation Considerations
+
+
+def classified_overlay(md: Path) -> Classified:
+    """Table 1 of the Classified System Overlay: the controls it selects, and those with a
+    Privacy Implementation Considerations checkmark."""
     pages: dict[int, list[str]] = defaultdict(list)
+    pic: dict[str, tuple[int, ...]] = {}
     page, inside = 0, False
     for line in md.read_text(encoding="utf-8").splitlines():
         m = _PAGE.match(line)
@@ -255,9 +292,14 @@ def classified_overlay(md: Path) -> dict[int, list[str]]:
         if not any(_OVERLAY_MARK.match(c) for c in cells):
             raise ExtractError(f"{CLASSIFIED} page {page} {ident}: no '+' specification cell")
         pages[page].append(ident)
+        marks = [m for c in cells if (m := pic_marks(c)) is not None]
+        if len(marks) > 1:
+            raise ExtractError(f"{CLASSIFIED} page {page} {ident}: two implication marks")
+        if marks:
+            pic[ident] = marks[0]
     if not pages:
         raise ExtractError(f"{CLASSIFIED}: {_CLASSIFIED_TITLE!r} not found")
-    return dict(pages)
+    return Classified(dict(pages), pic)
 
 
 def _name_key(s: str) -> str:
@@ -383,6 +425,17 @@ def privacy_sets(rows: list[PrivacyRow]) -> dict[str, dict[int, list[PrivacyRow]
 # --- overrides, cross-checks, output -----------------------------------------------------
 
 
+def _pages(md: Path) -> list[tuple[int, str]]:
+    """Each line of a text extraction with its page."""
+    out, page = [], 0
+    for line in md.read_text(encoding="utf-8").splitlines():
+        m = _PAGE.match(line)
+        if m:
+            page = int(m.group(1))
+        out.append((page, line))
+    return out
+
+
 def _read_yaml(path: Path) -> Any:
     return safe_load(path.read_text(encoding="utf-8"))
 
@@ -444,6 +497,10 @@ def cross_check_text(rows: list[Row], text: TextTables, covered: set[tuple[int, 
         elif text.sequences[key] != r.sequence():
             problems.append(f"page {r.page} {r.table_id}: text has {text.sequences[key]}, "
                             f"PDF geometry gives {r.sequence()}")
+        if key in text.sequences and text.pic.get(key, ()) != r.pic:
+            problems.append(f"page {r.page} {r.table_id}: text has Privacy Implementation "
+                            f"Considerations {text.pic.get(key, ())}, PDF geometry gives "
+                            f"{r.pic}")
     return problems
 
 
@@ -488,7 +545,7 @@ def _privacy_blocks(pages: dict[int, list[PrivacyRow]]) -> list[str]:
     return out
 
 
-def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
+def render(rows: list[Row], text: TextTables, classified: Classified,
            privacy: dict[str, dict[int, list[PrivacyRow]]]) -> str:
     out = [
         f"# {YAML_PATH}: GENERATED by `uv run python -m rmf_tool.cnssi1253`; do not edit.",
@@ -545,7 +602,7 @@ def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
                 f"    transcribed: {'true' if ref == CLASSIFIED else 'false'}"]
         if ref == CLASSIFIED:
             out.append("    blocks:")
-            for n, (page, ids) in enumerate(classified.items()):
+            for n, (page, ids) in enumerate(classified.pages.items()):
                 anchor = _CLASSIFIED_TITLE if n == 0 else ids[0]
                 out += [f"      - citation: {{ref: {ref}, page: {page}, anchor: {_q(anchor)}}}",
                         f"        add: [{', '.join(oscal_id(i) for i in ids)}]"]
@@ -557,10 +614,69 @@ def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
     return "\n".join(out) + "\n"
 
 
+# The column's legend, as each document words it.
+PIC_LEGENDS = {
+    REF: (22, "Privacy Implementation Considerations – Controls that if selected to meet a "
+              "security", (
+        "Close coordination between security and privacy is needed to manage privacy risks",
+        "Design choices may mitigate privacy risks",
+        "Implementation choices may create unintended privacy risks",
+        "PII should not flow through or into a system that is not authorized to process PII")),
+    CLASSIFIED: (None, "The Privacy Implementation Considerations column identifies controls "
+                       "that are not added", (
+        "Coordinate an approach between security and privacy to manage privacy risk",
+        "Design choices may mitigate privacy risks",
+        "Identify and address hidden privacy risks",
+        "Ensure PII does not flow through or into a system that is not authorized to process "
+        "PII")),
+}
+
+
+def _pic_blocks(ref: str, pages: dict[int, list[tuple[str, str, tuple[int, ...]]]]
+                ) -> list[str]:
+    out = []
+    for page, marks in pages.items():
+        out += [f"      - citation: {{ref: {ref}, page: {page}, anchor: {_q(marks[0][0])}}}",
+                "        pic: {" + ", ".join(f"{cid}: [{', '.join(map(str, ns))}]"
+                                            for _, cid, ns in marks) + "}"]
+    return out
+
+
+def render_pic(rows: list[Row], classified: Classified, classified_page: int) -> str:
+    out = [
+        f"# {PIC_PATH}: GENERATED by `uv run python -m rmf_tool.cnssi1253`; do not edit.",
+        "# The Privacy Implementation Considerations column: controls outside the NSS privacy",
+        "# control baseline that, if selected, require coordination with the SAOP or designee",
+        "# before implementation, with the subscripted implications of each checkmark (PIC-001).",
+        "# Read from the same rows as framework/baselines/cnssi-1253.yaml.",
+        "# Schema: framework/schema/privacy-considerations.schema.json.",
+        "documents:",
+    ]
+    appendix: dict[int, list[tuple[str, str, tuple[int, ...]]]] = defaultdict(list)
+    for r in rows:
+        if r.pic:
+            appendix[r.page].append((r.table_id, r.id, r.pic))
+    overlay: dict[int, list[tuple[str, str, tuple[int, ...]]]] = defaultdict(list)
+    for page, ids in classified.pages.items():
+        for i in ids:
+            if i in classified.pic:
+                overlay[page].append((i, oscal_id(i), classified.pic[i]))
+    for ref, pages in ((REF, appendix), (CLASSIFIED, overlay)):
+        page, anchor, legend = PIC_LEGENDS[ref]
+        page = page or classified_page
+        out += [f"  - ref: {ref}",
+                f"    citation: {{ref: {ref}, page: {page}, anchor: {_q(anchor)}}}",
+                "    implications:",
+                *(f'      "{n}": {_q(text)}' for n, text in enumerate(legend, start=1)),
+                "    blocks:", *_pic_blocks(ref, pages)]
+    return "\n".join(out) + "\n"
+
+
 @dataclass
 class Result:
     rows: list[Row]
     text: str
+    pic: str
     nist: dict[str, dict[str, list[str]]]
     classified: int  # controls the Classified System Overlay adds
     privacy: dict[str, int]  # Privacy Overlay control set suffix -> controls it adds
@@ -579,6 +695,9 @@ def generate(repo: Path) -> Result:
     covered = apply_overrides(rows, overrides)
     text = text_tables(repo / TEXT_PATH)
     problems = cross_check_text(rows, text, covered)
+    keys = {(r.page, r.table_id) for r in rows}
+    problems += [f"page {k[0]} {k[1]}: Privacy Implementation Considerations in {TEXT_PATH} "
+                 "on no PDF row" for k in text.pic if k not in keys]
     known = catalog.load(repo).controls
     problems += [f"page {r.page} {r.table_id}: {r.id} is not in the SP 800-53r5 catalog"
                  for r in rows if r.id not in known]
@@ -586,12 +705,16 @@ def generate(repo: Path) -> Result:
                  for r in rows if r.withdrawn and r.sequence()]
     classified = classified_overlay(repo / f"references/text/{CLASSIFIED}.md")
     problems += [f"{CLASSIFIED} page {page} {i}: {oscal_id(i)} is not in the catalog"
-                 for page, ids in classified.items() for i in ids if oscal_id(i) not in known]
+                 for page, ids in classified.pages.items() for i in ids
+                 if oscal_id(i) not in known]
     if problems:
         raise ExtractError(f"{len(problems)} problem(s):\n  " + "\n  ".join(problems))
     privacy = privacy_sets(privacy_overlay(repo / f"references/text/{PRIVACY}.md", known))
-    return Result(rows, render(rows, text, classified, privacy), nist_differences(repo, rows),
-                  sum(len(ids) for ids in classified.values()),
+    legend = next(p for p, line in _pages(repo / f"references/text/{CLASSIFIED}.md")
+                  if line.startswith(PIC_LEGENDS[CLASSIFIED][1]))
+    return Result(rows, render(rows, text, classified, privacy),
+                  render_pic(rows, classified, legend), nist_differences(repo, rows),
+                  sum(len(ids) for ids in classified.pages.values()),
                   {s: sum(len(rs) for rs in pages.values()) for s, pages in privacy.items()})
 
 
@@ -600,6 +723,7 @@ def summary(result: Result) -> str:
     lines = [f"{len(result.rows)} rows ({len(result.rows) - len(rows)} withdrawn), "
              f"{len({r.table_id[:2] for r in rows})} families"]
     lines.append(f"privacy baseline: {sum(r.privacy in 'X+' for r in rows)}")
+    lines.append(f"privacy implementation considerations: {sum(bool(r.pic) for r in rows)}")
     lines.append(f"{CLASSIFIED}: {result.classified} control(s) added")
     lines.append(f"{PRIVACY}: " + ", ".join(f"{s}={n}" for s, n in result.privacy.items()))
     for obj in OBJECTIVES:
@@ -622,17 +746,19 @@ def main(argv: list[str] | None = None) -> int:
     except ExtractError as exc:
         print(f"cnssi1253: {exc}", file=sys.stderr)
         return 2
-    target = args.repo / YAML_PATH
+    outputs = ((YAML_PATH, result.text), (PIC_PATH, result.pic))
     if args.check:
-        current = target.read_text(encoding="utf-8") if target.is_file() else ""
-        if current != result.text:
-            print(f"{YAML_PATH} is stale; run: uv run python -m rmf_tool.cnssi1253",
-                  file=sys.stderr)
+        stale = [p for p, text in outputs if not (args.repo / p).is_file()
+                 or (args.repo / p).read_text(encoding="utf-8") != text]
+        for p in stale:
+            print(f"{p} is stale; run: uv run python -m rmf_tool.cnssi1253", file=sys.stderr)
+        if stale:
             return 1
-        print(f"{YAML_PATH} is current")
+        print(f"{YAML_PATH} and {PIC_PATH} are current")
         return 0
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(result.text, encoding="utf-8")
+    for p, text in outputs:
+        (args.repo / p).parent.mkdir(parents=True, exist_ok=True)
+        (args.repo / p).write_text(text, encoding="utf-8")
     print(summary(result))
     return 0
 

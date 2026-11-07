@@ -139,26 +139,26 @@ headings link to the persona catalog; each persona's card describes the role in 
 
 ### P Prepare
 
-| Task | [AO](#per-ao) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [P-1](#task-p-1) Risk Management Roles | C | R/A | C | C |  | I |  |  |  |  |  |  |  | R |  |  |  |
-| [P-2](#task-p-2) Risk Management Strategy | I | R/A | C | R |  |  |  |  |  |  |  |  |  | C |  |  |  |
-| [P-3](#task-p-3) Risk Assessment—Organization | C | C | R | R/A |  |  |  |  |  |  |  |  |  | R |  | C |  |
-| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles | C | C | C | R/A |  |  |  |  |  |  |  |  |  | C |  | R |  |
-| [P-5](#task-p-5) Common Control Identification | C | C | R/A | C |  | C |  |  |  |  |  | C |  | R |  | C |  |
-| [P-6](#task-p-6) Impact-Level Prioritization | C | C | C | R/A |  | C |  |  |  |  |  |  |  | C |  | C |  |
-| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | C | C | C | R/A |  | C |  |  |  |  |  |  | I | C |  | C |  |
-| [P-8](#task-p-8) Mission or Business Focus | C | C | C |  |  | A | I |  |  | C | C |  |  | C |  | R |  |
-| [P-9](#task-p-9) System Stakeholders | C | C | C |  |  | R/A | I |  |  |  | C |  |  | C | C | R |  |
-| [P-10](#task-p-10) Asset Identification | C |  | C |  |  | R/A | R |  |  |  | C |  |  | C |  | C | C |
-| [P-11](#task-p-11) Authorization Boundary | A | C | C |  |  | R | R | C | C |  |  |  |  | C |  | C |  |
-| [P-12](#task-p-12) Information Types |  |  |  |  |  | R/A | C |  |  |  | R |  |  | R |  |  |  |
-| [P-13](#task-p-13) Information Life Cycle |  | C |  |  |  | R/A |  | C | C |  | R |  |  | R |  | C |  |
-| [P-14](#task-p-14) Risk Assessment—System | C |  |  | C | C | R/A | R |  |  |  | C |  |  | R |  | C |  |
-| [P-15](#task-p-15) Requirements Definition | C |  | C |  |  | R/A | C | C | C | C | R |  |  | R | C | R |  |
-| [P-16](#task-p-16) Enterprise Architecture | C | C | C |  |  | A |  | R | R |  | C |  |  | R |  | R |  |
-| [P-17](#task-p-17) Requirements Allocation | C | C | C |  |  | A | R | R |  |  |  | C |  | R |  | C |  |
-| [P-18](#task-p-18) System Registration |  | I | I |  |  | R/A | R |  |  |  |  |  |  |  |  |  |  |
+| Task | [AO](#per-ao) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [P-1](#task-p-1) Risk Management Roles | C | R/A | C | C |  | I |  |  |  |  |  |  |  |  | R |  |  |  |
+| [P-2](#task-p-2) Risk Management Strategy | I | R/A | C | R |  |  |  |  |  |  |  |  |  |  | C |  |  |  |
+| [P-3](#task-p-3) Risk Assessment—Organization | C | C | R | R/A |  |  |  |  |  |  |  |  |  |  | R |  | C |  |
+| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles | C | C | C | R/A |  |  |  |  |  |  |  |  |  |  | C |  | R |  |
+| [P-5](#task-p-5) Common Control Identification | C | C | R/A | C |  | C |  |  |  |  |  |  | C |  | R |  | C |  |
+| [P-6](#task-p-6) Impact-Level Prioritization | C | C | C | R/A |  | C |  |  |  |  |  |  |  |  | C |  | C |  |
+| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | C | C | C | R/A |  | C |  |  |  |  |  |  |  | I | C |  | C |  |
+| [P-8](#task-p-8) Mission or Business Focus | C | C | C |  |  | A | I |  |  |  | C | C |  |  | C |  | R |  |
+| [P-9](#task-p-9) System Stakeholders | C | C | C |  |  | R/A | I |  |  |  |  | C |  |  | C | C | R |  |
+| [P-10](#task-p-10) Asset Identification | C |  | C |  |  | R/A | R |  |  |  |  | C |  |  | C |  | C | C |
+| [P-11](#task-p-11) Authorization Boundary | A | C | C |  |  | R | R |  | C | C |  |  |  |  | C |  | C |  |
+| [P-12](#task-p-12) Information Types |  |  |  |  |  | R/A | C |  |  |  |  | R |  |  | R |  |  |  |
+| [P-13](#task-p-13) Information Life Cycle |  | C |  |  |  | R/A |  |  | C | C |  | R |  |  | R |  | C |  |
+| [P-14](#task-p-14) Risk Assessment—System | C |  |  | C | C | R/A | C | R |  |  |  | C |  |  | R |  | C |  |
+| [P-15](#task-p-15) Requirements Definition | C |  | C |  |  | R/A | C |  | C | C | C | R |  |  | R | C | R |  |
+| [P-16](#task-p-16) Enterprise Architecture | C | C | C |  |  | A |  |  | R | R |  | C |  |  | R |  | R |  |
+| [P-17](#task-p-17) Requirements Allocation | C | C | C |  |  | A | C | R | R |  |  |  | C |  | R |  | C |  |
+| [P-18](#task-p-18) System Registration |  | I | I |  |  | R/A | R |  |  |  |  |  |  |  |  |  |  |  |
 
 ### C Categorize
 
@@ -174,7 +174,7 @@ headings link to the persona catalog; each persona's card describes the role in 
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | [S-1](#task-s-1) Control Selection | C |  |  |  |  | R/A | R |  | C | C | R |  | C |  |  |  |  |
 | [S-2](#task-s-2) Control Tailoring | C |  |  |  |  | R/A | R |  | C | C | R |  | C |  |  |  |  |
-| [S-3](#task-s-3) Control Allocation | C |  | C | C |  | A | R |  | R |  | C |  | R |  | C |  |  |
+| [S-3](#task-s-3) Control Allocation | C |  | C | C |  | A | C | R | R |  | C |  | R |  | C |  |  |
 | [S-4](#task-s-4) Documentation of Planned Control Implementations | C |  |  |  |  | A | R | C | R | C | R | C | C |  |  | C | C |
 | [S-5](#task-s-5) Continuous Monitoring Strategy—System | C |  | C | C | C | R/A | R |  | C | C | R | C | C |  |  |  |  |
 | [S-6](#task-s-6) Plan Review and Approval | A | R | C | C | C | I | I |  |  |  |  |  | C | C |  |  |  |
@@ -332,6 +332,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- Each role record carries a qualification with the training completed and the official other than the appointee who verified it; an appointee in a cyberspace work role names its DCWF code and meets, or is pending by a due date, the qualification standard of the DoD cyberspace workforce policy (DoDD 8140.01, WFQ-001).
 
 **Alignment**
 
@@ -1005,9 +1006,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[SCA](personas/PER-SCA.md) Security Control Assessor |
+| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[SCA](personas/PER-SCA.md) Security Control Assessor |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1044,6 +1045,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- ra.yaml system_risk designates the system's risk consistent with the most severe threat to any individual component or subcomponent, no lower than the highest risk ra.yaml rates against one, for requirements, acquisition and T&E (DoDI 8510.01 3.3.a(3), THREAT-001); the ISSO, a primary role, gives a P-14 interview (WFQ-002).
 
 **Alignment**
 
@@ -1510,9 +1512,9 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1540,6 +1542,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 
 **Alignment**
 
@@ -1664,6 +1667,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 
 **Alignment**
 
@@ -1694,9 +1698,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1724,6 +1728,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - allocation.yaml gives every tailored-baseline control a type and the components that implement it.
 - Every requirement of ART-REQ is satisfied by a control that names it (TLR-009).
 - The system owner and the AO determine, for each common control provider, that its controls protect the system commensurate with risk (TLR-010).
+- The ISSO, a primary role (DoDI 8510.01 Table 3), gives an S-3 interview (WFQ-002).
 
 **Alignment**
 
@@ -4325,8 +4330,8 @@ simulated stakeholders.
 | [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 16 / 0 |
 | [SCA](#per-sca) Security Control Assessor | rmf | DoD Component CISO (the Component SCA, who may formally delegate the role) | [PER-SCA.md](personas/PER-SCA.md) | 5 / 3 / 4 / 1 |
 | [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 9 / 6 |
-| [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 19 / 0 / 12 / 6 |
-| [ISSO](#per-isso) Information System Security Officer | rmf | PM or SO | [PER-ISSO.md](personas/PER-ISSO.md) | 1 / 0 / 8 / 0 |
+| [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 16 / 0 / 15 / 6 |
+| [ISSO](#per-isso) Information System Security Officer | rmf | PM or SO | [PER-ISSO.md](personas/PER-ISSO.md) | 4 / 0 / 8 / 0 |
 | [ISSE](#per-isse) Information Systems Security Engineer | engineering | — | [PER-ISSE.md](personas/PER-ISSE.md) | 5 / 0 / 11 / 0 |
 | [LSE](#per-lse) Lead Systems Engineer | engineering | — | [PER-LSE.md](personas/PER-LSE.md) | 1 / 0 / 6 / 0 |
 | [UR](#per-ur) User Representative | operations | SO (DoDI 8510.01 4.4.b(4)(b); Table 8 lists the appointer as ISO) | [PER-UR.md](personas/PER-UR.md) | 0 / 0 / 3 / 1 |
@@ -4471,9 +4476,9 @@ Leads the system cybersecurity program day to day: maintains the authorization p
 - Card: [personas/PER-ISSM.md](personas/PER-ISSM.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer
-- Responsible for: [P-10](#task-p-10), [P-11](#task-p-11), [P-14](#task-p-14), [P-17](#task-p-17), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-2](#task-i-2), [A-6](#task-a-6), [R-1](#task-r-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Responsible for: [P-10](#task-p-10), [P-11](#task-p-11), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-2](#task-i-2), [A-6](#task-a-6), [R-1](#task-r-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
 - Accountable for: none
-- Consulted on: [P-12](#task-p-12), [P-15](#task-p-15), [I-1](#task-i-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2)
+- Consulted on: [P-12](#task-p-12), [P-14](#task-p-14), [P-15](#task-p-15), [P-17](#task-p-17), [S-3](#task-s-3), [I-1](#task-i-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2)
 - Informed of: [P-8](#task-p-8), [P-9](#task-p-9), [C-3](#task-c-3), [S-6](#task-s-6), [R-4](#task-r-4), [M-6](#task-m-6)
 
 Citations:
@@ -4488,7 +4493,7 @@ Maintains the operational security posture of the system under the ISSM's direct
 - Card: [personas/PER-ISSO.md](personas/PER-ISSO.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer, System Administrator
-- Responsible for: [M-1](#task-m-1)
+- Responsible for: [P-14](#task-p-14), [P-17](#task-p-17), [S-3](#task-s-3), [M-1](#task-m-1)
 - Accountable for: none
 - Consulted on: [S-4](#task-s-4), [I-1](#task-i-1), [I-2](#task-i-2), [A-3](#task-a-3), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
 - Informed of: none
