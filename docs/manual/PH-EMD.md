@@ -348,6 +348,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
 | [EXT-TEST-RESULTS](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [EXT-SOFTWARE-EVIDENCE](../../MANUAL.md#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
 
 **Outputs**
 

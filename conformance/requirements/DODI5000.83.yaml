@@ -86,7 +86,9 @@ requirements:
     locator: "1.2.c"
     context: "POLICY"
     statement: "c. Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment. Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held: SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment (manufacture only for a product that is manufactured: a software product or service has no manufacture activity of its own). The second is not: requirements.yaml engineering.assurance records the level of assurance, why it is commensurate with the technology, program, system and mission objectives, and the requirements with an assurance measure that carry it (SSE-002 fails a level carried by none), but no source gives a scale of assurance levels, so whether the level is commensurate is a judgment no rule can fail."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.stage.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cybersecurity in design, test, manufacture, and sustainment: no practice that addresses cybersecurity in test fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.manufacture.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices in manufacture: a hardware product with no practice that addresses cybersecurity in manufacture fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.resilience.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cyber resilience in test: no practice that addresses cyber-resilience in test fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.survivability.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Programs employ system security engineering practices for cyber survivability in design: no practice that addresses cyber-survivability in design fails", "holds_when": "P-15 is in the run's scope", "sentence": "Programs will employ system security engineering methods and practices, including cybersecurity, cyber resilience, and cyber survivability in design, test, manufacture, and sustainment."}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "The practices provide a level of assurance carried into the requirements: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope", "sentence": "Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/assurance/properties/commensurate_with", "claim": "presence", "asserts": "The level of assurance is commensurate with the technology, program, system, and mission objectives", "sentence": "Such methods and practices will ensure that systems function as intended, mitigating risks associated with known and exploitable vulnerabilities to provide a level of assurance commensurate with technology, program, system, and mission objectives."}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.83-0011"
     citation: {"ref": "DODI5000.83", "page": 4, "anchor": "TAPPs, S&T protection, and PPPs will be used to manage activities to"}
@@ -1400,7 +1402,9 @@ requirements:
     locator: "3.3.c.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(1) Include cybersecurity, security, and other system requirements into system performance specifications and product support needs that:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a security requirement included in neither the system performance specification nor the product support needs, and a matrix none of whose requirements enters one of them."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cybersecurity and security requirements are included into system performance specifications and product support needs: a security requirement included in neither fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.support.yaml", "expect": "no requirement is included in the", "claim": "constraint", "asserts": "Security requirements are included into the product support needs as well as the system performance specifications: a matrix with no requirement included in the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0170"
     citation: {"ref": "DODI5000.83", "page": 15, "anchor": "Draft or validated capability development document or equivalent capability requirements document."}
@@ -1450,7 +1454,9 @@ requirements:
     locator: "3.3.c.(1).(c)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(c) Ensure that key performance parameters and attributes establish:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no survivability, no sustainment or no information system security measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.kpp.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "Key performance parameters and attributes establish the measures they must: a set where no key performance parameter or attribute establishes sustainment fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0176"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "System survivability and sustainment measures."}
@@ -1458,7 +1464,9 @@ requirements:
     locator: "3.3.c.(1).(c).1"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "1. System survivability and sustainment measures."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no survivability measures, and one that establishes no sustainment measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.survivability.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "System survivability measures are established: a set where no key performance parameter or attribute establishes survivability fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.kpp.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "System sustainment measures are established: a set where no key performance parameter or attribute establishes sustainment fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0177"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Information system security measures, such as cryptography and key distribution, based on"}
@@ -1466,7 +1474,9 @@ requirements:
     locator: "3.3.c.(1).(c).2"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "2. Information system security measures, such as cryptography and key distribution, based on confidentiality, integrity, and availability needs."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a set of key performance parameters and attributes that establishes no information system security measures, and a security measure based on no confidentiality, integrity or availability need. Cryptography and key distribution are examples ('such as'), recorded in measures."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.security.yaml", "expect": "no key performance parameter or attribute establishes", "claim": "constraint", "asserts": "Information system security measures, such as cryptography and key distribution, are established by key performance parameters or attributes: a set where none establishes security measures fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.cia.yaml", "expect": "based on no confidentiality, integrity or availability need", "claim": "constraint", "asserts": "Information system security measures are based on confidentiality, integrity, and availability needs: a security measure based on no confidentiality, integrity or availability need fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0178"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Use requirements derivation methods, such as system modeling and analysis, security use"}
@@ -1474,7 +1484,9 @@ requirements:
     locator: "3.3.c.(1).(d)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(d) Use requirements derivation methods, such as system modeling and analysis, security use and abuse or misuse cases, criticality analysis, and vulnerability analysis to derive system security and exportability requirements that are sufficient to minimize vulnerabilities introduced by design, implementation, system interfaces, and access points."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails derivation methods that together leave design, implementation, interfaces or access points without derived requirements, a method that names a requirement the traceability matrix does not hold, an exportability requirement the matrix does not hold, and a derivation with no exportability requirement that does not say why none is derived (exportability_none, for a program with nothing planned for foreign release); that last clause is presence. The methods named are examples ('such as'): any method may be recorded."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.methods.yaml", "expect": "no derivation method derives requirements that minimize vulnerabilities introduced by", "claim": "constraint", "asserts": "Requirements derivation methods derive system security requirements sufficient to minimize vulnerabilities introduced by design, implementation, system interfaces, and access points: methods that leave implementation uncovered fail", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "The requirements a derivation method derives are system security requirements of the matrix: a method that derives a requirement the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.export.yaml", "expect": "is not a requirement of the traceability matrix", "claim": "constraint", "asserts": "Exportability requirements are derived as requirements of the matrix: an exportability requirement that is not a requirement of the traceability matrix fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.83-0179"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Incorporate the derived requirements into the system requirements traceability verification matrix."}
@@ -2411,7 +2423,9 @@ requirements:
     locator: "3.2.a"
     context: ""
     statement: "Mitigating adversary impact on technological advantage and employing system security engineering practices for program protection is a requirement for all DoD research, technology, and programs."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-002 fails a run whose recorded system security engineering practices include none for program protection, the discipline that mitigates adversary impact on technological advantage; it applies to every run with P-15 in scope."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.protection.yaml", "expect": "employs no system security engineering practice for program protection", "claim": "constraint", "asserts": "Employing system security engineering practices for program protection is a requirement for all programs: a program that employs no such practice for program protection fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
     promoted: {"reason": "The sentence says mitigating adversary impact and employing system security engineering practices 'is a requirement for all DoD research, technology, and programs'; the extractor rejected the paragraph as no-marker."}
   - id: "REQ-DODI5000.83-0284"
@@ -2428,7 +2442,9 @@ requirements:
     locator: "3.3.c.(1).(a)"
     context: ""
     statement: "(a) Inform requirements derivation activities using the:"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-001 fails a requirements derivation not informed by each of the draft or validated capability requirements document (or equivalent), the concept of operations, the operational mode summary and the mission profiles, the four items 0170 to 0173 list under this sentence."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.informed.yaml", "expect": "requirements derivation is not informed by the", "claim": "constraint", "asserts": "Requirements derivation activities are informed using the capability requirements document, concept of operations, operational mode summary and mission profiles: a derivation not informed by the mission profiles fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
     promoted: {"reason": "The lead-in holds the lead systems engineers' verb over bare noun items 0170 to 0173, which name the inputs to requirements derivation."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

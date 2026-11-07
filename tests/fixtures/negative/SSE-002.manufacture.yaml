@@ -1,0 +1,21 @@
+rule: SSE-002
+bases:
+- minimal
+description: a hardware product whose cybersecurity practices leave out manufacture
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.product_kind
+  value: hardware
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: engineering.practices.0.stages
+  value:
+  - design
+  - test
+  - sustainment
+expect:
+  errors:
+  - SSE-002
+  messages:
+  - no system security engineering practice addresses cybersecurity in manufacture
