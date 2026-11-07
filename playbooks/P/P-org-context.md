@@ -598,7 +598,10 @@ Purpose: Prioritize organizational systems that share an impact level into low-,
 2. **Read** `uv run rmf refs show SP800-37R2 --section "TASK P-6"`.
 3. **Interview** PER-RE: whether the organization divides systems of one impact level into
    low, moderate and high sub-categories, the criteria, and where this capability area's
-   systems fall.
+   systems fall. For National Security Systems there is no high-water mark to start from:
+   CNSSI 1253 keeps a value per security objective (SP 800-37r2 footnote 62,
+   `uv run rmf refs show SP800-37R2 --page 53 --anchor "Organizations operating National Security Systems"`),
+   so record which impact designation the organization groups its NSS by.
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-6` to `touched_by` and append
    `## Impact-level prioritization` with the criteria and sub-categories, or a traced
    sentence that the organization does not use one.

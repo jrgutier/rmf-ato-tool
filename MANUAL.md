@@ -214,7 +214,7 @@ headings link to the persona catalog; each persona's card describes the role in 
 | [M-1](#task-m-1) System and Environment Changes | I | C |  | R | C |  | R/A | C | R |  | C | R |  | R | C |
 | [M-2](#task-m-2) Ongoing Assessments | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |
 | [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R |  | C | C | R | C | C |  |
-| [M-4](#task-m-4) Authorization Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |
+| [M-4](#task-m-4) Authorization Package Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |
 | [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |
 | [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  |
 | [M-7](#task-m-7) System Disposal | I | C |  |  | C |  | R/A | R | C |  | C |  |  | C |  |
@@ -604,7 +604,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 **Entry criteria**
 
 - Organization-level risk assessment available (P-3).
-- The organization's systems have already been categorized; prioritization applies the high-water mark first.
+- The organization's systems have already been categorized. Under FIPS 199 and 200 the prioritization applies the high-water mark first; a National Security System follows CNSSI 1253, which does not apply the high-water mark (SP 800-37r2 footnote 62), so it keeps its per-objective C/I/A values and ART-ORG-CONTEXT says which impact designation groups systems before they are prioritized.
 
 **Exit criteria**
 
@@ -620,6 +620,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-6"
 - [DODI8510.01](#ref-dodi8510-01), p. 14, "Task P-6 Impact – Level Prioritization"
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"
+- [SP800-37R2](#ref-sp800-37r2), p. 53, "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253]"
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-6](playbooks/P/P-org-context.md#task-p-6)
 
@@ -1021,7 +1022,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
-**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle.
+**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle. P-14 runs before C-2, which reads ART-RA, so its supplier risks are a first pass: SP 800-161r1 prioritizes the supplier risk assessment once the impact level is defined, and C-3 feeds back to P-14 once the categorization is approved.
 
 **Stakeholders (RACI)**
 
@@ -1078,6 +1079,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Citations**
 
+- [SP800-161R1](#ref-sp800-161r1), p. 61, "Establish and begin using supplier risk-assessment processes on a prioritized basis"
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-14" (SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance.)
 - [DODI8510.01](#ref-dodi8510-01), p. 14, "Task P-14 Mission-Based Cyber Risk Assessment"
 - [SP800-30R1](#ref-sp800-30r1), section 3.2
@@ -1089,7 +1091,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-3](#task-c-3).
 
 #### <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -1415,7 +1417,7 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](#task-s-1).
+**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](#task-s-1); feeds back to [P-14](#task-p-14).
 
 ### <a id="ph-tmrr"></a>Phase 2: TMRR · Technology Maturation and Risk Reduction
 
@@ -3018,7 +3020,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](#per-pm) | [ART-CHG](#art-chg) | [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-POAM](#art-poam), [ART-SAR](#art-sar), [ART-SSP](#art-ssp), [ART-CP](#art-cp) | [IOC](#ms-ioc), [PCA](#rv-pca) |
 | [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](#per-sca) | — | [ART-SAR](#art-sar), [ART-CONMON](#art-conmon), [ART-SVCA](#art-svca), [ART-SAP](#art-sap) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](#per-ao) | — | [ART-RA](#art-ra), [ART-POAM](#art-poam), [ART-RAR](#art-rar), [ART-SAR](#art-sar) | — |
-| [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra), [ART-IRP](#art-irp) | — |
+| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra), [ART-IRP](#art-irp) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](#per-pm) | [ART-SECRPT](#art-secrpt) | — | — |
 | [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](#per-ao) | — | [ART-AODM](#art-aodm), [ART-AUTHREC](#art-authrec), [ART-RAR](#art-rar) | [FOC](#ms-foc), [cATO](#ad-cato), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc), [DATO](#ad-dato), [DATU](#ad-datu), [DCCA](#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](#per-pm) | [ART-DISP](#art-disp) | [ART-INV](#art-inv), [ART-SSP](#art-ssp) | — |
@@ -3259,7 +3261,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Cross-references:** depends on [M-2](#task-m-2); required by [M-4](#task-m-4); feeds back to [A-5](#task-a-5).
 
-#### <a id="task-m-4"></a>M-4 · Authorization Updates
+#### <a id="task-m-4"></a>M-4 · Authorization Package Updates
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3779,6 +3781,7 @@ Citations:
 Acquisition of services from the private sector, including IT and cloud services.
 
 - Services do not receive an ATO themselves when they are below the system level; they complete the Assess Only process, and contracts carry the cybersecurity requirements.
+- The pathway has no Materiel Solution Analysis phase and no Materiel Development Decision. The system-level Prepare tasks the spine places in PH-MSA, P-8 first, run while the services requirement is defined, before the SRRB approves it (DP-AOS-REQUIREMENTS) and at the start of PH-PD; P-8's entry is the validated services requirement, not MS-MDD.
 
 Citations:
 
@@ -4904,6 +4907,7 @@ the whole library with checksums.
 | <a id="ref-sp800-128"></a>**SP800-128** | Guide for Security-Focused Configuration Management of Information Systems | NIST | August 2011 (includes updates as of 10-10-2019) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-128.pdf> | [SP800-128.md](references/text/SP800-128.md) |
 | <a id="ref-sp800-160v1r1"></a>**SP800-160V1R1** | Engineering Trustworthy Secure Systems | NIST | Vol. 1 Rev. 1 (November 2022) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-160v1r1.pdf> | [SP800-160V1R1.md](references/text/SP800-160V1R1.md) |
 | <a id="ref-sp800-137a"></a>**SP800-137A** | Assessing Information Security Continuous Monitoring (ISCM) Programs: Developing an ISCM Program Assessment | NIST | May 2020 | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-137A.pdf> | [SP800-137A.md](references/text/SP800-137A.md) |
+| <a id="ref-sp800-161r1"></a>**SP800-161R1** | Cybersecurity Supply Chain Risk Management Practices for Systems and Organizations | NIST | Rev. 1 (May 2022, includes updates as of 11-01-2024) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-161r1-upd1.pdf> | [SP800-161R1.md](references/text/SP800-161R1.md) |
 | <a id="ref-fips199"></a>**FIPS199** | Standards for Security Categorization of Federal Information and Information Systems | NIST | February 2004 | <https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf> | [FIPS199.md](references/text/FIPS199.md) |
 | <a id="ref-dodi8510-01"></a>**DODI8510.01** | Risk Management Framework for DoD Systems | DoD | July 19, 2022 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf> | [DODI8510.01.md](references/text/DODI8510.01.md) |
 | <a id="ref-cnssi1253"></a>**CNSSI1253** | Security Categorization and Control Selection for National Security Systems | CNSS | 29 July 2022 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1253.md](references/text/CNSSI1253.md) |

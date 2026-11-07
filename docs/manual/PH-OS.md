@@ -55,7 +55,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-POAM](../../MANUAL.md#art-poam), [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp), [ART-CP](../../MANUAL.md#art-cp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
 | [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca), [ART-SAP](../../MANUAL.md#art-sap) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar), [ART-SAR](../../MANUAL.md#art-sar) | — |
-| [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra), [ART-IRP](../../MANUAL.md#art-irp) | — |
+| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra), [ART-IRP](../../MANUAL.md#art-irp) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
 | [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec), [ART-RAR](../../MANUAL.md#art-rar) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | [ART-INV](../../MANUAL.md#art-inv), [ART-SSP](../../MANUAL.md#art-ssp) | — |
@@ -296,7 +296,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Cross-references:** depends on [M-2](#task-m-2); required by [M-4](#task-m-4); feeds back to [A-5](PH-EMD.md#task-a-5).
 
-## <a id="task-m-4"></a>M-4 · Authorization Updates
+## <a id="task-m-4"></a>M-4 · Authorization Package Updates
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
