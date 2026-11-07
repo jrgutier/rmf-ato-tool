@@ -1,0 +1,20 @@
+rule: AUTY-001
+bases:
+- joint
+description: an official accepting the risk who is no party to the agreement in the plans
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: joint_authorization.officials.1.official
+  value: Third Component AO
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: joint_authorization.terms.established_by
+  value:
+  - PER-AO
+  - Third Component AO
+expect:
+  errors:
+  - AUTY-001
+  messages:
+  - 'is not between the officials who accept the risk: Partner Component AO is not a party'

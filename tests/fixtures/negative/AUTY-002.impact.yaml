@@ -1,0 +1,21 @@
+rule: AUTY-002
+bases:
+- joint
+description: facility common controls at no specified impact level
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.facility
+  value:
+    environment: Component A relay enclave
+    impact_level: unrated
+    controls:
+    - pe-3
+    - pe-14
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - the facility common controls are provided at a specified impact level
+  also:
+  - RUN-FM-001

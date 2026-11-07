@@ -94,7 +94,9 @@ def _artifact_problems(run: Run, task: str) -> list[str]:
     for aid in run.tasks[task].get("outputs") or []:
         art = run.artifacts.get(aid, {})
         if art.get("generated"):
-            if not any(run.path(d["path"]).is_file() for d in art.get("data") or []):
+            # the CLI's own output (schema null), not data an agent writes beside it
+            made = [d for d in art.get("data") or [] if d.get("schema") is None]
+            if not any(run.path(d["path"]).is_file() for d in made):
                 problems.append(f"{aid} not generated")
             continue
         md = run.artifact_md(aid)

@@ -1,11 +1,12 @@
 """The authorization ledger: AODM-001 to AODM-007, AODM-009 to AODM-011 and AOCHG-001, the
-Enterprise boarding and receipt of ENT-001 and ENT-002, and AUTHRPT-001 on what follows a decision.
-Each reads the records through ``rmf_tool.run.authorization`` and stays quiet about a missing
-or unreadable file (RUN-ART-001 and RUN-FM-001 report those), except AUTHRPT-001: ART-AUTHRPT is
-not a core artifact, so RUN-ART-001 never demands its data and the rule must. A record's findings
-belong to the task that wrote it. These rules test progress, not scope: a decision type has to be
-reachable in the run as it stands on disk, so a task merely being in scope never excuses a record
-written ahead of it."""
+Enterprise boarding and receipt of ENT-001 and ENT-002, AUTHRPT-001 on what follows a decision,
+XSUM-001 on the package's executive summary, and AUTY-001 and AUTY-002 on joint, type and
+facility authorizations. Each reads the records through ``rmf_tool.run.authorization`` and stays
+quiet about a missing or unreadable file (RUN-ART-001 and RUN-FM-001 report those), except
+AUTHRPT-001: ART-AUTHRPT is not a core artifact, so RUN-ART-001 never demands its data and the
+rule must. A record's findings belong to the task that wrote it. These rules test progress, not
+scope: a decision type has to be reachable in the run as it stands on disk, so a task merely
+being in scope never excuses a record written ahead of it."""
 
 from __future__ import annotations
 
@@ -31,6 +32,8 @@ RAR_FILE = "artifacts/data/rar.yaml"
 REPORT_FILE = "artifacts/data/authorization-report.yaml"
 LEVERAGED_FILE = "artifacts/data/leveraged-authorizations.yaml"
 POAM_FILE = "artifacts/poam/items.yaml"
+SUMMARY_FILE = "artifacts/data/package-summary.yaml"  # ART-PKG, written at R-1
+SUBMITTED_TO = ("PER-AO", "PER-AODR")  # the AODR may receive the package for the AO
 SAR_DIR = "artifacts/sar/"
 # DoD CIO reciprocity memo 4.2.1.b.
 DSAWG_DOCUMENTS = ("ART-SSP", "ART-SAR", "ART-RAR", "ART-POAM", "ART-AODM")
@@ -689,4 +692,184 @@ def report_valid(ctx: Context) -> list[RunFinding]:
         err(f"the retained assessment records {', '.join(gone)} do not exist")
     if missing := [d for d in (SAP_FILE, SAR_DIR) if not any(p.startswith(d) for p in kept)]:
         err(f"the assessment records retained for the audit trail lack {', '.join(missing)}")
+    return out
+
+
+# --- XSUM-001: the package's executive summary and its submission -----------------------------
+
+def executive_summary(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 Task R-1 and Appendix F: the package holds an executive summary giving a
+    consolidated view of its security and privacy information and highlighting the risk
+    management issues, and the system owner or common control provider submits it to the
+    authorizing official (or the designated representative) for the decision."""
+    if not scope.produced_or_seeded(ctx.run, "ART-PKG"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("XSUM-001", message, SUMMARY_FILE, None, {"R-1"}))
+
+    summary = ctx.data(SUMMARY_FILE)
+    if not isinstance(summary, dict):
+        err(f"the authorization package has no executive summary: R-1 writes {SUMMARY_FILE}")
+        return out
+    data = ctx.data(POAM_FILE)
+    items = data.get("items") if isinstance(data, dict) else None
+    poam = {str(i.get("id")): i for i in items or () if isinstance(i, dict)}
+    issues = [i for i in summary.get("issues") or () if isinstance(i, dict)]
+    sent = summary.get("submission") if isinstance(summary.get("submission"), dict) else {}
+    submitted = _day(sent.get("date"))
+    # the POA&M as it stood when the package went in: an item identified later is no omission
+    pending = {k for k, i in poam.items() if i.get("status") != "completed"
+               and (_day(i.get("identified")) or dt.date.min) <= (submitted or dt.date.max)}
+    cited = {str(p) for i in issues for p in _list(i.get("poam_items"))}
+    if pending and cited.isdisjoint(pending):
+        err("the executive summary highlights no risk management issue among the open POA&M "
+            f"items {', '.join(sorted(pending))}")
+    for issue in issues:
+        if unknown := [str(p) for p in _list(issue.get("poam_items")) if str(p) not in poam]:
+            err(f"{issue.get('id')}: cites {', '.join(unknown)}, which the package's POA&M does "
+                "not hold")
+    if ctx.processes_pii and not str(summary.get("privacy") or "").strip():
+        err("the executive summary of a system processing PII gives no consolidated view of the "
+            "privacy information")
+    submitter = RECEIVERS.get(str(summary.get("subject")))
+    if sent.get("by") != submitter:
+        err(f"the package is compiled and submitted by {submitter}, the system owner or common "
+            f"control provider, not {sent.get('by')}")
+    if sent.get("to") not in SUBMITTED_TO:
+        err("the package is submitted to the authorizing official or the designated "
+            f"representative, not {sent.get('to')}")
+    for r, kind in _typed(ctx):
+        date = _day(r.get("date"))
+        if r.get("task") == "R-4" and kind.get("effect") in RAR_EFFECTS and date is not None \
+                and submitted is not None and submitted > date:
+            err(f"the package was submitted on {submitted}, after the authorization decision "
+                f"{r.get('id')} of {date}")
+    return out
+
+
+# --- AUTY-001: traditional and joint authorization -------------------------------------------
+
+SSP_RECORDS = "artifacts/data/ssp-records.yaml"
+COLLABORATION = ("categorization", "control-selection", "assessment-plan", "poam",
+                 "monitoring-strategy")  # SP 800-37r2 p. 175
+
+
+def _list(value: Any) -> list[Any]:
+    """A list field as written, or nothing when it is not a list (RUN-FM-001 reports that)."""
+    return value if isinstance(value, list) else []
+
+
+def _names(items: Any, key: str = "official") -> set[str]:
+    return {str(i.get(key)) for i in _list(items) if isinstance(i, dict) and i.get(key)}
+
+
+def joint_authorization(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 Appendix F: an organization chooses a traditional or a joint authorization.
+    A joint one has several authorizing officials who each accept the risk, under an agreement
+    documented in the security and privacy plans; it stays in effect only while they agree."""
+    out, err = _rule(ctx, "AUTY-001")
+    ssp = ctx.data(SSP_RECORDS)
+    agreement = ssp.get("joint_authorization") if isinstance(ssp, dict) else None
+    agreement = agreement if isinstance(agreement, dict) else None
+    records = {str(r.get("id")): r for r in _records(ctx)}
+    for r, kind in _typed(ctx):
+        approach, joint = r.get("approach"), r.get("joint")
+        if kind.get("effect") == "authorize" and approach not in ("traditional", "joint"):
+            err(r, f"{r['decision']} names no approach: traditional (a single authorizing "
+                "official) or joint")
+        if approach == "traditional" and joint:
+            err(r, "a traditional authorization has a single authorizing official; a record "
+                "with co-authorizing officials takes the joint approach")
+        base = records.get(str(r.get("underlying"))) or {}
+        held = r if approach == "joint" else base  # the joint authorization relied on
+        ended = _day((agreement or {}).get("ended"))
+        if held.get("approach") == "joint" and ended is not None \
+                and (_day(r.get("date")) or dt.date.min) >= ended:
+            err(r, f"the joint authorization {held.get('id')} ended with the agreement among "
+                f"the authorizing officials on {ended}")
+        if approach != "joint":
+            continue
+        accepting = _names((joint or {}).get("acceptances") if isinstance(joint, dict) else ())
+        if len(accepting) < 2:
+            err(r, "a joint authorization has at least two authorizing officials who each "
+                "accept the risk")
+        if agreement is None:
+            err(r, "the agreement of the co-authorizing officials is not documented in the "
+                "security and privacy plans (ssp-records.yaml joint_authorization)")
+            continue
+        _agreement(r, agreement, accepting, set(ctx.run.tasks), err)
+    return out
+
+
+def _agreement(record: Record, agreement: Record, accepting: set[str], tasks_of_run: set[str],
+               err: Callable[[Record, str], None]) -> None:
+    officials = _names(agreement.get("officials"))
+    if unaccepted := sorted(officials - accepting):
+        err(record, f"{', '.join(unaccepted)} of the joint agreement do not jointly accept the "
+            "risk")
+    if outside := sorted(accepting - officials):
+        err(record, f"the agreement in the security and privacy plans is not between the "
+            f"officials who accept the risk: {', '.join(outside)} is not a party")
+    shared = {str(c) for c in _list(agreement.get("collaboration"))}
+    if missing := [c for c in COLLABORATION if c not in shared]:
+        err(record, f"the joint authorization does not collaborate on {', '.join(missing)}")
+    terms = agreement.get("terms") if isinstance(agreement.get("terms"), dict) else {}
+    if absent := sorted(officials - {str(o) for o in _list(terms.get("established_by"))}):
+        err(record, "the terms and conditions are not established by all participating "
+            f"authorizing officials: {', '.join(absent)}")
+    tasks = {str(p.get("task")) for p in _list(agreement.get("progress")) if isinstance(p, dict)}
+    if tasks.isdisjoint(tasks_of_run):
+        err(record, "the joint agreement documents no progress in implementing the RMF tasks")
+
+
+
+# --- AUTY-002: type and facility authorization -----------------------------------------------
+
+IDENTICAL = frozenset({"architecture", "software", "information-types", "hardware",
+                       "processing", "control-implementations", "configurations"})
+SITE_CONTROLS = ("site-specific", "facility")
+IMPACT_LEVELS = ("low", "moderate", "high")
+
+
+def type_facility(ctx: Context) -> list[RunFinding]:
+    """SP 800-37r2 Appendix F: a type authorization is an ATO for an archetype of identical
+    instances, used with site-specific controls or a facility authorization; each site issues
+    an authorization to use that leverages it and the facility common controls; a facility
+    authorization is a common control authorization of physical and environmental controls."""
+    out, err = _rule(ctx, "AUTY-002")
+    data = ctx.data(LEVERAGED_FILE)
+    leveraged = _names(data.get("leveraged_authorizations") if isinstance(data, dict) else (),
+                       "id")
+    for r, kind in _typed(ctx):
+        found = r.get("type_authorization")
+        if isinstance(found, dict):
+            if r["decision"] not in ATO_TYPES:
+                err(r, f"a type authorization represents an authorization to operate, not "
+                    f"{r['decision']}")
+            if IDENTICAL.isdisjoint(str(x) for x in _list(found.get("identical"))):
+                err(r, "the type authorization names no identical element its deployed "
+                    "instances share")
+            if found.get("site_controls") not in SITE_CONTROLS:
+                err(r, "a type authorization is used with authorized site-specific controls or "
+                    "a facility authorization")
+        provider = r.get("provider") if isinstance(r.get("provider"), dict) else {}
+        if provider.get("type_authorization") is True:
+            if "provider" not in (kind.get("requires") or ()):  # AD-ATU and AD-DATU
+                err(r, "the site authorizing official accepts the risk of a type-authorized "
+                    f"system with an authorization to use, not {r['decision']}")
+            if provider.get("facility_package") not in leveraged:
+                err(r, "the authorization to use leverages the facility common controls: "
+                    f"{provider.get('facility_package')} is no leveraged authorization")
+        facility = r.get("facility")
+        if isinstance(facility, dict):
+            if r["decision"] != "AD-CCA":
+                err(r, "the facility authorizing official issues a common control "
+                    f"authorization, not {r['decision']}")
+            if facility.get("impact_level") not in IMPACT_LEVELS:
+                err(r, "the facility common controls are provided at a specified impact level")
+            if all(not str(c).startswith("pe-") for c in _list(facility.get("controls"))):
+                err(r, "a facility authorization addresses the physical and environmental "
+                    "controls of the facility")
     return out

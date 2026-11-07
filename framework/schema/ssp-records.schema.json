@@ -540,6 +540,116 @@
           }
         }
       }
+    },
+    "joint_authorization": {
+      "title": "Agreement of the co-authorizing officials of a joint authorization, documented in the security and privacy plans",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "officials",
+        "collaboration",
+        "terms",
+        "progress",
+        "sources"
+      ],
+      "properties": {
+        "officials": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "official",
+              "organization"
+            ],
+            "properties": {
+              "official": {
+                "type": "string",
+                "minLength": 1
+              },
+              "organization": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "collaboration": {
+          "title": "RMF work the authorizing officials collaborate on",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "categorization",
+              "control-selection",
+              "assessment-plan",
+              "poam",
+              "monitoring-strategy"
+            ]
+          }
+        },
+        "terms": {
+          "title": "Terms and conditions of the joint authorization",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "established_by",
+            "ongoing_risk"
+          ],
+          "properties": {
+            "established_by": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "ongoing_risk": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Process for the ongoing determination and acceptance of risk"
+            }
+          }
+        },
+        "progress": {
+          "title": "Progress of the officials in implementing the RMF tasks",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "task",
+              "status"
+            ],
+            "properties": {
+              "task": {
+                "type": "string",
+                "pattern": "^[PCSIARM]-\\d+$"
+              },
+              "status": {
+                "enum": [
+                  "planned",
+                  "in-progress",
+                  "done"
+                ]
+              }
+            }
+          }
+        },
+        "ended": {
+          "title": "Date the agreement among the authorizing officials ended",
+          "type": "string",
+          "format": "date"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   },
   "$defs": {

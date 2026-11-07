@@ -21,7 +21,8 @@ BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
 if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3)
     BASES["example"] = EXAMPLE_RUN
 # A derived base: a committed base plus mutations, so it cannot drift from what it extends.
-DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml"}
+DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml",
+           "joint": REPO_ROOT / "tests/fixtures/runs/joint.yaml"}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 
