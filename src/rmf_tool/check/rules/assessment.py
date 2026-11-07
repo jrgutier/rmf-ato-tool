@@ -28,7 +28,7 @@ NO_LOGICAL_ACCESS, GENERAL_PUBLIC = "no-logical-access", "general-public"
 INFORMATION_OWNER = "PER-IO"
 SYSTEM_OWNER, CCP, AO, AODR, SCA, CISO = ("PER-PM", "PER-CCP", "PER-AO", "PER-AODR", "PER-SCA",
                                           "PER-CISO")
-RISK_ASSESSMENT, ORG_CONTEXT = "ART-RA", "ART-ORG-CONTEXT"
+RISK_ASSESSMENT, ORG_CONTEXT, CATEGORIZATION = "ART-RA", "ART-ORG-CONTEXT", "ART-CAT"
 ACCESS = ("system", "environment", "documentation", "records", "artifacts", "test-results")
 # SP 800-53A section 2.4: what each assessment method applies to.
 METHOD_OBJECTS = {"examine": {"specifications", "mechanisms", "activities"},
@@ -538,16 +538,90 @@ def team(ctx: Context) -> list[RunFinding]:
         if _late(found.get("verified"), start):
             err(f"{persona} was verified as a qualified assessor on {found.get('verified')}, "
                 "after the assessment starts")
+    _selection(ctx, sap, start, err)
     independence = _block(sap, "assessor_independence")
     if independence.get("determined_by") not in (AO, AODR):
         err("the authorizing official or designated representative determines the required "
             f"degree of assessor independence, not {independence.get('determined_by')}")
-    if independence.get("required") == "independent":
+    basis = independence.get("basis") if isinstance(independence.get("basis"), list) else []
+    if CATEGORIZATION not in basis:
+        err("the required level of independence rests on the results of the security "
+            "categorization; basis omits ART-CAT")
+    if RISK_ASSESSMENT not in basis:
+        err("the required level of independence rests on the risk to organizational operations, "
+            "assets, individuals, other organizations and the Nation; basis omits ART-RA")
+    _sufficiency(_block(independence, "sufficiency"), err)
+    reviewed = _independent_review(independence, _team(sap), ctx, err)
+    for member in _records(sap, "team"):
+        contract = _block(member, "contract")
+        if (member.get("independent") is True and contract.get("owner_involved") is True
+                and contract.get("owner_can_influence") is True):
+            err(f"{member.get('persona')} is contracted with the system owner directly involved "
+                "in the contracting process and able to unduly influence the assessor, so the "
+                "member is not independent")
+    if independence.get("required") == "independent" and not reviewed:
         for member in _records(sap, "team"):
             if member.get("independent") is not True:
                 err(f"{member.get('persona')} lacks the required degree of independence the "
                     "authorizing official determined")
     return out
+
+
+def _selection(ctx: Context, sap: dict[str, Any], start: dt.date | None, err: Err) -> None:
+    """A-1: the AO or designated representative selects the team for the type of assessment,
+    weighing the technical expertise required (SP 800-53A 3.2, SP 800-37r2 Task A-1)."""
+    selection = _block(sap, "selection")
+    if not selection:
+        err("no assessor selection is recorded: the authorizing official or designated "
+            "representative selects the assessor or assessment team for the type of control "
+            "assessment to be conducted")
+        return
+    if selection.get("selected_by") not in (AO, AODR):
+        err("the authorizing official or designated representative selects the assessor or "
+            f"assessment team, not {selection.get('selected_by')}")
+    if _late(selection.get("date"), start):
+        err(f"the assessment team was selected on {selection.get('date')}, after the assessment "
+            "starts")
+    if ctx.processes_pii and selection.get("assessment_type") == "security":
+        err("the system processes PII, so the type of control assessment to be conducted covers "
+            "the privacy controls; the assessor was selected for a security assessment only")
+    if not selection.get("expertise"):
+        err("the selection records no technical expertise the assessors possess to carry out "
+            "the assessments")
+
+
+def _sufficiency(found: dict[str, Any], err: Err) -> None:
+    if not found:
+        err("the authorizing official has not determined whether the level of assessor "
+            "independence is sufficient to provide confidence in the assessment results")
+        return
+    if found.get("determined_by") not in (AO, AODR):
+        err("the authorizing official or designated representative determines whether the "
+            f"level of assessor independence is sufficient, not {found.get('determined_by')}")
+    if found.get("sufficient") is not True:
+        err("the authorizing official determined the level of assessor independence "
+            "insufficient to provide confidence that the assessment results are sound")
+
+
+def _independent_review(independence: dict[str, Any], team: set[Any], ctx: Context,
+                        err: Err) -> bool:
+    """Whether an independent team of experts reviewing the results stands in for the
+    assessors' own independence (SP 800-53A 3.2, special situations)."""
+    if independence.get("achieved_by") != "independent-review":
+        return False
+    review = _block(independence, "review")
+    reviewers = review.get("by") if isinstance(review.get("by"), list) else []
+    if not reviewers:
+        err("independence achieved by an independent review of the assessment results names "
+            "no reviewing team of experts")
+        return False
+    sound = True
+    for who in reviewers:
+        if not isinstance(who, str) or who in team or who not in ctx.run.personas:
+            err(f"the independent team of experts that reviews the assessment results includes "
+                f"{who}, who is on the assessment team or no framework persona")
+            sound = False
+    return sound
 
 
 # --- ASMT-008: the report as a whole ------------------------------------------------------------

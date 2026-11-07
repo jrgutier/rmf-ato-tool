@@ -697,6 +697,8 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 No artifact. The task is done when its interviews are recorded and its checks pass.
 
+Writes to `facts.yaml`: `missions`.
+
 **Entry criteria**
 
 - A capability need is documented (EXT-CAPDOC) and the organizational context is available.
@@ -706,6 +708,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Missions, business functions and mission/business processes that the system is intended to support are identified (DoDI 8510.01 Table 1 outcome).
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
+- facts.yaml `missions` (from framework 0.2.0) lists each mission, business function and mission/business process with its kind and whether it is mission essential, identified by the mission or business owner; an essential function names its supporting assets and data once P-11 and P-12 put them on record (MSN-001).
 
 **Alignment**
 

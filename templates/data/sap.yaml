@@ -11,10 +11,19 @@ team:
     role: "<<FILL: role on the assessment team>>"
     independent: true
     qualification: {basis: "<<FILL: what qualifies this assessor>>", verified_by: PER-CISO, verified: "2026-01-01"}
+    # contract: {owner_involved: false, owner_can_influence: false}  # for contracted assessors
+selection:  # Task A-1: the AO or AODR selects the team for the type of control assessment
+  selected_by: PER-AO
+  date: "2026-01-01"  # not after schedule.start
+  assessment_type: security  # security | privacy | security-and-privacy (covers privacy when the system processes PII)
+  expertise: "<<FILL: the skills and technical expertise the selection required>>"
 assessor_independence:
   required: independent  # self-assessment | internal | independent
   determined_by: PER-AO
   rationale: "<<FILL: why this degree>>"
+  basis: [ART-CAT, ART-RA]  # the categorization and the risk the degree rests on
+  sufficiency: {determined_by: PER-AO, sufficient: true, date: "2026-01-01", rationale: "<<FILL: why the degree gives confidence in the results>>"}
+  achieved_by: assessor  # assessor | independent-review (then `review: {by: [PER-...], situation: "..."}` names the independent team of experts that reviews the results)
 objectives: "<<FILL: the objective of the control assessment>>"
 level_of_effort: "<<FILL: the expected level of effort>>"
 approval: {reviewed_by: PER-SCA, approved_by: PER-AO, date: "2026-01-01"}  # on or before schedule.start
@@ -34,6 +43,20 @@ preparation:  # SP 800-53A section 3.1, all dated on or before schedule.start
     - {persona: PER-ISSM, for: "<<FILL: what they arrange>>"}
   ambiguity_mechanism: {between: [PER-SCA, PER-ISSM], means: "<<FILL: how ambiguities are settled>>"}
   understanding: {summary: "<<FILL: the organization's operations and how the system supports them>>", sources: [ART-ORG-CONTEXT]}
+rigor:  # what the rigor and scope of the assessment rest on (RIGR-001; SP 800-53A 1.1, 2.4, appendix C)
+  categorization: ART-CAT
+  # privacy_risk_assessment: ART-RA  # required when the system processes PII
+  plans: [ART-SSP]  # the approved plans whose controls are assessed
+  assurance_requirements:  # what the organization intends to meet; each procedure names one
+    - id: AR-001
+      requirement: "<<FILL: the assurance the organization intends to meet>>"
+      specified_by: PER-AO  # a persona of the organization outside the team (PER-AO or PER-AODR)
+      depth: focused  # the least depth and coverage meeting it: basic | focused | comprehensive
+      coverage: focused
+  direction:  # the organization's direction on the type, number and specific objects to assess
+    by: PER-AO  # outside the team
+    conferred_with: [PER-SCA]  # assessors conferred with
+    factors: ["<<FILL: e.g. available resources, importance of the assessment>>"]
 procedures:  # every scoped control in a record, each method once per control; several controls consolidate
   - id: PRC-001
     controls: [ac-2]
@@ -45,6 +68,11 @@ procedures:  # every scoped control in a record, each method once per control; s
     risk_results: [ART-RA]
     adaptation: none  # none | system-specific | platform-specific | organization-specific
     sequence: 1
+    assurance_requirement: AR-001
+    sampling:  # one record per method: the types sampled (personas for interview) with a number each
+      - {method: examine, types: [{type: specifications, number: 2}, {type: mechanisms, number: 2}, {type: activities, number: 2}], specific: [ART-SSP], selection: random-and-targeted, bias_control: "<<FILL: how bias is avoided>>"}
+      - {method: interview, types: [{type: PER-ISSM, number: 1}], specific: ["<<FILL: the individuals deemed important>>"], selection: targeted, bias_control: "<<FILL: how bias is avoided>>"}
+      - {method: test, types: [{type: mechanisms, number: 2}, {type: activities, number: 1}], specific: ["<<FILL: component ids>>"], selection: random-and-targeted, bias_control: "<<FILL>>", extent: [{measure: test cases, count: 10}]}  # extent: mechanism tests only; specific: focused or comprehensive coverage
 optimization: {reviewed_by: PER-SCA, tailoring_guidance: "<<FILL: the organization's tailoring guidance, or that it gives none>>", notes: "<<FILL: how procedures were sequenced and consolidated>>"}
 additional_procedures: []  # {id: APR-001, requirement, statements, methods, objects, rationale} for anything outside SP 800-53
 reuse_policy: {max_age_days: 365, source: ART-ORG-CONTEXT}

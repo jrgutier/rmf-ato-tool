@@ -1,0 +1,15 @@
+rule: MSN-001
+bases:
+- minimal
+description: a mission supported by a component the boundary does not declare
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: missions.items.0.supported_by
+  value:
+  - CMP-NOPE
+expect:
+  errors:
+  - MSN-001
+  messages:
+  - MSN-01 is supported by CMP-NOPE, which the assets on record do not declare

@@ -9,8 +9,7 @@ team:
   role: Lead assessor
   independent: true
   qualification:
-    basis: Current DoD 8140 assessor qualification and two prior RMF 
-      assessments.
+    basis: Current DoD 8140 assessor qualification and two prior RMF assessments.
     verified_by: PER-CISO
     verified: '2026-10-29'
 schedule:
@@ -23,23 +22,31 @@ schedule:
   - date: '2026-11-09'
     description: Penetration test of the relay appliance
     kind: penetration-test
-rules_of_engagement: Testing uses the developmental test environment only; no 
-  production data.
+rules_of_engagement: Testing uses the developmental test environment only; no production data.
 sources:
 - INT-008.A1
-objectives: Determine whether the controls of the tailored baseline are 
-  implemented correctly and produce the desired outcome.
-level_of_effort: Two assessors for two weeks on the developmental test 
-  environment.
+objectives: Determine whether the controls of the tailored baseline are implemented correctly and produce the desired outcome.
+level_of_effort: Two assessors for two weeks on the developmental test environment.
 approval:
   reviewed_by: PER-SCA
   approved_by: PER-AO
   date: '2026-10-30'
+selection:
+  selected_by: PER-AO
+  date: '2026-10-28'
+  assessment_type: security
+  expertise: Assessors with DoD 8140 assessor qualification and experience with the relay's Linux appliances, PostgreSQL and the operator console.
 assessor_independence:
   required: independent
   determined_by: PER-AO
-  rationale: A moderate-impact system needs assessors outside the program 
-    office.
+  rationale: A moderate-impact system needs assessors outside the program office.
+  basis: [ART-CAT, ART-RA]
+  sufficiency:
+    determined_by: PER-AO
+    sufficient: true
+    date: '2026-10-28'
+    rationale: An independent SCA outside the program office gives confidence the results are sound.
+  achieved_by: assessor
 preparation:
   informed_by: PER-PM
   officials_notified:
@@ -52,8 +59,7 @@ preparation:
   resources:
     allocated_by: PER-PM
     allocated: '2026-10-29'
-    description: Two assessors and the developmental test environment for the 
-      schedule.
+    description: Two assessors and the developmental test environment for the schedule.
   access:
   - to: system
     provided_by: PER-PM
@@ -77,8 +83,7 @@ preparation:
   - ART-SSP
   - ART-STIG
   elements:
-  - responsible_for: Develops and updates the system security plan and its 
-      procedures.
+  - responsible_for: Develops and updates the system security plan and its procedures.
     persona: PER-ISSM
   channels:
   - among:
@@ -94,10 +99,27 @@ preparation:
     - PER-ISSM
     means: A daily review of draft observations before they become findings.
   understanding:
-    summary: The relay supports the mission thread named in the organizational 
-      context.
+    summary: The relay supports the mission thread named in the organizational context.
     sources:
     - ART-ORG-CONTEXT
+rigor:
+  categorization: ART-CAT
+  plans:
+  - ART-SSP
+  assurance_requirements:
+  - id: AR-001
+    requirement: Increased grounds for confidence that each scoped control is implemented correctly and operating as intended, for a moderate-impact system.
+    specified_by: PER-AO
+    depth: focused
+    coverage: focused
+  direction:
+    by: PER-AO
+    conferred_with:
+    - PER-SCA
+    factors:
+    - available resources
+    - importance of the assessment
+    - the organization's assessment goals and objectives
 procedures:
 - id: PRC-001
   controls:
@@ -115,14 +137,52 @@ procedures:
   - mechanisms
   - activities
   - individuals
-  rationale: The controls in the risk assessment need all three methods to reach
-    the objectives.
+  rationale: The controls in the risk assessment need all three methods to reach the objectives.
   depth: focused
   coverage: focused
   risk_results: &id001
   - ART-RA
   adaptation: none
   sequence: 1
+  assurance_requirement: AR-001
+  sampling:
+  - method: examine
+    types:
+    - type: specifications
+      number: 2
+    - type: mechanisms
+      number: 2
+    - type: activities
+      number: 2
+    specific:
+    - ART-SSP
+    selection: random-and-targeted
+    bias_control: The representative sample is drawn by lot from the inventory before the specific objects are added.
+  - method: interview
+    types:
+    - type: PER-ISSM
+      number: 1
+    - type: PER-PM
+      number: 1
+    specific:
+    - the ISSM of record
+    selection: random-and-targeted
+    bias_control: Roles are drawn from the staffing list; the ISSM is added as the role that operates the controls.
+  - method: test
+    types:
+    - type: mechanisms
+      number: 2
+    - type: activities
+      number: 2
+    specific:
+    - CMP-RELAY
+    selection: random-and-targeted
+    bias_control: The representative sample is drawn by lot from the inventory before the specific objects are added.
+    extent:
+    - measure: test cases
+      count: 12
+    - measure: modules
+      count: 2
 - id: PRC-002
   controls:
   - cm-6
@@ -139,11 +199,35 @@ procedures:
   risk_results: *id001
   adaptation: none
   sequence: 2
+  assurance_requirement: AR-001
+  sampling:
+  - method: examine
+    types:
+    - type: specifications
+      number: 2
+    - type: mechanisms
+      number: 2
+    specific:
+    - ART-SSP
+    selection: random-and-targeted
+    bias_control: The representative sample is drawn by lot from the inventory before the specific objects are added.
+  - method: test
+    types:
+    - type: mechanisms
+      number: 2
+    specific:
+    - CMP-RELAY
+    selection: random-and-targeted
+    bias_control: The representative sample is drawn by lot from the inventory before the specific objects are added.
+    extent:
+    - measure: test cases
+      count: 12
+    - measure: modules
+      count: 2
 optimization:
   reviewed_by: PER-SCA
   tailoring_guidance: The organization provides none beyond SP 800-53A.
-  notes: Interviews are consolidated by persona; configuration runs last so 
-    scans inform it.
+  notes: Interviews are consolidated by persona; configuration runs last so scans inform it.
 reuse_policy:
   max_age_days: 365
   source: ART-ORG-CONTEXT
@@ -194,8 +278,7 @@ external_providers:
     by: PER-SCA
     date: '2026-10-29'
     assurances: The agreement commits the provider to its ATO controls.
-  procedure_adjustment: Inherited sign-in controls are assessed from the 
-    provider ATO package and an interview.
+  procedure_adjustment: Inherited sign-in controls are assessed from the provider ATO package and an interview.
   provider_assessment:
     scope: A full assessment for the provider ATO.
     independence: independent
@@ -218,10 +301,8 @@ penetration_test:
     - malicious insider operator
     objectives:
     - Gain administrator access on the relay appliance and alter stored reports
-    level_of_effort: Two testers for three days, sized to the cost and time 
-      available.
-    rules_of_engagement: No denial of service; test environment only; stop on 
-      any production data.
+    level_of_effort: Two testers for three days, sized to the cost and time available.
+    rules_of_engagement: No denial of service; test environment only; stop on any production data.
   components:
   - CMP-RELAY
   - CMP-CONSOLE
