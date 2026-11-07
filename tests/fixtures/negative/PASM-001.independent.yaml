@@ -1,0 +1,40 @@
+rule: PASM-001
+bases:
+- pii
+description: a privacy assessor who is neither the SAOP nor independent
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: team
+  value:
+  - persona: PER-SCA
+    role: Lead assessor
+    independent: true
+    qualification:
+      basis: Current DoD 8140 assessor qualification and two prior RMF assessments.
+      verified_by: PER-CISO
+      verified: '2026-10-29'
+  - persona: PER-ISSM
+    role: Privacy assessor
+    independent: false
+    qualification:
+      basis: Current DoD 8140 assessor qualification.
+      verified_by: PER-CISO
+      verified: '2026-10-29'
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: assessor_independence.required
+  value: internal
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: privacy.assessors
+  value:
+  - PER-SCA
+  - PER-ISSM
+expect:
+  errors:
+  - PASM-001
+  also:
+  - ASMT-001
+  messages:
+  - privacy controls are assessed by the senior agency official for privacy or an independent assessor, not PER-ISSM

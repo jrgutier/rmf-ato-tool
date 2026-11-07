@@ -1,6 +1,7 @@
-"""Privacy rules of a system processing PII: PRIV-001 to PRIV-010. Each stays quiet for a system
-that processes no PII (``Context.processes_pii``), for a task outside the run's scope, and about a
-file that is missing or unreadable where another rule reports it (RUN-ART-001, RUN-FM-001).
+"""Privacy rules of a system processing PII: PRIV-001 to PRIV-012, PASM-001 and PASM-002. Each
+stays quiet for a system that processes no PII (``Context.processes_pii``), PRIV-012's AO approval
+of the plans aside, for a task outside the run's scope, and about a file that is missing or
+unreadable where another rule reports it (RUN-ART-001, RUN-FM-001).
 
 Who does what follows the sources. DoDI 5400.16 makes the PIA, on DD Form 2930 (2930A when
 adapted), coordinated by the PM through the ISSM, the privacy representative and the records
@@ -63,6 +64,9 @@ PREPARER = "PER-PM"  # E3 2b: the PM or designee completes and coordinates the P
 OMB_A130 = "OMB-A-130"
 FIPPS = "FIPPS"  # DoDI 5400.11 5.2: systems are evaluated against the FIPPs
 PLAN_TASKS = ("I-2", "A-5", "M-4")  # tasks that update the plans with what they learned
+SAP = "artifacts/data/sap.yaml"
+SAR_REPORT = "artifacts/data/sar-report.yaml"
+AUTHORIZERS = ("PER-AO", "PER-AODR")  # SP 800-37r2 S-6: the AO or designated representative
 
 
 def _list(value: Any) -> list[Any]:
@@ -549,3 +553,137 @@ def privacy_program(ctx: Context) -> list[RunFinding]:
                          "section on the Component privacy and civil liberties program",
                          ORG_CONTEXT, "P-2")]
     return []
+
+
+# --- PRIV-012: the SAOP approves the privacy plan before the AO -------------------------------
+
+def _touched(ctx: Context, aid: str, task: str) -> bool:
+    doc = ctx.docs.get(f"artifacts/{aid}.md")
+    return doc is not None and task in _list(_dict(doc.data).get("touched_by"))
+
+
+def _first_authorization(ctx: Context) -> dt.date | None:
+    """The date of the system's first decision that authorizes it, from the ledger."""
+    effect = ledger.effects(ctx.run)
+    dates = [_day(r.get("date")) for r in ledger.load(ctx.run) or ()
+             if effect.get(str(r.get("decision"))) == "authorize"]
+    return min((d for d in dates if d is not None), default=None)
+
+
+def saop_approval(ctx: Context) -> list[RunFinding]:
+    """PRIV-012: once S-6 has written ART-SSP, the AO or AODR has approved the plans, and for a
+    system processing PII the senior agency official for privacy (PER-PRIV, the role a designee
+    acts in) reviewed and approved the privacy plan first: the first such approval precedes the
+    AO's or AODR's approval of the plans and the first authorization decision (SP 800-37r2 S-4
+    and S-6, DoDI 5400.11 3.1.b.(4), CNSSI 1253 3.2.2.f.7)."""
+    data = _record(ctx, SSP_RECORDS)
+    if data is None or "S-6" not in scope.active_tasks(ctx.run) \
+            or not _touched(ctx, "ART-SSP", "S-6"):
+        return []
+    by_ao = [_day(a.get("date")) for a in _dicts(data.get("approvals"))
+             if a.get("system_role") in AUTHORIZERS]
+    ao = min((d for d in by_ao if d is not None), default=None)
+    if ao is None:
+        return [_finding("PRIV-012", "S-6 wrote ART-SSP, and no approval of the security and "
+                         "privacy plans by the authorizing official or designated representative "
+                         "is on record", SSP_RECORDS, "S-6")]
+    if not ctx.processes_pii:
+        return []
+    plan = _dict(data.get("privacy_plan"))
+    approvals = _dicts(plan.get("approvals"))
+    if not approvals:
+        return [_finding("PRIV-012", "the privacy plan of a system processing PII went to the "
+                         "authorizing official without the review and approval of the senior "
+                         "agency official for privacy", SSP_RECORDS, "S-6")]
+    saop = [a for a in approvals if a.get("by") == PRIVACY]
+    if not saop:
+        others = ", ".join(sorted(_strings([a.get("by") for a in approvals])))
+        return [_finding("PRIV-012", f"the privacy plan is reviewed and approved by {others}, "
+                         "not the senior agency official for privacy (PER-PRIV)", SSP_RECORDS,
+                         "S-6")]
+    first = min((d for d in (_day(a.get("date")) for a in saop) if d is not None), default=None)
+    if first is None:
+        return []
+    out = []
+    if first > ao:
+        out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
+                            f"privacy plan on {first}, after the authorizing official's approval "
+                            f"of the plans on {ao}", SSP_RECORDS, "S-6"))
+    decided = _first_authorization(ctx)
+    if decided is not None and first > decided:
+        out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
+                            f"privacy plan on {first}, after the authorization decision of "
+                            f"{decided}", SSP_RECORDS, "S-6"))
+    return out
+
+
+# --- PASM-001: the privacy scope and assessors of the assessment plan ---------------------------
+
+def _privacy_assessment(ctx: Context, rel: str, aid: str, task: str) -> dict[str, Any] | None:
+    data = _record(ctx, rel)
+    if not _active(ctx, task) or data is None or not _touched(ctx, aid, task):
+        return None
+    return data
+
+
+def privacy_assessment_plan(ctx: Context) -> list[RunFinding]:
+    """PASM-001: the assessment plan of a system processing PII scopes every privacy control of
+    the baseline, and its privacy assessors are on the team and are the senior agency official
+    for privacy or an independent assessor (SP 800-37r2 A-1 to A-3)."""
+    data = _privacy_assessment(ctx, SAP, "ART-SAP", "A-2")
+    if data is None:
+        return []
+    privacy = data.get("privacy")
+    if not isinstance(privacy, dict):
+        return [_finding("PASM-001", "the assessment plan of a system processing PII has no "
+                         "privacy assessment scope", SAP, "A-2")]
+    team = {str(m.get("persona")): m for m in _dicts(data.get("team"))}
+    out = []
+    for persona in sorted(_strings(privacy.get("assessors"))):
+        member = team.get(persona)
+        if member is None:
+            out.append(_finding("PASM-001", f"privacy assessor {persona} is not on the "
+                                "assessment team of the plan", SAP, "A-2"))
+        elif persona != PRIVACY and member.get("independent") is not True:
+            out.append(_finding("PASM-001", "privacy controls are assessed by the senior agency "
+                                f"official for privacy or an independent assessor, not {persona}",
+                                SAP, "A-2"))
+    scoped = _strings(privacy.get("controls"))
+    for control in sorted(_privacy_controls(ctx) - scoped):
+        out.append(_finding("PASM-001", f"privacy control {control} of the baseline is outside "
+                            "the privacy scope of the assessment plan", SAP, "A-2"))
+    return out
+
+
+# --- PASM-002: the privacy assessment report ----------------------------------------------------
+
+def privacy_assessment_report(ctx: Context) -> list[RunFinding]:
+    """PASM-002: the assessment report of a system processing PII documents the privacy control
+    assessment, by a privacy assessor of the plan, and the senior agency official for privacy
+    provides it to the AO or AODR (SP 800-37r2 A-3, A-4)."""
+    data = _privacy_assessment(ctx, SAR_REPORT, "ART-SAR", "A-4")
+    if data is None:
+        return []
+    privacy = data.get("privacy")
+    if not isinstance(privacy, dict):
+        return [_finding("PASM-002", "the assessment report of a system processing PII has no "
+                         "privacy assessment results", SAR_REPORT, "A-4")]
+    out = []
+    planned = _strings(_dict(_dict(ctx.data(SAP)).get("privacy")).get("assessors"))
+    for persona in sorted(_strings(privacy.get("assessed_by")) - planned):
+        if not planned:
+            break  # PASM-001 reports a plan with no privacy assessors
+        out.append(_finding("PASM-002", f"the privacy assessment results are documented by "
+                            f"{persona}, not a privacy assessor of the assessment plan",
+                            SAR_REPORT, "A-4"))
+    provided = _dict(privacy.get("provided"))
+    if provided.get("by") != PRIVACY:
+        out.append(_finding("PASM-002", "privacy information goes to the authorizing official "
+                            "from the senior agency official for privacy, not "
+                            f"{provided.get('by')}",
+                            SAR_REPORT, "A-4"))
+    if provided.get("to") not in AUTHORIZERS:
+        out.append(_finding("PASM-002", f"the privacy assessment results are provided to "
+                            f"{provided.get('to')}, not the authorizing official or designated "
+                            "representative", SAR_REPORT, "A-4"))
+    return out

@@ -2311,7 +2311,9 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "PLAN REVIEW AND APPROVAL | necessary to protect the system and the environment of operation commensurate with risk are reviewed and approved by the authorizing official."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-012 fails S-6 when no approval of the security and privacy plans by the AO or AODR is on record."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "no approval of the security and privacy plans by the authorizing official or designated representative", "claim": "constraint", "asserts": "The security and privacy plans are reviewed and approved by the authorizing official, or a designated representative, at S-6"}]
     work_item: "WI-02"
   - id: "REQ-SP800-37R2-0299"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
@@ -2420,8 +2422,11 @@ requirements:
     locator: "TASK S-4"
     context: ""
     statement: "Organizations may develop a consolidated plan that incorporates security and privacy plans or maintain separate plans. If developing a consolidated plan, privacy programs collaborate with security programs to ensure that the plan reflects the selection of controls that provide protections with respect to managing the confidentiality, integrity, and availability of PII; and delineates roles and responsibilities for control implementation, assessment, and monitoring. For separate system security plans and privacy plans, organizations cross-reference the controls in all plans to help maintain accountability and awareness. The senior agency official for privacy reviews and approves the privacy plan (or integrated plan) before the plan is provided to the authorizing official or designated representative for review (see Task S-6). Organizations may document the control selection and tailoring information in documents equivalent to security and privacy plans, for example, in systems engineering or system life cycle artifacts or documents."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-012 fails a privacy plan the senior agency official for privacy approved after the AO's approval; the collaboration of the programs in a consolidated plan and the cross-reference of separate plans are unheld (this framework always consolidates in ART-SSP), and two sentences are permissions."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.order.yaml", "expect": "after the authorizing official's approval of the plans", "claim": "constraint", "asserts": "The senior agency official for privacy reviews and approves the privacy plan before the authorizing official's approval of the plans", "sentence": "The senior agency official for privacy reviews and approves the privacy plan (or integrated plan) before the plan is provided to the authorizing official or designated representative for review (see Task S-6)."}]
     work_item: "WI-02"
+    ruling_sought: [{"sentence": "Organizations may develop a consolidated plan that incorporates security and privacy plans or maintain separate plans.", "reason": "A permission: organizations may consolidate the plans or keep them separate; nothing can fail."}, {"sentence": "Organizations may document the control selection and tailoring information in documents equivalent to security and privacy plans, for example, in systems engineering or system life cycle artifacts or documents.", "reason": "A permission: control selection may be documented in equivalent documents; nothing can fail."}]
   - id: "REQ-SP800-37R2-0313"
     citation: {"ref": "SP800-37R2", "page": 73, "anchor": "Documentation of planned control implementations allows for traceability of decisions prior to"}
     kind: "indicative"
@@ -2480,7 +2485,9 @@ requirements:
     locator: "TASK S-6"
     context: ""
     statement: "Review and approve the security and privacy plans for the system and the environment of operation."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-012 fails S-6 when no approval of the security and privacy plans by the AO or AODR is on record."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "no approval of the security and privacy plans by the authorizing official or designated representative", "claim": "constraint", "asserts": "The authorizing official or designated representative reviews and approves the security and privacy plans at S-6"}]
     work_item: "WI-02"
   - id: "REQ-SP800-37R2-0320"
     citation: {"ref": "SP800-37R2", "page": 75, "anchor": "The Privacy Continuous Monitoring (PCM) strategy includes all of the available privacy"}
@@ -2506,15 +2513,20 @@ requirements:
     locator: "TASK S-6"
     context: ""
     statement: "The security and privacy plan review by the authorizing official or designated representative with support from the senior accountable official for risk management or risk executive (function), chief information officer, senior agency information security officer, and senior agency official for privacy, determines if the plans are complete, consistent, and satisfy the stated security and privacy requirements for the system. Based on the results from this review, the authorizing official or designated representative may recommend changes to the security and privacy plans. If the plans are unacceptable, the system owner or common control provider make appropriate changes to the plans. If the plans are acceptable, the authorizing official or designated representative approves the plans."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-012 fails S-6 without the AO's or AODR's approval of acceptable plans; who supports the review, whether the plans are complete and consistent, and the changes to unacceptable plans are prose in S-6."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "no approval of the security and privacy plans by the authorizing official or designated representative", "claim": "constraint", "asserts": "Acceptable plans are approved by the authorizing official or designated representative, and S-6 without that approval fails", "sentence": "If the plans are acceptable, the authorizing official or designated representative approves the plans."}]
     work_item: "WI-02"
+    ruling_sought: [{"sentence": "Based on the results from this review, the authorizing official or designated representative may recommend changes to the security and privacy plans.", "reason": "A permission: the AO or AODR may recommend changes; nothing can fail."}]
   - id: "REQ-SP800-37R2-0323"
     citation: {"ref": "SP800-37R2", "page": 76, "anchor": "The acceptance of the security and privacy plans represents an important milestone"}
     kind: "modal"
     locator: "TASK S-6"
     context: ""
     statement: "The acceptance of the security and privacy plans represents an important milestone in the SDLC and risk management process. The authorizing official or designated representative, by approving the plans, agrees to the set of controls (i.e., system-specific, hybrid, or common controls) and the description of the proposed implementation of the controls to meet the security and privacy requirements for the system and the environment in which the system operates.84 The approval of the plans allows the risk management process to proceed to the RMF Implement step. The approval of the plans also establishes the level of effort required to successfully complete the remainder of the RMF steps and provides the basis of the security and privacy specifications for the acquisition of the system or individual system elements."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-012 fails S-6 without the approval of the plans; that the approval lets I-1 start is task order (I-1 depends on S-6), and the level of effort it establishes is prose."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "no approval of the security and privacy plans by the authorizing official or designated representative", "claim": "constraint", "asserts": "The approval of the plans by the authorizing official comes before the RMF Implement step proceeds", "sentence": "The approval of the plans allows the risk management process to proceed to the RMF Implement step."}]
     work_item: "WI-02"
   - id: "REQ-SP800-37R2-0324"
     citation: {"ref": "SP800-37R2", "page": 76, "anchor": "After the initial review and approval of the system security plan by"}
@@ -2666,7 +2678,9 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-3 CONTROL ASSESSMENTS | • Control assessments are conducted in accordance with the security and privacy assessment plans. • Opportunities to reuse assessment results from previous assessments to make the risk management process timely and cost-effective are considered. • Use of automation to conduct control assessments is maximized to increase speed, effectiveness, and efficiency of assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy results documented by anyone but a privacy assessor of the privacy assessment plan; reuse and automation are the ASMT rules'."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.assessor.yaml", "expect": "not a privacy assessor of the assessment plan", "claim": "constraint", "asserts": "Control assessments are conducted in accordance with the privacy assessment plans, by a privacy assessor of the plan"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0341"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-4 | • Security and privacy assessment reports that provide findings"}
@@ -2674,7 +2688,9 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-4 | • Security and privacy assessment reports that provide findings"
-    status: "candidate"
+    status: "covered"
+    reason: "PASM-002 fails the assessment report of a system processing PII with no privacy assessment results; the security assessment report is ART-SAR itself."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.yaml", "expect": "has no privacy assessment results", "claim": "presence", "asserts": "Security and privacy assessment reports provide findings: a system processing PII has privacy assessment results in the report"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0342"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "ASSESSMENT REPORTS | and recommendations are completed."}
@@ -2746,8 +2762,11 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "The system privacy officer is responsible for identifying assessment methodologies and metrics to determine if privacy controls are implemented correctly, operating as intended, and sufficient to ensure compliance with applicable privacy requirements and manage privacy risks. The senior agency official for privacy is responsible for conducting assessments of privacy controls and documenting the results of the assessments. At the discretion of the organization, privacy controls may be assessed by an independent assessor. However, in all cases, the senior agency official for privacy is responsible and accountable for the organization’s privacy program, including any privacy functions performed by independent assessors. The senior agency official for privacy is responsible for providing privacy information to the authorizing official."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-001 fails a privacy assessor who is neither the senior agency official for privacy nor independent, and PASM-002 privacy information reaching the AO from anyone but that official; the methods and metrics are prose in privacy_plan (PRIV-008), and the official's accountability is unheld."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.independent.yaml", "expect": "privacy controls are assessed by the senior agency official for privacy or an independent assessor", "claim": "constraint", "asserts": "Assessments of privacy controls are conducted by the senior agency official for privacy, or an independent assessor", "sentence": "The senior agency official for privacy is responsible for conducting assessments of privacy controls and documenting the results of the assessments."}, {"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.provider.yaml", "expect": "privacy information goes to the authorizing official from the senior agency official for privacy", "claim": "constraint", "asserts": "The senior agency official for privacy provides the privacy information to the authorizing official", "sentence": "The senior agency official for privacy is responsible for providing privacy information to the authorizing official."}]
     work_item: "WI-03"
+    ruling_sought: [{"sentence": "At the discretion of the organization, privacy controls may be assessed by an independent assessor.", "reason": "A permission: privacy controls may be assessed by an independent assessor; PASM-001 accepts one."}]
   - id: "REQ-SP800-37R2-0351"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "In accordance with [OMB A-130], an independent evaluation of privacy program and"}
     kind: "modal"
@@ -2778,8 +2797,11 @@ requirements:
     locator: "TASK A-2"
     context: ""
     statement: "Security and privacy assessment plans are developed by control assessors based on the implementation information contained in security and privacy plans, program management control documentation, and common control documentation. Organizations may choose to develop a single, integrated security and privacy assessment plan for the system or the organization. An integrated assessment plan delineates roles and responsibilities for control assessment. Assessment plans also provide the objectives for control assessments and specific assessment procedures for each control. Assessment plans reflect the type of assessment the organization is conducting, including for example: developmental testing and evaluation; independent verification and validation; audits, including supply chain; assessments supporting system and common control authorization or reauthorization; program management control assessments; continuous monitoring; and assessments conducted after remediation actions."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-001 fails privacy assessors who are not on the team of the assessment plan, so the plan delineates who assesses privacy; that plans are based on the security and privacy plans, and the objectives and procedures, are the ASMT rules'."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.team.yaml", "expect": "is not on the assessment team of the plan", "claim": "constraint", "asserts": "An integrated assessment plan delineates roles and responsibilities: each privacy assessor is on the assessment team of the plan", "sentence": "An integrated assessment plan delineates roles and responsibilities for control assessment."}]
     work_item: "WI-03"
+    ruling_sought: [{"sentence": "Organizations may choose to develop a single, integrated security and privacy assessment plan for the system or the organization.", "reason": "A permission: a single integrated assessment plan may be developed; nothing can fail."}]
   - id: "REQ-SP800-37R2-0355"
     citation: {"ref": "SP800-37R2", "page": 82, "anchor": "Assessment plans are reviewed and approved by the authorizing official or the"}
     kind: "indicative"
@@ -2804,7 +2826,9 @@ requirements:
     locator: "TASK A-3"
     context: ""
     statement: "Control assessments determine the extent to which the selected controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting security and privacy requirements for the system and the organization. The system owner, common control provider, and/or organization rely on the technical skills and expertise of assessors to assess implemented controls using the assessment procedures specified in assessment plans and provide recommendations on how to respond to control deficiencies to reduce or eliminate identified vulnerabilities or unacceptable risks. The senior agency official for privacy serves as the control assessor for the privacy controls and is responsible for conducting an initial assessment of the privacy controls prior to system operation, and for assessing the controls periodically thereafter at a frequency sufficient to ensure compliance with privacy requirements and to manage privacy risks.89 Controls implemented to achieve both security and privacy objectives may require a degree of collaboration between security and privacy control assessors. The assessor findings are a factual reporting of whether the controls are operating as intended and whether any deficiencies90 in the controls are discovered during the assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-001 fails a privacy assessor who is neither the senior agency official for privacy nor independent; the initial assessment before operation and the periodic frequency (PRIV-006) are not tied to this record, and the other sentences are general assessment duties of the ASMT rules."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.independent.yaml", "expect": "privacy controls are assessed by the senior agency official for privacy or an independent assessor", "claim": "constraint", "asserts": "The senior agency official for privacy, or an independent assessor, serves as the control assessor for the privacy controls", "sentence": "The senior agency official for privacy serves as the control assessor for the privacy controls and is responsible for conducting an initial assessment of the privacy controls prior to system operation, and for assessing the controls periodically thereafter at a frequency sufficient to ensure compliance with privacy requirements and to manage privacy risks.89"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0358"
     citation: {"ref": "SP800-37R2", "page": 83, "anchor": "Control assessments occur as early as practicable in the SDLC, preferably during"}
@@ -2875,7 +2899,9 @@ requirements:
     locator: "TASK A-4"
     context: ""
     statement: "Prepare the assessment reports documenting the findings and recommendations from the control assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy results documented by anyone but a privacy assessor of the plan; the findings and recommendations of the reports are the SAR rules'."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.assessor.yaml", "expect": "not a privacy assessor of the assessment plan", "claim": "constraint", "asserts": "The privacy assessment reports document the findings from the control assessments by a privacy assessor of the assessment plan"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0366"
     citation: {"ref": "SP800-37R2", "page": 84, "anchor": "The results of the security and privacy control assessments, including recommendations for"}
@@ -2883,8 +2909,11 @@ requirements:
     locator: "TASK A-4"
     context: ""
     statement: "The results of the security and privacy control assessments, including recommendations for correcting deficiencies in the implemented controls, are documented in the assessment reports92 by control assessors. Organizations may develop a single, integrated security and privacy assessment report. Assessment reports are key documents in the system or common control authorization package that is developed for authorizing officials. The assessment reports include information based on assessor findings, necessary to determine the effectiveness of the controls implemented within or inherited by the information system. Assessment reports are an important factor in a determining risk to organizational operations and assets, individuals, other organizations, and the Nation by the authorizing official. The format and the level of detail provided in assessment reports are appropriate for the type of control assessment conducted, for example, developmental testing and evaluation; independent verification and validation; independent assessments supporting information system or common control authorizations or reauthorizations; self-assessments; assessments after remediation actions; independent evaluations or audits; and assessments during continuous monitoring. The reporting format may also be prescribed by the organization."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy assessment results documented by anyone but a privacy assessor of the plan; the reports' place in the package, content and format are prose and the SAR rules'."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.assessor.yaml", "expect": "not a privacy assessor of the assessment plan", "claim": "constraint", "asserts": "The results of the privacy control assessments are documented in the assessment reports by a privacy assessor of the plan", "sentence": "The results of the security and privacy control assessments, including recommendations for correcting deficiencies in the implemented controls, are documented in the assessment reports92 by control assessors."}]
     work_item: "WI-03"
+    ruling_sought: [{"sentence": "Organizations may develop a single, integrated security and privacy assessment report.", "reason": "A permission: the reports may be integrated; nothing can fail."}]
   - id: "REQ-SP800-37R2-0367"
     citation: {"ref": "SP800-37R2", "page": 84, "anchor": "In accordance with [OMB A-130], an independent evaluation of privacy program and"}
     kind: "modal"
@@ -3836,8 +3865,11 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "CONTROL ASSESSOR"
     statement: "The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy information to the authorizing official. At the discretion of the organization, privacy controls may be assessed by an independent assessor. However, in all cases, the senior agency official for privacy retains responsibility and accountability for the privacy program of the organization, including any privacy functions performed by the independent assessors."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy information reaching the AO from anyone but the senior agency official for privacy; that official's accountability for independent assessors is unheld."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.provider.yaml", "expect": "privacy information goes to the authorizing official from the senior agency official for privacy", "claim": "constraint", "asserts": "The senior agency official for privacy provides the privacy information to the authorizing official after assessing the privacy controls", "sentence": "The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy information to the authorizing official."}]
     work_item: "WI-03"
+    ruling_sought: [{"sentence": "At the discretion of the organization, privacy controls may be assessed by an independent assessor.", "reason": "A permission: privacy controls may be assessed by an independent assessor; PASM-001 accepts one."}]
   - id: "REQ-SP800-37R2-0480"
     citation: {"ref": "SP800-37R2", "page": 136, "anchor": "The enterprise architect is an individual or group responsible for working with"}
     kind: "modal"
@@ -4196,7 +4228,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Reviewing and approving privacy plans for information systems prior to authorization, reauthorization, or ongoing authorization;"
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-012 fails a privacy plan whose first approval by the senior agency official for privacy follows the system's first authorization decision; later reauthorizations and ongoing authorization follow it too."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.authorization.yaml", "expect": "after the authorization decision of", "claim": "constraint", "asserts": "The senior agency official for privacy approves the privacy plan before the authorization decision of the system"}]
     work_item: "WI-02"
   - id: "REQ-SP800-37R2-0524"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Reviewing authorization packages for information systems that create, collect, use, process, store,"}
@@ -4214,7 +4248,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Conducting and documenting the results of privacy control assessments to verify the continued effectiveness of all privacy controls selected and implemented at the agency; and"
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-001 fails a privacy assessment plan that leaves out a privacy control of the baseline, and PASM-002 results documented by anyone but its assessors; continued effectiveness over time is M-2's monitoring, not held here."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.scope.yaml", "expect": "of the baseline is outside the privacy scope of the assessment plan", "claim": "constraint", "asserts": "Privacy control assessments cover all privacy controls selected and implemented, each in the scope of the assessment plan"}, {"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.assessor.yaml", "expect": "not a privacy assessor of the assessment plan", "claim": "constraint", "asserts": "The results of the privacy control assessments are documented by a privacy assessor of the assessment plan"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0526"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Establishing and maintaining a privacy continuous monitoring program to maintain ongoing awareness"}
@@ -4485,7 +4521,9 @@ requirements:
     locator: "SYSTEM AND COMMON CONTROL AUTHORIZATIONS"
     context: "AUTHORIZATION PACKAGE"
     statement: "The security and privacy assessment reports, prepared by the control assessor or generated by automated security/privacy management and reporting tools, provide the findings and results of assessing the implementation of the controls identified in the security and privacy plans to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting security and privacy requirements. The assessment reports may contain recommended corrective actions for deficiencies identified in the controls.133 The authorizing official reviews the reports and determines the appropriate risk response [Task R-3]."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy assessment results documented by anyone but a privacy assessor of the plan; the AO's review and risk response are R-3's."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.assessor.yaml", "expect": "not a privacy assessor of the assessment plan", "claim": "constraint", "asserts": "The privacy assessment reports, prepared by the control assessor of the plan, provide the findings of assessing the controls", "sentence": "The security and privacy assessment reports, prepared by the control assessor or generated by automated security/privacy management and reporting tools, provide the findings and results of assessing the implementation of the controls identified in the security and privacy plans to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting security and privacy requirements."}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0558"
     citation: {"ref": "SP800-37R2", "page": 160, "anchor": "Supporting the near real-time risk management objectives of the authorization process, the"}
@@ -5048,8 +5086,11 @@ requirements:
     locator: "Denial of Authorization"
     context: "ONGOING AUTHORIZATION"
     statement: "To support ongoing authorizations for moderate- and high-impact systems, the security and privacy information provided to the authorizing official, whether generated manually or in an automated fashion, is produced and analyzed by an entity that meets the independence requirements established by the organization. The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy information to the authorizing official. At the discretion of the organization, privacy controls may be assessed by an independent assessor. The independent assessor is impartial and free from any perceived or actual conflicts of interest regarding the development, implementation, assessment, operation, or management of the organizational systems and common controls being monitored."
-    status: "candidate"
+    status: "partial"
+    reason: "PASM-002 fails privacy information reaching the AO from anyone but the senior agency official for privacy; the second marked sentence is a permission."
+    evidence: [{"kind": "rule", "target": "PASM-002", "fixture": "tests/fixtures/negative/PASM-002.provider.yaml", "expect": "privacy information goes to the authorizing official from the senior agency official for privacy", "claim": "constraint", "asserts": "The senior agency official for privacy provides the privacy information to the authorizing official after assessing the privacy controls", "sentence": "The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy information to the authorizing official."}]
     work_item: "WI-03"
+    ruling_sought: [{"sentence": "At the discretion of the organization, privacy controls may be assessed by an independent assessor.", "reason": "A permission: privacy controls may be assessed by an independent assessor; PASM-001 accepts one."}]
   - id: "REQ-SP800-37R2-0622"
     citation: {"ref": "SP800-37R2", "page": 169, "anchor": "[SP 800-53] security control CA-6, Part c. specifies that the authorization for"}
     kind: "modal"
