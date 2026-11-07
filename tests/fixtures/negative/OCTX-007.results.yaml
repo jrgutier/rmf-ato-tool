@@ -1,0 +1,15 @@
+rule: OCTX-007
+bases:
+- minimal
+description: no policy feeding ISCM results to risk assessment
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.policies.1.subject
+  value: tools
+expect:
+  errors:
+  - OCTX-007
+  messages:
+  - there is no organization-wide policy for making ISCM results available to the risk assessment 
+    process

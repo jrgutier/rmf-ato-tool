@@ -1,0 +1,22 @@
+rule: SYSD-001
+bases:
+- minimal
+description: a PIT system not centrally registered
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: system_type.value
+  value: pit-system
+- op: set_field
+  file: facts.yaml
+  path: system_type.designated_by
+  value: dod-component-head
+- op: set_field
+  file: facts.yaml
+  path: system_type.pit_ao_appointed
+  value: true
+expect:
+  errors:
+  - SYSD-001
+  messages:
+  - the PIT system is not centrally registered at the DoD Component level

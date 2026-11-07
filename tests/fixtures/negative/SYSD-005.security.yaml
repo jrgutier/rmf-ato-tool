@@ -1,0 +1,22 @@
+rule: SYSD-005
+bases:
+- minimal
+description: an external service whose agreement carries no security requirements
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.service.kind
+  value: external
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.service.agreement.instrument
+  value: statement-of-work
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.service.agreement.security_requirements
+  value: false
+expect:
+  errors:
+  - SYSD-005
+  messages:
+  - the agreement for the external service does not incorporate the security requirements of DoDI 8500.01

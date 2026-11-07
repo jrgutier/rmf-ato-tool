@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:sar-summary",
+  "title": "runs/<run-id>/artifacts/data/sar-summary.yaml",
+  "description": "What the security assessment report states about the assessment as a whole (A-3): its type, environment, assumptions, limitations and issues, the SCA, the sites and dates, and the penetration test results. PENT-002 and PKG-003 read it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assessment_type",
+    "environment",
+    "assumptions",
+    "limitations",
+    "issues",
+    "sca",
+    "sites",
+    "sources"
+  ],
+  "properties": {
+    "assessment_type": {
+      "title": "Type of assessment and its objective",
+      "enum": [
+        "developmental-test-and-evaluation",
+        "independent-verification-and-validation",
+        "authorization",
+        "reauthorization",
+        "audit",
+        "ongoing-monitoring",
+        "post-remediation"
+      ]
+    },
+    "environment": {
+      "title": "The environment where the most recent testing took place",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "site_location",
+        "security",
+        "supporting_equipment",
+        "external_interfaces",
+        "personnel"
+      ],
+      "properties": {
+        "description": {
+          "title": "Description of the assessment environment",
+          "type": "string",
+          "minLength": 1
+        },
+        "site_location": {
+          "title": "Site location of the assessment",
+          "type": "string",
+          "minLength": 1
+        },
+        "security": {
+          "title": "Security system of the site",
+          "type": "string",
+          "minLength": 1
+        },
+        "supporting_equipment": {
+          "title": "Supporting equipment used to support the assessment event, such as emulators, sniffers, analyzers and traffic generators",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-CNSSI1254-0062"
+          ]
+        },
+        "external_interfaces": {
+          "title": "External interfaces active during the test event",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "personnel": {
+          "title": "All personnel present for the assessment, their organizations and their role in the assessment event",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "organization",
+              "role"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "organization": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-CNSSI1254-0062"
+          ]
+        }
+      }
+    },
+    "assumptions": {
+      "title": "Assumptions the SCA applied to the assessment",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "x-enforces": [
+        "REQ-CNSSI1254-0063"
+      ]
+    },
+    "limitations": {
+      "title": "Limitations and constraints the SCA applied, such as inherited controls, test environment or system configuration",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "x-enforces": [
+        "REQ-CNSSI1254-0063"
+      ]
+    },
+    "issues": {
+      "title": "Issues associated with those assumptions and limitations",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "x-enforces": [
+        "REQ-CNSSI1254-0063"
+      ]
+    },
+    "sca": {
+      "title": "The SCA's name, organization and contact information",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "organization",
+        "role",
+        "email",
+        "phone"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-53AR5-0341"
+          ],
+          "title": "Name of the security control assessor, the assessor's identification"
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sites": {
+      "title": "Sites assessed and the assessment dates at each",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "site",
+          "dates"
+        ],
+        "properties": {
+          "site": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-53AR5-0294"
+      ]
+    },
+    "penetration_test": {
+      "title": "Results of the penetration test the plan scheduled",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "activities_log",
+        "exploited",
+        "likelihood",
+        "controls_validated",
+        "remediation",
+        "findings"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "activities_log": {
+          "title": "Reference to the verifiable and reproducible log of all activities performed during the test",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-53AR5-0288"
+          ]
+        },
+        "exploited": {
+          "title": "Exploited vulnerabilities and how they were combined into attacks",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "vulnerability",
+              "attack"
+            ],
+            "properties": {
+              "vulnerability": {
+                "type": "string",
+                "minLength": 1
+              },
+              "attack": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-53AR5-0285"
+          ]
+        },
+        "likelihood": {
+          "title": "Likelihood of occurrence for a given attack, from the level of effort the team expended to penetrate the system",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-53AR5-0276",
+            "REQ-SP800-53AR5-0286"
+          ]
+        },
+        "controls_validated": {
+          "title": "Existing security and privacy controls the test validated",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+          }
+        },
+        "remediation": {
+          "title": "Possible remediation measures for the successful attacks",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "findings": {
+          "title": "The SAR findings the test produced",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "provided_to_ao": {
+          "type": "string",
+          "format": "date"
+        },
+        "lessons_learned": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+      }
+    }
+  }
+}

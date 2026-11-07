@@ -1,0 +1,15 @@
+rule: DETC-001
+bases:
+- minimal
+description: monitoring that leaves out the physical environment
+mutations:
+- op: delete_list_item
+  file: artifacts/data/conmon.yaml
+  path: detection_coverage
+  where:
+    asset_class: physical-environment
+expect:
+  errors:
+  - DETC-001
+  messages:
+  - continuous monitoring does not cover physical-environment at all times

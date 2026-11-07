@@ -1,0 +1,45 @@
+# Template: artifacts/data/system-description.yaml (C-1; M-1 updates it; schema
+# system-description). Written whole (INV-8). Replace every <<FILL: ...>> and example value
+# (playbooks/C/C-1.md). SYSD-002 and SYSD-003 judge it.
+ownership: government-owned-government-operated  # | government-owned-contractor-operated | contractor-owned-contractor-operated | non-federal
+function: "<<FILL: the system, its function and uses; whether it is stand-alone and how it connects to the DODIN>>"
+physical_environment:
+  building: "<<FILL: the building that houses the system>>"
+  walls_and_ceilings: "<<FILL: exterior wall, interior wall and ceiling compositions>>"
+  physical_security: "<<FILL: guards, cameras, access pads and other physical security of the building>>"
+  validation: none  # none | tempest-accreditation | scif-assessment
+service_alignment:  # required when facts.yaml system_type.dodin_connection is direct or indirect
+  nosc: "<<FILL: the joint or DoD Component NOSC the system is aligned to>>"
+  designation: genser  # genser | se | both
+  cssp_agreement: SVA-001  # the CSSP agreement in artifacts/data/service-agreements.yaml
+  authorized_by: [USCYBERCOM]  # CDRUSSTRATCOM or USCYBERCOM for GENSER services, DIA for SE services
+  registered_in: "<<FILL: the DoD Component register holding the alignment>>"
+  mission_criticality: "<<FILL: mission criticality as the CSSP record holds it>>"
+  ip_ranges: ["<<FILL: IP address range>>"]
+  locations: ["<<FILL: physical location of each owned or operated part>>"]
+  # changes: [{date, from, to, reported_to: [CDRUSSTRATCOM, DISA] or [DIA]}]  # M-1
+interconnections:  # one record per boundary component of type interconnection; [] when none
+  - id: ICX-01
+    component: CMP-EXAMPLE
+    system: "<<FILL: name of the interconnected system or communications provider>>"
+    organization: "<<FILL: organization that owns it>>"
+    partner: dod-component  # dod-component | federal-mission-partner | defense-contractor | foreign-mission-partner | other-mission-partner
+    interface:
+      kind: "<<FILL: type of communications or interconnection>>"
+      ports_protocols_services: "<<FILL: ports, protocols and services>>"
+      provider: "<<FILL: provider of the communications services>>"
+      boundaries_crossed: "<<FILL: boundaries crossed>>"
+    agreement:
+      instrument: isa  # isa | mou | moa | contract | support-agreement | international-agreement | sla
+      reference: "<<FILL: agreement identifier>>"
+      date: "2026-01-01"
+      signed_by: ["<<FILL: signatory>>"]
+    authorization:
+      status: "<<FILL: authorization status of the other system>>"
+      authorizing_official: "<<FILL: its authorizing official>>"
+    # A mission partner (any partner but dod-component) also records:
+    # terms: [dodin-operations-responsibilities, cybersecurity-requirements, data-protection-requirements, incident-reporting-contacts]
+    # based_on: [component-risk-assessment, risk-tolerance-guidance, interconnection-policy]
+    # cybersecurity_services: dod-cssp-subscription  # federal mission partner: or equivalent-capability-assessed
+    sources: [INT-001.A1]
+sources: [INT-001.A1]

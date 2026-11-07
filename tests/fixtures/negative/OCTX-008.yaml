@@ -1,0 +1,25 @@
+rule: OCTX-008
+bases:
+- minimal
+description: two program reviews further apart than the annual frequency
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.reviews
+  value:
+  - date: '2026-02-01'
+    by: PER-CISO
+    considered:
+    - threats
+    strategy_adjusted: false
+  - date: '2027-06-01'
+    by: PER-CISO
+    considered:
+    - threats
+    strategy_adjusted: true
+expect:
+  errors:
+  - OCTX-008
+  messages:
+  - the ISCM program review of 2027-06-01 follows the previous one by more than its annually review 
+    frequency

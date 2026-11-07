@@ -28,7 +28,8 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements", "pia"}
+                     "requirements", "system-description", "sar-summary",
+                     "org-context", "disposal", "pia"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -368,8 +369,18 @@ RUN_EXAMPLES.update({
         ("contingency", "exercises", [{"id": "EX-1", "type": "drill"}]),
         ("incident-response", "reporting_paths", [{"case": "unknown"}]),
         ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
-        ("ssp-records", "space_nss", "maybe"))
+        ("ssp-records", "space_nss", "maybe"),
+        ("system-description", "ownership", "leased"),
+        ("sar-summary", "assessment_type", "spot-check"),
+        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]))
 })
+RUN_EXAMPLES["disposal"] = (
+    {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
+     "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},
+     "storage": {"stored": False},
+     "supply_chain": {"non_reuse_elements": ["drives"], "prevention": "Shredded on site."},
+     "sources": SRC},
+    {"end_state": "Sanitized", "environment": {"restored_to": "wherever"}, "sources": SRC})
 
 
 def test_every_run_schema_has_examples():
@@ -395,7 +406,9 @@ def test_interview_answer_definition():
 def test_fact_paths_come_from_the_facts_schema():
     assert fact_paths(REPO_ROOT) == {
         "system_id", "system_name", "acronym", "aliases", "boundary_id", "lifecycle_state",
-        "categorization", "categorization.approved", "baseline_id", "acquisition"}
+        "categorization", "categorization.approved", "baseline_id", "acquisition",
+        "classification", "system_type", "owning_organization", "system_version",
+        "operational_environment", "lifecycle_phase"}
 
 
 def test_real_framework_writes_each_fact_once():

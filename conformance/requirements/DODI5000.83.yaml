@@ -1065,7 +1065,9 @@ requirements:
     locator: "3.3.a.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(1) Work with security classification guidance authorities to determine classification markings as described in Volume 2 of DoD Manual 5200.01."
-    status: "candidate"
+    status: "partial"
+    reason: "Working with the classification guidance authorities is prose; the classification fact records the outcome, and nothing tests that the authority was consulted."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Classification markings are determined with the security classification guidance authority and recorded in the classification fact", "claim": "presence"}]
     work_item: "WI-174"
   - id: "REQ-DODI5000.83-0134"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Assess the impact of the exposure of the CTI that will be"}
@@ -1073,7 +1075,9 @@ requirements:
     locator: "3.3.a.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(2) Assess the impact of the exposure of the CTI that will be placed on unclassified networks, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "The CTI record holds the exposure assessment as text whenever a type holds CTI; presence only."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.cti.yaml", "expect": "the system holds CTI and records no assessment of its exposure and protection", "asserts": "Assess the impact of the exposure of the CTI placed on unclassified networks", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(2) Assess the impact of the exposure of the CTI that will be placed on unclassified networks, including:"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0135"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Information contained in solicitations."}
@@ -1105,7 +1109,9 @@ requirements:
     locator: "3.3.a.(3)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(3) Determine, apply, and direct dissemination and marking statements on technical documents and review for public release, as described in DoDIs 5230.24 and 3200.12."
-    status: "candidate"
+    status: "partial"
+    reason: "Handling markings are recorded on the classification fact and on documents holding vulnerability detail; dissemination statements on other technical documents and public release review are unheld."
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.none.yaml", "expect": "carries no handling marking", "asserts": "Marking statements are applied to technical documents that hold vulnerability or configuration detail", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded"}]
     work_item: "WI-174"
   - id: "REQ-DODI5000.83-0139"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Establish a strong culture of protection awareness and behavior through training and"}
@@ -1169,7 +1175,8 @@ requirements:
     locator: "3.3.a.(5).(a)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(a) Protection of CTI is consistent with Clause 252.204-7012 of the Defense Federal Acquisition Regulation Supplement (DFARS), unless exempted by Clause 252.204-7000(a)(3) of the DFARS."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.dfars.yaml", "expect": "protection of CTI is consistent with DFARS 252.204-7012 unless exempted by DFARS", "asserts": "Protection of CTI is consistent with DFARS 252.204-7012 unless exempted by 252.204-7000(a)(3)", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(a) Protection of CTI is consistent with Clause 252.204-7012 of the Defense Federal Acquisition Regulation Supplement (DFARS), unless exempted by Clause 252.204-7000(a)(3) of the DFARS."}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0147"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Requirements as described in DoDI 8582.01 are included in legally binding agreements"}
@@ -1177,7 +1184,8 @@ requirements:
     locator: "3.3.a.(5).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(b) Requirements as described in DoDI 8582.01 are included in legally binding agreements to include, but not limited to:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.agreements.yaml", "expect": "the legally binding agreements do not include the DoDI 8582.01 requirements for", "asserts": "DoDI 8582.01 requirements are included in legally binding agreements", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(b) Requirements as described in DoDI 8582.01 are included in legally binding agreements to include, but not limited to:"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0148"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Grants."}
@@ -1233,7 +1241,9 @@ requirements:
     locator: "3.3.a.(6)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(6) Assess losses associated with cyber incidents reported under contracts that contain:"
-    status: "candidate"
+    status: "partial"
+    reason: "Losses from reported cyber incidents are a required text field of the CTI record; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/cti/properties/incident_losses", "claim": "presence", "asserts": "Assess losses associated with cyber incidents reported under contracts"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0155"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Clause 252.204–7012 of DFARS; or"}

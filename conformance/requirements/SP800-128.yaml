@@ -401,7 +401,9 @@ requirements:
     locator: "2.4"
     context: "SECCM ROLES AND RESPONSIBILITIES"
     statement: "The set of roles (at the organization, mission/business process, and system level) that are relevant to the SecCM program are defined along with the responsibilities. The responsibilities are in the context of SecCM only and are not inclusive of other non-SecCM responsibilities the roles may also have. Typically, SecCM roles and responsibilities include: Chief Information Officer (CIO) The CIO designates and/or provides a SecCM Program Manager for the organization and approves the organizational SecCM plan and policies. Senior Agency Information Security Officer (SAISO) The SAISO may act as the SecCM Program Manager for the organization. The SAISO may also provide staff with security expertise to serve on the CCB and/or to conduct security impact analyses. Organizations may also refer to this position as the Chief Information Security Officer (CISO). Authorizing Official (AO) The AO manages or participates in the CCB for systems s/he authorizes and may provide technical staff to conduct and/or review security impact analyses. The AO coordinates with the Risk Executive (Function) on SecCM issues and makes the final determination whether or not a given change or set of changes continues to be an acceptable security risk. System Owner The system owner identifies, defines, and ensures implementation of the aspects of SecCM for the information system that have not been defined by the organization of which the system is a part. The system owner also ensures implementation of organizational-level SecCM requirements for the system. SecCM Program Manager The SecCM Program Manager develops SecCM policies and procedures, provides direction, and oversees the implementation of the SecCM program for the organization and/or system level SecCM program."
-    status: "candidate"
+    status: "partial"
+    reason: "SecCM roles can be recorded as roles and policy owners; no SecCM program manager is demanded"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles", "asserts": "The roles relevant to the SecCM program are defined with their responsibilities in the RMF role assignments", "claim": "constraint"}]
     work_item: "WI-162"
   - id: "REQ-SP800-128-0053"
     citation: {"ref": "SP800-128", "page": 28, "anchor": "The following sections discuss activities that occur within each of the four"}
@@ -1038,7 +1040,8 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL Some data elements18 typically stored for each component in the system component inventory include:"
     statement: "• Unique Identifier and/or Serial Number;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.yaml", "expect": "is shared by more than one item", "asserts": "Each component has a unique identifier not shared by another item", "claim": "constraint"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0135"
     citation: {"ref": "SP800-128", "page": 38, "anchor": "System of which the component is a part;19"}
@@ -1067,7 +1070,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Operating System Type and Version/Service Pack Level (preferably using the appropriate Common Platform Enumeration Name);"
-    status: "candidate"
+    status: "partial"
+    reason: "Version is required of software; CPE names are not."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.version.yaml", "expect": "is software with no version number", "asserts": "Operating system type and version are recorded", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0139"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Presence of virtual machines;19"}
@@ -1082,7 +1087,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Application Software Version/License information (preferably using the appropriate Common Platform Enumeration Name);"
-    status: "candidate"
+    status: "partial"
+    reason: "Version is required; license information is optional."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.version.yaml", "expect": "is software with no version number", "asserts": "Application software version is recorded", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0141"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Physical location (e.g., building/room number);"}
@@ -1090,7 +1097,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Physical location (e.g., building/room number);"
-    status: "candidate"
+    status: "partial"
+    reason: "Physical location is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/location/properties/physical", "claim": "presence", "asserts": "Physical location such as building and room number"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0142"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Logical location (e.g., IP address);"}
@@ -1098,7 +1107,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Logical location (e.g., IP address);"
-    status: "candidate"
+    status: "partial"
+    reason: "Logical location is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/location/properties/logical", "claim": "presence", "asserts": "Logical location such as the IP address"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0143"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Media Access Control (MAC) address;"}
@@ -1106,7 +1117,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Media Access Control (MAC) address;"
-    status: "candidate"
+    status: "partial"
+    reason: "MAC address is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/mac_address", "claim": "presence", "asserts": "Media Access Control address of the item"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0144"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Primary and secondary administrators; and"}
@@ -1114,7 +1127,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Primary and secondary administrators; and"
-    status: "candidate"
+    status: "partial"
+    reason: "Administrators are an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/administrators", "claim": "presence", "asserts": "Primary and secondary administrators of the item"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0145"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Primary user (if applicable). Some additional data elements may also be recorded"}
@@ -1122,7 +1137,9 @@ requirements:
     locator: "3.1.2.•"
     context: "PLANNING AT THE SYSTEM LEVEL"
     statement: "• Primary user (if applicable). Some additional data elements may also be recorded to facilitate SecCM, such as:"
-    status: "candidate"
+    status: "partial"
+    reason: "Primary user is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/primary_user", "claim": "presence", "asserts": "Primary user of the item, if applicable"}]
     work_item: "WI-188"
   - id: "REQ-SP800-128-0146"
     citation: {"ref": "SP800-128", "page": 39, "anchor": "Status of the component (e.g., operational, spare, disposed, etc.);"}
@@ -1689,7 +1706,9 @@ requirements:
     locator: "3.3.3.•"
     context: "CONDUCT SECURITY IMPACT ANALYSIS Security impact analyses are conducted by individuals or teams with technical knowledge of the system throughout the SDLC such that the impact of changes on security i"
     statement: "• Development/Acquisition and Implementation/Assessment Phases Security impact analysis is not a one-time event conducted during the initiation phase to support the decisions of the CCB when approving changes. When the change is initially proposed and reviewed, the manner in which the change will be built and implemented may not be known, something which can greatly influence the security impact of the change. For instance, for a custom-built component during the design phase, security impact analysis is performed on technical design documents to ensure that the design considers security best practices, implements the appropriate controls, and would not need to be redeveloped at a later date due to introduced vulnerabilities. Developers ensure that security is taken into account as they build the component, and the design is tested during implementation to confirm that expected controls were implemented and that no new or unexpected vulnerabilities were introduced."
-    status: "candidate"
+    status: "partial"
+    reason: "Security impact analysis of changes is CM's (cm-plan.yaml); bound here for the impact review only."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "Security impact of the design is reviewed against the categorization factors", "claim": "presence"}]
     work_item: "WI-186"
   - id: "REQ-SP800-128-0217"
     citation: {"ref": "SP800-128", "page": 51, "anchor": "Operations and Maintenance Phase (After a Change is Deployed) Security impact analysis"}
@@ -3140,7 +3159,9 @@ requirements:
     locator: "3.1.2.•"
     context: ""
     statement: "• Manufacturer/Model information;"
-    status: "candidate"
+    status: "partial"
+    reason: "Vendor and product are recorded when known; neither is required."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/vendor", "claim": "presence", "asserts": "Manufacturer and model information of the item"}]
     work_item: "WI-188"
     promoted: {"reason": "Sibling item of the typical inventory data elements on page 39, dropped as label-only while the other items entered"}
   - id: "REQ-SP800-128-0397"
@@ -3149,7 +3170,9 @@ requirements:
     locator: "3.1.2.•"
     context: ""
     statement: "• Operational status;"
-    status: "candidate"
+    status: "partial"
+    reason: "Operational status is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/operational_status", "claim": "constraint", "asserts": "Operational status of the item"}]
     work_item: "WI-188"
     promoted: {"reason": "Sibling item of the typical inventory data elements on page 39, dropped as label-only while the other items entered"}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

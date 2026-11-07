@@ -1,0 +1,19 @@
+rule: OCTX-012
+bases:
+- minimal
+description: no policy reaches operations and support
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: policies.0.phases
+  value:
+  - PH-MSA
+  - PH-TMRR
+  - PH-EMD
+  - PH-PD
+expect:
+  errors:
+  - OCTX-012
+  messages:
+  - 'no organizational policy integrates risk management into PH-OS: policies carry it throughout the
+    system life cycle'

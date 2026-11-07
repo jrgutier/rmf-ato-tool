@@ -1,0 +1,14 @@
+rule: OCTX-008
+bases:
+- minimal
+description: a finding owned by no one in a role
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.assessments.0.findings.0.owner
+  value: PER-DEV
+expect:
+  errors:
+  - OCTX-008
+  messages:
+  - 'ISCM assessment finding IF-01: the role responsible for the response, PER-DEV, holds no role in roles'

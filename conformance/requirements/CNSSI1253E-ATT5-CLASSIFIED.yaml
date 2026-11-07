@@ -92,7 +92,9 @@ requirements:
     locator: "3"
     context: ""
     statement: "This overlay applies to NSS that store, process, or transmit classified information. Information may be considered for classification when there is a reasonable expectation that unauthorized disclosure of the information could cause damage to national security8. There are three levels of classification: Top Secret (exceptionally grave damage), Secret (serious damage), and Confidential (damage). This overlay does not apply to NSS that store, process, or transmit only information that is unclassified, to include Controlled Unclassified Information (CUI). Types of classified information include information that pertains to military plans, weapon systems, or operations; foreign government information; intelligence activities (including covert action), intelligence sources or methods or cryptology; foreign relations or foreign activities of the United States, including confidential sources; scientific, technological, or economic matters relating to the national security; United States Government programs for safeguarding nuclear materials or facilities; vulnerabilities or capabilities of systems, installations, infrastructures, projects, plans, or protection services relating to the national security; or the development, production, or use of weapons of mass destruction. Classified information on systems requires protections and handling methods that are in addition to those required to protect unclassified information, because of the classified information’s nature and potential harm that would result from unauthorized disclosure. Impact values for confidentiality are not equivalent to classification levels. A loss of confidentiality is different from an unauthorized disclosure of classified information. Confidentiality impact values represent levels of impact on organizational operations and assets, individuals, other organizations, and the Nation. In contrast, classification levels represent the degrees of damage to national security. The categorization decision (i.e., the impact values for confidentiality, integrity, and availability) is independent of the classification decision. Organizations are required by EO 13526 to establish uniform procedures to ensure systems prevent access by unauthorized persons and ensure the integrity of the information."
-    status: "candidate"
+    status: "partial"
+    reason: "The overlay's applicability is held by SYSD-001 against the classification fact; the rest of the paragraph defines classification levels."
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.yaml", "expect": "the Classified System Overlay is not applied", "asserts": "The overlay applies to NSS that store, process or transmit classified information", "claim": "constraint"}]
     work_item: "WI-174"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0012"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "The system stores, processes, or transmits classified information.9"}
@@ -148,7 +150,8 @@ requirements:
     locator: "4"
     context: ""
     statement: "Does the system of interest by intent and design11 store, process, or transmit classified information? If yes, this overlay does apply. If no, this overlay does not apply."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.yaml", "expect": "the Classified System Overlay is not applied", "asserts": "If the system stores, processes or transmits classified information the overlay does apply", "claim": "constraint"}, {"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.overlay.yaml", "expect": "the Classified System Overlay is applied to a system whose classification is unclassified", "asserts": "If the system does not store classified information the overlay does not apply", "claim": "constraint"}]
     work_item: "WI-174"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0018"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "Safeguards for protecting classified information are not equivalent to addressing safeguarding needs"}
@@ -355,7 +358,9 @@ requirements:
     locator: "3"
     context: ""
     statement: "These procedures consist of safeguards to properly store, reproduce, transfer, and destroy classified information. Methods for safeguarding classified information include, but are not limited to, requiring personnel clearances, signed non-disclosure agreements (NDAs), and the appropriate clearance and need to know for information access. Proper marking is also essential for appropriate handling of classified information. The assumptions that underlie the security control selections and serve as the basis to justify the allocation of controls in the Classified System Overlay include:"
-    status: "candidate"
+    status: "partial"
+    reason: "Safeguards, clearances and NDAs are the overlay's control assumptions; the run records classification and markings only."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Proper marking of classified information is recorded in the classification fact's handling markings", "claim": "presence"}]
     work_item: "WI-174"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0042"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "Use the following question to determine the applicability of the Classified System"}

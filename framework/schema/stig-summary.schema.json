@@ -38,7 +38,15 @@
           "kind": {
             "enum": [
               "stig",
-              "srg"
+              "srg",
+              "nsa-guide",
+              "security-configuration-guide",
+              "nist-checklist",
+              "vendor-guide"
+            ],
+            "title": "Source of the secure configuration: a DISA STIG or SRG, NSA/CSS security implementation and mitigation guidance, a DoD security configuration guide, a NIST checklist or mitigation guideline, or vendor hardening guidance",
+            "x-enforces": [
+              "REQ-DODI8531.01-0030"
             ]
           },
           "applies_to": {
@@ -124,11 +132,36 @@
               "open",
               "not-a-finding",
               "not-applicable",
-              "not-reviewed"
+              "not-reviewed",
+              "exception"
             ]
           },
           "control_id": {
             "$ref": "#/$defs/control_id"
+          },
+          "exception": {
+            "title": "A documented exception to the configuration guidance, approved by the responsible AO",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "rationale",
+              "approved_by",
+              "date"
+            ],
+            "properties": {
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approved_by": {
+                "type": "string",
+                "pattern": "^PER-[A-Z0-9]+$"
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              }
+            }
           }
         }
       }

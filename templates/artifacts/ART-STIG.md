@@ -4,6 +4,7 @@ run_id: "<<FILL: run_id from run.yaml>>"
 produced_by_task: I-1
 touched_by: [I-1]
 sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
+handling: CUI  # at a minimum CUI, or the classification level of the system (DoDI 8530.01)
 ---
 # STIG and SRG summary
 

@@ -129,6 +129,65 @@
                 "$ref": "#/$defs/date"
               }
             }
+          },
+          "service": {
+            "title": "The IT service consumed through the leveraged authorization and the agreement behind it",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "agreement"
+            ],
+            "properties": {
+              "kind": {
+                "title": "Internal (provided within DoD) or external IT service",
+                "enum": [
+                  "internal",
+                  "external"
+                ]
+              },
+              "agreement": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "instrument",
+                  "reference",
+                  "security_requirements"
+                ],
+                "properties": {
+                  "instrument": {
+                    "title": "Service-level agreement, interagency agreement, government statement of work or contract",
+                    "enum": [
+                      "sla",
+                      "interagency-agreement",
+                      "statement-of-work",
+                      "contract"
+                    ]
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "enterprise": {
+                    "title": "Whether it is a DoD enterprise-level agreement",
+                    "type": "boolean",
+                    "x-enforces": [
+                      "REQ-DODI8500.01-0322"
+                    ]
+                  },
+                  "security_requirements": {
+                    "title": "Whether the agreement incorporates the security control requirements of DoDI 8500.01",
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-18R2-0118",
+              "REQ-SP800-18R1-0071",
+              "REQ-SP800-39-0102",
+              "REQ-SP800-61R3-0132"
+            ]
           }
         }
       }

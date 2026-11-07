@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 169 rules, 36 repo-scope and 133 run-scope. Authoritative;
+# Rule registry (plan §6.5): 202 rules, 36 repo-scope and 166 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1222,9 +1222,14 @@ rules:
     ac: [AC-16]
     phase: p6
     applies_after: I-1
-    summary: software or OS item without a STIG/SRG mapping or not-applicable rationale
+    summary: software, OS or (from 0.2.0) hardware or network device item without a STIG/SRG mapping or not-applicable rationale
     fixture: tests/fixtures/negative/STIG-001.yaml
     hint: Map the item to a benchmark in stig-summary.yaml or list it under not_applicable with a rationale.
+    enforces:
+      - REQ-DODI8531.01-0078
+      - REQ-DODI8531.01-0051
+      - REQ-DODI8500.01-0173
+      - REQ-DODI8531.01-0178
   - id: STIG-002
     scope: run
     severity: E
@@ -1438,6 +1443,22 @@ rules:
       - REQ-CNSSI1254-0012
       - REQ-CNSSI1254-0039
       - REQ-CNSSI1254-0043
+      - REQ-CNSSI1254-0028
+      - REQ-CNSSI1254-0029
+      - REQ-CNSSI1254-0035
+      - REQ-CNSSI1254-0036
+      - REQ-CNSSI1254-0058
+      - REQ-CNSSI1254-0030
+      - REQ-CNSSI1254-0057
+      - REQ-CNSSI1254-0051
+      - REQ-CNSSI1254-0052
+      - REQ-CNSSI1254-0060
+      - REQ-CNSSI1254-0061
+      - REQ-CNSSI1254-0046
+      - REQ-CNSSI1254-0062
+      - REQ-CNSSI1254-0065
+      - REQ-CNSSI1254-0066
+      - REQ-CNSSI1254-0037
   - id: TLR-001
     scope: run
     severity: E
@@ -2218,6 +2239,14 @@ rules:
       - REQ-DODI8530.01-0271
       - REQ-DODI8530.01-0274
       - REQ-DODI8530.01-0312
+      - REQ-SP800-160V1R1-0767
+      - REQ-DODI8530.01-0025
+      - REQ-DODCIO-CATO-EVAL-0108
+      - REQ-DODCIO-CATO-IG-0049
+      - REQ-DODI8530.01-0141
+      - REQ-DODI8530.01-0154
+      - REQ-DODI8530.01-0264
+      - REQ-DODI8530.01-0315
   - id: SVCA-002
     scope: run
     severity: E
@@ -2315,3 +2344,614 @@ rules:
     hint: "Record the approval and basis, or stop accepting the equipment."
     enforces:
       - REQ-DODI8500.01-0347
+  - id: SYSD-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: the classification disagrees with the Classified System Overlay, an enclave is categorized below a system it hosts, or a PIT system lacks its designation, registration or appointed AO
+    fixture: tests/fixtures/negative/SYSD-001.yaml
+    hint: "Set classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase in facts.yaml with set_by_task: C-1."
+    enforces:
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0011
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0017
+      - REQ-DODI8500.01-0097
+      - REQ-DODI8500.01-0143
+      - REQ-DODI8500.01-0294
+      - REQ-DODI8500.01-0308
+      - REQ-SP800-18R1-0012
+      - REQ-SP800-18R2-0084
+  - id: SYSD-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: the system description lacks its NOSC and CSSP alignment, or the CSSP's authority or a change report does not fit its GENSER or SE designation
+    fixture: tests/fixtures/negative/SYSD-002.yaml
+    hint: "Write artifacts/data/system-description.yaml from templates/data/system-description.yaml."
+    enforces:
+      - REQ-DODI8530.01-0024
+      - REQ-DODI8530.01-0117
+      - REQ-DODI8530.01-0143
+      - REQ-DODI8530.01-0153
+      - REQ-DODI8530.01-0154
+      - REQ-DODI8530.01-0199
+      - REQ-DODI8530.01-0264
+      - REQ-DODI8530.01-0279
+      - REQ-DODI8530.01-0310
+  - id: SYSD-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: an interconnection has no record, or a mission partner agreement lacks what DoDI 8530.01 has it state
+    fixture: tests/fixtures/negative/SYSD-003.yaml
+    hint: "One interconnections record per boundary component of type interconnection."
+    enforces:
+      - REQ-CNSSP12-0019
+      - REQ-CNSSP12-0059
+      - REQ-DODI8500.01-0366
+      - REQ-DODI8530.01-0029
+      - REQ-DODI8530.01-0030
+      - REQ-DODI8530.01-0031
+      - REQ-DODI8530.01-0032
+      - REQ-DODI8530.01-0052
+      - REQ-DODI8530.01-0171
+      - REQ-DODI8530.01-0285
+      - REQ-DODI8530.01-0286
+      - REQ-DODI8530.01-0287
+      - REQ-DODI8530.01-0288
+      - REQ-DODI8530.01-0289
+      - REQ-DODI8530.01-0295
+      - REQ-DODI8530.01-0296
+      - REQ-DODI8530.01-0297
+      - REQ-DODI8530.01-0299
+      - REQ-SP800-161R1-1543
+      - REQ-SP800-18R1-0125
+      - REQ-SP800-18R1-0177
+      - REQ-SP800-61R3-0109
+  - id: SYSD-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a user group lacks its category or access requirements, privileged users their qualification and signed statement, or foreign users their authorization
+    fixture: tests/fixtures/negative/SYSD-004.yaml
+    hint: "Fill category, access_requirements, privileged_access and foreign_access in users.yaml."
+    enforces:
+      - REQ-CNSSP12-0018
+      - REQ-DODI8500.01-0178
+      - REQ-DODI8500.01-0363
+      - REQ-DODI8500.01-0364
+      - REQ-CNSSI1254-0061
+  - id: SYSD-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a consumed IT service names no agreement, or the agreement is not the kind DoDI 8500.01 requires
+    fixture: tests/fixtures/negative/SYSD-005.yaml
+    hint: "Give each leveraged authorization a service with its agreement."
+    enforces:
+      - REQ-DODI8500.01-0317
+      - REQ-DODI8500.01-0319
+      - REQ-SP800-160V1R1-0766
+      - REQ-SP800-39-0104
+  - id: SYSD-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a document holding vulnerability or configuration detail is not marked at least CUI or at the system's classification level
+    fixture: tests/fixtures/negative/SYSD-006.yaml
+    hint: "Set handling: in the front matter of ART-SAR, ART-POAM, ART-STIG and ART-CMP."
+    enforces:
+      - REQ-DODI8530.01-0165
+      - REQ-DODI8530.01-0166
+      - REQ-DODI5000.83-0138
+      - REQ-SP800-18R1-0104
+      - REQ-SP800-18R2-0285
+  - id: ASSET-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-10
+    summary: the organization's asset scope leaves out an asset class of SP 800-37 Task P-10, or an asset falls in a class it excludes
+    fixture: tests/fixtures/negative/ASSET-001.yaml
+    hint: "List every asset class under asset_scope in inventory.yaml, considered or not, with a rationale."
+    enforces:
+      - REQ-SP800-37R2-0240
+      - REQ-SP800-160V1R1-0006
+      - REQ-SP800-160V1R1-0574
+      - REQ-SP800-160V1R1-0598
+  - id: ASSET-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-10
+    summary: an inventory item is not individually identified with its CNSSI 1254 fields and a unique item identifier, or no asset management system holds the inventory
+    fixture: tests/fixtures/negative/ASSET-002.yaml
+    hint: "Give each item uii, owner, serial_number (hardware), version and software_category (software); name asset_management_system."
+    enforces:
+      - REQ-SP800-61R3-0126
+      - REQ-SP800-61R3-0130
+      - REQ-CNSSI1254-0045
+      - REQ-CNSSI1254-0056
+      - REQ-DODI8531.01-0080
+      - REQ-DODI8531.01-0082
+      - REQ-DODI5000.88-0253
+      - REQ-DOWI8430.01-0018
+      - REQ-DOWI8430.01-0022
+      - REQ-DOWI8430.01-0064
+      - REQ-DOWI8430.01-0231
+      - REQ-SP800-128-0134
+      - REQ-SP800-128-0138
+      - REQ-SP800-128-0140
+      - REQ-SP800-18R2-0151
+      - REQ-SP800-18R2-0157
+      - REQ-SP800-18R2-0166
+      - REQ-DODI8500.01-0323
+  - id: ASSET-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-10
+    summary: the inventory does not say whether the system is a high-value asset, or an HVA has no Component HVA inventory entry
+    fixture: tests/fixtures/negative/ASSET-003.yaml
+    hint: "Record hva: {designated, basis, inventory_entry} in inventory.yaml."
+    enforces:
+      - REQ-DODI5400.11-0074
+      - REQ-DODI5400.11-0121
+  - id: CATG-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: the categorization is below the high-water mark of the information types, raised above it with no recorded adjustment, or not reviewed against the SP 800-60 and FIPS 199 factors
+    fixture: tests/fixtures/negative/CATG-001.yaml
+    hint: "Record categorization.factors_reviewed and one adjustments record per raised objective in facts.yaml."
+    enforces:
+      - REQ-CNSSI1253-0049
+      - REQ-FIPS199-0010
+      - REQ-SP800-60V1R1-0053
+      - REQ-SP800-60V1R1-0130
+      - REQ-SP800-60V1R1-0147
+      - REQ-SP800-60V1R1-0150
+      - REQ-SP800-60V1R1-0153
+      - REQ-SP800-60V1R1-0154
+      - REQ-SP800-60V1R1-0155
+      - REQ-SP800-60V1R1-0156
+      - REQ-SP800-60V1R1-0157
+      - REQ-SP800-60V1R1-0160
+      - REQ-SP800-60V1R1-0067
+      - REQ-SP800-60V1R1-0095
+      - REQ-SP800-60V1R1-0101
+      - REQ-SP800-60V1R1-0125
+      - REQ-SP800-60V1R1-0127
+      - REQ-SP800-60V1R1-0128
+  - id: CATG-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: CUI, CTI or software artifacts with a military application are categorized below moderate, system information below the user information, or information above the system's classification
+    fixture: tests/fixtures/negative/CATG-002.yaml
+    hint: "Raise the categorization, or correct the handling recorded on the information type."
+    enforces:
+      - REQ-DODI8500.01-0268
+      - REQ-DOWI8430.01-0171
+      - REQ-DOWI8430.01-0172
+      - REQ-FIPS199-0016
+      - REQ-SP800-60V1R1-0058
+      - REQ-SP800-60V1R1-0131
+      - REQ-DODI8530.01-0161
+  - id: CATG-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: an information type lacks its selection basis, PII identification or handling, or CTI lacks its exposure and protection record
+    fixture: tests/fixtures/negative/CATG-003.yaml
+    hint: "Fill selection_basis, pii_identification and handling per type, and cti when a type holds CTI."
+    enforces:
+      - REQ-DODI5000.83-0134
+      - REQ-DODI5000.83-0146
+      - REQ-DODI5000.83-0147
+      - REQ-DODI8530.01-0294
+      - REQ-DODI5000.82-0174
+      - REQ-DOWI8430.01-0103
+      - REQ-SP800-60V1R1-0094
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0021
+      - REQ-SP800-60V1R1-0076
+      - REQ-SP800-60V1R1-0088
+  - id: SUBS-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-11
+    summary: a subsystem names no boundary component, the system is below the high-water mark of its subsystems, or subsystems that differ in categorization have no examined interface and interconnection controls
+    fixture: tests/fixtures/negative/SUBS-001.yaml
+    hint: "List subsystems and subsystem_interfaces in boundary.yaml; select interconnection controls from the baseline."
+    enforces:
+      - REQ-SP800-37R2-0670
+      - REQ-SP800-37R2-0671
+      - REQ-SP800-37R2-0742
+      - REQ-SP800-37R2-0743
+      - REQ-SP800-18R1-0069
+      - REQ-SP800-18R2-0099
+      - REQ-SP800-60V1R1-0158
+  - id: SUBS-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-11
+    summary: the network architecture or data flows carry no diagram, a diagram is not a file of the run, or together they leave out what SP 800-18r2 has them show
+    fixture: tests/fixtures/negative/SUBS-002.yaml
+    hint: "Give each diagram a path in the run and a shows list."
+    enforces:
+      - REQ-SP800-18R2-0091
+      - REQ-SP800-18R2-0304
+      - REQ-SP800-18R2-0427
+      - REQ-SP800-18R2-0096
+      - REQ-SP800-18R2-0167
+      - REQ-SP800-18R2-0171
+      - REQ-SP800-18R2-0172
+      - REQ-SP800-18R2-0173
+      - REQ-SP800-18R2-0176
+      - REQ-SP800-18R2-0418
+  - id: PENT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the plan's penetration test is missing where ca-8 or a cATO calls for it, does not use NIST SP 800-115, has no schedule event, or a cATO test misses its environments, third party or kind
+    fixture: tests/fixtures/negative/PENT-001.yaml
+    hint: "Fill penetration_test in sap.yaml and schedule a penetration-test event."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0116
+      - REQ-DODCIO-CATO-EVAL-0119
+      - REQ-DODI8531.01-0127
+  - id: PENT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: the SAR summary is missing, or the penetration test results are missing or name controls and findings the run does not hold
+    fixture: tests/fixtures/negative/PENT-002.yaml
+    hint: "Write artifacts/data/sar-summary.yaml from templates/data/sar-summary.yaml."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0123
+      - REQ-DODCIO-CATO-EVAL-0124
+      - REQ-DODCIO-CATO-EVAL-0126
+      - REQ-SP800-53AR5-0287
+      - REQ-SP800-53AR5-0289
+  - id: SCFG-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: I-1
+    summary: an exception to a STIG, SRG or security configuration guide is not approved by the responsible AO or AODR
+    fixture: tests/fixtures/negative/SCFG-001.yaml
+    hint: "Record exception: {rationale, approved_by: PER-AO or PER-AODR, date} on the finding."
+    enforces:
+      - REQ-DODI8500.01-0173
+  - id: RISKX-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the risk executive function has no forum for all and aggregated risk, no vehicle to internal and external stakeholders, or leaves subordinate autonomy unspecified for a risk activity
+    fixture: tests/fixtures/negative/RISKX-001.yaml
+    hint: "Write artifacts/data/org-context.yaml from templates/data/org-context.yaml at P-2."
+    enforces:
+      - REQ-SP800-37R2-0502
+      - REQ-SP800-37R2-0506
+      - REQ-SP800-37R2-0507
+      - REQ-SP800-37R2-0509
+  - id: ENTRY-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: null
+    summary: a run's entry determination names a task outside its step, counts a later task as completed, or lacks the AO's approval
+    fixture: tests/fixtures/negative/ENTRY-001.yaml
+    hint: "Record entry in run.yaml as playbooks/00-run-protocol.md describes."
+    enforces:
+      - REQ-SP800-37R2-0069
+      - REQ-DODI5000.90-0088
+  - id: DETC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: detection does not use CTI in log analysis, correlation and event analysis, or monitoring leaves out an asset class or says nothing of tuning
+    fixture: tests/fixtures/negative/DETC-001.yaml
+    hint: "Fill detection in incident-response.yaml and detection_coverage and tuning in conmon.yaml."
+    enforces:
+      - REQ-SP800-61R3-0199
+      - REQ-SP800-61R3-0200
+      - REQ-SP800-61R3-0205
+      - REQ-SP800-61R3-0191
+      - REQ-SP800-61R3-0192
+      - REQ-SP800-61R3-0193
+      - REQ-SP800-61R3-0194
+      - REQ-SP800-61R3-0195
+      - REQ-SP800-61R3-0196
+      - REQ-SP800-61R3-0197
+  - id: OCTX-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: a role is not appointed, or is appointed by the wrong official, to someone outside government, or without the AO's basis, the ISSM's means or the CISO's terms
+    fixture: tests/fixtures/negative/OCTX-001.yaml
+    hint: "artifacts/data/org-context.yaml roles holds one record per appointee (P-1)."
+    enforces:
+      - REQ-DODI8500.01-0411
+      - REQ-DODI8510.01-0063
+      - REQ-DODI8510.01-0236
+      - REQ-DODI8510.01-0241
+      - REQ-DODI8510.01-0306
+      - REQ-SP800-18R1-0112
+      - REQ-SP800-37R2-0466
+      - REQ-SP800-37R2-0517
+      - REQ-SP800-37R2-0739
+      - REQ-SP800-39-0210
+      - REQ-SP800-39-0220
+  - id: OCTX-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: code-signing certificates are used without a designation process or a stated operational need, or more individuals are designated than that need
+    fixture: tests/fixtures/negative/OCTX-002.yaml
+    hint: "Record code_signing in org-context.yaml, with operational_need whenever certificates are used."
+    enforces:
+      - REQ-DODI8500.01-0398
+  - id: OCTX-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the Cybersecurity Risk Management Program falls short of CNSSP 22, DoDI 8500.01 or DoDI 8510.01 on scope, issuances, integration, steps, assignment or governance
+    fixture: tests/fixtures/negative/OCTX-003.yaml
+    hint: "P-2 records program, policies and resources in org-context.yaml."
+    enforces:
+      - REQ-CNSSP12-0021
+      - REQ-CNSSP12-0048
+      - REQ-CNSSP22-0002
+      - REQ-CNSSP22-0010
+      - REQ-CNSSP22-0014
+      - REQ-CNSSP22-0023
+      - REQ-DODI8500.01-0012
+      - REQ-DODI8500.01-0140
+      - REQ-DODI8500.01-0339
+      - REQ-DODI8500.01-0396
+      - REQ-DODI8510.01-0042
+      - REQ-DODI8510.01-0049
+      - REQ-SP800-161R1-1002
+      - REQ-SP800-18R1-0003
+      - REQ-SP800-37R2-0070
+      - REQ-SP800-37R2-0468
+      - REQ-SP800-37R2-0469
+      - REQ-SP800-37R2-0489
+      - REQ-SP800-39-0193
+      - REQ-SP800-39-0211
+  - id: OCTX-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the risk strategy lacks its frame, governance, assessment guidance or response strategy, or an external risk relationship is not accepted by a senior leader
+    fixture: tests/fixtures/negative/OCTX-004.yaml
+    hint: "P-2 records risk_frame, governance, risk_assessment_guidance, risk_response and external_entities; C-1 adds the provider of each leveraged authorization."
+    enforces:
+      - REQ-SP800-37R2-0496
+      - REQ-SP800-37R2-0516
+      - REQ-SP800-39-0107
+      - REQ-SP800-39-0108
+      - REQ-SP800-39-0112
+  - id: OCTX-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-5
+    summary: a common control package lacks its authorization, a qualified assessor chosen by the provider or organization, a POA&M for deficiencies, or AO approval before reaching the system owner
+    fixture: tests/fixtures/negative/OCTX-005.yaml
+    hint: "P-5 records common_controls in org-context.yaml, one package per provider."
+    enforces:
+      - REQ-SP800-37R2-0204
+      - REQ-SP800-37R2-0362
+      - REQ-SP800-37R2-0474
+      - REQ-SP800-37R2-0545
+      - REQ-SP800-53AR5-0144
+      - REQ-SP800-53AR5-0190
+      - REQ-SP800-53AR5-0194
+  - id: OCTX-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: the system assessment assesses an inherited control itself, does not verify the inheritance, or is delivered before the provider's results are available
+    fixture: tests/fixtures/negative/OCTX-006.yaml
+    hint: "A determination of an inherited control rests on the provider's assessment (inherited.basis) and the assessor verifies the inheritance."
+    enforces:
+      - REQ-SP800-37R2-0477
+      - REQ-SP800-37R2-0618
+      - REQ-SP800-53AR5-0183
+      - REQ-SP800-53AR5-0188
+      - REQ-SP800-53AR5-0193
+      - REQ-SP800-53AR5-0194
+  - id: OCTX-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-7
+    summary: the organizational ISCM strategy leaves a manual process unverified, a required policy out, an activity unmapped, or misjudges a not-applicable element
+    fixture: tests/fixtures/negative/OCTX-007.yaml
+    hint: "P-7 records iscm in org-context.yaml."
+    enforces:
+      - REQ-SP800-137-0056
+      - REQ-SP800-137-0169
+      - REQ-SP800-137A-0048
+      - REQ-SP800-137A-0089
+      - REQ-SP800-137A-0091
+      - REQ-SP800-137A-0137
+      - REQ-SP800-137A-0140
+      - REQ-SP800-137A-0352
+      - REQ-SP800-39-0187
+      - REQ-SP800-39-0190
+      - REQ-SP800-53R5-0028
+  - id: OCTX-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-7
+    summary: the ISCM program is not reviewed at its frequency, its reviews ignore threats, or its formal assessment is not reported or its findings not owned
+    fixture: tests/fixtures/negative/OCTX-008.yaml
+    hint: "P-7 records iscm.reviews and iscm.assessments; each finding names an owner and a due date."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0037
+      - REQ-SP800-137A-0014
+      - REQ-SP800-137A-0017
+      - REQ-SP800-137A-0056
+      - REQ-SP800-137A-0094
+      - REQ-SP800-137A-0279
+  - id: OCTX-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a system monitoring frequency is less frequent than the organizational minimum, or the system owner has not reviewed the minimums
+    fixture: tests/fixtures/negative/OCTX-009.yaml
+    hint: "conmon.yaml minimum_review records the system owner's review of the organizational minimums."
+    enforces:
+      - REQ-SP800-137-0160
+      - REQ-SP800-137-0162
+      - REQ-SP800-137-0163
+      - REQ-SP800-37R2-0615
+  - id: OCTX-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: a system under ongoing authorization has no organization-wide ongoing authorization process, or the process or the ISCM program does not hold its conditions
+    fixture: tests/fixtures/negative/OCTX-010.yaml
+    hint: "P-7 records iscm.ongoing_authorization before a system transitions (AD-CONT)."
+    enforces:
+      - REQ-SP800-137A-0073
+      - REQ-SP800-37R2-0613
+      - REQ-SP800-37R2-0615
+      - REQ-SP800-37R2-0616
+  - id: OCTX-011
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-3
+    summary: operations bring no review of threat, vulnerability, technology and mission changes against the organizational risk posture
+    fixture: tests/fixtures/negative/OCTX-011.yaml
+    hint: "P-3 records posture_reviews in org-context.yaml once the system operates."
+    enforces:
+      - REQ-CNSSP22-0026
+      - REQ-SP800-137-0116
+      - REQ-SP800-30R1-0092
+      - REQ-SP800-39-0157
+      - REQ-SP800-39-0186
+  - id: OCTX-012
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the organizational policies do not carry risk management through the life cycle, or the funding, staffing and allocation owners hold no role or skip PPBE
+    fixture: tests/fixtures/negative/OCTX-012.yaml
+    hint: "P-2 records policies and resources in org-context.yaml; every owner holds a role in roles."
+    enforces:
+      - REQ-CNSSP22-0019
+      - REQ-CNSSP22-0024
+      - REQ-DODI8510.01-0046
+      - REQ-DODI8510.01-0059
+      - REQ-SP800-37R2-0070
+      - REQ-SP800-37R2-0473
+      - REQ-SP800-37R2-0685
+      - REQ-SP800-39-0216
+      - REQ-SP800-61R3-0094
+  - id: OCTX-013
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: a cybersecurity position is held against the citizenship bars, without its designation, DCPDS record, manpower position or written duties, or by a function the organization has not opened
+    fixture: tests/fixtures/negative/OCTX-013.yaml
+    hint: "Each roles record of a cybersecurity position carries position, duties_statement and, where needed, personnel_security and supervised_by."
+    enforces:
+      - REQ-DODI8500.01-0359
+      - REQ-DODI8500.01-0360
+      - REQ-DODI8500.01-0406
+      - REQ-DODI8500.01-0407
+      - REQ-DODI8500.01-0408

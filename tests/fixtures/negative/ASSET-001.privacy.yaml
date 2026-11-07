@@ -1,0 +1,15 @@
+rule: ASSET-001
+bases:
+- minimal
+description: an asset scope that leaves out the privacy interests of individuals
+mutations:
+- op: delete_list_item
+  file: artifacts/data/inventory.yaml
+  path: asset_scope
+  where:
+    class: privacy-interests
+expect:
+  errors:
+  - ASSET-001
+  messages:
+  - the organization's asset scope does not consider privacy-interests

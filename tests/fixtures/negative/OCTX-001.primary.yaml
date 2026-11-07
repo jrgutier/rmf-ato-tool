@@ -1,0 +1,15 @@
+rule: OCTX-001
+bases:
+- minimal
+description: the CISO's primary duty is not security
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.1.primary_duty
+  value: other
+expect:
+  errors:
+  - OCTX-001
+  messages:
+  - 'RA-02: the senior agency information security officer maintains security duties as a primary responsibility,
+    not other'

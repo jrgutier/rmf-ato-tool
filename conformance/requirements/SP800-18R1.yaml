@@ -27,7 +27,9 @@ requirements:
     locator: "1.1"
     context: "Background"
     statement: "Title III of the E-Government Act, entitled the Federal Information Security Management Act (FISMA), requires each federal agency to develop, document, and implement an agency-wide information security program to provide information security for the information and information systems that support the operations and assets of the agency, including those provided or managed by another agency, contractor, or other source. System security planning is an important activity that supports the system development life cycle (SDLC) and should be updated as system events trigger the need for revision in order to accurately reflect the most current state of the system. The system security plan provides a summary of the security requirements for the information system and describes the security controls in place or planned for meeting those requirements. The plan also may reference other key security-related documents for the information system such as a risk assessment, plan of action and milestones, accreditation decision letter, privacy impact assessment, contingency plan, configuration management plan, security configuration checklists, and system interconnection agreements as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "the agency-wide program is checked by OCTX-003 scope; the security plan's upkeep is outside this record"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.scope.yaml", "expect": ", not an integrated, organization-wide program", "asserts": "Each agency develops and implements an agency-wide information security program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section"}]
     work_item: "WI-163"
   - id: "REQ-SP800-18R1-0004"
     citation: {"ref": "SP800-18R1", "page": 8, "anchor": "Program managers, system owners, and security personnel in the organization must understand"}
@@ -97,7 +99,9 @@ requirements:
     locator: "1.3"
     context: "Organization of Document"
     statement: "1.5 Major Applications, General Support Systems, and Minor Applications All information systems must be covered by a system security plan and labeled as a major application1 or general support system.2 Specific system security plans for minor applications3 are not required because the security controls for those applications are typically provided by the general support system or major application in which they operate. In those cases where the minor application is not connected to a major application or general support system, the minor application should be briefly described in a general support system plan that has either a common physical location or is supported by the same organization. Additional information is provided in Chapter 2."
-    status: "candidate"
+    status: "partial"
+    reason: "The IT type fact labels every system; minor applications described in a general support system's plan are not modelled."
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pit.yaml", "expect": "the PIT system is not designated by the responsible OSD or DoD Component head or a delegate", "asserts": "Every system is labeled as a major application or general support system in its IT type, and a PIT system is designated", "claim": "constraint"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R1-0013"
     citation: {"ref": "SP800-18R1", "page": 9, "anchor": "OMB Circular A-130, Appendix III, defines major application as an application that"}
@@ -167,7 +171,9 @@ requirements:
     locator: "1.7.1.•"
     context: "Chief Information Officer"
     statement: "• Manages the identification, implementation, and assessment of common security controls,"
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The identification, implementation, and assessment of common security controls are recorded per provider", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0022"
     citation: {"ref": "SP800-18R1", "page": 12, "anchor": "Ensures that personnel with significant responsibilities for system security plans are trained,"}
@@ -232,7 +238,9 @@ requirements:
     locator: "1.7.2.•"
     context: "Information System Owner The information system owner has the following responsibilities related to system security plans:"
     statement: "• Assists in the identification, implementation, and assessment of the common security controls."
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The identification, implementation, and assessment of the common security controls are recorded per provider", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0031"
     citation: {"ref": "SP800-18R1", "page": 12, "anchor": "The information owner is the agency official with statutory or operational authority"}
@@ -276,7 +284,9 @@ requirements:
     locator: "1.7.3.•"
     context: "Information Owner"
     statement: "• Assists in the identification and assessment of the common security controls where the information resides."
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The identification and assessment of the common security controls are recorded per provider", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0037"
     citation: {"ref": "SP800-18R1", "page": 13, "anchor": "The senior agency information security officer is the agency official responsible for"}
@@ -305,7 +315,9 @@ requirements:
     locator: "1.7.4.•"
     context: "Senior Agency Information Security Officer (SAISO) The SAISO has the following responsibilities related to system security plans:"
     statement: "• Coordinates the identification, implementation, and assessment of the common security controls, and"
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The identification, implementation, and assessment of the common security controls are recorded per provider", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0041"
     citation: {"ref": "SP800-18R1", "page": 13, "anchor": "Possesses professional qualifications, including training and experience, required to develop and review"}
@@ -328,7 +340,9 @@ requirements:
     locator: "1.7.5.•"
     context: "Information System Security Officer The information system security officer has the following responsibilities related to system security plans:"
     statement: "• Assists the senior agency information security officer in the identification, implementation, and assessment of the common security controls, and"
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The identification, implementation, and assessment of the common security controls are recorded per provider", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0044"
     citation: {"ref": "SP800-18R1", "page": 13, "anchor": "The information owner retains that responsibility even when the data/information are shared"}
@@ -487,7 +501,9 @@ requirements:
     locator: "1.9.2"
     context: "System Security Plan Approval"
     statement: "Before the system security plan can be developed, the information system and the information resident within that system must be categorized based on a FIPS 199 impact analysis. Then a determination can be made as to which systems in the inventory can be logically grouped into major applications or general support systems. The FIPS 199 impact levels must be considered when the system boundaries are drawn and when selecting the initial set of security controls (i.e., control baseline). The baseline security controls can then be tailored based on an assessment of risk and local conditions including organization-specific security requirements, specific threat information, cost-benefit analyses, the availability of compensating controls, or special circumstances. Common security controls, which is one of the tailoring considerations, must be identified prior to system security plan preparation in order to identity those controls covered at the agency level, which are not system-specific. These common security controls can then be incorporated into the system security plan by reference."
-    status: "candidate"
+    status: "partial"
+    reason: "The categorization precedes the boundary in the run's order; that FIPS 199 levels shaped the boundary is prose."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "The FIPS 199 impact levels are considered when the system boundaries are drawn", "claim": "presence"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R1-0065"
     citation: {"ref": "SP800-18R1", "page": 16, "anchor": "The process of uniquely assigning information resources9 to an information system defines"}
@@ -495,7 +511,9 @@ requirements:
     locator: "2.1"
     context: "System Boundaries"
     statement: "The process of uniquely assigning information resources9 to an information system defines the security boundary for that system. Agencies have great flexibility in determining what constitutes an information system (i.e., major application or general support system). If a set of information resources is identified as an information system, the resources should generally be under the same direct management control. Direct management control10 does not necessarily imply that there is no intervening management. It is also possible for an information system to contain multiple subsystems. A subsystem is a major subdivision or component of an information system consisting of information, information technology, and personnel that perform one or more specific functions. Subsystems typically fall under the same management authority and are included within a single system security plan. Figure 3 depicts a general support system with three subsystems. In addition to the consideration of direct management control, it may be helpful for agencies to consider if the information resources being identified as an information system:"
-    status: "candidate"
+    status: "partial"
+    reason: "Assigning resources to a system is the boundary's components; management control is prose."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Information resources are assigned to the system as boundary components defining the security boundary", "claim": "presence"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R1-0066"
     citation: {"ref": "SP800-18R1", "page": 16, "anchor": "Have the same function or mission objective and essentially the same operating"}
@@ -527,7 +545,8 @@ requirements:
     locator: "2.1.•"
     context: "LOCAL AREA"
     statement: "• One system security plan reflects information system decomposition with adequate security controls assigned to each subsystem component."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.component.yaml", "expect": "no boundary component", "asserts": "The plan reflects system decomposition into subsystems, each made of boundary components", "claim": "constraint"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R1-0070"
     citation: {"ref": "SP800-18R1", "page": 18, "anchor": "All federal applications have value and require some level of protection. Certain"}
@@ -542,7 +561,9 @@ requirements:
     locator: "2.2.•"
     context: "Major Applications If a system is defined as a major application and the application is run on another organization's general support system, the major application owner is responsible for acceptance"
     statement: "• Notifies the general support system owner that the application is critical and provides specific security requirements;"
-    status: "candidate"
+    status: "partial"
+    reason: "Notifying the general support system owner is not modelled; the agreement behind the consumed service is recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/leveraged-authorizations.schema.json#/properties/leveraged_authorizations/items/properties/service", "claim": "presence", "asserts": "The consumed service and its agreement carry the specific security requirements"}]
     work_item: "WI-195"
   - id: "REQ-SP800-18R1-0072"
     citation: {"ref": "SP800-18R1", "page": 18, "anchor": "Provides a copy of the major application's system security plan to the"}
@@ -550,7 +571,9 @@ requirements:
     locator: "2.2.•"
     context: "Major Applications If a system is defined as a major application and the application is run on another organization's general support system, the major application owner is responsible for acceptance"
     statement: "• Provides a copy of the major application's system security plan to the operator of the general support system;"
-    status: "candidate"
+    status: "partial"
+    reason: "Sharing the plan with the general support system operator is not modelled."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "The major application's security plan is shared with the provider of the consumed service", "claim": "presence"}]
     work_item: "WI-195"
   - id: "REQ-SP800-18R1-0073"
     citation: {"ref": "SP800-18R1", "page": 19, "anchor": "Requests a copy of the system security plan of the general support"}
@@ -558,7 +581,9 @@ requirements:
     locator: "2.2.•"
     context: "Major Applications If a system is defined as a major application and the application is run on another organization's general support system, the major application owner is responsible for acceptance"
     statement: "• Requests a copy of the system security plan of the general support system and ensures that it provides adequate protection for the application and information; and"
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/plan", "asserts": "A copy of the system security plan of the general support system is made available to the system owner", "claim": "presence"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0074"
     citation: {"ref": "SP800-18R1", "page": 19, "anchor": "Includes a reference to the general support system security plan in the"}
@@ -605,7 +630,9 @@ requirements:
     locator: "2.3.•"
     context: "General Support Systems A general support system, for example11, can be a:"
     statement: "• Shared information processing service facility A general support system can have a FIPS 199 impact level of low, moderate, or high in its security categorization depending on the criticality or sensitivity of the system and any major applications the general support system is supporting. A general support system is considered a major information system when special management attention is required, there are high development, operating, or maintenance costs; and the system/information has a significant role in the administration of agency programs. When the general support system is a major information system, the system's FIPS 199 impact level is either moderate or high. A major application can be hosted on a general support system. The general support system plan should reference the major application system security plan."
-    status: "candidate"
+    status: "partial"
+    reason: "A general support system's impact level follows its categorization as for any system; the definition text is not a duty a run can fail."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_type", "claim": "presence", "asserts": "The general support system type is recorded as the system's IT type"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R1-0080"
     citation: {"ref": "SP800-18R1", "page": 19, "anchor": "Agencies are expected to exercise management judgment in determining which of their"}
@@ -613,7 +640,9 @@ requirements:
     locator: "2.4"
     context: "Minor Applications"
     statement: "Agencies are expected to exercise management judgment in determining which of their applications are minor applications and to ensure that the security requirements of minor applications are addressed as part of the system security plan for the applicable general support systems or, in some cases, the applicable major application. It is very common that a minor application may have a majority of its security controls provided by the general support system or major application on which it resides. If this is the case, the information system owner of the general support system or major application is the information system owner for the minor application and is responsible for developing the system security plan. The additional security controls specific to the minor application should be documented in the system security plan as an appendix or paragraph. The minor application owner (often the same as information owner) may develop the appendix or paragraph describing the additional controls. The complete general support system or major application system security plan should be shared with the information owner. The minor application can have a FIPS 199 security category of low or moderate. However, if the minor application resides on a system that does not have adequate boundary protection, the minor application must implement the minimum baseline controls required by the host or interconnected system."
-    status: "candidate"
+    status: "partial"
+    reason: "Minor applications are not modelled."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Minor application security requirements are addressed in the plan of the general support system", "claim": "presence"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R1-0081"
     citation: {"ref": "SP800-18R1", "page": 20, "anchor": "FIPS 200 provides seventeen minimum security requirements for federal information and information"}
@@ -789,7 +818,9 @@ requirements:
     locator: "2.5.3.•"
     context: "Common Security Controls Common security controls, typically identified during a collaborative agency-wide process with the involvement of the CIO, SAISO, authorizing officials, information system own"
     statement: "• Agency experts in the common control areas identified have been consulted as part of the process. An agency may also assign a hybrid status to security controls in situations where one part of the control is deemed to be common, while another part of the control is deemed to be system-specific. For example, an agency may view the IR-1 (Incident Response Policy and Procedures) security control as a hybrid control with the policy portion of the control deemed to be common and the procedures portion of the control deemed to be system-specific. Hybrid security controls may also serve as templates for further control refinement. An agency may choose, for example, to implement the CP-2 (Contingency Plan) security control as a master template for a generalized contingency plan for all agency information systems with individual information system owners tailoring the plan, where appropriate, for system-specific issues. Information system owners are responsible for any system-specific issues associated with the implementation of an agency's common security controls. These issues are identified and described in the system security plans for the individual information systems. The SAISO, acting on behalf of the CIO, should coordinate with agency officials (e.g., facilities managers, site managers, personnel managers) responsible for the development and implementation of the designated common security controls to ensure that the required controls are put into place, the controls are assessed, and the assessment results are shared with the appropriate information system owners. Partitioning security controls into common security controls and system-specific security controls can result in significant savings to the agency in control development and implementation costs. It can also result in a more consistent application of the security controls across the agency at large. Moreover, equally significant savings can be realized in the security certification and accreditation process. Rather than assessing common security controls in every information system, the certification process draws upon any applicable results from the most current assessment of the common security controls performed at the agency level. An agency-wide approach to reuse and sharing of assessment results can greatly enhance the efficiency of the security certifications and accreditations being conducted by an agency and significantly reduce security program costs."
-    status: "candidate"
+    status: "partial"
+    reason: "common_controls records each provider's controls and package; the roles of other officials in identifying and assessing them are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "Common security controls and hybrid status are recorded with the controls a provider offers", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-18R1-0103"
     citation: {"ref": "SP800-18R1", "page": 25, "anchor": "While the concept of security control partitioning into common security controls and"}
@@ -805,7 +836,9 @@ requirements:
     locator: "2.5.3.3"
     context: "Common Security Controls"
     statement: "The remainder of this document guides the reader in writing a system security plan, including logical steps which should be followed in approaching plan development, recommended structure and content, and how to maximize the use of current NIST publications to effectively support system security planning activity. There should be established agency policy on how the information system security plans are to be controlled and accessed prior to initiation of the activity."
-    status: "candidate"
+    status: "partial"
+    reason: "Agency policy on control of and access to the plans is organizational; the handling marking SYSD-006 sets on documents holding vulnerability detail is one control of access."
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.yaml", "expect": "configuration detail is handled at a minimum as CUI", "asserts": "The security plans are controlled and accessed under a handling marking", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded"}]
     work_item: "WI-174"
   - id: "REQ-SP800-18R1-0105"
     citation: {"ref": "SP800-18R1", "page": 26, "anchor": "The first item listed in the system security plan is the system"}
@@ -827,7 +860,9 @@ requirements:
     locator: "3.3"
     context: "System Owner"
     statement: "A designated system owner must be identified in the system security plan for each system. This person is the key point of contact (POC) for the system and is responsible for coordinating system development life cycle (SDLC) activities specific to the system. It is important that this person have expert knowledge of the system capabilities and functionality. The assignment of a system owner should be documented in writing and the plan should include the following contact information:"
-    status: "candidate"
+    status: "partial"
+    reason: "the system owner's record, its appointment instrument and contact are held; no rule demands the written instrument for the system owner, and the SDLC coordination is conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/appointment", "asserts": "The appointment of the system owner is documented with its written instrument", "claim": "presence"}, {"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "The system owner record includes contact information", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0108"
     citation: {"ref": "SP800-18R1", "page": 27, "anchor": "Security Objective | LOW | MODERATE | HIGH"}
@@ -867,7 +902,9 @@ requirements:
     locator: "3.4"
     context: "Authorizing Official"
     statement: "An authorizing official must be identified in the system security plan for each system. This person is the senior management official who has the authority to authorize operation (accredit) of an information system (major application or general support system) and accept the residual risk associated with the system. The assignment of the authorizing official should be in writing, and the plan must include the same contact information listed in Section 3.3."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-001 demands the AO's appointment basis; that the assignment is in writing and the address are not checked"
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.basis.yaml", "expect": ": the AO's appointment states no basis", "asserts": "The authorizing official's appointment is recorded with the authority it rests on", "claim": "presence", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}, {"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "The authorizing official record includes the same contact information", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0113"
     citation: {"ref": "SP800-18R1", "page": 27, "anchor": "This section should include names of other key contact personnel who can"}
@@ -875,7 +912,9 @@ requirements:
     locator: "3.5"
     context: "Other Designated Contacts"
     statement: "This section should include names of other key contact personnel who can address inquiries regarding system characteristics and operation. The same information listed in Section 3.3 should be included for each person listed under this section."
-    status: "candidate"
+    status: "partial"
+    reason: "other key personnel can be listed in roles with names and contact; nothing asks for them"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "Other key contact personnel are listed with their names and contact information", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0114"
     citation: {"ref": "SP800-18R1", "page": 28, "anchor": "Within an agency, an individual must be assigned responsibility for each system."}
@@ -883,7 +922,9 @@ requirements:
     locator: "3.6"
     context: "Assignment of Security Responsibility"
     statement: "Within an agency, an individual must be assigned responsibility for each system. This can be accomplished in many ways. In some agencies, the overall responsibility may be delegated to the SAISO. Often, the SAISO is supported by a subnet of security officers assigned to each major component. These security officers may be authorized to address the security requirements for all systems within their domain of authority. Other models may segment this responsibility in other ways based on agency structure and responsibility. The same contact information, as listed under Section 3.3, should be provided for these individuals. Most important is that this responsibility be formalized in writing either in the employee's Position Description or by delegation Memorandum."
-    status: "candidate"
+    status: "partial"
+    reason: "the appointment instrument is recorded; no rule refuses an oral assignment of security responsibility, and the delegation models are permissions"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/appointment", "asserts": "The assignment of security responsibility is formalized in writing in the appointment instrument, a position description or delegation memorandum", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0115"
     citation: {"ref": "SP800-18R1", "page": 28, "anchor": "Indicate one or more of the following for the system's operational status."}
@@ -921,7 +962,9 @@ requirements:
     locator: "3.9"
     context: "General Description/Purpose"
     statement: "Prepare a brief description (one to three paragraphs) of the function and purpose of the system (e.g., economic indicator, network support for an agency, business census data analysis, crop reporting support). If the system is a general support system, list all applications supported by the general support system. Specify if the application is or is not a major application and include unique name/identifiers, where applicable. Describe each application's function and the information processed. Include a list of user organizations, whether they are internal or external to the system owner's agency."
-    status: "candidate"
+    status: "partial"
+    reason: "The function narrative is required; listing the applications a general support system supports is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/function", "claim": "presence", "asserts": "A brief description of the function and purpose of the system is recorded"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R1-0120"
     citation: {"ref": "SP800-18R1", "page": 29, "anchor": "Provide a brief (one to three paragraphs) general description of the technical"}
@@ -929,7 +972,9 @@ requirements:
     locator: "3.10"
     context: "System Environment"
     statement: "Provide a brief (one to three paragraphs) general description of the technical system. Include any environmental or technical factors that raise special security concerns, such as use of Personal Digital Assistants, wireless technology, etc. Typically, operational environments are as follows:"
-    status: "candidate"
+    status: "partial"
+    reason: "The operational environment is a fact; the technical description and special security concerns are prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/operational_environment", "claim": "presence", "asserts": "The general description names the operational environment of the system"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R1-0121"
     citation: {"ref": "SP800-18R1", "page": 29, "anchor": "Standalone or Small Office/Home Office (SOHO) describes small, informal computer installations that"}
@@ -969,7 +1014,9 @@ requirements:
     locator: "3.11"
     context: "System Interconnection/Information Sharing"
     statement: "System interconnection is the direct connection of two or more IT systems for the purpose of sharing information resources. System interconnection, if not appropriately protected, may result in a compromise of all connected systems and the data they store, process, or transmit. It is important that system owners, information owners, and management obtain as much information as possible regarding vulnerabilities associated with system interconnections and information sharing. This is essential to selecting the appropriate controls required to mitigate those vulnerabilities. An Interconnection Security Agreement (ISA), Memorandum of Understanding (MOU), or Memorandum of Agreement (MOA) is needed between systems (not between workstations/desktops or publicly accessed systems) that share data that are owned or operated by different organizations. An ISA is not needed with internal agency systems if an agency manages and enforces a rigid system development life cycle, which requires approvals and sign-offs ensuring compliance with security requirements. For additional information on interconnections, see NIST SP 800-47, Security Guide for Interconnecting Information Technology Systems. In this section, for each interconnection between systems that are owned or operated by different organizations, provide the following information concerning the authorization for the connection to other systems or the sharing of information:"
-    status: "candidate"
+    status: "partial"
+    reason: "Interconnections are recorded with their agreements; obtaining information on their vulnerabilities is prose."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.record.yaml", "expect": "has no interconnection record", "asserts": "System interconnections are identified with an agreement record so their protection can be reviewed", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-SP800-18R1-0126"
     citation: {"ref": "SP800-18R1", "page": 30, "anchor": "Name of system;"}
@@ -1322,7 +1369,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.3.•"
     context: "Information System Owner:"
     statement: "• Name, title, agency, address, email address, and phone number of person who owns the system."
-    status: "candidate"
+    status: "partial"
+    reason: "name, title, organization, email and phone are required in each role record; the address is not recorded"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "Name, title, email address and phone number of the person who owns the system are recorded", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0170"
     citation: {"ref": "SP800-18R1", "page": 35, "anchor": "Name, title, agency, address, email address, and phone number of the senior"}
@@ -1330,7 +1379,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.4.•"
     context: "Authorizing Official:"
     statement: "• Name, title, agency, address, email address, and phone number of the senior management official designated as the authorizing official."
-    status: "candidate"
+    status: "partial"
+    reason: "name, title, organization, email and phone are required in each role record; the address is not recorded"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "Name, title, email address and phone number of the senior management official designated as the authorizing official are recorded", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0171"
     citation: {"ref": "SP800-18R1", "page": 35, "anchor": "List other key personnel, if applicable; include their title, address, email address,"}
@@ -1338,7 +1389,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.5.•"
     context: "Other Designated Contacts:"
     statement: "• List other key personnel, if applicable; include their title, address, email address, and phone number."
-    status: "candidate"
+    status: "partial"
+    reason: "name, title, organization, email and phone are required in each role record; the address is not recorded"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "Name, title, email address and phone number of the other key personnel are recorded", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0172"
     citation: {"ref": "SP800-18R1", "page": 35, "anchor": "Name, title, address, email address, and phone number of person who is"}
@@ -1346,7 +1399,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.6.•"
     context: "Assignment of Security Responsibility:"
     statement: "• Name, title, address, email address, and phone number of person who is responsible for the security of the system."
-    status: "candidate"
+    status: "partial"
+    reason: "name, title, organization, email and phone are required in each role record; the address is not recorded"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/roles/items/properties/contact", "asserts": "Name, title, email address and phone number of the person responsible for the security of the system are recorded", "claim": "presence"}]
     work_item: "WI-170"
   - id: "REQ-SP800-18R1-0173"
     citation: {"ref": "SP800-18R1", "page": 35, "anchor": "Indicate the operational status of the system. If more than one status"}
@@ -1361,7 +1416,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.8.•"
     context: "Information System Type:"
     statement: "• Indicate if the system is a major application or a general support system. If the system contains minor applications, list them in Section 9. General System Description/Purpose."
-    status: "candidate"
+    status: "partial"
+    reason: "The IT type fact says major application or general support system; listing minor applications is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_type", "claim": "presence", "asserts": "The IT type indicates if the system is a major application or a general support system"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R1-0175"
     citation: {"ref": "SP800-18R1", "page": 36, "anchor": "Describe the function or purpose of the system and the information processes."}
@@ -1383,7 +1440,9 @@ requirements:
     locator: "Appendix A: Sample Information System Security Plan Template.11.•"
     context: "System Interconnections/Information Sharing"
     statement: "• List interconnected systems and system identifiers (if appropriate), provide the system, name, organization, system type (major application or general support system), indicate if there is an ISA/MOU/MOA on file, date of agreement to interconnect, FIPS 199 category, C&A status, and the name of the authorizing official."
-    status: "candidate"
+    status: "partial"
+    reason: "The interconnection record lists the system, organization, agreement and date, and the other system's authorization status and AO; its FIPS 199 category is optional."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.record.yaml", "expect": "has no interconnection record", "asserts": "List interconnected systems with the organization, agreement on file, date of agreement and name of the authorizing official", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-SP800-18R1-0178"
     citation: {"ref": "SP800-18R1", "page": 37, "anchor": "List any laws or regulations that establish specific requirements for the confidentiality,"}
@@ -1528,7 +1587,9 @@ requirements:
     locator: "1.7.1"
     context: "Chief Information Officer"
     statement: "The Chief Information Officer (CIO)5 is the agency official responsible for developing and maintaining an agency-wide information security program and has the following responsibilities for system security planning:"
-    status: "candidate"
+    status: "partial"
+    reason: "the program owner is recorded; the CIO's planning responsibilities are conduct"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/program/properties/owner", "asserts": "The Chief Information Officer develops and maintains the agency-wide information security program", "claim": "constraint"}]
     work_item: "WI-163"
   - id: "REQ-SP800-18R1-0196"
     citation: {"ref": "SP800-18R1", "page": 17, "anchor": "While the above considerations may be useful to agencies in determining information"}
@@ -1536,7 +1597,9 @@ requirements:
     locator: "2.1"
     context: "Figure 3: Decomposition of large and complex information systems"
     statement: "While the above considerations may be useful to agencies in determining information system boundaries for purposes of security accreditation, they should not be viewed as limiting the agency's flexibility in establishing boundaries that promote effective information security within the available resources of the agency. Authorizing officials and senior agency information security officers should consult with prospective information system owners when establishing information system boundaries. The process of establishing boundaries for agency information systems and the associated security implications, is an agency-level activity that should include careful negotiation among all key participants—taking into account the mission/business requirements of the agency, the technical considerations with respect to information security, and the programmatic costs to the agency. FIPS 199 defines security categories for information systems based on potential impact on organizations, assets, or individuals should there be a breach of security—that is, a loss of confidentiality, integrity, or availability. FIPS 199 security categories can play an important part in defining information system boundaries by partitioning the agency's information systems according to the criticality or sensitivity of the information and information systems and the importance of those systems in accomplishing the agency's mission. This is particularly important when there are various FIPS 199 impact levels contained in one information system. The FIPS 199 requirement to secure an information system to the high watermark or highest impact level must be applied when grouping minor applications/subsystems with varying FIPS 199 impact levels into a single general support system or major application unless there is adequate boundary protection, e.g., firewalls and encryption, around those subsystems or applications with the highest impact level. Additionally, there must be assurance that the shared resources, i.e., networks, communications, and physical access within the whole general support system or major application, are protected adequately for the highest impact level."
-    status: "candidate"
+    status: "partial"
+    reason: "Boundary flexibility is guidance."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Authorizing officials consult on establishing boundaries", "claim": "presence"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R1-0197"
     citation: {"ref": "SP800-18R1", "page": 18, "anchor": "Having the ability to isolate the high impact systems will not only"}
@@ -1560,7 +1623,9 @@ requirements:
     locator: "3.8"
     context: ""
     statement: "In this section of the plan, indicate whether the system is a major application or general support system. If the system contains minor applications, describe them in the General Description/Purpose section of the plan. If the agency has additional categories of information system types, modify the template to include the other categories."
-    status: "candidate"
+    status: "partial"
+    reason: "The IT type fact records the type; minor applications are unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_type", "claim": "presence", "asserts": "The IT type indicates whether the system is a major application or general support system"}]
     work_item: "WI-196"
     promoted: {"reason": "Section 3.8 states what the plan must say about system type, in imperatives the extractor read as no marker: indicate major application or general support system, describe minor applications, extend the template for added categories."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);
