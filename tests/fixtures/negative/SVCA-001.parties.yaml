@@ -1,0 +1,14 @@
+rule: SVCA-001
+bases:
+- minimal
+description: a service with no subscriber responsibility
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.services.0.responsibilities.1.party
+  value: service-provider
+expect:
+  errors:
+  - SVCA-001
+  messages:
+  - CSSP and subscriber responsibilities are each assigned for every service

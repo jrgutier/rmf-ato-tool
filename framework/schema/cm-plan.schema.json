@@ -1,0 +1,372 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:cm-plan",
+  "title": "runs/<run-id>/artifacts/data/cm-plan.yaml",
+  "description": "The configuration management plan record (S-4): the configuration item register, change control decisions, SecCM procedures, records and tools. CMPL-001 and CMPL-002 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "configuration_items",
+    "change_control",
+    "procedures",
+    "records",
+    "interconnected_baselines",
+    "ccb_charter",
+    "tools",
+    "manual_monitoring",
+    "sources"
+  ],
+  "properties": {
+    "configuration_items": {
+      "title": "Configuration item register: identifier, label, version, the inventory items in each, and what rebuilds it",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "version",
+          "kind",
+          "inventory_items",
+          "rebuild",
+          "baseline"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "component",
+              "component-group",
+              "non-component",
+              "system",
+              "seccm-tools"
+            ]
+          },
+          "inventory_items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "rebuild": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseline": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-128-0042",
+        "REQ-SP800-128-0158",
+        "REQ-SP800-128-0159",
+        "REQ-SP800-128-0169",
+        "REQ-SP800-128-0268"
+      ]
+    },
+    "change_control": {
+      "title": "Change control decisions that ART-CMP states",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "architecture_consistency",
+        "ccb_submission",
+        "elevation",
+        "rollback",
+        "retroactive",
+        "preapproved",
+        "testing",
+        "approved_products"
+      ],
+      "properties": {
+        "architecture_consistency": {
+          "title": "Review of a change for consistency with the enterprise architecture",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0077"
+          ]
+        },
+        "ccb_submission": {
+          "title": "What a change brings to the CCB: test plan, schedule and results",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0079"
+          ]
+        },
+        "elevation": {
+          "title": "Criteria elevating a change request from system level to organizational approval",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0080"
+          ]
+        },
+        "rollback": {
+          "title": "Rollback of changes when problems occur",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0083"
+          ]
+        },
+        "retroactive": {
+          "title": "Retroactive analysis, testing and approval, and help desk and SDLC procedures",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0085"
+          ]
+        },
+        "preapproved": {
+          "title": "Preapproved changes, still tested and documented",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0394"
+          ]
+        },
+        "testing": {
+          "title": "Testing of secure configurations before production",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0199"
+          ]
+        },
+        "approved_products": {
+          "title": "Approved hardware and software products list and how it is used",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0092"
+          ]
+        }
+      }
+    },
+    "procedures": {
+      "title": "SecCM procedures",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inventory_upkeep",
+        "monitoring_and_media",
+        "patch_management",
+        "program"
+      ],
+      "properties": {
+        "inventory_upkeep": {
+          "title": "Component inventory and baseline configuration procedures",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0071"
+          ]
+        },
+        "monitoring_and_media": {
+          "title": "Monitoring procedures and the media library",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0086"
+          ]
+        },
+        "patch_management": {
+          "title": "Patch management integrated into SecCM",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0286",
+            "REQ-SP800-128-0387"
+          ]
+        },
+        "program": {
+          "title": "SecCM program: roles, CCB functions, resources, tools and retention",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0267"
+          ]
+        }
+      }
+    },
+    "records": {
+      "title": "SecCM records",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "disposal"
+      ],
+      "properties": {
+        "content": {
+          "title": "Records maintained, the information in each, who keeps them",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0065"
+          ]
+        },
+        "disposal": {
+          "title": "Protection, access, audit and deletion of records",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0065"
+          ]
+        }
+      }
+    },
+    "interconnected_baselines": {
+      "title": "Coordination of secure configuration baselines with interconnected systems",
+      "type": "string",
+      "minLength": 1,
+      "x-enforces": [
+        "REQ-SP800-128-0192"
+      ]
+    },
+    "ccb_charter": {
+      "title": "CCB charter elements",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "operating_procedures",
+        "decision_process"
+      ],
+      "properties": {
+        "purpose": {
+          "title": "Purpose of the CCB and its relation to other CCBs",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0337"
+          ]
+        },
+        "operating_procedures": {
+          "title": "Meeting frequency, quorum and guests",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0340"
+          ]
+        },
+        "decision_process": {
+          "title": "Decision rule and who may overrule",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-128-0341"
+          ]
+        }
+      }
+    },
+    "tools": {
+      "title": "SecCM tools, automated first, with SCAP validation and handling of false positives",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "purpose",
+          "scap",
+          "false_positives"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scap": {
+            "enum": [
+              "validated",
+              "none-available",
+              "not-validated"
+            ]
+          },
+          "false_positives": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-128-0093",
+        "REQ-SP800-128-0227",
+        "REQ-SP800-128-0250",
+        "REQ-SP800-128-0388",
+        "REQ-SP800-128-0389"
+      ]
+    },
+    "manual_monitoring": {
+      "title": "Components automated tools cannot reach and their manual process",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inventory_item",
+          "process"
+        ],
+        "properties": {
+          "inventory_item": {
+            "type": "string",
+            "minLength": 1
+          },
+          "process": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-128-0249"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  }
+}

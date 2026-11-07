@@ -325,7 +325,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. | SSP | Authorization Status | Authorization to Operate (ATO), ATO - with conditions, Interim Authorization to Test (IATT), Denial of Authorization to Operate (DATO), No Authorization Determination at this time | NIST SP 800- 53"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SSPR-001", "fixture": "tests/fixtures/negative/SSPR-001.yaml", "expect": "the security plan states authorization status", "asserts": "The Authorization Status the security plan states equals what the ledger holds, among ATO, ATO with conditions, IATT, DATO and no determination", "claim": "constraint"}]
     work_item: "WI-253"
   - id: "REQ-CNSSI1254-0041"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "| SSP | Authorization Termination Date | If applicable, identifies the date"}
@@ -333,7 +334,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | SSP | Authorization Termination Date | If applicable, identifies the date the current authorization (ATO, IATT, and ATO with conditions) will expire | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SSPR-001", "fixture": "tests/fixtures/negative/SSPR-001.termination.yaml", "expect": "the security plan states authorization termination date", "asserts": "The Authorization Termination Date the security plan states equals the date the current authorization will expire", "claim": "constraint", "sentence": "3. | SSP | Authorization Termination Date | If applicable, identifies the date the current authorization (ATO, IATT, and ATO with conditions) will expire | NIST SP 800- 37"}]
     work_item: "WI-253"
   - id: "REQ-CNSSI1254-0042"
     citation: {"ref": "CNSSI1254", "page": 14, "anchor": "| SSP | Cryptographic Key Management Information | Data required to track,"}
@@ -341,7 +343,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | SSP | Cryptographic Key Management Information | Data required to track, disseminate, and use a security key needed to secure information. All systems containing classified information must use NSA-approved encryption techniques. FIPS validated for protection of information that requires compartment access. Yes/No? FIPS validated for unclassified access. Yes/No NSA Approved Cryptographic Solution? Yes/No If not, provide cryptographic key management technology and processes | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.keydata.yaml", "expect": "the plan holds no cryptographic key management information", "asserts": "Cryptographic Key Management Information is held in the plan", "claim": "presence", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "4. | SSP | Cryptographic Key Management Information | Data required to track, disseminate, and use a security key needed to secure information."}, {"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.classified.yaml", "expect": "a system containing classified information uses NSA-approved encryption techniques", "asserts": "All systems containing classified information must use NSA-approved encryption techniques", "claim": "constraint", "holds_when": "the Classified System Overlay applies", "sentence": "All systems containing classified information must use NSA-approved encryption techniques."}, {"kind": "schema", "target": "framework/schema/ssp-records.schema.json#/properties/cryptography/properties/fips_validated_compartment", "claim": "presence", "asserts": "FIPS validated for protection of information that requires compartment access, yes or no", "sentence": "FIPS validated for protection of information that requires compartment access."}]
     work_item: "WI-248"
   - id: "REQ-CNSSI1254-0043"
     citation: {"ref": "CNSSI1254", "page": 14, "anchor": "| SSP | E-Authentication Assessment/Privacy Impact Assessment | Indicate whether an E-Authentication"}
@@ -349,7 +352,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "5. | SSP | E-Authentication Assessment/Privacy Impact Assessment | Indicate whether an E-Authentication risk assessment has been performed for the system. Yes/No | NIST SP 800- 63 or OMB M-04-04"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.eauth.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The E-Authentication risk assessment answer is a data element the plan must carry", "claim": "presence", "holds_when": "ART-SSP is in play"}, {"kind": "schema", "target": "framework/schema/ssp-records.schema.json#/properties/e_authentication/properties/performed", "claim": "presence", "asserts": "E-Authentication risk assessment performed for the system, yes or no"}]
     work_item: "WI-253"
   - id: "REQ-CNSSI1254-0044"
     citation: {"ref": "CNSSI1254", "page": 14, "anchor": "| SSP | External Security Services | Are external security services provided?"}
@@ -442,7 +446,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "17. | SSP | Security Review Date | Indicates the date of the last annual security review for systems with an ATO. | NIST SP 800- 53"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SSPR-001", "fixture": "tests/fixtures/negative/SSPR-001.review.yaml", "expect": "the Security Review Date", "asserts": "The Security Review Date, the date of the last annual security review for systems with an ATO, sits within a year", "claim": "constraint"}]
     work_item: "WI-253"
   - id: "REQ-CNSSI1254-0056"
     citation: {"ref": "CNSSI1254", "page": 16, "anchor": "| SSP | Software Category | Commercial off-the-shelf (COTS) Government off-the-shelf (GOTS)"}

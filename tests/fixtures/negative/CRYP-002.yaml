@@ -1,0 +1,18 @@
+rule: CRYP-002
+bases:
+- minimal
+description: space commands not protected end to end
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.space.command_protection
+  value: uplink-only
+expect:
+  errors:
+  - CRYP-002
+  messages:
+  - space system commands and data are authenticated and encrypted from end to end

@@ -1,0 +1,32 @@
+# Template: artifacts/data/service-agreements.yaml (S-4; M-2 adds effectiveness; schema
+# service-agreements). Written whole (INV-8). One agreement per provider, the CSSP first; a
+# provider named in `inherited_from` in the family files uses the same `provider` string.
+dodin_connected: true
+system_environments: [on-premises]
+agreements:
+  - id: SVA-001
+    provider: "<<FILL: provider, as inherited_from names it>>"
+    role: cssp  # cssp | common-control-provider | ...
+    integration: external
+    instrument: support-agreement  # dod-component-policy | dod-component-issuance | support-agreement | moa | contract | sla
+    reference: "<<FILL: the agreement's identifier>>"
+    environments: [on-premises]
+    scope: "<<FILL: scope of support>>"
+    parameters: "<<FILL: parameters of support>>"
+    approved_by: PER-AO
+    evaluation: {scheme: evaluator-scoring-metrics, authorized_by: USCYBERCOM, date: "2026-01-15"}  # a CSSP
+    validation:
+      by: PER-ISSM  # the system's own side
+      date: "2026-01-01"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-01
+        name: "<<FILL: service>>"
+        kind: vulnerability-detection
+        responsibilities:
+          - {party: service-provider, duty: "<<FILL: what the provider does>>"}
+          - {party: subscriber, duty: "<<FILL: what the system does>>"}
+        controls: [si-2]  # baseline controls the service aligns with
+    # effectiveness: [{date, service, measured_by, measure, rating, issue: {status}}]  # M-2
+    sources: [INT-001.A1]
+sources: [INT-001.A1]

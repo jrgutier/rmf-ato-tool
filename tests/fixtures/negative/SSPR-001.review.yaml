@@ -1,0 +1,14 @@
+rule: SSPR-001
+bases:
+- minimal
+description: an annual security review over a year old on a system with an ATO
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: system_status.security_review_date
+  value: '2024-01-01'
+expect:
+  errors:
+  - SSPR-001
+  messages:
+  - the Security Review Date 2024-01-01 is not within a year on a system with an ATO

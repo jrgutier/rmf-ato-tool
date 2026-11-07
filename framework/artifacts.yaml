@@ -168,6 +168,7 @@ artifacts:
     generated: false
     data:
       - {path: "artifacts/ssp/controls/<fam>.yaml", schema: ssp-controls}
+      - {path: artifacts/data/ssp-records.yaml, schema: ssp-records, since: 0.2.0}
     oscal: ["ssp#control-implementation.implemented-requirements"]
     template: templates/artifacts/ART-SSP.md
     data_elements:
@@ -181,10 +182,10 @@ artifacts:
       - {element: System Version or Release Number, req: REQ-CNSSI1254-0035, pending: "WI-177"}
       - {element: Operational Environment, req: REQ-CNSSI1254-0036, pending: "WI-177"}
       - {element: Authorization Boundary Diagram, req: REQ-CNSSI1254-0039, file: artifacts/data/boundary.yaml, path: "authorization_boundary.diagrams.*.path", exists: true}
-      - {element: Authorization Status, req: REQ-CNSSI1254-0040, pending: "WI-253"}
-      - {element: Authorization Termination Date, req: REQ-CNSSI1254-0041, pending: "WI-253"}
-      - {element: Cryptographic Key Management Information, req: REQ-CNSSI1254-0042, pending: "WI-248"}
-      - {element: E-Authentication Assessment/Privacy Impact Assessment, req: REQ-CNSSI1254-0043, pending: "WI-253"}
+      - {element: Authorization Status, req: REQ-CNSSI1254-0040, rule: SSPR-001}
+      - {element: Authorization Termination Date, req: REQ-CNSSI1254-0041, rule: SSPR-001}
+      - {element: Cryptographic Key Management Information, req: REQ-CNSSI1254-0042, file: artifacts/data/ssp-records.yaml, path: cryptography.key_management}
+      - {element: E-Authentication Assessment/Privacy Impact Assessment, req: REQ-CNSSI1254-0043, file: artifacts/data/ssp-records.yaml, path: e_authentication.performed}
       - {element: External Security Services, req: REQ-CNSSI1254-0044, pending: "WI-199"}
       - {element: Hardware/Software Inventory, req: REQ-CNSSI1254-0045, pending: "WI-188"}
       - {element: Internal and External System Interfaces, req: REQ-CNSSI1254-0046, pending: "WI-190"}
@@ -196,7 +197,7 @@ artifacts:
       - {element: Physical Environment, req: REQ-CNSSI1254-0052, pending: "WI-194"}
       - {element: RMF Key Roles and Corresponding Responsibilities, req: REQ-CNSSI1254-0053, pending: "WI-170"}
       - {element: Security Controls, req: REQ-CNSSI1254-0054, pending: "WI-156"}
-      - {element: Security Review Date, req: REQ-CNSSI1254-0055, pending: "WI-253"}
+      - {element: Security Review Date, req: REQ-CNSSI1254-0055, rule: SSPR-001}
       - {element: Software Category, req: REQ-CNSSI1254-0056, pending: "WI-188"}
       - {element: System Function Description, req: REQ-CNSSI1254-0057, pending: "WI-196"}
       - {element: System Lifecycle Phase (numbered) or Acquisition Milestone (lettered), req: REQ-CNSSI1254-0058, pending: "WI-177"}
@@ -224,7 +225,8 @@ artifacts:
     producer: S-4
     package: core
     generated: false
-    data: []
+    data:
+      - {path: artifacts/data/cm-plan.yaml, schema: cm-plan, since: 0.2.0}
     oscal: []
     template: templates/artifacts/ART-CMP.md
     citations:
@@ -235,7 +237,8 @@ artifacts:
     producer: S-4
     package: core
     generated: false
-    data: []
+    data:
+      - {path: artifacts/data/contingency.yaml, schema: contingency, since: 0.2.0}
     oscal: []
     template: templates/artifacts/ART-CP.md
     citations:
@@ -246,11 +249,26 @@ artifacts:
     producer: S-4
     package: core
     generated: false
-    data: []
+    data:
+      - {path: artifacts/data/incident-response.yaml, schema: incident-response, since: 0.2.0}
     oscal: []
     template: templates/artifacts/ART-IRP.md
     citations:
       - {ref: SP800-61R3, section: "2.3"}
+  - id: ART-SVCA
+    name: Cybersecurity service agreements
+    description: One record per provider, the agreement behind it, the services it covers, the controls mapped to them, the subscriber's check of it, and the measured effectiveness of each service.
+    producer: S-4
+    since: 0.2.0
+    package: supporting
+    generated: false
+    data:
+      - {path: artifacts/data/service-agreements.yaml, schema: service-agreements}
+    oscal: []
+    template: templates/artifacts/ART-SVCA.md
+    citations:
+      - {ref: DODI8530.01, page: 35, anchor: "cybersecurity service provided will be specifically assigned and documented"}
+      - {ref: DODI8530.01, page: 36, anchor: "Will monitor the effectiveness of cybersecurity services"}
   - id: ART-STIG
     name: STIG/SRG summary
     description: STIG and SRG applicability per inventory item, scan results and open findings by category.

@@ -1397,7 +1397,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [S-1](#task-s-1) Control Selection | Select | [PM/SO](#per-pm) | [ART-BASELINE](#art-baseline) | — | [SFR](#rv-sfr) |
 | [S-2](#task-s-2) Control Tailoring | Select | [PM/SO](#per-pm) | — | [ART-BASELINE](#art-baseline) | [SFR](#rv-sfr) |
 | [S-3](#task-s-3) Control Allocation | Select | [PM/SO](#per-pm) | — | [ART-BASELINE](#art-baseline) | [PDR](#rv-pdr) |
-| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](#per-pm) | [ART-SSP](#art-ssp), [ART-CMP](#art-cmp), [ART-CP](#art-cp), [ART-IRP](#art-irp) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](#per-pm) | [ART-SSP](#art-ssp), [ART-CMP](#art-cmp), [ART-CP](#art-cp), [ART-IRP](#art-irp), [ART-SVCA](#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [S-5](#task-s-5) Continuous Monitoring Strategy—System | Select | [PM/SO](#per-pm) | [ART-CONMON](#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [S-6](#task-s-6) Plan Review and Approval | Select | [AO](#per-ao) | — | [ART-SSP](#art-ssp) | [MS B](#ms-b) |
 
@@ -1715,6 +1715,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-CMP](#art-cmp) | Configuration management plan | produces | core |
 | [ART-CP](#art-cp) | Contingency plan | produces | core |
 | [ART-IRP](#art-irp) | Incident response plan | produces | core |
+| [ART-SVCA](#art-svca) | Cybersecurity service agreements | produces | supporting |
 
 **Entry criteria**
 
@@ -1840,7 +1841,7 @@ Writes to `facts.yaml`: `baseline_id`.
 **Exit criteria**
 
 - Security and privacy plans reflecting the controls needed to protect the system and its environment commensurate with risk are reviewed and approved by the AO (DoDI 8510.01 Table 3 outcome).
-- ART-SSP records the AO's approval (or the changes required before approval).
+- ART-SSP records the AO's approval (or the changes required before approval), and `approvals` in ssp-records.yaml holds each approver's full name, system role, title, signature and date, with the concurrences.
 
 **Alignment**
 
@@ -2604,6 +2605,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - The authorization for the system or the common controls is approved or denied (DoDI 8510.01 Table 6 outcome).
+- authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
 - For a risk level of Very High or High, the Component CIO has documented concurrence or non-concurrence before the ATO is issued.
 - The decision confirms that the system meets cyberspace operational commander requirements.
@@ -2792,7 +2794,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
 | [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](#per-pm) | [ART-CHG](#art-chg) | [ART-INV](#art-inv), [ART-CMP](#art-cmp) | [IOC](#ms-ioc), [PCA](#rv-pca) |
-| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](#per-sca) | — | [ART-SAR](#art-sar), [ART-CONMON](#art-conmon) | — |
+| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](#per-sca) | — | [ART-SAR](#art-sar), [ART-CONMON](#art-conmon), [ART-SVCA](#art-svca) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](#per-ao) | — | [ART-RA](#art-ra), [ART-POAM](#art-poam), [ART-RAR](#art-rar) | — |
 | [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](#per-pm) | [ART-SECRPT](#art-secrpt) | — | — |
@@ -2884,6 +2886,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
 | [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
 | [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
+| [ART-SVCA](#art-svca) | Cybersecurity service agreements | [S-4](#task-s-4) (supporting artifact) |
 | [EXT-MONITORING](#ext-monitoring) | Continuous monitoring data | outside input (operational) |
 
 **Outputs**
@@ -2892,6 +2895,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 |---|---|---|---|
 | [ART-SAR](#art-sar) | Security assessment report | updates | core |
 | [ART-CONMON](#art-conmon) | Continuous monitoring strategy | updates | core |
+| [ART-SVCA](#art-svca) | Cybersecurity service agreements | updates | supporting |
 
 **Entry criteria**
 
@@ -3019,6 +3023,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - Risk management documents are updated based on continuous monitoring activities (DoDI 8510.01 Table 7 outcome).
 - Authorization package artifacts reflect the current state of the system.
+- A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
 
 **Alignment**
 
@@ -3134,6 +3139,7 @@ Writes to `facts.yaml`: `acquisition`.
 **Exit criteria**
 
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
+- authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 
 **Authorization decision.** The [AO](#per-ao) decides here: [DATO](#ad-dato), [cATO](#ad-cato), [DATU](#ad-datu), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) (see [authorization decisions](#decisions)).
@@ -3484,6 +3490,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-CMP](#art-cmp) Configuration management plan | core | [S-4](#task-s-4) | [I-2](#task-i-2), [M-1](#task-m-1) | [M-1](#task-m-1) |
 | [ART-CP](#art-cp) Contingency plan | core | [S-4](#task-s-4) | [I-2](#task-i-2) | — |
 | [ART-IRP](#art-irp) Incident response plan | core | [S-4](#task-s-4) | [I-2](#task-i-2) | — |
+| [ART-SVCA](#art-svca) Cybersecurity service agreements | supporting | [S-4](#task-s-4) | [M-2](#task-m-2) | [M-2](#task-m-2) |
 | [ART-STIG](#art-stig) STIG/SRG summary | supporting | [I-1](#task-i-1) | [A-3](#task-a-3) | [I-2](#task-i-2), [A-3](#task-a-3), [A-6](#task-a-6) |
 | [ART-SAP](#art-sap) Security assessment plan | core | [A-2](#task-a-2) | — | [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-2](#task-m-2) |
 | [ART-SAR](#art-sar) Security assessment report | core | [A-3](#task-a-3) | [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2), [M-4](#task-m-4) | [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
@@ -3715,7 +3722,7 @@ The security plan with a statement for every control in the tailored baseline.
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SSP.md](templates/artifacts/ART-SSP.md) |
-| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`) |
+| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`) |
 | OSCAL | `ssp#control-implementation.implemented-requirements` |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-4](#task-m-4) |
@@ -3753,7 +3760,7 @@ Security-focused configuration management plan, configuration items and change c
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-CMP.md](templates/artifacts/ART-CMP.md) |
-| Data files | — |
+| Data files | `artifacts/data/cm-plan.yaml` (schema `cm-plan`) |
 | OSCAL | — |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [I-2](#task-i-2), [M-1](#task-m-1) |
@@ -3771,7 +3778,7 @@ Information system contingency plan with the business impact analysis, recovery 
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-CP.md](templates/artifacts/ART-CP.md) |
-| Data files | — |
+| Data files | `artifacts/data/contingency.yaml` (schema `contingency`) |
 | OSCAL | — |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [I-2](#task-i-2) |
@@ -3789,7 +3796,7 @@ Incident response roles, procedures and reporting, aligned with the cybersecurit
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-IRP.md](templates/artifacts/ART-IRP.md) |
-| Data files | — |
+| Data files | `artifacts/data/incident-response.yaml` (schema `incident-response`) |
 | OSCAL | — |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [I-2](#task-i-2) |
@@ -3798,6 +3805,25 @@ Incident response roles, procedures and reporting, aligned with the cybersecurit
 Citations:
 
 - [SP800-61R3](#ref-sp800-61r3), section 2.3
+
+### <a id="art-svca"></a>ART-SVCA: Cybersecurity service agreements
+
+One record per provider, the agreement behind it, the services it covers, the controls mapped to them, the subscriber's check of it, and the measured effectiveness of each service.
+
+| | |
+|---|---|
+| Package | supporting |
+| Template | [templates/artifacts/ART-SVCA.md](templates/artifacts/ART-SVCA.md) |
+| Data files | `artifacts/data/service-agreements.yaml` (schema `service-agreements`) |
+| OSCAL | — |
+| Produced by | [S-4](#task-s-4) |
+| Updated by | [M-2](#task-m-2) |
+| Used by | [M-2](#task-m-2) |
+
+Citations:
+
+- [DODI8530.01](#ref-dodi8530-01), p. 35, "cybersecurity service provided will be specifically assigned and documented"
+- [DODI8530.01](#ref-dodi8530-01), p. 36, "Will monitor the effectiveness of cybersecurity services"
 
 ### <a id="art-stig"></a>ART-STIG: STIG/SRG summary
 
@@ -4516,5 +4542,6 @@ the whole library with checksums.
 | <a id="ref-dodi5000-90"></a>**DODI5000.90** | Cybersecurity for Acquisition Decision Authorities and Program Managers | DoD | December 31, 2020 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500090p.pdf> | [DODI5000.90.md](references/text/DODI5000.90.md) |
 | <a id="ref-dodcio-cato"></a>**DODCIO-CATO** | Continuous Authorization To Operate (cATO) memorandum | DoD CIO | February 2, 2022 | <https://dodcio.defense.gov/Library/> | [DODCIO-CATO.md](references/text/DODCIO-CATO.md) |
 | <a id="ref-dodcio-devsecops"></a>**DODCIO-DEVSECOPS** | DoD Enterprise DevSecOps Fundamentals | DoD CIO | Version 2.5 (approved October 16, 2024) | <https://dodcio.defense.gov/Library/> | [DODCIO-DEVSECOPS.md](references/text/DODCIO-DEVSECOPS.md) |
+| <a id="ref-dodi8530-01"></a>**DODI8530.01** | Cybersecurity Activities Support to DoD Information Network Operations | DoD | March 7, 2016, Change 1, July 25, 2017 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/853001p.pdf> | [DODI8530.01.md](references/text/DODI8530.01.md) |
 | <a id="ref-cnssi1254"></a>**CNSSI1254** | Risk Management Framework Documentation, Data Element Standards, and Reciprocity Process for National Security Systems | CNSS | August 2016 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1254.md](references/text/CNSSI1254.md) |
 | <a id="ref-dodcio-reciprocity"></a>**DODCIO-RECIPROCITY** | DoD Cybersecurity Reciprocity Playbook | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/(U)%202024-01-02%20DoD%20Cybersecurity%20Reciprocity%20Playbook.pdf> | [DODCIO-RECIPROCITY.md](references/text/DODCIO-RECIPROCITY.md) |

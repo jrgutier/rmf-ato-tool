@@ -1,0 +1,533 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:ssp-records",
+  "title": "runs/<run-id>/artifacts/data/ssp-records.yaml",
+  "description": "What the security plan states beside the control statements (S-4, S-6, R-4, M-3, M-6): authorization data elements, funding, cryptography, telework, plan structure and approvals. SSPR-001, FUND-001, CRYP-001 to CRYP-003 and TELE-001 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "space_nss",
+    "e_authentication",
+    "funding",
+    "cryptography",
+    "telework",
+    "plan_structure",
+    "approvals",
+    "sources"
+  ],
+  "properties": {
+    "space_nss": {
+      "title": "Whether this system is a space NSS under CNSSP 12",
+      "type": "boolean"
+    },
+    "e_authentication": {
+      "title": "E-Authentication Assessment",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "performed"
+      ],
+      "properties": {
+        "performed": {
+          "title": "E-Authentication risk assessment performed",
+          "type": "boolean",
+          "x-enforces": [
+            "REQ-CNSSI1254-0043"
+          ]
+        }
+      }
+    },
+    "funding": {
+      "title": "Budget lines for security control implementation, assessment and sustainment",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "purpose",
+          "phases",
+          "status",
+          "fiscal_years",
+          "amount"
+        ],
+        "properties": {
+          "purpose": {
+            "enum": [
+              "acquisition",
+              "implementation",
+              "assessment",
+              "sustainment",
+              "configuration-management",
+              "vulnerability-management",
+              "decommission",
+              "other"
+            ]
+          },
+          "phases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "enum": [
+              "programmed",
+              "unfunded"
+            ]
+          },
+          "fiscal_years": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount": {
+            "type": "string",
+            "minLength": 1
+          },
+          "poam_item": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-DODI5000.90-0085",
+        "REQ-DODI5000.90-0096",
+        "REQ-DODI5000.90-0155",
+        "REQ-SP800-160V1R1-0998",
+        "REQ-SP800-160V1R1-1011",
+        "REQ-SP800-39-0212",
+        "REQ-SP800-39-0226",
+        "REQ-SP800-39-0306"
+      ]
+    },
+    "cryptography": {
+      "title": "Cryptographic Key Management Information",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fips_validated_compartment",
+        "fips_validated_unclassified",
+        "nsa_approved",
+        "key_management",
+        "uses",
+        "vulnerabilities"
+      ],
+      "properties": {
+        "fips_validated_compartment": {
+          "title": "FIPS validated for information that requires compartment access",
+          "type": "boolean",
+          "x-enforces": [
+            "REQ-CNSSI1254-0042"
+          ]
+        },
+        "fips_validated_unclassified": {
+          "title": "FIPS validated for unclassified access",
+          "type": "boolean"
+        },
+        "nsa_approved": {
+          "title": "NSA Approved Cryptographic Solution",
+          "type": "boolean"
+        },
+        "key_management": {
+          "title": "Data required to track, disseminate and use a security key",
+          "type": "string",
+          "minLength": 1
+        },
+        "key_management_process": {
+          "title": "Cryptographic key management technology and processes when the solution is not NSA approved",
+          "type": "string",
+          "minLength": 1
+        },
+        "uses": {
+          "title": "Each use of cryptography: function, algorithm, implementation and acquisition basis, NSA approval",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "function",
+              "algorithm",
+              "policy_basis",
+              "acquisition_basis"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "function": {
+                "type": "string",
+                "minLength": 1
+              },
+              "algorithm": {
+                "type": "string",
+                "minLength": 1
+              },
+              "policy_basis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "acquisition_basis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "nsa_approval": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "by",
+                  "algorithm",
+                  "reference",
+                  "date"
+                ],
+                "properties": {
+                  "by": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "algorithm": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  }
+                }
+              },
+              "nsa_consulted": {
+                "$ref": "#/$defs/date"
+              },
+              "acquisition_started": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "vulnerabilities": {
+          "title": "Cryptographic vulnerabilities referred to NSA",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "poam_item",
+              "nsa_notified",
+              "vep"
+            ],
+            "properties": {
+              "poam_item": {
+                "type": "string",
+                "minLength": 1
+              },
+              "nsa_notified": {
+                "$ref": "#/$defs/date"
+              },
+              "vep": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "space": {
+          "title": "Space NSS cryptography under CNSSP 12",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command_protection",
+            "skmp",
+            "csps",
+            "emergency_links",
+            "bypasses"
+          ],
+          "properties": {
+            "command_protection": {
+              "title": "Protection of system commands and data",
+              "type": "string",
+              "minLength": 1
+            },
+            "skmp": {
+              "title": "System key management plan",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "submitted",
+                "approved",
+                "approved_by"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "submitted": {
+                  "$ref": "#/$defs/date"
+                },
+                "approved": {
+                  "$ref": "#/$defs/date"
+                },
+                "approved_by": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "csps": {
+              "title": "Cryptographic security plans",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "submitted",
+                  "approved",
+                  "approved_by"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "submitted": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "approved": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "approved_by": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "emergency_links": {
+              "title": "Emergency backup links",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "link",
+                  "unencrypted",
+                  "approved_by"
+                ],
+                "properties": {
+                  "link": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unencrypted": {
+                    "type": "boolean"
+                  },
+                  "approved_by": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "bypasses": {
+              "title": "Cryptographic bypass capabilities",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "capability",
+                  "coordinated_with",
+                  "approved_by"
+                ],
+                "properties": {
+                  "capability": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "coordinated_with": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "approved_by": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "telework": {
+      "title": "Remote access from non-government furnished equipment",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "non_gfe_remote_access"
+      ],
+      "properties": {
+        "non_gfe_remote_access": {
+          "title": "Telework from non-government furnished equipment accepted",
+          "type": "boolean"
+        },
+        "basis": {
+          "title": "Guidance the telework solution was developed from",
+          "type": "string",
+          "minLength": 1
+        },
+        "approval": {
+          "title": "Case-by-case approval",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "reference",
+            "date"
+          ],
+          "properties": {
+            "by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        }
+      }
+    },
+    "plan_structure": {
+      "title": "Decisions on the structure of the system plans",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consolidation",
+        "common_elements",
+        "detail",
+        "format"
+      ],
+      "properties": {
+        "consolidation": {
+          "title": "Decision on consolidating the system security, privacy and C-SCRM plans",
+          "enum": [
+            "consolidated",
+            "separate",
+            "partly-consolidated"
+          ],
+          "x-enforces": [
+            "REQ-SP800-18R2-0072"
+          ]
+        },
+        "common_elements": {
+          "title": "Common elements kept consistent across the security, privacy and C-SCRM plans",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-18R2-0073"
+          ]
+        },
+        "detail": {
+          "title": "Level of detail and areas of focus for each system plan element",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-18R2-0013"
+          ]
+        },
+        "format": {
+          "title": "Methods, structures, formats and added elements of the system plans",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-18R2-0078"
+          ]
+        }
+      }
+    },
+    "approvals": {
+      "title": "Plan approval: each approver with full name, system role, title, signature and date",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "full_name",
+          "system_role",
+          "title",
+          "signature",
+          "date",
+          "concurrence"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "system_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "signature": {
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "concurrence": {
+            "enum": [
+              "approve",
+              "concur",
+              "approve-with-changes"
+            ]
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-18R1-0183",
+        "REQ-SP800-18R2-0211",
+        "REQ-SP800-18R2-0214"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  }
+}

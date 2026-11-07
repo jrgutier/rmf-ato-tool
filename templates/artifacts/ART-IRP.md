@@ -20,7 +20,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Definitions and prioritization
 
-<<FILL: what counts as an event and an incident for this system, and how incidents are prioritized and their severity estimated, with tokens>>
+<<FILL: what counts as an event and an incident for this system, the risk factors behind triage and escalation, categorization by type, containment and eradication criteria, the incident lead, how third parties report, the fields tracked per incident and evidence handling (`triage` in artifacts/data/incident-response.yaml), with tokens>>
 
 ## Roles, responsibilities and authorities
 
@@ -36,11 +36,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Response and reporting
 
-<<FILL: reporting to the CSSP and the chain of command with timelines, containment and eradication, evidence handling, and notifications including PII breaches through the privacy officer, with tokens>>
+<<FILL: the reporting path of each case in `reporting_paths` (CSSP, JFHQ-DODIN, chain of command, classified compromise, CUI, law enforcement) with timelines, containment and eradication, and who is told what and when under the laws and agreements that apply: asset owners, senior leadership, human resources, third parties, the media and the public, and PII breaches through the privacy officer (`notifications` in artifacts/data/incident-response.yaml), with tokens>>
 
 ## Recovery
 
-<<FILL: restoring affected components and data, in coordination with ART-CP, and confirming normal operation, with tokens>>
+<<FILL: the criteria that start and end recovery, how actions are chosen and reassessed, integrity checks on restoration assets and restored systems, who is told, restoring affected components and data in coordination with ART-CP, and monitoring after restoration (`recovery` in artifacts/data/incident-response.yaml), with tokens>>
 
 ## Lessons learned
 

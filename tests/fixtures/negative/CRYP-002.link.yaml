@@ -1,0 +1,18 @@
+rule: CRYP-002
+bases:
+- minimal
+description: an unencrypted backup link NSA did not approve
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.space.emergency_links.0.approved_by
+  value: PER-AO
+expect:
+  errors:
+  - CRYP-002
+  messages:
+  - unencrypted emergency backup link S-band backup is approved by NSA

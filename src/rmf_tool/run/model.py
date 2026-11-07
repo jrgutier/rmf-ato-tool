@@ -122,14 +122,15 @@ class Run:
 
     @cached_property
     def artifacts(self) -> dict[str, Any]:
-        """The contract's view: newer artifacts absent, data files it retired kept only while
-        the run predates the retirement."""
+        """The contract's view: newer artifacts and data files absent, data files it retired kept
+        only while the run predates the retirement."""
         out = {}
         for aid, e in self.framework.index("artifacts").items():
             if aid in self._absent:
                 continue
             data = [d for d in e.data.get("data") or []
-                    if "until" not in d or not self.holds(d["until"])]
+                    if self.holds(d.get("since"))
+                    and ("until" not in d or not self.holds(d["until"]))]
             out[aid] = {**e.data, "data": data}
         return out
 

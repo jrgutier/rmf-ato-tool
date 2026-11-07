@@ -1,0 +1,15 @@
+rule: SVCA-001
+bases:
+- minimal
+description: a service aligned with a control outside the baseline
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.services.0.controls
+  value:
+  - pm-1
+expect:
+  errors:
+  - SVCA-001
+  messages:
+  - a security control outside the baseline

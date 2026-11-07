@@ -49,6 +49,8 @@ act when no PM is assigned.
 - **C (C-2), when the program owns information types:** For each type the program owns,
   do you confirm the provisional C, I and A values? What would disclosure, tampering or loss
   cause?
+- **S (S-4), accountable:** Which budget lines fund control implementation, assessment and
+  sustainment through operations? What is unfunded, and which POA&M item tracks it?
 - **S (S-1), optional:** Do you accept the selected baseline and its resource demands?
 - **A (A-6):** For each weakness: what is the fix, in which release, by when, with which
   resources? What interim mitigation is in place?

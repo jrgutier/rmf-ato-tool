@@ -1,0 +1,14 @@
+rule: CMPL-002
+bases:
+- minimal
+description: a SecCM tool not SCAP-validated
+mutations:
+- op: set_field
+  file: artifacts/data/cm-plan.yaml
+  path: tools.0.scap
+  value: not-validated
+expect:
+  errors:
+  - CMPL-002
+  messages:
+  - is not SCAP-validated although a validated tool is available

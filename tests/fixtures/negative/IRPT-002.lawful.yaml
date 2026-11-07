@@ -1,0 +1,17 @@
+rule: IRPT-002
+bases:
+- minimal
+description: a federal law violation that skips the IG DoD
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.8.recipients
+  value:
+  - DCIO
+  - law-enforcement
+expect:
+  errors:
+  - IRPT-002
+  messages:
+  - incidents that appear to violate federal law are reported to the defense criminal investigative organization,
+    law enforcement and the IG DoD

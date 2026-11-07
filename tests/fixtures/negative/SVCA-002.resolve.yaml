@@ -1,0 +1,18 @@
+rule: SVCA-002
+bases:
+- minimal
+description: an escalated issue closed by someone else
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.effectiveness.0.issue
+  value:
+    status: resolved
+    description: Scan access dispute.
+    reported_to: PER-CIO
+    resolved_by: PER-CSSP
+expect:
+  errors:
+  - SVCA-002
+  messages:
+  - the DoD Component resolves the issue the parties could not

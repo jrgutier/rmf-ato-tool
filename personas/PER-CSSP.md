@@ -45,6 +45,9 @@ control provider for the controls it operates; say which service an answer is ab
 - **S (S-4), consulted:** Which services do you provide to this system (monitoring,
   incident response, vulnerability scanning)? What must the system send you, and how? How
   does the system report an incident to you, and how fast?
+- **S (S-4), agreement:** Under which agreement do you serve this system, and who validated
+  it? Which controls does each service map to, and who evaluated you? Which reporting path
+  and timeline applies to each incident case?
 - **S (S-5), consulted:** Which monitoring do you perform continuously, and what do you
   report to the system and the AO? What events should trigger a review of the system's
   authorization?

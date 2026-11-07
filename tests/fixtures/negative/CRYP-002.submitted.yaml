@@ -1,0 +1,18 @@
+rule: CRYP-002
+bases:
+- minimal
+description: an SKMP approved before it was submitted to NSA
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.space.skmp.submitted
+  value: '2026-03-01'
+expect:
+  errors:
+  - CRYP-002
+  messages:
+  - is submitted to NSA for approval before it is approved

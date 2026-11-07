@@ -1,0 +1,25 @@
+rule: CRYP-001
+bases:
+- minimal
+description: a classified system without NSA-approved encryption
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253E-ATT5-CLASSIFIED
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.nsa_approved
+  value: false
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.key_management_process
+  value: Enterprise PKI.
+expect:
+  errors:
+  - CRYP-001
+  also:
+  - GEN-STALE-001
+  messages:
+  - a system containing classified information uses NSA-approved encryption techniques

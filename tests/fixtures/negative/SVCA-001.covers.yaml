@@ -1,0 +1,16 @@
+rule: SVCA-001
+bases:
+- minimal
+description: an agreement validated without its scope
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.validation.covers
+  value:
+  - roles
+  - responsibilities
+expect:
+  errors:
+  - SVCA-001
+  messages:
+  - the validated agreement does not define applicability, scope

@@ -1,0 +1,15 @@
+rule: IRPT-001
+bases:
+- minimal
+description: incidents that do not reach the AO
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.6.recipients
+  value:
+  - PER-CSSP
+expect:
+  errors:
+  - IRPT-001
+  messages:
+  - incidents are reported to the AO and the appropriate reporting chain

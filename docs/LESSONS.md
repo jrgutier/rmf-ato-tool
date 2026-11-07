@@ -439,3 +439,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the link is the path as written; valid_minimal lists the boundary diagram, and PKG-003 fails when its file is not in the run.
 - Rule: An optional field no fixture sets is untested, however green its golden.
 - Promotion: check: PKG-003
+
+## L-0063 · 2026-11-02 · run: phase-11 · tags: conformance, evidence
+- Symptom: rule items on SVCA-001 and SSPR-001 judged weak with "provider is a decision's required field", though no decision record was in sight; the clauses were about service agreements and the review date.
+- Root cause: FW-REQ-003 finds a `requires` field by name in the declared message and in the clause's string constants, so an ordinary English word that happens to name a required field (`provider`, `review`) reads as that field.
+- Fix: the messages say CSSP and "Security Review Date", and the party enum says `service-provider`; the judge stays strict, since loosening it would let a real required field out through a reworded message.
+- Rule: When a rule item is weak on a required field it does not touch, reword the message; never relax the judge.
+- Promotion: none — a wording trap of the judge, reported by the judge itself with the field named, and it does not reach forks.

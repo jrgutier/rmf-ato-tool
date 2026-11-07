@@ -73,7 +73,8 @@ def front_matter(ctx: Context) -> list[RunFinding]:
             for e in run.schema_errors(schema, data):
                 out.append(make(FM, f"{schema}.schema.json: {e}", rel, None, owners))
             fam = rel.rsplit("/", 1)[-1].split(".")[0]
-            if any(FAMILY_TOKEN in d["path"] for d in run.artifacts[aid].get("data") or []) \
+            if any(FAMILY_TOKEN in d["path"] and d.get("schema") == schema
+                   for d in run.artifacts[aid].get("data") or []) \
                     and isinstance(data, dict) and data.get("family") != fam:
                 out.append(make(FM, f"family {data.get('family')!r} does not match the file "
                                f"name ({fam})", rel, None, owners))
