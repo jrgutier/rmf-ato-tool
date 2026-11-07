@@ -48,6 +48,7 @@ AO = "PER-AO"
 AO_OR_DR = frozenset({"PER-AO", "PER-AODR"})
 ISO = "PER-PM"  # the information system owner is the PM persona
 CISO = "PER-CISO"
+EQUIVALENT = "equivalent"
 # CNSSI 1254 Annex D 4.a: the documents the deploying organization submits.
 PACKAGE = {"ssp": "system security plan", "sar": "security assessment report",
            "rar": "risk assessment report", "poam": "POA&M",
@@ -58,9 +59,12 @@ INSTALLATION = "installation-configuration"
 INSTRUCTIONS = "deployment-instructions"
 VISIBILITY = ("emass", "other-tool", "manual-inheritance")
 AUTOMATED = frozenset({"emass", "other-tool"})
+AWARENESS = AUTOMATED | {"manual-inheritance"}  # DoD CIO reciprocity 4.2.1.b.(2).a
+RECORD_KEEPING = ("compatible", "incompatible")
+OUTCOMES = ("pending", "accepted", "refused")
+ORIGINS = ("built-in", "deployment-configured", "inherited", "hybrid")
 MANUAL = "manual-inheritance"
 REAUTHORIZATION = "reauthorization"
-PACKAGE_BASES = ("initial", REAUTHORIZATION)
 PLAN = "plan"
 NOTICE_MONTHS = 6  # DoD CIO reciprocity 4.4.1: at least six months before a reauthorization
 STATUS_LEAD_WORKING_DAYS = 60  # CNSSI 1254 Annex D 4.d
@@ -194,6 +198,12 @@ def _delivered(org: Record) -> dict[str, dt.date | None]:
     return out
 
 
+def _latest(org: Record, document: str) -> dt.date | None:
+    """The latest delivery of one document to a Receiving organization."""
+    return max((d for x in _items(org, "deliveries") if x.get("document") == document
+                if (d := _day(x.get("date")))), default=None)
+
+
 def _first_delivery(org: Record) -> dt.date | None:
     return min((d for d in _delivered(org).values() if d is not None), default=None)
 
@@ -232,15 +242,15 @@ def package(ctx: Context) -> list[RunFinding]:
         return []
     out, err = _collector("RCP-001", "R-1")
     stigs = {k for b in _items(ctx.data(STIG_FILE), "benchmarks") if (k := _key(b.get("id")))}
-    # A current POA&M postdates the latest decision that issues the package anew.
-    decided = max((d for r in ctx.ledger or () if isinstance(r, dict)
-                   and r.get("basis") in PACKAGE_BASES
-                   if (d := _day(r.get("date")))), default=None)
+    # A current POA&M is one delivered on or after its newest item was identified.
+    newest = max((d for i in _poam_items(ctx).values()
+                  if (d := _day(_block(i, "identified").get("date")))), default=None)
     enterprise = [r.get("id") for r in ctx.ledger or () if isinstance(r, dict)
                   and _block(r, "deployment").get("scope") == "enterprise"]
-    if enterprise and not _items(data, "receiving_organizations"):
+    co_use = _block(data, "co_use").get("notification_processes")
+    if enterprise and not _items(data, "receiving_organizations") and not co_use:
         err(f"{enterprise[0]} deploys the system at enterprise scope, but reciprocity.yaml "
-            "names no Receiving organization")
+            "names no Receiving organization and no co-use notification processes")
     for org in _items(data, "receiving_organizations"):
         rid = org.get("id")
         delivered = _delivered(org)
@@ -253,10 +263,10 @@ def package(ctx: Context) -> list[RunFinding]:
         if INSTRUCTIONS not in delivered:
             err(f"{rid}: the deployment instructions are not provided to the receiving "
                 "organization")
-        poam = delivered.get("poam")
-        if poam is not None and decided is not None and poam < decided:
-            err(f"{rid}: the POA&M delivered predates the latest authorization decision, so the "
-                "receiving organization does not hold a current POA&M")
+        poam = _latest(org, "poam")
+        if poam is not None and newest is not None and poam < newest:
+            err(f"{rid}: the latest POA&M delivered predates its newest item, so the receiving "
+                "organization does not hold a current POA&M")
         first, setup = _first_deployment(org), delivered.get(INSTALLATION)
         if setup is None or (first is not None and setup >= first):
             err(f"{rid}: installation and configuration requirements do not reach the receiving "
@@ -271,6 +281,9 @@ def package(ctx: Context) -> list[RunFinding]:
             err(f"{rid}: the receiving organization has no continuing visibility of the "
                 "security authorization package through eMASS, another tool or manual "
                 "inheritance")
+        elif tool.get("record_keeping") not in RECORD_KEEPING:
+            err(f"{rid}: the receiving organization's record keeping is neither compatible nor "
+                "incompatible with this organization's RMF tool")
         elif tool.get("record_keeping") == "incompatible" and via != MANUAL:
             err(f"{rid}: the manual inheritance capability is not used for a receiving "
                 "organization whose record keeping system is incompatible")
@@ -289,53 +302,60 @@ def package(ctx: Context) -> list[RunFinding]:
 # --- RCP-002: coordination with and notices to each Receiving organization -------------------
 
 def coordination(ctx: Context) -> list[RunFinding]:
-    """RCP-002: the Granting side gathers requirements from each Receiving organization before
-    the system is developed and coordinates them during development, has every additional
-    control they ask for assessed and weighed in control selection, resolves the issues they
-    raise, updates them on its RMF activities and again no later than 60 working days before
-    deployment, and tells them of every change, new finding, plan and reauthorization, the last
-    at least six months ahead, with receipt acknowledged."""
+    """RCP-002: the Granting side gathers requirements from each Receiving organization it knew
+    before the system was released, and coordinates them during development; has every
+    additional control they ask for assessed; resolves the issues they raised before it deploys
+    to them; updates them on its RMF activities and no later than 60 working days before
+    deployment; and tells them of every change and new finding after the first delivery, of a
+    decommissioning plan, and of each reauthorization at least six months ahead, the in-force
+    ATO's termination being the next one, with receipt acknowledged. An organization that joins
+    after release, or after a reauthorization's notice was due, is not held to what came before
+    it (CNSSI 1254 Annex D 3.b)."""
     data = _data(ctx)
     if data is None:
         return []
     out, err = _collector("RCP-002", "M-5")
     released = _released(ctx)
     assessed = _assessed(ctx)
-    baseline = ctx.data("baseline.json")
-    selected = {k for c in _items(baseline, "controls") if (k := _key(c.get("control_id")))}
     changes = [c for c in _items(ctx.data(CHANGES_FILE), "changes") if _key(c.get("id"))]
     poam = _poam_items(ctx)
-    reauthorizations = [r for r in ctx.ledger or ()
-                        if isinstance(r, dict) and r.get("basis") == REAUTHORIZATION]
+    records = [r for r in ctx.ledger or () if isinstance(r, dict)]
+    reauthorizations = [r for r in records if r.get("basis") == REAUTHORIZATION]
+    effect_of = ledger.effects(ctx.run)
+    terminations = sorted({d for s in ledger.in_force(records, effect_of).values()
+                           if effect_of.get(s.record.get("decision")) == "authorize"
+                           and (d := s.expires) is not None})
+    as_of = _day(str(ctx.run.config.get("as_of"))[:10])
     disposal = ctx.data(DISPOSAL_FILE) if scope.produced_or_seeded(ctx.run, "ART-DISP") else None
     for org in _items(data, "receiving_organizations"):
         rid = org.get("id")
+        joined = _day(org.get("joined"))
         reqs = _block(org, "requirements")
+        known = released is not None and joined is not None and joined < released
         gathered = _day(reqs.get("gathered"))
-        if released is not None and (gathered is None or gathered >= released):
+        if known and (gathered is None or gathered >= released):
             err(f"{rid}: requirements are not gathered from the receiving organization before "
-                "the system is developed")
+                "the system is released")
         early = min((d for v in _strings(reqs, "coordinated") if (d := _day(v))), default=None)
-        if released is not None and (early is None or early >= released):
+        if known and (early is None or early >= released):
             err(f"{rid}: security requirements are not coordinated with the receiving "
                 "organization during system development")
         for control in _strings(reqs, "additional_controls"):
             if control not in assessed:
                 err(f"{rid}: the additional control {control} requested by the receiving "
                     "organization is not addressed by the security control assessment")
-            if selected and control not in selected:
-                err(f"{rid}: the protection needs of the receiving organization are not "
-                    f"considered in control selection; {control} is not in the baseline")
+        first = _first_deployment(org)
         for issue in _items(org, "issues"):
             raised, resolved = _day(issue.get("raised")), _day(issue.get("resolved"))
-            if resolved is None or (raised is not None and resolved < raised):
+            due = first is not None and raised is not None and raised < first
+            if (resolved is not None and raised is not None and resolved < raised) or \
+                    (due and (resolved is None or resolved > first)):
                 err(f"{rid}: the security issue {issue.get('id')} raised by the receiving "
-                    "organization is not resolved")
+                    "organization is not resolved before the system is deployed to it")
         updates = _items(org, "status_updates")
         if "rmf-activities" not in {_key(u.get("covers")) for u in updates}:
             err(f"{rid}: the receiving organization gets no status update of the RMF "
                 "activities")
-        first = _first_deployment(org)
         earliest = min((d for u in updates if (d := _day(u.get("date")))), default=None)
         if first is not None and (earliest is None or business_days_between(
                 earliest, first) < STATUS_LEAD_WORKING_DAYS):
@@ -343,7 +363,12 @@ def coordination(ctx: Context) -> list[RunFinding]:
                 f"{STATUS_LEAD_WORKING_DAYS} working days before the planned deployment")
         notices = _items(org, "notices")
         _changes_and_findings(org, notices, changes, poam, err)
-        _plans(rid, notices, reauthorizations, disposal, err)
+        _acknowledged(rid, notices, err)
+        _reauthorizations(rid, joined, notices, reauthorizations, terminations, as_of, err)
+        if isinstance(disposal, dict) and disposal and "decommissioning" not in {
+                _key(n.get("plan")) for n in notices if n.get("kind") == PLAN}:
+            err(f"{rid}: the plan to decommission the system is not notified to the receiving "
+                "organization")
     return out
 
 
@@ -363,31 +388,45 @@ def _changes_and_findings(org: Record, notices: list[Record], changes: list[Reco
             err(f"{rid}: the new finding {pid} is not notified to the receiving organization")
 
 
-def _plans(rid: Any, notices: list[Record], reauthorizations: list[Record], disposal: Any,
-           err: Err) -> None:
+def _acknowledged(rid: Any, notices: list[Record], err: Err) -> None:
     for notice in notices:
         kind, day = notice.get("kind"), _day(notice.get("date"))
-        if kind == REAUTHORIZATION:
-            event = _day(notice.get("event"))
-            if day is None or event is None or day > _months_before(event, NOTICE_MONTHS):
-                err(f"{rid}: the receiving organization is notified less than "
-                    f"{NOTICE_MONTHS} months before the reauthorization event")
         if kind in (REAUTHORIZATION, PLAN):
             ack = _day(notice.get("acknowledged"))
             if ack is None or (day is not None and ack < day):
                 err(f"{rid}: receipt of the {kind} notice is not acknowledged by the receiving "
                     "organization")
-    events = {_day(n.get("event")) for n in notices if n.get("kind") == REAUTHORIZATION}
-    for record in reauthorizations:
-        day = _day(record.get("date"))
-        if day is not None and day not in events:
-            err(f"{rid}: the reauthorization {record.get('id')} is not notified to the "
-                "receiving organization")
-    if isinstance(disposal, dict) and disposal and \
-            "decommissioning" not in {_key(n.get("plan")) for n in notices
-                                      if n.get("kind") == PLAN}:
-        err(f"{rid}: the plan to decommission the system is not notified to the receiving "
-            "organization")
+
+
+def _reauthorizations(rid: Any, joined: dt.date | None, notices: list[Record],
+                      reauthorizations: list[Record], terminations: list[dt.date],
+                      as_of: dt.date | None, err: Err) -> None:
+    """Each reauthorization the run records, and the in-force ATO's termination once its
+    notice is due by the run's as_of date, has a notice at least six months ahead, for an
+    organization that was a Receiving organization when the notice fell due."""
+    sent = {}
+    for n in notices:
+        event, day = _day(n.get("event")), _day(n.get("date"))
+        if n.get("kind") == REAUTHORIZATION and event is not None and day is not None:
+            sent[event] = min(day, sent.get(event, day))
+    events = [(d, f"the reauthorization {r.get('id')}") for r in reauthorizations
+              if (d := _day(r.get("date")))]
+    events += [(d, f"the reauthorization due when the ATO terminates on {d}")
+               for d in terminations if as_of is not None and _months_before(d, NOTICE_MONTHS)
+               <= as_of]
+    for event, what in events:
+        due = _months_before(event, NOTICE_MONTHS)
+        if joined is not None and joined > due:
+            continue
+        day = sent.get(event)
+        if day is None or day > due:
+            err(f"{rid}: {what} is not notified to the receiving organization at least "
+                f"{NOTICE_MONTHS} months before the reauthorization event")
+    for event, day in sent.items():
+        due = _months_before(event, NOTICE_MONTHS)
+        if day > due and (joined is None or joined <= due):
+            err(f"{rid}: the receiving organization is notified less than "
+                f"{NOTICE_MONTHS} months before the reauthorization event")
 
 
 # --- RCP-003: patches and the CSSP the Granting side keeps for its Receiving organizations ---
@@ -414,8 +453,12 @@ def sustainment(ctx: Context) -> list[RunFinding]:
         for org in sorted(orgs - set(_strings(patch, "communicated_to"))):
             err(f"{pid}: the patch is not communicated to the receiving organization {org}")
     directed = {_key(p.get("directed_action")) for p in patches}
+    since = min((d for o in _items(data, "receiving_organizations")
+                 if (d := _first_delivery(o))), default=None)
     for action in _items(ctx.data(POAM_FILE), "directed_actions"):
-        if action.get("response") == "implemented" and _key(action.get("id")) not in directed:
+        received = _day(action.get("received"))
+        if action.get("response") == "implemented" and _key(action.get("id")) not in directed \
+                and since is not None and received is not None and received >= since:
             err(f"the patch or update for {action.get('id')} is not provided to the receiving "
                 "organizations")
     cssp = _block(granting, "cssp")
@@ -442,13 +485,24 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
         return []
     out, err = _collector("RCP-004", "A-2")
     received = _items(data, "received_systems")
+    links = _enterprise_links(ctx)
     linked = {_key(r.get("leveraged")) for r in received}
-    for la in _items(ctx.data(LEVERAGED_FILE), "leveraged_authorizations"):
-        if la.get("enterprise") and _key(la.get("id")) not in linked:
-            err(f"{la.get('id')}: the Enterprise system received has no received-system record "
-                "in reciprocity.yaml")
+    for la in sorted(links - linked):
+        err(f"{la}: the Enterprise system received has no received-system record in "
+            "reciprocity.yaml")
     for system in received:
         sid = system.get("id")
+        outcome = system.get("outcome")
+        if outcome not in OUTCOMES:
+            err(f"{sid}: the outcome of the received system is not pending, accepted or "
+                "refused")
+            continue
+        if _key(system.get("leveraged")) in links and system.get("enterprise") is not True:
+            err(f"{sid}: the received system links an Enterprise system in "
+                "leveraged-authorizations.yaml but is not recorded as one")
+        _tests(sid, system, err)
+        if outcome == "pending":
+            continue
         decided = _decided(system)
         review = _block(system, "review")
         reviewed = _day(review.get("date"))
@@ -457,14 +511,14 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
             err(f"{sid}: the Granting AO's authorization decision and package are not reviewed "
                 "by the Receiving AO before the decision")
         vias = {_key(a.get("via")) for a in _items(system, "awareness")}
-        if AUTOMATED.isdisjoint(vias):
+        if AWARENESS.isdisjoint(vias):
             err(f"{sid}: situational awareness of the Granting system's assessment activities "
-                "is not kept through eMASS or another automated tool")
+                "is not kept through eMASS, another automated tool or manual inheritance")
         pkg = _block(system, "package")
         asked = set(_strings(pkg, "requested_documents"))
         for doc in sorted({*REQUIRED_DOCS, INSTRUCTIONS} - asked):
             err(f"{sid}: the Granting organization is not asked for the {doc}")
-        if system.get("outcome") == REFUSED:
+        if outcome == REFUSED:
             continue
         shared = _day(system.get("own_package_shared"))
         if shared is None or (decided is not None and shared > decided):
@@ -479,16 +533,31 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
         if determined is None or (decided is not None and determined > decided):
             err(f"{sid}: the security impact of connecting the Granting system is not "
                 "determined before the decision")
-        if system.get("enterprise") is True and impact.get("via") != DSAWG:
+        if _is_enterprise(system, links) and impact.get("via") != DSAWG:
             err(f"{sid}: issues that may preclude connecting the Enterprise system are not "
                 "identified through the DSAWG representative")
+        deployed = _deployed(system)
         for aug in _items(impact, "augmenting_controls"):
             done = _day(aug.get("implemented"))
-            if done is None or (decided is not None and done > decided):
+            if done is None or (deployed is not None and done > deployed):
                 err(f"{sid}: the augmenting control {aug.get('control')} required to deploy "
-                    "the system is not implemented before the decision")
-        _tests(sid, system, err)
+                    "the system is not implemented by the time it is deployed")
     return out
+
+
+def _enterprise_links(ctx: Context) -> set[str]:
+    """Leveraged authorizations that record an Enterprise system this organization receives."""
+    return {k for la in _items(ctx.data(LEVERAGED_FILE), "leveraged_authorizations")
+            if la.get("enterprise") and (k := _key(la.get("id")))}
+
+
+def _is_enterprise(system: Record, links: set[str]) -> bool:
+    return system.get("enterprise") is True or _key(system.get("leveraged")) in links
+
+
+def _deployed(system: Record) -> dt.date | None:
+    """The day the received system was installed in this one."""
+    return _day(_block(system, "installation").get("implemented"))
 
 
 def _decided(system: Record) -> dt.date | None:
@@ -506,6 +575,14 @@ def _tests(sid: Any, system: Record, err: Err) -> None:
         elif origin == CONFIGURED and control.get("tested_by") != RECEIVING:
             err(f"{sid}: the control {cid} configured at deployment is not tested by the "
                 "receiving system owner")
+        elif origin not in ORIGINS:
+            err(f"{sid}: the control {cid} is neither built in, configured at deployment, "
+                "inherited nor hybrid")
+        tested, deployed = _day(control.get("tested")), _deployed(system)
+        if origin == CONFIGURED and (tested is None or (deployed is not None
+                                                         and tested < deployed)):
+            err(f"{sid}: the control {cid} configured at deployment is not tested once it is "
+                "configured on deployment")
         elif origin == INHERITED and control.get("validated_by") != ISO:
             err(f"{sid}: the inherited control {cid} is not validated by the receiving system "
                 "ISO")
@@ -529,9 +606,10 @@ def authorization_to_use(ctx: Context) -> list[RunFinding]:
         return []
     out, err = _collector("RCP-005", "I-2")
     changes = {k for c in _items(ctx.data(CHANGES_FILE), "changes") if (k := _key(c.get("id")))}
+    links = _enterprise_links(ctx)
     for system in _items(data, "received_systems"):
         sid = system.get("id")
-        if system.get("enterprise") is True and system.get("coordination_point") != CISO:
+        if _is_enterprise(system, links) and system.get("coordination_point") != CISO:
             err(f"{sid}: the Component CISO is not the single cybersecurity coordination point "
                 "for the DoD-wide program deploying the system")
         if system.get("outcome") != ACCEPTED:
@@ -547,7 +625,9 @@ def authorization_to_use(ctx: Context) -> list[RunFinding]:
         if copy is None or (issued is not None and copy < issued):
             err(f"{sid}: a copy of the authorization to use is not provided to the Granting AO")
         sites = _block(atu, "sites_notified")
-        if sites.get("scope") != AUTHORIZED_CONFIGURATION or _day(sites.get("date")) is None:
+        notified = _day(sites.get("date"))
+        if sites.get("scope") != AUTHORIZED_CONFIGURATION or notified is None \
+                or (issued is not None and notified < issued):
             err(f"{sid}: subordinate sites are not notified that the system may operate only in "
                 "the authorized configuration")
         _hosting(sid, system, changes, err)
@@ -564,9 +644,11 @@ def _hosting(sid: Any, system: Record, changes: set[str], err: Err) -> None:
     for control in sorted(c for c in added - set(_strings(update, "controls")) if c):
         err(f"{sid}: the hosting system's authorization does not include the added control "
             f"{control}")
-    for doc in sorted({INSTALLATION, "difference-tests"} - set(_strings(update, "documents"))):
-        err(f"{sid}: the updated authorization documentation leaves out the {doc} documents")
     install = _block(system, "installation")
+    # Difference tests are needed only where the receiving environment differs.
+    needed = {INSTALLATION} | ({"difference-tests"} if _items(install, "differences") else set())
+    for doc in sorted(needed - set(_strings(update, "documents"))):
+        err(f"{sid}: the updated authorization documentation leaves out the {doc} documents")
     implemented = _day(install.get("implemented"))
     received = _day(_block(system, "package").get("received"))
     if implemented is None or (received is not None and implemented < received):
@@ -674,8 +756,6 @@ def agreements(ctx: Context) -> list[RunFinding]:
 
 def _terms(aid: Any, agreement: Record, side: str, ctx: Context, err: Err) -> None:
     instrument = agreement.get("instrument")
-    if instrument not in ("mou", "moa", "sla", ISA):
-        err(f"{aid}: the agreement is not an MOU, MOA, SLA or ISA")
     topics = set(_strings(agreement, "topics"))
     for key, name in TOPICS.items():
         if key not in topics:
@@ -753,7 +833,7 @@ def evidence_and_refusal(ctx: Context) -> list[RunFinding]:
         sid = system.get("id")
         got = set(_strings(_block(system, "package"), "received_documents"))
         boe = _block(system, "body_of_evidence")
-        if set(REQUIRED_DOCS) - got:
+        if system.get("outcome") in (ACCEPTED, REFUSED) and set(REQUIRED_DOCS) - got:
             weighed = {_key(i.get("item")) for i in _items(boe, "considered")
                        if i.get("status") in ("considered", "unavailable")}
             for key, name in BOE_ITEMS.items():
@@ -761,7 +841,13 @@ def evidence_and_refusal(ctx: Context) -> list[RunFinding]:
                     err(f"{sid}: the body of evidence considered leaves out {name}")
         for req in _items(boe, "requests"):
             endorsed, forwarded = _day(req.get("endorsed")), _day(req.get("forwarded"))
-            if req.get("endorsed_by") != CISO or endorsed is None \
+            equivalent = _block(req, "equivalent")
+            # "the requesting Component CISO, or equivalent": an equivalent names its title
+            # and the authority it endorses under.
+            endorser = CISO if req.get("endorsed_by") == CISO else (
+                EQUIVALENT if req.get("endorsed_by") == EQUIVALENT and equivalent.get("title")
+                and equivalent.get("authority") else None)
+            if endorser not in (CISO, EQUIVALENT) or endorsed is None \
                     or (forwarded is not None and forwarded < endorsed):
                 err(f"{sid}: the request for {req.get('document')} beyond the package is not "
                     "endorsed by the requesting Component CISO before it is forwarded")

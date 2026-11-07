@@ -1,0 +1,23 @@
+rule: RCP-002
+bases:
+- minimal
+description: no notice of the reauthorization the in-force ATO's termination brings, once it is due
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.authorization_termination_date
+  value: '2027-03-01'
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: system_status.termination_date
+  value: '2027-03-01'
+- op: delete_list_item
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.notices
+  where:
+    kind: reauthorization
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: the reauthorization due when the ATO terminates on 2027-03-01 is not notified to the receiving organization at least 6 months before the reauthorization event'

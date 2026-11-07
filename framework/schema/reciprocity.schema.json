@@ -22,6 +22,8 @@
           "organization",
           "receiving_ao",
           "poc",
+          "joined",
+          "visibility",
           "sites",
           "deliveries",
           "agreement",
@@ -45,21 +47,38 @@
             "minLength": 1,
             "title": "Point of contact of the Receiving organization the package goes through"
           },
+          "joined": {
+            "$ref": "#/$defs/date",
+            "title": "When the organization became a Receiving organization of the system"
+          },
           "kind": {
-            "title": "deployment, or software-delivery for a software factory deploying into the Receiving boundary",
-            "type": "string"
+            "enum": [
+              "deployment",
+              "software-delivery"
+            ],
+            "title": "deployment, or software-delivery for a software factory deploying into the Receiving boundary"
           },
           "visibility": {
             "type": "object",
             "additionalProperties": false,
             "title": "How the Receiving organization keeps visibility of the package",
+            "required": [
+              "via",
+              "record_keeping"
+            ],
             "properties": {
               "via": {
-                "type": "string",
-                "title": "emass, other-tool or manual-inheritance"
+                "enum": [
+                  "emass",
+                  "other-tool",
+                  "manual-inheritance"
+                ]
               },
               "record_keeping": {
-                "type": "string",
+                "enum": [
+                  "compatible",
+                  "incompatible"
+                ],
                 "title": "compatible or incompatible with this organization's RMF tool"
               }
             }
@@ -148,8 +167,17 @@
               ],
               "properties": {
                 "document": {
-                  "type": "string",
-                  "title": "ssp, sar, rar, poam, authorization-decision, deployment-sites, body-of-evidence, installation-configuration or deployment-instructions"
+                  "enum": [
+                    "ssp",
+                    "sar",
+                    "rar",
+                    "poam",
+                    "authorization-decision",
+                    "deployment-sites",
+                    "body-of-evidence",
+                    "installation-configuration",
+                    "deployment-instructions"
+                  ]
                 },
                 "date": {
                   "$ref": "#/$defs/date"
@@ -183,8 +211,10 @@
                   "$ref": "#/$defs/date"
                 },
                 "covers": {
-                  "type": "string",
-                  "title": "rmf-activities or planned-deployment"
+                  "enum": [
+                    "rmf-activities",
+                    "planned-deployment"
+                  ]
                 }
               }
             }
@@ -200,8 +230,12 @@
               ],
               "properties": {
                 "kind": {
-                  "type": "string",
-                  "title": "change, finding, plan or reauthorization"
+                  "enum": [
+                    "change",
+                    "finding",
+                    "plan",
+                    "reauthorization"
+                  ]
                 },
                 "change": {
                   "type": "string",
@@ -241,6 +275,20 @@
         }
       },
       "title": "Organizations this system is deployed into (the run is their Granting side)"
+    },
+    "co_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "A system used in its native environment only (co-use), with the notification processes the Granting organization establishes",
+      "required": [
+        "notification_processes"
+      ],
+      "properties": {
+        "notification_processes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     },
     "package_sharing": {
       "type": "object",
@@ -375,8 +423,12 @@
                   "$ref": "#/$defs/date"
                 },
                 "via": {
-                  "type": "string",
-                  "minLength": 1
+                  "enum": [
+                    "emass",
+                    "other-tool",
+                    "manual-inheritance",
+                    "other"
+                  ]
                 }
               }
             }
@@ -455,6 +507,25 @@
                       "type": "string",
                       "minLength": 1
                     },
+                    "equivalent": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "title": "The CISO equivalent who endorsed it",
+                      "required": [
+                        "title",
+                        "authority"
+                      ],
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "authority": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
                     "endorsed": {
                       "$ref": "#/$defs/date"
                     },
@@ -493,8 +564,10 @@
                 "$ref": "#/$defs/date"
               },
               "via": {
-                "type": "string",
-                "minLength": 1
+                "enum": [
+                  "dsawg",
+                  "local"
+                ]
               },
               "augmenting_controls": {
                 "type": "array",
@@ -532,15 +605,21 @@
                   "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
                 },
                 "origin": {
-                  "type": "string",
-                  "title": "built-in, deployment-configured or inherited"
+                  "enum": [
+                    "built-in",
+                    "deployment-configured",
+                    "inherited",
+                    "hybrid"
+                  ]
                 },
                 "retested": {
                   "type": "boolean"
                 },
                 "tested_by": {
-                  "type": "string",
-                  "minLength": 1
+                  "enum": [
+                    "receiving",
+                    "granting"
+                  ]
                 },
                 "tested": {
                   "$ref": "#/$defs/date"
@@ -560,8 +639,11 @@
             }
           },
           "outcome": {
-            "type": "string",
-            "title": "pending, accepted or refused"
+            "enum": [
+              "pending",
+              "accepted",
+              "refused"
+            ]
           },
           "atu": {
             "type": "object",
@@ -576,8 +658,10 @@
                 "minLength": 1
               },
               "risk": {
-                "type": "string",
-                "minLength": 1
+                "enum": [
+                  "acceptable",
+                  "unacceptable"
+                ]
               },
               "copy_to_granting_ao": {
                 "$ref": "#/$defs/date"
@@ -590,8 +674,10 @@
                     "$ref": "#/$defs/date"
                   },
                   "scope": {
-                    "type": "string",
-                    "minLength": 1
+                    "enum": [
+                      "authorized-configuration",
+                      "other"
+                    ]
                   }
                 }
               }
@@ -719,15 +805,19 @@
                   "minLength": 1
                 },
                 "kind": {
-                  "type": "string",
-                  "minLength": 1
+                  "enum": [
+                    "iava",
+                    "stig"
+                  ]
                 },
                 "released": {
                   "$ref": "#/$defs/date"
                 },
                 "outcome": {
-                  "type": "string",
-                  "minLength": 1
+                  "enum": [
+                    "applied",
+                    "poam"
+                  ]
                 },
                 "poam_item": {
                   "type": "string",
@@ -764,8 +854,11 @@
                 "minLength": 1
               },
               "grounds": {
-                "type": "string",
-                "minLength": 1
+                "enum": [
+                  "insufficient-content",
+                  "excessive-risk",
+                  "other"
+                ]
               },
               "documented": {
                 "$ref": "#/$defs/date"
@@ -811,15 +904,20 @@
                   ],
                   "properties": {
                     "level": {
-                      "type": "string",
-                      "minLength": 1
+                      "enum": [
+                        "ao",
+                        "rmf-tag-chair",
+                        "ao-council"
+                      ]
                     },
                     "date": {
                       "$ref": "#/$defs/date"
                     },
                     "result": {
-                      "type": "string",
-                      "minLength": 1
+                      "enum": [
+                        "resolved",
+                        "unresolved"
+                      ]
                     },
                     "notified": {
                       "type": "string",
@@ -867,7 +965,8 @@
           },
           "instrument": {
             "type": "string",
-            "title": "mou, moa, sla or isa"
+            "minLength": 1,
+            "title": "The kind of documented agreement, such as mou, moa, sla or isa"
           },
           "party": {
             "type": "string",
