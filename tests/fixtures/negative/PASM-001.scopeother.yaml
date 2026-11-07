@@ -1,0 +1,14 @@
+rule: PASM-001
+bases:
+- pii
+description: the privacy scope of the plan holds three of the baseline's privacy controls and leaves out au-2
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: privacy.controls
+  value: [ac-2, ia-2, sc-7]
+expect:
+  errors:
+  - PASM-001
+  messages:
+  - privacy control au-2 of the baseline is outside the privacy scope of the assessment plan

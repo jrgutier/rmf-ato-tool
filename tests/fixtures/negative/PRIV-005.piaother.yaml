@@ -1,0 +1,14 @@
+rule: PRIV-005
+bases:
+- pii
+description: the PIA review follows a change other than the one that changes the privacy posture
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: updates.0.change
+  value: CHG-001
+expect:
+  errors:
+  - PRIV-005
+  messages:
+  - CHG-002 changes the privacy posture, and no PIA review in artifacts/data/pia.yaml follows it

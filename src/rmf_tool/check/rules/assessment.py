@@ -63,6 +63,19 @@ def _records(data: dict[str, Any], key: str) -> list[dict[str, Any]]:
     return [r for r in data.get(key) or () if isinstance(r, dict)]
 
 
+def _seq(record: dict[str, Any], key: str, ident: Any = None, err: Err | None = None) -> list[str]:
+    """The strings of a list field; a scalar in its place is reported (when ``err`` is given)
+    and read as empty, never iterated."""
+    value = record.get(key)
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        if err is not None:
+            err(f"{ident}: {key} is {value!r}, not a list")
+        return []
+    return [v for v in value if isinstance(v, str)]
+
+
 def _block(data: dict[str, Any], key: str) -> dict[str, Any]:
     found = data.get(key)
     return found if isinstance(found, dict) else {}
@@ -205,8 +218,8 @@ def preparation(ctx: Context) -> list[RunFinding]:
 # --- ASMT-002: assessment procedures are selected and tailored --------------------------------
 
 def _methods_fit(ident: Any, record: dict[str, Any], err: Err) -> None:
-    objects = set(record.get("objects") or ())
-    methods = record.get("methods") or ()
+    objects = set(_seq(record, "objects", ident, err))
+    methods = _seq(record, "methods", ident, err)
     fits = {o for m in methods for o in METHOD_OBJECTS.get(m, ())}
     for leftover in sorted(objects - fits):
         err(f"{ident}: no selected assessment method applies to the assessment object "
@@ -219,11 +232,11 @@ def _methods_fit(ident: Any, record: dict[str, Any], err: Err) -> None:
 def _procedure(ctx: Context, p: dict[str, Any], seen: dict[Any, Any], err: Err) -> None:
     pid = p.get("id")
     baseline = set(baseline_mod.control_ids(ctx.run))
-    for cid in p.get("controls") or ():
+    for cid in _seq(p, "controls", pid, err):
         if cid not in baseline:
             err(f"{pid} selects assessment procedures for {cid}, which is not in the security "
                 "plan after tailoring")
-        for method in p.get("methods") or ():
+        for method in _seq(p, "methods"):
             if (cid, method) in seen:
                 err(f"{cid} is in both {seen[cid, method]} and {pid} by {method}: consolidating "
                     "assessment procedures applies each method to a control once")
@@ -400,8 +413,8 @@ def _statements(cat: catalog.Catalog, d: dict[str, Any], err: Err) -> dict[Any, 
 def _planned(sap: dict[str, Any]) -> dict[Any, set[Any]]:
     planned: dict[Any, set[Any]] = {}
     for p in _records(sap, "procedures"):
-        for cid in p.get("controls") or ():
-            planned.setdefault(cid, set()).update(p.get("methods") or ())
+        for cid in _seq(p, "controls"):
+            planned.setdefault(cid, set()).update(_seq(p, "methods"))
     return planned
 
 
@@ -410,10 +423,10 @@ def _used(d: dict[str, Any], sap: dict[str, Any], err: Err) -> None:
     cid = d.get("control_id")
     planned = _planned(sap).get(cid)
     if planned is not None:
-        for method in sorted(set(d.get("methods") or ()) - planned):
+        for method in sorted(set(_seq(d, "methods", cid, err)) - planned):
             err(f"{cid}: the assessment method {method} was not selected in the assessment plan")
     results = {r.get("id"): r for r in _records(sap, "reused_results")}
-    for rid in d.get("reused") or ():
+    for rid in _seq(d, "reused", cid, err):
         if rid not in results:
             err(f"{cid}: {rid} is not a reused result of the assessment plan")
         elif cid not in (results[rid].get("controls") or ()):

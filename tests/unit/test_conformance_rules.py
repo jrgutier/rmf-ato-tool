@@ -2114,7 +2114,8 @@ def test_the_field_comes_from_the_fixture_not_the_fragment(reg, framework, tmp_p
     deleted = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
                "mutations": [{"op": "delete_field", "path": "records.1.review"}]}
     changed = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
-               "mutations": [{"op": "set_field", "path": "records.1.review", "value": {}}]}
+               "mutations": [{"op": "set_field", "path": "records.1.review",
+                              "value": {"by": "PER-ISSM"}}]}
     for fixture, claim in ((named, "constraint"), (deleted, "presence"), (changed, "constraint")):
         rule["claim"] = claim
         entry["kind"] = "table"
@@ -2257,6 +2258,30 @@ def test_the_judge_classifies_rule_items(rule, fixture, expect, claim):
     source = evidence.rule_sources().get(rule, rule)
     assert evidence.failing_clauses(source, expect)
     assert evidence.rule_claim(spec, source, expect) == claim
+
+
+@pytest.mark.parametrize("value", [[], {}, "", None])
+def test_a_fixture_that_sets_a_field_empty_is_presence(value):
+    # the clause compares a value, yet the fixture only empties it: silence, not a wrong value
+    source = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
+    spec = {"mutations": [{"op": "set_field", "file": "f.yaml", "path": "x", "value": value}]}
+    assert evidence.rule_claim(spec, source, "x is bad") == "presence"
+
+
+@pytest.mark.parametrize("value", [["PER-ISSM"], {"a": 1}, "PER-AO", 0, False])
+def test_a_fixture_that_sets_a_wrong_value_stays_constraint(value):
+    source = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
+    spec = {"mutations": [{"op": "set_field", "file": "f.yaml", "path": "x", "value": value}]}
+    assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
+
+
+def test_a_fixture_that_empties_one_field_and_sets_another_wrong_stays_constraint():
+    source = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
+    spec = {"mutations": [
+        {"op": "set_field", "file": "f.yaml", "path": "y", "value": []},
+        {"op": "set_field", "file": "f.yaml", "path": "x", "value": "PER-AO"},
+    ]}
+    assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
 
 
 def test_a_rule_item_with_no_clause_to_read_is_presence():

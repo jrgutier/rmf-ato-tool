@@ -1,0 +1,12 @@
+rule: TLR-009
+description: cm-6 traces to REQ-02 instead of REQ-03, so no control satisfies REQ-03
+mutations:
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.2.requirements
+  value: [REQ-02]
+expect:
+  errors:
+  - TLR-009
+  messages:
+  - the requirement REQ-03 is satisfied by no control; traceability of controls to the requirements ensures all requirements are addressed

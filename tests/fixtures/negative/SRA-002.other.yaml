@@ -1,0 +1,10 @@
+rule: SRA-002
+description: ra.yaml records a connection for a component other than the external CMP-IDP
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: external.connections.0.component
+  value: CMP-RELAY
+expect:
+  errors: [SRA-002]
+  messages: ['external component CMP-IDP has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered']

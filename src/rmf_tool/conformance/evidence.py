@@ -302,12 +302,20 @@ def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False)
     return isinstance(test, ast.Name)
 
 
+def _deletes(mutation: Mapping[str, Any]) -> bool:
+    """A mutation that removes a value: a deletion, or a set to an empty value (``[]``, ``{}``,
+    ``""`` or null), which a rule refuses for the same silence."""
+    if mutation["op"] == DELETE_FIELD:
+        return True
+    return mutation["op"] == SET_FIELD and mutation.get("value") in (None, "", [], {})
+
+
 def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
     """What a rule item can refuse, read from its fixture and clause: a fixture that only deletes
     and a clause that only tests absence refuse silence, not a wrong value. With no clause to
     read, nothing shows a wrong value is refused."""
     mutations = spec.get("mutations") or ()
-    if mutations and all(m["op"] == DELETE_FIELD for m in mutations):
+    if mutations and all(_deletes(m) for m in mutations):
         return PRESENCE
     clauses = failing_clauses(source, expect)
     plain = _plain_reads(source)

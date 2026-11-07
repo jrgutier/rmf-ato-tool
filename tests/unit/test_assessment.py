@@ -1,5 +1,6 @@
 """The assessment rules allow what their sources allow, and the POA&M's dates freeze once."""
 
+import pytest
 from conftest import REPO_ROOT, VALID_MINIMAL, copy_run, edit_yaml
 from ruamel.yaml import YAML
 
@@ -235,3 +236,18 @@ def test_interview_samples_may_be_typed_as_individuals(minimal_run):
     edit_yaml(minimal_run / SAP, individuals)
     found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
     assert not [f for f in found if f.rule == "RIGR-003" and "no persona" in f.finding.message]
+
+
+@pytest.mark.parametrize(("rel", "edit", "needle"), [
+    (SAP, lambda d: d["procedures"][0].update(controls="ac-2"), "controls is 'ac-2', not a list"),
+    (SAP, lambda d: d["procedures"][0].update(controls=7), "controls is 7, not a list"),
+    (SAP, lambda d: d["procedures"][0].update(methods="examine"), "methods is 'examine'"),
+    (SAP, lambda d: d["procedures"][0].update(objects=3), "objects is 3, not a list"),
+    (AC, lambda d: d["determinations"][0].update(methods="examine"), "methods is 'examine'"),
+    (AC, lambda d: d["determinations"][0].update(methods=5), "methods is 5, not a list"),
+    (AC, lambda d: d["determinations"][0].update(reused=3), "reused is 3, not a list"),
+])
+def test_a_scalar_where_a_list_belongs_is_a_finding_not_a_crash(tmp_path, rel, edit, needle):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / rel, edit)
+    assert any(needle in f.message for f in errors(run_dir))

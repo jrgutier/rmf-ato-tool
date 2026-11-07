@@ -1,0 +1,12 @@
+rule: ISCM-002
+description: the only automated tool assesses si-2, so cm-6 at a continuous frequency has no automated tool
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.assesses
+  value: [si-2]
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - no automated tool assesses cm-6, so it needs a manual assessment frequency, not continuous

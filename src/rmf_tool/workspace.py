@@ -4,7 +4,7 @@ A workspace holds ``product/`` (from ``templates/workspace/product/``) and ``run
 is ``runs/<run-id>/`` with run.yaml (stamped: mode, run_id, product, as_of,
 framework_version, git_sha, upstream_hash, upstream_hash_basis, oscal_version), facts.yaml,
 assumptions.yaml, journal.md and empty artifact and interview directories. A scenario
-(``tests/agent/scenarios/<s>.yaml``) supplies the product, scope, seeds, lifecycle and
+(``tests/agent/scenarios/<s>.yaml``) supplies the product, scope, seeds, lifecycle, entry and
 control subset, and its ``hash_globs`` scope the upstream hash (``upstream_hash_basis``
 records which variant a run carries, ADR-0001). A scenario with ``base_run`` starts from a
 copy of that run instead, minus its ``remove`` paths (ADR-0004).
@@ -50,7 +50,7 @@ DEFAULTS: dict[str, Any] = {
     "include_after_stop": [], "lifecycle_stop_rationale": None, "deferred": {},
 }
 KEY_ORDER = (*STAMPED, "humans", "scope", "seeded", "lifecycle_stop", "include_after_stop",
-             "lifecycle_stop_rationale", "deferred", "control_subset")
+             "lifecycle_stop_rationale", "deferred", "entry", "control_subset")
 
 
 class WorkspaceError(Exception):
@@ -184,7 +184,7 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
     seeds: list[tuple[Path, str]] = []
     if scenario:
         config["scope"] = scenario["scope"]
-        for key in ("lifecycle_stop", "include_after_stop", "control_subset"):
+        for key in ("lifecycle_stop", "include_after_stop", "entry", "control_subset"):
             if key in scenario:
                 config[key] = scenario[key]
         seeds_dir = base_run or repo / scenario.get("seeds_dir", ".")

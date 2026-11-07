@@ -257,3 +257,16 @@ def test_a_new_ao_may_read_the_automated_report_alone_and_sign_a_cato(minimal_ru
     edit_yaml(minimal_run / LEDGER, lambda d: d["records"][1].update(
         basis="ao-change", decision=decision, ao_transfer=transfer))
     assert messages(minimal_run, authorization.ao_change) == []
+
+
+@pytest.mark.parametrize(("rel", "edit", "needle"), [
+    (CHANGES, lambda d: d["changes"][0].update(id=["CHG-001"]), None),
+    (PLAN, lambda d: d["changes"][0].update(change_ref=["CHG-001"], approved_by=["PER-AO"]),
+     "by PER-AO or PER-AODR or PER-CCB, not ['PER-AO']"),
+    (PLAN, lambda d: d["reviews"][0].update(date=["2026-10-30"]), None),
+    (PLAN, lambda d: d.update(schedule={"interval_days": "yearly"}, changes="v1"), None),
+])
+def test_a_malformed_plan_review_log_is_a_finding_not_a_crash(minimal_run, rel, edit, needle):
+    edit_yaml(minimal_run / rel, edit)
+    found = messages(minimal_run, monitor.plan_reviews)
+    assert needle is None or any(needle in m for m in found)

@@ -1,0 +1,13 @@
+rule: RECIP-001
+description: the package review considers the integration of a component other than the one leveraging the authorization
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.integration
+  value:
+  - {component: CMP-RELAY, risk: The relay forwards reports to the analysis enclave.}
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the risk of integrating CMP-IDP with the system is not considered in the review'
