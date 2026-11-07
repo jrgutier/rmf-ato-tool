@@ -538,7 +538,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
 - Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
 
-## L-0077 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
+## L-0077 · 2026-11-07 · run: phase-11 · tags: references, rules
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities look empty in a terminal or editor, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the extractor maps to the private-use code point U+F0E9, which renders as blank, while the ● and ○ keys come through as themselves; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
+- Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
+- Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
+
+## L-0078 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
 - Symptom: a first cut of RCP-001 tested `tool.get("compatible") is False` and FW-REQ-003 read the clause as presence, while `len(early) < 1` in RCP-002 read as a constraint though it only asks that a list be non-empty.
 - Root cause: the judge's absence test compares against None, "" and 0, and `False == 0` in Python, so `is False` counts as a read of absence; a comparison it does not know, such as `< 1`, counts as a constraint.
 - Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.

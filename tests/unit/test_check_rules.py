@@ -3,7 +3,8 @@ mutates a copy of a base run; ``rmf check --final`` must then report exactly the
 errors plus the listed ``also`` errors (and, for a warning rule, the listed ``warnings``).
 Bases: ``minimal`` (valid_minimal, scope all), ``hybrid`` (hybrid_minimal, skeleton scope)
 and ``example`` (the uas-gcs synthetic run, Phase 7), and ``pii``, derived from ``minimal`` by
-the mutations in tests/fixtures/runs/pii.yaml into a system that processes PII. Copies are
+the mutations in tests/fixtures/runs/pii.yaml into a system that processes PII, and ``cloud``,
+by tests/fixtures/runs/cloud.yaml into a partly CSO-hosted system. Copies are
 re-stamped to the current upstream hash, so the bases start without findings."""
 
 
@@ -21,7 +22,8 @@ BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
 if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3)
     BASES["example"] = EXAMPLE_RUN
 # A derived base: a committed base plus mutations, so it cannot drift from what it extends.
-DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml"}
+DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml",
+           "cloud": REPO_ROOT / "tests/fixtures/runs/cloud.yaml"}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 
@@ -265,3 +267,14 @@ def test_every_run_rule_is_implemented_with_a_fixture():
         assert rule.fixture, rid
         if rule.fixture.startswith("tests/fixtures/negative/"):
             assert rid in specs, rid
+
+
+def test_an_optional_data_file_is_not_required_with_its_artifact(tmp_path):
+    """cato.yaml is written only once a cATO is sought (CATO-001), so RUN-ART-001 does not
+    require it of every run that produces ART-AODM."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    (run_dir / "artifacts/data/cato.yaml").unlink()
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert [f for f in found if f.severity == "E"] == []

@@ -1,0 +1,15 @@
+rule: CATO-004
+bases:
+- minimal
+description: CSSP monitoring that ignores non-approved actions
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: monitoring.cssp_application_monitoring
+  value:
+  - malicious-actions
+expect:
+  errors:
+  - CATO-004
+  messages:
+  - CSSP application monitoring does not watch for non-approved-actions

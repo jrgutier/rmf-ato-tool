@@ -1,0 +1,19 @@
+rule: CATO-008
+bases:
+- minimal
+description: a governance group without the mission owner
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: people.risk_governance_group.members
+  value:
+  - application-development-team
+  - ao-risk-assessment-team
+  - dsop-security-team
+  - platform-team
+expect:
+  errors:
+  - CATO-008
+  messages:
+  - the cybersecurity risk governance group has no member from the mission-owner
+  - with production in the factory the group managing the risk includes the mission-owner

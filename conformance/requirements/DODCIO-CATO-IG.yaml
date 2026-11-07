@@ -50,9 +50,8 @@ requirements:
     locator: "Introduction"
     context: ""
     statement: "Continuous Authorization to Operate (cATO) is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant. This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."
-    status: "partial"
-    reason: "Sufficient maturity is judged on evidence the ledger does not hold (WI-287)"
-    evidence: [{"kind": "citation", "asserts": "AD-CATO states the evidence a continuous authorization rests on", "target": "AD-CATO", "claim": "presence"}]
+    status: "covered"
+    evidence: [{"kind": "citation", "asserts": "AD-CATO states the evidence a continuous authorization rests on", "target": "AD-CATO", "claim": "presence"}, {"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "The organization has implemented continuous monitoring, active cyber defense and secure software supply chain requirements: each competency demonstrated", "claim": "constraint", "sentence": "This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-IG-0007"
     citation: {"ref": "DODCIO-CATO-IG", "page": 6, "anchor": "Systems seeking a cATO must have already achieved an Authorization to Operate"}
@@ -108,7 +107,9 @@ requirements:
     locator: "The cATO Competencies"
     context: "The Continuous Authorization To Operate (cATO) Memo [1] states: “In order to achieve cATO, the Authorizing Official (AO) must be able to demonstrate three main competencies: On-going visibility of key"
     statement: "In addition, the cATO memo calls out the need for a Secure Software Supply Chain (SSSC) and relates that to the third competency, saying: “In order to prevent any combination of human errors, supply chain interdictions, unintended code, and support the creation of a software bill of materials (SBOM), the adoption of an approved software platform and development pipeline(s) are critical.”"
-    status: "candidate"
+    status: "partial"
+    reason: "CATO-003 holds an approved reference design and a pipeline with guardrails and control gates; approval of the development pipeline itself is not held."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.yaml", "expect": "implements an approved DevSecOps Reference Design", "asserts": "The adoption of an approved software platform is critical: the platform implements an approved DevSecOps reference design", "claim": "constraint", "sentence": "In addition, the cATO memo calls out the need for a Secure Software Supply Chain (SSSC) and relates that to the third competency, saying: “In order to prevent any combination of human errors, supply chain interdictions, unintended code, and support the creation of a software bill of materials (SBOM), the adoption of an approved software platform and development pipeline(s) are critical.”"}, {"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.pipeline.yaml", "expect": "no DevSecOps pipeline has automated guardrails and control gates", "asserts": "The adoption of development pipeline(s) with automated guardrails and control gates", "claim": "constraint", "sentence": "In addition, the cATO memo calls out the need for a Secure Software Supply Chain (SSSC) and relates that to the third competency, saying: “In order to prevent any combination of human errors, supply chain interdictions, unintended code, and support the creation of a software bill of materials (SBOM), the adoption of an approved software platform and development pipeline(s) are critical.”"}]
     work_item: "WI-297"
   - id: "REQ-DODCIO-CATO-IG-0014"
     citation: {"ref": "DODCIO-CATO-IG", "page": 6, "anchor": "The cATO memo states that evolving guidance and related resources will be"}
@@ -132,8 +133,11 @@ requirements:
     locator: "Approach"
     context: "Figure 1. Software Factory: cATO Viewpoint"
     statement: "In the terminology of the NIST Risk Management Framework (RMF), the software factory contains at least one system with a single authorization boundary. This typically contains a development system, a testing system, and a staging (or pre-production) system. It may also contain the production system, or that system may be hosted on a different platform such as in an embedded system. These two use cases are explained in more detail in Appendix A. In either of these cases, the cATO will cover the software developed in the software factory and deployed to the production systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Both sentences are a permission and a scope statement and await the user's ruling; use_case (CATO-001) records which case applies."
+    evidence: [{"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "use_case records whether production sits in the software factory or outside it", "claim": "presence"}]
     work_item: "WI-289"
+    ruling_sought: [{"sentence": "It may also contain the production system, or that system may be hosted on a different platform such as in an embedded system.", "reason": "Permission and description: the factory 'may also contain' the production system, or it 'may be hosted' elsewhere; the two use cases are recorded in use_case."}, {"sentence": "In either of these cases, the cATO will cover the software developed in the software factory and deployed to the production systems.", "reason": "Scope, no duty a run can fail: 'the cATO will cover the software developed in the software factory'; use_case records where production sits."}]
   - id: "REQ-DODCIO-CATO-IG-0017"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "The Software Factory should include the following:"}
     kind: "should"
@@ -148,7 +152,8 @@ requirements:
     locator: "Approach.•"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "• Automation that includes at least one DevSecOps pipeline with automated guardrails and control gates that collect evidence for making continuous risk assessments and determinations during software development"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.pipeline.yaml", "expect": "no DevSecOps pipeline has automated guardrails and control gates", "asserts": "At least one DevSecOps pipeline has automated guardrails and control gates that collect evidence for continuous risk determinations", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0019"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "Built-in dashboards and automated alerts for monitoring and managing the risk in"}
@@ -164,7 +169,8 @@ requirements:
     locator: "Approach.o"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "o Must include an active feedback mechanism for both internal and external production environments"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.feedenv.yaml", "expect": "no active feedback mechanism for the", "asserts": "An active feedback mechanism for both internal and external production environments", "claim": "constraint", "sentence": "o Must include an active feedback mechanism for both internal and external production environments"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0021"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "An application hosting environment that uses a modern hyperscale cloud (or other"}
@@ -172,7 +178,8 @@ requirements:
     locator: "Approach.•"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "• An application hosting environment that uses a modern hyperscale cloud (or other DoD approved environment) to provide development, test, staging, and (optionally) production environments"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.hosting.yaml", "expect": "a hyperscale cloud or another DoD approved environment", "asserts": "The application hosting environment is a hyperscale cloud or other DoD approved environment", "claim": "constraint"}, {"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.environments.yaml", "expect": "the hosting environment provides no", "asserts": "The hosting environment provides development, test and staging environments", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0022"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "A DSOP that is delivered and operated as its own system and"}
@@ -180,7 +187,8 @@ requirements:
     locator: "Approach.•"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "• A DSOP that is delivered and operated as its own system and provided as a service to application developers"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.delivery.yaml", "expect": "is delivered and operated as its own system", "asserts": "The DSOP is delivered and operated as its own system and provided as a service", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0023"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "Input from the risk governance process that provides a common set of"}
@@ -188,7 +196,9 @@ requirements:
     locator: "Approach.•"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "• Input from the risk governance process that provides a common set of acceptable residual risk tolerances for applications moving through the pipeline"
-    status: "candidate"
+    status: "partial"
+    reason: "CATO-011 holds the tolerances' collaborative authors; that they are input from the risk governance process for applications moving through the pipeline is not tied to the governance group's record."
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.authors.yaml", "expect": "the risk tolerances are not developed collaboratively with", "asserts": "A common set of acceptable residual risk tolerances is developed collaboratively", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0024"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "When the software factory includes the production environment for one or more"}
@@ -196,7 +206,8 @@ requirements:
     locator: "Approach.o"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "o When the software factory includes the production environment for one or more applications, as in Use Case 1 (Appendix A), the group managing the risk is a collaborative group comprised of the platform team, application teams, AO designated risk assessors, and mission security teams. The cATO is issued to the software factory managing the environment that also has the responsibility for managing the risk for the single authorization boundary that is hosting multiple applications (subsystems)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.factory.yaml", "expect": "the group managing the risk includes the", "asserts": "With production in the factory the group managing the risk includes the platform team, application teams, risk assessors and mission teams", "claim": "constraint", "sentence": "The cATO is issued to the software factory managing the environment that also has the responsibility for managing the risk for the single authorization boundary that is hosting multiple applications (subsystems)"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0025"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "Use case 2 (Appendix A): the production/operational environment is outside the DSOP,"}
@@ -204,7 +215,8 @@ requirements:
     locator: "Approach.o"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "o Use case 2 (Appendix A): the production/operational environment is outside the DSOP, such as when the hosting environment is an embedded system or a system of a higher classification than the development environment the risk governance team must work with the authorizing official for the production environment to identify the risk tolerances for applications"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.prodao.yaml", "expect": "works with the production environment's AO", "asserts": "With production outside the DSOP the risk governance team works with the production environment's authorizing official on the risk tolerances", "claim": "constraint", "sentence": "o Use case 2 (Appendix A): the production/operational environment is outside the DSOP, such as when the hosting environment is an embedded system or a system of a higher classification than the development environment the risk governance team must work with the authorizing official for the production environment to identify the risk tolerances for applications"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0026"
     citation: {"ref": "DODCIO-CATO-IG", "page": 8, "anchor": "Adherence to DoD CIO DevSecOps guidance, including the DevSecOps Fundamentals Guidebook: Activities"}
@@ -212,7 +224,8 @@ requirements:
     locator: "Approach.•"
     context: "Figure 1. Software Factory: cATO Viewpoint The Software Factory should include the following:"
     statement: "• Adherence to DoD CIO DevSecOps guidance, including the DevSecOps Fundamentals Guidebook: Activities and Tools [5] Assessment Approach"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.guidebook.yaml", "expect": "mapped from the DevSecOps Activities and Tools Guidebook", "asserts": "Adherence to DoD CIO DevSecOps guidance, including the DevSecOps Fundamentals Guidebook: Activities and Tools", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0027"
     citation: {"ref": "DODCIO-CATO-IG", "page": 9, "anchor": "Continuous security posture (or status) and risk reporting, including dashboards, that aggregate"}
@@ -228,7 +241,8 @@ requirements:
     locator: "Approach.b"
     context: "Figure 1. Software Factory: cATO Viewpoint A cATO assessment ensures the software factory includes these features:"
     statement: "b. Feedback from cyber operations on unexpected changes in security configurations, incident analysis, mitigation effectiveness, change in threat environment, and detection of non-approved behavior is being monitored and used to support the risk response"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.feedfrom.yaml", "expect": "feedback from cyber operations on", "asserts": "Feedback from cyber operations on configuration changes, incident analysis, mitigation effectiveness, threat and non-approved behavior is monitored for the risk response", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0029"
     citation: {"ref": "DODCIO-CATO-IG", "page": 9, "anchor": "A holistic set of information, along with the DevSecOps guardrails and control"}
@@ -236,7 +250,8 @@ requirements:
     locator: "Approach.c"
     context: "Figure 1. Software Factory: cATO Viewpoint A cATO assessment ensures the software factory includes these features:"
     statement: "c. A holistic set of information, along with the DevSecOps guardrails and control gates provides the ability to perform continuous risk analysis against agreed-to risk tolerances in support of continuous risk determinations and authorization decisions"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "DevSecOps control gates perform continuous risk analysis against agreed-to risk tolerances", "claim": "constraint"}, {"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.guardrail.yaml", "expect": "guardrail promotion rules rest on an agreed risk tolerance", "asserts": "DevSecOps guardrails support continuous risk analysis against agreed-to risk tolerances", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0030"
     citation: {"ref": "DODCIO-CATO-IG", "page": 9, "anchor": "The assessment process for a cATO involves developing an understanding of the"}
@@ -244,7 +259,8 @@ requirements:
     locator: "Assessment Method"
     context: ""
     statement: "The assessment process for a cATO involves developing an understanding of the organization’s risk management practices in the software factory through the review of evidence of use of the practices, interviews with personnel performing the practices to determine the level of organizational understanding and implementation, and review of results from continuous monitoring activities. The information is used by the assessment team to determine the organization’s readiness to manage risk based on evaluation criteria developed by the assessment team. These criteria should be based on the DevSecOps Continuous Authorization to Operate Evaluation Criteria [3]."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.basis.yaml", "expect": "the evaluation criteria are based on the DevSecOps cATO Evaluation Criteria", "asserts": "The evaluation criteria are based on the DevSecOps Continuous Authorization to Operate Evaluation Criteria", "claim": "constraint", "sentence": "These criteria should be based on the DevSecOps Continuous Authorization to Operate Evaluation Criteria [3]."}, {"kind": "rule", "target": "CATO-012", "fixture": "tests/fixtures/negative/CATO-012.readiness.yaml", "expect": "readiness risk determination is", "asserts": "The assessment team determines the organization's readiness to manage risk as a readiness risk determination", "claim": "constraint", "sentence": "The information is used by the assessment team to determine the organization’s readiness to manage risk based on evaluation criteria developed by the assessment team."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0031"
     citation: {"ref": "DODCIO-CATO-IG", "page": 9, "anchor": "Identify the team to perform the process assessment. The skills required to"}
@@ -252,7 +268,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Identify the team to perform the process assessment. The skills required to assess DevSecOps platform, process, and people will be different, and the AO will approve the assessment team and their capabilities as part of the authorization process."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.approval.yaml", "expect": "the AO approves the assessment team and their capabilities", "asserts": "The AO approves the assessment team and their capabilities as part of the authorization process", "claim": "constraint", "sentence": "The skills required to assess DevSecOps platform, process, and people will be different, and the AO will approve the assessment team and their capabilities as part of the authorization process."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0032"
     citation: {"ref": "DODCIO-CATO-IG", "page": 9, "anchor": "Educate and train the team on the cATO assessment process. Develop the"}
@@ -260,7 +277,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Educate and train the team on the cATO assessment process. Develop the assessment plan and identify key practices, as well as evaluation and weighting criteria. Detailed cATO evaluation criteria can be found on the KS in the DevSecOps Continuous Authorization to Operate Evaluation Criteria [3]"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.practices.yaml", "expect": "identifies key practices that are no cATO requirement", "asserts": "The assessment plan identifies key practices from the cATO requirements, with evaluation and weighting criteria", "claim": "constraint", "sentence": "Develop the assessment plan and identify key practices, as well as evaluation and weighting criteria."}, {"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.basis.yaml", "expect": "the evaluation criteria are based on the DevSecOps cATO Evaluation Criteria", "asserts": "Detailed cATO evaluation criteria are those of the DevSecOps Continuous Authorization to Operate Evaluation Criteria", "claim": "constraint", "sentence": "Detailed cATO evaluation criteria can be found on the KS in the DevSecOps Continuous Authorization to Operate Evaluation Criteria [3]"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0033"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Practices are defined and documented."}
@@ -268,7 +286,8 @@ requirements:
     locator: "Assessment Method.o"
     context: "High Level Evaluation Criteria:"
     statement: "o Practices are defined and documented."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.defined-documented.yaml", "expect": "the assessment does not judge the high level criterion", "asserts": "Practices are defined and documented: the assessment judges that high level criterion", "claim": "constraint"}, {"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.criterion.yaml", "expect": "and a cATO is recommended or decided", "asserts": "Practices are defined and documented: the criterion is met before a cATO is recommended", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0034"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Evidence exists on the use of risk management and continuous monitoring practices."}
@@ -276,7 +295,8 @@ requirements:
     locator: "Assessment Method.o"
     context: "High Level Evaluation Criteria:"
     statement: "o Evidence exists on the use of risk management and continuous monitoring practices. This evidence includes demonstrations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.evidence-of-use.yaml", "expect": "the assessment does not judge the high level criterion", "asserts": "Evidence on the use of risk management and continuous monitoring practices is a high level criterion the assessment judges", "claim": "constraint"}, {"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.demonstration.yaml", "expect": "the evidence gathered on the practices includes no", "asserts": "The evidence of use of the practices includes demonstrations", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0035"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "The workforce is knowledgeable on the cATO practices."}
@@ -284,7 +304,8 @@ requirements:
     locator: "Assessment Method.o"
     context: "High Level Evaluation Criteria:"
     statement: "o The workforce is knowledgeable on the cATO practices."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.workforce-knowledge.yaml", "expect": "the assessment does not judge the high level criterion", "asserts": "The workforce is knowledgeable on the cATO practices: the assessment judges that high level criterion", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0036"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "The level of implementation of the cATO practices is measured as defined"}
@@ -292,7 +313,8 @@ requirements:
     locator: "Assessment Method.o"
     context: "High Level Evaluation Criteria:"
     statement: "o The level of implementation of the cATO practices is measured as defined in"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.implementation-level.yaml", "expect": "the assessment does not judge the high level criterion", "asserts": "The level of implementation of the cATO practices is a high level criterion the assessment judges", "claim": "constraint"}, {"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.unscored.yaml", "expect": "threshold requirements and the objective ones the plan selects are not scored", "asserts": "The level of implementation of the cATO practices is measured against Table 2: every threshold requirement is scored", "claim": "constraint"}, {"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.result.yaml", "expect": "not met, partially-met, not-met or not-applicable", "asserts": "The level of implementation of each cATO practice is measured as met, partially met, not met or not applicable", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0037"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Coordinate the assessment with the responsible cATO office; ensure the organization understands"}
@@ -300,7 +322,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Coordinate the assessment with the responsible cATO office; ensure the organization understands the critical practices to be assessed, the assessment process, and the evaluation criteria."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.pmo.yaml", "expect": "the assessment plan is not coordinated with the program office", "asserts": "The assessment is coordinated with the program office responsible for the cATO", "claim": "constraint"}, {"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.briefed.yaml", "expect": "assessed organization is not briefed", "asserts": "The organization understands the critical practices to be assessed, the assessment process and the evaluation criteria: it is briefed on them", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0038"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Review the assessment plan with the AO to ensure key practices and"}
@@ -308,7 +331,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Review the assessment plan with the AO to ensure key practices and concerns are included."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.review.yaml", "expect": "reviewed with the AO for key practices and concerns", "asserts": "The assessment plan is reviewed with the AO to ensure key practices and concerns are included", "claim": "constraint", "sentence": "• Review the assessment plan with the AO to ensure key practices and concerns are included."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0039"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Gather and review organization’s practice documentation and evidence. For example, evidence may"}
@@ -316,7 +340,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Gather and review organization’s practice documentation and evidence. For example, evidence may be provided through various types of tracking systems, meeting minutes, and pipeline security scanning reports."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.documentation.yaml", "expect": "the evidence gathered on the practices includes no", "asserts": "The organization's practice documentation is gathered and reviewed as evidence", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0040"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Identify and schedule interviews with the organization’s personnel representing key roles and"}
@@ -324,7 +349,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Identify and schedule interviews with the organization’s personnel representing key roles and who are knowledgeable on the cATO DevSecOps (DSO) practices."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.interview.yaml", "expect": "represents no key role of the DSO team", "asserts": "Interviews are with the organization's personnel representing key roles on the DSO team", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0041"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Assess the DSOP, process, and teams against evaluation and weighting criteria. Weighting"}
@@ -332,7 +358,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Assess the DSOP, process, and teams against evaluation and weighting criteria. Weighting can be established for the key areas, such as the software factory, process, and teams, down to the actual practices identified in Table 2."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.areas.yaml", "expect": "against the evaluation and weighting criteria", "asserts": "The DSOP, process and teams are each assessed and scored against evaluation and weighting criteria", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0042"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Develop assessment findings, recommendations, and review them with the organization’s office that"}
@@ -340,7 +367,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Develop assessment findings, recommendations, and review them with the organization’s office that is responsible for cATO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-012", "fixture": "tests/fixtures/negative/CATO-012.yaml", "expect": "the findings and recommendation are not reviewed with the program office", "asserts": "Assessment findings and recommendations are reviewed with the program office responsible for cATO", "claim": "constraint", "sentence": "• Develop assessment findings, recommendations, and review them with the organization’s office that is responsible for cATO."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0043"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Provide a final organizational readiness risk determination and recommendation for the AO"}
@@ -348,7 +376,8 @@ requirements:
     locator: "Assessment Method.•"
     context: ""
     statement: "• Provide a final organizational readiness risk determination and recommendation for the AO to consider, using an AO cATO decision briefing, including all conditions of the authorization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-012", "fixture": "tests/fixtures/negative/CATO-012.readiness.yaml", "expect": "readiness risk determination is", "asserts": "A final organizational readiness risk determination and recommendation is provided for the AO to consider", "claim": "constraint"}, {"kind": "rule", "target": "CATO-012", "fixture": "tests/fixtures/negative/CATO-012.briefing.yaml", "expect": "in an AO cATO decision briefing", "asserts": "The recommendation reaches the AO using an AO cATO decision briefing", "claim": "constraint"}, {"kind": "rule", "target": "CATO-012", "fixture": "tests/fixtures/negative/CATO-012.conditions.yaml", "expect": "the decision briefing leaves out conditions of the authorization", "asserts": "The AO cATO decision briefing includes all conditions of the authorization", "claim": "constraint"}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0044"
     citation: {"ref": "DODCIO-CATO-IG", "page": 10, "anchor": "Continuous Monitoring (CONMON)"}
@@ -381,8 +410,11 @@ requirements:
     locator: "Key Practices"
     context: ""
     statement: "The DevSecOps Platform must be based on one of the DoD Enterprise DevSecOps Reference Designs (RD). The cATO assessment assumes the DevSecOps platform is already authorized to operate and is in a state of continuous monitoring. The applicable continuous monitoring practices will be inherited for use in the cATO authorization. The intent of this part of the assessment is to ensure the organization responsible for the DevSecOps Platform has effectively instituted the required supporting cATO practices for managing risk of an application traversing the DevSecOps pipeline. Relative to the DSOP, the following cATO practices apply:"
-    status: "candidate"
+    status: "partial"
+    reason: "The reference design and the inherited monitoring practices are held by CATO-003; the intent sentence is scope and awaits the user's ruling."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.yaml", "expect": "implements an approved DevSecOps Reference Design", "asserts": "The DevSecOps Platform is based on one of the approved DoD Enterprise DevSecOps Reference Designs", "claim": "constraint", "sentence": "The DevSecOps Platform must be based on one of the DoD Enterprise DevSecOps Reference Designs (RD)."}, {"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.inherited.yaml", "expect": "does not inherit the DSOP's applicable continuous monitoring practices", "asserts": "The applicable continuous monitoring practices are inherited for use in the cATO authorization", "claim": "constraint", "sentence": "The applicable continuous monitoring practices will be inherited for use in the cATO authorization."}]
     work_item: "WI-296"
+    ruling_sought: [{"sentence": "The intent of this part of the assessment is to ensure the organization responsible for the DevSecOps Platform has effectively instituted the required supporting cATO practices for managing risk of an application traversing the DevSecOps pipeline.", "reason": "Intent of the platform assessment, no duty a run can fail: 'the intent of this part of the assessment is to ensure' the practices are instituted; Table 2 scoring is held by CATO-001."}]
   - id: "REQ-DODCIO-CATO-IG-0048"
     citation: {"ref": "DODCIO-CATO-IG", "page": 11, "anchor": "The DSOP has developed and instituted a continuous monitoring strategy."}
     kind: "lettered"
@@ -405,7 +437,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• An application or subsystem manager identifies unique application events, develops Security Information and Event Management (SIEM) monitoring analytics, and provides them to the CSSP."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.yaml", "expect": "the application manager develops SIEM monitoring analytics", "asserts": "The application manager develops SIEM monitoring analytics for unique application events and provides them to the CSSP", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0051"
     citation: {"ref": "DODCIO-CATO-IG", "page": 11, "anchor": "The production system and its monitoring capabilities are configured for unique application"}
@@ -413,7 +446,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• The production system and its monitoring capabilities are configured for unique application traffic inspection and handling of events."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.inspection.yaml", "expect": "configured for unique application traffic inspection", "asserts": "The production system monitoring is configured for unique application traffic inspection and handling of events", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0052"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "If the system uses containers and the Sidecar Container Security Stack (SCSS)"}
@@ -421,7 +455,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "o If the system uses containers and the Sidecar Container Security Stack (SCSS) deployed in a Kubernetes pod, it should be configured for unique application traffic inspection and handling of events. (Note that the SCSS is not required; its use depends on the reference design selected.)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.sidecar.yaml", "expect": "security sidecar is not configured for unique application traffic", "asserts": "A Sidecar Container Security Stack in use is configured for unique application traffic inspection and handling of events", "claim": "constraint", "sentence": "o If the system uses containers and the Sidecar Container Security Stack (SCSS) deployed in a Kubernetes pod, it should be configured for unique application traffic inspection and handling of events."}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0053"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "DSOP control inheritance by an application is identified by the DSOP security"}
@@ -443,7 +478,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• Operational risk tolerances are agreed to and implemented in the pipeline control gates with event trigger routing."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "Operational risk tolerances are agreed to and implemented in the pipeline control gates", "claim": "constraint"}, {"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.routing.yaml", "expect": "routes its event triggers to no role for escalating", "asserts": "The pipeline control gates have event trigger routing", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0056"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "Cyber operations feedback loops are established, and application cybersecurity incidents are reviewed"}
@@ -451,7 +487,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• Cyber operations feedback loops are established, and application cybersecurity incidents are reviewed in collaboration with the DevSecOps team."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.incidents.yaml", "expect": "application cybersecurity incidents are reviewed in collaboration with", "asserts": "Application cybersecurity incidents are reviewed in collaboration with the DevSecOps team", "claim": "constraint", "sentence": "• Cyber operations feedback loops are established, and application cybersecurity incidents are reviewed in collaboration with the DevSecOps team."}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0057"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "The security posture of the application and the DSOP are visualized on"}
@@ -467,7 +504,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The organization establishes a cybersecurity risk governance group comprised of members from the application development team, the Authorizing Official’s security risk assessment team, the DSOP security team, and mission owner, as depicted in Figure 2."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.yaml", "expect": "the cybersecurity risk governance group has no member from the", "asserts": "The cybersecurity risk governance group has members from the development team, the AO's risk assessment team, the DSOP security team and mission owner", "claim": "constraint", "sentence": "• The organization establishes a cybersecurity risk governance group comprised of members from the application development team, the Authorizing Official’s security risk assessment team, the DSOP security team, and mission owner, as depicted in Figure 2."}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0059"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The organization understands and establishes guardrails and control gate risk tolerance promotion"}
@@ -475,7 +513,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The organization understands and establishes guardrails and control gate risk tolerance promotion rules for making automated risk determinations along with event triggers for escalating resolution."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.guardrail.yaml", "expect": "guardrail promotion rules rest on an agreed risk tolerance", "asserts": "Guardrails and control gate risk tolerance promotion rules are established for automated risk determinations", "claim": "constraint"}, {"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.routing.yaml", "expect": "routes its event triggers to no role for escalating", "asserts": "Event triggers on the control gate route to a role for escalating resolution", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0060"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "In the case of a DSOP with a single authorization boundary, its"}
@@ -483,7 +522,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o In the case of a DSOP with a single authorization boundary, its risk tolerance should be used to establish the guardrail and control gate promotion rules."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.dsop.yaml", "expect": "single authorization boundary has no risk tolerance", "asserts": "A DSOP with a single authorization boundary uses its risk tolerance to establish the guardrail and control gate promotion rules", "claim": "constraint", "sentence": "o In the case of a DSOP with a single authorization boundary, its risk tolerance should be used to establish the guardrail and control gate promotion rules."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0061"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The DevSecOps team periodically uses dynamic vulnerability tools, threat actor emulation, pen-testing,"}
@@ -491,7 +531,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The DevSecOps team periodically uses dynamic vulnerability tools, threat actor emulation, pen-testing, and analysis from operations to determine security control effectiveness. This is an area in which some of the testing may be manual, such as pen-testing, but the results of which can be used for control gate pass/fail determination."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.effectiveness.yaml", "expect": "security control effectiveness is not determined with", "asserts": "Dynamic vulnerability tools, threat actor emulation, pen-testing and operations analysis determine security control effectiveness", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0062"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The DevSecOps team continuously validates sub-system secure configurations and security control compliance"}
@@ -506,7 +547,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The DevSecOps team leverages ongoing CSSP monitoring of the production system for non-approved behavior and performing incident forensics to improve the ongoing system security posture. This includes cyber operations intel cell feedback on changes in the threat landscape."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.cssp.yaml", "expect": "the DevSecOps team does not leverage CSSP monitoring for", "asserts": "The DevSecOps team leverages CSSP monitoring for non-approved behavior and incident forensics", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0064"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The DevSecOps team continuously reassesses artifacts in the artifact repository to ensure"}
@@ -514,7 +556,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The DevSecOps team continuously reassesses artifacts in the artifact repository to ensure that the residual risk remains acceptable."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.artifacts.yaml", "expect": "artifacts in the artifact repository are not continuously reassessed", "asserts": "The DevSecOps team continuously reassesses artifacts in the artifact repository for residual risk", "claim": "constraint"}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-IG-0065"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The DevSecOps team continuously visualizes the security posture and residual risk of"}
@@ -530,7 +573,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The DSOP team establishes the technical security controls and risk tolerances required for applications traversing the pipeline. If stricter tolerances need to be applied, the development team should work with the DSOP cATO team to apply them."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.setby.yaml", "expect": "the DSOP team establishes the risk tolerances required for", "asserts": "The DSOP team establishes the technical security controls and risk tolerances required for applications traversing the pipeline", "claim": "constraint", "sentence": "If stricter tolerances need to be applied, the development team should work with the DSOP cATO team to apply them."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0067"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The objective for assessing the DevSecOps teams is to build trust in"}
@@ -546,7 +590,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The organization has a process for ensuring the workforce, based on their role in the organization and DevSecOps platform, is educated, trained, and certified. Possible areas of training include Agile, DevSecOps, secure coding, security automation tools, interpreting vulnerability scanning reports, and the cATO framework."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.yaml", "expect": "education, certification, and training process is not documented", "asserts": "The organization has a process ensuring the workforce is educated, trained, and certified", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0069"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Leadership education and training should also be available and tracked."}
@@ -554,7 +599,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Leadership education and training should also be available and tracked."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.leadership.yaml", "expect": "leadership training on software modernization and cATO methods is not", "asserts": "Leadership education and training is available and tracked", "claim": "constraint", "sentence": "o Leadership education and training should also be available and tracked."}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0070"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "The organization has an onboarding process for team members based on their"}
@@ -562,7 +608,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The organization has an onboarding process for team members based on their role."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.onboarding.yaml", "expect": "no onboarding and offboarding process is defined", "asserts": "The organization has an onboarding process for team members based on their role", "claim": "constraint"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0071"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Member(s) of the team have experience in developing security applications, working in"}
@@ -570,7 +617,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• Member(s) of the team have experience in developing security applications, working in a DevSecOps culture, use of security automation tools, and performing application and system authorizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.experience.yaml", "expect": "no member of the team has experience in", "asserts": "Members of the team have experience in security applications, a DevSecOps culture, security automation tools and authorizations", "claim": "constraint"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0072"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "The team members are trained in the cATO method:"}
@@ -586,7 +634,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Trained on the security automation tools, interpretation of resultant scans, and how they are used in the cATO method,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.security-automation-tools.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained on the security automation tools and how they are used in the cATO method", "claim": "constraint", "sentence": "o Trained on the security automation tools, interpretation of resultant scans, and how they are used in the cATO method,"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0074"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Trained on DevSecOps guardrail and control gate promotion rules and risk tolerances,"}
@@ -594,7 +643,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Trained on DevSecOps guardrail and control gate promotion rules and risk tolerances,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.gates-and-tolerances.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained on DevSecOps guardrail and control gate promotion rules and risk tolerances", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0075"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Trained on the resolution and adjudication of security findings that result in"}
@@ -602,7 +652,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Trained on the resolution and adjudication of security findings that result in exceeding the risk tolerances,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.finding-adjudication.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained on the resolution and adjudication of security findings exceeding the risk tolerances", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0076"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Ability to perform root cause analysis of security findings,"}
@@ -610,7 +661,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Ability to perform root cause analysis of security findings,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.root-cause-analysis.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained in the ability to perform root cause analysis of security findings", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0077"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Trained in continuous monitoring feedback loops for ensuing continuous improvement of system"}
@@ -618,7 +670,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Trained in continuous monitoring feedback loops for ensuing continuous improvement of system security posture."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.feedback-loops.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained in continuous monitoring feedback loops for continuous improvement", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0078"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Trained in the establishment of Plan of Action and Milestones (POA&M) and"}
@@ -626,7 +679,8 @@ requirements:
     locator: "Key Practices.o"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "o Trained in the establishment of Plan of Action and Milestones (POA&M) and security dashboard monitoring."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.poam-and-dashboard.yaml", "expect": "is trained in the cATO method on", "asserts": "Trained in the establishment of POA&M and security dashboard monitoring", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0079"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Organization identifies cultural change challenges and leverages training, collaborative discussion forums, and"}
@@ -634,7 +688,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• Organization identifies cultural change challenges and leverages training, collaborative discussion forums, and senior leadership to help address."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.culture.yaml", "expect": "cultural change challenges are not addressed with", "asserts": "Cultural change challenges are addressed with training, collaborative discussion forums and senior leadership", "claim": "constraint", "sentence": "• Organization identifies cultural change challenges and leverages training, collaborative discussion forums, and senior leadership to help address."}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0080"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Cyber hygiene metrics, such as Mean Time to Patch Vulnerabilities – Average"}
@@ -642,7 +697,8 @@ requirements:
     locator: "Continuous Authorization Metrics.•"
     context: ""
     statement: "• Cyber hygiene metrics, such as Mean Time to Patch Vulnerabilities – Average time between identification of a vulnerability in the DSOP or application and successful production deployment of a patch. Focus on vulnerabilities with high to moderate impact on application or mission."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.hygiene.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines cyber hygiene metrics such as mean time to patch vulnerabilities", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0081"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Trend metrics associated with guardrail and control gate results over time to"}
@@ -650,7 +706,8 @@ requirements:
     locator: "Continuous Authorization Metrics.•"
     context: ""
     statement: "• Trend metrics associated with guardrail and control gate results over time to show improvements in development team efforts at developing secure code with each new sprint and the system’s continuous improvement in its security posture."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.trend.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines trend metrics on guardrail and control gate results over time", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0082"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Feedback Communication Frequency metrics to ensure feedback loops are in place, being"}
@@ -658,7 +715,8 @@ requirements:
     locator: "Continuous Authorization Metrics.•"
     context: ""
     statement: "• Feedback Communication Frequency metrics to ensure feedback loops are in place, being used, and trends showing improvement in security posture."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.feedback-frequency.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines feedback communication frequency metrics showing feedback loops in place", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0083"
     citation: {"ref": "DODCIO-CATO-IG", "page": 14, "anchor": "Metrics associated with continued effectiveness of mitigations against a changing threat landscape."}
@@ -666,7 +724,8 @@ requirements:
     locator: "Continuous Authorization Metrics.•"
     context: ""
     statement: "• Metrics associated with continued effectiveness of mitigations against a changing threat landscape."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.mitigation-effectiveness.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines metrics on continued effectiveness of mitigations against a changing threat", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0084"
     citation: {"ref": "DODCIO-CATO-IG", "page": 15, "anchor": "Security posture dashboard metrics showing stage of application and its security posture"}
@@ -674,7 +733,8 @@ requirements:
     locator: "Continuous Authorization Metrics.•"
     context: ""
     statement: "• Security posture dashboard metrics showing stage of application and its security posture in the context of risk tolerances, security control compliance, and security control effectiveness results."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.posture-dashboard.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines security posture dashboard metrics on the application against risk tolerances", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0085"
     citation: {"ref": "DODCIO-CATO-IG", "page": 15, "anchor": "Container Metrics - measure of the age of containers against the number"}
@@ -818,7 +878,8 @@ requirements:
     locator: "Practical Implementation Advice.•"
     context: ""
     statement: "• Continuous Monitoring must be implemented in all environments, including development, test, and production."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.environments.yaml", "expect": "continuous monitoring is not implemented in the", "asserts": "Continuous Monitoring is implemented in all environments, development, test and production", "claim": "constraint", "sentence": "• Continuous Monitoring must be implemented in all environments, including development, test, and production."}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-IG-0103"
     citation: {"ref": "DODCIO-CATO-IG", "page": 16, "anchor": "Integrated continuous monitoring with auditing to identify thresholds and triggers for active"}
@@ -826,7 +887,8 @@ requirements:
     locator: "Practical Implementation Advice.o"
     context: ""
     statement: "o Integrated continuous monitoring with auditing to identify thresholds and triggers for active incident response."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.plan.yaml", "expect": "automated triggers sit within the auditing and incident response plans", "asserts": "Continuous monitoring is integrated with auditing: triggers sit within the auditing and incident response plans", "claim": "constraint"}, {"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.coupling.yaml", "expect": "is not tightly coupled with the", "asserts": "Continuous monitoring is tightly coupled and integrated with auditing and incident response triggers", "claim": "constraint"}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-IG-0104"
     citation: {"ref": "DODCIO-CATO-IG", "page": 16, "anchor": "Active Cyber Defense must be in place, including a local Security Operations"}
@@ -834,7 +896,8 @@ requirements:
     locator: "Practical Implementation Advice.•"
     context: ""
     statement: "• Active Cyber Defense must be in place, including a local Security Operations Center (SOC) and external CSSP."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.soc.yaml", "expect": "active cyber defense needs a local SOC and an external CSSP", "asserts": "Active Cyber Defense is in place with a local Security Operations Center (SOC) and external CSSP", "claim": "constraint", "sentence": "• Active Cyber Defense must be in place, including a local Security Operations Center (SOC) and external CSSP."}]
     work_item: "WI-286"
   - id: "REQ-DODCIO-CATO-IG-0105"
     citation: {"ref": "DODCIO-CATO-IG", "page": 16, "anchor": "There must be a detailed incident response plan in place with personnel"}
@@ -849,7 +912,8 @@ requirements:
     locator: "Practical Implementation Advice.o"
     context: ""
     statement: "o Create SBOMs for the DSOP and applications passing through it."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.yaml", "expect": "no SBOM for the DSOP with a statement of how it was developed", "asserts": "Create SBOMs for the DSOP and the applications passing through it", "claim": "constraint"}, {"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.export.yaml", "expect": "passing through the DSOP is an automated export", "asserts": "SBOMs are created for applications passing through the DSOP by automated export", "claim": "constraint"}]
     work_item: "WI-297"
   - id: "REQ-DODCIO-CATO-IG-0107"
     citation: {"ref": "DODCIO-CATO-IG", "page": 16, "anchor": "Culture change is a critical component of DevSecOps. It may be more"}
@@ -969,7 +1033,8 @@ requirements:
     locator: "Appendix A. Use Cases"
     context: ""
     statement: "Programs or software factories applying for a DevSecOps cATO should already be in one of the following use case categories."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.usecase.yaml", "expect": "already in one of the use case categories", "asserts": "Programs applying for a DevSecOps cATO are already in one of the use case categories", "claim": "constraint", "sentence": "Programs or software factories applying for a DevSecOps cATO should already be in one of the following use case categories."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-IG-0122"
     citation: {"ref": "DODCIO-CATO-IG", "page": 17, "anchor": "Use Case 1 (Software delivery inside the DevSecOps Platform (DSOP) Boundary): A"}
@@ -995,7 +1060,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: ""
     statement: "This section summarizes the requirements to assess for a cATO. The intent is to provide an abstraction of the practices to provide flexibility to implementing organizations. It also indicates which requirements are threshold (T) and which are objective (O). A threshold requirement must be met, while an objective requirement is one that should be met, but which may not be fully met initially, while still obtaining a cATO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.yaml", "expect": "a threshold requirement must be met", "asserts": "A threshold requirement must be met; an objective requirement may not be fully met initially while still obtaining a cATO", "claim": "constraint", "sentence": "A threshold requirement must be met, while an objective requirement is one that should be met, but which may not be fully met initially, while still obtaining a cATO."}, {"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.decided.yaml", "expect": "a threshold requirement must be met", "asserts": "A threshold requirement must be met while obtaining a cATO: a decided cATO with a threshold requirement unmet is refused", "claim": "constraint", "sentence": "A threshold requirement must be met, while an objective requirement is one that should be met, but which may not be fully met initially, while still obtaining a cATO."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-CATO-IG-0125"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "IC | IC | Key cATO Processes and Practices: Information capture practices"}
@@ -1019,7 +1085,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "IC02 | Identify and capture risk tolerances and thresholds based on an understanding of the criticality of mission, systems, and key system parameters for cybersecurity, cyber resiliency, and cyber survivability. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.criticality.yaml", "expect": "the tolerance is not set from the criticality of mission", "asserts": "Identify and capture risk tolerances and thresholds based on the criticality of mission, systems and key system parameters", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0128"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "IC03 | Identify cyber threats to network and data architecture, assets supporting"}
@@ -1049,7 +1116,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RA01 | Leverage DSOP Zero Trust with both ingress/egress and east/west traffic enforcement. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.yaml", "expect": "DSOP zero trust does not enforce", "asserts": "DSOP Zero Trust enforces both ingress/egress and east/west traffic", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0132"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "RA02 | Leverage a Cloud Native Access Point or Boundary Cloud Access"}
@@ -1057,7 +1125,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RA02 | Leverage a Cloud Native Access Point or Boundary Cloud Access Point. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.access.yaml", "expect": "leverages a Cloud Native Access Point or Boundary Cloud Access Point", "asserts": "Leverage a Cloud Native Access Point or Boundary Cloud Access Point", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0133"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "SA | Security Automation risk determination practices"}
@@ -1073,7 +1142,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA01 | Adjudicate findings, including false positives capture and analysis. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.falsepos.yaml", "expect": "without capturing and analyzing false positives", "asserts": "Adjudicate findings, including false positives capture and analysis", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0135"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA02 | Set guardrail thresholds, control gate risk acceptance"}
@@ -1081,7 +1151,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA02 | Set guardrail thresholds, control gate risk acceptance tolerances, and notification thresholds. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.thresholds.yaml", "expect": "the platform does not set", "asserts": "The platform sets guardrail thresholds, control gate risk acceptance tolerances and notification thresholds", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0136"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA03 | Automate security control configurations and validation. | O"}
@@ -1089,7 +1160,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA03 | Automate security control configurations and validation. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.validation.yaml", "expect": "security control configurations and their validation are not automated", "asserts": "Automate security control configurations and validation", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0137"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA04 | Perform security scanning: dependency analysis, static and"}
@@ -1097,7 +1169,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA04 | Perform security scanning: dependency analysis, static and dynamic application analysis, prioritizing method, and adjudication. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.scanning.yaml", "expect": "security scanning leaves out", "asserts": "Perform security scanning: dependency analysis, static and dynamic application analysis, prioritizing and adjudication", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0138"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA05 | Perform pen-testing and threat emulation: threat modeling, pen-testing methods, and"}
@@ -1105,7 +1178,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA05 | Perform pen-testing and threat emulation: threat modeling, pen-testing methods, and assets. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.pentest.yaml", "expect": "pen-testing and threat emulation leave out", "asserts": "Perform pen-testing and threat emulation: threat modeling, pen-testing methods and assets", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0139"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA06 | Perform risk assessments: mission based, threat based,"}
@@ -1141,7 +1215,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA10 | Capture, visualize, and provide feedback on security findings during pipeline runs. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.findings.yaml", "expect": "security findings during pipeline runs are not", "asserts": "Capture, visualize and provide feedback on security findings during pipeline runs", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0144"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM | Continuous Monitoring practices"}
@@ -1165,7 +1240,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM02 | Establish event triggers: on findings / risk tolerances / change in threat / mitigation effectiveness. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.trigger.yaml", "expect": "no event trigger is established on", "asserts": "Establish event triggers on findings, risk tolerances, change in threat and mitigation effectiveness", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0147"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM03 | Provide availability of findings, plan of action, security posture,"}
@@ -1195,7 +1271,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM06 | Monitor control compliance and continued effectiveness of controls against the changing threat. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.compliance.yaml", "expect": "monitored against the changing threat", "asserts": "Monitor control compliance and continued effectiveness of controls against the changing threat", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0151"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM07 | Establish metrics: identification, collection, and trend analysis. | T"}
@@ -1203,7 +1280,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM07 | Establish metrics: identification, collection, and trend analysis. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.analysis.yaml", "expect": "no metric is identified, collected and trend analyzed", "asserts": "Establish metrics: identification, collection and trend analysis", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0152"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "RM | Continuous Risk Management practices"}
@@ -1219,7 +1297,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RM01 | Establish or assign a group for managing risks. Should include designated AO representative, development security team, DSOP security team, and mission owners | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.yaml", "expect": "the cybersecurity risk governance group has no member from the", "asserts": "The group for managing risks includes the AO representative, development security team, DSOP security team and mission owners", "claim": "constraint", "sentence": "Should include designated AO representative, development security team, DSOP security team, and mission owners | T"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0154"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "RM02 | Establish a method for aggregating findings into a risk posture"}
@@ -1249,7 +1328,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RM05 | RM05 | Establish periodic reviews of risk and risk remediation / adjudication. Establish approach for ad-hoc resolution of risks that exceed thresholds. | T | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.review.yaml", "expect": "no periodic review of risk and no approach for ad-hoc resolution", "asserts": "Establish periodic reviews of risk and an approach for ad-hoc resolution of risks that exceed thresholds", "claim": "presence", "sentence": "Establish approach for ad-hoc resolution of risks that exceed thresholds. | T | T"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0158"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "RM06 | Monitor and respond to security posture, status of metrics, change"}
@@ -1257,7 +1337,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RM06 | Monitor and respond to security posture, status of metrics, change in threat, and effectiveness of controls. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.mitigation-effectiveness.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines metrics to monitor the effectiveness of controls", "claim": "constraint"}, {"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.posture-dashboard.yaml", "expect": "the strategy determines no", "asserts": "The strategy determines metrics to monitor security posture and status on the dashboard", "claim": "constraint"}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-CATO-IG-0159"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP | DSOP cATO practices; for a DSOP that already has an"}
@@ -1273,7 +1354,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP01 | Compliance with capabilities and practices listed in the DevSecOps Fundamentals Guidebook: DevSecOps Tools & Activities [5] and in one of the DoD Enterprise DevSecOps Reference Designs (RD), such as: the DoD Enterprise DevSecOps Reference Design: CNCF Kubernetes [6]. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.guidebook.yaml", "expect": "mapped from the DevSecOps Activities and Tools Guidebook", "asserts": "Compliance with the practices listed in the DevSecOps Fundamentals Guidebook Tools and Activities", "claim": "constraint"}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-CATO-IG-0161"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP02 | Implement zero-trust and boundary access point. | T"}
@@ -1281,7 +1363,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP02 | Implement zero-trust and boundary access point. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.yaml", "expect": "DSOP zero trust does not enforce", "asserts": "Implement zero-trust enforcing east-west and ingress-egress traffic", "claim": "constraint"}, {"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.access.yaml", "expect": "leverages a Cloud Native Access Point or Boundary Cloud Access Point", "asserts": "Implement the boundary access point: a Cloud Native or Boundary Cloud Access Point", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0162"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP03 | Establish a SOC continuous monitoring strategy using the Software Factory."}
@@ -1289,7 +1372,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP03 | Establish a SOC continuous monitoring strategy using the Software Factory. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.soc.yaml", "expect": "the SOC continuous monitoring strategy does not use the software factory", "asserts": "Establish a SOC continuous monitoring strategy using the Software Factory", "claim": "constraint"}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-IG-0163"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP04 | Establish CSSP application monitoring for non-approved or"}
@@ -1297,7 +1381,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP04 | Establish CSSP application monitoring for non-approved or malicious actions. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.cssp.yaml", "expect": "CSSP application monitoring does not watch for", "asserts": "CSSP application monitoring watches for non-approved or malicious actions", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0164"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP05 | Configure the security sidecar for unique application traffic inspection and"}
@@ -1305,7 +1390,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP05 | Configure the security sidecar for unique application traffic inspection and handling events. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.sidecar.yaml", "expect": "security sidecar is not configured for unique application traffic", "asserts": "The security sidecar is configured for unique application traffic inspection and handling events", "claim": "constraint"}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-CATO-IG-0165"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP06 | Identify application control inheritance from the DSOP using a"}
@@ -1327,7 +1413,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP08 | Implement agreed-to risk tolerances in the pipeline guardrails and control gates with event trigger routing. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "Agreed-to risk tolerances are implemented in the pipeline guardrails and control gates", "claim": "constraint"}, {"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.routing.yaml", "expect": "routes its event triggers to no role for escalating", "asserts": "Pipeline control gates implement tolerances with event trigger routing", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-CATO-IG-0168"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP09 | Establish a cyber operations feedback loop and review of application"}
@@ -1335,7 +1422,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP09 | Establish a cyber operations feedback loop and review of application incidents in collaboration with the program office DevSecOps team. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.incidents.yaml", "expect": "application cybersecurity incidents are reviewed in collaboration with", "asserts": "Review of application incidents in collaboration with the program office DevSecOps team", "claim": "constraint"}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-CATO-IG-0169"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP10 | Visualize the security posture of the application and the DSOP"}
@@ -1359,7 +1447,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP01 | Establish an organizational DevSecOps position education, certification, and training process. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.yaml", "expect": "education, certification, and training process is not documented", "asserts": "Establish an organizational DevSecOps position education, certification, and training process", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0172"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "TP02 | Establish hiring position descriptions and certification requirements in line with"}
@@ -1367,7 +1456,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP02 | Establish hiring position descriptions and certification requirements in line with the DoD Cyber Workforce Framework (DCWF). | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.dcwf.yaml", "expect": "hiring position descriptions and certification requirements follow the DCWF", "asserts": "Hiring position descriptions and certification requirements in line with the DCWF", "claim": "constraint"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0173"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "TP03 | Establish a training compliance / validation process to ensure"}
@@ -1375,7 +1465,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP03 | Establish a training compliance / validation process to ensure team members meet cybersecurity education, certification, and training requirements. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.validation.yaml", "expect": "no training compliance and validation process", "asserts": "A training compliance and validation process ensures team members meet education, certification, and training requirements", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0174"
     citation: {"ref": "DODCIO-CATO-IG", "page": 22, "anchor": "TP04 | Ensure that members of the team have experience in developing"}
@@ -1383,7 +1474,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP04 | Ensure that members of the team have experience in developing secure applications, working in a DevSecOps culture, and assessing security practices. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.assessing.yaml", "expect": "no member of the team has experience in", "asserts": "Members of the team have experience in developing secure applications, a DevSecOps culture and assessing security practices", "claim": "constraint"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0175"
     citation: {"ref": "DODCIO-CATO-IG", "page": 22, "anchor": "TP05 | Train team members in the cATO method and practices. |"}
@@ -1391,7 +1483,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP05 | Train team members in the cATO method and practices. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.yaml", "expect": "is trained in the cATO method on", "asserts": "Train team members in the cATO method and practices, the reference design among them", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0176"
     citation: {"ref": "DODCIO-CATO-IG", "page": 22, "anchor": "TP06 | Identify cultural change challenges and the change management approach. |"}
@@ -1399,7 +1492,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP06 | Identify cultural change challenges and the change management approach. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.approach.yaml", "expect": "change management approach are not identified", "asserts": "Identify cultural change challenges and the change management approach", "claim": "presence"}]
     work_item: "WI-291"
   - id: "REQ-DODCIO-CATO-IG-0177"
     citation: {"ref": "DODCIO-CATO-IG", "page": 22, "anchor": "TP07 | Expand the use of (specialized) training programs for senior"}
@@ -1407,7 +1501,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP07 | Expand the use of (specialized) training programs for senior technology leaders and project managers on software modernization and cATO methods and practices. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.leadership.yaml", "expect": "leadership training on software modernization and cATO methods is not", "asserts": "Training programs for senior leaders and project managers on software modernization and cATO methods", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0178"
     citation: {"ref": "DODCIO-CATO-IG", "page": 22, "anchor": "TP08 | Train the team in performing threat actor analysis, mitigation practices,"}
@@ -1415,7 +1510,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "TP08 | Train the team in performing threat actor analysis, mitigation practices, developing secure code, security automation, determining mitigation effectiveness, the software factory, continuous monitoring, and risk management. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-009", "fixture": "tests/fixtures/negative/CATO-009.tp08.yaml", "expect": "the team is not trained in", "asserts": "Train the team in threat actor analysis, mitigation, secure code, security automation and risk management", "claim": "constraint"}]
     work_item: "WI-298"
   - id: "REQ-DODCIO-CATO-IG-0179"
     citation: {"ref": "DODCIO-CATO-IG", "page": 23, "anchor": "Authorizing Official (AO) is “a senior Federal official or executive with the"}
@@ -1447,9 +1543,8 @@ requirements:
     locator: "Appendix C. Glossary"
     context: ""
     statement: "Continuous Authority to Operate (cATO) is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant. This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."
-    status: "partial"
-    reason: "Sufficient maturity is judged on evidence the ledger does not hold (WI-287)"
-    evidence: [{"kind": "citation", "asserts": "AD-CATO states the evidence a continuous authorization rests on", "target": "AD-CATO", "claim": "presence"}]
+    status: "covered"
+    evidence: [{"kind": "citation", "asserts": "AD-CATO states the evidence a continuous authorization rests on", "target": "AD-CATO", "claim": "presence"}, {"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "The organization has implemented continuous monitoring, active cyber defense and secure software supply chain requirements: each competency demonstrated", "claim": "constraint", "sentence": "This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-IG-0183"
     citation: {"ref": "DODCIO-CATO-IG", "page": 23, "anchor": "Control gate is a defined point in the project lifecycle when specific"}
@@ -1473,7 +1568,8 @@ requirements:
     locator: "Approach"
     context: ""
     statement: "The program office, mission owners, risk assessors, and authorization official collaboratively develop a set of acceptable risk tolerances."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.authors.yaml", "expect": "the risk tolerances are not developed collaboratively with", "asserts": "The program office, mission owners, risk assessors and authorizing official collaboratively develop the acceptable risk tolerances", "claim": "constraint"}]
     work_item: "WI-295"
     promoted: {"reason": "Names who sets the tolerances: the program office, mission owners, risk assessors and authorizing official develop them together. No extraction marker on the verb; a duty on run roles."}
   - id: "REQ-DODCIO-CATO-IG-0186"
@@ -1482,7 +1578,8 @@ requirements:
     locator: "Approach"
     context: ""
     statement: "The software factory employs risk thresholds that align to organizational risk management tolerances."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "The software factory employs risk thresholds in its control gates that align to agreed risk tolerances", "claim": "constraint"}, {"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.yaml", "expect": "cATO risk tolerances are based on the Component's risk posture", "asserts": "Risk thresholds align to organizational risk management tolerances from the Component's risk posture guidance", "claim": "constraint"}]
     work_item: "WI-295"
     promoted: {"reason": "The software factory must keep its thresholds aligned to organizational risk management tolerances; indicative verb, so the extractor found no marker."}
   - id: "REQ-DODCIO-CATO-IG-0187"
@@ -1491,7 +1588,9 @@ requirements:
     locator: "Assessment Method"
     context: ""
     statement: "For example, for CONMON, the software factory must have the automation to generate, analyze and display machine evidence; also, there must be good processes in use (e.g., incident response); and the people must be trained in both the automation and the processes."
-    status: "candidate"
+    status: "partial"
+    reason: "CATO-003 holds the DSOP automation enabling CONMON as the run states it, and CATO-013 the training; generating, analyzing and displaying machine evidence, and processes in use, are not judged."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.enables.yaml", "expect": "the DSOP automation does not enable", "asserts": "For CONMON, the software factory must have the automation: the DSOP automation enables CONMON", "claim": "constraint"}, {"kind": "rule", "target": "CATO-013", "fixture": "tests/fixtures/negative/CATO-013.yaml", "expect": "is trained in the cATO method on", "asserts": "The people must be trained in both the automation and the processes of the cATO method", "claim": "constraint"}]
     work_item: "WI-293"
     promoted: {"reason": "Holds three musts on the software factory, its processes and its people; rejected as an example, yet it is the only prose statement of the crosswalk that Table 1 shows as an image."}
   - id: "REQ-DODCIO-CATO-IG-0188"
@@ -1500,9 +1599,12 @@ requirements:
     locator: "Appendix B. Requirements"
     context: ""
     statement: "An organization could leverage this table for identifying which practices are necessary for their cATO implementation and the assessors would review this implementation to determine its effectiveness."
-    status: "candidate"
+    status: "partial"
+    reason: "A could/would sentence on how Table 2 is used; the scoring is held by CATO-001 and the sentence awaits the user's ruling."
+    evidence: [{"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.selected.yaml", "expect": "the objective ones the plan selects are not scored", "asserts": "The practices an organization identifies from the table as necessary for its cATO implementation are reviewed by the assessors: each selected one is scored", "claim": "constraint"}, {"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "Assessors review the organization's Table 2 practices at M-6 and score them in cato.yaml", "claim": "presence"}]
     work_item: "WI-287"
     promoted: {"reason": "Says how Table 2 is used: the organization picks its practices and the assessors review their effectiveness. Governs every row of Table 2."}
+    ruling_sought: [{"sentence": "An organization could leverage this table for identifying which practices are necessary for their cATO implementation and the assessors would review this implementation to determine its effectiveness.", "reason": "Permission: an organization 'could leverage' Table 2 to choose its practices and assessors 'would review' them; scoring of the rows is held by CATO-001."}]
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);
 # sample them with `rmf conformance sample --rejected`.
 rejected:

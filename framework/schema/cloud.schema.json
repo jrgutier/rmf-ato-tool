@@ -1,0 +1,1326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:cloud",
+  "title": "runs/<run-id>/artifacts/data/cloud.yaml",
+  "description": "The cloud service offerings a CSO-hosted system uses (its mission owner is PER-SPONSOR) and the DTM 24-001 cybersecurity activities performed for them (S-4; M-2 adds events and reports). Required once service-agreements.yaml names the cloud. CLOUD-* judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mission_impact_level",
+    "offerings",
+    "checklist",
+    "cssp",
+    "incident_response",
+    "sources"
+  ],
+  "properties": {
+    "mission_impact_level": {
+      "title": "The impact level of the mission and its data",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "data",
+        "disclosure_effect",
+        "determined_by",
+        "date",
+        "sources"
+      ],
+      "properties": {
+        "level": {
+          "title": "Impact level for the mission and mission data",
+          "enum": [
+            "IL2",
+            "IL4",
+            "IL5",
+            "IL6"
+          ]
+        },
+        "data": {
+          "title": "Kinds of mission data hosted",
+          "type": "array",
+          "items": {
+            "enum": [
+              "public",
+              "nonpublic-unclassified",
+              "mission-operations",
+              "cui",
+              "cui-above-il4",
+              "unclassified-nss",
+              "classified-secret",
+              "classified-above-secret"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "disclosure_effect": {
+          "title": "Expected adverse effect of unauthorized disclosure",
+          "enum": [
+            "limited",
+            "serious"
+          ]
+        },
+        "determined_by": {
+          "title": "Who determined the impact level: the mission AO",
+          "type": "string",
+          "pattern": "^PER-[A-Z]+$"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "offerings": {
+      "title": "Cloud service offerings the system is hosted on",
+      "type": "array",
+      "items": {
+        "title": "One cloud service offering the system is hosted on",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "provider",
+          "service_model",
+          "leveraged_authorization",
+          "authorization",
+          "package_review",
+          "inheritance",
+          "configuration_guidance",
+          "contract",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CSO-\\d{2}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "provider": {
+            "title": "The cloud service provider",
+            "type": "string",
+            "minLength": 1
+          },
+          "service_model": {
+            "title": "Service model of the offering",
+            "enum": [
+              "iaas",
+              "paas",
+              "saas"
+            ]
+          },
+          "leveraged_authorization": {
+            "title": "The leveraged authorization of the offering, an id in leveraged-authorizations.yaml",
+            "type": "string",
+            "pattern": "^LA-\\d{2}$"
+          },
+          "authorization": {
+            "title": "The FedRAMP authorization or DoD provisional authorization (PA) of the offering",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "basis",
+              "impact_level",
+              "issued_by",
+              "conditions",
+              "package_location"
+            ],
+            "properties": {
+              "basis": {
+                "title": "FedRAMP authorization or DoD provisional authorization",
+                "enum": [
+                  "fedramp",
+                  "dod-pa"
+                ],
+                "x-enforces": [
+                  "REQ-DODCIO-RECIPROCITY-0002"
+                ]
+              },
+              "path": {
+                "title": "How a DoD PA was reached: a new Cloud Authorization Process, or an IL2 offering uplifted to IL4/5",
+                "enum": [
+                  "new",
+                  "uplift"
+                ]
+              },
+              "fedramp_baseline": {
+                "title": "FedRAMP baseline the offering is authorized at",
+                "enum": [
+                  "li-saas",
+                  "low",
+                  "moderate",
+                  "high"
+                ]
+              },
+              "impact_level": {
+                "title": "Impact level the offering is authorized at",
+                "enum": [
+                  "IL2",
+                  "IL4",
+                  "IL5",
+                  "IL6"
+                ]
+              },
+              "issued_by": {
+                "title": "Who issued it: FedRAMP (JAB or agency) or DISA",
+                "type": "string",
+                "minLength": 1
+              },
+              "conditions": {
+                "title": "Conditions outlined in the provisional authorization",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "package_location": {
+                "title": "Where the security authorization package and inheritance are obtained",
+                "enum": [
+                  "emass",
+                  "fedramp-repository"
+                ]
+              },
+              "package_access_request": {
+                "title": "The FedRAMP Package Access Request form submitted to obtain the body of evidence",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "submitted_by",
+                  "date"
+                ],
+                "properties": {
+                  "submitted_by": {
+                    "title": "Who submitted it: the mission owner",
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  }
+                }
+              },
+              "uplift_request": {
+                "title": "The DoD Sponsor's DCAS request to DISA to begin the Cloud Authorization Process for an uplift",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "requested_by",
+                  "via",
+                  "date"
+                ],
+                "properties": {
+                  "requested_by": {
+                    "title": "The DoD Sponsor",
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  "via": {
+                    "title": "Request channel",
+                    "enum": [
+                      "dcas",
+                      "other"
+                    ]
+                  },
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  }
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "basis": {
+                      "const": "fedramp"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "fedramp_baseline",
+                    "package_access_request"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "basis": {
+                      "const": "dod-pa"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "path"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "path": {
+                      "const": "uplift"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "uplift_request"
+                  ]
+                }
+              }
+            ]
+          },
+          "package_review": {
+            "title": "Review of the FedRAMP and DoD provisional authorization artifacts to understand the inherited risks",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reviewed_by",
+              "covers",
+              "accepted_by",
+              "date"
+            ],
+            "properties": {
+              "reviewed_by": {
+                "title": "Who reviewed: the mission owner, PM and authorizing official",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                },
+                "minItems": 1
+              },
+              "covers": {
+                "title": "What the review covers",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "data-types",
+                    "impact-level",
+                    "conditions",
+                    "inherited-risks",
+                    "csp-cybersecurity-services",
+                    "supporting-evaluations"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "accepted_by": {
+                "title": "Authorizing official who accepted the selected CSP cybersecurity services",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "inheritance": {
+            "title": "How the mission owner inherits controls from the offering",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "documents",
+              "reference"
+            ],
+            "properties": {
+              "documents": {
+                "title": "The provider documents used to understand control implementation (inherited, hybrid or the mission owner's)",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "ssp",
+                    "srtm",
+                    "cis-crm"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "configuration_guidance": {
+            "title": "Configuration guidance the CSP systems comply with (CM-6)",
+            "type": "array",
+            "items": {
+              "enum": [
+                "cc-srg",
+                "srg",
+                "stig",
+                "other"
+              ]
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "additional_measures": {
+            "title": "Additional security measures negotiated with the IT service provider",
+            "type": "array",
+            "items": {
+              "title": "A negotiated measure",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "measure",
+                "in_contract",
+                "assessed",
+                "approved_by"
+              ],
+              "properties": {
+                "measure": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "in_contract": {
+                  "title": "Whether the measure is documented in the contract agreement",
+                  "type": "boolean"
+                },
+                "assessed": {
+                  "title": "Whether the newly included security-related information was assessed",
+                  "type": "boolean"
+                },
+                "approved_by": {
+                  "title": "Who approved it",
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                }
+              }
+            }
+          },
+          "contract": {
+            "title": "The CSO contract and the cybersecurity clauses it includes",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reference",
+              "dfars_239_76",
+              "clauses",
+              "dco_data_shared_with"
+            ],
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dfars_239_76": {
+                "title": "Whether the contract follows DFARS Subpart 239.76",
+                "type": "boolean"
+              },
+              "clauses": {
+                "title": "Cybersecurity clauses the contract includes",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "accreditation-boundary",
+                    "licensing",
+                    "cssp-incident-notification",
+                    "threat-representative-testing",
+                    "csp-dco-data",
+                    "corrective-action-process",
+                    "inspection-access",
+                    "report-delivery"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 0
+              },
+              "dco_data_shared_with": {
+                "title": "Parties the CSP shares data for CSSP DCO with",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "cssp",
+                    "authorizing-official",
+                    "dow-sponsor"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 0
+              }
+            }
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "checklist": {
+      "title": "The cybersecurity activity tracking checklist (DTM 24-001 Att 3, 2.c)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generated_by",
+        "coordinated_with",
+        "validated_by",
+        "date",
+        "activities",
+        "sources"
+      ],
+      "properties": {
+        "generated_by": {
+          "title": "Who generated it: the mission owner and PM",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "minItems": 1
+        },
+        "coordinated_with": {
+          "title": "Who it was developed in coordination with: the CSSP, PM and authorizing official",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "minItems": 1
+        },
+        "validated_by": {
+          "title": "Authorizing official who validated who is responsible for each activity",
+          "type": "string",
+          "pattern": "^PER-[A-Z]+$"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "nss_policies": {
+          "title": "Policies cybersecurity activities on an NSS follow",
+          "type": "array",
+          "items": {
+            "enum": [
+              "CNSSP 32",
+              "NSD 42",
+              "EO 14028",
+              "NSM-08"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 0
+        },
+        "activities": {
+          "title": "One row per Table 1 activity and offering",
+          "type": "array",
+          "items": {
+            "title": "One row of the checklist: who performs a Table 1 activity for an offering",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "activity",
+              "offering",
+              "performer"
+            ],
+            "properties": {
+              "activity": {
+                "title": "DTM 24-001 Table 1 cybersecurity activity",
+                "enum": [
+                  "external-vulnerability-scans",
+                  "web-vulnerability-scans",
+                  "dcrt-operations",
+                  "dcat-operations",
+                  "penetration-testing",
+                  "intrusion-assessment",
+                  "awareness-and-training",
+                  "endpoint-security",
+                  "apply-security-configurations",
+                  "mitigate-vulnerabilities",
+                  "monitor-vulnerability-compliance",
+                  "malware-protection",
+                  "asw-boundary",
+                  "asw-application",
+                  "warning-intelligence",
+                  "endpoint-visibility",
+                  "correlate-threat-data",
+                  "malware-notification",
+                  "nsm-boundary",
+                  "enclave-monitoring",
+                  "uam-detect",
+                  "uam-audit-data",
+                  "uam-correlate",
+                  "cpcon-implementation",
+                  "cpcon-notification",
+                  "incident-categorization",
+                  "incident-reporting",
+                  "incident-handling",
+                  "incident-law-enforcement",
+                  "incident-counterintelligence",
+                  "incident-analysis"
+                ]
+              },
+              "offering": {
+                "type": "string",
+                "pattern": "^CSO-\\d{2}$"
+              },
+              "performer": {
+                "title": "Who performs it",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "entity"
+                ],
+                "properties": {
+                  "entity": {
+                    "title": "Kind of performer: CSSP, DCRT, other DoW entity, commercial entity, not applicable, or none (a gap)",
+                    "enum": [
+                      "cssp",
+                      "dcrt",
+                      "dow-entity",
+                      "commercial",
+                      "not-applicable",
+                      "none"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "gap": {
+                "title": "A gap in the activity, its risk accepted by the authorizing official",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "risk",
+                  "accepted_by",
+                  "date"
+                ],
+                "properties": {
+                  "risk": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted_by": {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  }
+                }
+              },
+              "dow_retains": {
+                "title": "What DoW keeps when awareness and training is outsourced",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "training-requirement",
+                    "compliance-oversight",
+                    "effectiveness-criteria"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 0
+              },
+              "approved_by": {
+                "title": "Authorizing official approving endpoint configurations and compliance policies",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "cssp": {
+      "title": "What the CSSP does for the CSO-hosted system and the visibility it is given",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agreement",
+        "duties",
+        "visibility",
+        "detection_tested",
+        "sources"
+      ],
+      "properties": {
+        "agreement": {
+          "title": "The CSSP agreement in service-agreements.yaml covering the cloud",
+          "type": "string",
+          "pattern": "^SVA-\\d{3}$"
+        },
+        "duties": {
+          "title": "CSSP duties for the CSO",
+          "type": "array",
+          "items": {
+            "enum": [
+              "correlate-threat-data",
+              "aggregate-csp-information",
+              "dodin-status",
+              "incident-handling-support",
+              "community-awareness",
+              "risk-decision-support",
+              "malware-notification",
+              "anti-malware-vendor-contact",
+              "detection-processes",
+              "cpcon-compliance-monitoring",
+              "incident-analysis",
+              "adequacy-determination"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "visibility": {
+          "title": "What the mission owner gives the CSSP",
+          "type": "array",
+          "items": {
+            "enum": [
+              "endpoint-devices",
+              "audit-logs",
+              "csp-supporting-information",
+              "csp-findings"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "detection_tested": {
+          "title": "Date the CSSP last tested its detection processes",
+          "$ref": "#/$defs/date"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "external_assessments": {
+      "title": "External assessments of the CSO-hosted system",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_process",
+        "identified_with",
+        "types",
+        "sources_considered",
+        "ccri_coordination",
+        "results_shared_with",
+        "sources"
+      ],
+      "properties": {
+        "request_process": {
+          "title": "The mission owner's process to request and allow VAA and external assessment activities",
+          "type": "string",
+          "minLength": 1
+        },
+        "identified_with": {
+          "title": "Who the mission owner identified the need, type and sources with: the PM and authorizing official",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "minItems": 1
+        },
+        "types": {
+          "title": "Most appropriate types of external assessment",
+          "type": "array",
+          "items": {
+            "enum": [
+              "dcrt",
+              "dcat",
+              "penetration-test",
+              "intrusion-assessment"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "sources_considered": {
+          "title": "Possible sources for the external assessments",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "ccri_coordination": {
+          "title": "How remote assessments are coordinated with the mission owner before CCRI and CORI inspections",
+          "type": "string",
+          "minLength": 1
+        },
+        "results_shared_with": {
+          "title": "Who assessment results and artifacts go to",
+          "type": "array",
+          "items": {
+            "enum": [
+              "mission-owner",
+              "authorizing-official",
+              "cssp",
+              "jfhq-dodin"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "dcrt_reports": {
+          "title": "DCRT reports and their release to JFHQ-DODIN",
+          "type": "array",
+          "items": {
+            "title": "A DCRT report",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "briefed",
+              "released_to_jfhq_dodin",
+              "covers"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "briefed": {
+                "$ref": "#/$defs/date"
+              },
+              "released_to_jfhq_dodin": {
+                "title": "Release to JFHQ-DODIN; null while the 30 days run",
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/date"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "covers": {
+                "title": "What the report includes",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "all-findings",
+                    "significant-vulnerabilities",
+                    "exploited-vulnerability-analysis"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "events": {
+      "title": "DCAT events, penetration tests and intrusion assessments",
+      "type": "array",
+      "items": {
+        "title": "One DCAT event, penetration test or intrusion assessment on the CSO",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "performer",
+          "date",
+          "description",
+          "approval",
+          "constraints_basis",
+          "mission_details",
+          "results"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EVT-\\d{2}$"
+          },
+          "kind": {
+            "title": "Kind of event",
+            "enum": [
+              "dcat",
+              "penetration-test",
+              "intrusion-assessment"
+            ]
+          },
+          "performer": {
+            "title": "Who performs it",
+            "enum": [
+              "dow-entity",
+              "commercial"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "description": {
+            "title": "Detailed description of the operation, with architecture diagrams",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reference",
+              "architecture_diagrams",
+              "delivered_to"
+            ],
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "architecture_diagrams": {
+                "type": "boolean"
+              },
+              "delivered_to": {
+                "title": "Who received it",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "mission-owner",
+                    "authorizing-official",
+                    "cssp",
+                    "jfhq-dodin"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              }
+            }
+          },
+          "approval": {
+            "title": "Mission owner's written approval to perform the operation",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "written",
+              "date"
+            ],
+            "properties": {
+              "by": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "written": {
+                "type": "boolean"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "constraints_basis": {
+            "title": "What the constraints are based on",
+            "type": "array",
+            "items": {
+              "enum": [
+                "safety",
+                "real-world-mission-execution",
+                "operational-security"
+              ]
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "mission_details": {
+            "title": "Mission details provided to JFHQ-DODIN before execution",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "submitted_by",
+              "date"
+            ],
+            "properties": {
+              "submitted_by": {
+                "title": "Who submitted them to JFHQ-DODIN",
+                "enum": [
+                  "performer",
+                  "mission-owner"
+                ]
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "results": {
+            "title": "Results with the exploited vulnerable points and remediation recommendations",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "delivered_to",
+              "remediation_recommendations"
+            ],
+            "properties": {
+              "delivered_to": {
+                "title": "Who received them",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "mission-owner",
+                    "authorizing-official",
+                    "cssp",
+                    "jfhq-dodin"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "remediation_recommendations": {
+                "type": "boolean"
+              }
+            }
+          },
+          "lessons_learned_to": {
+            "title": "Who received the lessons learned",
+            "type": "array",
+            "items": {
+              "enum": [
+                "mission-owner",
+                "authorizing-official",
+                "cssp",
+                "jfhq-dodin"
+              ]
+            },
+            "uniqueItems": true,
+            "minItems": 0
+          },
+          "fedramp_demonstrated": {
+            "title": "A commercial performer demonstrated the capability within DoW standards during its FedRAMP authorization",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "deliverables": {
+      "title": "Reports and notices performers owe",
+      "type": "array",
+      "items": {
+        "title": "A report or notice a performer owes the mission owner, AO and CSSP",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "activity",
+          "kind",
+          "recipients",
+          "cadence"
+        ],
+        "properties": {
+          "activity": {
+            "title": "The Table 1 activity it comes from",
+            "enum": [
+              "external-vulnerability-scans",
+              "web-vulnerability-scans",
+              "dcrt-operations",
+              "dcat-operations",
+              "penetration-testing",
+              "intrusion-assessment",
+              "awareness-and-training",
+              "endpoint-security",
+              "apply-security-configurations",
+              "mitigate-vulnerabilities",
+              "monitor-vulnerability-compliance",
+              "malware-protection",
+              "asw-boundary",
+              "asw-application",
+              "warning-intelligence",
+              "endpoint-visibility",
+              "correlate-threat-data",
+              "malware-notification",
+              "nsm-boundary",
+              "enclave-monitoring",
+              "uam-detect",
+              "uam-audit-data",
+              "uam-correlate",
+              "cpcon-implementation",
+              "cpcon-notification",
+              "incident-categorization",
+              "incident-reporting",
+              "incident-handling",
+              "incident-law-enforcement",
+              "incident-counterintelligence",
+              "incident-analysis"
+            ]
+          },
+          "kind": {
+            "title": "Kind of deliverable",
+            "enum": [
+              "scan-notification",
+              "scan-executive-summary",
+              "situational-awareness",
+              "endpoint-alerts",
+              "correlation-analysis",
+              "compliance-statistics",
+              "malware-procedures",
+              "malware-incident-report",
+              "malware-trend-report",
+              "corrective-action-report",
+              "violation-report",
+              "control-state-change",
+              "threat-report",
+              "anomalous-event-report",
+              "action-report"
+            ]
+          },
+          "recipients": {
+            "title": "Who receives it",
+            "type": "array",
+            "items": {
+              "enum": [
+                "mission-owner",
+                "authorizing-official",
+                "cssp",
+                "jfhq-dodin"
+              ]
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "cadence": {
+            "title": "When it is delivered",
+            "enum": [
+              "each-event",
+              "upon-request",
+              "immediately",
+              "annually",
+              "continuous"
+            ]
+          }
+        }
+      }
+    },
+    "uam": {
+      "title": "DODIN user activity monitoring on the CSO-hosted system",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "procedures",
+        "data_shared_with",
+        "correlation",
+        "sources"
+      ],
+      "properties": {
+        "legal_review": {
+          "title": "The DoW Component legal advisor's review of the provider's ability to legally perform UAM",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "date"
+          ],
+          "properties": {
+            "by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "ao_decision": {
+          "title": "The authorizing official's risk decision on outsourcing UAM",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "date"
+          ],
+          "properties": {
+            "by": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "procedures": {
+          "title": "UAM procedures documented and shared with the mission owner",
+          "type": "array",
+          "items": {
+            "enum": [
+              "uam-procedures",
+              "anomalous-activity-response",
+              "chain-of-custody",
+              "audit-data-preservation"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "data_shared_with": {
+          "title": "Who collected UAM data is shared with",
+          "type": "array",
+          "items": {
+            "enum": [
+              "mission-owner",
+              "authorizing-official",
+              "cssp",
+              "jfhq-dodin"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "correlation": {
+          "title": "Correlation of insider threat audit data",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "coordinates_with",
+            "analysts_trained"
+          ],
+          "properties": {
+            "coordinates_with": {
+              "title": "Who the DoW entity coordinates with",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "component-insider-threat-program",
+                  "law-enforcement",
+                  "counterintelligence"
+                ]
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "analysts_trained": {
+              "type": "boolean"
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "incident_response": {
+      "title": "Shared incident response responsibilities between the CSP, CSSP and mission owner",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cssp_poc",
+        "cpt_reports_to",
+        "responsibilities",
+        "sources"
+      ],
+      "properties": {
+        "cssp_poc": {
+          "title": "The CSSP agreement named as cybersecurity POC in all documentation with the CSP",
+          "type": "string",
+          "pattern": "^SVA-\\d{3}$"
+        },
+        "cpt_reports_to": {
+          "title": "Whom the assigned cyber protection team reports to",
+          "enum": [
+            "cssp",
+            "other"
+          ]
+        },
+        "responsibilities": {
+          "title": "Who does what",
+          "type": "array",
+          "items": {
+            "title": "One responsibility",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "duty",
+              "party"
+            ],
+            "properties": {
+              "duty": {
+                "title": "The duty",
+                "enum": [
+                  "support-cssp-incident-handling",
+                  "report-events-and-incidents",
+                  "provide-incident-artifacts",
+                  "safeguard-incident-information",
+                  "report-csp-findings",
+                  "damage-assessment",
+                  "post-incident-feedback",
+                  "countermeasures",
+                  "corrective-actions",
+                  "deliver-ir-artifacts",
+                  "operational-impact",
+                  "passive-countermeasures",
+                  "retain-incident-artifacts",
+                  "make-data-available"
+                ]
+              },
+              "party": {
+                "title": "Who holds it",
+                "enum": [
+                  "csp",
+                  "cssp",
+                  "mission-owner",
+                  "incident-handler"
+                ]
+              },
+              "recipients": {
+                "title": "Who it reports to",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "mission-owner",
+                    "authorizing-official",
+                    "cssp",
+                    "jfhq-dodin"
+                  ]
+                },
+                "uniqueItems": true,
+                "minItems": 0
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012), a product file with optional anchor or an artifact.",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

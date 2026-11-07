@@ -1,0 +1,18 @@
+rule: CATO-006
+bases:
+- minimal
+description: scanning without dynamic analysis
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.scanning
+  value:
+  - dependency-analysis
+  - static-analysis
+  - prioritization
+  - adjudication
+expect:
+  errors:
+  - CATO-006
+  messages:
+  - security scanning leaves out dynamic-analysis

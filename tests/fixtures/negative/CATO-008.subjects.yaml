@@ -1,0 +1,17 @@
+rule: CATO-008
+bases:
+- minimal
+description: exercises without elevated privileges
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: people.tabletop_exercises.0.subjects
+  value:
+  - incident-response
+  - control-gate-trigger
+  - security-alert
+expect:
+  errors:
+  - CATO-008
+  messages:
+  - the tabletop exercises do not include elevated-privileges

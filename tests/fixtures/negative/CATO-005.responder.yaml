@@ -1,0 +1,14 @@
+rule: CATO-005
+bases:
+- minimal
+description: a gate alert with no role to respond
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.control_gates.0.alert_responder
+  value: whoever is on call
+expect:
+  errors:
+  - CATO-005
+  messages:
+  - "CG-01: the description of how to respond to the gate's alert names no role that responds: whoever is on call"
