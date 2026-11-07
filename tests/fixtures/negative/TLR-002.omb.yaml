@@ -1,0 +1,17 @@
+rule: TLR-002
+bases:
+- minimal
+description: a remove action not reviewed against OMB policy
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: actions.2.law_policy.reviewed
+  value:
+  - legislation
+  - regulation
+  - policy
+expect:
+  errors:
+  - TLR-002
+  messages:
+  - action is not tested against omb-policy

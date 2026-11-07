@@ -10,7 +10,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "The Classified System Overlay identifies security control specifications needed to safeguard classified information stored, processed, or transmitted by national security systems (NSS). This overlay is baseline independent and can be used with any NSS baseline (security and privacy) to safeguard classified information. As a result, there may be overlap of controls between an NSS baseline and controls identified in this overlay.1 Organizations must effectively manage security and privacy risks related to safeguarding classified information. To do so, the security and privacy control baselines are implemented together to support risk management decisions related to confidentiality, integrity, and/or availability as well as manage enterprise privacy risks. The Classified System Overlay provides details on why it is necessary to apply specified controls for safeguarding classified information. The security and privacy baselines in CNSSI No. 1253 are “starting points” to guide an organization in controls applicable to their system once categorization is complete. Organizations are permitted to tailor2 the applied baseline to address specific mission or business needs and risks. Controls identified in this overlay generally have a legal/regulatory requirement associated with them and should not be tailored out without significant justification. For example, AT-2 (Literacy Training and Awareness) is in all NSS Security Control Baselines and the NSS Privacy Control Baseline because it is required by a regulatory requirement. An organization may tailor AT-2 out based on a risk assessment of the sufficiency of training and awareness provided. However, if an organization has a system with classified information on it and this overlay is applied, this overlay specifically identifies AT-2 as a control to support the safeguarding of classified information."
-    status: "candidate"
+    status: "partial"
+    reason: "Removing a control a legal or regulatory requirement requires fails; the significant justification for removing other overlay controls is prose"
+    evidence: [{"kind": "rule", "asserts": "Controls with a legal or regulatory requirement associated are not tailored out of the overlay", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.required.yaml", "expect": "so it is not tailored out of the baseline", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Controls identified in this overlay generally have a legal/regulatory requirement associated with them and should not be tailored out without significant justification."}]
     work_item: "WI-224"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0002"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 3, "anchor": "CNSSP No. 25, National Policy for Public Key Infrastructure in National Security"}
@@ -106,7 +108,9 @@ requirements:
     locator: "3.•"
     context: ""
     statement: "• The system does not store, process, or transmit classified information that requires protection within any Special Access Program (SAP), which includes sensitive compartmented information (SCI).10"
-    status: "candidate"
+    status: "covered"
+    reason: "The assumption is in tailoring-inputs.yaml for the Classified System Overlay, and a run applying the overlay fails until it is tested"
+    evidence: [{"kind": "rule", "asserts": "The system's assumption on Special Access Program classified information is tested when the classified overlay applies", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.cls.yaml", "expect": "does not test the assumption", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-217"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0014"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "All persons authorized for access to the system have been granted a"}
@@ -114,7 +118,9 @@ requirements:
     locator: "3.•"
     context: ""
     statement: "• All persons authorized for access to the system have been granted a security clearance for the highest classification of information stored, processed, or transmitted by the system; however, all may not have a need to know."
-    status: "candidate"
+    status: "covered"
+    reason: "The assumption is in tailoring-inputs.yaml for the Classified System Overlay, and a run applying the overlay fails until it is tested"
+    evidence: [{"kind": "rule", "asserts": "The system's assumption on security clearance for the highest classification is tested when the classified overlay applies", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.cls.yaml", "expect": "does not test the assumption", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-217"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0015"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "All persons authorized for access to the system are U.S. citizens."}
@@ -122,7 +128,9 @@ requirements:
     locator: "3.•"
     context: ""
     statement: "• All persons authorized for access to the system are U.S. citizens."
-    status: "candidate"
+    status: "covered"
+    reason: "The assumption is in tailoring-inputs.yaml for the Classified System Overlay, and a run applying the overlay fails until it is tested"
+    evidence: [{"kind": "rule", "asserts": "The system's assumption on persons authorized for access are U.S. citizens is tested when the classified overlay applies", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.cls.yaml", "expect": "does not test the assumption", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-217"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0016"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "The organization provides facility and personnel security to ensure only personnel with"}
@@ -130,7 +138,9 @@ requirements:
     locator: "3.•"
     context: ""
     statement: "• The organization provides facility and personnel security to ensure only personnel with security clearances for all information stored, processed, or transmitted by the system are allowed unescorted access to the facility and/or areas within the facility where the system resides."
-    status: "candidate"
+    status: "covered"
+    reason: "The assumption is in tailoring-inputs.yaml for the Classified System Overlay, and a run applying the overlay fails until it is tested"
+    evidence: [{"kind": "rule", "asserts": "The system's assumption on facility and personnel security for unescorted access is tested when the classified overlay applies", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.cls.yaml", "expect": "does not test the assumption", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-217"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0017"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "Does the system of interest by intent and design11 store, process, or"}
@@ -233,7 +243,9 @@ requirements:
     locator: ""
     context: "Table 1: Classified System Overlay Summary of Control Specifications"
     statement: "Controls with Implementation Considerations Table 2 (below) identifies controls that may be required when certain conditions are met by systems containing classified information to ensure security and privacy concerns related to the specified control are adequately addressed. If selected (e.g., part of a baseline, part of another overlay, tailoring decision), special consideration must be applied when these controls are allocated to any system handling classified information. See Section 7, Implementation Considerations, for additional information about these controls."
-    status: "candidate"
+    status: "partial"
+    reason: "Each Table 2 condition is answered and one that applies selects its controls; the special consideration when allocating them is S-4 prose"
+    evidence: [{"kind": "rule", "asserts": "Table 2 controls may be required when certain conditions are met, and a condition that applies must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Controls with Implementation Considerations Table 2 (below) identifies controls that may be required when certain conditions are met by systems containing classified information to ensure security and privacy concerns related to the specified control are adequately addressed."}, {"kind": "prose", "asserts": "Systems containing classified information answer the conditions under which controls are allocated", "target": "playbooks/S/S-2.md", "claim": "presence", "sentence": "If selected (e.g., part of a baseline, part of another overlay, tailoring decision), special consideration must be applied when these controls are allocated to any system handling classified information."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0030"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 40, "anchor": "Justification to Select: EO 13873 requires the USG to protect against supply chain risks from foreign adversaries, reducing the probability of adversaries successfully identifying and targeting the supply chain, and limiting harm that can be done by unauthorized persons to classified information. Reference(s): EO"}
@@ -265,7 +277,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Organizations should consider the following control guidance when implementing specific system capabilities on systems used to process classified information. Controls that do not warrant selection or exclusion for safeguarding classified information require further consideration when systems containing classified information employ these controls (e.g., part of a baseline, part of another overlay, tailoring decision) to ensure safeguarding considerations related to that control are adequately addressed. For example, AC-18, which discusses use of wireless access, is not mandatory for systems storing, processing, or transmitting classified information. However, when AC-18 is implemented for systems that contain classified information, organizations must consider how to implement this control in a way that properly protects classified information. AC-18(1), Wireless Access | Authentication and Encryption"
-    status: "candidate"
+    status: "partial"
+    reason: "Every condition of Section 7 is answered for a classified system; how AC-18 is implemented to protect classified information is S-4 prose"
+    evidence: [{"kind": "rule", "asserts": "Systems used to process classified information answer each condition of the control guidance for specific system capabilities", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.yaml", "expect": "is not answered by tailoring.yaml overlay_conditions", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Organizations should consider the following control guidance when implementing specific system capabilities on systems used to process classified information."}, {"kind": "rule", "asserts": "Controls employed by systems containing classified information are selected when their condition applies", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Controls that do not warrant selection or exclusion for safeguarding classified information require further consideration when systems containing classified information employ these controls (e.g., part of a baseline, part of another overlay, tailoring decision) to ensure safeguarding considerations related to that control are adequately addressed."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0034"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 42, "anchor": "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected. If wireless capabilities are enabled, there is a risk of unauthorized access to, and exfiltration of, classified information. If this control applies/is selected, please see EO 13526, Sec 4.1, para. (d), (f) and (g) and CNSSP No. 17. AC-18(5), Wireless Access"}
@@ -273,7 +287,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected. If wireless capabilities are enabled, there is a risk of unauthorized access to, and exfiltration of, classified information. If this control applies/is selected, please see EO 13526, Sec 4.1, para. (d), (f) and (g) and CNSSP No. 17. AC-18(5), Wireless Access | Antennas and Transmission Power Levels"
-    status: "candidate"
+    status: "partial"
+    reason: "Wireless access applying fails until AC-18(1) is selected; the pointer to EO 13526 and CNSSP 17 holds nothing a run records"
+    evidence: [{"kind": "rule", "asserts": "If the organization intends to use wireless access for the system of interest, the control must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0035"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 42, "anchor": "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected. If wireless capabilities are enabled, there is a risk of unauthorized access to, and exfiltration of, classified information. If this control applies/is selected, please see EO 13526, Sec 4.1, para. (d), (f) and (g) and CNSSP No. 17. AC-19(5), Access Control"}
@@ -281,7 +297,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected. If wireless capabilities are enabled, there is a risk of unauthorized access to, and exfiltration of, classified information. If this control applies/is selected, please see EO 13526, Sec 4.1, para. (d), (f) and (g) and CNSSP No. 17. AC-19(5), Access Control for Mobile Devices | Full Device or Container-Based Encryption"
-    status: "candidate"
+    status: "partial"
+    reason: "Wireless access applying fails until AC-18(5) is selected; the pointer to EO 13526 and CNSSP 17 holds nothing a run records"
+    evidence: [{"kind": "rule", "asserts": "If the organization intends to use wireless access for the system of interest, the control must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Guidance: If the organization intends to use wireless access for the system of interest, this control must be selected."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0036"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 42, "anchor": "Guidance: If the organization intends to allow mobile devices as part of"}
@@ -289,7 +307,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Guidance: If the organization intends to allow mobile devices as part of the system of interest, this control must be selected. If this control applies/is selected, please see EO 13526, Sec 4.1, para. (f) and (g); EO 13587, Sec 5.2, para. (a); and CNSSP No. 17 for guidance. SA-9(8), External System Services | Processing and Storage Location – U.S. Jurisdiction"
-    status: "candidate"
+    status: "partial"
+    reason: "The mobile devices condition is answered and selects AC-19(5) by the same clause as wireless; the pointer to EO 13526 and CNSSP 17 holds nothing a run records"
+    evidence: [{"kind": "rule", "asserts": "If the organization intends to allow mobile devices for the system of interest, this control must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Guidance: If the organization intends to allow mobile devices as part of the system of interest, this control must be selected."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0037"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 42, "anchor": "Guidance: If the organization intends to process and store classified information on"}
@@ -297,7 +317,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Guidance: If the organization intends to process and store classified information on an external system, outside of the United States, then the geographic location must be restricted to facilities located within in the legal jurisdictional boundary of the United States and this control must be selected. If this control applies/is selected, please refer to EO 13526, Sec 4.1, para. (f) and (g) and CNSSP No. 32."
-    status: "candidate"
+    status: "partial"
+    reason: "The external system condition selects SA-9(8); restricting facilities to U.S. jurisdiction is the control's implementation, not held, and the pointer holds nothing"
+    evidence: [{"kind": "rule", "asserts": "If the organization intends to process classified information on an external system outside the United States, this control must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Guidance: If the organization intends to process and store classified information on an external system, outside of the United States, then the geographic location must be restricted to facilities located within in the legal jurisdictional boundary of the United States and this control must be selected."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0038"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 43, "anchor": "Guidance: If the organization intends to implement capabilities on its systems or"}
@@ -305,7 +327,9 @@ requirements:
     locator: "b.(b).7"
     context: ""
     statement: "Guidance: If the organization intends to implement capabilities on its systems or system components to determine if organizational data has been exfiltrated or improperly removed (whether passively or actively, or from adversaries or unintended user procedures) from the organization, this control must be selected. If this control applies/is selected, please refer to EO 13526, Sec 4.1, para. (f) and (g)."
-    status: "candidate"
+    status: "partial"
+    reason: "The data tainting condition selects SI-20 by the same clause; the pointer to EO 13526 holds nothing a run records"
+    evidence: [{"kind": "rule", "asserts": "If the organization intends to determine if organizational data has been exfiltrated, this control must be selected", "target": "TLR-005", "fixture": "tests/fixtures/negative/TLR-005.applies.yaml", "expect": "must be selected, and the baseline does not select it", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Guidance: If the organization intends to implement capabilities on its systems or system components to determine if organizational data has been exfiltrated or improperly removed (whether passively or actively, or from adversaries or unintended user procedures) from the organization, this control must be selected."}]
     work_item: "WI-219"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0039"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 43, "anchor": "The terms used in this overlay are all defined in CNSSI No."}

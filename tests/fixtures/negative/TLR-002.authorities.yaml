@@ -1,0 +1,20 @@
+rule: TLR-002
+bases:
+- minimal
+description: a removal on inapplicable circumstances that names no authority
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: actions.2.basis
+  value: circumstance-not-applicable
+- op: delete_field
+  file: artifacts/data/tailoring.yaml
+  path: actions.2.scoping
+- op: delete_field
+  file: artifacts/data/tailoring.yaml
+  path: actions.2.downgrade
+expect:
+  errors:
+  - TLR-002
+  messages:
+  - law_policy names no authority whose circumstances were tested

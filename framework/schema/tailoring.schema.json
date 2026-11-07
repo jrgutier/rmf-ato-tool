@@ -2,20 +2,123 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:tailoring",
   "title": "runs/<run-id>/artifacts/data/tailoring.yaml",
-  "description": "Control tailoring actions (S-2; part of ART-BASELINE).",
+  "description": "Control tailoring actions (S-2; part of ART-BASELINE), and the tests S-2 runs before it tailors: the baseline and overlay assumptions, the need for assurance and the overlay conditions. TLR-001 to TLR-006 hold what the fields mean.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "actions"
   ],
   "properties": {
+    "assumptions": {
+      "description": "One record per assumption of framework/baselines/tailoring-inputs.yaml that applies to the run (TLR-003).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "holds",
+          "rationale",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AS-[A-Z]+-\\d+$"
+          },
+          "holds": {
+            "title": "Whether the assumption under the control baseline holds for this system",
+            "type": "boolean"
+          },
+          "controls": {
+            "title": "Controls whose tailoring actions revisit or supplement the control selection for the assumption",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/control_id"
+            }
+          },
+          "overlays": {
+            "title": "Overlays applied for the assumption",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          },
+          "outcome": {
+            "title": "An assumption that applies was revisited and the selected controls already address it",
+            "const": "revisited-no-change"
+          }
+        }
+      }
+    },
+    "assurance": {
+      "description": "Whether additional assurance-related controls are needed to reach the trustworthiness the system requires (CNSSI 1253 3.2.2 item 3.f.5; TLR-004).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "additional_needed",
+        "rationale",
+        "sources"
+      ],
+      "properties": {
+        "additional_needed": {
+          "title": "Additional assurance-related controls are needed to increase trustworthiness",
+          "type": "boolean"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "overlay_conditions": {
+      "description": "Answers to the conditions an applied overlay names (framework/baselines/tailoring-inputs.yaml; TLR-005).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "overlay",
+          "condition",
+          "applies",
+          "sources"
+        ],
+        "properties": {
+          "overlay": {
+            "type": "string",
+            "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+          },
+          "condition": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "applies": {
+            "title": "The overlay condition applies to the system, so its controls must be selected",
+            "type": "boolean"
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      }
+    },
     "actions": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "control_id",
           "action",
           "rationale",
           "sources"
@@ -29,11 +132,243 @@
               "add",
               "remove",
               "compensating",
-              "parameter"
+              "parameter",
+              "specification"
             ]
           },
           "compensating_for": {
             "$ref": "#/$defs/control_id"
+          },
+          "source": {
+            "title": "Where the compensating control comes from: the SP 800-53 catalog, or another source",
+            "enum": [
+              "catalog",
+              "other"
+            ]
+          },
+          "other_control": {
+            "title": "A compensating control adopted from a source other than the catalog",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title",
+              "origin"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^ORG-[A-Z0-9-]+$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "origin": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "catalog_search": {
+            "title": "The catalog controls considered before adopting a compensating control from another source",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "considered",
+              "finding"
+            ],
+            "properties": {
+              "considered": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/control_id"
+                },
+                "x-enforces": [
+                  "REQ-SP800-53B-0081"
+                ],
+                "title": "The catalog controls considered as compensating controls"
+              },
+              "finding": {
+                "title": "The catalog does not contain a suitable compensating control",
+                "const": "no-suitable-control",
+                "x-enforces": [
+                  "REQ-SP800-53B-0081"
+                ]
+              }
+            }
+          },
+          "cannot_implement": {
+            "title": "Why the baseline control cannot be implemented",
+            "type": "string",
+            "minLength": 1
+          },
+          "equivalence": {
+            "title": "How the compensating control provides equivalent or comparable protection",
+            "type": "string",
+            "minLength": 1
+          },
+          "risk": {
+            "title": "The assessment and acceptance of the risk of the compensating control",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "assessment",
+              "accepted_by",
+              "sources"
+            ],
+            "properties": {
+              "assessment": {
+                "type": "string",
+                "minLength": 1
+              },
+              "accepted_by": {
+                "title": "The authorizing official or designated representative accepts the risk of the compensating control",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          },
+          "basis": {
+            "title": "The basis for removing a control: a scoping consideration, no risk for the control to mitigate, or a legal or policy requirement whose circumstances do not apply",
+            "enum": [
+              "scoping",
+              "no-risk",
+              "circumstance-not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1253-0041"
+            ]
+          },
+          "scoping": {
+            "title": "The scoping consideration applied",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "consideration"
+            ],
+            "properties": {
+              "consideration": {
+                "title": "Scoping considerations of CNSSI 1253 3.2.2 item 3.b and SP 800-53B 2.4",
+                "enum": [
+                  "implementation-applicability-placement",
+                  "operational-environmental",
+                  "technology",
+                  "mission-business",
+                  "security-objective",
+                  "legal-policy"
+                ],
+                "x-enforces": [
+                  "REQ-CNSSI1253-0109"
+                ]
+              }
+            }
+          },
+          "downgrade": {
+            "title": "A downgrade under the security objective consideration",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "objectives",
+              "sources",
+              "security_relevant_unaffected"
+            ],
+            "properties": {
+              "objectives": {
+                "title": "The one or two security objectives the downgraded control supports",
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "c",
+                    "i",
+                    "a"
+                  ]
+                }
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              },
+              "security_relevant_unaffected": {
+                "title": "The downgrade does not adversely affect the protection of security-relevant information",
+                "type": "boolean"
+              }
+            }
+          },
+          "law_policy": {
+            "title": "The test of a remove or compensating action against the laws, regulations and policies, OMB policy among them, that the control carries",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reviewed",
+              "requires_control",
+              "sources"
+            ],
+            "properties": {
+              "reviewed": {
+                "title": "What the action was reviewed against",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "legislation",
+                    "regulation",
+                    "policy",
+                    "omb-policy"
+                  ]
+                }
+              },
+              "requires_control": {
+                "title": "A legislative, regulatory or policy requirement requires the control for this system",
+                "type": "boolean"
+              },
+              "authorities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "title": "The legislation, regulations and policies read, and for basis circumstance-not-applicable the requirement whose circumstances do not apply"
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          },
+          "assurance": {
+            "title": "The added control is an assurance-related control added for trustworthiness",
+            "type": "boolean"
+          },
+          "specification": {
+            "title": "Organization-defined control specification information for implementation",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "placement"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "placement": {
+                "title": "Whether the specification is part of the control statement or a separate control addendum",
+                "enum": [
+                  "statement",
+                  "addendum"
+                ],
+                "x-enforces": [
+                  "REQ-CNSSI1253-0071"
+                ]
+              }
+            }
           },
           "parameter": {
             "type": "object",
@@ -55,15 +390,35 @@
           },
           "rationale": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R2-0434"
+            ],
+            "title": "The justification and rationale for the tailoring decision"
           },
           "sources": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/$defs/source"
-            }
+            "$ref": "#/$defs/sources"
           }
+        },
+        "if": {
+          "properties": {
+            "source": {
+              "const": "other"
+            }
+          },
+          "required": [
+            "source"
+          ]
+        },
+        "then": {
+          "required": [
+            "other_control"
+          ]
+        },
+        "else": {
+          "required": [
+            "control_id"
+          ]
         }
       }
     }
@@ -73,6 +428,13 @@
       "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
       "type": "string",
       "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
     },
     "source": {
       "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:allocation",
   "title": "runs/<run-id>/artifacts/data/allocation.yaml",
-  "description": "Control allocation (S-3; part of ART-BASELINE): system-specific, hybrid or common, and the components that implement each control.",
+  "description": "Control allocation (S-3; part of ART-BASELINE): system-specific, hybrid or common, the components that implement each control, the requirements each control satisfies (TLR-009), and the determination for each common control provider (TLR-010).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -49,6 +49,79 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          },
+          "requirements": {
+            "title": "The security and privacy requirements of ART-REQ the control is intended to satisfy",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^REQ-\\d{2,3}$"
+            }
+          }
+        }
+      }
+    },
+    "providers": {
+      "description": "One record per common control provider an allocation names (TLR-010).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "provider",
+          "determination"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "determination": {
+            "title": "The determination that the common controls on offer protect the inheriting system commensurate with risk",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "commensurate",
+              "parameters_examined",
+              "implementation_info",
+              "sources"
+            ],
+            "properties": {
+              "by": {
+                "title": "The system owner and the authorizing official or designated representative determine the inherited protection",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                }
+              },
+              "commensurate": {
+                "title": "The common controls provide protection commensurate with risk for the inheriting system",
+                "type": "boolean"
+              },
+              "parameters_examined": {
+                "title": "The control parameters were examined when determining that the common control is adequate",
+                "type": "boolean"
+              },
+              "implementation_info": {
+                "title": "The provider's current implementation information and assessment results",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/source"
+                }
+              },
+              "sources": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/source"
+                }
+              }
             }
           }
         }

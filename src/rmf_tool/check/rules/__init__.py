@@ -18,6 +18,7 @@ from rmf_tool.check.rules import (
     generated,
     hybrid,
     journal,
+    tailoring,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -64,6 +65,17 @@ RULES: dict[str, Rule] = {
     "RAR-003": consistency.rar_courses,
     "DIAS-001": consistency.dias_controls,
     "PKG-003": coverage.data_elements,
+    "TLR-001": tailoring.compensating,
+    "TLR-002": tailoring.removal,
+    "TLR-003": tailoring.assumptions,
+    "TLR-004": tailoring.assurance,
+    "TLR-005": tailoring.overlay_conditions,
+    "TLR-006": tailoring.specification,
+    "TLR-007": tailoring.enhancements,
+    "TLR-008": tailoring.capabilities,
+    "TLR-009": tailoring.requirement_trace,
+    "TLR-010": tailoring.inheritance,
+    "TLR-011": tailoring.capability_gaps,
     "RUN-VER-001": config.old_contract,
     "INV-BND-001": consistency.inventory_in_boundary,
     "INV-BND-002": consistency.boundary_in_inventory,

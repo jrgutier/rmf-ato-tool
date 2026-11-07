@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 100 rules, 36 repo-scope and 64 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -915,6 +915,184 @@ rules:
       - REQ-CNSSI1254-0006
       - REQ-CNSSI1254-0012
       - REQ-CNSSI1254-0039
+  - id: TLR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a compensating control stands for no baseline control, one the SSP implements, or lacks its catalog search, reason or risk acceptance by the AO or AODR
+    fixture: tests/fixtures/negative/TLR-001.yaml
+    hint: "Each compensating action names a baseline control it cannot implement, a catalog or other source (other only after a catalog search found no suitable control), and a risk assessed in ART-RA and accepted by PER-AO or PER-AODR."
+    enforces:
+      - REQ-CNSSI1253-0068
+      - REQ-SP800-18R1-0093
+      - REQ-SP800-34R1-0038
+      - REQ-SP800-53B-0074
+      - REQ-SP800-53B-0076
+      - REQ-SP800-53B-0077
+      - REQ-SP800-53B-0079
+      - REQ-SP800-53B-0081
+  - id: TLR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a remove action lacks its basis or scoping consideration, a downgrade its three conditions, or a remove or compensating action the law and policy test (a requirement whose circumstances do not apply names its authority)
+    fixture: tests/fixtures/negative/TLR-002.yaml
+    hint: "A remove names its basis and scoping consideration; a security-objective downgrade names its objectives, rests on ART-RA and leaves security-relevant information protected; remove and compensating actions record law_policy against legislation, regulation, policy and OMB policy, and a required control stays."
+    enforces:
+      - REQ-CNSSI1253-0041
+      - REQ-CNSSI1253-0109
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0001
+      - REQ-FIPS200-0008
+      - REQ-SP800-18R1-0091
+      - REQ-SP800-18R1-0092
+      - REQ-SP800-18R1-0094
+      - REQ-SP800-18R1-0095
+      - REQ-SP800-37R2-0305
+      - REQ-SP800-53B-0057
+      - REQ-SP800-53B-0066
+      - REQ-SP800-53B-0067
+      - REQ-SP800-53B-0072
+      - REQ-SP800-53B-0079
+      - REQ-SP800-53B-0131
+      - REQ-SP800-53B-0132
+  - id: TLR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: an assumption under the baselines or an applied overlay is untested, or its failure or application leaves the selection unrevisited
+    fixture: tests/fixtures/negative/TLR-003.yaml
+    hint: "Record each assumption of framework/baselines/tailoring-inputs.yaml in tailoring.yaml; a failed baseline assumption names tailored controls or overlays, an additional assumption that holds names controls in the baseline or added, overlays, or outcome revisited-no-change."
+    enforces:
+      - REQ-CNSSI1253-0020
+      - REQ-CNSSI1253-0030
+      - REQ-CNSSI1253E-ATT1-TEMPLATE-0078
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0013
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0014
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0015
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0016
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0045
+      - REQ-SP800-53B-0041
+      - REQ-SP800-53B-0130
+  - id: TLR-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: no assurance determination, or needed assurance with no assurance-related control added
+    fixture: tests/fixtures/negative/TLR-004.yaml
+    hint: "Record tailoring.yaml assurance; when additional_needed, add a control `rmf catalog show --fields assurance` marks as contributing to assurance."
+    enforces:
+      - REQ-CNSSI1253-0074
+      - REQ-SP800-160V1R1-0503
+      - REQ-SP800-39-0122
+  - id: TLR-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: an applied overlay's condition is unanswered, or applies and its controls are not selected
+    fixture: tests/fixtures/negative/TLR-005.yaml
+    hint: "Answer each overlay_conditions entry of framework/baselines/tailoring-inputs.yaml for the applied overlays; a condition that applies adds its controls."
+    enforces:
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0029
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0033
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0034
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0035
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0036
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0037
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0038
+  - id: TLR-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a specification action carries no specification information or names a control outside the baseline
+    fixture: tests/fixtures/negative/TLR-006.yaml
+    hint: "A specification action names a selected control and gives specification.text and placement."
+    enforces:
+      - REQ-CNSSI1253-0071
+      - REQ-SP800-53B-0085
+  - id: TLR-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-1
+    summary: a control enhancement is selected without its base control, or implemented while the base is not
+    fixture: tests/fixtures/negative/TLR-007.yaml
+    hint: "Keep the base control of every selected enhancement, and implement it before or with the enhancement."
+    enforces:
+      - REQ-CNSSI1253E-ATT1-TEMPLATE-0080
+      - REQ-SP800-53B-0034
+      - REQ-SP800-53R5-0052
+      - REQ-SP800-53R5-0057
+  - id: TLR-008
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-1
+    summary: a capability maps a control the catalog does not contain
+    fixture: tests/fixtures/negative/TLR-008.yaml
+    hint: "Map each capability to the SP 800-53 catalog controls that support it."
+    enforces:
+      - REQ-SP800-53AR5-0324
+  - id: TLR-009
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-3
+    summary: a control traces to no requirement of ART-REQ, or a requirement is satisfied by no control
+    fixture: tests/fixtures/negative/TLR-009.yaml
+    hint: "List the REQ-## IDs in ART-REQ and name, on each allocation, the requirements the control satisfies."
+    enforces:
+      - REQ-CNSSI1254-0069
+      - REQ-CNSSP12-0028
+      - REQ-SP800-18R2-0048
+      - REQ-SP800-18R2-0075
+      - REQ-SP800-37R2-0056
+  - id: TLR-010
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-3
+    summary: a common control provider has no inheritance determination by the system owner and AO or AODR, one not commensurate with risk, or one that did not examine parameters
+    fixture: tests/fixtures/negative/TLR-010.yaml
+    hint: "Record providers in allocation.yaml: determination by PER-PM and PER-AO or PER-AODR, commensurate, parameters_examined and the provider's implementation information."
+    enforces:
+      - REQ-SP800-53B-0058
+      - REQ-SP800-53R5-0068
+  - id: TLR-011
+    scope: run
+    severity: W
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-1
+    summary: a capability maps to a control the baseline does not select
+    fixture: tests/fixtures/negative/TLR-011.yaml
+    hint: "S-2 weighs supplementing the control, or the capability is recorded as not fully held."
   - id: DIAS-001
     scope: run
     severity: E

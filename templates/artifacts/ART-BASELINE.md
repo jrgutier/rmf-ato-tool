@@ -20,11 +20,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Common controls available for inheritance
 
-<<FILL: per provider: what is offered, fully or in part, and its authorization, with tokens>>
+<<FILL: per provider: what is offered, fully or in part, its authorization, and the system owner's and AO's determination (allocation.yaml providers) that it protects the system commensurate with risk, with tokens>>
 
 ## Tailoring and allocation
 
-<<FILL: summary of artifacts/data/tailoring.yaml and allocation.yaml and who produced them, with tokens>>
+<<FILL: summary of artifacts/data/tailoring.yaml (assumptions tested, the assurance determination, overlay conditions, and each remove and compensating action with its law and policy test) and allocation.yaml (the requirements each control satisfies), any capabilities.yaml mapping, and who produced them, with tokens>>
 
 ## Requirements to address in tailoring
 

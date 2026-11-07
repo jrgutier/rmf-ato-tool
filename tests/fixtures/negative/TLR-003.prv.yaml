@@ -1,0 +1,17 @@
+rule: TLR-003
+bases:
+- minimal
+description: a run applying a Privacy Overlay set leaves its assumption untested
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253F-ATT6-PRIVACY-ACCT
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - TLR-003
+  messages:
+  - does not test the assumption AS-PRV-1

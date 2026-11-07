@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:tailoring-inputs",
+  "title": "framework/baselines/tailoring-inputs.yaml",
+  "description": "The baseline and overlay assumptions and the overlay conditions Task S-2 tests a system against (TLR-003, TLR-005).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assumptions", "overlay_conditions"],
+  "properties": {
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "when", "citation"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^AS-[A-Z]+-\\d+$"},
+          "text": {"type": "string", "minLength": 1},
+          "when": {
+            "description": "holds-false: the baselines rest on it, so a system where it fails revisits the selection. holds-true: the baselines do not address it, so a system where it holds supplements.",
+            "enum": ["holds-false", "holds-true"]
+          },
+          "overlay": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
+          "citation": {"$ref": "#/$defs/citation"}
+        }
+      }
+    },
+    "overlay_conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["overlay", "id", "question", "controls", "citation"],
+        "properties": {
+          "overlay": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+          "question": {"type": "string", "minLength": 1},
+          "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}},
+          "citation": {"$ref": "#/$defs/citation"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"},
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "page", "anchor"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "page": {"type": "integer", "minimum": 1},
+        "anchor": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

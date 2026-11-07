@@ -1465,8 +1465,11 @@ requirements:
     locator: "2.2"
     context: "SELECTING CONTROL BASELINES"
     statement: "Privacy control enhancements in Tables 3-1 through 3-20 in Chapter Three cannot be selected and implemented without the selection and implementation of the associated base control. Such actions may require collaboration with security programs in cases where the security program has responsibility for the base control. Organizations ensure that the responsibility for the selection and implementation of controls is clearly defined between the information security and privacy programs."
-    status: "candidate"
+    status: "partial"
+    reason: "An enhancement selected or implemented without its base control fails; the split of responsibility between the security and privacy programs is not recorded"
+    evidence: [{"kind": "rule", "asserts": "Privacy control enhancements cannot be selected without the selection of the associated base control", "target": "TLR-007", "fixture": "tests/fixtures/negative/TLR-007.yaml", "expect": "is selected without the selection of its base control", "claim": "constraint", "holds_when": "S-1 or S-2 is active", "sentence": "Privacy control enhancements in Tables 3-1 through 3-20 in Chapter Three cannot be selected and implemented without the selection and implementation of the associated base control."}, {"kind": "rule", "asserts": "Privacy control enhancements cannot be implemented without the implementation of the associated base control", "target": "TLR-007", "fixture": "tests/fixtures/negative/TLR-007.base.yaml", "expect": "and the implementation of its base control", "claim": "constraint", "holds_when": "S-1 or S-2 is active", "sentence": "Privacy control enhancements in Tables 3-1 through 3-20 in Chapter Three cannot be selected and implemented without the selection and implementation of the associated base control."}]
     work_item: "WI-327"
+    ruling_sought: [{"sentence": "Such actions may require collaboration with security programs in cases where the security program has responsibility for the base control.", "reason": "Such actions may require collaboration with security programs: a permission that no run can fail"}]
   - id: "REQ-SP800-53B-0035"
     citation: {"ref": "SP800-53B", "page": 22, "anchor": "The control baselines in Chapter Three address the protection needs of a"}
     kind: "indicative"
@@ -1521,8 +1524,11 @@ requirements:
     locator: "2.3"
     context: "CONTROL BASELINE ASSUMPTIONS Specific assumptions that underlie the control baselines in Chapter Three include:"
     statement: "If any of the above assumptions are not valid, then some of the security controls allocated to the control baselines in Chapter Three may not be applicable—a situation that can be addressed by applying the tailoring guidance in Section 2.4 and the results of organization- and system-level risk assessments. Additional assumptions that are not addressed in the baselines include:"
-    status: "candidate"
+    status: "partial"
+    reason: "An applying additional assumption fails until it names controls selected or added, an overlay, or a revisited-no-change outcome; the first sentence is a permission awaiting the user's ruling"
+    evidence: [{"kind": "rule", "asserts": "If the assumptions are not valid, the controls allocated to the baselines are addressed by applying tailoring guidance", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.untouched.yaml", "expect": "does not hold, and no tailoring action revisits", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "If any of the above assumptions are not valid, then some of the security controls allocated to the control baselines in Chapter Three may not be applicable—a situation that can be addressed by applying the tailoring guidance in Section 2.4 and the results of organization- and system-level risk assessments."}, {"kind": "rule", "asserts": "Additional assumptions not addressed in the baselines are tested, and one that applies names controls in the baseline or supplemented by an add action", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.unadded.yaml", "expect": "is neither in the baseline nor supplemented by an add action", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Additional assumptions that are not addressed in the baselines include:"}]
     work_item: "WI-217"
+    ruling_sought: [{"sentence": "If any of the above assumptions are not valid, then some of the security controls allocated to the control baselines in Chapter Three may not be applicable—a situation that can be addressed by applying the tailoring guidance in Section 2.4 and the results of organization- and system-level risk assessments.", "reason": "Some baseline controls may not be applicable when an assumption fails, a situation that can be addressed by tailoring: a permission to tailor, which no run can fail; TLR-003 still requires a failed assumption to be answered"}]
   - id: "REQ-SP800-53B-0042"
     citation: {"ref": "SP800-53B", "page": 22, "anchor": "Insider threats exist within organizations."}
     kind: "lettered"
@@ -1647,16 +1653,22 @@ requirements:
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES"
     statement: "Tailoring decisions can be based on the timing and applicability of selected controls under certain conditions. That is, security and privacy controls may not apply in every situation, or the parameter values for assignment operations may change under certain circumstances. Federal agencies conduct baseline tailoring activities in accordance with OMB policy. In certain situations, OMB may prohibit agencies from tailoring specific security or privacy controls."
-    status: "candidate"
+    status: "partial"
+    reason: "Every remove and compensating action is tested against OMB policy along with law, regulation and policy; the other two sentences describe when tailoring may apply and await the user's ruling"
+    evidence: [{"kind": "rule", "asserts": "Federal agencies conduct baseline tailoring action activities tested against OMB policy", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.omb.yaml", "expect": "action is not tested against", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Federal agencies conduct baseline tailoring activities in accordance with OMB policy."}]
     work_item: "WI-224"
+    ruling_sought: [{"sentence": "Tailoring decisions can be based on the timing and applicability of selected controls under certain conditions.", "reason": "Tailoring decisions can be based on timing and applicability: a permission"}, {"sentence": "That is, security and privacy controls may not apply in every situation, or the parameter values for assignment operations may change under certain circumstances.", "reason": "Controls may not apply in every situation, or parameter values may change: an explanation of the permission before it"}]
   - id: "REQ-SP800-53B-0058"
     citation: {"ref": "SP800-53B", "page": 24, "anchor": "Common controls are controls that may be inherited by one or more"}
     kind: "modal"
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES"
     statement: "Common controls are controls that may be inherited by one or more organizational systems. If a system inherits a common control provided by another entity (internal or external), there is no need to implement the control within that system. Organizational decisions on which controls are designated as common controls may affect the responsibilities of individual system owners with regard to the implementation of the controls in a baseline.29 Common control providers ensure that current implementation information and assessment results are available to facilitate decision making by system owners and authorizing officials. System owners and authorizing officials determine if the common controls available for inheritance actually provide protection commensurate with risk for inheriting systems.30"
-    status: "candidate"
+    status: "partial"
+    reason: "The system owner and AO determination for each provider is checked; the definition, the provider's own duty to publish results and how designation shifts responsibilities hold nothing a run can fail"
+    evidence: [{"kind": "rule", "asserts": "System owners and authorizing officials determine if common controls provide protection commensurate with risk", "target": "TLR-010", "fixture": "tests/fixtures/negative/TLR-010.by.yaml", "expect": "system owners and authorizing officials determine if the common controls provide protection commensurate with risk", "claim": "constraint", "holds_when": "S-3 is active", "sentence": "System owners and authorizing officials determine if the common controls available for inheritance actually provide protection commensurate with risk for inheriting systems.30"}, {"kind": "rule", "asserts": "Common controls available for inheritance must provide protection commensurate with risk for inheriting systems", "target": "TLR-010", "fixture": "tests/fixtures/negative/TLR-010.commensurate.yaml", "expect": "whose common controls are not determined to provide protection commensurate with risk", "claim": "constraint", "holds_when": "S-3 is active", "sentence": "System owners and authorizing officials determine if the common controls available for inheritance actually provide protection commensurate with risk for inheriting systems.30"}, {"kind": "prose", "asserts": "Common control providers make implementation information and assessment results available", "target": "playbooks/S/S-3.md", "claim": "presence", "sentence": "Common control providers ensure that current implementation information and assessment results are available to facilitate decision making by system owners and authorizing officials."}]
     work_item: "WI-222"
+    ruling_sought: [{"sentence": "If a system inherits a common control provided by another entity (internal or external), there is no need to implement the control within that system.", "reason": "A system that inherits a common control need not implement it: a permission, which allocation type common allows"}]
   - id: "REQ-SP800-53B-0059"
     citation: {"ref": "SP800-53B", "page": 24, "anchor": "Common control designation and control implementation can affect organizations’ resource expenditures. That"}
     kind: "should"
@@ -1716,15 +1728,20 @@ requirements:
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES"
     statement: "Certain controls may not be appropriate if implementing those controls has the potential to degrade, debilitate, or interfere with organizational mission or business functions, including endangering or harming individuals. However, decisions on the appropriateness of control implementation always consider legislative, regulatory, and policy requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "The marked sentence lets controls that would harm the mission be tailored; the law and policy test the following sentence asks for is required of every removal"
+    evidence: [{"kind": "rule", "asserts": "Decisions on the appropriateness of control implementation record a test against legislative, regulatory, and policy requirements", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.law.yaml", "expect": "records no test against the laws, regulations and policies", "claim": "presence", "holds_when": "S-2 is active"}]
     work_item: "WI-224"
+    ruling_sought: [{"sentence": "Certain controls may not be appropriate if implementing those controls has the potential to degrade, debilitate, or interfere with organizational mission or business functions, including endangering or harming individuals.", "reason": "Certain controls may not be appropriate if they could degrade or harm the mission: a permission to tailor them"}]
   - id: "REQ-SP800-53B-0067"
     citation: {"ref": "SP800-53B", "page": 25, "anchor": "Controls that support only one or two of the security objectives (i.e.,"}
     kind: "should"
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES"
     statement: "Controls that support only one or two of the security objectives (i.e., confidentiality, integrity, or availability) may be downgraded to the corresponding control in a lower baseline (or modified or eliminated if not defined in a lower baseline) only if the downgrading action reflects the [FIPS 199] security category for the supported security objectives before considering the [FIPS 200] impact level (i.e., high water mark),"
-    status: "candidate"
+    status: "covered"
+    reason: "A downgrade names the one or two objectives the control supports and fails when their FIPS 199 levels still select it"
+    evidence: [{"kind": "rule", "asserts": "Controls that support only one or two security objectives are downgraded only if the downgrading action reflects the FIPS 199 security category", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.category.yaml", "expect": "the downgrade does not reflect the FIPS 199 security category", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "A downgrade names the security objectives the downgraded controls support", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.objectives.yaml", "expect": "names no security objective it supports", "claim": "presence", "holds_when": "S-2 is active"}]
     work_item: "WI-223"
   - id: "REQ-SP800-53B-0068"
     citation: {"ref": "SP800-53B", "page": 25, "anchor": "For example, if a system is categorized as moderate-impact using the high"}
@@ -1764,8 +1781,11 @@ requirements:
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES The following security controls and control enhancements are candidates for downgrading for each of the security categories:"
     statement: "Although controls that are used to meet legislative, regulatory, or policy requirements are not to be tailored out of control baselines, some legislative, regulatory, or policy requirements may only apply in specified circumstances. It is justifiable to tailor the baseline when these circumstances are not applicable to an organization or certain systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Tailoring out a control a requirement requires fails, and a requirement whose circumstances do not apply is the basis circumstance-not-applicable; the justification sentence is a permission awaiting the user's ruling"
+    evidence: [{"kind": "rule", "asserts": "Controls used to meet legislative, regulatory, or policy requirements are not to be tailored out of control baselines", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.required.yaml", "expect": "so it is not tailored out of the baseline", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Although controls that are used to meet legislative, regulatory, or policy requirements are not to be tailored out of control baselines, some legislative, regulatory, or policy requirements may only apply in specified circumstances."}]
     work_item: "WI-224"
+    ruling_sought: [{"sentence": "It is justifiable to tailor the baseline when these circumstances are not applicable to an organization or certain systems.", "reason": "It is justifiable to tailor when the circumstances do not apply: a permission, which basis circumstance-not-applicable allows and a test proves passes"}]
   - id: "REQ-SP800-53B-0073"
     citation: {"ref": "SP800-53B", "page": 26, "anchor": "Compensating controls are used by organizations in lieu of specific controls in"}
     kind: "indicative"
@@ -1779,7 +1799,9 @@ requirements:
     locator: "Selecting Compensating Controls.•"
     context: "To use compensating controls, organizations:"
     statement: "• Select compensating controls from the control catalog in [SP 800-53]."
-    status: "candidate"
+    status: "covered"
+    reason: "A compensating control names its source, and one from another source fails without the determination that the control catalog has none suitable"
+    evidence: [{"kind": "rule", "asserts": "Select compensating controls from the control catalog unless the catalog contains no suitable compensating control", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.other.yaml", "expect": "without the determination that the control catalog contains no suitable compensating control", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "Compensating controls say whether they come from the control catalog", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.source.yaml", "expect": "does not say whether the compensating control comes from the control catalog", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-220"
   - id: "REQ-SP800-53B-0075"
     citation: {"ref": "SP800-53B", "page": 26, "anchor": "Provide a rationale for how compensating controls satisfy security or privacy requirements"}
@@ -1794,7 +1816,9 @@ requirements:
     locator: "Selecting Compensating Controls.•"
     context: "To use compensating controls, organizations:"
     statement: "• Adopt suitable compensating controls from other sources if appropriate compensating controls are not available in [SP 800-53].36"
-    status: "candidate"
+    status: "covered"
+    reason: "A compensating control from another source is accepted only with the determination that no suitable catalog control exists"
+    evidence: [{"kind": "rule", "asserts": "Adopt compensating controls from other sources only if suitable compensating controls are not available in the control catalog", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.other.yaml", "expect": "without the determination that the control catalog contains no suitable compensating control", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-220"
   - id: "REQ-SP800-53B-0077"
     citation: {"ref": "SP800-53B", "page": 26, "anchor": "Assess and accept the security and privacy risks associated with implementing compensating"}
@@ -1802,7 +1826,9 @@ requirements:
     locator: "Selecting Compensating Controls.•"
     context: "To use compensating controls, organizations:"
     statement: "• Assess and accept the security and privacy risks associated with implementing compensating controls."
-    status: "candidate"
+    status: "covered"
+    reason: "A compensating control fails unless its risk is assessed against ART-RA and accepted by the authorizing official"
+    evidence: [{"kind": "rule", "asserts": "Assess the risks associated with implementing compensating controls against the risk assessment", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.ra.yaml", "expect": "does not rest on the risk assessment ART-RA", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "Accept the risks of compensating controls by the authorizing official", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.acceptor.yaml", "expect": "not the authorizing official", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "Assess the risks associated with implementing compensating controls", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.assess.yaml", "expect": "does not assess the risk associated with implementing the compensating control", "claim": "presence", "holds_when": "S-2 is active"}]
     work_item: "WI-220"
   - id: "REQ-SP800-53B-0078"
     citation: {"ref": "SP800-53B", "page": 26, "anchor": "For example, additional physical security controls may be implemented in lieu of"}
@@ -1818,7 +1844,9 @@ requirements:
     locator: "Selecting Compensating Controls"
     context: ""
     statement: "Compensating controls are not used to avoid the need to comply with requirements. Rather, the use of such controls provides alternative and suitable security and privacy protections to facilitate risk management."
-    status: "candidate"
+    status: "partial"
+    reason: "A compensating control for a control a requirement requires fails; whether the alternative protection is suitable is the equivalence prose"
+    evidence: [{"kind": "rule", "asserts": "Compensating controls are not used to avoid the need to comply with requirements", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.compensating.yaml", "expect": "compensating controls are not used to avoid the need to comply", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Compensating controls are not used to avoid the need to comply with requirements."}, {"kind": "rule", "asserts": "The use of compensating controls provides alternative and suitable protections, stated as equivalent or comparable protection", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.equivalence.yaml", "expect": "does not state how it provides equivalent or comparable protection", "claim": "presence", "holds_when": "S-2 is active", "sentence": "Rather, the use of such controls provides alternative and suitable security and privacy protections to facilitate risk management."}]
     work_item: "WI-224"
   - id: "REQ-SP800-53B-0080"
     citation: {"ref": "SP800-53B", "page": 26, "anchor": "More than one compensating control may be required to provide the equivalent"}
@@ -1834,7 +1862,9 @@ requirements:
     locator: "Selecting Compensating Controls"
     context: ""
     statement: "Organizations make every attempt to select compensating controls from the consolidated control catalog in [SP 800-53]. Organization-defined compensating controls are employed only when organizations determine that the control catalog does not contain suitable compensating controls."
-    status: "candidate"
+    status: "covered"
+    reason: "An other-source compensating control fails unless it names the catalog controls considered and records that the catalog does not contain a suitable one"
+    evidence: [{"kind": "rule", "asserts": "Organizations select compensating controls from the control catalog first, and the catalog controls considered must be in the catalog", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.considered.yaml", "expect": "which the control catalog does not contain", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Organizations make every attempt to select compensating controls from the consolidated control catalog in [SP 800-53]."}, {"kind": "schema", "asserts": "The catalog controls considered before adopting a compensating control are recorded", "target": "framework/schema/tailoring.schema.json#/properties/actions/items/properties/catalog_search/properties/considered", "claim": "constraint", "read_by": "TLR-001", "sentence": "Organizations make every attempt to select compensating controls from the consolidated control catalog in [SP 800-53]."}, {"kind": "rule", "asserts": "Organization-defined compensating controls are employed only when the control catalog does not contain suitable compensating controls", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.other.yaml", "expect": "without the determination that the control catalog contains no suitable compensating control", "claim": "constraint", "holds_when": "S-2 is active", "sentence": "Organization-defined compensating controls are employed only when organizations determine that the control catalog does not contain suitable compensating controls."}, {"kind": "schema", "asserts": "Organization-defined compensating controls rest on the finding that the catalog does not contain a suitable compensating control", "target": "framework/schema/tailoring.schema.json#/properties/actions/items/properties/catalog_search/properties/finding", "claim": "constraint", "read_by": "TLR-001", "sentence": "Organization-defined compensating controls are employed only when organizations determine that the control catalog does not contain suitable compensating controls."}]
     work_item: "WI-220"
   - id: "REQ-SP800-53B-0082"
     citation: {"ref": "SP800-53B", "page": 27, "anchor": "Controls and control enhancements containing embedded parameters (i.e., assignment and selection operations)"}
@@ -1864,16 +1894,22 @@ requirements:
     locator: "Supplementing Control Baselines"
     context: ""
     statement: "Since controls and control enhancements are statements of security or privacy functions or capabilities that are conveyed at higher levels of abstraction, the controls may lack sufficient information for implementation. Therefore, additional details may be necessary to fully define the intent of a given control for implementation purposes and to ensure that the security and privacy requirements related to that control are satisfied. For example, additional information may be provided as part of the process of moving from control to specification requirements and may involve refinement of implementation details, refinement of scope, or iteration to apply the same control differently to different scopes. The need to provide control specification information occurs routinely when controls are employed in a systems engineering process as part of requirements engineering. Organizations ensure that if existing control information is not sufficient to define the intended implementation details for the control, such information is provided to system owners and common control providers. Organizations have the flexibility to determine whether control specification information is included as part of the control statement or in a separate control addendum section. When providing additional detail, organizations are cautioned not to change the intent of the base control or modify the original language in the control. Implementation information is documented in the system security and privacy plans."
-    status: "candidate"
+    status: "partial"
+    reason: "Specification information goes to a selected control and names its placement; whether existing control information was sufficient is judgment, and three sentences explain why specification is needed"
+    evidence: [{"kind": "rule", "asserts": "If existing control information is not sufficient, control specification information is provided", "target": "TLR-006", "fixture": "tests/fixtures/negative/TLR-006.yaml", "expect": "provides no control specification information", "claim": "presence", "holds_when": "S-2 is active", "sentence": "Organizations ensure that if existing control information is not sufficient to define the intended implementation details for the control, such information is provided to system owners and common control providers."}, {"kind": "prose", "asserts": "Implementation information is documented in the security plan", "target": "playbooks/S/S-2.md", "claim": "presence", "sentence": "Implementation information is documented in the system security and privacy plans."}]
     work_item: "WI-225"
+    ruling_sought: [{"sentence": "Organizations have the flexibility to determine whether control specification information is included as part of the control statement or in a separate control addendum section.", "reason": "Organizations have the flexibility to place specification information in the control statement or an addendum: a permission, which placement allows"}]
   - id: "REQ-SP800-53B-0086"
     citation: {"ref": "SP800-53B", "page": 28, "anchor": "Organizations consider defining a set of capabilities as a precursor to the"}
     kind: "indicative"
     locator: "2.5"
     context: "CAPABILITIES"
     statement: "Organizations consider defining a set of capabilities as a precursor to the control selection process. The concept of capability recognizes that satisfying security or privacy requirements seldom derives from a single control but rather from a set of mutually reinforcing controls. For example, organizations may wish to define a capability for secure remote authentication. This capability can be achieved by the selection and implementation of a set of controls from [SP 800-53], such as IA-2 (1), IA-2 (2), IA-2 (8), IA-2 (9), and SC-8 (1). Moreover, capabilities can address a variety of areas that can include technical means, physical means, procedural means, or any combination thereof. In addition to the above capability for secure remote access, organizations may also need security capabilities that address physical means, such as tamper detection on a cryptographic module or anomaly detection/analysis on an orbiting spacecraft."
-    status: "candidate"
+    status: "partial"
+    reason: "S-1 asks whether capabilities are defined ahead of selection and maps them in capabilities.yaml; considering is prose no rule can fail, and the example sentence awaits the user's ruling"
+    evidence: [{"kind": "prose", "asserts": "S-1 considers capabilities defined as a precursor to the control selection process and maps them to their controls", "target": "playbooks/S/S-1.md", "claim": "presence", "sentence": "Organizations consider defining a set of capabilities as a precursor to the control selection process."}]
     work_item: "WI-218"
+    ruling_sought: [{"sentence": "In addition to the above capability for secure remote access, organizations may also need security capabilities that address physical means, such as tamper detection on a cryptographic module or anomaly detection/analysis on an orbiting spacecraft.", "reason": "An example of capabilities organizations may also need (tamper detection, spacecraft anomaly detection); an open example that no run can fail"}]
   - id: "REQ-SP800-53B-0087"
     citation: {"ref": "SP800-53B", "page": 28, "anchor": "Traditionally, assessments have been conducted on a control-by-control basis, producing results that"}
     kind: "modal"
@@ -2223,16 +2259,21 @@ requirements:
     locator: "2.3"
     context: ""
     statement: "If any of these assumptions apply, then additional controls from [SP 800-53] are likely needed to ensure adequate protection—a situation that can also be effectively addressed by applying the tailoring guidance in Section 2.4 (specifically, security control supplementation) and the results of organization- and system-level assessments of risk."
-    status: "candidate"
+    status: "partial"
+    reason: "An applying additional assumption is answered by controls selected or added, an overlay, or a revisited-no-change outcome; additional controls are likely needed, not always, so the sentence awaits the user's ruling"
+    evidence: [{"kind": "rule", "asserts": "If any of these assumptions apply, additional controls are in the baseline or supplemented by an add action through security control supplementation", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.unadded.yaml", "expect": "is neither in the baseline nor supplemented by an add action", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "If any of these assumptions apply, a control, overlay or outcome is named so additional controls are weighed", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.supplement.yaml", "expect": "no control, overlay or revisited-no-change outcome is named", "claim": "presence", "holds_when": "S-2 is active"}]
     work_item: "WI-217"
     promoted: {"reason": "The supplementation trigger for the second assumption list: 'additional controls from [SP 800-53] are likely needed'. The extractor rejected it as no-marker, but it is the duty the list under 0041 hangs on."}
+    ruling_sought: [{"sentence": "If any of these assumptions apply, then additional controls from [SP 800-53] are likely needed to ensure adequate protection—a situation that can also be effectively addressed by applying the tailoring guidance in Section 2.4 (specifically, security control supplementation) and the results of organization- and system-level assessments of risk.", "reason": "Additional controls are likely needed: a likelihood, not a duty, since the selected controls may already address the assumption; a test proves that case passes"}]
   - id: "REQ-SP800-53B-0131"
     citation: {"ref": "SP800-53B", "page": 23, "anchor": "It is inappropriate for organizations to tailor out security or privacy controls"}
     kind: "promoted"
     locator: "2.4"
     context: ""
     statement: "It is inappropriate for organizations to tailor out security or privacy controls that pertain to applicable federal legislative, regulatory, or policy requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "A remove action is tested against law, regulation, policy and OMB policy, and fails when a requirement requires the control"
+    evidence: [{"kind": "rule", "asserts": "It is inappropriate to tailor out controls that pertain to applicable legislative, regulatory, or policy requirements", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.required.yaml", "expect": "so it is not tailored out of the baseline", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "Tailoring out controls is tested against applicable legislative, regulatory, or policy requirements", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.law.yaml", "expect": "records no test against the laws, regulations and policies", "claim": "presence", "holds_when": "S-2 is active"}]
     work_item: "WI-224"
     promoted: {"reason": "Footnote 24 is a prohibition on tailoring out controls tied to law, regulation or policy; rejected as no-marker because 'inappropriate' is not a marker word."}
   - id: "REQ-SP800-53B-0132"
@@ -2241,7 +2282,9 @@ requirements:
     locator: "2.4"
     context: ""
     statement: "is supported by an organizational assessment of risk, and does not adversely affect the level of protection for the security-relevant information within the system."
-    status: "candidate"
+    status: "covered"
+    reason: "A downgrade fails unless its sources include ART-RA and it records that the protection of security-relevant information is unaffected"
+    evidence: [{"kind": "rule", "asserts": "The downgrade is supported by an organizational assessment of risk", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.risk.yaml", "expect": "not supported by the organizational assessment of risk ART-RA", "claim": "constraint", "holds_when": "S-2 is active"}, {"kind": "rule", "asserts": "The downgrade does not adversely affect the level of protection for the security-relevant information", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.relevant.yaml", "expect": "affects the protection of the security-relevant information", "claim": "constraint", "holds_when": "S-2 is active"}]
     work_item: "WI-223"
     promoted: {"reason": "Second and third conditions of the 'only if' test in 0067, cut off by the page's indented list; rejected as no-marker."}
   - id: "REQ-SP800-53B-0133"

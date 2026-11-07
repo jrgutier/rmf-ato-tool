@@ -1,0 +1,38 @@
+rule: TLR-009
+bases:
+- minimal
+description: ART-REQ lists no requirement IDs
+mutations:
+- op: replace_text
+  file: artifacts/ART-REQ.md
+  old: '| REQ-01 |'
+  new: '| R-01 |'
+- op: replace_text
+  file: artifacts/ART-REQ.md
+  old: '| REQ-02 |'
+  new: '| R-02 |'
+- op: replace_text
+  file: artifacts/ART-REQ.md
+  old: '| REQ-03 |'
+  new: '| R-03 |'
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.0.requirements
+  value: []
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.2.requirements
+  value: []
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.3.requirements
+  value: []
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.4.requirements
+  value: []
+expect:
+  errors:
+  - TLR-009
+  messages:
+  - ART-REQ lists no requirement IDs

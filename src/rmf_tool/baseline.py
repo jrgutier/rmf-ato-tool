@@ -5,8 +5,9 @@ union of the Appendix D security control baselines for each objective at its own
 level (C, I and A columns of ``framework/baselines/cnssi-1253.yaml``, origin ``baseline``)
 and the NSS privacy control baseline, "a default for all NSS" (origin ``privacy-baseline``
 for controls no security column selects). The overlays in
-``categorization.overlays`` are added next, then ``tailoring.yaml`` (add/remove) and
-``run.yaml:control_subset`` apply. ``method: high-water-mark`` (the SP 800-53B profile at the
+``categorization.overlays`` are added next, then ``tailoring.yaml`` (add, remove, and from
+contract 0.2.0 a compensating control taken from the catalog) and ``run.yaml:control_subset``
+apply. ``method: high-water-mark`` (the SP 800-53B profile at the
 highest of C/I/A, read as raw OSCAL JSON) is the plan §7.6 fallback, allowed only while the
 CNSSI1253 reference is degraded. ``product/profile.yaml`` (proposed values) is never read.
 """
@@ -19,7 +20,7 @@ from typing import Any
 
 from rmf_tool import catalog, refs
 from rmf_tool.run import facts as facts_mod
-from rmf_tool.run.model import BASELINE_FILE, Run, YamlError
+from rmf_tool.run.model import BASELINE_FILE, Run, YamlError, schema_errors
 from rmf_tool.yamlload import safe_load
 
 PROFILE_PATHS = {
@@ -28,6 +29,10 @@ PROFILE_PATHS = {
 }
 TABLES_PATH = "framework/baselines/cnssi-1253.yaml"
 TAILORING_FILE = "artifacts/data/tailoring.yaml"
+INPUTS_PATH = "framework/baselines/tailoring-inputs.yaml"
+# From this contract a compensating control from the catalog is a baseline control, so it needs
+# an SSP statement (SSP-COV-001); before it, rmf baseline resolve ignored compensating actions.
+COMPENSATING_SINCE = "0.2.0"
 CNSSI, HIGH_WATER = "cnssi1253", "high-water-mark"
 METHODS = (CNSSI, HIGH_WATER)
 LEVELS = ("low", "moderate", "high")
@@ -59,6 +64,15 @@ def load_tables(run: Run) -> dict[str, Any]:
     errors = run.schema_errors("baselines", data)
     if errors:
         raise BaselineError(f"{TABLES_PATH}: {errors[0]}")
+    return data
+
+
+def load_inputs(repo: Any) -> dict[str, Any]:
+    """The assumptions and overlay conditions S-2 tests a system against, schema-checked."""
+    data = safe_load((repo / INPUTS_PATH).read_text(encoding="utf-8"))
+    errors = schema_errors(repo, "tailoring-inputs", data)
+    if errors:
+        raise BaselineError(f"{INPUTS_PATH}: {errors[0]}")
     return data
 
 
@@ -174,12 +188,15 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
         errors = run.schema_errors("tailoring", data)
         if errors:
             raise BaselineError(f"{TAILORING_FILE}: {errors[0]}")
+        compensating = run.holds(COMPENSATING_SINCE)
         for action in data["actions"]:
-            cid = action["control_id"]
-            if action["action"] == "add":
+            cid, kind = action.get("control_id"), action["action"]
+            if kind == "add":
                 origin.setdefault(cid, "tailored-in")
-            elif action["action"] == "remove":
+            elif kind == "remove":
                 origin.pop(cid, None)
+            elif kind == "compensating" and compensating and cid:
+                origin.setdefault(cid, "compensating")
     unknown = sorted(c for c in origin if c not in known)
     if unknown:
         raise BaselineError(f"controls not in the catalog: {', '.join(unknown)}")
