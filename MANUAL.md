@@ -1482,6 +1482,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
 - boundary.yaml records each external connection with its detail and the approvals it needs, any cross-domain solution and mission partner terms, and whether the system is on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
+- boundary.yaml records where the system is hosted and why, a new major application in a Defense Enterprise Computing Center unless operationally infeasible, why it is not an application in an existing authorized enclave, and the cloud hosting assessment of a new or modernized system (HOST-001).
 - nss-assessments.yaml records, for a National Security System, NSA's assessment with the cognizant AO of its cybersecurity requirements and security architecture before each milestone passed, and for a space NSS the coordination of its architecture, the check of pre-existing components and the compliance reports to the AO and NSA (PPROT-006).
 
 **Alignment**
@@ -1495,6 +1496,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - [SP800-39](#ref-sp800-39), section 2.4.2
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
 - [SP800-37R2](#ref-sp800-37r2), p. 183, "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING"
+- [DODI8500.01](#ref-dodi8500-01), p. 38, "When operationally feasible all new major applications will be hosted"
 
 **Playbook:** [playbooks/P/P-16.md](playbooks/P/P-16.md)
 
@@ -1538,6 +1540,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
 
@@ -1785,6 +1788,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - ssp/controls holds one statement per tailored-baseline control (SSP-COV-001, SSP-DUP-001).
 - ART-CMP, ART-CP and ART-IRP written.
 - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control board and the baseline configuration process.
+- A CSO-hosted system has artifacts/data/cloud.yaml with its offerings and their FedRAMP or DoD provisional authorization, the mission impact level, the DTM 24-001 activity tracking checklist, contract clauses, the CSSP's part and the incident response split (CLOUD-001 to CLOUD-010).
 - For a system processing PII, ART-SSP holds the privacy plan with the security plan (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
@@ -4013,13 +4017,13 @@ Citations:
 
 ### <a id="art-svca"></a>ART-SVCA: Cybersecurity service agreements
 
-One record per provider, the agreement behind it, the services it covers, the controls mapped to them, the subscriber's check of it, and the measured effectiveness of each service.
+One record per provider, the agreement behind it, the services it covers, the controls mapped to them, the subscriber's check of it, and the measured effectiveness of each service; for a CSO-hosted system, the offerings, their authorizations and the DTM 24-001 cybersecurity activities performed for them (cloud.yaml).
 
 | | |
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-SVCA.md](templates/artifacts/ART-SVCA.md) |
-| Data files | `artifacts/data/service-agreements.yaml` (schema `service-agreements`) |
+| Data files | `artifacts/data/service-agreements.yaml` (schema `service-agreements`)<br>`artifacts/data/cloud.yaml` (schema `cloud`) |
 | OSCAL | — |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [M-2](#task-m-2) |
@@ -4029,6 +4033,7 @@ Citations:
 
 - [DODI8530.01](#ref-dodi8530-01), p. 35, "cybersecurity service provided will be specifically assigned and documented"
 - [DODI8530.01](#ref-dodi8530-01), p. 36, "Will monitor the effectiveness of cybersecurity services"
+- [DTM-24-001](#ref-dtm-24-001), p. 10, "A cybersecurity activity tracking checklist, generated by the mission owner and PM"
 
 ### <a id="art-stig"></a>ART-STIG: STIG/SRG summary
 
@@ -4773,3 +4778,4 @@ the whole library with checksums.
 | <a id="ref-dodi5000-81"></a>**DODI5000.81** | Urgent Capability Acquisition | DoD | December 31, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500081p.PDF> | [DODI5000.81.md](references/text/DODI5000.81.md) |
 | <a id="ref-dowi8430-01"></a>**DOWI8430.01** | Accelerated Mission Software | DoD | September 8, 2026 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/843001p.PDF> | [DOWI8430.01.md](references/text/DOWI8430.01.md) |
 | <a id="ref-dodi5400-16"></a>**DODI5400.16** | DoD Privacy Impact Assessment (PIA) Guidance | DoD | July 14, 2015, Change 1, August 11, 2017 | <https://www.esd.whs.mil/DD/DoD-Issuances/DoDI/> | [DODI5400.16.md](references/text/DODI5400.16.md) |
+| <a id="ref-dtm-24-001"></a>**DTM-24-001** | DoW Cybersecurity Activities Performed for Cloud Service Offerings | DoD | February 27, 2024, Change 2, May 7, 2026 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dtm/DTM-24-001.PDF> | [DTM-24-001.md](references/text/DTM-24-001.md) |

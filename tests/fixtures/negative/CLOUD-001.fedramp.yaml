@@ -1,0 +1,25 @@
+rule: CLOUD-001
+bases:
+- cloud
+description: IL4 data on a FedRAMP Moderate offering
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.authorization
+  value:
+    basis: fedramp
+    fedramp_baseline: moderate
+    impact_level: IL2
+    issued_by: FedRAMP agency authorization
+    conditions:
+    - Public data only
+    package_location: fedramp-repository
+    package_access_request:
+      submitted_by: PER-SPONSOR
+      date: '2026-02-01'
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: data categorized at IL4 is hosted under a DoD provisional authorization, not a FedRAMP authorization'
+  - 'CSO-01: authorized at IL2, below the impact level IL4 of the mission data it processes or stores'

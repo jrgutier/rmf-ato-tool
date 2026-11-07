@@ -1,0 +1,16 @@
+rule: CLOUD-003
+bases:
+- cloud
+description: a commercial entity monitors the BCP
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: checklist.activities.18.performer
+  value:
+    entity: commercial
+    name: Example Cloud Provider
+expect:
+  errors:
+  - CLOUD-003
+  messages:
+  - 'nsm-boundary on CSO-01: a CSSP must perform this cybersecurity activity, not commercial'

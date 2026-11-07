@@ -1,0 +1,14 @@
+rule: CLOUD-007
+bases:
+- cloud
+description: the DCRT report reaches JFHQ-DODIN after 45 days
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: external_assessments.dcrt_reports.0.released_to_jfhq_dodin
+  value: '2026-08-15'
+expect:
+  errors:
+  - CLOUD-007
+  messages:
+  - 'DCRT-01: the DCRT report is released to JFHQ-DODIN within 30 calendar days of the briefing'
