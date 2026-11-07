@@ -278,6 +278,12 @@ def rule_raci(ctx: Context) -> list[Finding]:
                             f"(found {count})"))
         if not raci.get("R"):
             out.append(_err("FW-RACI-001", t, "raci.R must name at least one persona"))
+        named = {*(raci.get("R") or []), *(raci.get("C") or []),
+                 *(accountable if isinstance(accountable, list) else [accountable])}
+        for pid in raci.get("when") or {}:
+            if pid not in named:
+                out.append(_err("FW-RACI-001", t, f"raci.when conditions {pid}, which the task "
+                                "does not name in R, A or C"))
     return out
 
 

@@ -1,0 +1,13 @@
+rule: PRIV-005
+bases:
+- pii
+description: a change not tested for new privacy risk
+mutations:
+- op: delete_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.privacy_impact
+expect:
+  errors:
+  - PRIV-005
+  messages:
+  - 'CHG-001 is not tested for new privacy risk: privacy_impact is not stated'

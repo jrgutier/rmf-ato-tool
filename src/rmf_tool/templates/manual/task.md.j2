@@ -12,6 +12,9 @@
 {% for label, ids in t.raci_rows %}
 | {{ label }} | {% for pid in ids %}{{ "<br>" if not loop.first }}{% set per = m.personas_by_id.get(pid) %}{% if per %}{{ L.file(per.card, per.short) }} {{ per.name | cell }}{% else %}{{ pid }}{% endif %}{% endfor %} |
 {% endfor %}
+{% for pid in (t.raci.get("when") or {}) %}
+| Condition | {{ pid }} only when the system processes PII |
+{% endfor %}
 
 **Inputs**
 

@@ -84,7 +84,8 @@ def ssp_coverage(ctx: Context) -> list[RunFinding]:
         return [make("SSP-COV-001", "no baseline.json; S-1 runs `rmf baseline resolve`",
                      BASELINE_FILE, None, {"S-4"})]
     stated = {item.get("control_id") for _, item in family_records(ctx, SSP_DIR, "controls")}
-    return [make("SSP-COV-001", f"baseline control {cid} has no SSP statement",
+    return [make("SSP-COV-001", f"baseline control {cid} has no SSP statement in the security "
+                 "and privacy plan",
                  f"{SSP_DIR}/{family(cid)}.yaml")
             for cid in baseline_mod.control_ids(run) if cid not in stated]
 

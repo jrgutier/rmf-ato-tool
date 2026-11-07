@@ -1,0 +1,27 @@
+rule: PRIV-006
+bases:
+- pii
+description: a control the SAOP found not appropriate, monitored anyway
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: privacy.controls
+  value:
+  - control: au-2
+    frequency: monthly
+    origin: strategy
+  - control: ac-2
+    frequency: quarterly
+    origin: added
+    consultation:
+      by: PER-PRIV
+      date: '2026-09-01'
+      appropriate: false
+      sources:
+      - INT-042.A1
+expect:
+  errors:
+  - PRIV-006
+  messages:
+  - the senior agency official for privacy found ac-2 not appropriate for the use case, and the strategy
+    monitors it

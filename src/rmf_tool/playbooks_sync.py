@@ -110,7 +110,7 @@ def header(fw: Framework, task: dict[str, Any], playbook: str, section: bool = F
         f"| Writes facts | {_ids(task.get('writes_facts'))} |",
         f"| Minimum interviews | {task.get('min_interviews', 0)} |",
         f"| RACI | R: {_ids(raci.get('R'))} · A: {raci.get('A', '—')} · C: {_ids(raci.get('C'))}"
-        f" · I: {_ids(raci.get('I'))} |",
+        f" · I: {_ids(raci.get('I'))}{_conditions(raci)} |",
         "| Persona cards | " + (", ".join(f"[{pid}]({path})" for pid, path in cards) or "—")
         + " |",
         "",
@@ -151,6 +151,15 @@ def _data_files(root: Path, art: dict[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
+# What a RACI condition means, in the words the header and the interview table show.
+CONDITIONS = {"processes-pii": "only when the system processes PII"}
+
+
+def _conditions(raci: dict[str, Any]) -> str:
+    when = raci.get("when") or {}
+    return "".join(f" · {pid} {CONDITIONS.get(c, c)}" for pid, c in when.items())
+
+
 def context(fw: Framework, task: dict[str, Any], root: Path) -> dict[str, Any]:
     """What templates/playbook-body.md.j2 renders: the task's YAML, resolved to names,
     files and commands."""
@@ -163,8 +172,10 @@ def context(fw: Framework, task: dict[str, Any], root: Path) -> dict[str, Any]:
         value = raci.get(letter)
         for pid in value if isinstance(value, list) else [value] if value else []:
             roles.setdefault(pid, []).append(letter)
+    when = raci.get("when") or {}
     interviewees = [{"id": pid, "name": personas[pid].data.get("name", "") if pid in personas
-                     else "", "roles": ", ".join(letters), "required": "R" in letters}
+                     else "", "roles": ", ".join(letters), "required": "R" in letters,
+                     "when": CONDITIONS.get(when.get(pid, ""))}
                     for pid, letters in roles.items()]
     inputs = []
     for name in task.get("inputs") or []:

@@ -1,0 +1,15 @@
+rule: PRIV-010
+bases:
+- pii
+description: an I-2 update that leaves out the privacy plan
+mutations:
+- op: set_field
+  file: artifacts/data/plan-reviews.yaml
+  path: changes.1.plans
+  value:
+  - security
+expect:
+  errors:
+  - PRIV-010
+  messages:
+  - the I-2 update of the plans leaves out the privacy plan of a system processing PII
