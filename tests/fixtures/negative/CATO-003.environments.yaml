@@ -1,0 +1,17 @@
+rule: CATO-003
+bases:
+- minimal
+description: no staging environment
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.hosting.environments
+  value:
+  - development
+  - test
+  - production
+expect:
+  errors:
+  - CATO-003
+  messages:
+  - the hosting environment provides no staging environment

@@ -266,7 +266,7 @@ tasks:
     purpose: >-
       Identify the missions, business functions and mission/business processes the system will
       support, so that categorization and requirements trace to mission impact.
-    raci: {R: [PER-SPONSOR], A: PER-PM, C: [PER-AO, PER-IO, PER-UR, PER-CIO, PER-CISO, PER-PRIV], I: [PER-ISSM]}
+    raci: {R: [PER-SPONSOR], A: PER-PM, C: [PER-AO, PER-IO, PER-UR, PER-CIO, PER-CISO, PER-PRIV], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, EXT-CAPDOC, EXT-PRODUCT]
     outputs: []
     writes_facts: []
@@ -303,7 +303,7 @@ tasks:
     purpose: >-
       Identify the stakeholders with an interest in the system across its life cycle, including
       every information owner and the user representative.
-    raci: {R: [PER-PM, PER-SPONSOR], A: PER-PM, C: [PER-CIO, PER-AO, PER-IO, PER-CISO, PER-PRIV, PER-MDA], I: [PER-ISSM]}
+    raci: {R: [PER-PM, PER-SPONSOR], A: PER-PM, C: [PER-CIO, PER-AO, PER-IO, PER-CISO, PER-PRIV, PER-MDA], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [EXT-PRODUCT, EXT-CAPDOC, EXT-ORG-POLICY]
     outputs: [ART-STAKE]
     writes_facts: []
@@ -338,7 +338,7 @@ tasks:
     purpose: >-
       Identify and prioritize the assets that require protection, as the system hardware and
       software inventory, including the components that perform mission-critical functions.
-    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-SPONSOR, PER-IO, PER-CISO, PER-PRIV, PER-DEV], I: []}
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-SPONSOR, PER-IO, PER-CISO, PER-PRIV, PER-DEV], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-STAKE, EXT-PRODUCT]
     outputs: [ART-INV]
     writes_facts: []
@@ -369,7 +369,7 @@ tasks:
     purpose: >-
       Determine the authorization boundary of the system, its network architecture and data
       flows; the AO is accountable for the boundary.
-    raci: {R: [PER-PM, PER-ISSM], A: PER-AO, C: [PER-CIO, PER-SPONSOR, PER-CISO, PER-PRIV, PER-LSE, PER-ISSE], I: []}
+    raci: {R: [PER-PM, PER-ISSM], A: PER-AO, C: [PER-CIO, PER-SPONSOR, PER-CISO, PER-PRIV, PER-LSE, PER-ISSE], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-INV, ART-STAKE, EXT-PRODUCT]
     outputs: [ART-BND]
     writes_facts: [boundary_id]
@@ -401,7 +401,7 @@ tasks:
     purpose: >-
       Identify the types of information the system processes, stores and transmits, including
       whether it processes PII.
-    raci: {R: [PER-PM, PER-IO], A: PER-PM, C: [PER-ISSM, PER-PRIV], I: []}
+    raci: {R: [PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-ISSM], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-INV, EXT-PRODUCT]
     outputs: [ART-INFOTYPES]
     writes_facts: []
@@ -417,12 +417,18 @@ tasks:
         identifier and provisional impact levels.
       - The determination of whether the system processes PII is recorded for approval by the
         SAOP or designee.
+      - For a system processing PII, each PII information type records whom the PII is about
+        and whether it holds PHI or SSNs, and infotypes.yaml privacy records the issuances its
+        handling complies with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN,
+        the SSN justification, records coordination and the PIA determination with its DoDI
+        5400.16 basis and due date (PRIV-001).
     citations:
       - {ref: SP800-37R2, section: "TASK P-12", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-12 Information Types"}
       - {ref: SP800-60V1R1, section: "4.1"}
       - {ref: SP800-37R2, section: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"}
       - {ref: CNSSI1253, section: "3.1.1"}
+    enforces: [REQ-SP800-37R2-0732]
     playbook: playbooks/P/P-12.md
   - id: P-13
     name: Information Life Cycle
@@ -435,7 +441,7 @@ tasks:
     purpose: >-
       Identify and understand every stage of the information life cycle (creation or collection,
       processing, dissemination, use, storage and disposition) for each information type.
-    raci: {R: [PER-PRIV, PER-PM, PER-IO], A: PER-PM, C: [PER-CIO, PER-SPONSOR, PER-ISSE, PER-LSE], I: []}
+    raci: {R: [PER-PRIV, PER-PM, PER-IO], A: PER-PM, C: [PER-CIO, PER-SPONSOR, PER-ISSE, PER-LSE], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-INFOTYPES, ART-BND, EXT-PRODUCT]
     outputs: [ART-INFOTYPES]
     writes_facts: []
@@ -465,9 +471,9 @@ tasks:
     purpose: >-
       Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community
       threat information, and keep its results current through the life cycle.
-    raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: []}
+    raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
-    outputs: [ART-RA]
+    outputs: [ART-RA, ART-PIA]
     writes_facts: []
     depends_on: [P-3, P-13]
     feeds_back_to: [P-3]
@@ -491,6 +497,13 @@ tasks:
         categorization sets.
       - ART-RA identifies the system elements and interfaces that need specific attention in
         test events, for the cybersecurity strategy and the TEMP.
+      - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the
+        processing and its impact on individuals and evaluates each legal and policy privacy
+        requirement, OMB A-130 among them, with what the privacy baseline leaves unmet
+        (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD
+        Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative
+        and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the
+        reviewing official (PRIV-002, PRIV-003).
       - ra.yaml components records each third-party and open-source software component with the
         six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and
         license review of a non-trivial open-source component, and any independent third-party
@@ -511,6 +524,8 @@ tasks:
       - {ref: SP800-37R2, section: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"}
       - {ref: DODI5000.89, page: 16, anchor: "Conduct a mission-based cyber risk assessment (such as a cyber table top)"}
       - {ref: DODI5000.90, page: 11, anchor: "PMs must use cyber threat information produced by the Intelligence Community"}
+      - {ref: SP800-53B, page: 21, anchor: "Organizations conduct privacy risk assessments that consider the nature of the PII"}
+      - {ref: DODI5400.16, page: 9, anchor: "The PIA will be prepared using DD Form 2930, “Privacy Impact Assessment"}
     playbook: playbooks/P/P-14.md
   - id: P-15
     name: Requirements Definition
@@ -524,7 +539,7 @@ tasks:
       Define and prioritize the security and privacy requirements for the system and its
       environment, including cyber survivability, so they enter the requirements baseline before
       the SRR.
-    raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: []}
+    raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
     outputs: [ART-REQ]
     writes_facts: []
@@ -546,6 +561,9 @@ tasks:
       - Every DoD design policy statement REQS-002 lists is addressed; one that applies is
         carried by a requirement, and only a conditional one may be marked not applicable.
       - The security-relevant constraints on the solution are recorded with their origin.
+      - For a system of records, requirements.yaml privacy_act carries each Privacy Act rule no
+        control states by a requirement, and each legal and policy privacy requirement ra.yaml
+        finds applicable is carried by a requirement (PRIV-007).
       - requirements.yaml derivation records how the lead systems engineer derived the security
         and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability
         requirements document, CONOPS, operational mode summary and mission profiles, by methods
@@ -568,6 +586,7 @@ tasks:
       - {ref: SP800-37R2, section: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"}
       - {ref: DODI5000.90, page: 10, anchor: "Represented within the system survivability key performance parameters"}
       - {ref: DODI8510.01, page: 20, anchor: "Requirements, development, procurement, and T&E processes must apply the RMF"}
+    enforces: [REQ-SP800-37R2-0733]
     playbook: playbooks/P/P-15.md
   - id: P-16
     name: Enterprise Architecture
@@ -580,7 +599,7 @@ tasks:
     purpose: >-
       Determine the placement of the system within the enterprise, security and privacy
       architecture.
-    raci: {R: [PER-LSE, PER-ISSE, PER-SPONSOR, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-CISO, PER-IO], I: []}
+    raci: {R: [PER-LSE, PER-ISSE, PER-SPONSOR, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-CISO, PER-IO], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-REQ, ART-BND, ART-INV, EXT-NSA-ASSESSMENT]
     outputs: [ART-BND]
     writes_facts: []
@@ -620,7 +639,7 @@ tasks:
       Allocate the security and privacy requirements to the system, its elements and its
       environment of operation, including common control providers, so the development RFP
       carries them.
-    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: []}
+    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-REQ, ART-ORG-CONTEXT, ART-INV]
     outputs: [ART-REQ]
     writes_facts: []

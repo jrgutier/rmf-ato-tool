@@ -651,7 +651,8 @@ def catalog_show(
                                              "statement.")
     ] = False,
     fields: Annotated[
-        str, typer.Option(help="Comma list of title, statement, guidance, objectives, params.")
+        str, typer.Option(help="Comma list of title, statement, guidance, objectives, params, "
+                             "assurance, overlay (with --run).")
     ] = "title,statement",
     chunk: Annotated[str | None, typer.Option(help="i/n: the i-th of n slices.")] = None,
     fmt: FormatOption = OutputFormat.text,
@@ -667,12 +668,22 @@ def catalog_show(
                            f"expected {', '.join(catalog_mod.FIELDS)}")
     if missing and run is None:
         raise _usage_error("--missing needs --run")
+    if catalog_mod.OVERLAY_FIELD in chosen and run is None:
+        raise _usage_error("--fields overlay needs --run (the overlays it applies)")
     cat = catalog_mod.load(repo_root())
+    specs: dict = {}
     if run is not None:
         from rmf_tool import baseline as baseline_mod
 
         r = _open(run)
         ids = baseline_mod.control_ids(r)
+        if catalog_mod.OVERLAY_FIELD in chosen:
+            from rmf_tool import overlay_specs
+            from rmf_tool.run import facts as facts_mod
+
+            cat_fact = facts_mod.get(facts_mod.load(r), "categorization")
+            overlays = cat_fact.get("overlays") if isinstance(cat_fact, dict) else None
+            specs = overlay_specs.applied(r.repo, overlays if isinstance(overlays, list) else [])
         if missing:
             gaps = status_mod.family_gaps(r)
             ids = [c for c in ids if c in gaps.get(catalog_mod.family(c), {}).get("ssp", [])]
@@ -694,6 +705,13 @@ def catalog_show(
         except ValueError as exc:
             raise _usage_error(str(exc)) from exc
     views = [catalog_mod.view(cat, c, chosen) for c in ids]
+    if catalog_mod.OVERLAY_FIELD in chosen:
+        for v in views:
+            v[catalog_mod.OVERLAY_FIELD] = [
+                {"overlay": a.overlay, "disposition": a.disposition,
+                 "statements": list(a.statements), "authorities": list(a.authorities),
+                 "guidance_references": list(a.guidance),
+                 "citation": dict(a.citation)} for a in specs.get(v["id"], [])]
     if fmt is OutputFormat.json:
         typer.echo(json.dumps({"controls": views}, indent=2))
     else:

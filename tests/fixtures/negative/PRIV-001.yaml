@@ -1,0 +1,13 @@
+rule: PRIV-001
+bases:
+- pii
+description: a system processing PII with no privacy compliance record
+mutations:
+- op: delete_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - the system processes PII and records no privacy compliance or PIA determination

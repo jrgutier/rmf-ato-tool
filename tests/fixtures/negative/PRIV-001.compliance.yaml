@@ -1,0 +1,16 @@
+rule: PRIV-001
+bases:
+- pii
+description: DoD 5400.11-R left out of the issuances complied with
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.compliance
+  value:
+  - DODI5400.16
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - DoD IT that processes PII complies with DoD 5400.11-R and DoDI 5400.16, and DOD5400.11-R is not among
+    the issuances it complies with

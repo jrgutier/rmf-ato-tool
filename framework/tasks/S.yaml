@@ -12,7 +12,7 @@ tasks:
     purpose: >-
       Select the NSS control baseline in CNSSI 1253 Appendix D that matches the approved C/I/A
       categorization, plus the NSS privacy baseline, as the starting point for tailoring.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CAT, ART-ORG-CONTEXT, ART-REQ, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS, EXT-CATALOG]
     outputs: [ART-BASELINE]
     writes_facts: [baseline_id]
@@ -50,7 +50,7 @@ tasks:
       Tailor the selected controls into the tailored control baseline by applying overlays,
       designating common controls, scoping, compensating, assigning DoD parameter values and
       supplementing.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-RA, EXT-CNSSI1253-OVERLAYS]
     outputs: [ART-BASELINE]
     writes_facts: []
@@ -98,7 +98,7 @@ tasks:
     purpose: >-
       Designate controls as system-specific, hybrid or common and allocate them to system
       elements, so the preliminary design (RV-PDR) shows where each control lives.
-    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: []}
+    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-BND, ART-ORG-CONTEXT, ART-REQ]
     outputs: [ART-BASELINE]
     writes_facts: []
@@ -132,7 +132,7 @@ tasks:
     purpose: >-
       Document the planned control implementations in the security plan and write the CM,
       contingency and incident response plans.
-    raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: []}
+    raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG]
     outputs: [ART-SSP, ART-CMP, ART-CP, ART-IRP, ART-SVCA]
     writes_facts: []
@@ -149,6 +149,8 @@ tasks:
       - ART-CMP, ART-CP and ART-IRP written.
       - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control
         board and the baseline configuration process.
+      - For a system processing PII, ART-SSP holds the privacy plan with the security plan
+        (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
       - The statement of each baseline control the catalog marks as contributing to assurance
         (`rmf catalog show --fields assurance`) says how its assurance requirements are
         addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
@@ -178,7 +180,7 @@ tasks:
       Develop the system-level continuous monitoring strategy, consistent with the
       organizational strategy, with monitoring metrics and frequencies set at the start of
       development.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AO, PER-IO, PER-ISSE, PER-CSSP], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AO, PER-IO, PER-ISSE, PER-CSSP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, ART-SSP, ART-RA, EXT-THREAT]
     outputs: [ART-CONMON]
     writes_facts: []
@@ -195,6 +197,9 @@ tasks:
         management strategy is developed (DoDI 8510.01 Table 3 outcome).
       - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization
         triggers (CONMON-001).
+      - On the software pathway (PW-SWP), conmon.yaml states the risk-based lifecycle management
+        approach, what it addresses, what the program backlogs capture, and when a
+        vulnerability fix is released out of the release cycle (SWLC-001).
       - conmon.yaml states the criteria behind each frequency, established by the system owner
         or common control provider with other officials, or cites ART-ORG-CONTEXT for a family
         organizational_frequencies lists as set by the organizational strategy (ISCM-003).
@@ -213,6 +218,9 @@ tasks:
         frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
       - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and
         manual controls have defined timelines.
+      - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring
+        strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment
+        frequency, and the SAOP consulted on each control added to it (PRIV-006).
       - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability
         management process across the system, the records that support it, how vulnerabilities
         are identified, the analysis tools from development to retirement, monthly
@@ -239,7 +247,7 @@ tasks:
     purpose: >-
       Have the AO (or AODR) review and approve the security plan and monitoring strategy before
       Milestone B.
-    raci: {R: [PER-AODR], A: PER-AO, C: [PER-RE, PER-CIO, PER-MDA, PER-CISO, PER-PRIV], I: [PER-PM, PER-ISSM]}
+    raci: {R: [PER-AODR], A: PER-AO, C: [PER-RE, PER-CIO, PER-MDA, PER-CISO, PER-PRIV], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, ART-CONMON, ART-RA]
     outputs: [ART-SSP]
     writes_facts: []

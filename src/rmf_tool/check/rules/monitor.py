@@ -594,9 +594,11 @@ def plan_reviews(ctx: Context) -> list[RunFinding]:
         if isinstance(interval, int) and (later - earlier).days > interval:
             err(f"the system plan went unreviewed from {earlier} to {later}, past the "
                 f"organization-defined schedule of {interval} days")
-    log = {i.get("id") for i in _items(ctx.data(CHANGES_FILE), "changes")}
+    log = {i.get("id") for i in _items(ctx.data(CHANGES_FILE), "changes")
+           if isinstance(i.get("id"), str)}
     for c in _items(data, "changes"):
-        if c.get("change_ref") is not None and log and c.get("change_ref") not in log:
+        ref = c.get("change_ref") if isinstance(c.get("change_ref"), str) else None
+        if c.get("change_ref") is not None and log and ref not in log:
             err(f"{c.get('version')}: the system plan update is not tracked by change "
                 f"management: {c.get('change_ref')} is not in the change log")
         if c.get("approved_by") not in PLAN_APPROVERS:

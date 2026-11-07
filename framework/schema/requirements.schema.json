@@ -54,6 +54,53 @@
     },
     "engineering": {
       "$ref": "#/$defs/engineering"
+    },
+    "privacy_act": {
+      "title": "Privacy Act rules no control states, each carried by requirements or not applicable with a reason (PRIV-007)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule",
+          "applies",
+          "sources"
+        ],
+        "properties": {
+          "rule": {
+            "title": "Privacy Act rule",
+            "enum": [
+              "direct-collection",
+              "disclosure-bar",
+              "first-amendment",
+              "access-appeals",
+              "rules-of-conduct",
+              "contract-provisions"
+            ]
+          },
+          "applies": {
+            "type": "boolean"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^REQ-\\d{2,3}$"
+            }
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {

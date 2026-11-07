@@ -1,0 +1,15 @@
+rule: PRIV-004
+bases:
+- pii
+description: a restricted publication without its reason
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: publication.status
+  value: restricted
+expect:
+  errors:
+  - PRIV-004
+  messages:
+  - publication of the PIA is restricted without the security concern or the classified or sensitive information
+    that restricts it

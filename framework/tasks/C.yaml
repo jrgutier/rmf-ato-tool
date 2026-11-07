@@ -12,7 +12,7 @@ tasks:
     purpose: >-
       Document the characteristics of the system, its users and the authorizations it leverages;
       the PM provides the system description.
-    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-LSE], I: []}
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-LSE], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BND, ART-REQ, ART-INV, EXT-PRODUCT]
     outputs: [ART-SD, ART-BND]
     writes_facts: [system_id, system_name, acronym, aliases, lifecycle_state, classification,
@@ -54,7 +54,7 @@ tasks:
       Categorize the system per CNSSI 1253, an impact level for each information type and the
       high-water mark for each security objective (C/I/A) plus the applicable overlays, and
       record it in facts.yaml.
-    raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [PER-UR, PER-ISSE, PER-PRIV, PER-CISO, PER-RE], I: [PER-AO]}
+    raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [PER-UR, PER-ISSE, PER-PRIV, PER-CISO, PER-RE], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SD, ART-INFOTYPES, ART-RA, EXT-CNSSI1253-OVERLAYS]
     outputs: [ART-CAT]
     writes_facts: [categorization]
@@ -95,7 +95,7 @@ tasks:
     purpose: >-
       Review the security categorization and have the AO (or AODR) approve it, with SAOP (or
       designee) approval as well when the system processes PII; approval is due by Milestone A.
-    raci: {R: [PER-AODR, PER-PRIV], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO], I: [PER-PM, PER-ISSM]}
+    raci: {R: [PER-AODR, PER-PRIV], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CAT]
     outputs: [ART-CAT]
     writes_facts: [categorization.approved]

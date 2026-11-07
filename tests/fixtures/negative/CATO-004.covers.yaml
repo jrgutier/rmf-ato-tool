@@ -1,0 +1,23 @@
+rule: CATO-004
+bases:
+- minimal
+description: an assessment that leaves out manual code reviews
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: monitoring.assessment_covers
+  value:
+  - threat-modeling
+  - vulnerability-analysis
+  - independent-verification
+  - penetration-testing
+  - attack-surface-reviews
+  - te-scope
+  - sast
+  - dast
+  - iast
+expect:
+  errors:
+  - CATO-004
+  messages:
+  - the security assessment of the DSOP does not address manual-code-reviews

@@ -2,8 +2,9 @@
 mutates a copy of a base run; ``rmf check --final`` must then report exactly the rule's
 errors plus the listed ``also`` errors (and, for a warning rule, the listed ``warnings``).
 Bases: ``minimal`` (valid_minimal, scope all), ``hybrid`` (hybrid_minimal, skeleton scope)
-and ``example`` (the uas-gcs synthetic run, Phase 7). Copies are re-stamped to the current
-upstream hash, so the bases start without findings."""
+and ``example`` (the uas-gcs synthetic run, Phase 7), and ``pii``, derived from ``minimal`` by
+the mutations in tests/fixtures/runs/pii.yaml into a system that processes PII. Copies are
+re-stamped to the current upstream hash, so the bases start without findings."""
 
 
 import pytest
@@ -19,7 +20,20 @@ NEGATIVE = REPO_ROOT / "tests/fixtures/negative"
 BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
 if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3)
     BASES["example"] = EXAMPLE_RUN
+# A derived base: a committed base plus mutations, so it cannot drift from what it extends.
+DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml"}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
+
+
+def base_copy(base, dest):
+    if base not in DERIVED:
+        return copy_run(BASES[base], dest)
+    spec = YAML(typ="safe").load(DERIVED[base].read_text(encoding="utf-8"))
+    run_dir = copy_run(BASES[spec["base"]], dest)
+    for mutation in spec["mutations"]:
+        apply(run_dir, mutation)
+    build.build(open_run(run_dir, REPO_ROOT))
+    return run_dir
 
 
 def on_old_contract(run) -> bool:
@@ -32,9 +46,9 @@ def _rules(run, found, severity: str) -> set[str]:
     return rules - ({"RUN-VER-001"} if on_old_contract(run) else set())
 
 
-@pytest.mark.parametrize("base", sorted(BASES))
+@pytest.mark.parametrize("base", sorted([*BASES, *DERIVED]))
 def test_base_has_no_findings(base, tmp_path):
-    run_dir = copy_run(BASES[base], tmp_path / base)
+    run_dir = base_copy(base, tmp_path / base)
     run = open_run(run_dir, REPO_ROOT)
     ev = engine.evaluate(run)
     found = [f for f in engine.select(run, ev, final=True)
@@ -110,11 +124,11 @@ def test_hybrid_minimal_exercises_tagging():
 def test_negative(spec_path, tmp_path):
     spec = YAML(typ="safe").load(spec_path.read_text(encoding="utf-8"))
     assert spec["rule"] == spec_path.stem.partition(".")[0]
-    bases = [b for b in spec.get("bases", ["minimal"]) if b in BASES]
+    bases = [b for b in spec.get("bases", ["minimal"]) if b in BASES or b in DERIVED]
     assert bases, "no base available"
     expect = spec["expect"]
     for base in bases:
-        run_dir = copy_run(BASES[base], tmp_path / base)
+        run_dir = base_copy(base, tmp_path / base)
         for mutation in spec["mutations"]:
             if base in mutation.get("only", [base]):
                 apply(run_dir, mutation)
@@ -251,3 +265,14 @@ def test_every_run_rule_is_implemented_with_a_fixture():
         assert rule.fixture, rid
         if rule.fixture.startswith("tests/fixtures/negative/"):
             assert rid in specs, rid
+
+
+def test_an_optional_data_file_is_not_required_with_its_artifact(tmp_path):
+    """cato.yaml is written only once a cATO is sought (CATO-001), so RUN-ART-001 does not
+    require it of every run that produces ART-AODM."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    (run_dir / "artifacts/data/cato.yaml").unlink()
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert [f for f in found if f.severity == "E"] == []

@@ -50,7 +50,9 @@ requirements:
     locator: "1.1.•"
     context: "Assumptions"
     statement: "• Cybersecurity elements will leverage cloud service provider (CSP) managed service capabilities where practicable. Teams will aggressively seek to integrate automated feedback, patching, alerting, and other authorized network security measures."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-010 holds feedback from both production environments; CSP managed services and patching are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.feedenv.yaml", "expect": "no active feedback mechanism for the", "asserts": "Teams integrate automated feedback from production environments", "claim": "constraint", "sentence": "Teams will aggressively seek to integrate automated feedback, patching, alerting, and other authorized network security measures."}]
     work_item: "WI-294"
   - id: "REQ-DODCIO-DEVSECOPS-0007"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 8, "anchor": "Rapidly changing technology dictates designing DevSecOps pipelines and patterns for flexibility as"}
@@ -219,8 +221,8 @@ requirements:
     context: "Table 1: DevSecOps Key Concepts"
     statement: "Continuous Authorization to Operate (cATO) | cATO is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant. This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."
     status: "partial"
-    reason: "Maturity, monitoring, cyber defense and supply chain are D-5 data at p12"
-    evidence: [{"kind": "pinned", "asserts": "A continuous authorization to operate requires an ATO and approval on evidence before the state is achieved", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "sentence": "Continuous Authorization to Operate (cATO) | cATO is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant."}]
+    reason: "Not tier 1. CATO-002 holds the competencies; sufficient maturity is the assessment's recommendation, not a value a rule can test."
+    evidence: [{"kind": "pinned", "asserts": "A continuous authorization to operate requires an ATO and approval on evidence before the state is achieved", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "sentence": "Continuous Authorization to Operate (cATO) | cATO is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant."}, {"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "The organization has implemented continuous monitoring, active cyber defense and secure software supply chain: each competency demonstrated", "claim": "constraint", "sentence": "This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-DEVSECOPS-0028"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 12, "anchor": "There are several critical components in implementing DevSecOps. These components include the"}
@@ -236,7 +238,9 @@ requirements:
     locator: "3.1"
     context: "DevSecOps Implementation Components"
     statement: "Note that a DevSecOps implementation does not require a specific architecture, containers, or even explicit use of cloud computing. However, the use of these components is strongly recommended, and in some cases mandated by specific DoD reference designs. Teams are encouraged to start small and build up their capabilities progressively, striving for continuous process improvement at each of the ten lifecycle phases."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. A permission and advice on architecture; nothing to hold."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.yaml", "expect": "implements an approved DevSecOps Reference Design", "asserts": "Components mandated by specific DoD reference designs: the DSOP implements an approved DevSecOps Reference Design", "claim": "constraint", "sentence": "However, the use of these components is strongly recommended, and in some cases mandated by specific DoD reference designs."}]
     work_item: "WI-296"
   - id: "REQ-DODCIO-DEVSECOPS-0030"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 12, "anchor": "The software supply chain is a logistical pathway that covers the entirety"}
@@ -244,7 +248,9 @@ requirements:
     locator: "3.1.1"
     context: "Software Supply Chain"
     statement: "The software supply chain is a logistical pathway that covers the entirety of all the hardware, Infrastructure as a Service (IaaS), Platform as a Service (PaaS), Software as a Service (SaaS), and tools and practices that are brought together to deliver specific software capabilities. The software supply chain matters because the end software supporting the warfighter, from embedded software on the bridge of a Naval vessel to electronic warfare algorithms in an aircraft, is only possible due to the people, processes, and tools that create the end result. For example, a compiler is unlikely to be deployed onto a physical vessel, but without the compiler there would be no guidance system. For this reason, the software supply chain must be recognized, understood, secured, and monitored to ensure mission success."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. Describes the software supply chain; CATO-007 requires the pipeline monitored, which is the duty this paragraph sets up."
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.pipeline.yaml", "expect": "the software development pipeline and its environment are not monitored", "asserts": "The software supply chain pipeline and its environment are monitored for the software capabilities delivered", "claim": "constraint", "sentence": "For this reason, the software supply chain must be recognized, understood, secured, and monitored to ensure mission success."}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-DEVSECOPS-0031"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 12, "anchor": "Software supply chains exist for business systems, weapons systems, and everywhere software"}
@@ -260,7 +266,9 @@ requirements:
     locator: "3.1.1"
     context: "Software Supply Chain"
     statement: "DevSecOps methodologies span multiple links of the software supply chain. DevSecOps cannot exist without this logistical supply chain – Integrated Development Environments (IDEs), build tools, code repositories, artifact repositories, testing software suites, and many other pieces of software must work together in unison to effectively execute a DevSecOps powered software factory. The totality of these environments must be considered when evaluating the software supply chain. For example, the cybersecurity and risk postures of a specific artifact or application would be calculated using the product rule across the entirety of the software supply chain. If the compiler is 90% secure, the code repository is 90% secure, the artifact repository is 90% secure, and the container orchestrator is 90% secure – the overall system is not 90% secure. The cybersecurity level of the end-to-end ecosystem is actually .9 * .9 *.9 * .9, or roughly 65% secure."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-007 requires the pipeline and its environment monitored; that the totality of environments is evaluated is not tested."
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.pipeline.yaml", "expect": "the software development pipeline and its environment are not monitored", "asserts": "The software supply chain environments, the development pipeline and its environment, are monitored when evaluating the supply chain", "claim": "constraint", "sentence": "The totality of these environments must be considered when evaluating the software supply chain."}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-DEVSECOPS-0033"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 14, "anchor": "Digital Platform Capabilities include the distinct development environments of the software factory,"}
@@ -268,7 +276,9 @@ requirements:
     locator: "3.1.2"
     context: "Figure 2: Software Capabilities of a Software Factory"
     statement: "Digital Platform Capabilities include the distinct development environments of the software factory, its CI/CD pipelines, a clearly implemented log aggregation and analysis strategy, and continuous monitoring operations. These capabilities should support multi-tenancy, enforce separation of duties for privileged users, and be considered part of the cyber survivability supply chain of the final software artifacts produced."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-003 requires the DSOP automation to enable monitoring; multi-tenancy and separation of duties for privileged users are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.enables.yaml", "expect": "the DSOP automation does not enable", "asserts": "Digital platform capabilities, including continuous monitoring, are enabled by the DSOP automation", "claim": "constraint", "sentence": "These capabilities should support multi-tenancy, enforce separation of duties for privileged users, and be considered part of the cyber survivability supply chain of the final software artifacts produced."}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-DEVSECOPS-0034"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 14, "anchor": "The set of environments within this capability set rely upon CI/CD pipelines,"}
@@ -276,7 +286,9 @@ requirements:
     locator: "3.1.2"
     context: "Figure 2: Software Capabilities of a Software Factory"
     statement: "The set of environments within this capability set rely upon CI/CD pipelines, each equipped with a purpose-driven set of tools and process workflows. The environmental boundaries are heavily automated with strict gates controlling promotion of software artifacts from development to test, and from test to integration. These capabilities also encompass planning and backlog functionality, configuration management (CM) repositories, and local and released artifact repositories. Access control for privileged users is expected to follow an environment-wide least privilege access model. Continuous monitoring assesses the state of compliance for all resources and services evaluated against NIST SP 800-53 controls. Reference NIST Special Publication 800-137, Information Security Continuous Monitoring (ISCM) for Federal Information Systems and Organizations and (CUI) DoD Information Security Continuous Monitoring Strategy for more information."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-005 holds the control gates on promotion; least privilege access and planning functionality are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "Strict gates controlling promotion of software artifacts implement agreed risk tolerances in the pipeline control gates", "claim": "constraint", "sentence": "Access control for privileged users is expected to follow an environment-wide least privilege access model."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-DEVSECOPS-0035"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 14, "anchor": "pipeline contains and defines a complete set of tools, process workflows, scripts,"}
@@ -342,7 +354,9 @@ requirements:
     locator: "3.1.2"
     context: "Figure 4: Generic Software Factory with a Separate Production Environment"
     statement: "Under the shift to a cATO, each software factory will have its processes, teams, and storage reviewed, certified, and continuously monitored to allow them to deploy applications into a continuously monitored system. This shift greatly lessens the initial burden of achieving an ATO for each piece of software, as the process and roll out are certified and fed into a continuous monitoring architecture."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-001 scores the processes and teams; storage is not scored."
+    evidence: [{"kind": "rule", "target": "CATO-015", "fixture": "tests/fixtures/negative/CATO-015.areas.yaml", "expect": "against the evaluation and weighting criteria", "asserts": "The software factory's processes and teams are reviewed against the evaluation and weighting criteria for the cATO", "claim": "constraint", "sentence": "Under the shift to a cATO, each software factory will have its processes, teams, and storage reviewed, certified, and continuously monitored to allow them to deploy applications into a continuously monitored system."}]
     work_item: "WI-287"
   - id: "REQ-DODCIO-DEVSECOPS-0043"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 16, "anchor": "Standardization: Establishes standardized practices, processes, and tools for software development. It promotes"}
@@ -374,7 +388,9 @@ requirements:
     locator: "3.1.2.4"
     context: "Figure 4: Generic Software Factory with a Separate Production Environment An ideal DevSecOps software factory does the following:"
     statement: "4. Scalability and Flexibility: Scales and adapts to the needs of the organization. It must be designed for multi-tenancy and accommodate different types of applications, technologies, and deployment environments, including on-premises, cloud, and hybrid infrastructures."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. Multi-tenancy and deployment environments are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.environments.yaml", "expect": "the hosting environment provides no", "asserts": "The platform accommodates different deployment environments: the hosting environment provides each environment", "claim": "constraint", "sentence": "It must be designed for multi-tenancy and accommodate different types of applications, technologies, and deployment environments, including on-premises, cloud, and hybrid infrastructures."}]
     work_item: "WI-293"
   - id: "REQ-DODCIO-DEVSECOPS-0047"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 16, "anchor": "Security and Compliance: Incorporates security practices throughout the development and delivery process."}
@@ -382,7 +398,9 @@ requirements:
     locator: "3.1.2.5"
     context: "Figure 4: Generic Software Factory with a Separate Production Environment An ideal DevSecOps software factory does the following:"
     statement: "5. Security and Compliance: Incorporates security practices throughout the development and delivery process. It provides a dynamically scalable set of pipelines with three distinct cyber survivability control gates and integrates security scanning tools, vulnerability assessments, and compliance checks to identify and address security issues early on. This helps ensure that software products meet security standards and regulatory requirements and provides assurance as an AO that functional, security, integration, operational, and all other tests are reliably performed and passed prior to formal release and delivery."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-005 holds the control gates; the three cyber survivability gates are not counted."
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.scanning.yaml", "expect": "security scanning leaves out", "asserts": "The pipelines integrate security scanning tools and vulnerability assessments; scanning leaves out none of dynamic and static analysis", "claim": "constraint"}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-DEVSECOPS-0048"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 17, "anchor": "Collaboration and Communication: Fosters collaboration and communication among teams, enabling them to"}
@@ -422,7 +440,9 @@ requirements:
     locator: "3.1.3"
     context: "Figure 5: DevSecOps Platform"
     statement: "DevSecOps platforms provide rapid access to common software development infrastructure capabilities for use by a DevSecOps team. DevSecOps platforms employ automation at multiple levels and across multiple activities in the develop, build, test, release, and deliver phases of the DevSecOps lifecycle. Each environment in the process is automated to the maximum extent that is safely and securely possible, rehydrated using Infrastructure as Code (IaC) and Configuration as Code (CaC) that run on various tools. DevSecOps platforms are expected to be instantiated from hardened IaC code and scripts or DoD hardened containers from a DoD artifact repository like Iron Bank, a hardened container image repository and one of Platform One’s value streams."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-006 requires IaC and CaC; hardened instantiation is not tested."
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.ascode.yaml", "expect": "as code to avoid environment drift", "asserts": "Environments are rehydrated using Infrastructure as Code and Configuration as Code", "claim": "constraint", "sentence": "DevSecOps platforms are expected to be instantiated from hardened IaC code and scripts or DoD hardened containers from a DoD artifact repository like Iron Bank, a hardened container image repository and one of Platform One’s value streams."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-DEVSECOPS-0053"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 18, "anchor": "Platforms are necessary to implement software delivery through DevSecOps. DevSecOps platforms represent"}
@@ -472,7 +492,9 @@ requirements:
     locator: "3.1.6"
     context: "Common Tools"
     statement: "Every DevSecOps software factory and platform must include a minimal set of common tooling. The use of the word common is indicative of a class of tooling; it does not, nor should it be construed that the same tool must be used across every implementation."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. The common tooling is the activities mapping CATO-011 requires."
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.guidebook.yaml", "expect": "mapped from the DevSecOps Activities and Tools Guidebook", "asserts": "The minimal set of common tooling is mapped from the DevSecOps Activities and Tools Guidebook", "claim": "constraint", "sentence": "Every DevSecOps software factory and platform must include a minimal set of common tooling."}]
     work_item: "WI-295"
   - id: "REQ-DODCIO-DEVSECOPS-0059"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 21, "anchor": "Feedback loops are critical mechanisms that overlap with specific DevSecOps lifecycle phases."}
@@ -528,7 +550,9 @@ requirements:
     locator: "3.2.2"
     context: "Continuous Integration"
     statement: "The CI feedback loop iterates across the Develop, Build, and Test phases of the DevSecOps lifecycle, depicted in Figure 7. If build doesn’t complete successfully, then the commit must be sent back to the submitting engineer to fix. Without a successful build, further steps are both illogical and impossible to complete. Common types of feedback between Develop and Build include a successful build by the build tool (because a broken build shouldn’t be merged into the main branch) and a pull request that creates the software equivalency of two-person integrity. The pull request performed is intended to evaluate the architecture and software structure, identify technical debt that the original engineer may (inadvertently) introduce if this commit is merged into the main branch, and most importantly, identify any glaring security risks and confusing code. Once the pull request is merged into the main branch, a complete series of automated tests are executed, including a full set of integration tests."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. The CI feedback loop is CATO-005's pipeline findings fed back; the build and pull request steps are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.findings.yaml", "expect": "security findings during pipeline runs are not", "asserts": "Feedback on security findings during pipeline runs reaches the submitting engineer through the CI feedback loop", "claim": "constraint", "sentence": "If build doesn’t complete successfully, then the commit must be sent back to the submitting engineer to fix."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-DEVSECOPS-0066"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 24, "anchor": "The Monitor and Feedback phases must bring together a deep, rich set"}
@@ -536,7 +560,9 @@ requirements:
     locator: "3.2.5"
     context: "Monitor/Feedback"
     statement: "The Monitor and Feedback phases must bring together a deep, rich set of real-time performance metrics and supporting data to continuously evaluate the totality of the software environment. These phases serve two main functions: cybersecurity monitoring to ensure events and incidents are handled in accordance with DoD mandates and policies and live data feedback and interaction between network defenders, end users, and developers. For cybersecurity, the antiquated snapshot view of network security is replaced with real time feeds, allowing security actions to be taken by local defenders, monitoring teams (Cybersecurity Service Providers (CSSPs)), incident response teams (Cyber Protection Teams (CPTs)), and Command and Control (C2) elements of U.S. Cyber Command/Joint Force Headquarters – DoD Information Network (JFHQ-DoDIN). For customer satisfaction, developers receive feedback regarding the operational effectiveness of the software release and its impact in meeting mission requirements. Some other monitoring activities include fault detection, log auditing, and value assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-007 requires metrics collected and trend analyzed; the feedback functions and developer feedback are not tested."
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.analysis.yaml", "expect": "no metric is identified, collected and trend analyzed", "asserts": "Real-time performance metrics are collected to continuously evaluate the software environment", "claim": "constraint", "sentence": "The Monitor and Feedback phases must bring together a deep, rich set of real-time performance metrics and supporting data to continuously evaluate the totality of the software environment."}]
     work_item: "WI-290"
   - id: "REQ-DODCIO-DEVSECOPS-0067"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 25, "anchor": "A software factory consists of the technology and processes focused on the"}
@@ -554,7 +580,9 @@ requirements:
     locator: "3.3.1"
     context: "Security"
     statement: "The security inherent within DevSecOps is achieved through a fundamental change in the culture and approach to cybersecurity and testing. Security is continuously shifted left and integrated throughout the software artifacts from the beginning. As software is developed, the development teams use secure coding techniques and practices while the pipeline includes control gates and guardrails that evaluate code for discrepancies and vulnerabilities before sending it to production. Additionally, security practices continue through deployment and into production. Repositories are scanned and software updated when new vulnerabilities are found, and continuous monitoring in production helps identify operational vulnerabilities and insider threat incidents. One can see that security spans the full lifecycle, whether during development, deployment, or production. Assessments, testing, documentation, detection, mitigation, and remediation are also required to provide the most secure operational capability possible."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. Control gates and guardrails are CATO-005; secure coding techniques are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-005", "fixture": "tests/fixtures/negative/CATO-005.yaml", "expect": "agreed-to risk tolerances are implemented in the pipeline control", "asserts": "The pipeline control gates evaluate code against agreed risk tolerances before production", "claim": "constraint", "sentence": "As software is developed, the development teams use secure coding techniques and practices while the pipeline includes control gates and guardrails that evaluate code for discrepancies and vulnerabilities before sending it to production."}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-DEVSECOPS-0069"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 26, "anchor": "This approach differs from the view that cybersecurity can simply be a"}
@@ -570,7 +598,9 @@ requirements:
     locator: "3.3.1.1"
     context: "Zero Trust"
     statement: "DevSecOps software factories and platforms must adopt zero trust as the target security model for cybersecurity. Teams should consistently strive to bake in as many of the zero trust principles as are supported by their architecture across each of the ten phases of the DevSecOps lifecycle. Further, DevSecOps teams must fully consider security from both the end user perspective and all non-person entities (NPEs). To illustrate several of these concepts in a notional list, these NPEs include servers, the mutual transport layer security (mTLS) between well-defined services relying on Federal Information Processing Standard (FIPS) compliant cryptography, adoption of deny by default postures, and an understanding of how all traffic, both north-south and east-west, is protected throughout the system’s architecture."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-006 requires zero trust traffic enforcement; non-person entities are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.yaml", "expect": "DSOP zero trust does not enforce", "asserts": "Software factories adopt zero trust as the target security model, enforced on traffic", "claim": "constraint", "sentence": "DevSecOps software factories and platforms must adopt zero trust as the target security model for cybersecurity."}]
     work_item: "WI-292"
   - id: "REQ-DODCIO-DEVSECOPS-0071"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 27, "anchor": "The Risk Management Framework (RMF) is the framework DoD uses to ensure"}
@@ -587,8 +617,8 @@ requirements:
     context: "Risk Management Framework"
     statement: "Continuous Authorization to Operate: A cATO is the state achieved when the organization(s) that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant. This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."
     status: "partial"
-    reason: "Maturity, monitoring, cyber defense and supply chain are D-5 data at p12"
-    evidence: [{"kind": "pinned", "asserts": "A continuous authorization to operate requires an ATO and approval on evidence before the state is achieved", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "sentence": "Continuous Authorization to Operate: A cATO is the state achieved when the organization(s) that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant."}]
+    reason: "Not tier 1. CATO-002 holds the competencies; sufficient maturity is the assessment's recommendation, not a value a rule can test."
+    evidence: [{"kind": "pinned", "asserts": "A continuous authorization to operate requires an ATO and approval on evidence before the state is achieved", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "sentence": "Continuous Authorization to Operate: A cATO is the state achieved when the organization(s) that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant."}, {"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "The organization has implemented continuous monitoring, active cyber defense and secure software supply chain: each competency demonstrated", "claim": "constraint", "sentence": "This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-DEVSECOPS-0073"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 27, "anchor": "Continuous Monitoring: Per NIST SP 800-137.26, “Information Security Continuous Monitoring (ISCM) for"}
@@ -604,7 +634,9 @@ requirements:
     locator: "3.3.1.2.•"
     context: "Risk Management Framework"
     statement: "• Active Cyber Defense: ISCM, as a component of active cyber defense, includes an integrated auditing and incident response capability with predefined triggers and thresholds that can be displayed on an interactive dashboard. Continuously monitoring a DevSecOps platform and its software factories requires the ability to continually evaluate and assess security controls, gates, guardrails, and operating conditions for software either in development or operations. The outcome of this monitoring ensures the effectiveness of security control implementation, verifies compliance with organizational and federal security requirements, and provides the AO information on the residual risk associated with the development and operations of the platform and software. This is a critical component to maintaining a cATO."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. The integrated auditing and incident response capability is CATO-007's coupling; the dashboard is a metric kind."
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.coupling.yaml", "expect": "is not tightly coupled with the", "asserts": "ISCM includes an integrated auditing and incident response capability tightly coupled with the strategy", "claim": "constraint", "sentence": "Continuously monitoring a DevSecOps platform and its software factories requires the ability to continually evaluate and assess security controls, gates, guardrails, and operating conditions for software either in development or operations."}]
     work_item: "WI-286"
   - id: "REQ-DODCIO-DEVSECOPS-0075"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 27, "anchor": "Secure Software Supply Chain: NIST 800-218, “Secure Software Development Framework (SSDF),” describes"}
@@ -630,7 +662,9 @@ requirements:
     locator: "3.3.1.2"
     context: "Risk Management Framework"
     statement: "A DevSecOps platform and its software factories must complete an authorization. Once an authorization is approved, the DevSecOps platform and its software factories can expedite future authorization activities and processes by obtaining a cATO. cATO moves away from a control assessment point-in-time document-based approach (though some documents are still required) towards a continuous risk determination and authorization concept by continuously assessing, monitoring, and managing risk. cATO raises the security standard over a traditional Authorization to Operate (ATO) and provides the ability to deploy updated software more rapidly while improving security. cATO includes the need for a Secure Software Supply Chain (SSSC) and requires a Software Bill of Materials (SBOM). Further information about cATO is available in the DevSecOps Continuous Authorization Implementation Guide.5"
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-003 requires the platform authorized; the benefits of a cATO are no duty."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.authorized.yaml", "expect": "is not already authorized to operate", "asserts": "The DevSecOps platform completes an authorization before obtaining a cATO", "claim": "constraint", "sentence": "A DevSecOps platform and its software factories must complete an authorization."}]
     work_item: "WI-296"
   - id: "REQ-DODCIO-DEVSECOPS-0078"
     citation: {"ref": "DODCIO-DEVSECOPS", "page": 28, "anchor": "While the DevSecOps lifecycle includes a phase named “Test,” there are testing"}
@@ -1238,7 +1272,9 @@ requirements:
     locator: "3.1.4"
     context: ""
     statement: "As an actor initiates a series of steps within a CI/CD pipeline, resources and input artifacts are consumed, and one or more final artifacts result. It is crucial to monitor each step, or link, in the software supply chain across every segment of the CI/CD pipeline. This monitoring involves collecting and analyzing comprehensive metadata at each stage, providing visibility into the entire process. Effective observability allows teams to track the flow of data, identify potential bottlenecks, and ensure that each step is executed correctly and securely."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-007 requires the pipeline monitored; collecting metadata at each step is not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-007", "fixture": "tests/fixtures/negative/CATO-007.pipeline.yaml", "expect": "the software development pipeline and its environment are not monitored", "asserts": "Each step of the CI/CD pipeline in the software supply chain is monitored", "claim": "constraint"}]
     work_item: "WI-288"
     promoted: {"reason": "Rejected as no-marker though 'It is crucial to monitor each step, or link' states the duty; the extractor's pattern needs 'is critical' or 'is essential', and 'crucial' is neither."}
   - id: "REQ-DODCIO-DEVSECOPS-0153"
@@ -1247,7 +1283,9 @@ requirements:
     locator: "3.1.6"
     context: ""
     statement: "The DevSecOps Fundamentals Guidebook: DevSecOps Activities & Tools provides a clean set of tables that captures both required and preferred tooling across DevSecOps lifecycle phase activities. DoD approved reference designs augment the DevSecOps Fundamentals Guidebook: DevSecOps Activities & Tools, adding in its environmentally specific required and preferred tooling. Reference designs do not remove a required tool or activity, only augment. The DevSecOps Fundamentals Guidebook: DevSecOps Activities & Tools and DoD approved reference designs are available at https://dodcio.defense.gov/Library/."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-011 maps activities from the guidebook; reference design augmentation is not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.guidebook.yaml", "expect": "mapped from the DevSecOps Activities and Tools Guidebook", "asserts": "The DevSecOps Activities and Tools guidebook's required and preferred tooling is mapped", "claim": "constraint"}]
     work_item: "WI-295"
     promoted: {"reason": "Rejected as no-marker. Says what 'required' tooling is and that a reference design only adds to it, which sets the floor of the 'must include a minimal set of common tooling' at REQ-DODCIO-DEVSECOPS-0058."}
   - id: "REQ-DODCIO-DEVSECOPS-0154"
@@ -1256,7 +1294,9 @@ requirements:
     locator: "3.3.1"
     context: ""
     statement: "Figure 11 identifies security activities that occur throughout the DevSecOps lifecycle. These are not all inclusive. Each shield surrounding the DevSecOps lifecycle represents a distinct category of cybersecurity testing and activities. This blanket of protection is intentionally depicted surrounding the ten phases because these tests must permeate throughout the lifecycle to achieve benefits. Failure to weave security and functional testing into just one of the ten phases can create a risk of exposure, or worse, compromise, in the final product."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-006 holds scanning; the ten lifecycle shields are not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-006", "fixture": "tests/fixtures/negative/CATO-006.scanning.yaml", "expect": "security scanning leaves out", "asserts": "Security testing permeates the lifecycle through static and dynamic scanning", "claim": "constraint", "sentence": "This blanket of protection is intentionally depicted surrounding the ten phases because these tests must permeate throughout the lifecycle to achieve benefits."}]
     work_item: "WI-292"
     promoted: {"reason": "Rejected as not-a-statement because the paragraph opens on a figure reference, yet it says 'these tests must permeate throughout the lifecycle to achieve benefits'."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

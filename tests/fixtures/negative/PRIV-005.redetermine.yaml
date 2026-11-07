@@ -1,0 +1,23 @@
+rule: PRIV-005
+bases:
+- pii
+description: new privacy risk on a system with no PIA, never decided again
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.determination
+  value: not-required
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.basis
+  value: unchanged
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.previous_assessment
+  value: PIA of 2025-03-01 for the predecessor relay
+expect:
+  errors:
+  - PRIV-005
+  messages:
+  - CHG-002 creates new privacy risk on a system with no PIA, so the PIA determination is due again at
+    P-12
