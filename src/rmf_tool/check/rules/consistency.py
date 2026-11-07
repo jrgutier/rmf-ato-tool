@@ -11,7 +11,13 @@ from rmf_tool import baseline as baseline_mod
 from rmf_tool import catalog
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
-from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, SSP_DIR, family_records
+from rmf_tool.check.rules.content import (
+    POAM_FILE,
+    SAR_DIR,
+    SSP_DIR,
+    family_records,
+    inconsequential,
+)
 from rmf_tool.run import scope
 from rmf_tool.run.model import RUN_FILE
 
@@ -191,7 +197,8 @@ def rar_links(ctx: Context) -> list[RunFinding]:
                 err(f"{r.get('id')} links {ref}, whose finding {item.get('finding_ref')} is "
                     "not among the risk's finding_refs")
     for f in sar:
-        if f.get("status") != "closed" and f.get("id") not in covered:
+        if f.get("status") != "closed" and f.get("id") not in covered \
+                and not inconsequential(f):
             err(f"open SAR finding {f.get('id')} ({f.get('control_id')}) maps to no risk")
     return out
 

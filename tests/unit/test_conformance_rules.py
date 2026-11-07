@@ -2001,6 +2001,21 @@ def test_a_requires_field_is_held_by_pin_rule_and_schema(reg, framework, tmp_pat
     assert evidence.judge(probe, shape, entry).strength == evidence.WEAK
 
 
+def test_a_message_word_is_no_requires_field(reg, framework, tmp_path, triple_context):
+    """ASMT-002's "assessors review the selected procedures" reads no `review` field, so the
+    triple is not asked of it; a rule reading `r.get("review")` still is."""
+    verb = 'err(r, "assessors review the selected procedures")\n'
+    entry, probe, spec = _triple(reg, framework, tmp_path, source=verb,
+                                 messages=("assessors review the selected procedures",),
+                                 expect="assessors review the selected procedures")
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    rule = entry["evidence"][0]
+    assert evidence._rule_fields(probe, rule) == frozenset()
+    entry, probe, spec = _triple(reg, framework, tmp_path / "read")
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    assert evidence._rule_fields(probe, entry["evidence"][0]) == frozenset({"review"})
+
+
 def test_a_leg_of_the_triple_must_judge_strong(reg, framework, tmp_path, triple_context):
     """Probe M3: a leg that only exists held the field."""
     entry, probe, spec = _triple(reg, framework, tmp_path)

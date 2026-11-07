@@ -94,6 +94,18 @@ def _part(control: dict[str, Any], name: str) -> dict[str, Any] | None:
     return next((p for p in control.get("parts") or [] if p.get("name") == name), None)
 
 
+def determination_statements(cat: Catalog, control_id: str) -> list[str]:
+    """The labels of a control's determination statements: its leaf assessment objectives."""
+    def leaves(part: dict[str, Any]) -> list[str]:
+        children = part.get("parts") or []
+        if children:
+            return [label for child in children for label in leaves(child)]
+        return [_label(part)] if _label(part) else []
+
+    part = _part(cat.controls.get(control_id, {}), "assessment-objective")
+    return leaves(part) if part else []
+
+
 def view(cat: Catalog, control_id: str, fields: tuple[str, ...]) -> dict[str, Any]:
     c = cat.controls[control_id]
     out: dict[str, Any] = {"id": control_id}

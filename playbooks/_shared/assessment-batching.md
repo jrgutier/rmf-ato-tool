@@ -26,9 +26,11 @@ adds what is specific to assessing: evidence, numbering, reuse and what each tas
    material, then batched interviews, one per persona per family, with `Control focus:` on
    each question. Ask for records, settings, results and dates. Why: DoDI 8510.01 Table 5
    (A-3) tells assessors to reuse test events and prior results.
-5. **Decide each control.** `satisfied` only when the evidence covers every objective;
-   `other-than-satisfied` when any objective fails or has no evidence; `not-applicable`
-   only with the reason the control does not apply. An SSP status of `partial` or
+5. **Decide each determination statement, then the control.** Record each statement's result
+   in `statements`. A control is `satisfied` only when no statement is other than satisfied or
+   not evaluated; `other-than-satisfied` when any objective fails or has no evidence;
+   `not-applicable` only with the reason the control does not apply. A statement that does not
+   apply takes `not-applicable` and a `reason`, and the control can still be satisfied. An SSP status of `partial` or
    `planned`, an open STIG finding mapped to the control, or a failed test means
    other-than-satisfied unless the evidence shows the gap closed.
 6. **Write the family file whole** (`artifacts/sar/results/<fam>.yaml`, schema
@@ -42,6 +44,8 @@ adds what is specific to assessing: evidence, numbering, reuse and what each tas
   family file and add 1. Never reuse or renumber an ID (INV-3).
 - A finding names one control and one weakness; a weakness in two controls is two findings.
 - Every other-than-satisfied determination lists its findings in `finding_refs`.
+- A finding names the statements it covers in `affected_statements`, and every
+  other-than-satisfied statement is named by a finding.
 - A finding's `severity` uses the SP 800-30 scale (`very-low` to `very-high`); its
   `recommendation` says what would close it.
 

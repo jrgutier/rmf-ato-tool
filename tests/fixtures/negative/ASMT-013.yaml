@@ -1,0 +1,14 @@
+rule: ASMT-013
+bases:
+- minimal
+description: access decided by someone other than the system owner
+mutations:
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.0.access_decision.decided_by
+  value: PER-ISSM
+expect:
+  errors:
+  - ASMT-013
+  messages:
+  - the system owner decides who has access to the system, not PER-ISSM

@@ -1,0 +1,14 @@
+rule: ASMT-010
+bases:
+- minimal
+description: a changed scheduled completion date
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.scheduled_completion
+  value: '2027-02-28'
+expect:
+  errors:
+  - ASMT-010
+  messages:
+  - 'POAM-001: the scheduled completion date should not be changed, from 2027-01-29 to 2027-02-28'

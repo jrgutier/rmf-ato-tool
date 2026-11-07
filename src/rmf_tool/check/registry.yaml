@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 102 rules, 36 repo-scope and 66 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -459,6 +459,236 @@ rules:
     summary: open SAR finding neither closed nor linked to a POA&M item
     fixture: tests/fixtures/negative/SAR-POAM-001.yaml
     hint: Add a POA&M item whose finding_ref is the finding ID, or close the finding with evidence.
+  - id: ASMT-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the assessment plan is not prepared, reviewed or approved: officials, resources, access, channels, points of contact, the ambiguity mechanism or the understanding of the organization"
+    fixture: tests/fixtures/negative/ASMT-001.yaml
+    hint: "sap.yaml records approval, objectives, level_of_effort and preparation; the system owner informs and resources, and each is dated before the assessment starts."
+    enforces:
+      - REQ-SP800-37R2-0339
+      - REQ-SP800-37R2-0355
+      - REQ-SP800-37R2-0363
+      - REQ-SP800-37R2-0529
+      - REQ-SP800-53AR5-0134
+      - REQ-SP800-53AR5-0140
+      - REQ-SP800-53AR5-0141
+      - REQ-SP800-53AR5-0146
+      - REQ-SP800-53AR5-0147
+      - REQ-SP800-53AR5-0152
+      - REQ-SP800-53AR5-0167
+      - REQ-SP800-53AR5-0332
+  - id: ASMT-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "assessment procedures are not selected and tailored for the scoped controls"
+    fixture: tests/fixtures/negative/ASMT-002.yaml
+    hint: "Each scoped control sits in one procedures record, with methods, objects fitting them, depth, coverage, a rationale and ART-RA in risk_results."
+    enforces:
+      - REQ-SP800-53AR5-0009
+      - REQ-SP800-53AR5-0016
+      - REQ-SP800-53AR5-0167
+      - REQ-SP800-53AR5-0171
+      - REQ-SP800-53AR5-0172
+      - REQ-SP800-53AR5-0175
+      - REQ-SP800-53AR5-0180
+      - REQ-SP800-53AR5-0181
+      - REQ-SP800-53AR5-0184
+      - REQ-SP800-53AR5-0187
+      - REQ-SP800-53AR5-0195
+      - REQ-SP800-53AR5-0202
+      - REQ-SP800-53AR5-0203
+      - REQ-SP800-53AR5-0337
+      - REQ-SP800-53AR5-0344
+      - REQ-SP800-53AR5-0346
+      - REQ-SP800-53AR5-0347
+  - id: ASMT-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "a reused assessment result does not meet the reuse criteria"
+    fixture: tests/fixtures/negative/ASMT-003.yaml
+    hint: "Each reused_results record dates and types the original, and carries the approval, collaboration, independence and the assessor verdicts."
+    enforces:
+      - REQ-CNSSI1254-0071
+      - REQ-SP800-37R2-0333
+      - REQ-SP800-37R2-0442
+      - REQ-SP800-53AR5-0038
+      - REQ-SP800-53AR5-0185
+      - REQ-SP800-53AR5-0196
+      - REQ-SP800-53AR5-0198
+      - REQ-SP800-53AR5-0199
+      - REQ-SP800-53AR5-0200
+  - id: ASMT-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "an external provider is not reviewed before its controls or results are leveraged"
+    fixture: tests/fixtures/negative/ASMT-004.yaml
+    hint: "Each external boundary component and leveraged authorization sits in an external_providers record with its agreement reviewed by an assessor and its evidence received."
+    enforces:
+      - REQ-CNSSP12-0023
+      - REQ-SP800-37R2-0394
+      - REQ-SP800-37R2-0681
+      - REQ-SP800-37R2-0682
+      - REQ-SP800-53AR5-0186
+      - REQ-SP800-53AR5-0201
+  - id: ASMT-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: "a determination does not record each determination statement, or a finding does not name what it affects"
+    fixture: tests/fixtures/negative/ASMT-005.yaml
+    hint: "Each determination lists statements from `rmf catalog show`; open findings name affected_statements, state_difference and potential_compromise."
+    enforces:
+      - REQ-CNSSI1254-0068
+      - REQ-SP800-37R2-0370
+      - REQ-SP800-37R2-0372
+      - REQ-SP800-53AR5-0185
+      - REQ-SP800-53AR5-0196
+      - REQ-SP800-53AR5-0197
+      - REQ-SP800-53AR5-0201
+      - REQ-SP800-53AR5-0216
+      - REQ-SP800-53AR5-0298
+      - REQ-SP800-53AR5-0333
+      - REQ-SP800-53AR5-0342
+  - id: ASMT-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-5
+    summary: "an assessor finding is not triaged, or its triage is not what the source lets it be"
+    fixture: tests/fixtures/negative/ASMT-006.yaml
+    hint: "Each finding records triage: action, who decided, significance and the risk assessment it rests on."
+    enforces:
+      - REQ-CNSSI1254-0093
+      - REQ-SP800-37R2-0370
+      - REQ-SP800-37R2-0372
+      - REQ-SP800-37R2-0373
+      - REQ-SP800-37R2-0374
+  - id: ASMT-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "an assessor is not shown qualified, or independence is not determined by the AO"
+    fixture: tests/fixtures/negative/ASMT-007.yaml
+    hint: "Each team member has a qualification the CISO verified; the AO determines assessor_independence."
+    enforces:
+      - REQ-DODI8500.01-0310
+      - REQ-DODI8510.01-0209
+      - REQ-SP800-53AR5-0134
+  - id: ASMT-008
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-4
+    summary: "the assessment report does not state its methodology, reach the system owner or carry the CISO review"
+    fixture: tests/fixtures/negative/ASMT-008.yaml
+    hint: "sar-report.yaml holds methodology, delivered and quality_review."
+    enforces:
+      - REQ-CNSSI1254-0067
+      - REQ-DODI8510.01-0211
+      - REQ-SP800-37R2-0529
+  - id: ASMT-009
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-6
+    summary: "a POA&M item lacks its risk level, criticality, mitigation approach or identifying event"
+    fixture: tests/fixtures/negative/ASMT-009.yaml
+    hint: "Each item carries risk_level (the RAR level once one links it), criticality, mitigation_approach and identified."
+    enforces:
+      - REQ-CNSSI1254-0093
+      - REQ-CNSSI1254-0095
+      - REQ-SP800-37R2-0378
+      - REQ-SP800-37R2-0563
+  - id: ASMT-010
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-6
+    summary: "a POA&M original date changed, or a change to milestones is not recorded"
+    fixture: tests/fixtures/negative/ASMT-010.yaml
+    hint: "Original dates stay; a new date and reason go in milestone_changes. artifacts/poam/original-dates.yaml is written by rmf build."
+    enforces:
+      - REQ-CNSSI1254-0098
+      - REQ-CNSSI1254-0099
+      - REQ-CNSSI1254-0100
+  - id: ASMT-011
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-6
+    summary: "a POA&M status is not one CNSSI 1254 names, or Completed or Delayed is not earned"
+    fixture: tests/fixtures/negative/ASMT-011.yaml
+    hint: "Status is planned, ongoing, delayed, completed or risk-accepted; completed needs the finding resolved, completed_on and the test; delayed needs comments and obstacles."
+    enforces:
+      - REQ-CNSSI1254-0097
+      - REQ-CNSSI1254-0098
+      - REQ-CNSSI1254-0101
+  - id: ASMT-012
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-6
+    summary: "POA&M items or risk responses are not in a prioritized order"
+    fixture: tests/fixtures/negative/ASMT-012.yaml
+    hint: "Give each item and risk a unique priority; a higher risk goes first."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0100
+      - REQ-DODI5000.83-0204
+      - REQ-DODI8531.01-0149
+      - REQ-DOWI8430.01-0157
+      - REQ-SP800-137A-0092
+      - REQ-SP800-37R2-0378
+      - REQ-SP800-37R2-0563
+      - REQ-SP800-37R2-0569
+      - REQ-SP800-39-0175
+      - REQ-SP800-61R3-0144
+  - id: ASMT-013
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: "a user group's access is not decided, or its training not ensured, by the system owner"
+    fixture: tests/fixtures/negative/ASMT-013.yaml
+    hint: "Each user group records access_decision (the system owner, with the information owner) and training (the system owner)."
+    enforces:
+      - REQ-SP800-37R2-0529
   - id: POAM-CTL-001
     scope: run
     severity: E

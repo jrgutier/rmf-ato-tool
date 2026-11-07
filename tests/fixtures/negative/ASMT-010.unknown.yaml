@@ -1,0 +1,17 @@
+rule: ASMT-010
+bases:
+- minimal
+description: a change to a milestone that does not exist
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.milestone_changes
+  value:
+  - milestone: Nothing of the kind
+    new_date: '2027-01-20'
+    reason: Staff moved.
+expect:
+  errors:
+  - ASMT-010
+  messages:
+  - the change to milestones names 'Nothing of the kind', which is not an initial milestone

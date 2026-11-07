@@ -1,0 +1,22 @@
+rule: ASMT-003
+bases:
+- minimal
+description: a component product not shown suitable
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: reused_results.0.type
+  value: component-product
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: reused_results.0.product_review
+  value:
+    controls_implemented: true
+    meets_requirements: true
+    configuration_consistent: false
+    assurance_satisfied: true
+expect:
+  errors:
+  - ASMT-003
+  messages:
+  - the component product checks do not show configuration_consistent

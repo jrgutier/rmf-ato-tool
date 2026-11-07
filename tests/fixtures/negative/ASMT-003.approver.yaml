@@ -1,0 +1,14 @@
+rule: ASMT-003
+bases:
+- minimal
+description: reuse approved by someone other than a user of the results
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: reused_results.0.approved_by
+  value: PER-DEV
+expect:
+  errors:
+  - ASMT-003
+  messages:
+  - reusing assessment results is approved by the users of the assessment results, not PER-DEV

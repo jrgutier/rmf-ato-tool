@@ -439,3 +439,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the link is the path as written; valid_minimal lists the boundary diagram, and PKG-003 fails when its file is not in the run.
 - Rule: An optional field no fixture sets is untested, however green its golden.
 - Promotion: check: PKG-003
+
+## L-0063 · 2026-11-02 · run: phase-11 · tags: rules, dates
+- Symptom: a first cut of the POA&M rules compared dates with `run.yaml:as_of` and refused every fixture: as_of is when the run starts, and a simulated run schedules its assessment after it.
+- Root cause: as_of reads like today, but a simulated run has no today.
+- Fix: a rule that needs the present uses the latest date the run vouches for, its newest authorization record, and a rule that bounds an event compares it with the plan's own schedule.
+- Rule: Compare a run's dates with each other, never with as_of as if it were now.
+- Promotion: none — it shapes how a rule is written, and test_valid_minimal fails at once on the mistake.

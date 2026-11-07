@@ -284,6 +284,7 @@ artifacts:
     generated: false
     data:
       - {path: "artifacts/sar/results/<fam>.yaml", schema: sar-results}
+      - {path: artifacts/data/sar-report.yaml, schema: sar-report, since: 0.2.0}
     oscal:
       - "assessment-results#results.findings"
       - "assessment-results#results.observations"
@@ -305,11 +306,11 @@ artifacts:
       - {element: SCA Executive Summary, req: REQ-CNSSI1254-0064, artifact: "ART-SAR", heading: Assessment summary}
       - {element: SCA and Organization, req: REQ-CNSSI1254-0065, pending: "WI-193"}
       - {element: Type of Assessment/Objective, req: REQ-CNSSI1254-0066, pending: "WI-193"}
-      - {element: Security Control Assessment Methodology/Procedure, req: REQ-CNSSI1254-0067, pending: "WI-269"}
-      - {element: Security Control Compliance Status, req: REQ-CNSSI1254-0068, pending: "WI-265"}
+      - {element: Security Control Assessment Methodology/Procedure, req: REQ-CNSSI1254-0067, file: artifacts/data/sar-report.yaml, path: methodology.standard}
+      - {element: Security Control Compliance Status, req: REQ-CNSSI1254-0068, file: "artifacts/sar/results/*.yaml", path: "determinations.*.result"}
       - {element: Security Control Traceability, req: REQ-CNSSI1254-0069, pending: "WI-221"}
       - {element: Systems and/or Components Assessed, req: REQ-CNSSI1254-0070, file: artifacts/data/sap.yaml, path: assessment_subjects}
-      - {element: Test Results, req: REQ-CNSSI1254-0071, pending: "WI-264"}
+      - {element: Test Results, req: REQ-CNSSI1254-0071, file: artifacts/data/sap.yaml, path: "reused_results.*.assessed"}
     citations:
       - {ref: SP800-53AR5, section: "APPENDIX E"}
       - {ref: SP800-37R2, section: "TASK A-4"}
@@ -334,15 +335,15 @@ artifacts:
       - {element: System Version or Release Number, req: REQ-CNSSI1254-0035, pending: "WI-177"}
       - {element: Assessment Date, req: REQ-CNSSI1254-0037, pending: "WI-177"}
       - {element: Vulnerability Identifier, req: REQ-CNSSI1254-0038, file: artifacts/poam/items.yaml, path: "items.*.finding_ref"}
-      - {element: Vulnerability (Weaknesses or Deficiency), req: REQ-CNSSI1254-0093, pending: "WI-267"}
+      - {element: Vulnerability (Weaknesses or Deficiency), req: REQ-CNSSI1254-0093, file: artifacts/poam/items.yaml, path: "items.*.risk_level"}
       - {element: Short Description of Weakness or Deficiency, req: REQ-CNSSI1254-0094, file: artifacts/poam/items.yaml, path: "items.*.weakness"}
-      - {element: Event that Identified Weakness or Deficiency, req: REQ-CNSSI1254-0095, pending: "WI-267"}
+      - {element: Event that Identified Weakness or Deficiency, req: REQ-CNSSI1254-0095, file: artifacts/poam/items.yaml, path: "items.*.identified.event"}
       - {element: Security Control Identifier, req: REQ-CNSSI1254-0096, file: artifacts/poam/items.yaml, path: "items.*.control_id"}
-      - {element: Comments, req: REQ-CNSSI1254-0097, pending: "WI-267"}
-      - {element: Scheduled Completion Date, req: REQ-CNSSI1254-0098, pending: "WI-267"}
-      - {element: Milestones with Completion Dates, req: REQ-CNSSI1254-0099, pending: "WI-267"}
-      - {element: Changes to Milestones, req: REQ-CNSSI1254-0100, pending: "WI-267"}
-      - {element: Vulnerability (Weakness) Status, req: REQ-CNSSI1254-0101, pending: "WI-267"}
+      - {element: Comments, req: REQ-CNSSI1254-0097, rule: ASMT-011}
+      - {element: Scheduled Completion Date, req: REQ-CNSSI1254-0098, file: artifacts/poam/items.yaml, path: "items.*.scheduled_completion"}
+      - {element: Milestones with Completion Dates, req: REQ-CNSSI1254-0099, file: artifacts/poam/items.yaml, path: "items.*.milestones"}
+      - {element: Changes to Milestones, req: REQ-CNSSI1254-0100, rule: ASMT-010}
+      - {element: Vulnerability (Weakness) Status, req: REQ-CNSSI1254-0101, file: artifacts/poam/items.yaml, path: "items.*.status"}
       - {element: POC, req: REQ-CNSSI1254-0102, file: artifacts/poam/items.yaml, path: "items.*.point_of_contact"}
     citations:
       - {ref: SP800-37R2, section: "TASK A-6"}

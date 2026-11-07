@@ -236,6 +236,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
+- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ASMT-007).
 
 **Alignment**
 
@@ -273,6 +274,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](PH-TMRR.md#task-s-1) (supporting artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
 
 **Outputs**
@@ -290,7 +293,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
-- sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+- sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
+- Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
+- Each scoped control has procedures selected and tailored from the risk results (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider is reviewed before its controls or results are leveraged (ASMT-004).
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [IATT](../../MANUAL.md#ad-iatt) (see [authorization decisions](../../MANUAL.md#decisions)).
@@ -353,7 +358,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - Control assessments are conducted per the plan, supported by developer, engineering, developmental and operational test events, with reuse of earlier results and automation considered (DoDI 8510.01 Table 5 outcome).
-- sar/results holds a determination for every scoped control (SAR-COV-001) and stig-summary.yaml holds the scan results.
+- sar/results holds a determination for every scoped control (SAR-COV-001), with a finding for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
 
 **Alignment**
 
@@ -387,7 +392,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Accountable | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
-| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 
 **Inputs**
@@ -410,6 +415,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Assessment reports with findings and recommendations are completed and include results from developer, engineering, developmental and operational test events (DoDI 8510.01 Table 5 outcome).
 - ART-SAR summarizes the determinations and states each finding with its severity and recommendation.
+- sar-report.yaml states the methodology, the system owner has the results, and the CISO has assessed the quality, capacity, visibility and effectiveness of the assessment (ASMT-008).
 
 **Alignment**
 
@@ -449,6 +455,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -465,6 +472,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Remediation actions are taken and the security and privacy plans are updated to reflect the resulting control implementation changes (DoDI 8510.01 Table 5 outcome).
 - Remediated findings are reassessed and closed in sar/results; the security plan reflects the changes.
+- Every finding is triaged from the risk assessment; only substantive findings go on to the POA&M (ASMT-006).
 
 **Alignment**
 
@@ -518,7 +526,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - A POA&M detailing remediation plans for the unacceptable risks in the assessment reports is developed (DoDI 8510.01 Table 5 outcome).
-- poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001).
+- poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001, ASMT-009), in a prioritized order (ASMT-012).
 - The POA&M is available to the cybersecurity strategy annex of the program protection plan.
 
 **Alignment**

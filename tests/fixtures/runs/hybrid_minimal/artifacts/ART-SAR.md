@@ -14,5 +14,7 @@ login [[INT-009.A1]].
 
 ## Results
 
+RR-001 reuses the developmental flaw remediation test, and EXT-001 brings in the provider ATO assessment [[ART-SAP]].
+
 Five controls are satisfied; AC-2 is other than satisfied because no quarterly account
 review has been performed yet (FND-001) [[INT-009.A1]].

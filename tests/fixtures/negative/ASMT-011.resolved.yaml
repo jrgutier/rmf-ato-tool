@@ -1,0 +1,25 @@
+rule: ASMT-011
+bases:
+- minimal
+description: Completed while the finding is open
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.status
+  value: completed
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.completed_on
+  value: '2027-01-20'
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.corrective_action_test
+  value:
+    by: PER-SCA
+    date: '2027-01-20'
+    result: Reviewed.
+expect:
+  errors:
+  - ASMT-011
+  messages:
+  - 'POAM-001 is Completed, but FND-001 is open: the status is used only when the weakness has been fully resolved'

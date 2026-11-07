@@ -1,0 +1,14 @@
+rule: ASMT-013
+bases:
+- minimal
+description: access decided without the information owner
+mutations:
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.0.access_decision.coordinated_with
+  value: PER-ISSM
+expect:
+  errors:
+  - ASMT-013
+  messages:
+  - the system owner decides access in coordination with the information owner, not PER-ISSM

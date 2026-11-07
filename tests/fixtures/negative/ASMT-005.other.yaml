@@ -1,0 +1,19 @@
+rule: ASMT-005
+bases:
+- minimal
+description: an other than satisfied control with no such statement
+mutations:
+- op: set_field
+  file: artifacts/sar/results/cm.yaml
+  path: determinations.0.statements.1.result
+  value: satisfied
+- op: set_field
+  file: artifacts/sar/results/cm.yaml
+  path: findings.0.affected_statements
+  value:
+  - CM-06a.
+expect:
+  errors:
+  - ASMT-005
+  messages:
+  - cm-6 is other than satisfied, yet no determination statement is

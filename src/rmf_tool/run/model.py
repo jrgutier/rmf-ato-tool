@@ -128,7 +128,8 @@ class Run:
             if aid in self._absent:
                 continue
             data = [d for d in e.data.get("data") or []
-                    if "until" not in d or not self.holds(d["until"])]
+                    if ("until" not in d or not self.holds(d["until"]))
+                    and self.holds(d.get("since"))]
             out[aid] = {**e.data, "data": data}
         return out
 

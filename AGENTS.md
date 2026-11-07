@@ -93,7 +93,7 @@ error. Commands that report support `--format json`.
 | `rmf assemble [RUN] [--check]` | fill the `rmf:facts` marker blocks in artifact Markdown from facts.yaml |
 | `rmf oscal build [RUN] [--check]` | `oscal/` profile, SSP, assessment plan, assessment results and POA&M (trestle models, uuid5, OSCAL 1.2.1); each is built once its inputs exist |
 | `rmf oscal validate [RUN\|DIR]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on the run's `oscal/*.json`, or on a directory of OSCAL JSON |
-| `rmf build [RUN]` | assemble + oscal build + `reports/assumptions.md` (+ refresh `package/manifest.yaml`); always before `rmf check` |
+| `rmf build [RUN]` | assemble + oscal build + `reports/assumptions.md` (+ refresh `package/manifest.yaml`, and freeze new POA&M dates in `artifacts/poam/original-dates.yaml` after A-6, ASMT-010); always before `rmf check` |
 | `rmf package [RUN]` | `package/manifest.yaml` (ART-PKG): the DoDI 8510.01 authorization package, every artifact (class, status, files with SHA-256, OSCAL), OSCAL documents, reports, degraded references |
 | `rmf check [RUN] [--task T] [--family F] [--rules R,..] [--final]` | run rules; `--task T` only what applies at T, `--final` everything (scope-aware); writes `reports/check.{json,md}`; DEGRADED-001 is never filtered out |
 | `rmf report assumptions [RUN]` | write `reports/assumptions.md` (every assumption and tagged answer, HYB-002); also part of `rmf build` |

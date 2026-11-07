@@ -14,6 +14,8 @@ login [[INT-009.A1]].
 
 ## Results
 
+RR-001 reuses the developmental flaw remediation test, and EXT-001 brings in the provider ATO assessment [[ART-SAP]].
+
 Four controls are satisfied and SC-15 is not applicable. AC-2 is other than satisfied because no quarterly account
 review has been performed yet (FND-001), and CM-6 because the image permits root SSH login
 (FND-002) [[INT-009.A1]] [[INT-009.A2]].

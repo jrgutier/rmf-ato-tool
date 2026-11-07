@@ -22,7 +22,7 @@ PLAN_RUN_SCHEMAS = {
     "authorizations",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias"}  # data named in plan §6.4, then the ones p11 added
+                     "dias", "sar-report"}  # data named in plan §6.4, then the ones p11 added
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -282,6 +282,10 @@ RUN_EXAMPLES = {
         {"assurance": {"identity_proofing": "IAL9", "authentication": "AAL2",
                        "federation": "not-applicable"},
          "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
+    "sar-report": (
+        {"methodology": {"standard": "NIST SP 800-53A Rev. 5"},
+         "delivered": [{"to": "PER-PM", "date": "2026-02-01"}], "sources": SRC},
+        {"methodology": {"standard": ""}, "sources": SRC}),
 }
 
 

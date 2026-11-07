@@ -1,8 +1,9 @@
 """OSCAL assessment plan builder (ART-SAP; plan §6.6 ``mapping.yaml``).
 
 ``artifacts/data/sap.yaml`` holds what the agent decides at A-2 (scope exclusions, subjects,
-team, schedule, rules of engagement). The reviewed controls come from ``baseline.json`` and
-the activities from the catalog's SP 800-53A assessment-method parts, so neither is restated.
+team, schedule, rules of engagement, procedures). The reviewed controls come from
+``baseline.json``, and the activities from ``procedures`` or, on an older run with none, the
+catalog's SP 800-53A assessment-method parts.
 Subjects reuse the SSP's uuid5 IDs for components, inventory items, users and parties.
 """
 
@@ -106,6 +107,16 @@ def method_controls(run: Run, controls: list[str]) -> dict[str, list[str]]:
     return out
 
 
+def planned_methods(sap: dict[str, Any], controls: list[str]) -> dict[str, list[str]]:
+    """Method -> the scoped controls whose selected procedures use it, in scope order."""
+    out: dict[str, list[str]] = {m: [] for m in METHODS}
+    chosen = {(m.upper(), c) for p in sap["procedures"] for c in p["controls"]
+              for m in p["methods"]}
+    for method, listed in out.items():
+        listed.extend(c for c in controls if (method, c) in chosen)
+    return out
+
+
 def activity_uuid(sid: str, method: str) -> str:
     return uuid_for(sid, MODEL, f"activity/{method.lower()}")
 
@@ -124,7 +135,9 @@ def build_sap(run: Run) -> str:
     name = facts_mod.value(facts, "system_name") or sid
     team = [m["persona"] for m in sap["team"]]
     subject_list = subjects(sid, sap)
-    by_method = method_controls(run, scoped_controls(run, sap))
+    scoped = scoped_controls(run, sap)
+    by_method = planned_methods(sap, scoped) if sap.get("procedures") \
+        else method_controls(run, scoped)
     activities = [
         {"uuid": activity_uuid(sid, m), "title": f"{m.capitalize()} (SP 800-53A)",
          "description": f"Apply the SP 800-53A {m.lower()} method to the assessment objects "

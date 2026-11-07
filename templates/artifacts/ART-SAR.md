@@ -20,7 +20,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Test results reused
 
-<<FILL: which test events were reused and what they showed, with tokens>>
+<<FILL: each reused result (RR-###) and external assessment (EXT-###) of the plan, with its date, type and what it showed, with tokens>>
 
 ## Findings overview
 

@@ -1,0 +1,14 @@
+rule: ASMT-011
+bases:
+- minimal
+description: an actual completion date on an item not completed
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.completed_on
+  value: '2027-01-20'
+expect:
+  errors:
+  - ASMT-011
+  messages:
+  - POAM-001 has an actual completion date, yet its status is planned

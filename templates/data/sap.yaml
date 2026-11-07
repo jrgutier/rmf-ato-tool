@@ -10,6 +10,46 @@ team:
   - persona: PER-SCA
     role: "<<FILL: role on the assessment team>>"
     independent: true
+    qualification: {basis: "<<FILL: what qualifies this assessor>>", verified_by: PER-CISO, verified: "2026-01-01"}
+assessor_independence:
+  required: independent  # self-assessment | internal | independent
+  determined_by: PER-AO
+  rationale: "<<FILL: why this degree>>"
+objectives: "<<FILL: the objective of the control assessment>>"
+level_of_effort: "<<FILL: the expected level of effort>>"
+approval: {reviewed_by: PER-SCA, approved_by: PER-AO, date: "2026-01-01"}  # on or before schedule.start
+preparation:  # SP 800-53A section 3.1, all dated on or before schedule.start
+  informed_by: PER-PM  # the system owner
+  officials_notified:
+    - {persona: PER-AO, date: "2026-01-01"}
+  resources: {allocated_by: PER-PM, allocated: "2026-01-01", description: "<<FILL: resources allocated>>"}
+  access:  # one each: system, environment, documentation, records, artifacts, test-results
+    - {to: system, provided_by: PER-PM, provided: "2026-01-01"}
+  documentation_provided: [ART-SSP]
+  elements:
+    - {responsible_for: "<<FILL: what this element develops, documents or updates>>", persona: PER-ISSM}
+  channels:
+    - {among: [PER-AO, PER-ISSM], means: "<<FILL: how they stay in touch>>"}
+  points_of_contact:
+    - {persona: PER-ISSM, for: "<<FILL: what they arrange>>"}
+  ambiguity_mechanism: {between: [PER-SCA, PER-ISSM], means: "<<FILL: how ambiguities are settled>>"}
+  understanding: {summary: "<<FILL: the organization's operations and how the system supports them>>", sources: [ART-ORG-CONTEXT]}
+procedures:  # every scoped control in a record, each method once per control; several controls consolidate
+  - id: PRC-001
+    controls: [ac-2]
+    methods: [examine, interview, test]
+    objects: [specifications, mechanisms, activities, individuals]
+    depth: focused  # basic | focused | comprehensive
+    coverage: focused
+    rationale: "<<FILL: why these methods and objects>>"
+    risk_results: [ART-RA]
+    adaptation: none  # none | system-specific | platform-specific | organization-specific
+    sequence: 1
+optimization: {reviewed_by: PER-SCA, tailoring_guidance: "<<FILL: the organization's tailoring guidance, or that it gives none>>", notes: "<<FILL: how procedures were sequenced and consolidated>>"}
+additional_procedures: []  # {id: APR-001, requirement, statements, methods, objects, rationale} for anything outside SP 800-53
+reuse_policy: {max_age_days: 365, source: ART-ORG-CONTEXT}
+reused_results: []  # playbooks/A/A-2.md lists the fields of a record
+external_providers: []  # one for each external boundary component and leveraged authorization
 schedule:
   start: "2026-01-01"
   end: "2026-01-31"

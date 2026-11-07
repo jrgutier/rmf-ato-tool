@@ -4,6 +4,7 @@ import json
 
 import pytest
 from conftest import REPO_ROOT, VALID_MINIMAL, edit_yaml
+from ruamel.yaml import YAML
 
 from rmf_tool import baseline as baseline_mod
 from rmf_tool.oscal import build_sap, schema_validate
@@ -50,14 +51,18 @@ def test_version_stamp_1_2_1():
     assert meta["last-modified"] == "2026-10-29T12:00:00+00:00"
 
 
-def test_activities_from_catalog_methods():
+def test_activities_from_the_selected_procedures():
     ap = built(VALID_MINIMAL)
     activities = ap["local-definitions"]["activities"]
     assert [a["props"][0]["value"] for a in activities] == ["EXAMINE", "INTERVIEW", "TEST"]
+    sap = YAML(typ="safe").load((VALID_MINIMAL / build_sap.SAP_DATA).read_text())
+    scoped = baseline_mod.control_ids(open_run(VALID_MINIMAL, REPO_ROOT))
     for a in activities:
+        method = a["props"][0]["value"].lower()
+        chosen = {c for p in sap["procedures"] if method in p["methods"] for c in p["controls"]}
         ids = [c["control-id"] for c in a["related-controls"]["control-selections"][0]
                ["include-controls"]]
-        assert ids == baseline_mod.control_ids(open_run(VALID_MINIMAL, REPO_ROOT))
+        assert ids == [c for c in scoped if c in chosen]
     assert [x["activity-uuid"] for x in ap["tasks"][0]["associated-activities"]] == \
         [a["uuid"] for a in activities]
 
