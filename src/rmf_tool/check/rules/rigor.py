@@ -119,7 +119,7 @@ def _types(pid: Any, method: Any, p: dict[str, Any], sample: dict[str, Any], ctx
             err(f"{pid} {method}: the number of objects of the type {t.get('type')} to sample "
                 f"is {t.get('number')}, not a count of at least one")
     if method == INTERVIEW:
-        for role in sorted(sampled - set(ctx.run.personas), key=str):
+        for role in sorted(sampled - set(ctx.run.personas) - METHOD_OBJECTS[INTERVIEW], key=str):
             err(f"{pid} interview: the individuals to be interviewed are sampled by "
                 f"organizational role, and {role} is no persona of the framework")
         return sampled

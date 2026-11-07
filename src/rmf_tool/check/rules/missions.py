@@ -38,7 +38,7 @@ def _listed(item: dict[str, Any], key: str) -> list[Any]:
 
 
 def _assets(item: dict[str, Any], components: set[Any] | None, err: Any) -> None:
-    if components is None:
+    if not components:  # no boundary, or one with no components on record yet
         return
     listed = _listed(item, "supported_by")
     if item.get("essential") is True and not listed:

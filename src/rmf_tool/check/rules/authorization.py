@@ -725,13 +725,20 @@ def executive_summary(ctx: Context) -> list[RunFinding]:
     issues = [i for i in summary.get("issues") or () if isinstance(i, dict)]
     sent = summary.get("submission") if isinstance(summary.get("submission"), dict) else {}
     submitted = _day(sent.get("date"))
-    # the POA&M as it stood when the package went in: an item identified later is no omission
-    # and an item completed only after the submission was still open when it went in
+    # the POA&M as it stood when the package went in: an item identified later is no omission,
+    # an item completed only after the submission was still open when it went in, and a
+    # risk-accepted item, or a completed one with no completion date, is not known to be open
+    def still_open(i: Record) -> bool:
+        if i.get("status") == "risk-accepted":
+            return False
+        if i.get("status") != "completed":
+            return True
+        done = _day(i.get("completed_on"))
+        return submitted is not None and done is not None and done > submitted
+
     pending = {k for k, i in poam.items()
                if (_identified(i) or dt.date.min) <= (submitted or dt.date.max)
-               and (i.get("status") != "completed"
-                    or (submitted is not None and (_day(i.get("completed_on")) or dt.date.max)
-                        > submitted))}
+               and still_open(i)}
     cited = {str(p) for i in issues for p in _list(i.get("poam_items"))}
     if pending and cited.isdisjoint(pending):
         err("the executive summary highlights no risk management issue among the open POA&M "
@@ -750,12 +757,15 @@ def executive_summary(ctx: Context) -> list[RunFinding]:
     if sent.get("to") not in SUBMITTED_TO:
         err("the package is submitted to the authorizing official or the designated "
             f"representative, not {sent.get('to')}")
-    for r, kind in _typed(ctx):
-        date = _day(r.get("date"))
-        if r.get("task") == "R-4" and kind.get("effect") in RAR_EFFECTS and date is not None \
-                and submitted is not None and submitted > date:
-            err(f"the package was submitted on {submitted}, after the authorization decision "
-                f"{r.get('id')} of {date}")
+    # the package precedes the decision it was submitted for; an earlier decision it renews
+    # (a reauthorization supersedes it) is no lateness
+    decided = [(date, r.get("id")) for r, kind in _typed(ctx)
+               if r.get("task") == "R-4" and kind.get("effect") in RAR_EFFECTS
+               and (date := _day(r.get("date"))) is not None]
+    if submitted is not None and decided and all(date < submitted for date, _ in decided):
+        date, ident = max(decided)
+        err(f"the package was submitted on {submitted}, after the authorization decision "
+            f"{ident} of {date}")
     return out
 
 
@@ -869,7 +879,11 @@ def type_facility(ctx: Context) -> list[RunFinding]:
             if "provider" not in (kind.get("requires") or ()):  # AD-ATU and AD-DATU
                 err(r, "the site authorizing official accepts the risk of a type-authorized "
                     f"system with an authorization to use, not {r['decision']}")
-            if provider.get("facility_package") not in leveraged:
+            used_with = provider.get("site_controls")
+            if used_with not in SITE_CONTROLS:
+                err(r, "the authorization to use does not say whether the type authorization "
+                    "is used with site-specific controls or a facility authorization")
+            elif used_with == "facility" and provider.get("facility_package") not in leveraged:
                 err(r, "the authorization to use leverages the facility common controls: "
                     f"{provider.get('facility_package')} is no leveraged authorization")
         facility = r.get("facility")

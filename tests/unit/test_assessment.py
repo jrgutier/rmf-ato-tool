@@ -202,3 +202,36 @@ def test_rigor_rules_report_malformed_fields_instead_of_raising(minimal_run):
     edit_yaml(minimal_run / SAP, mangle)
     found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
     assert any(f.rule == "RIGR-001" for f in found)
+
+
+def _msn(run_dir) -> list[str]:
+    found = engine.evaluate(open_run(run_dir, REPO_ROOT)).findings
+    return [f.finding.message for f in found if f.rule == "MSN-001"]
+
+
+def test_missions_rule_reports_malformed_ids_instead_of_raising(minimal_run):
+    def mangle(d):
+        d["missions"]["items"][0]["supported_by"] = [["CMP-RELAY"]]
+        d["missions"]["items"][0]["data"] = [{"id": "INF-01"}]
+    edit_yaml(minimal_run / "facts.yaml", mangle)
+    assert _msn(minimal_run)
+
+
+def test_an_essential_function_is_not_refused_while_the_boundary_lists_no_components(
+        minimal_run):
+    edit_yaml(minimal_run / "artifacts/data/boundary.yaml",
+              lambda d: d.update(components=[]))
+    edit_yaml(minimal_run / "facts.yaml",
+              lambda d: d["missions"]["items"][0].update(supported_by=[]))
+    assert not [m for m in _msn(minimal_run) if "no supporting assets" in m]
+
+
+def test_interview_samples_may_be_typed_as_individuals(minimal_run):
+    def individuals(d):
+        for p in d["procedures"]:
+            for sample in p.get("sampling") or ():
+                if sample.get("method") == "interview":
+                    sample["types"] = [{"type": "individuals", "number": 6}]
+    edit_yaml(minimal_run / SAP, individuals)
+    found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
+    assert not [f for f in found if f.rule == "RIGR-003" and "no persona" in f.finding.message]

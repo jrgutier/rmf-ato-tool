@@ -292,41 +292,19 @@ def _strs(value: Any) -> list[str]:
     return [v for v in value if isinstance(v, str)] if isinstance(value, list) else []
 
 
-def _rank(frequency: Any) -> int | None:
-    return PERIODIC.index(frequency) if frequency in PERIODIC else None
-
-
 def metric_timing(ctx: Context) -> list[RunFinding]:
-    """Each control a metric reads is monitored at least as often as the metric is refreshed:
-    at its minimum frequency, or by a tool that assesses it more often."""
+    """Each control a metric reads is in the baseline, so the metric is calculated from the
+    security architecture's controls. SP 800-137 lets a metric's inputs change at their own
+    frequencies (policies yearly, assets daily), so no ordering of frequencies is imposed."""
     conmon = _strategy(ctx)
     if conmon is None or baseline_mod.load(ctx.run) is None:
         return []
-    controls = baseline_mod.control_ids(ctx.run)
-    baseline = set(controls)
-    best = {cid: _rank(freq) for cid, freq in _minimums(conmon, controls).items()}
-    for tool in _records(conmon, "tools"):
-        rank = _rank(tool.get("frequency"))
-        for cid in _strs(tool.get("assesses")):
-            if rank is not None and (best.get(cid) is None or rank < best[cid]):
-                best[cid] = rank
+    baseline = set(baseline_mod.control_ids(ctx.run))
     out = []
     for metric in _records(conmon, "metrics"):
-        mid, freq = metric.get("id"), metric.get("frequency")
-        wanted = _rank(freq)
         for cid in _strs(metric.get("controls")):
             if cid not in baseline:
-                out.append(make("METR-002", f"metric {mid} reads {cid}, which is not in the "
-                                "baseline, so it is not calculated from the security "
+                out.append(make("METR-002", f"metric {metric.get('id')} reads {cid}, which is "
+                                "not in the baseline, so it is not calculated from the security "
                                 "architecture's controls", CONMON_FILE))
-                continue
-            if cid not in best or wanted is None:
-                continue
-            have = best[cid]
-            if have is None or have > wanted:
-                seen = PERIODIC[have] if have is not None else "only on events"
-                out.append(make("METR-002", f"metric {mid} is refreshed {freq} but {cid} is "
-                                f"monitored {seen}: the controls a metric is calculated from are "
-                                "monitored with frequencies consistent with its timing",
-                                CONMON_FILE))
     return out
