@@ -20,7 +20,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Scan results
 
-<<FILL: scan dates and tools, and finding counts by category and status, with tokens>>
+<<FILL: scan dates and tools, naming the tool from `tools` in artifacts/data/cm-plan.yaml, and finding counts by category and status, with tokens>>
 
 ## Open findings
 

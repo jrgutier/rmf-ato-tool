@@ -28,7 +28,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Configuration items and component inventory
 
-<<FILL: the configuration items under control and how they map to the inventory in ART-INV, named by INV-### ID, with tokens>>
+<<FILL: how the system was decomposed into the configuration items of artifacts/data/cm-plan.yaml, why, and what rebuilds each, including the CI for SecCM tools and testing processes, with tokens>>
 
 ## Baseline configurations
 
@@ -36,7 +36,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Configuration change control
 
-<<FILL: the change procedure from request through security impact analysis, board decision, testing, implementation, verification and record; pre-approved routine changes; emergency changes and their after-the-fact review, with tokens>>
+<<FILL: the change procedure from request through security impact analysis, enterprise architecture review, board decision, testing, implementation, verification and record; what a change brings to the CCB; the criteria that elevate it above system level; rollback; pre-approved routine changes, still tested and documented; emergency changes and their retroactive analysis, testing and approval; help desk requests, patch management and SDLC use (`change_control` and `procedures` in artifacts/data/cm-plan.yaml), with tokens>>
 
 ## Security impact analysis
 
@@ -52,7 +52,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Records and tools
 
-<<FILL: where change requests, analyses, approvals and baselines are kept, and the SecCM tools used, with tokens>>
+<<FILL: where change requests, analyses, approvals and baselines are kept, what each record holds and how it is disposed of; the media library; the SecCM tools, automated first and SCAP-validated where available, how false positives are handled, and the manual process for what tools cannot reach (`tools`, `manual_monitoring`, `records` in artifacts/data/cm-plan.yaml), with tokens>>
 
 ## Plan maintenance and exceptions
 

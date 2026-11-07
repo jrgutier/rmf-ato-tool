@@ -130,7 +130,8 @@ requirements:
     locator: "9"
     context: "SECTION IV- POLICY"
     statement: "9. Space NSS and services must incorporate cybersecurity monitoring, auditing, and recovery measures to report related events to the cognizant AO and operations organizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.space.yaml", "expect": "space NSS report cybersecurity events to the cognizant AO and operations organizations", "asserts": "Space NSS report related cybersecurity events to the cognizant AO and operations organizations", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Space NSS and services must incorporate cybersecurity monitoring, auditing, and recovery measures to report related events to the cognizant AO and operations organizations."}]
     work_item: "WI-245"
   - id: "REQ-CNSSP12-0017"
     citation: {"ref": "CNSSP12", "page": 6, "anchor": "I 0. Space NSS and services (singularly or as a system-of-systems) and"}
@@ -272,7 +273,8 @@ requirements:
     locator: "a"
     context: "CNSSP 12"
     statement: "a. Authenticate and encrypt all system commands and data in Space NSS and services from end to end, in accordance with requirements and exceptions in CNSSI 1200. The system will use NSA-approved cryptography, in accordance with CNSSP 11 and CNSSP 15. The system must have a system key management plan (SKMP) and relevant cryptographic security plans (CSP) approved by NSA."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.yaml", "expect": "space system commands and data are authenticated and encrypted from end to end", "asserts": "System commands and data in Space NSS are authenticated and encrypted from end to end, or under a CNSSI 1200 exception", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Authenticate and encrypt all system commands and data in Space NSS and services from end to end, in accordance with requirements and exceptions in CNSSI 1200."}, {"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.nsa.yaml", "expect": "a space NSS uses NSA-approved cryptography", "asserts": "The system will use NSA-approved cryptography", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "The system will use NSA-approved cryptography, in accordance with CNSSP 11 and CNSSP 15."}, {"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.skmp.yaml", "expect": "the system key management plan or cryptographic security plan", "asserts": "The system key management plan (SKMP) and cryptographic security plans (CSP) are approved by NSA", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "The system must have a system key management plan (SKMP) and relevant cryptographic security plans (CSP) approved by NSA."}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0035"
     citation: {"ref": "CNSSP12", "page": 8, "anchor": "Any capability for unencrypted emergency backup links must be approved by NSA."}
@@ -280,7 +282,8 @@ requirements:
     locator: "b"
     context: "CNSSP 12"
     statement: "b. Any capability for unencrypted emergency backup links must be approved by NSA. Any other capability for cryptographic bypass must be coordinated with NSA and approved by the AO. See CNSSI 1200 for requirements."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.link.yaml", "expect": "unencrypted emergency backup link", "asserts": "Any capability for unencrypted emergency backup links must be approved by NSA", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Any capability for unencrypted emergency backup links must be approved by NSA."}, {"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.bypass.yaml", "expect": "is coordinated with NSA and approved by the AO", "asserts": "Any other capability for cryptographic bypass must be coordinated with NSA and approved by the AO", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Any other capability for cryptographic bypass must be coordinated with NSA and approved by the AO."}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0036"
     citation: {"ref": "CNSSP12", "page": 8, "anchor": "Space NSS and services must implement TRANSEC measures in accordance with CNSSP"}
@@ -312,7 +315,8 @@ requirements:
     locator: "a"
     context: "SECTION V- RESPONSIBILITIES"
     statement: "a. Review and approve all cryptographies, cryptographic techniques, commanded or automatically invoked cryptographic bypasses, as well as implementations of cryptographies, CSPs, and SKMPs intended to satisfy requirements associated with this policy."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.review.yaml", "expect": "NSA reviews and approves all cryptographies on a space NSS", "asserts": "NSA reviews and approves all cryptographies; a record of each is required", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Review and approve all cryptographies, cryptographic techniques, commanded or automatically invoked cryptographic bypasses, as well as implementations of cryptographies, CSPs, and SKMPs intended to satisfy requirements associated with this policy."}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0040"
     citation: {"ref": "CNSSP12", "page": 9, "anchor": "Provide cybersecurity guidance and assistance to USG Departments and Agencies throughout their"}
@@ -360,7 +364,9 @@ requirements:
     locator: "g"
     context: "SECTION V- RESPONSIBILITIES"
     statement: "g. Specify the format and information content of a CSP and SK.MP to applicable Departments, Agencies, commercial entities, or foreign partners requesting employment of NSA-approved cryptography or cryptographic techniques."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is NSA's, to specify the format and information content of a CSP and SKMP. S-4 tells the run to write both in the format NSA specifies, and CRYP-002 holds their NSA approval (0034, 0057), but no NSA format is in the references, so nothing can fail on a plan in the wrong format. Asks the user whether this NSA responsibility is the run's duty at all."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "claim": "presence", "asserts": "On a space NSS, write the SKMP and each CSP in the format and information content NSA specifies"}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0046"
     citation: {"ref": "CNSSP12", "page": 9, "anchor": "Heads of USG Departments and Agencies must:"}
@@ -414,7 +420,8 @@ requirements:
     locator: "(2)"
     context: "C SSP 12"
     statement: "(2) Programming the funds required to acquire, implement, sustain, and decommission those products, services, measures, controls or techniques necessary to provide AO approved levels of cybersecurity."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "FUND-001", "fixture": "tests/fixtures/negative/FUND-001.space.yaml", "expect": "no programmed funds to", "asserts": "Programming the funds to acquire, implement, sustain, and decommission what provides AO approved levels of cybersecurity", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "(2) Programming the funds required to acquire, implement, sustain, and decommission those products, services, measures, controls or techniques necessary to provide AO approved levels of cybersecurity."}]
     work_item: "WI-228"
   - id: "REQ-CNSSP12-0053"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Ensuring cybersecurity products, services, measures, and controls are integrated, activated, and sustained."}
@@ -453,7 +460,8 @@ requirements:
     locator: "(7)"
     context: "C SSP 12"
     statement: "(7) Ensuring applicable system SKMPs and CSPs are submitted to NSA for approval."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.submitted.yaml", "expect": "is submitted to NSA for approval before it is approved", "asserts": "SKMPs and CSPs are submitted to NSA for approval, dated before the approval", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "(7) Ensuring applicable system SKMPs and CSPs are submitted to NSA for approval."}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0058"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Timely and accurate reporting to the cognizant AO, and NSA, concerning the"}
@@ -477,7 +485,8 @@ requirements:
     locator: "c"
     context: "C SSP 12"
     statement: "c. Ensure timely and accurate reporting of threats and vulnerabilities to the cognizant intelligence authority to support their dissemination of threat and vulnerability information."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.intel.yaml", "expect": "threats and vulnerabilities are reported to the cognizant intelligence", "asserts": "Reporting of threats and vulnerabilities reaches the cognizant intelligence authority", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Ensure timely and accurate reporting of threats and vulnerabilities to the cognizant intelligence authority to support their dissemination of threat and vulnerability information."}]
     work_item: "WI-245"
   - id: "REQ-CNSSP12-0061"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Ensure applicable systems meet the requirements of PL 113-283 (Reference r)."}
@@ -492,7 +501,9 @@ requirements:
     locator: "e"
     context: "C SSP 12"
     statement: "e. Ensure compliance with the cyber incident detection, response, and reporting requirements of CNS SI 1010, Cyber Incident Response (Reference x)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: IRPT-001 checks only that the cnssi-1010 path names CNSSI 1010, which proves the name and not compliance with its detection, response and reporting requirements; CNSSI 1010 is not in the references. Asks the user whether the named path discharges it."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case: the cyber incident response and reporting path names CNSSI 1010"}]
     work_item: "WI-245"
   - id: "REQ-CNSSP12-0063"
     citation: {"ref": "CNSSP12", "page": 11, "anchor": "Issue cybersecurity guidelines and standards, as appropriate, to include security assessment and"}
@@ -507,7 +518,8 @@ requirements:
     locator: "g"
     context: "C SSP 12"
     statement: "g. Consult with NSA prior to initiating the development, acquisition, or purchase of cryptographies or cryptographic products for applicable space NSS to ensure they are suitable for the intended application and operational environment. See CNSSP 15, Use of Public Standards for Secure Information Sharing (Reference y) and CNSSP 11 , National Policy Governing the Acquisition of Information Assurance (IA) and IA-Enabled Information Technology Products (Reference z), for more additional information."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-002", "fixture": "tests/fixtures/negative/CRYP-002.consult.yaml", "expect": "consult with NSA prior to initiating the acquisition", "asserts": "Consult with NSA prior to initiating the development, acquisition, or purchase of cryptographies", "claim": "constraint", "holds_when": "the run is a space NSS: space_nss or the Space Platform Overlay", "sentence": "Consult with NSA prior to initiating the development, acquisition, or purchase of cryptographies or cryptographic products for applicable space NSS to ensure they are suitable for the intended application and operational environment."}]
     work_item: "WI-248"
   - id: "REQ-CNSSP12-0065"
     citation: {"ref": "CNSSP12", "page": 11, "anchor": "Definitions of cybersecurity-related terms used in this policy are contained in CNSSl"}

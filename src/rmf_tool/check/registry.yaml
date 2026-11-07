@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 104 rules, 36 repo-scope and 68 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -915,6 +915,7 @@ rules:
       - REQ-CNSSI1254-0006
       - REQ-CNSSI1254-0012
       - REQ-CNSSI1254-0039
+      - REQ-CNSSI1254-0043
   - id: DIAS-001
     scope: run
     severity: E
@@ -945,3 +946,224 @@ rules:
     summary: deferral without rationale, or deferral of an in-scope task that produces a core artifact
     fixture: tests/fixtures/negative/TASK-DEF-001.yaml
     hint: Give run.yaml deferred entries a rationale; core-producing in-scope tasks cannot be deferred.
+  - id: CMPL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the configuration item register does not hold every inventory item once under an unambiguous identifier
+    fixture: tests/fixtures/negative/CMPL-001.yaml
+    hint: "artifacts/data/cm-plan.yaml gives each CI one identifier and each inventory item one CI, and one CI puts the SecCM tools and testing processes under control."
+    enforces:
+      - REQ-SP800-128-0158
+      - REQ-SP800-128-0159
+      - REQ-SP800-128-0169
+  - id: CMPL-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a SecCM tool is not SCAP-validated where one exists, or manual monitoring names no inventory item
+    fixture: tests/fixtures/negative/CMPL-002.yaml
+    hint: "Replace the tool or record `none-available`; list in manual_monitoring only what the inventory holds."
+    enforces:
+      - REQ-SP800-128-0093
+      - REQ-SP800-128-0249
+  - id: CPLAN-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a process breaks the 12-hour essential function limit, or its RTO and reprocessing exceed its MTD with no POA&M item
+    fixture: tests/fixtures/negative/CPLAN-001.yaml
+    hint: "Shorten the recovery or add the process to strategy.rto_gaps with a POA&M item."
+    enforces:
+      - REQ-SP800-34R1-0129
+      - REQ-SP800-34R1-0130
+      - REQ-SP800-34R1-0132
+  - id: CPLAN-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the exercises are shallower than the availability impact asks
+    fixture: tests/fixtures/negative/CPLAN-002.yaml
+    hint: "Low needs a tabletop, moderate a functional exercise, high a full-scale exercise with a failover."
+    enforces:
+      - REQ-SP800-34R1-0207
+  - id: CPLAN-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: no exercise under realistic cyber conditions, no test of total loss, or unproved dynamic allocation
+    fixture: tests/fixtures/negative/CPLAN-003.yaml
+    hint: "Record the exercise, its tests of work-arounds and fall-backs, the total loss test, and the exercise behind strategy.dynamic_allocation."
+    enforces:
+      - REQ-DODI8500.01-0236
+      - REQ-DODI8500.01-0237
+      - REQ-DODI8500.01-0238
+  - id: IRPT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a reporting path follows the wrong authority or leaves out a required recipient
+    fixture: tests/fixtures/negative/IRPT-001.yaml
+    hint: "artifacts/data/incident-response.yaml names, per case, the issuance and recipients DoDI 8500.01 and 8530.01 name."
+    enforces:
+      - REQ-DODI8500.01-0152
+      - REQ-DODI8500.01-0153
+      - REQ-DODI8500.01-0154
+      - REQ-DODI8500.01-0274
+      - REQ-DODI8500.01-0423
+      - REQ-DODI8500.01-0424
+      - REQ-DODI8530.01-0158
+      - REQ-DODI8530.01-0162
+      - REQ-DODI8530.01-0245
+  - id: IRPT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an investigation or law enforcement path leaves out what the source names
+    fixture: tests/fixtures/negative/IRPT-002.yaml
+    hint: "Identify classified disclosures as negligent discharges, determine intent, name the investigative recipients, and keep audit data with its chain of custody."
+    enforces:
+      - REQ-CNSSP12-0016
+      - REQ-CNSSP12-0060
+      - REQ-DODI8530.01-0160
+      - REQ-DODI8530.01-0245
+      - REQ-DODI8530.01-0249
+      - REQ-DODI8530.01-0250
+  - id: SVCA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a provider agreement fails on its instrument, parties, controls, validation or the cATO criteria
+    fixture: tests/fixtures/negative/SVCA-001.yaml
+    hint: "artifacts/data/service-agreements.yaml holds one agreement per provider; the owner validates it."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0109
+      - REQ-DODCIO-CATO-EVAL-0111
+      - REQ-DODCIO-CATO-EVAL-0112
+      - REQ-DODCIO-CATO-EVAL-0113
+      - REQ-DODI8530.01-0257
+      - REQ-DODI8530.01-0270
+      - REQ-DODI8530.01-0271
+      - REQ-DODI8530.01-0274
+      - REQ-DODI8530.01-0312
+  - id: SVCA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-2
+    summary: a provider is not measured by the owner of the system, or an issue is not carried to the DoD Component CIO
+    fixture: tests/fixtures/negative/SVCA-002.yaml
+    hint: "The owner measures a service of the agreement; an issue the parties cannot resolve goes to PER-CIO."
+    enforces:
+      - REQ-DODI8530.01-0277
+      - REQ-DODI8530.01-0306
+      - REQ-DODI8530.01-0313
+  - id: SSPR-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the security plan elements in authorizations.yaml disagree with the ledger
+    fixture: tests/fixtures/negative/SSPR-001.yaml
+    hint: "Restate system_status when writing a record."
+    enforces:
+      - REQ-CNSSI1254-0040
+      - REQ-CNSSI1254-0041
+      - REQ-CNSSI1254-0055
+  - id: FUND-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: the plan does not budget implementation, assessment and sustainment across the life cycle
+    fixture: tests/fixtures/negative/FUND-001.yaml
+    hint: "artifacts/data/ssp-records.yaml holds a funding line per purpose; an unfunded line names a POA&M item."
+    enforces:
+      - REQ-CNSSP12-0052
+      - REQ-DODI8500.01-0413
+  - id: CRYP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: cryptography lacks its key management data, CNSSP 15 basis, or NSA approval on a classified system
+    fixture: tests/fixtures/negative/CRYP-001.yaml
+    hint: "Fill cryptography in artifacts/data/ssp-records.yaml; a classified system needs NSA approval per use."
+    enforces:
+      - REQ-CNSSI1254-0042
+      - REQ-DODI8500.01-0130
+      - REQ-DODI8500.01-0131
+      - REQ-DODI8500.01-0280
+      - REQ-DODI8500.01-0337
+  - id: CRYP-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a space NSS breaks a CNSSP 12 cryptographic requirement
+    fixture: tests/fixtures/negative/CRYP-002.yaml
+    hint: "Fill cryptography.space: end to end protection, NSA-approved SKMP and CSPs, approved bypasses, and consultation before acquisition."
+    enforces:
+      - REQ-CNSSP12-0034
+      - REQ-CNSSP12-0035
+      - REQ-CNSSP12-0039
+      - REQ-CNSSP12-0057
+      - REQ-CNSSP12-0064
+  - id: CRYP-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-4
+    summary: a cryptographic vulnerability is no POA&M item or is not taken to the VEP
+    fixture: tests/fixtures/negative/CRYP-003.yaml
+    hint: "List the POA&M item with vep submitted or not-applicable."
+    enforces:
+      - REQ-DODI8531.01-0056
+  - id: TELE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: remote access from non-government equipment lacks the DoD CIO approval or the SP 800-114 basis
+    fixture: tests/fixtures/negative/TELE-001.yaml
+    hint: "Record the approval and basis, or stop accepting the equipment."
+    enforces:
+      - REQ-DODI8500.01-0347

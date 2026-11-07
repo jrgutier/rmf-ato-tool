@@ -1,0 +1,21 @@
+rule: CRYP-001
+bases:
+- minimal
+description: classified information protected by an algorithm NSA did not approve
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253E-ATT5-CLASSIFIED
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.uses.0.nsa_approval.algorithm
+  value: AES-128-CBC
+expect:
+  errors:
+  - CRYP-001
+  also:
+  - GEN-STALE-001
+  messages:
+  - the NSA approval covers the application of AES-128-CBC

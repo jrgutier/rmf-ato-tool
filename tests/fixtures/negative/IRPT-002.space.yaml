@@ -1,0 +1,19 @@
+rule: IRPT-002
+bases:
+- minimal
+description: a space NSS that reports events to nobody in operations
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.10.recipients
+  value:
+  - PER-ISSM
+expect:
+  errors:
+  - IRPT-002
+  messages:
+  - space NSS report cybersecurity events to the cognizant AO and operations organizations

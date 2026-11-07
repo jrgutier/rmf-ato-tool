@@ -1,0 +1,14 @@
+rule: SVCA-002
+bases:
+- minimal
+description: an ineffective service with no issue raised
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.effectiveness.0.rating
+  value: ineffective
+expect:
+  errors:
+  - SVCA-002
+  messages:
+  - a service executed outside the agreement raises an issue

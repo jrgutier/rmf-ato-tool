@@ -1,0 +1,15 @@
+rule: IRPT-001
+bases:
+- minimal
+description: a cleared contractor incident that skips DCSA
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.4.recipients
+  value:
+  - PER-AO
+expect:
+  errors:
+  - IRPT-001
+  messages:
+  - incidents involving cleared defense contractors are reported to DCSA

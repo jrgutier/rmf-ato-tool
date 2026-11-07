@@ -1,0 +1,14 @@
+rule: CRYP-001
+bases:
+- minimal
+description: cryptography implemented under another policy
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.uses.0.policy_basis
+  value: FIPS 140-3 only
+expect:
+  errors:
+  - CRYP-001
+  messages:
+  - cryptography protecting DoD information is implemented under CNSSP 15

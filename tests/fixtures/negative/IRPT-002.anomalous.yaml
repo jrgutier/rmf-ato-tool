@@ -1,0 +1,15 @@
+rule: IRPT-002
+bases:
+- minimal
+description: anomalous activity that skips the investigative authority
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.9.recipients
+  value:
+  - PER-ISSM
+expect:
+  errors:
+  - IRPT-002
+  messages:
+  - anomalous user activity contacts the DoD Component investigative authority

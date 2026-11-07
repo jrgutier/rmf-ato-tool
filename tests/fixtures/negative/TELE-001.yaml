@@ -1,0 +1,20 @@
+rule: TELE-001
+bases:
+- minimal
+description: non-government equipment approved short of the DoD CIO
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: telework
+  value:
+    non_gfe_remote_access: true
+    basis: NIST SP 800-114
+    approval:
+      by: PER-CISO
+      reference: Memo 26-7
+      date: '2026-08-01'
+expect:
+  errors:
+  - TELE-001
+  messages:
+  - telework on non-government furnished equipment is approved by the DoD CIO

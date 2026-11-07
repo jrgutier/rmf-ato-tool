@@ -1,0 +1,17 @@
+rule: SVCA-002
+bases:
+- minimal
+description: an unresolved issue that stops short of the CIO
+mutations:
+- op: set_field
+  file: artifacts/data/service-agreements.yaml
+  path: agreements.0.effectiveness.0.issue
+  value:
+    status: unresolved
+    description: Scan access dispute.
+    reported_to: PER-PM
+expect:
+  errors:
+  - SVCA-002
+  messages:
+  - an issue that cannot be resolved is reported to the DoD Component CIO

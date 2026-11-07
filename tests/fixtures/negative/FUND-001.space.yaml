@@ -1,0 +1,18 @@
+rule: FUND-001
+bases:
+- minimal
+description: a space NSS with no funds to decommission
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: funding.6.purpose
+  value: other
+expect:
+  errors:
+  - FUND-001
+  messages:
+  - no programmed funds to decommission

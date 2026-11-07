@@ -1,0 +1,14 @@
+rule: IRPT-002
+bases:
+- minimal
+description: audit data kept with no chain of custody
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.9.audit_data
+  value: thirty-day-rotation
+expect:
+  errors:
+  - IRPT-002
+  messages:
+  - audit data of anomalous user activity is kept with its chain of custody

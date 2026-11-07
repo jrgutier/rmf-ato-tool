@@ -76,7 +76,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [S-1](#task-s-1) Control Selection | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-BASELINE](../../MANUAL.md#art-baseline) | — | [SFR](#rv-sfr) |
 | [S-2](#task-s-2) Control Tailoring | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-BASELINE](../../MANUAL.md#art-baseline) | [SFR](#rv-sfr) |
 | [S-3](#task-s-3) Control Allocation | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-BASELINE](../../MANUAL.md#art-baseline) | [PDR](#rv-pdr) |
-| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-SSP](../../MANUAL.md#art-ssp), [ART-CMP](../../MANUAL.md#art-cmp), [ART-CP](../../MANUAL.md#art-cp), [ART-IRP](../../MANUAL.md#art-irp) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-SSP](../../MANUAL.md#art-ssp), [ART-CMP](../../MANUAL.md#art-cmp), [ART-CP](../../MANUAL.md#art-cp), [ART-IRP](../../MANUAL.md#art-irp), [ART-SVCA](../../MANUAL.md#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [S-5](#task-s-5) Continuous Monitoring Strategy—System | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-CONMON](../../MANUAL.md#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [S-6](#task-s-6) Plan Review and Approval | Select | [AO](../../MANUAL.md#per-ao) | — | [ART-SSP](../../MANUAL.md#art-ssp) | [MS B](#ms-b) |
 
@@ -394,6 +394,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | produces | core |
 | [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | produces | core |
 | [ART-IRP](../../MANUAL.md#art-irp) | Incident response plan | produces | core |
+| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | produces | supporting |
 
 **Entry criteria**
 
@@ -519,7 +520,7 @@ Writes to `facts.yaml`: `baseline_id`.
 **Exit criteria**
 
 - Security and privacy plans reflecting the controls needed to protect the system and its environment commensurate with risk are reviewed and approved by the AO (DoDI 8510.01 Table 3 outcome).
-- ART-SSP records the AO's approval (or the changes required before approval).
+- ART-SSP records the AO's approval (or the changes required before approval), and `approvals` in ssp-records.yaml holds each approver's full name, system role, title, signature and date, with the concurrences.
 
 **Alignment**
 

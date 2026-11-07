@@ -1,0 +1,1753 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:contingency",
+  "title": "runs/<run-id>/artifacts/data/contingency.yaml",
+  "description": "The contingency plan record (S-4): the policy it rests on, the business impact analysis, the recovery strategy, sites, backup, teams, procedures, exercises and maintenance. CPLAN-001 to CPLAN-003 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy",
+    "scope",
+    "bia",
+    "preventive",
+    "strategy",
+    "sites",
+    "backup",
+    "teams",
+    "activation",
+    "recovery",
+    "reconstitution",
+    "training",
+    "testing",
+    "exercises",
+    "maintenance",
+    "appendices",
+    "sources"
+  ],
+  "properties": {
+    "policy": {
+      "title": "Contingency planning policy this plan rests on",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "senior_management",
+        "impact_levels",
+        "activation_criteria",
+        "backup"
+      ],
+      "properties": {
+        "statement": {
+          "title": "Contingency planning policy statement, with its objectives, framework and responsibilities",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0105",
+            "REQ-SP800-34R1-0506"
+          ]
+        },
+        "senior_management": {
+          "title": "Senior management support for the contingency program and policy",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0105"
+          ]
+        },
+        "impact_levels": {
+          "title": "FIPS 199 impact levels and contingency controls the policy reflects",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0105"
+          ]
+        },
+        "activation_criteria": {
+          "title": "Activation criteria for outages or disruptions the policy states",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0240"
+          ]
+        },
+        "backup": {
+          "title": "Backup policy: minimum frequency, scope, location, naming, rotation and transport",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frequency",
+            "scope",
+            "storage"
+          ],
+          "properties": {
+            "frequency": {
+              "title": "Minimum backup frequency",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0155",
+                "REQ-SP800-34R1-0506"
+              ]
+            },
+            "scope": {
+              "title": "Backup scope, incremental, differential or full",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0295"
+              ]
+            },
+            "storage": {
+              "title": "Location, file naming, media rotation and offsite transport of backed-up data",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0155"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "title": "Plan identity and how it fits the suite of plans",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan_type",
+        "related_plans"
+      ],
+      "properties": {
+        "plan_type": {
+          "title": "Plan type, an information system contingency plan",
+          "enum": [
+            "iscp"
+          ],
+          "x-enforces": [
+            "REQ-SP800-34R1-0229"
+          ]
+        },
+        "related_plans": {
+          "title": "Related plans coordinated with this one, each with its version, location and point of contact",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "plan",
+              "kind",
+              "version",
+              "location",
+              "poc"
+            ],
+            "properties": {
+              "plan": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "location": {
+                "type": "string",
+                "minLength": 1
+              },
+              "poc": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0050",
+            "REQ-SP800-34R1-0053",
+            "REQ-SP800-34R1-0109",
+            "REQ-SP800-34R1-0491",
+            "REQ-SP800-34R1-0498",
+            "REQ-SP800-34R1-0522"
+          ]
+        }
+      }
+    },
+    "bia": {
+      "title": "Business impact analysis results",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processes",
+        "resources",
+        "impact_categories",
+        "objectives",
+        "pocs",
+        "cost_balance",
+        "associated_priorities",
+        "continuity_input"
+      ],
+      "properties": {
+        "processes": {
+          "title": "Mission or business processes with maximum tolerable downtime, recovery time and recovery point objectives, reprocessing time and priority",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "mtd_hours",
+              "rto_hours",
+              "rpo_hours",
+              "reprocessing_hours",
+              "priority",
+              "essential_function"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mtd_hours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "rto_hours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "rpo_hours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "reprocessing_hours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "priority": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "essential_function": {
+                "enum": [
+                  "none",
+                  "MEF",
+                  "PMEF",
+                  "NEF"
+                ]
+              },
+              "telecom_rto_basis": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0123",
+            "REQ-SP800-34R1-0130",
+            "REQ-SP800-34R1-0132",
+            "REQ-SP800-34R1-0512"
+          ]
+        },
+        "resources": {
+          "title": "Resources needed for recovery with their interdependencies",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "resource",
+              "kind",
+              "supports",
+              "depends_on"
+            ],
+            "properties": {
+              "resource": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "facility",
+                  "personnel",
+                  "equipment",
+                  "software",
+                  "data",
+                  "component",
+                  "vital-record"
+                ]
+              },
+              "supports": {
+                "type": "string",
+                "minLength": 1
+              },
+              "depends_on": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0116",
+            "REQ-SP800-34R1-0140"
+          ]
+        },
+        "impact_categories": {
+          "title": "Impact categories and the severity scale of each",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "category",
+              "scale"
+            ],
+            "properties": {
+              "category": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scale": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0126",
+            "REQ-SP800-34R1-0508"
+          ]
+        },
+        "objectives": {
+          "title": "Impacts analyzed against availability, integrity, confidentiality and the FIPS 199 level",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "availability",
+            "integrity",
+            "confidentiality"
+          ],
+          "properties": {
+            "availability": {
+              "title": "Impact on availability, the basis of the BIA",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0122",
+                "REQ-SP800-34R1-0123"
+              ]
+            },
+            "integrity": {
+              "title": "Impact on integrity",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0122"
+              ]
+            },
+            "confidentiality": {
+              "title": "Impact on confidentiality",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0122"
+              ]
+            }
+          }
+        },
+        "pocs": {
+          "title": "Internal and external points of contact consulted, including data partners and interconnected systems",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "poc",
+              "relation"
+            ],
+            "properties": {
+              "poc": {
+                "type": "string",
+                "minLength": 1
+              },
+              "relation": {
+                "enum": [
+                  "internal",
+                  "data-provider",
+                  "data-receiver",
+                  "interconnected-system",
+                  "end-user"
+                ]
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0125",
+            "REQ-SP800-34R1-0512"
+          ]
+        },
+        "cost_balance": {
+          "title": "Optimum recovery point balancing the cost of inoperability against the cost of recovery",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0137"
+          ]
+        },
+        "associated_priorities": {
+          "title": "Impacts and priorities of associated systems, LANs, WANs and telecommunications the BIA gives",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0323",
+            "REQ-SP800-34R1-0332",
+            "REQ-SP800-34R1-0347"
+          ]
+        },
+        "continuity_input": {
+          "title": "Telecommunications and FCD-2 continuity inputs to the system BIA",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0133",
+            "REQ-SP800-34R1-0509"
+          ]
+        }
+      }
+    },
+    "preventive": {
+      "title": "Preventive controls the platform carries",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "power",
+        "standardization",
+        "telecommunications_diagrams",
+        "single_points_of_failure",
+        "remote_access",
+        "wan",
+        "design",
+        "failover"
+      ],
+      "properties": {
+        "power": {
+          "title": "Power protection: UPS, generator and fuel",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0309"
+          ]
+        },
+        "standardization": {
+          "title": "Standardized hardware, software and peripherals and off-the-shelf compatibility",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0320"
+          ]
+        },
+        "telecommunications_diagrams": {
+          "title": "Physical and logical telecommunications diagrams kept up to date",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0344"
+          ]
+        },
+        "single_points_of_failure": {
+          "title": "Single points of failure and the redundant cables, routers and devices that answer them",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0349",
+            "REQ-SP800-34R1-0350"
+          ]
+        },
+        "remote_access": {
+          "title": "Remote access as a contingency capability, with bandwidth and security controls",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0351"
+          ]
+        },
+        "wan": {
+          "title": "WAN contingency solutions, communications links and provider redundancy",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0354",
+            "REQ-SP800-34R1-0357"
+          ]
+        },
+        "design": {
+          "title": "Technical measures designed in: redundancy, robustness, power and data mirroring",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0447",
+            "REQ-SP800-34R1-0545"
+          ]
+        },
+        "failover": {
+          "title": "Failover mode and redundancy of critical components",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0078"
+          ]
+        }
+      }
+    },
+    "strategy": {
+      "title": "Recovery strategy and why it fits the system",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fit",
+        "availability_fit",
+        "risk_basis",
+        "alternatives",
+        "high_availability",
+        "equipment",
+        "budget",
+        "data_protection",
+        "dynamic_allocation"
+      ],
+      "properties": {
+        "fit": {
+          "title": "How the methods and strategies answer the disruption impacts and allowable downtimes of the BIA",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0147",
+            "REQ-SP800-34R1-0288"
+          ]
+        },
+        "availability_fit": {
+          "title": "How the strategy matches the FIPS 199 availability impact level and system life cycle",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0036",
+            "REQ-SP800-34R1-0504",
+            "REQ-SP800-34R1-0542"
+          ]
+        },
+        "risk_basis": {
+          "title": "Risk-informed decisions behind the resilience methods",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0307"
+          ]
+        },
+        "alternatives": {
+          "title": "Alternative strategies compared on cost, downtime, security and priority",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "cost",
+              "max_downtime_hours",
+              "security",
+              "priority",
+              "chosen"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cost": {
+                "type": "string",
+                "minLength": 1
+              },
+              "max_downtime_hours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "security": {
+                "type": "string",
+                "minLength": 1
+              },
+              "priority": {
+                "type": "string",
+                "minLength": 1
+              },
+              "chosen": {
+                "type": "boolean"
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0148"
+          ]
+        },
+        "high_availability": {
+          "title": "High availability: whether it is used, why the system warrants it, and its extension to an alternate location",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0314",
+            "REQ-SP800-34R1-0315"
+          ]
+        },
+        "equipment": {
+          "title": "Equipment needs: model or version, specifications, quantity and replacement approach",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "item",
+              "model_or_version",
+              "specifications",
+              "quantity"
+            ],
+            "properties": {
+              "item": {
+                "type": "string",
+                "minLength": 1
+              },
+              "model_or_version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "specifications": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0178",
+            "REQ-SP800-34R1-0284"
+          ]
+        },
+        "budget": {
+          "title": "Cost of each option weighed against the budget, with the cost-benefit analysis",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0179"
+          ]
+        },
+        "data_protection": {
+          "title": "Encryption of stored and backup data and the key management that keeps it readable",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0291",
+            "REQ-SP800-34R1-0334"
+          ]
+        },
+        "rto_gaps": {
+          "title": "Plan of Action and Milestone item for each process whose RTO cannot be met",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "process",
+              "poam_item"
+            ],
+            "properties": {
+              "process": {
+                "type": "string",
+                "minLength": 1
+              },
+              "poam_item": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0129"
+          ]
+        },
+        "dynamic_allocation": {
+          "title": "How information resources are allocated dynamically to sustain mission operations",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "proved_by"
+          ],
+          "properties": {
+            "mechanism": {
+              "title": "Mechanism that reallocates information resources",
+              "type": "string",
+              "minLength": 1
+            },
+            "proved_by": {
+              "title": "Exercise that proved the allocation",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "sites": {
+      "title": "Offsite storage, alternate site and the agreements behind them",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offsite_store",
+        "alternate_site",
+        "agreements",
+        "vendor_agreements"
+      ],
+      "properties": {
+        "offsite_store": {
+          "title": "Offsite storage facility and the criteria it was chosen on",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selection",
+            "security"
+          ],
+          "properties": {
+            "selection": {
+              "title": "Offsite storage facility selection against geography, accessibility, security, environment and cost",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0156",
+                "REQ-SP800-34R1-0312"
+              ]
+            },
+            "security": {
+              "title": "Security capabilities of the shipping method, storage facility and personnel",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0158"
+              ]
+            }
+          }
+        },
+        "alternate_site": {
+          "title": "Alternate site, its type and why it fits",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "selection",
+            "location",
+            "control_compatibility"
+          ],
+          "properties": {
+            "type": {
+              "title": "Alternate site type",
+              "enum": [
+                "cold",
+                "warm",
+                "hot",
+                "mirrored",
+                "mobile",
+                "none"
+              ],
+              "x-enforces": [
+                "REQ-SP800-34R1-0163",
+                "REQ-SP800-34R1-0313",
+                "REQ-SP800-34R1-0442"
+              ]
+            },
+            "selection": {
+              "title": "Alternate site choice against core requirements, the BIA, downtime and FIPS 199 level",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0164",
+                "REQ-SP800-34R1-0443",
+                "REQ-SP800-34R1-0514"
+              ]
+            },
+            "location": {
+              "title": "Geographic hazard, transport time and mode to the site",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0166"
+              ]
+            },
+            "control_compatibility": {
+              "title": "Security, management, operational and technical controls compatible with the prospective site",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0167"
+              ]
+            }
+          }
+        },
+        "agreements": {
+          "title": "Contract, reciprocal agreement, MOU or SLA behind each site",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "party",
+              "terms",
+              "legal_review",
+              "partner_testing"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "commercial-contract",
+                  "reciprocal-agreement",
+                  "mou",
+                  "sla",
+                  "internal"
+                ]
+              },
+              "party": {
+                "type": "string",
+                "minLength": 1
+              },
+              "terms": {
+                "type": "string",
+                "minLength": 1
+              },
+              "legal_review": {
+                "type": "string",
+                "minLength": 1
+              },
+              "partner_testing": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0171",
+            "REQ-SP800-34R1-0172",
+            "REQ-SP800-34R1-0173"
+          ]
+        },
+        "vendor_agreements": {
+          "title": "Vendor SLAs: response time and priority for replacement equipment",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0175"
+          ]
+        }
+      }
+    },
+    "backup": {
+      "title": "Backup solution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "solution",
+        "system_software",
+        "client_data",
+        "stand_alone",
+        "multi_server"
+      ],
+      "properties": {
+        "solution": {
+          "title": "Backup solution chosen on device compatibility, storage volume, software and medium",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0303",
+            "REQ-SP800-34R1-0304",
+            "REQ-SP800-34R1-0306",
+            "REQ-SP800-34R1-0446"
+          ]
+        },
+        "system_software": {
+          "title": "System software, drivers, licenses and image loads stored at an alternate location",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0310"
+          ]
+        },
+        "client_data": {
+          "title": "Critical user data on central servers, automated client backup and guidance on saving data",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0324",
+            "REQ-SP800-34R1-0325",
+            "REQ-SP800-34R1-0326"
+          ]
+        },
+        "stand_alone": {
+          "title": "Backup of stand-alone systems and the storage of their media at an alternate site",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0327"
+          ]
+        },
+        "multi_server": {
+          "title": "Centralized storage and a dedicated backup network in a multi-server environment",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0338"
+          ]
+        }
+      }
+    },
+    "teams": {
+      "title": "Roles, teams and vendors",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activation_authority",
+        "leadership",
+        "teams",
+        "vendors"
+      ],
+      "properties": {
+        "activation_authority": {
+          "title": "The one designated authority that activates the plan, and the successor",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "successor"
+          ],
+          "properties": {
+            "role": {
+              "title": "Designated authority that activates the plan",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0245"
+              ]
+            },
+            "successor": {
+              "title": "Successor to the activating authority",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0245"
+              ]
+            }
+          }
+        },
+        "leadership": {
+          "title": "Plan leadership",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "director",
+            "coordinator",
+            "owner_poc",
+            "technical_poc"
+          ],
+          "properties": {
+            "director": {
+              "title": "ISCP Director with overall management responsibility",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0410"
+              ]
+            },
+            "coordinator": {
+              "title": "ISCP Coordinator overseeing recovery and reconstitution",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0410"
+              ]
+            },
+            "owner_poc": {
+              "title": "System owner or business unit point of contact",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0410"
+              ]
+            },
+            "technical_poc": {
+              "title": "Technical recovery point of contact",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0410"
+              ]
+            }
+          }
+        },
+        "teams": {
+          "title": "Recovery teams, staffed by skill, each with a leader and an alternate",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "leader",
+              "alternate_leader",
+              "members",
+              "skills"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "leader": {
+                "type": "string",
+                "minLength": 1
+              },
+              "alternate_leader": {
+                "type": "string",
+                "minLength": 1
+              },
+              "members": {
+                "type": "string",
+                "minLength": 1
+              },
+              "skills": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0186",
+            "REQ-SP800-34R1-0187"
+          ]
+        },
+        "vendors": {
+          "title": "Vendors and providers with contacts, contract numbers, response times and service agreements",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "contact",
+              "contract",
+              "response",
+              "vetting"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contact": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contract": {
+                "type": "string",
+                "minLength": 1
+              },
+              "response": {
+                "type": "string",
+                "minLength": 1
+              },
+              "vetting": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0311",
+            "REQ-SP800-34R1-0321",
+            "REQ-SP800-34R1-0345",
+            "REQ-SP800-34R1-0359",
+            "REQ-SP800-34R1-0468"
+          ]
+        }
+      }
+    },
+    "activation": {
+      "title": "Activation and notification",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notification",
+        "outage_assessment"
+      ],
+      "properties": {
+        "notification": {
+          "title": "Notification strategy for each case",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "with_notice",
+            "without_notice",
+            "method",
+            "unreachable",
+            "external_pocs",
+            "content"
+          ],
+          "properties": {
+            "with_notice": {
+              "title": "Notification procedures with prior notice of an outage",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0243"
+              ]
+            },
+            "without_notice": {
+              "title": "Notification procedures with no notice, in and out of business hours",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0243"
+              ]
+            },
+            "method": {
+              "title": "Who starts notification, the sequence and the method, and its limits such as email",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0247",
+                "REQ-SP800-34R1-0415",
+                "REQ-SP800-34R1-0516"
+              ]
+            },
+            "unreachable": {
+              "title": "What is done when a person cannot be contacted, with primary and alternate contact methods",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0248"
+              ]
+            },
+            "external_pocs": {
+              "title": "External organizations and interconnected system partners notified, each with a POC",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0250"
+              ]
+            },
+            "content": {
+              "title": "Type of information relayed to those notified",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0251"
+              ]
+            }
+          }
+        },
+        "outage_assessment": {
+          "title": "Outage assessment",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "team",
+            "areas",
+            "follow_up"
+          ],
+          "properties": {
+            "team": {
+              "title": "Outage Assessment Team, first notified",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0253"
+              ]
+            },
+            "areas": {
+              "title": "Minimum areas: cause, potential for further damage, affected area, infrastructure, equipment, items to replace, time to restore",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0253",
+                "REQ-SP800-34R1-0417"
+              ]
+            },
+            "follow_up": {
+              "title": "How the assessment result updates notification and the planned response",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-34R1-0255"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "recovery": {
+      "title": "Recovery procedures",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "tailoring",
+        "sequence",
+        "actions_by_team",
+        "escalation",
+        "shipment",
+        "supporting_systems",
+        "alternate_processing",
+        "activation_summary"
+      ],
+      "properties": {
+        "format": {
+          "title": "Stepwise, sequential, checklist procedures that assume no step",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0263",
+            "REQ-SP800-34R1-0444"
+          ]
+        },
+        "tailoring": {
+          "title": "How the plan balances detail with flexibility for this system",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0229"
+          ]
+        },
+        "sequence": {
+          "title": "Recovery sequence tied to BIA priorities and the MTD",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0257",
+            "REQ-SP800-34R1-0424"
+          ]
+        },
+        "actions_by_team": {
+          "title": "Procedures assigned to each recovery team",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0445"
+          ]
+        },
+        "escalation": {
+          "title": "Events, thresholds and triggers that escalate, and the notices that follow",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0273",
+            "REQ-SP800-34R1-0425"
+          ]
+        },
+        "shipment": {
+          "title": "Shipment of backup media, hardware, plans and software to an alternate site",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0260"
+          ]
+        },
+        "supporting_systems": {
+          "title": "Contact and procedures of a system this one relies on for recovery",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0469"
+          ]
+        },
+        "alternate_processing": {
+          "title": "Alternate manual or technical processing procedures",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0470"
+          ]
+        },
+        "activation_summary": {
+          "title": "Who may activate the plan and the recovery activities this strategy sets",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0454",
+            "REQ-SP800-34R1-0455"
+          ]
+        }
+      }
+    },
+    "reconstitution": {
+      "title": "Reconstitution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_validation",
+        "functionality_validation",
+        "test_plan",
+        "cleanup",
+        "full_backup",
+        "offsite_return",
+        "return_to_normal",
+        "event_documentation",
+        "after_action"
+      ],
+      "properties": {
+        "data_validation": {
+          "title": "Validation data testing",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0427"
+          ]
+        },
+        "functionality_validation": {
+          "title": "Validation functionality testing",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0428"
+          ]
+        },
+        "test_plan": {
+          "title": "System validation test plan run before the system returns to users",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0471"
+          ]
+        },
+        "cleanup": {
+          "title": "Cleanup of temporary recovery locations, supplies, manuals and media",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0431"
+          ]
+        },
+        "full_backup": {
+          "title": "Full system backup after recovery",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0432"
+          ]
+        },
+        "offsite_return": {
+          "title": "Return of retrieved media to offsite data storage",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0279"
+          ]
+        },
+        "return_to_normal": {
+          "title": "Declaration of return to normal, and the significant change determination with the concurrence of the Authorizing Official",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0276"
+          ]
+        },
+        "event_documentation": {
+          "title": "Recovery events documented with actions, problems and lessons learned",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0433"
+          ]
+        },
+        "after_action": {
+          "title": "After Action Report responsibilities",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0435"
+          ]
+        }
+      }
+    },
+    "training": {
+      "title": "Training",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "covers",
+        "frequency_days",
+        "new_personnel"
+      ],
+      "properties": {
+        "covers": {
+          "title": "What training covers: roles, skills and plan elements",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0196"
+          ]
+        },
+        "frequency_days": {
+          "title": "Training frequency in days",
+          "type": "integer",
+          "minimum": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0196"
+          ]
+        },
+        "new_personnel": {
+          "title": "Training of personnel newly appointed to ISCP roles",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0196"
+          ]
+        }
+      }
+    },
+    "testing": {
+      "title": "Test, training and exercise program",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backup_media",
+        "readiness",
+        "triggers",
+        "improvement"
+      ],
+      "properties": {
+        "backup_media": {
+          "title": "Regular testing of backup media, at the alternate site where applicable",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0160"
+          ]
+        },
+        "readiness": {
+          "title": "First TT&E event in Implementation/Assessment and how the plan stays ready",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0189",
+            "REQ-SP800-34R1-0547",
+            "REQ-SP800-34R1-0548"
+          ]
+        },
+        "triggers": {
+          "title": "What triggers a TT&E event: period, organizational or system change, new guidance",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0190",
+            "REQ-SP800-34R1-0518"
+          ]
+        },
+        "improvement": {
+          "title": "How results update and improve the plan",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0204"
+          ]
+        }
+      }
+    },
+    "exercises": {
+      "title": "Exercises and tests, each with objectives, success criteria, scope, scenario and logistics",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "frequency_days",
+          "objectives",
+          "success_criteria",
+          "scope",
+          "scenario",
+          "logistics",
+          "participants",
+          "schedule",
+          "conditions",
+          "tests",
+          "loss"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "tabletop",
+              "functional",
+              "full-scale"
+            ]
+          },
+          "frequency_days": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "objectives": {
+            "type": "string",
+            "minLength": 1
+          },
+          "success_criteria": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenario": {
+            "type": "string",
+            "minLength": 1
+          },
+          "logistics": {
+            "type": "string",
+            "minLength": 1
+          },
+          "participants": {
+            "type": "string",
+            "minLength": 1
+          },
+          "schedule": {
+            "type": "string",
+            "minLength": 1
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "benign",
+                "realistic-cyber"
+              ]
+            }
+          },
+          "tests": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "loss": {
+            "enum": [
+              "none",
+              "partial",
+              "all-information-resources-and-connectivity"
+            ]
+          },
+          "failover": {
+            "type": "boolean"
+          },
+          "evaluation_kind": {
+            "enum": [
+              "exercise",
+              "evaluation"
+            ]
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-34R1-0192",
+        "REQ-SP800-34R1-0194",
+        "REQ-SP800-34R1-0206",
+        "REQ-SP800-34R1-0207",
+        "REQ-SP800-34R1-0208",
+        "REQ-SP800-34R1-0482",
+        "REQ-SP800-34R1-0483"
+      ]
+    },
+    "maintenance": {
+      "title": "Plan maintenance",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review",
+        "copies",
+        "record_of_changes",
+        "coordination",
+        "supporting_information",
+        "change_response",
+        "approval"
+      ],
+      "properties": {
+        "review": {
+          "title": "Review frequency, significant change triggers and the minimum review elements",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0222",
+            "REQ-SP800-34R1-0520"
+          ]
+        },
+        "copies": {
+          "title": "Marking and distribution of the plan, record of copies, a copy at the alternate site and vital records stored with it",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0223"
+          ]
+        },
+        "record_of_changes": {
+          "title": "Record of changes in the plan, with page number, change comment and date",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "page",
+              "comment",
+              "date"
+            ],
+            "properties": {
+              "page": {
+                "type": "string",
+                "minLength": 1
+              },
+              "comment": {
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-34R1-0224"
+          ]
+        },
+        "coordination": {
+          "title": "Coordination on change with internal and external points of contact, and version control",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0226"
+          ]
+        },
+        "supporting_information": {
+          "title": "Supporting information checked for currency",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0226"
+          ]
+        },
+        "change_response": {
+          "title": "BIA updated on a significant change, and upkeep through disposal",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0228",
+            "REQ-SP800-34R1-0549"
+          ]
+        },
+        "approval": {
+          "title": "Signed approval affirming the plan is complete and tested, and who keeps it maintained",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0448"
+          ]
+        }
+      }
+    },
+    "appendices": {
+      "title": "Appendices the plan carries",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "personnel_contacts",
+        "diagrams",
+        "inventory",
+        "interconnections",
+        "constraints"
+      ],
+      "properties": {
+        "personnel_contacts": {
+          "title": "Personnel contact list with an office and a non-office number",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0456",
+            "REQ-SP800-34R1-0457"
+          ]
+        },
+        "diagrams": {
+          "title": "System, input and output diagrams or the SSP section they come from",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0479"
+          ]
+        },
+        "inventory": {
+          "title": "Hardware and software inventory the plan restores",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0480"
+          ]
+        },
+        "interconnections": {
+          "title": "Interconnections table: type of connection, information transferred and contact person",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0481"
+          ]
+        },
+        "constraints": {
+          "title": "Additional constraints and associated plans",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-34R1-0405"
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "control_id": {
+      "description": "OSCAL control id from the catalog (ac-2, ac-2.1).",
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  }
+}

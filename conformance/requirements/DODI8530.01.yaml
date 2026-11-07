@@ -1246,7 +1246,8 @@ requirements:
     locator: "ENCLOSURE 2.n"
     context: "RESPONSIBILITIES"
     statement: "n. Inform the IG DoD when cybersecurity deficiencies in the DODIN contribute to a security breach or failure and are the result of noncompliance with DoD standards or contractual provisions."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.ig.yaml", "expect": "a cybersecurity deficiency behind a breach goes to the IG DoD", "asserts": "A cybersecurity deficiency behind a security breach reaches the IG DoD", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0159"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "Ensure that all users understand and follow the policy and guidance to"}
@@ -1261,7 +1262,8 @@ requirements:
     locator: "ENCLOSURE 2.o.(1).(a)"
     context: "RESPONSIBILITIES Classified Information"
     statement: "(a) Unauthorized disclosure or data spillage involving classified information will be identified as a negligent discharge of classified information incident to be reported and investigated in accordance with Volume 3 of DoDM 5200.01 (Reference (bd)). The investigation must determine whether the incident was willful, negligent, or inadvertent."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.yaml", "expect": "a disclosure or spillage of classified information is identified as a negligent discharge", "asserts": "Unauthorized disclosure or data spillage involving classified information is identified as a negligent discharge", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(a) Unauthorized disclosure or data spillage involving classified information will be identified as a negligent discharge of classified information incident to be reported and investigated in accordance with Volume 3 of DoDM 5200.01 (Reference (bd))."}, {"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.determines.yaml", "expect": "the investigation determines whether the incident was willful, negligent or inadvertent", "asserts": "The investigation must determine whether the incident was willful, negligent, or inadvertent", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "The investigation must determine whether the incident was willful, negligent, or inadvertent."}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0161"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "Classified information may be processed only on systems approved for such use,"}
@@ -1277,7 +1279,8 @@ requirements:
     locator: "ENCLOSURE 2.o.(2).(a)"
     context: "RESPONSIBILITIES Controlled Unclassified Information (CUI)"
     statement: "(a) Unauthorized disclosures of CUI will be handled and reported in accordance with Volume 4 of DoDM 5200.01(Reference (be)) or guidance for specific types of CUI provided by the DoD Component Head or information owner (e.g., DoD 5400.11-R (Reference (bf)) for privacy information)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.cui.yaml", "expect": "an unauthorized disclosure of CUI is reported under", "asserts": "Unauthorized disclosures of CUI are handled and reported under Volume 4 of DoDM 5200.01", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(a) Unauthorized disclosures of CUI will be handled and reported in accordance with Volume 4 of DoDM 5200.01(Reference (be)) or guidance for specific types of CUI provided by the DoD Component Head or information owner (e.g., DoD 5400.11-R (Reference (bf)) for privacy information)."}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0163"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "If possible, electronic transmission CUI and privacy information (e.g., data, website, or"}
@@ -1919,7 +1922,8 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: ""
     statement: "c. Requires DoD Components to report all incidents that appear to be violations of federal law to DoD Component defense criminal investigative organizations; law enforcement organizations; and the IG DoD. Incidents involving cleared defense contractors will be reported to DSS as described in Reference (k) and DoDD 5240.06 (Reference (ca))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.lawful.yaml", "expect": "incidents that appear to violate federal law are reported to the defense criminal", "asserts": "Incidents that appear to be violations of federal law are reported to criminal investigative organizations, law enforcement and the IG DoD", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Requires DoD Components to report all incidents that appear to be violations of federal law to DoD Component defense criminal investigative organizations; law enforcement organizations; and the IG DoD."}, {"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.dcsa.yaml", "expect": "incidents involving cleared defense contractors are reported to DCSA", "asserts": "Incidents involving cleared defense contractors are reported to DCSA, the former DSS", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded; a path marked applies: false is exempt", "sentence": "Incidents involving cleared defense contractors will be reported to DSS as described in Reference (k) and DoDD 5240.06 (Reference (ca))."}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0246"
     citation: {"ref": "DODI8530.01", "page": 31, "anchor": "Requires DoD Components to develop, implement, and enforce procedures to prevent, handle,"}
@@ -1948,7 +1952,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: ""
     statement: "b. Implements minimum standards for UAM in accordance with References (x) and (y). This includes procedures to maintain audit data and preserve audit data chain of custody."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: IRPT-002 holds the chain of custody of audit data of anomalous user activity, which is the second sentence, the one the register does not mark. The marked sentence, minimum UAM standards under References (x) and (y), names standards not in the references, so nothing fails on a run below them."
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.custody.yaml", "expect": "audit data of anomalous user activity is kept with its chain of custody", "asserts": "Procedures maintain audit data and preserve the audit data chain of custody", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0250"
     citation: {"ref": "DODI8530.01", "page": 31, "anchor": "Establishes procedures for responding to anomalous user activity on the DODIN, including"}
@@ -1956,7 +1962,8 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: ""
     statement: "c. Establishes procedures for responding to anomalous user activity on the DODIN, including procedures to mitigate potential damage to data on the DODIN and to contact applicable DoD Component investigative authority when necessary in accordance with References (x) and (bx) and DoDD 5240.26 (Reference (cd))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.anomalous.yaml", "expect": "anomalous user activity contacts the DoD Component investigative authority", "asserts": "Responding to anomalous user activity reaches the DoD Component investigative authority", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Establishes procedures for responding to anomalous user activity on the DODIN, including procedures to mitigate potential damage to data on the DODIN and to contact applicable DoD Component investigative authority when necessary in accordance with References (x) and (bx) and DoDD 5240.26 (Reference (cd))."}]
     work_item: "WI-245"
   - id: "REQ-DODI8530.01-0251"
     citation: {"ref": "DODI8530.01", "page": 31, "anchor": "WARNING INTELLIGENCE AND AS&W. Warning intelligence activities are intended to detect and"}
@@ -2011,7 +2018,8 @@ requirements:
     locator: "ENCLOSURE 3.a.(2)"
     context: "Individuals and organizations will be held accountable for implementing DoD Component activities outlined in this enclosure, including actions directed by DoD Component heads to protect the DODIN. Thi"
     statement: "(2) DoD Component internal or external cybersecurity service providers who are responsible for implementing cybersecurity services in accordance with DoD Component policy, MOAs, contracts, or support agreements such as a DD Form 1144, “Support Agreement” in accordance with Reference (m)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.yaml", "expect": "cybersecurity services are implemented under policy, an MOA, a contract", "asserts": "A cybersecurity service provider implements services under DoD Component policy, MOAs, contracts or support agreements", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(2) DoD Component internal or external cybersecurity service providers who are responsible for implementing cybersecurity services in accordance with DoD Component policy, MOAs, contracts, or support agreements such as a DD Form 1144, “Support Agreement” in accordance with Reference (m)."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0258"
     citation: {"ref": "DODI8530.01", "page": 32, "anchor": "Actions may be taken against military and civilian personnel who knowingly, willfully,"}
@@ -2112,7 +2120,8 @@ requirements:
     locator: "ENCLOSURE 4.b.(1)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(1) These cybersecurity service provider and subscriber responsibilities will be documented in a support agreement, MOA, contract, or in accordance with applicable DoD Component issuance (e.g., CONOPs)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.parties.yaml", "expect": "CSSP and subscriber responsibilities are each assigned for every service", "asserts": "Cybersecurity service provider and subscriber responsibilities are documented per service in the support agreement", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(1) These cybersecurity service provider and subscriber responsibilities will be documented in a support agreement, MOA, contract, or in accordance with applicable DoD Component issuance (e.g., CONOPs)."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0271"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Cybersecurity services provided will be aligned with applicable security controls. The implemented"}
@@ -2120,7 +2129,8 @@ requirements:
     locator: "ENCLOSURE 4.b.(2)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(2) Cybersecurity services provided will be aligned with applicable security controls. The implemented security controls will be documented in the support agreement, MOA, or contract."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.control.yaml", "expect": "a security control outside the baseline", "asserts": "Cybersecurity services provided are aligned with applicable security controls of the baseline", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(2) Cybersecurity services provided will be aligned with applicable security controls."}, {"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.documented.yaml", "expect": "is not documented in the agreement with", "asserts": "The implemented security controls are documented in the support agreement, MOA, or contract", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "The implemented security controls will be documented in the support agreement, MOA, or contract."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0272"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "The cybersecurity service subscriber will ensure the use of appropriate controls and"}
@@ -2143,7 +2153,8 @@ requirements:
     locator: "ENCLOSURE 4.c.(1)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(1) Will validate that support agreements are comprehensive and define organizational roles and responsibilities and the scope and applicability of the cybersecurity service(s) to be provided by the DoD cybersecurity service providers, including those provided to tenant organizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.covers.yaml", "expect": "the validated agreement does not define", "asserts": "Validate that support agreements are comprehensive and define roles, responsibilities, scope and applicability", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(1) Will validate that support agreements are comprehensive and define organizational roles and responsibilities and the scope and applicability of the cybersecurity service(s) to be provided by the DoD cybersecurity service providers, including those provided to tenant organizations."}, {"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.validator.yaml", "expect": "the system's own side validates the support agreement", "asserts": "The owner of the system validates support agreements, not the cybersecurity service provider", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(1) Will validate that support agreements are comprehensive and define organizational roles and responsibilities and the scope and applicability of the cybersecurity service(s) to be provided by the DoD cybersecurity service providers, including those provided to tenant organizations."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0275"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Will establish and maintain records identifying cybersecurity service provider(s) and cybersecurity services"}
@@ -2167,7 +2178,8 @@ requirements:
     locator: "ENCLOSURE 4.c.(4)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(4) Will monitor the effectiveness of cybersecurity services provided by either a DoD Component or an external cybersecurity service provider. Issues that cannot be resolved concerning support agreement responsibilities will be reported to their DoD Component CIO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-002", "fixture": "tests/fixtures/negative/SVCA-002.yaml", "expect": "the effectiveness of a cybersecurity service is monitored by the owner of the system", "asserts": "The owner monitors the effectiveness of cybersecurity services a provider gives", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(4) Will monitor the effectiveness of cybersecurity services provided by either a DoD Component or an external cybersecurity service provider."}, {"kind": "rule", "target": "SVCA-002", "fixture": "tests/fixtures/negative/SVCA-002.cio.yaml", "expect": "an issue that cannot be resolved is reported to the DoD Component CIO", "asserts": "Issues that cannot be resolved are reported to their DoD Component CIO", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Issues that cannot be resolved concerning support agreement responsibilities will be reported to their DoD Component CIO."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0278"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Will verify POA&Ms to correct deficiencies or weaknesses identified during evaluations or"}
@@ -2399,7 +2411,8 @@ requirements:
     locator: "ENCLOSURE 4.a.(3)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities The DoD Components will:"
     statement: "(3) Measure the effectiveness of cybersecurity service provider services provided in accordance with support agreements, MOAs, or contracts. Resolve issues that cannot be resolved between a DoD Component cybersecurity service provider and the external subscribers, as required."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-002", "fixture": "tests/fixtures/negative/SVCA-002.service.yaml", "expect": "which is no service provided under the agreement", "asserts": "Measure the effectiveness of services provided in accordance with support agreements, each measurement naming a service", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(3) Measure the effectiveness of cybersecurity service provider services provided in accordance with support agreements, MOAs, or contracts."}, {"kind": "rule", "target": "SVCA-002", "fixture": "tests/fixtures/negative/SVCA-002.resolve.yaml", "expect": "the DoD Component resolves the issue the parties could not", "asserts": "Resolve issues the parties could not: the DoD Component cybersecurity service provider and subscribers", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Resolve issues that cannot be resolved between a DoD Component cybersecurity service provider and the external subscribers, as required."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0307"
     citation: {"ref": "DODI8530.01", "page": 39, "anchor": "The DoD CIO Cybersecurity Service Provider Process Manager will:"}
@@ -2447,7 +2460,8 @@ requirements:
     locator: "ENCLOSURE 4.c.(1)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Cybersecurity service providers will:"
     statement: "(1) Offer and provide cybersecurity services in accordance with Reference (p)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.evaluation.yaml", "expect": "a CSSP offers services as evaluated under the Evaluator's Scoring Metrics", "asserts": "A provider must offer and provide cybersecurity services as evaluated under Reference (p), the Scoring Metrics", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(1) Offer and provide cybersecurity services in accordance with Reference (p)."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0313"
     citation: {"ref": "DODI8530.01", "page": 39, "anchor": "Execute cybersecurity responsibilities and authorities in accordance with DoD Component policy, MOAs,"}
@@ -2455,7 +2469,9 @@ requirements:
     locator: "ENCLOSURE 4.c.(2)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Cybersecurity service providers will:"
     statement: "(2) Execute cybersecurity responsibilities and authorities in accordance with DoD Component policy, MOAs, contracts, or support agreements."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: SVCA-002 refuses an ineffective service with no issue raised, which shows a lapse is recorded, not that responsibilities and authorities are executed under the policy, MOA, contract or support agreement. Execution is not something a run record can prove."
+    evidence: [{"kind": "rule", "target": "SVCA-002", "fixture": "tests/fixtures/negative/SVCA-002.execute.yaml", "expect": "a service executed outside the agreement raises an issue", "asserts": "A service that does not execute cybersecurity responsibilities under its support agreements raises an issue", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(2) Execute cybersecurity responsibilities and authorities in accordance with DoD Component policy, MOAs, contracts, or support agreements."}]
     work_item: "WI-242"
   - id: "REQ-DODI8530.01-0314"
     citation: {"ref": "DODI8530.01", "page": 40, "anchor": "Comply with directives and orders of USSTRATCOM and supported DoD Component NOSC"}

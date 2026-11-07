@@ -1,0 +1,94 @@
+dodin_connected: true
+system_environments:
+- on-premises
+agreements:
+- id: SVA-001
+  provider: Component CSSP
+  role: cssp
+  integration: external
+  instrument: support-agreement
+  reference: DD Form 1144 FDR-01
+  environments:
+  - on-premises
+  scope: Network defense of the relay enclave.
+  parameters: 24/7 coverage of the appliance.
+  approved_by: PER-AO
+  evaluation:
+    scheme: evaluator-scoring-metrics
+    authorized_by: USCYBERCOM
+    date: '2026-01-15'
+  validation:
+    by: PER-ISSM
+    date: '2026-08-01'
+    covers:
+    - roles
+    - responsibilities
+    - scope
+    - applicability
+  services:
+  - id: SRV-01
+    name: Vulnerability scanning
+    kind: vulnerability-detection
+    responsibilities:
+    - party: service-provider
+      duty: Operates the scanners.
+    - party: subscriber
+      duty: Gives scan access.
+    controls:
+    - si-2
+    sensors:
+    - Enclave ACAS scanner
+  - id: SRV-02
+    name: Log monitoring
+    kind: monitoring
+    responsibilities:
+    - party: service-provider
+      duty: Watches forwarded logs.
+    - party: subscriber
+      duty: Forwards logs.
+    controls:
+    - au-2
+  effectiveness:
+  - date: '2026-10-01'
+    service: SRV-01
+    measured_by: PER-ISSM
+    measure: Scan coverage of the inventory.
+    rating: effective
+    issue:
+      status: none
+  sources:
+  - ART-SSP
+- id: SVA-002
+  provider: Analysis enclave boundary (common control)
+  role: common-control-provider
+  integration: inherited
+  instrument: moa
+  reference: MOA FDR-02
+  environments:
+  - on-premises
+  scope: Enclave firewall.
+  parameters: Allow-list maintained by the enclave.
+  approved_by: PER-AO
+  validation:
+    by: PER-ISSM
+    date: '2026-08-01'
+    covers:
+    - roles
+    - responsibilities
+    - scope
+    - applicability
+  services:
+  - id: SRV-03
+    name: Boundary protection
+    kind: other
+    responsibilities:
+    - party: service-provider
+      duty: Runs the firewall.
+    - party: subscriber
+      duty: Requests rule changes.
+    controls:
+    - sc-7
+  sources:
+  - ART-SSP
+sources:
+- ART-SSP

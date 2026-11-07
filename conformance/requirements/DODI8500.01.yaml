@@ -1011,7 +1011,8 @@ requirements:
     locator: "ENCLOSURE 2.n"
     context: "RESPONSIBILITIES"
     statement: "n. Approves all applications of cryptographic algorithms for the protection of classified information."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.algorithm.yaml", "expect": "the NSA approval covers the application of", "asserts": "NSA approves each application of cryptographic algorithms protecting classified information", "claim": "constraint", "holds_when": "the Classified System Overlay applies"}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0131"
     citation: {"ref": "DODI8500.01", "page": 21, "anchor": "Approves all cryptography used to protect classified information in accordance with CNSSP"}
@@ -1019,7 +1020,8 @@ requirements:
     locator: "ENCLOSURE 2.o"
     context: "RESPONSIBILITIES"
     statement: "o. Approves all cryptography used to protect classified information in accordance with CNSSP 15 (Reference (be))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.approver.yaml", "expect": "NSA approves cryptography protecting classified information", "asserts": "NSA approves all cryptography used to protect classified information", "claim": "constraint", "holds_when": "the Classified System Overlay applies", "sentence": "Approves all cryptography used to protect classified information in accordance with CNSSP 15 (Reference (be))."}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0132"
     citation: {"ref": "DODI8500.01", "page": 21, "anchor": "Develops, implements, and manages a cybersecurity program for layered protection of DoD"}
@@ -1172,7 +1174,9 @@ requirements:
     locator: "ENCLOSURE 2.h.(4)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(4) Establish procedures to ensure prompt management action and reporting in accordance with:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the authorities the stem lists are held by IRPT-001 under (a) 0152, (b) 0153 and (c) 0154; (d) is 0155, outside this cluster. Unheld: 'prompt management action' names no owner, timeline or measure a rule could fail on, so the per-case owner and timeline in reporting_paths are recorded, not judged."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case, with its owner and timeline, so procedures ensure prompt management action and reporting"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0152"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "DoDM 5200.01, Volume 3 (Reference (bj)) for an actual or potential compromise"}
@@ -1180,7 +1184,8 @@ requirements:
     locator: "ENCLOSURE 2.h.(4).(a)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to: Establish procedures to ensure prompt management action and reporting in accordance"
     statement: "(a) DoDM 5200.01, Volume 3 (Reference (bj)) for an actual or potential compromise of classified information."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.yaml", "expect": "an actual or potential compromise of classified information is reported under", "asserts": "A compromise of classified information reports under DoDM 5200.01 Volume 3, refused otherwise", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0153"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "DoDM 5200.01, Volume 4 (Reference (bk)) for an actual or potential unauthorized"}
@@ -1188,7 +1193,8 @@ requirements:
     locator: "ENCLOSURE 2.h.(4).(b)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to: Establish procedures to ensure prompt management action and reporting in accordance"
     statement: "(b) DoDM 5200.01, Volume 4 (Reference (bk)) for an actual or potential unauthorized disclosure of CUI (e.g., proprietary information, LE information)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.cui.yaml", "expect": "an unauthorized disclosure of CUI is reported under", "asserts": "An unauthorized disclosure of CUI reports under DoDM 5200.01 Volume 4, refused otherwise", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0154"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Reference (bf) when such losses occur on cleared contractor systems."}
@@ -1196,7 +1202,8 @@ requirements:
     locator: "ENCLOSURE 2.h.(4).(c)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to: Establish procedures to ensure prompt management action and reporting in accordance"
     statement: "(c) Reference (bf) when such losses occur on cleared contractor systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.contractor.yaml", "expect": "a loss on a cleared contractor system is reported under", "asserts": "Such losses on cleared contractor systems report under DoD 5220.22-M, Reference (bf)", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded; a path marked applies: false is exempt"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0155"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "DoD 5400.11-R (Reference (bl)) for a loss or unauthorized disclosure of personally"}
@@ -1211,7 +1218,9 @@ requirements:
     locator: "ENCLOSURE 2.h.(5)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(5) Comply with CNSS Instruction (CNSSI) 1010 (Reference (bm))."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: IRPT-001 checks only that the cnssi-1010 path names CNSSI 1010, which proves the name and not compliance; CNSSI 1010's own requirements are not in the references, so nothing can fail on a run that does not comply. Asks the user whether the named path discharges it."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case: the cnssi-1010 path names CNSS Instruction CNSSI 1010 as its reference"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0157"
     citation: {"ref": "DODI8500.01", "page": 23, "anchor": "Ensure that contracts and other agreements include specific requirements to provide cybersecurity"}
@@ -1825,7 +1834,8 @@ requirements:
     locator: "ENCLOSURE 3.e"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "e. Exercising under realistic cyber conditions and testing procedures and tactics for work-arounds and fall-backs in the face of hostility in accordance with Secretary of Defense Memorandum (Reference (cg)). This includes:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CPLAN-003", "fixture": "tests/fixtures/negative/CPLAN-003.yaml", "expect": "no exercise is held under realistic cyber conditions", "asserts": "Exercising under realistic cyber conditions is required of one exercise", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Exercising under realistic cyber conditions and testing procedures and tactics for work-arounds and fall-backs in the face of hostility in accordance with Secretary of Defense Memorandum (Reference (cg))."}, {"kind": "rule", "target": "CPLAN-003", "fixture": "tests/fixtures/negative/CPLAN-003.tests.yaml", "expect": "is held under realistic cyber conditions and does not test", "asserts": "That exercise tests work-arounds and fall-backs in the face of hostility", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Exercising under realistic cyber conditions and testing procedures and tactics for work-arounds and fall-backs in the face of hostility in accordance with Secretary of Defense Memorandum (Reference (cg))."}]
     work_item: "WI-240"
   - id: "REQ-DODI8500.01-0237"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Conducting periodic exercises or evaluations of the ability to operate during loss"}
@@ -1833,7 +1843,8 @@ requirements:
     locator: "ENCLOSURE 3.e.(1)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Exercising under realistic cyber conditions and testing procedures and tactics for work-arounds and fall-backs in the face of hostility in accordance"
     statement: "(1) Conducting periodic exercises or evaluations of the ability to operate during loss of all information resources and connectivity."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CPLAN-003", "fixture": "tests/fixtures/negative/CPLAN-003.loss.yaml", "expect": "no periodic exercise or evaluation tests operating during loss of all information", "asserts": "Conducting periodic exercises or evaluations of the ability to operate during loss of all information resources and connectivity", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-240"
   - id: "REQ-DODI8500.01-0238"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Being able to allocate information resources dynamically as needed to sustain mission"}
@@ -1841,7 +1852,8 @@ requirements:
     locator: "ENCLOSURE 3.e.(2)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Exercising under realistic cyber conditions and testing procedures and tactics for work-arounds and fall-backs in the face of hostility in accordance"
     statement: "(2) Being able to allocate information resources dynamically as needed to sustain mission operations while addressing cyber failures, no matter the cause."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CPLAN-003", "fixture": "tests/fixtures/negative/CPLAN-003.allocation.yaml", "expect": "which is no exercise of this plan", "asserts": "The ability to allocate information resources dynamically rests on an exercise of this plan that proved it", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-240"
   - id: "REQ-DODI8500.01-0239"
     citation: {"ref": "DODI8500.01", "page": 31, "anchor": "Being able to restore information resources rapidly to a trusted state while"}
@@ -2119,7 +2131,8 @@ requirements:
     locator: "ENCLOSURE 3.g"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "g. Spillage of classified information onto an unclassified IS, of higher-level classified information onto a lower level classified IS, or of classified information onto an IS not authorized to the appropriate level must be handled in accordance with Reference (bj)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.spillage.yaml", "expect": "spillage of classified information is handled under", "asserts": "Spillage of classified information must be handled in accordance with DoDM 5200.01 Volume 3", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Spillage of classified information onto an unclassified IS, of higher-level classified information onto a lower level classified IS, or of classified information onto an IS not authorized to the appropriate level must be handled in accordance with Reference (bj)."}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0275"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "To enable automated sharing and protection, all DoD information must include marking"}
@@ -2167,7 +2180,8 @@ requirements:
     locator: "ENCLOSURE 3.m"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "m. Cryptography required to protect DoD information will be implemented in accordance with Reference (be)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.yaml", "expect": "cryptography protecting DoD information is implemented under", "asserts": "Cryptography required to protect DoD information is implemented in accordance with CNSSP 15, Reference (be)", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Cryptography required to protect DoD information will be implemented in accordance with Reference (be)."}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0281"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "DoD information proposed or projected for publication on public Internet media (e.g.,"}
@@ -2604,7 +2618,8 @@ requirements:
     locator: "ENCLOSURE 3.b.(10)"
     context: "Figure 2. DoD Information Technology"
     statement: "(10) Cryptographic products used to protect IT and the information that resides in the IT will be acquired and implemented in accordance with Reference (be)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.acquired.yaml", "expect": "cryptographic products are acquired under", "asserts": "Cryptographic products are acquired in accordance with CNSSP 15, Reference (be)", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "(10) Cryptographic products used to protect IT and the information that resides in the IT will be acquired and implemented in accordance with Reference (be)."}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0338"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "All IA products and IA-enabled products that require use of the product's"}
@@ -2681,7 +2696,8 @@ requirements:
     locator: "ENCLOSURE 3.b.(18).(b)"
     context: "Figure 2. DoD Information Technology In addition to complying with the provisions of DoDI 1035.01 (Reference (dh)):"
     statement: "(b) Telework solutions involving the use of non-government furnished equipment (i.e., any computer or other telework device not furnished by DoD) for remote access to unclassified DoD networks will be developed by the DoD Components desiring the capability based on the guidance provided in NIST SP 800-114 (Reference (di)) and evaluated and approved by the DoD CIO on a case-by-case basis."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "TELE-001", "fixture": "tests/fixtures/negative/TELE-001.yaml", "expect": "telework on non-government furnished equipment is approved by the DoD CIO", "asserts": "Telework solutions on non-government furnished equipment are approved by the DoD CIO", "claim": "constraint", "holds_when": "ART-SSP is in play and telework.non_gfe_remote_access is true", "sentence": "(b) Telework solutions involving the use of non-government furnished equipment (i.e., any computer or other telework device not furnished by DoD) for remote access to unclassified DoD networks will be developed by the DoD Components desiring the capability based on the guidance provided in NIST SP 800-114 (Reference (di)) and evaluated and approved by the DoD CIO on a case-by-case basis."}, {"kind": "rule", "target": "TELE-001", "fixture": "tests/fixtures/negative/TELE-001.basis.yaml", "expect": "telework on non-government furnished equipment is developed from", "asserts": "Telework solutions on non-government furnished equipment are developed from NIST SP 800-114", "claim": "constraint", "holds_when": "ART-SSP is in play and telework.non_gfe_remote_access is true", "sentence": "(b) Telework solutions involving the use of non-government furnished equipment (i.e., any computer or other telework device not furnished by DoD) for remote access to unclassified DoD networks will be developed by the DoD Components desiring the capability based on the guidance provided in NIST SP 800-114 (Reference (di)) and evaluated and approved by the DoD CIO on a case-by-case basis."}]
     work_item: "WI-247"
   - id: "REQ-DODI8500.01-0348"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "Basic input and output systems (BIOSs) will be managed in accordance with"}
@@ -2743,7 +2759,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(24)"
     context: "Figure 2. DoD Information Technology"
     statement: "(24) All DoD IT that is designated as an NSS must comply with CNSS policy issuances."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: 'must comply with CNSS policy issuances' is a blanket duty over every CNSS issuance. S-4 names the issuances the framework holds (CNSSI 1253 baseline, CNSSP 15 by CRYP-001, CNSSP 12 by CRYP-002, CNSSI 1010 by IRPT-001); no rule can fail on the set of all CNSS issuances. Asks the user whether these discharge it."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "claim": "presence", "asserts": "A system designated an NSS complies with CNSS policy issuances"}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0356"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "The DoD Cyber Workforce Improvement Program develops and maintains a trained and"}
@@ -3199,7 +3217,8 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 2. DoD Information Technology"
     statement: "a. Plan and budget for security control implementation, assessment, and sustainment throughout the system life cycle, including timely and effective configuration and vulnerability management."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "FUND-001", "fixture": "tests/fixtures/negative/FUND-001.yaml", "expect": "no budget line for security control", "asserts": "Plan and budget for security control implementation, assessment, sustainment, configuration and vulnerability management", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Plan and budget for security control implementation, assessment, and sustainment throughout the system life cycle, including timely and effective configuration and vulnerability management."}, {"kind": "rule", "target": "FUND-001", "fixture": "tests/fixtures/negative/FUND-001.operations.yaml", "expect": "sustainment funding stops short of operations and support", "asserts": "The plan and budget for sustainment run throughout the system life cycle, into operations and support", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Plan and budget for security control implementation, assessment, and sustainment throughout the system life cycle, including timely and effective configuration and vulnerability management."}]
     work_item: "WI-228"
   - id: "REQ-DODI8500.01-0414"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Ensure that SSE is used to design, develop, implement, modify, and test"}
@@ -3271,7 +3290,8 @@ requirements:
     locator: "ENCLOSURE 3.g"
     context: "Figure 2. DoD Information Technology"
     statement: "g. Ensure implementation of IS security measures and procedures, including reporting incidents to the AO and appropriate reporting chains and coordinating system-level responses to unauthorized disclosures in accordance with Reference (bj) for classified information or Reference (bk) for CUI, respectively."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.ao.yaml", "expect": "incidents are reported to the AO and the appropriate reporting chain", "asserts": "Reporting incidents to the AO and appropriate reporting chains is a required recipient set", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Ensure implementation of IS security measures and procedures, including reporting incidents to the AO and appropriate reporting chains and coordinating system-level responses to unauthorized disclosures in accordance with Reference (bj) for classified information or Reference (bk) for CUI, respectively."}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0424"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "Ensure that the handling of possible or actual data spills of classified"}
@@ -3279,7 +3299,8 @@ requirements:
     locator: "ENCLOSURE 3.h"
     context: "Figure 2. DoD Information Technology"
     statement: "h. Ensure that the handling of possible or actual data spills of classified information resident in ISs, are conducted in accordance with Reference (bj)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.spillage.yaml", "expect": "spillage of classified information is handled under", "asserts": "The handling of data spills of classified information follows Reference (bj), Volume 3", "claim": "constraint", "holds_when": "the record is in play once its artifact is produced or seeded", "sentence": "Ensure that the handling of possible or actual data spills of classified information resident in ISs, are conducted in accordance with Reference (bj)."}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0425"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "Act as the primary cybersecurity technical advisor to the AO for DoD"}

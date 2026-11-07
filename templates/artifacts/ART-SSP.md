@@ -16,11 +16,15 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Approach to control implementation
 
-<<FILL: how the controls are implemented across the components, with tokens; the statements live in artifacts/ssp/controls/FAM.yaml>>
+<<FILL: how the controls are implemented across the components, and why the security, privacy and C-SCRM plans are consolidated or separate as `plan_structure` in artifacts/data/ssp-records.yaml records, with tokens; the statements live in artifacts/ssp/controls/FAM.yaml>>
 
 ## Inheritance and shared responsibility
 
 <<FILL: one paragraph per provider: what it implements and what the system does, with tokens>>
+
+## Plan records
+
+<<FILL: what artifacts/data/ssp-records.yaml holds and why: the funding of control implementation, assessment and sustainment, the cryptography and who approved it, whether non-government equipment reaches the system, and the E-Authentication assessment, with tokens>>
 
 ## Open items
 

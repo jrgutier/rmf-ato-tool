@@ -1,0 +1,14 @@
+rule: CPLAN-001
+bases:
+- minimal
+description: an RTO past the MTD with no POA&M item
+mutations:
+- op: set_field
+  file: artifacts/data/contingency.yaml
+  path: bia.processes.0.rto_hours
+  value: 30
+expect:
+  errors:
+  - CPLAN-001
+  messages:
+  - the recovery time objective plus reprocessing time is 32 hours

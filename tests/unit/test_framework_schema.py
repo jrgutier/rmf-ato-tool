@@ -9,6 +9,7 @@ import jsonschema
 import pytest
 from _framework_fixtures import MINI, P3A, REAL
 from conftest import REPO_ROOT
+from ruamel.yaml import YAML
 
 from rmf_tool.framework.load import load
 from rmf_tool.framework.model import SCHEMA_DIR
@@ -21,8 +22,10 @@ PLAN_RUN_SCHEMAS = {
     "ssp-controls", "sap", "sar-results", "poam-items", "stig-summary", "baseline", "decision",
     "authorizations",
 }
+# data named in plan §6.4, then the ones p11 added
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias"}  # data named in plan §6.4, then the ones p11 added
+                     "dias", "cm-plan", "contingency", "incident-response",
+                     "service-agreements", "ssp-records"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -283,6 +286,23 @@ RUN_EXAMPLES = {
                        "federation": "not-applicable"},
          "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
 }
+
+_FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
+
+
+def _record(name):
+    return YAML(typ="safe").load((_FIXTURE_RECORDS / f"{name}.yaml").read_text(encoding="utf-8"))
+
+
+RUN_EXAMPLES.update({
+    name: (_record(name), {**_record(name), field: value})
+    for name, field, value in (
+        ("cm-plan", "configuration_items", [{"id": "CI-1"}]),
+        ("contingency", "exercises", [{"id": "EX-1", "type": "drill"}]),
+        ("incident-response", "reporting_paths", [{"case": "unknown"}]),
+        ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
+        ("ssp-records", "space_nss", "maybe"))
+})
 
 
 def test_every_run_schema_has_examples():

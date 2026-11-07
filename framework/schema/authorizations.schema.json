@@ -28,6 +28,41 @@
       "items": {
         "$ref": "#/$defs/boarding"
       }
+    },
+    "system_status": {
+      "title": "What the security plan states of this system's authorization",
+      "description": "Written whole with the ledger by each task that records a decision; SSPR-001 compares it with what the records hold.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "title": "Authorization Status of the system",
+          "enum": [
+            "ATO",
+            "ATO-with-conditions",
+            "IATT",
+            "DATO",
+            "none"
+          ],
+          "x-enforces": [
+            "REQ-SP800-18R2-0241",
+            "REQ-SP800-18R2-0341"
+          ]
+        },
+        "termination_date": {
+          "title": "Authorization Termination Date",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "security_review_date": {
+          "title": "Security Review Date, the date of the last annual security review",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      }
     }
   },
   "$defs": {

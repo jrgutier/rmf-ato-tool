@@ -1,0 +1,20 @@
+rule: SVCA-002
+bases:
+- minimal
+description: M-2 in scope and an agreement never measured
+mutations:
+- op: set_field
+  file: run.yaml
+  path: include_after_stop
+  value:
+  - M-2
+- op: write_file
+  file: product/monitoring/scan.csv
+  content: |
+    host,finding
+    gcs-01,none
+expect:
+  errors:
+  - SVCA-002
+  messages:
+  - M-2 is in scope and measures no service under this agreement

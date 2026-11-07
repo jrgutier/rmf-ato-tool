@@ -53,7 +53,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
 | [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
-| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon) | — |
+| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | — |
 | [M-4](#task-m-4) Authorization Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
@@ -145,6 +145,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](PH-EMD.md#task-a-2) (core artifact) |
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
+| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | [S-4](PH-TMRR.md#task-s-4) (supporting artifact) |
 | [EXT-MONITORING](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
 
 **Outputs**
@@ -153,6 +154,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 |---|---|---|---|
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 | [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
+| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | updates | supporting |
 
 **Entry criteria**
 
@@ -280,6 +282,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - Risk management documents are updated based on continuous monitoring activities (DoDI 8510.01 Table 7 outcome).
 - Authorization package artifacts reflect the current state of the system.
+- A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
 
 **Alignment**
 
@@ -395,6 +398,7 @@ Writes to `facts.yaml`: `acquisition`.
 **Exit criteria**
 
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
+- authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) (see [authorization decisions](../../MANUAL.md#decisions)).

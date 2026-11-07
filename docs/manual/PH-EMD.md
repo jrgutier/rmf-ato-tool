@@ -752,6 +752,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - The authorization for the system or the common controls is approved or denied (DoDI 8510.01 Table 6 outcome).
+- authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
 - For a risk level of Very High or High, the Component CIO has documented concurrence or non-concurrence before the ATO is issued.
 - The decision confirms that the system meets cyberspace operational commander requirements.

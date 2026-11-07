@@ -2,8 +2,10 @@
 template conventions (5-key front-matter naming the producer, the rmf:facts block,
 ``<<FILL: ...>>`` placeholders with no angle brackets inside, one in every ## section)."""
 
+import json
 import re
 
+import jsonschema
 import pytest
 from _framework_fixtures import REAL
 from conftest import REPO_ROOT
@@ -50,3 +52,17 @@ def test_template_follows_the_conventions(art):
     assert len(sections) >= 2
     for part in sections[1:]:
         assert FILL.search(part), "a ## section without a placeholder"
+
+
+DATA_TEMPLATES = sorted((REPO_ROOT / "templates/data").glob("*.yaml"))
+
+
+@pytest.mark.parametrize("path", DATA_TEMPLATES, ids=lambda p: p.stem)
+def test_data_template_loads_and_meets_its_schema(path):
+    """A data template an agent copies is valid YAML, and valid against its schema where one
+    exists: a FILL sits only where the schema takes free text."""
+    data = YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+    schema = REPO_ROOT / "framework/schema" / f"{path.stem}.schema.json"
+    if schema.is_file():
+        validator = jsonschema.Draft202012Validator(json.loads(schema.read_text()))
+        assert [e.message for e in validator.iter_errors(data)] == []

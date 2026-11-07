@@ -1,0 +1,14 @@
+rule: CRYP-001
+bases:
+- minimal
+description: not NSA approved and no key management technology
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: cryptography.nsa_approved
+  value: false
+expect:
+  errors:
+  - CRYP-001
+  messages:
+  - the solution is not NSA approved and states no key management technology and processes

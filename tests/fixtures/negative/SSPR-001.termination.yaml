@@ -1,0 +1,14 @@
+rule: SSPR-001
+bases:
+- minimal
+description: a termination date the ledger does not hold
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: system_status.termination_date
+  value: '2028-01-01'
+expect:
+  errors:
+  - SSPR-001
+  messages:
+  - the security plan states authorization termination date 2028-01-01

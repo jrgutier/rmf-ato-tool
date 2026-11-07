@@ -1,0 +1,19 @@
+rule: IRPT-002
+bases:
+- minimal
+description: threats not reported to the intelligence authority
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.11.recipients
+  value:
+  - PER-ISSM
+expect:
+  errors:
+  - IRPT-002
+  messages:
+  - threats and vulnerabilities are reported to the cognizant intelligence authority

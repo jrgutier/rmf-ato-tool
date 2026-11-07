@@ -1,0 +1,15 @@
+rule: PKG-003
+bases:
+- minimal
+description: no E-Authentication answer
+mutations:
+- op: delete_field
+  file: artifacts/data/ssp-records.yaml
+  path: e_authentication.performed
+expect:
+  errors:
+  - PKG-003
+  also:
+  - RUN-FM-001
+  messages:
+  - does not carry the CNSSI 1254 data element E-Authentication
