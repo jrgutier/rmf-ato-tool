@@ -1,0 +1,14 @@
+rule: CATO-010
+bases:
+- minimal
+description: security testing against compliance scans only
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: process.active_testing.basis
+  value: compliance-scans
+expect:
+  errors:
+  - CATO-010
+  messages:
+  - security testing is not ongoing against adversary tactics and techniques based on real-world observations

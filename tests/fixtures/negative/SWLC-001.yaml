@@ -1,0 +1,21 @@
+rule: SWLC-001
+bases:
+- minimal
+description: a software pathway approach that ignores intelligence threats
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: lifecycle_approach.addresses
+  value:
+  - software-vulnerabilities
+  - supply-chain
+  - development-environment
+expect:
+  errors:
+  - SWLC-001
+  messages:
+  - the risk-based lifecycle management approach does not address intelligence-threats

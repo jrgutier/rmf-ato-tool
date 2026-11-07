@@ -1,0 +1,14 @@
+rule: CATO-014
+bases:
+- minimal
+description: no SBOM archive
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: sbom.archive
+  value: none
+expect:
+  errors:
+  - CATO-014
+  messages:
+  - 'no archive of SBOMs is maintained for products passing through pipelines: none'

@@ -1,0 +1,1542 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:cato",
+  "title": "runs/<run-id>/artifacts/data/cato.yaml",
+  "description": "What a cATO application shows (M-6; DoD CIO cATO Implementation Guide and Evaluation Criteria): the assessment and its scoring against Table 2 of the guide, the DevSecOps platform, its monitoring, the strategy's triggers, metrics, people, training, process, risk tolerances, the activities mapping and the SBOM. CATO-001..011 judge it whenever it exists and require it once the ledger holds an AD-CATO record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "use_case",
+    "underlying",
+    "assessment",
+    "platform",
+    "monitoring",
+    "strategy",
+    "metrics",
+    "people",
+    "training",
+    "process",
+    "tolerances",
+    "activities_mapping",
+    "sbom",
+    "sources"
+  ],
+  "properties": {
+    "use_case": {
+      "title": "IG Appendix A use case: production inside or outside the software factory",
+      "type": "string"
+    },
+    "underlying": {
+      "title": "The ledger record of the ATO the cATO rests on",
+      "type": "string"
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "team": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "approved_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "skills": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "trained_on_method": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "trained_on_method"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "approved_by",
+            "skills",
+            "members"
+          ]
+        },
+        "plan": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "key_practices": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "criteria_basis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "weighting": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "coordinated_with": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "reviewed_with": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "briefed_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "key_practices",
+            "criteria_basis",
+            "weighting",
+            "coordinated_with",
+            "reviewed_with",
+            "briefed_on"
+          ]
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "criterion": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "criterion",
+              "result"
+            ]
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "practice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "practice",
+              "kind",
+              "reference"
+            ]
+          }
+        },
+        "interviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "practices": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "role",
+              "practices"
+            ]
+          }
+        },
+        "analysis": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "competencies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "requirement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "area": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "requirement",
+              "area",
+              "result"
+            ]
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requirement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "description"
+            ]
+          }
+        },
+        "recommendation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recommend": {
+              "enum": [
+                "authorize",
+                "do-not-authorize"
+              ]
+            },
+            "readiness": {
+              "type": "string",
+              "minLength": 1
+            },
+            "briefing": {
+              "type": "string",
+              "minLength": 1
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "reviewed_with": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "recommend",
+            "readiness",
+            "briefing",
+            "conditions",
+            "reviewed_with"
+          ]
+        }
+      },
+      "required": [
+        "date",
+        "steps",
+        "team",
+        "plan",
+        "criteria",
+        "evidence",
+        "interviews",
+        "analysis",
+        "competencies",
+        "scores",
+        "findings",
+        "recommendation"
+      ]
+    },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reference_design": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "approved": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "name",
+            "approved"
+          ]
+        },
+        "authorization": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "type": "string",
+              "minLength": 1
+            },
+            "continuous_monitoring": {
+              "type": "boolean"
+            },
+            "inherited": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "status",
+            "continuous_monitoring",
+            "inherited"
+          ]
+        },
+        "delivery": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hosting": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "cloud": {
+              "title": "Whether any environment is hosted on a cloud, which requires a CNAPP",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "environments",
+            "cloud"
+          ]
+        },
+        "enables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pipelines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "guardrails": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "control_gates": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "collects_evidence": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "guardrails",
+              "control_gates",
+              "collects_evidence"
+            ]
+          }
+        },
+        "control_gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "opens_on": {
+                "type": "string",
+                "minLength": 1
+              },
+              "closes_on": {
+                "type": "string",
+                "minLength": 1
+              },
+              "alert_trigger": {
+                "type": "string",
+                "minLength": 1
+              },
+              "alert_response": {
+                "type": "string",
+                "minLength": 1
+              },
+              "demonstrated": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tolerance": {
+                "type": "string",
+                "minLength": 1
+              },
+              "trigger_routing": {
+                "type": "string",
+                "minLength": 1
+              },
+              "described_in": {
+                "type": "string",
+                "minLength": 1
+              },
+              "alert_responder": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "description",
+              "opens_on",
+              "closes_on",
+              "alert_trigger",
+              "alert_response",
+              "demonstrated",
+              "tolerance",
+              "trigger_routing",
+              "described_in",
+              "alert_responder"
+            ]
+          }
+        },
+        "guardrails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "out_of_tolerance": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tolerance": {
+                "type": "string",
+                "minLength": 1
+              },
+              "described_in": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "description",
+              "out_of_tolerance",
+              "tolerance",
+              "described_in"
+            ]
+          }
+        },
+        "as_code": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "configuration_validation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cnapp": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "zero_trust": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "access_point": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scanning": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "adjudication": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "false_positives": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "false_positives"
+          ]
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pipeline_findings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "reference_design",
+        "authorization",
+        "delivery",
+        "hosting",
+        "enables",
+        "pipelines",
+        "control_gates",
+        "guardrails",
+        "as_code",
+        "configuration_validation",
+        "zero_trust",
+        "access_point",
+        "scanning",
+        "adjudication",
+        "thresholds",
+        "pipeline_findings"
+      ]
+    },
+    "monitoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "environments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "siem_analytics": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "developed_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "provided_to": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "developed_by",
+            "provided_to"
+          ]
+        },
+        "traffic_inspection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sidecar": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "used": {
+              "type": "boolean"
+            },
+            "configured_for": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "used"
+          ]
+        },
+        "cssp_application_monitoring": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "soc": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cssp": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acd_methodology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vulnerability_tracking": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assessment_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audit_ir_coupling": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pipeline_monitored": {
+          "type": "boolean"
+        },
+        "attack_events": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_reassessment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "soc_strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vulnerability_management": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expectations_published": {
+              "type": "boolean"
+            },
+            "remediation_timelines_published": {
+              "type": "boolean"
+            },
+            "staffing_plan_published": {
+              "type": "boolean"
+            },
+            "tracked_in": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "timeframe_accepted_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "documented_on": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "expectations_published",
+            "remediation_timelines_published",
+            "staffing_plan_published",
+            "tracked_in",
+            "timeframe_accepted_by",
+            "documented_on"
+          ]
+        },
+        "assessment_covers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "environments",
+        "siem_analytics",
+        "traffic_inspection",
+        "sidecar",
+        "cssp_application_monitoring",
+        "soc",
+        "cssp",
+        "acd_methodology",
+        "vulnerability_tracking",
+        "assessment_scope",
+        "audit_ir_coupling",
+        "pipeline_monitored",
+        "attack_events",
+        "artifact_reassessment",
+        "soc_strategy",
+        "vulnerability_management",
+        "assessment_covers"
+      ]
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "on": {
+                "type": "string",
+                "minLength": 1
+              },
+              "threat": {
+                "type": "string",
+                "minLength": 1
+              },
+              "threshold": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approved_by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "plan": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "on",
+              "threat",
+              "threshold",
+              "approved_by",
+              "plan"
+            ]
+          },
+          "minItems": 1
+        },
+        "issue_investigation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "triggers",
+        "issue_investigation"
+      ]
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "measure": {
+            "type": "string",
+            "minLength": 1
+          },
+          "collection": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trend_analysis": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "measure",
+          "collection",
+          "trend_analysis"
+        ]
+      },
+      "minItems": 1
+    },
+    "people": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_governance_group": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "periodic_review": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ad_hoc_resolution": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "members",
+            "periodic_review",
+            "ad_hoc_resolution"
+          ]
+        },
+        "threats_tracked": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "insider_threat": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "working_group": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "established": {
+                  "type": "boolean"
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "chair": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "established",
+                "active",
+                "chair"
+              ]
+            },
+            "critical_areas": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "thresholds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "working_group",
+            "critical_areas",
+            "thresholds"
+          ]
+        },
+        "org_chart": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "role",
+              "team"
+            ],
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "team": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "tabletop_exercises": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "participants": {
+                "type": "string",
+                "minLength": 1
+              },
+              "after_action_report": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "date",
+              "participants",
+              "subjects"
+            ]
+          }
+        },
+        "onboarding": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "by_role": {
+              "type": "boolean"
+            },
+            "offboarding": {
+              "type": "boolean"
+            },
+            "completed_by": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "by_role",
+            "offboarding",
+            "completed_by"
+          ]
+        },
+        "experience": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "culture_change": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "challenges": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "means": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "approach": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "challenges",
+            "means",
+            "approach"
+          ]
+        },
+        "position_descriptions": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ir_program": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "risk_governance_group",
+        "threats_tracked",
+        "insider_threat",
+        "org_chart",
+        "tabletop_exercises",
+        "onboarding",
+        "experience",
+        "culture_change",
+        "position_descriptions",
+        "ir_program"
+      ]
+    },
+    "training": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "process": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "documented": {
+              "type": "boolean"
+            },
+            "certification": {
+              "type": "boolean"
+            },
+            "validation": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "documented",
+            "certification",
+            "validation"
+          ]
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "member": {
+                "type": "string",
+                "minLength": 1
+              },
+              "team": {
+                "type": "string",
+                "minLength": 1
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "member",
+              "team",
+              "subjects"
+            ]
+          },
+          "minItems": 1
+        },
+        "cross_functional": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "member": {
+                "type": "string",
+                "minLength": 1
+              },
+              "shadowed": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "member",
+              "shadowed"
+            ]
+          }
+        }
+      },
+      "required": [
+        "process",
+        "records",
+        "cross_functional"
+      ]
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "active_testing": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "basis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cadence": {
+              "type": "string",
+              "minLength": 1
+            },
+            "strategy": {
+              "type": "string",
+              "minLength": 1
+            },
+            "budget": {
+              "type": "string",
+              "minLength": 1
+            },
+            "iterations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "date",
+                  "kind"
+                ]
+              }
+            }
+          },
+          "required": [
+            "basis",
+            "cadence",
+            "strategy",
+            "budget",
+            "iterations"
+          ]
+        },
+        "control_effectiveness": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pen_testing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "feedback": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "environments": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "from_cyber_operations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "incident_reviews_with": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cssp_monitoring": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "environments",
+            "from_cyber_operations",
+            "incident_reviews_with",
+            "cssp_monitoring"
+          ]
+        },
+        "compliance_monitoring": {
+          "type": "string",
+          "minLength": 1
+        },
+        "business_rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "active_testing",
+        "control_effectiveness",
+        "pen_testing",
+        "feedback",
+        "compliance_monitoring",
+        "business_rules"
+      ]
+    },
+    "tolerances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "threshold": {
+            "type": "string",
+            "minLength": 1
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "developed_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "criticality": {
+            "type": "string",
+            "minLength": 1
+          },
+          "applies_to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "set_by": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "threshold",
+          "basis",
+          "developed_by",
+          "criticality",
+          "applies_to",
+          "set_by"
+        ]
+      },
+      "minItems": 1
+    },
+    "activities_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "guidebook": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "activity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "implemented": {
+                "type": "boolean"
+              },
+              "demonstrated": {
+                "type": "boolean"
+              },
+              "roadmap": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "activity",
+              "kind",
+              "implemented"
+            ]
+          },
+          "minItems": 1
+        },
+        "additional_documentation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "roadmap": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "activity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "due": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            "required": [
+              "id",
+              "activity",
+              "due"
+            ]
+          }
+        }
+      },
+      "required": [
+        "guidebook",
+        "activities",
+        "additional_documentation",
+        "roadmap"
+      ]
+    },
+    "sbom": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dsop": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provided": {
+              "type": "boolean"
+            },
+            "statement": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "provided",
+            "statement"
+          ]
+        },
+        "applications": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frequency": {
+          "type": "string",
+          "minLength": 1
+        },
+        "archive": {
+          "type": "string",
+          "minLength": 1
+        },
+        "analysis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "new_cve": {
+          "type": "string",
+          "minLength": 1
+        },
+        "composition_analysis": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "dsop",
+        "applications",
+        "format",
+        "frequency",
+        "archive",
+        "analysis",
+        "new_cve",
+        "composition_analysis"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

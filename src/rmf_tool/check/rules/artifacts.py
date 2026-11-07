@@ -124,7 +124,7 @@ def core_present(ctx: Context) -> list[RunFinding]:
                 parent, _, pattern = path.rpartition("/")
                 if not list(run.path(parent).glob(pattern.replace(FAMILY_TOKEN, "*"))):
                     out.append(make(ART, f"{aid}: no {path} file", parent, None, owners))
-            elif not run.path(path).is_file():
+            elif not run.path(path).is_file() and not entry.get("optional"):
                 out.append(make(ART, f"{aid}: {path} missing", path, None, owners))
     return out
 

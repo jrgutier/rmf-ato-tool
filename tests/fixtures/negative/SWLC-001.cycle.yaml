@@ -1,0 +1,20 @@
+rule: SWLC-001
+bases:
+- minimal
+description: no word on out-of-cycle vulnerability fixes
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: lifecycle_approach.out_of_cycle
+  value: ''
+expect:
+  errors:
+  - SWLC-001
+  also:
+  - RUN-FM-001
+  messages:
+  - the approach does not say when a vulnerability fix is released out of the release cycle

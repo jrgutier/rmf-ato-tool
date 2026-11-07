@@ -18,7 +18,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "cATO represents a challenging but necessary enhancement of our cyber risk approach in order to accelerate innovation while outpacing expanding cybersecurity threats. In order to achieve cATO, the Authorizing Official (AO) must be able to demonstrate three main competencies: On-going visibility of key cybersecurity activities inside of the system boundary with a robust continuous monitoring of RMF controls; the ability to conduct active cyber defense in order to respond to cyber threats in real time; and the adoption and use of an approved DevSecOps reference design."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-002 refuses an assessment that does not demonstrate the three competencies; the reference design is CATO-003. The AO's own demonstration is the cATO record, judged by AODM-007."
+    evidence: [{"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "To achieve cATO the competencies of continuous monitoring and active cyber defense are demonstrated", "claim": "constraint", "sentence": "In order to achieve cATO, the Authorizing Official (AO) must be able to demonstrate three main competencies: On-going visibility of key cybersecurity activities inside of the system boundary with a robust continuous monitoring of RMF controls; the ability to conduct active cyber defense in order to respond to cyber threats in real time; and the adoption and use of an approved DevSecOps reference design."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-0003"
     citation: {"ref": "DODCIO-CATO", "page": 1, "anchor": "RMF requires a CONMON strategy for each system. This strategy describes how"}
@@ -26,7 +28,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "RMF requires a CONMON strategy for each system. This strategy describes how the System Owner, in coordination with Service Providers, will continuously monitor and assess all of the security controls within the information system’s security baseline, including common controls. The specific plan will vary based on component monitoring infrastructure, the specific technologies used by the system, and the application of the system. Automated monitoring should be as near real time as feasible. Manual controls will have different timelines associated, but must be included in the overall monitoring strategy. It is critical that System Owners in coordination with Service Providers demonstrate the ability to effectively integrate the automation and monitoring of all security controls prior to entering into a cATO status."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CONMON-001 and ISCM-* hold the strategy for each system; that every control's automation is integrated before a cATO is not tested."
+    evidence: [{"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "The continuous monitoring strategy for each system is read at M-6 before a cATO", "claim": "presence"}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-0004"
     citation: {"ref": "DODCIO-CATO", "page": 1, "anchor": "Systems are rarely produced or deployed as a singular system; they operate"}
@@ -50,7 +54,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "Active cyber defense is the ability to respond to cyber threats in real, or near real time. As the Department adopts a data centric model, so too must our cyber defenses. The focus should be on using threat driven dashboards and metrics to establish patterns and discern threats before they are able to wreak havoc on DoD domains."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. Threat-driven dashboards are the posture-dashboard metric CATO-007 requires; the data-centric framing has no value to test."
+    evidence: [{"kind": "prose", "target": "templates/data/cato.yaml", "asserts": "Threat driven dashboards and metrics are the cATO metrics in cato.yaml", "claim": "presence"}]
     work_item: "WI-286"
   - id: "REQ-DODCIO-CATO-0007"
     citation: {"ref": "DODCIO-CATO", "page": 2, "anchor": "Simply conducting scans and patching does not meet the threshold for active"}
@@ -58,7 +64,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "Simply conducting scans and patching does not meet the threshold for active cyber defense. Systems must be able to show a real, or near real time ability to deploy appropriate countermeasures to thwart cyber adversaries. AO’s/AODR’s must be in constant communications with the various cyber operational components, including Cybersecurity Service Providers (CSSP), component cyber operations forces, JFHQ-DoDIN, and United States Cyber Command. These communication channels are essential to ensuring operations within each system boundary rapidly ingest cyber threat intelligence and take appropriate actions. These communications will also serve to share indicators that may prevent intrusions in other DoD environments."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-004 requires a local SOC and an external CSSP; constant AO communication with cyber operations components is not recorded."
+    evidence: [{"kind": "rule", "target": "CATO-004", "fixture": "tests/fixtures/negative/CATO-004.soc.yaml", "expect": "active cyber defense needs a local SOC and an external CSSP", "asserts": "Systems deploy countermeasures through active cyber defense with a SOC and CSSP", "claim": "constraint", "sentence": "Systems must be able to show a real, or near real time ability to deploy appropriate countermeasures to thwart cyber adversaries."}]
     work_item: "WI-286"
   - id: "REQ-DODCIO-CATO-0008"
     citation: {"ref": "DODCIO-CATO", "page": 2, "anchor": "The number of components required to build, deploy, operate, and secure modern"}
@@ -66,7 +74,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "The number of components required to build, deploy, operate, and secure modern systems continues to expand rapidly, where underlying software architectures and deployment topologies have moved well beyond a single binary installed from physical media. These advancements are too often invisible to the end-user, where modern software applications are backed by an array of additional network services that include remote configuration updates, advanced analytics, artificial intelligence (AI)-powered rulesets that update cyber defense systems automatically, etc. As the Department’s operations become increasingly dependent on software, we must ensure that this software is created in a secure, protected, and controlled environment that instills confidence in the user base that it will perform as designed. In order to prevent any combination of human errors, supply chain interdictions, unintended code, and support the creation of a software bill of materials (SBOM), the adoption of an approved software platform and development pipeline(s) are critical."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-006 requires the DSOP SBOM; the other sentences describe modern architectures and carry no duty a run can show."
+    evidence: [{"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.yaml", "expect": "no SBOM for the DSOP with a statement of how it was developed", "asserts": "Support the creation of a software bill of materials (SBOM) for the platform", "claim": "constraint", "sentence": "In order to prevent any combination of human errors, supply chain interdictions, unintended code, and support the creation of a software bill of materials (SBOM), the adoption of an approved software platform and development pipeline(s) are critical."}]
     work_item: "WI-297"
   - id: "REQ-DODCIO-CATO-0009"
     citation: {"ref": "DODCIO-CATO", "page": 2, "anchor": "To achieve a cATO, a system must embrace the DoD Enterprise DevSecOps"}
@@ -74,7 +84,9 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "To achieve a cATO, a system must embrace the DoD Enterprise DevSecOps Strategy, aligning to an approved DevSecOps Reference Design. This strategy creates a cultural change that implements the full and open agile collaboration of what have traditionally been separate disciplines. Incorporating development, security, and operations together closes gaps with baked-in safeguards and monitoring functions that span the entire software supply chain. Specifics on the current DoD Enterprise DevSecOps Strategy and approved Reference Designs can be found here: https://DoDcio.defense.gov/Library/. The DevSecOps Strategy supports a \"Pathway to a Reference Design\" whereby new architectures can be submitted for evaluation."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-003 refuses a design that is not approved; embracing the DevSecOps strategy as culture is not tested."
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.yaml", "expect": "implements an approved DevSecOps Reference Design", "asserts": "The system aligns to an approved DevSecOps Reference Design", "claim": "constraint", "sentence": "To achieve a cATO, a system must embrace the DoD Enterprise DevSecOps Strategy, aligning to an approved DevSecOps Reference Design."}]
     work_item: "WI-296"
   - id: "REQ-DODCIO-CATO-0010"
     citation: {"ref": "DODCIO-CATO", "page": 2, "anchor": "If an AO determines their system provides the required real time risk"}
@@ -83,8 +95,8 @@ requirements:
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "If an AO determines their system provides the required real time risk posture to achieve a cATO, the AO will notify the component CISO of the intention to move that system to a cATO status. Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration. Systems desiring to move from a traditional ATO model to a cATO model must demonstrate: complete understanding of activities inside of their AO boundary with a robust continuous monitoring of RMF controls; the ability to conduct active cyber defense in order to respond to cyber threats in real time; and the adoption and use of a specific DoD Enterprise DevSecOps Reference Design."
     status: "partial"
-    reason: "The evidence of the three competencies is D-5 data at p12"
-    evidence: [{"kind": "rule", "asserts": "The AO notifies the Component CISO first, of the intention to move to a cATO", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.notice.yaml", "expect": "the AO notifies the Component CISO first", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If an AO determines their system provides the required real time risk posture to achieve a cATO, the AO will notify the component CISO of the intention to move that system to a cATO status."}, {"kind": "rule", "asserts": "A cATO needs a recorded dod_ciso_approval: the request goes to the DoD CISO", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.yaml", "expect": "a cATO needs a recorded dod_ciso_approval", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}, {"kind": "pinned", "asserts": "A cATO requires the DoD CISO approval of the request", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "read_by": "AODM-007", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}, {"kind": "schema", "asserts": "The date of the DoD CISO approval of the cATO request", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/dod_ciso_approval/properties/date", "claim": "constraint", "read_by": "AODM-007", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}]
+    reason: "Not tier 1. CATO-002 holds the competencies; the notice and presentation are AODM-007's component_ciso_notification and dod_ciso_approval."
+    evidence: [{"kind": "rule", "asserts": "The AO notifies the Component CISO first, of the intention to move to a cATO", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.notice.yaml", "expect": "the AO notifies the Component CISO first", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If an AO determines their system provides the required real time risk posture to achieve a cATO, the AO will notify the component CISO of the intention to move that system to a cATO status."}, {"kind": "rule", "asserts": "A cATO needs a recorded dod_ciso_approval: the request goes to the DoD CISO", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.yaml", "expect": "a cATO needs a recorded dod_ciso_approval", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}, {"kind": "pinned", "asserts": "A cATO requires the DoD CISO approval of the request", "target": "AD-CATO", "field": "requires", "value": ["underlying", "review", "dod_ciso_approval", "component_ciso_notification"], "claim": "constraint", "read_by": "AODM-007", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}, {"kind": "schema", "asserts": "The date of the DoD CISO approval of the cATO request", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/dod_ciso_approval/properties/date", "claim": "constraint", "read_by": "AODM-007", "sentence": "Together the AO and component CISO will present this request and the supporting body of evidence to the DoD CISO for consideration."}, {"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "cATO evidence has not demonstrated", "asserts": "Systems moving to a cATO demonstrate continuous monitoring and active cyber defense competencies", "claim": "constraint", "sentence": "Systems desiring to move from a traditional ATO model to a cATO model must demonstrate: complete understanding of activities inside of their AO boundary with a robust continuous monitoring of RMF controls; the ability to conduct active cyber defense in order to respond to cyber threats in real time; and the adoption and use of a specific DoD Enterprise DevSecOps Reference Design."}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-0011"
     citation: {"ref": "DODCIO-CATO", "page": 3, "anchor": "DoD CISO approved cATOs do not have an expiration date and will"}
@@ -110,8 +122,7 @@ requirements:
     locator: ""
     context: "MEMORANDUM FOR SENIOR PENTAGON LEADERSHIP"
     statement: "The approval of cATO does not guarantee a system will stay in that state, systems that have been granted permission to operate under a cATO may have this revoked for several reasons. This may include, but is not limited to: poor cybersecurity posture as identified through continuous monitoring or external assessments; changes in risk tolerance; or a cybersecurity incident resulting from poor adherence to cybersecurity practices. A system can temporarily lose its cATO privilege without any loss of existing ATO."
-    status: "partial"
-    reason: "That the ATO survives is in_force, a unit test the judge cannot see; the reasons for revocation are free choice"
+    status: "covered"
     evidence: [{"kind": "rule", "asserts": "A cATO may be revoked for reasons, and there must be a cATO to revoke", "target": "AODM-005", "fixture": "tests/fixtures/negative/AODM-005.revoke.yaml", "expect": "has no cATO to revoke", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-289"
   - id: "REQ-DODCIO-CATO-0014"

@@ -1,0 +1,22 @@
+rule: SWLC-001
+bases:
+- minimal
+description: backlogs that do not capture threats
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: lifecycle_approach.backlog_captures
+  value:
+  - issues
+  - errors
+  - defects
+  - supplier-updates
+expect:
+  errors:
+  - SWLC-001
+  messages:
+  - the program backlogs do not capture threats found in development and operations
