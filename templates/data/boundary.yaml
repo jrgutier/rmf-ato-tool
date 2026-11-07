@@ -1,18 +1,31 @@
 # Template: artifacts/data/boundary.yaml (P-11, updated by C-1; schema boundary).
-# Replace every <<FILL: ...>> and example value (playbooks/P/P-11.md). The authorization boundary
-# diagram is a CNSSI 1254 element of the SSP (PKG-003), so its file exists in the run; omit the
-# other diagrams unless theirs does. Never list a this-system component; the CLI adds it.
+# Replace every <<FILL: ...>> and example value (playbooks/P/P-11.md). Every diagram's file
+# exists in the run, and the diagrams together show what SP 800-18r2 lists for what the run
+# records (SUBS-002). Never list a this-system component; the CLI adds it.
 authorization_boundary:
   description: "<<FILL: what is inside, what is outside, and where the edge is>>"
   diagrams:
-    - {path: product/boundary-diagram.png, caption: "<<FILL: what the diagram shows>>"}
+    - path: product/boundary-diagram.png
+      caption: "<<FILL: what the diagram shows>>"
+      shows: [components, internal-boundaries, third-party-services, physical-protections, isolated-components]
   sources: [INT-001.A1]
 network_architecture:
   description: "<<FILL: networks, interfaces and permitted traffic>>"
+  diagrams:
+    - path: product/network-diagram.png
+      caption: "<<FILL: what the diagram shows>>"
+      shows: [components, external-connections, routing-controls, data-stores]
   sources: [INT-001.A1]
 data_flow:
   description: "<<FILL: each flow across or inside the boundary and its protection>>"
+  diagrams:
+    - path: product/data-flow-diagram.png
+      caption: "<<FILL: what the diagram shows>>"
+      shows: [data-types, data-direction, external-flows]
   sources: [INT-001.A1]
+# A complex system adds (SUBS-001):
+# subsystems: [{id: SUB-EXAMPLE, title, components: [CMP-EXAMPLE], c, i, a, status}]
+# subsystem_interfaces: [{between: [SUB-A, SUB-B], connected: true, flows, controls: [sc-7]}]
 components:
   - id: CMP-EXAMPLE
     title: "<<FILL: component name>>"

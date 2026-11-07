@@ -174,7 +174,15 @@ Purpose: Establish the organization's risk management strategy, including how it
    `## Risk management strategy and risk tolerance`, traced, including the risk assessment
    maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
    M-4 applies it. Keep the risk tolerance
-   concrete; R-2 and R-4 compare the system's risk with it.
+   concrete; R-2 and R-4 compare the system's risk with it. Write
+   `artifacts/data/org-context.yaml` from `templates/data/org-context.yaml`: how the risk
+   executive function is formed here (an individual or a group, its members), its forums
+   for all types and sources of risk including aggregated risk, its oversight of risk
+   decisions, its broad-based view of risk, the vehicles that share risk information with
+   AOs, senior leaders and internal and external stakeholders, the autonomy it gives
+   subordinate organizations for framing, assessing, responding to and monitoring risk, and
+   how it handles authorizations with shared responsibility such as joint authorizations
+   (SP 800-37r2 Appendix D.3, RISKX-001). Ask PER-RE.
 5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews

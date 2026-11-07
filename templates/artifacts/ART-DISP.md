@@ -16,7 +16,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Disposal strategy
 
-<<FILL: what is removed from operation, the whole system or named elements, when, and on whose decision, with tokens>>
+<<FILL: how and when the system is disposed of, the secure end state, whether the environment returns to its original secure state or one set by agreement, and the storage criteria if the system is stored first, as in artifacts/data/disposal.yaml, with tokens>>
 
 ## Information disposition
 

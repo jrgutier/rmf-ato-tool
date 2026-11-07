@@ -250,7 +250,9 @@ requirements:
     locator: "2.2.i"
     context: "DIRECTOR, DEFENSE INFORMATION SYSTEMS AGENCY (DISA) Under the authority, direction, and control of the DoD Chief Information Officer, and in addition to the responsibilities in Paragraph 2.10., the Di"
     statement: "i. When vendor-provided security hardening guidance is insufficient for DoD’s security needs, develops cybersecurity configuration guidance pursuant to DoDI 8500.01 and Committee on National Security Systems Instruction (CNSSI) No. 1253 in collaboration with the DIRNSA/CHCSS."
-    status: "candidate"
+    status: "partial"
+    reason: "Developing DoD configuration guidance where vendor guidance falls short is DISA's duty; a run records which guidance it applies, vendor guidance among the kinds."
+    evidence: [{"kind": "schema", "target": "framework/schema/stig-summary.schema.json#/properties/benchmarks/items/properties/kind", "claim": "constraint", "asserts": "Cybersecurity configuration guidance used when vendor-provided security hardening guidance is insufficient"}]
     work_item: "WI-176"
   - id: "REQ-DODI8531.01-0031"
     citation: {"ref": "DODI8531.01", "page": 6, "anchor": "Identifies, develops, updates, and implements policy and processes for the DoD acquisition"}
@@ -417,7 +419,9 @@ requirements:
     locator: "2.6.b"
     context: "DIRNSA/CHCSS Under the authority, direction, and control of the USD(I&S), and in addition to the responsibilities in Paragraph 2.10., the DIRNSA/CHCSS:"
     statement: "b. Provides cybersecurity support to DoD Components to assess vulnerabilities and establish security implementation specifications and, in collaboration with DISA, develops security technical implementation guides."
-    status: "candidate"
+    status: "partial"
+    reason: "NSA's support and STIG development with DISA are outside the run; a run applies the security technical implementation guides they produce."
+    evidence: [{"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.benchmark.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "The security technical implementation guides developed are applied to the system's items as a STIG benchmark", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded"}]
     work_item: "WI-176"
   - id: "REQ-DODI8531.01-0052"
     citation: {"ref": "DODI8531.01", "page": 8, "anchor": "Identifies, monitors, and analyzes vulnerabilities of software, firmware, and hardware used by"}
@@ -646,7 +650,9 @@ requirements:
     locator: "2.10.j"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "j. Identify and provide guidance on security-relevant configurations for DoD Component software, firmware, and hardware."
-    status: "candidate"
+    status: "partial"
+    reason: "Each software item is mapped to a configuration benchmark; the Component's own guidance on security-relevant configurations is outside the run."
+    evidence: [{"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.benchmark.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "Security-relevant configuration guidance is identified for Component software as a benchmark", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded", "sentence": "Identify and provide guidance on security-relevant configurations for DoD Component software, firmware, and hardware."}]
     work_item: "WI-176"
   - id: "REQ-DODI8531.01-0079"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Determine and communicate requirements for mitigations by the system owner, program manager,"}
@@ -664,7 +670,9 @@ requirements:
     locator: "2.10.l"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "l. Account for all software, firmware, and hardware items used on systems, system components, and devices owned or operated on behalf of the DoD Component; maintain current inventory in DoD information technology asset management systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Items are accounted for per boundary component (INV-BND-002 warns) and the asset management system is named; that the inventory there is current is not tested."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Maintain current inventory of software, firmware and hardware items in DoD IT asset management systems", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DODI8531.01-0081"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Ensure DoD Component conducts audits for patching, compliance, and reporting."}
@@ -682,7 +690,8 @@ requirements:
     locator: "2.10.n"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "n. Ensure DoD Component creates and uses unique item identifiers and automated systems for software, firmware, and hardware items in accordance with DoDI 8320.03 and 8320.04."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.yaml", "expect": "is shared by more than one item", "asserts": "Unique item identifiers are created and used for software, firmware and hardware items, never shared by two", "claim": "constraint", "sentence": "Ensure DoD Component creates and uses unique item identifiers and automated systems for software, firmware, and hardware items in accordance with DoDI 8320.03 and 8320.04."}, {"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.uii.yaml", "expect": "has no unique item identifier", "asserts": "Each software, firmware and hardware item has a unique item identifier", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DODI8531.01-0083"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Provide SMEs to support equities determinations and discussions for the VEP as"}
@@ -1054,7 +1063,9 @@ requirements:
     locator: "3.2.b.(1)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(1) Perform penetration testing considering cost and time available."
-    status: "candidate"
+    status: "partial"
+    reason: "The level of effort is a required scope field sized to cost and time; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/level_of_effort", "claim": "presence", "asserts": "Perform penetration testing considering the cost and time available for the level of effort"}]
     work_item: "WI-191"
   - id: "REQ-DODI8531.01-0127"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Perform penetration testing using the guidelines in NIST SP 800-115 as reference."}
@@ -1062,7 +1073,8 @@ requirements:
     locator: "3.2.b.(2)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(2) Perform penetration testing using the guidelines in NIST SP 800-115 as reference."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PENT-001", "fixture": "tests/fixtures/negative/PENT-001.yaml", "expect": "penetration testing uses the guidelines in NIST SP 800-115 as reference", "asserts": "Perform penetration testing using the guidelines in NIST SP 800-115 as reference", "claim": "constraint"}]
     work_item: "WI-191"
   - id: "REQ-DODI8531.01-0128"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Security Controls Assessment."}
@@ -1498,7 +1510,9 @@ requirements:
     locator: "3.5.k"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "k. Implement secure configurations for software, firmware, and hardware in accordance with applicable DoD security technical implementation guides, NSA/CSS security implementation and mitigation guidance, and NIST mitigation guidelines."
-    status: "candidate"
+    status: "covered"
+    reason: "STIG-001 requires a configuration benchmark for software, operating systems, databases, firmware and virtual machines, not for hardware, so secure configuration of hardware is unheld."
+    evidence: [{"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.benchmark.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "Secure configurations for software and firmware are implemented in accordance with an applicable STIG, NSA/CSS guidance or NIST benchmark", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded", "sentence": "Implement secure configurations for software, firmware, and hardware in accordance with applicable DoD security technical implementation guides, NSA/CSS security implementation and mitigation guidance, and NIST mitigation guidelines."}, {"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.hardware.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "Secure configurations for hardware are implemented in accordance with an applicable STIG or benchmark unless not applicable", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded"}]
     work_item: "WI-176"
   - id: "REQ-DODI8531.01-0179"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "DoD Components will verify the remediation or mitigation method implemented on identified"}

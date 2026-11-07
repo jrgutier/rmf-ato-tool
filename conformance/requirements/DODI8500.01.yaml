@@ -768,7 +768,8 @@ requirements:
     locator: "ENCLOSURE 2.g"
     context: "RESPONSIBILITIES"
     statement: "g. Ensures that PIT systems included in acquisition programs are designated, categorized, and have their authorization boundaries defined according to the guidelines provided in Reference (q)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pit.yaml", "expect": "the PIT system is not designated by the responsible OSD or DoD Component head or a delegate", "asserts": "PIT systems in acquisition programs are designated by the responsible head, categorized and given authorization boundaries", "claim": "constraint", "sentence": "Ensures that PIT systems included in acquisition programs are designated, categorized, and have their authorization boundaries defined according to the guidelines provided in Reference (q)."}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0098"
     citation: {"ref": "DODI8500.01", "page": 18, "anchor": "Ensures that policy and procedures for developing program protection plans (PPPs) required"}
@@ -1126,7 +1127,8 @@ requirements:
     locator: "ENCLOSURE 2.d"
     context: "RESPONSIBILITIES"
     statement: "d. Ensure that PIT systems are identified, designated as such, and centrally registered at the DoD Component level."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pit.yaml", "expect": "the PIT system is not designated by the responsible OSD or DoD Component head or a delegate", "asserts": "PIT systems are identified and designated as such by the responsible head", "claim": "constraint", "sentence": "Ensure that PIT systems are identified, designated as such, and centrally registered at the DoD Component level."}, {"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.register.yaml", "expect": "the PIT system is not centrally registered at the DoD Component level", "asserts": "PIT systems are centrally registered at the DoD Component level", "claim": "presence", "sentence": "Ensure that PIT systems are identified, designated as such, and centrally registered at the DoD Component level."}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0144"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Ensure that SSE and trusted systems and networks (TSN) processes, tools, and"}
@@ -1363,7 +1365,9 @@ requirements:
     locator: "ENCLOSURE 2.u"
     context: "RESPONSIBILITIES"
     statement: "u. Ensure that all DoD IT under their purview complies with applicable STIGs, security configuration guides, and SRGs with any exceptions documented and approved by the responsible AO."
-    status: "candidate"
+    status: "covered"
+    reason: "Exceptions are held to the AO's approval (SCFG-001); compliance is held for software, operating systems, databases, firmware and virtual machines only (STIG-001's kinds), not for hardware and network devices, so 'all DoD IT' is unheld."
+    evidence: [{"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.benchmark.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "All DoD IT software complies with an applicable STIG, security configuration guide or SRG benchmark", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded", "sentence": "Ensure that all DoD IT under their purview complies with applicable STIGs, security configuration guides, and SRGs with any exceptions documented and approved by the responsible AO."}, {"kind": "rule", "target": "STIG-001", "fixture": "tests/fixtures/negative/STIG-001.hardware.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "asserts": "All DoD IT, hardware and network devices included, complies with an applicable STIG or SRG benchmark unless not applicable", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded"}, {"kind": "rule", "target": "SCFG-001", "fixture": "tests/fixtures/negative/SCFG-001.yaml", "expect": "an exception to the configuration guidance is approved by the responsible AO", "asserts": "Any exception to the STIGs and SRGs is documented and approved by the responsible AO", "claim": "constraint", "holds_when": "ART-STIG is in play once I-1 is active or it is seeded", "sentence": "Ensure that all DoD IT under their purview complies with applicable STIGs, security configuration guides, and SRGs with any exceptions documented and approved by the responsible AO."}]
     work_item: "WI-176"
   - id: "REQ-DODI8500.01-0174"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Establish a CD support element to coordinate CD activities with the National"}
@@ -1404,7 +1408,9 @@ requirements:
     locator: "ENCLOSURE 2.y.(1)"
     context: "RESPONSIBILITIES Ensure individual and organization accountability within organizations under their purview, including:"
     statement: "(1) Hold commanders, IS owners (ISOs), AOs, information system security managers (ISSMs), information system security officers (ISSOs), program managers (PMs), project and application leads, supervisors, and system administrators responsible and accountable for the implementation of DoD security requirements in accordance with this instruction, References ( w), (bj), (bk), (bn), and (br), DoDM 5200.01, Volume 2 (Reference (bs), DoD 5220.22-R (Reference (bt)), and supplemental DoD Component guidance. Personnel filling positions with privileged access must be qualified and sign a Statement of Acceptance of Responsibilities in accordance with Reference (ay)."
-    status: "candidate"
+    status: "partial"
+    reason: "Qualification and the signed statement are held; holding the named officials accountable is not something a run can test."
+    evidence: [{"kind": "rule", "target": "SYSD-004", "fixture": "tests/fixtures/negative/SYSD-004.qualified.yaml", "expect": "personnel filling positions with privileged access are not qualified", "asserts": "Personnel filling positions with privileged access must be qualified", "claim": "constraint", "sentence": "Personnel filling positions with privileged access must be qualified and sign a Statement of Acceptance of Responsibilities in accordance with Reference (ay)."}, {"kind": "rule", "target": "SYSD-004", "fixture": "tests/fixtures/negative/SYSD-004.yaml", "expect": "personnel with privileged access have not signed a Statement of Acceptance of Responsibilities", "asserts": "Personnel with privileged access must sign a Statement of Acceptance of Responsibilities", "claim": "constraint", "sentence": "Personnel filling positions with privileged access must be qualified and sign a Statement of Acceptance of Responsibilities in accordance with Reference (ay)."}]
     work_item: "WI-197"
   - id: "REQ-DODI8500.01-0179"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Ensure that military and civilian personnel are considered for administrative or judicial"}
@@ -2107,7 +2113,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "a. The DoD Information Security Program is described in DoDI 5200.01 (Reference (cq)). All classified information and CUI must be protected in accordance with References (bn), (bs), (bj), and (bk). Systems processing CUI will be categorized at no less than the moderate confidentiality impact level in accordance with Part 2002 of Title 32, Code of Federal Regulations (Reference (z))."
-    status: "candidate"
+    status: "partial"
+    reason: "CUI and CTI hold confidentiality at moderate; that classified information and CUI are protected per the cited references is not testable."
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.yaml", "expect": "the system processes controlled unclassified information", "asserts": "Systems processing CUI are categorized at no less than the moderate confidentiality impact level", "claim": "constraint", "sentence": "Systems processing CUI will be categorized at no less than the moderate confidentiality impact level in accordance with Part 2002 of Title 32, Code of Federal Regulations (Reference (z))."}]
     work_item: "WI-180"
   - id: "REQ-DODI8500.01-0269"
     citation: {"ref": "DODI8500.01", "page": 34, "anchor": "DoD’s information sharing policies and procedures are defined in DoDD 8320.02 (Reference"}
@@ -2316,7 +2324,8 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. Enclaves always assume the highest security category of the ISs that they host, and derive their security needs from those systems. See Reference (ca) for a discussion of IS boundaries and the application of security controls."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.enclave.yaml", "expect": "the enclave is categorized below", "asserts": "Enclaves assume the highest security category of the systems that they host", "claim": "constraint"}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0295"
     citation: {"ref": "DODI8500.01", "page": 37, "anchor": "Major Application (Formerly Automated Information System Application)"}
@@ -2332,7 +2341,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 2. DoD Information Technology"
     statement: "a. Certain applications, because of the information in them, require special management oversight due to the risk and magnitude of the harm resulting from the loss, misuse, or unauthorized access to or modification of the information in the application and should be treated as major applications. A major application may be a single software application (e.g., integrated consumable items support); multiple software applications that are related to a single mission (e.g., payroll or personnel); or a combination of software and hardware performing a specific support function across a range of missions (e.g., Global Command and Control System, Defense Enrollment Eligibility Reporting System)."
-    status: "candidate"
+    status: "partial"
+    reason: "Whether an application warrants special management oversight is judgment; the IT type fact records the result and its rationale."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_type/properties/value", "claim": "constraint", "asserts": "The application is treated as a major application in the IT type the system records", "sentence": "Certain applications, because of the information in them, require special management oversight due to the risk and magnitude of the harm resulting from the loss, misuse, or unauthorized access to or modification of the information in the application and should be treated as major applications."}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0297"
     citation: {"ref": "DODI8500.01", "page": 38, "anchor": "Major applications include any application that is a product or deliverable of"}
@@ -2363,7 +2374,9 @@ requirements:
     locator: "ENCLOSURE 3.e"
     context: "Figure 2. DoD Information Technology"
     statement: "e. DoD Component CIOs will resolve disputes regarding whether an application rises to the level of a major application."
-    status: "candidate"
+    status: "partial"
+    reason: "Dispute resolution by the Component CIO is outside the run; the IT type fact records the type decided and why."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Whether an application rises to the level of a major application is recorded in the IT type with its rationale", "claim": "presence", "sentence": "DoD Component CIOs will resolve disputes regarding whether an application rises to the level of a major application."}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0301"
     citation: {"ref": "DODI8500.01", "page": 38, "anchor": "DoD IS Registration. All systems will be reported in either the eMASS"}
@@ -2424,7 +2437,8 @@ requirements:
     locator: "ENCLOSURE 3.e.(2).(d).1"
     context: "Figure 2. DoD Information Technology PIT"
     statement: "1. PIT systems are analogous to enclaves but are dedicated only to the platforms they support. PIT systems must be designated as such by the responsible OSD or DoD Component heads or their delegates and authorized by an AO specifically appointed to authorize PIT systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pit.yaml", "expect": "the PIT system is not designated by the responsible OSD or DoD Component head or a delegate", "asserts": "PIT systems are designated as such by the responsible OSD or DoD Component heads or their delegates", "claim": "constraint", "sentence": "PIT systems must be designated as such by the responsible OSD or DoD Component heads or their delegates and authorized by an AO specifically appointed to authorize PIT systems."}, {"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pitao.yaml", "expect": "the PIT system's AO is not one specifically appointed to authorize PIT systems", "asserts": "PIT systems are authorized by an AO specifically appointed to authorize PIT systems", "claim": "constraint", "sentence": "PIT systems must be designated as such by the responsible OSD or DoD Component heads or their delegates and authorized by an AO specifically appointed to authorize PIT systems."}]
     work_item: "WI-196"
   - id: "REQ-DODI8500.01-0309"
     citation: {"ref": "DODI8500.01", "page": 39, "anchor": "All DoD PIT systems will be categorized as defined in Reference (cb)"}
@@ -2495,7 +2509,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(3).(c)"
     context: "Figure 2. DoD Information Technology"
     statement: "(c) An internal IT service is implemented within DoD. The DoD entity providing the service is responsible for the application of appropriate security controls and for ensuring that ISs supporting service delivery are assessed and authorized in accordance with Reference (q). Service-level agreements will be executed for internal services."
-    status: "candidate"
+    status: "partial"
+    reason: "The SLA for an internal service is held; that the providing DoD entity has its supporting systems assessed and authorized rests on the leveraged authorization record's decision, which is optional."
+    evidence: [{"kind": "rule", "target": "SYSD-005", "fixture": "tests/fixtures/negative/SYSD-005.yaml", "expect": "a service-level agreement is executed for an internal IT service", "asserts": "Service-level agreements are executed for internal IT services", "claim": "constraint", "sentence": "Service-level agreements will be executed for internal services."}]
     work_item: "WI-195"
   - id: "REQ-DODI8500.01-0318"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "An external IT service is implemented outside DoD. The DoD entity using"}
@@ -2511,7 +2527,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(3).(d).1"
     context: "Figure 2. DoD Information Technology An external IT service is implemented outside DoD. The DoD entity using the external service will:"
     statement: "1. Ensure that interagency agreements or government statements of work for external services incorporate requirements in accordance with this instruction. Requirements for external services must include the application of appropriate security controls to the IT supporting the external service delivery in accordance with Reference (q). Requests for proposals will include sufficient information on which to evaluate each offeror’s proposed approach to satisfying the security control requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "The interagency agreement or statement of work and its security requirements are held; what requests for proposals hold is not modelled."
+    evidence: [{"kind": "rule", "target": "SYSD-005", "fixture": "tests/fixtures/negative/SYSD-005.external.yaml", "expect": "an external IT service is held by an interagency agreement or a government statement of work", "asserts": "External services are held by interagency agreements or government statements of work", "claim": "constraint", "sentence": "Ensure that interagency agreements or government statements of work for external services incorporate requirements in accordance with this instruction."}, {"kind": "rule", "target": "SYSD-005", "fixture": "tests/fixtures/negative/SYSD-005.security.yaml", "expect": "the agreement for the external service does not incorporate the security requirements of DoDI 8500.01", "asserts": "Requirements for external services include the application of appropriate security controls", "claim": "constraint", "sentence": "Requirements for external services must include the application of appropriate security controls to the IT supporting the external service delivery in accordance with Reference (q)."}]
     work_item: "WI-195"
   - id: "REQ-DODI8500.01-0320"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "Ensure that processes, roles, and responsibilities are established between program management office"}
@@ -2535,7 +2553,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(3).(d).4"
     context: "Figure 2. DoD Information Technology An external IT service is implemented outside DoD. The DoD entity using the external service will:"
     statement: "4. DoD enterprise-level agreements for services should be used when possible."
-    status: "candidate"
+    status: "partial"
+    reason: "Whether an enterprise-level agreement is recorded per service; whether one was possible is judgment no rule can test."
+    evidence: [{"kind": "schema", "target": "framework/schema/leveraged-authorizations.schema.json#/properties/leveraged_authorizations/items/properties/service/properties/agreement/properties/enterprise", "claim": "presence", "asserts": "Whether a DoD enterprise-level agreement is used for the service", "sentence": "DoD enterprise-level agreements for services should be used when possible."}]
     work_item: "WI-195"
   - id: "REQ-DODI8500.01-0323"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "Unified capability products will receive unified capability certification for cybersecurity in accordance"}
@@ -2543,7 +2563,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(4).(a)"
     context: "Figure 2. DoD Information Technology IT Product"
     statement: "(a) Unified capability products will receive unified capability certification for cybersecurity in accordance with Reference (am)."
-    status: "candidate"
+    status: "partial"
+    reason: "A product the inventory flags as a unified capability must be certified; nothing finds an unflagged UC product, so the flag is self-declared."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.uc.yaml", "expect": "is a unified capability product without unified capability", "asserts": "Unified capability products receive unified capability certification for cybersecurity", "claim": "constraint", "sentence": "(a) Unified capability products will receive unified capability certification for cybersecurity in accordance with Reference (am)."}]
     work_item: "WI-172"
   - id: "REQ-DODI8500.01-0324"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "Products that protect classified information must comply with Reference (bc)."}
@@ -2872,7 +2894,8 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 2. DoD Information Technology"
     statement: "c. Foreign exchange personnel and representatives of foreign nations, coalitions or international organizations may be authorized access to DoD ISs containing classified or sensitive information only if these conditions are met:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-004", "fixture": "tests/fixtures/negative/SYSD-004.foreign.yaml", "expect": "access by foreign personnel to the system is authorized by the DoD Component head", "asserts": "Foreign personnel are authorized access to DoD ISs only under the conditions, starting with authorization by the DoD Component head", "claim": "constraint", "sentence": "Foreign exchange personnel and representatives of foreign nations, coalitions or international organizations may be authorized access to DoD ISs containing classified or sensitive information only if these conditions are met:"}]
     work_item: "WI-197"
   - id: "REQ-DODI8500.01-0364"
     citation: {"ref": "DODI8500.01", "page": 44, "anchor": "Access to DoD ISs is authorized only by the DoD Component head"}
@@ -2880,7 +2903,8 @@ requirements:
     locator: "ENCLOSURE 3.c.(1)"
     context: "Figure 2. DoD Information Technology Foreign exchange personnel and representatives of foreign nations, coalitions or international organizations may be authorized access to DoD ISs containing classif"
     statement: "(1) Access to DoD ISs is authorized only by the DoD Component head in accordance with DoD, Department of State, and ODNI disclosure guidance, as applicable."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-004", "fixture": "tests/fixtures/negative/SYSD-004.foreign.yaml", "expect": "access by foreign personnel to the system is authorized by the DoD Component head", "asserts": "Access to DoD ISs is authorized only by the DoD Component head", "claim": "constraint", "sentence": "(1) Access to DoD ISs is authorized only by the DoD Component head in accordance with DoD, Department of State, and ODNI disclosure guidance, as applicable."}]
     work_item: "WI-197"
   - id: "REQ-DODI8500.01-0365"
     citation: {"ref": "DODI8500.01", "page": 44, "anchor": "Mechanisms are in place to limit access strictly to information that has"}
@@ -2888,7 +2912,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(2)"
     context: "Figure 2. DoD Information Technology Foreign exchange personnel and representatives of foreign nations, coalitions or international organizations may be authorized access to DoD ISs containing classif"
     statement: "(2) Mechanisms are in place to limit access strictly to information that has been cleared for release to the represented foreign nation, coalition, or international organization (e.g., North Atlantic Treaty Organization) in accordance with Reference (ab) for classified military information, and other policy guidance for unclassified information such as References (bk), (dg), DoDD 5230.20E (Reference (dl)), and DoDI 5230.27 (Reference (dm))."
-    status: "candidate"
+    status: "partial"
+    reason: "The release limits are required in the foreign access record; their content is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/users.schema.json#/properties/users/items/properties/foreign_access/properties/release_limits", "claim": "presence", "asserts": "Mechanisms limit access to information cleared for release to the represented foreign nation", "sentence": "(2) Mechanisms are in place to limit access strictly to information that has been cleared for release to the represented foreign nation, coalition, or international organization (e.g., North Atlantic Treaty Organization) in accordance with Reference (ab) for classified military information, and other policy guidance for unclassified information such as References (bk), (dg), DoDD 5230.20E (Reference (dl)), and DoDI 5230.27 (Reference (dm))."}]
     work_item: "WI-197"
   - id: "REQ-DODI8500.01-0366"
     citation: {"ref": "DODI8500.01", "page": 44, "anchor": "Capabilities built to support cybersecurity objectives that are shared with mission partners will be governed through"}
@@ -2896,7 +2922,9 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. Capabilities built to support cybersecurity objectives that are shared with mission partners will be governed through integrated decision structures and processes described in this instruction, must have formal agreements (e.g., a memorandum of agreement, memorandum of understanding, service-level agreements, contracts, grants, or other legal agreements or understandings) that incorporate considerations for DoD risks, be in accordance with Reference (ak), and will be consistent with applicable guidance contained in References (ab), (bj), (bk), (bp), (bn), (bs), and DoDI 2040.02 (Reference (dn))."
-    status: "candidate"
+    status: "partial"
+    reason: "Each interconnection has a record with its formal agreement; capabilities shared with mission partners outside an interconnection, and the decision structures that govern them, are unheld."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.record.yaml", "expect": "has no interconnection record", "asserts": "Capabilities shared with mission partners must have formal agreements such as a memorandum of agreement recorded per interconnection", "claim": "constraint", "sentence": "Capabilities built to support cybersecurity objectives that are shared with mission partners will be governed through integrated decision structures and processes described in this instruction, must have formal agreements (e.g., a memorandum of agreement, memorandum of understanding, service-level agreements, contracts, grants, or other legal agreements or understandings) that incorporate considerations for DoD risks, be in accordance with Reference (ak), and will be consistent with applicable guidance contained in References (ab), (bj), (bk), (bp), (bn), (bs), and DoDI 2040.02 (Reference (dn))."}]
     work_item: "WI-190"
   - id: "REQ-DODI8500.01-0367"
     citation: {"ref": "DODI8500.01", "page": 44, "anchor": "Information systems jointly developed by DoD and mission partners are considered DoD-partnered"}

@@ -11,6 +11,7 @@ from _framework_fixtures import REAL
 from conftest import REPO_ROOT
 from ruamel.yaml import YAML
 
+from rmf_tool.check.rules.system import VULNERABILITY_DOCUMENTS
 from rmf_tool.framework.load import load
 
 ARTIFACTS = [a.data for a in load(REAL, REPO_ROOT).framework.of("artifacts")]
@@ -35,7 +36,8 @@ def test_every_hand_written_artifact_has_a_template():
 def test_template_follows_the_conventions(art):
     text = (REPO_ROOT / art["template"]).read_text(encoding="utf-8")
     front, body = split(text)
-    assert list(front) == ["artifact_id", "run_id", "produced_by_task", "touched_by", "sources"]
+    keys = ["artifact_id", "run_id", "produced_by_task", "touched_by", "sources"]
+    assert list(front) == keys + (["handling"] if art["id"] in VULNERABILITY_DOCUMENTS else [])
     assert front["artifact_id"] == art["id"]
     assert front["produced_by_task"] == art["producer"]
     assert front["touched_by"] == [art["producer"]]

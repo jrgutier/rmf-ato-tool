@@ -28,7 +28,8 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements", "registration"}
+                     "requirements", "system-description", "sar-summary",
+                     "org-context", "disposal", "registration"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -370,8 +371,18 @@ RUN_EXAMPLES.update({
         ("contingency", "exercises", [{"id": "EX-1", "type": "drill"}]),
         ("incident-response", "reporting_paths", [{"case": "unknown"}]),
         ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
-        ("ssp-records", "space_nss", "maybe"))
+        ("ssp-records", "space_nss", "maybe"),
+        ("system-description", "ownership", "leased"),
+        ("sar-summary", "assessment_type", "spot-check"),
+        ("org-context", "risk_executive", {"form": "committee"}))
 })
+RUN_EXAMPLES["disposal"] = (
+    {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
+     "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},
+     "storage": {"stored": False},
+     "supply_chain": {"non_reuse_elements": ["drives"], "prevention": "Shredded on site."},
+     "sources": SRC},
+    {"end_state": "Sanitized", "environment": {"restored_to": "wherever"}, "sources": SRC})
 
 
 def test_every_run_schema_has_examples():
@@ -397,7 +408,9 @@ def test_interview_answer_definition():
 def test_fact_paths_come_from_the_facts_schema():
     assert fact_paths(REPO_ROOT) == {
         "system_id", "system_name", "acronym", "aliases", "boundary_id", "lifecycle_state",
-        "categorization", "categorization.approved", "baseline_id", "acquisition"}
+        "categorization", "categorization.approved", "baseline_id", "acquisition",
+        "classification", "system_type", "owning_organization", "system_version",
+        "operational_environment", "lifecycle_phase"}
 
 
 def test_real_framework_writes_each_fact_once():
@@ -463,7 +476,7 @@ TRACED = sorted(p for p in SCHEMAS.glob("*.schema.json") if p.name != "baseline.
 
 @pytest.mark.parametrize("path", TRACED, ids=lambda p: p.name)
 def test_sources_properties_hold_trace_tokens(path):
-    """L-0070: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
+    """L-0071: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
     origin kinds named `sources` fails every run that fills it."""
     root = json.loads(path.read_text(encoding="utf-8"))
 

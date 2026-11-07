@@ -146,7 +146,9 @@ requirements:
     locator: "2.1.c"
     context: "DOW CHIEF INFORMATION OFFICER (CIO) The DoW CIO:"
     statement: "c. Manages requirements for the DoW software asset inventory in accordance with DoDD 8115.01; DoDIs 5000.76 and 8115.02 and DoWI 8000.02; and Public Law 118-187."
-    status: "candidate"
+    status: "partial"
+    reason: "The software inventory is held per system; Component software asset inventory requirements are outside the run."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.version.yaml", "expect": "is software with no version number", "asserts": "Requirements for the software asset inventory are met by inventory items with version", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0019"
     citation: {"ref": "DOWI8430.01", "page": 6, "anchor": "Under the authority, direction, and control of the DoW CIO, and in"}
@@ -178,7 +180,9 @@ requirements:
     locator: "2.2.c"
     context: "DIRECTOR, DEFENSE INFORMATION SYSTEMS AGENCY (DISA) Under the authority, direction, and control of the DoW CIO, and in addition to the responsibilities in Paragraph 2.8., the Director, DISA:"
     statement: "c. Develops and manages repositories for software assets in accordance with DoW CIO requirements and DoDD 8115.01; DoDIs 5000.76 and 8115.02 and DoWI 8000.02; and Public Law 118-187."
-    status: "candidate"
+    status: "partial"
+    reason: "Software asset repositories are a Component service outside the run."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Repositories for software assets hold the inventory", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0023"
     citation: {"ref": "DOWI8430.01", "page": 7, "anchor": "Establishes policy and provides guidance, procedures, and workforce competency for DoW research,"}
@@ -338,7 +342,9 @@ requirements:
     locator: "2.6.a"
     context: "DIRECTOR, NATIONAL SECURITY AGENCY/CHIEF, CENTRAL SECURITY Under the authority, direction, and control of the USW(I&S); under the authority, direction, and control exercised by the DoW CIO over the ac"
     statement: "a. Advises DoW Components on advanced cybersecurity practices, cryptographic standards, and methods to mitigate software vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Advising Components is the DoW CIO's duty; a run records the configuration and cryptographic guidance it follows."
+    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "Advanced cybersecurity practices and methods to mitigate software vulnerabilities are applied through configuration benchmarks", "claim": "presence"}]
     work_item: "WI-176"
   - id: "REQ-DOWI8430.01-0043"
     citation: {"ref": "DOWI8430.01", "page": 9, "anchor": "Defines technical standards for security test and validation of software intended for"}
@@ -514,7 +520,9 @@ requirements:
     locator: "2.8.n"
     context: "DOW COMPONENT HEADS The DoW Component heads:"
     statement: "n. Report software asset inventory in accordance with DoDD 8115.01; DoDIs 5000.76 and 8115.02 and DoWI 8000.02; and Public Law 118-187, while abiding by classification and handling caveats."
-    status: "candidate"
+    status: "partial"
+    reason: "Reporting the software asset inventory is outside the run; the inventory and its asset management system are recorded."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Report software asset inventory through the asset management system", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0065"
     citation: {"ref": "DOWI8430.01", "page": 11, "anchor": "Share custom-developed code across the DoW and with the broader Federal community"}
@@ -830,7 +838,9 @@ requirements:
     locator: "3.2.f.(3)"
     context: "MODERN SOFTWARE TENETS The following tenets are foundational principles for DoW software development and deployment efforts:"
     statement: "(3) Appropriately protect software with military or space application, which is designated as controlled technical information (CTI) at inception in accordance with Subpart 252.204-7012 of the Defense Federal Acquisition Regulation Supplement and Section 130 of Title 10, U.S.C."
-    status: "candidate"
+    status: "partial"
+    reason: "Software with military application is flagged and held at moderate; its CTI designation and DFARS protection follow the CTI flag."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.dfars.yaml", "expect": "protection of CTI is consistent with DFARS 252.204-7012 unless exempted by DFARS", "asserts": "Software designated as CTI is protected in accordance with DFARS 252.204-7012", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded"}]
     work_item: "WI-179"
   - id: "REQ-DOWI8430.01-0104"
     citation: {"ref": "DOWI8430.01", "page": 15, "anchor": "Align Governance with Speed."}
@@ -1376,7 +1386,9 @@ requirements:
     locator: "3.5.e.(1)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(1) Software factories and services within the DoW enterprise digital arsenal that store, process, or develop DoW software or associated artifacts will be hardened, monitored, and authorized at a minimum of moderate confidentiality and moderate integrity. For cloud hosting, the minimum impact level (IL) is IL2 or higher as defined in the Cloud Service Provider Security Requirements Guide."
-    status: "candidate"
+    status: "partial"
+    reason: "A software factory is not recorded as such; its artifacts are held at moderate through the software_artifacts flag."
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.software.yaml", "expect": "are protected at a minimum of moderate", "asserts": "Software factories that store DoW software artifacts are authorized at a minimum of moderate confidentiality and moderate integrity", "claim": "constraint"}]
     work_item: "WI-180"
   - id: "REQ-DOWI8430.01-0172"
     citation: {"ref": "DOWI8430.01", "page": 20, "anchor": "Software and associated technical artifacts (e.g., source code, build scripts, SBOMs, test"}
@@ -1384,7 +1396,8 @@ requirements:
     locator: "3.5.e.(2)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(2) Software and associated technical artifacts (e.g., source code, build scripts, SBOMs, test vectors, design documents) with a specific military or space application are CTI under the DoD Controlled Unclassified Information Program per DoDI 5200.48 and must be protected at a minimum of moderate confidentiality and moderate integrity."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.software.yaml", "expect": "are protected at a minimum of moderate", "asserts": "Software and technical artifacts with a specific military or space application are protected at a minimum of moderate confidentiality and moderate integrity", "claim": "constraint"}]
     work_item: "WI-180"
   - id: "REQ-DOWI8430.01-0173"
     citation: {"ref": "DOWI8430.01", "page": 20, "anchor": "DoW software development and deployment efforts will be protected by applying operations"}
@@ -1853,7 +1866,9 @@ requirements:
     locator: "3.7.a"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "DoW Components will report custom-developed code (i.e., GOTS) unless security requirements dictate otherwise, in accordance with DoDI 8115.02 and Public Law 118-187."
-    status: "candidate"
+    status: "partial"
+    reason: "Custom-developed code is recorded with software category gots; reporting it is outside the run."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.category.yaml", "expect": "has no software category (COTS, GOTS or OSS)", "asserts": "Custom-developed code is recorded as GOTS software", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0232"
     citation: {"ref": "DOWI8430.01", "page": 25, "anchor": "DoW Components will report unclassified systems in the DoW IT Portfolio Repository"}
@@ -1885,7 +1900,9 @@ requirements:
     locator: "3.7.a.(2).(b)"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "(b) Custom-developed code with military or space application, along with its associated documentation and binaries, is designated as CTI at its inception. Pursuant to Public Law 118-187, this code will be shared for discovery and reuse across the DoW using an InnerSource model."
-    status: "candidate"
+    status: "partial"
+    reason: "Designation at inception and InnerSource sharing are not modelled; the CTI flag is per type."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/handling/properties/cti", "claim": "presence", "asserts": "Custom-developed code with military application is designated as CTI"}]
     work_item: "WI-179"
   - id: "REQ-DOWI8430.01-0236"
     citation: {"ref": "DOWI8430.01", "page": 26, "anchor": "The public release of GOTS as open-source software is encouraged to drive"}
@@ -1893,7 +1910,9 @@ requirements:
     locator: "3.7.a.(2).(c)"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "(c) The public release of GOTS as open-source software is encouraged to drive innovation and maximize value. As determined by the program manager or authorizing official, software without specific military or space application, or other sensitivities (e.g., intellectual property, export controls, sensitive operational capabilities (tactics, techniques, procedures)) will be developed using an open source, collaborative approach that maximizes value through reuse and minimizes maintenance and integration costs. DoW Components will use MOSA to separate CTI components from potentially releasable components."
-    status: "candidate"
+    status: "partial"
+    reason: "Public release of GOTS and MOSA separation are acquisition decisions not modelled."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/handling/properties/software_artifacts", "claim": "presence", "asserts": "Software with military application is separated from releasable components"}]
     work_item: "WI-179"
   - id: "REQ-DOWI8430.01-0237"
     citation: {"ref": "DOWI8430.01", "page": 26, "anchor": "Custom-developed code released as open-source software will use permissive, widely recognized licenses"}
@@ -1917,7 +1936,9 @@ requirements:
     locator: "3.7.b"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "DoW Components will manage commercial software licenses and SaaS subscriptions to minimize cost, reduce risk, and ensure compliance with DoW policy, and will track them in accordance with the January 28, 2021, DoD CIO Memorandum and associated guidance."
-    status: "candidate"
+    status: "partial"
+    reason: "Licenses are an optional inventory field; managing them is outside the run."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/license", "claim": "presence", "asserts": "Commercial software licenses and subscriptions are tracked"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0240"
     citation: {"ref": "DOWI8430.01", "page": 26, "anchor": "DoW Components will maintain an authoritative, automated inventory of all commercial software"}
@@ -1925,7 +1946,9 @@ requirements:
     locator: "3.7.b.(1)"
     context: "SOFTWARE ASSET MANAGEMENT"
     statement: "DoW Components will maintain an authoritative, automated inventory of all commercial software entitlements and SaaS subscriptions, including license data, entitlements, deployments/usage, versions, end-of-support dates, costs, and contract identifiers in accordance with DoDI 5000.76 and DoWI 8000.02. Inventories will integrate with Comply-to-Connect and Information Security Continuous Monitoring tools to detect and remediate unauthorized software and shadow IT."
-    status: "candidate"
+    status: "partial"
+    reason: "License, version and end-of-support fields exist and are optional; integration with Comply-to-Connect and ISCM tools is not modelled."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/support", "claim": "presence", "asserts": "The inventory of commercial software holds deployments, versions and end-of-support dates"}]
     work_item: "WI-188"
   - id: "REQ-DOWI8430.01-0241"
     citation: {"ref": "DOWI8430.01", "page": 26, "anchor": "DoW Components will first consider DoW Enterprise Software Initiative agreements and other"}

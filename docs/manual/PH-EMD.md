@@ -107,7 +107,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs | outside input (reference) |
+| [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**

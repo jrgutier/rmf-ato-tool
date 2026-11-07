@@ -222,6 +222,73 @@
       },
       "minItems": 1,
       "uniqueItems": true
+    },
+    "entry": {
+      "title": "Where the run enters the RMF and why, when not at P-1: the assessment of the system's current state, the activities already completed, the gaps, the decision, who was notified and who approved",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step",
+        "task",
+        "current_state",
+        "completed",
+        "gaps",
+        "decision",
+        "notified",
+        "approved_by"
+      ],
+      "properties": {
+        "step": {
+          "enum": [
+            "P",
+            "C",
+            "S",
+            "I",
+            "A",
+            "R",
+            "M"
+          ]
+        },
+        "task": {
+          "type": "string",
+          "pattern": "^[PCSIARM]-[1-9]\\d?$"
+        },
+        "current_state": {
+          "title": "Assessment of the current state of the system",
+          "type": "string",
+          "minLength": 1
+        },
+        "completed": {
+          "title": "RMF tasks whose activities are already completed for the system",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[PCSIARM]-[1-9]\\d?$"
+          }
+        },
+        "gaps": {
+          "title": "What the gap analysis found missing or out of date",
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "title": "The entry decision and its rationale",
+          "type": "string",
+          "minLength": 1
+        },
+        "notified": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          }
+        },
+        "approved_by": {
+          "type": "string",
+          "pattern": "^PER-[A-Z0-9]+$"
+        }
+      }
     }
   },
   "$defs": {

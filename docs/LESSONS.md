@@ -489,7 +489,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
 
-## L-0070 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
+## L-0070 · 2026-11-07 · run: phase-11 · tags: facts, contract
+- Symptom: the six system facts C-1 now records (classification, IT type, owning organization, version, operational environment, life-cycle phase) could not go into `writes_facts` without FACTS-001 and `rmf status` refusing the example run, which is at contract 0.1.0; making `roles` required in users.schema.json likewise broke a valid older users record.
+- Root cause: `writes_facts` and a schema's `required` hold every run whatever its contract; only rules carried `since`.
+- Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
+- Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
+- Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
 - Symptom: valid_minimal failed TRACE-002 with "malformed trace token 'cve'" once conmon.yaml held `vulnerability_management.identification.sources: [cve, vendor-bulletins]` and `patching.sources`.
 - Root cause: TRACE-002 reads every key named `sources` anywhere in run data as a list of trace tokens, so a schema that names a list of origin kinds `sources` makes every run that fills it fail.
 - Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.

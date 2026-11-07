@@ -42,6 +42,30 @@
               "caption": {
                 "type": "string",
                 "minLength": 1
+              },
+              "shows": {
+                "title": "What the diagram depicts, from the content SP 800-18r2 lists for system, network architecture and data flow diagrams",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "components",
+                    "subsystems",
+                    "internal-boundaries",
+                    "data-stores",
+                    "virtual-components",
+                    "third-party-services",
+                    "external-connections",
+                    "routing-controls",
+                    "physical-protections",
+                    "isolated-components",
+                    "data-types",
+                    "data-direction",
+                    "external-flows",
+                    "physical-locations",
+                    "logical-locations"
+                  ]
+                }
               }
             }
           }
@@ -85,6 +109,30 @@
               "caption": {
                 "type": "string",
                 "minLength": 1
+              },
+              "shows": {
+                "title": "What the diagram depicts, from the content SP 800-18r2 lists for system, network architecture and data flow diagrams",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "components",
+                    "subsystems",
+                    "internal-boundaries",
+                    "data-stores",
+                    "virtual-components",
+                    "third-party-services",
+                    "external-connections",
+                    "routing-controls",
+                    "physical-protections",
+                    "isolated-components",
+                    "data-types",
+                    "data-direction",
+                    "external-flows",
+                    "physical-locations",
+                    "logical-locations"
+                  ]
+                }
               }
             }
           }
@@ -128,6 +176,30 @@
               "caption": {
                 "type": "string",
                 "minLength": 1
+              },
+              "shows": {
+                "title": "What the diagram depicts, from the content SP 800-18r2 lists for system, network architecture and data flow diagrams",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "components",
+                    "subsystems",
+                    "internal-boundaries",
+                    "data-stores",
+                    "virtual-components",
+                    "third-party-services",
+                    "external-connections",
+                    "routing-controls",
+                    "physical-protections",
+                    "isolated-components",
+                    "data-types",
+                    "data-direction",
+                    "external-flows",
+                    "physical-locations",
+                    "logical-locations"
+                  ]
+                }
               }
             }
           }
@@ -497,6 +569,128 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "subsystems": {
+      "title": "The subsystems of a complex system, each with its components, categorization and operational status (P-11, C-2)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "components",
+          "c",
+          "i",
+          "a",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SUB-[A-Z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "components": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^CMP-[A-Z0-9-]+$"
+            }
+          },
+          "c": {
+            "enum": [
+              "low",
+              "moderate",
+              "high"
+            ]
+          },
+          "i": {
+            "enum": [
+              "low",
+              "moderate",
+              "high"
+            ]
+          },
+          "a": {
+            "enum": [
+              "low",
+              "moderate",
+              "high"
+            ]
+          },
+          "status": {
+            "title": "Operational status of the subsystem within the authorization boundary",
+            "enum": [
+              "operational",
+              "under-development",
+              "under-major-modification",
+              "disposition",
+              "other"
+            ],
+            "x-enforces": [
+              "REQ-SP800-18R2-0247"
+            ]
+          },
+          "readiness": {
+            "title": "Readiness of the subsystem within the environment of operation",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R2-0432"
+            ]
+          }
+        }
+      }
+    },
+    "subsystem_interfaces": {
+      "title": "The interfaces between subsystems: information flows, dependencies, and the controls selected for the interconnection where categorizations differ",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "between",
+          "connected",
+          "flows"
+        ],
+        "properties": {
+          "between": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "pattern": "^SUB-[A-Z0-9-]+$"
+            }
+          },
+          "connected": {
+            "title": "Whether the subsystems exchange information",
+            "type": "boolean"
+          },
+          "flows": {
+            "title": "Information flows and security and privacy dependencies across the interface",
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "title": "Controls selected for the interconnection of the subsystems",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
             }
           }
         }
