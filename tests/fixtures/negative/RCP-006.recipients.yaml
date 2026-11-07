@@ -1,0 +1,15 @@
+rule: RCP-006
+bases:
+- minimal
+description: events not sent to the original AO
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: agreements.0.notification.recipients
+  value:
+  - pm
+expect:
+  errors:
+  - RCP-006
+  messages:
+  - 'AGR-01: events that may affect the security posture are not communicated to the original AO'

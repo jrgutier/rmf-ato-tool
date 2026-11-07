@@ -1,0 +1,1046 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:reciprocity",
+  "title": "runs/<run-id>/artifacts/data/reciprocity.yaml",
+  "description": "Reciprocity records of ART-SD (C-1, kept up through M-7): the Receiving organizations this system is deployed into, the systems it receives, and the agreements between them. RCP-001 to RCP-008 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receiving_organizations",
+    "received_systems",
+    "agreements",
+    "sources"
+  ],
+  "properties": {
+    "receiving_organizations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "organization",
+          "receiving_ao",
+          "poc",
+          "sites",
+          "deliveries",
+          "agreement",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^RO-\\d{2}$"
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1
+          },
+          "receiving_ao": {
+            "type": "string",
+            "minLength": 1
+          },
+          "poc": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Point of contact of the Receiving organization the package goes through"
+          },
+          "kind": {
+            "title": "deployment, or software-delivery for a software factory deploying into the Receiving boundary",
+            "type": "string"
+          },
+          "visibility": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "How the Receiving organization keeps visibility of the package",
+            "properties": {
+              "via": {
+                "type": "string",
+                "title": "emass, other-tool or manual-inheritance"
+              },
+              "record_keeping": {
+                "type": "string",
+                "title": "compatible or incompatible with this organization's RMF tool"
+              }
+            }
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "site",
+                "projected"
+              ],
+              "properties": {
+                "site": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "projected": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            },
+            "minItems": 1,
+            "title": "Deployment sites and projected deployment dates"
+          },
+          "requirements": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "Security requirements gathered from and coordinated with the Receiving organization",
+            "properties": {
+              "gathered": {
+                "$ref": "#/$defs/date"
+              },
+              "coordinated": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/date"
+                }
+              },
+              "additional_controls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+                },
+                "title": "Controls or adjustments the Receiving organization asks for"
+              }
+            }
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "raised"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "raised": {
+                  "$ref": "#/$defs/date"
+                },
+                "resolved": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "deliveries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "document",
+                "date"
+              ],
+              "properties": {
+                "document": {
+                  "type": "string",
+                  "title": "ssp, sar, rar, poam, authorization-decision, deployment-sites, body-of-evidence, installation-configuration or deployment-instructions"
+                },
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "via": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "title": "What the Receiving organization received, and when"
+          },
+          "installation_stigs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "STIG benchmarks the installation and configuration requirements include"
+          },
+          "status_updates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "covers"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "covers": {
+                  "type": "string",
+                  "title": "rmf-activities or planned-deployment"
+                }
+              }
+            }
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "date"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "title": "change, finding, plan or reauthorization"
+                },
+                "change": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "poam_item": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "plan": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "event": {
+                  "$ref": "#/$defs/date"
+                },
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "acknowledged": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "agreement": {
+            "type": "string",
+            "pattern": "^AGR-\\d{2}$"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "title": "Organizations this system is deployed into (the run is their Granting side)"
+    },
+    "package_sharing": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Information owners and interconnected systems the package is shared with",
+      "properties": {
+        "shared_with": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(PER-[A-Z0-9]+|CONN-\\d{2,3})$"
+          }
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        }
+      }
+    },
+    "granting": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "What the Granting side keeps up for its Receiving organizations",
+      "properties": {
+        "cssp": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "accredited_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "services": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "patches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "directed_action": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required_by": {
+                "$ref": "#/$defs/date"
+              },
+              "provided": {
+                "$ref": "#/$defs/date"
+              },
+              "communicated_to": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "received_systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "system",
+          "granting_organization",
+          "granting_ao",
+          "outcome",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^RS-\\d{2}$"
+          },
+          "system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "granting_organization": {
+            "type": "string",
+            "minLength": 1
+          },
+          "granting_ao": {
+            "type": "string",
+            "minLength": 1
+          },
+          "enterprise": {
+            "type": "boolean",
+            "title": "An Enterprise system deployed to multiple DoD Components"
+          },
+          "leveraged": {
+            "type": "string",
+            "pattern": "^LA-\\d{2,3}$"
+          },
+          "coordination_point": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          },
+          "awareness": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "via"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "via": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "package": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "requested": {
+                "$ref": "#/$defs/date"
+              },
+              "requested_documents": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "received": {
+                "$ref": "#/$defs/date"
+              },
+              "received_documents": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "poam_items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Items of the Granting POA&M"
+              }
+            }
+          },
+          "body_of_evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "What the Receiving AO weighs when required documents are not available",
+            "properties": {
+              "considered": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "item",
+                    "status"
+                  ],
+                  "properties": {
+                    "item": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "status": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "requests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "document"
+                  ],
+                  "properties": {
+                    "document": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "endorsed_by": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "endorsed": {
+                      "$ref": "#/$defs/date"
+                    },
+                    "forwarded": {
+                      "$ref": "#/$defs/date"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "own_package_shared": {
+            "$ref": "#/$defs/date"
+          },
+          "review": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "guide_reviewed": {
+            "$ref": "#/$defs/date"
+          },
+          "impact": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "determined": {
+                "$ref": "#/$defs/date"
+              },
+              "via": {
+                "type": "string",
+                "minLength": 1
+              },
+              "augmenting_controls": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "control"
+                  ],
+                  "properties": {
+                    "control": {
+                      "type": "string",
+                      "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+                    },
+                    "implemented": {
+                      "$ref": "#/$defs/date"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "control",
+                "origin"
+              ],
+              "properties": {
+                "control": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+                },
+                "origin": {
+                  "type": "string",
+                  "title": "built-in, deployment-configured or inherited"
+                },
+                "retested": {
+                  "type": "boolean"
+                },
+                "tested_by": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "tested": {
+                  "$ref": "#/$defs/date"
+                },
+                "validated_by": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "outcome": {
+            "type": "string",
+            "title": "pending, accepted or refused"
+          },
+          "atu": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "The authorization to use or connect",
+            "properties": {
+              "issued": {
+                "$ref": "#/$defs/date"
+              },
+              "by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "risk": {
+                "type": "string",
+                "minLength": 1
+              },
+              "copy_to_granting_ao": {
+                "$ref": "#/$defs/date"
+              },
+              "sites_notified": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "hosting_update": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "Update of the hosting system's authorization and connection documentation",
+            "properties": {
+              "change": {
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "controls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+                }
+              },
+              "documents": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "installation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "implemented": {
+                "$ref": "#/$defs/date"
+              },
+              "differences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "item"
+                  ],
+                  "properties": {
+                    "item": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "tested": {
+                      "$ref": "#/$defs/date"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "provided_controls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+            }
+          },
+          "mitigations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "poam_item"
+              ],
+              "properties": {
+                "poam_item": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "implemented": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "patches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "released": {
+                  "$ref": "#/$defs/date"
+                },
+                "pm_due": {
+                  "$ref": "#/$defs/date"
+                },
+                "applied": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "configuration_updates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "kind"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "released": {
+                  "$ref": "#/$defs/date"
+                },
+                "outcome": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "poam_item": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "poam_item"
+              ],
+              "properties": {
+                "poam_item": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "reported": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "refusal": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "decided_by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "grounds": {
+                "type": "string",
+                "minLength": 1
+              },
+              "documented": {
+                "$ref": "#/$defs/date"
+              },
+              "reported_to_granting_ao": {
+                "$ref": "#/$defs/date"
+              },
+              "requests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "by"
+                  ],
+                  "properties": {
+                    "by": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "requested": {
+                      "$ref": "#/$defs/date"
+                    },
+                    "provided": {
+                      "$ref": "#/$defs/date"
+                    }
+                  }
+                }
+              },
+              "rework": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/date"
+                }
+              },
+              "escalation": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "level"
+                  ],
+                  "properties": {
+                    "level": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "date": {
+                      "$ref": "#/$defs/date"
+                    },
+                    "result": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "notified": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "chair": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "agreement": {
+            "type": "string",
+            "pattern": "^AGR-\\d{2}$"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "title": "Systems deployed into this one (the run is their Receiving side)"
+    },
+    "agreements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "instrument",
+          "party",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AGR-\\d{2}$"
+          },
+          "instrument": {
+            "type": "string",
+            "title": "mou, moa, sla or isa"
+          },
+          "party": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executed": {
+            "$ref": "#/$defs/date"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "covers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pocs": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "granting": {
+                "type": "string",
+                "minLength": 1
+              },
+              "receiving": {
+                "type": "string",
+                "minLength": 1
+              },
+              "technical": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "party",
+                    "poc"
+                  ],
+                  "properties": {
+                    "party": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "poc": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "notification": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "processes": {
+                "type": "string",
+                "minLength": 1
+              },
+              "timing": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requirements": {
+                "type": "string",
+                "minLength": 1
+              },
+              "recipients": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "termination_factors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "pre_agreement_tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "task"
+              ],
+              "properties": {
+                "task": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "responsible": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "completed": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            }
+          },
+          "deviations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "element"
+              ],
+              "properties": {
+                "element": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "raised": {
+                  "$ref": "#/$defs/date"
+                },
+                "resolved": {
+                  "$ref": "#/$defs/date"
+                },
+                "accepted_by": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

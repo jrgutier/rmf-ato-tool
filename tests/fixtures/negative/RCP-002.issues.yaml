@@ -1,0 +1,14 @@
+rule: RCP-002
+bases:
+- minimal
+description: an issue resolved before it was raised
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.issues.0.resolved
+  value: '2026-04-01'
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: the security issue RI-01 raised by the receiving organization is not resolved'

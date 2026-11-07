@@ -1,0 +1,14 @@
+rule: RCP-005
+bases:
+- minimal
+description: an authorization to use on a risk not found acceptable
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.atu.risk
+  value: tolerable-with-conditions
+expect:
+  errors:
+  - RCP-005
+  messages:
+  - 'RS-01: the authorization to use does not rest on a determination that the risk to the receiving system is acceptable'
