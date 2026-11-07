@@ -1,0 +1,18 @@
+rule: SCRM-010
+bases:
+- minimal
+description: a cloud service provider with no FedRAMP record
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.0.kind
+  value: cloud-service-provider
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.considerations.1.applies
+  value: true
+expect:
+  errors:
+  - SCRM-010
+  messages:
+  - cloud service provider SUP-01 has no FedRAMP record; FedRAMP guidelines apply first

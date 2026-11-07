@@ -1,0 +1,14 @@
+rule: SCRM-013
+bases:
+- minimal
+description: a risk outside tolerance whose response record names another assessment
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: response.0.assessment
+  value: SA-09
+expect:
+  errors:
+  - SCRM-013
+  messages:
+  - SA-01 is outside tolerance and has no R-3 response record

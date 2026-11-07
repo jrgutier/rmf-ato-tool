@@ -1,0 +1,15 @@
+rule: SCRM-003
+bases:
+- minimal
+description: a factor other than counterfeit products marked not relevant
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.factors.12.status
+  value: not-relevant
+expect:
+  errors:
+  - SCRM-003
+  messages:
+  - SA-01 marks foci not relevant; only counterfeit and non-conforming products may be left out of 
+    the baseline

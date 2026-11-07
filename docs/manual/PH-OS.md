@@ -391,6 +391,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
 - For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 - The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
+- The posture reports carry the supply chain reporting scrm-plan.yaml sets.
 
 **Alignment**
 

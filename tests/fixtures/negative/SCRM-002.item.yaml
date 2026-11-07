@@ -1,0 +1,16 @@
+rule: SCRM-002
+bases:
+- minimal
+description: a mission-critical function names no inventory item
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: criticality.functions.0.items
+  value:
+  - INV-003
+  - INV-009
+expect:
+  errors:
+  - SCRM-002
+  messages:
+  - CF-01 names INV-009, which is no inventory item

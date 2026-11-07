@@ -544,3 +544,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
 - Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
 - Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
+
+## L-0078 · 2026-11-07 · run: phase-11 · tags: framework, runs
+- Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
+- Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
+- Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.
+- Rule: Add an artifact to a task's outputs only with a `framework_version` bump and `rmf run migrate` handling; a later task that fills a section of an existing data file takes the artifact as input.
+- Promotion: none — the p7 example check and test_base_has_no_findings already fail on it; the lesson records why.
