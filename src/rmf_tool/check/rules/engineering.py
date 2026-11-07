@@ -18,6 +18,7 @@ from rmf_tool import catalog
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import SSP_DIR, family_records
+from rmf_tool.check.rules.software import product_kind
 from rmf_tool.run import scope
 
 REQUIREMENTS_FILE = "artifacts/data/requirements.yaml"
@@ -53,8 +54,12 @@ PRINCIPLES = frozenset({
     "redundancy", "self-reliant-trustworthiness", "structured-decomposition-and-composition",
     "substantiated-trustworthiness", "trustworthy-system-control",
 })
-# An SSP status that says the control is in place, so its assurance must be satisfied.
-IN_PLACE = ("implemented", "inherited")
+# An SSP status that says the system implements the control, so its assurance must be satisfied.
+# An inherited control's provider addresses its assurance, so the system authors none for it.
+IN_PLACE = ("implemented",)
+INHERITED = "inherited"
+# A software-only product or service has no manufacture activity of its own.
+UNMANUFACTURED = ("software", "service")
 
 
 def _list(value: Any) -> list[Any]:
@@ -109,10 +114,14 @@ def derivation(ctx: Context) -> list[RunFinding]:
     out += _informed(record)
     out += _methods(record, held)
     out += _key_performance(record, held)
-    exportability = [r for r in _list(record.get("exportability")) if _key(r) in held]
-    if len(exportability) == 0:
-        out.append(_finding("SSE-001", "the derivation names no exportability requirement the "
-                            "traceability matrix holds"))
+    exportability = _list(record.get("exportability"))
+    for req in exportability:
+        if _key(req) not in held:
+            out.append(_finding("SSE-001", f"exportability requirement {req} is not a "
+                                "requirement of the traceability matrix"))
+    if len(exportability) == 0 and not record.get("exportability_none"):
+        out.append(_finding("SSE-001", "the derivation names no exportability requirement and "
+                            "does not say why none is derived"))
     out += _inclusion(data)
     return out
 
@@ -181,7 +190,8 @@ def _inclusion(data: dict[str, Any]) -> list[RunFinding]:
 
 def practices(ctx: Context) -> list[RunFinding]:
     """SSE-002: the program employs system security engineering practices for cybersecurity,
-    cyber resilience and cyber survivability in design, test, manufacture and sustainment, for
+    cyber resilience and cyber survivability in design, test, manufacture (none for a software
+    product or service) and sustainment, for
     program protection, and for privacy where the system holds PII; they apply named principles
     of trustworthy secure design; and the assurance level is commensurate with the technology,
     program, system and mission objectives (DoDI 5000.83 1.2.c and 3.2.a)."""
@@ -194,9 +204,11 @@ def practices(ctx: Context) -> list[RunFinding]:
     entries = _records(record, "practices")
     pairs = {(_key(p.get("area")), stage) for p in entries for stage in _keys(p, "stages")}
     areas = {_key(p.get("area")) for p in entries}
+    stages = [s for s in SSE_STAGES
+              if not (s == "manufacture" and product_kind(ctx) in UNMANUFACTURED)]
     out = []
     for area in SSE_AREAS:
-        for stage in SSE_STAGES:
+        for stage in stages:
             if (area, stage) not in pairs:
                 out.append(_finding("SSE-002", f"no system security engineering practice "
                                     f"addresses {area} in {stage}"))
@@ -253,7 +265,8 @@ def control_assurance(ctx: Context) -> list[RunFinding]:
     out = []
     for path, record in statements:
         cid = _key(record.get("control_id"))
-        if not catalog.contributes_to_assurance(cat, str(cid)):
+        if record.get("status") == INHERITED \
+                or not catalog.contributes_to_assurance(cat, str(cid)):
             continue
         assurance = record.get("assurance")
         assurance = assurance if isinstance(assurance, dict) else {}

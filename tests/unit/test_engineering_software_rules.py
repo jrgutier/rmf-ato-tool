@@ -95,3 +95,52 @@ def test_wholly_acquired_software_needs_no_pipeline_but_still_an_sbom(tmp_path):
     edit_yaml(run_dir / "artifacts/data/software.yaml",
               lambda d: d["evidence"]["sbom"].update(third_party_included=False))
     assert _messages(run_dir, "SWA-001") == ["the SBOM leaves out third-party components"]
+
+
+def test_a_trivial_open_source_component_needs_no_project_review(tmp_path):
+    """3.5.i.(3) asks the further review of a non-trivial open-source component only."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def trivial(data):
+        component = dict(data["components"][0], name="left-pad", trivial="Eleven lines.")
+        del component["open_source"]
+        data["components"].append(component)
+    edit_yaml(run_dir / "artifacts/data/ra.yaml", trivial)
+    assert _messages(run_dir, "SWA-002") == []
+
+
+def test_a_derivation_may_yield_no_exportability_requirement_with_a_reason(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/data/requirements.yaml", lambda d: d["derivation"].update(
+        exportability=[], exportability_none="Nothing is planned for foreign release."))
+    assert _messages(run_dir, "SSE-001") == []
+    edit_yaml(run_dir / "artifacts/data/requirements.yaml",
+              lambda d: d["derivation"].pop("exportability_none"))
+    assert _messages(run_dir, "SSE-001") == [
+        "the derivation names no exportability requirement and does not say why none is derived"]
+
+
+def test_a_software_product_needs_no_manufacture_practice(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def no_manufacture(data):
+        for practice in data["engineering"]["practices"]:
+            practice["stages"] = [s for s in practice["stages"] if s != "manufacture"]
+    edit_yaml(run_dir / "artifacts/data/requirements.yaml", no_manufacture)
+    assert _messages(run_dir, "SSE-002") == []
+
+
+def test_an_inherited_assurance_control_needs_no_assurance_record(tmp_path):
+    """The provider addresses an inherited control's assurance; the system authors none."""
+    import yaml as pyyaml
+
+    spec = pyyaml.safe_load((REPO_ROOT / "tests/fixtures/negative/SSE-003.yaml").read_text())
+    from _mutations import apply
+
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    for mutation in spec["mutations"]:
+        if mutation["file"] == "artifacts/ssp/controls/sa.yaml":
+            mutation = {**mutation, "content": mutation["content"].replace(
+                "status: implemented", "status: inherited\n    inherited_from: Enterprise")}
+        apply(run_dir, mutation)
+    assert _messages(run_dir, "SSE-003") == []

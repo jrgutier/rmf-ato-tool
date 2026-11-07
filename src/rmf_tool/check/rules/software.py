@@ -65,6 +65,9 @@ def software(ctx: Context) -> list[RunFinding]:
     if not isinstance(data, dict):
         return []
     kind = product_kind(ctx)
+    if not isinstance(data.get("covered_software"), bool):
+        return [_finding("SWA-001", "software.yaml does not say whether the system includes "
+                         "covered software", PLAN, SOFTWARE_FILE)]
     if data.get("covered_software") is not True:
         if kind in SOFTWARE_KINDS:
             return [_finding("SWA-001", f"the system's product kind is {kind}, and software.yaml "
@@ -122,20 +125,25 @@ def software(ctx: Context) -> list[RunFinding]:
 
 
 def components(ctx: Context) -> list[RunFinding]:
-    """SWA-002: a non-trivial open-source component has its governance, community and license
-    reviewed beyond the six risk factors, and a COTS product that does not use an available
-    validated product says why (DoWI 8430.01 3.5.i; SP 800-37r2 Task I-1)."""
+    """SWA-002: a system with covered software records its third-party components, a
+    non-trivial open-source component (one with no ``trivial`` reason) has its governance,
+    community and license reviewed beyond the six risk factors, and a COTS product that does
+    not use an available validated product says why (DoWI 8430.01 3.5.i; SP 800-37r2 Task I-1)."""
     if ASSESS_RISK not in scope.active_tasks(ctx.run):
         return []
     data = ctx.data(RA_FILE)
     if not isinstance(data, dict):
         return []
     out = []
+    if not isinstance(data.get("components"), list) and has_covered_software(ctx):
+        out.append(_finding("SWA-002", "ra.yaml does not record the third-party software "
+                            "components of a system with covered software", ASSESS_RISK,
+                            RA_FILE))
     for component in _records(data.get("components")):
         name, kind = component.get("name"), component.get("kind")
         review = _dict(component.get("open_source"))
         missing = [k for k in ("governance", "community", "license") if not review.get(k)]
-        if kind == "open-source" and missing:
+        if kind == "open-source" and missing and not component.get("trivial"):
             out.append(_finding("SWA-002", f"open-source component {name} is not reviewed for "
                                 f"its {', '.join(missing)}", ASSESS_RISK, RA_FILE))
         validation = _dict(component.get("validation"))
