@@ -1561,7 +1561,10 @@ def test_a_removed_entry_takes_a_removal_reason_and_nothing_else():
     register.mark(reg, "REQ-X-0001", removal_reason="A heading, now read as one.")
 
     assert entry["removal_reason"] == "A heading, now read as one."
-    with pytest.raises(register.MarkError, match="takes --removal-reason alone"):
+    entry["work_item"] = "WI-1"
+    register.mark(reg, "REQ-X-0001", removal_reason="Absorbed by 0000.", work_item=None)
+    assert "work_item" not in entry
+    with pytest.raises(register.MarkError, match="takes --removal-reason and a cleared"):
         register.mark(reg, "REQ-X-0001", status="candidate")
     with pytest.raises(register.MarkError, match="no live entry REQ-X-0002$"):
         register.mark(reg, "REQ-X-0002", removal_reason="Nothing to remove here.")

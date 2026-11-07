@@ -785,7 +785,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
-**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle.
+**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle. P-14 runs before C-2, which reads ART-RA, so its supplier risks are a first pass: SP 800-161r1 prioritizes the supplier risk assessment once the impact level is defined, and C-3 feeds back to P-14 once the categorization is approved.
 
 **Stakeholders (RACI)**
 
@@ -826,7 +826,6 @@ Writes to `facts.yaml`: `boundary_id`.
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
 - artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
-- P-14 runs before C-2 because C-2 reads ART-RA, while SP 800-161r1 starts the prioritized supplier risk assessment (criticality, threat and vulnerability analysis) once the impact level is defined. So P-14's supplier rows are a first pass, and C-2 feeds back to P-14, which rewrites ra.yaml's supplier risks in the priority the approved categorization sets.
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
@@ -851,7 +850,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-2](#task-c-2).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-3](#task-c-3).
 
 ## <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -1096,7 +1095,7 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3); feeds back to [P-14](#task-p-14).
+**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3).
 
 ## <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
 
@@ -1153,4 +1152,4 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](../../playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](PH-TMRR.md#task-s-1).
+**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](PH-TMRR.md#task-s-1); feeds back to [P-14](#task-p-14).

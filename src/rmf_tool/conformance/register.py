@@ -503,12 +503,16 @@ class MarkError(Exception):
 
 def mark(reg: Register, ident: str, **fields: Any) -> dict[str, Any]:
     """Set reviewed fields on a live entry. ``None`` deletes a field. A removed entry takes
-    ``removal_reason`` alone, the review FW-REQ-004 asks of a reviewed entry that left its
-    source. The caller writes the file; the rules say whether the result is acceptable."""
+    ``removal_reason``, the review FW-REQ-004 asks of a reviewed entry that left its source,
+    and may drop its ``work_item``, since a removed entry binds nothing. The caller writes the file;
+    the rules say whether the result is acceptable."""
     entry = reg.entry(ident)
-    if entry is None or (entry.get("removed") and set(fields) != {"removal_reason"}):
+    if entry is None or (entry.get("removed") and (
+            "removal_reason" not in fields or set(fields) - {"removal_reason", "work_item"}
+            or fields.get("work_item") is not None)):
         raise MarkError(f"no live entry {ident}" + (
-            "; a removed entry takes --removal-reason alone" if entry else ""))
+            "; a removed entry takes --removal-reason and a cleared work_item only"
+            if entry else ""))
     for key, value in fields.items():
         if key not in REVIEWED:
             raise MarkError(f"{key} is not a reviewed field; reviewed fields are "
