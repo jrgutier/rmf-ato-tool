@@ -369,7 +369,7 @@ RUN_EXAMPLES.update({
         ("ssp-records", "space_nss", "maybe"),
         ("system-description", "ownership", "leased"),
         ("sar-summary", "assessment_type", "spot-check"),
-        ("org-context", "risk_executive", {"form": "committee"}))
+        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]))
 })
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},

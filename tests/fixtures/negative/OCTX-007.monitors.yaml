@@ -1,0 +1,16 @@
+rule: OCTX-007
+bases:
+- minimal
+description: monitoring does not determine the organizational state
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.monitors
+  value:
+  - control-effectiveness
+  - changes
+expect:
+  errors:
+  - OCTX-007
+  messages:
+  - organization-wide continuous monitoring does not determine organizational-state

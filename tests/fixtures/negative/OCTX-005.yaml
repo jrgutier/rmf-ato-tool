@@ -1,0 +1,15 @@
+rule: OCTX-005
+bases:
+- minimal
+description: unauthorized common controls
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: common_controls.0.authorization.decision
+  value: none
+expect:
+  errors:
+  - OCTX-005
+  messages:
+  - 'Analysis enclave boundary (common control): the common controls hold no authorization from their
+    authorizing official (none)'

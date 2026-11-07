@@ -1,0 +1,16 @@
+rule: OCTX-013
+bases:
+- minimal
+description: a contractor ISSO where the function is not identified as open
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: open_functions.0.open_to
+  value:
+  - non-dod
+expect:
+  errors:
+  - OCTX-013
+  messages:
+  - 'RA-09: PER-ISSO is held by a contractor appointee, and the organization has not identified it as
+    a cybersecurity function a contractor may perform'

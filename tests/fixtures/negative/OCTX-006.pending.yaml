@@ -1,0 +1,15 @@
+rule: OCTX-006
+bases:
+- minimal
+description: the SAR is delivered before the provider's results are available
+mutations:
+- op: set_field
+  file: artifacts/sar/results/sc.yaml
+  path: determinations.0.inherited.provider_assessment.available_on
+  value: '2026-12-01'
+expect:
+  errors:
+  - OCTX-006
+  messages:
+  - the assessment is delivered as complete before the assessment results of the common controls 
+    behind sc-7 are made available to the system owner

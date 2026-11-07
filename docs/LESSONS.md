@@ -495,3 +495,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
 - Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
 - Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.

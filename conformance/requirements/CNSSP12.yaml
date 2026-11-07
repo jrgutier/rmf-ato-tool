@@ -180,7 +180,8 @@ requirements:
     locator: "a"
     context: "CNSSP 12"
     statement: "a. Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.yaml", "expect": "the Cybersecurity Risk Management Program does not implement CNSSP 22", "asserts": "The RMF is applied as part of a Cybersecurity Risk Management Program that implements CNSSP 22", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."}, {"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.scope.yaml", "expect": ", not an integrated, organization-wide program", "asserts": "The Cybersecurity Risk Management Program is organization-wide", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."}]
     work_item: "WI-163"
   - id: "REQ-CNSSP12-0022"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "b. NIST SP 800-37, Guide for Applying the Risk Management Framework to"}
@@ -245,8 +246,11 @@ requirements:
     locator: "h.(1)"
     context: "CNSSP 12"
     statement: "(1) Continued advancement of adversarial threats may require revisiting risk tolerance thresholds and accordingly selecting and tailoring security controls over the lifecycle of a system. CNS SP 22 requires A Os to assess and continuously monitor security controls, based on risk assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "awaits the ruling on its first sentence; assessing and monitoring controls on risk assessments is held at system level by the ISCM rules, not here"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/posture_reviews/items/properties/considered", "asserts": "Changes in adversarial threats are reviewed against risk tolerance in the organizational posture reviews", "claim": "constraint"}]
     work_item: "WI-161"
+    ruling_sought: [{"sentence": "(1) Continued advancement of adversarial threats may require revisiting risk tolerance thresholds and accordingly selecting and tailoring security controls over the lifecycle of a system.", "reason": "A possibility, not a duty: advancing threats may require revisiting risk tolerance thresholds"}]
   - id: "REQ-CNSSP12-0030"
     citation: {"ref": "CNSSP12", "page": 8, "anchor": "Space NSS and services must implement cyber defense services, including on-board intrusion"}
     kind: "lettered"
@@ -402,7 +406,8 @@ requirements:
     locator: "(1)"
     context: "C SSP 12"
     statement: "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m). At a minimum ensure that:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "Applicable systems are integrated into the Department or Agency CRMP, assigned to and governed by the program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m)."}, {"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.yaml", "expect": "the Cybersecurity Risk Management Program does not implement CNSSP 22", "asserts": "Systems apply the RMF in accordance with CNSSP 22 through the program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m)."}]
     work_item: "WI-163"
   - id: "REQ-CNSSP12-0049"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Cognizant system AOs, ISSOs, and SCAs are qualified, trained, and formally designated."}

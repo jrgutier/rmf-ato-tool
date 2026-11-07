@@ -1,0 +1,25 @@
+rule: OCTX-002
+bases:
+- minimal
+description: more holders designated than operations need
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: code_signing.operational_need
+  value: 1
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: code_signing.designated
+  value:
+  - name: Release engineer (fixture)
+    role: PER-DEV
+    justification: Signs relay firmware releases
+  - name: Build engineer (fixture)
+    role: PER-DEV
+    justification: Signs nightly builds
+expect:
+  errors:
+  - OCTX-002
+  messages:
+  - '2 individuals are designated to receive code-signing certificates where operational requirements
+    need 1: designations are kept to a minimum'
