@@ -1,0 +1,22 @@
+rule: SYSD-001
+bases:
+- minimal
+description: an enclave categorized below a system it hosts
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: system_type.value
+  value: enclave
+- op: set_field
+  file: facts.yaml
+  path: system_type.hosts
+  value:
+  - system: Mission planner
+    c: high
+    i: moderate
+    a: low
+expect:
+  errors:
+  - SYSD-001
+  messages:
+  - the enclave is categorized below Mission planner, a system it hosts

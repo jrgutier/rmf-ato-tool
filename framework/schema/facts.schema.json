@@ -39,10 +39,42 @@
       "additionalProperties": false,
       "required": ["c", "i", "a", "overlays", "set_by_task"],
       "properties": {
-        "c": {"$ref": "#/$defs/impact"},
-        "i": {"$ref": "#/$defs/impact"},
-        "a": {"$ref": "#/$defs/impact"},
+        "c": {
+          "$ref": "#/$defs/impact",
+          "x-enforces": ["REQ-FIPS199-0010"],
+          "title": "System confidentiality impact level: one of the three levels of potential impact, low, moderate or high"
+        },
+        "i": {"$ref": "#/$defs/impact", "title": "System integrity impact level: one of the three levels of potential impact, low, moderate or high"},
+        "a": {"$ref": "#/$defs/impact", "title": "System availability impact level: one of the three levels of potential impact, low, moderate or high"},
         "overlays": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "factors_reviewed": {
+          "title": "The factors the provisional impact levels were reviewed against: organization, environment, mission, use, data sharing and national interest, and any other factor weighed",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/factor"}
+        },
+        "adjustments": {
+          "title": "Each adjustment of a system impact level away from the high-water mark of the information types, with the factor and rationale",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["objective", "from", "to", "factor", "rationale"],
+            "properties": {
+              "objective": {"enum": ["c", "i", "a"]},
+              "from": {"$ref": "#/$defs/impact"},
+              "to": {"$ref": "#/$defs/impact"},
+              "factor": {"$ref": "#/$defs/factor"},
+              "rationale": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "revisit": {
+          "title": "When the categorization is revisited: at significant change, situational change, and at least every three years",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": ["REQ-SP800-60V1R1-0041"]
+        },
         "method": {
           "description": "cnssi1253 normally; high-water-mark only under the degraded policy (plan §7.6).",
           "enum": ["cnssi1253", "high-water-mark"]
@@ -74,6 +106,123 @@
         "set_by_task": {"$ref": "#/$defs/task_id"},
         "sources": {"$ref": "#/$defs/sources"}
       }
+    },
+    "classification": {
+      "title": "Data classification level and handling markings of the system (C-1); SYSD-001 holds it against the Classified System Overlay",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "handling_markings", "set_by_task"],
+      "properties": {
+        "value": {
+          "title": "Highest classification level of the information the system stores, processes or transmits",
+          "enum": ["unclassified", "confidential", "secret", "top-secret"]
+        },
+        "compartments": {
+          "title": "Sensitive compartmented, special access program and Atomic Energy Act markings",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["sci", "sap", "aea"]}
+        },
+        "handling_markings": {
+          "title": "Dissemination controls and other handling markings, such as CUI or NOFORN; empty when none apply",
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    },
+    "system_type": {
+      "title": "Information technology type of the system and why (C-1); SYSD-001 reads it",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "connectivity", "dodin_connection", "rationale", "set_by_task"],
+      "properties": {
+        "value": {
+          "title": "IT type: enclave, major application, platform IT system or general support system",
+          "enum": ["enclave", "major-application", "pit-system", "general-support-system"],
+          "x-enforces": ["REQ-DODI8500.01-0296"]
+        },
+        "connectivity": {
+          "title": "Whether the system is stand-alone or networked",
+          "enum": ["stand-alone", "networked"],
+          "x-enforces": ["REQ-SP800-18R2-0121"]
+        },
+        "dodin_connection": {
+          "title": "Whether the system connects to the DODIN directly, indirectly or not at all",
+          "enum": ["direct", "indirect", "none"]
+        },
+        "rationale": {"type": "string", "minLength": 1},
+        "designated_by": {
+          "title": "Who designated the PIT system as such: the responsible OSD or DoD Component head, or a delegate",
+          "enum": ["osd-component-head", "dod-component-head", "delegate"]
+        },
+        "registered_in": {
+          "title": "The DoD Component register that holds the PIT system",
+          "type": "string",
+          "minLength": 1
+        },
+        "pit_ao_appointed": {"title": "Whether the AO was specifically appointed to authorize PIT systems", "type": "boolean"},
+        "hosts": {
+          "title": "Information systems the enclave hosts, with their categorization",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["system", "c", "i", "a"],
+            "properties": {
+              "system": {"type": "string", "minLength": 1},
+              "c": {"$ref": "#/$defs/impact"},
+              "i": {"$ref": "#/$defs/impact"},
+              "a": {"$ref": "#/$defs/impact"}
+            }
+          }
+        },
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      },
+      "x-enforces": ["REQ-SP800-18R1-0174", "REQ-SP800-18R1-0199", "REQ-SP800-18R1-0079"]
+    },
+    "owning_organization": {"title": "Parent or governing department, agency or organization that manages, owns or controls the system (C-1)", "$ref": "#/$defs/string_fact"},
+    "system_version": {
+      "title": "Version or release number of the system and its release date (C-1)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "release_date", "set_by_task"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "release_date": {"type": "string", "format": "date"},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      },
+      "x-enforces": ["REQ-CNSSI1254-0131"]
+    },
+    "operational_environment": {
+      "title": "Operational environment of the system (C-1)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "set_by_task"],
+      "properties": {
+        "value": {
+          "title": "Production, test, research and development, tactical, deployed or other",
+          "enum": ["production", "test", "research-and-development", "tactical", "deployed", "other"]
+        },
+        "description": {"type": "string", "minLength": 1},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      },
+      "x-enforces": ["REQ-SP800-18R2-0120", "REQ-SP800-18R1-0120"]
+    },
+    "lifecycle_phase": {
+      "title": "Acquisition life-cycle phase of the system: 1 MSA, 2 TMRR, 3 EMD, 4 P&D, 5 O&S (C-1)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "set_by_task"],
+      "properties": {
+        "value": {"enum": ["PH-MSA", "PH-TMRR", "PH-EMD", "PH-PD", "PH-OS"]},
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"}
+      }
     }
   },
   "$defs": {
@@ -92,6 +241,27 @@
         "set_by_task": {"$ref": "#/$defs/task_id"},
         "sources": {"$ref": "#/$defs/sources"}
       }
+    },
+    "factor": {
+      "enum": [
+        "organization",
+        "environment",
+        "mission",
+        "use",
+        "data-sharing",
+        "national-interest",
+        "direct-services",
+        "aggregation",
+        "critical-functionality",
+        "time-criticality",
+        "public-visibility",
+        "reliant-systems",
+        "replacement-cost",
+        "legal-statutory",
+        "pii",
+        "critical-infrastructure",
+        "special-handling"
+      ]
     }
   }
 }

@@ -457,7 +457,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14).
+**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
 
 #### <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
 
@@ -757,6 +757,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - The stakeholders having an interest in the system are identified (DoDI 8510.01 Table 1 outcome).
 - ART-STAKE lists the stakeholders and the persona that represents each in interviews.
 - Every information owner is identified, because each sets the impact level for its own information types (CNSSI 1253).
+- ART-STAKE records each stakeholder's security concerns, loss concerns and trust expectations, which P-15 turns into protection needs.
 
 **Alignment**
 
@@ -1027,6 +1028,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
+- artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
 
@@ -1046,7 +1048,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
 
 #### <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -1088,6 +1090,10 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - Security and privacy requirements are defined and prioritized (DoDI 8510.01 Table 1 outcome).
 - ART-REQ lists prioritized security and privacy requirements traced to their sources.
+- requirements.yaml records each stakeholder protection need with its success criteria, priority and rationale; a requirement traces to it and its stakeholder agrees the requirements address it (REQS-003). A change to the requirements reassesses the needs.
+- Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
+- Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
+- The security-relevant constraints on the solution are recorded with their origin.
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
 
 **Alignment**
@@ -1189,7 +1195,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-SD](#art-sd) | System description, users and leveraged authorizations | produces | core |
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
-Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`.
+Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
 **Entry criteria**
 
@@ -1198,7 +1204,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 **Exit criteria**
 
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
-- ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+- ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
 
 **Alignment**
 
@@ -1449,6 +1455,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
+- boundary.yaml records each external connection with its detail and the approvals it needs, any cross-domain solution and mission partner terms, and whether the system is on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
 - nss-assessments.yaml records, for a National Security System, NSA's assessment with the cognizant AO of its cybersecurity requirements and security architecture before each milestone passed, and for a space NSS the coordination of its architecture, the check of pre-existing components and the compliance reports to the AO and NSA (PPROT-006).
 
 **Alignment**
@@ -1504,6 +1511,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
 
 **Alignment**
@@ -1985,7 +1993,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [EXT-STIG](#ext-stig) | DISA STIGs and SRGs | outside input (reference) |
+| [EXT-STIG](#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
@@ -2063,6 +2071,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 - Changes to the planned implementation of controls are documented, and the security and privacy plans are updated from what was learned during implementation (DoDI 8510.01 Table 4 outcome).
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
+- A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 
 **Alignment**
 
@@ -2155,6 +2164,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
 | [EXT-TEST-STRATEGY](#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
 
 **Outputs**
@@ -2176,6 +2186,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
 - Each scoped control has procedures selected and tailored from the risk results (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider is reviewed before its controls or results are leveraged (ASMT-004).
 - test-strategy.yaml records the TEMP or test strategy the pathway calls for, who approved each part of it, its schedule against decision points, its cybersecurity test objectives and the cybersecurity test events, including independent threat-representative penetration and exploitation testing (TSTRAT-001, TSTRAT-002).
+- The assessment plan reads each requirement's verification method and measure from requirements.yaml.
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [IATT](#ad-iatt) (see [authorization decisions](#decisions)).
@@ -3561,7 +3572,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2) |
 | [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
+| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
 | [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | — | — |
 | [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
 | [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1) |
@@ -3594,7 +3605,7 @@ RMF role assignments, risk management strategy and risk tolerance, organization-
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-ORG-CONTEXT.md](templates/artifacts/ART-ORG-CONTEXT.md) |
-| Data files | — |
+| Data files | `artifacts/data/org-context.yaml` (schema `org-context`) |
 | OSCAL | — |
 | Produced by | [P-1](#task-p-1) |
 | Updated by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
@@ -3688,7 +3699,7 @@ System-level security and privacy risk assessment, updated as the system and thr
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-RA.md](templates/artifacts/ART-RA.md) |
-| Data files | `artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`) |
+| Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`) |
 | OSCAL | — |
 | Produced by | [P-14](#task-p-14) |
 | Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
@@ -3701,17 +3712,17 @@ Citations:
 
 ### <a id="art-req"></a>ART-REQ: Security and privacy requirements and allocation
 
-Security and privacy requirements for the system and its environment, and their allocation to system elements.
+Security and privacy requirements for the system and its environment, from the stakeholders' protection needs and the DoD design policy statements, with verification methods, measures and their allocation to system elements.
 
 | | |
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-REQ.md](templates/artifacts/ART-REQ.md) |
-| Data files | `artifacts/data/protection-requirements.yaml` (schema `protection-requirements`) |
+| Data files | `artifacts/data/requirements.yaml` (schema `requirements`)<br>`artifacts/data/protection-requirements.yaml` (schema `protection-requirements`) |
 | OSCAL | — |
 | Produced by | [P-15](#task-p-15) |
 | Updated by | [P-17](#task-p-17) |
-| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
+| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
 
 Citations:
 
@@ -3745,7 +3756,7 @@ The documented characteristics of the system, its users and privileges, and the 
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
-| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`) |
+| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`) |
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
 | Produced by | [C-1](#task-c-1) |
 | Updated by | [I-2](#task-i-2) |
@@ -3951,7 +3962,7 @@ Assessment determinations per control, findings and recommendations, including t
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SAR.md](templates/artifacts/ART-SAR.md) |
-| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`)<br>`artifacts/data/sar-report.yaml` (schema `sar-report`) |
+| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`)<br>`artifacts/data/sar-report.yaml` (schema `sar-report`)<br>`artifacts/data/sar-summary.yaml` (schema `sar-summary`) |
 | OSCAL | `assessment-results#results.findings`<br>`assessment-results#results.observations` |
 | Produced by | [A-3](#task-a-3) |
 | Updated by | [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2), [M-4](#task-m-4) |
@@ -4142,7 +4153,7 @@ System disposal strategy and the actions taken when the system is removed from o
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-DISP.md](templates/artifacts/ART-DISP.md) |
-| Data files | — |
+| Data files | `artifacts/data/disposal.yaml` (schema `disposal`) |
 | OSCAL | — |
 | Produced by | [M-7](#task-m-7) |
 | Updated by | — |
@@ -4162,13 +4173,13 @@ content and operational data.
 | <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [C-1](#task-c-1), [I-1](#task-i-1), [I-2](#task-i-2) |
 | <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | The document that states and validates the capability need for the pathway: JCIDS documents (initial capabilities document, capability development document) on major capability acquisition; a validated JUON, JEON or DoD Component UON, a critical warfighter issue statement approved by the Warfighter SIG, or a SecDef or DepSecDef RAA determination document on urgent capability acquisition; the capability needs statement and user agreement on the software pathway; business requirements on defense business systems; and the services requirement validated by the SRRB for an acquisition of services. P-15 records in protection-requirements.yaml whether it holds the SCRM, export control, anti-tamper, counterintelligence and security support, and threat content the CJCS puts in JCIDS capability requirements (PPROT-004), and the information requirements of the milestone or decision point it supports. | [P-8](#task-p-8), [P-9](#task-p-9), [P-15](#task-p-15) |
 | <a id="ext-org-policy"></a>**EXT-ORG-POLICY** Organizational policy and Prepare-step guidance | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [P-1](#task-p-1), [P-2](#task-p-2), [P-5](#task-p-5), [P-9](#task-p-9), [P-15](#task-p-15) |
-| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions. | [P-3](#task-p-3), [P-14](#task-p-14), [S-5](#task-s-5), [R-2](#task-r-2), [M-1](#task-m-1), [M-3](#task-m-3) |
+| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions: Intelligence Community products such as DIA cyber threat assessments and the Defense Intelligence Threat Library cyber threat modules, the USD(I&S) cyber threat assessment capability, threat intelligence on third party providers and environments, and the USCYBERCOM and NSA/CSS cyber operational risk tolerances. ART-RA records which product, its date and the credentialed professionals consulted. | [P-3](#task-p-3), [P-14](#task-p-14), [S-5](#task-s-5), [R-2](#task-r-2), [M-1](#task-m-1), [M-3](#task-m-3) |
 | <a id="ext-registry"></a>**EXT-REGISTRY** Component system registry | organization | The DoD Component registry in which programs register their systems. | [P-18](#task-p-18) |
 | <a id="ext-baselines"></a>**EXT-BASELINES** Control baselines | reference | CNSSI 1253 security control baselines for national security systems and the SP 800-53B baselines (OSCAL profiles in references/oscal/profiles). | [P-4](#task-p-4), [S-1](#task-s-1) |
 | <a id="ext-cnssi1253-overlays"></a>**EXT-CNSSI1253-OVERLAYS** CNSSI 1253 overlays | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [P-4](#task-p-4), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2) |
 | <a id="ext-catalog"></a>**EXT-CATALOG** SP 800-53 Rev. 5 control catalog | reference | The OSCAL 800-53r5 catalog (references/oscal/catalog), the source of control text, parameters and assessment objectives. | [S-1](#task-s-1), [S-4](#task-s-4) |
 | <a id="ext-assessment-procedures"></a>**EXT-ASSESSMENT-PROCEDURES** SP 800-53A assessment procedures | reference | SP 800-53A Rev. 5 assessment objects, methods and objectives, with the DoD-specific assessment procedures on the RMF Knowledge Service. | [A-2](#task-a-2), [A-3](#task-a-3) |
-| <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory. | [I-1](#task-i-1) |
+| <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs, and other secure configuration guidance | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory, and where none applies NSA/CSS security implementation and mitigation guidance, DoD security configuration guides, NIST checklists and mitigation guidelines, or vendor hardening guidance. An exception is documented and approved by the responsible AO (SCFG-001). | [I-1](#task-i-1) |
 | <a id="ext-test-results"></a>**EXT-TEST-RESULTS** Developmental and operational test results | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence: cooperative vulnerability identification, cybersecurity DT&E, the cooperative vulnerability and penetration assessment (CVPA), the adversarial assessment (AA), the cyber economic vulnerability analysis, the evaluation of defensive cyberspace operations, and independent threat-representative penetration and exploitation testing. Each event in test-strategy.yaml records who conducted it, the configuration of the test asset, the test conditions and whether they were operationally representative (TSTRAT-003). | [A-3](#task-a-3) |
 | <a id="ext-monitoring"></a>**EXT-MONITORING** Continuous monitoring data | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [M-2](#task-m-2) |
 | <a id="ext-change-requests"></a>**EXT-CHANGE-REQUESTS** Configuration change requests | operational | Proposed changes to the system and its environment, submitted to configuration control. | [M-1](#task-m-1) |

@@ -1,0 +1,16 @@
+rule: REQS-002
+bases:
+- minimal
+description: a design policy record listing a requirement that does not trace to it
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: design_policy.15.requirements
+  value:
+  - REQ-03
+  - REQ-04
+expect:
+  errors:
+  - REQS-002
+  messages:
+  - the DP-SCAP record lists REQ-04, whose policy trace does not name the statement

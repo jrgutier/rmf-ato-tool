@@ -16,7 +16,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Stakeholders and interview roster
 
-<<FILL: table: stakeholder | persona ID | interest in the system | tasks they are interviewed for, one row per stakeholder organization or role, with tokens>>
+<<FILL: table: stakeholder | persona ID | interest in the system | security concerns, loss concerns and trust expectations | tasks they are interviewed for, one row per stakeholder organization or role, with tokens>>
 
 ## Users represented
 

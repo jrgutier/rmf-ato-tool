@@ -475,7 +475,28 @@ with the next ID; never edit or delete an existing entry.
 - Rule: Compare a run's dates with each other, never with as_of as if it were now.
 - Promotion: none — it shapes how a rule is written, and test_valid_minimal fails at once on the mistake.
 
-## L-0068 · 2026-11-07 · run: phase-11 · tags: rules, should
+## L-0068 · 2026-11-07 · run: phase-11 · tags: run-data, rules
+- Symptom: a run could delete the new `artifacts/data/ra.yaml` and pass every check, and its PKG-003 data elements for the RAR were the only sign.
+- Root cause: RUN-ART-001 checks the files of core artifacts only; ART-RA is `package: supporting`, so a data file added to it is required by nothing.
+- Fix: SRA-001 reports a missing ra.yaml whenever ART-RA is produced or seeded on a contract that has the file, with a negative fixture.
+- Rule: A data file added to a supporting artifact needs a rule that reports it missing; RUN-ART-001 does not.
+- Promotion: check: SRA-001
+
+## L-0069 · 2026-11-07 · run: phase-11 · tags: conformance, references
+- Symptom: DoDI 8530.01 Encl. 4 §d.(5) cites Reference (ch), which the issuance's reference list gives as DoD 5220.22-R, the Industrial Security Regulation; triage read it as the DISN Connection Process Guide, which the list gives as (cg).
+- Root cause: the body on pp. 37-38 runs one letter ahead of the list: it cites 5220.22-R as (ci), FAR Subpart 4.4 as (cj), DoDI 8582.01 as (ck) and DFARS 252.204-7012 as (cl), so a body letter there cannot be looked up in the list as printed.
+- Fix: CONN-001 holds mission partner interconnections to the DISN connection process; REQ-DODI8530.01-0300 stays partial, with the drift stated, until the user rules on the reading.
+- Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
+- Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
+
+## L-0070 · 2026-11-07 · run: phase-11 · tags: facts, contract
+- Symptom: the six system facts C-1 now records (classification, IT type, owning organization, version, operational environment, life-cycle phase) could not go into `writes_facts` without FACTS-001 and `rmf status` refusing the example run, which is at contract 0.1.0; making `roles` required in users.schema.json likewise broke a valid older users record.
+- Root cause: `writes_facts` and a schema's `required` hold every run whatever its contract; only rules carried `since`.
+- Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
+- Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
+- Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: rules, should
 - Symptom: a first cut of PPROT-002 and PPROT-004 refused every contract award with no PPP update and every RFP without PPP countermeasures, though DoDI 5000.83 5.3.c.(2)(b) says lead systems engineers *should* do both; the register showed the items as plain lettered entries.
 - Root cause: the extractor cuts a lead-in from its items, so an item under a should lead-in reads like a will, and the modal sits in the lead-in's context, not in the item.
 - Fix: those clauses accept a recorded reason for not updating or a deviation on the RFP, and tests/unit/test_protection.py holds each permitted case.

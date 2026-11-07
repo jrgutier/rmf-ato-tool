@@ -145,7 +145,9 @@ requirements:
     locator: "2.1.f"
     context: "DOD CISO Under the authority, direction, and control of the DoD Chief Information Officer (CIO), the DoD CISO:"
     statement: "f. Incorporates United States Cyber Command (USCYBERCOM) and National Security Agency/Central Security Service cyber operational risk tolerances into security authorization baselines, as applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "EXT-THREAT carries the USCYBERCOM and NSA/CSS cyber operational risk tolerances and ra.yaml states those applied; incorporating them into authorization baselines is the DoD CISO's act, which no run performs"
+    evidence: [{"kind": "schema", "asserts": "The USCYBERCOM and NSA/CSS cyber operational risk tolerances applied are recorded", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance/properties/operational", "claim": "presence"}]
     work_item: "WI-207"
   - id: "REQ-DODI8510.01-0020"
     citation: {"ref": "DODI8510.01", "page": 6, "anchor": "Oversees DISA control correlation identifiers, security requirements guides, and security technical implementation"}
@@ -608,7 +610,9 @@ requirements:
     locator: "2.11.b"
     context: "COMMANDER, USCYBERCOM In coordination with the DoD CISO and in addition to the responsibilities in Paragraph 2.7., the Commander, USCYBERCOM:"
     statement: "b. Coordinates with the Director, National Security Agency/Chief, Central Security Service to make cyberspace operations forces’ operational risk tolerances and relevant cyber threat information available to all cybersecurity risk management decision-makers to eliminate isolated processes."
-    status: "candidate"
+    status: "partial"
+    reason: "EXT-THREAT carries the operational risk tolerances and threat information and ra.yaml records those applied; making them available is USCYBERCOM's act, which no run performs"
+    evidence: [{"kind": "schema", "asserts": "Cyberspace operations forces' operational risk tolerances available to risk management decision-makers are recorded", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance/properties/operational", "claim": "presence"}, {"kind": "citation", "asserts": "Relevant cyber threat information is available to risk management decision-makers", "target": "EXT-THREAT", "claim": "presence"}]
     work_item: "WI-207"
   - id: "REQ-DODI8510.01-0081"
     citation: {"ref": "DODI8510.01", "page": 12, "anchor": "The RMF process for lifecycle cybersecurity risk to DoD systems is in"}
@@ -639,7 +643,9 @@ requirements:
     locator: "3.1.c"
     context: "Figure 1. RMF Process"
     statement: "c. The RMF process applies to all systems and organizations regardless of acquisition pathway in the DoD, as well as DoD partnered systems and organizations where it has been agreed that DoD standards will be followed."
-    status: "candidate"
+    status: "partial"
+    reason: "A statement of where the RMF applies; whether a partnered system agreed to DoD standards is not recorded."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "The RMF process applies to partnered systems whose interconnection agreements record DoD cybersecurity requirements", "claim": "presence", "sentence": "The RMF process applies to all systems and organizations regardless of acquisition pathway in the DoD, as well as DoD partnered systems and organizations where it has been agreed that DoD standards will be followed."}]
     work_item: "WI-190"
   - id: "REQ-DODI8510.01-0085"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "DoD systems (e.g., weapons systems, stand-alone systems, control systems, or any other"}
@@ -1207,7 +1213,9 @@ requirements:
     locator: "4.2.b.(1).(a)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: DoD ISRMC:"
     statement: "(a) Provides strategic guidance to Levels 2 and 3, assesses Level 1 risk, and authorizes information exchanges and connections for DoD enterprise systems, cross-mission area systems, cross security domain connections, and mission partner connections."
-    status: "candidate"
+    status: "covered"
+    reason: "The ISRMC's side: CONN-001 fails a cross security domain or mission partner connection that the DoD ISRMC, or the DSAWG in its support, has not been asked to authorize. Enterprise systems are ENT-001's."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.risk-executive.yaml", "expect": "needs authorization by the DoD ISRMC or the DSAWG in its support", "claim": "constraint", "asserts": "Cross security domain connections and mission partner connections are authorized by the DoD ISRMC, or the DSAWG in its support, and one without that authorization fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8510.01-0160"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Performs the Risk Executive Function as described in DoDI 8500.01 and NIST"}
@@ -1264,7 +1272,9 @@ requirements:
     locator: "4.2.b.(2).(b)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: The DSAWG, in support of the DoD ISRMC:"
     statement: "(b) Develops and provides guidance to the AOs for system connections to the DoD Information Enterprise. AOs who disagree with DSAWG decisions may appeal to the DoD ISRMC."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-001 records the DSAWG's decision on a cross-domain or mission partner connection as the approval it needs; AODM-011 sends an appeal of a DSAWG decision to the DoD ISRMC."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.risk-executive.yaml", "expect": "needs authorization by the DoD ISRMC or the DSAWG in its support", "claim": "constraint", "asserts": "AOs take system connections to the DSAWG, in support of the DoD ISRMC, for its decision, and a connection with no DSAWG or ISRMC authorization fails", "holds_when": "P-16 is in the run's scope"}, {"kind": "rule", "target": "AODM-011", "fixture": "tests/fixtures/negative/AODM-011.appeal.yaml", "expect": "goes to the DoD ISRMC", "claim": "constraint", "asserts": "AOs who disagree with DSAWG decisions appeal to the DoD ISRMC, and an appeal sent elsewhere fails"}]
     work_item: "WI-208"
   - id: "REQ-DODI8510.01-0167"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Reference the RMF KS for additional processes needed for environment specific requirements."}

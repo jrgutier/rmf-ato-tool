@@ -544,7 +544,8 @@ requirements:
     locator: "2.2"
     context: "FLEXIBILITY IN RMF IMPLEMENTATION"
     statement: "Note: Since the RMF is an SDLC process that emphasizes ongoing authorization, organizations have the flexibility to determine which RMF step to enter (or reenter) based on an assessment of risk and the tasks described in the Prepare—System Level step. Determination of the appropriate RMF step requires an assessment of the current state of the system, a review of the activities that have already been completed for the system, identification of a proposed step and task entry into the RMF, a gap analysis to ensure that the risk is acceptable, documenting decisions, notifying stakeholders, and approval from the Authorizing Official (or other relevant decision maker)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ENTRY-001", "fixture": "tests/fixtures/negative/ENTRY-001.first.yaml", "expect": "the entry determination enters at", "asserts": "Determination of the appropriate RMF step to enter records the current state, the activities already completed and the gaps, and the step entered is where the run starts", "claim": "constraint", "sentence": "Determination of the appropriate RMF step requires an assessment of the current state of the system, a review of the activities that have already been completed for the system, identification of a proposed step and task entry into the RMF, a gap analysis to ensure that the risk is acceptable, documenting decisions, notifying stakeholders, and approval from the Authorizing Official (or other relevant decision maker)."}, {"kind": "rule", "target": "ENTRY-001", "fixture": "tests/fixtures/negative/ENTRY-001.missing.yaml", "expect": "and records no entry determination", "asserts": "A run entering past the Prepare step's first task requires a recorded determination of the RMF step to enter", "claim": "presence"}, {"kind": "rule", "target": "ENTRY-001", "fixture": "tests/fixtures/negative/ENTRY-001.yaml", "expect": "is no task of step", "asserts": "The organization determines which RMF step and task to enter", "claim": "constraint"}]
     work_item: "WI-192"
   - id: "REQ-SP800-37R2-0070"
     citation: {"ref": "SP800-37R2", "page": 29, "anchor": "Although the risk management approach in Figure 1 is conveyed as hierarchical,"}
@@ -880,7 +881,8 @@ requirements:
     locator: "2.4"
     context: "FIGURE 5: CONCEPTUAL VIEW OF THE SYSTEM"
     statement: "For connections and information exchange between the system and the enabling or other systems outside of the authorization boundary, organizations consider the risks introduced by such connections and information exchange."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Each connection and information exchange with systems outside the authorization boundary has a record of the risks introduced", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.yaml", "expect": "has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "rule", "asserts": "Each connection and information exchange outside the authorization boundary names the vulnerabilities it introduces", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.introduces.yaml", "expect": "which is no vulnerability or predisposing condition in ra.yaml", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-SP800-37R2-0113"
     citation: {"ref": "SP800-37R2", "page": 36, "anchor": "The authorization boundary establishes the scope of protection for an information system"}
@@ -1044,7 +1046,9 @@ requirements:
     locator: "2.8"
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "[OMB A-130] defines supply chain risk and requires federal agencies to consider supply chain security issues for all resource planning and management activities throughout the SDLC so that risks are appropriately managed."
-    status: "candidate"
+    status: "partial"
+    reason: "ART-RA considers supply chain risk for every inventory item and is updated at R-2 and M-3 (SRA-002); supply chain security across all resource planning and management activities of the SDLC is not held"
+    evidence: [{"kind": "rule", "asserts": "The risk assessment considers supply chain security issues for every component so that risks are managed", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.chain.yaml", "expect": "is in no supply chain record, so its supply chain risk is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-SP800-37R2-0134"
     citation: {"ref": "SP800-37R2", "page": 40, "anchor": "[FISMA] and [OMB A-130] require external providers handling federal information or operating"}
@@ -1868,7 +1872,9 @@ requirements:
     locator: "TASK P-10"
     context: ""
     statement: "Assets are tangible and intangible items that are of value to achievement of mission or business objectives. Tangible assets are physical in nature and include physical/environmental elements (e.g., non-digital information, structures, facilities), human elements, and technology/machine elements (e.g., hardware elements, mechanisms, and networks). In contrast, intangible assets are not physical in nature and include mission and business processes, functions, digital information and data, firmware, software, and services. Information assets can be tangible or intangible assets, and can include the information needed to carry out missions or business functions, to deliver services, and for system management/operation; controlled unclassified information and classified information; and all forms of documentation associated with the information system. Intangible assets can also include the image or reputation of an organization, and the privacy interests of the individuals whose information will be processed by the system. The organization defines the scope of stakeholder assets to be considered for protection. The assets that require protection are identified based on stakeholder concerns and the contexts in which the assets are used. This includes the missions or business functions of the organization; the other systems that interact with the system; and stakeholders whose assets are utilized by the mission or business functions or by the system. Assets can be documented in the system security and privacy plans."
-    status: "candidate"
+    status: "partial"
+    reason: "The asset scope must consider every class, reputation and privacy interests among them; that assets are identified from stakeholder concerns and the contexts of use is prose."
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Intangible assets such as the reputation of an organization are considered in the asset scope", "claim": "constraint", "sentence": "Intangible assets can also include the image or reputation of an organization, and the privacy interests of the individuals whose information will be processed by the system."}, {"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.privacy.yaml", "expect": "the organization's asset scope does not consider", "asserts": "The privacy interests of individuals are an intangible asset class the asset scope considers", "claim": "constraint"}, {"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.excluded.yaml", "expect": "a class the asset scope leaves out", "asserts": "The organization defines the scope of stakeholder assets considered for protection, and an asset class the asset scope leaves out holds no asset", "claim": "constraint", "sentence": "The organization defines the scope of stakeholder assets to be considered for protection."}, {"kind": "prose", "target": "playbooks/P/P-10.md", "asserts": "The assets that require protection are identified from the stakeholder concerns in the asset scope rationale", "claim": "presence", "sentence": "The assets that require protection are identified based on stakeholder concerns and the contexts in which the assets are used."}]
     work_item: "WI-172"
   - id: "REQ-SP800-37R2-0241"
     citation: {"ref": "SP800-37R2", "page": 57, "anchor": "Determine the authorization boundary of the system."}
@@ -1985,8 +1991,11 @@ requirements:
     locator: "TASK P-14"
     context: ""
     statement: "Risk assessments are also conducted to determine the potential that the use of an external provider for the development, implementation, maintenance, management, operation, or disposition of a system, system element, or service could create a loss, and the potential impact of that loss. The impact may be immediate (e.g., physical theft) or on-going (e.g., the ability of adversaries to replicate critical equipment because of theft). The impact may be endemic (e.g., limited to a single system) or systemic (e.g., including any system that uses a specific type of system component). Supply chain risk assessments consider vulnerabilities which may arise related to the disposition of a system or system element and from the use of external providers. Vulnerabilities in the supply chain may include a lack of traceability or accountability leading to the potential use of counterfeits, insertion of malware, or poor-quality systems. The use of external providers may result in a loss of visibility and control over how systems, system elements, and services are developed, deployed, and maintained. A clear understanding of the threats, vulnerabilities, and potential impacts of an adverse supply chain event can help organizations appropriately balance supply chain risk with risk tolerance. Supply chain risk assessments can include information from supplier audits, reviews, and supply chain intelligence. Organizations develop a strategy for collecting information, including a strategy for collaborating with providers on supply chain risk assessments. Such collaboration helps organizations leverage information from providers, reduce redundancy, identify potential courses of action for risk responses, and reduce the burden on providers."
-    status: "candidate"
+    status: "partial"
+    reason: "Each external provider records the loss it could create and its impact, and each supplier the vulnerabilities considered (SRA-002). Unheld: the strategy for collecting information and collaborating with providers, which is the SCRM strategy of WI-04; the loss of visibility and control external providers may cause, which no field records apart from the loss in general; and the benefits of collaboration with providers, which follow the unheld strategy"
+    evidence: [{"kind": "schema", "asserts": "Each external provider records the potential impact of the loss its use could create", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/impact", "sentence": "Risk assessments are also conducted to determine the potential that the use of an external provider for the development, implementation, maintenance, management, operation, or disposition of a system, system element, or service could create a loss, and the potential impact of that loss.", "claim": "constraint"}, {"kind": "rule", "asserts": "The use of each external provider is assessed for the loss it could create", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.provider.yaml", "expect": "has no record in external.providers, so who supplies it, its services and assurances are not documented", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "Risk assessments are also conducted to determine the potential that the use of an external provider for the development, implementation, maintenance, management, operation, or disposition of a system, system element, or service could create a loss, and the potential impact of that loss.", "claim": "constraint"}, {"kind": "rule", "asserts": "Supply chain risk assessments consider the vulnerabilities from use of external providers named for each supplier", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.chainvuln.yaml", "expect": "which is no vulnerability or predisposing condition in ra.yaml", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "Supply chain risk assessments consider vulnerabilities which may arise related to the disposition of a system or system element and from the use of external providers.", "claim": "constraint"}, {"kind": "schema", "asserts": "Supply chain risk assessments consider vulnerabilities from disposition and from the use of external providers", "target": "framework/schema/ra.schema.json#/properties/external/properties/supply_chain/items/properties/vulnerabilities", "sentence": "Supply chain risk assessments consider vulnerabilities which may arise related to the disposition of a system or system element and from the use of external providers.", "claim": "constraint"}]
     work_item: "WI-199"
+    ruling_sought: [{"sentence": "Vulnerabilities in the supply chain may include a lack of traceability or accountability leading to the potential use of counterfeits, insertion of malware, or poor-quality systems.", "reason": "An open list of examples: what supply chain vulnerabilities may include"}, {"sentence": "Supply chain risk assessments can include information from supplier audits, reviews, and supply chain intelligence.", "reason": "An open list of examples: what supply chain risk assessments can include"}]
   - id: "REQ-SP800-37R2-0257"
     citation: {"ref": "SP800-37R2", "page": 61, "anchor": "Risk assessments are conducted throughout the SDLC and support various RMF steps"}
     kind: "indicative"
@@ -2858,8 +2867,11 @@ requirements:
     locator: "TASK A-4"
     context: ""
     statement: "Control assessment results obtained during the system development lifecycle are documented in an interim report and included in the final security and privacy assessment reports. Development of interim reports that document assessment results from relevant phases of the SDLC reinforces the concept that assessment reports are evolving documents. Interim reports are used, as appropriate, to inform the final assessment report. Organizations may choose to develop an executive summary from the control assessment findings. The executive summary provides authorizing officials and other interested individuals in the organization with an abbreviated version of the assessment reports that includes a synopsis of the assessment, findings, and the recommendations for addressing deficiencies in the controls."
-    status: "candidate"
+    status: "partial"
+    reason: "Interim reports are not recorded; the executive summary is the SAR's Assessment summary heading; sentence 4 is a permission awaiting the user's ruling."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-3.md", "asserts": "Control assessment results are documented and included in the final security assessment report", "claim": "presence", "sentence": "Control assessment results obtained during the system development lifecycle are documented in an interim report and included in the final security and privacy assessment reports."}]
     work_item: "WI-193"
+    ruling_sought: [{"sentence": "Organizations may choose to develop an executive summary from the control assessment findings.", "reason": "A permission: organizations may choose to develop an executive summary."}]
   - id: "REQ-SP800-37R2-0369"
     citation: {"ref": "SP800-37R2", "page": 85, "anchor": "Conduct initial remediation actions on the controls and reassess remediated controls."}
     kind: "imperative"
@@ -3604,7 +3616,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "AUTHORIZING OFFICIAL"
     statement: "The authorizing official is a senior official or executive with the authority to formally assume responsibility and accountability for operating a system; providing common controls inherited by organizational systems; or using a system, service, or application from an external provider. The authorizing official is the only organizational official who can accept the security and privacy risk to organizational operations, organizational assets, and individuals.115 Authorizing officials typically have budgetary oversight for the system or are responsible for the mission and/or business operations supported by the system. Accordingly, authorizing officials are in management positions with a level of authority commensurate with understanding and accepting such security and privacy risks. Authorizing officials approve plans, memorandums of agreement or understanding, plans of action and milestones, and determine whether significant changes in the information systems or environments of operation require reauthorization."
-    status: "candidate"
+    status: "partial"
+    reason: "The AO's authority is on the PER-AO card; approval of interconnection agreements is recorded as the agreement's signatories, not as an AO approval."
+    evidence: [{"kind": "prose", "target": "personas/PER-AO.md", "asserts": "The authorizing official assumes responsibility and accountability for operating a system", "claim": "presence", "sentence": "The authorizing official is a senior official or executive with the authority to formally assume responsibility and accountability for operating a system; providing common controls inherited by organizational systems; or using a system, service, or application from an external provider."}]
     work_item: "WI-190"
   - id: "REQ-SP800-37R2-0460"
     citation: {"ref": "SP800-37R2", "page": 133, "anchor": "Authorizing officials coordinate their activities with common control providers, system owners, chief"}
@@ -3932,7 +3946,8 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Establish organization-wide forums to consider all types and sources of risk (including aggregated risk);"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "asserts": "Establish organization-wide forums to consider all types and sources of risk including aggregated risk", "claim": "constraint"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0503"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Identify the organizational risk posture based on the aggregated risk from the"}
@@ -3947,7 +3962,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Provide oversight for the risk management activities carried out by organizations to help ensure consistent and effective risk-based decisions;"
-    status: "candidate"
+    status: "partial"
+    reason: "Oversight is a required text field; nothing tests that risk decisions are consistent."
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/risk_executive/properties/oversight", "claim": "presence", "asserts": "Provide oversight for the risk management activities to ensure consistent and effective risk-based decisions"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0505"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Develop a broad-based understanding of risk regarding the strategic view of organizations"}
@@ -3955,7 +3972,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Develop a broad-based understanding of risk regarding the strategic view of organizations and their integrated operations;"
-    status: "candidate"
+    status: "partial"
+    reason: "The strategic view is a required text field; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/risk_executive/properties/strategic_view", "claim": "presence", "asserts": "Develop a broad-based understanding of risk across integrated operations"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0506"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Establish effective vehicles and serve as a focal point for communicating and"}
@@ -3963,7 +3982,8 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Establish effective vehicles and serve as a focal point for communicating and sharing risk information among key stakeholders (e.g., authorizing officials and other senior leaders) internally and externally to organizations;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.external.yaml", "expect": "no vehicle shares risk information with", "asserts": "Establish effective vehicles for communicating and sharing risk information among key stakeholders internally and externally", "claim": "constraint"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0507"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Specify the degree of autonomy for subordinate organizations permitted by parent organizations"}
@@ -3971,7 +3991,8 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Specify the degree of autonomy for subordinate organizations permitted by parent organizations regarding framing, assessing, responding to, and monitoring risk;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.autonomy.yaml", "expect": "the degree of autonomy for subordinate organizations is not specified", "asserts": "Specify the degree of autonomy for subordinate organizations regarding framing, assessing, responding to and monitoring risk", "claim": "constraint"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0508"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Promote cooperation and collaboration among authorizing officials to include authorization actions requiring"}
@@ -3979,7 +4000,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Promote cooperation and collaboration among authorizing officials to include authorization actions requiring shared responsibility (e.g., joint authorizations);"
-    status: "candidate"
+    status: "partial"
+    reason: "How the function promotes cooperation among AOs on joint authorizations is a required text field; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/risk_executive/properties/shared_authorizations", "claim": "presence", "asserts": "Promote cooperation among authorizing officials on authorization actions requiring shared responsibility such as joint authorizations", "sentence": "• Promote cooperation and collaboration among authorizing officials to include authorization actions requiring shared responsibility (e.g., joint authorizations);"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0509"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Provide an organization-wide forum to consider all sources of risk (including aggregated"}
@@ -3987,7 +4010,8 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Provide an organization-wide forum to consider all sources of risk (including aggregated risk) to organizational operations and assets, individuals, other organizations, and the Nation;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "asserts": "Provide an organization-wide forum to consider all sources of risk including aggregated risk", "claim": "constraint"}]
     work_item: "WI-189"
   - id: "REQ-SP800-37R2-0510"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Ensure that authorization decisions consider all factors necessary for mission and business"}
@@ -5331,7 +5355,9 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: "FIGURE G-1: CONCEPTUAL VIEW OF A COMPLEX SYSTEM"
     statement: "Information security and privacy architectures play a key part in the process of dividing complex systems into subsystems. This includes monitoring and controlling communications at internal boundaries among subsystems and selecting, allocating, and implementing controls that meet or exceed the security and privacy requirements of the constituent subsystems. One approach to control selection and allocation is to categorize each identified subsystem separately (see Task C-2). However, separately categorizing each subsystem does not change the overall categorization of the system. Rather, separately categorizing each subsystem allows the subsystems to receive a separate and more targeted allocation of controls from [SP 800-53] instead of deploying higher-impact controls across the entire system (see Task P-17 and Task S- 3). Another approach is to bundle smaller subsystems into larger subsystems within the system, categorize each of the aggregated subsystems, and allocate controls to the subsystems, as needed. While subsystems within complex systems may exist as complete systems, the subsystems are, in most cases, not treated as independent entities because they are typically interdependent and interconnected."
-    status: "candidate"
+    status: "partial"
+    reason: "The marked sentence describes subsystems rather than setting a duty; the run models them inside one boundary, categorized as a whole (SUBS-001), and monitoring of internal boundaries is the controls'."
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.yaml", "expect": "below the high-water mark", "asserts": "Subsystems are not treated as independent entities: the system is categorized no lower than the high-water mark of its designated subsystems", "claim": "constraint", "sentence": "While subsystems within complex systems may exist as complete systems, the subsystems are, in most cases, not treated as independent entities because they are typically interdependent and interconnected."}]
     work_item: "WI-175"
   - id: "REQ-SP800-37R2-0671"
     citation: {"ref": "SP800-37R2", "page": 177, "anchor": "When the security categorizations for the identified subsystems are different (e.g., low-impact"}
@@ -5339,7 +5365,9 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: "FIGURE G-1: CONCEPTUAL VIEW OF A COMPLEX SYSTEM"
     statement: "When the security categorizations for the identified subsystems are different (e.g., low-impact versus high-impact), the organization examines the subsystem interfaces,164 information flows, and security and privacy dependencies among subsystems and selects the appropriate controls for the interconnection of the subsystems to eliminate or reduce potential vulnerabilities. This helps to ensure that the system is adequately protected. Controls for the interconnection of subsystems are also employed when the subsystems implement different security and privacy policies or are administered by different authorities. The extent to which the selected controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements for the complex system, can be determined by combining control assessments at the system level and adding considerations addressing interface issues. The combined approach facilitates a targeted and cost-effective risk management process by scaling the level of effort of the assessment in accordance with the security categorization and allowing for reuse of assessment results at the system level."
-    status: "candidate"
+    status: "partial"
+    reason: "Interfaces between subsystems that differ in categorization are examined and interconnection controls selected (SUBS-001); the marked sentences, on combining assessments at system and subsystem level, are A-step guidance the run does not hold."
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.interface.yaml", "expect": "differ in categorization and no interface record examines their interfaces, flows and dependencies", "asserts": "When the security categorizations of subsystems differ the organization examines the subsystem interfaces, information flows and dependencies", "claim": "constraint"}, {"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.controls.yaml", "expect": "no control is selected for the interconnection of", "asserts": "The organization selects the appropriate controls for the interconnection of subsystems whose categorizations differ", "claim": "presence"}, {"kind": "prose", "target": "playbooks/A/A-3.md", "asserts": "Control assessments at the system level are combined with consideration of the subsystem interfaces", "claim": "presence", "sentence": "The extent to which the selected controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements for the complex system, can be determined by combining control assessments at the system level and adding considerations addressing interface issues."}]
     work_item: "WI-175"
   - id: "REQ-SP800-37R2-0672"
     citation: {"ref": "SP800-37R2", "page": 178, "anchor": "Authorization boundaries include all system elements, including hardware, firmware, and software. Software"}
@@ -5410,7 +5438,8 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: "AUTHORIZATION BOUNDARIES FOR SOFTWARE APPLICATIONS"
     statement: "Ultimately, when the level of trust in the external provider does not provide sufficient assurance, the organization employs compensating controls; accepts greater risk; contracts with a more trustworthy external provider; or does not obtain the service (i.e., conducts its missions and business operations with reduced levels of functionality or possibly no functionality at all)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "When trust in the external provider does not provide sufficient assurance, the organization employs compensating controls, accepts greater risk, contracts with a more trustworthy provider or does not obtain the service", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.trust.yaml", "expect": "trust in it gives insufficient assurance and no response is recorded", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}, {"kind": "schema", "asserts": "The response when trust in the external provider is insufficient: compensating controls, greater risk, a more trustworthy provider or not obtaining the service", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/response", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-SP800-37R2-0681"
     citation: {"ref": "SP800-37R2", "page": 180, "anchor": "Organizations should exercise caution when attempting to leverage external provider controls and"}
@@ -5919,7 +5948,8 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: ""
     statement: "Note: The system is categorized at the high-water mark of all designated subsystems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.yaml", "expect": "below the high-water mark", "asserts": "The system is categorized no lower than the high-water mark of all designated subsystems; a raise above it is a recorded C-2 adjustment (CATG-001)", "claim": "constraint"}]
     work_item: "WI-175"
     promoted: {"reason": "Note inside Figure G-1, confirmed in the PDF: it fixes the categorization of a complex system at the high-water mark of its designated subsystems."}
   - id: "REQ-SP800-37R2-0743"
@@ -5928,7 +5958,8 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: ""
     statement: "To avoid this situation, organizations carefully examine the interfaces among subsystems and take appropriate actions to eliminate potential vulnerabilities in this area, thus helping to ensure that the information system is adequately protected."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.interface.yaml", "expect": "differ in categorization and no interface record examines their interfaces, flows and dependencies", "asserts": "Organizations carefully examine the interfaces among subsystems", "claim": "constraint"}, {"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.controls.yaml", "expect": "no control is selected for the interconnection of", "asserts": "Organizations select controls for the interconnection to eliminate potential vulnerabilities between subsystems", "claim": "presence"}]
     work_item: "WI-175"
     promoted: {"reason": "Footnote 164: organizations examine the interfaces among subsystems and act to eliminate vulnerabilities there, the duty the rest of the footnote explains."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

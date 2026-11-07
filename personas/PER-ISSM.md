@@ -39,6 +39,11 @@ representative. Appointed by the PM or SO.
 
 - **P (P-10), optional:** Which items have known security limitations? Anything missing
   from the list?
+- **P (P-14):** Which threat sources and events concern this system, and how capable,
+  intent and targeted is each adversary? Which threat products, of what date, and which
+  credentialed professionals informed that? What does each connection, external provider and
+  supplier introduce, and is the trust in each provider enough? Which risk model and scales
+  apply, and how were borderline values settled?
 - **C (C-1), optional:** Which providers' authorizations does the system leverage, and
   when were they granted? Which roles are privileged?
 - **C (C-2):** Which CNSSI 1253 overlays apply, and why do the others not? Is any

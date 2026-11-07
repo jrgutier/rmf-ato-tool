@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:org-context",
+  "title": "runs/<run-id>/artifacts/data/org-context.yaml",
+  "description": "How the risk executive function is formed at this organization and what it does (P-2, SP 800-37r2 Appendix D.3): its form and members, its forums, its oversight of risk decisions, the vehicles that share risk information, the autonomy it gives subordinate organizations, and how it handles authorizations with shared responsibility. RISKX-001 judges it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "risk_executive",
+    "sources"
+  ],
+  "properties": {
+    "risk_executive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "form",
+        "members",
+        "forums",
+        "oversight",
+        "strategic_view",
+        "communication",
+        "subordinate_autonomy",
+        "shared_authorizations"
+      ],
+      "properties": {
+        "form": {
+          "title": "Whether the risk executive function is an individual or a group",
+          "enum": [
+            "individual",
+            "group"
+          ]
+        },
+        "members": {
+          "title": "Who fills the function",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          }
+        },
+        "forums": {
+          "title": "Organization-wide forums to consider all types and sources of risk, including aggregated risk",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "considers"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "considers": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "all-types-and-sources",
+                    "aggregated-risk"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "oversight": {
+          "title": "How the function oversees the risk management activities of the organization so risk-based decisions are consistent and effective",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-37R2-0504"
+          ]
+        },
+        "strategic_view": {
+          "title": "How the function develops a broad-based understanding of risk across the organization's integrated operations",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-37R2-0505"
+          ]
+        },
+        "communication": {
+          "title": "Vehicles for communicating and sharing risk information among key stakeholders, internally and externally",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "vehicle",
+              "audience"
+            ],
+            "properties": {
+              "vehicle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "audience": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "authorizing-officials",
+                    "senior-leaders",
+                    "internal-stakeholders",
+                    "external-stakeholders"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "subordinate_autonomy": {
+          "title": "The degree of autonomy subordinate organizations have for framing, assessing, responding to and monitoring risk",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "activity",
+              "autonomy"
+            ],
+            "properties": {
+              "activity": {
+                "enum": [
+                  "frame",
+                  "assess",
+                  "respond",
+                  "monitor"
+                ]
+              },
+              "autonomy": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "shared_authorizations": {
+          "title": "How the function promotes cooperation among authorizing officials on authorizations requiring shared responsibility, such as joint authorizations",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-37R2-0508"
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+      }
+    }
+  }
+}

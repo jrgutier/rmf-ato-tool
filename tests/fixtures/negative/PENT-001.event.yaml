@@ -1,0 +1,15 @@
+rule: PENT-001
+bases:
+- minimal
+description: a penetration test with no schedule event
+mutations:
+- op: delete_list_item
+  file: artifacts/data/sap.yaml
+  path: schedule.events
+  where:
+    kind: penetration-test
+expect:
+  errors:
+  - PENT-001
+  messages:
+  - the schedule has no penetration-test event

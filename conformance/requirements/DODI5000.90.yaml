@@ -242,7 +242,9 @@ requirements:
     locator: "2.5.b"
     context: "USD(I&S) In addition to the responsibilities in Paragraph 2.6., the USD(I&S):"
     statement: "b. Advises the USD(A&S) and AAF PM on the incorporation of Intelligence Community products, especially cyber threat assessments, into the AAF."
-    status: "candidate"
+    status: "partial"
+    reason: "EXT-THREAT names the Intelligence Community products a program uses, and ra.yaml records which and of what date; the advice to USD(A&S) is the USD(I&S)'s act, outside a run"
+    evidence: [{"kind": "citation", "asserts": "Intelligence Community products, especially cyber threat assessments, reach the program as threat information", "target": "EXT-THREAT", "claim": "presence"}, {"kind": "schema", "asserts": "Each information source names the Intelligence Community product, such as a cyber threat assessment", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/title", "claim": "presence"}]
     work_item: "WI-207"
   - id: "REQ-DODI5000.90-0031"
     citation: {"ref": "DODI5000.90", "page": 6, "anchor": "Provides a cyber threat assessment capability for DoD Components that is optimized"}
@@ -250,7 +252,9 @@ requirements:
     locator: "2.5.c"
     context: "USD(I&S) In addition to the responsibilities in Paragraph 2.6., the USD(I&S):"
     statement: "c. Provides a cyber threat assessment capability for DoD Components that is optimized for effectively driving risk-appropriate cybersecurity within the AAF."
-    status: "candidate"
+    status: "partial"
+    reason: "EXT-THREAT names the USD(I&S) cyber threat assessment capability as a source; providing it is the USD(I&S)'s act, outside a run"
+    evidence: [{"kind": "citation", "asserts": "The cyber threat assessment capability supplies threat information to DoD Components", "target": "EXT-THREAT", "claim": "presence"}]
     work_item: "WI-207"
   - id: "REQ-DODI5000.90-0032"
     citation: {"ref": "DODI5000.90", "page": 6, "anchor": "Authorizes and directs the Director, Defense Intelligence Agency (DIA) to:"}
@@ -266,7 +270,9 @@ requirements:
     locator: "2.5.d.(1)"
     context: "USD(I&S) In addition to the responsibilities in Paragraph 2.6., the USD(I&S): Authorizes and directs the Director, Defense Intelligence Agency (DIA) to:"
     statement: "(1) Manage the Defense Intelligence Threat Library cyber threat modules."
-    status: "candidate"
+    status: "partial"
+    reason: "EXT-THREAT names the Defense Intelligence Threat Library modules and ra.yaml records the module used; managing the library is the DIA's act, outside a run"
+    evidence: [{"kind": "citation", "asserts": "The Defense Intelligence Threat Library cyber threat modules are a source of threat information", "target": "EXT-THREAT", "claim": "presence"}, {"kind": "schema", "asserts": "Each information source names the product used, such as a Defense Intelligence Threat Library module", "target": "framework/schema/ra.schema.json#/properties/information_sources/items/properties/title", "claim": "presence"}]
     work_item: "WI-207"
   - id: "REQ-DODI5000.90-0034"
     citation: {"ref": "DODI5000.90", "page": 6, "anchor": "Assess cyber vulnerabilities and perform the validation of VOLTs for Acquisition Category"}
@@ -352,7 +358,9 @@ requirements:
     locator: "2.6.b.(2).(a)"
     context: "DOD AND OSD COMPONENT HEADS PMs are responsible for the cybersecurity of their programs, systems, and information, as assisted by supporting organizations. PMs: Must identify:"
     statement: "(a) Risks, including financial, schedule, functional, supply chain, and cybersecurity."
-    status: "candidate"
+    status: "partial"
+    reason: "Supply chain and cybersecurity risks are held in ra.yaml (SRA-002); financial, schedule and functional risks are program risks outside the RMF run"
+    evidence: [{"kind": "rule", "asserts": "Supply chain risks are recorded for every component", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.chain.yaml", "expect": "is in no supply chain record, so its supply chain risk is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.90-0045"
     citation: {"ref": "DODI5000.90", "page": 7, "anchor": "The consequences of a cybersecurity breach, including situations where a cybersecurity breach"}
@@ -490,7 +498,9 @@ requirements:
     locator: "3.1.c"
     context: "Figure 1. AAF"
     statement: "c. Program cybersecurity must mitigate cyber vulnerabilities to protect:"
-    status: "candidate"
+    status: "partial"
+    reason: "A heading over what program cybersecurity protects; CTI handling is one."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-12.md", "asserts": "Program cybersecurity protects CTI through its handling record", "claim": "presence"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.90-0062"
     citation: {"ref": "DODI5000.90", "page": 10, "anchor": "Operational effectiveness of the system (i.e., system functions, mission execution, system performance,"}
@@ -617,7 +627,8 @@ requirements:
     locator: "3.2.a.(2)"
     context: "CYBERSECURITY DRIVEN BY THREAT System Threat Analysis"
     statement: "(2) PMs will consult with intelligence and security credentialed professionals to obtain cyber threat and security inputs to the program and RMF processes."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "asserts": "PMs consult with intelligence and security credentialed professionals to obtain cyber threat and security inputs", "target": "framework/schema/ra.schema.json#/properties/consultations", "claim": "constraint"}]
     work_item: "WI-207"
   - id: "REQ-DODI5000.90-0078"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "Every program that requires an authority to operate (ATO) in accordance with"}
@@ -711,7 +722,9 @@ requirements:
     locator: "3.2.d.(3)"
     context: "CYBERSECURITY DRIVEN BY THREAT Tailoring"
     statement: "(3) The PM, with concurrence from the AO and DA, can tailor the RMF process to achieve an ATO commensurate with the cyber risk of the program."
-    status: "candidate"
+    status: "partial"
+    reason: "The AO's approval of an entry past P-1 is held (ENTRY-001); the DA's concurrence and tailoring beyond the entry point are not recorded."
+    evidence: [{"kind": "rule", "target": "ENTRY-001", "fixture": "tests/fixtures/negative/ENTRY-001.approval.yaml", "expect": "the entry determination is approved by the AO or AODR", "asserts": "The PM tailors the RMF entry with concurrence from the AO", "claim": "constraint"}]
     work_item: "WI-192"
   - id: "REQ-DODI5000.90-0089"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "The PM is responsible for ensuring that the cybersecurity requirements are considered"}
@@ -1265,7 +1278,9 @@ requirements:
     locator: "3.1.g"
     context: ""
     statement: "g. Cybersecurity considerations must be addressed:"
-    status: "candidate"
+    status: "partial"
+    reason: "A heading over cybersecurity considerations; the classification and handling markings C-1 records are one of them."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Cybersecurity considerations addressed at C-1 include the classification and handling markings", "claim": "presence"}]
     work_item: "WI-174"
     promoted: {"reason": "Rejected lead-in holding the duty; its three items are bare scope phrases with no verb of their own."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

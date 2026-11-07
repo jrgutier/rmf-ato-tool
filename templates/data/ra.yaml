@@ -1,0 +1,133 @@
+# Template: artifacts/data/ra.yaml (P-14; schema ra; updated by R-2 and M-3). The system risk
+# assessment in SP 800-30 Rev. 1 terms (playbooks/P/P-14.md). SRA-001 to SRA-003 read it.
+purpose:
+  statement: "<<FILL: the information the assessment is to produce>>"
+  decisions: ["<<FILL: a decision it supports, such as tailoring or the authorization decision>>"]
+  kind: initial  # initial | subsequent (an update of a prior assessment)
+point_of_contact:
+  persona: PER-ISSM
+  name: "<<FILL: name>>"
+  phone: "<<FILL: phone number>>"
+  email: poc@example.mil
+scope:
+  applicability: "<<FILL: the tier, system and parts of the organization covered>>"
+  time_frame: "<<FILL: how long the results can inform risk-based decisions>>"
+  architecture: "<<FILL: architectural and technology considerations>>"
+assumptions: ["<<FILL: an assumption the assessment rests on>>"]
+constraints: ["<<FILL: a constraint, such as information not available>>"]
+information_sources:  # at least one each of threat, vulnerability and impact (SRA-001)
+  - id: SRC-01
+    kind: threat  # descriptive | threat | vulnerability | impact
+    title: "<<FILL: the product, such as a DIA cyber threat assessment or a DITL module>>"
+    provider: "<<FILL: who produced it>>"
+    date: "2026-01-01"  # its date, which shows its timeliness
+    sources: [INT-001.A1]
+  - id: SRC-02
+    kind: vulnerability
+    title: "<<FILL: source of vulnerability information>>"
+    provider: "<<FILL: who produced it>>"
+    date: "2026-01-01"
+    sources: [INT-001.A1]
+  - id: SRC-03
+    kind: impact
+    title: "<<FILL: source of impact information, such as the mission analysis>>"
+    provider: "<<FILL: who produced it>>"
+    date: "2026-01-01"
+    sources: [INT-001.A1]
+consultations:  # intelligence and security credentialed professionals (DoDI 5000.90)
+  - professional: "<<FILL: office or professional consulted>>"
+    organization: "<<FILL: their organization>>"
+    date: "2026-01-01"
+    sources: [INT-001.A1]
+risk_model:
+  defined_in: risk-management-strategy  # risk-management-strategy (ART-ORG-CONTEXT) | this-assessment
+  factors: [threat, vulnerability, impact, likelihood, predisposing-condition]
+  scales:
+    likelihood: "<<FILL: the likelihood scale, such as SP 800-30 Table G-5>>"
+    impact: "<<FILL: the impact scale, such as Table H-3>>"
+    risk: "<<FILL: the risk scale, such as Table I-2>>"
+  assessment_approach: qualitative  # quantitative | qualitative | semi-quantitative
+  analysis_approach: threat-oriented  # threat-oriented | asset-impact-oriented | vulnerability-oriented
+  combination: "<<FILL: how likelihood values, then likelihood and impact, combine into risk>>"
+  time_period: "<<FILL: the period the likelihood and impact assessments hold for>>"
+  rationale: "<<FILL: why this model and approach>>"
+risk_tolerance:
+  statement: "<<FILL: the level of risk the organization is willing to assume>>"
+  consequences: ["<<FILL: a consequence considered>>"]
+  tiers:  # any tolerance set at Tier 1, 2 or 3
+    - tier: 1
+      tolerance: "<<FILL: the tolerance set at the tier>>"
+      sources: [ART-ORG-CONTEXT]
+  operational: "<<FILL: the USCYBERCOM and NSA/CSS cyber operational risk tolerances applied>>"
+threat_sources:
+  - id: TS-01
+    title: "<<FILL: threat source>>"
+    type: adversarial  # adversarial | accidental | structural | environmental
+    in_scope: true
+    capability: moderate  # adversarial: capability, intent and targeting are rated (SRA-001)
+    intent: moderate
+    targeting: moderate
+    range_of_effects: not-applicable  # non-adversarial: rated; adversarial: not-applicable
+    sources: [INT-001.A1]
+threat_events:
+  - id: TE-01
+    description: "<<FILL: the event, with the TTPs of an adversarial one>>"
+    threat_sources: [TS-01]
+    relevance: expected  # confirmed | expected | anticipated | predicted | possible | not-applicable
+    vulnerabilities: [VUL-01]
+    conditions: []
+    likelihood_initiation: moderate  # initiation (adversarial) or occurrence (non-adversarial)
+    likelihood_impact: moderate  # given initiation or occurrence, the likelihood of adverse impact
+    likelihood: moderate  # overall, by risk_model.combination
+    likelihood_rationale: "<<FILL: why>>"
+    impacts:
+      - harm: operations  # operations | assets | individuals | other-organizations | nation
+        asset: "<<FILL: the affected asset>>"
+    impact: moderate
+    risk: moderate
+    uncertainty: "<<FILL: the uncertainty in these determinations>>"
+    sources: [INT-001.A1]
+threat_scenarios: []  # each: {id: SCN-01, description, events: [TE-01, TE-02]}
+level_of_detail: "<<FILL: threat events, threat scenarios or both, and how fine>>"
+vulnerabilities:
+  - id: VUL-01
+    description: "<<FILL: the vulnerability>>"
+    severity: moderate
+    sources: [INT-001.A1]
+predisposing_conditions: []  # each: {id: PC-01, description, pervasiveness, sources}
+external:  # SRA-002
+  services_provided: false  # true when external security services are provided
+  connections:  # one per external boundary component (external: true or type interconnection)
+    - component: CMP-EXT
+      information_exchange: "<<FILL: what crosses the connection>>"
+      nss: true  # under the space overlay, a non-NSS one needs end_to_end_impact
+      introduces: [VUL-01]
+      risk: moderate
+      sources: [INT-001.A1]
+  # end_to_end_analysis: {considered_by: [PER-PM, PER-AO], coordinated_with: [nsa], sources}
+  # is required under the space overlay once any connection is non-NSS (CNSSP 12)
+  providers: []  # one per external provider of services or an environment; a leveraged
+  # authorization's provider is one. Each: {id: EXP-01, name, kind, component, services,
+  # meets_requirements, assurance, loss, impact, trust, response, compensating_controls,
+  # risk_acceptable, threat_intelligence: [dia, component-intelligence, dcsa, japec], sources}
+  supply_chain:  # every inventory item is in one record
+    - id: SC-01
+      supplier: "<<FILL: supplier>>"
+      items: [INV-001]
+      vulnerabilities: [VUL-01]
+      risk: moderate
+      sources: [INT-001.A1]
+  nonconforming: []  # each: {component, alternatives (two or more), selected, coordinated_with, sources}
+prioritization:  # SRA-003: order lists every threat event, never a lower risk above a higher
+  method: "<<FILL: how risks of similar level are ordered, tied to mission and risk tolerance>>"
+  factors: [immediate-impact, future-impact]  # immediate-impact | future-impact | cumulative-impact | coupling
+  borderline: "<<FILL: how uncertain or borderline values were assigned>>"
+  order: [TE-01]
+  couplings: []  # each: {events: [TE-01, TE-02], effect: increases | decreases, note}
+communication:
+  recipients: [PER-AO, PER-PM]
+  method: risk-assessment-report  # executive-briefing | risk-assessment-report | dashboard | other
+  shared: [source-information, intermediate-results, supporting-evidence]
+  policy: "<<FILL: the policy and guidance followed for sharing>>"
+executive_summary: "<<FILL: purpose, key findings and recommendations for the AO>>"
+sources: [INT-001.A1]

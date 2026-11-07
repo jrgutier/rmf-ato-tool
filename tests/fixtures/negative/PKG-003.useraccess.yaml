@@ -1,0 +1,18 @@
+rule: PKG-003
+bases:
+- minimal
+description: no user access requirements
+mutations:
+- op: delete_field
+  file: artifacts/data/users.yaml
+  path: users.0.access_requirements
+- op: delete_field
+  file: artifacts/data/users.yaml
+  path: users.1.access_requirements
+expect:
+  errors:
+  - PKG-003
+  also:
+  - SYSD-004
+  messages:
+  - does not carry the CNSSI 1254 data element User Access Requirements, Restrictions, Constraints

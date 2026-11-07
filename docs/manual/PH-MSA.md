@@ -242,7 +242,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](../../playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14).
+**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
 
 ## <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
 
@@ -542,6 +542,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - The stakeholders having an interest in the system are identified (DoDI 8510.01 Table 1 outcome).
 - ART-STAKE lists the stakeholders and the persona that represents each in interviews.
 - Every information owner is identified, because each sets the impact level for its own information types (CNSSI 1253).
+- ART-STAKE records each stakeholder's security concerns, loss concerns and trust expectations, which P-15 turns into protection needs.
 
 **Alignment**
 
@@ -812,6 +813,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
+- artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
 
@@ -831,7 +833,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
 
 ## <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -873,6 +875,10 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - Security and privacy requirements are defined and prioritized (DoDI 8510.01 Table 1 outcome).
 - ART-REQ lists prioritized security and privacy requirements traced to their sources.
+- requirements.yaml records each stakeholder protection need with its success criteria, priority and rationale; a requirement traces to it and its stakeholder agrees the requirements address it (REQS-003). A change to the requirements reassesses the needs.
+- Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
+- Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
+- The security-relevant constraints on the solution are recorded with their origin.
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
 
 **Alignment**
@@ -974,7 +980,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | produces | core |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
-Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`.
+Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
 **Entry criteria**
 
@@ -983,7 +989,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 **Exit criteria**
 
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
-- ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+- ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
 
 **Alignment**
 

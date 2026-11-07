@@ -1,0 +1,11 @@
+rule: SRA-001
+bases: [minimal]
+description: a threat scenario names a threat event that is not listed
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: threat_scenarios.0.events
+  value: [TE-01, TE-09]
+expect:
+  errors: [SRA-001]
+  messages: ['SCN-01 names threat event TE-09, which ra.yaml does not list']

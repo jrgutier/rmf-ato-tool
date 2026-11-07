@@ -1,0 +1,16 @@
+rule: REQS-002
+bases:
+- minimal
+description: a requirement tracing to a design policy key nobody defined
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.policy
+  value:
+  - DP-RESILIENCE-AUDIT
+  - DP-NOPE
+expect:
+  errors:
+  - REQS-002
+  messages:
+  - REQ-04 traces to DP-NOPE, which is no design policy statement REQS-002 knows

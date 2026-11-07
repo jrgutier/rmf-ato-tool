@@ -1,0 +1,1526 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:ra",
+  "title": "runs/<run-id>/artifacts/data/ra.yaml",
+  "description": "System risk assessment data (P-14; updated by R-2 and M-3) in the SP 800-30 Rev. 1 terms: purpose, scope, risk model, threat sources and events, vulnerabilities, external and supply chain risk, prioritization and communication. SRA-001 to SRA-003 read it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "purpose",
+    "point_of_contact",
+    "scope",
+    "assumptions",
+    "constraints",
+    "information_sources",
+    "consultations",
+    "risk_model",
+    "risk_tolerance",
+    "threat_sources",
+    "threat_events",
+    "threat_scenarios",
+    "level_of_detail",
+    "vulnerabilities",
+    "predisposing_conditions",
+    "external",
+    "prioritization",
+    "communication",
+    "executive_summary",
+    "sources"
+  ],
+  "properties": {
+    "purpose": {
+      "title": "Purpose of the risk assessment",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "decisions",
+        "kind"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Purpose of the risk assessment: the information it is to produce",
+          "x-enforces": [
+            "REQ-CNSSI1254-0072",
+            "REQ-SP800-30R1-0103",
+            "REQ-SP800-30R1-0108",
+            "REQ-SP800-30R1-0127",
+            "REQ-SP800-30R1-0139",
+            "REQ-SP800-30R1-0285"
+          ]
+        },
+        "decisions": {
+          "title": "Decisions the risk assessment is intended to support",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-CNSSI1254-0072",
+            "REQ-SP800-30R1-0103",
+            "REQ-SP800-30R1-0127",
+            "REQ-SP800-30R1-0285"
+          ]
+        },
+        "kind": {
+          "title": "Whether this is an initial or a subsequent risk assessment",
+          "enum": [
+            "initial",
+            "subsequent"
+          ],
+          "x-enforces": [
+            "REQ-SP800-30R1-0082",
+            "REQ-SP800-30R1-0108"
+          ]
+        }
+      }
+    },
+    "point_of_contact": {
+      "title": "Risk assessment point of contact information",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "persona",
+        "name",
+        "phone",
+        "email"
+      ],
+      "properties": {
+        "persona": {
+          "title": "Persona who is the risk assessment point of contact",
+          "type": "string",
+          "pattern": "^PER-[A-Z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Risk assessment point of contact name",
+          "x-enforces": [
+            "REQ-CNSSI1254-0073"
+          ]
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Risk assessment point of contact phone number",
+          "x-enforces": [
+            "REQ-CNSSI1254-0073"
+          ]
+        },
+        "email": {
+          "title": "Risk assessment point of contact email",
+          "type": "string",
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+          "x-enforces": [
+            "REQ-CNSSI1254-0073"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "title": "Scope of the risk assessment",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicability",
+        "time_frame",
+        "architecture"
+      ],
+      "properties": {
+        "applicability": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Organizational applicability: the tier, systems and parts of the organization the assessment covers",
+          "x-enforces": [
+            "REQ-SP800-30R1-0286"
+          ]
+        },
+        "time_frame": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Effectiveness time frame: how long the results can inform risk-based decisions",
+          "x-enforces": [
+            "REQ-SP800-30R1-0112",
+            "REQ-SP800-30R1-0286"
+          ]
+        },
+        "architecture": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Architectural and technology considerations of the scope",
+          "x-enforces": [
+            "REQ-SP800-30R1-0286"
+          ]
+        }
+      }
+    },
+    "assumptions": {
+      "title": "Assumptions under which the risk assessment is conducted",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-30R1-0105",
+        "REQ-SP800-30R1-0114",
+        "REQ-SP800-30R1-0129"
+      ]
+    },
+    "constraints": {
+      "title": "Constraints under which the risk assessment is conducted",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-30R1-0105",
+        "REQ-SP800-30R1-0114",
+        "REQ-SP800-30R1-0129"
+      ]
+    },
+    "information_sources": {
+      "title": "Sources of descriptive, threat, vulnerability and impact information used in the risk assessment",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "provider",
+          "date",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SRC-\\d{2,3}$"
+          },
+          "kind": {
+            "title": "What the source informs: descriptive, threat, vulnerability or impact information",
+            "enum": [
+              "descriptive",
+              "threat",
+              "vulnerability",
+              "impact"
+            ],
+            "x-enforces": [
+              "REQ-SP800-30R1-0202",
+              "REQ-SP800-39-0156"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source of information, such as an Intelligence Community product or the Defense Intelligence Threat Library module",
+            "x-enforces": [
+              "REQ-DODI5000.90-0030",
+              "REQ-DODI5000.90-0033"
+            ]
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Organization that produced the source",
+            "x-enforces": [
+              "REQ-SP800-30R1-0124"
+            ]
+          },
+          "date": {
+            "title": "Date of the source, which shows its timeliness",
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "x-enforces": [
+              "REQ-SP800-39-0159"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-30R1-0106"
+      ]
+    },
+    "consultations": {
+      "title": "Intelligence and security credentialed professionals consulted for cyber threat and security inputs",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "professional",
+          "organization",
+          "date",
+          "sources"
+        ],
+        "properties": {
+          "professional": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Credentialed professional or office consulted"
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Organization of the credentialed professional"
+          },
+          "date": {
+            "title": "Date of the consultation",
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-DODI5000.90-0077"
+      ]
+    },
+    "risk_model": {
+      "title": "Risk model and analytic approach",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defined_in",
+        "factors",
+        "scales",
+        "assessment_approach",
+        "analysis_approach",
+        "combination",
+        "time_period",
+        "rationale"
+      ],
+      "properties": {
+        "defined_in": {
+          "title": "Where the risk model and analytic approach are defined: the organization's risk management strategy, or this assessment",
+          "enum": [
+            "risk-management-strategy",
+            "this-assessment"
+          ],
+          "x-enforces": [
+            "REQ-SP800-30R1-0126"
+          ]
+        },
+        "factors": {
+          "title": "Risk factors of the risk model",
+          "type": "array",
+          "items": {
+            "enum": [
+              "threat",
+              "vulnerability",
+              "impact",
+              "likelihood",
+              "predisposing-condition"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-30R1-0047",
+            "REQ-SP800-30R1-0107",
+            "REQ-SP800-30R1-0125",
+            "REQ-SP800-30R1-0131",
+            "REQ-SP800-30R1-0288",
+            "REQ-SP800-30R1-0302"
+          ]
+        },
+        "scales": {
+          "title": "Value scales of the risk factors",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "likelihood",
+            "impact",
+            "risk"
+          ],
+          "properties": {
+            "likelihood": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Value scale of likelihood",
+              "x-enforces": [
+                "REQ-SP800-30R1-0190"
+              ]
+            },
+            "impact": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Value scale of impact"
+            },
+            "risk": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Value scale of risk",
+              "x-enforces": [
+                "REQ-SP800-30R1-0211"
+              ]
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-30R1-0302"
+          ]
+        },
+        "assessment_approach": {
+          "title": "Assessment approach: quantitative, qualitative or semi-quantitative",
+          "enum": [
+            "quantitative",
+            "qualitative",
+            "semi-quantitative"
+          ],
+          "x-enforces": [
+            "REQ-SP800-30R1-0107",
+            "REQ-SP800-30R1-0122",
+            "REQ-SP800-30R1-0125",
+            "REQ-SP800-30R1-0131",
+            "REQ-SP800-30R1-0288"
+          ]
+        },
+        "analysis_approach": {
+          "title": "Risk analysis approach: threat-oriented (threat-based), asset/impact-oriented (asset impact based) or vulnerability-oriented (vulnerability based)",
+          "enum": [
+            "threat-oriented",
+            "asset-impact-oriented",
+            "vulnerability-oriented"
+          ],
+          "x-enforces": [
+            "REQ-CNSSI1254-0076",
+            "REQ-SP800-30R1-0107",
+            "REQ-SP800-30R1-0122",
+            "REQ-SP800-30R1-0125",
+            "REQ-SP800-30R1-0131",
+            "REQ-SP800-30R1-0288"
+          ]
+        },
+        "combination": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Algorithms or rules that combine likelihood values, and likelihood with impact, into a level of risk",
+          "x-enforces": [
+            "REQ-SP800-30R1-0051",
+            "REQ-SP800-30R1-0184",
+            "REQ-SP800-39-0160"
+          ]
+        },
+        "time_period": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Time period that likelihood and impact assessments are associated with: the temporal element of the risk factors",
+          "x-enforces": [
+            "REQ-SP800-30R1-0300"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Why this risk model and analytic approach are used",
+          "x-enforces": [
+            "REQ-SP800-30R1-0281",
+            "REQ-SP800-39-0290"
+          ]
+        }
+      }
+    },
+    "risk_tolerance": {
+      "title": "Organizational risk tolerance",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "consequences",
+        "tiers",
+        "operational"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Organizational risk tolerance: the level of risk the organization is willing to assume",
+          "x-enforces": [
+            "REQ-CNSSI1254-0077"
+          ]
+        },
+        "consequences": {
+          "title": "Range of consequences considered",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-CNSSI1254-0077"
+          ]
+        },
+        "tiers": {
+          "title": "Risk tolerance levels set at Tier 1, Tier 2 and Tier 3",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tier",
+              "tolerance",
+              "sources"
+            ],
+            "properties": {
+              "tier": {
+                "title": "Risk management tier",
+                "enum": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "tolerance": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Risk tolerance level set at the tier"
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-CNSSI1254-0077"
+          ]
+        },
+        "operational": {
+          "type": "string",
+          "minLength": 1,
+          "title": "USCYBERCOM and NSA/CSS cyber operational risk tolerances the assessment applies",
+          "x-enforces": [
+            "REQ-DODI8510.01-0019",
+            "REQ-DODI8510.01-0080"
+          ]
+        }
+      }
+    },
+    "threat_sources": {
+      "title": "Threat sources of concern",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "type",
+          "in_scope",
+          "capability",
+          "intent",
+          "targeting",
+          "range_of_effects",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TS-\\d{2,3}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat source"
+          },
+          "type": {
+            "title": "Type of threat source (Table D-2)",
+            "enum": [
+              "adversarial",
+              "accidental",
+              "structural",
+              "environmental"
+            ]
+          },
+          "in_scope": {
+            "title": "Whether the threat source is relevant to the organization and in scope",
+            "type": "boolean",
+            "x-enforces": [
+              "REQ-SP800-30R1-0149"
+            ]
+          },
+          "capability": {
+            "title": "Adversarial threat source capability to initiate a threat event",
+            "enum": [
+              "very-low",
+              "low",
+              "moderate",
+              "high",
+              "very-high",
+              "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0079",
+              "REQ-SP800-30R1-0057",
+              "REQ-SP800-30R1-0141",
+              "REQ-SP800-30R1-0182",
+              "REQ-SP800-39-0156"
+            ]
+          },
+          "intent": {
+            "title": "Adversarial threat source intent to initiate a threat event",
+            "enum": [
+              "very-low",
+              "low",
+              "moderate",
+              "high",
+              "very-high",
+              "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0080"
+            ]
+          },
+          "targeting": {
+            "title": "Adversarial threat source targeting: whether it has targeted or is actively targeting the system",
+            "enum": [
+              "very-low",
+              "low",
+              "moderate",
+              "high",
+              "very-high",
+              "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0081"
+            ]
+          },
+          "range_of_effects": {
+            "title": "Range of effects from a non-adversarial threat source",
+            "enum": [
+              "very-low",
+              "low",
+              "moderate",
+              "high",
+              "very-high",
+              "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-SP800-30R1-0141"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-30R1-0150"
+      ]
+    },
+    "threat_events": {
+      "title": "Threat events of concern",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "threat_sources",
+          "relevance",
+          "vulnerabilities",
+          "conditions",
+          "likelihood_initiation",
+          "likelihood_impact",
+          "likelihood",
+          "likelihood_rationale",
+          "impacts",
+          "impact",
+          "risk",
+          "uncertainty",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TE-\\d{2,3}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat event, with the tactics, techniques and procedures of an adversarial event"
+          },
+          "threat_sources": {
+            "title": "Threat sources that could initiate the threat event",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^TS-\\d{2,3}$"
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "x-enforces": [
+              "REQ-SP800-30R1-0155",
+              "REQ-SP800-30R1-0191",
+              "REQ-SP800-30R1-0292"
+            ]
+          },
+          "relevance": {
+            "title": "Relevance of the threat event (Table E-4)",
+            "enum": [
+              "confirmed",
+              "expected",
+              "anticipated",
+              "predicted",
+              "possible",
+              "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-SP800-30R1-0164",
+              "REQ-SP800-30R1-0290"
+            ]
+          },
+          "vulnerabilities": {
+            "title": "Vulnerabilities the threat event could exploit",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^VUL-\\d{2,3}$"
+            },
+            "uniqueItems": true,
+            "x-enforces": [
+              "REQ-SP800-30R1-0183",
+              "REQ-SP800-30R1-0303"
+            ]
+          },
+          "conditions": {
+            "title": "Predisposing conditions affecting the threat event",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^PC-\\d{2,3}$"
+            },
+            "uniqueItems": true
+          },
+          "likelihood_initiation": {
+            "title": "Likelihood of threat event initiation (adversarial) or occurrence (non-adversarial)",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-CNSSI1254-0085",
+              "REQ-SP800-30R1-0057",
+              "REQ-SP800-30R1-0059",
+              "REQ-SP800-30R1-0136",
+              "REQ-SP800-30R1-0181",
+              "REQ-SP800-30R1-0192"
+            ]
+          },
+          "likelihood_impact": {
+            "title": "Likelihood that the threat event, once initiated or occurring, results in adverse impact: likelihood of threat event success",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-CNSSI1254-0086",
+              "REQ-SP800-30R1-0057",
+              "REQ-SP800-30R1-0059",
+              "REQ-SP800-30R1-0136",
+              "REQ-SP800-30R1-0181",
+              "REQ-SP800-30R1-0193",
+              "REQ-SP800-30R1-0292"
+            ]
+          },
+          "likelihood": {
+            "title": "Overall likelihood of the threat event",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-SP800-30R1-0059",
+              "REQ-SP800-30R1-0181",
+              "REQ-SP800-30R1-0184",
+              "REQ-SP800-30R1-0194"
+            ]
+          },
+          "likelihood_rationale": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Rationale for the likelihood determination",
+            "x-enforces": [
+              "REQ-SP800-30R1-0183"
+            ]
+          },
+          "impacts": {
+            "title": "Adverse impacts: the harm and the affected asset",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "harm",
+                "asset"
+              ],
+              "properties": {
+                "harm": {
+                  "title": "Who is harmed",
+                  "enum": [
+                    "operations",
+                    "assets",
+                    "individuals",
+                    "other-organizations",
+                    "nation"
+                  ],
+                  "x-enforces": [
+                    "REQ-SP800-30R1-0203"
+                  ]
+                },
+                "asset": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Affected asset or potential target"
+                }
+              }
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-30R1-0196",
+              "REQ-SP800-30R1-0203",
+              "REQ-SP800-30R1-0293",
+              "REQ-SP800-39-0161"
+            ]
+          },
+          "impact": {
+            "title": "Maximum level of impact of the threat event",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-SP800-30R1-0060",
+              "REQ-SP800-30R1-0204"
+            ]
+          },
+          "risk": {
+            "title": "Level of risk of the threat event: a combination of likelihood and impact",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-SP800-30R1-0138"
+            ]
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Uncertainty associated with the likelihood, impact and risk determinations",
+            "x-enforces": [
+              "REQ-SP800-160V1R1-0603",
+              "REQ-SP800-30R1-0132",
+              "REQ-SP800-30R1-0138",
+              "REQ-SP800-30R1-0206",
+              "REQ-SP800-30R1-0299",
+              "REQ-SP800-39-0159",
+              "REQ-SP800-39-0160"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-30R1-0290"
+      ]
+    },
+    "threat_scenarios": {
+      "title": "Threat scenarios: how a series of threat events can cause harm",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "events"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SCN-\\d{2,3}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat scenario"
+          },
+          "events": {
+            "title": "Threat events of the threat scenario",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^TE-\\d{2,3}$"
+            },
+            "minItems": 2,
+            "uniqueItems": true,
+            "x-enforces": [
+              "REQ-SP800-30R1-0279"
+            ]
+          }
+        }
+      }
+    },
+    "level_of_detail": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Level of detail and form in which threats are analyzed: threat events, threat scenarios or both",
+      "x-enforces": [
+        "REQ-SP800-30R1-0122",
+        "REQ-SP800-30R1-0155",
+        "REQ-SP800-30R1-0167",
+        "REQ-SP800-30R1-0283"
+      ]
+    },
+    "vulnerabilities": {
+      "title": "Vulnerabilities identified",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "severity",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^VUL-\\d{2,3}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Vulnerability"
+          },
+          "severity": {
+            "title": "Severity of the vulnerability (Table F-2)",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-CNSSI1254-0084",
+              "REQ-SP800-30R1-0176"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      }
+    },
+    "predisposing_conditions": {
+      "title": "Predisposing conditions identified",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "pervasiveness",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^PC-\\d{2,3}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Predisposing condition"
+          },
+          "pervasiveness": {
+            "title": "Pervasiveness of the predisposing condition (Table F-5)",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-CNSSI1254-0084",
+              "REQ-SP800-30R1-0178"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      }
+    },
+    "external": {
+      "title": "Risk from connections, external providers and the supply chain",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "services_provided",
+        "connections",
+        "providers",
+        "supply_chain",
+        "nonconforming"
+      ],
+      "properties": {
+        "services_provided": {
+          "title": "Whether external security services are provided",
+          "type": "boolean",
+          "x-enforces": [
+            "REQ-CNSSI1254-0044"
+          ]
+        },
+        "connections": {
+          "title": "Connections and information exchange with enabling and other systems outside the authorization boundary, and the risk they introduce",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "component",
+              "information_exchange",
+              "nss",
+              "introduces",
+              "risk",
+              "sources"
+            ],
+            "properties": {
+              "component": {
+                "title": "Boundary component of the connection or external system interface",
+                "type": "string",
+                "pattern": "^CMP-[A-Z0-9-]+$"
+              },
+              "information_exchange": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Information exchanged over the connection",
+                "x-enforces": [
+                  "REQ-SP800-18R2-0004",
+                  "REQ-SP800-18R2-0299"
+                ]
+              },
+              "nss": {
+                "title": "Whether the connected system is a national security system",
+                "type": "boolean"
+              },
+              "introduces": {
+                "title": "Vulnerabilities and predisposing conditions the connected or supporting system introduces",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(VUL|PC)-\\d{2,3}$"
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "x-enforces": [
+                  "REQ-DODI5000.83-0212"
+                ]
+              },
+              "risk": {
+                "title": "Level of risk introduced by the connection",
+                "$ref": "#/$defs/level"
+              },
+              "end_to_end_impact": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Impact of a non-NSS component in the end-to-end analysis of risks",
+                "x-enforces": [
+                  "REQ-CNSSI1253F-ATT2-SPACE-0013"
+                ]
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        },
+        "end_to_end_analysis": {
+          "title": "End-to-end analysis of risks of a space NSS that includes non-NSS components",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "considered_by",
+            "coordinated_with",
+            "sources"
+          ],
+          "properties": {
+            "considered_by": {
+              "title": "Officials who considered the impact of non-NSS components in the end-to-end analysis of risks",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z0-9]+$"
+              },
+              "uniqueItems": true
+            },
+            "coordinated_with": {
+              "title": "Organizations the end-to-end analysis of risks was coordinated with",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "nsa",
+                  "national-manager"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "sources": {
+              "$ref": "#/$defs/sources"
+            }
+          }
+        },
+        "providers": {
+          "title": "External providers of services and environments to the system",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "kind",
+              "services",
+              "meets_requirements",
+              "assurance",
+              "loss",
+              "impact",
+              "trust",
+              "response",
+              "risk_acceptable",
+              "threat_intelligence",
+              "sources"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^EXP-\\d{2,3}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "title": "External provider"
+              },
+              "kind": {
+                "title": "Kind of external provider",
+                "enum": [
+                  "service-provider",
+                  "environment"
+                ]
+              },
+              "component": {
+                "title": "Boundary component the provider supplies",
+                "type": "string",
+                "pattern": "^CMP-[A-Z0-9-]+$"
+              },
+              "services": {
+                "title": "Services provided",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "meets_requirements": {
+                "title": "Whether the services are in accordance with the security requirements of the organization",
+                "type": "boolean",
+                "x-enforces": [
+                  "REQ-CNSSI1254-0044"
+                ]
+              },
+              "assurance": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Assurances obtained from the external provider",
+                "x-enforces": [
+                  "REQ-CNSSI1254-0044"
+                ]
+              },
+              "loss": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Loss the use of the external provider could create",
+                "x-enforces": [
+                  "REQ-SP800-61R3-0050"
+                ]
+              },
+              "impact": {
+                "title": "Potential impact of that loss",
+                "$ref": "#/$defs/level",
+                "x-enforces": [
+                  "REQ-SP800-37R2-0256"
+                ]
+              },
+              "trust": {
+                "title": "Whether the level of trust in the external provider provides sufficient assurance",
+                "enum": [
+                  "sufficient",
+                  "insufficient"
+                ]
+              },
+              "response": {
+                "title": "What the organization does when trust in the external provider is insufficient",
+                "enum": [
+                  "none",
+                  "compensating-controls",
+                  "accept-greater-risk",
+                  "more-trustworthy-provider",
+                  "not-obtained"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-37R2-0680"
+                ]
+              },
+              "compensating_controls": {
+                "title": "Compensating controls employed for the external provider",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+                },
+                "uniqueItems": true
+              },
+              "risk_acceptable": {
+                "title": "Whether the risk arising from use of the external services is acceptable",
+                "type": "boolean"
+              },
+              "threat_intelligence": {
+                "title": "Threat intelligence used to assess the third party provider or environment",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "dia",
+                    "component-intelligence",
+                    "dcsa",
+                    "japec"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "x-enforces": [
+                  "REQ-DODI5000.83-0217"
+                ]
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        },
+        "supply_chain": {
+          "title": "Supply chain risk: each supplier of the system's components",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "supplier",
+              "items",
+              "vulnerabilities",
+              "risk",
+              "sources"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^SC-\\d{2,3}$"
+              },
+              "supplier": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Supplier"
+              },
+              "items": {
+                "title": "Inventory items the supplier provides",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^INV-\\d{3}$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "vulnerabilities": {
+                "title": "Supply chain vulnerabilities and predisposing conditions, including those from disposition and from use of external providers",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(VUL|PC)-\\d{2,3}$"
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "x-enforces": [
+                  "REQ-SP800-37R2-0256"
+                ]
+              },
+              "risk": {
+                "title": "Level of supply chain risk",
+                "$ref": "#/$defs/level"
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        },
+        "nonconforming": {
+          "title": "Systems or components not built to fully meet the policy that are included in the system",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "component",
+              "alternatives",
+              "selected",
+              "coordinated_with",
+              "sources"
+            ],
+            "properties": {
+              "component": {
+                "title": "Component not built to fully meet the requirements",
+                "type": "string",
+                "pattern": "^(CMP-[A-Z0-9-]+|INV-\\d{3})$"
+              },
+              "alternatives": {
+                "title": "Alternatives reviewed and compared",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 2,
+                "x-enforces": [
+                  "REQ-CNSSP12-0013"
+                ]
+              },
+              "selected": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Solution that offers the best capability versus risk"
+              },
+              "coordinated_with": {
+                "title": "External organizations the review was coordinated with",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "nsa",
+                    "national-manager"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        }
+      }
+    },
+    "prioritization": {
+      "title": "Prioritization of risks",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "factors",
+        "borderline",
+        "order",
+        "couplings"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Method for prioritizing risks of similar level, tied to mission and business requirements and risk tolerance",
+          "x-enforces": [
+            "REQ-SP800-30R1-0238"
+          ]
+        },
+        "factors": {
+          "title": "What refined the order of risks of similar level",
+          "type": "array",
+          "items": {
+            "enum": [
+              "immediate-impact",
+              "future-impact",
+              "cumulative-impact",
+              "coupling"
+            ]
+          },
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-30R1-0241"
+          ]
+        },
+        "borderline": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How uncertain or borderline values were assigned to a bin",
+          "x-enforces": [
+            "REQ-SP800-30R1-0251"
+          ]
+        },
+        "order": {
+          "title": "Threat events in priority order",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^TE-\\d{2,3}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "couplings": {
+          "title": "Coupling among risks",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "events",
+              "effect",
+              "note"
+            ],
+            "properties": {
+              "events": {
+                "title": "Coupled threat events",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^TE-\\d{2,3}$"
+                },
+                "minItems": 2,
+                "uniqueItems": true
+              },
+              "effect": {
+                "title": "Whether one materializing makes the other more or less likely",
+                "enum": [
+                  "increases",
+                  "decreases"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-30R1-0249"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "title": "How the risks are coupled"
+              }
+            }
+          }
+        }
+      }
+    },
+    "communication": {
+      "title": "Communication and sharing of risk assessment results",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recipients",
+        "method",
+        "shared",
+        "policy"
+      ],
+      "properties": {
+        "recipients": {
+          "title": "Organizational stakeholders and decision makers the risk assessment results are communicated to",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-30R1-0079",
+            "REQ-SP800-30R1-0093",
+            "REQ-SP800-30R1-0213",
+            "REQ-SP800-30R1-0218",
+            "REQ-SP800-30R1-0220",
+            "REQ-SP800-30R1-0232",
+            "REQ-SP800-30R1-0295",
+            "REQ-SP800-30R1-0296"
+          ]
+        },
+        "method": {
+          "title": "Method used to communicate risk assessment results",
+          "enum": [
+            "executive-briefing",
+            "risk-assessment-report",
+            "dashboard",
+            "other"
+          ],
+          "x-enforces": [
+            "REQ-SP800-30R1-0215",
+            "REQ-SP800-30R1-0217"
+          ]
+        },
+        "shared": {
+          "title": "Source information, intermediate results and supporting evidence shared",
+          "type": "array",
+          "items": {
+            "enum": [
+              "source-information",
+              "intermediate-results",
+              "supporting-evidence"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-30R1-0093",
+            "REQ-SP800-30R1-0214",
+            "REQ-SP800-30R1-0216",
+            "REQ-SP800-30R1-0219",
+            "REQ-SP800-30R1-0296"
+          ]
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Organizational policy and guidance on communicating and sharing risk-related information",
+          "x-enforces": [
+            "REQ-SP800-30R1-0219"
+          ]
+        }
+      }
+    },
+    "executive_summary": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Risk assessment executive summary: purpose, synopsis of key findings and recommendations",
+      "x-enforces": [
+        "REQ-CNSSI1254-0092"
+      ]
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+        "type": "string",
+        "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+      }
+    }
+  }
+}

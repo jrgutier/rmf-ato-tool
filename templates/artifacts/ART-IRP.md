@@ -32,7 +32,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Detection and analysis
 
-<<FILL: the sources that detect incidents, such as logs forwarded to the CSSP, alerts and user reports, and how a possible incident is analyzed and confirmed, with tokens>>
+<<FILL: the sources that detect incidents, such as logs forwarded to the CSSP, alerts and user reports; how up-to-date cyber threat intelligence is used in log analysis, to correlate events across log sources and in adverse event analysis (artifacts/data/incident-response.yaml detection); and how a possible incident is analyzed and confirmed, with tokens>>
 
 ## Response and reporting
 

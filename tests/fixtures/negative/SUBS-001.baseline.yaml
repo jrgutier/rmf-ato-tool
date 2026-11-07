@@ -1,0 +1,52 @@
+rule: SUBS-001
+bases:
+- minimal
+description: interconnection controls outside the baseline
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: authorization_boundary.diagrams.0.shows
+  value:
+  - components
+  - subsystems
+  - internal-boundaries
+  - third-party-services
+  - physical-protections
+  - isolated-components
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: subsystems
+  value:
+  - id: SUB-RELAY
+    title: SUB-RELAY
+    components:
+    - CMP-RELAY
+    - CMP-STORE
+    c: moderate
+    i: moderate
+    a: low
+    status: under-development
+  - id: SUB-CONSOLE
+    title: SUB-CONSOLE
+    components:
+    - CMP-CONSOLE
+    c: low
+    i: moderate
+    a: low
+    status: under-development
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: subsystem_interfaces
+  value:
+  - between:
+    - SUB-RELAY
+    - SUB-CONSOLE
+    connected: true
+    flows: Operators read relay health over the management VLAN.
+    controls:
+    - ac-17
+expect:
+  errors:
+  - SUBS-001
+  messages:
+  - the interconnection of SUB-RELAY and SUB-CONSOLE selects ac-17, outside the baseline

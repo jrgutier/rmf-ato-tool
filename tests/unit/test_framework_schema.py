@@ -26,7 +26,10 @@ PLAN_RUN_SCHEMAS = {
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
-                     "changes", "posture-reports", "plan-reviews", "capabilities", "sar-report",
+                     "changes", "posture-reports", "plan-reviews", "capabilities",
+                     "sar-report", "ra",
+                     "requirements", "system-description", "sar-summary",
+                     "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
                      "test-strategy"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
@@ -88,6 +91,15 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 
 SRC = ["INT-001.A1"]
+_RA = YAML(typ="safe").load((REPO_ROOT / "templates/data/ra.yaml").read_text(encoding="utf-8"))
+NEED = {"id": "NEED-01", "stakeholder": "PER-IO", "kind": "loss-concern", "concern": "c",
+        "assets": ["a"], "success_criteria": "s", "priority": 1, "rationale": "r", "sources": SRC}
+REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["NEED-01"],
+               "priority": 1, "criticality": 1, "measure": {"kind": "assurance", "statement": "m"},
+               "verification": {"method": "test", "description": "d"}, "sources": SRC}
+AGREEMENT = {"analysis": "a", "feedback": "f",
+             "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
+             "sources": SRC}
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -331,6 +343,15 @@ RUN_EXAMPLES = {
         {"methodology": {"standard": "NIST SP 800-53A Rev. 5"},
          "delivered": [{"to": "PER-PM", "date": "2026-02-01"}], "sources": SRC},
         {"methodology": {"standard": ""}, "sources": SRC}),
+    "ra": (_RA, {**_RA, "risk_model": {**_RA["risk_model"], "analysis_approach": "guess"}}),
+    "requirements": (
+        {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
+         "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
+                            "sources": SRC}],
+         "agreement": AGREEMENT},
+        {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
+            "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
+         "agreement": AGREEMENT}),
 }
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
@@ -348,6 +369,9 @@ RUN_EXAMPLES.update({
         ("incident-response", "reporting_paths", [{"case": "unknown"}]),
         ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
         ("ssp-records", "space_nss", "maybe"),
+        ("system-description", "ownership", "leased"),
+        ("sar-summary", "assessment_type", "spot-check"),
+        ("org-context", "risk_executive", {"form": "committee"}),
         ("protection", "program", {"acat": "IV", "mda": "DAE"}),
         ("protection-requirements", "read", {"ppp": "PPP-1"}),
         ("nss-assessments", "nss", "perhaps"),
@@ -356,6 +380,13 @@ RUN_EXAMPLES.update({
 _ST = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
+RUN_EXAMPLES["disposal"] = (
+    {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
+     "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},
+     "storage": {"stored": False},
+     "supply_chain": {"non_reuse_elements": ["drives"], "prevention": "Shredded on site."},
+     "sources": SRC},
+    {"end_state": "Sanitized", "environment": {"restored_to": "wherever"}, "sources": SRC})
 
 
 def test_every_run_schema_has_examples():
@@ -381,7 +412,9 @@ def test_interview_answer_definition():
 def test_fact_paths_come_from_the_facts_schema():
     assert fact_paths(REPO_ROOT) == {
         "system_id", "system_name", "acronym", "aliases", "boundary_id", "lifecycle_state",
-        "categorization", "categorization.approved", "baseline_id", "acquisition"}
+        "categorization", "categorization.approved", "baseline_id", "acquisition",
+        "classification", "system_type", "owning_organization", "system_version",
+        "operational_environment", "lifecycle_phase"}
 
 
 def test_real_framework_writes_each_fact_once():

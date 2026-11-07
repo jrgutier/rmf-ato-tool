@@ -1,0 +1,30 @@
+rule: SYSD-002
+bases:
+- minimal
+description: a CSSP change on an SE system not reported to DIA
+mutations:
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: service_alignment.designation
+  value: both
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: service_alignment.authorized_by
+  value:
+  - USCYBERCOM
+  - DIA
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: service_alignment.changes
+  value:
+  - date: '2026-07-01'
+    from: Old CSSP
+    to: Component CSSP
+    reported_to:
+    - USCYBERCOM
+    - DISA
+expect:
+  errors:
+  - SYSD-002
+  messages:
+  - on an SE system is reported to the Director, DIA

@@ -1,0 +1,23 @@
+rule: CONN-004
+bases:
+- minimal
+description: a DODIN waiver granted before the DoD CIO finished its review
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: dodin
+  value:
+    position: outside
+    waiver:
+      reviewed_by: DOD-CIO
+      reviewed: '2026-03-20'
+      granted: '2026-03-01'
+      reference: DODIN waiver 26-07
+    sources:
+    - INT-025.A1
+expect:
+  errors:
+  - CONN-004
+  messages:
+  - the cybersecurity posture was reviewed on 2026-03-20, which does not precede the DODIN waiver granted
+    2026-03-01

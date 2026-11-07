@@ -26,7 +26,9 @@ requirements:
     locator: "1.2.a"
     context: "POLICY"
     statement: "a. As a means to counter the threat from strategic competitor nations, the DoD will employ risk-based measures to protect systems and technologies from adversarial exploitation and compromise of U.S. military vulnerabilities and weaknesses in:"
-    status: "candidate"
+    status: "partial"
+    reason: "ART-RA rates threats and vulnerabilities and holds supply chain risk for every inventory item (SRA-001, SRA-002); that the risk-based measures chosen at S-2 rest on it is tailoring no rule ties to ART-RA"
+    evidence: [{"kind": "rule", "asserts": "Risk-based measures protect systems from compromise of vulnerabilities and weaknesses in supply chains: every component is in a supply chain record", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.chain.yaml", "expect": "is in no supply chain record, so its supply chain risk is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0004"
     citation: {"ref": "DODI5000.83", "page": 4, "anchor": "Systems."}
@@ -552,7 +554,9 @@ requirements:
     locator: "2.4.a"
     context: "DOD CHIEF INFORMATION OFFICER In accordance with DoDD 5144.02, the DoD Chief Information Officer:"
     statement: "a. Provides guidance to the DoD Components on the risks that DoD systems are subjected to when connected to the DoD information enterprise, to the extent that the DoD information enterprise:"
-    status: "candidate"
+    status: "partial"
+    reason: "The guidance is the DoD CIO's to give; a run only reads it for each connection in ra.yaml external.connections, and no field records the guidance used"
+    evidence: [{"kind": "prose", "asserts": "The risk assessment weighs the risks DoD systems are subjected to when connected outside the boundary", "target": "templates/artifacts/ART-RA.md", "claim": "presence"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0068"
     citation: {"ref": "DODI5000.83", "page": 8, "anchor": "Is effective."}
@@ -1097,7 +1101,9 @@ requirements:
     locator: "3.3.a.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(1) Work with security classification guidance authorities to determine classification markings as described in Volume 2 of DoD Manual 5200.01."
-    status: "candidate"
+    status: "partial"
+    reason: "Working with the classification guidance authorities is prose; the classification fact records the outcome, and nothing tests that the authority was consulted."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Classification markings are determined with the security classification guidance authority and recorded in the classification fact", "claim": "presence"}]
     work_item: "WI-174"
   - id: "REQ-DODI5000.83-0134"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Assess the impact of the exposure of the CTI that will be"}
@@ -1105,7 +1111,9 @@ requirements:
     locator: "3.3.a.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(2) Assess the impact of the exposure of the CTI that will be placed on unclassified networks, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "The CTI record holds the exposure assessment as text whenever a type holds CTI; presence only."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.cti.yaml", "expect": "the system holds CTI and records no assessment of its exposure and protection", "asserts": "Assess the impact of the exposure of the CTI placed on unclassified networks", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(2) Assess the impact of the exposure of the CTI that will be placed on unclassified networks, including:"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0135"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Information contained in solicitations."}
@@ -1137,7 +1145,9 @@ requirements:
     locator: "3.3.a.(3)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(3) Determine, apply, and direct dissemination and marking statements on technical documents and review for public release, as described in DoDIs 5230.24 and 3200.12."
-    status: "candidate"
+    status: "partial"
+    reason: "Handling markings are recorded on the classification fact and on documents holding vulnerability detail; dissemination statements on other technical documents and public release review are unheld."
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.none.yaml", "expect": "carries no handling marking", "asserts": "Marking statements are applied to technical documents that hold vulnerability or configuration detail", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded"}]
     work_item: "WI-174"
   - id: "REQ-DODI5000.83-0139"
     citation: {"ref": "DODI5000.83", "page": 13, "anchor": "Establish a strong culture of protection awareness and behavior through training and"}
@@ -1201,7 +1211,8 @@ requirements:
     locator: "3.3.a.(5).(a)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(a) Protection of CTI is consistent with Clause 252.204-7012 of the Defense Federal Acquisition Regulation Supplement (DFARS), unless exempted by Clause 252.204-7000(a)(3) of the DFARS."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.dfars.yaml", "expect": "protection of CTI is consistent with DFARS 252.204-7012 unless exempted by DFARS", "asserts": "Protection of CTI is consistent with DFARS 252.204-7012 unless exempted by 252.204-7000(a)(3)", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(a) Protection of CTI is consistent with Clause 252.204-7012 of the Defense Federal Acquisition Regulation Supplement (DFARS), unless exempted by Clause 252.204-7000(a)(3) of the DFARS."}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0147"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Requirements as described in DoDI 8582.01 are included in legally binding agreements"}
@@ -1209,7 +1220,8 @@ requirements:
     locator: "3.3.a.(5).(b)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(b) Requirements as described in DoDI 8582.01 are included in legally binding agreements to include, but not limited to:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.agreements.yaml", "expect": "the legally binding agreements do not include the DoDI 8582.01 requirements for", "asserts": "DoDI 8582.01 requirements are included in legally binding agreements", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "(b) Requirements as described in DoDI 8582.01 are included in legally binding agreements to include, but not limited to:"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0148"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Grants."}
@@ -1265,7 +1277,9 @@ requirements:
     locator: "3.3.a.(6)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To safeguard classified and unclassified CTI—starting with the application of appropriate classification and marking guidance for Do"
     statement: "(6) Assess losses associated with cyber incidents reported under contracts that contain:"
-    status: "candidate"
+    status: "partial"
+    reason: "Losses from reported cyber incidents are a required text field of the CTI record; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/cti/properties/incident_losses", "claim": "presence", "asserts": "Assess losses associated with cyber incidents reported under contracts"}]
     work_item: "WI-179"
   - id: "REQ-DODI5000.83-0155"
     citation: {"ref": "DODI5000.83", "page": 14, "anchor": "Clause 252.204–7012 of DFARS; or"}
@@ -1466,7 +1480,9 @@ requirements:
     locator: "3.3.c.(1).(e)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(e) Incorporate the derived requirements into the system requirements traceability verification matrix."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a derived requirement whose parent the matrix does not hold, and each requirement of the matrix carries a verification method."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "Derived requirements are incorporated into the requirements traceability verification matrix, and one derived from a requirement the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Each requirement of the traceability verification matrix carries its verification method"}]
     work_item: "WI-212"
   - id: "REQ-DODI5000.83-0180"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Allocate cybersecurity and related system security requirements to the system architecture and"}
@@ -1542,7 +1558,9 @@ requirements:
     locator: "3.3.c.(3)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS To design, develop, test, and acquire systems that can successfully operate in the face of threats, to include cyber threats, as wel"
     statement: "(3) Ensure cybersecurity and related system security requirements, design characteristics, and verification methods to demonstrate the achievement of those requirements are included in the technical baseline. Maintain bi-directional traceability among requirements throughout the system lifecycle."
-    status: "candidate"
+    status: "covered"
+    reason: "Each cybersecurity requirement carries its verification method (schema, required, one of five methods); REQS-001 fails a derived requirement whose parent the matrix does not hold."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/verification/properties/method", "claim": "constraint", "asserts": "Cybersecurity requirements carry the verification methods that demonstrate their achievement", "sentence": "(3) Ensure cybersecurity and related system security requirements, design characteristics, and verification methods to demonstrate the achievement of those requirements are included in the technical baseline."}, {"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "Bi-directional traceability among requirements is maintained: a derived requirement whose parent the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope", "sentence": "Maintain bi-directional traceability among requirements throughout the system lifecycle."}]
     work_item: "WI-212"
   - id: "REQ-DODI5000.83-0190"
     citation: {"ref": "DODI5000.83", "page": 16, "anchor": "Include cybersecurity and related system security in the conduct of technical risk"}
@@ -1741,7 +1759,9 @@ requirements:
     locator: "3.3.d.(1)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(1) Identify all system interfaces to all enabling and supporting systems and assess cybersecurity vulnerabilities. S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "Every interface to an enabling or supporting system outside the boundary has a connection record naming the vulnerabilities it introduces (SRA-002); support activities such as test tools and environments are not forced into a record"
+    evidence: [{"kind": "rule", "asserts": "All system interfaces to enabling and supporting systems are identified, each with a connection record", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.yaml", "expect": "has no connection record in ra.yaml, so the risk its connection and information exchange introduce is not considered", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "(1) Identify all system interfaces to all enabling and supporting systems and assess cybersecurity vulnerabilities.", "claim": "constraint"}, {"kind": "rule", "asserts": "Each connection to an enabling and supporting system names the vulnerabilities it introduces", "target": "SRA-002", "fixture": "tests/fixtures/negative/SRA-002.introduces.yaml", "expect": "which is no vulnerability or predisposing condition in ra.yaml", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "sentence": "S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:", "claim": "constraint"}, {"kind": "schema", "asserts": "Each connection records the vulnerabilities introduced by the enabling and supporting systems", "target": "framework/schema/ra.schema.json#/properties/external/properties/connections/items/properties/introduces", "sentence": "S&T managers and lead systems engineers will review vulnerabilities introduced by enabling and supporting systems and support activities, including:", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0213"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "Engineering, simulation, and test tools and environments."}
@@ -1781,7 +1801,9 @@ requirements:
     locator: "3.3.d.(2)"
     context: "ACTIVITIES TO MITIGATE ADVERSARY THREATS TO TECHNOLOGY AND PROGRAMS S&T managers and lead systems engineers will:"
     statement: "(2) Use threat intelligence from the Defense Intelligence Agency, DoD Component intelligence and counterintelligence activities, the Defense Counterintelligence and Security Agency, and the Joint Acquisition Protection and Exploitation Cell to assess third party service providers and environments (e.g., training, testing, logistics, or certification)."
-    status: "candidate"
+    status: "partial"
+    reason: "Each external provider names the threat intelligence used to assess it, from DIA, Component intelligence and counterintelligence, DCSA or JAPEC; only external services are forced into the provider list, so third party environments (training, testing, logistics) can be left out"
+    evidence: [{"kind": "schema", "asserts": "Each third party service provider or environment is assessed with threat intelligence from DIA, Component intelligence, DCSA or JAPEC", "target": "framework/schema/ra.schema.json#/properties/external/properties/providers/items/properties/threat_intelligence", "claim": "constraint"}]
     work_item: "WI-199"
   - id: "REQ-DODI5000.83-0218"
     citation: {"ref": "DODI5000.83", "page": 18, "anchor": "S&T protection and program protection measures implemented during concept development, engineering, and"}
