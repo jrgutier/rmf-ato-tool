@@ -105,7 +105,9 @@ requirements:
     locator: "1.2.•"
     context: "Differences Between CNSSI No. 1253 and NIST Publications The major differences between this Instruction and the NIST publications relevant to the RMF Steps Categorize and Select are:"
     statement: "• Tables D-1 through D-20 in Appendix D include a Privacy Implementation Considerations column that identifies controls not included in the NSS privacy control baseline, but if such controls are implemented, they may introduce privacy risks and so require coordination with the SAOP or designee."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. PIC-001 fails a selected control the column marks with no coordination with the SAOP or designee."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.yaml", "expect": "no privacy_implementation record shows the coordination with the SAOP or designee", "claim": "constraint", "asserts": "A control the Privacy Implementation Considerations column identifies is implemented only after coordination with the SAOP or designee", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0014"
     citation: {"ref": "CNSSI1253", "page": 7, "anchor": "The CNSS adopts NIST SP 800-376, as documented in this Instruction, for"}
@@ -142,7 +144,9 @@ requirements:
     locator: "2.3.1"
     context: "Privacy Implementation Considerations"
     statement: "It is possible for organizations to introduce unintended privacy risk when implementing security controls. Coordination between the cybersecurity and privacy officials is an effective means to identify and address any such unintended risks at the earliest opportunity and improve cybersecurity and privacy decision making. The new Privacy Implementation Considerations column in Appendix D (Tables D-1 through D-20) is intended to manage this risk. This column identifies controls that are not included in the privacy control baseline but may introduce privacy risk if selected to meet security objectives.11 If a control is selected that includes a checkmark in the Privacy Implementation Considerations column, the system owner must confer with the SAOP, or designee, to address any privacy risks and mitigation considerations that may arise from implementing controls listed under privacy implementation considerations. Controls with checkmarks are a starting point for discussions between the AO and SAOP or their designees."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. PIC-001 fails a selected control the column marks with no coordination, and one coordinated with anyone but the SAOP or designee."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.yaml", "expect": "no privacy_implementation record shows the coordination with the SAOP or designee", "claim": "constraint", "asserts": "The column identifies controls that may introduce privacy risk if selected, and a selected one with no coordination fails", "sentence": "This column identifies controls that are not included in the privacy control baseline but may introduce privacy risk if selected to meet security objectives.11", "holds_when": "S-2 is active"}, {"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.designee.yaml", "expect": "not the SAOP or designee", "claim": "constraint", "asserts": "The system owner must confer with the SAOP or designee on a selected control with a checkmark in the column", "sentence": "If a control is selected that includes a checkmark in the Privacy Implementation Considerations column, the system owner must confer with the SAOP, or designee, to address any privacy risks and mitigation considerations that may arise from implementing controls listed under privacy implementation considerations.", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0019"
     citation: {"ref": "CNSSI1253", "page": 8, "anchor": "For example, control PE-6(3) “Monitoring Physical Access: Video Surveillance” addresses employing video"}
@@ -150,8 +154,11 @@ requirements:
     locator: "2.3.1"
     context: "Privacy Implementation Considerations"
     statement: "For example, control PE-6(3) “Monitoring Physical Access: Video Surveillance” addresses employing video surveillance for the purpose of subsequent review. This control is not required for the privacy control baseline, but there are privacy implications to filming individuals’ physical activities and behavior. If such controls are selected, the SAOP or designee must be consulted before implementation."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. Held: a selected control with a checkmark (PE-6(3) among them) is not implemented without the SAOP or designee consulted (PIC-001). Unheld: the first sentence describes the PE-6(3) example of footnote 11 and can never fail; its ruling is sought."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.yaml", "expect": "no privacy_implementation record shows the coordination with the SAOP or designee", "claim": "constraint", "asserts": "If such controls are selected, the SAOP or designee is consulted before implementation, and a selected one with no coordination fails", "sentence": "If such controls are selected, the SAOP or designee must be consulted before implementation.", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
+    ruling_sought: [{"sentence": "This control is not required for the privacy control baseline, but there are privacy implications to filming individuals’ physical activities and behavior.", "reason": "Part of the footnote's example of PE-6(3): it says why the control has a checkmark and states no duty."}]
   - id: "REQ-CNSSI1253-0020"
     citation: {"ref": "CNSSI1253", "page": 9, "anchor": "Assumptions related to control baselines are intended to represent a majority of"}
     kind: "modal"
@@ -321,7 +328,9 @@ requirements:
     locator: "2.5.1"
     context: "Relationship between Privacy Control Baseline and Privacy Overlays"
     statement: "While some systems may be designed specifically to process PII, in other systems PII may appear in unexpected ways, such as the administration of user accounts or logs of how individuals utilized the system. For systems that do not process PII, and do not have user accounts or associated logs, the NSS privacy control baseline will be sufficient. In instances in which the system processes PII, is designed to process PII, or the organization determines it must utilize the user account and associated logs for accountability, security, and/or counterintelligence purposes, then a Privacy Overlay must be applied. The SAOP or designee must approve the determination as to whether a system does or does not process PII. Similarly, if the organization determines it must employ one of the controls designated as having a privacy implementation consideration, the SAOP or designee must be consulted to determine if additional steps are required to protect privacy. It is important to note that decisions made regarding sufficiency of security and privacy controls cannot be made once and assumed to be unchangeable for the entire system life cycle. As a system’s usage evolves over time, additional data collection, data aggregation, changes in use, or other factors may necessitate the implementation of additional security and privacy controls. This may also include the application of a more stringent privacy overlay. Maintaining communications between security and privacy experts is essential to ensuring privacy information is appropriately protected over the life of the system and its information."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. Held: a control designated as having a privacy implementation consideration is employed only after the SAOP or designee is consulted (PIC-001). Unheld: applying a Privacy Overlay to a system with PII or user accounts and logs, the SAOP's approval of the PII determination (WI-17), the recheck of control sufficiency over the life cycle (control-sufficiency-recheck), and the descriptive sentences."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.designee.yaml", "expect": "not the SAOP or designee", "claim": "constraint", "asserts": "If the organization employs a control designated as having a privacy implementation consideration, the SAOP or designee is consulted, and a coordination with another official fails", "sentence": "Similarly, if the organization determines it must employ one of the controls designated as having a privacy implementation consideration, the SAOP or designee must be consulted to determine if additional steps are required to protect privacy.", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0041"
     citation: {"ref": "CNSSI1253", "page": 11, "anchor": "NSS are exposed to different threats than non-NSS influenced by such factors"}
@@ -470,7 +479,9 @@ requirements:
     locator: "3.2.1.3"
     context: "Task S-1, Control Selection To select an NSS baseline, the following activities are completed:"
     statement: "3. As appropriate, coordinate with privacy program officials or representatives to ensure privacy risk is addressed as informed by the Privacy Implementation Considerations column in Tables D-1 through D-20 in Appendix D."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. PIC-001 fails a selected control the column marks with no coordination with privacy officials at S-2."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.yaml", "expect": "no privacy_implementation record shows the coordination with the SAOP or designee", "claim": "constraint", "asserts": "Coordinate with privacy officials to ensure privacy risk is addressed as informed by the Privacy Implementation Considerations column", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0060"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "The tailoring process is used to modify and align an NSS baseline"}
@@ -650,7 +661,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.•"
     context: "The tables contain the following columns:"
     statement: "• Privacy Implementation Considerations – Controls that if selected to meet a security objective may have a privacy impact and require coordination with the SAOP or designee to address privacy considerations prior to implementation. Checkmarks in this column include a subscripted number(s) that correlate to implications to consider when implementing the control. The controls indicated in this column impact privacy risk in that:"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. PIC-001 fails a selected control the column marks with no coordination with the SAOP or designee before implementation."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.yaml", "expect": "no privacy_implementation record shows the coordination with the SAOP or designee", "claim": "constraint", "asserts": "Controls selected with a Privacy Implementation Considerations checkmark require coordination with the SAOP or designee prior to implementation", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0082"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Close coordination between security and privacy is needed to manage privacy risks"}
@@ -658,7 +671,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.1"
     context: "The tables contain the following columns:"
     statement: "1. Close coordination between security and privacy is needed to manage privacy risks"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. Each checkmark's subscripted implications, 1 among them, are transcribed; PIC-001 fails a coordination that leaves one of its checkmark's implications unaddressed."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.implication.yaml", "expect": "the coordination does not address implication", "claim": "constraint", "asserts": "Close coordination between security and privacy is needed to manage privacy risks, an implication the coordination addresses; a coordination leaving an implication of the checkmark unaddressed fails", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0083"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Design choices may mitigate privacy risks"}
@@ -666,7 +681,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.2"
     context: "The tables contain the following columns:"
     statement: "2. Design choices may mitigate privacy risks"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. Each checkmark's subscripted implications, 2 among them, are transcribed; PIC-001 fails a coordination that leaves one of its checkmark's implications unaddressed."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.implication.yaml", "expect": "the coordination does not address implication", "claim": "constraint", "asserts": "Design choices that may mitigate privacy risks are an implication the coordination addresses; a coordination leaving an implication of the checkmark unaddressed fails", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0084"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Implementation choices may create unintended privacy risks"}
@@ -674,7 +691,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.3"
     context: "The tables contain the following columns:"
     statement: "3. Implementation choices may create unintended privacy risks"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. Each checkmark's subscripted implications, 3 among them, are transcribed; PIC-001 fails a coordination that leaves one of its checkmark's implications unaddressed."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.implication.yaml", "expect": "the coordination does not address implication", "claim": "constraint", "asserts": "Implementation choices that may create unintended privacy risks are an implication the coordination addresses; a coordination leaving an implication of the checkmark unaddressed fails", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0085"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "PII should not flow through or into a system that is not"}
@@ -682,7 +701,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.4"
     context: "The tables contain the following columns:"
     statement: "4. PII should not flow through or into a system that is not authorized to process PII"
-    status: "candidate"
+    status: "covered"
+    reason: "Built: framework/baselines/privacy-considerations.yaml transcribes the Privacy Implementation Considerations column of Appendix D (114 rows, read from the PDF's geometry and checked against the text) and of the Classified System Overlay Table 1 (21 rows); S-2 records tailoring.yaml privacy_implementation. PIC-001 fails the coordination on sc-7 that leaves implication 4 unaddressed."
+    evidence: [{"kind": "rule", "target": "PIC-001", "fixture": "tests/fixtures/negative/PIC-001.implication.yaml", "expect": "the coordination does not address implication", "claim": "constraint", "asserts": "PII should not flow through or into a system that is not authorized to process PII: the coordination on a control so marked addresses implication 4", "holds_when": "S-2 is active"}]
     work_item: "WI-32"
   - id: "REQ-CNSSI1253-0086"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Security Control Baselines Confidentiality (C)/Integrity (I)/Availability (A)"}

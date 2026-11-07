@@ -1,0 +1,14 @@
+rule: WFQ-001
+description: the release engineer, acquisition personnel with IT development responsibilities, does not meet the qualification standard of the cyberspace workforce policy
+bases:
+- minimal
+mutations:
+- op: replace_text
+  file: artifacts/data/org-context.yaml
+  old: "  - {id: RA-13,"
+  new: "  - {id: RA-14, role: PER-DEV, name: Release engineer (fixture), title: Software Developer, organization: Relay integrator, contact: {email: dev@example.com}, appointed_by: PER-PM, citizenship: us, affiliation: contractor, position: {designation: noncritical-sensitive, suitability: met, recorded_in: contract, manpower_id: MP-07, dcwf_code: \"621\"}, qualification: {status: not-met, training: [{course: Secure coding}], verified_by: PER-ISSM}, sources: [INT-013.A1]}\n  - {id: RA-13,"
+expect:
+  errors:
+  - WFQ-001
+  messages:
+  - "RA-14: PER-DEV performs a cyberspace work role and does not meet the qualification standard of the DoD cyberspace workforce policy"

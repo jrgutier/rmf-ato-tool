@@ -30,6 +30,7 @@ PROFILE_PATHS = {
 TABLES_PATH = "framework/baselines/cnssi-1253.yaml"
 TAILORING_FILE = "artifacts/data/tailoring.yaml"
 INPUTS_PATH = "framework/baselines/tailoring-inputs.yaml"
+PIC_PATH = "framework/baselines/privacy-considerations.yaml"
 # From this contract a compensating control from the catalog is a baseline control, so it needs
 # an SSP statement (SSP-COV-001); before it, rmf baseline resolve ignored compensating actions.
 COMPENSATING_SINCE = "0.2.0"
@@ -120,6 +121,26 @@ def overlay_ids(tables: dict[str, Any], overlays: list[str]) -> list[str]:
             raise BaselineError(problem)
         ids += [cid for block in known[name]["blocks"] for cid in block["add"]]
     return ids
+
+
+def privacy_considerations(repo: Any, overlays: list[str]) -> dict[str, dict[int, str]]:
+    """Controls with a Privacy Implementation Considerations checkmark: control -> each
+    subscripted implication -> its wording in the document whose column marks it (CNSSI 1253
+    Appendix D, and Table 1 of each applied overlay that has the column, whose wording is the
+    more specific and is preferred)."""
+    data = safe_load((repo / PIC_PATH).read_text(encoding="utf-8"))
+    errors = schema_errors(repo, "privacy-considerations", data)
+    if errors:
+        raise BaselineError(f"{PIC_PATH}: {errors[0]}")
+    out: dict[str, dict[int, str]] = {}
+    docs = [d for d in data["documents"] if d["ref"] in overlays]
+    docs += [d for d in data["documents"] if d["ref"] == "CNSSI1253"]
+    for doc in docs:
+        for block in doc["blocks"]:
+            for cid, marks in block["pic"].items():
+                for n in marks:
+                    out.setdefault(cid, {}).setdefault(n, doc["implications"][str(n)])
+    return out
 
 
 def cnssi_degraded(run: Run) -> bool:

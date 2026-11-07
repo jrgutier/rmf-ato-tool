@@ -151,9 +151,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -181,6 +181,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 
 **Alignment**
 
@@ -305,6 +306,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 
 **Alignment**
 
@@ -335,9 +337,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -365,6 +367,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - allocation.yaml gives every tailored-baseline control a type and the components that implement it.
 - Every requirement of ART-REQ is satisfied by a control that names it (TLR-009).
 - The system owner and the AO determine, for each common control provider, that its controls protect the system commensurate with risk (TLR-010).
+- The ISSO, a primary role (DoDI 8510.01 Table 3), gives an S-3 interview (WFQ-002).
 
 **Alignment**
 

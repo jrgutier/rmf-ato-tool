@@ -2077,6 +2077,89 @@ rules:
     enforces:
       - REQ-DOWI8430.01-0198
       - REQ-SP800-37R2-0330
+  - id: PIC-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a selected control with a Privacy Implementation Considerations checkmark has no coordination with the SAOP or designee before it is implemented, or one that leaves an implication of the checkmark unaddressed
+    fixture: tests/fixtures/negative/PIC-001.yaml
+    hint: "Record tailoring.yaml privacy_implementation for each selected control with a pic mark in framework/baselines/cnssi-1253.yaml (Appendix D, or the Table 1 of an applied overlay): by PER-PRIV (or a designee with designee_of: PER-PRIV), the implications of its checkmark addressed, the finding and its sources."
+    enforces:
+      - REQ-CNSSI1253-0013
+      - REQ-CNSSI1253-0018
+      - REQ-CNSSI1253-0019
+      - REQ-CNSSI1253-0040
+      - REQ-CNSSI1253-0059
+      - REQ-CNSSI1253-0081
+      - REQ-CNSSI1253-0082
+      - REQ-CNSSI1253-0083
+      - REQ-CNSSI1253-0084
+      - REQ-CNSSI1253-0085
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0024
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0025
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0026
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0027
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0028
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0298
+  - id: WFQ-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: an RMF appointee whose training is not recorded or verified by another official, or one in a cyberspace work role with no DCWF code or not meeting the qualification standard of the DoD cyberspace workforce policy
+    fixture: tests/fixtures/negative/WFQ-001.yaml
+    hint: "At P-1 give each org-context.yaml role record a qualification: its status against the DoD cyberspace workforce policy (met, pending with the due date, or not-a-work-role), the training completed, and verified_by, an official other than the appointee; a cyberspace work role also names position.dcwf_code."
+    enforces:
+      - REQ-CNSSP12-0049
+      - REQ-DODCIO-CATO-EVAL-0179
+      - REQ-DODD8140.01-0004
+      - REQ-DODD8140.01-0010
+      - REQ-DODD8140.01-0021
+      - REQ-DODD8140.01-0026
+      - REQ-DODD8140.01-0052
+      - REQ-DODD8140.01-0055
+      - REQ-DODI8500.01-0034
+      - REQ-DODI8500.01-0100
+      - REQ-DODI8500.01-0161
+      - REQ-DODI8500.01-0357
+      - REQ-DODI8510.01-0062
+      - REQ-DODI8510.01-0196
+      - REQ-DODI8530.01-0260
+      - REQ-DOWI8430.01-0258
+      - REQ-SP800-160V1R1-0891
+      - REQ-SP800-160V1R1-0909
+      - REQ-SP800-18R1-0041
+  - id: WFQ-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the ISSO, a primary role of the task, gave no interview at a task that has written its outputs
+    fixture: tests/fixtures/negative/WFQ-002.yaml
+    hint: "Interview PER-ISSO at each task whose RACI makes the ISSO primary (P-14, P-17, S-3) before writing its outputs."
+    enforces:
+      - REQ-DODI8510.01-0101
+      - REQ-DODI8510.01-0104
+      - REQ-DODI8510.01-0112
+  - id: THREAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the risk assessment designates no risk for the system, or one below the most severe threat to any individual component or subcomponent
+    fixture: tests/fixtures/negative/THREAT-001.yaml
+    hint: "At P-14 record ra.yaml system_risk: the level designated for the system, no lower than the highest risk ra.yaml rates against a component (threat events, external connections, supply chain), and set_by, the threat that sets it."
+    enforces:
+      - REQ-DODI8510.01-0147
   - id: PRIV-001
     scope: run
     severity: E
@@ -3158,11 +3241,14 @@ rules:
     fixture: tests/fixtures/negative/OCTX-013.yaml
     hint: "Each roles record of a cybersecurity position carries position, duties_statement and, where needed, personnel_security and supervised_by."
     enforces:
+      - REQ-DODI8500.01-0034
+      - REQ-DODI8500.01-0357
       - REQ-DODI8500.01-0359
       - REQ-DODI8500.01-0360
       - REQ-DODI8500.01-0406
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
+      - REQ-DODI8530.01-0260
   - id: PPROT-001
     scope: run
     severity: E
