@@ -357,6 +357,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- A determination of an inherited control rests on the common control provider's assessment and the assessor's check that the system inherits it (sar-results inherited; OCTX-006), and the SAR is not delivered before those results are available.
 - Control assessments are conducted per the plan, supported by developer, engineering, developmental and operational test events, with reuse of earlier results and automation considered (DoDI 8510.01 Table 5 outcome).
 - sar/results holds a determination for every scoped control (SAR-COV-001), with a finding for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
 
@@ -688,6 +689,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -702,6 +704,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- Courses of action are selected and their responses communicated as the organization's risk response strategy in ART-ORG-CONTEXT (org-context.yaml risk_response) directs.
 - Risk responses for determined risks are provided (DoDI 8510.01 Table 6 outcome).
 - Every risk in rar.yaml has a response; mitigations are reflected in the POA&M.
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).

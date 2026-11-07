@@ -2346,7 +2346,8 @@ requirements:
     locator: "3.1"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY"
     statement: "Common control assessments and assessments of the common part of hybrid controls are the responsibility of the common control providers, not the system owner inheriting the controls."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.chosen.yaml", "expect": ": the assessment of the common controls is arranged by the system owner, not the common control provider or the organization", "asserts": "Common control assessments are the responsibility of the common control providers, not the system owner inheriting the controls", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "sentence": "Common control assessments and assessments of the common part of hybrid controls are the responsibility of the common control providers, not the system owner inheriting the controls."}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0145"
     citation: {"ref": "SP800-53AR5", "page": 32, "anchor": "Providing artifacts to the assessors/assessment teams (e.g., policies, procedures, plans, specifications, designs,"}
@@ -2655,7 +2656,8 @@ requirements:
     locator: "3.2.3.•"
     context: "TAILOR ASSESSMENT PROCEDURES Assessment procedures are tailored by:"
     statement: "• Identifying common controls and inherited portions of hybrid controls that have been assessed by a separately documented security assessment plan or privacy assessment plan and do not require the repeated execution of the assessment procedures,37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.yaml", "expect": ": its determination rests on the separate assessment of the common controls it inherits", "asserts": "Inherited common controls assessed by a separately documented plan do not require the repeated execution of the assessment procedures", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "• Identifying common controls and inherited portions of hybrid controls that have been assessed by a separately documented security assessment plan or privacy assessment plan and do not require the repeated execution of the assessment procedures,37"}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0184"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Developing system/platform-specific and organization-specific assessment procedures (which may be adaptations of those"}
@@ -2702,7 +2704,8 @@ requirements:
     locator: "3.2.3.1"
     context: "ASSESSMENT METHOD- AND OBJECT-RELATED CONSIDERATIONS"
     statement: "Common controls are not assessed as part of system control assessments unless the common controls are part of a system that provides the common control(s) for inheritance by other systems. The assessor simply verifies that the system being assessed has actually inherited the common control (i.e., that a given inherited common control is being used by the system being assessed to provide protection) and the control is not implemented at the level of the system being assessed."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.yaml", "expect": ": its determination rests on the separate assessment of the common controls it inherits", "asserts": "Common controls are not assessed as part of system control assessments", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "Common controls are not assessed as part of system control assessments unless the common controls are part of a system that provides the common control(s) for inheritance by other systems."}, {"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.verified.yaml", "expect": "the assessor does not verify that the system inherits and uses", "asserts": "The assessor verifies that the system being assessed has actually inherited the common control", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "The assessor simply verifies that the system being assessed has actually inherited the common control (i.e., that a given inherited common control is being used by the system being assessed to provide protection) and the control is not implemented at the level of the system being assessed."}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0189"
     citation: {"ref": "SP800-53AR5", "page": 37, "anchor": "In addition to selecting appropriate assessment methods and objects, each assessment method"}
@@ -2718,7 +2721,9 @@ requirements:
     locator: "3.2.3.3"
     context: "COMMON CONTROL-RELATED CONSIDERATIONS"
     statement: "Assessors note which security and privacy controls (or parts of such controls) in security plans or privacy plans are designated as common controls.39 Since the assessment of common controls is the responsibility of the organizational entity that developed and implemented the controls (i.e., common control provider), the assessment procedures in Chapter 4 are also used to assess common controls. The results from the common control assessment are made available to organizational systems and system owners that elect to inherit the common controls.40"
-    status: "candidate"
+    status: "partial"
+    reason: "noting the common controls in the plans is the SAP's and is not checked; the second sentence says which procedures apply"
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.owner.yaml", "expect": "is not made available to the system owner of the inheriting system", "asserts": "The results from the common control assessment are made available to system owners that inherit the common controls", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "sentence": "The results from the common control assessment are made available to organizational systems and system owners that elect to inherit the common controls.40"}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0191"
     citation: {"ref": "SP800-53AR5", "page": 37, "anchor": "Another consideration in assessing common controls is awareness of system-specific aspects of"}
@@ -2726,7 +2731,9 @@ requirements:
     locator: "3.2.3.3"
     context: "COMMON CONTROL-RELATED CONSIDERATIONS"
     statement: "Another consideration in assessing common controls is awareness of system-specific aspects of a control that are not covered by the organizational entities responsible for the common aspects of the control. Such controls are referred to as hybrid controls. For example, CP-02, the contingency planning security control, may be considered a hybrid control by the organization if there is a contingency plan developed by the organization for all organizational systems. System owners are expected to adjust or tailor the organization-developed contingency plan when there are specific aspects of the plan that need to be defined for the particular system where the control is employed. For each hybrid control, assessors include in security assessment plans or privacy assessment plans the portions of the assessment procedures from Chapter 4 related to the parts of the control that are system-specific to ensure that, along with the results from common control assessments, all aspects of the control are assessed."
-    status: "candidate"
+    status: "partial"
+    reason: "hybrid controls and the tailoring of the contingency plan are not recorded here"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The controls a provider offers are recorded so the system-specific aspects of hybrid controls can be assessed", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0192"
     citation: {"ref": "SP800-53AR5", "page": 37, "anchor": "Common controls support multiple systems within the organization, and the protection measures"}
@@ -2734,7 +2741,9 @@ requirements:
     locator: "3.2.3.3"
     context: "COMMON CONTROL-RELATED CONSIDERATIONS"
     statement: "Common controls support multiple systems within the organization, and the protection measures provided by common controls are inherited by individual systems. Therefore, the organization determines the appropriate set of common controls to ensure that both the strength of the controls (i.e., security or privacy capability) and level of rigor and intensity of the control assessments are commensurate with the privacy risk assessment and categorization of the individual systems inheriting those controls. Weaknesses or deficiencies in common controls have the potential to adversely affect large portions of the organization and thus require significant attention."
-    status: "candidate"
+    status: "partial"
+    reason: "the organization's determination of the set of common controls, their strength and the rigor of their assessment is recorded as the controls offered, not judged"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/common_controls/items/properties/controls", "asserts": "The organization determines the appropriate set of common controls inherited by individual systems", "claim": "constraint"}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0193"
     citation: {"ref": "SP800-53AR5", "page": 37, "anchor": "If assessment results are not currently available for the common controls, the"}
@@ -2742,7 +2751,9 @@ requirements:
     locator: "3.2.3.3"
     context: "COMMON CONTROL-RELATED CONSIDERATIONS"
     statement: "If assessment results are not currently available for the common controls, the assessment plans for the systems under assessment that depend on those controls are duly noted. The assessments cannot be considered complete until the assessment results for the common controls are made available to system owners."
-    status: "candidate"
+    status: "partial"
+    reason: "that the assessment plan notes missing common control results is not recorded"
+    evidence: [{"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.pending.yaml", "expect": "the assessment is delivered as complete before the assessment results of the common controls behind", "asserts": "The assessments cannot be considered complete until the assessment results for the common controls are made available to system owners", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "The assessments cannot be considered complete until the assessment results for the common controls are made available to system owners."}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0194"
     citation: {"ref": "SP800-53AR5", "page": 38, "anchor": "FROM A COMMON CONTROL PROVIDER In system security and privacy plans, common"}
@@ -2750,7 +2761,8 @@ requirements:
     locator: "3.2.3.3"
     context: "ASSESSING COMMON CONTROLS AND PORTIONS OF HYBRID CONTROLS INHERITED"
     statement: "FROM A COMMON CONTROL PROVIDER In system security and privacy plans, common controls or portions of hybrid controls implemented and maintained by the common control provider are indicated as “inherited” with a reference to the common control provider. The system owner is not responsible for assessing common controls or the inherited portion of hybrid controls. Common controls are assessed separately and are not reassessed at the system level by each system that inherits them. However, the assessor verifies if the system does, in fact, inherit and utilize the common control as indicated in the system security plans and privacy plans. The assessment of common controls (for the common control provider) is carried out using the same process as a system control assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.chosen.yaml", "expect": ": the assessment of the common controls is arranged by the system owner, not the common control provider or the organization", "asserts": "The system owner is not responsible for assessing common controls", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "sentence": "The system owner is not responsible for assessing common controls or the inherited portion of hybrid controls."}, {"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.yaml", "expect": ": its determination rests on the separate assessment of the common controls it inherits", "asserts": "Common controls are assessed separately and are not reassessed at the system level", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "Common controls are assessed separately and are not reassessed at the system level by each system that inherits them."}, {"kind": "rule", "target": "OCTX-006", "fixture": "tests/fixtures/negative/OCTX-006.verified.yaml", "expect": "the assessor does not verify that the system inherits and uses", "asserts": "The assessor verifies the system does inherit and utilize the common control", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is in play and records common_controls", "sentence": "However, the assessor verifies if the system does, in fact, inherit and utilize the common control as indicated in the system security plans and privacy plans."}]
     work_item: "WI-156"
   - id: "REQ-SP800-53AR5-0195"
     citation: {"ref": "SP800-53AR5", "page": 38, "anchor": "The assessment procedures in SP 800-53A may be adapted to address system-,"}

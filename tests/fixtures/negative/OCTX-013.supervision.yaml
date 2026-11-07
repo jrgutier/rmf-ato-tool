@@ -1,0 +1,14 @@
+rule: OCTX-013
+bases:
+- minimal
+description: a non-U.S. citizen administrator is supervised by no U.S. citizen
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.12.supervised_by
+  value: RA-99
+expect:
+  errors:
+  - OCTX-013
+  messages:
+  - 'RA-13: a non-U.S. citizen system-administrator serves under the immediate supervision of a U.S. citizen'

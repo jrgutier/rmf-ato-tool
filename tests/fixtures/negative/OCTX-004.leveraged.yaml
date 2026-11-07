@@ -1,0 +1,15 @@
+rule: OCTX-004
+bases:
+- minimal
+description: a leveraged authorization's provider is no external entity
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: external_entities.0.name
+  value: Another provider
+expect:
+  errors:
+  - OCTX-004
+  messages:
+  - 'LA-01: the system leverages an authorization from Enterprise IT Services, which external_entities
+    does not list'

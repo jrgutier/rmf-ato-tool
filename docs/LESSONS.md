@@ -474,3 +474,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: a rule that needs the present uses the latest date the run vouches for, its newest authorization record, and a rule that bounds an event compares it with the plan's own schedule.
 - Rule: Compare a run's dates with each other, never with as_of as if it were now.
 - Promotion: none — it shapes how a rule is written, and test_valid_minimal fails at once on the mistake.
+
+## L-0068 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
