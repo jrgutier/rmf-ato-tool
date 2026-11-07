@@ -192,16 +192,22 @@ def termination_valid(ctx: Context) -> list[RunFinding]:
 
 def _late_review(record: Record, date: dt.date, prior: list[Record],
                  err: Callable[[Record, str], None]) -> None:
-    """A time-driven review falls within the frequency the last review on this authorization
-    set."""
-    last = [r for r in prior if isinstance(r.get("review"), dict)
-            and r.get("underlying") == record.get("underlying")]
-    if not last:
+    """A time-driven review falls within the frequency the last time-driven review on this
+    authorization set. An event-driven review is in addition to it (SP 800-37r2 p. 168), so it
+    does not reset the clock."""
+    reviews = [r for r in prior if isinstance(r.get("review"), dict)
+               and r.get("underlying") == record.get("underlying")]
+    timed = [r for r in reviews if r.get("basis") != "event-driven"]
+    if not timed:
         return
-    since, days = _day(last[-1].get("date")), last[-1]["review"].get("frequency_days")
+    last = timed[-1]
+    since, days = _day(last.get("date")), last["review"].get("frequency_days")
     if since is not None and days and (date - since).days > days:
-        err(record, f"this review comes {(date - since).days} days after {last[-1].get('id')}, "
-            f"past its {days}-day frequency")
+        between = reviews[reviews.index(last) + 1:]
+        event = any(r.get("basis") == "event-driven" for r in between)
+        err(record, f"this review comes {(date - since).days} days after {last.get('id')}, "
+            f"past its {days}-day frequency"
+            + ("; an event-driven review is in addition to it, not instead" if event else ""))
 
 
 # --- AODM-003: Component CIO position before an ATO at High or Very High --------------------

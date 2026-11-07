@@ -70,17 +70,6 @@ def review_events(ctx: Context) -> list[RunFinding]:
         prior = [p for _, p in ordered[:i] if p.get("underlying") == r.get("underlying")]
         if r.get("basis") == "event-driven":
             _trigger(r, date, prior, err)
-        if r.get("basis") == "time-driven":
-            timed = [(d, p) for d, p in ordered[:i]
-                     if p.get("underlying") == r.get("underlying")
-                     and p.get("basis") != "event-driven" and _frequency(p)]
-            if timed:
-                since, last = timed[-1]
-                days = _frequency(last) or 0
-                if (date - since).days > days:
-                    err(r, f"this time-driven review comes {(date - since).days} days after "
-                        f"the last time-driven review {last.get('id')}, past its {days}-day "
-                        "frequency; an event-driven review is in addition to it, not instead")
     return out
 
 
