@@ -99,7 +99,7 @@ def test_malformed_lists_are_findings_not_crashes(tmp_path):
 
 
 def _ppp_errors(run_dir):
-    return [e for e in _errors(run_dir) if e[0] in ("PPROT-001", "PPROT-002", "PPROT-005")]
+    return [e for e in _errors(run_dir) if e[0].startswith("PPROT")]
 
 
 def test_oversight_with_no_live_fire_needs_no_lfte_approval(tmp_path):
@@ -151,3 +151,34 @@ def test_critical_technology_without_applicable_horizontal_guidance(tmp_path):
         d["program"].update(critical_technology={"associated": True, "areas": []}),
         d["inputs"].update(horizontal_protection=[])))
     assert _errors(run_dir) == []
+
+
+@pytest.mark.parametrize(("pathway", "kind"), [("PW-SWP", "cns"), ("PW-UCA", "juon")])
+def test_jcids_content_is_asked_only_of_a_jcids_document(pathway, kind, tmp_path):
+    """DoDI 5000.83 2.8 binds JCIDS capability requirements; a CNS or a JUON is no JCIDS
+    document, so its missing SCRM, AT or threat content is not refused."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / FACTS, lambda d: d["acquisition"].update(pathway=pathway))
+    edit_yaml(run_dir / PREQ, lambda d: (
+        d["capability_document"].update(kind=kind),
+        [c.update(included=False, addressed_by=[])
+         for c in d["capability_document"]["protection_content"]]))
+    assert [e for e in _errors(run_dir) if e[0] == "PPROT-004"] == []
+
+
+def test_a_rescinded_authorization_opens_no_gate(tmp_path):
+    """GATE-001 reads the ledger in force on the gate's date: an ATO with conditions rescinded
+    before the MVCR does not authorize the release."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / FACTS, lambda d: d["acquisition"].update(pathway="PW-SWP"))
+    edit_yaml(run_dir / PROT, lambda d: d["program"].update(decision_points=[
+        {"id": "DP-SWP-PATHWAY", "date": "2026-03-15"},
+        {"id": "DP-SWP-MVCR", "date": "2027-02-01"}]))
+    edit_yaml(run_dir / "artifacts/data/authorizations.yaml", lambda d: d["records"].append(
+        {"id": "AUTH-003", "subject": "system", "task": "M-6", "decision": "AD-RESC",
+         "decided_by": "PER-AO", "date": "2027-01-10", "underlying": "AUTH-002",
+         "revocation_reason": "Risk no longer acceptable.", "sources": ["INT-012.A1"]}))
+    run = open_run(run_dir, REPO_ROOT)
+    gate = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "GATE-001"]
+    assert gate == ["the system is fielded at DP-SWP-MVCR, and no ATO or ATO with conditions of "
+                    "the system stands on that date"]

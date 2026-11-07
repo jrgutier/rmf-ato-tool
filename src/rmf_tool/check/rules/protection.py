@@ -324,10 +324,12 @@ def st_protection(ctx: Context) -> list[RunFinding]:
 # --- PPROT-004: protection requirements and solicitations ---------------------------------
 
 def protection_requirements(ctx: Context) -> list[RunFinding]:
-    data, out, err = _record(ctx, "PPROT-004", PREQ_FILE, "P-15")
+    owed = _ppp_owed(ctx)
+    data, out, err = _record(ctx, "PPROT-004", PREQ_FILE, "P-15",
+                             owed or ctx.run.path(PREQ_FILE).is_file())
     if data is None:
         return out
-    prot = _protection(ctx)
+    prot = _protection(ctx) if owed else {}
     ppp, inputs = _dict(prot.get("ppp")), _dict(prot.get("inputs"))
     read = _dict(data.get("read"))
     if prot and read.get("ppp") != ppp.get("id"):
@@ -338,6 +340,33 @@ def protection_requirements(ctx: Context) -> list[RunFinding]:
               if read_on is None or (_day(t.get("date")) or dt.date.min) <= read_on}
     for tapp in sorted(str(t) for t in before - _ids(read.get("tapps"))):
         err(f"protection-requirements.yaml does not name {tapp}, a TAPP the run read")
+    if _jcids(ctx, data):
+        _jcids_content(data, err)
+    if not owed:
+        return out
+    countermeasures = {c.get("id") for c in _dicts(ppp.get("countermeasures"))}
+    known = countermeasures | tapps | _ids(read.get("st_protection_plans")) \
+        | {_dict(data.get("capability_document")).get("id")}
+    for r in _dicts(data.get("requirements")):
+        for origin in sorted(str(o) for o in _ids(r.get("derived_from")) - known):
+            err(f"{r.get('id')} is derived from {origin}, which is no countermeasure, TAPP, "
+                "protection plan or capability document the run read")
+    if "P-17" in scope.active_tasks(ctx.run):
+        _solicitations(data, ppp, countermeasures, err)
+    return out
+
+
+def _jcids(ctx: Context, data: dict[str, Any]) -> bool:
+    """DoDI 5000.83 2.8 binds JCIDS capability requirements: on major capability acquisition,
+    and on the middle tier and urgent pathways only where the run's capability document is a
+    JCIDS document. The software pathway is outside JCIDS (DoDI 5000.87 1.2.c), and business
+    systems and services take their requirements elsewhere."""
+    pathway = _pathway(ctx)
+    kind = _dict(data.get("capability_document")).get("kind")
+    return pathway == MCA or (pathway in (None, "PW-MTA", "PW-UCA") and kind == "jcids")
+
+
+def _jcids_content(data: dict[str, Any], err: Check) -> None:
     content = {c.get("topic"): c for c in
                _dicts(_dict(data.get("capability_document")).get("protection_content"))}
     prq = {r.get("id") for r in _dicts(data.get("requirements"))}
@@ -356,16 +385,6 @@ def protection_requirements(ctx: Context) -> list[RunFinding]:
     if _unraised(content.get(THREAT_INFO)):
         err("foreign intelligence entity, cyber and supply chain threat information is not in "
             "the JCIDS capability requirements, and the gap is not raised to the sponsor")
-    countermeasures = {c.get("id") for c in _dicts(ppp.get("countermeasures"))}
-    known = countermeasures | tapps | _ids(read.get("st_protection_plans")) \
-        | {_dict(data.get("capability_document")).get("id")}
-    for r in _dicts(data.get("requirements")):
-        for origin in sorted(str(o) for o in _ids(r.get("derived_from")) - known):
-            err(f"{r.get('id')} is derived from {origin}, which is no countermeasure, TAPP, "
-                "protection plan or capability document the run read")
-    if "P-17" in scope.active_tasks(ctx.run):
-        _solicitations(data, ppp, countermeasures, err)
-    return out
 
 
 def _unraised(entry: Any) -> bool:
@@ -513,26 +532,28 @@ def nss_assessment(ctx: Context) -> list[RunFinding]:
 
 # --- GATE-001: an authorization before fielding on a pathway's release gate --------------
 
-AUTHORIZING = ("AD-ATO", "AD-ATOC", "AD-CATO")
+AUTHORIZING = ("AD-ATO", "AD-ATOC")  # the authorizations a cATO (AD-CATO) rests on
 
 
 def authorization_gates(ctx: Context) -> list[RunFinding]:
-    """A pathway's decision point marked authorization_gate fields the system, so an ATO, an ATO
-    with conditions or a cATO of the system is dated on or before it. Read only when protection.yaml
-    records the decision points the program passed."""
+    """A pathway's decision point marked authorization_gate fields the system, so an ATO or an
+    ATO with conditions of the system (a cATO rests on one) stands on that date: in force by the
+    ledger's reading (ADR-0005, 2026-11-01), not expired, rescinded, denied or superseded. Read
+    only when protection.yaml records the decision points the program passed."""
     program = _dict(_protection(ctx).get("program"))
     entity = ctx.run.framework.index("pathways").get(_pathway(ctx) or "")
     gates = {d.get("id") for d in _dicts(entity.data.get("decision_points") if entity else None)
              if d.get("authorization_gate") is True}
-    records = [r for r in _dicts(ctx.ledger)
-               if r.get("decision") in AUTHORIZING and r.get("subject") == "system"]
+    records, effect_of = _dicts(ctx.ledger), ledger.effects(ctx.run)
     out: list[RunFinding] = []
     for point, date in sorted(_passed(program).items()):
-        if point not in gates:
+        if point not in gates or date is None:
             continue
-        if not any(date is None or (_day(r.get("date")) or dt.date.max) <= date for r in records):
-            out.append(make("GATE-001", f"the system is fielded at {point}, and no ATO, ATO with "
-                            "conditions or cATO of the system precedes it", ledger.LEDGER_FILE,
+        standing = ledger.in_force(records, effect_of, on=date).values()
+        if not any(s.record.get("decision") in AUTHORIZING
+                   and s.record.get("subject") == "system" for s in standing):
+            out.append(make("GATE-001", f"the system is fielded at {point}, and no ATO or ATO with "
+                            "conditions of the system stands on that date", ledger.LEDGER_FILE,
                             None, {"R-4"}))
     return out
 
