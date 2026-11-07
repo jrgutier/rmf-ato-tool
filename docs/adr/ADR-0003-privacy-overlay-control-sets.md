@@ -54,11 +54,11 @@ logs or account records take the ACCT set. Table 2 (pp15-27) marks, per control,
   the system implements, so PRIV-001 reads the exclusion as void once ra-8 is in the baseline,
   and accepts it otherwise only on a Privacy Overlay control set and a statement of the privacy
   implications considered (I-32).
-- SP 800-37r2 lets an organization keep separate security and privacy plans. This framework has
-  one plan artifact, ART-SSP, so a system processing PII holds its privacy plan there
-  (`ssp-records.yaml` `privacy_plan`) and PRIV-008 refuses `plan_structure.consolidation:
-  separate`. A separate privacy plan artifact (ART-PRIVPLAN, planned under WI-02) would lift the
-  refusal.
+- SP 800-37r2 lets an organization keep separate security and privacy plans, and
+  `plan_structure.consolidation` may say so. This framework has one plan artifact, ART-SSP, so a
+  system processing PII records its privacy plan in `ssp-records.yaml` `privacy_plan` either way
+  (PRIV-008); a separate plan's own artifact (ART-PRIVPLAN) is planned under WI-02. A first cut
+  refused `separate`, a choice the source permits; Fable's review of I-15 removed the refusal.
 - PER-PRIV stands for the senior agency official for privacy and the system privacy officer
   until PER-SPO exists (WI-02); every system-level task names it under `raci.when:
   processes-pii`, and PRIV-009 asks its interview where it is responsible.

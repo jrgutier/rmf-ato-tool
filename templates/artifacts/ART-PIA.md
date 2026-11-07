@@ -13,8 +13,9 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 <!-- Template for ART-PIA (playbook: playbooks/P/P-14.md). Replace every <<FILL: ...>> placeholder with traced
      prose; each ## section needs at least one [[TOKEN]] (playbooks/_shared/tagging-and-traceability.md).
      Never write between the rmf:facts markers and never restate system facts. Delete this comment.
-     A system with no PII, or one P-12 found needs no PIA, writes the Determination section and a
-     sentence in each other section saying none; artifacts/data/pia.yaml is then not written. -->
+     A system with no PII, or one P-12 found needs no PIA, writes the Determination section only,
+     stating the not-required determination and its basis; artifacts/data/pia.yaml is then not
+     written. -->
 
 ## Determination
 

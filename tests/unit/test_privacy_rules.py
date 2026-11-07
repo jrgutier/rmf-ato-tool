@@ -93,6 +93,38 @@ def test_a_system_without_pii_logs_security_only_plan_updates(tmp_path):
     assert _privacy(run_dir) == []
 
 
+def test_separate_security_and_privacy_plans_are_allowed(pii):
+    """SP 800-37r2 Task S-4: organizations may keep separate plans."""
+    edit_yaml(pii / "artifacts/data/ssp-records.yaml",
+              lambda d: d["plan_structure"].update(consolidation="separate"))
+    assert _privacy(pii) == []
+
+
+def test_a_baseline_that_meets_omb_a130_may_say_so(pii):
+    """SP 800-53B 2.2: agencies may need extra steps; an evaluation that finds none passes."""
+    def sufficient(d):
+        d["privacy"]["legal_requirements"][0].update(
+            beyond_baseline=[], baseline_sufficient="Each A-130 privacy duty maps to a control.")
+    edit_yaml(pii / "artifacts/data/ra.yaml", sufficient)
+    assert _privacy(pii) == []
+
+
+def test_a_designee_of_the_ciso_may_review_the_pia(pii):
+    """DoDI 5400.16 E3 2c: the senior information security officer or designee reviews."""
+    edit_yaml(pii / PIA, lambda d: d["reviews"][0].update(by="PER-ISSM", designee_of="PER-CISO"))
+    assert _privacy(pii) == []
+
+
+def test_a_system_with_no_pia_decided_again_after_new_privacy_risk(pii):
+    """DoDI 5400.16 1a(3): new privacy risk on a system without a PIA is decided again at P-12."""
+    def again(d):
+        d["privacy"]["pia"].update(determination="not-required", basis="unchanged",
+                                   previous_assessment="PIA of 2025-03-01")
+        d["privacy"]["redetermined_after"] = ["CHG-002"]
+    edit_yaml(pii / INFOTYPES, again)
+    assert _privacy(pii) == []
+
+
 @pytest.mark.parametrize(("rel", "path", "value"), [
     (INFOTYPES, ("privacy", "compliance"), [["DOD5400.11-R"]]),
     (INFOTYPES, ("privacy", "pia", "basis"), ["nss"]),
@@ -102,6 +134,7 @@ def test_a_system_without_pii_logs_security_only_plan_updates(tmp_path):
     (CONMON, ("privacy", "controls", 0, "control"), ["au-2"]),
     (PLAN_REVIEWS, ("changes", 0, "plans"), "privacy"),
     ("artifacts/data/changes.yaml", ("changes", 1, "privacy_impact"), ["yes"]),
+    ("artifacts/data/changes.yaml", ("changes", 1, "id"), ["CHG-002"]),
 ])
 def test_malformed_privacy_data_is_a_finding_not_a_crash(pii, rel, path, value):
     def set_value(d):

@@ -1927,7 +1927,7 @@ rules:
     applies_after: P-14
     summary: "a PIA not coordinated, reviewed or approved by the officials DoDI 5400.16 names, or approved after the decision that took it"
     fixture: tests/fixtures/negative/PRIV-003.yaml
-    hint: "Coordinate the PIA through the ISSM, the privacy representative and the records management office; PER-CISO confirms cybersecurity policy and PER-PRIV privacy policy; PER-CIO (or the reviewing official) approves after them and before the authorization decision."
+    hint: "Coordinate the PIA through the ISSM, the privacy representative and the records management office; PER-CISO (or a designee, designee_of) confirms cybersecurity policy and PER-PRIV privacy policy; PER-CIO (or the reviewing official, never the PM or another party who coordinated it) approves after them and before the authorization decision."
     enforces:
       - REQ-DODI5400.11-0141
       - REQ-DODI5400.16-0027
@@ -1964,7 +1964,7 @@ rules:
     applies_after: M-1
     summary: "a change not tested for new privacy risk, or one that changes the privacy posture with no PIA review"
     fixture: tests/fixtures/negative/PRIV-005.yaml
-    hint: "State privacy_impact on every change of a system processing PII; a change with privacy_impact true needs a pia.yaml updates entry naming it."
+    hint: "State privacy_impact on every change of a system processing PII; a change with privacy_impact true needs a pia.yaml updates entry naming it; on a system with no PIA it needs a new P-12 determination (infotypes.yaml privacy.redetermined_after)."
     enforces:
       - REQ-DODI5400.16-0042
       - REQ-DODI5400.16-0043
@@ -1999,17 +1999,19 @@ rules:
     applies_after: P-14
     summary: "a privacy risk assessment that does not evaluate the legal requirements or OMB A-130, or an applicable requirement or Privacy Act rule ART-REQ does not carry"
     fixture: tests/fixtures/negative/PRIV-007.yaml
-    hint: "Record ra.yaml privacy with the nature of the processing, its impact on individuals and each legal and policy requirement evaluated (OMB A-130 applies, with what the privacy baseline leaves unmet); carry each applicable one, and each Privacy Act rule of a system of records, by an ART-REQ requirement."
+    hint: "Record ra.yaml privacy with the nature of the processing, its impact on individuals and each legal and policy requirement evaluated (OMB A-130 applies, with what the privacy baseline leaves unmet or why it leaves nothing; the FIPPs considered); carry each applicable one, and each Privacy Act rule of a system of records (with the contract provisions when a contractor operates it), by an ART-REQ requirement."
     enforces:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0075
       - REQ-DODI5000.82-0176
       - REQ-DODI5400.11-0004
       - REQ-DODI5400.11-0043
+      - REQ-DODI5400.11-0097
       - REQ-DODI5400.11-0136
       - REQ-DODI5400.11-0160
       - REQ-DODI5400.11-0164
       - REQ-DODI5400.11-0173
       - REQ-DODI5400.11-0174
+      - REQ-DODI5400.11-0180
       - REQ-SP800-53B-0031
       - REQ-SP800-53B-0033
   - id: PRIV-008
@@ -2019,15 +2021,11 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-4
-    summary: "a system processing PII whose privacy plan is not held in ART-SSP"
+    summary: "a system processing PII with no privacy plan record"
     fixture: tests/fixtures/negative/PRIV-008.yaml
-    hint: "Record ssp-records.yaml privacy_plan with the privacy requirements and the methods and metrics that assess the privacy controls, and keep the plans consolidated or partly consolidated."
+    hint: "Record ssp-records.yaml privacy_plan with the privacy requirements and the methods and metrics that assess the privacy controls; the plans may be consolidated or separate."
     enforces:
-      - REQ-CNSSI1253-0075
       - REQ-DODI8510.01-0108
-      - REQ-DODI8510.01-0113
-      - REQ-SP800-37R2-0292
-      - REQ-SP800-37R2-0310
       - REQ-SP800-37R2-0556
   - id: PRIV-009
     scope: run

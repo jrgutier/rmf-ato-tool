@@ -9,16 +9,5 @@ sources: [ART-INFOTYPES]
 
 ## Determination
 
-No PIA is required: neither information type holds PII [[ART-INFOTYPES]].
-
-## Assessment
-
-None: the system processes no PII [[ART-INFOTYPES]].
-
-## Coordination, reviews and approval
-
-None [[ART-INFOTYPES]].
-
-## Submission, publication and updates
-
-None [[ART-INFOTYPES]].
+No PIA is required: neither information type holds PII, so P-12 found nothing a PIA would
+assess [[ART-INFOTYPES]].

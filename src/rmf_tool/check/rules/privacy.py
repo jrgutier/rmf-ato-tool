@@ -59,7 +59,9 @@ COORDINATION = {"issm": "the information system security manager",
                 "records-management": "the records management office"}
 REVIEWERS = {"PER-CISO": "cybersecurity-policy", PRIVACY: "privacy-policy"}
 APPROVERS = {"cio": "PER-CIO"}
+PREPARER = "PER-PM"  # E3 2b: the PM or designee completes and coordinates the PIA
 OMB_A130 = "OMB-A-130"
+FIPPS = "FIPPS"  # DoDI 5400.11 5.2: systems are evaluated against the FIPPs
 PLAN_TASKS = ("I-2", "A-5", "M-4")  # tasks that update the plans with what they learned
 
 
@@ -212,16 +214,16 @@ def _pia(ctx: Context, task: str) -> tuple[dict[str, Any] | None, bool]:
 
 def pia_form(ctx: Context) -> list[RunFinding]:
     """PRIV-002: a required or adapted PIA exists, prepared on its DoD form."""
-    data, needed = _pia(ctx, "P-14")
+    _, needed = _pia(ctx, "P-14")
     if not needed:
         return []
-    decided = _determination(ctx)
-    if data is None:
+    decided, pia = _determination(ctx), ctx.data(PIA)
+    if not isinstance(pia, dict):
         return [_finding("PRIV-002", f"the PIA is {decided}, and artifacts/data/pia.yaml holds "
                          "no PIA", PIA, "P-14")]
-    if data.get("form") != FORMS[str(decided)]:
+    if pia.get("form") != FORMS[str(decided)]:
         return [_finding("PRIV-002", f"a {decided} PIA is prepared on its DoD form "
-                         f"{FORMS[str(decided)]}, not {data.get('form')}", PIA, "P-14")]
+                         f"{FORMS[str(decided)]}, not {pia.get('form')}", PIA, "P-14")]
     return []
 
 
@@ -248,13 +250,18 @@ def pia_approval(ctx: Context) -> list[RunFinding]:
             err(f"the PIA is coordinated through the ISSM, not {c.get('by')}")
     reviews = _dicts(data.get("reviews"))
     for reviewer, confirms in REVIEWERS.items():
-        if not any(r.get("by") == reviewer and r.get("confirms") == confirms for r in reviews):
+        if not any(reviewer in (r.get("by"), r.get("designee_of")) and r.get("confirms") == confirms
+                   for r in reviews):
             err(f"{reviewer} does not review the completed PIA and confirm its compliance with "
                 f"{confirms.replace('-', ' ')}")
-    role = _str(approval.get("role"))
-    if role in APPROVERS and approval.get("by") != APPROVERS[role]:
+    role, approver = _str(approval.get("role")), _str(approval.get("by"))
+    if role in APPROVERS and approver != APPROVERS[role]:
         err(f"the Component CIO approves the PIA as final review and approval official, not "
-            f"{approval.get('by')}")
+            f"{approver}")
+    preparers = {PREPARER} | _strings([c.get("by") for c in coordination])
+    if approver in preparers:
+        err(f"{approver} prepared or coordinated the PIA and cannot also give it final review "
+            "and approval")
     for step in [*coordination, *reviews]:
         day = _day(step.get("date"))
         if approved is not None and day is not None and day > approved:
@@ -322,6 +329,11 @@ def change_privacy(ctx: Context) -> list[RunFinding]:
         elif impact and needs_pia and ident not in updates:
             out.append(_finding("PRIV-005", f"{ident} changes the privacy posture, and no PIA "
                                 "review in artifacts/data/pia.yaml follows it", CHANGES, "M-1"))
+        elif impact and _determination(ctx) == "not-required" \
+                and ident not in _strings(_dict(_privacy(ctx)).get("redetermined_after")):
+            out.append(_finding("PRIV-005", f"{ident} creates new privacy risk on a system with "
+                                "no PIA, so the PIA determination is due again at P-12",
+                                CHANGES, "M-1"))
     return out
 
 
@@ -408,9 +420,13 @@ def legal_basis(ctx: Context) -> list[RunFinding]:
     elif a130.get("applies") is not True:
         err("OMB A-130 applies to a federal information system, and the privacy risk "
             "assessment finds it does not")
-    elif not _list(a130.get("beyond_baseline")):
-        err("the privacy risk assessment assumes the privacy control baseline meets every "
-            "OMB A-130 obligation: beyond_baseline names none")
+    elif not _list(a130.get("beyond_baseline")) and not a130.get("baseline_sufficient"):
+        err("the privacy risk assessment does not evaluate which OMB A-130 obligations the "
+            "privacy control baseline leaves unmet: beyond_baseline names none and "
+            "baseline_sufficient gives no reason")
+    if FIPPS not in _strings([r.get("authority") for r in legal]):
+        err("the privacy risk assessment does not consider the Fair Information Practice "
+            "Principles in evaluating the system")
     reqs = _record(ctx, REQUIREMENTS)
     if reqs is None or "P-15" not in scope.active_tasks(ctx.run):
         return out
@@ -424,8 +440,11 @@ def legal_basis(ctx: Context) -> list[RunFinding]:
     if sorn.get("status") in ("published", "pending"):
         rules = {r["rule"]: r for r in _dicts(reqs.get("privacy_act"))
                  if isinstance(r.get("rule"), str)}
-        for rule in ("direct-collection", "disclosure-bar", "first-amendment", "access-appeals",
-                     "rules-of-conduct"):
+        wanted = ["direct-collection", "disclosure-bar", "first-amendment", "access-appeals",
+                  "rules-of-conduct"]
+        if sorn.get("contractor_operated") is True:
+            wanted.append("contract-provisions")
+        for rule in wanted:
             entry = rules.get(rule)
             if entry is None:
                 err(f"the system keeps a system of records, and ART-REQ does not address the "
@@ -446,10 +465,6 @@ def privacy_plan(ctx: Context) -> list[RunFinding]:
     if not _active(ctx, "S-4") or data is None:
         return []
     out = []
-    if _dict(data.get("plan_structure")).get("consolidation") == "separate":
-        out.append(_finding("PRIV-008", "the privacy plan is kept separate, and ART-SSP is the "
-                            "only plan the framework holds: consolidate it with the security "
-                            "plan", SSP_RECORDS, "S-4"))
     if not isinstance(data.get("privacy_plan"), dict):
         out.append(_finding("PRIV-008", "the system processes PII and ART-SSP holds no privacy "
                             "plan", SSP_RECORDS, "S-4"))
@@ -528,8 +543,9 @@ def privacy_program(ctx: Context) -> list[RunFinding]:
     if doc is None or "P-2" not in scope.active_tasks(ctx.run) \
             or "P-2" not in _list(_dict(doc.data).get("touched_by")):
         return []
-    if PROGRAM_HEADING.search(doc.body or ""):
-        return []
-    return [_finding("PRIV-011", "P-2 wrote ART-ORG-CONTEXT without its Privacy program "
-                     "section on the Component privacy and civil liberties program",
-                     ORG_CONTEXT, "P-2")]
+    heading = PROGRAM_HEADING.search(doc.body or "")
+    if not heading:
+        return [_finding("PRIV-011", "P-2 wrote ART-ORG-CONTEXT without its Privacy program "
+                         "section on the Component privacy and civil liberties program",
+                         ORG_CONTEXT, "P-2")]
+    return []

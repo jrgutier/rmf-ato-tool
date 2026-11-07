@@ -368,6 +368,10 @@
               "type": "string",
               "minLength": 1
             },
+            "contractor_operated": {
+              "title": "A contractor operates the system of records on behalf of DoD",
+              "type": "boolean"
+            },
             "sources": {
               "type": "array",
               "minItems": 1,
@@ -482,6 +486,11 @@
               "type": "string",
               "minLength": 1
             },
+            "previous_assessment": {
+              "title": "The earlier PIA or PIA-like evaluation (such as a data use agreement) a previously-assessed or unchanged basis rests on",
+              "type": "string",
+              "minLength": 1
+            },
             "sources": {
               "type": "array",
               "minItems": 1,
@@ -489,6 +498,36 @@
                 "$ref": "#/$defs/source"
               }
             }
+          },
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "basis"
+                ],
+                "properties": {
+                  "basis": {
+                    "enum": [
+                      "previously-assessed",
+                      "unchanged"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "previous_assessment"
+                ]
+              }
+            }
+          ]
+        },
+        "redetermined_after": {
+          "title": "Changes creating new privacy risk after which P-12 decided the PIA again",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CHG-\\d{3}$"
           }
         },
         "sources": {
