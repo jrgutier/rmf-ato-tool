@@ -45,8 +45,11 @@ requirements:
     locator: "5"
     context: "SECTION III - SCOPE"
     statement: "5. This Instruction provides guidance for security authorization documentation and data elements within RMF core documents to facilitate reciprocity across the national security community. The requirements of this Instruction apply to all United States Government departments, agencies, and their contractors, consultants, and licensees who own, procure, use, operate, or maintain NSS as defined by the Federal Information Security Modernization Act (FISMA) of 2014. Specific requirements within this Instruction also apply to all RMF security assessment plan materials as described in NIST SP 800-53A. These requirements apply irrespective of form or generation process. While the scope of this Instruction applies primarily to systems, the RMF documentation, data elements, and reciprocity processes may be applied to other system components (e.g., hardware, software), as indicated in Annex D of this Instruction. Organizations must, however, agree on which RMF core documents and which data elements are required."
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the first two sentences state the instruction's scope and bind no act of a run. The last is held by RCP-006; the third is a permission."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.documents.yaml", "expect": "agreed as required, is not an RMF core document", "asserts": "The organizations agree which RMF core documents are required, each a core document", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Organizations must, however, agree on which RMF core documents and which data elements are required."}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "While the scope of this Instruction applies primarily to systems, the RMF documentation, data elements, and reciprocity processes may be applied to other system components (e.g., hardware, software), as indicated in Annex D of this Instruction.", "reason": "a permission: the documentation and reciprocity processes 'may be applied' to components"}]
   - id: "REQ-CNSSI1254-0006"
     citation: {"ref": "CNSSI1254", "page": 4, "anchor": "A standard set of documents and associated data elements are required for"}
     kind: "lettered"
@@ -130,7 +133,8 @@ requirements:
     locator: "9"
     context: "SECTION V - RESPONSIBILITIES"
     statement: "9. In accordance with CNSSP 22, the national security community will make documentation regarding the security posture of systems available to promote reciprocity and to assist AOs from other organizations in making credible, risk-based decisions regarding the acceptance and use of systems and the information they process, store, or transmit."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "Documentation of the security posture of the system is delivered to the AOs of the receiving organizations to make risk-based decisions on its acceptance", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "In accordance with CNSSP 22, the national security community will make documentation regarding the security posture of systems available to promote reciprocity and to assist AOs from other organizations in making credible, risk-based decisions regarding the acceptance and use of systems and the information they process, store, or transmit."}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0016"
     citation: {"ref": "CNSSI1254", "page": 6, "anchor": "References are listed in Annex A. Future updates to referenced documents shall"}
@@ -940,7 +944,9 @@ requirements:
     locator: "REFERENCES.1"
     context: "RECIPROCITY"
     statement: "1. Reciprocity helps ensure IT capabilities are developed and fielded rapidly and efficiently across an information enterprise. Applied appropriately, reciprocity reduces redundant testing, assessments, documentation, and the associated costs in time and resources. Organizations entering into reciprocal agreements will discuss all deviations from the data elements and resolve to both organizations’ satisfaction."
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the first sentence states what reciprocity is for and binds no act. The second is held by RCP-006."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.deviation.yaml", "expect": "is not resolved to both organizations' satisfaction", "asserts": "Each deviation from the data elements is resolved to both organizations' satisfaction", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Organizations entering into reciprocal agreements will discuss all deviations from the data elements and resolve to both organizations’ satisfaction."}]
     work_item: "WI-317"
   - id: "REQ-CNSSI1254-0113"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "To facilitate reciprocity, the concepts in the following paragraphs are fundamental to"}
@@ -964,15 +970,20 @@ requirements:
     locator: "REFERENCES.b"
     context: "RECIPROCITY"
     statement: "b. Deploying3 systems with authorizations are intended to be accepted into receiving organizations without adversely affecting the authorizations of either the deployed system or the receiving system or site. Configuration differences introduced by using the system in a new or different environment may require additional testing. ISOs and Program Managers (PM) of deploying systems must coordinate system security requirements with receiving organizations or their representatives early and throughout system development."
-    status: "candidate"
+    status: "partial"
+    reason: "That coordination continues 'throughout system development' is not held: RCP-002 asks for coordination before the system is released, and the source sets no cadence. The configuration-differences sentence is a permission."
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.coordinated.yaml", "expect": "security requirements are not coordinated with the receiving organization during system development", "asserts": "System security requirements of deploying systems are coordinated with the receiving organizations during system development", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "ISOs and Program Managers (PM) of deploying systems must coordinate system security requirements with receiving organizations or their representatives early and throughout system development."}]
     work_item: "WI-312"
+    ruling_sought: [{"sentence": "Configuration differences introduced by using the system in a new or different environment may require additional testing.", "reason": "a permission: configuration differences 'may require additional testing'; RCP-005 tests each difference recorded"}]
   - id: "REQ-CNSSI1254-0116"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "An authorization decision for a system cannot be made without completing the"}
     kind: "lettered"
     locator: "REFERENCES.c"
     context: "RECIPROCITY"
     statement: "c. An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR). Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "That an authorization decision rests on completed assessments is held only through AODM-001's progress and rar_ref clauses, which do not read the assessment results themselves; the delivery sentence is held by RCP-001."
+    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.progress.yaml", "expect": "have not written their outputs", "asserts": "An authorization decision is refused while the assessment tasks before it have not written their outputs", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.rar.yaml", "expect": "the decision must rest on the risk assessment report", "asserts": "The authorization decision must rest on the risk assessment report recorded in the package", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The complete security authorization package is delivered to the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.evidence.yaml", "expect": "the body of evidence behind the package is not shared with the receiving organization", "asserts": "The supporting artifacts, the body of evidence behind the package, are shared with the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0117"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "The AO for a receiving system does not issue a new/additional ATO"}
@@ -980,7 +991,8 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY"
     statement: "d. The AO for a receiving system does not issue a new/additional ATO for the deployed system. However, the receiving organization updates their hosting system ATO to include any additional or modified security controls associated with hosting the deploying system. Depending on risk assessment factors of the receiving organization, the changes caused by the deployed system may change the authorization decision of the hosting system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.added.yaml", "expect": "the hosting system's authorization does not include the added control", "asserts": "The hosting system authorization is updated to include each additional security control of hosting the deploying system", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "However, the receiving organization updates their hosting system ATO to include any additional or modified security controls associated with hosting the deploying system."}]
     work_item: "WI-315"
   - id: "REQ-CNSSI1254-0118"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "Organizations have the right to refuse participating in reciprocity with another organization,"}
@@ -988,7 +1000,8 @@ requirements:
     locator: "REFERENCES.e"
     context: "RECIPROCITY"
     statement: "e. Organizations have the right to refuse participating in reciprocity with another organization, if the system's RMF core documentation is not considered complete enough to provide an informed understanding of potential or existing risks, or there would be excessive risk to the system or site, as determined by the system or site AO. Such decisions to refuse participation in reciprocity should be documented by the refusing AO, and provided, upon request, to the deploying organization’s ISO or PM, AO, and organization Senior Information Security Officer (SISO), and to the refusing organization’s Component SISO. Disputes should be resolved at the lowest possible level. Disputes that cannot be resolved will be raised to the next appropriate level."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.refusingao.yaml", "expect": "the refusal to participate in reciprocity is not documented by the refusing AO", "asserts": "The decision to refuse participation in reciprocity is documented by the refusing AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Such decisions to refuse participation in reciprocity should be documented by the refusing AO, and provided, upon request, to the deploying organization’s ISO or PM, AO, and organization Senior Information Security Officer (SISO), and to the refusing organization’s Component SISO."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.request.yaml", "expect": "the documented refusal is not provided to", "asserts": "The documented refusal is provided, upon request, to those who ask for it", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Such decisions to refuse participation in reciprocity should be documented by the refusing AO, and provided, upon request, to the deploying organization’s ISO or PM, AO, and organization Senior Information Security Officer (SISO), and to the refusing organization’s Component SISO."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.first.yaml", "expect": "the dispute is not raised from the AO level to the RMF TAG Chair and then to the AO Council, in that order", "asserts": "Disputes are resolved first at the AO level, the lowest possible level", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Disputes should be resolved at the lowest possible level."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.next.yaml", "expect": "is not raised to the next level", "asserts": "Disputes that cannot be resolved are raised to the next level", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Disputes that cannot be resolved will be raised to the next appropriate level."}]
     work_item: "WI-319"
   - id: "REQ-CNSSI1254-0119"
     citation: {"ref": "CNSSI1254", "page": 25, "anchor": "The following section does not represent all possible reciprocity circumstances. The cases"}
@@ -1004,7 +1017,9 @@ requirements:
     locator: "REFERENCES.a"
     context: "RECIPROCITY SCENARIOS"
     statement: "a. A new system is being developed by Organization A for deployment into Organizations B, C, D, and E. In this scenario, Organization A, will maintain ownership and configuration control of the system. Organization A completes RMF steps 1-54, documents the results in the RMF core documents, and provides the documentation (and supporting artifacts) to the AOs of hosting environments for Organizations B, C, D, and E, who must determine if the documentation provides sufficient information to confirm adequate security measures are in place and establish an acceptable level of risk for deployment within their organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the first sentence describes the scenario; it binds no one to an act. The second is held on the receiving side by RCP-005 (the hosting AO decides on an acceptable risk); its delivery half is RCP-001's, cited on the Granting entries."
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.risk.yaml", "expect": "the authorization to use does not rest on a determination that the risk to the receiving system is acceptable", "asserts": "The hosting AO determines that the level of risk is acceptable before authorizing deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Organization A completes RMF steps 1-54, documents the results in the RMF core documents, and provides the documentation (and supporting artifacts) to the AOs of hosting environments for Organizations B, C, D, and E, who must determine if the documentation provides sufficient information to confirm adequate security measures are in place and establish an acceptable level of risk for deployment within their organizations."}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0121"
     citation: {"ref": "CNSSI1254", "page": 25, "anchor": "A system is authorized and subsequently deployed into receiving sites authorized by"}
@@ -1012,8 +1027,11 @@ requirements:
     locator: "REFERENCES.b"
     context: "RECIPROCITY SCENARIOS"
     statement: "b. A system is authorized and subsequently deployed into receiving sites authorized by a separate organization. In this scenario, the deploying organization’s security assessment documentation and supporting artifacts are made available to the receiving site organization. If the receiving organization determines there is insufficient information in the documentation or inadequate security measures in place for establishing an acceptable level of risk, the receiving organization may negotiate with the deploying organization for additional security-related information and/or additional security-related measures. The additional security-related information or security measures may be provided by the deploying organization, the system developer, the receiving organization, some other external third party, or a combination of the above. Once the receiving organization’s AO believes adequate security measures are in place and the level of risk is acceptable, the AO may issue a separate authorization for this instance of the system."
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the first sentence describes the scenario; it binds no one to an act. The second is held on the receiving side by RCP-004 (the documentation is requested); the other three are permissions."
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.requested.yaml", "expect": "the Granting organization is not asked for the", "asserts": "The receiving site organization asks the Granting, deploying organization for its security assessment documentation and supporting artifacts", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "In this scenario, the deploying organization’s security assessment documentation and supporting artifacts are made available to the receiving site organization."}]
     work_item: "WI-314"
+    ruling_sought: [{"sentence": "If the receiving organization determines there is insufficient information in the documentation or inadequate security measures in place for establishing an acceptable level of risk, the receiving organization may negotiate with the deploying organization for additional security-related information and/or additional security-related measures.", "reason": "a permission: the receiving organization 'may negotiate' for more information or measures"}, {"sentence": "The additional security-related information or security measures may be provided by the deploying organization, the system developer, the receiving organization, some other external third party, or a combination of the above.", "reason": "a permission: the added information or measures 'may be provided' by any of several parties"}, {"sentence": "Once the receiving organization’s AO believes adequate security measures are in place and the level of risk is acceptable, the AO may issue a separate authorization for this instance of the system.", "reason": "a permission: the AO 'may issue' a separate authorization for this instance"}]
   - id: "REQ-CNSSI1254-0122"
     citation: {"ref": "CNSSI1254", "page": 25, "anchor": "A system is authorized by an organization, and another organization takes ownership"}
     kind: "lettered"
@@ -1063,7 +1081,8 @@ requirements:
     locator: "REFERENCES.a"
     context: "RECIPROCITY PROCESS"
     statement: "a. Initiates the security authorization package and submits an electronic copy of the SSP, SAR, RAR, POA&M, Authorization Decision Document, and list of deployment sites as well as projected dates of deployment through the deploying and receiving organization’s POCs."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The SSP, SAR, RAR, POA&M, authorization decision document and list of deployment sites with projected dates are delivered to the receiving organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Initiates the security authorization package and submits an electronic copy of the SSP, SAR, RAR, POA&M, Authorization Decision Document, and list of deployment sites as well as projected dates of deployment through the deploying and receiving organization’s POCs."}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0128"
     citation: {"ref": "CNSSI1254", "page": 26, "anchor": "Provides continuing visibility of the system’s security authorization package to the receiving"}
@@ -1071,7 +1090,8 @@ requirements:
     locator: "REFERENCES.b"
     context: "RECIPROCITY PROCESS"
     statement: "b. Provides continuing visibility of the system’s security authorization package to the receiving systems(s) or site(s)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.visibility.yaml", "expect": "has no continuing visibility of the security authorization package", "asserts": "The receiving organization has continuing visibility of the security authorization package through eMASS, another tool or manual inheritance", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0129"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "In coordination with the receiving organization, ensures security control assessments address any"}
@@ -1079,7 +1099,8 @@ requirements:
     locator: "REFERENCES.c"
     context: "RECIPROCITY PROCESS"
     statement: "c. In coordination with the receiving organization, ensures security control assessments address any and all additional receiving organization security controls or requested adjustments to the assigned security controls identified during security reviews."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.controls.yaml", "expect": "requested by the receiving organization is not addressed by the security control assessment", "asserts": "Every additional security control the receiving organization requests is addressed by the security control assessment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "In coordination with the receiving organization, ensures security control assessments address any and all additional receiving organization security controls or requested adjustments to the assigned security controls identified during security reviews."}]
     work_item: "WI-312"
   - id: "REQ-CNSSI1254-0130"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "No later than 60 working days prior to planned deployment, provides a"}
@@ -1087,7 +1108,8 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY PROCESS"
     statement: "d. No later than 60 working days prior to planned deployment, provides a status update to the receiving organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.lead.yaml", "expect": "working days before the planned deployment", "asserts": "A status update reaches each receiving organization at least 60 working days before the planned deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
   - id: "REQ-CNSSI1254-0131"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Issues an authorization decision for the system and version being deployed."}
@@ -1105,7 +1127,8 @@ requirements:
     locator: "REFERENCES.f"
     context: "RECIPROCITY PROCESS"
     statement: "f. Provides installation and configuration requirements documentation to receiving site(s) prior to system deployment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.install.yaml", "expect": "installation and configuration requirements do not reach the receiving organization before the system is deployed", "asserts": "Installation and configuration requirements documentation reaches the receiving site before system deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0133"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Maintains situational awareness of the deploying system development and assessment activities."}
@@ -1113,7 +1136,8 @@ requirements:
     locator: "REFERENCES.a"
     context: "RECIPROCITY PROCESS"
     statement: "a. Maintains situational awareness of the deploying system development and assessment activities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.awareness.yaml", "expect": "is not kept through eMASS, another automated tool or manual inheritance", "asserts": "Situational awareness of the deploying system's assessment activities is maintained through eMASS or another automated tool", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0134"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Makes the receiving system(s) security authorization package available to the organization deploying"}
@@ -1121,7 +1145,8 @@ requirements:
     locator: "REFERENCES.b"
     context: "RECIPROCITY PROCESS"
     statement: "b. Makes the receiving system(s) security authorization package available to the organization deploying the system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.own.yaml", "expect": "security authorization package is not made available to the Granting organization", "asserts": "The receiving system's security authorization package is made available to the deploying organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0135"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Determines the security impact of connecting the deploying system within the receiving"}
@@ -1129,7 +1154,8 @@ requirements:
     locator: "REFERENCES.c"
     context: "RECIPROCITY PROCESS"
     statement: "c. Determines the security impact of connecting the deploying system within the receiving system(s) (e.g., requests for adjustments to the assigned security controls). Implements any receiving system or site augmenting security controls required to support deploying the system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.augment.yaml", "expect": "required to deploy the system is not implemented by the time it is deployed", "asserts": "Each receiving system augmenting security control required to deploy the system is implemented before the decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Implements any receiving system or site augmenting security controls required to support deploying the system."}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0136"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Tests security controls, as appropriate."}
@@ -1137,7 +1163,8 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY PROCESS"
     statement: "d. Tests security controls, as appropriate."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.configured.yaml", "expect": "configured at deployment is not tested by the receiving system owner", "asserts": "Tests security controls as appropriate: the receiving owner tests each control configured at deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.testdate.yaml", "expect": "configured at deployment is not tested once it is configured on deployment", "asserts": "Tests security controls as appropriate: each control configured at deployment is tested once it is configured", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0137"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "1) Security controls that are built into the system will not be"}
@@ -1145,7 +1172,8 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY PROCESS"
     statement: "1) Security controls that are built into the system will not be re-tested as they do not change when the system is deployed."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.builtin.yaml", "expect": "is re-tested though it does not change when the system is deployed", "asserts": "Security controls built into the system are not re-tested when the system is deployed", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0138"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "2) Controls that require configuration upon deployment must be tested by the"}
@@ -1153,7 +1181,8 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY PROCESS"
     statement: "2) Controls that require configuration upon deployment must be tested by the receiving system owner."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.configured.yaml", "expect": "configured at deployment is not tested by the receiving system owner", "asserts": "Controls that require configuration upon deployment are tested by the receiving system owner", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.testdate.yaml", "expect": "configured at deployment is not tested once it is configured on deployment", "asserts": "Controls that require configuration upon deployment are tested once they are configured on deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0139"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "3) Inherited controls (i.e., controls that will be implemented by the receiving"}
@@ -1161,7 +1190,9 @@ requirements:
     locator: "REFERENCES.d"
     context: "RECIPROCITY PROCESS"
     statement: "3) Inherited controls (i.e., controls that will be implemented by the receiving systems) must be (or must have been) validated by the receiving system ISO and supporting documentation or artifacts must be developed."
-    status: "candidate"
+    status: "partial"
+    reason: "The validation by the receiving ISO is held; that supporting documentation or artifacts are developed is held as presence only, which caps at partial on prose."
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.inherited.yaml", "expect": "is not validated by the receiving system ISO", "asserts": "Inherited controls are validated by the receiving system ISO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.evidence.yaml", "expect": "no supporting documentation or artifact is developed for the inherited control", "asserts": "Supporting documentation or artifacts are developed for each inherited control", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-CNSSI1254-0140"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Executes a documented agreement (e.g., Memorandum of Understanding (MOU), Memorandum of Agreement"}
@@ -1169,15 +1200,19 @@ requirements:
     locator: "REFERENCES.e"
     context: "RECIPROCITY PROCESS"
     statement: "e. Executes a documented agreement (e.g., Memorandum of Understanding (MOU), Memorandum of Agreement (MOA), or Service Level Agreement (SLA)) with the deploying organization for the maintenance and monitoring of the security posture of the system by a cybersecurity service provider. The document should address such topics as: operating constraints, operating environment, monitoring requirements, security maintenance, and roles and responsibilities."
-    status: "candidate"
+    status: "partial"
+    reason: "The sentence is an open list ('should address such topics as'); RCP-006 holds the DoD CIO playbook's minimum topics, which include these five."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.topics.yaml", "expect": "the agreement does not address", "asserts": "The agreement document addresses operating constraints, operating environment, monitoring requirements, security maintenance, and roles and responsibilities", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "The document should address such topics as: operating constraints, operating environment, monitoring requirements, security maintenance, and roles and responsibilities."}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "The document should address such topics as: operating constraints, operating environment, monitoring requirements, security maintenance, and roles and responsibilities.", "reason": "an open list of examples: the document 'should address such topics as' these; no run can fail the list itself"}]
   - id: "REQ-CNSSI1254-0141"
     citation: {"ref": "CNSSI1254", "page": 27, "anchor": "Issues a formal authorization to connect the system (e.g., approval to connect"}
     kind: "lettered"
     locator: "REFERENCES.f"
     context: "RECIPROCITY PROCESS"
     statement: "f. Issues a formal authorization to connect the system (e.g., approval to connect memorandum.). This includes a statement by the receiving organization AO granting approval for a deployed system to connect to the hosting/receiving system. The receiving system AO’s decision is based on the determination that the risk to the hosting/receiving system is acceptable."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.risk.yaml", "expect": "the authorization to use does not rest on a determination that the risk to the receiving system is acceptable", "asserts": "The receiving system AO's decision rests on a determination that the risk to the receiving system is acceptable", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "The receiving system AO’s decision is based on the determination that the risk to the hosting/receiving system is acceptable."}]
     work_item: "WI-315"
   - id: "REQ-CNSSI1254-0142"
     citation: {"ref": "CNSSI1254", "page": 28, "anchor": "2) Notifies and provides guidance to subordinate site(s) that the system is"}
@@ -1185,7 +1220,8 @@ requirements:
     locator: "REFERENCES.f"
     context: "RECIPROCITY PROCESS"
     statement: "2) Notifies and provides guidance to subordinate site(s) that the system is authorized to operate and/or connect only in the authorized configuration."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.sites.yaml", "expect": "subordinate sites are not notified that the system may operate only in the authorized configuration", "asserts": "Subordinate sites are notified that the system is authorized to operate only in the authorized configuration", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-CNSSI1254-0143"
     citation: {"ref": "CNSSI1254", "page": 28, "anchor": "Updates hosting/receiving system authorization and/or connection documentation to reflect the incorporation/connection of"}
@@ -1193,7 +1229,8 @@ requirements:
     locator: "REFERENCES.g"
     context: "RECIPROCITY PROCESS"
     statement: "g. Updates hosting/receiving system authorization and/or connection documentation to reflect the incorporation/connection of the system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.hosting.yaml", "expect": "authorization and connection documentation is not updated through the change log to incorporate the system", "asserts": "The hosting system authorization and connection documentation is updated through the change log to incorporate the system", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-CNSSI1254-0144"
     citation: {"ref": "CNSSI1254", "page": 28, "anchor": "Ensures the deploying system’s installation guide and applicable security configuration requirements are"}
@@ -1201,7 +1238,8 @@ requirements:
     locator: "REFERENCES.h"
     context: "RECIPROCITY PROCESS"
     statement: "h. Ensures the deploying system’s installation guide and applicable security configuration requirements are implemented."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.install.yaml", "expect": "the installation guide and security configuration requirements are not implemented after they are received", "asserts": "The deploying system's installation guide and security configuration requirements are implemented after they are received", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-CNSSI1254-0145"
     citation: {"ref": "CNSSI1254", "page": 28, "anchor": "Ensures mitigations are implemented and maintained in accordance with the deploying system’s"}
@@ -1209,7 +1247,8 @@ requirements:
     locator: "REFERENCES.i"
     context: "RECIPROCITY PROCESS"
     statement: "i. Ensures mitigations are implemented and maintained in accordance with the deploying system’s POA&M."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.yaml", "expect": "the mitigation in the Granting POA&M item", "asserts": "Each mitigation in the deploying system's POA&M is implemented", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Ensures mitigations are implemented and maintained in accordance with the deploying system’s POA&M."}]
     work_item: "WI-316"
   - id: "REQ-CNSSI1254-0146"
     citation: {"ref": "CNSSI1254", "page": 26, "anchor": "1) Provides status updates of the RMF activities."}
@@ -1217,7 +1256,8 @@ requirements:
     locator: "REFERENCES.b"
     context: ""
     statement: "1) Provides status updates of the RMF activities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.rmf.yaml", "expect": "gets no status update of the RMF activities", "asserts": "The deploying organization provides each receiving organization status updates of the RMF activities", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
     promoted: {"reason": "Sub-item of para 4.b, a deploying organization's duty with its own verb; the extractor rejected it for having no marker."}
   - id: "REQ-CNSSI1254-0147"
@@ -1226,7 +1266,8 @@ requirements:
     locator: "REFERENCES.b"
     context: ""
     statement: "2) Resolves any security issues raised."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.issues.yaml", "expect": "raised by the receiving organization is not resolved before the system is deployed to it", "asserts": "Each security issue raised by the receiving organization is resolved", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-312"
     promoted: {"reason": "Sub-item of para 4.b, a deploying organization's duty with its own verb; the extractor rejected it for having no marker."}
   - id: "REQ-CNSSI1254-0148"
@@ -1235,7 +1276,8 @@ requirements:
     locator: "REFERENCES.f"
     context: ""
     statement: "1) Provides a copy of implementing documentation (e.g., “authorization to connect”) to deploying organization AO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.copy.yaml", "expect": "a copy of the authorization to use is not provided to the Granting AO", "asserts": "A copy of the authorization to use is provided to the deploying organization AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
     promoted: {"reason": "Sub-item of para 5.f, a receiving organization's duty to copy the deploying AO; the extractor rejected it for having no marker while keeping sibling item 2."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

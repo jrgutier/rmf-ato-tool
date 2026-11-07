@@ -551,3 +551,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.
 - Rule: Add an artifact to a task's outputs only with a `framework_version` bump and `rmf run migrate` handling; a later task that fills a section of an existing data file takes the artifact as input.
 - Promotion: none — the p7 example check and test_base_has_no_findings already fail on it; the lesson records why.
+
+## L-0079 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
+- Symptom: a first cut of RCP-001 tested `tool.get("compatible") is False` and FW-REQ-003 read the clause as presence, while `len(early) < 1` in RCP-002 read as a constraint though it only asks that a list be non-empty.
+- Root cause: the judge's absence test compares against None, "" and 0, and `False == 0` in Python, so `is False` counts as a read of absence; a comparison it does not know, such as `< 1`, counts as a constraint.
+- Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.
+- Rule: Write each failing clause in the form the judge reads truthfully: presence as `not x` on a plain read, a constraint as a comparison of the value; never pick a spelling to change the claim.
+- Promotion: none — changing how the judge reads booleans would reclassify the evidence of rules already merged; the RCP clauses follow the rule and their claims are computed, not declared.

@@ -32,4 +32,4 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Interconnections and leveraged authorizations
 
-<<FILL: interconnected systems and agreements; leveraged authorizations (LA-##) from artifacts/data/leveraged-authorizations.yaml; with tokens>>
+<<FILL: interconnected systems and agreements; leveraged authorizations (LA-##) from artifacts/data/leveraged-authorizations.yaml; the Receiving organizations, received systems and reciprocity agreements of artifacts/data/reciprocity.yaml; with tokens>>

@@ -1120,6 +1120,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- Each Receiving organization that joined before the system's release has its requirements in reciprocity.yaml gathered and coordinated before release, and each control it asks for is assessed (RCP-002).
 
 **Alignment**
 
@@ -1174,6 +1175,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
 - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
 - An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
+- registration.yaml lists every deployment site of reciprocity.yaml, an update after each received system accepted, and an exemption justification when reciprocity listing is deselected (RCP-008).
 
 **Alignment**
 
@@ -1234,6 +1236,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 - The provider of each leveraged authorization is an external entity in org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
 - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
+- reciprocity.yaml names each Receiving organization and received system, each resting on an executed agreement with its minimum content (RCP-006).
 
 **Alignment**
 
@@ -1873,6 +1876,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
 - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
 - The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring strategy.
+- With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP maintaining every service the DoD CIO reciprocity playbook names, and each implemented directed action as a patch provided in time and communicated to every Receiving organization (RCP-003).
 
 **Alignment**
 
@@ -2133,6 +2137,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
 - A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 - plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010).
+- Each received system accepted in reciprocity.yaml has the Receiving AO's authorization to use on an acceptable risk, its copy to the Granting AO, notice to subordinate sites, this system's authorization documentation updated through the change log, the installation implemented and the inherited controls provided (RCP-005).
 
 **Alignment**
 
@@ -2553,6 +2558,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - ART-DIAS states the assurance levels chosen with the ia family at S-4 (DIAS-001).
 - For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
 - The package carries the PPP approval recorded in protection.yaml, and that approval was made by the authority the program's ACAT, decision authority and pathway call for (PPROT-001).
+- Each Receiving organization in reciprocity.yaml has the package, a current POA&M, the body of evidence, the deployment instructions and, before its first site, the installation and configuration requirements with every STIG, and visibility of the package; the package is shared with the information owners and every interconnected system (RCP-001).
 
 **Alignment**
 
@@ -3131,6 +3137,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in directed_actions of poam/items.yaml with who implements it and its response, implemented, tracked in a POA&M item or withheld after coordination, and its compliance status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002); for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and the mission owner, with the CSSP, prioritizes its requirements and passes them to the CSP.
 - Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and reported within VRMN (VULN-003).
 - Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of confidentiality, integrity and availability (VULN-004); its fix is chosen case by case and tracked, and verified by successive scans once completed (VULN-005); one not publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
+- Each accepted received system's Granting POA&M mitigations, patches, IAVAs and STIGs are kept up and new findings reported back (RCP-009).
 
 **Alignment**
 
@@ -3266,6 +3273,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 - The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 - The posture reports carry the supply chain reporting scrm-plan.yaml sets.
+- Each Receiving organization in reciprocity.yaml is updated on the RMF activities and before deployment, and notified of changes, new findings, plans and reauthorization, with receipt acknowledged (RCP-002).
 
 **Alignment**
 
@@ -3883,13 +3891,13 @@ Citations:
 
 ### <a id="art-sd"></a>ART-SD: System description, users and leveraged authorizations
 
-The documented characteristics of the system, its users and privileges, and the authorizations it leverages.
+The documented characteristics of the system, its users and privileges, the authorizations it leverages, and its reciprocity records: the Receiving organizations it is deployed into, the systems it receives, and the agreements between them.
 
 | | |
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
-| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`) |
+| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`)<br>`artifacts/data/reciprocity.yaml` (schema `reciprocity`) |
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
 | Produced by | [C-1](#task-c-1) |
 | Updated by | [I-2](#task-i-2) |

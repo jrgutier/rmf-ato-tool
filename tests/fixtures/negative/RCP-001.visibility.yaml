@@ -1,0 +1,16 @@
+rule: RCP-001
+bases:
+- minimal
+description: visibility by email only
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.visibility.via
+  value: email
+expect:
+  errors:
+  - RCP-001
+  messages:
+  - 'RO-01: the receiving organization has no continuing visibility of the security authorization package through eMASS, another tool or manual inheritance'
+  also:
+  - RUN-FM-001

@@ -1,0 +1,15 @@
+rule: RCP-005
+bases:
+- minimal
+description: the hosting update leaves out an added control
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.hosting_update.controls
+  value:
+  - au-2
+expect:
+  errors:
+  - RCP-005
+  messages:
+  - 'RS-01: the hosting system''s authorization does not include the added control si-2'

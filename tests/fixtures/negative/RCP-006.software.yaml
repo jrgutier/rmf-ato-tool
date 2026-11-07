@@ -1,0 +1,15 @@
+rule: RCP-006
+bases:
+- minimal
+description: a software factory agreement without software or feedback flows
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.kind
+  value: software-delivery
+expect:
+  errors:
+  - RCP-006
+  messages:
+  - 'AGR-01: the agreement does not pass software across the authorization boundary'
+  - 'AGR-01: the agreement does not pass results and feedback back to the software factory'
