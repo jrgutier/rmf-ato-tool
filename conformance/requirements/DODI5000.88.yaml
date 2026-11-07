@@ -98,7 +98,9 @@ requirements:
     locator: "2.1.c"
     context: "UNDER SECRETARY OF DEFENSE FOR RESEARCH AND ENGINEERING The USD(R&E):"
     statement: "c. Conducts and approves ITRAs for ACAT ID programs."
-    status: "candidate"
+    status: "covered"
+    reason: "PPROT-005 fails an ACAT ID program's ITRA approved by anyone but the USD(R&E)."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.usdre.yaml", "expect": "the USD(R&E) conducts and approves the ITRA of an ACAT ID program", "claim": "constraint", "asserts": "The USD(R&E) conducts and approves ITRAs for ACAT ID programs: the USD(R&E) conducts and approves the ITRA of an ACAT ID program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "c. Conducts and approves ITRAs for ACAT ID programs."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0013"
     citation: {"ref": "DODI5000.88", "page": 5, "anchor": "Determines ITRA approval authority for ACAT IB/IC programs."}
@@ -172,7 +174,9 @@ requirements:
     locator: "2.3.c"
     context: "UNDER SECRETARY OF DEFENSE FOR INTELLIGENCE AND SECURITY The Under Secretary of Defense for Intelligence and Security:"
     statement: "c. Advises and assists the DoD Component heads with identifying critical program and technology information in support of Program Protection Plan (PPP) preparation."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: protection.yaml requires the PPP's critical program information and critical items. Unheld: binds the USD(R&E) to advise and assist the Component heads in identifying them, which a run cannot observe."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/critical_items", "claim": "constraint", "asserts": "critical program and technology information identified in support of PPP preparation: Critical program information, critical components and functions the PPP protects", "sentence": "c. Advises and assists the DoD Component heads with identifying critical program and technology information in support of Program Protection Plan (PPP) preparation."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.88-0022"
     citation: {"ref": "DODI5000.88", "page": 6, "anchor": "Implement the procedures outlined in this issuance."}
@@ -195,7 +199,9 @@ requirements:
     locator: "2.4.c"
     context: "DOD COMPONENT HEADS, EXCEPT THE CHAIRMAN OF THE JOINT CHIEFS OF STAFF Except for the Chairman of the Joint Chiefs of Staff, who is covered in Paragraph 2.5., the DoD Component heads:"
     statement: "c. Conduct ITRAs for ACAT IB/IC programs. Ensure that DoD Component MDAs take under advisement the results from ITRAs when making acquisition program decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: protection.yaml records each ACAT IB/IC ITRA and PPROT-005 judges its approver. Unheld: the Component MDAs taking ITRA results under advisement (sentence 2), a decision of the MDA no run records."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.chain.yaml", "expect": "the approval authority of an ACAT IB or IC ITRA is independent of the program's chain of command", "claim": "constraint", "asserts": "ITRAs for ACAT IB/IC programs are conducted by the Component with an approval authority outside the program's chain of command: the approval authority of an ACAT IB or IC ITRA is independent of the program's chain of command", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Conduct ITRAs for ACAT IB/IC programs."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0025"
     citation: {"ref": "DODI5000.88", "page": 6, "anchor": "Consider technical advice provided by the USD(R&E) during analysis of alternatives (AoA)"}
@@ -530,7 +536,9 @@ requirements:
     locator: "3.3.e.(8)"
     context: "ME AND CONCEPT DEVELOPMENT A concept design review will be conducted before the materiel development decision where the initial concept baseline(s) will be established. The concept design review will"
     statement: "(8) Cyber security assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: protection.yaml records the technical reviews at which each security risk is assessed (PPROT-005). Unheld: the cyber security assessment as a review criterion of the SEP is the LSE's, outside the run."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-14.md", "claim": "presence", "asserts": "cyber security assessment as a technical review criterion: security risks are assessed at technical reviews", "sentence": "(8) Cyber security assessment."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.88-0067"
     citation: {"ref": "DODI5000.88", "page": 11, "anchor": "After the materiel development decision and acquisition pathway initiation, the DoD Component"}
@@ -825,7 +833,9 @@ requirements:
     locator: "3.4.a.(3).(q)"
     context: "PROGRAM TECHNICAL PLANNING AND MANAGEMENT SEP For MDAPs, ACAT II, and ACAT III programs, the SEP will contain these elements, unless waived by the SEP approval authority:"
     statement: "(q) The program’s major technical risks, issues, opportunities, and mitigations and planning activities."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: P-14 reads the SEP (EXT-SEP) and draws security risks from it. Unheld: the SEP's own content."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.drawn.yaml", "expect": "which is no SEP, ITRA or threat assessment the run read", "claim": "constraint", "asserts": "the program's major technical risks and mitigations in the SEP are read into the security risks: which is no SEP, ITRA or threat assessment the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(q) The program’s major technical risks, issues, opportunities, and mitigations and planning activities."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.88-0104"
     citation: {"ref": "DODI5000.88", "page": 14, "anchor": "The MOSA and program interdependencies with other programs and components, to include"}
@@ -942,7 +952,9 @@ requirements:
     locator: "3.4.e"
     context: "PROGRAM TECHNICAL PLANNING AND MANAGEMENT"
     statement: "The PM will ensure test and evaluation planning and program activities are conducted in accordance with Enclosures 4 and 5 of DoD Instruction (DoDI) 5000.02T. To the greatest extent possible, the test and evaluation plan will use and contribute to the information contained in the evolving digital system representation."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: A-2 records the test planning. Unheld: DoDI 5000.02T enclosures and the digital system representation."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "test and evaluation planning recorded from the TEMP", "sentence": "The PM will ensure test and evaluation planning and program activities are conducted in accordance with Enclosures 4 and 5 of DoD Instruction (DoDI) 5000.02T."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.88-0119"
     citation: {"ref": "DODI5000.88", "page": 15, "anchor": "Risk, Issue, and Opportunity Management."}
@@ -958,7 +970,9 @@ requirements:
     locator: "3.4.f.(1)"
     context: "PROGRAM TECHNICAL PLANNING AND MANAGEMENT"
     statement: "(1) The LSE will advise the PM on major technical risks, issues, opportunities, and mitigation planning and implementation and document them in the SEP. The PM will:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each security technical risk names the SEP or other source read (PPROT-005). Unheld: the LSE's advice to the PM and the SEP itself."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.drawn.yaml", "expect": "which is no SEP, ITRA or threat assessment the run read", "claim": "constraint", "asserts": "the LSE documents major technical risks and mitigation planning in the SEP, which the security risks draw on: which is no SEP, ITRA or threat assessment the run read", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) The LSE will advise the PM on major technical risks, issues, opportunities, and mitigation planning and implementation and document them in the SEP."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.88-0121"
     citation: {"ref": "DODI5000.88", "page": 15, "anchor": "Integrate risk, issue, and opportunity management planning and execution in accordance with"}
@@ -998,7 +1012,9 @@ requirements:
     locator: "3.4.g"
     context: "PROGRAM TECHNICAL PLANNING AND MANAGEMENT"
     statement: "To maintain technology dominance, the PM will prepare a PPP. The PPP will serve as a technical planning tool to guide system security engineering activities, which includes software assurance, for the program in accordance with DoDI 5000.83."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-002 accepts the PM or the lead systems engineer as the PPP's preparer and fails anyone else, and it requires cyber resilient engineering among the SSE activities. Unheld: software assurance among the SSE activities (sentence 2) is recorded but not required."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.yaml", "expect": "the lead systems engineer prepares the PPP (the PM under DoDI 5000.88)", "claim": "constraint", "asserts": "the PM will prepare a PPP: the lead systems engineer prepares the PPP (the PM under DoDI 5000.88)", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "To maintain technology dominance, the PM will prepare a PPP."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.88-0126"
     citation: {"ref": "DODI5000.88", "page": 16, "anchor": "Systems engineering technical reviews provide a venue to establish the technical baselines,"}
@@ -1006,7 +1022,9 @@ requirements:
     locator: "3.5.a.(1)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS Technical Reviews"
     statement: "(1) Systems engineering technical reviews provide a venue to establish the technical baselines, assess the system’s technical maturity, and review and assess technical risks. At each technical review, the PM will, to the extent practicable, use information from the digital authoritative source of truth to assess key risks, issues, opportunities, and mitigation plans in order to understand cost, schedule, and performance implications."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails a security risk assessed at no technical review. Unheld: the digital authoritative source of truth and the cost, schedule and performance understanding."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.review.yaml", "expect": "a security technical risk is assessed at technical reviews, and it names none of the framework", "claim": "constraint", "asserts": "at each technical review key risks are assessed: a security technical risk is assessed at technical reviews, and it names none of the framework", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "At each technical review, the PM will, to the extent practicable, use information from the digital authoritative source of truth to assess key risks, issues, opportunities, and mitigation plans in order to understand cost, schedule, and performance implications."}]
     work_item: "WI-89"
   - id: "REQ-DODI5000.88-0127"
     citation: {"ref": "DODI5000.88", "page": 16, "anchor": "Unless waived through the SEP approval process, the PM will conduct these"}
@@ -1080,7 +1098,9 @@ requirements:
     locator: "3.5.b.(1).(b)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS ITRA ITRAs:"
     statement: "(b) Are conducted on all MDAPs before approval of Milestone A, Milestone B, and any decision to enter into lowrate initial production or full-rate production."
-    status: "candidate"
+    status: "covered"
+    reason: "PPROT-005 fails an MDAP (ACAT ID, IB or IC) past MS-A, MS-B, MS-C or MS-FRP with no ITRA for that decision point and no USD(R&E) waiver."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.mdap.yaml", "expect": "an ITRA is conducted on an MDAP before", "claim": "constraint", "asserts": "ITRAs are conducted on all MDAPs before Milestone A, Milestone B, and the LRIP and FRP decisions: an ITRA is conducted on an MDAP before", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(b) Are conducted on all MDAPs before approval of Milestone A, Milestone B, and any decision to enter into lowrate initial production or full-rate production."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0137"
     citation: {"ref": "DODI5000.88", "page": 17, "anchor": "Pursuant to Section 2448b of Title 10, U.S.C., are required for programs"}
@@ -1088,15 +1108,20 @@ requirements:
     locator: "3.5.b.(1).(c)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS ITRA ITRAs:"
     statement: "(c) Pursuant to Section 2448b of Title 10, U.S.C., are required for programs either initiated or having a Milestone A after October 1, 2017. For programs initiated or having a Milestone A before October 1, 2017, ITRAs are regulatory and may be waived at the discretion of the USD(R&E). Formal requests will provide appropriate justification and will be submitted through the MDA."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 refuses an ITRA waiver by anyone but the USD(R&E). Unheld: the October 1, 2017 cut-off (sentence 1), since protection.yaml records no program initiation date, and the formal request through the MDA (sentence 3)."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.waiver.yaml", "expect": "an ITRA is waived at the discretion of the USD(R&E)", "claim": "constraint", "asserts": "ITRAs may be waived at the discretion of the USD(R&E) only: an ITRA is waived at the discretion of the USD(R&E)", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "For programs initiated or having a Milestone A before October 1, 2017, ITRAs are regulatory and may be waived at the discretion of the USD(R&E)."}]
     work_item: "WI-82"
+    ruling_sought: [{"sentence": "For programs initiated or having a Milestone A before October 1, 2017, ITRAs are regulatory and may be waived at the discretion of the USD(R&E).", "reason": "Permission: ITRAs 'may be waived at the discretion of the USD(R&E)'; the run only refuses a waiver by anyone else."}]
   - id: "REQ-DODI5000.88-0138"
     citation: {"ref": "DODI5000.88", "page": 17, "anchor": "Consider the full spectrum of technology, engineering, and integration risk. These areas"}
     kind: "lettered"
     locator: "3.5.b.(1).(d)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS ITRA ITRAs:"
     statement: "(d) Consider the full spectrum of technology, engineering, and integration risk. These areas could include mission capability, technology, system development, MOSA, software, security, manufacturing, sustainment, and their potential impacts to cost, schedule, and performance. For ITRAs conducted before Milestone A, identifies critical technologies and manufacturing processes that need to be matured. Subsequent ITRAs will re-assess technology and manufacturing process maturity, accounting for demonstrations in relevant environments."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: protection.yaml inputs.itras records the risk areas each ITRA covers, technology and manufacturing among them. Unheld: whether an ITRA before Milestone A identifies the technologies to mature, and later ITRAs re-assess maturity; no field holds maturity."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/inputs/properties/itras", "claim": "presence", "asserts": "ITRAs identify critical technologies and manufacturing processes and re-assess maturity, recorded with the risk areas covered: Independent technical risk assessments (ITRAs) of the system design and interfaces read", "sentence": "For ITRAs conducted before Milestone A, identifies critical technologies and manufacturing processes that need to be matured."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0139"
     citation: {"ref": "DODI5000.88", "page": 17, "anchor": "Are conducted and approved by the USD(R&E) on all ACAT ID programs."}
@@ -1104,7 +1129,9 @@ requirements:
     locator: "3.5.b.(1).(e)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS ITRA ITRAs:"
     statement: "(e) Are conducted and approved by the USD(R&E) on all ACAT ID programs. The USD(R&E) will determine ITRA approval authority for ACAT IB/IC programs, providing periodic written notification, based on the following criteria:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails an ACAT ID ITRA not approved by the USD(R&E). Unheld: the USD(R&E)'s determination of the ACAT IB/IC approval authority and its periodic written notification (sentence 2)."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.usdre.yaml", "expect": "the USD(R&E) conducts and approves the ITRA of an ACAT ID program", "claim": "constraint", "asserts": "ITRAs are conducted and approved by the USD(R&E) on all ACAT ID programs: the USD(R&E) conducts and approves the ITRA of an ACAT ID program", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(e) Are conducted and approved by the USD(R&E) on all ACAT ID programs."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0140"
     citation: {"ref": "DODI5000.88", "page": 17, "anchor": "Significant or strategic joint mission integration and interoperability requirements."}
@@ -1176,7 +1203,9 @@ requirements:
     locator: "3.5.b.(2)"
     context: "PROGRAM TECHNICAL REVIEWS AND ASSESSMENTS ITRA"
     statement: "(2) DoD Components will conduct ACAT IB/IC ITRAs. Approval will be consistent with Paragraph 3.5.b.(1)(e). The approval authority must be independent and may not be in the program’s chain of command. ITRAs are not required for non-MDAP programs, but if conducted, will follow the OUSD(R&E)-published ITRA policy and guidance. ITRAs will be conducted in accordance with DoD ITRA guidance and the DoD ITRA Framework for Risk Categorization both developed and maintained by OUSD(R&E)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails an ACAT IB/IC ITRA approved in the chain of command (sentence 3). Unheld: conduct by the Components and consistency with 3.5.b.(1)(e) (sentences 1 and 2), non-MDAP ITRAs following policy, and the ITRA guidance and framework (sentences 4 and 5), which no run record holds."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.chain.yaml", "expect": "the approval authority of an ACAT IB or IC ITRA is independent of the program's chain of command", "claim": "constraint", "asserts": "The ACAT IB/IC ITRA approval authority must be independent and not in the program's chain of command: the approval authority of an ACAT IB or IC ITRA is independent of the program's chain of command", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "The approval authority must be independent and may not be in the program’s chain of command."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.88-0149"
     citation: {"ref": "DODI5000.88", "page": 18, "anchor": "The organization conducting the ITRA designates a lead, who will form a"}

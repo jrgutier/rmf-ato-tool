@@ -405,7 +405,9 @@ requirements:
     locator: "3.6.b.(3)"
     context: "MSA PHASE Phase Description"
     statement: "(3) MDAP MDAs will establish program goals consistent with the procedures in Paragraph 3C.3.(c)(1) of this issuance. An independent cost estimate (ICE) and independent technical risk assessment (ITRA) will be conducted before granting Milestone A approval for an MDAP."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails an MDAP past Milestone A with no ITRA before it. Unheld: the program goals of sentence 1 and the independent cost estimate, which no run record holds."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.mdap.yaml", "expect": "an ITRA is conducted on an MDAP before", "claim": "constraint", "asserts": "An ITRA is conducted before Milestone A approval for an MDAP: an ITRA is conducted on an MDAP before", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "An independent cost estimate (ICE) and independent technical risk assessment (ITRA) will be conducted before granting Milestone A approval for an MDAP."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.85-0052"
     citation: {"ref": "DODI5000.85", "page": 12, "anchor": "Product support (PS) and sustainment planning begin during this phase and support"}
@@ -468,7 +470,9 @@ requirements:
     locator: "3.7.a.(2).(e)"
     context: "MILESTONE A Purpose Principal considerations include:"
     statement: "(e) A proposed acquisition strategy, including intellectual property (IP), program protection, and exportability and acquisition planning;"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PPP is submitted at Milestone A (PPROT-001). Unheld: the acquisition strategy's IP and exportability content."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.submission.yaml", "expect": "the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "claim": "constraint", "asserts": "a proposed acquisition strategy including program protection at Milestone A: the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(e) A proposed acquisition strategy, including intellectual property (IP), program protection, and exportability and acquisition planning;"}]
     work_item: "WI-322"
   - id: "REQ-DODI5000.85-0060"
     citation: {"ref": "DODI5000.85", "page": 12, "anchor": "The test strategy;"}
@@ -562,7 +566,9 @@ requirements:
     locator: "3.8.b.(2)"
     context: "TMRR PHASE Phase Description"
     statement: "(2) The acquisition strategy will describe the overall approach to acquiring the capability and include the program schedule, risks, funding, business strategy, and an IP strategy. PS and sustainment planning continues during this phase and will include consideration of data rights. Program security and program protection requirements will be evaluated. Unless waived by the MDA, a preliminary design review (PDR) will be conducted prior to Milestone B. This phase normally includes multiple competitive sources conducting technology risk reduction activity to demonstrate new technologies in a relevant environment. An ICE and an ITRA will be conducted for MDAPs, before granting Milestone B approval. Development testing will be guided by the test and evaluation master plan."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: P-14 records the PPP and P-15 the protection requirements (PPROT-002, PPROT-004). Unheld: the acquisition strategy content, PS and sustainment planning, the PDR waiver, the ICE and the TEMP guiding development testing are MDA records; the ITRA before Milestone B is held for MDAPs by PPROT-005."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-14.md", "claim": "presence", "asserts": "program security and program protection requirements are evaluated through the PPP the run reads", "sentence": "Program security and program protection requirements will be evaluated."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.85-0072"
     citation: {"ref": "DODI5000.85", "page": 14, "anchor": "During the TMRR phase, the requirements validation authority will validate the CDD"}
@@ -676,7 +682,9 @@ requirements:
     locator: "3.11.b.(6)"
     context: "EMD PHASE Phase Description"
     statement: "(6) The EMD phase will end when the design is stable; the system meets validated capability requirements demonstrated by developmental, live fire (as appropriate), and early operational testing; manufacturing processes have been effectively demonstrated and are under control; software sustainment processes are in place and functioning; industrial production capabilities are reasonably available; program security remains uncompromised; and the program has met or exceeds all directed EMD phase exit criteria and Milestone C entrance criteria per the MDA’s direction. An ICE and an ITRA will be conducted for MDAPs before beginning LRIP."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails an MDAP past MS-C (the LRIP decision) with no ITRA. Unheld: the EMD exit conditions of sentence 1 and the ICE."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.mdap.yaml", "expect": "an ITRA is conducted on an MDAP before", "claim": "constraint", "asserts": "An ITRA is conducted for MDAPs before beginning LRIP at Milestone C: an ITRA is conducted on an MDAP before", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "An ICE and an ITRA will be conducted for MDAPs before beginning LRIP."}]
     work_item: "WI-82"
   - id: "REQ-DODI5000.85-0087"
     citation: {"ref": "DODI5000.85", "page": 16, "anchor": "Milestone C is the point at which a program is reviewed for"}
@@ -729,7 +737,9 @@ requirements:
     locator: "3.13.b"
     context: "P&D PHASE"
     statement: "The P&D phase is guided by an updated CDD if required, the acquisition strategy, and the test and evaluation master plan. In this phase the product is produced and fielded or deployed for use by operational units."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: a major capability program's test planning document must be a TEMP (TSTRAT-001). Unheld: the CDD and acquisition strategy."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "the test and evaluation master plan guides the phase on major capability acquisition", "sentence": "The P&D phase is guided by an updated CDD if required, the acquisition strategy, and the test and evaluation master plan."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.85-0094"
     citation: {"ref": "DODI5000.85", "page": 17, "anchor": "The phase includes a number of key events: LRIP, personnel training, completion"}
@@ -752,8 +762,11 @@ requirements:
     locator: "3.14"
     context: "FRP DECISION OR FD DECISION"
     statement: "The MDA will conduct an FRP decision review to assess the results of initial OT&E and initial manufacturing to determine whether to proceed to FRP. Proceeding to FRP requires control of the manufacturing process, acceptable performance and reliability, the establishment of adequate sustainment and support systems, and for MDAPs, an ICE and an ITRA. This decision will be informed by consideration of any new validated threat environments that might affect operational effectiveness. The MDA may consult with the requirements validation authority as part of the decision making process to ensure that capability requirements are current. The MDA will document the results of the review in an ADM."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PPROT-005 fails an MDAP past MS-FRP with no ITRA. Unheld: the FRP review content (manufacturing, reliability, sustainment, the ICE, threat environments) and the ADM, which are the MDA's records, not the run's."
+    evidence: [{"kind": "rule", "target": "PPROT-005", "fixture": "tests/fixtures/negative/PPROT-005.mdap.yaml", "expect": "an ITRA is conducted on an MDAP before", "claim": "constraint", "asserts": "For MDAPs proceeding to FRP an ITRA is conducted before the FRP decision: an ITRA is conducted on an MDAP before", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Proceeding to FRP requires control of the manufacturing process, acceptable performance and reliability, the establishment of adequate sustainment and support systems, and for MDAPs, an ICE and an ITRA."}]
     work_item: "WI-82"
+    ruling_sought: [{"sentence": "The MDA may consult with the requirements validation authority as part of the decision making process to ensure that capability requirements are current.", "reason": "Permission: 'The MDA may consult with the requirements validation authority'; nothing fails when the MDA does not."}]
   - id: "REQ-DODI5000.85-0097"
     citation: {"ref": "DODI5000.85", "page": 18, "anchor": "This phase executes the PSS, satisfies materiel readiness and operational support performance"}
     kind: "indicative"
@@ -927,7 +940,9 @@ requirements:
     locator: "APPENDIX 3B: PROGRAM INFORMATION.a.(1)"
     context: "The tables described in Paragraphs 3B.1.a(1) through 3B.1.a (9) identify program information requirements, and have been placed online at https://www.dau.edu/mdid/Pages/Default.aspx to facilitate acce"
     statement: "(1) Milestone and phase information requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Unheld: the DAU tables are not in references/."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "milestone and phase information requirements", "sentence": "(1) Milestone and phase information requirements."}]
     work_item: "WI-322"
   - id: "REQ-DODI5000.85-0119"
     citation: {"ref": "DODI5000.85", "page": 22, "anchor": "Statutory program breach definitions."}
@@ -991,7 +1006,9 @@ requirements:
     locator: "APPENDIX 3B: PROGRAM INFORMATION.b"
     context: ""
     statement: "b. PMs must comply with the online requirements, consistent with the policy specified in this issuance. Requirements set out at https://www.dau.edu/mdid/Pages/Default.aspx are to be treated the same way as they would be if they were published in this document. Substantive changes to online content not required by law must be formally coordinated in accordance with the procedures in DoDI 5025.01. Substantive changes include any additional requirements that add to the financial, personnel, or administrative burden of any of the DoD Components."
-    status: "candidate"
+    status: "partial"
+    reason: "Unheld: the DAU online requirements are not in references/."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "PMs comply with the online requirements", "sentence": "PMs must comply with the online requirements, consistent with the policy specified in this issuance."}]
     work_item: "WI-322"
   - id: "REQ-DODI5000.85-0127"
     citation: {"ref": "DODI5000.85", "page": 22, "anchor": "Statutory requirements must be satisfied unless the statute allows the requirement to"}
@@ -1605,8 +1622,11 @@ requirements:
     locator: "APPENDIX 3B: PROGRAM INFORMATION.c.(1)"
     context: "Figure 4. Sample Program Cost, Fielding, and Performance Goals Memorandum."
     statement: "(1) An ICP is any acquisition program or technology project that includes participation by the United States and one or more foreign nations, through an international agreement, during any phase of a system’s life cycle. All ICPs will consider applicable U.S.-ratified materiel international standardization agreements in accordance with the Chairman of the Joint Chiefs of Staff Manual for the Operation of the Joint Capabilities Integration and Development System (JCIDS), and fully comply with foreign disclosure, export control, technology transfer, program protection, and all applicable security requirements. Programs containing classified information and/or controlled unclassified information will have a delegation of disclosure authority letter or other written authorization issued by the DoD Component’s cognizant foreign disclosure office prior to entering discussions with potential foreign partners. When pursuing ICPs, staff members are encouraged to use the streamlined agreement procedures overseen and managed by the USD(A&S)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: protection.yaml records planned foreign involvement. Unheld: standardization agreements and the delegation of disclosure authority letter, which no run record holds."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/exportability/properties/foreign_involvement", "claim": "constraint", "asserts": "international cooperative programs with foreign participation are recorded in the PPP's exportability planning: Planning for exportability and potential foreign involvement: what foreign involvement is expected", "sentence": "Programs containing classified information and/or controlled unclassified information will have a delegation of disclosure authority letter or other written authorization issued by the DoD Component’s cognizant foreign disclosure office prior to entering discussions with potential foreign partners."}]
     work_item: "WI-85"
+    ruling_sought: [{"sentence": "When pursuing ICPs, staff members are encouraged to use the streamlined agreement procedures overseen and managed by the USD(A&S).", "reason": "Permission: staff members 'are encouraged to use' the streamlined agreement procedures; nothing fails if they do not."}]
   - id: "REQ-DODI5000.85-0204"
     citation: {"ref": "DODI5000.85", "page": 33, "anchor": "DoD Components will notify and obtain DAE approval before terminating or substantially"}
     kind: "lettered"

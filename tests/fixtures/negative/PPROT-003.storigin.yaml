@@ -1,0 +1,19 @@
+rule: PPROT-003
+bases:
+- minimal
+description: an S&T protection plan on a new start
+mutations:
+- op: write_file
+  file: artifacts/data/st-protection.yaml
+  content: "id: STPP-RADIO-1\nprepared_by: S&T manager, radio lab\ncritical_technology_elements:\n- id:
+    CTE-001\n  name: Adaptive waveform\n  kind: critical-technology-element\nthreats:\n- element: CTE-001\n\
+    \  threat: Reverse engineering\n  vulnerability: Waveform tables in clear\ncountermeasures:\n- element:
+    CTE-001\n  measure: Encrypt the waveform tables\napproval:\n  submitted: '2025-06-01'\n  project_approved:
+    '2025-07-01'\n  approved_by: Component S&T executive\ntransition:\n  to: PER-LSE\n  conditions:\n\
+    \  - technology-transition-decision\n  - technology-transfer-requirements-met\n  date: '2025-12-01'\n\
+    sources:\n- INT-023.A1\n"
+expect:
+  errors:
+  - PPROT-003
+  messages:
+  - st-protection.yaml holds an S&T protection plan, and program.origin is not st-transition

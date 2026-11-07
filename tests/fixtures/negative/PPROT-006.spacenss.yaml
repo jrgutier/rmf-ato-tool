@@ -1,0 +1,18 @@
+rule: PPROT-006
+bases:
+- minimal
+description: a space NSS recorded as no National Security System
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: nss
+  value: false
+expect:
+  errors:
+  - PPROT-006
+  messages:
+  - a space NSS is a National Security System, and nss-assessments.yaml records nss
