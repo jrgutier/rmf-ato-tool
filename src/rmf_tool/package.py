@@ -30,6 +30,8 @@ AUTHORIZATION_PACKAGE = (("security-plan", "ART-SSP"), ("security-assessment-rep
 OSCAL_ARTIFACT = {"profile": "ART-BASELINE", "ssp": "ART-SSP", "assessment-plan": "ART-SAP",
                   "assessment-results": "ART-SAR", "poam": "ART-POAM"}
 INDEX_FILE = "references/index.yaml"
+# SP 800-37r2 p. 89: packages include an executive summary, under version and change control
+SUMMARY_FILE = "artifacts/data/package-summary.yaml"
 
 
 def _sha(path: Path) -> str:
@@ -104,6 +106,8 @@ def manifest(run: Run) -> dict[str, Any]:
             "authorization_package": authorization,
             "artifacts": artifacts,
             "oscal": oscal,
+            **({"executive_summary": {"path": SUMMARY_FILE, "sha256": _sha(run.path(SUMMARY_FILE))}}
+               if run.path(SUMMARY_FILE).is_file() else {}),
             "reports": [{"path": REPORT_FILE, "sha256": _sha(run.path(REPORT_FILE))}]
             if run.path(REPORT_FILE).is_file() else [],
             "degraded_references": _degraded(run),

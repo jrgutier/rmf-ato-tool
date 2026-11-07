@@ -210,3 +210,27 @@ def data_elements(ctx: Context) -> list[RunFinding]:
                                 f"{element['element']}", run.rel(run.artifact_md(aid)), None,
                                 {art.get("producer")}))
     return out
+
+
+# --- TPL-001: the sections a template names stay in the run's document ----------------------
+
+def required_sections(ctx: Context) -> list[RunFinding]:
+    """Each heading an artifact's ``required_sections`` names is in its Markdown, with written
+    content, once the artifact is produced or seeded. A task may add headings after them."""
+    run, out = ctx.run, []
+    for aid, art in run.artifacts.items():
+        required = art.get("required_sections") or ()
+        if not required or not scope.produced_or_seeded(run, aid):
+            continue
+        rel = run.rel(run.artifact_md(aid))
+        doc = ctx.docs.get(rel)
+        if doc is None:
+            continue  # RUN-ART-001 reports a missing document
+        written = {heading for heading, _, lines in sections(doc.body, 1)
+                   if any(line.strip() and PLACEHOLDER not in line for line in lines)}
+        for heading in required:
+            if heading not in written:
+                out.append(make("TPL-001", f"{aid} drops the required section {heading!r} of "
+                                "its template, or leaves it unwritten", rel, None,
+                                {art.get("producer")}))
+    return out

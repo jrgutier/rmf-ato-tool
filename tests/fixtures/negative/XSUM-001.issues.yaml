@@ -1,0 +1,13 @@
+rule: XSUM-001
+bases: [minimal]
+description: an executive summary whose only issue rests on a completed POA&M item while others are open
+mutations:
+  - op: set_field
+    file: artifacts/data/package-summary.yaml
+    path: issues
+    value:
+      - {id: XS-01, issue: The closed patch item shows the flaw process works., poam_items: [POAM-004]}
+expect:
+  errors: [XSUM-001]
+  messages:
+    - highlights no risk management issue among the open POA&M items

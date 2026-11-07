@@ -24,7 +24,7 @@ PLAN_RUN_SCHEMAS = {
 }
 # data named in plan §6.4, then the ones p11 added
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias", "cm-plan", "contingency", "incident-response",
+                     "dias", "package-summary", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
@@ -347,6 +347,11 @@ RUN_EXAMPLES = {
          "sources": SRC},
         {"schedule": {"interval_days": 0, "set_by": "policy"}, "reviews": [], "changes": [],
          "sources": SRC}),
+    "package-summary": (
+        {"subject": "system", "security": "s", "issues": [], "sources": SRC,
+         "submission": {"by": "PER-PM", "to": "PER-AO", "date": "2026-11-10"}},
+        {"subject": "enclave", "security": "s", "issues": [], "sources": SRC,
+         "submission": {"by": "PER-PM", "to": "PER-AO", "date": "2026-11-10"}}),
     "dias": (
         {"assurance": {"identity_proofing": "IAL2", "authentication": "AAL2",
                        "federation": "not-applicable"},

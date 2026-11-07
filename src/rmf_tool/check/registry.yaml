@@ -50,6 +50,15 @@ rules:
     summary: artifact without a producer (no task outputs it, or its producer does not)
     fixture: tests/fixtures/framework_neg/FW-ART-001/
     hint: List the artifact in its producer task's outputs, or fix artifacts.yaml producer.
+  - id: FW-TPL-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p11
+    applies_after: null
+    summary: a required section of an artifact is not a heading of its template
+    fixture: tests/unit/test_template_sections.py::test_fw_tpl_001_fires_on_a_heading_the_template_lacks
+    hint: Name in required_sections only H2 headings of the artifact's template, or restore the heading in the template.
   - id: FW-ORD-001
     scope: repo
     severity: E
@@ -397,14 +406,15 @@ rules:
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
     enforces:
+      - REQ-FIPS200-0035
       - REQ-FIPS200-0036
       - REQ-FIPS200-0037
       - REQ-FIPS200-0038
-      - REQ-FIPS200-0035
       - REQ-SP800-18R1-0134
       - REQ-SP800-18R1-0135
       - REQ-SP800-18R1-0136
       - REQ-SP800-18R1-0197
+      - REQ-SP800-37R2-0392
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -1475,6 +1485,51 @@ rules:
     hint: Run `rmf package <run>`.
     enforces:
       - REQ-SP800-37R2-0377
+      - REQ-SP800-37R2-0392
+      - REQ-SP800-37R2-0547
+  - id: AUTY-001
+    scope: run
+    severity: E
+    ac: [AC-18, AC-42]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: an authorization names no traditional or joint approach, or a joint authorization lacks co-authorizing officials who each accept the risk, an agreement in the security and privacy plans, its collaboration, terms and progress, or is relied on after the agreement ended
+    fixture: tests/fixtures/negative/AUTY-001.yaml
+    hint: Set approach on each authorize record; for joint, list each official's acceptance in joint.acceptances and write joint_authorization in ssp-records.yaml with the same officials.
+    enforces:
+      - REQ-SP800-37R2-0460
+      - REQ-SP800-37R2-0660
+      - REQ-SP800-37R2-0661
+      - REQ-SP800-37R2-0664
+  - id: AUTY-002
+    scope: run
+    severity: E
+    ac: [AC-18, AC-42]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: a type authorization is not an ATO of identical instances with site or facility controls, a site's use of it is not an authorization to use leveraging the facility package, or a facility authorization is not a common control authorization of physical and environmental controls at an impact level
+    fixture: tests/fixtures/negative/AUTY-002.yaml
+    hint: Put type_authorization on an AD-ATO or AD-ATOC, provider.type_authorization with facility_package on an AD-ATU, and facility on an AD-CCA.
+    enforces:
+      - REQ-SP800-37R2-0658
+      - REQ-SP800-37R2-0659
+  - id: XSUM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: the authorization package lacks its executive summary, the summary misses the risk management issues or the privacy view, or the package is not submitted by the system owner or common control provider to the AO before the decision
+    fixture: tests/fixtures/negative/XSUM-001.yaml
+    hint: Write artifacts/data/package-summary.yaml at R-1 from templates/data/package-summary.yaml; each issue cites POA&M items of the package, and the submission is dated on or before the R-4 decision.
+    enforces:
+      - REQ-SP800-37R2-0392
+      - REQ-SP800-37R2-0547
+      - REQ-SP800-37R2-0555
+      - REQ-SP800-37R2-0735
   - id: PKG-003
     scope: run
     severity: E
@@ -1506,6 +1561,16 @@ rules:
       - REQ-CNSSI1254-0065
       - REQ-CNSSI1254-0066
       - REQ-CNSSI1254-0037
+  - id: TPL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a produced artifact drops or leaves unwritten a section its template names in required_sections
+    fixture: tests/fixtures/negative/TPL-001.yaml
+    hint: Keep every heading of the template that required_sections in framework/artifacts.yaml names, each with traced content; add sections after them, never in their place.
   - id: TLR-001
     scope: run
     severity: E
