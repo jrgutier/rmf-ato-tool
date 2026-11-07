@@ -1,0 +1,14 @@
+rule: VULN-002
+bases:
+- minimal
+description: the last compliance status disagrees with the response
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.1.compliance_reports.0.status
+  value: compliant
+expect:
+  errors:
+  - VULN-002
+  messages:
+  - the last compliance status reported is compliant, but the response recorded is poam

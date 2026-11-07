@@ -1,0 +1,21 @@
+rule: VULN-001
+bases:
+- minimal
+description: an alert recorded not applicable with no reason
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.0.response
+  value: not-applicable
+- op: delete_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.0.implemented
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.0.compliance_reports.0.status
+  value: not-applicable
+expect:
+  errors:
+  - VULN-001
+  messages:
+  - is recorded not applicable without the reason it does not apply to the system

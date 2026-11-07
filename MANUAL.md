@@ -387,6 +387,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 - A risk management strategy for the organization that includes a determination and expression of organizational risk tolerance is established (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT states the risk management strategy and the organizational risk tolerance.
+- ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI 8430.01 for the software it develops or deploys.
 - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
 
 **Alignment**
@@ -1031,6 +1032,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
 - artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
+- ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
 
 **Alignment**
@@ -1095,6 +1097,8 @@ Writes to `facts.yaml`: `boundary_id`.
 - Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
 - Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
 - The security-relevant constraints on the solution are recorded with their origin.
+- requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
+- requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
 
 **Alignment**
@@ -1148,7 +1152,8 @@ Writes to `facts.yaml`: `boundary_id`.
 **Exit criteria**
 
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
-- ART-REG records the registry entry for the system.
+- ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
+- An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
 
 **Alignment**
 
@@ -1158,6 +1163,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-18" (SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance.)
 - [DODI8510.01](#ref-dodi8510-01), p. 14, "Task P-18 System Registration"
+- [DODCIO-RECIPROCITY](#ref-dodcio-reciprocity), p. 9, "Register the Enterprise system in the DoD Ports, Protocols, and Services Management"
 - [DODI8510.01](#ref-dodi8510-01), p. 29, "Register the system in the DoD Component registry"
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
 - [DODI8510.01](#ref-dodi8510-01), p. 26, "Maintains visibility of assessment and authorization status"
@@ -1756,6 +1762,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - ssp/controls holds one statement per tailored-baseline control (SSP-COV-001, SSP-DUP-001).
 - ART-CMP, ART-CP and ART-IRP written.
 - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control board and the baseline configuration process.
+- The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
+- artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
 
 **Alignment**
 
@@ -1820,6 +1828,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - conmon.yaml states the data architecture, compliance, effectiveness and change monitoring, event criteria with thresholds and what each triggers, a periodic boundary review, threat monitoring of threat actors, protective techniques and the deployed environment (EXT-THREAT), metrics and the tasks using them, activities delegated to external partners and how the risk assessment is kept current (ISCM-001, ISCM-005, ISCM-006); posture reports reach the AO (ISCM-005).
 - conmon.yaml has room for the AO's or AODR's approval of the strategy and the minimum frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
+- conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
 
 **Alignment**
 
@@ -1835,6 +1844,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - [SP800-137](#ref-sp800-137), section 3.2.2
 - [DODI8510.01](#ref-dodi8510-01), p. 10, "Ensure acquisition programs develop evaluation metrics for DT&E and OT&E, and continuous monitoring"
 - [DODCIO-CATO](#ref-dodcio-cato), p. 1, "RMF requires a CONMON strategy for each system"
+- [DODI8531.01](#ref-dodi8531-01), p. 20, "Conduct monthly non-authenticated and authenticated vulnerability scans"
 
 **Playbook:** [playbooks/S/S-5.md](playbooks/S/S-5.md)
 
@@ -2237,6 +2247,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-STIG](#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
 | [EXT-TEST-RESULTS](#ext-test-results) | Developmental and operational test results | outside input (operational) |
 | [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [EXT-SOFTWARE-EVIDENCE](#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
 
 **Outputs**
 
@@ -3023,6 +3034,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-INSPECTIONS](#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 | [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
+| [EXT-DIRECTIVES](#ext-directives) | Directed actions | outside input (operational) |
+| [EXT-VDP](#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
 
 **Outputs**
 
@@ -3047,6 +3060,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
+- Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in directed_actions of poam/items.yaml with who implements it and its response, implemented, tracked in a POA&M item or withheld after coordination, and its compliance status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002); for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and the mission owner, with the CSSP, prioritizes its requirements and passes them to the CSP.
+- Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and reported within VRMN (VULN-003).
+- Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of confidentiality, integrity and availability (VULN-004); its fix is chosen case by case and tracked, and verified by successive scans once completed (VULN-005); one not publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
 
 **Alignment**
 
@@ -3061,6 +3077,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [DODI5000.90](#ref-dodi5000-90), p. 11, "the PM will initiate a risk assessment to identify the risk to the platform"
 - [DODI8510.01](#ref-dodi8510-01), p. 7, "decisions to withhold or delay vulnerability remediation"
 - [DODI8530.01](#ref-dodi8530-01), p. 36, "verify POA&Ms to correct deficiencies or weaknesses"
+- [DODI8530.01](#ref-dodi8530-01), p. 29, "Verifies DoD Component organizations and individuals take directed actions, maintain POA&Ms"
+- [DODI8531.01](#ref-dodi8531-01), p. 19, "Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial"
+- [DODI8531.01](#ref-dodi8531-01), p. 16, "During the VDP coordination process, the DoD Components will:"
 
 **Playbook:** [playbooks/M/M-3.md](playbooks/M/M-3.md)
 
@@ -3173,6 +3192,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 
 **Alignment**
 
@@ -3742,13 +3762,13 @@ Citations:
 
 ### <a id="art-reg"></a>ART-REG: System registration
 
-Record of the system's registration in the DoD Component registry.
+Record of the system's registration in the DoD Component registry, and of its ports, protocols and services in the DoD PPSM Registry.
 
 | | |
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-REG.md](templates/artifacts/ART-REG.md) |
-| Data files | — |
+| Data files | `artifacts/data/registration.yaml` (schema `registration`) |
 | OSCAL | — |
 | Produced by | [P-18](#task-p-18) |
 | Updated by | — |
@@ -3863,7 +3883,7 @@ Security-focused configuration management plan, configuration items and change c
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-CMP.md](templates/artifacts/ART-CMP.md) |
-| Data files | `artifacts/data/cm-plan.yaml` (schema `cm-plan`) |
+| Data files | `artifacts/data/cm-plan.yaml` (schema `cm-plan`)<br>`artifacts/data/software.yaml` (schema `software`) |
 | OSCAL | — |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [I-2](#task-i-2), [M-1](#task-m-1) |
@@ -4192,9 +4212,12 @@ content and operational data.
 | <a id="ext-assessment-procedures"></a>**EXT-ASSESSMENT-PROCEDURES** SP 800-53A assessment procedures | reference | SP 800-53A Rev. 5 assessment objects, methods and objectives, with the DoD-specific assessment procedures on the RMF Knowledge Service. | [A-2](#task-a-2), [A-3](#task-a-3) |
 | <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs, and other secure configuration guidance | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory, and where none applies NSA/CSS security implementation and mitigation guidance, DoD security configuration guides, NIST checklists and mitigation guidelines, or vendor hardening guidance. An exception is documented and approved by the responsible AO (SCFG-001). | [I-1](#task-i-1) |
 | <a id="ext-test-results"></a>**EXT-TEST-RESULTS** Developmental and operational test results | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence: cooperative vulnerability identification, cybersecurity DT&E, the cooperative vulnerability and penetration assessment (CVPA), the adversarial assessment (AA), the cyber economic vulnerability analysis, the evaluation of defensive cyberspace operations, and independent threat-representative penetration and exploitation testing. Each event in test-strategy.yaml records who conducted it, the configuration of the test asset, the test conditions and whether they were operationally representative (TSTRAT-003). | [A-3](#task-a-3) |
+| <a id="ext-software-evidence"></a>**EXT-SOFTWARE-EVIDENCE** Machine-readable software evidence | operational | SBOMs, build provenance and attestations, security scan and other assurance results, and the record of AI models used, produced by the software factory or pipeline and read as input to control assessment and authorization (artifacts/data/software.yaml evidence). | [A-3](#task-a-3) |
 | <a id="ext-monitoring"></a>**EXT-MONITORING** Continuous monitoring data | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [M-2](#task-m-2) |
 | <a id="ext-change-requests"></a>**EXT-CHANGE-REQUESTS** Configuration change requests | operational | Proposed changes to the system and its environment, submitted to configuration control. | [M-1](#task-m-1) |
 | <a id="ext-inspections"></a>**EXT-INSPECTIONS** Readiness inspection and outside evaluation findings | operational | Findings on the system from readiness inspections, joint compliance inspections, penetration assessments, audits and evaluations by the DoD Component or outside bodies such as CDRUSSTRATCOM, DISA, DIRNSA or DIA. | [M-3](#task-m-3) |
+| <a id="ext-directives"></a>**EXT-DIRECTIVES** Directed actions | operational | Orders and directives a system receives through its aligned NOSC, its CSSP or its DoD Component headquarters: operation, fragmentary, tasking and execute orders, IAVM vulnerability management alerts and bulletins, and CPCON changes, issued under the directive authority of CDRUSSTRATCOM through CDRUSCYBERCOM and JFHQ-DODIN or by the DoD Component. M-3 records each in directed_actions of poam/items.yaml. | [M-3](#task-m-3) |
+| <a id="ext-vdp"></a>**EXT-VDP** Vulnerability disclosure reports | operational | Reports from the DoD Vulnerability Disclosure Program that DC3 delivers to the system owner through JFHQ-DODIN, with actions USCYBERCOM directs within VRMN. M-3 records each in vdp_reports of poam/items.yaml. | [M-3](#task-m-3) |
 | <a id="ext-iscm-assessment"></a>**EXT-ISCM-ASSESSMENT** ISCM program assessment report | organization | The final report of an SP 800-137A assessment of the organization's ISCM program, which may bear on the decision to continue operation under ongoing authorization. | [M-6](#task-m-6) |
 | <a id="ext-adm"></a>**EXT-ADM** Acquisition decisions and determinations | organization | Acquisition decision memoranda and the decision authority's determinations at each milestone or decision point of the pathway (framework/milestones.yaml for major capability acquisition, `decision_points` in framework/pathways.yaml for the others), including the urgent capability MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment, which R-3 reads. | [R-3](#task-r-3), [R-4](#task-r-4) |
 | <a id="ext-ppp"></a>**EXT-PPP** Program protection plan | product | The program protection plan prepared by the lead systems engineer and approved by the USD(R&E) where the DAE is the milestone decision authority, or by the Component acquisition executive or a designee for ACAT IB to III, urgent, middle tier and software programs, with the cybersecurity strategy as an appendix. P-14 records in protection.yaml its approval, its critical items, their threats, vulnerabilities and countermeasures, exportability, anti-tamper, its updates and its transition (PPROT-001, PPROT-002); P-15 and P-17 carry its countermeasures into requirements and solicitations (PPROT-004). | [P-14](#task-p-14), [P-15](#task-p-15), [R-1](#task-r-1) |
@@ -4658,8 +4681,10 @@ the whole library with checksums.
 | <a id="ref-dodi8500-01"></a>**DODI8500.01** | Cybersecurity | DoD | March 14, 2014, Change 1, October 7, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/850001_2014.pdf> | [DODI8500.01.md](references/text/DODI8500.01.md) |
 | <a id="ref-dodi5000-83"></a>**DODI5000.83** | Technology and Program Protection to Maintain Technological Advantage | DoD | July 20, 2020, Change 1, May 21, 2021 | <https://www.esd.whs.mil/DD/DoD-Issuances/DoDI/> | [DODI5000.83.md](references/text/DODI5000.83.md) |
 | <a id="ref-dodi8530-01"></a>**DODI8530.01** | Cybersecurity Activities Support to DoD Information Network Operations | DoD | March 7, 2016, Change 1, July 25, 2017 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/853001p.pdf> | [DODI8530.01.md](references/text/DODI8530.01.md) |
+| <a id="ref-dodi8531-01"></a>**DODI8531.01** | DoD Vulnerability Management | DoD | September 15, 2020 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/853101p.pdf> | [DODI8531.01.md](references/text/DODI8531.01.md) |
 | <a id="ref-cnssi1254"></a>**CNSSI1254** | Risk Management Framework Documentation, Data Element Standards, and Reciprocity Process for National Security Systems | CNSS | August 2016 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1254.md](references/text/CNSSI1254.md) |
 | <a id="ref-cnssp12"></a>**CNSSP12** | Cybersecurity Policy for Space Systems Used to Support National Security Missions | CNSS | August 2025 | <https://www.cnss.gov/CNSS/issuances/Policies.cfm> | [CNSSP12.md](references/text/CNSSP12.md) |
 | <a id="ref-dodcio-reciprocity"></a>**DODCIO-RECIPROCITY** | DoD Cybersecurity Reciprocity Playbook | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/(U)%202024-01-02%20DoD%20Cybersecurity%20Reciprocity%20Playbook.pdf> | [DODCIO-RECIPROCITY.md](references/text/DODCIO-RECIPROCITY.md) |
 | <a id="ref-dodi5000-74"></a>**DODI5000.74** | Defense Acquisition of Services | DoD | January 10, 2020, Change 1, June 24, 2021 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500074p.pdf> | [DODI5000.74.md](references/text/DODI5000.74.md) |
 | <a id="ref-dodi5000-81"></a>**DODI5000.81** | Urgent Capability Acquisition | DoD | December 31, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500081p.PDF> | [DODI5000.81.md](references/text/DODI5000.81.md) |
+| <a id="ref-dowi8430-01"></a>**DOWI8430.01** | Accelerated Mission Software | DoD | September 8, 2026 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/843001p.PDF> | [DOWI8430.01.md](references/text/DOWI8430.01.md) |

@@ -1,0 +1,18 @@
+rule: SWA-001
+bases:
+- minimal
+description: a cloud service product whose software record says it holds no covered software
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.product_kind
+  value: service
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: covered_software
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - the system's product kind is service, and software.yaml says it includes no covered software

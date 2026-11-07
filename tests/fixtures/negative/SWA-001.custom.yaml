@@ -1,0 +1,14 @@
+rule: SWA-001
+bases:
+- minimal
+description: no SBOM for the custom software
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: evidence.sbom.custom_generated
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - an SBOM is not generated and maintained for the custom software

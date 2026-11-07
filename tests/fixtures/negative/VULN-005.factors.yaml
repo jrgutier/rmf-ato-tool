@@ -1,0 +1,16 @@
+rule: VULN-005
+bases:
+- minimal
+description: a total cost of ownership that is no number
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.remediation.factors.total_cost_of_ownership
+  value: unknown
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - the method calculation does not consider total cost of ownership
+  also:
+  - RUN-FM-001

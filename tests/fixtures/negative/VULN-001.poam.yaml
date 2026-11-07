@@ -1,0 +1,14 @@
+rule: VULN-001
+bases:
+- minimal
+description: a directed action tracked in a POA&M item that does not exist
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.1.poam_item
+  value: POAM-099
+expect:
+  errors:
+  - VULN-001
+  messages:
+  - 'DIR-002: the directed action is not tracked in a POA&M item'

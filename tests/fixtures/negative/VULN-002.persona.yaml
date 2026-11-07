@@ -1,0 +1,15 @@
+rule: VULN-002
+bases:
+- minimal
+description: a directed action implemented by a role the framework lacks
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.0.implementers
+  value:
+  - PER-NOBODY
+expect:
+  errors:
+  - VULN-002
+  messages:
+  - named to implement the directed action, is no role of the framework

@@ -1,0 +1,14 @@
+rule: SWA-001
+bases:
+- minimal
+description: unsigned build provenance
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: pipeline.provenance.signed
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - the build provenance attestations are not cryptographically signed

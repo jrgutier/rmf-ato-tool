@@ -1,0 +1,14 @@
+rule: VULN-001
+bases:
+- minimal
+description: a directed action implemented by a requested change, not a dow-order one
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.0.implemented.change
+  value: CHG-001
+expect:
+  errors:
+  - VULN-001
+  messages:
+  - is not in the change log as a dow-order change

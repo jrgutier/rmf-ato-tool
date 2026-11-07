@@ -76,7 +76,9 @@ requirements:
     locator: "References"
     context: "CRITICAL SYSTEM BEHAVIORS OF THE FUTURE"
     statement: "Systems security engineering provides complementary engineering capabilities that extend the concept of trustworthiness to deliver trustworthy secure systems. Trustworthiness is not only about demonstrably meeting a set of requirements. The requirements must also be complete, consistent, and correct. From a security perspective, a trustworthy system meets a set of well-defined requirements, including security requirements. Through evidence and expert judgment, trustworthy secure systems can limit and prevent the effects of modern adversities. Such adversities come in malicious and non-malicious forms and can emanate from a variety of sources, including physical and electronic. Adversities can include attacks from determined and capable adversaries, human errors of omission and commission, accidents and incidents, component faults and failures, abuses and misuses, and natural and human-made disasters."
-    status: "candidate"
+    status: "partial"
+    reason: "agreement analysis records how the set was analyzed; whether it is complete, consistent and correct is judgment."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/agreement/properties/analysis", "claim": "presence", "asserts": "The requirements are analyzed to be complete, consistent and correct against the protection needs"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0010"
     citation: {"ref": "SP800-160V1R1", "page": 18, "anchor": "Provide a basis for establishing a discipline for systems security engineering as"}
@@ -132,7 +134,9 @@ requirements:
     locator: "References"
     context: "CRITICAL SYSTEM BEHAVIORS OF THE FUTURE"
     statement: "Increasing the trustworthiness of systems is a significant undertaking that requires a substantial investment in the requirements, architecture, design, and development of systems, system components, applications, and networks. The policy in [8] requires federal agencies to implement the systems security engineering principles, concepts, techniques, and system life cycle processes in this publication for all high-value assets."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment, or apply no principle of SP 800-160v1r1 Appendix E; high-value asset designation is not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/practice", "claim": "presence", "asserts": "Systems security engineering principles, techniques and life cycle processes are implemented as the engineering method or practice"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0017"
     citation: {"ref": "SP800-160V1R1", "page": 19, "anchor": "Development of a new capability or system"}
@@ -396,7 +400,9 @@ requirements:
     locator: "References"
     context: "ENGINEERING-DRIVEN SOLUTIONS"
     statement: "The effectiveness of any engineering discipline first requires a thorough understanding of the problem and consideration of all feasible solutions before acting to solve the identified problem. To maximize the effectiveness of systems security engineering, the security requirements for the protection against asset loss must be driven by business, mission, and all other stakeholder asset loss concerns. The security requirements are defined and managed as a well-defined set of engineering requirements and cannot be addressed independently or after the fact."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-001 fails a requirement that traces to no protection need, policy statement or parent; that they are not addressed after the fact is narrative."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.trace.yaml", "expect": "traces to no protection need, design policy statement or parent requirement", "claim": "presence", "asserts": "Security requirements are driven by stakeholder asset loss concerns: a requirement that traces to no protection need fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0050"
     citation: {"ref": "SP800-160V1R1", "page": 22, "anchor": "In the context of systems security engineering, the term protection has a"}
@@ -404,7 +410,9 @@ requirements:
     locator: "References"
     context: "ENGINEERING-DRIVEN SOLUTIONS"
     statement: "In the context of systems security engineering, the term protection has a broad scope and is primarily focused on the concept of assets and asset loss resulting in unacceptable consequences. The protection capability provided by a system goes beyond prevention and aims to control the events, conditions, and consequences that constitute asset loss. It is achieved in the form of the specific capability and constraints on system architecture, design, function, implementation, construction, selection of technology, methods, and tools and must be “engineered in” as part of the system life cycle process."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment, or apply no principle of SP 800-160v1r1 Appendix E; the protection capability itself is narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.stage.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Protection must be engineered in as part of the system life cycle process: no engineering practice that addresses cybersecurity in manufacture fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0051"
     citation: {"ref": "SP800-160V1R1", "page": 22, "anchor": "Understanding stakeholder asset protection needs (including assets that they own and assets"}
@@ -668,7 +676,9 @@ requirements:
     locator: "2.1.2"
     context: "ENGINEERING FOR TRUST"
     statement: "Protective failure requires the ability to (1) detect that the system is in an insecure state and (2) detect a transition that will place the system into an insecure state for the purposes of responding to avoid the propagation of new failure. Protective failure calls for responsive and corrective actions, including (when needed) transitioning to a secure halt state with a protected recovery to allow for the continuation of operations in a reconstituted, reconfigured, or alternative secure operational mode. Other stakeholder objectives may necessitate the continuation of operations in a less-than-fully-secure state and should be reflected as necessary in such things as policy and requirements (Section C.3)."
-    status: "candidate"
+    status: "partial"
+    reason: "Protective failure is an Appendix E principle a practice may name; continued operation in a less-than-fully-secure state is narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/principles", "claim": "presence", "asserts": "Protective failure is a design principle for trustworthy secure design reflected in policy and requirements"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0084"
     citation: {"ref": "SP800-160V1R1", "page": 31, "anchor": "Protective recovery requires the ability to take reactive, responsive, or corrective action"}
@@ -1448,7 +1458,9 @@ requirements:
     locator: "2.1.2"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS To summarize, the following considerations impact the identification of protection needs:"
     statement: "The stakeholder perspective is based on the assets that belong to stakeholders. Therefore, those stakeholders determine the protection needs. The system perspective is based on the assets necessary for the system to function. These assets are determined by system design decisions and the criticality and priority41 of the asset in providing or supporting the functions of the system. Stakeholders are typically unaware of the existence of system assets and are not able to make decisions about the protection needs for system assets. The protection of system assets is an element of trustworthy secure system design."
-    status: "candidate"
+    status: "partial"
+    reason: "Indicative; needs assets records the assets of a loss concern."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/assets", "claim": "presence", "asserts": "Protection needs are determined for the assets of stakeholders and of the system"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0181"
     citation: {"ref": "SP800-160V1R1", "page": 43, "anchor": "Three predominant viewpoints of system security include system function, security function, and"}
@@ -1552,7 +1564,9 @@ requirements:
     locator: "2.1.2"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS Such demonstration must consider the system as an emergent43 whole that consists of:"
     statement: "Examples include software and hardware development tools and suites; modeling and simulation environments and tools; maintenance and diagnostics devices, components, and suites; simulators and test-case scenario generators; and training systems. While these assets are not necessarily within the scope of engineering the system of interest, behaviors and outcomes of these systems have security implications that must be addressed in the secure design of the system of interest. The behaviors and outcomes to consider include how they might directly or indirectly enable, interface, interact, and interoperate with the system of interest."
-    status: "candidate"
+    status: "partial"
+    reason: "software.yaml pipeline development_tools records the development, test and other enabling systems and how their security implications are addressed; narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/software.schema.json#/properties/pipeline/properties/development_tools", "claim": "presence", "asserts": "Software development tools, modeling and test systems have security implications that are addressed"}]
     work_item: "WI-96"
   - id: "REQ-SP800-160V1R1-0194"
     citation: {"ref": "SP800-160V1R1", "page": 44, "anchor": "An emergent property is a property exhibited by entities that is meaningful"}
@@ -1600,7 +1614,9 @@ requirements:
     locator: "2.1.2.•"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS As part of a transdisciplinary systems engineering effort to deliver a trustworthy secure system, systems security engineering:"
     statement: "• Works with stakeholders to ensure that security objectives, protection needs and concerns, assurance needs, security requirements (including measures of effectiveness [MOEs] and measures of performance [MOPs]), and associated validation methods are defined"
-    status: "candidate"
+    status: "partial"
+    reason: "requirement measure and verification record the MOEs, MOPs and validation methods; working with stakeholders is narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Security requirements include measures of effectiveness and performance, a performance or assurance measure"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0200"
     citation: {"ref": "SP800-160V1R1", "page": 47, "anchor": "Defines system security requirements48 and associated verification methods"}
@@ -1618,7 +1634,9 @@ requirements:
     locator: "2.1.2.•"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS"
     statement: "• Develops security views and viewpoints of the system architecture and design"
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/practice", "claim": "presence", "asserts": "Security views and viewpoints of the system architecture and design are developed by an engineering practice"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0202"
     citation: {"ref": "SP800-160V1R1", "page": 47, "anchor": "Identifies and assesses susceptibilities and vulnerabilities to life cycle hazards and adversities"}
@@ -1633,7 +1651,9 @@ requirements:
     locator: "2.1.2.•"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS"
     statement: "• Designs preemptive and reactive features and functions included within a balanced strategy to control asset loss and associated loss consequences"
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/practice", "claim": "presence", "asserts": "Preemptive and reactive features to control asset loss are designed by an engineering practice"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0204"
     citation: {"ref": "SP800-160V1R1", "page": 47, "anchor": "Provides security considerations to inform systems engineering efforts with the objective to"}
@@ -1641,7 +1661,9 @@ requirements:
     locator: "2.1.2.•"
     context: "ASSET-BASED PROTECTION – ENGINEERING FOR SUCCESS"
     statement: "• Provides security considerations to inform systems engineering efforts with the objective to reduce errors, flaws, and weaknesses that may constitute a security vulnerability"
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/practice", "claim": "presence", "asserts": "Security considerations inform systems engineering efforts to reduce errors, flaws and weaknesses, the engineering method or practice"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0205"
     citation: {"ref": "SP800-160V1R1", "page": 47, "anchor": "Performs system security analyses and interprets the results of other system analyses"}
@@ -1757,7 +1779,9 @@ requirements:
     locator: "2.1.2"
     context: "SECURITY – AN EMERGING PROPERTY OF AN ENGINEERING PROCESS"
     statement: "Protection needs are determined based on the security objectives, life cycle concepts, and stakeholder concerns. The protection needs are subsequently transformed into stakeholder security requirements and associated constraints, as well as the measures needed to validate that all requirements have been met. A well-defined and stakeholder-validated problem definition and context provide the foundation for all systems engineering and systems security engineering and supporting activities."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-003 fails a protection need traced by no requirement; the measures that validate them are recorded per requirement."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Protection needs are transformed into stakeholder security requirements: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0219"
     citation: {"ref": "SP800-160V1R1", "page": 50, "anchor": "The problem context may be interpreted within a life cycle phase as"}
@@ -1983,7 +2007,9 @@ requirements:
     locator: "C.2.1. Stakeholder Security Requirements.•"
     context: "These requirements specify:"
     statement: "• The assurance that is to be obtained in the security solution Systems security considerations within activities and tasks such as those described in Appendices H, I, J, and K provide the security perspective to ensure that stakeholder security requirements are included in the stakeholder requirements and that the stakeholder security requirements are consistent with all other stakeholder requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails a level of assurance carried by no requirement with an assurance measure; consistency with all other stakeholder requirements is judgment."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "The assurance to be obtained in the security solution is specified in the requirements: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0247"
     citation: {"ref": "SP800-160V1R1", "page": 83, "anchor": "System requirements specify the technical view of a system or solution that"}
@@ -1991,7 +2017,9 @@ requirements:
     locator: "C.2.2. System Security Requirements"
     context: ""
     statement: "System requirements specify the technical view of a system or solution that meets the specified stakeholder needs. The system requirements are a transformation of the validated stakeholder requirements. System requirements specify what the system or solution must do to satisfy the stakeholder requirements. System security requirements are those system requirements that have security relevance. These requirements define:"
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-001 fails a requirement tracing to no need, policy statement or parent; the transformation itself is narrative."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.trace.yaml", "expect": "traces to no protection need, design policy statement or parent requirement", "claim": "presence", "asserts": "System requirements are a transformation of the validated stakeholder requirements: a requirement that traces to no protection need fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0248"
     citation: {"ref": "SP800-160V1R1", "page": 83, "anchor": "The protection capabilities provided by the security solution"}
@@ -2047,7 +2075,9 @@ requirements:
     locator: "C.2.2. System Security Requirements"
     context: "SYSTEM STATES, POLICY, AND REQUIREMENTS"
     statement: "Systems operate in secure, insecure, and indeterminant states (Section 3.2). System security policy and system requirements account for these states and the state transitions, including those that reflect the design principles of Protective Failure and Protective Recovery. For example, requirements capture needs to (1) detect insecure system states;"
-    status: "candidate"
+    status: "partial"
+    reason: "Protective failure and protective recovery are Appendix E principles a practice may name; requirements per system state are narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/principles", "claim": "presence", "asserts": "System requirements reflect the design principles of Protective Failure and Protective Recovery"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0255"
     citation: {"ref": "SP800-160V1R1", "page": 84, "anchor": "detect a transition that will result in an insecure state; (3) transition"}
@@ -2119,7 +2149,9 @@ requirements:
     locator: "Appendix D. Trustworthy Secure Design"
     context: ""
     statement: "A principled system design strengthens trustworthiness claims [2]. The concepts in this appendix and the principles in Appendix E provide a sound basis for reasoning about a system and enable the demonstration of system trustworthiness. Applying concepts and principles and using other enablers (e.g., standards, specifications, design patterns, security policy models, cryptographic algorithms, security protocols, strength of mechanism, and known adversities) should be planned for, appropriately scoped, and revisited throughout the system life cycle and engineering effort."
-    status: "candidate"
+    status: "partial"
+    reason: "A 'should': SSE-002 fails practices that apply no principle of Appendix E; planning, scoping and revisiting them is narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.applied.yaml", "expect": "no practice applies a principle for trustworthy secure design to develop and integrate the system components", "claim": "constraint", "asserts": "Applying concepts and principles is planned and scoped: no practice that applies a principle for trustworthy secure design fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0264"
     citation: {"ref": "SP800-160V1R1", "page": 86, "anchor": "The design approach for engineering trustworthy secure systems is intended to establish"}
@@ -2599,7 +2631,9 @@ requirements:
     locator: "Appendix E. Principles for Trustworthy Secure Design"
     context: ""
     statement: "The use of the design principles is subject to various priorities and constraints that may restrict or preclude their application within a specific context.76 The principles may conflict with other principles, and that conflict must be understood. In practice, the principles can be satisfied or implemented in various and often equally effective ways. The use of specific principles may change in response to changes and variances in requirements, architecture, design, and risk acceptability. Therefore, their application should be planned for, appropriately scoped, and revisited throughout the engineering effort."
-    status: "candidate"
+    status: "partial"
+    reason: "practices principles names the Appendix E principles applied; that their conflicts are understood is narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/principles", "claim": "presence", "asserts": "The design principles applied, and conflicts among principles, are understood for trustworthy secure design"}]
     work_item: "WI-101"
   - id: "REQ-SP800-160V1R1-0324"
     citation: {"ref": "SP800-160V1R1", "page": 98, "anchor": "An important objective for security is the reduction of uncertainty regarding the"}
@@ -3727,7 +3761,9 @@ requirements:
     locator: "F.1.1. Roles of Requirements in Trustworthiness"
     context: ""
     statement: "The trustworthiness requirements about security derive from the protection needs, priorities, constraints, and concerns associated with the system’s ability to achieve authorized and intended behaviors and outcomes, deal with adversity, and control loss. The requirements also address the measures used to assess trustworthiness and the evidentiary data and information required to substantiate trustworthiness conclusions and grant trust. The requirements engineering discipline provides the methods, processes, techniques, and tools for this to occur."
-    status: "candidate"
+    status: "partial"
+    reason: "requirement measure records the measures used; the evidentiary data to substantiate trustworthiness is narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "The requirements address the measures used to assess trustworthiness, a performance or assurance measure"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0465"
     citation: {"ref": "SP800-160V1R1", "page": 119, "anchor": "“A meaningful claim of trustworthiness cannot be based on an isolated demonstration"}
@@ -3799,7 +3835,9 @@ requirements:
     locator: "F.2. Assurance"
     context: ""
     statement: "Assurance is the grounds for justified confidence that a claim or set of claims has been or will be achieved [61]. Assurance is a complex and multi-dimensional property of the system that builds over time. Assurance must be planned, established, and maintained in alignment with the system throughout the system life cycle."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails a level of assurance carried by no requirement with an assurance measure; maintaining it across the life cycle is narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "Assurance is planned and established in alignment with the system: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-95"
   - id: "REQ-SP800-160V1R1-0474"
     citation: {"ref": "SP800-160V1R1", "page": 120, "anchor": "Adequate security judgments should be based on the level of confidence in"}
@@ -3959,7 +3997,9 @@ requirements:
     locator: "F.2.3. Assurance Needs"
     context: ""
     statement: "Assurance is a need that is to be engineered and satisfied similar to the need to engineer the system capability to satisfy specified capability needs. Assurance needs for trustworthy secure systems are grounded in the concerns of loss and adverse effects due to intentional and unintentional adversity (Commensurate Trustworthiness, Substantiated Trustworthiness, Commensurate Rigor). Assurance needs include the evidence-basis for reasoning, the degree of rigor to acquire and interpret the evidence, and the selection of the methods, tools, and processes used throughout the system life cycle. Similar to capability and performance needs, assurance needs, expectations, priorities, and constraints should be expressed as system requirements and achieved, tracked, and maintained within the systems engineering effort."
-    status: "candidate"
+    status: "partial"
+    reason: "The second sentence, a 'should', is held: SSE-002 fails a level of assurance carried by no requirement with an assurance measure. The first says assurance is a need to engineer; requirement measure kind 'assurance' records it."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "Assurance needs are expressed as system requirements: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope", "sentence": "Similar to capability and performance needs, assurance needs, expectations, priorities, and constraints should be expressed as system requirements and achieved, tracked, and maintained within the systems engineering effort."}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "Assurance is a need engineered and satisfied like capability, an assurance measure", "sentence": "Assurance is a need that is to be engineered and satisfied similar to the need to engineer the system capability to satisfy specified capability needs."}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0494"
     citation: {"ref": "SP800-160V1R1", "page": 124, "anchor": "Assurance evidence can support a conclusion that a stated claim is not"}
@@ -4656,7 +4696,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Prioritized stakeholder protection needs are transformed into stakeholder requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a protection need traced by no requirement, and each need carries its priority."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Prioritized stakeholder protection needs are transformed into stakeholder requirements: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0580"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Security-oriented performance measures and quality characteristics are defined."}
@@ -4915,7 +4957,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [98] [99] [100] [101] [103].SN-4.2"
     context: "SN-4 TRANSFORM STAKEHOLDER NEEDS INTO STAKEHOLDER REQUIREMENTS"
     statement: "SN-4.2 Define stakeholder requirements in a manner consistent with security aspects and protection needs."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-003 fails a protection need traced by no requirement; consistency with security aspects is judgment."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Stakeholder requirements are defined consistent with protection needs: a protection need traced by no requirement fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0609"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Analyze the set of stakeholder requirements with respect to the protection needs."}
@@ -5073,7 +5117,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-1.1"
     context: "SR-1 PREPARE FOR SYSTEM REQUIREMENTS DEFINITION"
     statement: "SR-1.1 Define the security aspects of the intended behavior and outcomes at the functional boundary of the system."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "Security aspects of the intended behavior at the functional boundary are defined as testable requirements"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0626"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Define the security domains of the system and their correlation to the"}
@@ -5121,7 +5167,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.1"
     context: "SR-2 DEFINE SYSTEM REQUIREMENTS"
     statement: "SR-2.1 Define each security function that the system is required to perform."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "Each security function the system performs is defined as a testable requirement"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0632"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Define the security aspects of each function that the system is required"}
@@ -5129,7 +5177,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.2"
     context: "SR-2 DEFINE SYSTEM REQUIREMENTS"
     statement: "SR-2.2 Define the security aspects of each function that the system is required to perform."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "The security aspects of each function are defined as a testable requirement"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0633"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Define necessary security-driven implementation constraints."}
@@ -5162,7 +5212,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.5"
     context: "SR-2 DEFINE SYSTEM REQUIREMENTS"
     statement: "SR-2.5 Define system security requirements and rationale."
-    status: "candidate"
+    status: "partial"
+    reason: "requirement statement and the need's rationale record them; no rationale per system security requirement is required."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "System security requirements and rationale are defined, one testable requirement each"}]
     work_item: "WI-102"
   - id: "REQ-SP800-160V1R1-0637"
     citation: {"ref": "SP800-160V1R1", "page": 137, "anchor": "Apply security metadata to the system security requirements."}
@@ -11184,7 +11236,9 @@ requirements:
     locator: "2.1.2"
     context: ""
     statement: "The purpose of establishing the need for protection is to decide what assets to protect and to determine the priority given to such protection. This can be accomplished without considering a cause or condition against which to protect. As shown in Figure 8, the need for protection is derived from the relationship among the asset of interest, context of loss, type of loss, and the consequences of loss. This approach establishes the need for protection that – once validated by stakeholders across all assets of interest – provides the basis for developing security objectives and requirements.40"
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-003 fails a loss concern that names no asset; the context, type and consequences of loss are narrative."
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.assets.yaml", "expect": "is a loss concern that names no asset", "claim": "presence", "asserts": "The need for protection derives from the asset of interest and its loss: a loss concern that names no asset fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
     promoted: {"reason": "Stakeholders validate the need for protection, which then bases the security objectives and requirements; ART-REQ's input, rejected for no marker."}
   - id: "REQ-SP800-160V1R1-1387"
@@ -11193,7 +11247,9 @@ requirements:
     locator: "2.1.2"
     context: ""
     statement: "Protection needs are continuously reassessed and adjusted as variances, changes, and trades occur throughout the system life cycle. These include the maturation of the system design and life cycle concepts, improved understanding of the operational environment (e.g., a more thorough understanding of adversities), and changes in understanding of the consequences of asset loss. Revisiting protection needs is a necessary part of the iterative nature of systems engineering. Systems security engineering is necessary to ensure completeness in understanding the problem space, exploring all feasible solutions, and engineering a trustworthy secure system."
-    status: "candidate"
+    status: "partial"
+    reason: "The P-15 exit criteria require reassessing the needs when a requirement changes; no rule detects a stale reassessment."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/need/properties/priority", "claim": "constraint", "asserts": "Protection needs are reassessed and adjusted, with their rank after down-selection"}]
     work_item: "WI-102"
     promoted: {"reason": "Protection needs are reassessed and adjusted through the life cycle, a duty in indicative voice rejected for no marker."}
   - id: "REQ-SP800-160V1R1-1388"
@@ -11202,7 +11258,9 @@ requirements:
     locator: "C.2.1. Stakeholder Security Requirements"
     context: ""
     statement: "Stakeholder security requirements are those stakeholder requirements that have security relevance. These requirements specify:"
-    status: "candidate"
+    status: "partial"
+    reason: "Introduces a list; requirement kind records security relevance."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "Stakeholder security requirements are testable requirements with security relevance"}]
     work_item: "WI-102"
     promoted: {"reason": "Lead-in with its own verb, 'These requirements specify:', over the noun items 0243 to 0246; names content of ART-REQ."}
   - id: "REQ-SP800-160V1R1-1389"
@@ -11253,7 +11311,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.1"
     context: ""
     statement: "Note: Security functions are defined for all system states, modes, and conditions of system operation and use, including the associated transitions between system states and modes. Security functions include those oriented to delivery of capability and the ability of the system to execute while preserving its inherent security characteristics."
-    status: "candidate"
+    status: "partial"
+    reason: "requirements.yaml records it at P-15, but what it says is narrative no rule judges."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/statement", "claim": "presence", "asserts": "Security functions are defined for all system states, modes and conditions as testable requirements"}]
     work_item: "WI-102"
     promoted: {"reason": "Note to SR-2.1, rejected for no marker: security functions are defined for all states, modes and conditions, a duty that shapes ART-REQ."}
   - id: "REQ-SP800-160V1R1-1394"
@@ -11262,7 +11322,9 @@ requirements:
     locator: "H.3.3. Security Activities and Tasks.SR-2.5"
     context: ""
     statement: "Note: System security requirements include security capability and functional requirements, security performance and effectiveness requirements, security assurance requirements, and implementation constraints (SR-2.3 and SR-2.4 outcomes expressed as requirements)."
-    status: "candidate"
+    status: "partial"
+    reason: "requirement measure kind tells assurance from performance and constraints carry implementation constraints; capability and functional requirements are not told apart."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/requirement/properties/measure/properties/kind", "claim": "constraint", "asserts": "System security requirements include security performance and assurance requirements, a performance or assurance measure"}, {"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/constraint/properties/origin", "claim": "constraint", "asserts": "Implementation constraints are among the system security requirements, by origin"}]
     work_item: "WI-102"
     promoted: {"reason": "Note to SR-2.5, rejected for no marker: names the kinds of requirement the set holds, content of ART-REQ."}
   - id: "REQ-SP800-160V1R1-1395"

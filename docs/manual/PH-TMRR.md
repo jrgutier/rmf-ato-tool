@@ -418,6 +418,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - ssp/controls holds one statement per tailored-baseline control (SSP-COV-001, SSP-DUP-001).
 - ART-CMP, ART-CP and ART-IRP written.
 - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control board and the baseline configuration process.
+- The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
+- artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
 
 **Alignment**
 
@@ -482,6 +484,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - conmon.yaml states the data architecture, compliance, effectiveness and change monitoring, event criteria with thresholds and what each triggers, a periodic boundary review, threat monitoring of threat actors, protective techniques and the deployed environment (EXT-THREAT), metrics and the tasks using them, activities delegated to external partners and how the risk assessment is kept current (ISCM-001, ISCM-005, ISCM-006); posture reports reach the AO (ISCM-005).
 - conmon.yaml has room for the AO's or AODR's approval of the strategy and the minimum frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
+- conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
 
 **Alignment**
 
@@ -497,6 +500,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - [SP800-137](../../MANUAL.md#ref-sp800-137), section 3.2.2
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Ensure acquisition programs develop evaluation metrics for DT&E and OT&E, and continuous monitoring"
 - [DODCIO-CATO](../../MANUAL.md#ref-dodcio-cato), p. 1, "RMF requires a CONMON strategy for each system"
+- [DODI8531.01](../../MANUAL.md#ref-dodi8531-01), p. 20, "Conduct monthly non-authenticated and authenticated vulnerability scans"
 
 **Playbook:** [playbooks/S/S-5.md](../../playbooks/S/S-5.md)
 

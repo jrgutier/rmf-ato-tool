@@ -426,7 +426,9 @@ requirements:
     locator: "2.6.b.(3)"
     context: "DOD AND OSD COMPONENT HEADS PMs are responsible for the cybersecurity of their programs, systems, and information, as assisted by supporting organizations. PMs:"
     statement: "(3) In accordance with DoDI 5000.02T, must ensure that their Program Management Office includes and decomposes cybersecurity requirements throughout the acquisition lifecycle: from needed security capabilities, to operational requirements for security, to system and technical requirements, to specifications as implemented controls."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-001 fails a derived requirement whose parent the matrix does not hold, and SSE-001 one included in no specification; the decomposition from capability to operational to technical requirements is not judged."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "Cybersecurity requirements are decomposed to system and technical requirements: a derived requirement whose parent requirement the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cybersecurity requirements are decomposed to specifications: a security requirement included in neither the performance specification nor the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.90-0053"
     citation: {"ref": "DODI5000.90", "page": 8, "anchor": "Consults with the USD(A&S), as appropriate, on the joint force warfighting implications"}
@@ -587,7 +589,9 @@ requirements:
     locator: "3.2"
     context: "CYBERSECURITY DRIVEN BY THREAT"
     statement: "PMs will incorporate cybersecurity requirements and apply controls to mitigate observed, anticipated, or emerging threats so that DoD systems are effective in cyber-contested operational environments. Designs and architectures must address technology and cyber threat evolution to maintain mission effectiveness beyond the near term."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-001 fails derivation methods that leave a vulnerability source without derived requirements; designs that address threat evolution are narrative."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.methods.yaml", "expect": "no derivation method derives requirements that minimize vulnerabilities introduced by", "claim": "constraint", "asserts": "PMs incorporate cybersecurity requirements to mitigate threats: no derivation method that derives requirements to minimize vulnerabilities introduced by implementation fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.90-0073"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "PMs must use cyber threat information produced by the Intelligence Community in"}
@@ -773,7 +777,9 @@ requirements:
     locator: "3.3.a.(2).(d)"
     context: "CYBERSECURITY PLANNING AND EXECUTION Planning Cybersecurity Activities The PM is expected to delegate responsibility to members of the program staff with technical knowledge of cybersecurity to produc"
     statement: "(d) The need for operational cyber resilience and, if appropriate, the resulting monitoring, responding, and recovering of the system and mitigation of the vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment, or apply no principle of SP 800-160v1r1 Appendix E; the monitoring, response and recovery that follow from the need are narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.resilience.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "The need for operational cyber resilience is planned: no engineering practice that addresses cyber-resilience in test fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.90-0095"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "Executing Cybersecurity Throughout the Acquisition Lifecycle."}
@@ -858,7 +864,9 @@ requirements:
     locator: "3.3.c.(2)"
     context: "Figure 2. Cybersecurity Planning and Execution In addition to allocating and protecting resources to constantly improve software, manufacturing, and reliability throughout a program’s lifecycle, the P"
     statement: "(2) The emergence of exploitable cyber vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "The strategy identifies vulnerabilities as they emerge (VULN-007); the PM's resourcing for them is not recorded."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.cve.yaml", "expect": "does not use the CVE list to identify publicly known vulnerabilities", "claim": "constraint", "asserts": "The emergence of exploitable cyber vulnerabilities is watched, and a strategy without CVE fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.90-0105"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "Methods to eliminate or mitigate vulnerabilities in accordance with DoD CIO guidance"}
@@ -866,7 +874,9 @@ requirements:
     locator: "3.3.c.(3)"
     context: "Figure 2. Cybersecurity Planning and Execution In addition to allocating and protecting resources to constantly improve software, manufacturing, and reliability throughout a program’s lifecycle, the P"
     statement: "(3) Methods to eliminate or mitigate vulnerabilities in accordance with DoD CIO guidance regarding vulnerability management."
-    status: "candidate"
+    status: "partial"
+    reason: "The method to remediate or mitigate each vulnerability is chosen and tracked (VULN-005); DoD CIO guidance itself is not in the library."
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.method.yaml", "expect": "is not among the remediation and mitigation options weighed case by case", "claim": "constraint", "asserts": "Methods to eliminate or mitigate vulnerabilities: a method not among the options weighed fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.90-0106"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "The threat environments where the system is, or is to be, deployed"}

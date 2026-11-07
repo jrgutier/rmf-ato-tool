@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 204 rules, 36 repo-scope and 168 run-scope. Authoritative;
+# Rule registry (plan §6.5): 217 rules, 36 repo-scope and 181 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -396,6 +396,15 @@ rules:
     summary: generated output differs from a fresh rmf build, baseline resolve or package
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-18R1-0197
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -1884,6 +1893,9 @@ rules:
       - REQ-SP800-160V1R1-0624
       - REQ-SP800-160V1R1-0645
       - REQ-SP800-160V1R1-0646
+      - REQ-DODI5000.90-0052
+      - REQ-SP800-160V1R1-0049
+      - REQ-SP800-160V1R1-0247
   - id: REQS-002
     scope: run
     severity: E
@@ -1902,6 +1914,14 @@ rules:
       - REQ-DODI8500.01-0275
       - REQ-DODI8500.01-0341
       - REQ-DODI8500.01-0352
+      - REQ-DOWI8430.01-0006
+      - REQ-DOWI8430.01-0007
+      - REQ-DOWI8430.01-0090
+      - REQ-DOWI8430.01-0175
+      - REQ-DOWI8430.01-0176
+      - REQ-DOWI8430.01-0178
+      - REQ-DOWI8430.01-0181
+      - REQ-DOWI8430.01-0182
   - id: REQS-003
     scope: run
     severity: E
@@ -1923,6 +1943,10 @@ rules:
       - REQ-SP800-160V1R1-0615
       - REQ-SP800-160V1R1-0616
       - REQ-SP800-160V1R1-0643
+      - REQ-SP800-160V1R1-0218
+      - REQ-SP800-160V1R1-0579
+      - REQ-SP800-160V1R1-0608
+      - REQ-SP800-160V1R1-1386
   - id: REQS-004
     scope: run
     severity: E
@@ -1937,6 +1961,109 @@ rules:
       - REQ-DODD8140.01-0022
       - REQ-DODD8140.01-0053
       - REQ-DODD8140.01-0054
+  - id: SSE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: security requirements derived without the informing documents, derivation methods, key performance measures, exportability or inclusion in the specifications
+    fixture: tests/fixtures/negative/SSE-001.yaml
+    hint: At P-15 record requirements.yaml derivation (DoDI 5000.83 3.3.c.(1)) and each requirement's included_in.
+    enforces:
+      - REQ-DODI5000.83-0169
+      - REQ-DODI5000.83-0175
+      - REQ-DODI5000.83-0176
+      - REQ-DODI5000.83-0177
+      - REQ-DODI5000.83-0178
+      - REQ-DODI5000.83-0285
+      - REQ-CNSSP12-0015
+      - REQ-DODI5000.90-0072
+      - REQ-DODI5000.82-0095
+      - REQ-DODI5000.90-0052
+  - id: SSE-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: system security engineering practices that miss an area, a life cycle activity, program protection, privacy, a design principle or the assurance level
+    fixture: tests/fixtures/negative/SSE-002.yaml
+    hint: At P-15 record requirements.yaml engineering (DoDI 5000.83 1.2.c); name principles of SP 800-160v1r1 Appendix E.
+    enforces:
+      - REQ-DODI5000.83-0010
+      - REQ-DODI5000.83-0283
+      - REQ-CNSSP12-0015
+      - REQ-SP800-53R5-0026
+      - REQ-DODI5000.82-0128
+      - REQ-DODI5000.90-0094
+      - REQ-SP800-160V1R1-0050
+      - REQ-SP800-160V1R1-0263
+      - REQ-SP800-18R2-0042
+      - REQ-SP800-39-0080
+      - REQ-SP800-160V1R1-0246
+      - REQ-SP800-160V1R1-0493
+      - REQ-SP800-160V1R1-0473
+      - REQ-SP800-37R2-0330
+      - REQ-SP800-53R5-0006
+  - id: SSE-003
+    scope: run
+    severity: E
+    ac: [AC-16, AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an assurance-related baseline control whose SSP statement does not address its assurance requirements, or leaves them unsatisfied once in place
+    fixture: tests/fixtures/negative/SSE-003.yaml
+    hint: "For each control `rmf catalog show --fields assurance` marks, record assurance.addressed in its SSP statement and assurance.status: satisfied once it is implemented."
+    enforces:
+      - REQ-FIPS200-0036
+      - REQ-FIPS200-0037
+      - REQ-FIPS200-0038
+      - REQ-FIPS200-0035
+      - REQ-SP800-37R2-0331
+      - REQ-SP800-18R1-0134
+      - REQ-SP800-18R1-0135
+      - REQ-SP800-18R1-0136
+      - REQ-SP800-39-0308
+  - id: SWA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: covered software without an automated pipeline, signed provenance, a complete SBOM, approved AI tools or independent cyber DT&E
+    fixture: tests/fixtures/negative/SWA-001.yaml
+    hint: At S-4 write artifacts/data/software.yaml (DoWI 8430.01 2.8, 3.5 and 3.6).
+    enforces:
+      - REQ-DOWI8430.01-0095
+      - REQ-DOWI8430.01-0209
+      - REQ-DOWI8430.01-0215
+      - REQ-DOWI8430.01-0216
+      - REQ-DOWI8430.01-0217
+      - REQ-DOWI8430.01-0051
+      - REQ-DOWI8430.01-0146
+      - REQ-DOWI8430.01-0061
+      - REQ-DOWI8430.01-0142
+      - REQ-DOWI8430.01-0144
+      - REQ-DOWI8430.01-0204
+      - REQ-DOWI8430.01-0169
+  - id: SWA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: an open-source component without its governance, community and license review, or a COTS component that declines a validated product without a reason
+    fixture: tests/fixtures/negative/SWA-002.yaml
+    hint: At P-14 record ra.yaml components with the six risk factors of DoWI 8430.01 3.5.i.(2) and, for open source, the review of 3.5.i.(3).
+    enforces:
+      - REQ-DOWI8430.01-0198
+      - REQ-SP800-37R2-0330
   - id: DEGRADED-001
     scope: run
     severity: W
@@ -3043,3 +3170,166 @@ rules:
     enforces:
       - REQ-DODCIO-DEVSECOPS-0067
       - REQ-DODI5000.81-0090
+  - id: VULN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action the system received has no response, or is implemented, tracked or withheld without what each needs
+    fixture: tests/fixtures/negative/VULN-001.yaml
+    hint: In poam/items.yaml directed_actions, record each order, alert or bulletin with response implemented (with its date, and a dow-order change where one made it), poam (with the POA&M item) withheld (coordinated with the requirements sponsor, the AO or AODR and the Component cyberspace operations forces), or not-applicable with not_applicable_reason.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0034
+      - REQ-DODCIO-RECIPROCITY-0165
+      - REQ-DODI8500.01-0148
+      - REQ-DODI8530.01-0144
+      - REQ-DODI8530.01-0145
+      - REQ-DODI8530.01-0184
+      - REQ-DODI8530.01-0196
+      - REQ-DODI8530.01-0229
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0262
+      - REQ-DODI8530.01-0265
+      - REQ-DODI8530.01-0266
+      - REQ-DODI8530.01-0314
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0101
+      - REQ-DODI8531.01-0102
+      - REQ-DODI8531.01-0103
+      - REQ-DODI8531.01-0137
+      - REQ-DOWI8430.01-0075
+      - REQ-DTM-24-001-0211
+      - REQ-DTM-24-001-0217
+  - id: VULN-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action names no one who implements it, or its compliance status is not reported up the chain
+    fixture: tests/fixtures/negative/VULN-002.yaml
+    hint: Name the implementers of each directed action (personas, or the roles DoDI 8530.01 names without one, commander, supervisor, project-lead, network-administrator, system-administrator, user) and report its compliance status to CDRUSCYBERCOM through the Component reporting chain, on or after receipt, the last report agreeing with the response.
+    enforces:
+      - REQ-DODI8530.01-0027
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0255
+      - REQ-DODI8530.01-0256
+      - REQ-DODI8530.01-0268
+      - REQ-DODI8531.01-0104
+      - REQ-DTM-24-001-0215
+  - id: VULN-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability disclosure report is not validated, rated, planned, communicated or reported within VRMN
+    fixture: tests/fixtures/negative/VULN-003.yaml
+    hint: Validate each VDP report and report it within VRMN on or after validation, a not-valid one as not-valid; a valid one links a vulnerabilities record, a POA&M item with source_of_weakness vdp opened no earlier than receipt, owner notices through completion, the AO or AODR advised, and a VRMN report after completion.
+    enforces:
+      - REQ-DODI8531.01-0087
+      - REQ-DODI8531.01-0106
+      - REQ-DODI8531.01-0133
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0136
+      - REQ-DODI8531.01-0138
+      - REQ-DODI8531.01-0139
+      - REQ-DODI8531.01-0141
+      - REQ-DODI8531.01-0142
+      - REQ-DODI8531.01-0143
+      - REQ-SP800-61R3-0146
+  - id: VULN-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: an analyzed vulnerability is not rated on CVSS 3.1, its rating disagrees with its score, its impact is unassessed or it is not reported
+    fixture: tests/fixtures/negative/VULN-004.yaml
+    hint: Each vulnerabilities record carries cvss version 3.1 with a score and the Table 1 rating for it, the expected loss of confidentiality, integrity and availability, and the date it was reported, not before its discovery.
+    enforces:
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0148
+      - REQ-DODI8531.01-0153
+      - REQ-DODI8531.01-0161
+      - REQ-DODI8531.01-0162
+      - REQ-DODI8531.01-0186
+      - REQ-SP800-61R3-0138
+  - id: VULN-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: the fix of a vulnerability is not chosen case by case, not tracked, or not verified by successive scans on completion
+    fixture: tests/fixtures/negative/VULN-005.yaml
+    hint: Record remediation with the method chosen among the options weighed, the loss of confidentiality, integrity and availability considered, the six cost factors and the POA&M item; once the item is completed, verify on or after completion, restoring the baseline, with at least two successive scans, the last on or after completion finding it absent.
+    enforces:
+      - REQ-DODI5000.90-0105
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0112
+      - REQ-DODI8531.01-0168
+      - REQ-DODI8531.01-0169
+      - REQ-DODI8531.01-0180
+      - REQ-DODI8531.01-0181
+      - REQ-SP800-18R2-0198
+  - id: VULN-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability that is not publicly known is not submitted toward the VEP, or one called public cites nothing
+    fixture: tests/fixtures/negative/VULN-006.yaml
+    hint: A vulnerabilities record with publicly_known false carries vep_submission to USCYBERCOM (NSA-direct for NSA), dated on or after discovery when newly_discovered is true, or for one not new prior set true with the reference of the earlier submission; publicly_known true cites a CVE or a public advisory.
+    enforces:
+      - REQ-DODI8531.01-0005
+      - REQ-DODI8531.01-0108
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0146
+  - id: VULN-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the continuous monitoring strategy lacks the vulnerability management process, its identification sources, tools across the life cycle, monthly scans or patch reach
+    fixture: tests/fixtures/negative/VULN-007.yaml
+    hint: conmon.yaml vulnerability_management lists the five DoD steps, the artifact behind configuration, asset, remediation and mitigation management, CVE as a source, incident reports cross-referenced with CVE, risk assessment data and vendor bulletins, tools of the strategy covering development to retirement, authenticated and non-authenticated scans at least monthly, and a patch coverage scan by a tool of the strategy; a provider's plan recorded there is approved by the AO or AODR.
+    enforces:
+      - REQ-DODI5000.83-0206
+      - REQ-DODI5000.83-0220
+      - REQ-DODI5000.87-0120
+      - REQ-DODI5000.90-0104
+      - REQ-DODI8510.01-0079
+      - REQ-DODI8531.01-0002
+      - REQ-DODI8531.01-0003
+      - REQ-DODI8531.01-0004
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0123
+      - REQ-DODI8531.01-0130
+      - REQ-DODI8531.01-0174
+      - REQ-DODI8531.01-0183
+      - REQ-DTM-24-001-0127
+  - id: PPSM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-18
+    summary: an Enterprise system is not registered in the DoD PPSM Registry for every connection of its boundary
+    fixture: tests/fixtures/negative/PPSM-001.yaml
+    hint: When an authorization deploys the system at enterprise scope, record ppsm in artifacts/data/registration.yaml with its registration date, number and every boundary connection.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0035
+      - REQ-DODI8500.01-0087
+      - REQ-DODI8500.01-0333
