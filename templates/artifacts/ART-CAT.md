@@ -24,6 +24,6 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Overlays
 
-<<FILL: one line per CNSSI 1253 overlay considered: applies or not, and why, with tokens>>
+<<FILL: one line per CNSSI 1253 overlay considered: applies or not, and why, with tokens. For the Privacy Overlays, name the privacy risk level that chose the set and say it is used in place of a PII confidentiality impact level (PCIL), as the overlay's section 4.2 directs although CNSSI 1253 footnote 23 still names PII impact levels>>
 
 <!-- C-3 appends a "## Review and approval" section here and adds C-3 to touched_by. -->

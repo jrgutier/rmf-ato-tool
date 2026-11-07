@@ -381,7 +381,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 **Entry criteria**
 
 - Organization-level risk assessment available (P-3).
-- The organization's systems have already been categorized; prioritization applies the high-water mark first.
+- The organization's systems have already been categorized. Under FIPS 199 and 200 the prioritization applies the high-water mark first; a National Security System follows CNSSI 1253, which does not apply the high-water mark (SP 800-37r2 footnote 62), so it keeps its per-objective C/I/A values and ART-ORG-CONTEXT says which impact designation groups systems before they are prioritized.
 
 **Exit criteria**
 
@@ -397,6 +397,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TASK P-6"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 14, "Task P-6 Impact – Level Prioritization"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"
+- [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), p. 53, "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253]"
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-6](../../playbooks/P/P-org-context.md#task-p-6)
 
@@ -816,6 +817,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
 - artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
+- P-14 runs before C-2 because C-2 reads ART-RA, while SP 800-161r1 starts the prioritized supplier risk assessment (criticality, threat and vulnerability analysis) once the impact level is defined. So P-14's supplier rows are a first pass, and C-2 feeds back to P-14, which rewrites ra.yaml's supplier risks in the priority the approved categorization sets.
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
@@ -827,6 +829,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Citations**
 
+- [SP800-161R1](../../MANUAL.md#ref-sp800-161r1), p. 61, "Establish and begin using supplier risk-assessment processes on a prioritized basis"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TASK P-14" (SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance.)
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 14, "Task P-14 Mission-Based Cyber Risk Assessment"
 - [SP800-30R1](../../MANUAL.md#ref-sp800-30r1), section 3.2
@@ -836,7 +839,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-2](#task-c-2).
 
 ## <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -1077,7 +1080,7 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3).
+**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3); feeds back to [P-14](#task-p-14).
 
 ## <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
 

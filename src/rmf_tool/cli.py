@@ -1072,10 +1072,14 @@ def conformance_promote(
     anchor: Annotated[str, typer.Option("--anchor", help="A few words of the passage; the "
                                         "rejection on the page that holds them, else the "
                                         "paragraph of the text that does.")],
-    reason: Annotated[str, typer.Option("--reason", help="Why the passage is a requirement.")],
+    reason: Annotated[str | None, typer.Option("--reason", help="Why the passage is a "
+                                               "requirement; optional with --replace.")] = None,
     sentence: Annotated[bool, typer.Option("--sentence", help="Take only the sentence of the "
                                            "passage that holds the words; exit 2 when they "
                                            "are in no sentence or in several.")] = False,
+    replace: Annotated[str | None, typer.Option("--replace", help="A live promoted entry "
+                                                "(REQ-ID) to rebase onto this passage, "
+                                                "keeping its ID and reviewed fields.")] = None,
 ) -> None:
     """Promote a rejected paragraph, or a passage the extractor read as context, into a live
     candidate entry with a new stable ID and `promoted: {reason}`.
@@ -1085,12 +1089,15 @@ def conformance_promote(
     flagged needs_review when its passage no longer resolves, is counted by `rmf conformance
     report`, and its citation is checked by FW-REQ-001 like any other. --sentence is for a
     paragraph that runs several things together, such as a two-column glossary read line by
-    line.
+    line. --replace REQ-ID rebases a promoted entry whose passage moved (a footer left it, a
+    page shifted) onto the passage found the same way: its ID, status, evidence and reason
+    stay, its statement and citation follow the passage, and needs_review is cleared.
     """
     from rmf_tool.conformance import cli_support
 
     try:
-        line = cli_support.promote(repo_root(), ref, page, anchor, reason, sentence=sentence)
+        line = cli_support.promote(repo_root(), ref, page, anchor, reason, sentence=sentence,
+                                   replace=replace)
     except cli_support.UsageError as exc:
         raise _usage_error(str(exc)) from exc
     console.print(line, markup=False)

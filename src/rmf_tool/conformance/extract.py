@@ -35,6 +35,7 @@ ANCHOR_WORDS = 12
 LEAD_IN_WORDS = 6
 TITLE_WORDS = 4
 MIN_SENTENCE_WORDS = 4
+CUT_ITEM_WORDS = 6  # a list item this long that stops mid-sentence continues past a blank line
 CONTEXT_CHARS = 200
 # A paragraph over this many words is split at sentence boundaries into runs under it, each
 # its own candidate (the 860-word privacy overlay paragraph is no unit of review).
@@ -183,6 +184,8 @@ _LABEL = re.compile(r"^(\([a-z]{1,2}\)|\(\d{1,2}\)|(?:[a-z]|([a-z])\2)\.|\d{1,2}
                     r"(?:\s+(?=\S)|(?<=\))(?=[A-Z]))")
 _ACTIVITY = re.compile(r"^[A-Z]{2}-\d{1,2}$")
 _NUMBERED = re.compile(r"^(?:#+ )?(\d{1,2}(?:\.\d{1,2}){1,3})\.?\s+(\S.*)$")
+_SECTION = re.compile(r"^(\d{1,2})\.\s+([A-Z][^a-z]{7,120})$")  # 5. ROLE OF VARIOUS TYPES OF AOS
+_RUN_IN_TITLE = re.compile(r"^([A-Z][^a-z]{2,120}?)\.\s+(?=[A-Z(“])")
 _CAPS = re.compile(r"^[A-Z][A-Z0-9 ,/&()’'—–-]{7,90}\.?$")
 _CAPTION = re.compile(r"^(?:FIGURE|TABLE|Figure|Table) (?:[A-Z]-?)?\d{1,2}(?:[-.]\d{1,2})?[.:]\s")
 _LEGEND_CELL = re.compile(r"^[A-Z][A-Za-z&/]{0,7}: ")
@@ -355,7 +358,25 @@ def _page_footers(paragraphs: list[Block], footers: Sequence[str]) -> set[int]:
     return out
 
 
-def blocks(text: str, footers: Sequence[str] = ()) -> list[Block]:
+def _page_headers(paragraphs: list[Block], headers: Sequence[str]) -> set[int]:
+    """Positions of the paragraphs that open a page and match a declared running-header
+    pattern: the counterpart of ``_page_footers`` for a header the extraction left in."""
+    out: set[int] = set()
+    page = None
+    opening = False
+    for n, block in enumerate(paragraphs):
+        if block.page != page:
+            page, opening = block.page, True
+        if block.kind != "paragraph":
+            continue
+        opening = opening and any(re.search(p, block.text) for p in headers)
+        if opening:
+            out.add(n)
+    return out
+
+
+def blocks(text: str, footers: Sequence[str] = (), *, cut_items: bool = False,
+           headers: Sequence[str] = ()) -> list[Block]:
     """The document's blocks, with footnotes tagged and paragraphs rejoined over page breaks:
     a paragraph with no closing punctuation continues in the next paragraph of a later page
     unless that one opens a list item. Footnotes sit between the two halves and are neither
@@ -364,11 +385,14 @@ def blocks(text: str, footers: Sequence[str] = ()) -> list[Block]:
     sentence crossing a page keeps its first page and never absorbs one. A caption, an
     all-caps line or a contents line with dot leaders never continues onto the next page: it
     has no closing punctuation because it is not a sentence, and joining would hide the
-    paragraph that follows it (the 2026-10-31 review found in-scope lines lost this way)."""
+    paragraph that follows it (the 2026-10-31 review found in-scope lines lost this way).
+    ``headers`` are the same for a running header that opens a page.
+    ``cut_items``, which a source declares, also joins a list item cut by a blank line inside
+    a page (``_cut_item``); a blank line ends a paragraph everywhere else."""
     out: list[Block] = []
     last_prose: int | None = None
     paragraphs = _paragraphs(text)
-    closing = _page_footers(paragraphs, footers)
+    closing = _page_footers(paragraphs, footers) | _page_headers(paragraphs, headers)
     for n, block in enumerate(paragraphs):
         if n in closing:
             out.append(replace(block, kind="footer"))
@@ -383,15 +407,43 @@ def blocks(text: str, footers: Sequence[str] = ()) -> list[Block]:
         last = out[last_prose] if last_prose is not None else None
         if (block.kind == "paragraph" and last is not None
                 and block.page > (last.end_page or last.page)
-                and not _FOOTNOTE_MARK.sub("", last.text).endswith(_TERMINAL)
+                and _open_ended(last.text, block.text, cut_items)
                 and not _LABEL.match(block.text) and not heading_like(block.text)):
             out[last_prose] = replace(last, text=f"{last.text} {block.text}", end_page=block.page)
+            continue
+        if (cut_items and block.kind == "paragraph" and last is not None
+                and last_prose == len(out) - 1 and block.page == (last.end_page or last.page)
+                and _cut_item(last.text)
+                and not _LABEL.match(block.text) and not heading_like(block.text)
+                and not _CAPTION.match(block.text)):
+            out[last_prose] = replace(last, text=f"{last.text} {block.text}")
             continue
         out.append(block)
         continues = block.kind == "paragraph" and not heading_like(block.text) \
             and not _LEADER.search(block.text)
         last_prose = len(out) - 1 if continues else None
     return out
+
+
+def _open_ended(text: str, following: str, cut_items: bool) -> bool:
+    """``text`` stops mid-sentence. Where a source declares ``cut_items``, a closing
+    parenthesis does not end a list item whose next page opens in lowercase: "(SIEM)" then
+    "monitoring, operational orders" is one sentence (I-7)."""
+    bare = _FOOTNOTE_MARK.sub("", text)
+    if not bare.endswith(_TERMINAL):
+        return True
+    return cut_items and bool(_LABEL.match(text)) and bare.endswith(")") \
+        and not bare.endswith(".)") and following[:1].islower()
+
+
+def _cut_item(text: str) -> bool:
+    """A list item cut by a blank line inside a page (I-7): one that opens with a label, has a
+    clause of its own and stops mid-sentence. Only where a source declares it: a NIST bullet
+    with no closing punctuation is followed by a paragraph of its own far more often."""
+    label = _LABEL.match(text)
+    body = text[label.end():] if label else ""
+    return len(body.split()) >= CUT_ITEM_WORDS and not _is_heading_line(body) \
+        and not _FOOTNOTE_MARK.sub("", text).endswith(_TERMINAL)
 
 
 def sentences(paragraph: str) -> list[str]:
@@ -607,16 +659,33 @@ def _prose(text: str, block: Block, trail: _Trail, *, skip_labels: frozenset[str
     return items, rejected
 
 
+def _run_in_heading(text: str) -> tuple[str, str] | None:
+    """A section number and title a paragraph opens with, where a source declares
+    ``run_in_headings`` (I-5): ``5. ROLE OF AOS`` alone, which reads as a list label otherwise,
+    or ``2.5. UNDER SECRETARY OF DEFENSE FOR INTELLIGENCE. The Under Secretary ...``, whose
+    capitals end at the first full stop. The paragraph is still read whole after it."""
+    whole = _SECTION.match(text)
+    if whole and _is_heading_line(whole.group(2)):
+        return whole.group(1), whole.group(2).rstrip(".")
+    numbered = _NUMBERED.match(text)
+    run_in = _RUN_IN_TITLE.match(numbered.group(2)) if numbered else None
+    if numbered and run_in and _is_heading_line(run_in.group(1)):
+        return numbered.group(1), run_in.group(1)
+    return None
+
+
 def statement_items(document: list[Block], pages: tuple[int, int], *, tables: bool = True,
                     skip_labels: frozenset[str] = frozenset(),
                     strip_labels: frozenset[str] = frozenset(),
-                    claimed: frozenset[int] = frozenset()) -> Extraction:
+                    claimed: frozenset[int] = frozenset(),
+                    run_in_headings: bool = False) -> Extraction:
     """Lettered items, table rows and requirement paragraphs on ``pages`` (inclusive), and
     every in-scope paragraph or row that is not one, with its reason. ``skip_labels`` drop a
     ``Label: value`` block whole (the task fields the NIST pin holds); ``strip_labels`` keep
     the value (``Discussion:``). A block belongs to the scope its first page is in; a block
     that starts on a page no scope claims (``claimed`` is every scope's pages) and ends in
-    this one belongs here, so a paragraph rejoined over the edge of an exclusion is read."""
+    this one belongs here, so a paragraph rejoined over the edge of an exclusion is read.
+    ``run_in_headings`` reads the section headings ``_run_in_heading`` finds."""
     out = Extraction()
     trail = _Trail()
     heading_open = False  # a numbered heading may wrap onto the next all-caps line
@@ -692,7 +761,14 @@ def statement_items(document: list[Block], pages: tuple[int, int], *, tables: bo
                 trail.retitle(text)
             continue
         heading_open = False
-        label = _LABEL.match(text)
+        section = _run_in_heading(text) if run_in_headings and block.kind == "paragraph" \
+            else None
+        if section is not None:
+            trail.enter_section(*section)
+            if _SECTION.match(text):
+                heading_open = True
+                continue
+        label = None if section else _LABEL.match(text)
         if label:
             trail.enter_label(label.group(1))
             body = text[label.end():]
@@ -798,16 +874,17 @@ def page_count(text: str) -> int:
 def extract(text: str, scopes: list[dict[str, Any]], *,
             skip_labels: frozenset[str] = frozenset(),
             strip_labels: frozenset[str] = frozenset(),
-            footers: Sequence[str] = ()) -> Extraction:
+            footers: Sequence[str] = (), cut_items: bool = False,
+            headers: Sequence[str] = (), run_in_headings: bool = False) -> Extraction:
     """Items and rejections of every scope, in document order."""
-    document = blocks(text, footers)
+    document = blocks(text, footers, cut_items=cut_items, headers=headers)
     out = Extraction()
     claimed = frozenset(p for s in scopes for p in range(s["pages"][0], s["pages"][1] + 1))
     for scope in scopes:
         first, last = scope["pages"]
         found = statement_items(document, (first, last), tables=scope.get("tables", True),
                                 skip_labels=skip_labels, strip_labels=strip_labels,
-                                claimed=claimed)
+                                claimed=claimed, run_in_headings=run_in_headings)
         out.items += found.items
         out.rejected += found.rejected
     out.items = identify(out.items, raw_pages(text))

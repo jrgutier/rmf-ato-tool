@@ -1554,6 +1554,58 @@ def test_a_promoted_entry_whose_passage_changes_is_flagged_and_never_dropped(rep
         "FW-REQ-001 fails the citation until the reviewer resolves it"
 
 
+def test_a_removed_entry_takes_a_removal_reason_and_nothing_else():
+    entry = {"id": "REQ-X-0001", "status": "not-a-requirement", "removed": True}
+    reg = type("R", (), {"entry": lambda self, ident: entry if ident == entry["id"] else None})()
+
+    register.mark(reg, "REQ-X-0001", removal_reason="A heading, now read as one.")
+
+    assert entry["removal_reason"] == "A heading, now read as one."
+    with pytest.raises(register.MarkError, match="takes --removal-reason alone"):
+        register.mark(reg, "REQ-X-0001", status="candidate")
+    with pytest.raises(register.MarkError, match="no live entry REQ-X-0002$"):
+        register.mark(reg, "REQ-X-0002", removal_reason="Nothing to remove here.")
+
+
+def test_promote_replace_rebases_a_moved_promoted_entry_and_keeps_its_review(repo, index):
+    """WI-55 (I-6): a promoted entry whose passage moved is rebased in place, not re-promoted
+    under a new ID, so its status and evidence follow it."""
+    reg = fx.load(repo)
+    made = promote(repo, reg)
+    made.update(status="partial", reason="Held in part by the owner record.")
+    fx.write(repo, reg)
+    text = repo / f"references/text/{DOC}.md"
+    text.write_text(text.read_text().replace("The owner:", "The system owner:"))
+    fx.extract(repo)
+    accept(repo)
+    reg = fx.load(repo)
+    assert reg.entry(made["id"])["needs_review"] is True
+
+    rebased = promote(repo, reg, anchor="The system owner", reason=None, replace=made["id"])
+    fx.write(repo, reg)
+    after = fx.load(repo)
+    entry = after.entry(made["id"])
+
+    assert rebased["id"] == made["id"] and entry == rebased
+    assert entry["statement"] == "The system owner:" and "needs_review" not in entry
+    assert entry["citation"] == {"ref": DOC, "page": 1, "anchor": "The system owner:"}
+    assert (entry["status"], entry["reason"]) == ("partial", "Held in part by the owner record.")
+    assert entry["promoted"] == made["promoted"], "the reason stays unless a new one is given"
+    assert len(after.files[DOC]["requirements"]) == len(reg.files[DOC]["requirements"])
+    assert shape(repo, after, index) == [], "FW-REQ-001 resolves the rebased citation"
+    assert fx.extract(repo) is None and fx.load(repo).entry(made["id"]) == entry, "idempotent"
+
+
+def test_promote_replace_refuses_an_extracted_entry_and_a_new_entry_needs_a_reason(repo):
+    reg = fx.load(repo)
+    extracted = next(e for e in reg.files[DOC]["requirements"] if not e.get("promoted"))
+
+    with pytest.raises(register.MarkError, match="no live promoted entry"):
+        promote(repo, reg, replace=extracted["id"])
+    with pytest.raises(register.MarkError, match="needs --reason"):
+        promote(repo, reg, reason=None)
+
+
 def test_a_passage_the_extractor_read_as_context_can_be_promoted_and_a_bad_anchor_cannot(repo,
                                                                                          index):
     reg = fx.load(repo)

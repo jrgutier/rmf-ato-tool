@@ -207,8 +207,11 @@ tasks:
     min_interviews: 1
     entry_criteria:
       - Organization-level risk assessment available (P-3).
-      - The organization's systems have already been categorized; prioritization applies the
-        high-water mark first.
+      - The organization's systems have already been categorized. Under FIPS 199 and 200 the
+        prioritization applies the high-water mark first; a National Security System follows
+        CNSSI 1253, which does not apply the high-water mark (SP 800-37r2 footnote 62), so it
+        keeps its per-objective C/I/A values and ART-ORG-CONTEXT says which impact designation
+        groups systems before they are prioritized.
     exit_criteria:
       - A prioritization of organizational systems with the same impact level is conducted (DoDI
         8510.01 Table 1 outcome).
@@ -218,6 +221,7 @@ tasks:
       - {ref: SP800-37R2, section: "TASK P-6"}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-6 Impact – Level Prioritization"}
       - {ref: SP800-37R2, section: "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"}
+      - {ref: SP800-37R2, page: 53, anchor: "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253]"}
     playbook: playbooks/P/P-org-context.md#task-p-6
   - id: P-7
     name: Continuous Monitoring Strategy—Organization
@@ -480,6 +484,11 @@ tasks:
         source, threat event, vulnerability and predisposing condition, and holds the risk of
         each connection, external provider and supplier, the priority order and to whom the
         results are communicated (SRA-001 to SRA-003).
+      - P-14 runs before C-2 because C-2 reads ART-RA, while SP 800-161r1 starts the prioritized
+        supplier risk assessment (criticality, threat and vulnerability analysis) once the
+        impact level is defined. So P-14's supplier rows are a first pass, and C-2 feeds back
+        to P-14, which rewrites ra.yaml's supplier risks in the priority the approved
+        categorization sets.
       - ART-RA identifies the system elements and interfaces that need specific attention in
         test events, for the cybersecurity strategy and the TEMP.
       - ra.yaml components records each third-party and open-source software component with the
@@ -495,6 +504,7 @@ tasks:
         security technical risks from the SEP and ITRAs with the reviews that assess them
         (PPROT-005).
     citations:
+      - {ref: SP800-161R1, page: 61, anchor: "Establish and begin using supplier risk-assessment processes on a prioritized basis"}
       - {ref: SP800-37R2, section: "TASK P-14", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-14 Mission-Based Cyber Risk Assessment"}
       - {ref: SP800-30R1, section: "3.2"}

@@ -523,3 +523,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.
 - Rule: Write each failing message of a rule inline in the call that reports it, so the clause that leads to it can be found and judged.
 - Promotion: none — FW-REQ-003 already refuses such an item as denied, so the mistake cannot reach the register.
+
+## L-0075 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
+- Symptom: joining a list item cut by a blank line inside a page (I-7) across the whole register changed 175 statements, retired 110 entries and flagged 127 for review in 22 documents, most of them NIST bullets wrongly joined to the paragraph after them.
+- Root cause: a layout quirk of one PDF (DODCIO-RECIPROCITY breaks a step after its first line; CNSSP12's OCR layer does the same and repeats a running header) looks like ordinary prose structure in every other document, so a global rule cannot tell them apart.
+- Fix: the reader takes per-document options from conformance/sources.yaml, each with a reason: `cut_items`, `run_in_headings` and `headers`; only the documents that declare them change, and register diffs are measured before marking.
+- Rule: Fix a layout defect of one document with a declared reading option for that document, and measure the register diff of any extractor change before accepting it.
+- Promotion: check: conformance/schema/sources.schema.json requires a reason on each option, and tests/unit/test_conformance_extract.py::test_a_cut_item_joins_only_where_the_source_declares_it fails if the join turns global.

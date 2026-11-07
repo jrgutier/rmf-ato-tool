@@ -856,3 +856,105 @@ def test_a_list_item_keeps_its_place_across_a_footer():
     found = extract.extract(text, [{"pages": [1, 2]}], footers=FOOTERS)
 
     assert [i.locator for i in found.items] == ["a", "b"]
+
+
+CUT = """<!-- page 1 -->
+
+# 4. USE CASES
+
+f. Ensure the Enterprise system complies with Information Assurance Vulnerability
+
+Management (IAVM) Program directions.
+
+o Ensure assignment of an accredited CSSP to maintain continuous monitoring, Event Management (SIEM)
+
+<!-- page 2 -->
+
+monitoring, operational orders and POA&Ms.
+
+• Development of a new capability or system
+
+The engineering effort includes concept exploration.
+
+# 5. ROLE OF VARIOUS TYPES OF AOS
+
+a. The AO will review the body of evidence.
+"""
+
+
+def test_a_cut_item_joins_only_where_the_source_declares_it():
+    """WI-56 (I-7): a list item cut by a blank line inside a page, or ending `)` before a page
+    that opens in lowercase, is one sentence where sources.yaml declares cut_items; elsewhere a
+    blank line still ends a paragraph, and a bullet with no closing punctuation keeps the
+    paragraph after it apart."""
+    declared = [b.text for b in extract.blocks(CUT, cut_items=True) if b.kind == "paragraph"]
+    plain = [b.text for b in extract.blocks(CUT) if b.kind == "paragraph"]
+
+    assert "f. Ensure the Enterprise system complies with Information Assurance Vulnerability " \
+        "Management (IAVM) Program directions." in declared
+    assert "o Ensure assignment of an accredited CSSP to maintain continuous monitoring, Event " \
+        "Management (SIEM) monitoring, operational orders and POA&Ms." in declared
+    assert "• Development of a new capability or system" in plain
+    assert "Management (IAVM) Program directions." in plain and "monitoring, operational " \
+        "orders and POA&Ms." in plain
+
+
+def test_a_cut_item_never_swallows_a_heading_or_a_short_label():
+    text = "<!-- page 1 -->\n\n5. ROLE OF VARIOUS TYPES OF AOS IN RECIPROCITY\n\nTo maintain " \
+        "scope, we identified roles.\n\nc. Decisions\n\nThe AO decides.\n"
+    found = [b.text for b in extract.blocks(text, cut_items=True)]
+
+    assert found == ["5. ROLE OF VARIOUS TYPES OF AOS IN RECIPROCITY",
+                     "To maintain scope, we identified roles.", "c. Decisions", "The AO decides."]
+
+
+RUN_IN = """<!-- page 1 -->
+
+# SECTION 2: RESPONSIBILITIES
+
+2.4. DIRECTOR, OPERATIONAL TEST AND EVALUATION (DOT&E). The DOT&E:
+
+a. Monitors all urgent capability acquisition programs.
+
+2.5. UNDER SECRETARY OF DEFENSE FOR INTELLIGENCE. The Under Secretary of
+Defense for Intelligence:
+
+a. Advises the USD(A&S) on security requirements.
+
+2.6. USD(C)/CFO. The USD(C)/CFO assesses Component funding strategies.
+
+# 5. ROLE OF AOS
+
+a. The AO will review the body of evidence.
+"""
+
+
+def test_run_in_headings_set_the_section_of_what_follows_only_where_declared():
+    """WI-54 (I-5): `2.5. CAPS TITLE. Prose` and `5. CAPS TITLE` head a section where the
+    source declares run_in_headings; the paragraph's own statement is unchanged."""
+    declared = extract.statement_items(extract.blocks(RUN_IN), (1, 1), run_in_headings=True)
+    plain = extract.statement_items(extract.blocks(RUN_IN), (1, 1))
+    where = {i.statement[:12]: (i.locator, i.context) for i in declared.items}
+    before = {i.statement[:12]: i.locator for i in plain.items}
+
+    assert where["a. Advises t"] == ("2.5.a", "UNDER SECRETARY OF DEFENSE FOR INTELLIGENCE "
+                                     "The Under Secretary of Defense for Intelligence:")
+    assert [r.locator for r in declared.rejected if r.text.startswith("2.6.")] == ["2.6"]
+    assert where["a. The AO wi"][0] == "5.a"
+    assert before["a. Advises t"] == "2.4.a" and before["a. The AO wi"] != "5.a"
+    assert [r.text for r in declared.rejected if r.text.startswith("2.6.")] == \
+        ["2.6. USD(C)/CFO. The USD(C)/CFO assesses Component funding strategies."]
+
+
+def test_a_declared_running_header_neither_joins_nor_stops_a_join():
+    """WI-50: CNSSP12's running header `CNSSP 12` opens each page and stopped every sentence
+    that crossed one; declared as a header it is set aside and the sentence joins."""
+    text = "<!-- page 1 -->\n\ng. Systems must meet guidelines, standards, and\n\n" \
+        "<!-- page 2 -->\n\nCNSSP 12\n\npolicies issued by the Heads of Agencies.\n"
+    declared = extract.blocks(text, headers=(r"^C ?N?SSP 12$",))
+    plain = extract.blocks(text)
+
+    assert [(b.text, b.kind) for b in declared] == [
+        ("g. Systems must meet guidelines, standards, and policies issued by the Heads of "
+         "Agencies.", "paragraph"), ("CNSSP 12", "footer")]
+    assert [b.text for b in plain][0] == "g. Systems must meet guidelines, standards, and"
