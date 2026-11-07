@@ -2256,7 +2256,9 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "DOCUMENTATION OF PLANNED CONTROL | security and privacy plans or equivalent documents."
-    status: "candidate"
+    status: "covered"
+    reason: "SSP-COV-001 fails a planned control with no statement in the security and privacy plan, and PRIV-008 fails a privacy plan outside ART-SSP."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Documentation of planned control implementations in security and privacy plans: a control with no statement fails"}, {"kind": "rule", "target": "PRIV-008", "fixture": "tests/fixtures/negative/PRIV-008.separate.yaml", "expect": "ART-SSP is the only plan the framework holds", "claim": "constraint", "asserts": "The security and privacy plans are documented in one plan, and separate plans fail"}]
     work_item: "WI-141"
   - id: "REQ-SP800-37R2-0293"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "IMPLEMENTATIONS | [Cybersecurity Framework: Profile]"}
@@ -2393,7 +2395,9 @@ requirements:
     locator: "TASK S-4"
     context: ""
     statement: "Document the controls for the system and environment of operation in security and privacy plans."
-    status: "candidate"
+    status: "covered"
+    reason: "SSP-COV-001 fails a baseline control, a privacy control among them, with no statement in ART-SSP, and PRIV-008 fails a privacy plan kept outside ART-SSP."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Document the controls for the system in security and privacy plans: a privacy control with no plan statement fails"}, {"kind": "rule", "target": "PRIV-008", "fixture": "tests/fixtures/negative/PRIV-008.separate.yaml", "expect": "ART-SSP is the only plan the framework holds", "claim": "constraint", "asserts": "The controls for the system and environment of operation are documented in one plan, ART-SSP, holding the security and privacy plans, and plans kept separate fail"}]
     work_item: "WI-141"
   - id: "REQ-SP800-37R2-0311"
     citation: {"ref": "SP800-37R2", "page": 73, "anchor": "Security and privacy plans contain an overview of the security and privacy"}
@@ -2416,7 +2420,9 @@ requirements:
     locator: "TASK S-4"
     context: ""
     statement: "Documentation of planned control implementations allows for traceability of decisions prior to and after the deployment of the system. To the extent possible, organizations reference existing documentation (either by vendors or other organizations that have employed the same or similar systems or system elements), use automated support tools, and coordinate across the organization to reduce redundancy and increase the efficiency and cost-effectiveness of control documentation. The documentation also addresses platform dependencies and includes any additional information necessary to describe how the capability required is to be achieved at the level of detail sufficient to support control implementation and assessment. Documentation for control implementations follows best practices for hardware and software development and for systems security and privacy engineering disciplines and is also consistent with established policies and procedures for documenting activities in the SDLC. In certain situations, security controls can be implemented in ways that create privacy risks. The privacy program supports documentation of privacy risk considerations and the implementations intended to mitigate them."
-    status: "candidate"
+    status: "partial"
+    reason: "S-4 documents the implementations in ART-SSP with the privacy plan (PRIV-008); best practice and the privacy risks of security controls are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "asserts": "S-4 documents the control implementations and the privacy risk considerations in the privacy plan", "claim": "presence"}]
     work_item: "WI-141"
   - id: "REQ-SP800-37R2-0314"
     citation: {"ref": "SP800-37R2", "page": 74, "anchor": "For controls that are mechanism-based, organizations take advantage of the functional specifications"}
@@ -2474,7 +2480,9 @@ requirements:
     locator: "TASK S-6"
     context: ""
     statement: "The Privacy Continuous Monitoring (PCM) strategy includes all of the available privacy controls implemented throughout the organization at all risk management levels (i.e., organization, mission/business process, and system). The strategy ensures that the controls are monitored on an ongoing basis by assigning an organization-defined assessment frequency to each control that is sufficient to ensure compliance with applicable privacy requirements and to manage privacy risks. If, during the development of a new system, there is a need to create or use a privacy control not included in the PCM strategy, the senior agency official for privacy is consulted to determine whether it is appropriate for the proposed use case. If there is a decision to implement a new privacy control, the organization’s PCM strategy is updated to include the new control with an organization-defined monitoring frequency."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-006 fails a privacy control with no assessment frequency and a control added without the SAOP; the third sentence is held by the frequency clause too, which one fixture cannot prove twice, and whether a frequency is sufficient is the organization's."
+    evidence: [{"kind": "rule", "target": "PRIV-006", "fixture": "tests/fixtures/negative/PRIV-006.frequency.yaml", "expect": "has no assessment frequency in the privacy continuous monitoring strategy", "claim": "constraint", "asserts": "Each privacy control is assigned an organization-defined assessment frequency in the strategy, and one without fails", "sentence": "The strategy ensures that the controls are monitored on an ongoing basis by assigning an organization-defined assessment frequency to each control that is sufficient to ensure compliance with applicable privacy requirements and to manage privacy risks."}, {"kind": "rule", "target": "PRIV-006", "fixture": "tests/fixtures/negative/PRIV-006.consulted.yaml", "expect": "is added to the PCM strategy without consulting the senior agency official for privacy", "claim": "constraint", "asserts": "A privacy control not included in the PCM strategy is added only with the senior agency official for privacy consulted", "sentence": "If, during the development of a new system, there is a need to create or use a privacy control not included in the PCM strategy, the senior agency official for privacy is consulted to determine whether it is appropriate for the proposed use case."}]
     work_item: "WI-139"
   - id: "REQ-SP800-37R2-0321"
     citation: {"ref": "SP800-37R2", "page": 75, "anchor": "Volatility is most prevalent in those controls implemented in the hardware, software"}
@@ -2521,7 +2529,9 @@ requirements:
     locator: "3.4"
     context: "TABLE 5: IMPLEMENT TASKS AND OUTCOMES"
     statement: "CONTROL IMPLEMENTATION | implemented. [Cybersecurity Framework: PR.IP-1] • Systems security and privacy engineering methodologies are used to implement the controls in the system security and privacy plans. [Cybersecurity Framework: PR.IP-2]"
-    status: "candidate"
+    status: "partial"
+    reason: "I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "I-1 implements the controls in the security and privacy plans", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0327"
     citation: {"ref": "SP800-37R2", "page": 77, "anchor": "TASK I-2 UPDATE CONTROL IMPLEMENTATION INFORMATION | • Changes to the planned"}
@@ -2529,7 +2539,9 @@ requirements:
     locator: "3.4"
     context: "TABLE 5: IMPLEMENT TASKS AND OUTCOMES"
     statement: "TASK I-2 UPDATE CONTROL IMPLEMENTATION INFORMATION | • Changes to the planned implementation of controls are documented. [Cybersecurity Framework: PR.IP-1] • The security and privacy plans are updated based on information obtained during the implementation of the controls. [Cybersecurity Framework: Profile]"
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-010 fails an I-2 that wrote ART-SSP with no update in the plan change log, and an update of a PII system's plans that leaves out the privacy plan."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Changes to the planned implementation of controls are documented: the security and privacy plans are updated at I-2, and an I-2 with no update fails"}, {"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.privacy.yaml", "expect": "update of the plans leaves out the privacy plan of a system processing PII", "claim": "constraint", "asserts": "The security and privacy plans are updated based on the implementation of the controls, and an update leaving out the privacy plan fails"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0328"
     citation: {"ref": "SP800-37R2", "page": 77, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
@@ -2546,7 +2558,9 @@ requirements:
     locator: "TASK I-1"
     context: ""
     statement: "Implement the controls in the security and privacy plans."
-    status: "candidate"
+    status: "partial"
+    reason: "I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "I-1 implements the controls in the security and privacy plans", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0330"
     citation: {"ref": "SP800-37R2", "page": 78, "anchor": "Organizations implement the controls as described in the security and privacy plans."}
@@ -2604,7 +2618,9 @@ requirements:
     locator: "TASK I-2"
     context: ""
     statement: "Despite the control implementation details in the security and privacy plans and the system design documents, it is not always feasible to implement controls as planned. Therefore, as control implementations are carried out, the security and privacy plans are updated with as-implemented control implementation details. The updates include revised descriptions of implemented controls including changes to planned inputs, expected behavior, and expected outputs with sufficient detail to support control assessments. Documenting the “as implemented” control information is essential to providing the capability to determine when there are changes to the controls, whether those changes are authorized, and the impact of the changes on the security and privacy posture of the system and the organization."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 fails an I-2 update of a PII system's plans that leaves out the privacy plan; the second sentence gives the reason for the duty and binds no one."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.privacy.yaml", "expect": "update of the plans leaves out the privacy plan of a system processing PII", "claim": "constraint", "asserts": "As control implementations are carried out, the security and privacy plans are updated with as-implemented details, and an update leaving out the privacy plan fails", "sentence": "Therefore, as control implementations are carried out, the security and privacy plans are updated with as-implemented control implementation details."}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0337"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-1 ASSESSOR SELECTION | TASK A-1 | • An assessor or"}
@@ -2665,7 +2681,9 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "REMEDIATION ACTIONS | implemented in the system and environment of operation are taken. • Security and privacy plans are updated to reflect control implementation changes made based on the assessments and subsequent remediation actions. [Cybersecurity Framework: Profile]"
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 fails an A-5 that wrote ART-SSP with no plan update; whether remediation actions are taken is ASMT-006's triage, not held here."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.a5.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Security and privacy plans are updated to reflect implementation changes from the assessments and remediation actions at A-5"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0345"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-6 PLAN OF ACTION AND MILESTONES | • A plan of"}
@@ -2890,7 +2908,9 @@ requirements:
     locator: "TASK A-5"
     context: ""
     statement: "If initial remediation actions are taken, assessors reassess the controls. The control reassessments determine the extent to which remediated controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements for the system and the organization. The assessors update the assessment reports with the findings from the reassessment, but do not change the original assessment results. The security and privacy plans are updated based on the findings of the control assessments and any remediation actions taken. The updated plans reflect the state of the controls after the initial assessment and any modifications by the system owner or common control provider in addressing recommendations for corrective actions. At the completion of the control assessments, security and privacy plans contain an accurate description of implemented controls, including compensating controls."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 holds the A-5 plan update; reassessment and the report updates are the assessment cluster's (ASMT)."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.a5.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "The security and privacy plans are updated based on the findings of the control assessments and remediation actions", "sentence": "The security and privacy plans are updated based on the findings of the control assessments and any remediation actions taken."}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0372"
     citation: {"ref": "SP800-37R2", "page": 86, "anchor": "Organizations can prepare an addendum to the security and privacy assessment reports"}
@@ -3070,7 +3090,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "The senior agency official for privacy reviews the authorization package for systems that process PII to ensure compliance with applicable privacy requirements and to manage privacy risks, prior to authorizing officials making risk determination and acceptance decisions."
-    status: "candidate"
+    status: "covered"
+    reason: "AODM-010 fails an authorization decision on a system processing PII not coordinated with PER-PRIV, and a privacy review of the package dated after the decision."
+    evidence: [{"kind": "rule", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.privacy.yaml", "expect": "coordinates the authorization decision with the privacy official", "claim": "constraint", "asserts": "The senior agency official for privacy reviews the authorization package for systems that process PII, and a decision coordinated with anyone else fails", "holds_when": "the authorization ledger is produced or seeded"}, {"kind": "rule", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.privacy-date.yaml", "expect": "reviewed the authorization package on", "claim": "constraint", "asserts": "The senior agency official for privacy reviews the authorization package prior to the authorizing official's decision, and a later review fails", "holds_when": "the authorization ledger is produced or seeded"}]
     work_item: "WI-146"
   - id: "REQ-SP800-37R2-0394"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "The information in the authorization package is used by authorizing officials to"}
@@ -3184,7 +3206,9 @@ requirements:
     locator: "TASK R-3"
     context: ""
     statement: "After risk is analyzed and determined, organizations can respond to risk in a variety of ways, including acceptance of risk and mitigation of risk. Existing risk assessment results and risk assessment techniques may be used to help determine the preferred course of action for the risk response.100 When the response to risk is mitigation, the planned mitigation actions are included in and tracked using the plan of action and milestones. Once mitigated, assessors reassess the controls. Control reassessments determine the extent to which remediated controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements for the system and the organization. The assessors update the assessment reports with the findings from the reassessment, but do not change the original assessment results. The security and privacy plans are updated based on the findings of the control assessments and any remediation actions taken. The updated plans reflect the state of the controls after the initial assessment and any modifications by the system owner or common control provider in addressing recommendations for corrective actions."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 holds the A-5 plan update; risk response and reassessment are other items'."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.a5.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "The security and privacy plans are updated based on the findings of the control assessments and any remediation actions taken", "sentence": "The security and privacy plans are updated based on the findings of the control assessments and any remediation actions taken."}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0407"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "At the completion of the control reassessments, security and privacy plans contain"}
@@ -3192,7 +3216,9 @@ requirements:
     locator: "TASK R-3"
     context: ""
     statement: "At the completion of the control reassessments, security and privacy plans contain an accurate description of implemented controls, including compensating controls. When the response to risk is acceptance, the deficiencies found during the assessment process remain documented in the security and privacy assessment reports and are monitored for changes to the risk factors.101 Because the authorizing official is the only person who can accept risk, the authorizing official is responsible for reviewing the assessment reports and plans of action and milestones and determining whether the identified risks need to be mitigated prior to authorization. Decisions on the most appropriate course of action for responding to risk may include some form of prioritization. Some risks may be of greater concern to organizations than other risks. In that case, more resources may need to be directed at addressing higher-priority risks versus lower-priority risks. Prioritizing risk response does not necessarily mean that the lower-priority risks are ignored. Rather, it could mean that fewer resources are directed at addressing the lower-priority risks, or that the lower-priority risks are addressed later. A key part of the risk-based decision process is the recognition that regardless of the risk response, there remains a degree of residual risk. Organizations determine acceptable degrees of residual risk based on organizational risk tolerance."
-    status: "candidate"
+    status: "partial"
+    reason: "The plans' accuracy after reassessment rests on the A-5 and M-4 updates (PRIV-010); risk acceptance and prioritization are other items'."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-5.md", "asserts": "A-5 updates the security and privacy plans so they contain an accurate description of implemented controls", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0408"
     citation: {"ref": "SP800-37R2", "page": 92, "anchor": "Determine if the risk from the operation or use of the information"}
@@ -3498,7 +3524,9 @@ requirements:
     locator: "TASK M-4"
     context: ""
     statement: "Update plans, assessment reports, and plans of action and milestones based on the results of the continuous monitoring process."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 asks an M-4 update in the plan change log once M-4 writes ART-SSP; no base runs M-4, so no fixture proves it."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-4.md", "asserts": "M-4 updates the plans, assessment reports and POA&M from continuous monitoring", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0446"
     citation: {"ref": "SP800-37R2", "page": 99, "anchor": "To achieve near real-time risk management, the organization updates security and privacy"}
@@ -3506,7 +3534,9 @@ requirements:
     locator: "TASK M-4"
     context: ""
     statement: "To achieve near real-time risk management, the organization updates security and privacy plans, security and privacy assessment reports, and plans of action and milestones on an ongoing basis. Updates to the plans reflect modifications to controls based on risk mitigation activities carried out by system owners or common control providers. Updates to control assessment reports reflect additional assessment activities carried out to determine control effectiveness based on implementation details in the plans. Plans of action and milestones are updated based on progress made on the current outstanding items; address security and privacy risks discovered as part of control effectiveness monitoring; and describe how the system owner or common control provider intends to address those risks. The updated information raises awareness of the security and privacy posture of the system and the common controls inherited by the system, thereby, supporting near real-time risk management and the ongoing authorization process."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 asks the M-4 plan update; ongoing updates of the assessment reports and POA&M are the monitoring cluster's."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-4.md", "asserts": "M-4 updates the security and privacy plans on an ongoing basis", "claim": "presence"}]
     work_item: "WI-142"
   - id: "REQ-SP800-37R2-0447"
     citation: {"ref": "SP800-37R2", "page": 99, "anchor": "The frequency of updates to risk management information is at the discretion"}
@@ -4107,7 +4137,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Reviewing authorization packages for information systems that create, collect, use, process, store, maintain, disseminate, disclose, or dispose of personally identifiable information to ensure compliance with privacy requirements and manage privacy risks;"
-    status: "candidate"
+    status: "covered"
+    reason: "AODM-010 fails an authorization decision on a system processing PII not coordinated with PER-PRIV, and a privacy review of the package dated after the decision."
+    evidence: [{"kind": "rule", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.privacy.yaml", "expect": "coordinates the authorization decision with the privacy official", "claim": "constraint", "asserts": "Reviewing authorization packages for information systems that process personally identifiable information, and a decision not coordinated with the privacy official fails", "holds_when": "the authorization ledger is produced or seeded"}]
     work_item: "WI-146"
   - id: "REQ-SP800-37R2-0525"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Conducting and documenting the results of privacy control assessments to verify the"}
@@ -4123,7 +4155,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Establishing and maintaining a privacy continuous monitoring program to maintain ongoing awareness of privacy risks and assess privacy controls at a frequency sufficient to ensure compliance with privacy requirements and manage privacy risks."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-006 fails a privacy control of the baseline with no assessment frequency in the PCM strategy."
+    evidence: [{"kind": "rule", "target": "PRIV-006", "fixture": "tests/fixtures/negative/PRIV-006.frequency.yaml", "expect": "has no assessment frequency in the privacy continuous monitoring strategy", "claim": "constraint", "asserts": "A privacy continuous monitoring program assesses privacy controls at a set frequency, and a privacy control with no frequency fails"}]
     work_item: "WI-139"
   - id: "REQ-SP800-37R2-0527"
     citation: {"ref": "SP800-37R2", "page": 142, "anchor": "The system administrator is an individual, group, or organization responsible for setting"}
@@ -4138,7 +4172,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "SYSTEM OWNER"
     statement: "The system owner is an organizational official responsible for the procurement, development, integration, modification, operation, maintenance, and disposal of a system.121 The system owner is responsible for addressing the operational interests of the user community (i.e., users who require access to the system to satisfy mission, business, or operational requirements) and for ensuring compliance with security requirements. In coordination with the system security and privacy officers, the system owner is responsible for the development and maintenance of the security and privacy plans and ensures that the system is operated in accordance with the selected and implemented controls."
-    status: "candidate"
+    status: "partial"
+    reason: "PER-PM is accountable for S-4, which writes ART-SSP with the privacy plan, PER-PRIV consulted; the system owner's other responsibilities are other items'."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "asserts": "S-4 has the system owner develop the security and privacy plans with the privacy officer", "claim": "presence"}]
     work_item: "WI-141"
   - id: "REQ-SP800-37R2-0529"
     citation: {"ref": "SP800-37R2", "page": 142, "anchor": "In coordination with the information owner/steward, the system owner decides who has"}
@@ -4179,7 +4215,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "SYSTEM SECURITY OR PRIVACY OFFICER"
     statement: "The system security or privacy officer124 is an individual responsible for ensuring that the security and privacy posture is maintained for an organizational system and works in close collaboration with the system owner. The system security or privacy officer also serves as a principal advisor on all matters, technical and otherwise, involving the controls for the system. The system security or privacy officer has the knowledge and expertise to manage the security or privacy aspects of an organizational system and, in many organizations, is assigned responsibility for the day-to-day system security or privacy operations. This responsibility may also include, but is not limited to, physical and environmental protection; personnel security; incident handling; and security and privacy training and awareness."
-    status: "candidate"
+    status: "partial"
+    reason: "The system security or privacy officer is PER-ISSO and PER-PRIV (PER-SPO is WI-02's); their day-to-day responsibilities are prose in the cards."
+    evidence: [{"kind": "prose", "target": "personas/PER-PRIV.md", "asserts": "PER-PRIV serves as the system privacy officer for the privacy aspects of the system", "claim": "presence"}]
     work_item: "WI-141"
   - id: "REQ-SP800-37R2-0534"
     citation: {"ref": "SP800-37R2", "page": 143, "anchor": "The system security or privacy officer may be called on to assist"}
@@ -4364,8 +4402,11 @@ requirements:
     locator: "SYSTEM AND COMMON CONTROL AUTHORIZATIONS"
     context: "AUTHORIZATION PACKAGE"
     statement: "The security and privacy plans provide an overview of the security and privacy requirements and describe the controls in place or planned for meeting those requirements.132 The plans provide sufficient information to understand the intended or actual implementation of the controls implemented within the system and indicate the controls that are implemented via inherited common controls. Additionally, privacy plans describe the methodologies and metrics that will be used to assess the controls. The security and privacy plans may also include as supporting appendices or as references, additional documents such as a privacy impact assessment, interconnection security agreements, security and privacy configurations, contingency plan, configuration management plan, supply chain risk management plan, incident response plan, and system-level continuous monitoring strategy. The security and privacy plans are updated whenever events dictate changes to the controls implemented within or inherited by the system."
-    status: "candidate"
+    status: "partial"
+    reason: "SSP-COV-001 fails a control the plan does not describe; the privacy requirements overview and assessment methods are required free text (PRIV-008); updates are logged at I-2, A-5 and M-4 (PRIV-010) but not on every event."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "The security and privacy plans describe the controls in place or planned, and a control without a statement fails", "sentence": "The security and privacy plans provide an overview of the security and privacy requirements and describe the controls in place or planned for meeting those requirements.132"}, {"kind": "rule", "target": "PRIV-008", "fixture": "tests/fixtures/negative/PRIV-008.yaml", "expect": "ART-SSP holds no privacy plan", "claim": "presence", "asserts": "Privacy plans describe the methodologies and metrics used to assess the controls, and no privacy plan fails", "sentence": "Additionally, privacy plans describe the methodologies and metrics that will be used to assess the controls."}, {"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.privacy.yaml", "expect": "update of the plans leaves out the privacy plan of a system processing PII", "claim": "constraint", "asserts": "The security and privacy plans are updated when events change the controls, the privacy plan included", "sentence": "The security and privacy plans are updated whenever events dictate changes to the controls implemented within or inherited by the system."}]
     work_item: "WI-141"
+    ruling_sought: [{"sentence": "The security and privacy plans may also include as supporting appendices or as references, additional documents such as a privacy impact assessment, interconnection security agreements, security and privacy configurations, contingency plan, configuration management plan, supply chain risk management plan, incident response plan, and system-level continuous monitoring strategy.", "reason": "A permission (may also include) with an open list of documents (such as)."}]
   - id: "REQ-SP800-37R2-0557"
     citation: {"ref": "SP800-37R2", "page": 160, "anchor": "The security and privacy assessment reports, prepared by the control assessor or"}
     kind: "indicative"
@@ -5029,8 +5070,11 @@ requirements:
     locator: "Denial of Authorization"
     context: "REAUTHORIZATION"
     statement: "The senior agency official for privacy is responsible for assessing privacy controls and those assessment results can be cumulatively applied to the reauthorization. Independent assessors may assess privacy controls at the discretion of the organization. The senior agency official for privacy reviews and approves the authorization packages for information systems that process PII prior to the authorizing official making a reauthorization decision. The reauthorization action may be as simple as updating the security and privacy plans, security and privacy assessment reports, and plans of action and milestones—focused only on specific problems or ongoing issues, or as comprehensive as the initial authorization."
-    status: "candidate"
+    status: "partial"
+    reason: "AODM-010 fails an authorization decision on a system processing PII not coordinated with PER-PRIV, and a privacy review of the package dated after the decision. Who assesses privacy controls is WI-03's (I-33)."
+    evidence: [{"kind": "rule", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.privacy.yaml", "expect": "coordinates the authorization decision with the privacy official", "claim": "constraint", "asserts": "The senior agency official for privacy reviews and approves the authorization packages for systems that process PII", "holds_when": "the authorization ledger is produced or seeded", "sentence": "The senior agency official for privacy reviews and approves the authorization packages for information systems that process PII prior to the authorizing official making a reauthorization decision."}, {"kind": "rule", "target": "AODM-010", "fixture": "tests/fixtures/negative/AODM-010.privacy-date.yaml", "expect": "reviewed the authorization package on", "claim": "constraint", "asserts": "The senior agency official for privacy reviews the authorization packages prior to the reauthorization decision", "holds_when": "the authorization ledger is produced or seeded", "sentence": "The senior agency official for privacy reviews and approves the authorization packages for information systems that process PII prior to the authorizing official making a reauthorization decision."}]
     work_item: "WI-146"
+    ruling_sought: [{"sentence": "Independent assessors may assess privacy controls at the discretion of the organization.", "reason": "A permission (may assess, at the discretion of the organization)."}]
   - id: "REQ-SP800-37R2-0633"
     citation: {"ref": "SP800-37R2", "page": 171, "anchor": "An ongoing authorization approach requires that a continuous monitoring program is in"}
     kind: "modal"
@@ -5225,7 +5269,9 @@ requirements:
     locator: "Denial of Authorization"
     context: "EVENT-DRIVEN TRIGGERS AND SIGNIFICANT CHANGES Significant changes to the environment of operation that may trigger an event-driven authorization action may include, but are not limited to:"
     statement: "The examples of changes listed above are only significant when they represent a change that is likely to affect the security and privacy posture of the system. Organizations establish criteria for what constitutes significant change based on a variety of factors (e.g., mission and business needs; threat and vulnerability information; environments of operation for systems; privacy risks; and security categorization)."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-005 has M-1 test each change for new privacy risk, so privacy risk is among the factors of significance; no record holds the organization's criteria for significant change, which other clusters own (MCHG)."
+    evidence: [{"kind": "rule", "target": "PRIV-005", "fixture": "tests/fixtures/negative/PRIV-005.yaml", "expect": "is not tested for new privacy risk", "claim": "presence", "asserts": "Each change is tested for whether it affects the privacy posture, a factor in what constitutes significant change", "holds_when": "ART-CHG is produced or seeded and the system processes PII", "sentence": "Organizations establish criteria for what constitutes significant change based on a variety of factors (e.g., mission and business needs; threat and vulnerability information; environments of operation for systems; privacy risks; and security categorization)."}]
     work_item: "WI-133"
   - id: "REQ-SP800-37R2-0657"
     citation: {"ref": "SP800-37R2", "page": 173, "anchor": "Risk assessment results or the results from an impact analysis may be"}
@@ -5837,7 +5883,9 @@ requirements:
     locator: "TASK P-12"
     context: ""
     statement: "System Privacy Officer is only a primary role when the information system processes PII."
-    status: "candidate"
+    status: "covered"
+    reason: "P-12's RACI makes PER-PRIV primary only when the system processes PII (raci.when), and PRIV-009 fails a system processing PII whose privacy officer gave no P-12 interview; a system with no PII owes none."
+    evidence: [{"kind": "rule", "target": "PRIV-009", "fixture": "tests/fixtures/negative/PRIV-009.yaml", "expect": "is a primary role at", "claim": "constraint", "asserts": "The privacy officer, as senior agency official for privacy, is a primary role at P-12 only when the system processes PII, and one processing PII with no privacy officer interview fails"}, {"kind": "pinned", "target": "P-12", "field": "raci.when", "value": {"PER-PRIV": "processes-pii"}, "asserts": "The privacy officer role, the senior agency official for privacy, at P-12 applies only when the information system processes PII", "read_by": "PRIV-009", "claim": "constraint"}]
     work_item: "WI-147"
     promoted: {"reason": "Footnote 66 sets a condition on a role named in the pinned task block: the System Privacy Officer is primary only when the system processes PII."}
   - id: "REQ-SP800-37R2-0733"
@@ -5846,7 +5894,9 @@ requirements:
     locator: "TASK P-15"
     context: ""
     statement: "The system privacy officer is a primary role only when the information system processes PII."
-    status: "candidate"
+    status: "covered"
+    reason: "P-15's RACI makes PER-PRIV primary only when the system processes PII (raci.when), and PRIV-009 fails a system processing PII whose privacy officer gave no P-15 interview; a system with no PII owes none."
+    evidence: [{"kind": "rule", "target": "PRIV-009", "fixture": "tests/fixtures/negative/PRIV-009.p15.yaml", "expect": "is a primary role at", "claim": "constraint", "asserts": "The privacy officer, as senior agency official for privacy, is a primary role at P-15 only when the system processes PII, and one processing PII with no privacy officer interview fails"}, {"kind": "pinned", "target": "P-15", "field": "raci.when", "value": {"PER-PRIV": "processes-pii"}, "asserts": "The privacy officer role, the senior agency official for privacy, at P-15 applies only when the information system processes PII", "read_by": "PRIV-009", "claim": "constraint"}]
     work_item: "WI-147"
     promoted: {"reason": "Footnote 69 sets the same PII condition on the System Privacy Officer in the pinned block of Task P-15."}
   - id: "REQ-SP800-37R2-0734"
@@ -5873,7 +5923,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "The senior agency official for privacy is active for information systems processing PII."
-    status: "candidate"
+    status: "covered"
+    reason: "R-1's RACI makes PER-PRIV primary only when the system processes PII (raci.when), and PRIV-009 fails a system processing PII whose privacy officer gave no R-1 interview; a system with no PII owes none."
+    evidence: [{"kind": "rule", "target": "PRIV-009", "fixture": "tests/fixtures/negative/PRIV-009.r1.yaml", "expect": "is a primary role at", "claim": "constraint", "asserts": "The privacy officer, as senior agency official for privacy, is a primary role at R-1 only when the system processes PII, and one processing PII with no privacy officer interview fails"}, {"kind": "pinned", "target": "R-1", "field": "raci.when", "value": {"PER-PRIV": "processes-pii"}, "asserts": "The privacy officer role, the senior agency official for privacy, at R-1 applies only when the information system processes PII", "read_by": "PRIV-009", "claim": "constraint"}]
     work_item: "WI-147"
     promoted: {"reason": "Footnote 95 on the Primary Responsibility line of Task R-1: limits the SAOP's primary role to systems that process PII, a condition on who acts."}
   - id: "REQ-SP800-37R2-0737"

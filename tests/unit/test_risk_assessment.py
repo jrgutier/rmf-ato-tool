@@ -47,9 +47,10 @@ def test_the_data_template_is_valid_yaml_of_the_schema():
 
 
 def test_the_example_shape_needs_every_section():
-    """Each top-level section is required, so a run cannot leave one out silently."""
+    """Each top-level section is required, so a run cannot leave one out silently; `privacy`
+    only applies to a system processing PII, and PRIV-007 reports it missing there."""
     schema = _schema()
-    assert set(schema["required"]) == set(schema["properties"])
+    assert set(schema["required"]) == set(schema["properties"]) - {"privacy"}
 
 
 def test_malformed_lists_are_reported_not_raised(minimal_run):

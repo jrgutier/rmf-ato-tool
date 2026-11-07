@@ -488,3 +488,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: CONN-001 holds mission partner interconnections to the DISN connection process; REQ-DODI8530.01-0300 stays partial, with the drift stated, until the user rules on the reading.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
+
+## L-0070 · 2026-11-07 · run: phase-11 · tags: fixtures, privacy
+- Symptom: the privacy rules apply only to a system processing PII, valid_minimal processes none, and the two older privacy fixtures had set `privacy: true` on minimal, so every new privacy rule fired in them too and each fixture had to restate the whole privacy record to fail on one clause.
+- Root cause: a fixture base fixes the system's conditions; a rule gated on a condition no base meets has no clean base to mutate, and copying a run to make one would drift from the run it copies.
+- Fix: tests/unit/test_check_rules.py derives a base `pii` from valid_minimal by the mutations in tests/fixtures/runs/pii.yaml; test_base_has_no_findings holds it clean, and the PRIV fixtures, AODM-010.privacy and RAR-002.privacy mutate it.
+- Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
+- Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.

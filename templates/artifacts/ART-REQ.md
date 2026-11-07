@@ -26,6 +26,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: table: REQ-## ID | requirement | traces to (NEED, DP or parent REQ) | priority | measure and criticality | verification method, one testable requirement per row as in requirements.yaml, with tokens>>
 
+## Privacy Act rules
+
+<<FILL: for a system of records, each Privacy Act rule no control states (direct collection from the individual, the bars on disclosure without consent and on First Amendment records, appeals of denied access or amendment requests, rules of conduct and penalties, contract provisions) and the requirement that carries it (requirements.yaml privacy_act; PRIV-007); or a sentence saying the system keeps no system of records, with tokens>>
+
 ## Operational constraints
 
 <<FILL: the security-relevant constraints on the solution by CON ID: those the security analysis drives, those from the stakeholders and the mission, and those implementation, integration, verification and transition raise, with tokens>>

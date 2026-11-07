@@ -1441,8 +1441,11 @@ requirements:
     locator: "2.2"
     context: "SELECTING CONTROL BASELINES"
     statement: "Organizations conduct privacy risk assessments that consider the nature of the PII processing and its impact on individuals to guide the tailoring of the privacy control baseline for their programs and systems. Privacy risk assessments include evaluating the applicability of legal and policy requirements for their programs. For example, organizations may remove controls or control enhancements related to legal or policy requirements that are not applicable to them unless they determine that, based on a privacy risk assessment, the controls or control enhancements would be helpful in mitigating identified privacy risks. In addition, organizations may add unassigned controls or control enhancements to mitigate privacy risks specific to their information systems as determined by their privacy risk assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-007 fails a privacy risk assessment that does not evaluate OMB A-130; that it considers the nature of the processing and its impact, and guides tailoring, is presence of free text."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.yaml", "expect": "the risk assessment has no privacy risk assessment", "claim": "presence", "asserts": "Organizations conduct privacy risk assessments that consider the nature of the PII processing, and a system processing PII without one fails", "sentence": "Organizations conduct privacy risk assessments that consider the nature of the PII processing and its impact on individuals to guide the tailoring of the privacy control baseline for their programs and systems."}, {"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.a130.yaml", "expect": "does not evaluate the applicability of OMB A-130", "claim": "constraint", "asserts": "Privacy risk assessments include evaluating the applicability of legal and policy requirements, OMB A-130 among them", "sentence": "Privacy risk assessments include evaluating the applicability of legal and policy requirements for their programs."}]
     work_item: "WI-140"
+    ruling_sought: [{"sentence": "In addition, organizations may add unassigned controls or control enhancements to mitigate privacy risks specific to their information systems as determined by their privacy risk assessments.", "reason": "A permission (may add); nothing can fail when an organization adds no control."}]
   - id: "REQ-SP800-53B-0032"
     citation: {"ref": "SP800-53B", "page": 21, "anchor": "The general control baseline selection process may be augmented or further detailed"}
     kind: "should"
@@ -1457,8 +1460,11 @@ requirements:
     locator: "2.2"
     context: "SELECTING CONTROL BASELINES"
     statement: "Federal agencies should not assume that the implementation of the privacy control baseline means that they have met all of their obligations under [OMB A-130]. Agencies may need to take additional, separate steps to fully comply with OMB privacy requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-007 fails a record of OMB A-130 that names nothing beyond the privacy baseline, and one finding A-130 does not apply; the steps named are free text, so presence."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.baseline.yaml", "expect": "assumes the privacy control baseline meets every OMB A-130 obligation", "claim": "constraint", "asserts": "Agencies should not assume the privacy control baseline meets all OMB A-130 obligations, and naming none beyond it fails", "sentence": "Federal agencies should not assume that the implementation of the privacy control baseline means that they have met all of their obligations under [OMB A-130]."}, {"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.applies.yaml", "expect": "OMB A-130 applies to a federal information system", "claim": "constraint", "asserts": "OMB A-130 obligations apply to federal agencies, and finding they do not fails", "sentence": "Federal agencies should not assume that the implementation of the privacy control baseline means that they have met all of their obligations under [OMB A-130]."}]
     work_item: "WI-140"
+    ruling_sought: [{"sentence": "Agencies may need to take additional, separate steps to fully comply with OMB privacy requirements.", "reason": "A possibility (may need to take); it binds no one to a step."}]
   - id: "REQ-SP800-53B-0034"
     citation: {"ref": "SP800-53B", "page": 21, "anchor": "Privacy control enhancements in Tables 3-1 through 3-20 in Chapter Three cannot"}
     kind: "modal"
@@ -1645,7 +1651,9 @@ requirements:
     locator: "2.4"
     context: "TAILORING CONTROL BASELINES"
     statement: "Tailoring decisions, including the risk-based justification for the decisions, are documented in the system security and privacy plans for organizational systems.28 Every control from the selected control baseline is accounted for by the organization. If certain controls are tailored out, the rationale is recorded in the system security and privacy plans and subsequently approved by the responsible officials within the organization as part of the approval process for the plans. Documenting risk management decisions during the baseline tailoring process is imperative for organizational officials to have the necessary information to make credible, risk-based decisions regarding security and privacy and to do so in a manner that fully supports transparency, traceability, and accountability."
-    status: "candidate"
+    status: "partial"
+    reason: "The tailoring rationale is required in tailoring.yaml (TLR-002), held under ART-BASELINE beside the plan rather than in ART-SSP; SSP-COV-001 accounts for every baseline control; the approval of a tailored-out rationale with the plans is unheld."
+    evidence: [{"kind": "rule", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.yaml", "expect": "is removed with no basis", "claim": "presence", "asserts": "Tailoring decisions carry their risk-based justification, and a control tailored out with no basis fails", "sentence": "Tailoring decisions, including the risk-based justification for the decisions, are documented in the system security and privacy plans for organizational systems.28"}, {"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Every control from the selected control baseline is accounted for, and one with no plan statement fails", "sentence": "Every control from the selected control baseline is accounted for by the organization."}]
     work_item: "WI-141"
   - id: "REQ-SP800-53B-0057"
     citation: {"ref": "SP800-53B", "page": 23, "anchor": "Tailoring decisions can be based on the timing and applicability of selected"}
@@ -1879,8 +1887,11 @@ requirements:
     locator: "Assigning Control Parameter Values"
     context: ""
     statement: "Once organizations specify the parameter values for the controls and control enhancements, the specified assignment and selection values become a permanent part of the control and control enhancement. As such, they are documented in security and privacy program plans or system security and privacy plans, as appropriate. Organizations can specify the parameter values before selecting compensating controls since the parameter specification completes the control definitions and may affect the need for compensating controls. There can be significant benefits to collaborating on the development of parameter values for controls. For organizations that work together on a frequent basis or regularly conduct exchanges of information, it may be useful to develop a mutually agreeable set of control parameter values."
-    status: "candidate"
+    status: "partial"
+    reason: "Parameter values sit in the SSP statements S-4 writes; nothing checks a statement records each assignment."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "asserts": "S-4 documents the parameter values of each control in the security and privacy plan", "claim": "presence"}]
     work_item: "WI-141"
+    ruling_sought: [{"sentence": "Organizations can specify the parameter values before selecting compensating controls since the parameter specification completes the control definitions and may affect the need for compensating controls.", "reason": "A permission (can specify before); nothing fails on the order chosen."}]
   - id: "REQ-SP800-53B-0084"
     citation: {"ref": "SP800-53B", "page": 27, "anchor": "In certain situations, additional controls or control enhancements beyond the controls and"}
     kind: "modal"

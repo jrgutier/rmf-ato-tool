@@ -148,10 +148,228 @@
             "items": {
               "$ref": "#/$defs/source"
             }
+          },
+          "pii": {
+            "title": "Whom the PII is about and whether it holds PHI or SSNs",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "subjects",
+              "phi",
+              "ssn"
+            ],
+            "properties": {
+              "subjects": {
+                "title": "Whom the PII in this information type is about",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "enum": [
+                    "public",
+                    "federal-personnel",
+                    "contractors",
+                    "foreign-nationals-us-facilities-abroad",
+                    "foreign-nationals-other"
+                  ]
+                }
+              },
+              "phi": {
+                "title": "The information type holds protected health information",
+                "type": "boolean"
+              },
+              "ssn": {
+                "title": "The information type holds Social Security numbers",
+                "type": "boolean"
+              }
+            }
           }
         }
       },
       "minItems": 1
+    },
+    "privacy": {
+      "title": "Privacy compliance record of a system processing PII (P-12; PRIV-001)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compliance",
+        "sorn",
+        "records",
+        "pia",
+        "sources"
+      ],
+      "properties": {
+        "compliance": {
+          "title": "DoD issuances the system's handling of PII and PHI complies with",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "DOD5400.11-R",
+              "DODI5400.16",
+              "DOD8580.02",
+              "DODM6025.18",
+              "DODI1000.30",
+              "DODI5015.02"
+            ]
+          }
+        },
+        "sorn": {
+          "title": "System of records notice covering the PII",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "sources"
+          ],
+          "properties": {
+            "status": {
+              "title": "System of records notice status",
+              "enum": [
+                "published",
+                "pending",
+                "not-required"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "ssn_justification": {
+          "title": "Justification of Social Security number use",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "memo",
+            "sources"
+          ],
+          "properties": {
+            "memo": {
+              "title": "SSN use and justification memorandum",
+              "type": "string",
+              "minLength": 1
+            },
+            "scop_signed": {
+              "$ref": "#/$defs/date"
+            },
+            "dpcltd_approved": {
+              "$ref": "#/$defs/date"
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "records": {
+          "title": "Records management coordination for the records the system creates",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "office",
+            "schedule",
+            "sources"
+          ],
+          "properties": {
+            "office": {
+              "title": "Records management office coordinated with",
+              "type": "string",
+              "minLength": 1
+            },
+            "schedule": {
+              "title": "NARA-approved records schedule the PII records follow",
+              "type": "string",
+              "minLength": 1
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "pia": {
+          "title": "PIA determination",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "determination",
+            "basis",
+            "sources"
+          ],
+          "properties": {
+            "determination": {
+              "title": "Whether a PIA is required, adapted or not required",
+              "enum": [
+                "required",
+                "adapted",
+                "not-required"
+              ]
+            },
+            "basis": {
+              "title": "DoDI 5400.16 basis of the determination",
+              "enum": [
+                "pii-in-electronic-form",
+                "existing-no-pia",
+                "new-system",
+                "paper-to-electronic",
+                "anonymous-to-pii",
+                "third-party-website",
+                "no-pii",
+                "nss",
+                "internal-government-operations",
+                "previously-assessed",
+                "unchanged",
+                "feedback-website",
+                "matching-agreement",
+                "statistical-agreement"
+              ]
+            },
+            "due": {
+              "title": "When the PIA is due: before development, procurement or contract, or a date",
+              "type": "string",
+              "minLength": 1
+            },
+            "privacy_implications": {
+              "title": "Privacy implications considered for an NSS excluded from the PIA requirement",
+              "type": "string",
+              "minLength": 1
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -170,6 +388,15 @@
       "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
       "type": "string",
       "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
     }
   }
 }

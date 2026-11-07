@@ -1,0 +1,20 @@
+rule: PRIV-006
+bases:
+- pii
+description: a control added to the PCM strategy without the SAOP
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: privacy.controls
+  value:
+  - control: au-2
+    frequency: monthly
+    origin: strategy
+  - control: ac-2
+    frequency: quarterly
+    origin: added
+expect:
+  errors:
+  - PRIV-006
+  messages:
+  - ac-2 is added to the PCM strategy without consulting the senior agency official for privacy

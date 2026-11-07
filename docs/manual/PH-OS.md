@@ -74,6 +74,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[CCB](../../personas/PER-CCB.md) Configuration Control Board Chair |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -110,6 +111,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 - A lawful LE/CI deployment is accommodated and coordinated with the AO through change control (MCHG-003).
 - The AO decision on each hosted or interconnected system is enforced (MCON-001).
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
+- For a system processing PII, each change states whether it creates new privacy risk (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates (PRIV-005).
 
 **Alignment**
 
@@ -147,6 +149,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | Accountable | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -209,6 +212,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -277,6 +281,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -309,6 +314,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
 - plan-reviews.yaml logs the review of the system plan on the organization-defined schedule and each update, approved and tracked by change management (MPLAN-001).
 - ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers), what was updated is recorded, and the results reach its communicated_to officials.
+- plan-reviews.yaml changes logs the M-4 update of the plans from the continuous monitoring results, covering the privacy plan for a system processing PII (PRIV-010).
 
 **Alignment**
 
@@ -341,6 +347,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider<br>[RE](../../personas/PER-RE.md) Risk Executive Function |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -370,6 +377,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 
 **Alignment**
 
@@ -405,6 +413,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -478,6 +487,7 @@ Writes to `facts.yaml`: `acquisition`.
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 

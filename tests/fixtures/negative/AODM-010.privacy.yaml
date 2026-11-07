@@ -1,12 +1,13 @@
 rule: AODM-010
 bases:
-- minimal
-description: a system processing PII with no privacy coordination
+- pii
+description: a system processing PII whose decision is coordinated with someone other than the privacy
+  official
 mutations:
 - op: set_field
-  file: artifacts/data/infotypes.yaml
-  path: information_types.0.privacy
-  value: true
+  file: artifacts/data/authorizations.yaml
+  path: records.1.privacy_coordination.by
+  value: PER-ISSM
 expect:
   errors:
   - AODM-010

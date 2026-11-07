@@ -28,7 +28,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements"}
+                     "requirements", "pia"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -350,6 +350,9 @@ RUN_EXAMPLES = {
             "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
          "agreement": AGREEMENT}),
 }
+
+_PIA = YAML(typ="safe").load((REPO_ROOT / "templates/data/pia.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["pia"] = (_PIA, {**_PIA, "form": "DD-9999"})
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
 

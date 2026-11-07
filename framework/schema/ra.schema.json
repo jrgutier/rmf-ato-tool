@@ -1500,6 +1500,96 @@
     },
     "sources": {
       "$ref": "#/$defs/sources"
+    },
+    "privacy": {
+      "title": "Privacy risk assessment of a system processing PII (PRIV-007)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processing",
+        "impact_on_individuals",
+        "legal_requirements",
+        "sources"
+      ],
+      "properties": {
+        "processing": {
+          "title": "The nature of the PII processing the privacy risk assessment considers",
+          "type": "string",
+          "minLength": 1
+        },
+        "impact_on_individuals": {
+          "title": "The impact of the processing on individuals",
+          "type": "string",
+          "minLength": 1
+        },
+        "legal_requirements": {
+          "title": "Legal and policy privacy requirements evaluated for applicability",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "authority",
+              "applies",
+              "reason",
+              "sources"
+            ],
+            "properties": {
+              "authority": {
+                "title": "Law, regulation or policy evaluated",
+                "enum": [
+                  "OMB-A-130",
+                  "PRIVACY-ACT",
+                  "E-GOV-ACT-208",
+                  "OMB-A-108",
+                  "DODI5400.11",
+                  "DOD5400.11-R",
+                  "DODI5400.16",
+                  "HIPAA",
+                  "DOD8580.02",
+                  "DODM5240.01",
+                  "OTHER"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "applies": {
+                "title": "Whether the requirement applies to the system",
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "beyond_baseline": {
+                "title": "Obligations the privacy control baseline does not meet, and the separate steps taken for them",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "requirements": {
+                "title": "ART-REQ requirements that carry the applicable requirement",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^REQ-\\d{2,3}$"
+                }
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
     }
   },
   "$defs": {

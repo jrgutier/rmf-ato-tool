@@ -26,6 +26,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: summary of artifacts/data/tailoring.yaml (assumptions tested, the assurance determination, overlay conditions, and each remove and compensating action with its law and policy test) and allocation.yaml (the requirements each control satisfies), any capabilities.yaml mapping, and who produced them, with tokens>>
 
+## Privacy tailoring
+
+<<FILL: for a system processing PII, how PER-PRIV took part with PER-ISSM in selecting and tailoring the privacy controls, and that the tailoring leaves no gap in compliance with privacy requirements and adds no privacy risk; or a sentence saying the system processes no PII, with tokens>>
+
 ## Requirements to address in tailoring
 
 <<FILL: requirements from ART-REQ the baseline does not obviously cover, or a sentence saying none, with tokens>>

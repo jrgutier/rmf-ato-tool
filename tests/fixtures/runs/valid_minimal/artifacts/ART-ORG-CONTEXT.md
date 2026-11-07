@@ -27,6 +27,11 @@ The CIO appoints the AO, who names an AODR; the program office provides the ISSM
 Moderate residual risk is acceptable for developmental systems with a dated POA&M
 [[INT-014.A1]].
 
+## Privacy program
+
+The Component privacy program is run by its SCOP, who decides for the Component, with a PCLO
+reporting through the SCOP to the DoD SAOP [[INT-014.A1]].
+
 ## Organizational risk assessment
 
 Compromised field units and insider misuse of administrator accounts are the organizational

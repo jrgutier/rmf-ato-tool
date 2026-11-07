@@ -34,7 +34,7 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    | Task | Section |
    |---|---|
    | P-1 | `## RMF role assignments` |
-   | P-2 | `## Risk management strategy and risk tolerance` |
+   | P-2 | `## Risk management strategy and risk tolerance`, then `## Privacy program` |
    | P-3 | `## Organization-level risk assessment` |
    | P-4 | `## Organizationally tailored baselines and profiles` |
    | P-5 | `## Common controls available for inheritance` |
@@ -168,13 +168,21 @@ Purpose: Establish the organization's risk management strategy, including how it
    is framed, assessed, responded to and monitored), its **risk tolerance** stated so a
    later decision can be checked against it (for example which risk levels the AO may
    accept, and for how long), and the constraints and priorities that shape it. Ask
-   PER-PRIV for the privacy part. Ask PER-RE how risk assessments are maintained: what
-   triggers an update, how often, what is updated and to whom results are communicated.
+   PER-PRIV for the privacy part and the Component privacy program (step 4). Ask PER-RE how
+   risk assessments are maintained: what triggers an update, how often, what is updated and
+   to whom results are communicated.
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-2` to `touched_by` and append
    `## Risk management strategy and risk tolerance`, traced, including the risk assessment
    maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
    M-4 applies it. Keep the risk tolerance
-   concrete; R-2 and R-4 compare the system's risk with it.
+   concrete; R-2 and R-4 compare the system's risk with it. Then append
+   `## Privacy program`, traced: the Component's privacy and civil liberties program (DoDI
+   5400.11), its senior Component official for privacy (SCOP) and privacy and civil
+   liberties officer (PCLO), their staffing and reporting lines to the DoD SAOP, the
+   procedures for complaints and alleged violations, training and awareness, which privacy
+   controls the Component treats as program management, common, system-specific or hybrid,
+   and whether the SCOP approves or only advises (an OSD Component's SCOP serves primarily in
+   an advisory capacity, DoDI 5400.11 paragraph 2.10). PER-PRIV answers for the program.
 5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -183,7 +191,7 @@ Purpose: Establish the organization's risk management strategy, including how it
 |---|---|---|
 | PER-CIO | responsible and accountable (R, A) | the strategy, its approval, who may accept which risk |
 | PER-RE | responsible (R) | risk tolerance levels, risk acceptance limits, organization-wide priorities |
-| PER-PRIV (optional) | consulted (C) | privacy risk in the strategy |
+| PER-PRIV | consulted (C) | privacy risk in the strategy; the Component privacy program, SCOP and PCLO |
 
 At least 1 interview with `task: P-2`.
 

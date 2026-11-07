@@ -42,7 +42,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Privacy risk
 
-<<FILL: risks to individuals from the processing of PII, or a sentence saying the system processes none, with tokens>>
+<<FILL: risks to individuals from the processing of PII, or a sentence saying the system processes none; for a system with PII, the nature of the processing and its impact on individuals, and each legal and policy privacy requirement evaluated for applicability, OMB A-130 among them with the obligations the privacy control baseline does not meet and the separate steps for them, and the ART-REQ requirements that carry each applicable one (ra.yaml privacy; PRIV-007), with tokens>>
 
 ## Maintenance
 
