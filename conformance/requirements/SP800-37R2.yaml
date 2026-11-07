@@ -1848,7 +1848,9 @@ requirements:
     locator: "TASK P-8"
     context: ""
     statement: "Identify the missions, business functions, and mission/business processes that the system is intended to support."
-    status: "candidate"
+    status: "partial"
+    reason: "Identifying the missions, business functions and mission/business processes the system is intended to support is a presence duty: MSN-001 fails a run whose P-8 identifies none (presence, capped on an imperative), and the owner and supporting-asset constraints hold the entries that state them (DODI8510.01-0095, DODCIO-CATO-IG-0126)."
+    evidence: [{"kind": "rule", "asserts": "Identify the missions, business functions and mission/business processes the system is intended to support: none identified fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope"}]
     work_item: "WI-19"
   - id: "REQ-SP800-37R2-0237"
     citation: {"ref": "SP800-37R2", "page": 56, "anchor": "Identify stakeholders who have an interest in the design, development, implementation, assessment,"}
@@ -2727,7 +2729,8 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "Select the appropriate assessor or assessment team for the type of control assessment to be conducted."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Select the appropriate assessor or assessment team: the AO or AODR (Task A-1 primary responsibility), not another persona", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Selected for the type of control assessment to be conducted: a PII system whose assessor was selected for a security assessment only fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.privacytype.yaml", "expect": "the assessor was selected for a security assessment only", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected before the assessment to be conducted starts", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selectlate.yaml", "expect": "the assessment team was selected on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-19"
   - id: "REQ-SP800-37R2-0348"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "Organizations consider both the technical expertise and level of independence87 required in"}

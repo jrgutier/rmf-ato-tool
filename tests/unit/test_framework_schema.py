@@ -435,7 +435,7 @@ def test_fact_paths_come_from_the_facts_schema():
         "system_id", "system_name", "acronym", "aliases", "boundary_id", "lifecycle_state",
         "categorization", "categorization.approved", "baseline_id", "acquisition",
         "classification", "system_type", "owning_organization", "system_version",
-        "operational_environment", "lifecycle_phase"}
+        "operational_environment", "lifecycle_phase", "missions"}
 
 
 def test_real_framework_writes_each_fact_once():

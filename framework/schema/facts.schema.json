@@ -238,9 +238,52 @@
         "set_by_task": {"$ref": "#/$defs/task_id"},
         "sources": {"$ref": "#/$defs/sources"}
       }
+    },
+    "missions": {
+      "title": "The missions, business functions and mission/business processes the system is intended to support, identified by the mission or business owner (P-8)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items", "identified_by", "set_by_task"],
+      "properties": {
+        "set_by_task": {"$ref": "#/$defs/task_id"},
+        "sources": {"$ref": "#/$defs/sources"},
+        "identified_by": {
+          "title": "The mission or business owner who identified them",
+          "$ref": "#/$defs/persona_id"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "kind", "essential"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^MSN-\\d{2,3}$"},
+              "name": {"type": "string", "minLength": 1},
+              "kind": {"enum": ["mission", "business-function", "mission-business-process"]},
+              "essential": {
+                "title": "A mission essential function, whose supporting assets and data are captured (cATO IC01)",
+                "type": "boolean"
+              },
+              "supported_by": {
+                "title": "The components of boundary.yaml that support it",
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "data": {
+                "title": "The information types of infotypes.yaml that support it",
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "sources": {"$ref": "#/$defs/sources"}
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {
+    "persona_id": {"type": "string", "pattern": "^PER-[A-Z]+(-[A-Z]+)*$"},
     "task_id": {"type": "string", "pattern": "^[PCSIARM]-[1-9]\\d?$"},
     "impact": {"enum": ["low", "moderate", "high"]},
     "sources": {

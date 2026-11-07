@@ -45,8 +45,12 @@ def test_methods_are_not_limited_to_all_three(tmp_path):
     """Organizations are not expected to employ every method: the plan and the result may use
     one."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1].update(methods=["examine"],
-                                                                 objects=["specifications"]))
+    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1].update(
+        methods=["examine"], objects=["specifications"],
+        sampling=[s for s in d["procedures"][1]["sampling"] if s["method"] == "examine"]))
+    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1]["sampling"][0].update(
+        types=[t for t in d["procedures"][1]["sampling"][0]["types"]
+               if t["type"] == "specifications"]))
     edit_yaml(run_dir / "artifacts/sar/results/cm.yaml",
               lambda d: d["determinations"][0].update(methods=["examine"]))
     assert built(run_dir) == []

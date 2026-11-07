@@ -930,7 +930,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES Tiers 1 and 2 officials have responsibilities throughout the ISCM process, including, but not limited to, the following:"
     statement: "• Provide input to the development of the organizational ISCM strategy including establishment of metrics, policy, and procedures, compiling and correlating Tier 3 data into security-related information of use at Tiers 1 and 2, policies on assessment and monitoring frequencies, and provisions for ensuring sufficient depth and coverage when sampling methodologies are utilized [ISCM steps: Define, Establish, Implement]. 27 See NIST SP 800-53, CA-2, Control Enhancement 1, for specific assessor independence requirements. Assessors need only be independent of the operation of the system. They may be from within the organizational tier, the mission/business tier, or from within some other independent entity internal or external to the organization. Results of assessments done by system operators can be used if they have been validated by independent assessors."
-    status: "candidate"
+    status: "partial"
+    reason: "An ISCM role bullet of the information security officer: the run holds only its last provision, sufficient depth and coverage when sampling (RIGR-003 samples every selected object type with a count). Input to the ISCM strategy, metrics, policy, Tier 3 correlation and frequencies are not run records."
+    evidence: [{"kind": "rule", "asserts": "Provisions for sufficient depth and coverage when sampling: every object type the procedure selects is sampled, so the sample keeps the diversity of types", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.diversity.yaml", "expect": "is not sampled, so the sample lacks the diversity of types selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
   - id: "REQ-SP800-137-0108"
     citation: {"ref": "SP800-137", "page": 28, "anchor": "Review monitoring results (security-related information) to determine security status in accordance with"}
@@ -1101,7 +1103,8 @@ requirements:
     locator: "3.1.4.•"
     context: "DEFINE SAMPLE POPULATIONS In selecting a sample population, the coverage attribute is satisfied through consideration of three criteria:"
     statement: "• Types of objects - ensure sufficient diversity of types of assessment objects;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Every type of assessment object the procedure selects is sampled, so the sample keeps the diversity of types; one not sampled fails", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.diversity.yaml", "expect": "is not sampled, so the sample lacks the diversity of types selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
   - id: "REQ-SP800-137-0127"
     citation: {"ref": "SP800-137", "page": 29, "anchor": "Number of each type - chose “enough” objects of each type to"}
@@ -1109,7 +1112,8 @@ requirements:
     locator: "3.1.4.•"
     context: "DEFINE SAMPLE POPULATIONS In selecting a sample population, the coverage attribute is satisfied through consideration of three criteria:"
     statement: "• Number of each type - chose “enough” objects of each type to provide confidence that assessment of additional objects will result in consistent findings; and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The number of objects of each type to sample is a count of at least one; zero fails", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.number.yaml", "expect": "the number of objects of the type", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
   - id: "REQ-SP800-137-0128"
     citation: {"ref": "SP800-137", "page": 29, "anchor": "Specific objects per type assessed - given all of the objects of"}
@@ -1117,7 +1121,9 @@ requirements:
     locator: "3.1.4.•"
     context: "DEFINE SAMPLE POPULATIONS In selecting a sample population, the coverage attribute is satisfied through consideration of three criteria:"
     statement: "• Specific objects per type assessed - given all of the objects of relevance throughout the organization that could be assessed, include “enough” objects per type in the sample population to sufficiently account for the known or anticipated variance in assessment outcomes."
-    status: "candidate"
+    status: "partial"
+    reason: "RIGR-003 holds a count of at least one object per type and specific objects under focused or comprehensive coverage; whether the count is enough for the known or anticipated variance in outcomes is the organization's judgment the run does not record."
+    evidence: [{"kind": "rule", "asserts": "The number of objects of each type to sample is a count of at least one; zero fails", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.number.yaml", "expect": "the number of objects of the type", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
   - id: "REQ-SP800-137-0129"
     citation: {"ref": "SP800-137", "page": 29, "anchor": "Prior to initial authorization, the system is not included in the organization’s"}
@@ -1181,8 +1187,11 @@ requirements:
     locator: "3.1.4"
     context: "DEFINE SAMPLE POPULATIONS"
     statement: "Organizations may also target specific objects for assessment in addition to the random sample, using the above criteria. However, sampling methods other than random sampling are used with care to avoid introducing bias. Automated data collection and analysis can reduce the need for sampling."
-    status: "candidate"
+    status: "partial"
+    reason: "S1 is a permission (ruling sought). S2: a non-random sample records a bias control (RIGR-003), presence of prose, which cannot show the care taken."
+    evidence: [{"kind": "rule", "asserts": "A sampling method other than random sampling is used with care to avoid bias: a bias control is recorded", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.bias.yaml", "expect": "a sampling method other than random sampling is used with care to avoid bias", "claim": "presence", "holds_when": "ART-SAP is produced or seeded", "sentence": "However, sampling methods other than random sampling are used with care to avoid introducing bias."}]
     work_item: "WI-14"
+    ruling_sought: [{"sentence": "Organizations may also target specific objects for assessment in addition to the random sample, using the above criteria.", "reason": "A permission: organizations may target specific objects beside the random sample. The plan's selection enum (random, targeted, random-and-targeted) and specific objects let a run do so; nothing can fail."}]
   - id: "REQ-SP800-137-0137"
     citation: {"ref": "SP800-137", "page": 31, "anchor": "Organizations establish a program to implement the ISCM strategy. The program is"}
     kind: "indicative"
@@ -1890,7 +1899,9 @@ requirements:
     locator: "3.1.4"
     context: ""
     statement: "As described in the NIST Engineering Statistics Handbook, when deciding how many objects to include in sample populations, the following are considered:32"
-    status: "candidate"
+    status: "partial"
+    reason: "The lead-in to the five sample-size considerations (desired information, cost, known information, variability, confidence): the plan records the number per type (RIGR-003), not these considerations, which the organization weighs."
+    evidence: [{"kind": "rule", "asserts": "The number of objects of each type to sample is a count of at least one; zero fails", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.number.yaml", "expect": "the number of objects of the type", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
     promoted: {"reason": "Lead-in with its own verb over the five bare noun items 0130 to 0134."}
   - id: "REQ-SP800-137-0215"
@@ -1907,7 +1918,9 @@ requirements:
     locator: "3.1.4"
     context: ""
     statement: "Expected Output: Security Assessment Plan documentation on acceptable sample sizes, security-related information"
-    status: "candidate"
+    status: "partial"
+    reason: "The plan documents a sample size per type (RIGR-003 refuses a count below one); whether the size is acceptable is the organization's judgment the run does not record."
+    evidence: [{"kind": "rule", "asserts": "The assessment plan documents the sample sizes: the number of objects of each type to sample is a count of at least one", "target": "RIGR-003", "fixture": "tests/fixtures/negative/RIGR-003.number.yaml", "expect": "the number of objects of the type", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-14"
     promoted: {"reason": "Step block of 3.1.4: plan content, sample sizes in the SAP."}
   - id: "REQ-SP800-137-0217"

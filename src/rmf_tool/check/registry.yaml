@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 226 rules, 36 repo-scope and 190 run-scope. Authoritative;
+# Rule registry (plan §6.5): 229 rules, 36 repo-scope and 193 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -609,13 +609,18 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: "an assessor is not shown qualified, or independence is not determined by the AO"
+    summary: "an assessor is not shown qualified or selected by the AO for the type of assessment, or independence is not determined, grounded and found sufficient by the AO"
     fixture: tests/fixtures/negative/ASMT-007.yaml
-    hint: "Each team member has a qualification the CISO verified; the AO determines assessor_independence."
+    hint: "Each team member has a qualification the CISO verified; the AO or AODR records the selection (type, expertise) and determines assessor_independence on ART-CAT and ART-RA with its sufficiency; a contracted member the owner can influence is not independent; an independent review may stand in for independence."
     enforces:
       - REQ-DODI8500.01-0310
+      - REQ-DODI8510.01-0120
       - REQ-DODI8510.01-0209
+      - REQ-SP800-37R2-0347
       - REQ-SP800-53AR5-0134
+      - REQ-SP800-53AR5-0159
+      - REQ-SP800-53AR5-0160
+      - REQ-SP800-53AR5-0163
   - id: ASMT-008
     scope: run
     severity: E
@@ -1661,6 +1666,77 @@ rules:
     hint: Name only controls of the ia family that artifacts/ssp/controls/ia.yaml holds.
     enforces:
       - REQ-SP800-18R2-0239
+  - id: RIGR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the plan's rigor and scope do not rest on the categorization, the privacy risk assessment, the approved plans and the organization's assurance requirements"
+    fixture: tests/fixtures/negative/RIGR-001.yaml
+    hint: "sap.yaml rigor names ART-CAT, ART-RA when PII, ART-SSP among plans, and assurance_requirements specified outside the team; each procedure names its assurance_requirement and selects depth and coverage not below it."
+    enforces:
+      - REQ-SP800-53AR5-0010
+      - REQ-SP800-53AR5-0011
+      - REQ-SP800-53AR5-0014
+      - REQ-SP800-53AR5-0015
+      - REQ-SP800-53AR5-0063
+      - REQ-SP800-53AR5-0182
+      - REQ-SP800-53AR5-0189
+      - REQ-SP800-53AR5-0336
+  - id: RIGR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: "a determination of a planned control records no depth or coverage the assessors applied, or one below the plan's"
+    fixture: tests/fixtures/negative/RIGR-002.yaml
+    hint: "Each determination in artifacts/sar/results/<fam>.yaml records depth and coverage, not below the highest value a sap.yaml procedure of the control selects."
+    enforces:
+      - REQ-SP800-53AR5-0299
+      - REQ-SP800-53AR5-0329
+  - id: RIGR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the organization does not direct the type, number and specific objects each assessment method samples"
+    fixture: tests/fixtures/negative/RIGR-003.yaml
+    hint: "sap.yaml rigor.direction names by (outside the team), conferred_with (on the team) and factors; each procedure carries one sampling record per method: types with a number each (personas for interview), specific objects for focused or comprehensive coverage, bias_control unless random, extent for mechanism tests."
+    enforces:
+      - REQ-SP800-137-0107
+      - REQ-SP800-137-0126
+      - REQ-SP800-137-0127
+      - REQ-SP800-137-0128
+      - REQ-SP800-137-0136
+      - REQ-SP800-137-0214
+      - REQ-SP800-137-0216
+      - REQ-SP800-53AR5-0246
+      - REQ-SP800-53AR5-0257
+      - REQ-SP800-53AR5-0269
+  - id: MSN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-8
+    summary: "the missions the system supports are not identified by the mission or business owner, or a mission essential function names no supporting assets or data on record"
+    fixture: tests/fixtures/negative/MSN-001.yaml
+    hint: "facts.yaml missions: identified_by the mission or business owner (PER-SPONSOR or PER-UR), items with kind and essential; an essential function lists supported_by components and data information types once boundary.yaml and infotypes.yaml exist."
+    enforces:
+      - REQ-DODCIO-CATO-IG-0126
+      - REQ-DODI8510.01-0070
+      - REQ-DODI8510.01-0095
+      - REQ-SP800-37R2-0236
+      - REQ-SP800-60V1R1-0034
+      - REQ-SP800-60V1R1-0065
+      - REQ-SP800-60V1R1-0081
   - id: SRA-001
     scope: run
     severity: E
