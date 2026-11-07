@@ -542,7 +542,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | SAR | Security Control Assessment Methodology/ Procedure | Identifies methodology and procedures used to assess controls (e.g., NIST SP 800-53A, DoD Joint Security Implementation Guide). If other methodology or procedures were used, provide rationale for deviation from standard assessment resources | NIST SP 800- 53A"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identifies methodology used to assess; other than SP 800-53A needs a rationale for deviation from standard assessment resources", "target": "ASMT-008", "fixture": "tests/fixtures/negative/ASMT-008.methodology.yaml", "expect": "the methodology is not SP 800-53A and gives no rationale for deviation from standard assessment resources", "claim": "presence", "holds_when": "ART-SAR is produced or seeded and, past the methodology, A-4 is active"}]
     work_item: "WI-269"
   - id: "REQ-CNSSI1254-0068"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | Security Control Compliance Status | Once assessed, identify controls"}
@@ -550,7 +551,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "7. | SAR | Security Control Compliance Status | Once assessed, identify controls as satisfied, other than satisfied, not evaluated. If using agency-specific terminology, provide mapping to the above NIST compliance status terms | NIST SP 800- 53A"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identify controls as satisfied only if no determination statement is otherwise", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.satisfied.yaml", "expect": "is satisfied, yet the determination statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded"}, {"kind": "rule", "asserts": "Identify controls as other than satisfied only when a determination statement is", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.other.yaml", "expect": "is other than satisfied, yet no determination statement is", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded"}, {"kind": "schema", "asserts": "Controls are identified as satisfied, other than satisfied or not evaluated, with not-applicable mapped to not evaluated", "target": "framework/schema/sar-results.schema.json#/properties/determinations/items/properties/result", "claim": "constraint"}]
     work_item: "WI-265"
   - id: "REQ-CNSSI1254-0069"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | Security Control Traceability | Provides the traceability from security"}
@@ -575,7 +577,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "10. RAR Data Elements | SAR | Test Results | Test results from external evaluation sources or recent test results used to verify implementation of a control for that current instance/version of the system (e.g., date of the recent test, testing resource, testing criteria and requirements used, changing conditions associated with security controls over time, degree of independence of previous assessments) | NIST SP 800- 53A"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Test results keep the date of the recent test; one older than the reuse policy allows fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.age.yaml", "expect": "the organization's reuse policy allows", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result"}, {"kind": "rule", "asserts": "Test results keep the degree of independence of previous assessments; a lesser degree cannot be reused", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "a previous assessment of independence", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result"}]
     work_item: "WI-264"
   - id: "REQ-CNSSI1254-0072"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Purpose for Risk Assessment | Describe the purpose of"}
@@ -743,7 +746,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | POA&M | Vulnerability (Weaknesses or Deficiency) | A short description of the program or system-level information security vulnerability that poses a risk of compromising confidentiality, integrity, or availability of information or the system, if applicable Contains both initial vulnerability (does not include false positives) from the SAR and the risk assessment level from the RAR | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Vulnerability contains the risk assessment level from the RAR; a different level fails", "target": "ASMT-009", "fixture": "tests/fixtures/negative/ASMT-009.yaml", "expect": "the risk assessment level is", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "asserts": "Contains the risk assessment level from the RAR; lacking it fails", "target": "ASMT-009", "fixture": "tests/fixtures/negative/ASMT-009.risk.yaml", "expect": "lacks the risk assessment level", "claim": "presence", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "asserts": "Vulnerability from the SAR does not include false positives: only substantive items go to the POA&M", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.transfer.yaml", "expect": "only substantive items go to the plan of action and milestones", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded and the finding carries a triage, which A-5 demands when active"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0094"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| POA&M | Short Description of Weakness or Deficiency | Sufficient detail"}
@@ -758,7 +762,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | POA&M | Event that Identified Weakness or Deficiency | Includes the event that identified the deficiency (e.g., security controls assessment, penetration test), reviewing organization, and date the weakness was identified | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Includes the event that identified the weakness", "target": "ASMT-009", "fixture": "tests/fixtures/negative/ASMT-009.event.yaml", "expect": "does not include the event that identified the weakness", "claim": "presence", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "asserts": "The date the weakness was identified falls within the security control assessment", "target": "ASMT-009", "fixture": "tests/fixtures/negative/ASMT-009.date.yaml", "expect": "falls outside the security control assessment", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0096"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| POA&M | Security Control Identifier | NIST SP 800-53 security control"}
@@ -773,7 +778,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "5. | POA&M | Comments | Used for additional detail or clarifications; must be used if there is a delay. The “Comments” column should identify obstacles and challenges to resolving the weakness not related to funding (e.g., lack of personnel or expertise or developing new system to replace legacy system) | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Comments must be used if there is a delay", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.comments.yaml", "expect": "is Delayed: comments must be used if there is a delay", "claim": "presence", "holds_when": "ART-POAM is produced or seeded", "sentence": "5. | POA&M | Comments | Used for additional detail or clarifications; must be used if there is a delay."}, {"kind": "rule", "asserts": "Identify obstacles and challenges to resolving the weakness when Delayed", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.obstacles.yaml", "expect": "is Delayed and identifies no obstacles or challenges", "claim": "presence", "holds_when": "ART-POAM is produced or seeded", "sentence": "The “Comments” column should identify obstacles and challenges to resolving the weakness not related to funding (e.g., lack of personnel or expertise or developing new system to replace legacy system) | NIST SP 800- 37"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0098"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| POA&M | Scheduled Completion Date | A realistic estimate of the"}
@@ -781,7 +787,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | POA&M | Scheduled Completion Date | A realistic estimate of the date when the corrective action will be implemented/tested. This date should not be changed. Actual completion date should be placed in the Status field | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "A realistic estimate of the date: before the weakness was identified is no realistic estimate", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.realistic.yaml", "expect": "before the weakness was identified is no realistic estimate", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "6. | POA&M | Scheduled Completion Date | A realistic estimate of the date when the corrective action will be implemented/tested."}, {"kind": "rule", "asserts": "This scheduled completion date should not be changed", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.yaml", "expect": "the scheduled completion date should not be changed, from", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "This date should not be changed."}, {"kind": "rule", "asserts": "Actual completion date goes in the Status field: Completed without the date of completion fails", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.date.yaml", "expect": "is Completed without the date of completion", "claim": "presence", "holds_when": "ART-POAM is produced or seeded", "sentence": "Actual completion date should be placed in the Status field | NIST SP 800- 37"}, {"kind": "rule", "asserts": "An actual completion date belongs only with the Completed status", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.early.yaml", "expect": "has an actual completion date, yet its status is", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "sentence": "Actual completion date should be placed in the Status field | NIST SP 800- 37"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0099"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| POA&M | Milestones with Completion Dates | Outlines the specific high-level"}
@@ -789,7 +796,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "7. | POA&M | Milestones with Completion Dates | Outlines the specific high-level steps to be executed in mitigating the weakness and the estimated completion date for each step. Initial milestones and completion dates should not be changed. Changes to milestones should be placed in the Changes to Milestones field | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Initial milestones and completion dates should not be changed", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.milestone.yaml", "expect": "should not be changed; record it in milestone_changes", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "Initial milestones and completion dates should not be changed."}, {"kind": "rule", "asserts": "Changes to milestones should be placed in the Changes to Milestones field: a missed milestone with no change recorded fails", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.missed.yaml", "expect": "and no new date and reason are recorded in the changes to milestones", "claim": "presence", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "Changes to milestones should be placed in the Changes to Milestones field | NIST SP 800- 37"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0100"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| POA&M | Changes to Milestones | New estimated date of a"}
@@ -797,7 +805,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. | POA&M | Changes to Milestones | New estimated date of a milestone’s completion, if the original date is not met. The new date and reason for the change in milestone completion should be recorded. No changes should be made to the original estimate | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The new date of a milestone must differ from its original date", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.same.yaml", "expect": "equals its original date", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "The new date and reason for the change in milestone completion should be recorded."}, {"kind": "rule", "asserts": "A change in milestone completion must name an initial milestone", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.unknown.yaml", "expect": "which is not an initial milestone", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "The new date and reason for the change in milestone completion should be recorded."}, {"kind": "rule", "asserts": "No changes should be made to the original estimate of a milestone completion date", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.milestone.yaml", "expect": "should not be changed; record it in milestone_changes", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded and, for original dates, A-6 has its CHECKPOINT", "sentence": "No changes should be made to the original estimate | NIST SP 800- 37"}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0101"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| POA&M | Vulnerability (Weakness) Status | Indicates the stage or state"}
@@ -805,7 +814,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "9. | POA&M | Vulnerability (Weakness) Status | Indicates the stage or state of the vulnerability (weakness) in the corrective process cycle (Completed, Ongoing, Delayed, or Planned). The Completed status should be used only when a vulnerability (weakness) has been fully resolved and the corrective action has been tested. When listing items as “Completed,” also include the date of completion in this column | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The Completed status is used only when the weakness has been fully resolved", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.resolved.yaml", "expect": "the status is used only when the weakness has been fully resolved", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "sentence": "The Completed status should be used only when a vulnerability (weakness) has been fully resolved and the corrective action has been tested."}, {"kind": "rule", "asserts": "The Completed status needs the corrective action tested", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.tested.yaml", "expect": "is Completed, but the corrective action has not been tested", "claim": "presence", "holds_when": "ART-POAM is produced or seeded", "sentence": "The Completed status should be used only when a vulnerability (weakness) has been fully resolved and the corrective action has been tested."}, {"kind": "rule", "asserts": "The status is one of Completed, Ongoing, Delayed or Planned, or the tool's own risk-accepted extension; any other fails", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.yaml", "expect": "is not Completed, Ongoing, Delayed or Planned", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "sentence": "The Completed status should be used only when a vulnerability (weakness) has been fully resolved and the corrective action has been tested."}]
     work_item: "WI-267"
   - id: "REQ-CNSSI1254-0102"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| POA&M | POC | Organization or title of the position within"}

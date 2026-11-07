@@ -35,10 +35,15 @@
             "$ref": "#/$defs/control_id"
           },
           "result": {
+            "title": "Security control compliance status: satisfied, other than satisfied or not evaluated; not-applicable maps to not evaluated (CNSSI 1254)",
             "enum": [
               "satisfied",
               "other-than-satisfied",
+              "not-evaluated",
               "not-applicable"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0068"
             ]
           },
           "methods": {
@@ -71,6 +76,49 @@
             "items": {
               "$ref": "#/$defs/source"
             }
+          },
+          "statements": {
+            "title": "The finding of each determination statement of the control",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "result"
+              ],
+              "properties": {
+                "id": {
+                  "title": "Determination statement label from the catalog (AC-02a.[01])",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "result": {
+                  "title": "Finding of the determination statement",
+                  "enum": [
+                    "satisfied",
+                    "other-than-satisfied",
+                    "not-evaluated",
+                    "not-applicable"
+                  ]
+                },
+                "reason": {
+                  "title": "Why the determination statement does not apply",
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "reused": {
+            "title": "Reused assessment results this determination rests on",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^RR-\\d{3}$"
+            },
+            "uniqueItems": true
           }
         }
       }
@@ -124,6 +172,78 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          },
+          "affected_statements": {
+            "title": "Parts of the control affected by the finding",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "state_difference": {
+            "title": "How the actual state differs from the planned or expected state",
+            "type": "string",
+            "minLength": 1
+          },
+          "potential_compromise": {
+            "title": "Potential compromise to confidentiality, integrity, availability or privacy",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "confidentiality",
+                "integrity",
+                "availability",
+                "privacy"
+              ]
+            }
+          },
+          "triage": {
+            "title": "Triage of the assessor finding",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "action",
+              "decided_by",
+              "significance",
+              "risk_basis",
+              "rationale"
+            ],
+            "properties": {
+              "action": {
+                "title": "The initial action on the finding",
+                "enum": [
+                  "immediate-remediation",
+                  "remediated",
+                  "poam",
+                  "inconsequential",
+                  "false-positive"
+                ]
+              },
+              "decided_by": {
+                "title": "Who determines the initial action",
+                "type": "string",
+                "pattern": "^PER-[A-Z0-9]+$"
+              },
+              "significance": {
+                "title": "The significance of the finding",
+                "$ref": "#/$defs/level"
+              },
+              "risk_basis": {
+                "title": "The risk assessment the decision rests on",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/source"
+                }
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         }

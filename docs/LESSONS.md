@@ -467,3 +467,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: from contract 0.2.0 a catalog compensating control joins baseline.json (origin `compensating`), and TLR-001 checks the action's target, source, reason and AO risk acceptance.
 - Rule: Every action kind a run-data schema admits is read by the resolver or a rule; one that only passes the schema is a gap.
 - Promotion: check: TLR-001 and test_catalog_compensating_control_reaches_the_baseline_from_its_contract
+
+## L-0067 · 2026-11-07 · run: phase-11 · tags: rules, dates
+- Symptom: a first cut of the POA&M rules compared dates with `run.yaml:as_of` and refused every fixture: as_of is when the run starts, and a simulated run schedules its assessment after it.
+- Root cause: as_of reads like today, but a simulated run has no today.
+- Fix: a rule that needs the present uses the latest date the run vouches for, its newest authorization record, and a rule that bounds an event compares it with the plan's own schedule.
+- Rule: Compare a run's dates with each other, never with as_of as if it were now.
+- Promotion: none — it shapes how a rule is written, and test_valid_minimal fails at once on the mistake.

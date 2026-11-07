@@ -1,0 +1,19 @@
+rule: ASMT-011
+bases:
+- minimal
+description: Delayed with no comments
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.status
+  value: delayed
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.obstacles
+  value:
+  - personnel
+expect:
+  errors:
+  - ASMT-011
+  messages:
+  - 'POAM-001 is Delayed: comments must be used if there is a delay'

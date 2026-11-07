@@ -1,0 +1,14 @@
+rule: ASMT-013
+bases:
+- minimal
+description: training ensured by someone other than the system owner
+mutations:
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.0.training.ensured_by
+  value: PER-ISSM
+expect:
+  errors:
+  - ASMT-013
+  messages:
+  - the system owner ensures that system users receive the requisite training, not PER-ISSM

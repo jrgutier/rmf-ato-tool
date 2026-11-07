@@ -26,7 +26,7 @@ PLAN_RUN_SCHEMAS = {
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
-                     "changes", "posture-reports", "plan-reviews", "capabilities"}
+                     "changes", "posture-reports", "plan-reviews", "capabilities", "sar-report"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -325,6 +325,10 @@ RUN_EXAMPLES = {
         {"assurance": {"identity_proofing": "IAL9", "authentication": "AAL2",
                        "federation": "not-applicable"},
          "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
+    "sar-report": (
+        {"methodology": {"standard": "NIST SP 800-53A Rev. 5"},
+         "delivered": [{"to": "PER-PM", "date": "2026-02-01"}], "sources": SRC},
+        {"methodology": {"standard": ""}, "sources": SRC}),
 }
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"

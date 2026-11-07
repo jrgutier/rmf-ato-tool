@@ -59,9 +59,12 @@
             "$ref": "#/$defs/level"
           },
           "status": {
+            "title": "Vulnerability status: Completed, Ongoing, Delayed or Planned, or risk-accepted once the AO accepts the risk (open is the older contract's word)",
             "enum": [
               "open",
+              "planned",
               "ongoing",
+              "delayed",
               "completed",
               "risk-accepted"
             ]
@@ -92,6 +95,10 @@
                 },
                 "due": {
                   "$ref": "#/$defs/date"
+                },
+                "completed": {
+                  "title": "When the milestone was met",
+                  "$ref": "#/$defs/date"
                 }
               }
             }
@@ -112,6 +119,129 @@
               "before-authorization",
               "after-authorization"
             ]
+          },
+          "risk_level": {
+            "title": "Risk assessment level from the RAR",
+            "$ref": "#/$defs/level"
+          },
+          "criticality": {
+            "title": "Criticality of the identified control deficiency",
+            "$ref": "#/$defs/level"
+          },
+          "mitigation_approach": {
+            "title": "The proposed risk mitigation approach",
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "title": "Rank of this item in the prioritized approach to risk mitigation; 1 goes first",
+            "type": "integer",
+            "minimum": 1
+          },
+          "identified": {
+            "title": "The event that identified the weakness",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event",
+              "reviewing_organization",
+              "date"
+            ],
+            "properties": {
+              "event": {
+                "title": "Event that identified the weakness",
+                "enum": [
+                  "security-control-assessment",
+                  "penetration-test",
+                  "stig-scan",
+                  "continuous-monitoring",
+                  "audit",
+                  "other"
+                ]
+              },
+              "reviewing_organization": {
+                "title": "Reviewing organization",
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "title": "Date the weakness was identified",
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "completed_on": {
+            "title": "Actual completion date",
+            "$ref": "#/$defs/date"
+          },
+          "corrective_action_test": {
+            "title": "The test of the corrective action",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date",
+              "result"
+            ],
+            "properties": {
+              "by": {
+                "title": "Who tested the corrective action",
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "result": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "obstacles": {
+            "title": "Obstacles and challenges not related to funding",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "personnel",
+                "expertise",
+                "legacy-replacement",
+                "dependency",
+                "schedule",
+                "technical",
+                "other"
+              ]
+            }
+          },
+          "milestone_changes": {
+            "title": "Changes to milestones; original dates stay as they are",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "milestone",
+                "new_date",
+                "reason"
+              ],
+              "properties": {
+                "milestone": {
+                  "title": "The original milestone, by its description",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "new_date": {
+                  "title": "New estimated date of the milestone's completion",
+                  "$ref": "#/$defs/date"
+                },
+                "reason": {
+                  "title": "Reason for the change in milestone completion",
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
           }
         }
       }

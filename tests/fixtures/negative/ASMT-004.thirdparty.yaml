@@ -1,0 +1,19 @@
+rule: ASMT-004
+bases:
+- minimal
+description: a commercial system outside USG authorities with no acceptable third party
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: external_providers.0.kind
+  value: commercial
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: external_providers.0.under_usg_authority
+  value: false
+expect:
+  errors:
+  - ASMT-004
+  messages:
+  - a commercial system outside USG authorities must use a third party assessment organization acceptable to the cognizant
+    AO

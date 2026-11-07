@@ -1,0 +1,24 @@
+rule: ASMT-011
+bases:
+- minimal
+description: Completed with the corrective action untested
+mutations:
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: findings.0.status
+  value: closed
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.status
+  value: completed
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.completed_on
+  value: '2027-01-20'
+expect:
+  errors:
+  - ASMT-011
+  also:
+  - MRPT-001
+  messages:
+  - POAM-001 is Completed, but the corrective action has not been tested

@@ -1266,7 +1266,9 @@ requirements:
     locator: "1.1"
     context: "PURPOSE AND APPLICABILITY"
     statement: "Organizations use this publication in conjunction with approved information security program plans, privacy program plans, system security plans, and privacy plans in developing assessment plans for producing and compiling the information necessary to determine the effectiveness of the security and privacy controls employed in the system and organization. The guidance in this publication has been developed with the intention of enabling organizations to tailor the basic assessment procedures provided. The assessment procedures are used as a starting point for and as input to the assessment plan. In developing effective security and privacy assessment plans, organizations take into consideration existing information about the controls to be assessed (e.g., results from assessments of risk; platform-specific dependencies in the hardware, software, or firmware; and any assessment procedures needed as a result of organization-specific controls not included in [SP 800-53]). 5"
-    status: "candidate"
+    status: "partial"
+    reason: "Selecting a procedure for every control is held; using SP 800-53A as a starting point cannot fail"
+    evidence: [{"kind": "rule", "asserts": "Organizations develop assessment plans with methods and objects selected for every scoped control", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.missing.yaml", "expect": "has no assessment methods and objects selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Organizations use this publication in conjunction with approved information security program plans, privacy program plans, system security plans, and privacy plans in developing assessment plans for producing and compiling the information necessary to determine the effectiveness of the security and privacy controls employed in the system and organization."}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0010"
     citation: {"ref": "SP800-53AR5", "page": 13, "anchor": "The security categorization of the system; 6"}
@@ -1320,8 +1322,11 @@ requirements:
     locator: "1.1"
     context: "PURPOSE AND APPLICABILITY"
     statement: "The assessment process is an information-gathering activity of the as-implemented state of the system or common controls, not a security- or privacy-producing activity. Organizations determine the most cost-effective implementation of the assessment process by applying the results of risk assessments, considering the maturity and quality level of the organization’s risk management processes, and taking advantage of the flexibility in the concepts described in this publication. The use of SP 800-53A as a starting point in the process of defining procedures for assessing the security and privacy controls in systems and organizations promotes the consistent application of security and privacy controls and offers the needed flexibility to customize the assessment based on organizational policies and requirements, known threat and vulnerability information, operational considerations, system and platform dependencies, and tolerance for risk. 8 The information produced during control assessments can be used by an organization to:"
-    status: "candidate"
+    status: "partial"
+    reason: "Applying the results of risk assessments is held; the second sentence is explanation and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Organizations apply the results of risk assessments in tailoring the assessment procedures", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.risk.yaml", "expect": "applies no results of risk assessments", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Organizations determine the most cost-effective implementation of the assessment process by applying the results of risk assessments, considering the maturity and quality level of the organization’s risk management processes, and taking advantage of the flexibility in the concepts described in this publication."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "The use of SP 800-53A as a starting point in the process of defining procedures for assessing the security and privacy controls in systems and organizations promotes the consistent application of security and privacy controls and offers the needed flexibility to customize the assessment based on organizational policies and requirements, known threat and vulnerability information, operational considerations, system and platform dependencies, and tolerance for risk. 8 The information produced during control assessments can be used by an organization to:", "reason": "States what starting from SP 800-53A promotes; it binds no one."}]
   - id: "REQ-SP800-53AR5-0017"
     citation: {"ref": "SP800-53AR5", "page": 14, "anchor": "Identify potential problems or shortfalls in the organization’s implementation of the Risk"}
     kind: "lettered"
@@ -1384,8 +1389,11 @@ requirements:
     locator: "1.1"
     context: "PURPOSE AND APPLICABILITY The use of SP 800-53A as a starting point in the process of defining procedures for assessing the security and privacy controls in systems and organizations promotes the cons"
     statement: "Organizations are not expected to employ all of the assessment methods and assessment objects contained within the assessment procedures identified in this publication for the associated security and privacy controls deployed within or available for inheritance by organizational systems. Rather, organizations have the inherent flexibility to determine the level of effort needed and the assurance required for a particular assessment (e.g., which assessment methods and assessment objects are most useful in obtaining the desired results). Determination of the level of effort and required assurance is made based on what is necessary to accomplish the assessment objectives in the most cost-effective manner and with sufficient confidence to support the subsequent determination of the resulting mission or business risk (i.e., risk management). Organizations balance the resources expended on the deployment of security and privacy controls (i.e., safeguards and countermeasures implemented for security and privacy protection) with the resources expended to determine overall control effectiveness, both initially and on an ongoing basis through continuous monitoring programs."
-    status: "candidate"
+    status: "partial"
+    reason: "A permission, so A-2 refuses nothing for leaving methods out; waits on a ruling"
+    evidence: [{"kind": "prose", "asserts": "Organizations are not expected to employ all assessment methods; the playbook says the plan need not use them all", "target": "playbooks/A/A-2.md", "claim": "presence"}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "Organizations are not expected to employ all of the assessment methods and assessment objects contained within the assessment procedures identified in this publication for the associated security and privacy controls deployed within or available for inheritance by organizational systems.", "reason": "A permission: organizations are not expected to employ every method and object."}]
   - id: "REQ-SP800-53AR5-0025"
     citation: {"ref": "SP800-53AR5", "page": 14, "anchor": "The security and privacy controls for the system and organization are documented"}
     kind: "indicative"
@@ -1493,7 +1501,8 @@ requirements:
     locator: "1.4"
     context: "ORGANIZATION OF THIS PUBLICATION"
     statement: "Organizations review the available information from component information technology products to determine what security and privacy controls are implemented by the product, if those controls meet the intended control requirements of the system under assessment, if the configuration of the product and the environment in which the product operates are consistent with the environmental and product configuration stated by the vendor and/or developer, and if the assurance requirements stated in the developer/vendor specification satisfy the assurance requirements for assessing those controls. Meeting the above criteria provides a sound rationale that the product is suitable and meets the intended security and privacy control requirements of the system under assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Organizations review component product information: controls implemented, requirements met, configuration consistent and assurance satisfied, and checks that do not show them fail", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.product.yaml", "expect": "the component product checks do not show", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "Organizations review the available information from component information technology products to determine what security and privacy controls are implemented by the product, if those controls meet the intended control requirements of the system under assessment, if the configuration of the product and the environment in which the product operates are consistent with the environmental and product configuration stated by the vendor and/or developer, and if the assurance requirements stated in the developer/vendor specification satisfy the assurance requirements for assessing those controls."}]
     work_item: "WI-264"
   - id: "REQ-SP800-53AR5-0039"
     citation: {"ref": "SP800-53AR5", "page": 17, "anchor": "Security and privacy assessments are also conducted during the operations and maintenance"}
@@ -2260,7 +2269,8 @@ requirements:
     locator: "3.1"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY"
     statement: "Outcomes | Outcomes | • • • • • • | The objective, scope, and timeframe of control assessment determined Key organizational stakeholders notified and necessary resources allocated Assessors/assessment teams identified Artifacts collected and provided to assessors/assessment teams Mechanism to minimize ambiguities and misunderstandings about control implementation and identified control deficiencies or weaknesses established Assessors/assessment teams understand the organization’s operations, structure, objective, scope, and timeframe of control assessment"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The objective of the control assessment is determined; a plan stating none fails", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.objective.yaml", "expect": "the assessment plan states no objective for the control assessments", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Key organizational stakeholders notified: the authorizing official among the officials notified", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.aonotified.yaml", "expect": "the authorizing official is not among the key organizational officials notified", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Necessary resources allocated before the assessment; allocated later fails", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.resourcelate.yaml", "expect": "necessary resources were allocated on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Artifacts provided to assessors: documentation that omits the security plan fails", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.documents.yaml", "expect": "the documentation provided to the assessor omits the security plan", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Mechanism to minimize ambiguities stands between the organization and the assessors", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.ambiguity.yaml", "expect": "the mechanism to minimize ambiguities must stand between the organization and the assessors", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Assessors understand the organization's operations resting on the organizational context", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.understanding.yaml", "expect": "the assessors' understanding of the organization's operations does not rest on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Assessors identified: each assessment team member has a qualification on record", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "has no qualification on record", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0135"
     citation: {"ref": "SP800-53AR5", "page": 31, "anchor": "Conducting security and privacy control assessments can be difficult, challenging, and resource"}
@@ -2304,7 +2314,8 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY From an organizational perspective, preparing for a security and privacy control assessment includes the following key activities:"
     statement: "• Notifying key organizational officials of impending assessments and allocating necessary resources to carry out the assessments;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Notifying key organizational officials of impending assessments includes the authorizing official", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.aonotified.yaml", "expect": "the authorizing official is not among the key organizational officials notified", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Notifying officials of impending assessments after they start fails", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.yaml", "expect": "was notified of the impending assessments on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Allocating necessary resources to carry out the assessments before they start", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.resourcelate.yaml", "expect": "necessary resources were allocated on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0141"
     citation: {"ref": "SP800-53AR5", "page": 31, "anchor": "Establishing appropriate communication channels among organizational officials with an interest in the"}
@@ -2312,7 +2323,8 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY From an organizational perspective, preparing for a security and privacy control assessment includes the following key activities:"
     statement: "• Establishing appropriate communication channels among organizational officials with an interest in the assessments;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Communication channels among organizational officials name officials notified of the assessments", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.channel.yaml", "expect": "who is not among the organizational officials notified", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0142"
     citation: {"ref": "SP800-53AR5", "page": 31, "anchor": "Establishing time frames for completing the assessments and key milestone decision points"}
@@ -2349,7 +2361,8 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY"
     statement: "• Establishing a mechanism between the organization and the assessors and/or assessment teams to minimize ambiguities or misunderstandings about the implementation of security and privacy controls and related weaknesses or deficiencies identified during the assessments."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The mechanism to minimize ambiguities must stand between the organization and the assessors", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.ambiguity.yaml", "expect": "the mechanism to minimize ambiguities must stand between the organization and the assessors", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0147"
     citation: {"ref": "SP800-53AR5", "page": 32, "anchor": "Obtaining a general understanding of the organization’s operations (including mission, functions, and"}
@@ -2357,7 +2370,8 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY Control assessors/assessment teams begin preparing for their respective assessments by:"
     statement: "• Obtaining a general understanding of the organization’s operations (including mission, functions, and business processes) and how the system or common control that is the subject of the particular assessment supports those organizational operations,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The general understanding of the organization's operations must rest on the organizational context", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.understanding.yaml", "expect": "the assessors' understanding of the organization's operations does not rest on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0148"
     citation: {"ref": "SP800-53AR5", "page": 32, "anchor": "Obtaining an understanding of the structure of the system (i.e., system architecture)"}
@@ -2393,7 +2407,8 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY Control assessors/assessment teams begin preparing for their respective assessments by:"
     statement: "• Establishing appropriate organizational points of contact to carry out the assessments, and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Organizational points of contact to carry out the assessments sit outside the assessment team", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.poc.yaml", "expect": "is no organizational point of contact", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0153"
     citation: {"ref": "SP800-53AR5", "page": 32, "anchor": "Obtaining previous assessment results that may be appropriately reused for the current"}
@@ -2511,7 +2526,8 @@ requirements:
     locator: "3.2"
     context: "TABLE 2. DEVELOP SECURITY AND PRIVACY PLANS SUMMARY"
     statement: "Outcomes | Outcomes | • • • • | Controls and control enhancements to be included in assessments are determined Assessment procedures are selected and tailored; additional procedures for security and privacy requirements/controls not covered by [SP 800-53] are developed Assessment procedures are optimized to reduce duplication of effort Assessment plan is finalized, and organizational approval is obtained"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessment procedures are selected for the controls to be included in assessments", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.missing.yaml", "expect": "has no assessment methods and objects selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Assessment procedures are optimized to reduce duplication of effort: a method applied to a control in two procedures fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.twice.yaml", "expect": "consolidating assessment procedures applies each method to a control once", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Assessment plan is finalized and organizational approval is obtained from the authorizing official", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.approver.yaml", "expect": "assessment plans are approved by the authorizing official or designated representative, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Assessment procedures are selected and tailored, and an adaptation says how", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.adaptation.yaml", "expect": "but does not say how the assessment procedures were adapted", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0168"
     citation: {"ref": "SP800-53AR5", "page": 34, "anchor": "The security assessment plan and privacy assessment plan provide the objectives for"}
@@ -2541,7 +2557,8 @@ requirements:
     locator: "3.2.•"
     context: "TABLE 2. DEVELOP SECURITY AND PRIVACY PLANS SUMMARY The following steps are considered by assessors when developing plans to assess the security and privacy controls in organizational systems or commo"
     statement: "• Tailor the selected assessment procedures (e.g., select appropriate assessment methods and objects, and assign depth and coverage attribute values),"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Select appropriate assessment methods and objects: an object no method applies to fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.object.yaml", "expect": "no selected assessment method applies to the assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "schema", "asserts": "Assign depth attribute values to the selected assessment procedures", "target": "framework/schema/sap.schema.json#/properties/procedures/items/properties/depth", "claim": "constraint", "read_by": "ASMT-002"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0172"
     citation: {"ref": "SP800-53AR5", "page": 34, "anchor": "Develop additional assessment procedures to address any security requirements or controls that"}
@@ -2549,7 +2566,9 @@ requirements:
     locator: "3.2.•"
     context: "TABLE 2. DEVELOP SECURITY AND PRIVACY PLANS SUMMARY The following steps are considered by assessors when developing plans to assess the security and privacy controls in organizational systems or commo"
     statement: "• Develop additional assessment procedures to address any security requirements or controls that are not covered by [SP 800-53],"
-    status: "candidate"
+    status: "partial"
+    reason: "A run has no field for a requirement outside SP 800-53, so nothing makes an additional procedure appear; a declared one must fit its methods and objects"
+    evidence: [{"kind": "rule", "asserts": "Additional assessment procedures for requirements not covered must fit methods to objects", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.additional.yaml", "expect": "has no selected assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0173"
     citation: {"ref": "SP800-53AR5", "page": 34, "anchor": "The authorizing official consults with the Office of the Inspector General, the"}
@@ -2572,7 +2591,8 @@ requirements:
     locator: "3.2.•"
     context: "TABLE 2. DEVELOP SECURITY AND PRIVACY PLANS SUMMARY"
     statement: "• Optimize the assessment procedures to reduce duplication of effort (e.g., sequencing and consolidating assessment procedures) and provide cost-effective assessment solutions, and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Consolidating assessment procedures applies each method to a control once; a repeat fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.twice.yaml", "expect": "consolidating assessment procedures applies each method to a control once", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0176"
     citation: {"ref": "SP800-53AR5", "page": 35, "anchor": "Finalize assessment plans and obtain the necessary approvals to execute the plans."}
@@ -2608,7 +2628,9 @@ requirements:
     locator: "3.2.3"
     context: "TAILOR ASSESSMENT PROCEDURES"
     statement: "In a manner similar to how the controls from [SP 800-53] are tailored for the organization’s mission, business functions, characteristics of the system, and operating environment, organizations tailor the assessment procedures in Chapter 4 to meet specific organizational needs. Organizations have the flexibility to perform the tailoring process at the organization level for all systems or common controls, at the individual system level, or using a combination of organization-level and system-specific approaches. Control assessors determine if the organization provides additional tailoring guidance prior to initiating the tailoring process. Assessment procedures are tailored by:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tailoring is held. The organization's tailoring guidance is a required field of prose"
+    evidence: [{"kind": "rule", "asserts": "Organizations tailor the assessment procedures to organizational needs, applying risk results", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.risk.yaml", "expect": "applies no results of risk assessments", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "In a manner similar to how the controls from [SP 800-53] are tailored for the organization’s mission, business functions, characteristics of the system, and operating environment, organizations tailor the assessment procedures in Chapter 4 to meet specific organizational needs."}, {"kind": "rule", "asserts": "Assessment procedures are tailored by selecting methods and objects that fit", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.object.yaml", "expect": "no selected assessment method applies to the assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Assessment procedures are tailored by:"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0181"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Selecting the appropriate assessment methods and objects needed to satisfy the stated"}
@@ -2616,7 +2638,8 @@ requirements:
     locator: "3.2.3.•"
     context: "TAILOR ASSESSMENT PROCEDURES Assessment procedures are tailored by:"
     statement: "• Selecting the appropriate assessment methods and objects needed to satisfy the stated assessment objectives,"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Selecting the appropriate assessment methods and objects: a method with no object fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.method.yaml", "expect": "has no selected assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0182"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Selecting the appropriate depth and coverage attribute values to define the rigor"}
@@ -2640,7 +2663,9 @@ requirements:
     locator: "3.2.3.•"
     context: "TAILOR ASSESSMENT PROCEDURES Assessment procedures are tailored by:"
     statement: "• Developing system/platform-specific and organization-specific assessment procedures (which may be adaptations of those in Chapter 4),"
-    status: "candidate"
+    status: "partial"
+    reason: "An adaptation is recorded and described; whether one was needed cannot be seen, so this stays presence"
+    evidence: [{"kind": "rule", "asserts": "System, platform and organization specific assessment procedures say how the assessment procedures were adapted", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.adaptation.yaml", "expect": "but does not say how the assessment procedures were adapted", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0185"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Incorporating assessment results from previous assessments where the results are deemed applicable,"}
@@ -2648,7 +2673,8 @@ requirements:
     locator: "3.2.3.•"
     context: "TAILOR ASSESSMENT PROCEDURES Assessment procedures are tailored by:"
     statement: "• Incorporating assessment results from previous assessments where the results are deemed applicable, and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Results from previous assessments are incorporated only where deemed applicable; reused though found not applicable fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.applicability.yaml", "expect": "was found not acceptable", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result"}, {"kind": "rule", "asserts": "Previous assessment results are incorporated from the reused result records of the assessment plan", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.reused.yaml", "expect": "is not a reused result of the assessment plan", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded"}]
     work_item: "WI-264"
   - id: "REQ-SP800-53AR5-0186"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Making appropriate adjustments in assessment procedures to obtain the requisite assessment evidence"}
@@ -2656,7 +2682,8 @@ requirements:
     locator: "3.2.3.•"
     context: "TAILOR ASSESSMENT PROCEDURES Assessment procedures are tailored by:"
     statement: "• Making appropriate adjustments in assessment procedures to obtain the requisite assessment evidence from external providers."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessment procedures are adjusted for external providers: an external component with no provider record fails", "target": "ASMT-004", "fixture": "tests/fixtures/negative/ASMT-004.yaml", "expect": "has no external_providers record", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the run has an external component, a leveraged authorization or a provider record"}]
     work_item: "WI-266"
   - id: "REQ-SP800-53AR5-0187"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Organizations can specify, document, and configure their systems in a variety of"}
@@ -2664,8 +2691,11 @@ requirements:
     locator: "3.2.3.1"
     context: "ASSESSMENT METHOD- AND OBJECT-RELATED CONSIDERATIONS"
     statement: "Organizations can specify, document, and configure their systems in a variety of ways, and the content and applicability of existing assessment evidence varies. This variety may result in the need to apply a mixture of assessment methods to assessment objects to generate the assessment evidence needed to determine whether the security and privacy controls are effective in their application. Additionally, as described in Section 2.3 and Section 2.4, the number and type of assessment methods and assessment objects needed to provide the required assurance varies based on the depth and coverage needed for the assessment. Therefore, the assessment methods and objects provided with each assessment procedure are termed potential to reflect the need to choose the specific methods and objects most appropriate for a specific assessment. The assessment methods and objects chosen are those deemed necessary to produce the evidence needed to make the determinations described in the determination statements in support of assurance requirements and the associated management of risk. The potential methods and objects in the assessment procedure are provided as a resource to assist in the selection of appropriate methods and objects and not with the intent of limiting the selection. Organizations use their judgment when selecting assessment methods and associated assessment objects. Organizations select those methods and objects that most cost-effectively manage risk and contribute to making the determinations associated with the assessment objective.38 The quality of assessment results is based on the soundness of the rationale provided for selecting the methods and objects, not the specific set of methods and objects applied. It is not necessary, in most cases, to apply every assessment method to every assessment object to obtain the desired assurance."
-    status: "candidate"
+    status: "partial"
+    reason: "Choosing methods is held for every control and each record gives a rationale; the rest explains or permits and waits on rulings"
+    evidence: [{"kind": "rule", "asserts": "Organizations select assessment methods and objects for every control", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.missing.yaml", "expect": "has no assessment methods and objects selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Organizations use their judgment when selecting assessment methods and associated assessment objects."}, {"kind": "rule", "asserts": "The methods and objects chosen must fit each other to contribute to the determinations", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.object.yaml", "expect": "no selected assessment method applies to the assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Organizations select those methods and objects that most cost-effectively manage risk and contribute to making the determinations associated with the assessment objective.38"}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "Organizations can specify, document, and configure their systems in a variety of ways, and the content and applicability of existing assessment evidence varies.", "reason": "States that organizations vary; it binds no one."}, {"sentence": "This variety may result in the need to apply a mixture of assessment methods to assessment objects to generate the assessment evidence needed to determine whether the security and privacy controls are effective in their application.", "reason": "States that a mixture of methods may be needed; a permission."}, {"sentence": "Therefore, the assessment methods and objects provided with each assessment procedure are termed potential to reflect the need to choose the specific methods and objects most appropriate for a specific assessment.", "reason": "Explains the term potential; it binds no one."}, {"sentence": "The potential methods and objects in the assessment procedure are provided as a resource to assist in the selection of appropriate methods and objects and not with the intent of limiting the selection.", "reason": "States what the catalog is for; it binds no one."}, {"sentence": "The quality of assessment results is based on the soundness of the rationale provided for selecting the methods and objects, not the specific set of methods and objects applied.", "reason": "States what quality rests on; it binds no one."}]
   - id: "REQ-SP800-53AR5-0188"
     citation: {"ref": "SP800-53AR5", "page": 36, "anchor": "Common controls are not assessed as part of system control assessments unless"}
     kind: "indicative"
@@ -2728,23 +2758,30 @@ requirements:
     locator: "3.2.3.4"
     context: "SYSTEM/PLATFORM- AND ORGANIZATION-RELATED CONSIDERATIONS"
     statement: "The assessment procedures in SP 800-53A may be adapted to address system-, platform-, or organization-specific dependencies. For example, the assessment of a Linux implementation of control IA-02 for the identification and authentication of users might include an explicit examination of any key-based, “password-less” login capability and potential risks inherent from any deficiency in key management, account management, system and boundary protection, physical and environmental protection, and other safeguards to prevent identification and authentication bypass by unauthorized users or processes acting on behalf of users."
-    status: "candidate"
+    status: "partial"
+    reason: "A permission, built as adaptation; waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "The assessment procedures may be adapted for platform-specific dependencies, and say how", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.adaptation.yaml", "expect": "but does not say how the assessment procedures were adapted", "claim": "presence", "holds_when": "ART-SAP is produced or seeded", "sentence": "The assessment procedures in SP 800-53A may be adapted to address system-, platform-, or organization-specific dependencies."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "The assessment procedures in SP 800-53A may be adapted to address system-, platform-, or organization-specific dependencies.", "reason": "A permission: procedures may be adapted."}]
   - id: "REQ-SP800-53AR5-0196"
     citation: {"ref": "SP800-53AR5", "page": 38, "anchor": "Reuse of assessment results from previously accepted or approved assessments is considered"}
     kind: "modal"
     locator: "3.2.3.5"
     context: "REUSE OF ASSESSMENT EVIDENCE-RELATED CONSIDERATIONS"
     statement: "Reuse of assessment results from previously accepted or approved assessments is considered in the body of evidence for determining overall security and privacy control effectiveness. Previously accepted or approved assessments include assessments of inherited common controls that are managed by the organization and support multiple systems, assessments of security or privacy controls that are reviewed as part of the control implementation (e.g., CP-02 requires a review of the contingency plan), or security-related information generated by the organization’s ISCM program. The acceptability of reusing assessment results in a security control assessment or privacy control assessment is coordinated with and approved by the users of the assessment results. It is essential that system owners and common control providers collaborate with authorizing officials and other appropriate organizational officials to determine the acceptability of using previous assessment results. When considering the reuse of assessment results and the value of those results to the current assessment, assessors determine the credibility of the assessment evidence, the appropriateness of previous analysis, and the applicability of the assessment evidence to current system operating conditions. If previous assessment results are reused, the date and type of the original assessment are documented in the assessment plan and assessment report."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentences on who approves, who collaborates, what assessors determine, and the date and type are held by rules; the first sentence defines a term and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Reusing assessment results is approved by the users of the assessment results; anyone else fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.approver.yaml", "expect": "reusing assessment results is approved by the users of the assessment results, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "The acceptability of reusing assessment results in a security control assessment or privacy control assessment is coordinated with and approved by the users of the assessment results."}, {"kind": "rule", "asserts": "System owners and common control providers collaborate with authorizing officials to determine the acceptability of previous assessment results", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.collaborate.yaml", "expect": "system owners or common control providers collaborate with authorizing officials on the acceptability of previous assessment results", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "It is essential that system owners and common control providers collaborate with authorizing officials and other appropriate organizational officials to determine the acceptability of using previous assessment results."}, {"kind": "rule", "asserts": "Assessors determine the credibility of the assessment evidence; anyone else fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.assessor.yaml", "expect": "assessors determine the credibility of the assessment evidence, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "When considering the reuse of assessment results and the value of those results to the current assessment, assessors determine the credibility of the assessment evidence, the appropriateness of previous analysis, and the applicability of the assessment evidence to current system operating conditions."}, {"kind": "rule", "asserts": "Reusing results whose credibility of the assessment evidence was found not acceptable fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.verdict.yaml", "expect": "was found not acceptable", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "When considering the reuse of assessment results and the value of those results to the current assessment, assessors determine the credibility of the assessment evidence, the appropriateness of previous analysis, and the applicability of the assessment evidence to current system operating conditions."}, {"kind": "rule", "asserts": "The original assessment date must precede the current assessment, documented in the assessment plan", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.yaml", "expect": "follows the current assessment", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "If previous assessment results are reused, the date and type of the original assessment are documented in the assessment plan and assessment report."}, {"kind": "rule", "asserts": "Reused assessment results are documented in the assessment report; left out fails", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.report.yaml", "expect": "the assessment report does not document the", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "If previous assessment results are reused, the date and type of the original assessment are documented in the assessment plan and assessment report."}]
     work_item: "WI-264"
+    ruling_sought: [{"sentence": "Previously accepted or approved assessments include assessments of inherited common controls that are managed by the organization and support multiple systems, assessments of security or privacy controls that are reviewed as part of the control implementation (e.g., CP-02 requires a review of the contingency plan), or security-related information generated by the organization’s ISCM program.", "reason": "Defines previously accepted or approved assessments by example; it binds no one."}]
   - id: "REQ-SP800-53AR5-0197"
     citation: {"ref": "SP800-53AR5", "page": 38, "anchor": "In certain situations, it may be necessary to supplement previous assessment results"}
     kind: "indicative"
     locator: "3.2.3.5"
     context: "REUSE OF ASSESSMENT EVIDENCE-RELATED CONSIDERATIONS"
     statement: "In certain situations, it may be necessary to supplement previous assessment results under consideration for reuse with additional assessment activities to fully address the current assessment objectives. For example, if an independent evaluation of an information technology product did not test a particular configuration setting that is employed by the organization in a system, then the assessor may need to supplement the original test results with additional testing to cover that configuration setting for the current system environment. The decision to reuse assessment results is documented in the security assessment plan or privacy assessment plan and the final security assessment report or privacy assessment report, and it is consistent with legislation, policies, directives, standards, and guidelines."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The decision to reuse assessment results is documented in the assessment report; left out fails", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.report.yaml", "expect": "the assessment report does not document the", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "The decision to reuse assessment results is documented in the security assessment plan or privacy assessment plan and the final security assessment report or privacy assessment report, and it is consistent with legislation, policies, directives, standards, and guidelines."}]
     work_item: "WI-264"
   - id: "REQ-SP800-53AR5-0198"
     citation: {"ref": "SP800-53AR5", "page": 39, "anchor": "Changing conditions associated with security controls and privacy controls over time. Security"}
@@ -2752,7 +2789,8 @@ requirements:
     locator: "3.2.3.5.•"
     context: "REUSE OF ASSESSMENT EVIDENCE-RELATED CONSIDERATIONS The following items are considered when validating previous assessment results for reuse:"
     statement: "• Changing conditions associated with security controls and privacy controls over time. Security and privacy controls that were deemed effective during previous assessments may have become ineffective due to changing conditions within the system or its environment of operation, including emergent threat information. Assessment results that were found to be previously acceptable may no longer provide credible evidence for the determination of security or privacy control effectiveness, and therefore, a reassessment may be required. Applying previous assessment results to a current assessment necessitates the identification of any changes that have occurred since the previous assessment and the impact of these changes on the previous results. For example, reusing previous assessment results from examining an organization’s security or privacy policies and procedures may be acceptable if it is determined that there have not been any significant changes to the identified policies and procedures. Reusing assessment results produced during the previous authorization of a system is a cost-effective method for supporting continuous monitoring activities and annual FISMA reporting requirements when the related controls have not changed and there are adequate reasons for confidence in their continued application."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessment results that no longer provide credible evidence are not reused: found not acceptable fails", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.verdict.yaml", "expect": "was found not acceptable", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "Assessment results that were found to be previously acceptable may no longer provide credible evidence for the determination of security or privacy control effectiveness, and therefore, a reassessment may be required."}]
     work_item: "WI-264"
   - id: "REQ-SP800-53AR5-0199"
     citation: {"ref": "SP800-53AR5", "page": 39, "anchor": "Amount of time that has transpired since previous assessments. In general, as"}
@@ -2760,7 +2798,8 @@ requirements:
     locator: "3.2.3.5.•"
     context: "REUSE OF ASSESSMENT EVIDENCE-RELATED CONSIDERATIONS The following items are considered when validating previous assessment results for reuse:"
     statement: "• Amount of time that has transpired since previous assessments. In general, as the time between current and previous assessments increases, the credibility and utility of the previous assessment results decrease. This is primarily because the system or the environment in which the system operates is more likely to change with the passage of time, possibly invalidating the original conditions or assumptions on which the previous assessment was based."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Time since previous assessments: days beyond the reuse policy allows fail", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.age.yaml", "expect": "the organization's reuse policy allows", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result"}]
     work_item: "WI-264"
   - id: "REQ-SP800-53AR5-0200"
     citation: {"ref": "SP800-53AR5", "page": 39, "anchor": "Degree of independence of previous assessments. Assessor independence can be a critical"}
@@ -2768,32 +2807,44 @@ requirements:
     locator: "3.2.3.5.•"
     context: "REUSE OF ASSESSMENT EVIDENCE-RELATED CONSIDERATIONS The following items are considered when validating previous assessment results for reuse:"
     statement: "• Degree of independence of previous assessments. Assessor independence can be a critical factor in certain types of assessments. The degree of independence required from assessment to assessment should be consistent. For example, it is not appropriate to reuse results from a previous self-assessment where no assessor independence was required when a current assessment requires a greater degree of independence."
-    status: "candidate"
+    status: "partial"
+    reason: "The consistency duty is held; the first sentence states why independence matters and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "The degree of independence must be consistent: a previous assessment of lesser independence cannot be reused when the current assessment requires more", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "a previous assessment of independence", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "The degree of independence required from assessment to assessment should be consistent."}]
     work_item: "WI-264"
+    ruling_sought: [{"sentence": "Assessor independence can be a critical factor in certain types of assessments.", "reason": "States that independence can matter; it binds no one."}]
   - id: "REQ-SP800-53AR5-0201"
     citation: {"ref": "SP800-53AR5", "page": 39, "anchor": "The assessment procedures in Chapter 4 need to be adjusted, as appropriate,"}
     kind: "modal"
     locator: "3.2.3.6"
     context: "EXTERNAL SYSTEM- RELATED CONSIDERATIONS"
     statement: "The assessment procedures in Chapter 4 need to be adjusted, as appropriate, to accommodate the assessment of external systems.41 Because the organization does not always have direct control over the security or privacy controls used in external systems or sufficient visibility into the development, implementation, and assessment of those controls, alternative assessment approaches may need to be applied, resulting in the need to tailor the assessment procedures described in Chapter 4. Where required assurances of agreed-upon security or privacy controls within a system are documented in contracts or service-level agreements, assessors review the contracts or agreements and tailor the assessment procedures as appropriate to assess the security or privacy controls or the security and privacy control assessment results provided through contracts or agreements. In addition, assessors consider any other assessments that have been conducted or are in the process of being conducted for external systems that are relied upon with regard to protecting the system under assessment. Applicable information from these assessments, if deemed reliable, is incorporated into the security assessment report or privacy assessment report, as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "Adjustment, contract review and other assessments are held; one sentence is explanation and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "The assessment procedures are adjusted to accommodate the assessment of external systems: a leveraged one with no provider record fails", "target": "ASMT-004", "fixture": "tests/fixtures/negative/ASMT-004.leveraged.yaml", "expect": "has no external_providers record", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the run has an external component, a leveraged authorization or a provider record", "sentence": "The assessment procedures in Chapter 4 need to be adjusted, as appropriate, to accommodate the assessment of external systems.41"}, {"kind": "rule", "asserts": "Assessors review the contracts or agreements before the assessment plan is approved, to tailor the procedures", "target": "ASMT-004", "fixture": "tests/fixtures/negative/ASMT-004.late.yaml", "expect": "after the assessment plan was approved", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the run has an external component, a leveraged authorization or a provider record", "sentence": "Where required assurances of agreed-upon security or privacy controls within a system are documented in contracts or service-level agreements, assessors review the contracts or agreements and tailor the assessment procedures as appropriate to assess the security or privacy controls or the security and privacy control assessment results provided through contracts or agreements."}, {"kind": "rule", "asserts": "Assessors review the contracts or agreements; anyone else fails", "target": "ASMT-004", "fixture": "tests/fixtures/negative/ASMT-004.review.yaml", "expect": "the contracts or agreements are reviewed by assessors, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the run has an external component, a leveraged authorization or a provider record", "sentence": "Where required assurances of agreed-upon security or privacy controls within a system are documented in contracts or service-level agreements, assessors review the contracts or agreements and tailor the assessment procedures as appropriate to assess the security or privacy controls or the security and privacy control assessment results provided through contracts or agreements."}, {"kind": "rule", "asserts": "Other assessments for external systems are considered: the assessment report documents the external assessment", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.external.yaml", "expect": "the assessment report does not document the", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "In addition, assessors consider any other assessments that have been conducted or are in the process of being conducted for external systems that are relied upon with regard to protecting the system under assessment."}]
     work_item: "WI-266"
+    ruling_sought: [{"sentence": "Because the organization does not always have direct control over the security or privacy controls used in external systems or sufficient visibility into the development, implementation, and assessment of those controls, alternative assessment approaches may need to be applied, resulting in the need to tailor the assessment procedures described in Chapter 4.", "reason": "Explains why alternative approaches may be needed; a permission, nothing is required."}]
   - id: "REQ-SP800-53AR5-0202"
     citation: {"ref": "SP800-53AR5", "page": 40, "anchor": "Based on organizational policies, mission or business function requirements, and an assessment"}
     kind: "indicative"
     locator: "3.2.4"
     context: "DEVELOP ASSESSMENT PROCEDURES FOR ORGANIZATION-SPECIFIC CONTROLS"
     statement: "Based on organizational policies, mission or business function requirements, and an assessment of risk, organizations may choose to develop and implement additional (organization-specific) controls or control enhancements for their systems that are beyond the scope of [SP 800-53]. Such controls are documented in the security plan and privacy plan as controls not found in SP 800-53. To assess the controls not found in SP 800-53, assessors use the guidelines in Chapter 2 to develop assessment procedures for those controls and control enhancements. The assessment procedures developed are subsequently integrated into the assessment plan, as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "No run field holds a control outside SP 800-53, so the SSP sentence has no check; additional procedures are built"
+    evidence: [{"kind": "rule", "asserts": "Assessors develop assessment procedures for controls not found in SP 800-53, fitting methods to objects", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.additional.yaml", "expect": "has no selected assessment object", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "To assess the controls not found in SP 800-53, assessors use the guidelines in Chapter 2 to develop assessment procedures for those controls and control enhancements."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "Based on organizational policies, mission or business function requirements, and an assessment of risk, organizations may choose to develop and implement additional (organization-specific) controls or control enhancements for their systems that are beyond the scope of [SP 800-53].", "reason": "A permission: organizations may choose to add controls."}]
   - id: "REQ-SP800-53AR5-0203"
     citation: {"ref": "SP800-53AR5", "page": 40, "anchor": "Assessors have flexibility in organizing assessment plans that meet the needs of"}
     kind: "indicative"
     locator: "3.2.5"
     context: "OPTIMIZE SELECTED ASSESSMENT PROCEDURES TO ENSURE MAXIMUM EFFICIENCY"
     statement: "Assessors have flexibility in organizing assessment plans that meet the needs of the organization and that provide the best opportunity for obtaining the necessary evidence to determine security or privacy control effectiveness while reducing overall assessment costs. Combining and consolidating assessment procedures is one area where flexibility can be applied. During the assessment of a system, assessment methods are applied numerous times to a variety of assessment objects within a particular family of controls. To save time, reduce assessment costs, and maximize the usefulness of assessment results, assessors review the selected assessment procedures for the control families and combine or consolidate the procedures (or parts of procedures) whenever possible or practicable. For example, assessors may consolidate interviews with key organizational officials who deal with a variety of security- or privacy-related topics. Assessors may have other opportunities for significant consolidation and cost savings by examining all policies and procedures from the families of security controls and privacy controls at the same time or by organizing groups of related policies and procedures that could be examined as a unified entity. Obtaining and examining configuration settings from similar hardware and software components within the system is another example that can provide significant assessment efficiencies."
-    status: "candidate"
+    status: "partial"
+    reason: "The review is held; the rest explains or permits and waits on rulings"
+    evidence: [{"kind": "rule", "asserts": "Assessors review the selected assessment procedures and combine or consolidate them; anyone else fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.review.yaml", "expect": "assessors review the selected assessment procedures to combine or consolidate them, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "To save time, reduce assessment costs, and maximize the usefulness of assessment results, assessors review the selected assessment procedures for the control families and combine or consolidate the procedures (or parts of procedures) whenever possible or practicable."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "During the assessment of a system, assessment methods are applied numerous times to a variety of assessment objects within a particular family of controls.", "reason": "States how methods get applied; it binds no one."}, {"sentence": "Assessors may have other opportunities for significant consolidation and cost savings by examining all policies and procedures from the families of security controls and privacy controls at the same time or by organizing groups of related policies and procedures that could be examined as a unified entity.", "reason": "A permission: assessors may have other opportunities."}]
   - id: "REQ-SP800-53AR5-0204"
     citation: {"ref": "SP800-53AR5", "page": 40, "anchor": "An additional area for consideration in optimizing the assessment process is the"}
     kind: "indicative"
@@ -2891,7 +2942,8 @@ requirements:
     locator: "3.3"
     context: "TABLE 3. CONDUCT SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY"
     statement: "Assessor findings are an unbiased, factual reporting of what was found concerning the control assessed. For each finding of “other than satisfied”, assessors indicate which parts of the control are affected by the finding (i.e., aspects of the control that were deemed not satisfied or were not able to be assessed) and describe how the actual state of the control differs from the planned or expected/desired state. The potential for compromises to confidentiality, integrity, and availability or privacy risks due to “other than satisfied” findings are also noted by the assessor in the assessment report."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessors indicate which parts of the control are affected by the finding: a part not other than satisfied fails", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.wrongpart.yaml", "expect": "as affected by the finding, but that statement is", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "For each finding of “other than satisfied”, assessors indicate which parts of the control are affected by the finding (i.e., aspects of the control that were deemed not satisfied or were not able to be assessed) and describe how the actual state of the control differs from the planned or expected/desired state."}, {"kind": "rule", "asserts": "For each other than satisfied statement a finding names the parts of the control", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.unnamed.yaml", "expect": "no finding names the other than satisfied statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "For each finding of “other than satisfied”, assessors indicate which parts of the control are affected by the finding (i.e., aspects of the control that were deemed not satisfied or were not able to be assessed) and describe how the actual state of the control differs from the planned or expected/desired state."}]
     work_item: "WI-265"
   - id: "REQ-SP800-53AR5-0217"
     citation: {"ref": "SP800-53AR5", "page": 42, "anchor": "In accordance with [SP 800-37], the authorization package consists of the security"}
@@ -3493,8 +3545,11 @@ requirements:
     locator: "ASSESSMENT REPORTS"
     context: "DOCUMENTING THE FINDINGS FROM SECURITY AND PRIVACY CONTROL ASSESSMENTS"
     statement: "The security and privacy assessment reports provide a disciplined and structured approach for documenting the findings of the assessor and the recommendations for correcting any weaknesses or deficiencies in the security and privacy controls.60 This appendix provides a template for reporting the results from security and privacy control assessments. Organizations are not restricted to the specific template format. However, it is expected that the overall report of an assessment includes information similar to that detailed in the template for each security and privacy control assessed preceded by a summary that provides the list of all security and privacy controls assessed and the overall status of each control."
-    status: "candidate"
+    status: "partial"
+    reason: "Explanatory; the findings and recommendations are held by ASMT-005 and A-4"
+    evidence: [{"kind": "prose", "asserts": "The assessment reports document findings and recommendations for correcting weaknesses in structured results", "target": "playbooks/A/A-3.md", "claim": "presence"}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "The security and privacy assessment reports provide a disciplined and structured approach for documenting the findings of the assessor and the recommendations for correcting any weaknesses or deficiencies in the security and privacy controls.60", "reason": "States what reports provide; it binds no one."}]
   - id: "REQ-SP800-53AR5-0293"
     citation: {"ref": "SP800-53AR5", "page": 729, "anchor": "The following elements are included in security and privacy assessment reports:61"}
     kind: "indicative"
@@ -3540,7 +3595,8 @@ requirements:
     locator: "ASSESSMENT REPORTS.•"
     context: "DOCUMENTING THE FINDINGS FROM SECURITY AND PRIVACY CONTROL ASSESSMENTS"
     statement: "• Selected assessment methods and objects"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Selected assessment methods: a method not selected in the assessment plan fails", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.method.yaml", "expect": "was not selected in the assessment plan", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded"}]
     work_item: "WI-269"
   - id: "REQ-SP800-53AR5-0299"
     citation: {"ref": "SP800-53AR5", "page": 730, "anchor": "Depth and coverage attributes values"}
@@ -3785,8 +3841,11 @@ requirements:
     locator: "2.4.3"
     context: "FIGURE 1: ASSESSMENT PROCEDURE FOR A CONTROL"
     statement: "Another example of granularization to support control assessments is the case of a privacy control requirement not being applicable to a particular system (e.g., the system does not process personally identifiable information); assessors can disregard such non-applicable requirements and still find that the control is satisfied. Figure 2 provides an example of control CM-0425, which is further granularized to address security impacts in CM-04[01] and privacy impacts in CM-04[02]."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: a statement may be not-applicable with a reason and the control still satisfied; the sentence is a permission and waits on a ruling"
+    evidence: [{"kind": "prose", "asserts": "Assessors can disregard non-applicable requirements and still find the control satisfied, recording not-applicable and a reason", "target": "playbooks/A/A-3.md", "claim": "presence"}]
     work_item: "WI-265"
+    ruling_sought: [{"sentence": "Another example of granularization to support control assessments is the case of a privacy control requirement not being applicable to a particular system (e.g., the system does not process personally identifiable information); assessors can disregard such non-applicable requirements and still find that the control is satisfied.", "reason": "A permission: assessors can disregard non-applicable requirements. Nothing is required."}]
   - id: "REQ-SP800-53AR5-0329"
     citation: {"ref": "SP800-53AR5", "page": 29, "anchor": "Although not explicitly noted with each assessment method in the assessment procedure,"}
     kind: "indicative"
@@ -3817,7 +3876,8 @@ requirements:
     locator: "3.1"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY Control assessors/assessment teams begin preparing for their respective assessments by:"
     statement: "In preparation for the assessment of security and privacy controls, the necessary background information is assembled and made available to the assessors or assessment team.30 To the extent necessary to support the specific assessment, and depending upon whether security controls or privacy controls are being assessed, the organization identifies and arranges access to elements of the organization responsible for developing, documenting, disseminating, reviewing, and updating:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The organization identifies and arranges access to elements of the organization, each a persona outside the team", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.element.yaml", "expect": "is no element of the organization to arrange access to", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "To the extent necessary to support the specific assessment, and depending upon whether security controls or privacy controls are being assessed, the organization identifies and arranges access to elements of the organization responsible for developing, documenting, disseminating, reviewing, and updating:"}]
     work_item: "WI-263"
   - id: "REQ-SP800-53AR5-0333"
     citation: {"ref": "SP800-53AR5", "page": 42, "anchor": "Assessment objectives are achieved by applying the designated assessment methods to selected"}
@@ -3825,7 +3885,8 @@ requirements:
     locator: "3.3"
     context: "TABLE 3. CONDUCT SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY"
     statement: "Assessment objectives are achieved by applying the designated assessment methods to selected assessment objects and compiling or producing the evidence necessary to make the determination associated with each assessment objective. Each determination statement45 contained within an assessment procedure executed by an assessor produces one of the following findings:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Each determination statement produces a finding; a statement with none fails", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.yaml", "expect": "no finding for the determination statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "Each determination statement45 contained within an assessment procedure executed by an assessor produces one of the following findings:"}]
     work_item: "WI-265"
   - id: "REQ-SP800-53AR5-0334"
     citation: {"ref": "SP800-53AR5", "page": 18, "anchor": "Senior Agency Officials for Privacy (SAOPs)/Chief Privacy Officers (CPOs) provide guidance on"}
@@ -3859,7 +3920,8 @@ requirements:
     locator: "2.4.3"
     context: ""
     statement: "The organization determines the assessment methods needed to provide the level of assurance required by the organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The organization determines the assessment methods for every scoped control", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.missing.yaml", "expect": "has no assessment methods and objects selected", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "The organization determines the assessment methods needed to provide the level of assurance required by the organization."}]
     work_item: "WI-269"
     promoted: {"reason": "This sentence of the Figure 1 paragraph assigns the choice of assessment methods to the organization. The paragraph was rejected as not-a-statement because it opens by describing a figure."}
   - id: "REQ-SP800-53AR5-0338"
@@ -3902,7 +3964,8 @@ requirements:
     locator: "ASSESSMENT REPORTS"
     context: ""
     statement: "Each determination statement executed by an assessor results in one of the following findings: satisfied (S) or other than satisfied (O)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Each determination statement executed results in a finding, recorded against the statements of the control", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.unknown.yaml", "expect": "is not a determination statement of the control", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded"}]
     work_item: "WI-265"
     promoted: {"reason": "Appendix E restates the finding each determination statement yields; the rejected sentence holds the duty for the report's finding element."}
   - id: "REQ-SP800-53AR5-0343"
@@ -3920,8 +3983,11 @@ requirements:
     locator: "SECURITY AND PRIVACY ASSESSMENT PROCEDURES"
     context: "OBJECTIVES, METHODS, AND OBJECTS FOR ASSESSING SECURITY AND PRIVACY CONTROLS"
     statement: "This chapter provides a catalog of procedures to assess the security and privacy controls and control enhancements in [SP 800-53].49 Assessors select assessment procedures from the catalog in accordance with the guidance provided in Section 3.2. Since the contents of the security and privacy plan are the basis for the development of the security and privacy assessment plans and the assessments, there will likely be assessment procedures in the catalog not used by assessors because the associated security and privacy controls or control enhancements are not contained in the security and privacy plan for the system,50 or the security and privacy controls or control enhancements are not being assessed at this time."
-    status: "candidate"
+    status: "partial"
+    reason: "A prediction; waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Assessment procedures follow the security plan: one for a control not in the plan fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.yaml", "expect": "which is not in the security plan after tailoring", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "Since the contents of the security and privacy plan are the basis for the development of the security and privacy assessment plans and the assessments, there will likely be assessment procedures in the catalog not used by assessors because the associated security and privacy controls or control enhancements are not contained in the security and privacy plan for the system,50 or the security and privacy controls or control enhancements are not being assessed at this time.", "reason": "Predicts that some catalog procedures go unused; it binds no one."}]
   - id: "REQ-SP800-53AR5-0345"
     citation: {"ref": "SP800-53AR5", "page": 48, "anchor": "The same assessment object may appear in multiple assessment object lists in"}
     kind: "indicative"
@@ -3936,16 +4002,22 @@ requirements:
     locator: "SECURITY AND PRIVACY ASSESSMENT PROCEDURES"
     context: "OBJECTIVES, METHODS, AND OBJECTS FOR ASSESSING SECURITY AND PRIVACY CONTROLS"
     statement: "Assessors are responsible for combining and consolidating the assessment procedures whenever possible or practical. Optimizing assessment procedures can save time, reduce assessment costs, and maximize the usefulness of assessment results. Assessors optimize assessment procedures by determining the best sequencing of the procedures. The assessment of some security and privacy controls before others may provide information that facilitates understanding and assessment of other controls.51"
-    status: "candidate"
+    status: "partial"
+    reason: "Consolidation is held; the second sentence is explanation and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Assessors are responsible for combining and consolidating the assessment procedures; anyone else fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.review.yaml", "expect": "assessors review the selected assessment procedures to combine or consolidate them, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Assessors are responsible for combining and consolidating the assessment procedures whenever possible or practical."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "The assessment of some security and privacy controls before others may provide information that facilitates understanding and assessment of other controls.51", "reason": "States that order may help; it binds no one."}]
   - id: "REQ-SP800-53AR5-0347"
     citation: {"ref": "SP800-53AR5", "page": 48, "anchor": "The execution of the RMF includes the selection of an initial set"}
     kind: "indicative"
     locator: "SECURITY AND PRIVACY ASSESSMENT PROCEDURES"
     context: "OBJECTIVES, METHODS, AND OBJECTS FOR ASSESSING SECURITY AND PRIVACY CONTROLS"
     statement: "The execution of the RMF includes the selection of an initial set of security and privacy controls employed within or inherited by an organizational system followed by a control tailoring process. The tailoring process often changes the set of security and privacy controls contained in the final security plan and privacy program plan. Therefore, the selection of assessment procedures from the catalog of available procedures is based solely on the content of the plan(s) after the tailoring activities are completed."
-    status: "candidate"
+    status: "partial"
+    reason: "The selection follows the plan; the first sentence is explanation and waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "The selection of assessment procedures is based solely on the security plan after tailoring; one outside it fails", "target": "ASMT-002", "fixture": "tests/fixtures/negative/ASMT-002.yaml", "expect": "which is not in the security plan after tailoring", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "Therefore, the selection of assessment procedures from the catalog of available procedures is based solely on the content of the plan(s) after the tailoring activities are completed."}]
     work_item: "WI-269"
+    ruling_sought: [{"sentence": "The execution of the RMF includes the selection of an initial set of security and privacy controls employed within or inherited by an organizational system followed by a control tailoring process.", "reason": "Describes the RMF; it binds no one."}]
   - id: "REQ-SP800-53AR5-0348"
     citation: {"ref": "SP800-53AR5", "page": 49, "anchor": "Whereas a set of potential assessment methods are included in the following"}
     kind: "indicative"
@@ -4008,7 +4080,9 @@ requirements:
     locator: "SECURITY AND PRIVACY ASSESSMENT PROCEDURES"
     context: "IMPLEMENTATION TIPS"
     statement: "Note: When assessing agency compliance with NIST guidance, auditors, Inspectors General, evaluators, and/or assessors consider the intent of the security and privacy concepts and principles articulated within the particular guidance document and how the agency applied the guidance in the context of its specific mission responsibilities, operational environments, and unique organizational conditions."
-    status: "candidate"
+    status: "partial"
+    reason: "Addresses auditors reviewing an agency, not this run; prose only, flagged for the user as possibly noise"
+    evidence: [{"kind": "prose", "asserts": "Assessors consider the intent of the guidance when tailoring assessment procedures to the mission", "target": "playbooks/A/A-2.md", "claim": "presence"}]
     work_item: "WI-269"
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);
 # sample them with `rmf conformance sample --rejected`.

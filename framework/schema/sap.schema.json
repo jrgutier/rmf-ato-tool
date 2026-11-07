@@ -104,6 +104,31 @@
           },
           "independent": {
             "type": "boolean"
+          },
+          "qualification": {
+            "title": "The assessor's qualification, verified by the CISO who establishes and oversees the team",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "basis",
+              "verified_by",
+              "verified"
+            ],
+            "properties": {
+              "basis": {
+                "title": "What qualifies this cybersecurity professional to assess",
+                "type": "string",
+                "minLength": 1
+              },
+              "verified_by": {
+                "title": "The CISO who establishes the team of qualified assessors",
+                "$ref": "#/$defs/persona_id"
+              },
+              "verified": {
+                "title": "When the qualification was verified",
+                "$ref": "#/$defs/date"
+              }
+            }
           }
         }
       },
@@ -141,10 +166,10 @@
                 "minLength": 1
               },
               "live": {
-                  "description": "The event runs on a live network or with live data, so it needs an AD-IATT or authorization in force (AODM-006).",
-                  "type": "boolean"
-                },
-                "kind": {
+                "description": "The event runs on a live network or with live data, so it needs an AD-IATT or authorization in force (AODM-006).",
+                "type": "boolean"
+              },
+              "kind": {
                 "enum": [
                   "kickoff",
                   "dt-e",
@@ -170,6 +195,848 @@
       "items": {
         "$ref": "#/$defs/source"
       }
+    },
+    "assessor_independence": {
+      "title": "Required degree of assessor independence",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "determined_by",
+        "rationale"
+      ],
+      "properties": {
+        "required": {
+          "title": "Degree of assessor independence the authorizing official requires",
+          "enum": [
+            "self-assessment",
+            "internal",
+            "independent"
+          ]
+        },
+        "determined_by": {
+          "title": "The authorizing official who determines the degree of independence",
+          "$ref": "#/$defs/persona_id"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "objectives": {
+      "title": "The objective of the control assessment",
+      "type": "string",
+      "minLength": 1
+    },
+    "level_of_effort": {
+      "title": "The expected level of effort for the control assessments",
+      "type": "string",
+      "minLength": 1
+    },
+    "approval": {
+      "title": "Review and approval of the assessment plan",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_by",
+        "approved_by",
+        "date"
+      ],
+      "properties": {
+        "reviewed_by": {
+          "title": "The security control assessor who reviews the assessment plan",
+          "$ref": "#/$defs/persona_id"
+        },
+        "approved_by": {
+          "title": "The authorizing official or designated representative who approves the assessment plan",
+          "$ref": "#/$defs/persona_id"
+        },
+        "date": {
+          "title": "When the assessment plan was approved",
+          "$ref": "#/$defs/date"
+        }
+      }
+    },
+    "preparation": {
+      "title": "Preparation for the assessment (SP 800-53A section 3.1)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "informed_by",
+        "officials_notified",
+        "resources",
+        "access",
+        "documentation_provided",
+        "elements",
+        "channels",
+        "points_of_contact",
+        "ambiguity_mechanism",
+        "understanding"
+      ],
+      "properties": {
+        "informed_by": {
+          "title": "The system owner who informs organizational officials of the assessment",
+          "$ref": "#/$defs/persona_id"
+        },
+        "officials_notified": {
+          "title": "Key organizational officials notified of the impending assessments",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "date"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "resources": {
+          "title": "Necessary resources allocated to the assessment",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allocated_by",
+            "allocated",
+            "description"
+          ],
+          "properties": {
+            "allocated_by": {
+              "title": "The system owner who ensures resources are available",
+              "$ref": "#/$defs/persona_id"
+            },
+            "allocated": {
+              "$ref": "#/$defs/date"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "access": {
+          "title": "Assessor access to the system, its environment and the materials needed",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "to",
+              "provided_by",
+              "provided"
+            ],
+            "properties": {
+              "to": {
+                "title": "What assessors have access to",
+                "enum": [
+                  "system",
+                  "environment",
+                  "documentation",
+                  "records",
+                  "artifacts",
+                  "test-results"
+                ]
+              },
+              "provided_by": {
+                "title": "The system owner who provides assessors the access",
+                "$ref": "#/$defs/persona_id"
+              },
+              "provided": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "documentation_provided": {
+          "title": "Documentation provided to the assessors",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+          }
+        },
+        "elements": {
+          "title": "Elements of the organization identified, with access arranged",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "responsible_for",
+              "persona"
+            ],
+            "properties": {
+              "responsible_for": {
+                "title": "What this element of the organization develops, documents or updates",
+                "type": "string",
+                "minLength": 1
+              },
+              "persona": {
+                "$ref": "#/$defs/persona_id"
+              }
+            }
+          }
+        },
+        "channels": {
+          "title": "Communication channels among organizational officials",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "among",
+              "means"
+            ],
+            "properties": {
+              "among": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "$ref": "#/$defs/persona_id"
+                }
+              },
+              "means": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "points_of_contact": {
+          "title": "Organizational points of contact to carry out the assessments",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "for"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "for": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "ambiguity_mechanism": {
+          "title": "Mechanism to minimize ambiguities or misunderstandings",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "between",
+            "means"
+          ],
+          "properties": {
+            "between": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/persona_id"
+              }
+            },
+            "means": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "understanding": {
+          "title": "The assessors' understanding of the organization's operations",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "summary",
+            "sources"
+          ],
+          "properties": {
+            "summary": {
+              "title": "General understanding of the organization's operations and how the system supports them",
+              "type": "string",
+              "minLength": 1
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        }
+      }
+    },
+    "reuse_policy": {
+      "title": "The reuse requirements established by the organization",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_age_days",
+        "source"
+      ],
+      "properties": {
+        "max_age_days": {
+          "title": "Oldest reusable result the organization's reuse policy allows, in days",
+          "type": "integer",
+          "minimum": 1
+        },
+        "source": {
+          "title": "The organization's reuse policy",
+          "$ref": "#/$defs/source"
+        }
+      }
+    },
+    "reused_results": {
+      "title": "Previous assessment results reused in this assessment",
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source",
+          "type",
+          "assessed",
+          "criteria",
+          "controls",
+          "independence",
+          "approved_by",
+          "coordinated_with",
+          "determined_by",
+          "credibility",
+          "appropriateness",
+          "applicability",
+          "currency",
+          "relevance",
+          "changes_since",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^RR-\\d{3}$"
+          },
+          "source": {
+            "title": "Testing resource or assessment the result comes from",
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "title": "Type of the original assessment",
+            "enum": [
+              "developmental-test",
+              "operational-test",
+              "ongoing-assessment",
+              "previous-authorization",
+              "common-control",
+              "control-review",
+              "iscm",
+              "audit",
+              "component-product"
+            ]
+          },
+          "assessed": {
+            "title": "Date of the original assessment",
+            "$ref": "#/$defs/date"
+          },
+          "criteria": {
+            "title": "Testing criteria and requirements used",
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/control_id"
+            }
+          },
+          "independence": {
+            "title": "Degree of independence of the previous assessment",
+            "enum": [
+              "self-assessment",
+              "internal",
+              "independent"
+            ]
+          },
+          "approved_by": {
+            "title": "The user of the assessment results who approves reusing them",
+            "$ref": "#/$defs/persona_id"
+          },
+          "coordinated_with": {
+            "title": "Officials who determine the acceptability of using previous assessment results",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "determined_by": {
+            "title": "The assessor who determines credibility and applicability",
+            "$ref": "#/$defs/persona_id"
+          },
+          "credibility": {
+            "$ref": "#/$defs/verdict"
+          },
+          "appropriateness": {
+            "$ref": "#/$defs/verdict"
+          },
+          "applicability": {
+            "$ref": "#/$defs/verdict"
+          },
+          "currency": {
+            "$ref": "#/$defs/verdict"
+          },
+          "relevance": {
+            "$ref": "#/$defs/verdict"
+          },
+          "changes_since": {
+            "title": "Changes since the previous assessment and their impact on the results",
+            "type": "string",
+            "minLength": 1
+          },
+          "supplement": {
+            "title": "Additional assessment activities that supplement the result",
+            "type": "string",
+            "minLength": 1
+          },
+          "product_review": {
+            "title": "Review of a component product's information",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "controls_implemented",
+              "meets_requirements",
+              "configuration_consistent",
+              "assurance_satisfied"
+            ],
+            "properties": {
+              "controls_implemented": {
+                "type": "boolean"
+              },
+              "meets_requirements": {
+                "type": "boolean"
+              },
+              "configuration_consistent": {
+                "type": "boolean"
+              },
+              "assurance_satisfied": {
+                "type": "boolean"
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "procedures": {
+      "title": "Assessment procedures selected and tailored for the scoped controls",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "controls",
+          "methods",
+          "objects",
+          "depth",
+          "coverage",
+          "rationale",
+          "risk_results",
+          "adaptation",
+          "sequence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^PRC-\\d{3}$"
+          },
+          "controls": {
+            "title": "Controls this assessment procedure covers; several are a consolidation",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/control_id"
+            }
+          },
+          "methods": {
+            "title": "Assessment methods selected",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "examine",
+                "interview",
+                "test"
+              ]
+            }
+          },
+          "objects": {
+            "title": "Assessment objects selected",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "specifications",
+                "mechanisms",
+                "activities",
+                "individuals"
+              ]
+            }
+          },
+          "depth": {
+            "title": "Depth attribute value of the assessment procedure",
+            "enum": [
+              "basic",
+              "focused",
+              "comprehensive"
+            ],
+            "x-enforces": [
+              "REQ-SP800-53AR5-0171"
+            ]
+          },
+          "coverage": {
+            "title": "Coverage attribute value of the assessment procedure",
+            "enum": [
+              "basic",
+              "focused",
+              "comprehensive"
+            ]
+          },
+          "rationale": {
+            "title": "Rationale for selecting the methods and objects",
+            "type": "string",
+            "minLength": 1
+          },
+          "risk_results": {
+            "title": "Risk assessment results applied to the tailoring",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "adaptation": {
+            "title": "System, platform or organization specific adaptation of the procedure",
+            "enum": [
+              "none",
+              "system-specific",
+              "platform-specific",
+              "organization-specific"
+            ]
+          },
+          "adaptation_note": {
+            "title": "How the procedure was adapted",
+            "type": "string",
+            "minLength": 1
+          },
+          "sequence": {
+            "title": "Order of the procedure among the assessment procedures; procedures run together share one",
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "optimization": {
+      "title": "Optimization of the assessment procedures",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_by",
+        "tailoring_guidance",
+        "notes"
+      ],
+      "properties": {
+        "reviewed_by": {
+          "title": "The assessor who reviews the selected procedures to combine or consolidate them",
+          "$ref": "#/$defs/persona_id"
+        },
+        "tailoring_guidance": {
+          "title": "Additional tailoring guidance the organization provides",
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "title": "How the procedures were sequenced and consolidated",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "additional_procedures": {
+      "title": "Additional assessment procedures for requirements outside SP 800-53",
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "requirement",
+          "statements",
+          "methods",
+          "objects",
+          "rationale"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^APR-\\d{3}$"
+          },
+          "requirement": {
+            "title": "Security requirement or control not covered by SP 800-53",
+            "type": "string",
+            "minLength": 1
+          },
+          "statements": {
+            "title": "Determination statements developed for it",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "methods": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "examine",
+                "interview",
+                "test"
+              ]
+            }
+          },
+          "objects": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "specifications",
+                "mechanisms",
+                "activities",
+                "individuals"
+              ]
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "external_providers": {
+      "title": "External providers and how their controls are assessed",
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "provider",
+          "kind",
+          "under_usg_authority",
+          "arrangement",
+          "covers",
+          "agreement_review",
+          "procedure_adjustment",
+          "provider_assessment",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EXT-\\d{3}$"
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "title": "Whose system this is",
+            "enum": [
+              "usg",
+              "commercial",
+              "foreign-government"
+            ]
+          },
+          "under_usg_authority": {
+            "title": "Whether the system falls under existing USG authorities for authorization decisions",
+            "type": "boolean"
+          },
+          "third_party": {
+            "title": "Third party assessment organization acceptable to the AO",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "organization",
+              "accepted_by",
+              "accepted"
+            ],
+            "properties": {
+              "organization": {
+                "type": "string",
+                "minLength": 1
+              },
+              "accepted_by": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "accepted": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "arrangement": {
+            "title": "The contract or agreement with the external provider",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "reference"
+            ],
+            "properties": {
+              "type": {
+                "title": "How the external provider is engaged",
+                "enum": [
+                  "contract",
+                  "interagency-agreement",
+                  "line-of-business",
+                  "licensing",
+                  "supply-chain"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "covers": {
+            "title": "External boundary components and leveraged authorizations this provider stands behind",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "agreement_review": {
+            "title": "Review of the contract or agreement",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date",
+              "assurances"
+            ],
+            "properties": {
+              "by": {
+                "title": "The assessor who reviews the contract or agreement",
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "assurances": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "procedure_adjustment": {
+            "title": "Adjustment to the assessment procedures for this external provider",
+            "type": "string",
+            "minLength": 1
+          },
+          "provider_assessment": {
+            "title": "The provider's assessment results, reviewed before leveraging",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "scope",
+              "independence",
+              "procedures_reviewed_by",
+              "evidence",
+              "meets_protection_needs",
+              "other_assessments"
+            ],
+            "properties": {
+              "scope": {
+                "title": "Type, rigor and scope of the provider's assessment",
+                "type": "string",
+                "minLength": 1
+              },
+              "independence": {
+                "title": "Independence of the assessors the provider used",
+                "enum": [
+                  "self-assessment",
+                  "internal",
+                  "independent"
+                ]
+              },
+              "procedures_reviewed_by": {
+                "title": "Who reviewed the assessment procedures the provider employed",
+                "$ref": "#/$defs/persona_id"
+              },
+              "evidence": {
+                "title": "State of the information the provider makes available",
+                "enum": [
+                  "received",
+                  "requested",
+                  "refused"
+                ]
+              },
+              "meets_protection_needs": {
+                "title": "Whether the provider's controls meet the protection needs of the organization",
+                "type": "boolean"
+              },
+              "other_assessments": {
+                "title": "Other assessments conducted or in progress for this external system",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -191,6 +1058,26 @@
       "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
       "type": "string",
       "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verdict",
+        "basis"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": [
+            "acceptable",
+            "not-acceptable"
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }

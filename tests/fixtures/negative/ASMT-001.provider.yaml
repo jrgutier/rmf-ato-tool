@@ -1,0 +1,14 @@
+rule: ASMT-001
+bases:
+- minimal
+description: someone other than the system owner provides access
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: preparation.access.0.provided_by
+  value: PER-ISSM
+expect:
+  errors:
+  - ASMT-001
+  messages:
+  - the system owner provides the required access to control assessors, not PER-ISSM

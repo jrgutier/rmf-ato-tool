@@ -13,7 +13,7 @@ from rmf_tool.oscal.build_poam import POAM_FILE, build_poam
 from rmf_tool.oscal.build_sap import SAP_FILE, build_sap
 from rmf_tool.oscal.build_sar import SAR_FILE, build_sar
 from rmf_tool.oscal.build_ssp import PROFILE_FILE, SSP_FILE, NotBuildable, build_profile, build_ssp
-from rmf_tool.run import assumptions, interviews
+from rmf_tool.run import assumptions, interviews, poam_dates
 from rmf_tool.run.model import Run
 
 
@@ -59,6 +59,9 @@ def write_output(run: Run, rel: str, text: str | None) -> bool:
 def build(run: Run) -> tuple[list[str], dict[str, str]]:
     """Write every generated file; returns (changed paths, not-built notes)."""
     changed = assemble.write(run)
+    frozen = poam_dates.freeze(run)
+    if frozen is not None and write_output(run, poam_dates.ORIGINAL_FILE, frozen):
+        changed.append(poam_dates.ORIGINAL_FILE)
     oscal = oscal_outputs(run)
     for rel, text in oscal.files.items():
         if write_output(run, rel, text):

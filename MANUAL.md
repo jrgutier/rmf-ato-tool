@@ -193,7 +193,7 @@ headings link to the persona catalog; each persona's card describes the role in 
 | [A-1](#task-a-1) Assessor Selection | A | R | C | C |  | I | I |  |  |  |  |  | C |  |  |  |  |
 | [A-2](#task-a-2) Assessment Plan | A | R |  | C |  | R | C | C |  |  | C | C | C |  | C | C |  |
 | [A-3](#task-a-3) Control Assessments | I | C |  | I |  | R/A | C | C | C |  | C | C | C |  | C | C | C |
-| [A-4](#task-a-4) Assessment Reports | I | I |  |  |  | R/A | C | C |  |  |  | C | C |  |  |  |  |
+| [A-4](#task-a-4) Assessment Reports | I | I |  | C |  | R/A | C | C |  |  |  | C | C |  |  |  |  |
 | [A-5](#task-a-5) Remediation Actions |  | C |  | C | C | R | R/A | C |  | C | C | R | C |  |  |  | R |
 | [A-6](#task-a-6) Plan of Action and Milestones | I |  |  | C |  | C | R/A | R |  |  | C | R | C | C |  |  |  |
 
@@ -2102,6 +2102,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
+- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ASMT-007).
 
 **Alignment**
 
@@ -2139,6 +2140,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|---|
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
+| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
 
 **Outputs**
@@ -2156,7 +2159,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
-- sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+- sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
+- Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
+- Each scoped control has procedures selected and tailored from the risk results (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider is reviewed before its controls or results are leveraged (ASMT-004).
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [IATT](#ad-iatt) (see [authorization decisions](#decisions)).
@@ -2219,7 +2224,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - Control assessments are conducted per the plan, supported by developer, engineering, developmental and operational test events, with reuse of earlier results and automation considered (DoDI 8510.01 Table 5 outcome).
-- sar/results holds a determination for every scoped control (SAR-COV-001) and stig-summary.yaml holds the scan results.
+- sar/results holds a determination for every scoped control (SAR-COV-001), with a finding for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
 
 **Alignment**
 
@@ -2253,7 +2258,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](personas/PER-SCA.md) Security Control Assessor |
 | Accountable | [SCA](personas/PER-SCA.md) Security Control Assessor |
-| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
 
 **Inputs**
@@ -2276,6 +2281,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Assessment reports with findings and recommendations are completed and include results from developer, engineering, developmental and operational test events (DoDI 8510.01 Table 5 outcome).
 - ART-SAR summarizes the determinations and states each finding with its severity and recommendation.
+- sar-report.yaml states the methodology, the system owner has the results, and the CISO has assessed the quality, capacity, visibility and effectiveness of the assessment (ASMT-008).
 
 **Alignment**
 
@@ -2315,6 +2321,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
+| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -2331,6 +2338,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Remediation actions are taken and the security and privacy plans are updated to reflect the resulting control implementation changes (DoDI 8510.01 Table 5 outcome).
 - Remediated findings are reassessed and closed in sar/results; the security plan reflects the changes.
+- Every finding is triaged from the risk assessment; only substantive findings go on to the POA&M (ASMT-006).
 
 **Alignment**
 
@@ -2384,7 +2392,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - A POA&M detailing remediation plans for the unacceptable risks in the assessment reports is developed (DoDI 8510.01 Table 5 outcome).
-- poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001).
+- poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required fields (POAM-FLD-001, ASMT-009), in a prioritized order (ASMT-012).
 - The POA&M is available to the cybersecurity strategy annex of the program protection plan.
 
 **Alignment**
@@ -2994,6 +3002,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
 - Where M-2 found a risk response ineffective, ART-RA records why, and the response goes back to the part of R-3 the failure points to, its implementation for a compliance failure, the whole response, and the risk assessment if needed, for an effectiveness failure.
+- POA&M items and risk responses keep their prioritized order, original dates and honest status; a slipped milestone is recorded as a change (ASMT-010, ASMT-011, ASMT-012).
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
@@ -3526,12 +3535,12 @@ listed data files; OSCAL documents are built from that data.
 
 | Artifact | Package | Produced by | Updated by | Used by |
 |---|---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-6](#task-a-6), [R-2](#task-r-2), [M-6](#task-m-6) |
+| [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [M-6](#task-m-6) |
 | [ART-STAKE](#art-stake) Stakeholder register | supporting | [P-9](#task-p-9) | — | [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15) |
 | [ART-INV](#art-inv) Hardware and software inventory | core | [P-10](#task-p-10) | [I-2](#task-i-2), [M-1](#task-m-1) | [P-11](#task-p-11), [P-12](#task-p-12), [P-14](#task-p-14), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-4](#task-s-4), [M-1](#task-m-1), [M-7](#task-m-7) |
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2) |
-| [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 | [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
 | [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | — | — |
 | [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
@@ -3569,7 +3578,7 @@ RMF role assignments, risk management strategy and risk tolerance, organization-
 | OSCAL | — |
 | Produced by | [P-1](#task-p-1) |
 | Updated by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
-| Used by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-6](#task-a-6), [R-2](#task-r-2), [M-6](#task-m-6) |
+| Used by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-14](#task-p-14), [P-17](#task-p-17), [S-1](#task-s-1), [S-3](#task-s-3), [S-5](#task-s-5), [A-1](#task-a-1), [A-2](#task-a-2), [A-6](#task-a-6), [R-2](#task-r-2), [M-6](#task-m-6) |
 
 Citations:
 
@@ -3663,7 +3672,7 @@ System-level security and privacy risk assessment, updated as the system and thr
 | OSCAL | — |
 | Produced by | [P-14](#task-p-14) |
 | Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| Used by | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 
 Citations:
 
@@ -3922,7 +3931,7 @@ Assessment determinations per control, findings and recommendations, including t
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SAR.md](templates/artifacts/ART-SAR.md) |
-| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`) |
+| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`)<br>`artifacts/data/sar-report.yaml` (schema `sar-report`) |
 | OSCAL | `assessment-results#results.findings`<br>`assessment-results#results.observations` |
 | Produced by | [A-3](#task-a-3) |
 | Updated by | [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2), [M-4](#task-m-4) |
@@ -4158,7 +4167,7 @@ simulated stakeholders.
 | [AO](#per-ao) Authorizing Official | rmf | DoD Component head; PAO for MA-managed information systems | [PER-AO.md](personas/PER-AO.md) | 2 / 11 / 19 / 11 |
 | [AODR](#per-aodr) Authorizing Official Designated Representative | rmf | AO | [PER-AODR.md](personas/PER-AODR.md) | 7 / 0 / 8 / 2 |
 | [Component CIO](#per-cio) DoD Component Chief Information Officer | organization | DoD Component head | [PER-CIO.md](personas/PER-CIO.md) | 2 / 2 / 18 / 3 |
-| [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 29 / 2 |
+| [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 30 / 2 |
 | [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 16 / 0 |
 | [SCA](#per-sca) Security Control Assessor | rmf | DoD Component CISO (the Component SCA, who may formally delegate the role) | [PER-SCA.md](personas/PER-SCA.md) | 5 / 3 / 4 / 1 |
 | [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 8 / 7 |
@@ -4241,7 +4250,7 @@ Directs the Component cybersecurity program; owns the security control assessmen
 - SP 800-37 Rev. 2 roles: Senior Agency Information Security Officer
 - Responsible for: [P-3](#task-p-3), [P-5](#task-p-5), [M-1](#task-m-1), [M-5](#task-m-5)
 - Accountable for: [P-5](#task-p-5)
-- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6)
+- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6)
 - Informed of: [P-18](#task-p-18), [A-3](#task-a-3)
 
 Citations:

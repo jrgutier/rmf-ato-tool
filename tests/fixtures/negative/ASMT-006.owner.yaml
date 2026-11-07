@@ -1,0 +1,18 @@
+rule: ASMT-006
+bases:
+- minimal
+description: inconsequential decided by someone other than the system owner
+mutations:
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: findings.0.triage.action
+  value: inconsequential
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: findings.0.triage.decided_by
+  value: PER-ISSO
+expect:
+  errors:
+  - ASMT-006
+  messages:
+  - system owners and common control providers decide that a finding is inconsequential, not PER-ISSO

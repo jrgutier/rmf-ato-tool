@@ -27,6 +27,8 @@ tasks:
         (DoDI 8510.01 Table 5 outcome).
       - The selected SCA and the basis for its independence are recorded (interview and journal
         DECISION), ready for the SAP team (A-2).
+      - The CISO has verified each assessor's qualification, and the AO has determined the degree
+        of independence required; sap.yaml carries both (ASMT-007).
     citations:
       - {ref: SP800-37R2, section: "TASK A-1", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-1 Assessor Selection"}
@@ -47,7 +49,7 @@ tasks:
       and operational test events, before the TRR for the first event that supplies assessment
       evidence.
     raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: []}
-    inputs: [ART-SSP, ART-BASELINE, EXT-ASSESSMENT-PROCEDURES]
+    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES]
     outputs: [ART-SAP, ART-AUTHREC]
     writes_facts: []
     depends_on: [A-1, I-2]
@@ -62,7 +64,13 @@ tasks:
         coordinated with developers and developmental and operational testers, and the AO
         approves them after SCA review (DoDI 8510.01 Table 5 outcome).
       - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team
-        and schedule, and the AO approves the plan (SAP-COV-001).
+        and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
+      - Preparation is done before the assessment starts - officials notified, resources allocated,
+        assessors given access, channels, points of contact and the ambiguity mechanism set
+        (ASMT-001).
+      - Each scoped control has procedures selected and tailored from the risk results
+        (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider
+        is reviewed before its controls or results are leveraged (ASMT-004).
       - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live
         network or with live data, and an empty record list when none does (AODM-001, AODM-006).
     citations:
@@ -99,8 +107,8 @@ tasks:
       - Control assessments are conducted per the plan, supported by developer, engineering,
         developmental and operational test events, with reuse of earlier results and automation
         considered (DoDI 8510.01 Table 5 outcome).
-      - sar/results holds a determination for every scoped control (SAR-COV-001) and
-        stig-summary.yaml holds the scan results.
+      - sar/results holds a determination for every scoped control (SAR-COV-001), with a finding
+        for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
     citations:
       - {ref: SP800-37R2, section: "TASK A-3", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 17, anchor: "Task A-3 Control Assessments"}
@@ -122,7 +130,7 @@ tasks:
     purpose: >-
       Prepare the security assessment report with findings and recommendations, including
       test-event results, for the AO and the program.
-    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV], I: [PER-AO, PER-AODR]}
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-PM, PER-CCP, PER-ISSM, PER-PRIV, PER-CISO], I: [PER-AO, PER-AODR]}
     inputs: [ART-SAR]
     outputs: [ART-SAR]
     writes_facts: []
@@ -137,6 +145,8 @@ tasks:
         Table 5 outcome).
       - ART-SAR summarizes the determinations and states each finding with its severity and
         recommendation.
+      - sar-report.yaml states the methodology, the system owner has the results, and the CISO has
+        assessed the quality, capacity, visibility and effectiveness of the assessment (ASMT-008).
     citations:
       - {ref: SP800-37R2, section: "TASK A-4", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-4 Assessment Reports"}
@@ -157,7 +167,7 @@ tasks:
       Take initial remediation actions on deficient controls and have the assessor reassess
       them.
     raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: []}
-    inputs: [ART-SAR, ART-SSP, ART-SAP]
+    inputs: [ART-SAR, ART-SSP, ART-SAP, ART-RA]
     outputs: [ART-SAR, ART-SSP]
     writes_facts: []
     depends_on: [A-4]
@@ -170,6 +180,8 @@ tasks:
         the resulting control implementation changes (DoDI 8510.01 Table 5 outcome).
       - Remediated findings are reassessed and closed in sar/results; the security plan reflects
         the changes.
+      - Every finding is triaged from the risk assessment; only substantive findings go on to the
+        POA&M (ASMT-006).
     citations:
       - {ref: SP800-37R2, section: "TASK A-5", note: "SDLC phase: New – Development/Acquisition, Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task A-5 Remediation Actions"}
@@ -200,7 +212,7 @@ tasks:
       - A POA&M detailing remediation plans for the unacceptable risks in the assessment reports
         is developed (DoDI 8510.01 Table 5 outcome).
       - poam/items.yaml links every open finding (SAR-POAM-001, STIG-002) with the DoD-required
-        fields (POAM-FLD-001).
+        fields (POAM-FLD-001, ASMT-009), in a prioritized order (ASMT-012).
       - The POA&M is available to the cybersecurity strategy annex of the program protection
         plan.
     citations:

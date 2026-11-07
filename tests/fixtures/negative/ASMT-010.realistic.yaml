@@ -1,0 +1,17 @@
+rule: ASMT-010
+bases:
+- minimal
+description: a completion date before the weakness was identified
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.identified
+  value:
+    event: audit
+    reviewing_organization: Inspector General
+    date: '2027-02-01'
+expect:
+  errors:
+  - ASMT-010
+  messages:
+  - before the weakness was identified is no realistic estimate

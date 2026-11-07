@@ -324,14 +324,28 @@ def _rule_fields(probe: Probe, item: Mapping[str, Any]) -> frozenset[str]:
     if spec is None or not expect:
         return frozenset()
     fields = probe.requires_fields
+    source = probe.sources.get(item["target"], "")
     named = {m["path"].rpartition(".")[2] for m in spec.get("mutations") or ()
              if m["op"] in (DELETE_FIELD, SET_FIELD)}
-    named |= {n.value for tests in failing_clauses(probe.sources.get(item["target"], ""), expect)
+    named |= {n.value for tests in failing_clauses(source, expect)
               for test in tests for n in ast.walk(test)
               if isinstance(n, ast.Constant) and isinstance(n.value, str)}
     declared = [m for m in (spec.get("expect") or {}).get("messages") or () if expect in m]
-    return frozenset(f for f in fields
-                     if f in named or any(re.search(rf"\b{f}\b", m) for m in declared))
+    worded = _wording(source)
+    # A declared message names a field the rule reads, or one it put there; the rule's own
+    # wording ("assessors review ...") names none.
+    return frozenset(f for f in fields if f in named or (
+        (f'"{f}"' in source or not re.search(rf"\b{f}\b", worded))
+        and any(re.search(rf"\b{f}\b", m) for m in declared)))
+
+
+def _wording(source: str) -> str:
+    """The rule's own message wording: a word there is the rule's prose, not a field it put in
+    the message, so "assessors review" names no `review`. A bare ``"review"`` is a read.
+    Limit: a rule that reads a field through a variable and reuses the field's word in its
+    prose drops it from this route; only a fixture mutating that field then still names it."""
+    return " ".join(n.value for n in ast.walk(_parsed(source))
+                    if isinstance(n, ast.Constant) and isinstance(n.value, str) and " " in n.value)
 
 
 def _same_sentence(one: Mapping[str, Any], other: Mapping[str, Any],

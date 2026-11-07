@@ -240,6 +240,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
 - Where M-2 found a risk response ineffective, ART-RA records why, and the response goes back to the part of R-3 the failure points to, its implementation for a compliance failure, the whole response, and the risk assessment if needed, for an effectiveness failure.
+- POA&M items and risk responses keep their prioritized order, original dates and honest status; a slipped milestone is recorded as a change (ASMT-010, ASMT-011, ASMT-012).
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).

@@ -1,12 +1,193 @@
-scope: {include: baseline, excluded_controls: []}
+scope:
+  include: baseline
+  excluded_controls: []
 assessment_subjects:
-  - {type: component, include: all}
+- type: component
+  include: all
 team:
-  - {persona: PER-SCA, role: Lead assessor, independent: true}
+- persona: PER-SCA
+  role: Lead assessor
+  independent: true
+  qualification:
+    basis: Current DoD 8140 assessor qualification and two prior RMF assessments.
+    verified_by: PER-CISO
+    verified: '2026-10-29'
 schedule:
   start: '2026-11-02'
   end: '2026-11-13'
   events:
-    - {date: '2026-11-02', description: Kickoff, kind: kickoff}
+  - date: '2026-11-02'
+    description: Kickoff
+    kind: kickoff
 rules_of_engagement: Testing uses the developmental test environment only; no production data.
-sources: [INT-008.A1]
+sources:
+- INT-008.A1
+objectives: Determine whether the controls of the tailored baseline are implemented correctly and produce the desired outcome.
+level_of_effort: Two assessors for two weeks on the developmental test environment.
+approval:
+  reviewed_by: PER-SCA
+  approved_by: PER-AO
+  date: '2026-10-30'
+assessor_independence:
+  required: independent
+  determined_by: PER-AO
+  rationale: A moderate-impact system needs assessors outside the program office.
+preparation:
+  informed_by: PER-PM
+  officials_notified:
+  - persona: PER-AO
+    date: '2026-10-29'
+  - persona: PER-ISSM
+    date: '2026-10-29'
+  - persona: PER-CISO
+    date: '2026-10-29'
+  resources:
+    allocated_by: PER-PM
+    allocated: '2026-10-29'
+    description: Two assessors and the developmental test environment for the schedule.
+  access:
+  - to: system
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  - to: environment
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  - to: documentation
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  - to: records
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  - to: artifacts
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  - to: test-results
+    provided_by: PER-PM
+    provided: '2026-10-30'
+  documentation_provided:
+  - ART-SSP
+  - ART-STIG
+  elements:
+  - responsible_for: Develops and updates the system security plan and its procedures.
+    persona: PER-ISSM
+  channels:
+  - among:
+    - PER-AO
+    - PER-ISSM
+    means: Weekly status note and a shared assessment mailbox.
+  points_of_contact:
+  - persona: PER-ISSM
+    for: Scheduling, evidence requests and access.
+  ambiguity_mechanism:
+    between:
+    - PER-SCA
+    - PER-ISSM
+    means: A daily review of draft observations before they become findings.
+  understanding:
+    summary: The relay supports the mission thread named in the organizational context.
+    sources:
+    - ART-ORG-CONTEXT
+procedures:
+- id: PRC-001
+  controls:
+  - ac-2
+  - au-2
+  - ia-2
+  - sc-7
+  - si-2
+  methods:
+  - examine
+  - interview
+  - test
+  objects:
+  - specifications
+  - mechanisms
+  - activities
+  - individuals
+  rationale: The controls in the risk assessment need all three methods to reach the objectives.
+  depth: focused
+  coverage: focused
+  risk_results: &id001
+  - ART-RA
+  adaptation: none
+  sequence: 1
+- id: PRC-002
+  controls:
+  - cm-6
+  - sc-15
+  methods:
+  - examine
+  - test
+  objects:
+  - specifications
+  - mechanisms
+  rationale: Configuration settings are shown by scan and examination.
+  depth: focused
+  coverage: focused
+  risk_results: *id001
+  adaptation: none
+  sequence: 2
+optimization:
+  reviewed_by: PER-SCA
+  tailoring_guidance: The organization provides none beyond SP 800-53A.
+  notes: Interviews are consolidated by persona; configuration runs last so scans inform it.
+reuse_policy:
+  max_age_days: 365
+  source: ART-ORG-CONTEXT
+reused_results:
+- id: RR-001
+  source: Developmental test team patch verification
+  type: developmental-test
+  assessed: '2026-09-15'
+  criteria: The developmental test plan for flaw remediation.
+  controls:
+  - si-2
+  independence: independent
+  approved_by: PER-AO
+  coordinated_with:
+  - PER-PM
+  - PER-AO
+  determined_by: PER-SCA
+  credibility:
+    verdict: acceptable
+    basis: The test team followed its plan.
+  appropriateness:
+    verdict: acceptable
+    basis: The analysis fits the objective.
+  applicability:
+    verdict: acceptable
+    basis: The tested image is the fielded image.
+  currency:
+    verdict: acceptable
+    basis: Within the policy age.
+  relevance:
+    verdict: acceptable
+    basis: It tests the same patch process.
+  changes_since: None to the patch process since the test.
+  sources:
+  - INT-008.A1
+external_providers:
+- id: EXT-001
+  provider: Enterprise IT Services
+  kind: usg
+  under_usg_authority: true
+  arrangement:
+    type: line-of-business
+    reference: Enterprise identity service agreement.
+  covers:
+  - CMP-IDP
+  - LA-01
+  agreement_review:
+    by: PER-SCA
+    date: '2026-10-29'
+    assurances: The agreement commits the provider to its ATO controls.
+  procedure_adjustment: Inherited sign-in controls are assessed from the provider ATO package and an interview.
+  provider_assessment:
+    scope: A full assessment for the provider ATO.
+    independence: independent
+    procedures_reviewed_by: PER-SCA
+    evidence: received
+    meets_protection_needs: true
+    other_assessments: None in progress.
+  sources:
+  - INT-008.A1

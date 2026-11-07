@@ -1,0 +1,19 @@
+rule: ASMT-005
+bases:
+- minimal
+description: a remediated, closed finding rewritten so it no longer names what the assessor found
+mutations:
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: findings.0.status
+  value: closed
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: findings.0.affected_statements
+  value:
+  - AC-02a.[01]
+expect:
+  errors:
+  - ASMT-005
+  messages:
+  - 'ac-2: no finding names the other than satisfied statement AC-02j.'

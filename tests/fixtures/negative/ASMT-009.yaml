@@ -1,0 +1,26 @@
+rule: ASMT-009
+bases:
+- minimal
+description: a risk level that is not the RAR level
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.risk_level
+  value: moderate
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.priority
+  value: 2
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.2.priority
+  value: 3
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.1.priority
+  value: 1
+expect:
+  errors:
+  - ASMT-009
+  messages:
+  - 'POAM-001: the risk assessment level is moderate, but the RAR says low'

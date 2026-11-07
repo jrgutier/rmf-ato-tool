@@ -89,13 +89,21 @@ def ssp_coverage(ctx: Context) -> list[RunFinding]:
             for cid in baseline_mod.control_ids(run) if cid not in stated]
 
 
+def inconsequential(finding: dict[str, Any]) -> bool:
+    """A finding the system owner decided presents no significant risk stays in the SAR and
+    needs no POA&M item or risk (SP 800-37r2 Task A-5); ASMT-006 judges the decision."""
+    triage = finding.get("triage")
+    return isinstance(triage, dict) and triage.get("action") == "inconsequential"
+
+
 def sar_poam(ctx: Context) -> list[RunFinding]:
     poam = ctx.data(POAM_FILE)
     linked = {i.get("finding_ref") for i in (poam or {}).get("items") or []
               if isinstance(i, dict)} if isinstance(poam, dict) else set()
     out = []
     for _, f in family_records(ctx, SAR_DIR, "findings"):
-        if f.get("status") != "closed" and f.get("id") not in linked:
+        if f.get("status") != "closed" and f.get("id") not in linked \
+                and not inconsequential(f):
             cid = str(f.get("control_id", ""))
             out.append(make("SAR-POAM-001", f"SAR finding {f.get('id')} ({cid}, "
                             f"{f.get('status')}) has no POA&M item", POAM_FILE,

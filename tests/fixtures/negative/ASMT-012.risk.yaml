@@ -1,0 +1,18 @@
+rule: ASMT-012
+bases:
+- minimal
+description: a lower risk response ranked ahead of a higher one
+mutations:
+- op: set_field
+  file: artifacts/data/rar.yaml
+  path: risks.0.priority
+  value: 1
+- op: set_field
+  file: artifacts/data/rar.yaml
+  path: risks.1.priority
+  value: 2
+expect:
+  errors:
+  - ASMT-012
+  messages:
+  - RSK-001 of low risk is prioritized ahead of RSK-002 of moderate risk

@@ -18,6 +18,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: which open SAR and STIG findings produced items, with tokens>>
 
+## Prioritization
+
+<<FILL: how the items were ranked: the organization's POA&M process, the risk assessment and categorization behind the order, with tokens>>
+
 ## Remediation approach and resources
 
 <<FILL: releases, funding and owners behind the items, named by POAM-### ID, with tokens>>

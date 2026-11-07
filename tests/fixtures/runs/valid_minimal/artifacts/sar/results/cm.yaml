@@ -1,17 +1,48 @@
 family: cm
 determinations:
-  - control_id: cm-6
+- control_id: cm-6
+  result: other-than-satisfied
+  methods:
+  - examine
+  - test
+  summary: The appliance image deviates from the RHEL 9 STIG on root SSH login (STG-002, CAT I).
+  finding_refs:
+  - FND-002
+  sources:
+  - INT-009.A2
+  statements:
+  - id: CM-06a.
+    result: satisfied
+  - id: CM-06b.
     result: other-than-satisfied
-    methods: [examine, test]
-    summary: The appliance image deviates from the RHEL 9 STIG on root SSH login (STG-002, CAT I).
-    finding_refs: [FND-002]
-    sources: [INT-009.A2]
+  - id: CM-06c.[01]
+    result: satisfied
+  - id: CM-06c.[02]
+    result: satisfied
+  - id: CM-06d.[01]
+    result: satisfied
+  - id: CM-06d.[02]
+    result: satisfied
 findings:
-  - id: FND-002
-    control_id: cm-6
-    title: Appliance image permits direct root SSH login
-    description: The STIG scan of the appliance found PermitRootLogin enabled, a CAT I deviation from the configuration baseline.
-    status: open
-    severity: high
-    recommendation: Rebuild the image with root SSH login disabled and re-scan.
-    sources: [INT-009.A2]
+- id: FND-002
+  control_id: cm-6
+  title: Appliance image permits direct root SSH login
+  description: The STIG scan of the appliance found PermitRootLogin enabled, a CAT I deviation from the configuration baseline.
+  status: open
+  severity: high
+  recommendation: Rebuild the image with root SSH login disabled and re-scan.
+  sources:
+  - INT-009.A2
+  affected_statements:
+  - CM-06b.
+  state_difference: The expected state is the control as the SSP describes it; the actual state differs as the description says.
+  potential_compromise:
+  - confidentiality
+  - integrity
+  triage:
+    action: poam
+    decided_by: PER-PM
+    significance: high
+    risk_basis:
+    - ART-RA
+    rationale: Needs a release, so it goes to the POA&M.
