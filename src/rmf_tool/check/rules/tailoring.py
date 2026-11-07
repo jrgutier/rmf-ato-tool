@@ -432,9 +432,12 @@ def _capabilities(ctx: Context) -> list[dict[str, Any]] | None:
 def capabilities(ctx: Context) -> list[RunFinding]:
     """A defined capability documents the mapping of the catalog controls that support it
     (SP 800-53A 3.5, SP 800-53B 2.5)."""
+    caps = _capabilities(ctx)
+    if not caps:  # read the catalog only when there is a mapping to judge
+        return []
     known = catalog.load(ctx.run.repo).controls
     out: list[RunFinding] = []
-    for cap in _capabilities(ctx) or []:
+    for cap in caps:
         foreign = sorted(c for c in cap.get("controls") or [] if c not in known)
         if foreign:
             out.append(make("TLR-008", f"the capability {cap.get('id')} maps "
