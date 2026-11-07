@@ -572,3 +572,22 @@ def test_a_single_course_of_action_stands_when_evaluated_adequate(minimal_run):
     run = open_run(minimal_run, REPO_ROOT)
     assert not [f for f in engine.evaluate(run).findings if f.rule == "RAR-003"]
 
+
+
+def test_site_guidance_may_name_the_granting_systems_package(tmp_path):
+    """DoD reciprocity memo 4.2.2: sites connect in the configuration the Granting AO
+    authorized, which lives in the package the receiving organization received."""
+    import yaml
+    from _mutations import apply
+    from test_check_rules import base_copy
+
+    run_dir = base_copy("minimal", tmp_path / "run")
+    spec = yaml.safe_load((REPO_ROOT / "tests/fixtures/negative/AODM-012.configuration.yaml")
+                          .read_text(encoding="utf-8"))
+    for mutation in spec["mutations"]:
+        apply(run_dir, mutation)
+    def package(d):
+        atu = next(r for r in d["records"] if r.get("site_guidance"))
+        atu["site_guidance"]["configuration"] = atu["provider"]["package"]
+    edit_yaml(run_dir / FILE, package)
+    assert "is not an artifact of this run" not in _check(run_dir, rules.atu_connection)

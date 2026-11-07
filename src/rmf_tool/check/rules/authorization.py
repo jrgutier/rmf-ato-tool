@@ -709,8 +709,14 @@ def atu_connection(ctx: Context) -> list[RunFinding]:
                 err(r, f"{r['decision']} records site_guidance: the notice to subordinate sites "
                     "of the authorized configuration")
                 continue
+            # The configuration is the Granting system's: an artifact of this run, a product
+            # file, or the provider's package the receiving organization holds.
             configuration = guidance.get("configuration")
-            if not isinstance(configuration, str) or configuration not in artifacts:
+            provider = r.get("provider")
+            package = provider.get("package") if isinstance(provider, dict) else None
+            if not isinstance(configuration, str) or not (
+                    configuration in artifacts or configuration.startswith("product/")
+                    or configuration == package):
                 err(r, f"the authorized configuration {configuration} given to "
                     "subordinate sites is not an artifact of this run")
             notified = _day(guidance.get("date"))
