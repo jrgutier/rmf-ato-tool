@@ -44,6 +44,7 @@ AO_ACTIONS = ("ongoing-authorization", "reauthorization")
 AO_ACCEPTS = frozenset({"organizational-operations", "organizational-assets", "individuals",
                         "other-organizations", "the-nation"})
 Record = dict[str, Any]
+NSS_DESIGNATION_FILE = "artifacts/data/nss-assessments.yaml"  # P-16: nss true or false
 
 
 def _kinds(ctx: Context) -> dict[str, dict[str, Any]]:
@@ -456,6 +457,8 @@ def risk_executive(ctx: Context) -> list[RunFinding]:
 def issues(ctx: Context) -> list[RunFinding]:
     out, err = _rule(ctx, "AODM-011")
     items = ledger.section(ctx.run, "issues")
+    designation = ctx.data(NSS_DESIGNATION_FILE)
+    nss = isinstance(designation, dict) and designation.get("nss") is True
     for issue in items:
         kind, forum = issue.get("kind"), issue.get("forum")
         if kind == "mission-area" and forum != "PAO":
@@ -472,6 +475,9 @@ def issues(ctx: Context) -> list[RunFinding]:
                 f"of the DoD CISO, not {forum}")
         if kind in ("dsawg-appeal", "isrmc-direction") and forum != "ISRMC":
             err(issue, f"a {kind} goes to the DoD ISRMC, not {forum}")
+        if kind == "interagency-risk" and nss and forum != "ISRMC":
+            err(issue, "an NSS cybersecurity risk issue unresolved between departments and "
+                f"agencies is referred to the governing departmental ISRMC, not {forum}")
         resolved, raised = _day(issue.get("resolved")), _day(issue.get("raised"))
         if issue.get("status") == "resolved" and (
                 resolved is None or not issue.get("resolution")):

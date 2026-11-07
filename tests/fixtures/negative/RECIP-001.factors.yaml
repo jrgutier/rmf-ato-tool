@@ -1,0 +1,14 @@
+rule: RECIP-001
+bases:
+- minimal
+description: a review that considers no risk factor
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.factors
+  value: []
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the review of the provider''s authorization package considers no risk factor'
