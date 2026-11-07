@@ -1,0 +1,11 @@
+rule: METR-001
+bases: [minimal]
+description: a metric reviewed by an official it is not reported to
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: metrics.0.review.by
+  value: [PER-SCA]
+expect:
+  errors: [METR-001]
+  messages: ['metric MET-01 is reviewed by PER-SCA, who is not among the officials it is reported to']

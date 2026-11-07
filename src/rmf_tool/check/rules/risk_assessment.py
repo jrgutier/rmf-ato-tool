@@ -290,3 +290,55 @@ def rar_residual(ctx: Context) -> list[RunFinding]:
             err(f"controls_by_level gives {declared.get(level)} for {level}; the risks identify "
                 f"{len(found)} controls at that level")
     return out
+
+
+# --- RARC-001 ---------------------------------------------------------------------------
+RISK_FACTORS = ("threat", "vulnerability", "impact", "likelihood", "predisposing-condition")
+
+
+def report_content(ctx: Context) -> list[RunFinding]:
+    """What a risk assessment report states beyond the threat model (SP 800-30 App. K, DoDI
+    8500.01 3.f)."""
+    data = _ra(ctx)
+    if data is None:
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("RARC-001", message, RA_FILE))
+
+    if "date" not in data:
+        err("ra.yaml has no date: the risk assessment report lists the date of the risk "
+            "assessment")
+    if "team" not in data:
+        err("ra.yaml has no team: the risk assessment report lists the team or individuals "
+            "conducting it, with contact information")
+    if "rationales" not in data:
+        err("ra.yaml has no rationales: the risk assessment report lists the rationale for each "
+            "risk-related decision, or an empty list")
+    if "tailoring" not in data:
+        err("ra.yaml has no tailoring: the risk assessment report lists any tailoring of its "
+            "robustness, or an empty list")
+    purpose = data.get("purpose") if isinstance(data.get("purpose"), dict) else {}
+    update = purpose.get("update") if isinstance(purpose.get("update"), dict) else {}
+    if purpose.get("kind") == "subsequent":
+        if not update.get("circumstances"):
+            err("ra.yaml is a subsequent risk assessment with no update.circumstances: it states "
+                "the circumstances that prompted it")
+        if not update.get("previous"):
+            err("ra.yaml is a subsequent risk assessment with no update.previous: it states a "
+                "reference to the previous risk assessment report")
+    model = data.get("risk_model") if isinstance(data.get("risk_model"), dict) else {}
+    factors = model.get("factors") if isinstance(model.get("factors"), list) else []
+    unused = [f for f in RISK_FACTORS if f not in factors]
+    if unused:
+        err(f"the risk model leaves out {', '.join(unused)}: all of the risk factors of SP "
+            "800-30 are used across the DoD, so risk information is reciprocal")
+    tailored = _list(data, "tailoring")
+    communication = data.get("communication") if isinstance(data.get("communication"),
+                                                            dict) else {}
+    if tailored and not set(_refs(communication, "recipients")) & set(AUTHORIZING):
+        err("ra.yaml tailors the robustness of the assessment but communicates the results to "
+            "no AO or AODR: tailoring is explained so AOs understand to what degree they can "
+            "rely on the results")
+    return out

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 225 rules, 36 repo-scope and 189 run-scope. Authoritative;
+# Rule registry (plan §6.5): 228 rules, 36 repo-scope and 192 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1271,6 +1271,38 @@ rules:
       - REQ-DODI5000.90-0005
       - REQ-DODI5000.90-0082
       - REQ-SP800-137-0164
+  - id: METR-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the strategy lists no metrics, a metric leaves out its objective, controls, baseline, threshold or review procedure, or is reviewed by an official it is not reported to
+    fixture: tests/fixtures/negative/METR-001.yaml
+    hint: Give each conmon.yaml metric objective, controls, baseline, threshold and review {by, procedure}; its reviewers are officials in reported_to.
+    enforces:
+      - REQ-DODI5000.87-0122
+      - REQ-SP800-137-0077
+      - REQ-SP800-137-0138
+      - REQ-SP800-137A-0052
+      - REQ-SP800-137A-0070
+      - REQ-SP800-137A-0093
+      - REQ-SP800-18R2-0194
+  - id: METR-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a metric reads a control outside the baseline, or one monitored less often than the metric is refreshed
+    fixture: tests/fixtures/negative/METR-002.yaml
+    hint: Name baseline controls in each metric's controls; monitor each at least as often as the metric's frequency, by its family frequency, an override or a tool.
+    enforces:
+      - REQ-SP800-137-0140
+      - REQ-SP800-137-0141
+      - REQ-SP800-137A-0075
   - id: ISCM-002
     scope: run
     severity: E
@@ -1324,6 +1356,7 @@ rules:
       - REQ-SP800-37R2-0119
       - REQ-SP800-37R2-0617
       - REQ-SP800-53AR5-0315
+      - REQ-SP800-61R3-0131
   - id: ISCM-006
     scope: run
     severity: E
@@ -1690,6 +1723,23 @@ rules:
       - REQ-SP800-30R1-0287
       - REQ-SP800-30R1-0289
       - REQ-SP800-30R1-0290
+  - id: RARC-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the risk assessment report leaves out its date, team, decision rationales or tailoring, a subsequent assessment its circumstances or previous report, the risk model an SP 800-30 risk factor, or a tailored assessment reaches no AO or AODR
+    fixture: tests/fixtures/negative/RARC-001.yaml
+    hint: ra.yaml states date, team, rationales and tailoring (empty lists are answers), purpose.update for a subsequent assessment, all five risk factors, and communicates a tailored assessment to PER-AO or PER-AODR.
+    enforces:
+      - REQ-DODI8500.01-0221
+      - REQ-SP800-30R1-0253
+      - REQ-SP800-30R1-0258
+      - REQ-SP800-30R1-0267
+      - REQ-SP800-30R1-0268
+      - REQ-SP800-30R1-0277
   - id: SRA-002
     scope: run
     severity: E
