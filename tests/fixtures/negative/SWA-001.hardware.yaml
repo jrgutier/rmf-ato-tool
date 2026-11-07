@@ -1,0 +1,18 @@
+rule: SWA-001
+bases:
+- minimal
+description: a hardware product that says it holds no covered software without saying why
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.product_kind
+  value: hardware
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: covered_software
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - the hardware product says it includes no covered software and does not say why it holds no firmware or other software

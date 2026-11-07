@@ -57,3 +57,41 @@ def test_malformed_data_is_reported_not_raised(rule, tmp_path):
 def test_the_base_run_holds(rule, tmp_path):
     run = open_run(copy_run(VALID_MINIMAL, tmp_path / "run"), REPO_ROOT)
     assert RULES[rule](Context(run)) == []
+
+
+def _messages(run_dir, rule):
+    return [f.finding.message for f in RULES[rule](Context(open_run(run_dir, REPO_ROOT)))]
+
+
+def test_a_hardware_product_with_a_reason_holds_no_covered_software(tmp_path):
+    """A hardware product may hold no firmware or software; said so with a reason, DoWI 8430.01
+    does not bind it, and its DP-SW-* statements may then be marked not applicable."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "facts.yaml",
+              lambda d: d["acquisition"].update(product_kind="hardware"))
+    edit_yaml(run_dir / "artifacts/data/software.yaml", lambda d: d.update(
+        covered_software=False, covered_software_reason="A passive patch panel: no firmware."))
+
+    def not_applicable(data):
+        for record in data["design_policy"]:
+            if record["statement"].startswith("DP-SW-"):
+                record.update(applies=False, reason="No covered software.", requirements=[])
+        data["requirements"][5]["policy"] = []
+        data["requirements"][5]["needs"] = ["NEED-01"]
+    edit_yaml(run_dir / "artifacts/data/requirements.yaml", not_applicable)
+    assert _messages(run_dir, "SWA-001") == []
+    assert _messages(run_dir, "REQS-002") == []
+
+
+def test_wholly_acquired_software_needs_no_pipeline_but_still_an_sbom(tmp_path):
+    """3.5.c.(1) binds producing software; 3.5.b's SBOM binds all covered software."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def acquired(data):
+        data["pipeline"] = {"produced": False, "reason": "A COTS relay bought as a service."}
+        data["evidence"]["sbom"]["custom_generated"] = False
+    edit_yaml(run_dir / "artifacts/data/software.yaml", acquired)
+    assert _messages(run_dir, "SWA-001") == []
+    edit_yaml(run_dir / "artifacts/data/software.yaml",
+              lambda d: d["evidence"]["sbom"].update(third_party_included=False))
+    assert _messages(run_dir, "SWA-001") == ["the SBOM leaves out third-party components"]

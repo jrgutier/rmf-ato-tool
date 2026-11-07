@@ -14,24 +14,28 @@
       "title": "Whether the system includes software the DoW develops, modifies or deploys (covered software)",
       "type": "boolean"
     },
+    "covered_software_reason": {
+      "title": "Why a hardware product holds no covered software: no firmware, operating system, application or service",
+      "type": "string",
+      "minLength": 1
+    },
     "pipeline": {
       "title": "The CI/CD pipeline and build process the software is produced by, treated as critical infrastructure",
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "automated",
-        "location",
-        "authorization",
-        "monitoring",
-        "protection",
-        "build",
-        "provenance",
-        "supply_chain_links",
-        "production_deployment",
-        "practices",
-        "development_tools"
+        "produced"
       ],
       "properties": {
+        "produced": {
+          "title": "Whether the covered software is produced (developed or built) for the DoW; false when it is wholly acquired",
+          "type": "boolean"
+        },
+        "reason": {
+          "title": "How wholly acquired covered software is obtained, where it is not produced",
+          "type": "string",
+          "minLength": 1
+        },
         "automated": {
           "title": "Whether a secure, automated CI/CD pipeline integrates, tests, secures and delivers the software",
           "type": "boolean"
@@ -153,7 +157,47 @@
             "REQ-SP800-160V1R1-0193"
           ]
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "produced": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "automated",
+              "location",
+              "authorization",
+              "monitoring",
+              "protection",
+              "build",
+              "provenance",
+              "supply_chain_links",
+              "production_deployment",
+              "practices",
+              "development_tools"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "produced": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
     },
     "ai_development": {
       "title": "Use of AI to write, modify or test the software",

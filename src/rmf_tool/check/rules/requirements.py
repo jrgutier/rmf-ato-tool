@@ -14,11 +14,13 @@ from typing import Any
 
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
+from rmf_tool.check.rules.software import has_covered_software
 from rmf_tool.run import scope
 
 REQUIREMENTS_FILE = "artifacts/data/requirements.yaml"
 BOUNDARY_FILE = "artifacts/data/boundary.yaml"
 DEFINE, ALLOCATE = "P-15", "P-17"
+SOFTWARE_DP = "DP-SW-"  # DoWI 8430.01: conditional on covered software, and only on that
 # key: (register entry and gist, conditional). Conditional statements hold only where their own
 # words say: "whenever possible", "used in support of", "where required by DISA STIGs", "as
 # appropriate", "to the extent practical", or where the system has what they speak of
@@ -167,11 +169,14 @@ def _allocation(ctx: Context, requirements: list[dict[str, Any]]) -> list[RunFin
 
 def design_policy(ctx: Context) -> list[RunFinding]:
     """REQS-002: every design policy statement is addressed once, an unconditional one
-    applies, and one that applies is carried by a requirement the matrix holds."""
+    applies, a DoWI 8430.01 one applies wherever the system has covered software (SWA-001's
+    reading of software.yaml and the product kind), and one that applies is carried by a
+    requirement the matrix holds."""
     data = _data(ctx, DEFINE)
     if data is None:
         return []
     held = {_key(r.get("id")) for r in _records(data, "requirements")}
+    software = has_covered_software(ctx)
     records = _records(data, "design_policy")
     addressed = {_key(r.get("statement")) for r in records}
     traces = {(_key(r.get("id")), _key(k)) for r in _records(data, "requirements")
@@ -203,6 +208,9 @@ def design_policy(ctx: Context) -> list[RunFinding]:
         if record.get("applies") is not True and not DESIGN_POLICY[key][1]:
             out.append(_finding("REQS-002", f"{key} binds every system, so it cannot be "
                                 "marked not applicable"))
+        elif record.get("applies") is not True and software and key.startswith(SOFTWARE_DP):
+            out.append(_finding("REQS-002", f"{key} binds a system with covered software, so it "
+                                "cannot be marked not applicable"))
         elif record.get("applies") is not True and not record.get("reason"):
             out.append(_finding("REQS-002", f"{key} is marked not applicable without saying why "
                                 "its condition does not hold"))

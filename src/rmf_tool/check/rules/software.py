@@ -18,9 +18,26 @@ from rmf_tool.run import scope
 SOFTWARE_FILE = "artifacts/data/software.yaml"
 RA_FILE = "artifacts/data/ra.yaml"
 PLAN, ASSESS_RISK = "S-4", "P-14"
-# Product kinds that are or carry software, so DoWI 8430.01 reaches them (3.5.a.(1)).
-SOFTWARE_KINDS = ("software", "software-enabled-hardware")
+# Product kinds that are or carry covered software: DoWI 8430.01's glossary counts any software,
+# firmware, operating system, application or cloud-based service developed, acquired, integrated
+# or operated for the DoW. A hardware product may still hold firmware, so it must say why not.
+SOFTWARE_KINDS = ("software", "software-enabled-hardware", "service")
+HARDWARE = "hardware"
 SECTIONS = ("pipeline", "ai_development", "evidence", "test_and_evaluation")
+
+
+def product_kind(ctx: Context) -> Any:
+    acquisition = facts_mod.get(ctx.facts, "acquisition")
+    return acquisition.get("product_kind") if isinstance(acquisition, dict) else None
+
+
+def has_covered_software(ctx: Context) -> bool:
+    """Whether DoWI 8430.01 binds the system: its software record says so, or its product kind
+    is or carries software."""
+    data = ctx.data(SOFTWARE_FILE)
+    declared = isinstance(data, dict) and data.get("covered_software") is True
+    return declared or product_kind(ctx) in SOFTWARE_KINDS
+
 def _list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
@@ -47,12 +64,15 @@ def software(ctx: Context) -> list[RunFinding]:
     data = ctx.data(SOFTWARE_FILE)
     if not isinstance(data, dict):
         return []
-    acquisition = facts_mod.get(ctx.facts, "acquisition")
-    kind = acquisition.get("product_kind") if isinstance(acquisition, dict) else None
+    kind = product_kind(ctx)
     if data.get("covered_software") is not True:
         if kind in SOFTWARE_KINDS:
             return [_finding("SWA-001", f"the system's product kind is {kind}, and software.yaml "
                              "says it includes no covered software", PLAN, SOFTWARE_FILE)]
+        if kind == HARDWARE and not data.get("covered_software_reason"):
+            return [_finding("SWA-001", "the hardware product says it includes no covered "
+                             "software and does not say why it holds no firmware or other "
+                             "software", PLAN, SOFTWARE_FILE)]
         return []
 
     def err(message: str) -> RunFinding:
@@ -61,15 +81,17 @@ def software(ctx: Context) -> list[RunFinding]:
     out = [err(f"the system includes covered software and software.yaml has no {key}")
            for key in SECTIONS if not isinstance(data.get(key), dict)]
     pipeline = _dict(data.get("pipeline"))
-    if "pipeline" in data and pipeline.get("automated") is not True:
+    produced = pipeline.get("produced") is not False  # 3.5.c.(1) binds producing software
+    if "pipeline" in data and produced and pipeline.get("automated") is not True:
         out.append(err("the covered software is not produced by a secure, automated CI/CD "
                        "pipeline"))
-    if "pipeline" in data and _dict(pipeline.get("provenance")).get("signed") is not True:
+    if "pipeline" in data and produced \
+            and _dict(pipeline.get("provenance")).get("signed") is not True:
         out.append(err("the build provenance attestations are not cryptographically signed, so "
                        "they give no verifiable chain of custody"))
     sbom = _dict(_dict(data.get("evidence")).get("sbom"))
     if "evidence" in data:  # 2.8.k, 3.5.b and 3.5.i.(4): what the SBOM holds
-        if sbom.get("custom_generated") is not True:
+        if produced and sbom.get("custom_generated") is not True:
             out.append(err("an SBOM is not generated and maintained for the custom software"))
         if sbom.get("cots_captured") is not True:
             out.append(err("SBOMs are not captured for the COTS software"))
