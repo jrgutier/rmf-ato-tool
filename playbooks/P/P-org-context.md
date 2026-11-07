@@ -53,7 +53,8 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    writes it with `roles`, `manpower_structure`, `open_functions` and `code_signing`; P-2 adds
    `program`, `policies`, `resources`, `risk_frame`, `governance`,
    `risk_assessment_guidance`, `risk_response` and `external_entities`; P-5 adds
-   `common_controls`; P-7 adds `iscm`; P-3 adds `posture_reviews` once the system operates.
+   `common_controls`; P-7 adds `iscm`; P-3 adds `posture_reviews` once the system operates;
+   P-4 adds `developed_overlays` for an overlay the organization develops itself.
    Each task rewrites the file whole (INV-8). OCTX-001 to OCTX-013 judge it; a section is
    demanded only while its task is in scope. Why: the Markdown cannot fail a check, the
    record can.
@@ -424,7 +425,18 @@ Purpose: Establish and publish organizationally-tailored control baselines and/o
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-4` to `touched_by` and append
    `## Organizationally tailored baselines and profiles` with each baseline or overlay,
    its scope and its approval, or a traced sentence that none apply. S-1 and S-2 read this
-   section.
+   section. For an overlay the organization develops itself, also record it in
+   `artifacts/data/org-context.yaml` under `developed_overlays` (schema `org-context`), in
+   the shape of the CNSSI 1253E Attachment 1 template: `id` (`ORG-OVL-...`), `title`,
+   `concerns`, `baseline` (`independent`, or `dependent` with the baseline), the
+   `justification` and rationale for the overlay with each `risk_decisions` record made in
+   developing it, the `characteristics` and `assumptions` that justify it, the
+   `applicability` questions, and one `controls` record per control it selects or justifies
+   not selecting (`disposition`, `justification` tied to the overlay's risk, and any
+   `extension`, `guidance`, `parameter_values` and `references`). Add `sp800_53_version`,
+   `documents`, `update_events`, `tailoring_considerations` and `definitions` where the
+   overlay has them. Why: SP 800-53B Appendix C asks an overlay to justify itself, risk-based
+   decisions included, and users of an overlay need to know why each control is specified.
    Rewrite `artifacts/data/scrm-org.yaml` whole with a `response_framework` entry at level-1
    and at level-2: threat source, event, vulnerability and outcome, likelihood, impact and
    exposure, mitigations with cost and effectiveness, and changes to common control

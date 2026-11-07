@@ -425,8 +425,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
-| Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
+| Informed | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -453,6 +453,7 @@ Writes to `facts.yaml`: `acquisition`.
 
 - Posture reports available (M-5); the monitoring strategy sets the ongoing-authorization triggers.
 - For AD-CATO, an ATO is in place and the system shows robust continuous monitoring of its RMF controls, active cyber defense and use of an approved DevSecOps reference design.
+- For AD-CATO, the program is in one of the use cases of the DoD CIO cATO Implementation Guide (Appendix A), and its current ATO carries no High or Very High unmitigated finding (CATO-002).
 
 **Exit criteria**
 
@@ -462,6 +463,7 @@ Writes to `facts.yaml`: `acquisition`.
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 - A change of AO is an `ao-change` record whose ao_transfer states what the new official reviewed, finds and does about it (AOCHG-001).
 - An ISCM program assessment report the determination reads is in iscm_assessments of the ledger (MISCM-001).
+- Where a cATO is sought, artifacts/data/cato.yaml records the cATO assessment (the team the AO approves, the plan coordinated with the PMO and AO, Table 2 of the cATO Implementation Guide scored, the recommendation reviewed with the PMO, AO and CISO and briefed with its conditions), the DevSecOps platform and its control gates and guardrails, monitoring and active cyber defense, the strategy's triggers, metrics, people, training, testing and feedback, risk tolerances, the activities mapping and the SBOM (CATO-001 to CATO-014).
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) (see [authorization decisions](../../MANUAL.md#decisions)).
 
@@ -483,6 +485,9 @@ Writes to `facts.yaml`: `acquisition`.
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 13, "While the AO may authorize a continuous ATO (cATO)"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), p. 172, "When there is a change in authorizing officials"
 - [SP800-137A](../../MANUAL.md#ref-sp800-137a), section 3.1
+- [DODCIO-CATO-IG](../../MANUAL.md#ref-dodcio-cato-ig), p. 9, "Identify the team to perform the process assessment"
+- [DODCIO-CATO-IG](../../MANUAL.md#ref-dodcio-cato-ig), p. 19, "A threshold requirement"
+- [DODCIO-CATO-EVAL](../../MANUAL.md#ref-dodcio-cato-eval), p. 10, "The following list of activities associated with the Continuous Authorization to Operate"
 
 **Playbook:** [playbooks/M/M-6.md](../../playbooks/M/M-6.md)
 

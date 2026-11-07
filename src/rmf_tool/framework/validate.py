@@ -488,6 +488,7 @@ def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
 
 
 TAILORING_INPUTS = "tailoring-inputs.yaml"  # what S-2 tests a system against (TLR-003, TLR-005)
+OVERLAY_SPECS = "overlay-specs.yaml"  # overlay Section 6 per control (OVS-001 to OVS-003)
 
 
 def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Entity]]:
@@ -506,9 +507,17 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
         if data is None:
             continue
         inputs = path.name == TAILORING_INPUTS
-        errors = schema_errors(repo, "tailoring-inputs" if inputs else "baselines", data)
+        specs = path.name == OVERLAY_SPECS
+        name = "tailoring-inputs" if inputs else "overlay-specs" if specs else "baselines"
+        errors = schema_errors(repo, name, data)
         findings += [Finding("FW-SCHEMA-001", "E", e, shown) for e in errors]
         if errors:
+            continue
+        if specs:
+            cited += [Entity("baselines", {"id": f"{o['overlay']} {s['control']}",
+                                           "citations": [s["citation"]]},
+                             Location(shown, s.lc.line + 1))
+                      for o in data["overlays"] for s in o["specs"]]
             continue
         if inputs:
             cited += [Entity("baselines", {"id": f"{path.stem} {i['id']}",

@@ -1,0 +1,16 @@
+rule: CATO-009
+bases:
+- minimal
+description: a team member with no training record
+mutations:
+- op: delete_list_item
+  file: artifacts/data/cato.yaml
+  path: training.records
+  where:
+    member: Pipeline engineer
+expect:
+  errors:
+  - CATO-009
+  messages:
+  - 'Pipeline engineer: no verification of appropriate training for this member of the team'
+  - no member of the dsop team has a training record

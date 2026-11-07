@@ -1,0 +1,16 @@
+rule: CATO-014
+bases:
+- minimal
+description: no SBOM frequency
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: sbom.frequency
+  value: ''
+expect:
+  errors:
+  - CATO-014
+  also:
+  - RUN-FM-001
+  messages:
+  - the SBOM format is specified but not how often it is generated

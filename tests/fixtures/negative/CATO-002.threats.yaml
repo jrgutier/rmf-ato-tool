@@ -1,0 +1,16 @@
+rule: CATO-002
+bases:
+- minimal
+description: triggers on external threats only
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: strategy.triggers.1.threat
+  value: external
+expect:
+  errors:
+  - CATO-002
+  also:
+  - CATO-008
+  messages:
+  - the automated triggers and approved thresholds include no insider threats

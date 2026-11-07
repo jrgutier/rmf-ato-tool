@@ -531,7 +531,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
 - Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.
 
-## L-0076 · 2026-11-07 · run: phase-11 · tags: framework, runs
+## L-0076 · 2026-11-07 · run: phase-11 · tags: references, extraction
+- Symptom: the first transcription of the Privacy Overlays' Section 6 gave AC-16 no guidance and AC-16(3) one, against Table 2's marks, and ran the rest of AC-16's guidance into its justification.
+- Root cause: the PDF prints AC-16's Guidance as a two-column box; the text extraction made it a table and placed it after the next heading, so reading Section 6 in line order files it under the wrong control.
+- Fix: rmf_tool.overlay_specs checks every specification against its summary-table marks (G, V, R, E per control set), and a named repair puts the box back under AC-16, failing when the text no longer matches it.
+- Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
+- Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
+
+## L-0077 · 2026-11-07 · run: phase-11 · tags: framework, runs
 - Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
 - Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
 - Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.

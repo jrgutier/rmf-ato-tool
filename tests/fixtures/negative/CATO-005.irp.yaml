@@ -1,0 +1,14 @@
+rule: CATO-005
+bases:
+- minimal
+description: control gate processes described outside incident response
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.control_gates.0.described_in
+  value: ART-SSP
+expect:
+  errors:
+  - CATO-005
+  messages:
+  - 'CG-01: control gate processes are described in the incident response management material, not ART-SSP'

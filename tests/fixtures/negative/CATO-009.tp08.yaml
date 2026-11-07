@@ -1,0 +1,31 @@
+rule: CATO-009
+bases:
+- minimal
+description: no one trained in threat actor analysis
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: assessment.scores.37.result
+  value: met
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: training.records.0.subjects
+  value:
+  - reference-design
+  - security-automation-tools
+  - gates-and-tolerances
+  - finding-adjudication
+  - root-cause-analysis
+  - feedback-loops
+  - poam-and-dashboard
+  - mitigation
+  - secure-code
+  - mitigation-effectiveness
+  - software-factory
+  - continuous-monitoring
+  - risk-management
+expect:
+  errors:
+  - CATO-009
+  messages:
+  - the team is not trained in threat-actor-analysis

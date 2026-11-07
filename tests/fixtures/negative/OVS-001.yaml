@@ -1,0 +1,47 @@
+rule: OVS-001
+description: a control the Privacy Overlay selects is removed with law_policy naming only one of the authorities the overlay cites for it
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253F-ATT6-PRIVACY-ACCT
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: "assurance:"
+  new: "  - {id: AS-PRV-1, holds: true, rationale: Users complete privacy training before their accounts are enabled., sources: [INT-028.A2]}\nassurance:"
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: "  - control_id: cp-3.1"
+  new: |2-
+      - control_id: ac-3
+        action: remove
+        basis: scoping
+        scoping: {consideration: technology}
+        law_policy:
+          reviewed: [legislation, regulation, policy, omb-policy]
+          requires_control: false
+          authorities: ["5 U.S.C. 552a(b), (e)(9)-(10)"]
+          sources: [INT-028.A3]
+        rationale: The relay holds no records that access enforcement would protect.
+        sources: [INT-028.A3]
+      - control_id: cp-3.1
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.parameters
+  value:
+    ac-02_odp.04: annual privacy training
+    ac-02_odp.05: account managers and the ISSO
+    ac-02_odp.06: 24 hours
+    ac-02_odp.07: 24 hours
+    ac-02_odp.08: 24 hours
+    ac-02_odp.09: a demonstrated need for the PII the duties require
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - OVS-001
+  messages:
+  - ac-3 is removed, and law_policy.authorities does not name EO 14028, which the Privacy Overlay references cite for it

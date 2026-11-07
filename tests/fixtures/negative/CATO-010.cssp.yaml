@@ -1,0 +1,16 @@
+rule: CATO-010
+bases:
+- minimal
+description: CSSP monitoring not used for forensics
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: process.feedback.cssp_monitoring
+  value:
+  - non-approved-behavior
+  - threat-landscape
+expect:
+  errors:
+  - CATO-010
+  messages:
+  - the DevSecOps team does not leverage CSSP monitoring for incident-forensics
