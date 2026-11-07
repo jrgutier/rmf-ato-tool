@@ -386,7 +386,9 @@ requirements:
     locator: "ENCLOSURE 2.g"
     context: "RESPONSIBILITIES"
     statement: "g. Oversees process and approves requests for the interconnection of mission partners’ systems to the DODIN through a point-to-point connection or a demilitarized zone (DMZ)."
-    status: "candidate"
+    status: "covered"
+    reason: "The DoD CIO's side: CONN-001 fails a mission partner interconnection whose request has no DoD CIO approval; CONN-003 holds the DMZ or point-to-point interconnection."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.partner-cio.yaml", "expect": "the mission partner interconnection request has no DoD CIO approval", "claim": "constraint", "asserts": "The DoD CIO approves requests for the interconnection of mission partners' systems to the DODIN, and an interconnection request with no DoD CIO approval fails", "holds_when": "P-16 is in the run's scope"}, {"kind": "rule", "target": "CONN-003", "fixture": "tests/fixtures/negative/CONN-003.yaml", "expect": "uses neither a mission partner DMZ nor a point-to-point interconnection", "claim": "constraint", "asserts": "Mission partner interconnection to the DODIN is through a point-to-point connection or a DMZ, and another interconnection fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0049"
     citation: {"ref": "DODI8530.01", "page": 12, "anchor": "Approves the authorized interconnection points to the DODIN for either a mission"}
@@ -394,7 +396,9 @@ requirements:
     locator: "ENCLOSURE 2.g.(1)"
     context: "RESPONSIBILITIES"
     statement: "(1) Approves the authorized interconnection points to the DODIN for either a mission partner DMZ interconnection (e.g., Federal (FED) DMZ or Releasable (REL) DMZ) or a point-to-point interconnection."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-003 fails a mission partner interconnection that uses neither a mission partner DMZ nor a point-to-point interconnection; CONN-001 needs the DoD CIO's approval of it."
+    evidence: [{"kind": "rule", "target": "CONN-003", "fixture": "tests/fixtures/negative/CONN-003.yaml", "expect": "uses neither a mission partner DMZ nor a point-to-point interconnection", "claim": "constraint", "asserts": "The authorized interconnection points to the DODIN are a mission partner DMZ or a point-to-point interconnection, and another interconnection fails", "holds_when": "P-16 is in the run's scope"}, {"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.partner-cio.yaml", "expect": "the mission partner interconnection request has no DoD CIO approval", "claim": "constraint", "asserts": "The DoD CIO approves the interconnection of a mission partner to the DODIN, and an interconnection with no DoD CIO approval fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0050"
     citation: {"ref": "DODI8530.01", "page": 12, "anchor": "In coordination with DISA, maintains a list of validated non-DoD Federal mission"}
@@ -479,7 +483,9 @@ requirements:
     locator: "ENCLOSURE 2.m"
     context: "RESPONSIBILITIES"
     statement: "m. Reviews the cybersecurity posture of systems authorized to operate outside the DODIN. Such systems will be reviewed, before granting a DODIN waiver to operate outside the DODIN, to ensure that there is an appropriate level of cybersecurity to protect personnel, information, and equipment within the system operating boundary."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-004 fails a DODIN waiver granted before the review of the system's cybersecurity posture, or resting on no DoD CIO review."
+    evidence: [{"kind": "rule", "target": "CONN-004", "fixture": "tests/fixtures/negative/CONN-004.waiver.yaml", "expect": "does not precede the DODIN waiver granted", "claim": "constraint", "asserts": "Systems outside the DODIN are reviewed before granting a DODIN waiver, and a cybersecurity posture reviewed on a date that does not precede the waiver fails", "holds_when": "P-16 is in the run's scope"}, {"kind": "rule", "target": "CONN-004", "fixture": "tests/fixtures/negative/CONN-004.reviewer.yaml", "expect": "names no DoD CIO as having reviewed the system's cybersecurity posture", "claim": "constraint", "asserts": "The DoD CIO reviews the cybersecurity posture before the DODIN waiver to operate outside the DODIN, and a waiver that names no DoD CIO as having reviewed it fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0061"
     citation: {"ref": "DODI8530.01", "page": 13, "anchor": "Participates or designates representation on Federal and DoD cybersecurity-related panels and boards,"}
@@ -2375,7 +2381,9 @@ requirements:
     locator: "ENCLOSURE 4.d.(5)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(5) Mission partner DMZ or point-to-point interconnections to the DODIN will be in accordance with Reference (ch)."
-    status: "candidate"
+    status: "partial"
+    reason: "CONN-001 fails a mission partner DMZ or point-to-point interconnection that does not follow the DISN connection process. The sentence cites Reference (ch), which the reference list gives as DoD 5220.22-R; but the body on pp. 37-38 runs one letter ahead of the list (it cites 5220.22-R as (ci), FAR 4.4 as (cj), DoDI 8582.01 as (ck), DFARS 252.204-7012 as (cl)), so body (ch) is most plausibly list (cg), the DISN Connection Process Guide. Partial until the user rules on that reading."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.partner-process.yaml", "expect": "the mission partner interconnection does not follow the DISN connection process", "claim": "constraint", "asserts": "Mission partner DMZ or point-to-point interconnections to the DODIN follow the DISN connection process, and one that does not follow it fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0301"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Mission partner interconnections with the DODIN must have validated requirements approved by"}
@@ -2383,7 +2391,9 @@ requirements:
     locator: "ENCLOSURE 4.d.(6)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(6) Mission partner interconnections with the DODIN must have validated requirements approved by a sponsoring DoD Component and the DoD CIO."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-003 fails a mission partner interconnection whose validated requirement is not approved by both the sponsoring DoD Component and the DoD CIO."
+    evidence: [{"kind": "rule", "target": "CONN-003", "fixture": "tests/fixtures/negative/CONN-003.requirement.yaml", "expect": "is not approved by both the sponsoring DoD Component and the DoD CIO", "claim": "constraint", "asserts": "Mission partner interconnections have validated requirements approved by a sponsoring DoD Component and the DoD CIO, and a requirement approved by one alone fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0302"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Sponsors will ensure all connection request fulfillment actions are completed."}
@@ -2391,7 +2401,9 @@ requirements:
     locator: "ENCLOSURE 4.d.(6).(a)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(a) Sponsors will ensure all connection request fulfillment actions are completed."
-    status: "candidate"
+    status: "partial"
+    reason: "boundary.yaml records the status of the sponsor's connection request fulfillment actions for a mission partner interconnection; the source sets no point by which they must be complete, so no state of the run is wrong and no rule fails."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/connections/items/properties/mission_partner/properties/fulfillment", "claim": "constraint", "asserts": "The status of the connection request fulfillment actions the sponsor ensures are completed is recorded"}, {"kind": "prose", "target": "playbooks/P/P-16.md", "claim": "presence", "asserts": "P-16 records the connection request fulfillment status the sponsor ensures is completed"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0303"
     citation: {"ref": "DODI8530.01", "page": 39, "anchor": "Sponsors will complete or assist the non-DoD mission partner with providing appropriate"}
@@ -2399,7 +2411,9 @@ requirements:
     locator: "ENCLOSURE 4.d.(6).(b)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(b) Sponsors will complete or assist the non-DoD mission partner with providing appropriate authorization package in accordance with References (f), (h), and (ci); as described in Reference (bv); or other applicable guidance for a specific mission partner interconnection."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-003 fails a mission partner interconnection whose partner authorization package the sponsor neither completed nor assisted with."
+    evidence: [{"kind": "rule", "target": "CONN-003", "fixture": "tests/fixtures/negative/CONN-003.package.yaml", "expect": "neither completed nor assisted the mission partner's authorization package", "claim": "constraint", "asserts": "Sponsors complete or assist the non-DoD mission partner with providing the authorization package, and a package the sponsor neither completed nor assisted fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8530.01-0304"
     citation: {"ref": "DODI8530.01", "page": 39, "anchor": "Support evaluation of DoD Component cybersecurity service providers’ services in accordance with"}

@@ -1,0 +1,24 @@
+rule: CONN-001
+bases:
+- minimal
+description: a cross-domain connection approved by DISA alone
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain
+  value: true
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain_solution
+  value:
+    provider: other
+    considered:
+    - disa-enterprise
+    - other
+    rationale: Vendor guard on the accredited list.
+expect:
+  errors:
+  - CONN-001
+  messages:
+  - 'CONN-01: a cross security domain or mission partner connection needs authorization by the DoD ISRMC
+    or the DSAWG in its support'

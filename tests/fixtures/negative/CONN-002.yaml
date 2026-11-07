@@ -1,0 +1,25 @@
+rule: CONN-002
+bases:
+- minimal
+description: a cross-domain connection that names no cross-domain solution
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain
+  value: true
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.approvals
+  value:
+  - authority: DISA
+    status: requested
+    sources: &id001
+    - INT-025.A1
+  - authority: ISRMC
+    status: requested
+    sources: *id001
+expect:
+  errors:
+  - CONN-002
+  messages:
+  - CONN-01 crosses security domains but names no cross-domain solution

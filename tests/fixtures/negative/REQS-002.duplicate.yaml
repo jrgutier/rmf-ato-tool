@@ -1,0 +1,127 @@
+rule: REQS-002
+bases:
+- minimal
+description: two records for one design policy statement
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: design_policy
+  value:
+  - statement: DP-RESILIENCE-AUDIT
+    applies: true
+    requirements:
+    - REQ-04
+    sources:
+    - INT-024.A1
+  - statement: DP-ARCH-PRINCIPLES
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-BIOMETRICS
+    applies: false
+    reason: FDR uses no biometrics; authentication is by CAC.
+    sources:
+    - product/security.md#authentication
+  - statement: DP-ASSISTIVE-TECH
+    applies: true
+    requirements:
+    - REQ-01
+    sources:
+    - INT-024.A1
+  - statement: DP-CRYPTO-INTEROP
+    applies: true
+    requirements:
+    - REQ-02
+    sources:
+    - INT-024.A1
+  - statement: DP-CYBER-ARCH
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-MARKING-METADATA
+    applies: true
+    requirements:
+    - REQ-02
+    sources:
+    - INT-024.A1
+  - statement: DP-IDENTITY-ASSURANCE
+    applies: true
+    requirements:
+    - REQ-01
+    sources:
+    - INT-024.A1
+  - statement: DP-ENTERPRISE-ARCH
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-BIOS-MANAGE
+    applies: false
+    reason: FDR procures no hardware; it runs on the existing field appliance.
+    sources:
+    - INT-024.A1
+  - statement: DP-BIOS-SPEC
+    applies: false
+    reason: FDR specifies no personal computer client system.
+    sources:
+    - INT-024.A1
+  - statement: DP-TPM
+    applies: false
+    reason: FDR procures no new computer asset.
+    sources:
+    - INT-024.A1
+  - statement: DP-TPM-TCG
+    applies: false
+    reason: FDR procures no new computer asset.
+    sources:
+    - INT-024.A1
+  - statement: DP-TPM-ON
+    applies: false
+    reason: FDR procures no new computer asset.
+    sources:
+    - INT-024.A1
+  - statement: DP-TPM-JUSTIFY
+    applies: false
+    reason: FDR procures no new computer asset.
+    sources:
+    - INT-024.A1
+  - statement: DP-SCAP
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-STANDARDS-REGISTRY
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-STANDARDS-SUFFICIENT
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+  - statement: DP-DATA-PROTECTION
+    applies: true
+    requirements:
+    - REQ-02
+    sources:
+    - INT-024.A1
+  - statement: DP-TPM
+    applies: true
+    requirements:
+    - REQ-03
+    sources:
+    - INT-024.A1
+expect:
+  errors:
+  - REQS-002
+  messages:
+  - DP-TPM is addressed by more than one record

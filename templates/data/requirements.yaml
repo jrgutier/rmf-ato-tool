@@ -1,0 +1,56 @@
+# Template: artifacts/data/requirements.yaml (P-15, updated by P-17; schema requirements).
+# Replace every <<FILL: ...>> and example value (playbooks/P/P-15.md). This is the requirements
+# traceability verification matrix: REQS-001 to REQS-004 judge it. Protection needs come from
+# the concerns ART-STAKE records at P-9; reassess them whenever a requirement changes.
+needs:
+  - id: NEED-01
+    stakeholder: PER-IO  # the persona who holds the concern
+    kind: loss-concern   # security-concern | loss-concern | trust-expectation
+    concern: "<<FILL: the concern in the stakeholder's words>>"
+    assets: ["<<FILL: asset or asset class, for a loss concern>>"]
+    success_criteria: "<<FILL: how the stakeholder will judge the need met, such as an MOE>>"
+    priority: 1          # rank after down-selection, 1 highest
+    rationale: "<<FILL: why this need, at this priority>>"
+    sources: [INT-001.A1]
+requirements:
+  - id: REQ-01
+    statement: "<<FILL: one testable requirement>>"
+    kind: security       # security | privacy
+    needs: [NEED-01]     # upward trace; or policy, or derived_from
+    policy: [DP-SCAP]    # design policy statements it carries
+    # derived_from: [REQ-00]  # a derived requirement names its parent
+    priority: 1
+    criticality: 1       # relative criticality of its measure, 1 most critical
+    measure: {kind: assurance, statement: "<<FILL: how technical achievement is measured>>"}
+    verification: {method: test, description: "<<FILL: what is verified and its success criteria>>"}  # inspection | analysis | demonstration | test | other
+    # allocated_to: [CMP-EXAMPLE]  # P-17: CMP-*, environment, common-control-provider or contract
+    sources: [INT-001.A1]
+constraints:  # security-relevant constraints on the solution
+  - id: CON-01
+    origin: stakeholder  # stakeholder | security | implementation | integration | verification | transition | validation | operation | maintenance | disposal
+    statement: "<<FILL: the constraint>>"
+    # raised_by: I-2     # a constraint a later task reported back
+    sources: [INT-001.A1]
+design_policy:  # one record per statement REQS-002 lists (src/rmf_tool/check/rules/requirements.py)
+  - statement: DP-SCAP
+    applies: true
+    requirements: [REQ-01]
+    sources: [INT-001.A1]
+  - statement: DP-BIOMETRICS
+    applies: false       # only a conditional statement may be marked not applicable
+    reason: "<<FILL: why its condition does not hold here>>"
+    sources: [INT-001.A1]
+agreement:
+  analysis: "<<FILL: how the requirement set was analyzed against the protection needs>>"
+  feedback: "<<FILL: what the stakeholders were shown from the analysis>>"
+  issues:
+    - {issue: "<<FILL: a requirements issue>>", resolution: "<<FILL: how it was resolved>>"}
+  agreed:  # one per stakeholder who holds a need (REQS-003)
+    - {stakeholder: PER-IO, date: "2025-01-15", decisions: "<<FILL: key decisions agreed and their rationale>>"}
+  sources: [INT-001.A1]
+# workforce:  # P-17 (REQS-004)
+#   contracted_work_roles: []  # cyberspace work roles contractor personnel perform
+#   qualification_requirement: REQ-02  # a requirement allocated to the contract
+#   dfars_239_71: applied     # applied | not-applied
+#   qualifications_documented: true
+#   sources: [INT-001.A1]

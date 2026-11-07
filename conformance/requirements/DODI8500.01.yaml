@@ -141,7 +141,9 @@ requirements:
     locator: "INSTRUCTION.b.(3)"
     context: "Operational Resilience. DoD IT will be planned, developed, tested, implemented, evaluated, and operated to ensure that:"
     statement: "(3) Whenever possible, technology components (e.g., hardware and software) have the ability to reconfigure, optimize, self-defend, and recover with little or no human intervention. Attempts made to reconfigure, self-defend, and recover should produce an incident audit trail."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-RESILIENCE-AUDIT and a reason when it is marked not applicable. The statement is conditional ('whenever possible'), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether attempts to reconfigure, self-defend and recover produce an incident audit trail"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0019"
     citation: {"ref": "DODI8500.01", "page": 3, "anchor": "Cybersecurity must be fully integrated into system life cycles and will be"}
@@ -156,7 +158,9 @@ requirements:
     locator: "INSTRUCTION.c.(2)"
     context: "Integration and Interoperability"
     statement: "(2) Interoperability will be achieved through adherence to DoD architecture principles, adopting a standards-based approach, and by all DoD Components sharing the level of risk necessary to achieve mission success."
-    status: "candidate"
+    status: "covered"
+    reason: "DP-ARCH-PRINCIPLES states no condition: REQS-002 fails a run that marks it not applicable, and one that applies is carried by a requirement."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-arch-principles.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "Interoperability through adherence to DoD architecture principles binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0021"
     citation: {"ref": "DODI8500.01", "page": 3, "anchor": "All interconnections of DoD IT will be managed to minimize shared risk"}
@@ -230,7 +234,9 @@ requirements:
     locator: "INSTRUCTION.g.(3)"
     context: "Identity Assurance"
     statement: "(3) Biometrics used in support of identity assurance will be managed in accordance with DoDD 8521.01 (Reference (v))."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-BIOMETRICS and a reason when it is marked not applicable. The statement is conditional (biometrics used in support of identity assurance), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether biometrics used in support of identity assurance are managed under DoDD 8521.01"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0031"
     citation: {"ref": "DODI8500.01", "page": 4, "anchor": "All IT that receives, processes, stores, displays, or transmits DoD information will"}
@@ -646,7 +652,9 @@ requirements:
     locator: "ENCLOSURE 2.e"
     context: "RESPONSIBILITIES"
     statement: "e. Oversees and maintains the connection approval process in accordance with DoDI 8010.01 (Reference (ak)), CD connection policy in accordance with Reference (ah), DoDI 8551.01 (Reference (al)), and DoDI 8100.04 (Reference (am)) for the DISN (e.g., the Secret Internet Protocol Router Network (SIPRNet) and the Non-Classified Internet Protocol Router Network (NIPRNet)) in coordination with the DSAWG (Reference (an)) and DoD ISRMC (Reference (ao)), when appropriate."
-    status: "candidate"
+    status: "covered"
+    reason: "DISA's side: CONN-001 fails a DISN connection that does not go through the connection approval process DISA maintains."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.disn.yaml", "expect": "connects to the DISN without going through the DISA connection approval process", "claim": "constraint", "asserts": "A DISN connection goes through the connection approval process DISA maintains, and one approved outside that process fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8500.01-0084"
     citation: {"ref": "DODI8500.01", "page": 17, "anchor": "Facilitates multinational information sharing efforts, as well as information sharing between the"}
@@ -670,7 +678,9 @@ requirements:
     locator: "ENCLOSURE 2.h"
     context: "RESPONSIBILITIES"
     statement: "h. Provides enterprise CD services compliant with Reference (ah)."
-    status: "candidate"
+    status: "partial"
+    reason: "DISA's side: DISA provides the enterprise CD services, which no record of a run can fail on. The run records their use as an external service of the boundary (CONN-002), which breaks only when the run models them inconsistently."
+    evidence: [{"kind": "rule", "target": "CONN-002", "fixture": "tests/fixtures/negative/CONN-002.service.yaml", "expect": "the DISA-provided enterprise CD service is not an external boundary component", "claim": "constraint", "asserts": "The enterprise CD services DISA provides are recorded as an external service of the boundary, and the DISA CD service recorded inside it fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8500.01-0087"
     citation: {"ref": "DODI8500.01", "page": 17, "anchor": "Ensures the continued development and maintenance of guidance and standards procedures to"}
@@ -1295,7 +1305,9 @@ requirements:
     locator: "ENCLOSURE 2.n"
     context: "RESPONSIBILITIES"
     statement: "n. Ensure that cybersecurity solutions do not unnecessarily restrict the use of assistive technology by individuals with disabilities or access to or use of information and data by individuals with disabilities in accordance with sections 791, 794, and 794d of Title 29, U.S.C. (Reference (bp))."
-    status: "candidate"
+    status: "covered"
+    reason: "DP-ASSISTIVE-TECH states no condition: REQS-002 fails a run that marks it not applicable, and one that applies is carried by a requirement."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-assistive-tech.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "That cybersecurity solutions do not unnecessarily restrict assistive technology binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0167"
     citation: {"ref": "DODI8500.01", "page": 23, "anchor": "Conduct vulnerability assessments, Blue Team vulnerability evaluations and intrusion assessments, cybersecurity inspections,"}
@@ -1363,7 +1375,9 @@ requirements:
     locator: "ENCLOSURE 2.w"
     context: "RESPONSIBILITIES"
     statement: "w. Ensure use of the DISA-provided CD Services as the preferred method of addressing CD requirements."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-002 fails a cross-domain connection that uses another solution without having considered the DISA-provided CD service."
+    evidence: [{"kind": "rule", "target": "CONN-002", "fixture": "tests/fixtures/negative/CONN-002.preferred.yaml", "expect": "other than the DISA-provided CD service without having considered it", "claim": "constraint", "asserts": "Use of the DISA-provided CD services is the preferred method of addressing CD requirements: another solution chosen without having considered the DISA service fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8500.01-0176"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Implement procedures issued by the DASD(DT&E) and DOT&E to ensure that cognizant"}
@@ -1936,7 +1950,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(3)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Interoperability"
     statement: "(3) Semantic, technical, and policy interoperability support products are designed to provide security for communications between different IT systems. Interoperable communications must be consistent with approved cryptographic design and current system implementation standards. The objective is to ensure the seamless and secure exchange of classified or sensitive information that is critical to the success of DoD mission goals and objectives."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-CRYPTO-INTEROP and a reason when it is marked not applicable. The statement is conditional (a system with interoperable communications), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether interoperable communications are consistent with approved cryptographic design"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0250"
     citation: {"ref": "DODI8500.01", "page": 32, "anchor": "Standards-Based Approach. The DoD cybersecurity and cyberspace defense data strategy will enable"}
@@ -1952,7 +1968,9 @@ requirements:
     locator: "ENCLOSURE 3.e"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "e. DoD Architecture Principles. Interoperability and effective management of security content will be achieved through adherence to DoD cybersecurity architectures as issued. All DoD Components must commit to these architectures to facilitate sharing of information necessary to achieve mission success while managing the risk inherent in interconnecting systems."
-    status: "candidate"
+    status: "partial"
+    reason: "DP-CYBER-ARCH states no condition: REQS-002 fails a run that marks it not applicable. The second sentence binds the DoD Components to commit to the architectures; no record of a run can fail on a Component's commitment."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-cyber-arch.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "Adherence to DoD cybersecurity architectures as issued binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope", "sentence": "Interoperability and effective management of security content will be achieved through adherence to DoD cybersecurity architectures as issued."}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0252"
     citation: {"ref": "DODI8500.01", "page": 32, "anchor": "Knowledge Repositories. These contain a broad collection of best practices, benchmarks, standards,"}
@@ -2141,7 +2159,9 @@ requirements:
     locator: "ENCLOSURE 3.h"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "h. To enable automated sharing and protection, all DoD information must include marking and metadata as required by References (bk), (bn) and (cr), and that information must be in the format specified in References (bk) and (bs)."
-    status: "candidate"
+    status: "covered"
+    reason: "DP-MARKING-METADATA states no condition: REQS-002 fails a run that marks it not applicable, and one that applies is carried by a requirement."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-marking-metadata.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "Marking and metadata on all DoD information binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0276"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "DoD IT that processes or stores PII or protected health information must"}
@@ -2228,7 +2248,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "b. DoD IS will employ identity assurance procedures that are aligned with the DoD Identity Management Strategic Plan and the Identity Assurance Implementation Guidance and Roadmap to the extent practical."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-IDENTITY-ASSURANCE and a reason when it is marked not applicable. The statement is conditional ('to the extent practical'), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether identity assurance procedures are aligned with the DoD Identity Management Strategic Plan"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0287"
     citation: {"ref": "DODI8500.01", "page": 36, "anchor": "Information and infrastructure that support identity reliant functions, processes, and procedures used"}
@@ -2532,7 +2554,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(4).(c)"
     context: "Figure 2. DoD Information Technology IT Product"
     statement: "(c) Products must meet security configuration guidance in accordance with Chapter 113 of Reference (t) and comply with the connection approval process established in Reference (ak)."
-    status: "candidate"
+    status: "partial"
+    reason: "CONN-001 fails a DISN connection outside the connection approval process; that products meet the security configuration guidance of 10 U.S.C. chapter 113 is held only through ART-STIG at I-1, and no rule fails a product that does not meet it."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.disn.yaml", "expect": "connects to the DISN without going through the DISA connection approval process", "claim": "constraint", "asserts": "Products connecting to the DISN comply with the connection approval process, and a connection approved outside the DISA connection approval process fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8500.01-0326"
     citation: {"ref": "DODI8500.01", "page": 40, "anchor": "Products will comply with the requirements of Reference (bh), as applicable."}
@@ -2656,7 +2680,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(14)"
     context: "Figure 2. DoD Information Technology"
     statement: "(14) Cybersecurity must be consistent with enterprise architecture principles and guidelines within the DoD Architecture Framework (Reference (de)) and DoD cybersecurity architectures developed or approved by the DoD CIO."
-    status: "candidate"
+    status: "covered"
+    reason: "DP-ENTERPRISE-ARCH states no condition: REQS-002 fails a run that marks it not applicable, and one that applies is carried by a requirement."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-enterprise-arch.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "That cybersecurity is consistent with enterprise architecture principles of the DoD Architecture Framework binds every system: marked not applicable, the decision fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0342"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "Connections to the DISN must comply with connection approval procedures and processes"}
@@ -2664,7 +2690,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(15)"
     context: "Figure 2. DoD Information Technology"
     statement: "(15) Connections to the DISN must comply with connection approval procedures and processes as established in Reference (ak)."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-001 fails a DISN connection that does not go through the DISA connection approval process."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.disn.yaml", "expect": "connects to the DISN without going through the DISA connection approval process", "claim": "constraint", "asserts": "Connections to the DISN comply with the DISA connection approval procedures and processes, and one approved outside them fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8500.01-0343"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "The ESSG will oversee development and acquisition of enterprise solutions for use"}
@@ -2711,7 +2739,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(19)"
     context: "Figure 2. DoD Information Technology"
     statement: "(19) Basic input and output systems (BIOSs) will be managed in accordance with Section 3.2 of SP 800-147 (Reference (dj)). Specifications for personal computer client systems must include the requirement for BIOS protections compliant with Section 3.1 of Reference (dj)."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-BIOS-MANAGE and DP-BIOS-SPEC and a reason when it is marked not applicable. The statement is conditional (a system with a BIOS; personal computer client specifications), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether basic input and output systems are managed and specifications include BIOS protections"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0349"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "In anticipation of emerging trusted platform module (TPM) product capabilities, as well"}
@@ -2719,7 +2749,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(20)"
     context: "Figure 2. DoD Information Technology"
     statement: "(20) In anticipation of emerging trusted platform module (TPM) product capabilities, as well as requirements for device identification, authentication, encryption, measurement, and device integrity, DoD Components will ensure new computer assets (e.g., server, desktop, laptop, thin client, tablet, smartphone, personal digital assistant, mobile phone) procured to support DoD will include a TPM version 1.2 or higher where required by DISA STIGs and where such technology is available."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-TPM and a reason when it is marked not applicable. The statement is conditional ('where required by DISA STIGs and where such technology is available'), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether new computer assets procured include a trusted platform module"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0350"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "Vendor TPMs must be in conformance with Trusted Computing Group standards (www.trustedcomputinggroup.org/groups/tpm)"}
@@ -2727,7 +2759,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(20).(a)"
     context: "Figure 2. DoD Information Technology"
     statement: "(a) Vendor TPMs must be in conformance with Trusted Computing Group standards (www.trustedcomputinggroup.org/groups/tpm) and must be approved by the procuring DoD Component. The TPM must be turned on and ready for provisioning when the computer asset is received from the vendor. Written justification must be provided to the responsible AO if assets are procured without TPM technology in cases where it is available."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-TPM-TCG, DP-TPM-ON and DP-TPM-JUSTIFY and a reason when it is marked not applicable. The statement is conditional (assets procured where DP-TPM applies), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether vendor TPMs conform, are turned on, and whether written justification goes to the AO"}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0351"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "DIRNSA will identify use cases and implementation standards and plans for DoD"}
@@ -2743,7 +2777,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(21)"
     context: "Figure 2. DoD Information Technology"
     statement: "(21) DoD IT must comply with SCAP standards established in Reference (ci). STIGs developed by DISA will use SCAP standards."
-    status: "candidate"
+    status: "partial"
+    reason: "DP-SCAP states no condition: REQS-002 fails a run that marks it not applicable. The second sentence binds DISA to build its STIGs on SCAP; no record of a run can fail on it."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "That DoD IT complies with SCAP standards binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope", "sentence": "(21) DoD IT must comply with SCAP standards established in Reference (ci)."}]
     work_item: "WI-209"
   - id: "REQ-DODI8500.01-0353"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "All use of Internet-based capabilities will comply with References (bk), (ct), (cx),"}

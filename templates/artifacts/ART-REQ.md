@@ -16,17 +16,28 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Sources of requirements
 
-<<FILL: the laws, policies, capability requirements, stakeholder needs and risk assessment results the requirements come from, with tokens>>
+<<FILL: the laws, policies, capability requirements, stakeholder needs and risk assessment results the requirements come from, and the DoD design policy statements of artifacts/data/requirements.yaml design_policy (each one that applies, and why a conditional one does not), with tokens>>
+
+## Protection needs
+
+<<FILL: the stakeholders' security concerns, loss concerns per asset and trust expectations from ART-STAKE, each protection need by NEED ID with its success criteria, priority and rationale, and when they were last reassessed, with tokens>>
 
 ## Security and privacy requirements
 
-<<FILL: table: REQ-## ID | requirement | source | priority, one testable requirement per row, with tokens>>
+<<FILL: table: REQ-## ID | requirement | traces to (NEED, DP or parent REQ) | priority | measure and criticality | verification method, one testable requirement per row as in requirements.yaml, with tokens>>
 
 ## Operational constraints
 
-<<FILL: mission and operational constraints the requirements must respect, from the user representative and sponsor, with tokens>>
+<<FILL: the security-relevant constraints on the solution by CON ID: those the security analysis drives, those from the stakeholders and the mission, and those implementation, integration, verification and transition raise, with tokens>>
 
-<!-- P-17 adds an "Allocated to" column (component IDs from artifacts/data/boundary.yaml, or
-     the environment of operation) to the requirements table, appends "## Allocation" (how
-     each requirement is split between the system, its elements and providers, and why), and
-     adds P-17 to touched_by. -->
+## Analysis and agreement
+
+<<FILL: how the requirement set was analyzed against the protection needs, the feedback the stakeholders got, the issues raised and how each was resolved, and each stakeholder's explicit agreement with the key decisions and their rationale, with tokens>>
+
+<!-- P-17 adds an "Allocated to" column (component IDs from artifacts/data/boundary.yaml, the
+     environment of operation, a common control provider or the contract) to the requirements
+     table, appends "## Allocation" (how each requirement is split between the system, its
+     elements and providers, and why, keeping the trace from need to verification both ways)
+     and "## Contract requirements" (the cybersecurity requirements the RFP carries, the
+     cyberspace work roles contractors perform, their qualification requirements, DFARS Subpart
+     239.71 and how their qualifications are documented), and adds P-17 to touched_by. -->

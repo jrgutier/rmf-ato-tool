@@ -720,7 +720,9 @@ requirements:
     locator: "3.3.c"
     context: "INFORMATION ENTERPRISE ARCHITECTURE (IEA)"
     statement: "c. IT standards employed must be selected from the current approved version of the DoD IT Standards Registry within the Global Information Grid Technical Guidance Federation service in accordance with DoDI 8310.01. The standards selected must be sufficient to enable the interoperability and cybersecurity required for joint operations in accordance with DoDIs 8330.01, 8320.02, and 8510.01."
-    status: "candidate"
+    status: "covered"
+    reason: "Neither sentence states a condition: REQS-002 fails a run that marks DP-STANDARDS-REGISTRY or DP-STANDARDS-SUFFICIENT not applicable, one fixture each."
+    evidence: [{"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-standards-registry.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "That IT standards are selected from the DoD IT Standards Registry binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope", "sentence": "IT standards employed must be selected from the current approved version of the DoD IT Standards Registry within the Global Information Grid Technical Guidance Federation service in accordance with DoDI 8310.01."}, {"kind": "rule", "target": "REQS-002", "fixture": "tests/fixtures/negative/REQS-002.na-standards-sufficient.yaml", "expect": "binds every system, so it cannot be marked not applicable", "claim": "constraint", "asserts": "That the standards selected suffice for interoperability and cybersecurity binds every system: marked not applicable, the design policy decision fails", "holds_when": "P-15 is in the run's scope", "sentence": "The standards selected must be sufficient to enable the interoperability and cybersecurity required for joint operations in accordance with DoDIs 8330.01, 8320.02, and 8510.01."}]
     work_item: "WI-209"
   - id: "REQ-DODI5000.82-0091"
     citation: {"ref": "DODI5000.82", "page": 13, "anchor": "All acquisitions of digital capabilities, as defined in this issuance, must be"}
@@ -1348,7 +1350,9 @@ requirements:
     locator: "3.9.a.(2).(d)"
     context: "DATA AND INFORMATION Data In accordance with the May 5, 2021 DepSecDef Memorandum, the DoD Data Strategy, and DoDI 8320.02, PMs will:"
     statement: "(d) Implement industry best practices for secure authentication, access management, encryption, monitoring, and protection of data at rest, in transit, and in use, as appropriate."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-002 needs a decision on DP-DATA-PROTECTION and a reason when it is marked not applicable. The statement is conditional ('as appropriate'), and no rule can test the reason against the condition, so a wrong 'not applicable' passes."
+    evidence: [{"kind": "prose", "target": "templates/data/requirements.yaml", "claim": "presence", "asserts": "The requirements record whether industry best practices for authentication, encryption and protection of data are implemented"}]
     work_item: "WI-209"
   - id: "REQ-DODI5000.82-0170"
     citation: {"ref": "DODI5000.82", "page": 21, "anchor": "Store data in a manner that is platform and environment-agnostic, uncoupled from"}

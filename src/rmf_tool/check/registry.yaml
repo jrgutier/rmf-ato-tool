@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 150 rules, 36 repo-scope and 114 run-scope. Authoritative;
+# Rule registry (plan §6.5): 158 rules, 36 repo-scope and 122 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -930,6 +930,7 @@ rules:
       - REQ-DODI8510.01-0076
       - REQ-DODI8510.01-0158
       - REQ-DODI8510.01-0165
+      - REQ-DODI8510.01-0166
       - REQ-DODI8510.01-0189
       - REQ-DODI8510.01-0218
   - id: ENT-001
@@ -1700,6 +1701,138 @@ rules:
     enforces:
       - REQ-CNSSI1254-0089
       - REQ-CNSSI1254-0090
+  - id: CONN-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: an external connection without a connection record, or without the approvals its network and domain need
+    fixture: tests/fixtures/negative/CONN-001.yaml
+    hint: Record every external interconnection, system or service in boundary.yaml connections with its detail. A DISN connection goes through DISA's connection approval process; a mission partner interconnection through that process and the DoD CIO; a cross-domain or mission partner connection through the DoD ISRMC or the DSAWG in its support.
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0055
+      - REQ-DODI8500.01-0083
+      - REQ-DODI8500.01-0325
+      - REQ-DODI8500.01-0342
+      - REQ-DODI8510.01-0159
+      - REQ-DODI8510.01-0166
+      - REQ-DODI8530.01-0048
+      - REQ-DODI8530.01-0049
+      - REQ-DODI8530.01-0300
+  - id: CONN-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: a cross-domain connection without its solution, or one that passes over the DISA-provided CD service unconsidered
+    fixture: tests/fixtures/negative/CONN-002.yaml
+    hint: A cross-domain connection names its cross_domain_solution; the DISA-provided enterprise CD service is the preferred method, so another solution lists it in considered; the DISA service is an external component.
+    enforces:
+      - REQ-DODI8500.01-0086
+      - REQ-DODI8500.01-0175
+  - id: CONN-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: a mission partner interconnection without its interconnection point, approved requirement or partner package
+    fixture: tests/fixtures/negative/CONN-003.yaml
+    hint: A mission partner interconnection uses a DMZ or a point-to-point interconnection, rests on a requirement the sponsor and the DoD CIO approved, and its partner's authorization package is completed by the sponsor or with the sponsor's help.
+    enforces:
+      - REQ-DODI8530.01-0048
+      - REQ-DODI8530.01-0049
+      - REQ-DODI8530.01-0301
+      - REQ-DODI8530.01-0303
+  - id: CONN-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: the DODIN position is not stated, or a DODIN waiver does not follow a DoD CIO review
+    fixture: tests/fixtures/negative/CONN-004.yaml
+    hint: boundary.yaml dodin says inside or outside; outside holds a waiver granted after the DoD CIO reviewed the system's cybersecurity posture.
+    enforces:
+      - REQ-DODI8530.01-0060
+  - id: REQS-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: the requirement matrix is missing, a requirement traces to nothing or to a record it lacks, or an allocation names no boundary component
+    fixture: tests/fixtures/negative/REQS-001.yaml
+    hint: Write artifacts/data/requirements.yaml at P-15. Trace each requirement to a protection need, a design policy statement or the requirement it is derived from, each held in the file; at P-17 allocate each to a boundary component, the environment, a common control provider or the contract.
+    enforces:
+      - REQ-DODI5000.75-0244
+      - REQ-DODI5000.83-0179
+      - REQ-DODI5000.83-0189
+      - REQ-SP800-160V1R1-0583
+      - REQ-SP800-160V1R1-0616
+      - REQ-SP800-160V1R1-0624
+      - REQ-SP800-160V1R1-0645
+      - REQ-SP800-160V1R1-0646
+  - id: REQS-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: a DoD design policy statement is not addressed, is wrongly marked not applicable, or is carried by no requirement
+    fixture: tests/fixtures/negative/REQS-002.yaml
+    hint: Address every design policy statement REQS-002 lists in design_policy. An unconditional statement applies; one that applies names the requirements that carry it.
+    enforces:
+      - REQ-DODI5000.82-0090
+      - REQ-DODI8500.01-0020
+      - REQ-DODI8500.01-0166
+      - REQ-DODI8500.01-0251
+      - REQ-DODI8500.01-0275
+      - REQ-DODI8500.01-0341
+      - REQ-DODI8500.01-0352
+  - id: REQS-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: a protection need held by no persona, traced by no requirement, or not agreed to by its stakeholder
+    fixture: tests/fixtures/negative/REQS-003.yaml
+    hint: Each need names the persona who holds it, a loss concern names its assets, a requirement traces to it, and agreement.agreed records that stakeholder's agreement.
+    enforces:
+      - REQ-SP800-160V1R1-0572
+      - REQ-SP800-160V1R1-0581
+      - REQ-SP800-160V1R1-0583
+      - REQ-SP800-160V1R1-0584
+      - REQ-SP800-160V1R1-0599
+      - REQ-SP800-160V1R1-0609
+      - REQ-SP800-160V1R1-0614
+      - REQ-SP800-160V1R1-0615
+      - REQ-SP800-160V1R1-0616
+      - REQ-SP800-160V1R1-0643
+  - id: REQS-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-17
+    summary: a contract for cyberspace work roles without qualification requirements, DFARS 239.71 or documented qualifications
+    fixture: tests/fixtures/negative/REQS-004.yaml
+    hint: At P-17 record workforce.contracted_work_roles; when there are any, name the qualification requirement allocated to the contract, apply DFARS Subpart 239.71 and document the contractor personnel's qualifications.
+    enforces:
+      - REQ-DODD8140.01-0022
+      - REQ-DODD8140.01-0053
+      - REQ-DODD8140.01-0054
   - id: DEGRADED-001
     scope: run
     severity: W

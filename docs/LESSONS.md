@@ -481,3 +481,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: SRA-001 reports a missing ra.yaml whenever ART-RA is produced or seeded on a contract that has the file, with a negative fixture.
 - Rule: A data file added to a supporting artifact needs a rule that reports it missing; RUN-ART-001 does not.
 - Promotion: check: SRA-001
+
+## L-0069 · 2026-11-07 · run: phase-11 · tags: conformance, references
+- Symptom: DoDI 8530.01 Encl. 4 §d.(5) cites Reference (ch), which the issuance's reference list gives as DoD 5220.22-R, the Industrial Security Regulation; triage read it as the DISN Connection Process Guide, which the list gives as (cg).
+- Root cause: the body on pp. 37-38 runs one letter ahead of the list: it cites 5220.22-R as (ci), FAR Subpart 4.4 as (cj), DoDI 8582.01 as (ck) and DFARS 252.204-7012 as (cl), so a body letter there cannot be looked up in the list as printed.
+- Fix: CONN-001 holds mission partner interconnections to the DISN connection process; REQ-DODI8530.01-0300 stays partial, with the drift stated, until the user rules on the reading.
+- Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
+- Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.

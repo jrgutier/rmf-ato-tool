@@ -756,6 +756,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - The stakeholders having an interest in the system are identified (DoDI 8510.01 Table 1 outcome).
 - ART-STAKE lists the stakeholders and the persona that represents each in interviews.
 - Every information owner is identified, because each sets the impact level for its own information types (CNSSI 1253).
+- ART-STAKE records each stakeholder's security concerns, loss concerns and trust expectations, which P-15 turns into protection needs.
 
 **Alignment**
 
@@ -1081,6 +1082,10 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - Security and privacy requirements are defined and prioritized (DoDI 8510.01 Table 1 outcome).
 - ART-REQ lists prioritized security and privacy requirements traced to their sources.
+- requirements.yaml records each stakeholder protection need with its success criteria, priority and rationale; a requirement traces to it and its stakeholder agrees the requirements address it (REQS-003). A change to the requirements reassesses the needs.
+- Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
+- Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
+- The security-relevant constraints on the solution are recorded with their origin.
 
 **Alignment**
 
@@ -1440,6 +1445,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 - The placement of the system within the enterprise architecture is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND records the system's place in the enterprise architecture, interconnections and any shared or cloud services.
+- boundary.yaml records each external connection with its detail and the approvals it needs, any cross-domain solution and mission partner terms, and whether the system is on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
 
 **Alignment**
 
@@ -1494,6 +1500,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - Security and privacy requirements are allocated to the system and to the environment in which the system operates (DoDI 8510.01 Table 1 outcome).
 - ART-REQ allocates every requirement to the system, a system element, the environment or a common control provider.
 - The cybersecurity requirements that contracts must carry are identified for the development RFP.
+- requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 
 **Alignment**
 
@@ -2052,6 +2059,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 - Changes to the planned implementation of controls are documented, and the security and privacy plans are updated from what was learned during implementation (DoDI 8510.01 Table 4 outcome).
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
+- A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 
 **Alignment**
 
@@ -2144,6 +2152,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
 
 **Outputs**
 
@@ -2163,6 +2172,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
 - Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
 - Each scoped control has procedures selected and tailored from the risk results (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider is reviewed before its controls or results are leveraged (ASMT-004).
+- The assessment plan reads each requirement's verification method and measure from requirements.yaml.
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [IATT](#ad-iatt) (see [authorization decisions](#decisions)).
@@ -3542,7 +3552,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2) |
 | [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
+| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
 | [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | — | — |
 | [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
 | [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1) |
@@ -3682,17 +3692,17 @@ Citations:
 
 ### <a id="art-req"></a>ART-REQ: Security and privacy requirements and allocation
 
-Security and privacy requirements for the system and its environment, and their allocation to system elements.
+Security and privacy requirements for the system and its environment, from the stakeholders' protection needs and the DoD design policy statements, with verification methods, measures and their allocation to system elements.
 
 | | |
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-REQ.md](templates/artifacts/ART-REQ.md) |
-| Data files | — |
+| Data files | `artifacts/data/requirements.yaml` (schema `requirements`) |
 | OSCAL | — |
 | Produced by | [P-15](#task-p-15) |
 | Updated by | [P-17](#task-p-17) |
-| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
+| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3), [A-2](#task-a-2) |
 
 Citations:
 

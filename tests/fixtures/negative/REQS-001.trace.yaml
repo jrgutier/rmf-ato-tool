@@ -1,0 +1,25 @@
+rule: REQS-001
+bases:
+- minimal
+description: a requirement that traces to nothing
+mutations:
+- op: delete_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.policy
+- op: delete_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.derived_from
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: design_policy.0
+  value:
+    statement: DP-RESILIENCE-AUDIT
+    applies: false
+    reason: The relay has no self-protective restart.
+    sources:
+    - INT-024.A1
+expect:
+  errors:
+  - REQS-001
+  messages:
+  - REQ-04 traces to no protection need, design policy statement or parent requirement

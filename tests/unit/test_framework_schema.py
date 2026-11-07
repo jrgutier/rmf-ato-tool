@@ -27,7 +27,8 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "dias", "cm-plan", "contingency", "incident-response",
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
-                     "sar-report", "ra"}
+                     "sar-report", "ra",
+                     "requirements"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -88,6 +89,14 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 SRC = ["INT-001.A1"]
 _RA = YAML(typ="safe").load((REPO_ROOT / "templates/data/ra.yaml").read_text(encoding="utf-8"))
+NEED = {"id": "NEED-01", "stakeholder": "PER-IO", "kind": "loss-concern", "concern": "c",
+        "assets": ["a"], "success_criteria": "s", "priority": 1, "rationale": "r", "sources": SRC}
+REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["NEED-01"],
+               "priority": 1, "criticality": 1, "measure": {"kind": "assurance", "statement": "m"},
+               "verification": {"method": "test", "description": "d"}, "sources": SRC}
+AGREEMENT = {"analysis": "a", "feedback": "f",
+             "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
+             "sources": SRC}
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -332,6 +341,14 @@ RUN_EXAMPLES = {
          "delivered": [{"to": "PER-PM", "date": "2026-02-01"}], "sources": SRC},
         {"methodology": {"standard": ""}, "sources": SRC}),
     "ra": (_RA, {**_RA, "risk_model": {**_RA["risk_model"], "analysis_approach": "guess"}}),
+    "requirements": (
+        {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
+         "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
+                            "sources": SRC}],
+         "agreement": AGREEMENT},
+        {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
+            "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
+         "agreement": AGREEMENT}),
 }
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"

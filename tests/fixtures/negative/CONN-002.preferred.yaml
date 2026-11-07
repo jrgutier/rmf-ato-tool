@@ -1,0 +1,34 @@
+rule: CONN-002
+bases:
+- minimal
+description: another cross-domain solution chosen without considering the DISA service
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain
+  value: true
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.approvals
+  value:
+  - authority: DISA
+    status: requested
+    sources: &id001
+    - INT-025.A1
+  - authority: ISRMC
+    status: requested
+    sources: *id001
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain_solution
+  value:
+    provider: other
+    considered:
+    - other
+    rationale: Vendor guard on the accredited list.
+expect:
+  errors:
+  - CONN-002
+  messages:
+  - CONN-01 uses a cross-domain solution other than the DISA-provided CD service without having considered
+    it
