@@ -1,0 +1,14 @@
+rule: CATO-006
+bases:
+- minimal
+description: hyperscale cloud hosting declared not a cloud
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.hosting.cloud
+  value: false
+expect:
+  errors:
+  - CATO-006
+  messages:
+  - 'the hosting environment is a hyperscale cloud, so it is hosted on a cloud: cloud is False'

@@ -1,0 +1,42 @@
+rule: SCRM-005
+bases:
+- minimal
+description: a substantial risk answered without weighing law-enforcement
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.severity.level
+  value: 3
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.escalation
+  value:
+    officials:
+    - PER-ISSM
+    - PER-AO
+    legal_counsel: true
+    fasc: mandatory
+    considered:
+    - law-enforcement
+    - counter-intelligence
+    - legal
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.review.senior_leadership
+  value: true
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.review.legal_counsel
+  value: true
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.escalation.considered
+  value:
+  - counter-intelligence
+  - legal
+expect:
+  errors:
+  - SCRM-005
+  messages:
+  - SA-01 responds to a substantial risk without weighing law-enforcement equities before engaging 
+    the source

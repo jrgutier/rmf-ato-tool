@@ -736,7 +736,9 @@ requirements:
     locator: "3.3.a.(1)"
     context: "CYBERSECURITY PLANNING AND EXECUTION Planning Cybersecurity Activities"
     statement: "(1) The PM is responsible for ensuring that the cybersecurity requirements are considered in all aspects of their program to include operational cybersecurity and supply chain resilience."
-    status: "candidate"
+    status: "partial"
+    reason: "The C-SCRM requirements contracts carry are requirements.yaml requirements allocated to the contract (SCRM-007); that the PM considers them in all aspects of the program is not checkable. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-007", "fixture": "tests/fixtures/negative/SCRM-007.allocation.yaml", "expect": "is not allocated to the contract in", "asserts": "The PM ensures cybersecurity requirements, including supply chain resilience, are carried in the program's contract", "claim": "constraint"}]
     work_item: "WI-105"
   - id: "REQ-DODI5000.90-0090"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "The PM is expected to delegate responsibility to members of the program"}
@@ -805,7 +807,9 @@ requirements:
     locator: "3.3.b.(2)"
     context: "CYBERSECURITY PLANNING AND EXECUTION"
     statement: "(2) PMs should conduct periodic threat-representative adversarial assessments to assess the ability of the cyber technologies in the materiel solution to complete missions in a cyber-contested environment."
-    status: "candidate"
+    status: "partial"
+    reason: "Not tier 1. CATO-010 requires testing against real-world adversary tactics; the mission in a cyber-contested environment is not modelled."
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.yaml", "expect": "security testing is not ongoing against adversary tactics", "asserts": "Periodic threat-representative adversarial assessments are conducted", "claim": "constraint", "sentence": "(2) PMs should conduct periodic threat-representative adversarial assessments to assess the ability of the cyber technologies in the materiel solution to complete missions in a cyber-contested environment."}]
     work_item: "WI-294"
   - id: "REQ-DODI5000.90-0098"
     citation: {"ref": "DODI5000.90", "page": 13, "anchor": "If an ATO is required, identify the AO responsible and ensure the"}
@@ -910,7 +914,9 @@ requirements:
     locator: "3.4.a.(1)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will conduct SCRM, to include Cyber-SCRM. This includes, at a minimum, conducting market research to assess potential vendors to determine if they:"
     statement: "(1) Provide products and components, or sub-components, sourced through original equipment manufacturers or authorized resellers."
-    status: "candidate"
+    status: "partial"
+    reason: "The vendor's answer is recorded per supplier (vendor.oem_or_authorized); DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/vendor/properties/oem_or_authorized", "asserts": "Products and components sourced through original equipment manufacturers or authorized resellers", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0110"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "Have previously incurred significant malicious network intrusions, data breaches, loss of client"}
@@ -918,7 +924,9 @@ requirements:
     locator: "3.4.a.(2)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will conduct SCRM, to include Cyber-SCRM. This includes, at a minimum, conducting market research to assess potential vendors to determine if they:"
     statement: "(2) Have previously incurred significant malicious network intrusions, data breaches, loss of client data, or intellectual property."
-    status: "candidate"
+    status: "partial"
+    reason: "The vendor's answer is recorded per supplier (vendor.prior_intrusions); DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/vendor/properties/prior_intrusions", "asserts": "Vendors have previously incurred significant malicious intrusions or data breaches", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0111"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "Have obtained a CMMC certification level indicating that they practice, at least,"}
@@ -926,7 +934,9 @@ requirements:
     locator: "3.4.a.(3)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will conduct SCRM, to include Cyber-SCRM. This includes, at a minimum, conducting market research to assess potential vendors to determine if they:"
     statement: "(3) Have obtained a CMMC certification level indicating that they practice, at least, basic cyber hygiene (e.g., access management, timely patch management, identity management, and password management)."
-    status: "candidate"
+    status: "partial"
+    reason: "The vendor's CMMC level is recorded per supplier (vendor.cmmc_level); the CMMC program is outside the library. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/vendor/properties/cmmc_level", "asserts": "Vendors have obtained a CMMC certification level", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0112"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "The PMs will consider maintaining a visualization (illumination) of the supply chain"}
@@ -942,7 +952,9 @@ requirements:
     locator: "3.4.c.(1)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will:"
     statement: "(1) Consider the source of products that may be supplied to fulfill program requirements, and seek alternatives to design of performance specifications or other program requirements that may necessitate the use of sources owned by, controlled by, or subject to the jurisdiction of a foreign adversary’s government. The program PM will maintain a complete list that shows, to the furthest extent possible:"
-    status: "candidate"
+    status: "partial"
+    reason: "The selection record keeps per supplier the ownership and technology relationships the PM's list shows; seeking alternatives to foreign adversary sources is the approved_source choice and the exclusion record, but not a rule. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/ownership", "asserts": "The program PM maintains a complete list of the ownership of companies that supply components", "sentence": "The program PM will maintain a complete list that shows, to the furthest extent possible:", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0114"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "The ownership of commercial companies that currently do, or potentially will, supply"}
@@ -950,7 +962,9 @@ requirements:
     locator: "3.4.c.(1).(a)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will: Consider the source of products that may be supplied to fulfill program requirements, and seek alternatives to design of performance specification"
     statement: "(a) The ownership of commercial companies that currently do, or potentially will, supply (hardware, software, or firmware) components to the program, and therefore may be subject to influence or control by threat actors with a known interest in the IS or PIT being acquired by the program."
-    status: "candidate"
+    status: "partial"
+    reason: "Recorded per supplier (ownership), free text; DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/ownership", "asserts": "The ownership of commercial companies that supply components and may be subject to influence or control by threat actors", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0115"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Technology relationships with other companies that are known to already be under"}
@@ -958,7 +972,9 @@ requirements:
     locator: "3.4.c.(1).(b)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will: Consider the source of products that may be supplied to fulfill program requirements, and seek alternatives to design of performance specification"
     statement: "(b) Technology relationships with other companies that are known to already be under the influence or control of threat actors."
-    status: "candidate"
+    status: "partial"
+    reason: "Recorded per supplier (technology_relationships), free text; DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/technology_relationships", "asserts": "Technology relationships with other companies under the influence or control of threat actors", "claim": "presence"}]
     work_item: "WI-129"
   - id: "REQ-DODI5000.90-0116"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Take action to manage supply chain risks, including those associated with foreign"}

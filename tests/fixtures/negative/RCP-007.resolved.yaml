@@ -1,0 +1,14 @@
+rule: RCP-007
+bases:
+- minimal
+description: a dispute escalated after it was resolved
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.1.refusal.escalation.0.result
+  value: resolved
+expect:
+  errors:
+  - RCP-007
+  messages:
+  - 'RS-02: the dispute is raised to rmf-tag-chair though it was resolved at ao'

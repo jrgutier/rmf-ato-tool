@@ -703,6 +703,133 @@
           }
         }
       }
+    },
+    "hosting": {
+      "title": "Where the system is hosted and why (P-16): a Defense Enterprise Computing Center, an existing authorized enclave, the cloud or elsewhere",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "decc",
+        "cloud",
+        "enterprise_services",
+        "sources"
+      ],
+      "properties": {
+        "environment": {
+          "title": "Hosting environment of the system",
+          "enum": [
+            "decc",
+            "existing-enclave",
+            "cloud",
+            "program-facility",
+            "other"
+          ]
+        },
+        "decc": {
+          "title": "Hosting in a Defense Enterprise Computing Center",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "title": "Hosted in a Defense Enterprise Computing Center, operationally infeasible, or hosted in the cloud first (DoDI 5000.82 3.7.b)",
+              "enum": [
+                "hosted",
+                "infeasible",
+                "cloud"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "enclave_application": {
+          "title": "Whether the capability could be developed as an application hosted in an existing authorized enclave rather than designated a major application requiring a new and separate authorization",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "title": "Developing it as an application in an existing authorized enclave is possible or not possible",
+              "enum": [
+                "possible",
+                "not-possible"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "cloud": {
+          "title": "Assessment that the system is, or can and would be, cloud-hosted without compromising security or integrity",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assessment",
+            "reason"
+          ],
+          "properties": {
+            "assessment": {
+              "title": "Cloud hosting assessment result",
+              "enum": [
+                "cloud-hosted",
+                "can-be-cloud-hosted",
+                "cannot-be-cloud-hosted"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "enterprise_services": {
+          "title": "Existing enterprise services, shared infrastructure and approved or provisionally authorized cloud environments considered before unique ones",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "considered",
+            "outcome"
+          ],
+          "properties": {
+            "considered": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "outcome": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "approved_by": {
+          "title": "Who approved the IT infrastructure and hosting solution",
+          "type": "string",
+          "pattern": "^PER-[A-Z]+$"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   },
   "$defs": {

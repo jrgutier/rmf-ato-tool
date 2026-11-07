@@ -1,0 +1,19 @@
+rule: RCP-004
+bases:
+- minimal
+description: deployment instructions not requested
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.package.requested_documents
+  value:
+  - ssp
+  - sar
+  - rar
+  - poam
+  - authorization-decision
+expect:
+  errors:
+  - RCP-004
+  messages:
+  - 'RS-01: the Granting organization is not asked for the deployment-instructions'

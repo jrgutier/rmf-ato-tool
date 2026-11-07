@@ -1,0 +1,18 @@
+rule: RCP-002
+bases:
+- minimal
+description: a reauthorization notice five months ahead
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.notices.6.date
+  value: '2027-06-21'
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.notices.6.acknowledged
+  value: '2027-06-22'
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: the receiving organization is notified less than 6 months before the reauthorization event'

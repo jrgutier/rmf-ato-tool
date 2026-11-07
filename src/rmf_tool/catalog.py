@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Any
 
 CATALOG_PATH = "references/oscal/catalog/NIST_SP-800-53_rev5_catalog.json"
-FIELDS = ("title", "statement", "guidance", "objectives", "params", "assurance")
+FIELDS = ("title", "statement", "guidance", "objectives", "params", "assurance", "overlay")
+OVERLAY_FIELD = "overlay"  # needs a run: the Section 6 specifications of its applied overlays
 ASSURANCE_PROP = "contributes-to-assurance"  # SP 800-53r5 Appendix C, the Assurance column
 DEFAULT_FIELDS = ("title", "statement")
 _INSERT = re.compile(r"\{\{\s*insert:\s*param,\s*([^\s}]+)\s*\}\}")
@@ -139,6 +140,15 @@ def render_text(v: dict[str, Any]) -> str:
             lines += [f"    {ln}" for ln in v[name].splitlines()]
     for pid, text in (v.get("params") or {}).items():
         lines.append(f"  param {pid}: {text}")
+    for spec in v.get(OVERLAY_FIELD) or ():
+        cite = spec["citation"]
+        lines.append(f"  overlay {spec['overlay']} ({spec['disposition']}), page {cite['page']}: "
+                     f"{cite['anchor']}")
+        lines += [f"    {st['kind']}: {st['text']}" for st in spec["statements"]]
+        if spec["authorities"]:
+            lines.append(f"    authorities: {'; '.join(spec['authorities'])}")
+        if spec.get("guidance_references"):
+            lines.append(f"    guidance references: {'; '.join(spec['guidance_references'])}")
     return "\n".join(lines)
 
 

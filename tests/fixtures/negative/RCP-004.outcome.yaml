@@ -1,0 +1,16 @@
+rule: RCP-004
+bases:
+- minimal
+description: an outcome outside pending, accepted and refused
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.outcome
+  value: approved
+expect:
+  errors:
+  - RCP-004
+  messages:
+  - 'RS-01: the outcome of the received system is not pending, accepted or refused'
+  also:
+  - RUN-FM-001

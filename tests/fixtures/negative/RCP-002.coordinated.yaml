@@ -1,0 +1,15 @@
+rule: RCP-002
+bases:
+- minimal
+description: no coordination during development
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.requirements.coordinated
+  value:
+  - '2026-10-01'
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: security requirements are not coordinated with the receiving organization during system development'

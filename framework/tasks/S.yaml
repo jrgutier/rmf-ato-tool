@@ -77,6 +77,8 @@ tasks:
         remove and compensating action is tested against law, regulation, policy and OMB policy
         (TLR-002); every compensating control carries its source, reason and the risk
         acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+      - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's
+        acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
     citations:
       - {ref: SP800-37R2, section: "TASK S-2", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 15, anchor: "Task S-2 Control Tailoring"}
@@ -133,7 +135,7 @@ tasks:
       Document the planned control implementations in the security plan and write the CM,
       contingency and incident response plans.
     raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG]
+    inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG, ART-RA, ART-REQ, ART-ORG-CONTEXT]
     outputs: [ART-SSP, ART-CMP, ART-CP, ART-IRP, ART-SVCA]
     writes_facts: []
     depends_on: [S-3]
@@ -149,6 +151,10 @@ tasks:
       - ART-CMP, ART-CP and ART-IRP written.
       - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control
         board and the baseline configuration process.
+      - A CSO-hosted system has artifacts/data/cloud.yaml with its offerings and their FedRAMP or DoD
+        provisional authorization, the mission impact level, the DTM 24-001 activity tracking
+        checklist, contract clauses, the CSSP's part and the incident response split
+        (CLOUD-001 to CLOUD-010).
       - For a system processing PII, ART-SSP holds the privacy plan with the security plan
         (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
       - The statement of each baseline control the catalog marks as contributing to assurance
@@ -158,6 +164,10 @@ tasks:
         with signed provenance, AI used in development, the SBOM and other machine-readable
         evidence, integrated test and evaluation and the software program (SWA-001; DoWI
         8430.01).
+      - artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM
+        control decisions, critical suppliers in contingency and incident planning, supplier
+        monitoring after award, training content and the supply chain reporting M-5 follows
+        (SCRM-009 to SCRM-012, SCRM-014).
     citations:
       - {ref: SP800-37R2, section: "TASK S-4", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-4 Documentation of Planned Control Implementations"}
@@ -197,6 +207,9 @@ tasks:
         management strategy is developed (DoDI 8510.01 Table 3 outcome).
       - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization
         triggers (CONMON-001).
+      - On the software pathway (PW-SWP), conmon.yaml states the risk-based lifecycle management
+        approach, what it addresses, what the program backlogs capture, and when a
+        vulnerability fix is released out of the release cycle (SWLC-001).
       - conmon.yaml states the criteria behind each frequency, established by the system owner
         or common control provider with other officials, or cites ART-ORG-CONTEXT for a family
         organizational_frequencies lists as set by the organizational strategy (ISCM-003).
@@ -226,6 +239,12 @@ tasks:
         are identified, the analysis tools from development to retirement, monthly
         authenticated and non-authenticated scans, the patch sources and the reach of
         automated patching, and the central log repository (VULN-007).
+      - The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring
+        strategy.
+      - With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP
+        maintaining every service the DoD CIO reciprocity playbook names, and each implemented
+        directed action as a patch provided in time and communicated to every Receiving organization
+        (RCP-003).
     citations:
       - {ref: SP800-37R2, section: "TASK S-5", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-5 Continuous Monitoring Strategy – System"}

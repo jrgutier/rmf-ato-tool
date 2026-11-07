@@ -1,0 +1,16 @@
+rule: CATO-005
+bases:
+- minimal
+description: pipeline findings not fed back
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.pipeline_findings
+  value:
+  - capture
+  - visualize
+expect:
+  errors:
+  - CATO-005
+  messages:
+  - security findings during pipeline runs are not feedbackd

@@ -530,3 +530,31 @@ with the next ID; never edit or delete an existing entry.
 - Fix: tests/unit/test_check_rules.py derives a base `pii` from valid_minimal by the mutations in tests/fixtures/runs/pii.yaml; test_base_has_no_findings holds it clean, and the PRIV fixtures, AODM-010.privacy and RAR-002.privacy mutate it.
 - Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
 - Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.
+
+## L-0076 · 2026-11-07 · run: phase-11 · tags: references, extraction
+- Symptom: the first transcription of the Privacy Overlays' Section 6 gave AC-16 no guidance and AC-16(3) one, against Table 2's marks, and ran the rest of AC-16's guidance into its justification.
+- Root cause: the PDF prints AC-16's Guidance as a two-column box; the text extraction made it a table and placed it after the next heading, so reading Section 6 in line order files it under the wrong control.
+- Fix: rmf_tool.overlay_specs checks every specification against its summary-table marks (G, V, R, E per control set), and a named repair puts the box back under AC-16, failing when the text no longer matches it.
+- Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
+- Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
+
+## L-0077 · 2026-11-07 · run: phase-11 · tags: references, rules
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities look empty in a terminal or editor, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the extractor maps to the private-use code point U+F0E9, which renders as blank, while the ● and ○ keys come through as themselves; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
+- Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
+- Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
+
+## L-0078 · 2026-11-07 · run: phase-11 · tags: framework, runs
+- Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
+- Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
+- Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.
+- Rule: Add an artifact to a task's outputs only with a `framework_version` bump and `rmf run migrate` handling; a later task that fills a section of an existing data file takes the artifact as input.
+- Promotion: none — the p7 example check and test_base_has_no_findings already fail on it; the lesson records why.
+
+## L-0079 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
+- Symptom: a first cut of RCP-001 tested `tool.get("compatible") is False` and FW-REQ-003 read the clause as presence, while `len(early) < 1` in RCP-002 read as a constraint though it only asks that a list be non-empty.
+- Root cause: the judge's absence test compares against None, "" and 0, and `False == 0` in Python, so `is False` counts as a read of absence; a comparison it does not know, such as `< 1`, counts as a constraint.
+- Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.
+- Rule: Write each failing clause in the form the judge reads truthfully: presence as `not x` on a plain read, a constraint as a comparison of the value; never pick a spelling to change the claim.
+- Promotion: none — changing how the judge reads booleans would reclassify the evidence of rules already merged; the RCP clauses follow the rule and their claims are computed, not declared.

@@ -53,7 +53,8 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    writes it with `roles`, `manpower_structure`, `open_functions` and `code_signing`; P-2 adds
    `program`, `policies`, `resources`, `risk_frame`, `governance`,
    `risk_assessment_guidance`, `risk_response` and `external_entities`; P-5 adds
-   `common_controls`; P-7 adds `iscm`; P-3 adds `posture_reviews` once the system operates.
+   `common_controls`; P-7 adds `iscm`; P-3 adds `posture_reviews` once the system operates;
+   P-4 adds `developed_overlays` for an overlay the organization develops itself.
    Each task rewrites the file whole (INV-8). OCTX-001 to OCTX-013 judge it; a section is
    demanded only while its task is in scope. Why: the Markdown cannot fail a check, the
    record can.
@@ -119,7 +120,13 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    a table of role, persona ID, holder's title (not a personal name unless the fork gives
    one) and appointing authority, traced. Do not add the later sections; P-2 to P-7 append
    them (step 4 of "How these tasks run").
-7. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
+7. **Write the C-SCRM part.** Write `artifacts/data/scrm-org.yaml` whole from `templates/data/scrm-org.yaml` (schema
+   `framework/schema/scrm-org.schema.json`) and fill its `governance` now: an executive persona
+   leads C-SCRM, `pmo` is dedicated, matrixed or a team, PER-AO is among `owners` (an AO may delegate
+   day-to-day risk to `delegates` such as PER-AODR), the council and its charter, and a C-SCRM
+   duty for PER-PM, PER-DEV, PER-LSE or PER-ISSE, PER-CIO, PER-CISO and PER-RE (SCRM-021).
+   Leave the other sections as the template's placeholders until their task.
+8. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
    until 0 errors. **Journal** a CHECKPOINT.
 
 ### Interviews
@@ -142,6 +149,7 @@ At least 1 interview with `task: P-1`.
 | File | Front-matter | Notes |
 |---|---|---|
 | `artifacts/ART-ORG-CONTEXT.md` | `artifact_id: ART-ORG-CONTEXT`, `produced_by_task: P-1`, `touched_by: [P-1]` | the role assignments section only |
+| `artifacts/data/scrm-org.yaml` | none (data) | C-SCRM governance; the other sections are filled by P-2 to P-7 |
 
 ### Facts
 
@@ -244,7 +252,13 @@ Purpose: Establish the organization's risk management strategy, including how it
      the evidence of trustworthiness and, for an actual one, that a senior leader accepted
      the ongoing risk, or the `response` when it is not acceptable. C-1 adds the provider of
      each leveraged authorization.
-6. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
+   to 1-4 (OT suppliers in scope; threat, vulnerability, impact and likelihood assumptions
+   each refined at P-14; which threat source kinds are addressed; appetite set at level-1 and
+   tolerance with thresholds at level-2 and level-3; priorities; the nine framing outputs),
+   the `policy`, `strategy`, `levels`, `process`, `maturity` and `training` (SCRM-020,
+   SCRM-022, SCRM-024, SCRM-027 to SCRM-029). The policy is the C-SCRM item of EXT-ORG-POLICY.
+7. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews
 
@@ -328,7 +342,11 @@ Purpose: Assess organization-wide security and privacy risk, including supply ch
    holds a record later than the authorization to operate. Update the strategy
    sections it changes in the same rewrite. Why: CNSSP 22 asks for an ongoing review at the
    organization level, not only the system-level reviews of M-1 and M-3.
-6. **Build and check** with `--task P-3`, then **journal** a CHECKPOINT.
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with `sharing`: each SP 800-150 key practice,
+   the communities, an executive FASC liaison, the scope approved per supplier, and `feeds`
+   naming P-3 and P-14, where shared supply chain risk information arrives as EXT-THREAT
+   (SCRM-023).
+7. **Build and check** with `--task P-3`, then **journal** a CHECKPOINT.
 
 ### Interviews
 
@@ -407,7 +425,22 @@ Purpose: Establish and publish organizationally-tailored control baselines and/o
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-4` to `touched_by` and append
    `## Organizationally tailored baselines and profiles` with each baseline or overlay,
    its scope and its approval, or a traced sentence that none apply. S-1 and S-2 read this
-   section.
+   section. For an overlay the organization develops itself, also record it in
+   `artifacts/data/org-context.yaml` under `developed_overlays` (schema `org-context`), in
+   the shape of the CNSSI 1253E Attachment 1 template: `id` (`ORG-OVL-...`), `title`,
+   `concerns`, `baseline` (`independent`, or `dependent` with the baseline), the
+   `justification` and rationale for the overlay with each `risk_decisions` record made in
+   developing it, the `characteristics` and `assumptions` that justify it, the
+   `applicability` questions, and one `controls` record per control it selects or justifies
+   not selecting (`disposition`, `justification` tied to the overlay's risk, and any
+   `extension`, `guidance`, `parameter_values` and `references`). Add `sp800_53_version`,
+   `documents`, `update_events`, `tailoring_considerations` and `definitions` where the
+   overlay has them. Why: SP 800-53B Appendix C asks an overlay to justify itself, risk-based
+   decisions included, and users of an overlay need to know why each control is specified.
+   Rewrite `artifacts/data/scrm-org.yaml` whole with a `response_framework` entry at level-1
+   and at level-2: threat source, event, vulnerability and outcome, likelihood, impact and
+   exposure, mitigations with cost and effectiveness, and changes to common control
+   baselines (SCRM-026).
 5. **Build and check** with `--task P-4`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -652,7 +685,11 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
    across them); the first review and assessment are due one cycle after `established`, each formal program assessment with who received it
    and its findings, each with an owner and a due date, and the organization-wide ongoing
    authorization process with its two conditions (OCTX-010).
-6. **Build and check** with `--task P-7`, then **journal** a CHECKPOINT.
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with `measures`: stakeholders, goals validated
+   with them, measures of implementation, efficiency and effectiveness, and mission impact,
+   KPIs or KRIs against appetite and against tolerance, each with a target, and the
+   enterprise risk monitoring strategy (SCRM-025).
+7. **Build and check** with `--task P-7`, then **journal** a CHECKPOINT.
 
 ### Interviews
 

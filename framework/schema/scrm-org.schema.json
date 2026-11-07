@@ -1,0 +1,1990 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:scrm-org",
+  "title": "runs/<run-id>/artifacts/data/scrm-org.yaml",
+  "description": "The organization's C-SCRM context (ART-ORG-CONTEXT; P-1, P-2, P-7): the risk frame of SP 800-161 Tasks 1-1 to 1-4, governance, the C-SCRM policy, strategy and implementation plan, what each level holds, information sharing, maturity, measures, the Risk Response Framework and training. SCRM-020 to SCRM-027 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "frame",
+    "governance",
+    "policy",
+    "strategy",
+    "levels",
+    "process",
+    "sharing",
+    "maturity",
+    "measures",
+    "response_framework",
+    "training",
+    "sources"
+  ],
+  "properties": {
+    "frame": {
+      "title": "C-SCRM risk frame: SP 800-161 Tasks 1-1 to 1-4",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supply_chain",
+        "criticality",
+        "assumptions",
+        "threat_sources",
+        "impact_directions",
+        "likelihood_horizon",
+        "constraints",
+        "appetite",
+        "tolerance",
+        "priorities",
+        "outputs",
+        "sources"
+      ],
+      "properties": {
+        "supply_chain": {
+          "title": "What composes the supply chain",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "processes",
+            "systems",
+            "services",
+            "products",
+            "ot_suppliers",
+            "dependencies",
+            "review_interval",
+            "sources"
+          ],
+          "properties": {
+            "processes": {
+              "title": "Mission and business processes",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-1078"
+              ]
+            },
+            "systems": {
+              "title": "Information systems that compose the supply chain",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-1078"
+              ]
+            },
+            "services": {
+              "title": "Contracted services",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "products": {
+              "title": "Commercial products",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "ot_suppliers": {
+              "type": "boolean",
+              "title": "OT-related suppliers are within the scope of C-SCRM"
+            },
+            "dependencies": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Agency system and supply chain dependencies, including critical fourth-party suppliers",
+              "x-enforces": [
+                "REQ-SP800-161R1-1090"
+              ]
+            },
+            "review_interval": {
+              "$ref": "#/$defs/duration",
+              "title": "Interval at which the supply chain definitions are reviewed",
+              "x-enforces": [
+                "REQ-SP800-161R1-1084"
+              ]
+            },
+            "sources": {
+              "$ref": "#/$defs/sources"
+            }
+          }
+        },
+        "criticality": {
+          "title": "Prioritizing risk treatment of critical elements",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "factors",
+            "levels"
+          ],
+          "properties": {
+            "factors": {
+              "title": "Factors that prioritize treatment",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-1079"
+              ]
+            },
+            "levels": {
+              "type": "string",
+              "minLength": 1,
+              "title": "How supplier criticality follows enterprise criticality at each level",
+              "x-enforces": [
+                "REQ-SP800-161R1-1088"
+              ]
+            }
+          }
+        },
+        "assumptions": {
+          "title": "Threat, vulnerability, impact and likelihood assumptions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "statement",
+              "basis",
+              "information",
+              "refined_at",
+              "sources"
+            ],
+            "properties": {
+              "kind": {
+                "title": "Kind of assumption",
+                "enum": [
+                  "threat",
+                  "vulnerability",
+                  "impact",
+                  "likelihood"
+                ]
+              },
+              "statement": {
+                "type": "string",
+                "minLength": 1,
+                "title": "The assumption"
+              },
+              "basis": {
+                "title": "Inherited from enterprise risk management, refined for C-SCRM, or developed",
+                "enum": [
+                  "inherited",
+                  "refined",
+                  "developed"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-161R1-1040",
+                  "REQ-SP800-161R1-1085",
+                  "REQ-SP800-161R1-1088",
+                  "REQ-SP800-161R1-1129",
+                  "REQ-SP800-161R1-1139"
+                ]
+              },
+              "information": {
+                "title": "Sources of the information it rests on",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-161R1-1135"
+                ]
+              },
+              "refined_at": {
+                "title": "Tasks that refine it",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[PSIARCM]-\\d+$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "threat_sources": {
+          "title": "Threat sources addressed and not addressed",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "addressed",
+            "not_addressed",
+            "ttps",
+            "classified"
+          ],
+          "properties": {
+            "addressed": {
+              "title": "Kinds addressed",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "adversarial",
+                  "accidental",
+                  "structural",
+                  "environmental"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "not_addressed": {
+              "title": "Kinds not addressed",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "adversarial",
+                  "accidental",
+                  "structural",
+                  "environmental"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "ttps": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Characterization of adversary tactics, techniques and procedures",
+              "x-enforces": [
+                "REQ-SP800-161R1-1099"
+              ]
+            },
+            "classified": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Capability to process classified intelligence",
+              "x-enforces": [
+                "REQ-SP800-161R1-1100"
+              ]
+            }
+          }
+        },
+        "impact_directions": {
+          "title": "Impact determination approach",
+          "type": "array",
+          "items": {
+            "enum": [
+              "top-down",
+              "bottom-up"
+            ]
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-1131"
+          ]
+        },
+        "likelihood_horizon": {
+          "$ref": "#/$defs/duration",
+          "title": "Time span of likelihood estimates",
+          "x-enforces": [
+            "REQ-SP800-161R1-1140"
+          ]
+        },
+        "constraints": {
+          "title": "The two types of constraints",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "agency",
+            "supply_chain"
+          ],
+          "properties": {
+            "agency": {
+              "title": "Agency constraints",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-1534",
+                "REQ-SP800-161R1-1545"
+              ]
+            },
+            "supply_chain": {
+              "title": "Supply chain constraints",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-1534",
+                "REQ-SP800-161R1-1545"
+              ]
+            }
+          }
+        },
+        "appetite": {
+          "title": "Risk appetite",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "statement",
+            "set_at",
+            "considered",
+            "outside"
+          ],
+          "properties": {
+            "statement": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Risk appetite statement",
+              "x-enforces": [
+                "REQ-SP800-161R1-1160"
+              ]
+            },
+            "set_at": {
+              "title": "Level that sets it",
+              "enum": [
+                "level-1",
+                "level-2",
+                "level-3"
+              ]
+            },
+            "considered": {
+              "title": "What it considered",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "threats",
+                  "vulnerabilities",
+                  "constraints",
+                  "criticality"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "outside": {
+              "type": "string",
+              "minLength": 1,
+              "title": "What a period outside appetite, in the review zone, sets off",
+              "x-enforces": [
+                "REQ-SP800-161R1-1163"
+              ]
+            }
+          }
+        },
+        "tolerance": {
+          "title": "Risk tolerance with thresholds",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "level",
+              "statement",
+              "thresholds"
+            ],
+            "properties": {
+              "level": {
+                "title": "Level",
+                "enum": [
+                  "level-1",
+                  "level-2",
+                  "level-3"
+                ]
+              },
+              "statement": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Tolerance statement"
+              },
+              "thresholds": {
+                "title": "Thresholds",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "priorities": {
+          "title": "Priorities and trade-offs",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "statement",
+              "considered"
+            ],
+            "properties": {
+              "statement": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Priority and its trade-off"
+              },
+              "considered": {
+                "title": "What it considered",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "appetite",
+                    "tolerance",
+                    "threats",
+                    "vulnerabilities",
+                    "constraints",
+                    "criticality"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "outputs": {
+          "title": "Outputs of the risk framing step",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "output",
+              "held_in"
+            ],
+            "properties": {
+              "output": {
+                "title": "Output",
+                "enum": [
+                  "policy",
+                  "criticality",
+                  "assessment-methodology",
+                  "response-guidance",
+                  "monitoring-guidance",
+                  "mission-requirements",
+                  "revised-processes",
+                  "operational-requirements",
+                  "acquisition-guidance"
+                ]
+              },
+              "held_in": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Where it is held"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "governance": {
+      "title": "C-SCRM governance",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lead",
+        "head",
+        "owners",
+        "escalation",
+        "council",
+        "pmo",
+        "operating_model",
+        "roles",
+        "sources"
+      ],
+      "properties": {
+        "lead": {
+          "title": "Executive lead of agency-wide C-SCRM: an individual, office or group",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "office"
+          ],
+          "properties": {
+            "persona": {
+              "$ref": "#/$defs/persona"
+            },
+            "office": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Office"
+            },
+            "group": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Group, such as a risk board or steering committee"
+            }
+          }
+        },
+        "head": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Head of the organization, where ownership and accountability lie",
+          "x-enforces": [
+            "REQ-SP800-161R1-0154"
+          ]
+        },
+        "owners": {
+          "title": "Authorizing officials ownership is delegated to",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/persona"
+          },
+          "minItems": 1
+        },
+        "delegates": {
+          "title": "Designated officials for day-to-day risk management",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/persona"
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-0157"
+          ]
+        },
+        "escalation": {
+          "title": "When and how risk decisions escalate",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "when",
+            "how"
+          ],
+          "properties": {
+            "when": {
+              "type": "string",
+              "minLength": 1,
+              "title": "When"
+            },
+            "how": {
+              "type": "string",
+              "minLength": 1,
+              "title": "How"
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-0155",
+            "REQ-SP800-61R3-0087"
+          ]
+        },
+        "council": {
+          "title": "C-SCRM council or team",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "members",
+            "charter"
+          ],
+          "properties": {
+            "members": {
+              "title": "Members and the functions they bring",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "function"
+                ],
+                "properties": {
+                  "function": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Function"
+                  },
+                  "persona": {
+                    "$ref": "#/$defs/persona"
+                  }
+                }
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0142",
+                "REQ-SP800-161R1-0143"
+              ]
+            },
+            "charter": {
+              "title": "Charter",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "goals",
+                "authorities",
+                "cadence",
+                "responsibilities"
+              ],
+              "properties": {
+                "goals": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Goals and objectives"
+                },
+                "authorities": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Authorities"
+                },
+                "cadence": {
+                  "$ref": "#/$defs/duration",
+                  "title": "Meeting cadence",
+                  "x-enforces": [
+                    "REQ-SP800-161R1-0144"
+                  ]
+                },
+                "responsibilities": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Responsibilities"
+                }
+              }
+            }
+          }
+        },
+        "pmo": {
+          "title": "C-SCRM PMO, or a dedicated C-SCRM team without one",
+          "enum": [
+            "dedicated",
+            "matrixed",
+            "team",
+            "none"
+          ]
+        },
+        "operating_model": {
+          "title": "C-SCRM operating model",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model",
+            "rationale"
+          ],
+          "properties": {
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Model"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Why it fits resources and context"
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-0199"
+          ]
+        },
+        "roles": {
+          "title": "C-SCRM duty of each run role",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "duty"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona"
+              },
+              "duty": {
+                "type": "string",
+                "minLength": 1,
+                "title": "C-SCRM duty"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "cleared": {
+          "title": "Key C-SCRM roles cleared to access classified C-SCRM information",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/persona"
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-0281",
+            "REQ-SP800-161R1-0976"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "policy": {
+      "title": "The Component's C-SCRM policy, an EXT-ORG-POLICY item",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "levels",
+        "purpose",
+        "authorities",
+        "statements",
+        "roles",
+        "integration_points",
+        "enforcement",
+        "responsible",
+        "revisions",
+        "sources"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Policy title"
+        },
+        "levels": {
+          "title": "Levels it applies at",
+          "type": "array",
+          "items": {
+            "enum": [
+              "level-1",
+              "level-2",
+              "level-3"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-0623"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Purpose and scope, and leadership's intent to adhere and enforce",
+          "x-enforces": [
+            "REQ-SP800-161R1-0164",
+            "REQ-SP800-161R1-0614",
+            "REQ-SP800-161R1-0623",
+            "REQ-SP800-37R2-0730"
+          ]
+        },
+        "authorities": {
+          "title": "Laws, orders, directives, regulations, policies and standards that govern it",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-1541"
+          ]
+        },
+        "statements": {
+          "title": "Mandatory high-level policy statements",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0142",
+            "REQ-SP800-161R1-0160",
+            "REQ-SP800-161R1-0271",
+            "REQ-SP800-161R1-0324",
+            "REQ-SP800-161R1-1076",
+            "REQ-SP800-161R1-1542",
+            "REQ-SP800-37R2-0132"
+          ]
+        },
+        "roles": {
+          "title": "C-SCRM roles and responsibilities it defines",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "responsibility"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona"
+              },
+              "responsibility": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Responsibility"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0164",
+            "REQ-SP800-161R1-0217",
+            "REQ-SP800-161R1-0614",
+            "REQ-SP800-161R1-1153",
+            "REQ-SP800-37R2-0132"
+          ]
+        },
+        "integration_points": {
+          "title": "Integration points with the risk management process and SDLC",
+          "type": "array",
+          "items": {
+            "enum": [
+              "risk-management-process",
+              "sdlc"
+            ]
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-1152"
+          ]
+        },
+        "enforcement": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How it is enforced"
+        },
+        "informed_by": {
+          "title": "Level 1 policies and plans that inform a Level 2 policy",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-0624"
+          ]
+        },
+        "responsible": {
+          "title": "Those responsible and key contributors, with role and name",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "role"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona"
+              },
+              "role": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Role and name"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0646"
+          ]
+        },
+        "revisions": {
+          "title": "Revision interval and table of revisions",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "interval",
+            "table"
+          ],
+          "properties": {
+            "interval": {
+              "$ref": "#/$defs/duration",
+              "title": "Required frequency of revision",
+              "x-enforces": [
+                "REQ-SP800-161R1-0664"
+              ]
+            },
+            "table": {
+              "title": "Table of revisions",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "date",
+                  "change"
+                ],
+                "properties": {
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "change": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Change"
+                  }
+                }
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0664"
+              ]
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "strategy": {
+      "title": "C-SCRM strategy and implementation plan",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "anchored_to",
+        "authorities",
+        "objectives",
+        "acquisition",
+        "funding",
+        "milestones",
+        "escalation",
+        "suppliers",
+        "contingency_acquisition",
+        "responsible",
+        "revisions",
+        "sources"
+      ],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Purpose, where it resides and its direction",
+          "x-enforces": [
+            "REQ-SP800-161R1-0540"
+          ]
+        },
+        "anchored_to": {
+          "type": "string",
+          "minLength": 1,
+          "title": "The enterprise risk management strategy it anchors to"
+        },
+        "authorities": {
+          "title": "Laws and policies that govern it",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0538",
+            "REQ-SP800-161R1-1540"
+          ]
+        },
+        "objectives": {
+          "title": "Strategic objectives and the capabilities they address",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0119",
+            "REQ-SP800-161R1-0120",
+            "REQ-SP800-161R1-0122",
+            "REQ-SP800-161R1-0539",
+            "REQ-SP800-161R1-0540",
+            "REQ-SP800-161R1-1522",
+            "REQ-SP800-161R1-1526",
+            "REQ-SP800-61R3-0108"
+          ]
+        },
+        "acquisition": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How supply chain risk is managed through the acquisition process",
+          "x-enforces": [
+            "REQ-SP800-161R1-0207",
+            "REQ-SP800-161R1-0217"
+          ]
+        },
+        "funding": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Resources and dedicated funding",
+          "x-enforces": [
+            "REQ-SP800-161R1-0081",
+            "REQ-SP800-161R1-0217",
+            "REQ-SP800-161R1-0333"
+          ]
+        },
+        "milestones": {
+          "title": "Implementation milestones",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "milestone",
+              "date"
+            ],
+            "properties": {
+              "milestone": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Milestone"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0173",
+            "REQ-SP800-161R1-0568"
+          ]
+        },
+        "escalation": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Issue escalation process and feedback mechanism",
+          "x-enforces": [
+            "REQ-SP800-161R1-0569"
+          ]
+        },
+        "suppliers": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Inventory of supplier relationships, contracts and what they provide, grouped by criticality",
+          "x-enforces": [
+            "REQ-SP800-161R1-0218"
+          ]
+        },
+        "contingency_acquisition": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Abbreviated acquisition procedures in contingencies and emergencies",
+          "x-enforces": [
+            "REQ-SP800-161R1-1544"
+          ]
+        },
+        "responsible": {
+          "title": "Those responsible and key contributors, with role and name",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "persona",
+              "role"
+            ],
+            "properties": {
+              "persona": {
+                "$ref": "#/$defs/persona"
+              },
+              "role": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Role and name"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0159",
+            "REQ-SP800-161R1-0591"
+          ]
+        },
+        "revisions": {
+          "title": "Revision interval and table of revisions",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "interval",
+            "table"
+          ],
+          "properties": {
+            "interval": {
+              "$ref": "#/$defs/duration",
+              "title": "Required frequency of revision",
+              "x-enforces": [
+                "REQ-SP800-161R1-0603"
+              ]
+            },
+            "table": {
+              "title": "Table of revisions",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "date",
+                  "change"
+                ],
+                "properties": {
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "change": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Change"
+                  }
+                }
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0603"
+              ]
+            }
+          }
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "levels": {
+      "title": "What each level holds and passes on",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "level",
+          "deliverables",
+          "informs"
+        ],
+        "properties": {
+          "level": {
+            "title": "Level",
+            "enum": [
+              "level-1",
+              "level-2",
+              "level-3"
+            ]
+          },
+          "deliverables": {
+            "title": "Deliverables",
+            "type": "array",
+            "items": {
+              "enum": [
+                "strategy",
+                "policy",
+                "implementation-plan",
+                "c-scrm-plan"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "informs": {
+            "title": "Levels it informs",
+            "type": "array",
+            "items": {
+              "enum": [
+                "level-1",
+                "level-2",
+                "level-3"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "x-enforces": [
+              "REQ-SP800-161R1-0168"
+            ]
+          }
+        }
+      },
+      "minItems": 3
+    },
+    "process": {
+      "title": "C-SCRM in the risk management process and the SDLC",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "steps",
+        "sdlc",
+        "adopted",
+        "integration",
+        "methodologies",
+        "handoff",
+        "opsec",
+        "sources"
+      ],
+      "properties": {
+        "steps": {
+          "title": "Frame, assess, respond and monitor",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "step",
+              "c_scrm"
+            ],
+            "properties": {
+              "step": {
+                "title": "Step",
+                "enum": [
+                  "frame",
+                  "assess",
+                  "respond",
+                  "monitor"
+                ]
+              },
+              "c_scrm": {
+                "type": "string",
+                "minLength": 1,
+                "title": "What C-SCRM does there"
+              }
+            }
+          },
+          "minItems": 4
+        },
+        "sdlc": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Integration of C-SCRM into the SDLC",
+          "x-enforces": [
+            "REQ-SP800-161R1-0056",
+            "REQ-SP800-161R1-0088",
+            "REQ-SP800-161R1-0200",
+            "REQ-SP800-161R1-0296"
+          ]
+        },
+        "adopted": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Practices of SP 800-161 adopted and how they are tailored",
+          "x-enforces": [
+            "REQ-SP800-161R1-0009",
+            "REQ-SP800-161R1-0011",
+            "REQ-SP800-161R1-0107",
+            "REQ-SP800-161R1-0123",
+            "REQ-SP800-161R1-0266",
+            "REQ-SP800-161R1-0344"
+          ]
+        },
+        "integration": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Method for integrating C-SCRM results into the agency risk management process",
+          "x-enforces": [
+            "REQ-SP800-161R1-1083"
+          ]
+        },
+        "methodologies": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Assessment methodologies selected",
+          "x-enforces": [
+            "REQ-SP800-161R1-1082"
+          ]
+        },
+        "handoff": {
+          "type": "string",
+          "minLength": 1,
+          "title": "What Levels 1 and 2 hand to a system's RMF steps",
+          "x-enforces": [
+            "REQ-SP800-161R1-0089"
+          ]
+        },
+        "opsec": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How operations security is integrated into planning, execution and assessment of supply chain risk management",
+          "x-enforces": [
+            "REQ-DODI5000.82-0126"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "sharing": {
+      "title": "Supply chain risk information sharing",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "practices",
+        "communities",
+        "fasc",
+        "scope",
+        "handling",
+        "feeds",
+        "sources"
+      ],
+      "properties": {
+        "practices": {
+          "title": "Information-sharing processes, by the SP 800-150 practice each follows",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "practice",
+              "how"
+            ],
+            "properties": {
+              "practice": {
+                "title": "Practice",
+                "enum": [
+                  "goals",
+                  "internal-sources",
+                  "scope",
+                  "rules",
+                  "join",
+                  "enrich",
+                  "automate",
+                  "agreements",
+                  "protect",
+                  "support"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-161R1-0240",
+                  "REQ-SP800-161R1-0241",
+                  "REQ-SP800-161R1-0242",
+                  "REQ-SP800-161R1-0243",
+                  "REQ-SP800-161R1-0244",
+                  "REQ-SP800-161R1-0245",
+                  "REQ-SP800-161R1-0246",
+                  "REQ-SP800-161R1-0247",
+                  "REQ-SP800-161R1-0248",
+                  "REQ-SP800-161R1-0249"
+                ]
+              },
+              "how": {
+                "type": "string",
+                "minLength": 1,
+                "title": "How"
+              }
+            }
+          }
+        },
+        "communities": {
+          "title": "Information-sharing communities and agreements",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "agreement"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Community"
+              },
+              "agreement": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Agreement"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0201",
+            "REQ-SP800-161R1-0238",
+            "REQ-SP800-161R1-0293",
+            "REQ-SP800-161R1-0305",
+            "REQ-SP800-161R1-0342"
+          ]
+        },
+        "fasc": {
+          "title": "Engagement with the FASC",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "liaison",
+            "process"
+          ],
+          "properties": {
+            "liaison": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Senior agency official who is liaison to the FASC: a persona, or the Department's liaison by name"
+            },
+            "process": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Sending and receiving SCRI",
+              "x-enforces": [
+                "REQ-SP800-161R1-0239",
+                "REQ-SP800-161R1-0974"
+              ]
+            }
+          }
+        },
+        "scope": {
+          "title": "Scope of sharing",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "classification",
+            "data_types"
+          ],
+          "properties": {
+            "classification": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Data classification level approved at the supplier's most recent risk assessment",
+              "x-enforces": [
+                "REQ-SP800-161R1-0251"
+              ]
+            },
+            "data_types": {
+              "title": "Data types approved for the supplier",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0251"
+              ]
+            }
+          }
+        },
+        "handling": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Mandated or voluntary sharing, handling and confidence metadata",
+          "x-enforces": [
+            "REQ-SP800-161R1-0250",
+            "REQ-SP800-161R1-0973",
+            "REQ-SP800-161R1-0975"
+          ]
+        },
+        "feeds": {
+          "title": "Tasks the shared information reaches as EXT-THREAT",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[PSIARCM]-\\d+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "maturity": {
+      "title": "Where the organization stands on the key practices of Section 3.4",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "practices",
+        "next",
+        "sources"
+      ],
+      "properties": {
+        "practices": {
+          "title": "Practices and their status",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "practice",
+              "tier",
+              "status"
+            ],
+            "properties": {
+              "practice": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Practice"
+              },
+              "tier": {
+                "title": "Tier",
+                "enum": [
+                  "foundational",
+                  "sustaining",
+                  "enhancing"
+                ]
+              },
+              "status": {
+                "title": "Status",
+                "enum": [
+                  "implemented",
+                  "in-progress",
+                  "planned",
+                  "not-started"
+                ]
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0302",
+            "REQ-SP800-161R1-0303",
+            "REQ-SP800-161R1-0304"
+          ]
+        },
+        "next": {
+          "title": "Practices it takes up next",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "measures": {
+      "title": "How the organization measures its C-SCRM program",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "framework",
+        "stakeholders",
+        "goals",
+        "measures",
+        "feedback",
+        "monitoring",
+        "supplier_data",
+        "sources"
+      ],
+      "properties": {
+        "framework": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Measurement framework used",
+          "x-enforces": [
+            "REQ-SP800-161R1-0345"
+          ]
+        },
+        "stakeholders": {
+          "title": "Primary and secondary stakeholders",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primary",
+            "secondary"
+          ],
+          "properties": {
+            "primary": {
+              "title": "Primary",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/persona"
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0322"
+              ]
+            },
+            "secondary": {
+              "title": "Secondary",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/persona"
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-161R1-0322"
+              ]
+            }
+          }
+        },
+        "goals": {
+          "title": "Goals and objectives validated with stakeholders",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "goal",
+              "validated_with"
+            ],
+            "properties": {
+              "goal": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Goal"
+              },
+              "validated_with": {
+                "title": "Validated with",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0323"
+          ]
+        },
+        "measures": {
+          "title": "Measures",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "indicator",
+              "against",
+              "measure",
+              "target",
+              "data_source"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^MEAS-\\d{2}$"
+              },
+              "kind": {
+                "title": "Kind of measure",
+                "enum": [
+                  "implementation",
+                  "efficiency-effectiveness",
+                  "mission-impact"
+                ]
+              },
+              "indicator": {
+                "title": "Key performance or key risk indicator",
+                "enum": [
+                  "kpi",
+                  "kri"
+                ]
+              },
+              "against": {
+                "title": "Measures performance against",
+                "enum": [
+                  "appetite",
+                  "tolerance",
+                  "objective"
+                ]
+              },
+              "measure": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Measure"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Performance target",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0310",
+                  "REQ-SP800-161R1-0332"
+                ]
+              },
+              "data_source": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Data source and template",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0325"
+                ]
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "feedback": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Formal feedback loop with stakeholders",
+          "x-enforces": [
+            "REQ-SP800-161R1-0332"
+          ]
+        },
+        "monitoring": {
+          "title": "Enterprise risk monitoring strategy",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "purpose",
+            "type",
+            "frequency"
+          ],
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Purpose"
+            },
+            "type": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Type of monitoring"
+            },
+            "frequency": {
+              "$ref": "#/$defs/duration",
+              "title": "Frequency of monitoring",
+              "x-enforces": [
+                "REQ-SP800-161R1-1555"
+              ]
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-161R1-1386"
+          ]
+        },
+        "supplier_data": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Protection of supplier data the agency collects",
+          "x-enforces": [
+            "REQ-SP800-161R1-1393"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "response_framework": {
+      "title": "C-SCRM Risk Response Framework at Levels 1 and 2",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "level",
+          "threat_source",
+          "threat_event",
+          "vulnerability",
+          "outcome",
+          "likelihood",
+          "impact",
+          "exposure",
+          "mitigations",
+          "baseline_changes",
+          "references"
+        ],
+        "properties": {
+          "level": {
+            "title": "Level",
+            "enum": [
+              "level-1",
+              "level-2"
+            ]
+          },
+          "threat_source": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat source"
+          },
+          "threat_event": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat event",
+            "x-enforces": [
+              "REQ-SP800-161R1-1538"
+            ]
+          },
+          "vulnerability": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Exploited vulnerability"
+          },
+          "outcome": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Threat event outcome"
+          },
+          "likelihood": {
+            "title": "Likelihood",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-SP800-161R1-1538"
+            ]
+          },
+          "impact": {
+            "title": "Impact",
+            "$ref": "#/$defs/level"
+          },
+          "exposure": {
+            "title": "Final risk exposure",
+            "$ref": "#/$defs/level"
+          },
+          "mitigations": {
+            "title": "Selected mitigating strategies and controls",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "strategy",
+                "cost",
+                "effectiveness"
+              ],
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Strategy and controls"
+                },
+                "cost": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Estimated cost"
+                },
+                "effectiveness": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Estimated effectiveness"
+                }
+              }
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-161R1-0350",
+              "REQ-SP800-161R1-1538"
+            ]
+          },
+          "baseline_changes": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Changes to requirements or common control baselines",
+            "x-enforces": [
+              "REQ-SP800-161R1-1308"
+            ]
+          },
+          "references": {
+            "title": "C-SCRM plans and frameworks it references",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-161R1-1263"
+            ]
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "training": {
+      "title": "Baseline and role-based C-SCRM training",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline",
+        "role_criteria",
+        "framework",
+        "assessors",
+        "sources"
+      ],
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Baseline training requirements set at Level 1",
+          "x-enforces": [
+            "REQ-SP800-161R1-0261",
+            "REQ-SP800-161R1-0262"
+          ]
+        },
+        "role_criteria": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Role-based training criteria",
+          "x-enforces": [
+            "REQ-SP800-161R1-0263"
+          ]
+        },
+        "framework": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Workforce framework used, such as the NICE Framework",
+          "x-enforces": [
+            "REQ-SP800-161R1-0264"
+          ]
+        },
+        "assessors": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Skills of personnel who perform SCRAs",
+          "x-enforces": [
+            "REQ-SP800-161R1-0903"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "persona": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "duration": {
+      "description": "ISO 8601 duration, such as P1Y or P90D.",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?$",
+      "minLength": 3
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    }
+  }
+}

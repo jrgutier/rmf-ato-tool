@@ -1,0 +1,18 @@
+rule: RCP-002
+bases:
+- minimal
+description: status updates too close to deployment
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.status_updates.0.date
+  value: '2026-12-15'
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations.0.status_updates.1.date
+  value: '2026-12-16'
+expect:
+  errors:
+  - RCP-002
+  messages:
+  - 'RO-01: no status update reaches the receiving organization 60 working days before the planned deployment'

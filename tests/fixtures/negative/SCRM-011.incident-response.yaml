@@ -1,0 +1,15 @@
+rule: SCRM-011
+bases:
+- minimal
+description: a critical supplier left out of incident-response
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: contingency.activities.1.suppliers
+  value:
+  - SUP-01
+expect:
+  errors:
+  - SCRM-011
+  messages:
+  - critical supplier SUP-03 is not included in incident-response

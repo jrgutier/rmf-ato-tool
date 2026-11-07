@@ -189,6 +189,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
 - A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 - plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010).
+- Each received system accepted in reciprocity.yaml has the Receiving AO's authorization to use on an acceptable risk, its copy to the Granting AO, notice to subordinate sites, this system's authorization documentation updated through the change log, the installation implemented and the inherited controls provided (RCP-005).
 
 **Alignment**
 
@@ -610,6 +611,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - artifacts/data/package-summary.yaml (template templates/data/package-summary.yaml) holds the package executive summary, a consolidated view of its security and, for a system processing PII, privacy information, with the risk management issues it highlights, and the submission of the package by the system owner or common control provider to the AO or AODR before the decision (XSUM-001).
 - For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
 - The package carries the PPP approval recorded in protection.yaml, and that approval was made by the authority the program's ACAT, decision authority and pathway call for (PPROT-001).
+- Each Receiving organization in reciprocity.yaml has the package, a current POA&M, the body of evidence, the deployment instructions and, before its first site, the installation and configuration requirements with every STIG, and visibility of the package; the package is shared with the information owners and every interconnected system (RCP-001).
 
 **Alignment**
 
@@ -716,6 +718,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [EXT-ADM](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -736,6 +739,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).
 - Where risks are not fully mitigated, the operators are told the potential impacts.
 - On urgent capability acquisition the MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment is read from EXT-ADM; it does not accept security risk, which only the AO does, and a mission-critical cybersecurity vulnerability is still eliminated before fielding.
+- Each supply chain risk outside tolerance has an R-3 response in scrm.yaml with two or more alternatives and their acceptable level, and a decision among them taken at the level its reach calls for (SCRM-013).
 
 **Alignment**
 

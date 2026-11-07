@@ -1,0 +1,22 @@
+rule: RCP-003
+bases:
+- minimal
+description: a CSSP without SIEM monitoring
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: granting.cssp.services
+  value:
+  - continuous-monitoring
+  - patch-management
+  - iavm
+  - ess
+  - operational-orders
+  - poams
+  - annual-reviews
+  - periodic-reviews
+expect:
+  errors:
+  - RCP-003
+  messages:
+  - the CSSP assigned does not maintain SIEM monitoring

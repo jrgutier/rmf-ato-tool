@@ -1,0 +1,14 @@
+rule: CATO-005
+bases:
+- minimal
+description: a gate whose triggers route to no role
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.control_gates.0.trigger_routing
+  value: nobody
+expect:
+  errors:
+  - CATO-005
+  messages:
+  - 'CG-01: the control gate routes its event triggers to no role for escalating resolution: nobody'

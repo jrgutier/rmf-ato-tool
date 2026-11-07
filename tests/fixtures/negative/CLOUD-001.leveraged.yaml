@@ -1,0 +1,15 @@
+rule: CLOUD-001
+bases:
+- cloud
+description: the offering names no leveraged authorization
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.leveraged_authorization
+  value: LA-09
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: leverages no authorization in leveraged-authorizations.yaml, so the existing authorization
+    and its documentation are not reused'

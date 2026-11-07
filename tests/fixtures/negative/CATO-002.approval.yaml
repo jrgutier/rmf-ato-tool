@@ -1,0 +1,14 @@
+rule: CATO-002
+bases:
+- minimal
+description: a trigger threshold the ISSM approved
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: strategy.triggers.0.approved_by
+  value: PER-ISSM
+expect:
+  errors:
+  - CATO-002
+  messages:
+  - 'TRG-01: an automated trigger rests on a threshold the AO approved, not PER-ISSM'

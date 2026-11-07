@@ -18,7 +18,8 @@ requirements:
     locator: "1.1"
     context: "RMF ROLE IN CYBERSECURITY"
     statement: "The DoD can leverage FedRAMP or independently initiate a DoD Provisional Authorization for cloud service offerings (CSOs) that DoD must use. Mission Owners (MOs) must understand the type of data, the authorized impact level, and the conditions outlined in the Provisional authorization when choosing an authorized CSO. Determination of the appropriate Impact Level for a specific mission and mission data will be the responsibility of the mission AO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/cloud.schema.json#/properties/offerings/items/properties/authorization/properties/basis", "asserts": "DoD leverages FedRAMP or a DoD Provisional Authorization for each cloud service offering", "claim": "constraint", "sentence": "The DoD can leverage FedRAMP or independently initiate a DoD Provisional Authorization for cloud service offerings (CSOs) that DoD must use."}, {"kind": "rule", "target": "CLOUD-001", "asserts": "Mission owners understand the type of data, the authorized impact level and the conditions of the Provisional authorization", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.review.yaml", "expect": "the type of data, the authorized impact level and the conditions of the provisional authorization", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "Mission Owners (MOs) must understand the type of data, the authorized impact level, and the conditions outlined in the Provisional authorization when choosing an authorized CSO."}, {"kind": "rule", "target": "CLOUD-002", "asserts": "Determination of the Impact Level for the mission and mission data is the responsibility of the mission AO", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.yaml", "expect": "is the responsibility of the mission AO", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "Determination of the appropriate Impact Level for a specific mission and mission data will be the responsibility of the mission AO."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0003"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 4, "anchor": "Impact Level 2 (IL2) accommodates publicly releasable data or nonpublic unclassified data"}
@@ -26,7 +27,8 @@ requirements:
     locator: "1.1.•"
     context: "RMF ROLE IN CYBERSECURITY"
     statement: "• Impact Level 2 (IL2) accommodates publicly releasable data or nonpublic unclassified data where the unauthorized disclosure of information could be expected to have a limited adverse effect on organizational operations, organizational assets, or individuals. This includes all data cleared for public release as well as some low confidentiality unclassified information not designated as Controlled Unclassified Information (CUI) or military/contingency operations mission data, but the information may require some minimal level of access control (e.g., user ID and password). This Impact Level accommodates non-CUI information categorizations based on Committee on National Security Systems Instruction (CNSSI)1253 at moderate Confidentiality, Integrity, and Availability (C-I-A). For noncontrolled unclassified information, Impact Level 2 CSP/CSO customers include whomever the CSP chooses to market the CSO to, which may include government customers, commercial customers, and the public within the same Impact Level 2 cloud environment. Access to CSO at this impact level is via the internet. DoD has reciprocity with FedRAMP for use of CSOs on the FedRAMP Marketplace for all DoD mission systems that process IL2 data."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-002", "asserts": "Impact Level 2 accommodates data whose unauthorized disclosure could be expected to have a limited adverse effect", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.limited.yaml", "expect": "expected to have a limited adverse effect, not a serious one", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "• Impact Level 2 (IL2) accommodates publicly releasable data or nonpublic unclassified data where the unauthorized disclosure of information could be expected to have a limited adverse effect on organizational operations, organizational assets, or individuals."}, {"kind": "rule", "target": "CLOUD-002", "asserts": "Impact Level 2 information is not designated as Controlled Unclassified Information", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.cui.yaml", "expect": "IL2 accommodates no Controlled Unclassified Information", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "This includes all data cleared for public release as well as some low confidentiality unclassified information not designated as Controlled Unclassified Information (CUI) or military/contingency operations mission data, but the information may require some minimal level of access control (e.g., user ID and password)."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0004"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 4, "anchor": "Impact Level 4 (IL4) accommodates nonpublic, unclassified data where the unauthorized disclosure"}
@@ -42,7 +44,8 @@ requirements:
     locator: "1.1.•"
     context: "RMF ROLE IN CYBERSECURITY"
     statement: "• Impact Level 5 (IL5) accommodates nonpublic, unclassified National Security Systems (NSS) data (i.e., unclassified National Security Information) or nonpublic, unclassified data where the unauthorized disclosure of information could be expected to have a serious adverse effect on organizational operations, organizational assets, or individuals. This includes CUI and/or other mission data that may require a higher level of protection than that afforded by Impact Level 4 as deemed necessary by the information owner, public law, or other government regulation. This Impact Level accommodates NSS and CUI information categorizations at High-High-X (H-H-X). Per CNSS Policy (CNSSP) 32, the minimum requirement for all unclassified NSS is equivalent to the FedRAMP High baseline. Impact Level 5 CSOs may support DOD private clouds such as a federal government community or DOD-only community."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-002", "asserts": "Nonpublic, unclassified National Security Systems data is accommodated at Impact Level 5", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.nss.yaml", "expect": "unclassified National Security Systems data is hosted at Impact Level 5", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "• Impact Level 5 (IL5) accommodates nonpublic, unclassified National Security Systems (NSS) data (i.e., unclassified National Security Information) or nonpublic, unclassified data where the unauthorized disclosure of information could be expected to have a serious adverse effect on organizational operations, organizational assets, or individuals."}, {"kind": "rule", "target": "CLOUD-002", "asserts": "CUI needing more protection than Impact Level 4, as deemed by the information owner, is accommodated at Impact Level 5", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.deemed.yaml", "expect": "CUI the information owner deems to need more protection than Impact Level 4", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "This includes CUI and/or other mission data that may require a higher level of protection than that afforded by Impact Level 4 as deemed necessary by the information owner, public law, or other government regulation."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0006"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 5, "anchor": "Impact Level 6 (IL6) accommodates nonpublic, classified NSS data (i.e., classified National"}
@@ -50,7 +53,8 @@ requirements:
     locator: "1.1.•"
     context: "RMF ROLE IN CYBERSECURITY"
     statement: "• Impact Level 6 (IL6) accommodates nonpublic, classified NSS data (i.e., classified National Security Information) or nonpublic, unclassified data where the unauthorized disclosure of information could be expected to have a serious adverse effect on organizational operations, organizational assets, or individuals. At this time, only information classified as SECRET or below, in accordance with the applicable executive orders, is permitted to be hosted at this Impact Level. Access to the CSO is via one or more private SIPRNet connections or approved CNSSP 11 circuits."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-002", "asserts": "Classified National Security Information is accommodated at Impact Level 6", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.secret.yaml", "expect": "classified National Security Information is hosted at Impact Level 6", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "• Impact Level 6 (IL6) accommodates nonpublic, classified NSS data (i.e., classified National Security Information) or nonpublic, unclassified data where the unauthorized disclosure of information could be expected to have a serious adverse effect on organizational operations, organizational assets, or individuals."}, {"kind": "rule", "target": "CLOUD-002", "asserts": "Only information classified as SECRET or below is permitted to be hosted at Impact Level 6", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-002.topsecret.yaml", "expect": "only information classified as SECRET or below is permitted", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "At this time, only information classified as SECRET or below, in accordance with the applicable executive orders, is permitted to be hosted at this Impact Level."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0007"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 5, "anchor": "Effective monitoring and analysis capabilities, incident response procedures, efficient communication management and"}
@@ -126,7 +130,8 @@ requirements:
     locator: "4.1"
     context: "ENTERPRISE – CLOUD"
     statement: "A CSP with a service offering already approved by FedRAMP at the moderate baseline is eligible for use under reciprocity by the DoD for public data. To obtain the BoE for review, the MO must submit a FedRAMP Package Access Request form at: https://www.fedramp.gov/assets/resources/documents/Agency_Package_Request_Form.pdf."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "A FedRAMP service offering below the moderate baseline is not eligible for use under reciprocity", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.baseline.yaml", "expect": "is not eligible for use under reciprocity; it needs the moderate baseline", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "A CSP with a service offering already approved by FedRAMP at the moderate baseline is eligible for use under reciprocity by the DoD for public data."}, {"kind": "rule", "target": "CLOUD-001", "asserts": "The mission owner submits the FedRAMP Package Access Request to obtain the body of evidence", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.par.yaml", "expect": "the FedRAMP Package Access Request for the body of evidence is submitted by the mission owner", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "To obtain the BoE for review, the MO must submit a FedRAMP Package Access Request form at: https://www.fedramp.gov/assets/resources/documents/Agency_Package_Request_Form.pdf."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0016"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "For data categorized at IL4/5/6, DoD issues a PA. The security authorization"}
@@ -134,7 +139,8 @@ requirements:
     locator: "4.1"
     context: "ENTERPRISE – CLOUD"
     statement: "For data categorized at IL4/5/6, DoD issues a PA. The security authorization package and inheritance is made available in the Enterprise Mission Assurance Support System (eMASS) for MOs to leverage when obtaining their department's ATOs."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "Data categorized at IL4/5/6 is hosted under a DoD provisional authorization the DoD issues", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.fedramp.yaml", "expect": "is hosted under a DoD provisional authorization, not a FedRAMP authorization", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "For data categorized at IL4/5/6, DoD issues a PA."}, {"kind": "rule", "target": "CLOUD-001", "asserts": "The security authorization package and inheritance are leveraged from eMASS when obtaining the ATO", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.emass.yaml", "expect": "authorization are leveraged from eMASS", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "The security authorization package and inheritance is made available in the Enterprise Mission Assurance Support System (eMASS) for MOs to leverage when obtaining their department's ATOs."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0017"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "For IL4 and IL5, MOs inherit security controls from eMASS for CSOs"}
@@ -142,7 +148,8 @@ requirements:
     locator: "4.1.•"
     context: "ENTERPRISE – CLOUD"
     statement: "• For IL4 and IL5, MOs inherit security controls from eMASS for CSOs and use the SSP and Security Requirements Traceability Matrix (SRTM) to understand control implementation guidance (inherited, hybrid or fully on MOs) and assess additional security controls based on MO’s need for awarding an ATO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "For IL4 and IL5 the mission owner uses the SSP and SRTM to understand control implementation guidance", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.srtm.yaml", "expect": "the mission owner uses the CSO's SSP and SRTM to understand control implementation guidance", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope"}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0018"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "For IL2 (Public Data), the DISA AO issued a reciprocity memo for"}
@@ -150,7 +157,8 @@ requirements:
     locator: "4.1.•"
     context: "ENTERPRISE – CLOUD"
     statement: "• For IL2 (Public Data), the DISA AO issued a reciprocity memo for CSOs assessed, authorized, and listed in the FedRAMP marketplace at a minimum of the FedRAMP moderate Baseline. If that IL2 needs be uplifted to IL4/5, a DoD Sponsor must utilize the DoD Cloud Authorization Services (DCAS) SharePoint page: https://dod365.sharepoint-mil.us/sites/DISA-RE-Apps/cas/SitePages/CASHome.aspx to request DISA to begin the Cloud Authorization Process."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CLOUD-001", "asserts": "Uplifting IL2 to IL4/5 needs a DoD Sponsor's request to DISA through the DoD Cloud Authorization Services", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.uplift.yaml", "expect": "needs a DoD Sponsor's request to DISA through the DoD Cloud Authorization Services", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope"}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0019"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "All DoD PAs for authorized CSOs, including the DISA Memorandum on IL2"}
@@ -198,7 +206,8 @@ requirements:
     locator: "4.2.b.(1)"
     context: "ENTERPRISE – ISRMC"
     statement: "(1) Granting AOs must also provide the complete security authorization package and body of evidence to Receiving AOs."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The complete security authorization package is delivered to each Receiving AO's organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.evidence.yaml", "expect": "the body of evidence behind the package is not shared with the receiving organization", "asserts": "The body of evidence behind the package is shared with each Receiving AO's organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0025"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 8, "anchor": "Program managers (PMs) and system owners – who deploy systems across multiple"}
@@ -206,15 +215,19 @@ requirements:
     locator: "4.2.b.(2)"
     context: "ENTERPRISE – ISRMC"
     statement: "(2) Program managers (PMs) and system owners – who deploy systems across multiple DoD Components – can accomplish this sharing by posting security authorization documentation and the associated body of evidence to eMASS or other automated assessment and authorization tools to provide visibility of authorization status and documentation to planned Receiving sites."
-    status: "candidate"
+    status: "partial"
+    reason: "The sentence is a permission ('can accomplish this sharing by posting'); RCP-001 holds that the Receiving organization keeps visibility through eMASS, another tool or manual inheritance."
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.visibility.yaml", "expect": "has no continuing visibility of the security authorization package", "asserts": "Visibility of authorization documentation to the planned Receiving sites is provided by posting to eMASS or other automated tools", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
+    ruling_sought: [{"sentence": "(2) Program managers (PMs) and system owners – who deploy systems across multiple DoD Components – can accomplish this sharing by posting security authorization documentation and the associated body of evidence to eMASS or other automated assessment and authorization tools to provide visibility of authorization status and documentation to planned Receiving sites.", "reason": "a permission: PMs and system owners 'can accomplish this sharing' by posting to eMASS or other tools; another route is allowed"}]
   - id: "REQ-DODCIO-RECIPROCITY-0026"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 9, "anchor": "For organizations inheriting from incompatible or interoperable record keeping systems, or RMF"}
     kind: "lettered"
     locator: "4.2.a"
     context: "ENTERPRISE – ISRMC"
     statement: "a. For organizations inheriting from incompatible or interoperable record keeping systems, or RMF inventory tools, the “manual inheritance” capability will be utilized."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.manual.yaml", "expect": "the manual inheritance capability is not used for a receiving organization whose record keeping system is incompatible", "asserts": "The manual inheritance capability is used for organizations whose record keeping systems or RMF inventory tools are incompatible", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "For organizations inheriting from incompatible or interoperable record keeping systems, or RMF inventory tools, the “manual inheritance” capability will be utilized."}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0027"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 9, "anchor": "This information sharing ensures all parties involved have visibility of the system’s"}
@@ -254,7 +267,9 @@ requirements:
     locator: "4.2.a.(3)"
     context: "ENTERPRISE – ISRMC"
     statement: "(3) System owners and PMs from Granting organizations must coordinate system security requirements with Receiving organizations’ representatives early and throughout system development."
-    status: "candidate"
+    status: "partial"
+    reason: "That coordination continues 'throughout system development' is not held: RCP-002 asks for coordination before the system is released, and the source sets no cadence."
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.coordinated.yaml", "expect": "security requirements are not coordinated with the receiving organization during system development", "asserts": "System security requirements are coordinated with the Receiving organizations during system development", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-312"
   - id: "REQ-DODCIO-RECIPROCITY-0032"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 9, "anchor": "Provide authorization status briefs to the DSAWG, as requested."}
@@ -271,7 +286,8 @@ requirements:
     locator: "4.2.e"
     context: "ENTERPRISE – ISRMC"
     statement: "e. In coordination with the Receiving organization, ensure security assessments address any and all additional Receiving organization security controls or requested adjustments to the assigned security controls identified during DSAWG security reviews."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.controls.yaml", "expect": "requested by the receiving organization is not addressed by the security control assessment", "asserts": "Every additional Receiving organization security control is addressed by the security control assessment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "In coordination with the Receiving organization, ensure security assessments address any and all additional Receiving organization security controls or requested adjustments to the assigned security controls identified during DSAWG security reviews."}]
     work_item: "WI-312"
   - id: "REQ-DODCIO-RECIPROCITY-0034"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 9, "anchor": "Ensure the Enterprise system complies with Information Assurance Vulnerability"}
@@ -325,7 +341,8 @@ requirements:
     locator: "4.2.i"
     context: "ENTERPRISE – ISRMC"
     statement: "i. Provide installation and configuration requirements documents to Receiving AOs prior to the Enterprise system deployment. This must include all applicable DoD Security Technical Implementation Guides (STIGs)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.install.yaml", "expect": "installation and configuration requirements do not reach the receiving organization before the system is deployed", "asserts": "Installation and configuration requirements documents reach the Receiving organization before the Enterprise system deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Provide installation and configuration requirements documents to Receiving AOs prior to the Enterprise system deployment."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.stigs.yaml", "expect": "the installation and configuration requirements leave out the applicable STIGs", "asserts": "The installation and configuration requirements include all applicable STIGs", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "This must include all applicable DoD Security Technical Implementation Guides (STIGs)."}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0040"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 10, "anchor": "Approve or disapprove the Enterprise system connection based on the DSAWG recommendation"}
@@ -378,7 +395,8 @@ requirements:
     locator: "4.2.a"
     context: "ENTERPRISE – ISRMC"
     statement: "a. Maintain situational awareness of the Granting Enterprise system assessment activities via eMASS or other automated tools."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.awareness.yaml", "expect": "is not kept through eMASS, another automated tool or manual inheritance", "asserts": "Situational awareness of the Granting system's assessment activities is maintained via eMASS or another automated tool", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Maintain situational awareness of the Granting Enterprise system assessment activities via eMASS or other automated tools."}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0046"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Make the system(s) security authorization package available to the Granting organization."}
@@ -386,7 +404,8 @@ requirements:
     locator: "4.2.b"
     context: "ENTERPRISE – ISRMC"
     statement: "b. Make the system(s) security authorization package available to the Granting organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.own.yaml", "expect": "security authorization package is not made available to the Granting organization", "asserts": "The receiving system's security authorization package is made available to the Granting organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Make the system(s) security authorization package available to the Granting organization."}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0047"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Determine the security impact of connecting the Granting Enterprise system within the"}
@@ -394,7 +413,8 @@ requirements:
     locator: "4.2.c"
     context: "ENTERPRISE – ISRMC"
     statement: "c. Determine the security impact of connecting the Granting Enterprise system within the"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.impact.yaml", "expect": "the security impact of connecting the Granting system is not determined before the decision", "asserts": "The security impact of connecting the Granting system is determined before the decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Determine the security impact of connecting the Granting Enterprise system within the"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0048"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Test security controls, as appropriate."}
@@ -402,7 +422,8 @@ requirements:
     locator: "4.2.d"
     context: "ENTERPRISE – ISRMC"
     statement: "d. Test security controls, as appropriate."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.configured.yaml", "expect": "configured at deployment is not tested by the receiving system owner", "asserts": "Test security controls as appropriate: the receiving owner tests each control configured at deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}, {"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.testdate.yaml", "expect": "configured at deployment is not tested once it is configured on deployment", "asserts": "Test security controls as appropriate: each control configured at deployment is tested once it is configured", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0049"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "The Receiving organization must review the controls and the deployment guide to"}
@@ -410,7 +431,8 @@ requirements:
     locator: "4.2.d.(1)"
     context: "ENTERPRISE – ISRMC"
     statement: "(1) The Receiving organization must review the controls and the deployment guide to ensure that the local security posture meets the deployment conditions and implement inherited controls and deploy the system in accordance with (IAW) the deployment guide."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.guide.yaml", "expect": "the controls and the deployment guide are not reviewed against the local security posture before the system is deployed", "asserts": "The controls and the deployment guide are reviewed against the local security posture before deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.provided.yaml", "expect": "required by the reciprocity authorization is not provided by the receiving organization", "asserts": "The Receiving organization implements and provides every inherited control", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.install.yaml", "expect": "the installation guide and security configuration requirements are not implemented after they are received", "asserts": "The system is deployed by implementing the deployment guide's installation and configuration requirements", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0050"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Security controls that are built into the system must not change when"}
@@ -418,7 +440,9 @@ requirements:
     locator: "4.2.d.(2)"
     context: "ENTERPRISE – ISRMC"
     statement: "(2) Security controls that are built into the system must not change when the system is deployed and do not need to be re-tested."
-    status: "candidate"
+    status: "partial"
+    reason: "RCP-004 refuses a re-test of a built-in control; that built-in controls do not change when the system is deployed is not held, since the run records no before-and-after of a built-in control."
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.builtin.yaml", "expect": "is re-tested though it does not change when the system is deployed", "asserts": "Security controls built into the system are not re-tested when the system is deployed", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0051"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "The Receiving organization must establish inheritance for the hybrid controls, providing supporting"}
@@ -433,7 +457,8 @@ requirements:
     locator: "4.2.e"
     context: "ENTERPRISE – ISRMC"
     statement: "e. Augment any security controls required for deploying the Enterprise system to a"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.augment.yaml", "expect": "required to deploy the system is not implemented by the time it is deployed", "asserts": "Each security control required for deploying the system is augmented and implemented before the decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0053"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "The authorization documentation for the systems receiving/hosting the"}
@@ -449,7 +474,8 @@ requirements:
     locator: "4.2.e.(1)"
     context: "ENTERPRISE – ISRMC"
     statement: "Enterprise system will be updated, as required."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.hosting.yaml", "expect": "authorization and connection documentation is not updated through the change log to incorporate the system", "asserts": "The authorization documentation of the systems hosting the Enterprise system is updated as required through the change log", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0055"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "This includes any installation and configuration requirement documents provided by the Granting"}
@@ -457,7 +483,8 @@ requirements:
     locator: "4.2.e.(2)"
     context: "ENTERPRISE – ISRMC"
     statement: "(2) This includes any installation and configuration requirement documents provided by the Granting organization and testing results of any configuration differences, if needed."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.documents.yaml", "expect": "the updated authorization documentation leaves out the", "asserts": "The updated authorization documentation includes the installation and configuration documents and the testing results of configuration differences", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0056"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Execute a documented agreement with the Granting organization, such as a"}
@@ -465,7 +492,8 @@ requirements:
     locator: "4.2.f"
     context: "ENTERPRISE – ISRMC"
     statement: "f. Execute a documented agreement with the Granting organization, such as a"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.yaml", "expect": "no documented agreement with the other organization is executed", "asserts": "A documented agreement with the Granting organization is executed", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Execute a documented agreement with the Granting organization, such as a"}, {"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.late.yaml", "expect": "the agreement is executed after the Receiving AO's decision", "asserts": "The agreement with the Granting organization is executed before the Receiving AO's decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Execute a documented agreement with the Granting organization, such as a"}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0057"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Memorandum of Understanding (MOU), Memorandum of Agreement (MOA), or Service Level Agreement"}
@@ -473,7 +501,8 @@ requirements:
     locator: "4.2.f"
     context: "ENTERPRISE – ISRMC"
     statement: "Memorandum of Understanding (MOU), Memorandum of Agreement (MOA), or Service Level Agreement (SLA), for maintaining and monitoring the system’s security posture, including the system’s security controls and cybersecurity service provider (CSSP). At a minimum, the agreement document must address: operating constraints, operation environment, monitoring requirements, security maintenance, vulnerability scanning, IAVM compliance, lifecycle replacement of software and components, and roles and responsibilities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.topics.yaml", "expect": "the agreement does not address", "asserts": "The agreement document addresses at a minimum operating constraints, vulnerability scanning, IAVM compliance, lifecycle replacement and roles and responsibilities", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "At a minimum, the agreement document must address: operating constraints, operation environment, monitoring requirements, security maintenance, vulnerability scanning, IAVM compliance, lifecycle replacement of software and components, and roles and responsibilities."}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0058"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "Issue a formal authorization to use and operate the Enterprise system. Not"}
@@ -507,7 +536,8 @@ requirements:
     locator: "4.2.g.(3)"
     context: "ENTERPRISE – ISRMC"
     statement: "(3) The Receiving AO provides a copy of implementing documentation, such as the “ATU”, to the Granting AO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.copy.yaml", "expect": "a copy of the authorization to use is not provided to the Granting AO", "asserts": "A copy of the authorization to use is provided to the Granting AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0062"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "The Receiving AO will notify subordinate sites that the Granting Enterprise system"}
@@ -515,7 +545,8 @@ requirements:
     locator: "4.2.g.(4)"
     context: "ENTERPRISE – ISRMC"
     statement: "(4) The Receiving AO will notify subordinate sites that the Granting Enterprise system (i.e., major application) is authorized to operate or connect to the Receiving organization’s systems, but only in the authorized configuration found in the updated system’s ATO documentation."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.sites.yaml", "expect": "subordinate sites are not notified that the system may operate only in the authorized configuration", "asserts": "Subordinate sites are notified that the system may operate only in the authorized configuration", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0063"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "Update system authorization and connection documentation to reflect the incorporation and connection"}
@@ -523,7 +554,8 @@ requirements:
     locator: "4.2.h"
     context: "ENTERPRISE – ISRMC"
     statement: "h. Update system authorization and connection documentation to reflect the incorporation and connection of the Enterprise systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.hosting.yaml", "expect": "authorization and connection documentation is not updated through the change log to incorporate the system", "asserts": "The system authorization and connection documentation is updated through the change log to incorporate the system", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Update system authorization and connection documentation to reflect the incorporation and connection of the Enterprise systems."}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0064"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "Ensure all parts of the Receiving organization implement major application installation guidance"}
@@ -531,7 +563,8 @@ requirements:
     locator: "4.2.i"
     context: "ENTERPRISE – ISRMC"
     statement: "i. Ensure all parts of the Receiving organization implement major application installation guidance and applicable DoD security configuration requirements."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.install.yaml", "expect": "the installation guide and security configuration requirements are not implemented after they are received", "asserts": "The installation guidance and security configuration requirements are implemented after they are received", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Ensure all parts of the Receiving organization implement major application installation guidance and applicable DoD security configuration requirements."}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0065"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "Implement and maintain mitigations identified in the Granting Enterprise systems’"}
@@ -539,7 +572,8 @@ requirements:
     locator: "4.2.j"
     context: "ENTERPRISE – ISRMC"
     statement: "j. Implement and maintain mitigations identified in the Granting Enterprise systems’"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.yaml", "expect": "the mitigation in the Granting POA&M item", "asserts": "Each mitigation identified in the Granting POA&M is implemented", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Implement and maintain mitigations identified in the Granting Enterprise systems’"}]
     work_item: "WI-316"
   - id: "REQ-DODCIO-RECIPROCITY-0066"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 12, "anchor": "In summary, the execution of Enterprise reciprocity is a collaborative effort. Each"}
@@ -555,7 +589,8 @@ requirements:
     locator: "4.3"
     context: "COMMUNITY – CONSORTIUM OF AOS"
     statement: "The main objective of the AO Committee is to provide a mechanism for all stakeholders with authorization equity to have insight to the risk posture of the system, to participate in the ongoing assessments and to have awareness of the Continuous Monitoring (CONMON) and priorities established by the system/capability AO, which allow the identification and adjudication of any reciprocity challenges early as part of the continuous assessment and authorization process of the system/capability. The AO Committee provides the forum and structure to allow all authorization stakeholders the ability to participate in, understand, and trust the risk assessment of the system AO and the ability to correlate that to their risk tolerance, and their environment, achieving reciprocity as an outcome. The committee of AOs would outline an interconnection service agreement (ISA); defining the relationships; roles and responsibilities, steps to address gaps between authorization boundaries and/or enterprise services, PPSM coordination, CSSP identification, incident response, and agreement review requirements to address later changes in technology and authorization statuses."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.isa.yaml", "expect": "the interconnection service agreement does not define", "asserts": "The interconnection service agreement defines relationships, roles and responsibilities, PPSM coordination, CSSP identification, incident response and agreement review", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "The committee of AOs would outline an interconnection service agreement (ISA); defining the relationships; roles and responsibilities, steps to address gaps between authorization boundaries and/or enterprise services, PPSM coordination, CSSP identification, incident response, and agreement review requirements to address later changes in technology and authorization statuses."}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0068"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 13, "anchor": "Allow all stakeholders a structured way to evaluate systems coming into their"}
@@ -675,7 +710,8 @@ requirements:
     locator: "4.4"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) The following process steps detail the responsibilities of both organizations:"
     statement: "Prior to entering into a reciprocity agreement, both Receiving and Granting organizations need to complete several tasks. These tasks may include:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.pretasklate.yaml", "expect": "is not completed before the agreement", "asserts": "The tasks are completed before entering into the reciprocity agreement", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Prior to entering into a reciprocity agreement, both Receiving and Granting organizations need to complete several tasks."}, {"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.pretasks.yaml", "expect": "no task completed before entering into the agreement is recorded", "asserts": "The tasks completed before entering into the agreement are recorded", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Prior to entering into a reciprocity agreement, both Receiving and Granting organizations need to complete several tasks."}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0083"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 14, "anchor": "Identifying who is responsible for providing the resources (e.g., funding, hardware, software,"}
@@ -683,56 +719,77 @@ requirements:
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Identifying who is responsible for providing the resources (e.g., funding, hardware, software, lifecycle replacement of system component, and personnel) required to manage and operate the system."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-006 holds that each recorded task names its responsible organization."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.responsible.yaml", "expect": "has no responsible organization documented", "asserts": "Each task identifies who is responsible for providing it, with the responsible organization documented", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Identifying who is responsible for providing the resources (e.g., funding, hardware, software, lifecycle replacement of system component, and personnel) required to manage and operate the system.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0084"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 14, "anchor": "Verifying compliance and maintenance of the reciprocity authorization by the Granting organization."}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Verifying compliance and maintenance of the reciprocity authorization by the Granting organization."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-003 holds what the Granting side keeps up."
+    evidence: [{"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.yaml", "expect": "the patch is not provided within the DoD and USCYBERCOM timeline", "asserts": "The Granting organization maintains the reciprocity authorization by providing each patch within the DoD and USCYBERCOM timeline", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Verifying compliance and maintenance of the reciprocity authorization by the Granting organization.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0085"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Ensuring the Receiving organization implements the appropriate security controls required by the"}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Ensuring the Receiving organization implements the appropriate security controls required by the authorization package and applies mitigation strategies as directed by the Granting organization's POA&M."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-005 holds the controls and POA&M mitigations themselves."
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.yaml", "expect": "the mitigation in the Granting POA&M item", "asserts": "The Receiving organization applies the mitigation strategies of the Granting organization's POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Ensuring the Receiving organization implements the appropriate security controls required by the authorization package and applies mitigation strategies as directed by the Granting organization's POA&M.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0086"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Ensuring the interconnected systems are not adversely affected by new (or aggregated)"}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Ensuring the interconnected systems are not adversely affected by new (or aggregated) vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-002 holds that new findings, the vulnerabilities, reach the interconnected Receiving organizations."
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.finding.yaml", "expect": "is not notified to the receiving organization", "asserts": "New vulnerabilities found in the system are notified to the interconnected Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Ensuring the interconnected systems are not adversely affected by new (or aggregated) vulnerabilities.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0087"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Verifying and maintain the correct configuration."}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Verifying and maintain the correct configuration."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-005 holds that the configuration is maintained by applying IAVAs and STIGs or tracking them."
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.neither.yaml", "expect": "is neither applied nor tracked in the POA&M", "asserts": "The correct configuration is maintained: each IAVA and STIG is applied or tracked in the POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Verifying and maintain the correct configuration.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0088"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Ensuring all stakeholders have access to the complete security authorization package, including"}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Ensuring all stakeholders have access to the complete security authorization package, including configuration specifications."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-001 holds the package and configuration delivery itself."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.sharing.yaml", "expect": "the sharing of the authorization package is not under terms agreed by both parties", "asserts": "All stakeholders have access to the complete security authorization package under sharing terms agreed by both parties", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Ensuring all stakeholders have access to the complete security authorization package, including configuration specifications.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0089"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Formally documenting all tasks that must be completed and the associated responsible"}
     kind: "lettered"
     locator: "4.4.•"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS) These tasks may include:"
     statement: "• Formally documenting all tasks that must be completed and the associated responsible organization, as the result of agreement between the Granting and Receiving organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "One of the tasks the source says the organizations 'may' complete before an agreement; RCP-006 holds that each recorded task names its responsible organization."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.responsible.yaml", "expect": "has no responsible organization documented", "asserts": "Each task to be completed is formally documented with its responsible organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
+    ruling_sought: [{"sentence": "• Formally documenting all tasks that must be completed and the associated responsible organization, as the result of agreement between the Granting and Receiving organizations.", "reason": "an item of the open list 'These tasks may include', so no run can fail it"}]
   - id: "REQ-DODCIO-RECIPROCITY-0090"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "4.4.1 Responsibilities of Granting Organization"}
     kind: "modal"
@@ -747,7 +804,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Provide the security authorization package and deployment instructions (or access to it), including a current POA&M, to Receiving organizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The security authorization package is delivered to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.instructions.yaml", "expect": "the deployment instructions are not provided to the receiving organization", "asserts": "The deployment instructions are provided to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.current.yaml", "expect": "the latest POA&M delivered predates its newest item, so the receiving organization does not hold a current POA&M", "asserts": "The POA&M the Receiving organization holds is current, delivered after the latest authorization decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0092"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Communicate all changes to the system during its lifecycle, such as version"}
@@ -755,7 +813,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Communicate all changes to the system during its lifecycle, such as version updates, to Receiving organizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.change.yaml", "expect": "to the system is not communicated to the receiving organization", "asserts": "Every change to the system after the first delivery is communicated to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
   - id: "REQ-DODCIO-RECIPROCITY-0093"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Notify Receiving organizations of any new findings, such as new threats, discovered"}
@@ -763,7 +822,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Notify Receiving organizations of any new findings, such as new threats, discovered vulnerabilities, or similar information, throughout the authorization life cycle."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.finding.yaml", "expect": "is not notified to the receiving organization", "asserts": "Every new finding opened after the first delivery is notified to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
   - id: "REQ-DODCIO-RECIPROCITY-0094"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Gather requirements from potential leveraging organizations before developing the system to ensure"}
@@ -771,7 +831,9 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Gather requirements from potential leveraging organizations before developing the system to ensure the widest use of a standardized configuration and avoid modifications driving separate authorizations."
-    status: "candidate"
+    status: "partial"
+    reason: "'Before developing the system' is bounded by the release date, since the run records no development start; requirements gathered after development began but before release pass."
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.yaml", "expect": "requirements are not gathered from the receiving organization before the system is released", "asserts": "Requirements are gathered from the leveraging Receiving organizations before the system is released", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-312"
   - id: "REQ-DODCIO-RECIPROCITY-0095"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Provide a point of contact (POC) to Receiving organizations requesting information."}
@@ -779,7 +841,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Provide a point of contact (POC) to Receiving organizations requesting information."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.poc.yaml", "expect": "the single point of contact this organization provides to the other is no role of the run", "asserts": "The Granting side provides a point of contact, a role of the run, to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0096"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Notify Receiving organizations at least six months prior to any reauthorization events"}
@@ -787,7 +850,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Notify Receiving organizations at least six months prior to any reauthorization events to ensure consideration of any input from Receiving organizations. (Acknowledgment of receipt required by impacted organizations)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.reauthorization.yaml", "expect": "months before the reauthorization event", "asserts": "Receiving organizations are notified at least six months before the reauthorization event", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.inforce.yaml", "expect": "is not notified to the receiving organization at least", "asserts": "The reauthorization the in-force ATO's termination brings is notified to the Receiving organizations at least six months prior", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.ack.yaml", "expect": "notice is not acknowledged by the receiving organization", "asserts": "Receipt of the reauthorization notice is acknowledged by the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
   - id: "REQ-DODCIO-RECIPROCITY-0097"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Notify Receiving organizations of any plans that may affect their use of"}
@@ -795,7 +859,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Notify Receiving organizations of any plans that may affect their use of the system, such as decommissioning or version changes. (Acknowledgement of receipt required by impacted organizations)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.decommission.yaml", "expect": "the plan to decommission the system is not notified to the receiving organization", "asserts": "A plan to decommission the system is notified to the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-002", "fixture": "tests/fixtures/negative/RCP-002.ack.yaml", "expect": "notice is not acknowledged by the receiving organization", "asserts": "Receipt of a plan notice that may affect their use is acknowledged by the Receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-310"
   - id: "REQ-DODCIO-RECIPROCITY-0098"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Identify factors or conditions justifying termination of the MOU/MOA."}
@@ -803,7 +868,9 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Identify factors or conditions justifying termination of the MOU/MOA."
-    status: "candidate"
+    status: "partial"
+    reason: "RCP-006 asks an MOU or MOA to list the factors justifying termination; it holds their presence only, which caps at partial on prose."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.termination.yaml", "expect": "the factors or conditions justifying termination of the MOU/MOA are not identified", "asserts": "The factors or conditions justifying termination of the MOU/MOA are identified", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0099"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Communicate and provide patches and updates in accordance with DoD and"}
@@ -811,7 +878,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Communicate and provide patches and updates in accordance with DoD and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.yaml", "expect": "the patch is not provided within the DoD and USCYBERCOM timeline", "asserts": "Patches and updates are provided within the DoD and USCYBERCOM timeline", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.communicated.yaml", "expect": "the patch is not communicated to the receiving organization", "asserts": "Each patch is communicated to every Receiving organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-313"
   - id: "REQ-DODCIO-RECIPROCITY-0100"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Maintain deployment locations of the system within the Granting organizational authorization tracking"}
@@ -819,7 +887,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Maintain deployment locations of the system within the Granting organizational authorization tracking tool."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-008", "fixture": "tests/fixtures/negative/RCP-008.yaml", "expect": "is not maintained in the authorization tracking tool", "asserts": "Each deployment location of the system is maintained within the Granting authorization tracking tool", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-320"
   - id: "REQ-DODCIO-RECIPROCITY-0101"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 15, "anchor": "Ensure assignment of a JFHQ-DODIN accredited CSSP to maintain continuous monitoring, patch"}
@@ -827,7 +896,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Ensure assignment of a JFHQ-DODIN accredited CSSP to maintain continuous monitoring, patch management, the IAVM Program, End Point Security Services (ESS) monitoring, Security Information and Event Management (SIEM)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.accredited.yaml", "expect": "the CSSP assigned to the system is not JFHQ-DODIN accredited", "asserts": "A JFHQ-DODIN accredited CSSP is assigned to the system", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.services.yaml", "expect": "the CSSP assigned does not maintain", "asserts": "The CSSP assigned maintains continuous monitoring, patch management, the IAVM Program, ESS and SIEM monitoring", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-313"
   - id: "REQ-DODCIO-RECIPROCITY-0102"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "4.4.2 Responsibilities of Receiving Organization"}
@@ -843,7 +913,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Request Security Authorization Package and deployment instructions (or access to it), including a current POA&M, from the Granting organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.requested.yaml", "expect": "the Granting organization is not asked for the", "asserts": "The security authorization package, deployment instructions and current POA&M are requested from the Granting organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0104"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Review the Granting organization AO's authorization decision and work with the"}
@@ -851,7 +922,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Review the Granting organization AO's authorization decision and work with the"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.yaml", "expect": "authorization decision and package are not reviewed by the Receiving AO before the decision", "asserts": "The Granting organization AO's authorization decision is reviewed by the Receiving AO before the decision", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0105"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Deploy the system using configuration requirements in the security authorization package and"}
@@ -859,7 +931,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Deploy the system using configuration requirements in the security authorization package and deployment instructions."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.install.yaml", "expect": "the installation guide and security configuration requirements are not implemented after they are received", "asserts": "The system is deployed by implementing the configuration requirements and deployment instructions after they are received", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0106"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Provide all inherited security controls, mitigations, or support functions required by the"}
@@ -867,7 +940,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Provide all inherited security controls, mitigations, or support functions required by the reciprocity authorization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.provided.yaml", "expect": "required by the reciprocity authorization is not provided by the receiving organization", "asserts": "Every inherited security control required by the reciprocity authorization is provided by the receiving organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0107"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Obtain any necessary authorization to connect and operate the system within the"}
@@ -875,7 +949,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Obtain any necessary authorization to connect and operate the system within the organization's network."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-005", "fixture": "tests/fixtures/negative/RCP-005.yaml", "expect": "no authorization to use or connect is issued by the Receiving AO", "asserts": "An authorization to use or connect the system is issued by the Receiving AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-315"
   - id: "REQ-DODCIO-RECIPROCITY-0108"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Provide a single POC to Granting organizations."}
@@ -883,7 +958,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Provide a single POC to Granting organizations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.pocreceiving.yaml", "expect": "the single point of contact this organization provides to the other is no role of the run", "asserts": "The Receiving side provides a single POC, a role of the run, to the Granting organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0109"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Update necessary authorization tracking tools within the organization."}
@@ -891,7 +967,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Update necessary authorization tracking tools within the organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-008", "fixture": "tests/fixtures/negative/RCP-008.updates.yaml", "expect": "the authorization tracking tool is not updated after the system is accepted", "asserts": "The authorization tracking tool within the organization is updated after the system is accepted", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-320"
   - id: "REQ-DODCIO-RECIPROCITY-0110"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Implement required patches and changes in accordance with Project Management"}
@@ -899,7 +976,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Implement required patches and changes in accordance with Project Management"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.patch.yaml", "expect": "is not implemented in accordance with PM guidance", "asserts": "Required patches are implemented in accordance with PM guidance", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-316"
   - id: "REQ-DODCIO-RECIPROCITY-0111"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Notify Granting organizations of any new findings, such as new threats, discovered"}
@@ -907,7 +985,9 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Notify Granting organizations of any new findings, such as new threats, discovered vulnerabilities, or similar information throughout the authorization life cycle."
-    status: "candidate"
+    status: "partial"
+    reason: "RCP-005 judges each finding report the run records against its POA&M item; which new findings concern the received system is the run's own statement, so one left unrecorded is not caught."
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.findings.yaml", "expect": "is not reported to the Granting organization once it is identified", "asserts": "Each new finding is reported to the Granting organization once it is identified", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-316"
   - id: "REQ-DODCIO-RECIPROCITY-0112"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Implement mitigations in accordance with the Granting Information Technology"}
@@ -915,7 +995,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Implement mitigations in accordance with the Granting Information Technology"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.yaml", "expect": "the mitigation in the Granting POA&M item", "asserts": "Each mitigation identified in the Granting POA&M is implemented", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-316"
   - id: "REQ-DODCIO-RECIPROCITY-0113"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Maintain the Enterprise Capability baseline by applying IAVAs and STIGs as new"}
@@ -923,7 +1004,8 @@ requirements:
     locator: "4.4.o"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "o Maintain the Enterprise Capability baseline by applying IAVAs and STIGs as new guidance is released, updating the POAM for any updates or configurations that cannot be applied."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.neither.yaml", "expect": "is neither applied nor tracked in the POA&M", "asserts": "Each IAVA and STIG released is applied to the Enterprise Capability baseline or tracked in the POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.untracked.yaml", "expect": "that cannot be applied is not tracked in the POA&M", "asserts": "An IAVA or STIG that cannot be applied is tracked in the POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-316"
   - id: "REQ-DODCIO-RECIPROCITY-0114"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Note: Additional testing may be required to satisfy all RMF requirements. However,"}
@@ -939,7 +1021,9 @@ requirements:
     locator: "4.4"
     context: "ONE-TO-ONE (RE-USE OF ARTIFACTS)"
     statement: "4.4.3 Change Management All organizations must identify technical POCs as part of their MOU, MOA, or SLA to support the management and operation of the authorized system. Organizations must communicate to the PM and original AO any event that may affect the security posture of the authorized system or the installed environment. Agreements must include processes, timing, and notification requirements. Examples of events requiring notification include:"
-    status: "candidate"
+    status: "partial"
+    reason: "That agreements include notification processes, timing and requirements is held as presence only (RCP-006), which caps at partial on prose."
+    evidence: [{"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.technical.yaml", "expect": "the agreement identifies no technical POC of the", "asserts": "The MOU, MOA or SLA identifies technical POCs of both organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "4.4.3 Change Management All organizations must identify technical POCs as part of their MOU, MOA, or SLA to support the management and operation of the authorized system."}, {"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.recipients.yaml", "expect": "events that may affect the security posture are not communicated to", "asserts": "Events that may affect the security posture are communicated to the PM and the original AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Organizations must communicate to the PM and original AO any event that may affect the security posture of the authorized system or the installed environment."}, {"kind": "rule", "target": "RCP-006", "fixture": "tests/fixtures/negative/RCP-006.timing.yaml", "expect": "the agreement does not include the notification", "asserts": "Agreements include the notification processes, timing and requirements", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Agreements must include processes, timing, and notification requirements."}]
     work_item: "WI-317"
   - id: "REQ-DODCIO-RECIPROCITY-0116"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 16, "anchor": "Security incidents"}
@@ -1027,7 +1111,9 @@ requirements:
     locator: "4.5.a"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity:"
     statement: "a. Components of the DoD and IC will make appropriate authorization decision documentation available to other IC elements, to the non-IC parts of the DoD (i.e., Military Departments, Combatant Commands and Defense Agencies), and to non-IC agencies of the Federal Government."
-    status: "candidate"
+    status: "partial"
+    reason: "Held for the organizations the system is deployed into (RCP-001 asks the authorization decision document be delivered to each); availability to other IC elements and federal agencies at large rests on the registry's reciprocity listing, which RCP-008 holds only as presence."
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.decision.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The authorization decision documentation is delivered to the DoD organizations the system is deployed into", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Components of the DoD and IC will make appropriate authorization decision documentation available to other IC elements, to the non-IC parts of the DoD (i.e., Military Departments, Combatant Commands and Defense Agencies), and to non-IC agencies of the Federal Government."}, {"kind": "rule", "target": "RCP-008", "fixture": "tests/fixtures/negative/RCP-008.exemption.yaml", "expect": "the system is deselected from reciprocity listing without an exemption justification", "asserts": "A system deselected from reciprocity listing carries an exemption justification, otherwise its authorization decision documentation is available to other Components", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Components of the DoD and IC will make appropriate authorization decision documentation available to other IC elements, to the non-IC parts of the DoD (i.e., Military Departments, Combatant Commands and Defense Agencies), and to non-IC agencies of the Federal Government."}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0127"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 17, "anchor": "Authorizing Officials of DoD and IC Components will make appropriate security assessment"}
@@ -1035,7 +1121,9 @@ requirements:
     locator: "4.5.b"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity:"
     statement: "b. Authorizing Officials of DoD and IC Components will make appropriate security assessment documentation of a system available to other IC elements, to the non-IC parts of the DoD, and to other non-IC agencies of the Federal Government."
-    status: "candidate"
+    status: "partial"
+    reason: "Held for the organizations the system is deployed into (RCP-001 asks the SAR be delivered to each); availability to other IC elements and federal agencies at large rests on the registry's reciprocity listing, which RCP-008 holds only as presence."
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.sar.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The security assessment documentation of the system is delivered to the DoD organizations it is deployed into", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Authorizing Officials of DoD and IC Components will make appropriate security assessment documentation of a system available to other IC elements, to the non-IC parts of the DoD, and to other non-IC agencies of the Federal Government."}, {"kind": "rule", "target": "RCP-008", "fixture": "tests/fixtures/negative/RCP-008.exemption.yaml", "expect": "the system is deselected from reciprocity listing without an exemption justification", "asserts": "A system deselected from reciprocity listing carries an exemption justification, otherwise its security assessment documentation is available to other Components", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Authorizing Officials of DoD and IC Components will make appropriate security assessment documentation of a system available to other IC elements, to the non-IC parts of the DoD, and to other non-IC agencies of the Federal Government."}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0128"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 17, "anchor": "DoD and IC Components will accept the security assessment of a system"}
@@ -1131,7 +1219,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• The Enterprise Capability POA&M, listing the open vulnerabilities, justification, and residual risk."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-poam.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the Enterprise Capability POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0140"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 19, "anchor": "Residual risk assessment for each “High” or “Very High” risk vulnerability"}
@@ -1139,7 +1228,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• Residual risk assessment for each “High” or “Very High” risk vulnerability"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-residual-risk.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the residual risk assessment for each High or Very High risk vulnerability", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0141"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 19, "anchor": "The authorization boundary diagram sometimes referred to as the network. diagram, depicting"}
@@ -1147,7 +1237,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• The authorization boundary diagram sometimes referred to as the network. diagram, depicting the Defense-in-depth security architecture for the platform (building, ship, Humvee, command center, etc.) and enclave."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-boundary-diagram.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the authorization boundary diagram", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0142"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 19, "anchor": "Data-flow diagrams, interface diagrams and cross-domain interfaces that specify type of interface,"}
@@ -1155,7 +1246,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• Data-flow diagrams, interface diagrams and cross-domain interfaces that specify type of interface, direction of data flow, and any in-line security solutions."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-data-flows.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the data-flow, interface and cross-domain diagrams", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0143"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "Impact and technical justification for any “High” or “Very High” risk vulnerabilities"}
@@ -1163,7 +1255,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• Impact and technical justification for any “High” or “Very High” risk vulnerabilities that remain."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-high-risk-justification.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the impact and technical justification of remaining High or Very High risk vulnerabilities", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0144"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "IAVM plan, Continuity of Operations Plan (COOP), Disaster Recovery Plan, and incident"}
@@ -1171,7 +1264,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• IAVM plan, Continuity of Operations Plan (COOP), Disaster Recovery Plan, and incident management plans."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-plans.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the IAVM plan, COOP, Disaster Recovery Plan and incident management plans", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0145"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "Hardware and software lists, with the associated STIG checklists."}
@@ -1179,7 +1273,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• Hardware and software lists, with the associated STIG checklists."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.boe-hardware-software.yaml", "expect": "the body of evidence considered leaves out", "asserts": "When required documents are not available the body of evidence considered includes the hardware and software lists with their STIG checklists", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0146"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "Validation or verification test results. Requests for documentation not included in the"}
@@ -1187,7 +1282,8 @@ requirements:
     locator: "4.5.ii.5.•"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "• Validation or verification test results. Requests for documentation not included in the Granting organization’s RMF package must be endorsed by the requesting Component CISO, or equivalent, before being forwarded to the Receiving AO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.ciso.yaml", "expect": "beyond the package is not endorsed by the requesting Component CISO before it is forwarded", "asserts": "Requests for documentation beyond the Granting RMF package are endorsed by the requesting Component CISO before they are forwarded", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Requests for documentation not included in the Granting organization’s RMF package must be endorsed by the requesting Component CISO, or equivalent, before being forwarded to the Receiving AO."}]
     work_item: "WI-318"
   - id: "REQ-DODCIO-RECIPROCITY-0147"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "The Granting AO will ensure documentation providing the body of evidence is"}
@@ -1195,7 +1291,8 @@ requirements:
     locator: "4.5.ii.5"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "The Granting AO will ensure documentation providing the body of evidence is freely shared with the Receiving organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.evidence.yaml", "expect": "the body of evidence behind the package is not shared with the receiving organization", "asserts": "Documentation providing the body of evidence is shared with the Receiving organization", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-311"
   - id: "REQ-DODCIO-RECIPROCITY-0148"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 20, "anchor": "The Receiving organization becomes responsible for establishing and maintaining a full authorization"}
@@ -1219,7 +1316,9 @@ requirements:
     locator: "4.5.ii.6"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "Within the Department, secure configuration guides take various forms, such as STIGs and Security Requirement Guides (SRGs). These guides offer detailed step-by-step instructions for securing specific technologies, platforms, and environments, ranging from operating systems and applications to cloud services. By following these guides, Components establish a consistent baseline security posture, reducing the attack surface and potential vulnerabilities that adversaries could exploit. These guides facilitate reciprocity by providing standardized and approved security configurations. When a system adheres to the recommended settings outlined in these guides, it becomes easier for other Components to trust the security of that system, accelerating the authorization and deployment process. This not only streamlines operations but also enhances the overall security posture of the DoD by maintaining a consistent level of security across the enterprise. While the SRGs define the high-level requirements for various technology families and organizations, STIGs are the detailed guidelines for specific products. STIGs provide product-specific information for validating, attaining, and continuously maintaining compliance with requirements defined in the SRG for that product’s technology area. The security requirements contained within the SRGs and STIGs, in general, are applicable to and required by all DoD-administered systems, all systems connected to DoD networks, and all systems operated and/or administrated on behalf of the DoD. This requirement remains in force for all mission owners building systems in a cloud service. In the case of cloud service, where CSP systems must comply with configuration guidance consistent with the National Institute of Standards and Technology Special Publication (NIST SP) 800-53 security control “CM-6 Configuration Settings” by using STIGs/SRGs. Secure configuration guides, such as the Cloud Computing SRG, play an essential role in ensuring that cloud deployments align with DoD cloud security requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Its first two marked sentences give the rationale for following STIGs and SRGs (a consistent baseline posture, easier trust between Components); they assert an effect, not a duty a run can break, and nothing tests them"
+    evidence: [{"kind": "rule", "target": "STIG-001", "asserts": "The security requirements within SRGs and STIGs are applicable to and required by all DoD-administered systems: every item has a STIG/SRG benchmark", "claim": "constraint", "fixture": "tests/fixtures/negative/STIG-001.benchmark.yaml", "expect": "has no STIG/SRG benchmark and no not_applicable rationale", "holds_when": "the summary is in play once I-1 is in scope", "sentence": "The security requirements contained within the SRGs and STIGs, in general, are applicable to and required by all DoD-administered systems, all systems connected to DoD networks, and all systems operated and/or administrated on behalf of the DoD."}, {"kind": "rule", "target": "CLOUD-001", "asserts": "CSP systems comply with configuration guidance by using STIGs or SRGs", "claim": "constraint", "fixture": "tests/fixtures/negative/CLOUD-001.stig.yaml", "expect": "CSP systems comply with configuration guidance by using STIGs or SRGs", "holds_when": "the record is in play once service-agreements.yaml names the cloud and S-4 is in scope", "sentence": "In the case of cloud service, where CSP systems must comply with configuration guidance consistent with the National Institute of Standards and Technology Special Publication (NIST SP) 800-53 security control “CM-6 Configuration Settings” by using STIGs/SRGs."}]
     work_item: "WI-302"
   - id: "REQ-DODCIO-RECIPROCITY-0151"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 21, "anchor": "As the Department increasingly leverages cloud technologies, these guides offer a roadmap"}
@@ -1243,8 +1342,11 @@ requirements:
     locator: "4.5.ii.7"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "Certain capabilities exist within eMASS to support reciprocity activities across Federal Organizations. Among these capabilities is the eMASS “Reciprocity” user role, which grants a set number of reciprocity users per eMASS instance—to be appointed by an Organization-defined Enterprise role (e.g., AO, CISO, CIO)— access to the eMASS reciprocity search function, allowing them to find reciprocity systems more easily. Reciprocity users can utilize this function to search across eMASS for the re-use and acceptance of systems that have an existing RMF assessment and authorization by another Organization. The eMASS Reciprocity Job Aid (https://rmfks.osd.mil/rmf/HelpandResources/References/Reference%20Library/eMASS_Recipro city_Job_Aid.pdf) is intended to assist a Reciprocity user in searching for and viewing System security assessments located in any eMASS instance. Accordingly, the “Interagency Partners” capability is intended to provide better support for these cases of collaboration or information sharing efforts. Organizations, via their eMASS System Administrators and Organization System Administrator, can identify and grant the Interagency Partner (IP) role to their users as appropriate. The Interagency Partner role appears as an “Additional” role that can be granted to a user’s account. The eMASS Interagency Partner Job Aid (https://rmfks.osd.mil/rmf/HelpandResources/References/Reference%20Library/eMASS_Interage ncyPartner_Job_Aid.pdf) is intended to assist an Interagency Partner user in searching for and viewing System security assessments located in external eMASS instances. By default, all new records are listed as reciprocity systems when registering. Users must list a reciprocity exemption justification if the option is deselected. Systems can also be designated as a reciprocity system at any time through the “System Information” page. Systems that are enabled for reciprocity will be visible to certain users across the various eMASS instances."
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the last sentence describes what eMASS shows. The exemption justification is held as presence only (RCP-008); the search, Interagency Partner and designation sentences are permissions."
+    evidence: [{"kind": "rule", "target": "RCP-008", "fixture": "tests/fixtures/negative/RCP-008.exemption.yaml", "expect": "the system is deselected from reciprocity listing without an exemption justification", "asserts": "A system deselected from reciprocity listing carries a reciprocity exemption justification", "claim": "presence", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Users must list a reciprocity exemption justification if the option is deselected."}]
     work_item: "WI-320"
+    ruling_sought: [{"sentence": "Reciprocity users can utilize this function to search across eMASS for the re-use and acceptance of systems that have an existing RMF assessment and authorization by another Organization.", "reason": "a permission: Reciprocity users 'can utilize' the search function"}, {"sentence": "Organizations, via their eMASS System Administrators and Organization System Administrator, can identify and grant the Interagency Partner (IP) role to their users as appropriate.", "reason": "a permission: organizations 'can identify and grant' the Interagency Partner role"}, {"sentence": "Systems can also be designated as a reciprocity system at any time through the “System Information” page.", "reason": "a permission: systems 'can also be designated' a reciprocity system at any time"}]
   - id: "REQ-DODCIO-RECIPROCITY-0154"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 22, "anchor": "Reciprocity users can search for systems with reciprocity enabled using the “Search"}
     kind: "modal"
@@ -1275,7 +1377,9 @@ requirements:
     locator: "4.5.ii.9"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "The Deputy Secretary of Defense (DSD) issued a memorandum in March 2024 (reference i), emphasizing the importance of a culture of collaboration in cybersecurity testing and reciprocity in order to accelerate delivery of innovative capabilities while maintaining our cybersecurity standards. The DSD expects testing re-use and reciprocity to be implemented except when the cybersecurity risk is proven to be too great. In a collaborative cybersecurity reciprocity culture, AOs trust one another and are inclined to granting reciprocity, thereby accepting the risk determination to deploy a capability made by another AO unless there are compelling operational and procedural reasons that prevent the risk acceptance (i.e., to refuse reciprocity). Therefore, the Receiving AO should make every attempt to accept the risk determination made by the Granting AO. However, before making the decision, Receiving AOs must thoroughly review the security authorization package provided by the Granting AO, focusing on content and not the organization or format. The content should clearly demonstrate the security posture, risk assessment, and rationale for the risk determination. Receiving AOs have the right to refuse participating in reciprocity with another organization due to insufficient content demonstrating an informed understanding of the security posture, risk assessment of the system, and the rationale for the risk determination as defined on the RMF KS, or due to excessive risk to the enclave or site, as determined by the site AO. However, the Receiving AO must document and report this refusal to the Granting organization’s AO within 10 business days. If a refusal does occur, both organizations will continue to work, and re-work, the ATO package to reach an agreement, if at all possible. When AOs cannot reach an agreement to leverage re-use and reciprocity, both parties must use the following resolution process to gain assistance in resolving the impasse:"
-    status: "candidate"
+    status: "partial"
+    reason: "left for the user: the first and third sentences ask the Receiving AO to try to accept and the Granting content to be clear, which no record can fail; the fifth, to keep re-working the package 'if at all possible', is not held."
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.yaml", "expect": "authorization decision and package are not reviewed by the Receiving AO before the decision", "asserts": "Before making the decision the Receiving AO reviews the security authorization package provided by the Granting AO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "However, before making the decision, Receiving AOs must thoroughly review the security authorization package provided by the Granting AO, focusing on content and not the organization or format."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.report.yaml", "expect": "the refusal is not reported to the Granting organization's AO within", "asserts": "The Receiving AO documents the refusal and reports it to the Granting organization's AO within 10 business days", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "However, the Receiving AO must document and report this refusal to the Granting organization’s AO within 10 business days."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.order.yaml", "expect": "the dispute is not raised from the AO level to the RMF TAG Chair and then to the AO Council, in that order", "asserts": "When AOs cannot reach an agreement on reciprocity the dispute follows the resolution process, from the AO level to the RMF TAG Chair and the AO Council", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "When AOs cannot reach an agreement to leverage re-use and reciprocity, both parties must use the following resolution process to gain assistance in resolving the impasse:"}]
     work_item: "WI-319"
   - id: "REQ-DODCIO-RECIPROCITY-0158"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 22, "anchor": "20"}
@@ -1292,7 +1396,8 @@ requirements:
     locator: "4.5.ii.1"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "1. If a conflict arises, due to reciprocity refusal there should be an attempt to resolve it at the AO level. This could include, but not limited to, the Granting AO conducting new assessments."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.first.yaml", "expect": "the dispute is not raised from the AO level to the RMF TAG Chair and then to the AO Council, in that order", "asserts": "A conflict due to reciprocity refusal is first resolved at the AO level", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "If a conflict arises, due to reciprocity refusal there should be an attempt to resolve it at the AO level."}]
     work_item: "WI-319"
   - id: "REQ-DODCIO-RECIPROCITY-0160"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 23, "anchor": "If the conflict cannot be resolved at the AO level, the RMF"}
@@ -1300,7 +1405,8 @@ requirements:
     locator: "4.5.ii.2"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "2. If the conflict cannot be resolved at the AO level, the RMF TAG Secretariat will be notified and the RMF TAG Chair will attempt to mediate the dispute as appropriate."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.secretariat.yaml", "expect": "the RMF TAG Secretariat is not notified before the RMF TAG Chair mediates", "asserts": "The RMF TAG Secretariat is notified and the RMF TAG Chair mediates the dispute the AO level cannot resolve", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "If the conflict cannot be resolved at the AO level, the RMF TAG Secretariat will be notified and the RMF TAG Chair will attempt to mediate the dispute as appropriate."}, {"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.resolved.yaml", "expect": "though it was resolved at", "asserts": "The dispute is raised to the RMF TAG Chair only if it cannot be resolved at the AO level", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "If the conflict cannot be resolved at the AO level, the RMF TAG Secretariat will be notified and the RMF TAG Chair will attempt to mediate the dispute as appropriate."}]
     work_item: "WI-319"
   - id: "REQ-DODCIO-RECIPROCITY-0161"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 23, "anchor": "If the RMF TAG Chair cannot reach a resolution, the issue will"}
@@ -1308,7 +1414,8 @@ requirements:
     locator: "4.5.ii.3"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity: To facilitate the exchange of BoE for reciprocity, the DoD and IC worked toget"
     statement: "3. If the RMF TAG Chair cannot reach a resolution, the issue will be taken to the AO Council, chaired by the DoD CISO, who will serve as a mediator for the dispute. In addition to potentially mediating conflicts, DoD CIO plays a strategic role in shaping reciprocity policies and frameworks. This includes advocating for standardized processes, fostering the adoption of best practices, and championing the importance of leveraging trusted assessments from other agencies or entities. By providing strategic direction and promoting a cohesive approach to reciprocity, DoD CIO contributes significantly to the organization's overall cybersecurity resilience and effectiveness in an increasingly complex threat landscape."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-007", "fixture": "tests/fixtures/negative/RCP-007.chair.yaml", "expect": "the AO Council hearing the dispute is not chaired by the DoD CISO", "asserts": "The dispute the RMF TAG Chair cannot resolve is taken to the AO Council chaired by the DoD CISO", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "If the RMF TAG Chair cannot reach a resolution, the issue will be taken to the AO Council, chaired by the DoD CISO, who will serve as a mediator for the dispute."}]
     work_item: "WI-319"
   - id: "REQ-DODCIO-RECIPROCITY-0162"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 23, "anchor": "In conclusion, this playbook serves as an invaluable starting point for organizations"}
@@ -1362,7 +1469,8 @@ requirements:
     locator: "4.2.c"
     context: ""
     statement: "Receiving system and use their DSAWG representative to identify issues that may preclude the system from connecting, such as requests for adjustments to the assigned security controls or requirements for additional controls."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.dsawg.yaml", "expect": "issues that may preclude connecting the Enterprise system are not identified through the DSAWG representative", "asserts": "Issues that may preclude connecting the Enterprise system are identified through the DSAWG representative", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
     promoted: {"reason": "Tail of item 4.2.3.c (REQ-DODCIO-RECIPROCITY-0047), cut by a blank line: it holds a duty of its own, using the DSAWG representative to identify issues that may preclude connection."}
   - id: "REQ-DODCIO-RECIPROCITY-0168"
@@ -1371,7 +1479,8 @@ requirements:
     locator: "4.4"
     context: ""
     statement: "USCYBERCOM requirements and timelines, maintain the Enterprise Capability authorization baseline within the established DoD and USCYBERCOM timelines."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.yaml", "expect": "the patch is not provided within the DoD and USCYBERCOM timeline", "asserts": "The authorization baseline is maintained by providing each patch within the DoD and USCYBERCOM timelines", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}, {"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.directed.yaml", "expect": "is not provided to the receiving organizations", "asserts": "Every directed action implemented under USCYBERCOM requirements reaches the Receiving organizations as a patch or update", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-313"
     promoted: {"reason": "Tail of the 4.4.1 item in REQ-DODCIO-RECIPROCITY-0099, cut by a blank line: it holds a duty of its own, maintaining the authorization baseline within DoD and USCYBERCOM timelines."}
   - id: "REQ-DODCIO-RECIPROCITY-0169"
@@ -1380,7 +1489,8 @@ requirements:
     locator: "4.4"
     context: ""
     statement: "monitoring, operational orders, POA&Ms, annual reviews, and quarterly or monthly reviews of authorized systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-003", "fixture": "tests/fixtures/negative/RCP-003.orders.yaml", "expect": "the CSSP assigned does not maintain", "asserts": "The CSSP assigned maintains monitoring, operational orders, POA&Ms, annual reviews and quarterly or monthly reviews", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-313"
     promoted: {"reason": "Tail of the 4.4.1 item in REQ-DODCIO-RECIPROCITY-0101, cut by the page break: it names the rest of the CSSP scope, operational orders, POA&Ms and annual, quarterly or monthly reviews."}
   - id: "REQ-DODCIO-RECIPROCITY-0170"
@@ -1389,7 +1499,8 @@ requirements:
     locator: "4.4"
     context: ""
     statement: "Granting organization to implement the Enterprise Capability with any required mitigations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "RCP-009", "fixture": "tests/fixtures/negative/RCP-009.yaml", "expect": "the mitigation in the Granting POA&M item", "asserts": "The Enterprise Capability is implemented with each required mitigation of the Granting POA&M", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
     promoted: {"reason": "Tail of the 4.4.2 item in REQ-DODCIO-RECIPROCITY-0104, cut by a blank line: it holds the duty to implement the Enterprise Capability with any required mitigations."}
   - id: "REQ-DODCIO-RECIPROCITY-0171"
