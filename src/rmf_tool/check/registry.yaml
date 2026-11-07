@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 244 rules, 36 repo-scope and 208 run-scope. Authoritative;
+# Rule registry (plan §6.5): 249 rules, 36 repo-scope and 213 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -3174,6 +3174,7 @@ rules:
     fixture: tests/fixtures/negative/PPROT-001.yaml
     hint: "protection.yaml ppp.approval names the authority the ACAT, MDA and pathway call for; ppp.submissions holds one per decision point passed."
     enforces:
+      - REQ-DODI5000.82-0113
       - REQ-DODI5000.83-0046
       - REQ-DODI5000.83-0047
       - REQ-DODI5000.83-0048
@@ -3185,6 +3186,7 @@ rules:
       - REQ-DODI5000.87-0010
       - REQ-DODI5000.90-0045
       - REQ-DODI8500.01-0098
+      - REQ-DODI8500.01-0216
   - id: PPROT-002
     scope: run
     severity: E
@@ -3317,6 +3319,102 @@ rules:
       - REQ-CNSSP12-0056
       - REQ-CNSSP12-0058
       - REQ-DODI8510.01-0037
+  - id: CSSTRAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy lacks the approval DoDI 5000.82 Table 2 calls for by ACAT or BCAT, or on the software pathway the DA's approval of the acquisition strategy holding it
+    fixture: tests/fixtures/negative/CSSTRAT-001.yaml
+    hint: "cybersecurity-strategy.yaml approvals name the Component CIO and DoD CIO before each milestone of an ACAT ID or BCAT I program, a CIO otherwise; acquisition_strategy records the DA's approval on PW-SWP."
+    enforces:
+      - REQ-DODI5000.82-0107
+      - REQ-DODI5000.82-0108
+      - REQ-DODI5000.82-0109
+      - REQ-DODI5000.82-0110
+      - REQ-DODI5000.82-0111
+      - REQ-DODI5000.75-0024
+      - REQ-DODI5000.75-0053
+      - REQ-DODI5000.90-0019
+      - REQ-DODI5000.90-0039
+      - REQ-DODI5000.87-0064
+      - REQ-DODI5000.82-0112
+  - id: CSSTRAT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy is not reviewed before a milestone decision or contract award, or a review lacks the program office or the AO
+    fixture: tests/fixtures/negative/CSSTRAT-002.yaml
+    hint: "Give each milestone decision and contract award a review or approval naming it in before; an award authorized at a milestone names it in authorized_at."
+    enforces:
+      - REQ-DODI8500.01-0331
+      - REQ-DODI5000.82-0112
+      - REQ-DODI5000.82-0100
+      - REQ-DODI5000.90-0100
+      - REQ-DODI5000.75-0053
+      - REQ-DODI5000.82-0108
+      - REQ-DODI5000.82-0110
+      - REQ-DODI5000.90-0019
+  - id: CSSTRAT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy misses a life-cycle phase, Intelligence Community threat information, a basis, the RMF, its document or a software pathway assessment, or postdates the first authorization
+    fixture: tests/fixtures/negative/CSSTRAT-003.yaml
+    hint: "strategy.activities cover every phase of the pathway; based_on holds all five bases; documented_in holds stand-alone without a PPP and acquisition-strategy below ACAT ID."
+    enforces:
+      - REQ-DODI5000.82-0099
+      - REQ-DODI5000.82-0113
+      - REQ-DODI5000.89-0113
+      - REQ-DODI5000.90-0073
+      - REQ-DODI5000.87-0079
+      - REQ-DODI5000.90-0099
+      - REQ-DODI5000.82-0109
+      - REQ-DODI5000.82-0111
+      - REQ-DODI5000.82-0112
+  - id: PMSCRM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a Table 1 SCRM action the risk tolerance level calls for is neither taken nor explained, a TAC report rated critical or high is not flagged, or SCRM starts after the acquisition
+    fixture: tests/fixtures/negative/PMSCRM-001.yaml
+    hint: "pm-scrm.yaml actions hold every Table 1 action of the level and the levels above it, or not_taken gives the reason."
+    enforces:
+      - REQ-DODI5000.90-0116
+      - REQ-DODI5000.90-0117
+      - REQ-DODI5000.90-0118
+      - REQ-DODI5000.90-0119
+      - REQ-DODI5000.90-0120
+      - REQ-DODI5000.90-0122
+      - REQ-DODI5000.90-0124
+      - REQ-DODI5000.90-0125
+      - REQ-DODI5000.90-0126
+      - REQ-DODI5000.82-0114
+  - id: PMSCRM-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a mission-critical item has neither assured supplier nor SCRM countermeasure, an unvalidated IA product has no reason, or a space NSS lacks acquisition and engineering mitigations informed by all-source threat information
+    fixture: tests/fixtures/negative/PMSCRM-002.yaml
+    hint: "pm-scrm.yaml mission_critical covers each PPP critical function and component; unvalidated_products explains each CNSSP 11 not-compliant item."
+    enforces:
+      - REQ-DODI5000.90-0127
+      - REQ-DODI5000.83-0202
+      - REQ-CNSSP12-0025
   - id: TSTRAT-001
     scope: run
     severity: E

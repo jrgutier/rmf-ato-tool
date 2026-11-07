@@ -1,0 +1,52 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: SCRM said documented in a PPP whose activities leave it out
+mutations:
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.procurement
+  value: assured
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.level
+  value: very-low
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: actions
+  value:
+  - foci-caution
+  - approved-products-lists
+  - industry-standards
+  - balance-risk-mission
+  - verifiable-vendor-processes
+  - vendor-limitations-awareness
+  - countermeasures-critical-risks
+  - assess-critical-components
+  - implement-countermeasures
+  - assessment-vendors
+  - follow-dodi5200.44-sp800-161
+  - criticality-analysis
+  - ppp-documentation
+  - tac-requests
+  - flag-reports
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: tac_requests
+  value:
+  - id: TR-1
+    subjects:
+    - Relay appliance vendor
+    to: DIA-SCRM-TAC
+    date: '2026-02-10'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.sse_activities
+  value:
+  - cyber-resilient-engineering
+  - software-assurance
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - SCRM is documented in the program protection plan, whose activities leave it out

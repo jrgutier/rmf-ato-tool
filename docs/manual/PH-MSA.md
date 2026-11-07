@@ -805,6 +805,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 | [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [EXT-CSS](../../MANUAL.md#ext-css) | Cybersecurity strategy | outside input (product) |
 | [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
 | [EXT-ITRA](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
 | [EXT-SEP](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
@@ -829,6 +830,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- cybersecurity-strategy.yaml records the CSS with its content, the approvals DoDI 5000.82 Table 2 calls for by ACAT or BCAT (on the software pathway the DA's approval of the acquisition strategy holding it), and its reviews before each milestone decision and contract award (CSSTRAT-001 to CSSTRAT-003); pm-scrm.yaml records the PM's SCRM actions of DoDI 5000.90 3.4 (market research, illumination, the Table 1 due diligence of the risk tolerance level, DIA SCRM TAC requests and flagged reports, the assured supplier or countermeasure of each mission-critical item and validated products) (PMSCRM-001, PMSCRM-002).
 
 **Alignment**
 

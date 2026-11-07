@@ -1,0 +1,27 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: a flagged TAC report with no mitigation decision
+mutations:
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: tac_requests
+  value:
+  - id: TR-1
+    subjects:
+    - Relay appliance vendor
+    to: DIA-SCRM-TAC
+    date: '2026-02-10'
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: reports
+  value:
+  - id: RPT-1
+    request: TR-1
+    rating: medium
+    flagged: true
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - flagged report RPT-1 has no mitigation decision commensurate with risk

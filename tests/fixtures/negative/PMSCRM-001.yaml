@@ -1,0 +1,21 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: a moderate risk tolerance system skipping a Table 1 action without a reason
+mutations:
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: actions
+  value:
+  - foci-caution
+  - approved-products-lists
+  - industry-standards
+  - balance-risk-mission
+  - verifiable-vendor-processes
+  - vendor-limitations-awareness
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - Table 1 asks a system of moderate risk tolerance for countermeasures-critical-risks; it is neither
+    taken nor explained

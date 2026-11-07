@@ -1,0 +1,19 @@
+rule: CSSTRAT-003
+bases:
+- minimal
+description: a CSS not based on the intended operational use
+mutations:
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: strategy.based_on
+  value:
+  - cssr-requirements
+  - threats
+  - derived-requirements
+  - performance-specifications
+expect:
+  errors:
+  - CSSTRAT-003
+  messages:
+  - the CSS is based on requirements, threats, derived requirements, performance specifications and intended
+    use; it leaves out operational-use

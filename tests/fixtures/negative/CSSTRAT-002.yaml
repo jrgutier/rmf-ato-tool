@@ -1,0 +1,18 @@
+rule: CSSTRAT-002
+bases:
+- minimal
+description: no CSS review or approval names Milestone A
+mutations:
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: reviews.0.before
+  value: K-000
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: approvals.0.before
+  value: K-000
+expect:
+  errors:
+  - CSSTRAT-002
+  messages:
+  - the CSS is reviewed prior to acquisition milestone decision MS-A

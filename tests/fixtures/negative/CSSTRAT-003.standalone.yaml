@@ -1,0 +1,22 @@
+rule: CSSTRAT-003
+bases:
+- minimal
+description: a business system's CSS documented only as a PPP appendix
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-DBS
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: strategy.documented_in
+  value:
+  - ppp-appendix
+expect:
+  errors:
+  - CSSTRAT-003
+  messages:
+  - without a program protection plan the CSS is a stand-alone required document
+  also:
+  - TSTRAT-001
+  - TSTRAT-002
