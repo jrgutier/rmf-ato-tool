@@ -1,0 +1,15 @@
+rule: BIA-002
+bases:
+- minimal
+description: the conflict reevaluated without the data owner
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: processes.0.disruption_impact, value: high}
+- op: set_field
+  file: artifacts/data/bia.yaml
+  path: reevaluations
+  value: [{process: BP-01, date: '2026-10-29', by: [PER-SPONSOR], outcome: both-retained, rationale: Field units buffer the reports through an outage., sources: [INT-019.A1]}]
+expect:
+  errors:
+  - BIA-002
+  messages:
+  - "the reevaluation of process BP-01 is not by the mission and data owners: PER-IO missing"

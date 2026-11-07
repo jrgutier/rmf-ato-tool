@@ -416,7 +416,8 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "12. | SSP | Mission Criticality and Mission Critical Functions | Identify if there are mission critical functions present within the system? Yes/No If yes, identify any mission critical functions supported by the system | FIPS Pub 199 or NIST SP 800-53"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.criticality.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SSP data elements carry whether mission critical functions are present within the system, yes or no, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}, {"kind": "rule", "target": "BIA-001", "fixture": "tests/fixtures/negative/BIA-001.yaml", "expect": "says mission critical functions are present but identifies none", "asserts": "If mission critical functions are present, the analysis identifies the mission critical functions supported by the system", "claim": "presence", "holds_when": "P-8 is active or ART-BIA is seeded"}]
     work_item: "WI-09"
   - id: "REQ-CNSSI1254-0051"
     citation: {"ref": "CNSSI1254", "page": 15, "anchor": "| SSP | Ownership/Operation | Indicates if the system is government-owned, government-operated;"}

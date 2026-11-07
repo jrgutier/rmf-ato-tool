@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 225 rules, 36 repo-scope and 189 run-scope. Authoritative;
+# Rule registry (plan §6.5): 227 rules, 36 repo-scope and 191 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1459,6 +1459,7 @@ rules:
       - REQ-CNSSI1254-0058
       - REQ-CNSSI1254-0030
       - REQ-CNSSI1254-0057
+      - REQ-CNSSI1254-0050
       - REQ-CNSSI1254-0051
       - REQ-CNSSI1254-0052
       - REQ-CNSSI1254-0060
@@ -1994,6 +1995,30 @@ rules:
     enforces:
       - REQ-DOWI8430.01-0198
       - REQ-SP800-37R2-0330
+  - id: BIA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-8
+    summary: "the business impact and criticality analysis does not answer whether mission critical functions are present, or names a function's process it does not list"
+    fixture: tests/fixtures/negative/BIA-001.yaml
+    hint: "At P-8 write bia.yaml: mission_critical true with each mission critical function and the processes that carry it, or false with no functions; every process a function names is in processes."
+    enforces:
+      - REQ-CNSSI1254-0050
+  - id: BIA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: "a process whose disruption impact exceeds the availability impact of the categorization is not reevaluated by the mission and data owners"
+    fixture: tests/fixtures/negative/BIA-002.yaml
+    hint: "At C-2 compare each bia.yaml process's disruption_impact with categorization a; for each that exceeds it, record a reevaluation of that process by PER-SPONSOR and PER-IO with its outcome, revising the categorization or the BIA, or retaining both with a rationale."
+    enforces:
+      - REQ-SP800-60V1R1-0193
   - id: PRIV-001
     scope: run
     severity: E

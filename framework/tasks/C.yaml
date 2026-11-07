@@ -55,8 +55,8 @@ tasks:
       high-water mark for each security objective (C/I/A) plus the applicable overlays, and
       record it in facts.yaml.
     raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [PER-UR, PER-ISSE, PER-PRIV, PER-CISO, PER-RE], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SD, ART-INFOTYPES, ART-RA, EXT-CNSSI1253-OVERLAYS]
-    outputs: [ART-CAT]
+    inputs: [ART-SD, ART-BIA, ART-INFOTYPES, ART-RA, EXT-CNSSI1253-OVERLAYS]
+    outputs: [ART-CAT, ART-BIA]
     writes_facts: [categorization]
     depends_on: [C-1, P-12]
     feeds_back_to: []
@@ -73,6 +73,9 @@ tasks:
         each value.
       - The categorization is not adjusted to reflect management decisions about control
         stringency; those go through tailoring (S-2).
+      - A supported process in bia.yaml whose disruption impact exceeds the availability impact
+        is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations
+        (BIA-002).
     citations:
       - {ref: SP800-37R2, section: "TASK C-2", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, section: "b. Categorize"}
