@@ -1,5 +1,5 @@
 """The program manager's SCRM actions P-14 writes beside ART-RA: PMSCRM-001 and PMSCRM-002
-(DoDI 5000.90 3.4, DoDI 5000.82 3.5.c, DoDI 5000.83 3.3.c, CNSSP 12). pm-scrm.yaml holds the
+(DoDI 5000.90 3.4, DoDI 5000.82 3.5.c, DoDI 5000.83 3.3.c, CNSSP 12). scrm.yaml pm_actions holds the
 market research, the illumination decision, the risk tolerance level with the Table 1 due
 diligence it calls for, DIA SCRM TAC requests and their reports, the assured supplier or
 countermeasure of each mission-critical item, validated products, and the supply chain
@@ -20,7 +20,7 @@ from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules.plans import _space
 from rmf_tool.check.rules.protection import _day, _dict, _dicts, _ids, _protection, _record
 
-SCRM_FILE = "artifacts/data/pm-scrm.yaml"
+SCRM_FILE = "artifacts/data/scrm.yaml"  # its pm_actions block
 INV_FILE = "artifacts/data/inventory.yaml"
 # DoDI 5000.90 Table 1: each level implements all previous strategies and its own.
 TABLE_1 = {
@@ -49,7 +49,14 @@ def _owed(level: Any) -> list[str]:
 
 def _scrm(ctx: Context, rule: str) -> tuple[dict[str, Any] | None, list[RunFinding],
                                             Callable[[str], None]]:
-    return _record(ctx, rule, SCRM_FILE, "P-14")
+    data, out, err = _record(ctx, rule, SCRM_FILE, "P-14")
+    if data is None:
+        return None, out, err
+    block = data.get("pm_actions")
+    if not isinstance(block, dict):
+        err(f"{SCRM_FILE} has no pm_actions block; P-14 records the PM's SCRM actions there")
+        return None, out, err
+    return block, out, err
 
 
 # --- PMSCRM-001: due diligence by risk tolerance -----------------------------------------

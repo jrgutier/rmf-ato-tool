@@ -31,7 +31,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "requirements", "software", "system-description", "sar-summary",
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
-                     "cybersecurity-strategy", "pm-scrm",
+                     "cybersecurity-strategy",
                      "test-strategy", "registration", "pia", "cato", "cloud",
                      "scrm", "scrm-acquisition", "scrm-plan", "scrm-org"}
 # framework/baselines/*.yaml (ADR-0002)
@@ -418,9 +418,9 @@ RUN_EXAMPLES["cato"] = (_CATO, {**_CATO, "metrics": []})
 _CSS = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/cybersecurity-strategy.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["cybersecurity-strategy"] = (_CSS, {**_CSS, "approvals": [{"authority": "MDA"}]})
-_PMSCRM = YAML(typ="safe").load(
-    (REPO_ROOT / "templates/data/pm-scrm.yaml").read_text(encoding="utf-8"))
-RUN_EXAMPLES["pm-scrm"] = (_PMSCRM, {**_PMSCRM, "market_research": []})
+_SCRM = YAML(typ="safe").load((REPO_ROOT / "templates/data/scrm.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["scrm"] = (_SCRM, {**_SCRM, "pm_actions": {**_SCRM["pm_actions"],
+                                                       "market_research": []}})
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
      "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},

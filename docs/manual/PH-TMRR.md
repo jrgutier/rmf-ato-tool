@@ -43,11 +43,13 @@ Reduce technology, engineering, integration and life-cycle cost risk and mature 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
+| <a id="ms-cddv"></a>**CDD validation** Capability Development Document validation | event | — | During TMRR the requirements validation authority validates the CDD, or the equivalent requirements document that replaced it once JCIDS was disestablished, before the Development RFP release decision point (ACQLC-002). | — |
 | <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](../../MANUAL.md#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [P-17](#task-p-17) |
 | <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) |
 
 Sources:
 
+- **CDD validation**: [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "During the TMRR phase, the requirements validation authority will validate the CDD"; [DODI5000.02](../../MANUAL.md#ref-dodi5000-02), p. 6, "Updates the issuance to reflect the disestablishment of the Joint Capabilities Integration"
 - **Dev RFP RD**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Require that contracts and other agreements include specific requirements"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "3.9. DEVELOPMENT RFP RELEASE DECISION POINT."; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 14, "that program security has been accommodated"
 - **MS B**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 8, "before program initiation for new systems and all acquisition milestones"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 15, "The Milestone B decision authorizes a program to enter into the EMD phase"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 15, "Risk sources include, but are not limited to, technology, threat projections, security"
 
@@ -151,9 +153,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -182,6 +184,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - For a cloud service offering, those requirements include the contract clauses DTM 24-001 lists (accreditation boundary and licensing, CSSP incident notification, threat- representative testing, CSP data for CSSP DCO, corrective action processes, access for inspection teams, report delivery); S-4 records them on the contract (CLOUD-004).
 - requirements.yaml allocates each requirement to a boundary component, the environment, a common control provider or the contract (REQS-001), and records the cyberspace work roles contractors perform with their qualification terms (REQS-004).
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
+- The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 - artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
 
 **Alignment**
@@ -307,6 +310,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every assumption under the baselines and the applied overlays is tested; one that fails revisits the selection, and one the baselines do not address that holds names the controls, selected or added, or the overlay that addresses it (TLR-003).
 - The need for additional assurance-related controls is determined (TLR-004), and each applied overlay's conditions are answered (TLR-005).
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+- Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
 
 **Alignment**
@@ -338,9 +342,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
+| Consulted | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -368,6 +372,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - allocation.yaml gives every tailored-baseline control a type and the components that implement it.
 - Every requirement of ART-REQ is satisfied by a control that names it (TLR-009).
 - The system owner and the AO determine, for each common control provider, that its controls protect the system commensurate with risk (TLR-010).
+- The ISSO, a primary role (DoDI 8510.01 Table 3), gives an S-3 interview (WFQ-002).
 
 **Alignment**
 
