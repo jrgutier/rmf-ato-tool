@@ -396,9 +396,12 @@ RUN_EXAMPLES.update({
         ("protection", "program", {"acat": "IV", "mda": "DAE"}),
         ("protection-requirements", "read", {"ppp": "PPP-1"}),
         ("nss-assessments", "nss", "perhaps"),
-        ("test-strategy", "approvals", []),
-        ("cloud", "mission_impact_level", {"level": "IL3"}))
+        ("test-strategy", "approvals", []))
 })
+# cloud.yaml lives in the derived `cloud` base, not valid_minimal; its template is a valid record.
+_CLOUD = YAML(typ="safe").load(
+    (REPO_ROOT / "templates/data/cloud.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["cloud"] = (_CLOUD, {**_CLOUD, "mission_impact_level": {"level": "IL3"}})
 _ST = YAML(typ="safe").load(
     (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
 RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})

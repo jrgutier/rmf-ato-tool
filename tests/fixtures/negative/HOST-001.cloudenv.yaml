@@ -1,0 +1,17 @@
+rule: HOST-001
+bases:
+- minimal
+description: a cloud-hosted assessment the agreements do not carry
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: hosting.cloud.assessment
+  value: cloud-hosted
+expect:
+  errors:
+  - HOST-001
+  messages:
+  - the cloud assessment says the system is cloud-hosted and service-agreements.yaml does not name 
+    the cloud among its environments
+  also:
+  - CLOUD-001

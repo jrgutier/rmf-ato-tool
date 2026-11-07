@@ -532,8 +532,8 @@ with the next ID; never edit or delete an existing entry.
 - Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.
 
 ## L-0076 · 2026-11-07 · run: phase-11 · tags: references, rules
-- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities have empty cells, so the extraction reads as if nothing constrains who performs them.
-- Root cause: the "CSSP must perform" key is a star glyph the text extractor drops, while the ● and ○ keys survive; the page image on p. 9 shows a star in every cell of those rows.
-- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and the paragraph text for each activity (Att 3, 3.a to 3.d) agrees with it row by row.
-- Rule: When a table's cells are empty in references/text but its key names a marker, read the PDF page before deciding the rows are unconstrained.
-- Promotion: none — which glyphs an extractor drops is a property of one PDF; the agreement of the table with its own paragraphs is checked by reading, not by a rule.
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities look empty in a terminal or editor, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the extractor maps to the private-use code point U+F0E9, which renders as blank, while the ● and ○ keys come through as themselves; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
+- Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
+- Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text

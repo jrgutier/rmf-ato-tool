@@ -42,7 +42,8 @@ DATA_FLOOR = {"cui": "IL4", "mission-operations": "IL4", "cui-above-il4": "IL5",
               "unclassified-nss": "IL5", "classified-secret": "IL6"}
 ABOVE_SECRET = "classified-above-secret"
 
-# DTM 24-001 Table 1, the same for IaaS, PaaS and SaaS: the key of each activity.
+# DTM 24-001 Table 1 (pp. 8-9, read from the page images: the extraction drops the CSSP star,
+# L-0076), the same for IaaS, PaaS and SaaS: the key of each activity.
 ANY, DOW, CSSP, DCRT = "any", "dow", "cssp", "dcrt"
 TABLE_1 = {
     "external-vulnerability-scans": ANY, "web-vulnerability-scans": ANY,
@@ -161,17 +162,20 @@ def _rank(level: Any) -> int:
 
 def _cloud_hosted(ctx: Context) -> bool:
     """What service-agreements.yaml and the P-16 hosting record say, so leaving cloud.yaml out is
-    no way around a rule."""
+    no way around a rule: the agreements, the hosting environment and the cloud assessment."""
     data = _mapping(ctx.data(AGREEMENTS_FILE))
     roles = [a.get("role") for a in _dicts(data.get("agreements"))]
-    hosted = _mapping(_mapping(ctx.data(BOUNDARY_FILE)).get("hosting")).get("environment")
+    hosting = _mapping(_mapping(ctx.data(BOUNDARY_FILE)).get("hosting"))
+    hosted = hosting.get("environment")
+    assessed = _mapping(hosting.get("cloud")).get("assessment")
     return "cloud" in _strings(data.get("system_environments")) \
-        or "cloud-service-provider" in roles or hosted == "cloud"
+        or "cloud-service-provider" in roles or hosted == "cloud" or assessed == "cloud-hosted"
 
 
 def _record(ctx: Context, rule: str, section: str | None = None
             ) -> tuple[dict[str, Any] | None, list[RunFinding], Callable[[str], None]]:
-    """The cloud record of a CSO-hosted system at S-4, or None when the rule is not in play."""
+    """The cloud record of a CSO-hosted system at S-4, or None when the rule is not in play. A
+    missing required section returns None too: the schema requires it, so RUN-FM-001 reports it."""
     out: list[RunFinding] = []
 
     def err(message: str) -> None:
@@ -321,6 +325,8 @@ def impact_level(ctx: Context) -> list[RunFinding]:
 # --- CLOUD-003: the cybersecurity activity tracking checklist --------------------------------
 
 def _key(activity: str, level: Any) -> str:
+    """The Table 1 key in the column of the mission impact level: the mission's data picks the
+    column, so an IL6 offering carrying IL4 data is judged at IL 4/5."""
     if level == "IL6" and activity in IL6_DOW:
         return DOW
     return TABLE_1[activity]
@@ -549,14 +555,15 @@ def events(ctx: Context) -> list[RunFinding]:
 # --- CLOUD-009: what performers owe ----------------------------------------------------------
 
 def deliverables(ctx: Context) -> list[RunFinding]:
-    """CLOUD-009: a performer of a Table 1 activity owes its reports to their recipients."""
+    """CLOUD-009: a performer of a Table 1 activity, CSSP or other DoW or commercial entity, owes
+    its reports to their recipients."""
     data, out, err = _record(ctx, "CLOUD-009")
     if data is None:
         return out
     owed = {(_text(d.get("activity")), _text(d.get("kind"))): d
             for d in _dicts(data.get("deliverables"))}
-    performed = {_text(r.get("activity")) for r in _rows(data)
-                 if _entity(r) in ("dow-entity", "commercial")}
+    # A CSSP is a DoW entity, so it owes what any DoW or commercial performer owes.
+    performed = {_text(r.get("activity")) for r in _rows(data) if _entity(r) in PERFORMERS}
     for activity in sorted(a for a in performed & set(DELIVERABLES) if a):
         for kind, recipients in DELIVERABLES[activity].items():
             found = owed.get((activity, kind))
@@ -634,15 +641,20 @@ def hosting(ctx: Context) -> list[RunFinding]:
     state = facts_mod.value(ctx.facts, "lifecycle_state")
     environment = found.get("environment")
     decc = _mapping(found.get("decc")).get("status")
-    enclave = _mapping(found.get("existing_enclave")).get("status")
-    # DoDI 5000.82 3.7.b puts the cloud first, so a cloud-hosted application names that.
-    if kind == MAJOR_APPLICATION and state in NEW_STATES and environment != DECC \
-            and decc != "infeasible" and (decc != "cloud" or environment != "cloud"):
+    designation = _mapping(found.get("enclave_application")).get("status")
+    # Encl 3.b holds a new major application to a DECC; an existing authorized enclave (Encl 3.d)
+    # meets it too, and DoDI 5000.82 3.7.b puts the cloud first, recorded as decc: cloud.
+    if kind == MAJOR_APPLICATION and state in NEW_STATES \
+            and environment not in (DECC, "existing-enclave") and decc != "infeasible" \
+            and (decc != "cloud" or environment != "cloud"):
         err("a new major application is hosted in a Defense Enterprise Computing Center when "
             "operationally feasible")
-    if kind == MAJOR_APPLICATION and enclave != "not-possible":
-        err("a major application needs a new and separate authorization; record why it cannot "
-            "be developed as an application hosted in an existing authorized enclave")
+    # Encl 3.d is a choice made while the capability is developed or modified, not a judgment of
+    # where an operational system now runs.
+    if kind == MAJOR_APPLICATION and state in DEVELOPED_STATES and designation != "not-possible":
+        err("a capability that can be developed as an application hosted in an existing "
+            "authorized enclave is designated a major application requiring a new and separate "
+            "authorization")
     if environment == DECC and decc != "hosted":
         err("the system is hosted in a Defense Enterprise Computing Center and decc says "
             f"{decc}")
@@ -652,6 +664,10 @@ def hosting(ctx: Context) -> list[RunFinding]:
             "an assessment that it is, or can and would be, cloud-hosted")
     if environment == "cloud" and cloud != "cloud-hosted":
         err(f"the system is hosted in the cloud and its cloud assessment says {cloud}")
+    environments = _strings(_mapping(ctx.data(AGREEMENTS_FILE)).get("system_environments"))
+    if cloud == "cloud-hosted" and "cloud" not in environments:
+        err("the cloud assessment says the system is cloud-hosted and service-agreements.yaml "
+            "does not name the cloud among its environments")
     return out
 
 

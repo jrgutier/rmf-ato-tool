@@ -3,7 +3,8 @@ mutates a copy of a base run; ``rmf check --final`` must then report exactly the
 errors plus the listed ``also`` errors (and, for a warning rule, the listed ``warnings``).
 Bases: ``minimal`` (valid_minimal, scope all), ``hybrid`` (hybrid_minimal, skeleton scope)
 and ``example`` (the uas-gcs synthetic run, Phase 7), and ``pii``, derived from ``minimal`` by
-the mutations in tests/fixtures/runs/pii.yaml into a system that processes PII. Copies are
+the mutations in tests/fixtures/runs/pii.yaml into a system that processes PII, and ``cloud``,
+by tests/fixtures/runs/cloud.yaml into a partly CSO-hosted system. Copies are
 re-stamped to the current upstream hash, so the bases start without findings."""
 
 
@@ -21,7 +22,8 @@ BASES = {"minimal": VALID_MINIMAL, "hybrid": HYBRID_MINIMAL}
 if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3)
     BASES["example"] = EXAMPLE_RUN
 # A derived base: a committed base plus mutations, so it cannot drift from what it extends.
-DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml"}
+DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml",
+           "cloud": REPO_ROOT / "tests/fixtures/runs/cloud.yaml"}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
 
