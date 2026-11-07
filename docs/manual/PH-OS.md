@@ -84,6 +84,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
 | [EXT-CHANGE-REQUESTS](../../MANUAL.md#ext-change-requests) | Configuration change requests | outside input (operational) |
+| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -202,6 +203,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
+| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -220,6 +222,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - The output of continuous monitoring activities is analyzed and responded to appropriately (DoDI 8510.01 Table 7 outcome).
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
+- Where M-2 found a risk response ineffective, ART-RA records why, and the response goes back to the part of R-3 the failure points to, its implementation for a compliance failure, the whole response, and the risk assessment if needed, for an effectiveness failure.
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 
 **Alignment**
@@ -262,6 +265,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
 
 **Outputs**
 
@@ -280,6 +284,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - Risk management documents are updated based on continuous monitoring activities (DoDI 8510.01 Table 7 outcome).
 - Authorization package artifacts reflect the current state of the system.
+- ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers), what was updated is recorded, and the results reach its communicated_to officials.
 
 **Alignment**
 

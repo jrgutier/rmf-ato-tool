@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 89 rules, 36 repo-scope and 53 run-scope. Authoritative;
+# Rule registry (plan §6.5): 95 rules, 36 repo-scope and 59 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -802,6 +802,85 @@ rules:
     summary: baseline control family without a monitoring frequency
     fixture: tests/fixtures/negative/CONMON-001.yaml
     hint: conmon.yaml lists a frequency for every family in the baseline.
+  - id: ISCM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the continuous monitoring strategy leaves out a part it states, or its threat monitoring a kind it watches
+    fixture: tests/fixtures/negative/ISCM-001.yaml
+    hint: conmon.yaml states frequency_criteria, tools, architecture, monitoring, events, boundary_review, threat_monitoring, metrics, delegations and risk_assessment; an empty list is an answer.
+    enforces:
+      - REQ-DODI5000.90-0005
+      - REQ-DODI5000.90-0082
+      - REQ-SP800-137-0164
+  - id: ISCM-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: an automated tool not using the test method, assessing a control outside the baseline, or collecting a continuously monitored control less often; a desired state tool without its block, an automated actual state, data-based or comparable desired state; or a continuously monitored control no tool covers
+    fixture: tests/fixtures/negative/ISCM-002.yaml
+    hint: Name baseline controls per tool at the test method; a continuously monitored control needs a continuous tool, or a manual frequency.
+    enforces:
+      - REQ-SP800-37R2-0617
+      - REQ-SP800-53AR5-0318
+      - REQ-SP800-53AR5-0319
+      - REQ-SP800-53AR5-0321
+  - id: ISCM-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a monitoring frequency without resolvable criteria (ART-ORG-CONTEXT only for a family organizational_frequencies lists), an override outside its family, or a criterion not established by the system owner or common control provider with other officials
+    fixture: tests/fixtures/negative/ISCM-003.yaml
+    hint: Each frequency cites FC-nn criteria or ART-ORG-CONTEXT; criteria are established by PER-PM or PER-CCP, consulting other officials.
+    enforces:
+      - REQ-SP800-37R2-0317
+  - id: ISCM-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-6
+    summary: the continuous monitoring strategy is not approved by the AO or designated representative
+    fixture: tests/fixtures/negative/ISCM-004.yaml
+    hint: Record the approval in conmon.yaml, approved_by PER-AO or PER-AODR.
+    enforces:
+      - REQ-SP800-37R2-0318
+  - id: ISCM-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: monitoring reports that do not reach the AO, or an authorization boundary not revisited periodically
+    fixture: tests/fixtures/negative/ISCM-005.yaml
+    hint: Put PER-AO or PER-AODR among reporting recipients and give boundary_review a periodic frequency.
+    enforces:
+      - REQ-SP800-37R2-0119
+      - REQ-SP800-37R2-0617
+      - REQ-SP800-53AR5-0315
+  - id: ISCM-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the CSSP works for the system with no delegation documented, or a delegation names a leveraged authorization the run does not hold
+    fixture: tests/fixtures/negative/ISCM-006.yaml
+    hint: List each activity delegated to an external partner under delegations, naming its agreement.
+    enforces:
+      - REQ-DODI8510.01-0239
   - id: TRACE-001
     scope: run
     severity: E

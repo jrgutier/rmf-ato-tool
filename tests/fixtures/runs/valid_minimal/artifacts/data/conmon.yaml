@@ -1,14 +1,91 @@
 frequencies:
-  - {family: ac, frequency: monthly, method: Account review and audit of privileged accounts, responsible: PER-ISSO}
-  - {family: au, frequency: monthly, method: SIEM forwarding check, responsible: PER-ISSO}
-  - {family: cm, frequency: continuous, method: Monthly STIG and vulnerability scans with drift alerts, responsible: PER-ISSE}
-  - {family: ia, frequency: quarterly, method: Identity provider configuration review, responsible: PER-ISSM}
-  - {family: sc, frequency: quarterly, method: Enclave firewall rule review (common control), responsible: PER-ISSM}
-  - {family: si, frequency: monthly, method: Patch compliance report, responsible: PER-ISSO}
+  - {family: ac, frequency: monthly, method: Account review and audit of privileged accounts, responsible: PER-ISSO, criteria: [FC-01]}
+  - {family: au, frequency: monthly, method: SIEM forwarding check, responsible: PER-ISSO, criteria: [ART-ORG-CONTEXT]}
+  - family: cm
+    frequency: continuous
+    method: Monthly STIG and vulnerability scans with drift alerts
+    responsible: PER-ISSE
+    criteria: [FC-01, FC-02]
+  - {family: ia, frequency: quarterly, method: Identity provider configuration review, responsible: PER-ISSM, criteria: [ART-ORG-CONTEXT]}
+  - family: sc
+    frequency: quarterly
+    method: Enclave firewall rule review (common control)
+    responsible: PER-ISSM
+    criteria: [FC-02]
+    overrides:
+      - {control: sc-7, frequency: monthly, reason: The boundary firewall is a critical security function.}
+  - {family: si, frequency: monthly, method: Patch compliance report, responsible: PER-ISSO, criteria: [FC-02]}
 ongoing_authorization:
   time_trigger_days: 365
   event_triggers: ["A new CAT I finding", "A change to the authorization boundary"]
 reporting:
   recipients: [PER-AO, PER-ISSM]
   frequency: quarterly
+approval:
+  approved_by: PER-AODR
+  date: '2026-10-29'
+  sources: [INT-031.A1]
+organizational_frequencies:
+  families: [au, ia]
+  sources: [INT-018.A1]
+frequency_criteria:
+  - id: FC-01
+    criterion: volatility
+    description: Account and configuration settings change often, so they are monitored at least monthly.
+    established_by: PER-PM
+    consulted: [PER-AODR, PER-ISSM]
+    sources: [INT-030.A1]
+  - id: FC-02
+    criterion: critical-function
+    description: Controls behind the boundary firewall and patching protect every interface, so they are monitored more often.
+    established_by: PER-PM
+    consulted: [PER-AODR]
+    sources: [INT-030.A1]
+tools:
+  - id: TOOL-01
+    name: SCAP compliance scanner
+    strategy: desired-state
+    assesses: [cm-6, si-2]
+    method: test
+    frequency: continuous
+    analysis: The ISSE compares each scan with the STIG benchmarks and the patch baseline.
+    reporting: Drift and missing patches are reported to the ISSM within a day.
+    selection: Reads the STIG content in SCAP form and covers every server in the boundary.
+    upkeep: The ISSE validates scanner content against each new STIG release.
+    responsible: PER-ISSE
+    desired_state:
+      actual_state: {collection: automated, controls: [cm-6, si-2], specification: Settings and installed patches read from each host.}
+      desired_state: {controls: [cm-6, si-2], data: [BM-01], specification: The STIG benchmarks and the approved patch level.}
+      defects: {method: Each difference between a host's settings and its benchmark is a defect., recorded_in: poam}
+architecture:
+  collection: Scans and log forwarding collect data from every host.
+  storage: The enclave SIEM keeps the data for a year.
+  analysis: The ISSE and ISSO analyze scan and log results.
+  retrieval: Dashboards in the SIEM retrieve data by control.
+  delivery: The ISSM delivers the quarterly posture report to the AO and the organization.
+  automated: Configuration and patch monitoring are automated.
+  manual: Account, identity and firewall reviews are manual because no tool reads them.
+monitoring:
+  compliance: {method: Scans and reviews check that controls are implemented as planned., responsible: PER-ISSM}
+  effectiveness: {method: The ISSM checks each quarter that risk responses lowered the risk., responsible: PER-ISSM}
+  change: {method: The CCB records changes and the ISSE analyzes their impact., responsible: PER-ISSE}
+events:
+  - {id: EV-01, event: significant-change, description: A change to the authorization boundary., threshold: Any new interface or hosting change., triggers: assessment-and-reauthorization}
+  - {id: EV-02, event: incident, description: A confirmed incident., threshold: A CAT I incident., triggers: assessment}
+boundary_review: {frequency: annually, responsible: PER-ISSM}
+threat_monitoring:
+  responsible: PER-CSSP
+  frequency: weekly
+  feeds: [CSSP threat bulletins, USCYBERCOM advisories]
+  watches: [threat-actors, protective-techniques, deployed-environment]
+metrics:
+  - {id: MET-01, name: Open CAT I findings, measures: Open CAT I findings past due, frequency: monthly, reported_to: [PER-AO], used_by: [M-2, M-5]}
+delegations:
+  - {activity: Threat monitoring and incident handling, partner: PER-CSSP, agreement: CSSP service level agreement}
+  - {activity: Operation of the inherited identity provider, partner: LA-01, agreement: Enterprise IT Services inheritance agreement}
+risk_assessment:
+  frequency: annually
+  triggers: [A significant change, New threat information]
+  updates: Threats, vulnerabilities and risk ratings in ART-RA.
+  communicated_to: [PER-AO, PER-ISSM]
 sources: [INT-030.A1, INT-018.A1]

@@ -1,0 +1,14 @@
+rule: ISCM-002
+bases:
+- minimal
+description: a desired state block on a tool whose strategy is other
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.strategy
+  value: other
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - TOOL-01 defines a desired state block but its strategy is other, not desired-state

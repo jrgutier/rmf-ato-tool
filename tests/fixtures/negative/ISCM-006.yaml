@@ -1,0 +1,14 @@
+rule: ISCM-006
+bases:
+- minimal
+description: CSSP monitoring with the delegation recorded against another partner
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: delegations.0.partner
+  value: PER-DEV
+expect:
+  errors:
+  - ISCM-006
+  messages:
+  - the CSSP performs monitoring for the system, but no activity delegated to it is documented

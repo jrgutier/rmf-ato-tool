@@ -1,0 +1,17 @@
+rule: ISCM-002
+bases:
+- minimal
+description: an automated tool naming a control outside the baseline
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.assesses
+  value:
+  - cm-6
+  - si-2
+  - ac-17
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - 'assesses ac-17, which is not in the baseline: the strategy documents the controls each automated tool assesses'

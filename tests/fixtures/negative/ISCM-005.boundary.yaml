@@ -1,0 +1,14 @@
+rule: ISCM-005
+bases:
+- minimal
+description: an authorization boundary revisited only on events
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: boundary_review.frequency
+  value: event-driven
+expect:
+  errors:
+  - ISCM-005
+  messages:
+  - 'the authorization boundary is revisited event-driven, not periodically: its scope is revisited on a schedule'

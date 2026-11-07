@@ -1,0 +1,14 @@
+rule: ISCM-002
+bases:
+- minimal
+description: a desired state strategy whose actual state is collected by hand
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.desired_state.actual_state.collection
+  value: manual
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - 'collects its actual state manually: the desired state strategy needs an automated actual state specification'

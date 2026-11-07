@@ -1,0 +1,16 @@
+rule: ISCM-001
+bases:
+- minimal
+description: threat monitoring that watches threat actors only
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: threat_monitoring.watches
+  value:
+  - threat-actors
+expect:
+  errors:
+  - ISCM-001
+  messages:
+  - threat monitoring does not watch protective-techniques
+  - threat monitoring does not watch deployed-environment

@@ -13,7 +13,7 @@ tasks:
       Monitor the system and its environment for changes that affect the security and privacy
       posture, analyzing the security impact of each change.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO]}
-    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, EXT-CHANGE-REQUESTS]
+    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, EXT-CHANGE-REQUESTS, EXT-THREAT]
     outputs: [ART-CHG, ART-INV, ART-CMP]
     writes_facts: []
     depends_on: [R-4]
@@ -81,7 +81,7 @@ tasks:
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: []}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR]
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, EXT-THREAT]
     outputs: [ART-RA, ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [M-2]
@@ -97,6 +97,10 @@ tasks:
         the POA&M updated.
       - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as
         adequate, and records the selected response (RAR-003).
+      - Where M-2 found a risk response ineffective, ART-RA records why, and the response goes
+        back to the part of R-3 the failure points to, its implementation for a compliance
+        failure, the whole response, and the risk assessment if needed, for an effectiveness
+        failure.
       - Decisions to withhold or delay vulnerability remediation are coordinated with the
         requirements sponsor, the AO and the Component cyberspace operations forces.
     citations:
@@ -119,7 +123,7 @@ tasks:
       Update the security plan, assessment report, risk assessment and POA&M from continuous
       monitoring results.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO]}
-    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA]
+    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CONMON]
     outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
     writes_facts: []
     depends_on: [M-3]
@@ -131,6 +135,8 @@ tasks:
       - Risk management documents are updated based on continuous monitoring activities (DoDI
         8510.01 Table 7 outcome).
       - Authorization package artifacts reflect the current state of the system.
+      - ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers),
+        what was updated is recorded, and the results reach its communicated_to officials.
     citations:
       - {ref: SP800-37R2, section: "TASK M-4", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-4 Authorization Package Updates"}

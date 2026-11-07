@@ -1,0 +1,15 @@
+rule: ISCM-005
+bases:
+- minimal
+description: posture reports that skip the AO
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: reporting.recipients
+  value:
+  - PER-ISSM
+expect:
+  errors:
+  - ISCM-005
+  messages:
+  - monitoring results do not reach the authorizing official

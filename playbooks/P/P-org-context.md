@@ -168,9 +168,12 @@ Purpose: Establish the organization's risk management strategy, including how it
    is framed, assessed, responded to and monitored), its **risk tolerance** stated so a
    later decision can be checked against it (for example which risk levels the AO may
    accept, and for how long), and the constraints and priorities that shape it. Ask
-   PER-PRIV for the privacy part.
+   PER-PRIV for the privacy part. Ask PER-RE how risk assessments are maintained: what
+   triggers an update, how often, what is updated and to whom results are communicated.
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-2` to `touched_by` and append
-   `## Risk management strategy and risk tolerance`, traced. Keep the risk tolerance
+   `## Risk management strategy and risk tolerance`, traced, including the risk assessment
+   maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
+   M-4 applies it. Keep the risk tolerance
    concrete; R-2 and R-4 compare the system's risk with it.
 5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
