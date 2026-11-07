@@ -251,3 +251,14 @@ def test_every_run_rule_is_implemented_with_a_fixture():
         assert rule.fixture, rid
         if rule.fixture.startswith("tests/fixtures/negative/"):
             assert rid in specs, rid
+
+
+def test_an_optional_data_file_is_not_required_with_its_artifact(tmp_path):
+    """cato.yaml is written only once a cATO is sought (CATO-001), so RUN-ART-001 does not
+    require it of every run that produces ART-AODM."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    (run_dir / "artifacts/data/cato.yaml").unlink()
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert [f for f in found if f.severity == "E"] == []
