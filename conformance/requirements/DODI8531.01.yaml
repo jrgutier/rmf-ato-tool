@@ -18,7 +18,8 @@ requirements:
     locator: "1.2.a"
     context: "POLICY The DoD will:"
     statement: "a. Use the DoD vulnerability management process to manage and respond to vulnerabilities identified in all software, firmware, and hardware within the DODIN."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.process.yaml", "expect": "step of the DoD vulnerability management process", "claim": "constraint", "asserts": "Use the DoD vulnerability management process to manage and respond to vulnerabilities: a strategy leaving out a step of the process fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0003"
     citation: {"ref": "DODI8531.01", "page": 4, "anchor": "Ensure configuration, asset, remediation, and mitigation management supports vulnerability management within the"}
@@ -26,7 +27,8 @@ requirements:
     locator: "1.2.b"
     context: "POLICY The DoD will:"
     statement: "b. Ensure configuration, asset, remediation, and mitigation management supports vulnerability management within the DODIN in accordance with DoD Instruction (DoDI) 8510.01."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.supported.yaml", "expect": "management supports vulnerability management", "claim": "constraint", "asserts": "Configuration, asset, remediation, and mitigation management supports vulnerability management: an asset management record the framework lacks fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0004"
     citation: {"ref": "DODI8531.01", "page": 4, "anchor": "Support all systems, subsystems, and system components owned by or operated on"}
@@ -34,7 +36,9 @@ requirements:
     locator: "1.2.c"
     context: "POLICY The DoD will:"
     statement: "c. Support all systems, subsystems, and system components owned by or operated on behalf of DoD with efficient vulnerability assessment techniques, procedures, and capabilities. In leased systems, enforcement is included in contract language to mitigate vulnerabilities consistent with DoD policies."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the strategy states the assessment techniques the system uses (VULN-007); whether they are efficient is not judged, and contract language for a leased system is P-17's (sa-4), not built here."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.process.yaml", "expect": "step of the DoD vulnerability management process", "claim": "constraint", "asserts": "Support systems with vulnerability assessment procedures: a strategy leaving out a step of the vulnerability management process fails", "holds_when": "ART-CONMON is produced or seeded", "sentence": "Support all systems, subsystems, and system components owned by or operated on behalf of DoD with efficient vulnerability assessment techniques, procedures, and capabilities."}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0005"
     citation: {"ref": "DODI8531.01", "page": 4, "anchor": "Maintain the requirements for DoD participation in the VEP and ensure DoD"}
@@ -42,7 +46,9 @@ requirements:
     locator: "1.2.d"
     context: "POLICY The DoD will:"
     statement: "d. Maintain the requirements for DoD participation in the VEP and ensure DoD and OSD Components submit a vulnerability to the VEP that is both a newly discovered vulnerability and not publicly known vulnerability, as soon as practicable."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a vulnerability not publicly known is submitted to USCYBERCOM for the VEP, a newly discovered one after discovery (VULN-006); 'as soon as practicable' sets no window a rule could hold, and maintaining the VEP requirements is the DoD's."
+    evidence: [{"kind": "rule", "target": "VULN-006", "fixture": "tests/fixtures/negative/VULN-006.yaml", "expect": "a vulnerability that is not publicly known is not submitted to USCYBERCOM for the VEP", "claim": "constraint", "asserts": "Submit a newly discovered and not publicly known vulnerability to the VEP: a submission dated before discovery fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-151"
   - id: "REQ-DODI8531.01-0006"
     citation: {"ref": "DODI8531.01", "page": 4, "anchor": "Develop and maintain a coordinated VDP."}
@@ -145,7 +151,9 @@ requirements:
     locator: "2.2.a.(1)"
     context: "DIRECTOR, DEFENSE INFORMATION SYSTEMS AGENCY (DISA) Under the authority, direction, and control of the DoD Chief Information Officer, and in addition to the responsibilities in Paragraph 2.10., the Di"
     statement: "(1) Provides access on major DoD enterprise networks to patches for DoD-approved software used by DoD systems or devices that can be automatically leveraged by automated patching services, where possible, or manually downloaded and applied, when necessary."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Director, DISA's, which no record of a run can fail on. The strategy names the source of patches for what it runs, the DoD enterprise source among them (vulnerability_management.patching)."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Patches for DoD-approved software from DoD enterprise networks, as the patch source the strategy names", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0019"
     citation: {"ref": "DODI8531.01", "page": 6, "anchor": "Tests and verifies patch source and integrity to ensure the patch is"}
@@ -169,7 +177,9 @@ requirements:
     locator: "2.2.c"
     context: "DIRECTOR, DEFENSE INFORMATION SYSTEMS AGENCY (DISA) Under the authority, direction, and control of the DoD Chief Information Officer, and in addition to the responsibilities in Paragraph 2.10., the Di"
     statement: "c. Maintains a list of available enterprise-designated automated vulnerability management capabilities approved for DoD Components’ use."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Director, DISA's, which no record of a run can fail on. It keeps the list of approved automated capabilities; the strategy names its tools (ISCM-002), not their place on that list."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Automated vulnerability management capabilities the strategy names among its analysis tools", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0022"
     citation: {"ref": "DODI8531.01", "page": 6, "anchor": "Develops security technical implementation guides and security requirements guides for information systems,"}
@@ -551,7 +561,9 @@ requirements:
     locator: "2.10.a"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "a. Establish the DoD Vulnerability Management Process through a vulnerability management program for systems, subsystems, and system components."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Component heads establish the vulnerability management program for systems, recorded in the organizational context", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0070"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Establish asset management, configuration management, and remediation and mitigation programs to support"}
@@ -559,7 +571,9 @@ requirements:
     locator: "2.10.b"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "b. Establish asset management, configuration management, and remediation and mitigation programs to support their vulnerability management process."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Asset, configuration, remediation and mitigation programs support the vulnerability management process", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0071"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Designate the organizations responsible for directing and managing the vulnerability management program"}
@@ -567,7 +581,9 @@ requirements:
     locator: "2.10.c"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "c. Designate the organizations responsible for directing and managing the vulnerability management program and coordinating with JFHQ-DODIN."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Organizations designated for directing and managing the vulnerability management program and coordinating with JFHQ-DODIN", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0072"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Coordinate all vulnerability reports and assessments with USCYBERCOM/JFHQ-DODIN as required."}
@@ -584,7 +600,9 @@ requirements:
     locator: "2.10.e"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "e. Create a DoD Component-level or Service-level prioritization and scheduling plan for the deployment of patches, updates, configuration changes, hardware upgrades, or directed actions to remediate vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Component prioritization and scheduling plan for the deployment of patches, updates and directed actions", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0074"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Track and report mitigations and risk acceptance status to JFHQ-DODIN."}
@@ -609,7 +627,9 @@ requirements:
     locator: "2.10.h"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "h. Establish and provide guidance to system owners and program managers on mitigation deployment, DoD Component risk tolerance, and designated authority to accept risk."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Guidance to system owners on mitigation deployment and designated authority to accept risk", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0077"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Implement patches, upgrades, and other remediation or mitigation actions directed by the"}
@@ -617,7 +637,8 @@ requirements:
     locator: "2.10.i"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "i. Implement patches, upgrades, and other remediation or mitigation actions directed by the Commander, USCYBERCOM, through JFHQ-DODIN, and as applicable based on network/system scans."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Patches, upgrades and remediation actions directed through JFHQ-DODIN are implemented, and one implemented before it was directed fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.yaml", "expect": "the remediation or mitigation of the vulnerability is not tracked in a POA&M item", "claim": "constraint", "asserts": "Remediation or mitigation based on network and system scans is implemented and tracked, and a remediation tracked in no POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0078"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Identify and provide guidance on security-relevant configurations for DoD Component software, firmware,"}
@@ -633,7 +654,9 @@ requirements:
     locator: "2.10.k"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "k. Determine and communicate requirements for mitigations by the system owner, program manager, or other DoD Component organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Requirements for mitigations by the system owner determined and communicated by the Component", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0080"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Account for all software, firmware, and hardware items used on systems, system"}
@@ -649,7 +672,9 @@ requirements:
     locator: "2.10.m"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "m. Ensure DoD Component conducts audits for patching, compliance, and reporting."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Component audits for patching, compliance, and reporting", "claim": "presence"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0082"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Ensure DoD Component creates and uses unique item identifiers and automated systems"}
@@ -697,7 +722,9 @@ requirements:
     locator: "2.11.c"
     context: "SECRETARY OF THE AIR FORCE In addition to the responsibilities in Paragraph 2.10., the Secretary of the Air Force, through the Director, DC3:"
     statement: "c. Coordinates with JFHQ-DODIN to ensure the delivery of reports to the system’s owner and helping the remediation team as quickly as possible."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: DC3 and JFHQ-DODIN deliver reports to the system owner; the run validates each report it receives (VULN-003)."
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.yaml", "expect": "the reported vulnerability is not validated", "claim": "constraint", "asserts": "Delivery of reports to the system owner leads to validation, and a report validated before it was delivered fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0088"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Coordinates and gains approval from USCYBERCOM/JFHQ-DODIN before releasing requests by researchers for"}
@@ -809,7 +836,9 @@ requirements:
     locator: "2.13.a.(1)"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "(1) Establishes procedures to direct and track implementation of patches, updates, configuration changes, hardware upgrades, and other remediation or mitigation actions."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. Its procedures to direct and track shape what the run consumes: each directed patch, update or change is tracked in the run (VULN-001)."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.poam.yaml", "expect": "the directed action is not tracked in a POA&M item", "claim": "constraint", "asserts": "Implementation of patches, updates and remediation actions is tracked, and one tracked in no POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0102"
     citation: {"ref": "DODI8531.01", "page": 12, "anchor": "Directs and prioritizes specific measures to remediate or mitigate software, firmware, and"}
@@ -817,7 +846,9 @@ requirements:
     locator: "2.13.a.(2)"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "(2) Directs and prioritizes specific measures to remediate or mitigate software, firmware, and hardware vulnerabilities and threat activities, including disconnection from DODIN transport services, under assigned directive authority for cyberspace operations."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It directs and prioritizes measures, disconnection included; the run records each measure as a directed action and its response (VULN-001)."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Measures directed to remediate or mitigate vulnerabilities are implemented, and one implemented before it was directed fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0103"
     citation: {"ref": "DODI8531.01", "page": 12, "anchor": "Distributes or produces orders and directives to DoD Components to mitigate or"}
@@ -825,7 +856,9 @@ requirements:
     locator: "2.13.a.(3)"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "(3) Distributes or produces orders and directives to DoD Components to mitigate or prevent the risk of threats exploiting vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It distributes orders and directives; the run records the ones it receives (EXT-DIRECTIVES) and its response (VULN-001)."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.poam.yaml", "expect": "the directed action is not tracked in a POA&M item", "claim": "constraint", "asserts": "Orders and directives to mitigate the risk of threats exploiting vulnerabilities are tracked, and one tracked in no POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0104"
     citation: {"ref": "DODI8531.01", "page": 12, "anchor": "Oversees DoD Component implementation and reporting on directed vulnerability management actions."}
@@ -833,7 +866,9 @@ requirements:
     locator: "2.13.a.(4)"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "(4) Oversees DoD Component implementation and reporting on directed vulnerability management actions."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It oversees; the run reports its implementation of directed actions up the chain, which that oversight reads (VULN-002)."
+    evidence: [{"kind": "rule", "target": "VULN-002", "fixture": "tests/fixtures/negative/VULN-002.report.yaml", "expect": "compliance with the directed action is not reported on or after its receipt", "claim": "constraint", "asserts": "Reporting on directed vulnerability management actions goes up the chain after receipt, and a report dated before it fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0105"
     citation: {"ref": "DODI8531.01", "page": 12, "anchor": "Manages operational risk for systems, subsystems, and system components operating or connected"}
@@ -849,7 +884,9 @@ requirements:
     locator: "2.13.a.(6)"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "(6) Receives VDP reports from DC3 and directs actions to mitigate and remediate vulnerabilities within the VRMN platform. The VRMN is located at: https://vrmn.dc3.smil.mil."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It receives VDP reports from DC3 and directs actions within VRMN; the run reports its own progress within VRMN (VULN-003)."
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.vrmn.yaml", "expect": "is not reported through the chain of command to DC3 and USCYBERCOM within VRMN", "claim": "constraint", "asserts": "Actions to mitigate and remediate vulnerabilities from VDP reports are reported within VRMN, and none after validation fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0107"
     citation: {"ref": "DODI8531.01", "page": 12, "anchor": "Appoints SMEs to support equities determinations and discussions for the VEP as"}
@@ -865,7 +902,9 @@ requirements:
     locator: "2.13.b"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "b. Establishes an office to serve as the primary DoD focal point for receiving and processing all vulnerability submissions from DoD to the VEP in coordination with the CJCS and the USD(P)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It establishes the office; the run addresses its submission to USCYBERCOM (VULN-006)."
+    evidence: [{"kind": "rule", "target": "VULN-006", "fixture": "tests/fixtures/negative/VULN-006.yaml", "expect": "a vulnerability that is not publicly known is not submitted to USCYBERCOM for the VEP", "claim": "constraint", "asserts": "Vulnerability submissions to the VEP reach the USCYBERCOM office, and a submission dated before discovery fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-151"
   - id: "REQ-DODI8531.01-0109"
     citation: {"ref": "DODI8531.01", "page": 13, "anchor": "Serves as one of four DoD representatives for VEP to the National Security Council staff for interagency meetings, such as the ERB and additional"}
@@ -897,7 +936,9 @@ requirements:
     locator: "2.13.f"
     context: "COMMANDER, USCYBERCOM In addition to the responsibilities in Paragraph 2.10., the Commander, USCYBERCOM:"
     statement: "f. Assists DoD Components to develop, maintain, and update mitigation plans and recommend mitigation options and deployment plans for vulnerabilities submitted to the VEP."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the duty is Commander, USCYBERCOM's, which no record of a run can fail on. It assists with mitigation plans; the run tracks the mitigation of each vulnerability in a POA&M item (VULN-005)."
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.yaml", "expect": "the remediation or mitigation of the vulnerability is not tracked in a POA&M item", "claim": "constraint", "asserts": "Mitigation plans for vulnerabilities are maintained, and a vulnerability tracked in no POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-151"
   - id: "REQ-DODI8531.01-0113"
     citation: {"ref": "DODI8531.01", "page": 13, "anchor": "Coordinates with the U.S. Computer Emergency Readiness Team (US-CERT), the CERT Coordination"}
@@ -945,7 +986,9 @@ requirements:
     locator: "3.2.a.(1)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(1) Perform vulnerability scanning procedures using the guidelines in NIST SP 800-115 as reference."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the strategy takes NIST SP 800-115 as its scanning reference (schema enum); whether each scan follows it is not recorded, and SP 800-115 is not in the library."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Perform vulnerability scanning procedures using the guidelines in NIST SP 800-115 as reference", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0119"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Use the Common Vulnerability and Exposure website available at https://cve.mitre.org/about/index.html#why_cve to identify"}
@@ -953,7 +996,8 @@ requirements:
     locator: "3.2.a.(2)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(2) Use the Common Vulnerability and Exposure website available at https://cve.mitre.org/about/index.html#why_cve to identify publicly known cybersecurity vulnerabilities"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.cve.yaml", "expect": "does not use the CVE list to identify publicly known vulnerabilities", "claim": "constraint", "asserts": "Use the Common Vulnerability and Exposure list to identify publicly known vulnerabilities: a strategy without CVE fails", "holds_when": "ART-CONMON is produced or seeded"}, {"kind": "rule", "target": "VULN-006", "fixture": "tests/fixtures/negative/VULN-006.public.yaml", "expect": "is called publicly known, but cites no CVE or public advisory", "claim": "constraint", "asserts": "Publicly known cybersecurity vulnerabilities cite a CVE, and one called publicly known that cites none fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0120"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Identify software requiring patches or updates."}
@@ -968,7 +1012,9 @@ requirements:
     locator: "3.2.a.(4)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(4) Identify unpatched vulnerabilities using automated services wherever possible and use manual processes only when necessary."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: each manual identification activity states why no automation does it, which the schema requires and only refuses silence; nothing judges whether automation was possible."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Identify unpatched vulnerabilities using automated services, and manual processes only when necessary", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0122"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Identify and maintain oversight of acquired, created, and discovered software; track software"}
@@ -983,7 +1029,8 @@ requirements:
     locator: "3.2.a.(6)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(6) Implement scanning programs to identify gaps and deficiencies in the function and coverage of automated patching systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.coverage.yaml", "expect": "the scan of the reach of automated patching names no tool of the strategy", "claim": "constraint", "asserts": "Implement scanning programs to identify gaps in the coverage of automated patching systems: a coverage scan by no tool fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0124"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Penetration Testing."}
@@ -1039,7 +1086,8 @@ requirements:
     locator: "3.2.d"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification:"
     statement: "The DoD Components will cross-reference previous incident reports and logs with the Common Vulnerability and Exposure System, risk assessment data, and vendor bulletins to identify vulnerabilities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.cross.yaml", "expect": "previous incident reports and logs are not cross-referenced with", "claim": "constraint", "asserts": "Cross-reference previous incident reports and logs with CVE, risk assessment data, and vendor bulletins: leaving out risk assessment data fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0131"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Coordinated VDP"}
@@ -1063,7 +1111,9 @@ requirements:
     locator: "3.2.e.(2)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification:"
     statement: "(2) Information submitted to DoD through the VDP must be used for defensive purposes to mitigate or remediate vulnerabilities in DODIN systems, subsystems, or system components."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a valid report leads to a remediation or mitigation plan (VULN-003); that the information is used for nothing else is not recorded."
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.plan.yaml", "expect": "has no remediation or mitigation plan in a POA&M item", "claim": "constraint", "asserts": "Information submitted through the VDP is used to mitigate or remediate vulnerabilities, and a valid report with no plan fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0134"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "During the VDP coordination process, the DoD Components will:"}
@@ -1079,7 +1129,8 @@ requirements:
     locator: "3.2.e.(3).(a)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will:"
     statement: "(a) Assess the severity of validated VDP vulnerabilities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.severity.yaml", "expect": "the severity of the validated vulnerability is not assessed", "claim": "constraint", "asserts": "Assess the severity of validated VDP vulnerabilities: a validated report with no analysis record fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.rating.yaml", "expect": "has the severity rating", "claim": "presence", "asserts": "The severity of validated vulnerabilities is rated on CVSS 3.1, and a rating that disagrees with its score fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0136"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Execute mitigation or remediation efforts. The system owner’s remediation team and the"}
@@ -1087,7 +1138,9 @@ requirements:
     locator: "3.2.e.(3).(b)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will:"
     statement: "(b) Execute mitigation or remediation efforts. The system owner’s remediation team and the Cyber Service Component:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a valid report gets a remediation or mitigation plan (VULN-003) and a completed fix is verified (VULN-005); nothing makes a run carry the plan out."
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.plan.yaml", "expect": "has no remediation or mitigation plan in a POA&M item", "claim": "constraint", "asserts": "Execute mitigation or remediation efforts: a validated report with no plan fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0137"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Execute the USCYBERCOM/ JFHQ-DODIN directive or orders."}
@@ -1095,7 +1148,8 @@ requirements:
     locator: "3.2.e.(3).(b).1"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will: Execute mitigation or remediation effor"
     statement: "1. Execute the USCYBERCOM/ JFHQ-DODIN directive or orders."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Execute the USCYBERCOM or JFHQ-DODIN directive or orders: an order recorded implemented before it was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8531.01-0138"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Validate the vulnerability."}
@@ -1103,7 +1157,8 @@ requirements:
     locator: "3.2.e.(3).(b).2"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will: Execute mitigation or remediation effor"
     statement: "2. Validate the vulnerability."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.yaml", "expect": "the reported vulnerability is not validated", "claim": "constraint", "asserts": "Validate the vulnerability: a report validated before it was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0139"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Develop, implement, and execute remediation or mitigation plans."}
@@ -1111,7 +1166,9 @@ requirements:
     locator: "3.2.e.(3).(b).3"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will: Execute mitigation or remediation effor"
     statement: "3. Develop, implement, and execute remediation or mitigation plans."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the plan is developed in a POA&M item with source_of_weakness vdp (VULN-003); its implementation and execution show only once the item completes, and nothing makes a run finish it."
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.plan.yaml", "expect": "has no remediation or mitigation plan in a POA&M item", "claim": "constraint", "asserts": "Develop remediation or mitigation plans: a validated report with no plan in a POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0140"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Contact the DoD Component chain of command (USCYBERCOM or Chief Information Officer)"}
@@ -1119,7 +1176,9 @@ requirements:
     locator: "3.2.e.(3).(b).4"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will: Execute mitigation or remediation effor"
     statement: "4. Contact the DoD Component chain of command (USCYBERCOM or Chief Information Officer) to request additional information from DC3 through USCYBERCOM as required."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a request for more information is recorded in details_requested when made; 'as required' leaves when to the team, so no record can fail."
+    evidence: [{"kind": "prose", "target": "templates/data/poam-items.yaml", "asserts": "Contact the chain of command to request additional information from DC3 through USCYBERCOM when the report lacks detail", "claim": "presence"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0141"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Keep the system owner informed of actions throughout the process and completion"}
@@ -1127,7 +1186,8 @@ requirements:
     locator: "3.2.e.(3).(b).5"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will: Execute mitigation or remediation effor"
     statement: "5. Keep the system owner informed of actions throughout the process and completion of remediation and mitigation of the vulnerability."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.owner.yaml", "expect": "the system owner is not kept informed of the actions on the vulnerability", "claim": "constraint", "asserts": "Keep the system owner informed of actions throughout the process: a notice only before validation fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.completion.yaml", "expect": "the system owner is not informed of the completion of remediation", "claim": "constraint", "asserts": "Keep the system owner informed of completion of remediation and mitigation, and no notice of completion fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0142"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Advise their authorizing officials of remediation and mitigation actions."}
@@ -1135,7 +1195,8 @@ requirements:
     locator: "3.2.e.(3).(c)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will:"
     statement: "(c) Advise their authorizing officials of remediation and mitigation actions."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.ao.yaml", "expect": "the authorizing official is not advised of the remediation and mitigation actions", "claim": "constraint", "asserts": "Advise authorizing officials of remediation and mitigation actions: advising the ISSM in their place fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0143"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "Report process through their chains of command to DC3 and USCYBERCOM within"}
@@ -1143,7 +1204,8 @@ requirements:
     locator: "3.2.e.(3).(d)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: During the VDP coordination process, the DoD Components will:"
     statement: "(d) Report process through their chains of command to DC3 and USCYBERCOM within VRMN"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-003", "fixture": "tests/fixtures/negative/VULN-003.vrmn.yaml", "expect": "is not reported through the chain of command to DC3 and USCYBERCOM within VRMN", "claim": "constraint", "asserts": "Report the process through chains of command to DC3 and USCYBERCOM within VRMN: a report only before validation fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-150"
   - id: "REQ-DODI8531.01-0144"
     citation: {"ref": "DODI8531.01", "page": 16, "anchor": "VEP"}
@@ -1167,7 +1229,9 @@ requirements:
     locator: "3.2.f.(1)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification:"
     statement: "(1) DoD Components will, except NSA, use existing vulnerability management processes to identify and submit vulnerabilities to USCYBERCOM for review and submission to the VEP in coordination with USD(P) or the CJCS, as applicable."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a vulnerability not publicly known is submitted (VULN-006), but NSA's exception lets a run send it directly (NSA-direct), and until the run records its Component (WI-177) that choice cannot be checked."
+    evidence: [{"kind": "rule", "target": "VULN-006", "fixture": "tests/fixtures/negative/VULN-006.known.yaml", "expect": "a vulnerability that is not publicly known is not submitted to USCYBERCOM for the VEP", "claim": "constraint", "asserts": "Components identify and submit vulnerabilities to USCYBERCOM for submission to the VEP, and one not public with no submission fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-151"
   - id: "REQ-DODI8531.01-0147"
     citation: {"ref": "DODI8531.01", "page": 17, "anchor": "NSA will submit vulnerabilities directly to the VEP."}
@@ -1183,7 +1247,8 @@ requirements:
     locator: "3.3.a"
     context: "STEP 2: VULNERABILITY ANALYSIS"
     statement: "An impact assessment determines the primary historical, recent, and probable impacts connected with the vulnerability and analyzes the underlying cause of those impacts. The DoD Components will perform impact assessments to determine the likely expected loss of integrity, confidentiality, and availability if the vulnerability is not remediated or mitigated."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.impact.yaml", "expect": "the impact assessment does not determine the expected loss of", "claim": "constraint", "asserts": "Impact assessments determine the expected loss of confidentiality, integrity and availability, and a loss off the scale fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0149"
     citation: {"ref": "DODI8531.01", "page": 17, "anchor": "Analysis prioritization manages the prioritization and urgency of different vulnerabilities to address"}
@@ -1224,7 +1289,9 @@ requirements:
     locator: "3.4.a"
     context: "STEP 3: ANALYSIS REPORTING"
     statement: "a. The DoD Components will draft an analysis report to display the output of the vulnerability analysis. The analysis report must include one or more of the following:"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: each vulnerabilities record is an analysis report with name, discovery date and CVSS score and rating (VULN-004); only a validated VDP report must have one (VULN-003), so a vulnerability found otherwise can go without."
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.yaml", "expect": "the severity is not rated on the CVSS 3.1 Qualitative Severity Rating scheme", "claim": "constraint", "asserts": "The analysis report displays the output of the vulnerability analysis, and one not rated on CVSS 3.1 fails", "holds_when": "ART-POAM is produced or seeded", "sentence": "The DoD Components will draft an analysis report to display the output of the vulnerability analysis."}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0154"
     citation: {"ref": "DODI8531.01", "page": 17, "anchor": "Name of the vulnerability."}
@@ -1288,7 +1355,9 @@ requirements:
     locator: "3.4.b.(1)"
     context: "STEP 3: ANALYSIS REPORTING When generating the analysis report, the DoD Components will:"
     statement: "(1) Report all vulnerabilities immediately upon discovery."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: each analyzed vulnerability carries the date it was reported, not before its discovery (VULN-004); 'immediately' sets no window a rule could hold."
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.reported.yaml", "expect": "the vulnerability is not reported upon discovery", "claim": "constraint", "asserts": "Report all vulnerabilities upon discovery: a vulnerability reported before its discovery fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0162"
     citation: {"ref": "DODI8531.01", "page": 18, "anchor": "Use the CVSS 3.1 Qualitative Severity Rating scheme listed in Table 1."}
@@ -1296,7 +1365,8 @@ requirements:
     locator: "3.4.b.(2)"
     context: "STEP 3: ANALYSIS REPORTING When generating the analysis report, the DoD Components will:"
     statement: "(2) Use the CVSS 3.1 Qualitative Severity Rating scheme listed in Table 1."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.yaml", "expect": "the severity is not rated on the CVSS 3.1 Qualitative Severity Rating scheme", "claim": "constraint", "asserts": "Use the CVSS 3.1 Qualitative Severity Rating scheme: a vulnerability rated on another version fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.rating.yaml", "expect": "has the severity rating", "claim": "presence", "asserts": "The CVSS 3.1 Qualitative Severity Rating scheme in Table 1: a rating that disagrees with the score fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0163"
     citation: {"ref": "DODI8531.01", "page": 18, "anchor": "Any vulnerability with a minimum CVSS score of 0.1 and 3.9 has"}
@@ -1344,7 +1414,8 @@ requirements:
     locator: "3.5.a"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "a. Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial and consider the loss of confidentiality, integrity, and availability."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.method.yaml", "expect": "is not among the remediation and mitigation options weighed case by case", "claim": "constraint", "asserts": "Determine case by case which remediation or mitigation method is most beneficial: a method not among the options weighed fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.considers.yaml", "expect": "the choice of method does not consider the loss of", "claim": "constraint", "asserts": "Consider the loss of confidentiality, integrity, and availability in the method: leaving integrity and availability out fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0169"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Consider asset value, exposure factor, single loss expectancy, the annual rate of"}
@@ -1352,7 +1423,8 @@ requirements:
     locator: "3.5.b"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "b. Consider asset value, exposure factor, single loss expectancy, the annual rate of occurrence, annualized loss expectancy, and the total cost of ownership in mitigation or remediation method calculations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.factors.yaml", "expect": "the method calculation does not consider", "claim": "constraint", "asserts": "Consider asset value, exposure factor, single loss expectancy and total cost of ownership in the method calculation, and a cost that is no number fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0170"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Compute and maintain metrics (mean time to patch, average patch deployment success"}
@@ -1389,7 +1461,9 @@ requirements:
     locator: "3.5.g"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "g. Use a vulnerability scan to identify physical or virtual devices that require remediation or mitigation and correct identified gaps in automated patching systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the scan of automated patching's reach is held (VULN-007); correcting each gap it finds is not a record a rule reads."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.coverage.yaml", "expect": "the scan of the reach of automated patching names no tool of the strategy", "claim": "constraint", "asserts": "Identify gaps in automated patching systems by a vulnerability scan, and a scan by no tool of the strategy fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0175"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Ensure patches are available to operators of patch deployment systems for software,"}
@@ -1397,7 +1471,9 @@ requirements:
     locator: "3.5.h"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "h. Ensure patches are available to operators of patch deployment systems for software, firmware, and hardware not supported by enterprise systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the strategy names where patches come from for what enterprise patching does not reach (patching.patch_sources, at least one), which only refuses silence."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Patches available for software, firmware, and hardware not supported by enterprise systems", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0176"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Establish infrastructure discovery and procedures to gain logical or physical control of"}
@@ -1405,7 +1481,9 @@ requirements:
     locator: "3.5.i"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "i. Establish infrastructure discovery and procedures to gain logical or physical control of non-compliant devices and bring them into compliance in accordance with respective device compliance policies."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the strategy states how non-compliant devices are found and brought into compliance (patching.noncompliant_devices), which only refuses silence."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Procedures to gain control of non-compliant devices and bring them into compliance", "claim": "presence"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0177"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Destroy devices or media in accordance with CNSSI 4004.1."}
@@ -1435,7 +1513,8 @@ requirements:
     locator: "3.6.a"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "a. Verify the efficiency of the remediation or mitigation method upon completion of implementation, which provides for re-establishing the baseline configuration."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.verified.yaml", "expect": "the efficiency of the fix is not verified upon completion of implementation", "claim": "constraint", "asserts": "Verify the efficiency of the remediation upon completion of implementation: a verification dated before completion fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.baseline.yaml", "expect": "the verification of the fix does not re-establish the baseline configuration", "claim": "constraint", "asserts": "Re-establishing the baseline configuration on verification: a verification that does not restore it fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0181"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Compare successive vulnerability scans to ensure that the vulnerability is remediated or"}
@@ -1443,7 +1522,8 @@ requirements:
     locator: "3.6.b"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "b. Compare successive vulnerability scans to ensure that the vulnerability is remediated or mitigated."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.scans.yaml", "expect": "successive vulnerability scans do not show the vulnerability remediated", "claim": "constraint", "asserts": "Compare successive vulnerability scans to ensure the vulnerability is remediated: a later scan still finding it fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0182"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Monitor remediated or mitigated systems, subsystems, or system components for any more"}
@@ -1451,7 +1531,9 @@ requirements:
     locator: "3.6.c"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "c. Monitor remediated or mitigated systems, subsystems, or system components for any more codependent vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: M-2 keeps watching a remediated component for codependent vulnerabilities in its playbook; no record shows the watching."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Monitor remediated system components for codependent vulnerabilities", "claim": "presence"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0183"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Conduct monthly non-authenticated and authenticated vulnerability scans to obtain accurate system information"}
@@ -1459,7 +1541,8 @@ requirements:
     locator: "3.6.d"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "d. Conduct monthly non-authenticated and authenticated vulnerability scans to obtain accurate system information for continuous monitoring of previously affected systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.scans.yaml", "expect": "vulnerability scan monthly or more often", "claim": "constraint", "asserts": "Conduct monthly authenticated and non-authenticated vulnerability scans: authenticated scans only quarterly fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0184"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Store logs in a central repository or security information and event management"}
@@ -1467,7 +1550,9 @@ requirements:
     locator: "3.6.e"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "e. Store logs in a central repository or security information and event management platform."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: conmon.yaml vulnerability_management names the central log repository or SIEM, required by its schema, which only refuses silence."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Store logs in a central repository or security information and event management platform", "claim": "presence"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0185"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Comply with the DoD Information Security Continuous Monitoring program to meet Federal"}
@@ -1482,7 +1567,9 @@ requirements:
     locator: "3.3"
     context: ""
     statement: "Vulnerability analysis evaluates vulnerabilities through impact assessment and analysis prioritization to assign severity levels to vulnerabilities as quickly as possible."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: each analyzed vulnerability is rated on CVSS 3.1 (VULN-004); 'as quickly as possible' sets no window a rule could hold."
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.rating.yaml", "expect": "has the severity rating", "claim": "presence", "asserts": "Vulnerability analysis assigns severity levels to vulnerabilities, and a severity rating that disagrees with the score fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
     promoted: {"reason": "Rejected as no-marker, but this paragraph holds the only timing on Step 2: severity levels are assigned as quickly as possible; the duty words of 0148 and 0149 state no time."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

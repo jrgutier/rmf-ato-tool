@@ -1,0 +1,17 @@
+rule: VULN-007
+bases:
+- minimal
+description: no tool serving the retirement phase
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.tools.0.phases
+  value:
+  - development
+  - operational-test
+  - operations-sustainment
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - no automated software vulnerability analysis tool serves the retirement phase

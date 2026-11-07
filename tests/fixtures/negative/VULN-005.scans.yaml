@@ -1,0 +1,14 @@
+rule: VULN-005
+bases:
+- minimal
+description: a later scan that still finds the vulnerability
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.verification.scans.1.result
+  value: present
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - successive vulnerability scans do not show the vulnerability remediated

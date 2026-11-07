@@ -1,0 +1,20 @@
+rule: VULN-005
+bases:
+- minimal
+description: a method chosen that was not among the options weighed
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.remediation.method
+  value: mitigation
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.remediation.options
+  value:
+  - method: remediation
+    description: Patch the path validation.
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - is not among the remediation and mitigation options weighed case by case

@@ -221,6 +221,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 | [EXT-INSPECTIONS](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [EXT-DIRECTIVES](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
+| [EXT-VDP](../../MANUAL.md#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
 
 **Outputs**
 
@@ -244,6 +246,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
+- Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in directed_actions of poam/items.yaml with who implements it and its response, implemented, tracked in a POA&M item or withheld after coordination, and its compliance status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002); for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and the mission owner, with the CSSP, prioritizes its requirements and passes them to the CSP.
+- Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and reported within VRMN (VULN-003).
+- Each vulnerability M-2 found has an analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of confidentiality, integrity and availability (VULN-004); its fix is chosen case by case and tracked, and verified by successive scans once completed (VULN-005); one not publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
 
 **Alignment**
 
@@ -258,6 +263,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [DODI5000.90](../../MANUAL.md#ref-dodi5000-90), p. 11, "the PM will initiate a risk assessment to identify the risk to the platform"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 7, "decisions to withhold or delay vulnerability remediation"
 - [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 36, "verify POA&Ms to correct deficiencies or weaknesses"
+- [DODI8530.01](../../MANUAL.md#ref-dodi8530-01), p. 29, "Verifies DoD Component organizations and individuals take directed actions, maintain POA&Ms"
+- [DODI8531.01](../../MANUAL.md#ref-dodi8531-01), p. 19, "Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial"
+- [DODI8531.01](../../MANUAL.md#ref-dodi8531-01), p. 16, "During the VDP coordination process, the DoD Components will:"
 
 **Playbook:** [playbooks/M/M-3.md](../../playbooks/M/M-3.md)
 
@@ -370,6 +378,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 
 **Alignment**
 

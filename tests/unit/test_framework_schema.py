@@ -28,7 +28,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements"}
+                     "requirements", "registration"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -324,6 +324,11 @@ RUN_EXAMPLES = {
                       "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
          "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-1"},
          "sources": SRC}),
+    "registration": (
+        {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
+                  "connections": ["CONN-01"]}, "sources": SRC},
+        {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
+                  "connections": ["link-1"]}, "sources": SRC}),
     "plan-reviews": (
         {"schedule": {"interval_days": 365, "set_by": "policy"}, "reviews": [], "changes": [],
          "sources": SRC},
@@ -438,3 +443,35 @@ def test_schema_error_names_entity_and_field(tmp_path):
     assert any("tasks/C.yaml:2: C-1: min_interviews: -1 is less than the minimum" in r
                for r in rendered), rendered
     assert any("meta.yaml:1: meta/task_set/mode: 'some' is not one of" in r for r in rendered)
+
+
+def _sources_properties(node, pointer=""):
+    if isinstance(node, dict):
+        for key, child in (node.get("properties") or {}).items():
+            if key == "sources":
+                yield f"{pointer}/properties/sources", child
+        for key, child in node.items():
+            yield from _sources_properties(child, f"{pointer}/{key}")
+    elif isinstance(node, list):
+        for n, child in enumerate(node):
+            yield from _sources_properties(child, f"{pointer}/{n}")
+
+
+# baseline.json is written by `rmf baseline resolve`; its sources are the files it read.
+TRACED = sorted(p for p in SCHEMAS.glob("*.schema.json") if p.name != "baseline.schema.json")
+
+
+@pytest.mark.parametrize("path", TRACED, ids=lambda p: p.name)
+def test_sources_properties_hold_trace_tokens(path):
+    """L-0070: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
+    origin kinds named `sources` fails every run that fills it."""
+    root = json.loads(path.read_text(encoding="utf-8"))
+
+    def resolve(node):
+        while isinstance(node, dict) and "$ref" in node:
+            node = root["$defs"][node["$ref"].rpartition("/")[2]]
+        return node
+
+    for pointer, node in _sources_properties(root):
+        token = resolve(resolve(node).get("items"))
+        assert str((token or {}).get("pattern", "")).startswith("^(INT-"), pointer

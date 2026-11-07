@@ -291,6 +291,9 @@ def poam_sources(ctx: Context) -> list[RunFinding]:
     documented = {f.get("id") for _, f in family_records(ctx, SAR_DIR, "findings")}
     documented |= {f.get("id") for f in _items(ctx.data(STIG_FILE), "findings")}
     documented |= {f.get("id") for f in external}
+    # M-3's own sources of a weakness: an order, a disclosure report, an analyzed vulnerability.
+    documented |= {r.get("id") for key in ("directed_actions", "vdp_reports", "vulnerabilities")
+                   for r in _items(data, key)}
     first = _first_authorization(ctx)
     for i in items:
         iid, recommended = i.get("id"), i.get("recommended_completion")

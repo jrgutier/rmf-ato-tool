@@ -1,0 +1,17 @@
+rule: PPSM-001
+bases:
+- minimal
+description: an Enterprise system with no PPSM registration
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.deployment
+  value: {scope: enterprise, version: '1.0', boarding: BRD-002}
+- op: delete_field
+  file: artifacts/data/registration.yaml
+  path: ppsm
+expect:
+  errors:
+  - PPSM-001
+  messages:
+  - the Enterprise system is not registered in the DoD Ports, Protocols, and Services Management Registry

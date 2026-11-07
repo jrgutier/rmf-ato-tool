@@ -488,3 +488,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: CONN-001 holds mission partner interconnections to the DISN connection process; REQ-DODI8530.01-0300 stays partial, with the drift stated, until the user rules on the reading.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
+
+## L-0070 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
+- Symptom: valid_minimal failed TRACE-002 with "malformed trace token 'cve'" once conmon.yaml held `vulnerability_management.identification.sources: [cve, vendor-bulletins]` and `patching.sources`.
+- Root cause: TRACE-002 reads every key named `sources` anywhere in run data as a list of trace tokens, so a schema that names a list of origin kinds `sources` makes every run that fills it fail.
+- Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.
+- Rule: In a run-data schema, `sources` means trace tokens and nothing else; name any other list of origins for what it holds.
+- Promotion: check: tests/unit/test_framework_schema.py::test_sources_properties_hold_trace_tokens

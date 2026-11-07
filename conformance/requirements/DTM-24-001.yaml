@@ -1029,7 +1029,9 @@ requirements:
     locator: "DoW CLOUD CYBERSECURITY ACTIVITIES.b.(3).(a)"
     context: "Table 1. Cybersecurity Activities Table, Continued"
     statement: "(a) Apply DoW-Required Security Configurations. A DoW entity or commercial entity can apply DoW-required security configurations. The DoW or commercial entity applying DoW-required security configurations will establish a comprehensive vulnerability management plan the authorizing official approves."
-    status: "candidate"
+    status: "partial"
+    reason: "A provider's vulnerability management plan recorded in the strategy is approved by the AO or AODR (VULN-007); nothing asks a run that uses a provider to record its plan."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.provider.yaml", "expect": "is not approved by the authorizing official", "claim": "constraint", "asserts": "A comprehensive vulnerability management plan the authorizing official approves: approval by the ISSM fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DTM-24-001-0128"
     citation: {"ref": "DTM-24-001", "page": 14, "anchor": "Perform Actions to Mitigate Potential Vulnerabilities or Threats. A DoW entity or"}
@@ -1696,7 +1698,9 @@ requirements:
     locator: "DoW CLOUD CYBERSECURITY ACTIVITIES.b.(5).(a).1"
     context: "Table 1. Cybersecurity Activities Table, Continued CPCON and Orders Implementation. A DoW entity or commercial entity can perform this activity. The entity performing CPCON and orders implementation w"
     statement: "1. Execute approved CPCON level and DoW orders actions specified by the mission owner or the CSSP."
-    status: "candidate"
+    status: "partial"
+    reason: "A CPCON level or DoW order is a directed action (kind cpcon) the system implements (VULN-001); the entity performing it for a cloud service, a DoW or commercial entity, is not recorded."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Execute approved CPCON level and DoW orders actions: an order implemented before it was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DTM-24-001-0212"
     citation: {"ref": "DTM-24-001", "page": 21, "anchor": "Share operational and technical impacts of any change or execution of a"}
@@ -1732,7 +1736,9 @@ requirements:
     locator: "DoW CLOUD CYBERSECURITY ACTIVITIES.a"
     context: "Table 1. Cybersecurity Activities Table, Continued"
     statement: "a. In accordance with JFHQ-DODIN OPORD 17-0217, the mission owner must report compliance of executed DoW order and CPCON level actions and coordinate with the CSSP on any issues."
-    status: "candidate"
+    status: "partial"
+    reason: "Compliance with each DoW order or CPCON action is reported (VULN-002); coordination with the CSSP on any issue is in the M-3 criterion only."
+    evidence: [{"kind": "rule", "target": "VULN-002", "fixture": "tests/fixtures/negative/VULN-002.report.yaml", "expect": "compliance with the directed action is not reported on or after its receipt", "claim": "constraint", "asserts": "The mission owner reports compliance of executed DoW order actions, and none after receipt fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DTM-24-001-0216"
     citation: {"ref": "DTM-24-001", "page": 21, "anchor": "In coordination with the CSSP, prioritize and disseminate information and requirements to"}
@@ -1740,7 +1746,9 @@ requirements:
     locator: "DoW CLOUD CYBERSECURITY ACTIVITIES.b"
     context: "Table 1. Cybersecurity Activities Table, Continued"
     statement: "b. In coordination with the CSSP, prioritize and disseminate information and requirements to the CSP as required."
-    status: "candidate"
+    status: "partial"
+    reason: "Stated in M-3's exit criterion only: nothing records the requirements passed to the CSP."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-3.md", "asserts": "In coordination with the CSSP the mission owner prioritizes requirements and passes them to the CSP", "claim": "presence"}]
     work_item: "WI-148"
   - id: "REQ-DTM-24-001-0217"
     citation: {"ref": "DTM-24-001", "page": 21, "anchor": "Notify mission owner of any CPCON changes or orders."}
@@ -1748,7 +1756,9 @@ requirements:
     locator: "DoW CLOUD CYBERSECURITY ACTIVITIES.a"
     context: "Table 1. Cybersecurity Activities Table, Continued"
     statement: "a. Notify mission owner of any CPCON changes or orders."
-    status: "candidate"
+    status: "partial"
+    reason: "The CSSP's notice is a directed action received through the CSSP (received_through CSSP, kind cpcon) with its response (VULN-001); that the CSSP gives it is the CSSP's side."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.poam.yaml", "expect": "the directed action is not tracked in a POA&M item", "claim": "constraint", "asserts": "CPCON changes or orders notified to the mission owner are tracked, and one tracked in no POA&M item fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DTM-24-001-0218"
     citation: {"ref": "DTM-24-001", "page": 21, "anchor": "Monitor the mission owner’s compliance with the order."}

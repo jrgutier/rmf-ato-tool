@@ -1,0 +1,16 @@
+rule: VULN-003
+bases:
+- minimal
+description: VRMN reports only before validation
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vdp_reports.0.vrmn_reports
+  value:
+  - date: '2026-12-02'
+    status: open
+expect:
+  errors:
+  - VULN-003
+  messages:
+  - is not reported through the chain of command to DC3 and USCYBERCOM within VRMN

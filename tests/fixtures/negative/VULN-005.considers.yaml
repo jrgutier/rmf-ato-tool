@@ -1,0 +1,15 @@
+rule: VULN-005
+bases:
+- minimal
+description: a method chosen without weighing integrity and availability
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.remediation.considers
+  value:
+  - confidentiality
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - the choice of method does not consider the loss of integrity, availability

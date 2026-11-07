@@ -923,7 +923,8 @@ Writes to `facts.yaml`: `boundary_id`.
 **Exit criteria**
 
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
-- ART-REG records the registry entry for the system.
+- ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
+- An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
 
 **Alignment**
 
@@ -933,6 +934,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TASK P-18" (SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance.)
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 14, "Task P-18 System Registration"
+- [DODCIO-RECIPROCITY](../../MANUAL.md#ref-dodcio-reciprocity), p. 9, "Register the Enterprise system in the DoD Ports, Protocols, and Services Management"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "Register the system in the DoD Component registry"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 26, "Maintains visibility of assessment and authorization status"

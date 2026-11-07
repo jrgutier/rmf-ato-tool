@@ -106,10 +106,10 @@ def test_the_first_frozen_date_stays(tmp_path):
 def test_a_new_item_joins_the_frozen_dates(tmp_path):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     edit_yaml(run_dir / POAM, lambda d: d["items"].append(
-        {**d["items"][0], "id": "POAM-004", "priority": 4}))
+        {**d["items"][0], "id": "POAM-005", "priority": 5}))
     build.build(open_run(run_dir, REPO_ROOT))
     frozen = YAML(typ="safe").load((run_dir / ORIGINAL).read_text())["items"]
-    assert frozen["POAM-004"]["scheduled_completion"] == "2027-01-29"
+    assert frozen["POAM-005"]["scheduled_completion"] == "2027-01-29"
 
 
 def test_an_older_contract_writes_no_frozen_dates(tmp_path):
@@ -131,7 +131,7 @@ def test_a_more_critical_deficiency_may_go_ahead_of_a_higher_risk(tmp_path):
     """SP 800-37r2 Task A-6: the prioritized approach weighs criticality beside risk."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     def rerank(poam):
-        for item, priority in zip(poam["items"], (1, 2, 3), strict=True):
+        for item, priority in zip(poam["items"], (1, 2, 3, 4), strict=True):
             item["priority"] = priority
         poam["items"][0]["criticality"] = "very-high"
     edit_yaml(run_dir / POAM, rerank)

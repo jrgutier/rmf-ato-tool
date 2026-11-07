@@ -688,7 +688,9 @@ requirements:
     locator: "ENCLOSURE 2.i"
     context: "RESPONSIBILITIES"
     statement: "i. Ensures the continued development and maintenance of guidance and standards procedures to catalog, regulate, and control the use and management of Internet protocols, data services, and associated ports on DoD networks, in accordance with Reference (al)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: DISA develops the guidance to catalog and control ports, protocols and services; the run's part is an Enterprise system's PPSM registration (PPSM-001)."
+    evidence: [{"kind": "rule", "target": "PPSM-001", "fixture": "tests/fixtures/negative/PPSM-001.connections.yaml", "expect": "the PPSM registration of the Enterprise system leaves out the ports, protocols and services of", "claim": "constraint", "asserts": "Control of the ports and protocols on DoD networks reaches the registration, and a connection left out of it fails", "holds_when": "P-18 is in the run's scope and an authorization deploys the system at enterprise scope"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0088"
     citation: {"ref": "DODI8500.01", "page": 17, "anchor": "Develops and provides cybersecurity training and awareness products and a distributive training"}
@@ -1162,7 +1164,9 @@ requirements:
     locator: "ENCLOSURE 2.h.(1)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(1) Comply with mitigations as directed by Commander, USCYBERCOM orders, or other directives such as alerts and bulletins and provide support to cyberspace defense, in accordance with Reference (bg)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: complying with mitigations directed by USCYBERCOM orders, alerts and bulletins is held (VULN-001); providing support to cyberspace defense is named nowhere a rule reads."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Comply with mitigations directed by USCYBERCOM orders, alerts and bulletins: one recorded implemented before it was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0149"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Limit damage and restore effective service following an incident."}
@@ -2618,7 +2622,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(6)"
     context: "Figure 2. DoD Information Technology"
     statement: "(6) Ports, protocols, and services will be managed in accordance with Reference (al)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: an Enterprise system registers its ports, protocols and services (PPSM-001); management under DoDI 8551.01 for every other system is not held, because DoDI 8551.01 is not in the library."
+    evidence: [{"kind": "rule", "target": "PPSM-001", "fixture": "tests/fixtures/negative/PPSM-001.yaml", "expect": "the Enterprise system is not registered in the DoD Ports, Protocols, and Services Management Registry", "claim": "constraint", "asserts": "Ports, protocols, and services of an Enterprise system are registered, and none registered fails", "holds_when": "P-18 is in the run's scope and an authorization deploys the system at enterprise scope"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0334"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "DoD use of space systems will follow cybersecurity policy established in this"}
