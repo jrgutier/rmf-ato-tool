@@ -20,8 +20,11 @@ BOUNDARY_FILE = "artifacts/data/boundary.yaml"
 STIG_FILE = "artifacts/data/stig-summary.yaml"
 RAR_FILE = "artifacts/data/rar.yaml"
 DIAS_FILE = "artifacts/data/dias.yaml"
-# Inventory kinds that a STIG or SRG covers (STIG-001); hardware is covered through its OS.
+# Inventory kinds that a STIG or SRG covers (STIG-001).
 STIG_KINDS = ("software", "operating-system", "database", "firmware", "virtual-machine")
+# DoDI 8500.01 Encl 3 7.u holds all DoD IT to the STIGs and SRGs, hardware and network devices
+# too: from contract 0.2.0 they need a benchmark or a not_applicable rationale as well.
+DEVICE_KINDS, DEVICES_SINCE = ("hardware", "network-device"), "0.2.0"
 # Boundary components that carry no inventory items of their own (INV-BND-002).
 NO_INVENTORY_TYPES = ("this-system", "interconnection")
 POAM_REQUIRED = ("severity", "point_of_contact", "resources_required", "scheduled_completion",
@@ -71,6 +74,7 @@ def stig_mapped(ctx: Context) -> list[RunFinding]:
     if inventory is None or not isinstance(stig, dict):
         return []
     known = {i.get("id") for i in inventory}
+    kinds = STIG_KINDS + (DEVICE_KINDS if ctx.run.holds(DEVICES_SINCE) else ())
     mapped: set[str] = set()
     referenced: list[tuple[str, str]] = []
     for b in stig.get("benchmarks") or []:
@@ -88,7 +92,7 @@ def stig_mapped(ctx: Context) -> list[RunFinding]:
            for inv, where in referenced if inv not in known]
     out += [make("STIG-001", f"{i.get('id')} ({i.get('kind')}) has no STIG/SRG benchmark and "
                  "no not_applicable rationale", STIG_FILE)
-            for i in inventory if i.get("kind") in STIG_KINDS and i.get("id") not in mapped]
+            for i in inventory if i.get("kind") in kinds and i.get("id") not in mapped]
     return out
 
 

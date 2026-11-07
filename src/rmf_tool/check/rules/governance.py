@@ -99,6 +99,10 @@ def entry_point(ctx: Context) -> list[RunFinding]:
     if unknown:
         err(f"the entry determination counts {', '.join(unknown)} as completed, which is no "
             "RMF task")
+    pending = [str(t) for t in _list(entry.get("completed")) if t in active]
+    if pending:
+        err(f"the entry determination counts {', '.join(pending)} as completed, though the run "
+            "still has it in scope")
     if entry.get("approved_by") not in APPROVERS:
         err("the entry determination is approved by the AO or AODR, not "
             f"{entry.get('approved_by')}")
