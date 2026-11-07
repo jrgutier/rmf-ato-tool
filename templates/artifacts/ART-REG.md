@@ -22,6 +22,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: what was registered: purpose, owner, boundary reference and life-cycle state as recorded in the registry, without restating facts, with tokens>>
 
+## Ports, protocols and services
+
+<<FILL: the system's registration in the DoD Ports, Protocols, and Services Management (PPSM) Registry, its number and the boundary connections it covers, as in registration.yaml ppsm; an Enterprise system registers every connection (PPSM-001), with tokens>>
+
 ## Registration updates owed
 
 <<FILL: when the record must be updated: after categorization, at the authorization decision (R-5) and at disposal (M-7), and who updates it, with tokens>>

@@ -1,0 +1,14 @@
+rule: VULN-007
+bases:
+- minimal
+description: authenticated scans only quarterly
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.scans.0.frequency
+  value: quarterly
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - the strategy schedules no authenticated vulnerability scan monthly or more often

@@ -1195,6 +1195,283 @@
       "type": "string",
       "minLength": 1
     },
+    "vulnerability_management": {
+      "title": "The vulnerability management strategy of the system (S-5)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process",
+        "supported_by",
+        "identification",
+        "tools",
+        "scans",
+        "patching",
+        "log_repository",
+        "sources"
+      ],
+      "properties": {
+        "process": {
+          "title": "Steps of the DoD vulnerability management process",
+          "type": "array",
+          "items": {
+            "enum": [
+              "identification",
+              "analysis",
+              "analysis-reporting",
+              "remediation-mitigation",
+              "verification-monitoring"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "supported_by": {
+          "title": "Record of each management that supports the process",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configuration",
+            "asset",
+            "remediation",
+            "mitigation"
+          ],
+          "properties": {
+            "configuration": {
+              "type": "string",
+              "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+            },
+            "asset": {
+              "type": "string",
+              "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+            },
+            "remediation": {
+              "type": "string",
+              "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+            },
+            "mitigation": {
+              "type": "string",
+              "pattern": "^ART-[A-Z]+(?:-[A-Z]+)*$"
+            }
+          }
+        },
+        "identification": {
+          "title": "How the system identifies vulnerabilities",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scanning_reference",
+            "identified_from",
+            "cross_reference",
+            "manual"
+          ],
+          "properties": {
+            "scanning_reference": {
+              "title": "Reference for vulnerability scanning",
+              "enum": [
+                "SP800-115"
+              ]
+            },
+            "identified_from": {
+              "title": "Where vulnerabilities are identified from",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "cve",
+                  "vendor-bulletins",
+                  "scans",
+                  "vdp",
+                  "directed-actions",
+                  "incident-history",
+                  "risk-assessment",
+                  "assessments"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "cross_reference": {
+              "title": "What previous incident reports and logs are cross-referenced with",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "cve",
+                  "risk-assessment",
+                  "vendor-bulletins"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "manual": {
+              "title": "Identification done by hand, and why no automation does it",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "activity",
+                  "reason"
+                ],
+                "properties": {
+                  "activity": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tools": {
+          "title": "Automated software vulnerability analysis tools and the life cycle phases each serves",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tool",
+              "phases"
+            ],
+            "properties": {
+              "tool": {
+                "type": "string",
+                "pattern": "^TOOL-\\d{2,3}$"
+              },
+              "phases": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "development",
+                    "operational-test",
+                    "operations-sustainment",
+                    "retirement"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "scans": {
+          "title": "Scheduled vulnerability scans",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "frequency"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "authenticated",
+                  "non-authenticated"
+                ]
+              },
+              "frequency": {
+                "$ref": "#/$defs/frequency"
+              }
+            }
+          }
+        },
+        "patching": {
+          "title": "Where patches come from and how their reach is checked",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "patch_sources",
+            "coverage_scan",
+            "noncompliant_devices"
+          ],
+          "properties": {
+            "patch_sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "covers",
+                  "source"
+                ],
+                "properties": {
+                  "covers": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "source": {
+                    "enum": [
+                      "dod-enterprise",
+                      "vendor",
+                      "program"
+                    ]
+                  }
+                }
+              },
+              "minItems": 1
+            },
+            "coverage_scan": {
+              "title": "Scan of the reach of automated patching, to find its gaps",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "tool",
+                "frequency"
+              ],
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "pattern": "^TOOL-\\d{2,3}$"
+                },
+                "frequency": {
+                  "$ref": "#/$defs/frequency"
+                }
+              }
+            },
+            "noncompliant_devices": {
+              "title": "How non-compliant devices are found and brought into compliance",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "log_repository": {
+          "title": "Central log repository or SIEM",
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_plan": {
+          "title": "A provider's vulnerability management plan, approved by the AO",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "approved_by",
+            "date"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "approved_by": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
     "privacy": {
       "title": "Privacy continuous monitoring strategy and program (PRIV-006)",
       "type": "object",

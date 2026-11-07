@@ -210,6 +210,9 @@ Purpose: Establish the organization's risk management strategy, including how it
    controls the Component treats as program management, common, system-specific or hybrid,
    and whether the SCOP approves or only advises (an OSD Component's SCOP serves primarily in
    an advisory capacity, DoDI 5400.11 paragraph 2.10). PER-PRIV answers for the program.
+   Record also the Component CIO's process for designated approval authorities to make
+   certification determinations and issue an IATT or ATO expeditiously for a capability fielded
+   under urgent capability acquisition (DoDI 5000.81), so a UCA program knows whom to ask.
 5. **Add the strategy to `org-context.yaml`**, rewriting it whole (OCTX-003, OCTX-004):
    - `program`: the Cybersecurity Risk Management Program, its owner, organization-wide
      scope, the issuances it implements (CNSSP 22 and its Annex A issuances, DoDI 8500.01),

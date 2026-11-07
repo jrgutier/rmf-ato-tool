@@ -1,0 +1,16 @@
+rule: VULN-004
+bases:
+- minimal
+description: an expected loss of availability off the scale of effects
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.impact.availability
+  value: moderate
+expect:
+  errors:
+  - VULN-004
+  messages:
+  - the impact assessment does not determine the expected loss of availability
+  also:
+  - RUN-FM-001

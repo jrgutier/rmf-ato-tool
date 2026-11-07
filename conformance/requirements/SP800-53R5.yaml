@@ -1242,7 +1242,9 @@ requirements:
     locator: "INTRODUCTION.•"
     context: "THE NEED TO PROTECT INFORMATION, SYSTEMS, ORGANIZATIONS, AND INDIVIDUALS Organizations should answer several key questions when addressing information security and privacy controls:"
     statement: "• What is the required level of assurance (i.e., grounds for confidence) that the selected controls, as designed and implemented, are effective?7 The answers to these questions are not given in isolation but rather in the context of a risk management process for the organization that identifies, assesses, responds to, and monitors security and privacy risks arising from its information and systems on an ongoing basis.8 The security and privacy controls in this publication are recommended for use by organizations to satisfy their information security and privacy requirements. The control catalog can be viewed as a toolbox containing a collection of safeguards, countermeasures, techniques, and processes to respond to security and privacy risks. The controls are employed as part of a well-defined risk management process that supports organizational information security and privacy programs. In turn, those information security and privacy programs lay the foundation for the success of the mission and business functions of the organization."
-    status: "candidate"
+    status: "partial"
+    reason: "The question of sentence 1 is answered by requirements.yaml engineering.assurance: SSE-002 fails a level of assurance carried by no requirement with an assurance measure. Sentences 2 to 4 describe the catalog (recommended for use, a toolbox, employed in a risk management process) and set no duty; they are listed for the user as noise."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.carried.yaml", "expect": "the level of assurance is carried by no requirement of the traceability matrix with an assurance measure", "claim": "constraint", "asserts": "The required level of assurance that the selected controls are effective is stated: a level of assurance carried by no requirement with an assurance measure fails", "holds_when": "P-15 is in the run's scope", "sentence": "• What is the required level of assurance (i.e., grounds for confidence) that the selected controls, as designed and implemented, are effective?7"}]
     work_item: "WI-95"
   - id: "REQ-SP800-53R5-0007"
     citation: {"ref": "SP800-53R5", "page": 28, "anchor": "The term organization describes an entity of any size, complexity, or positioning"}
@@ -1375,7 +1377,9 @@ requirements:
     locator: "1.3.•"
     context: "ORGANIZATIONAL RESPONSIBILITIES Managing security and privacy risks is a complex, multifaceted undertaking that requires:"
     statement: "• The use of trustworthy information system components based on state-of-the-practice hardware, firmware, and software development and acquisition processes;"
-    status: "candidate"
+    status: "partial"
+    reason: "ra.yaml components records each third-party component's developer practices and any third-party validation; the run declares its components, and 'state-of-the-practice' is judgment."
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/components/items/properties/factors/properties/developer_practices", "claim": "presence", "asserts": "Trustworthy components rest on the developer's security practices and software development processes"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/components/items/properties/validation/properties/outcome", "claim": "constraint", "asserts": "Trustworthy information system components: whether a validated product is used"}]
     work_item: "WI-95"
   - id: "REQ-SP800-53R5-0024"
     citation: {"ref": "SP800-53R5", "page": 30, "anchor": "[OMB A-130] requires federal agencies to implement the NIST Risk Management Framework"}
@@ -1400,7 +1404,9 @@ requirements:
     locator: "1.3.•"
     context: "ORGANIZATIONAL RESPONSIBILITIES"
     statement: "• The application of system security and privacy engineering principles and practices to securely develop and integrate system components into information systems;"
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-002 fails practices that apply no principle for trustworthy secure design to develop and integrate the system components, a principle that is not one of SP 800-160v1r1 Appendix E, and a system that processes PII with no privacy engineering practice."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.applied.yaml", "expect": "no practice applies a principle for trustworthy secure design to develop and integrate the system components", "claim": "constraint", "asserts": "System security engineering principles and practices are applied to securely develop and integrate system components: no practice that applies a principle to develop and integrate the system components fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.principle.yaml", "expect": "is not a principle for trustworthy secure design of SP 800-160v1r1 Appendix E", "claim": "constraint", "asserts": "The engineering principles applied are security engineering principles: a principle that is not one for trustworthy secure design of SP 800-160v1r1 Appendix E fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.privacy.yaml", "expect": "the system processes PII and employs no privacy engineering practice", "claim": "constraint", "asserts": "Privacy engineering principles and practices are applied: a system that processes PII and employs no privacy engineering practice fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-SP800-53R5-0027"
     citation: {"ref": "SP800-53R5", "page": 31, "anchor": "The employment of security and privacy practices that are properly documented and"}

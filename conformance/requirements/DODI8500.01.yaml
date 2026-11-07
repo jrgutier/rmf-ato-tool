@@ -689,7 +689,9 @@ requirements:
     locator: "ENCLOSURE 2.i"
     context: "RESPONSIBILITIES"
     statement: "i. Ensures the continued development and maintenance of guidance and standards procedures to catalog, regulate, and control the use and management of Internet protocols, data services, and associated ports on DoD networks, in accordance with Reference (al)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: DISA develops the guidance to catalog and control ports, protocols and services; the run's part is an Enterprise system's PPSM registration (PPSM-001)."
+    evidence: [{"kind": "rule", "target": "PPSM-001", "fixture": "tests/fixtures/negative/PPSM-001.connections.yaml", "expect": "the PPSM registration of the Enterprise system leaves out the ports, protocols and services of", "claim": "constraint", "asserts": "Control of the ports and protocols on DoD networks reaches the registration, and a connection left out of it fails", "holds_when": "P-18 is in the run's scope and an authorization deploys the system at enterprise scope"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0088"
     citation: {"ref": "DODI8500.01", "page": 17, "anchor": "Develops and provides cybersecurity training and awareness products and a distributive training"}
@@ -776,7 +778,9 @@ requirements:
     locator: "ENCLOSURE 2.h"
     context: "RESPONSIBILITIES"
     statement: "h. Ensures that policy and procedures for developing program protection plans (PPPs) required by DoDI 5200.39 (Reference (aw)) address cybersecurity in accordance with this instruction."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the official who issues PPP policy and procedures. The run shows its own PPP addresses cybersecurity (the strategy as appendix, PPROT-001; cybersecurity risk sources, PPROT-002), but the policy and procedures are not a run record."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.appendix.yaml", "expect": "the cybersecurity strategy is submitted as an appendix to the PPP", "claim": "constraint", "asserts": "program protection plans address cybersecurity through the cybersecurity strategy appendix: the cybersecurity strategy is submitted as an appendix to the PPP", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Ensures that policy and procedures for developing program protection plans (PPPs) required by DoDI 5200.39 (Reference (aw)) address cybersecurity in accordance with this instruction."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0099"
     citation: {"ref": "DODI8500.01", "page": 18, "anchor": "Defines, develops, and integrates systems security engineering (SSE) into the systems engineering"}
@@ -1167,7 +1171,9 @@ requirements:
     locator: "ENCLOSURE 2.h.(1)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(1) Comply with mitigations as directed by Commander, USCYBERCOM orders, or other directives such as alerts and bulletins and provide support to cyberspace defense, in accordance with Reference (bg)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: complying with mitigations directed by USCYBERCOM orders, alerts and bulletins is held (VULN-001); providing support to cyberspace defense is named nowhere a rule reads."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Comply with mitigations directed by USCYBERCOM orders, alerts and bulletins: one recorded implemented before it was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0149"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Limit damage and restore effective service following an incident."}
@@ -1834,7 +1840,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(1)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Supporting acquisition program protection by:"
     statement: "(1) Ensuring cybersecurity is a key element of program protection planning activities that manage risks to advance technology and mission-critical system functionality from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss throughout the system life cycle."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (risk_sources lists all three), so it holds presence of the three risk sources, not that program protection manages them."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.risksource.yaml", "expect": "program protection planning manages the risk of foreign collection due to design vulnerability, supply chain exploit insertion and battlefield loss", "claim": "constraint", "asserts": "cybersecurity is a key element of program protection planning that manages risks from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss: program protection planning manages the risk of foreign collection due to design vulnerability, supply chain exploit insertion and battlefield loss", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) Ensuring cybersecurity is a key element of program protection planning activities that manage risks to advance technology and mission-critical system functionality from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss throughout the system life cycle."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0234"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Having mission criteria for identifying critical components and critical program information as"}
@@ -1842,7 +1850,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(2)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Supporting acquisition program protection by:"
     statement: "(2) Having mission criteria for identifying critical components and critical program information as established in References (bh) and (aw)."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. protection.yaml requires each critical component or item of critical program information to name at least one mission criterion that identified it."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/critical_items/items/properties/mission_criteria", "claim": "constraint", "asserts": "mission criteria for identifying critical components and critical program information are recorded for each item: Mission criteria by which the critical component or critical program information was identified", "sentence": "(2) Having mission criteria for identifying critical components and critical program information as established in References (bh) and (aw)."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0235"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Planning for mission continuation in the face of degraded or unavailable information"}
@@ -2017,7 +2027,9 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "c. Penetration and Exploitation Testing. Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers. Penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E via the appropriate program test documentation."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 2 is held, TSTRAT-002 fails penetration and exploitation testing not planned in both DT&E and OT&E, and each event records its resources. Sentence 1 rests on independent, threat_representative, scope and includes_cssp, literals the template supplies, so it holds presence."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.independent.yaml", "expect": "penetration and exploitation testing is independent and threat representative", "claim": "constraint", "asserts": "evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing: penetration and exploitation testing is independent and threat representative", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers."}, {"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.complete.yaml", "expect": "penetration and exploitation testing evaluates the complete system cyberspace defenses, including the controls and protection provided by cybersecurity service providers", "claim": "constraint", "asserts": "penetration testing evaluates the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers: penetration and exploitation testing evaluates the complete system cyberspace defenses, including the controls and protection provided by cybersecurity service providers", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers."}, {"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.phases.yaml", "expect": "penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "claim": "constraint", "asserts": "penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E: penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E via the appropriate program test documentation."}]
     work_item: "WI-91"
   - id: "REQ-DODI8500.01-0257"
     citation: {"ref": "DODI8500.01", "page": 33, "anchor": "Cyber Defense Personnel. Cyber defense personnel operating on or in DoD IS"}
@@ -2647,7 +2659,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(6)"
     context: "Figure 2. DoD Information Technology"
     statement: "(6) Ports, protocols, and services will be managed in accordance with Reference (al)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: an Enterprise system registers its ports, protocols and services (PPSM-001); management under DoDI 8551.01 for every other system is not held, because DoDI 8551.01 is not in the library."
+    evidence: [{"kind": "rule", "target": "PPSM-001", "fixture": "tests/fixtures/negative/PPSM-001.yaml", "expect": "the Enterprise system is not registered in the DoD Ports, Protocols, and Services Management Registry", "claim": "constraint", "asserts": "Ports, protocols, and services of an Enterprise system are registered, and none registered fails", "holds_when": "P-18 is in the run's scope and an authorization deploys the system at enterprise scope"}]
     work_item: "WI-149"
   - id: "REQ-DODI8500.01-0334"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "DoD use of space systems will follow cybersecurity policy established in this"}

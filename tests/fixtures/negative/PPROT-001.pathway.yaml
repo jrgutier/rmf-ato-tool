@@ -1,0 +1,53 @@
+rule: PPROT-001
+bases:
+- minimal
+description: a software program's PPP approved by a Component official below the CAE
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.acat
+  value: none
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.approval.authority
+  value: component
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: DP-SWP-PATHWAY
+    date: '2026-03-15'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.submissions
+  value:
+  - decision_point: DP-SWP-PATHWAY
+    date: '2026-03-10'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.tailoring.pathway
+  value: PW-SWP
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: assessments.0.decision_point
+  value: DP-SWP-PATHWAY
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: document
+  value:
+    id: TS-1
+    kind: test-strategy
+    pathway: PW-SWP
+    date: '2026-04-01'
+expect:
+  errors:
+  - PPROT-001
+  messages:
+  - the Component acquisition executive or a designee approves the PPP of an urgent, middle tier or 
+    software program
+  also:
+  - TSTRAT-002

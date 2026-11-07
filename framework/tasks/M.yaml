@@ -98,7 +98,7 @@ tasks:
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, ART-ORG-CONTEXT, EXT-INSPECTIONS, EXT-THREAT]
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, ART-ORG-CONTEXT, EXT-INSPECTIONS, EXT-THREAT, EXT-DIRECTIVES, EXT-VDP]
     outputs: [ART-RA, ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [M-2]
@@ -128,6 +128,21 @@ tasks:
       - Each readiness inspection or outside evaluation finding is in external_findings of
         poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
       - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
+      - Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in
+        directed_actions of poam/items.yaml with who implements it and its response,
+        implemented, tracked in a POA&M item or withheld after coordination, and its compliance
+        status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002);
+        for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and
+        the mission owner, with the CSSP, prioritizes its requirements and passes them to the
+        CSP.
+      - Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a
+        POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and
+        reported within VRMN (VULN-003).
+      - Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an
+        analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of
+        confidentiality, integrity and availability (VULN-004); its fix is chosen case by case
+        and tracked, and verified by successive scans once completed (VULN-005); one not
+        publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
     citations:
       - {ref: SP800-37R2, section: "TASK M-3", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-3 Ongoing Risk Response"}
@@ -136,6 +151,9 @@ tasks:
       - {ref: DODI5000.90, page: 11, anchor: "the PM will initiate a risk assessment to identify the risk to the platform"}
       - {ref: DODI8510.01, page: 7, anchor: "decisions to withhold or delay vulnerability remediation"}
       - {ref: DODI8530.01, page: 36, anchor: "verify POA&Ms to correct deficiencies or weaknesses"}
+      - {ref: DODI8530.01, page: 29, anchor: "Verifies DoD Component organizations and individuals take directed actions, maintain POA&Ms"}
+      - {ref: DODI8531.01, page: 19, anchor: "Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial"}
+      - {ref: DODI8531.01, page: 16, anchor: "During the VDP coordination process, the DoD Components will:"}
     playbook: playbooks/M/M-3.md
   - id: M-4
     name: Authorization Updates
@@ -211,6 +229,8 @@ tasks:
       - For a system processing PII, ART-SECRPT names the Component privacy report path (the
         PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and
         any system of records with PII that cannot be appropriately protected.
+      - The compliance status of each directed action and the VRMN reports of each VDP report
+        in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
     citations:
       - {ref: SP800-37R2, section: "TASK M-5", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-5 Security and Privacy Reporting"}

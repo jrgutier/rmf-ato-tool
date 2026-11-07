@@ -1,0 +1,17 @@
+rule: VULN-006
+bases:
+- minimal
+description: a vulnerability called publicly known that cites nothing public
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.publicly_known
+  value: true
+- op: delete_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.vep_submission
+expect:
+  errors:
+  - VULN-006
+  messages:
+  - is called publicly known, but cites no CVE or public advisory

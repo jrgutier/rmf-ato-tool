@@ -54,6 +54,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: the security-relevant information needs, the measures that satisfy them with their acceptable parameters and users, and the procedures for collection, analysis, access and reporting, as in conmon.yaml measurement, with tokens>>
 
+## Vulnerability management
+
+<<FILL: how the system runs the five steps of the DoD vulnerability management process (DoDI 8531.01 Section 3) and which records support it; how vulnerabilities are identified (scans with NIST SP 800-115 as reference, CVE, automation before manual work and why each manual activity is manual, incident reports and logs cross-referenced with CVE, risk assessment data and vendor bulletins); the analysis tools from development through operational test, operations and sustainment to retirement, and where JFAC assistance or licenses are used; the monthly authenticated and non-authenticated scans; where patches come from for what enterprise patching does not reach, the scan of its reach and how non-compliant devices are brought into compliance; the central log repository or SIEM; a provider's plan and the AO's approval of it, as in conmon.yaml vulnerability_management, with tokens>>
+
 ## Roles and tools
 
 <<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and each operations and sustainment activity delegated to an external partner with its agreement (conmon.yaml delegations); the tools used; which asset classes detection covers at all times (networks, the physical environment, personnel activity, external providers, computing) and how monitoring is tuned against false positives and negatives, as in conmon.yaml detection_coverage and tuning, with tokens>>

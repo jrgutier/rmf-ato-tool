@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:st-protection",
+  "title": "runs/<run-id>/artifacts/data/st-protection.yaml",
+  "description": "The S&T protection plan of a technology that transitions from S&T into the program, as P-14 read it. PPROT-003 judges it; the file is present only when protection.yaml program.origin is st-transition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "prepared_by",
+    "critical_technology_elements",
+    "threats",
+    "countermeasures",
+    "approval",
+    "transition",
+    "sources"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/text"
+    },
+    "prepared_by": {
+      "$ref": "#/$defs/text"
+    },
+    "critical_technology_elements": {
+      "title": "Critical technology elements and enabling technologies the S&T protection plan includes",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "kind"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CTE-\\d{3}$"
+          },
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "kind": {
+            "enum": [
+              "critical-technology-element",
+              "enabling-technology"
+            ]
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-DODI5000.83-0236",
+        "REQ-DODI5000.83-0237"
+      ]
+    },
+    "threats": {
+      "title": "Threats to, and vulnerabilities of, the critical technology elements",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "threat",
+          "vulnerability"
+        ],
+        "properties": {
+          "element": {
+            "type": "string",
+            "pattern": "^CTE-\\d{3}$"
+          },
+          "threat": {
+            "$ref": "#/$defs/text"
+          },
+          "vulnerability": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "countermeasures": {
+      "title": "Selected countermeasures to mitigate associated risks",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "measure"
+        ],
+        "properties": {
+          "element": {
+            "type": "string",
+            "pattern": "^CTE-\\d{3}$"
+          },
+          "measure": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "approval": {
+      "title": "Submission of the S&T protection plan for approval and the date of project approval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "submitted",
+        "project_approved",
+        "approved_by"
+      ],
+      "properties": {
+        "submitted": {
+          "$ref": "#/$defs/date"
+        },
+        "project_approved": {
+          "$ref": "#/$defs/date"
+        },
+        "approved_by": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "transition": {
+      "title": "Transition of the S&T protection plan to the lead systems engineer responsible for system development",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "to",
+        "conditions",
+        "date"
+      ],
+      "properties": {
+        "to": {
+          "$ref": "#/$defs/persona_id"
+        },
+        "conditions": {
+          "title": "Conditions met when the S&T protection plan transitioned to the lead systems engineer",
+          "type": "array",
+          "items": {
+            "enum": [
+              "technology-transition-decision",
+              "technology-transfer-requirements-met"
+            ]
+          }
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_point": {
+      "description": "A milestone of framework/milestones.yaml or a decision point of framework/pathways.yaml.",
+      "type": "string",
+      "pattern": "^(MS|DP)-[A-Z0-9-]+$"
+    }
+  }
+}

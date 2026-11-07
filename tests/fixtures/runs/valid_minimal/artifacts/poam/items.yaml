@@ -78,6 +78,37 @@ items:
     event: stig-scan
     reviewing_organization: Security control assessment team
     date: '2026-11-03'
+- id: POAM-004
+  finding_ref: VDP-001
+  control_id: si-2
+  weakness: Reported path traversal in the relay upload endpoint.
+  source_of_weakness: vdp
+  recommended_completion: after-authorization
+  severity: moderate
+  residual_risk: low
+  status: completed
+  point_of_contact: PER-ISSE
+  resources_required: One developer day to patch and ISSE time to re-scan.
+  scheduled_completion: '2026-12-20'
+  milestones:
+  - description: Patch the upload endpoint and re-scan
+    due: '2026-12-20'
+    completed: '2026-12-14'
+  sources:
+  - INT-010.A2
+  priority: 4
+  risk_level: low
+  criticality: moderate
+  mitigation_approach: Patch the input validation and verify by successive scans.
+  identified:
+    event: other
+    reviewing_organization: DC3 through JFHQ-DODIN
+    date: '2026-12-02'
+  completed_on: '2026-12-14'
+  corrective_action_test:
+    by: PER-ISSE
+    date: '2026-12-15'
+    result: Authenticated re-scan no longer finds the traversal.
 ao_review:
   by: PER-AO
   reviewed: '2026-11-18'
@@ -92,5 +123,79 @@ external_findings:
   verified:
     by: PER-ISSM
     date: '2026-12-05'
+  sources:
+  - INT-010.A2
+directed_actions:
+- id: DIR-001
+  kind: vm-alert
+  reference: IAVA 2026-A-0042
+  issued_by: JFHQ-DODIN
+  received_through: NOSC
+  received: '2026-12-01'
+  action: Apply the vendor patch for the relay service TLS library.
+  implementers: [PER-ISSO, PER-PM]
+  response: implemented
+  implemented:
+    date: '2026-12-08'
+  compliance_reports:
+  - {date: '2026-12-09', to: CDRUSCYBERCOM, through: Component-reporting-chain, status: compliant}
+  sources:
+  - INT-010.A1
+- id: DIR-002
+  kind: taskord
+  reference: JFHQ-DODIN TASKORD 26-0117
+  issued_by: JFHQ-DODIN
+  received_through: CSSP
+  received: '2026-12-02'
+  action: Disable direct root SSH login on every appliance.
+  implementers: [PER-ISSE]
+  response: poam
+  poam_item: POAM-002
+  compliance_reports:
+  - {date: '2026-12-03', to: CDRUSCYBERCOM, through: Component-reporting-chain, status: poam}
+  sources:
+  - INT-010.A2
+vdp_reports:
+- id: VDP-001
+  received: '2026-12-02'
+  received_from: JFHQ-DODIN
+  summary: A researcher reported a path traversal in the relay upload endpoint.
+  validation: {by: PER-ISSE, date: '2026-12-03', result: valid}
+  vulnerability: VUL-001
+  poam_item: POAM-004
+  owner_informed:
+  - {date: '2026-12-04', about: progress}
+  - {date: '2026-12-15', about: completion}
+  ao_advised: {to: PER-AODR, date: '2026-12-04'}
+  vrmn_reports:
+  - {date: '2026-12-04', status: open}
+  - {date: '2026-12-15', status: remediated}
+  sources:
+  - INT-010.A2
+vulnerabilities:
+- id: VUL-001
+  name: Path traversal in the relay upload endpoint
+  discovered: '2026-12-03'
+  reported: {date: '2026-12-03', to: CSSP and the Component chain of command}
+  cvss: {version: '3.1', score: 6.5, rating: medium}
+  impact: {confidentiality: serious, integrity: limited, availability: none}
+  recommendation: Validate upload paths against the storage root.
+  publicly_known: false
+  newly_discovered: true
+  vep_submission: {date: '2026-12-04', to: USCYBERCOM}
+  remediation:
+    method: remediation
+    options:
+    - {method: remediation, description: Patch the path validation in the next release.}
+    - {method: mitigation, description: Block traversal sequences at the reverse proxy.}
+    considers: [confidentiality, integrity, availability]
+    factors: {asset_value: 250000, exposure_factor: 0.2, single_loss_expectancy: 50000, annual_rate_of_occurrence: 0.5, annualized_loss_expectancy: 25000, total_cost_of_ownership: 4000}
+    poam_item: POAM-004
+  verification:
+    date: '2026-12-15'
+    scans:
+    - {date: '2026-12-03', result: present}
+    - {date: '2026-12-15', result: absent}
+    baseline_restored: true
   sources:
   - INT-010.A2

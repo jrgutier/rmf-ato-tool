@@ -1,0 +1,14 @@
+rule: VULN-004
+bases:
+- minimal
+description: a vulnerability rated on another CVSS version
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.cvss.version
+  value: '2.0'
+expect:
+  errors:
+  - VULN-004
+  messages:
+  - the severity is not rated on the CVSS 3.1 Qualitative Severity Rating scheme

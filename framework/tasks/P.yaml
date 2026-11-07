@@ -69,6 +69,11 @@ tasks:
         outcome).
       - ART-ORG-CONTEXT states the risk management strategy and the organizational risk
         tolerance.
+      - ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI
+        8430.01 for the software it develops or deploys.
+      - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities
+        to make certification determinations and issue an IATT or ATO expeditiously for a
+        capability fielded under urgent capability acquisition.
     citations:
       - {ref: SP800-37R2, section: "TASK P-2"}
       - {ref: DODI8510.01, page: 13, anchor: "Task P-2 Risk Management Strategy"}
@@ -267,7 +272,11 @@ tasks:
     entry_criteria:
       - A capability need is documented (EXT-CAPDOC) and the organizational context is
         available.
-      - The program has entered MSA at the Materiel Development Decision.
+      - The program has entered its pathway at its first decision point - the Materiel
+        Development Decision on major capability acquisition; receipt of a validated UON, an
+        approved critical warfighter issue statement or an RAA determination on urgent capability
+        acquisition; an approved CNS on the software pathway; the validated services requirement on
+        an acquisition of services.
     exit_criteria:
       - Missions, business functions and mission/business processes that the system is intended
         to support are identified (DoDI 8510.01 Table 1 outcome).
@@ -459,7 +468,7 @@ tasks:
       Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community
       threat information, and keep its results current through the life cycle.
     raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT]
+    inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
     outputs: [ART-RA, ART-PIA]
     writes_facts: []
     depends_on: [P-3, P-13]
@@ -486,6 +495,18 @@ tasks:
         Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative
         and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the
         reviewing official (PRIV-002, PRIV-003).
+      - ra.yaml components records each third-party and open-source software component with the
+        six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and
+        license review of a non-trivial open-source component, and any independent third-party
+        validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each
+        AI-enabled capability's use case risk, benchmarks, verification before deployment,
+        monitoring and bias handling (DoWI 8430.01 3.6.e).
+      - protection.yaml records the PPP the run read with its approval at each decision point
+        passed, its critical items with their threats, vulnerabilities and countermeasures,
+        exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs,
+        horizontal protection guidance and S&T protection plan read (PPROT-003); and the
+        security technical risks from the SEP and ITRAs with the reviews that assess them
+        (PPROT-005).
     citations:
       - {ref: SP800-37R2, section: "TASK P-14", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-14 Mission-Based Cyber Risk Assessment"}
@@ -509,7 +530,7 @@ tasks:
       environment, including cyber survivability, so they enter the requirements baseline before
       the SRR.
     raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY]
+    inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
     outputs: [ART-REQ]
     writes_facts: []
     depends_on: [P-14]
@@ -533,6 +554,22 @@ tasks:
       - For a system of records, requirements.yaml privacy_act carries each Privacy Act rule no
         control states by a requirement, and each legal and policy privacy requirement ra.yaml
         finds applicable is carried by a requirement (PRIV-007).
+      - requirements.yaml derivation records how the lead systems engineer derived the security
+        and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability
+        requirements document, CONOPS, operational mode summary and mission profiles, by methods
+        that together address design, implementation, interfaces and access points - and the
+        key performance parameters and attributes that establish survivability, sustainment and
+        security measures; each security requirement is included in the system performance
+        specification or the product support needs (SSE-001).
+      - requirements.yaml engineering records the system security engineering practices for
+        cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and
+        sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1
+        Appendix E principles they apply, and the level of assurance with its basis and the
+        requirements that carry it (SSE-002).
+      - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal
+        protection guidance read, records whether the capability document holds the protection
+        content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor,
+        and traces the protection requirements it derives (PPROT-004).
     citations:
       - {ref: SP800-37R2, section: "TASK P-15", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-15 Requirements Definition"}
@@ -553,7 +590,7 @@ tasks:
       Determine the placement of the system within the enterprise, security and privacy
       architecture.
     raci: {R: [PER-LSE, PER-ISSE, PER-SPONSOR, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-CISO, PER-IO], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-REQ, ART-BND, ART-INV]
+    inputs: [ART-REQ, ART-BND, ART-INV, EXT-NSA-ASSESSMENT]
     outputs: [ART-BND]
     writes_facts: []
     depends_on: [P-15]
@@ -569,6 +606,10 @@ tasks:
       - boundary.yaml records each external connection with its detail and the approvals it
         needs, any cross-domain solution and mission partner terms, and whether the system is
         on the DODIN or outside it under a waiver (CONN-001 to CONN-004).
+      - nss-assessments.yaml records, for a National Security System, NSA's assessment with the
+        cognizant AO of its cybersecurity requirements and security architecture before each
+        milestone passed, and for a space NSS the coordination of its architecture, the check of
+        pre-existing components and the compliance reports to the AO and NSA (PPROT-006).
     citations:
       - {ref: SP800-37R2, section: "TASK P-16", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-16 Enterprise Architecture"}
@@ -608,6 +649,10 @@ tasks:
       - requirements.yaml allocates each requirement to a boundary component, the environment, a
         common control provider or the contract (REQS-001), and records the cyberspace work
         roles contractors perform with their qualification terms (REQS-004).
+      - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the
+        cyber resilient engineering requirements and the software and hardware assurance
+        remediation strategies, and the mitigations of each reassessment reach the solicitations
+        and contracts (PPROT-004).
     citations:
       - {ref: SP800-37R2, section: "TASK P-17", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-17 Requirements Allocation"}
@@ -638,10 +683,13 @@ tasks:
     exit_criteria:
       - The system is registered for purposes of management, accountability, coordination and
         oversight (DoDI 8510.01 Table 1 outcome).
-      - ART-REG records the registry entry for the system.
+      - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
+      - An Enterprise system registers the ports, protocols and services of every boundary
+        connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
     citations:
       - {ref: SP800-37R2, section: "TASK P-18", note: "SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 14, anchor: "Task P-18 System Registration"}
+      - {ref: DODCIO-RECIPROCITY, page: 9, anchor: "Register the Enterprise system in the DoD Ports, Protocols, and Services Management"}
       - {ref: DODI8510.01, page: 29, anchor: "Register the system in the DoD Component registry"}
       - {ref: SP800-37R2, section: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"}
       - {ref: DODI8510.01, page: 26, anchor: "Maintains visibility of assessment and authorization status"}
