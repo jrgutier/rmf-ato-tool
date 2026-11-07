@@ -739,8 +739,11 @@ def denial(ctx: Context) -> list[RunFinding]:
         base, halts = r.get("underlying"), r.get("halts")
         named = {str(h) for h in halts} if isinstance(halts, list) else set()
         stands = ledger.in_force(_before(records, r), effect_of, date)
+        # In operation means an authorization to operate stands: an IATT is a test, and testing
+        # under it may run to its own date (SP 800-37r2 p. 165).
         running = sorted(i for i, held in stands.items()
-                         if held.record.get("subject") == r.get("subject") and i != base)
+                         if held.record.get("subject") == r.get("subject") and i != base
+                         and effect_of.get(held.record.get("decision")) == "authorize")
         if gap := [i for i in running if i not in named]:
             err(r, f"in force on {date}: {', '.join(gap)}; if the subject is in operation, all "
                 "activity is halted, so list it in halts")

@@ -1,12 +1,15 @@
 rule: AODM-013
-bases: [minimal]
-description: a denial while the IATT stands, halting nothing and revising no POA&M
+bases:
+- minimal
+description: a denial while the ATO stands, halting nothing and revising no POA&M
 mutations:
-  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-DATO}
-  - {op: delete_field, file: artifacts/data/authorizations.yaml, path: records.1.authorization_termination_date}
+- op: append_text
+  file: artifacts/data/authorizations.yaml
+  text: "- id: AUTH-003\n  decision: AD-DATO\n  date: '2026-12-01'\n  basis: initial\n  subject: system\n  decided_by: PER-AO\n  risk_executive:\n    by: PER-RE\n    consulted: '2026-11-18'\n    analyzed_by: PER-AO\n    input: The enterprise accepts moderate risk on sensor relays while the POA&M items close.\n    sources:\n    - INT-012.A1\n  signature: pki\n  conveyed_to:\n  - PER-PM\n  - PER-ISSM\n  rar_ref: ART-RAR\n  rationale: The reassessment found the CAT I weakness exploitable; the residual risk exceeds tolerance.\n  task: R-4\n  risk_level: moderate\n  sources:\n  - INT-012.A1\n  - ART-RAR\n  risk_acceptance: I understand and accept the residual risk stated in the rationale.\n"
 expect:
-  errors: [AODM-013]
-  also: [CATO-002, SSPR-001]
+  errors:
+  - AODM-013
+  also: []
   messages:
-    - "in force on 2026-11-20: AUTH-001; if the subject is in operation, all activity is halted, so list it in halts"
-    - records poam_revision
+  - 'in force on 2026-12-01: AUTH-002; if the subject is in operation, all activity is halted, so list it in halts'
+  - records poam_revision
