@@ -1,0 +1,21 @@
+rule: CATO-001
+bases:
+- minimal
+description: an assessment that skips assessing the teams
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: assessment.steps
+  value:
+  - identify-assessors
+  - develop-plan
+  - assess-platform
+  - assess-processes
+  - develop-recommendation
+  - authorize
+  - monitor
+expect:
+  errors:
+  - CATO-001
+  messages:
+  - the cATO assessment leaves out the step assess-teams

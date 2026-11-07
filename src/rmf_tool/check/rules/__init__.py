@@ -9,12 +9,14 @@ from collections.abc import Callable
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
-    assess_only,
     artifacts,
+    assess_only,
     assessment,
     assets,
     authorization,
     categorize,
+    cato,
+    cloud,
     config,
     connections,
     consistency,
@@ -27,8 +29,8 @@ from rmf_tool.check.rules import (
     iscm,
     journal,
     monitor,
-    org_context,
     nss_params,
+    org_context,
     overlays,
     pentest,
     plans,
@@ -203,6 +205,8 @@ RULES: dict[str, Rule] = {
     **dict(pentest.rules()),
     **dict(secureconfig.rules()),
     **dict(governance.rules()),
+    **dict(cloud.rules()),
+    **dict(cato.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

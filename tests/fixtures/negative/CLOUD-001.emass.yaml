@@ -1,0 +1,15 @@
+rule: CLOUD-001
+bases:
+- cloud
+description: the DoD PA package is taken from somewhere other than eMASS
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.authorization.package_location
+  value: fedramp-repository
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: the package and inheritance of a DoD provisional authorization are leveraged from eMASS,
+    not fedramp-repository'

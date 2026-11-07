@@ -28,3 +28,21 @@ connections:
     detail: {ports_protocols: HTTPS 443 for SAML sign-in, data: Authentication assertions (CUI), direction: bidirectional}
     approvals: []
     sources: [INT-025.A1, product/architecture.md#network]
+hosting:
+  environment: decc
+  decc:
+    status: hosted
+    reason: The relay runs in the DECC enclave that hosts the analysis enclave.
+  enclave_application:
+    status: not-possible
+    reason: The relay faces the field network, which no authorized enclave admits, so it is a major application with its own authorization.
+  cloud:
+    assessment: can-be-cloud-hosted
+    reason: The report store could move to an IL5 IaaS offering without lowering its protection; the relay stays on the field network.
+  enterprise_services:
+    considered:
+      - Enterprise identity provider
+      - DoD Cloud Service Catalog IaaS
+    outcome: Both are used; no unique service is built.
+  sources:
+    - INT-025.A1

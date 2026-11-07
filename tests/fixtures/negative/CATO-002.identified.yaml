@@ -1,0 +1,20 @@
+rule: CATO-002
+bases:
+- minimal
+description: a High finding identified after the assessment date
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.1.residual_risk
+  value: high
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.1.identified.date
+  value: '2026-12-01'
+expect:
+  errors:
+  - CATO-002
+  also:
+  - ASMT-009
+  messages:
+  - 'POAM-002: a cATO needs a current ATO with no High or Very High unmitigated findings'

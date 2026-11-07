@@ -254,7 +254,7 @@ tasks:
       The AO reviews the posture on an ongoing basis to determine whether the risk remains
       acceptable and, where monitoring is near real time, may seek a cATO through the Component
       CISO.
-    raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR, PER-DODCISO], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
+    raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR, PER-PM, PER-DODCISO], I: [PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP, EXT-ISCM-ASSESSMENT]
     outputs: [ART-AODM, ART-AUTHREC]
     writes_facts: [acquisition]
@@ -266,6 +266,9 @@ tasks:
         triggers.
       - For AD-CATO, an ATO is in place and the system shows robust continuous monitoring of its
         RMF controls, active cyber defense and use of an approved DevSecOps reference design.
+      - For AD-CATO, the program is in one of the use cases of the DoD CIO cATO Implementation
+        Guide (Appendix A), and its current ATO carries no High or Very High unmitigated finding
+        (CATO-002).
     exit_criteria:
       - Before the first continued authorization, ART-ORG-CONTEXT records the
         organization-wide ongoing authorization process with both transition conditions
@@ -281,6 +284,13 @@ tasks:
         reviewed, finds and does about it (AOCHG-001).
       - An ISCM program assessment report the determination reads is in iscm_assessments of the
         ledger (MISCM-001).
+      - Where a cATO is sought, artifacts/data/cato.yaml records the cATO assessment (the team
+        the AO approves, the plan coordinated with the PMO and AO, Table 2 of the cATO
+        Implementation Guide scored, the recommendation reviewed with the PMO, AO and CISO and
+        briefed with its conditions), the DevSecOps platform and its control gates and
+        guardrails, monitoring and active cyber defense, the strategy's triggers, metrics,
+        people, training, testing and feedback, risk tolerances, the activities mapping and the
+        SBOM (CATO-001 to CATO-014).
     citations:
       - {ref: SP800-37R2, section: "TASK M-6", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-6 Ongoing Authorization"}
@@ -293,6 +303,9 @@ tasks:
       - {ref: DODI5000.90, page: 13, anchor: "While the AO may authorize a continuous ATO (cATO)"}
       - {ref: SP800-37R2, page: 172, anchor: "When there is a change in authorizing officials"}
       - {ref: SP800-137A, section: "3.1"}
+      - {ref: DODCIO-CATO-IG, page: 9, anchor: "Identify the team to perform the process assessment"}
+      - {ref: DODCIO-CATO-IG, page: 19, anchor: "A threshold requirement"}
+      - {ref: DODCIO-CATO-EVAL, page: 10, anchor: "The following list of activities associated with the Continuous Authorization to Operate"}
     playbook: playbooks/M/M-6.md
   - id: M-7
     name: System Disposal

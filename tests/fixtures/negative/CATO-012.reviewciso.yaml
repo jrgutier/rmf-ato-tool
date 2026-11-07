@@ -1,0 +1,16 @@
+rule: CATO-012
+bases:
+- minimal
+description: a recommendation not reviewed with the CISO
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: assessment.recommendation.reviewed_with
+  value:
+  - PER-PM
+  - PER-AO
+expect:
+  errors:
+  - CATO-012
+  messages:
+  - the findings and recommendation are not reviewed with the CISO
