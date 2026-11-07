@@ -1,0 +1,14 @@
+rule: SWA-001
+bases:
+- minimal
+description: covered software built outside an automated pipeline
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: pipeline.automated
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - the covered software is not produced by a secure, automated CI/CD pipeline

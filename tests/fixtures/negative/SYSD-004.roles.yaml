@@ -1,0 +1,13 @@
+rule: SYSD-004
+bases:
+- minimal
+description: privileged users with no role or function
+mutations:
+- op: delete_field
+  file: artifacts/data/users.yaml
+  path: users.1.roles
+expect:
+  errors:
+  - SYSD-004
+  messages:
+  - 'USR-ADMIN: privileged users carry no user ID information (role or function)'

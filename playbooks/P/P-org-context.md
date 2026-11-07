@@ -34,7 +34,7 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    | Task | Section |
    |---|---|
    | P-1 | `## RMF role assignments` |
-   | P-2 | `## Risk management strategy and risk tolerance` |
+   | P-2 | `## Risk management strategy and risk tolerance`, then `## Privacy program` |
    | P-3 | `## Organization-level risk assessment` |
    | P-4 | `## Organizationally tailored baselines and profiles` |
    | P-5 | `## Common controls available for inheritance` |
@@ -48,7 +48,16 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    the organization (optional P-4, P-6) still appends its heading with one traced sentence
    saying the organization has none. Why: RUN-PH-001 forbids a placeholder left for a later
    task, TRACE-001 needs a token in every section, and the file is written whole (INV-8).
-5. **Build, check and journal** after each task, as for any task (`00-run-protocol.md`,
+5. **Keep the record beside the prose.** `artifacts/data/org-context.yaml` (template
+   `templates/data/org-context.yaml`, schema `org-context`) holds what a rule can judge: P-1
+   writes it with `roles`, `manpower_structure`, `open_functions` and `code_signing`; P-2 adds
+   `program`, `policies`, `resources`, `risk_frame`, `governance`,
+   `risk_assessment_guidance`, `risk_response` and `external_entities`; P-5 adds
+   `common_controls`; P-7 adds `iscm`; P-3 adds `posture_reviews` once the system operates.
+   Each task rewrites the file whole (INV-8). OCTX-001 to OCTX-013 judge it; a section is
+   demanded only while its task is in scope. Why: the Markdown cannot fail a check, the
+   record can.
+6. **Build, check and journal** after each task, as for any task (`00-run-protocol.md`,
    steps 7 and 8).
 
 ## Task P-1
@@ -87,18 +96,36 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    it authorizes, and the SCA has the independence the AO requires. A conflict is a
    finding to record, not to resolve here. Why: the exit criterion and SP 800-37r2 Task P-1
    require it.
-5. **Write `artifacts/ART-ORG-CONTEXT.md`** from `templates/artifacts/ART-ORG-CONTEXT.md`
+5. **Write `artifacts/data/org-context.yaml`** from `templates/data/org-context.yaml`: one
+   `roles` record per appointee with name, official title, parent organization, business
+   contact (never personal), appointing official, the appointment and, for the AO, its basis,
+   citizenship and government or contractor status. For each cybersecurity position, its
+   designation and suitability (DoDM 5200.02), where the designation is recorded (DCPDS for a
+   civilian), its `manpower_structure` position, its DCWF work role code and the written
+   statement of duties. List in `open_functions` each function the organization lets a
+   non-U.S. citizen, non-DoD person, contractor or non-U.S. provider perform. OCTX-001
+   refuses: government functions (AO, CIO, risk executive, SAORM, CISO, privacy official) held
+   by non-government personnel; an AO who is not a U.S. citizen and DoD official; a non-U.S.
+   citizen as ISSM, ISSO, supervisor or PKI issuer, or as an administrator without a U.S.
+   citizen supervising and the investigation met; an ISSM without support, authority and
+   resources or DoDM 5200.02 met; a CISO the CIO did not designate, without security as the
+   primary duty, an office, or coordination with the privacy official; and no UR appointed
+   by the system owner. The CIO may also be the AO and the CISO may serve as AODR or SCA:
+   record each role held. In `code_signing` say whether code-signing certificates are used
+   by the organization (cm-14 met by vendor signatures alone does not count), the designation
+   process, `operational_need` and each holder, no more than that need (OCTX-002).
+6. **Write `artifacts/ART-ORG-CONTEXT.md`** from `templates/artifacts/ART-ORG-CONTEXT.md`
    with `produced_by_task: P-1` and `touched_by: [P-1]`. Fill `## RMF role assignments` with
    a table of role, persona ID, holder's title (not a personal name unless the fork gives
    one) and appointing authority, traced. Do not add the later sections; P-2 to P-7 append
    them (step 4 of "How these tasks run").
-   Write `artifacts/data/scrm-org.yaml` whole from `templates/data/scrm-org.yaml` (schema
+7. **Write the C-SCRM part.** Write `artifacts/data/scrm-org.yaml` whole from `templates/data/scrm-org.yaml` (schema
    `framework/schema/scrm-org.schema.json`) and fill its `governance` now: an executive persona
-   leads C-SCRM, `pmo` is dedicated or matrixed, PER-AO is among `owners` (an AO may delegate
+   leads C-SCRM, `pmo` is dedicated, matrixed or a team, PER-AO is among `owners` (an AO may delegate
    day-to-day risk to `delegates` such as PER-AODR), the council and its charter, and a C-SCRM
    duty for PER-PM, PER-DEV, PER-LSE or PER-ISSE, PER-CIO, PER-CISO and PER-RE (SCRM-021).
    Leave the other sections as the template's placeholders until their task.
-6. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
+8. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
    until 0 errors. **Journal** a CHECKPOINT.
 
 ### Interviews
@@ -175,20 +202,62 @@ Purpose: Establish the organization's risk management strategy, including how it
    is framed, assessed, responded to and monitored), its **risk tolerance** stated so a
    later decision can be checked against it (for example which risk levels the AO may
    accept, and for how long), and the constraints and priorities that shape it. Ask
-   PER-PRIV for the privacy part. Ask PER-RE how risk assessments are maintained: what
-   triggers an update, how often, what is updated and to whom results are communicated.
+   PER-PRIV for the privacy part and the Component privacy program (step 4). Ask PER-RE how
+   risk assessments are maintained: what triggers an update, how often, what is updated and
+   to whom results are communicated.
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-2` to `touched_by` and append
    `## Risk management strategy and risk tolerance`, traced, including the risk assessment
    maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
    M-4 applies it. Keep the risk tolerance
-   concrete; R-2 and R-4 compare the system's risk with it.
-   Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
+   concrete; R-2 and R-4 compare the system's risk with it. Then append
+   `## Privacy program`, traced: the Component's privacy and civil liberties program (DoDI
+   5400.11), its senior Component official for privacy (SCOP) and privacy and civil
+   liberties officer (PCLO), their staffing and reporting lines to the DoD SAOP, the
+   procedures for complaints and alleged violations, training and awareness, which privacy
+   controls the Component treats as program management, common, system-specific or hybrid,
+   and whether the SCOP approves or only advises (an OSD Component's SCOP serves primarily in
+   an advisory capacity, DoDI 5400.11 paragraph 2.10). PER-PRIV answers for the program.
+   Record also the Component CIO's process for designated approval authorities to make
+   certification determinations and issue an IATT or ATO expeditiously for a capability fielded
+   under urgent capability acquisition (DoDI 5000.81), so a UCA program knows whom to ask.
+5. **Add the strategy to `org-context.yaml`**, rewriting it whole (OCTX-003, OCTX-004):
+   - `program`: the Cybersecurity Risk Management Program, its owner, organization-wide
+     scope, the issuances it implements (CNSSP 22 and its Annex A issuances, DoDI 8500.01),
+     its integration with mission and business risk management, the risk steps it carries
+     out (frame, assess, respond, monitor), the systems assigned to it (this system among
+     them), its consistency with the DoD SISO strategy, and governance bodies integrated with
+     DoD enterprise governance.
+   - `policies`: each policy, procedure or process with its owner (a role holder), the
+     life-cycle phases it covers (together they cover every phase), whether it integrates
+     systems security engineering, and whom it directs (one directs the system owner to keep
+     the system compliant with the RMF).
+   - `resources`: who identifies, secures and makes available funding (in PPBE) and qualified
+     people, and who determines the allocation (the CIO and the AOs, with the privacy
+     official when the system processes PII).
+   - `risk_frame` (assumptions, constraints, priorities, trade-offs, tolerance by type of loss
+     and what shaped them), `governance` (model, reserved decisions, how differing tolerances
+     are resolved, and `risk_executive`: led and structured by the SAORM, or led by the
+     official it delegated to; formed as an individual or a group with its members; its
+     forums for all types and sources of risk including aggregated risk; its oversight of
+     risk decisions; its broad-based view of risk; the vehicles that share risk information
+     with AOs, senior leaders and internal and external stakeholders; the autonomy it gives
+     subordinate organizations for framing, assessing, responding to and monitoring risk; and
+     how it handles authorizations with shared responsibility, SP 800-37r2 Appendix D.3,
+     RISKX-001; ask PER-RE), `risk_assessment_guidance` (methods, tools, roles, rigor,
+     form of results, threat, vulnerability, impact and likelihood approach, uncertainty, aggregation, information sources) and `risk_response` (types used,
+     selection, the four strategies, course-of-action tools, communication).
+   - `external_entities`: each external organization with an actual or potential risk
+     relationship, its trust model, how risk information is shared, the degree of control,
+     the evidence of trustworthiness and, for an actual one, that a senior leader accepted
+     the ongoing risk, or the `response` when it is not acceptable. C-1 adds the provider of
+     each leveraged authorization.
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
    to 1-4 (OT suppliers in scope; threat, vulnerability, impact and likelihood assumptions
    each refined at P-14; which threat source kinds are addressed; appetite set at level-1 and
    tolerance with thresholds at level-2 and level-3; priorities; the nine framing outputs),
    the `policy`, `strategy`, `levels`, `process`, `maturity` and `training` (SCRM-020,
    SCRM-022, SCRM-024, SCRM-027 to SCRM-029). The policy is the C-SCRM item of EXT-ORG-POLICY.
-5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
+7. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews
 
@@ -196,7 +265,7 @@ Purpose: Establish the organization's risk management strategy, including how it
 |---|---|---|
 | PER-CIO | responsible and accountable (R, A) | the strategy, its approval, who may accept which risk |
 | PER-RE | responsible (R) | risk tolerance levels, risk acceptance limits, organization-wide priorities |
-| PER-PRIV (optional) | consulted (C) | privacy risk in the strategy |
+| PER-PRIV | consulted (C) | privacy risk in the strategy; the Component privacy program, SCOP and PCLO |
 
 At least 1 interview with `task: P-2`.
 
@@ -240,7 +309,7 @@ P-2 writes no facts.
 | Field | Value |
 |---|---|
 | Step | P Prepare (organization level) |
-| Phases | PH-MSA (primary) |
+| Phases | PH-MSA (primary), PH-OS |
 | Depends on | P-2 |
 | Inputs | ART-ORG-CONTEXT, EXT-THREAT |
 | Outputs | ART-ORG-CONTEXT (updates) |
@@ -249,7 +318,7 @@ P-2 writes no facts.
 | RACI | R: PER-RE, PER-CISO, PER-PRIV · A: PER-RE · C: PER-CIO, PER-SPONSOR, PER-AO · I: — |
 | Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-CIO](../../personas/PER-CIO.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-AO](../../personas/PER-AO.md) |
 
-Purpose: Assess organization-wide security and privacy risk, including supply chain risk, using current cyber threat information, and keep the results current.
+Purpose: Assess organization-wide security and privacy risk, including supply chain risk, using current cyber threat information, and keep the results current: in operations, review threat, vulnerability, technology and mission changes against the organizational risk posture.
 <!-- END rmf:header P-3 -->
 
 ### Steps
@@ -264,11 +333,19 @@ Purpose: Assess organization-wide security and privacy risk, including supply ch
    `## Organization-level risk assessment` with the main risks, their likelihood and
    impact on the SP 800-30 scale, and the update cycle, traced. System risk assessments
    (P-14) start from these results.
-   Rewrite `artifacts/data/scrm-org.yaml` whole with `sharing`: each SP 800-150 key practice,
+5. **In operations, review the posture.** Once the system operates (an authorization to
+   operate stands and an M task is in scope), P-3 runs again: PER-RE reviews threat,
+   vulnerability, technology and mission changes against the organizational risk posture
+   and records each review in `org-context.yaml` `posture_reviews` with its date, what it
+   considered, the impact and the sections it updated (OCTX-011); one is due once the ledger
+   holds a record later than the authorization to operate. Update the strategy
+   sections it changes in the same rewrite. Why: CNSSP 22 asks for an ongoing review at the
+   organization level, not only the system-level reviews of M-1 and M-3.
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with `sharing`: each SP 800-150 key practice,
    the communities, an executive FASC liaison, the scope approved per supplier, and `feeds`
    naming P-3 and P-14, where shared supply chain risk information arrives as EXT-THREAT
    (SCRM-023).
-5. **Build and check** with `--task P-3`, then **journal** a CHECKPOINT.
+7. **Build and check** with `--task P-3`, then **journal** a CHECKPOINT.
 
 ### Interviews
 
@@ -430,7 +507,13 @@ Purpose: Identify, document and publish the common controls available for inheri
    `## Common controls available for inheritance` with a table per provider: control IDs
    (OSCAL form, `ac-2`), full or partial, the provider's authorization status, traced.
    S-1, S-3 and P-17 read this table.
-5. **Build and check** with `--task P-5`, then **journal** a CHECKPOINT.
+5. **Add `common_controls` to `org-context.yaml`**: per provider (`provided_by`, the string the
+   SSP's `inherited_from` uses), its persona, the controls, the separate authorization of the
+   common controls, the assessor (chosen by the provider or the organization, qualified), and
+   the plan, assessment report and, for deficiencies, POA&M, each approved by the AO or AODR
+   accountable for the common controls before it is made available to the system owner
+   (OCTX-005). A-3 rests each inherited control's determination on this package (OCTX-006).
+6. **Build and check** with `--task P-5`, then **journal** a CHECKPOINT.
 
 ### Interviews
 
@@ -579,11 +662,22 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-7` to `touched_by` and append
    `## Organizational continuous monitoring strategy`, traced. S-5 builds the system
    strategy (`conmon.yaml`) to be consistent with this section.
-   Rewrite `artifacts/data/scrm-org.yaml` whole with `measures`: stakeholders, goals validated
+5. **Add `iscm` to `org-context.yaml`** (OCTX-007, OCTX-008): whether the program is in
+   place, its governance, the organization-wide policies by subject (security status
+   monitoring and making results available to risk assessment among them), the manual and
+   automated processes with how manual ones are verified as repeatable, the strategic
+   objectives and the activities mapped to them, what monitoring determines, the assessment
+   elements the strategy declares not applicable, the minimum frequency per family across
+   systems and common controls (S-5 is held to it, OCTX-009), when the program was
+   `established`, its `review_cycle` (monthly to annually) and each review (threats considered
+   across them); the first review and assessment are due one cycle after `established`, each formal program assessment with who received it
+   and its findings, each with an owner and a due date, and the organization-wide ongoing
+   authorization process with its two conditions (OCTX-010).
+6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with `measures`: stakeholders, goals validated
    with them, measures of implementation, efficiency and effectiveness, and mission impact,
    KPIs or KRIs against appetite and against tolerance, each with a target, and the
    enterprise risk monitoring strategy (SCRM-025).
-5. **Build and check** with `--task P-7`, then **journal** a CHECKPOINT.
+7. **Build and check** with `--task P-7`, then **journal** a CHECKPOINT.
 
 ### Interviews
 

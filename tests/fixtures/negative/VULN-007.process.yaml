@@ -1,0 +1,18 @@
+rule: VULN-007
+bases:
+- minimal
+description: a strategy leaving out analysis reporting
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.process
+  value:
+  - identification
+  - analysis
+  - remediation-mitigation
+  - verification-monitoring
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - leaves out the analysis-reporting step of the DoD vulnerability management process

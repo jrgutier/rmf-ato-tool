@@ -12,7 +12,7 @@ tasks:
     purpose: >-
       Monitor the system and its environment for changes that affect the security and privacy
       posture, analyzing the security impact of each change.
-    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO]}
+    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS, EXT-THREAT]
     outputs: [ART-CHG, ART-INV, ART-CMP]
     writes_facts: []
@@ -35,6 +35,9 @@ tasks:
       - The AO decision on each hosted or interconnected system is enforced (MCON-001).
       - A significant system modification re-enters the RMF at the affected task (feeds back to
         P-11 and C-1).
+      - For a system processing PII, each change states whether it creates new privacy risk
+        (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates
+        (PRIV-005).
     citations:
       - {ref: SP800-37R2, section: "TASK M-1", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-1 System and Environment Changes"}
@@ -58,7 +61,7 @@ tasks:
     purpose: >-
       Assess implemented and inherited controls on the frequencies of the continuous monitoring
       strategy, with reviews of the system at least annually.
-    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CISO, PER-CSSP], I: [PER-AO]}
+    raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CISO, PER-CSSP], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CONMON, ART-SSP, ART-SAP, ART-SAR, ART-POAM, ART-SVCA, EXT-MONITORING]
     outputs: [ART-SAR, ART-CONMON, ART-SVCA]
     writes_facts: []
@@ -94,8 +97,8 @@ tasks:
     purpose: >-
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: []}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, EXT-INSPECTIONS, EXT-THREAT]
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: [], when: {PER-PRIV: processes-pii}}
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, ART-ORG-CONTEXT, EXT-INSPECTIONS, EXT-THREAT, EXT-DIRECTIVES, EXT-VDP]
     outputs: [ART-RA, ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [M-2]
@@ -105,6 +108,9 @@ tasks:
       - Ongoing assessment results available (M-2), or a new or previously unaddressed threat
         has emerged and the PM has started a risk assessment.
     exit_criteria:
+      - Courses of action are selected and their responses communicated as the
+        organization's risk response strategy in ART-ORG-CONTEXT (org-context.yaml
+        risk_response) directs.
       - The output of continuous monitoring activities is analyzed and responded to
         appropriately (DoDI 8510.01 Table 7 outcome).
       - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and
@@ -122,6 +128,21 @@ tasks:
       - Each readiness inspection or outside evaluation finding is in external_findings of
         poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
       - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
+      - Each order, directive, IAVM alert or bulletin received (EXT-DIRECTIVES) is in
+        directed_actions of poam/items.yaml with who implements it and its response,
+        implemented, tracked in a POA&M item or withheld after coordination, and its compliance
+        status reported up the Component reporting chain to CDRUSCYBERCOM (VULN-001, VULN-002);
+        for a cloud service, the CSSP's notice of an order or CPCON change is how it arrives, and
+        the mission owner, with the CSSP, prioritizes its requirements and passes them to the
+        CSP.
+      - Each VDP report received (EXT-VDP) is validated, and a valid one is rated, planned in a
+        POA&M item with source_of_weakness vdp, kept before the system owner and the AO, and
+        reported within VRMN (VULN-003).
+      - Each vulnerability M-3 analyzes, and every one a validated VDP report names, has an
+        analysis record in vulnerabilities of poam/items.yaml, reported on discovery and rated on CVSS 3.1 with its expected loss of
+        confidentiality, integrity and availability (VULN-004); its fix is chosen case by case
+        and tracked, and verified by successive scans once completed (VULN-005); one not
+        publicly known is submitted to USCYBERCOM for the VEP (VULN-006).
     citations:
       - {ref: SP800-37R2, section: "TASK M-3", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-3 Ongoing Risk Response"}
@@ -130,6 +151,9 @@ tasks:
       - {ref: DODI5000.90, page: 11, anchor: "the PM will initiate a risk assessment to identify the risk to the platform"}
       - {ref: DODI8510.01, page: 7, anchor: "decisions to withhold or delay vulnerability remediation"}
       - {ref: DODI8530.01, page: 36, anchor: "verify POA&Ms to correct deficiencies or weaknesses"}
+      - {ref: DODI8530.01, page: 29, anchor: "Verifies DoD Component organizations and individuals take directed actions, maintain POA&Ms"}
+      - {ref: DODI8531.01, page: 19, anchor: "Determine, on a case-by-case basis, which remediation or mitigation method is most beneficial"}
+      - {ref: DODI8531.01, page: 16, anchor: "During the VDP coordination process, the DoD Components will:"}
     playbook: playbooks/M/M-3.md
   - id: M-4
     name: Authorization Updates
@@ -142,7 +166,7 @@ tasks:
     purpose: >-
       Update the security plan, assessment report, risk assessment and POA&M from continuous
       monitoring results.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO]}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG, ART-CONMON]
     outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
     writes_facts: []
@@ -160,6 +184,8 @@ tasks:
         and each update, approved and tracked by change management (MPLAN-001).
       - ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers),
         what was updated is recorded, and the results reach its communicated_to officials.
+      - plan-reviews.yaml changes logs the M-4 update of the plans from the continuous
+        monitoring results, covering the privacy plan for a system processing PII (PRIV-010).
     citations:
       - {ref: SP800-37R2, section: "TASK M-4", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-4 Authorization Package Updates"}
@@ -179,7 +205,7 @@ tasks:
     purpose: >-
       Report the security and privacy posture to the AO and senior leaders as the monitoring
       strategy requires.
-    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP, PER-RE], I: [PER-AO, PER-CIO]}
+    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP, PER-RE], I: [PER-AO, PER-CIO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA, ART-CHG, ART-SD]
     outputs: [ART-SECRPT]
     writes_facts: []
@@ -200,6 +226,11 @@ tasks:
         conmon.yaml names in reporting.dodin.required_by with who required them.
       - The risk executive (function) and the CISO review the status reports at the organization
         tier, and that review feeds P-7 (MRPT-002).
+      - For a system processing PII, ART-SECRPT names the Component privacy report path (the
+        PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and
+        any system of records with PII that cannot be appropriately protected.
+      - The compliance status of each directed action and the VRMN reports of each VDP report
+        in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
       - The posture reports carry the supply chain reporting scrm-plan.yaml sets.
     citations:
       - {ref: SP800-37R2, section: "TASK M-5", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
@@ -224,7 +255,7 @@ tasks:
       The AO reviews the posture on an ongoing basis to determine whether the risk remains
       acceptable and, where monitoring is near real time, may seek a cATO through the Component
       CISO.
-    raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR], I: [PER-PM, PER-ISSM]}
+    raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP, EXT-ISCM-ASSESSMENT]
     outputs: [ART-AODM, ART-AUTHREC]
     writes_facts: [acquisition]
@@ -237,6 +268,9 @@ tasks:
       - For AD-CATO, an ATO is in place and the system shows robust continuous monitoring of its
         RMF controls, active cyber defense and use of an approved DevSecOps reference design.
     exit_criteria:
+      - Before the first continued authorization, ART-ORG-CONTEXT records the
+        organization-wide ongoing authorization process with both transition conditions
+        and an ISCM program in place (OCTX-010).
       - The AO conducts ongoing authorization using the results of continuous monitoring and
         communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table
         7 outcome).
@@ -272,7 +306,7 @@ tasks:
     purpose: >-
       Implement the disposal strategy and execute the required actions when the system is
       removed from operation.
-    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AODR, PER-IO, PER-ISSO, PER-PRIV, PER-RE], I: [PER-AO]}
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AODR, PER-IO, PER-ISSO, PER-PRIV, PER-RE], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, ART-INV, ART-RA]
     outputs: [ART-DISP]
     writes_facts: []

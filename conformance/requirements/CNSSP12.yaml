@@ -127,7 +127,9 @@ requirements:
     locator: "8"
     context: "SECTION IV- POLICY"
     statement: "8. AOs, acquisition managers, program managers, architects, designers, system engineers, developers, integrators, planners, operators, maintainers, trainers, cybersecurity subject matter experts, and end users of applicable systems must ensure cybersecurity requirements are integrated and applied throughout the life cycle of space NSS and services as part of a holistic systems engineering approach. National Institute of Standards and Technology Special Publication 800-160 (NIST SP 800-160), Systems Security Engineering (Reference k), provides a guide for effectively integrating systems security engineering principles, concepts, and activities in to established systems engineering processes."
-    status: "candidate"
+    status: "covered"
+    reason: "Triage: the substance binds every fork; 'space NSS' only names the subject. SSE-002 fails cybersecurity practices that leave a life cycle activity (design, test, manufacture, sustainment, the activities of DoDI 5000.83 1.2.c) unaddressed, and SSE-001 fails a security requirement not integrated into the system performance specification or the product support needs. The second sentence, that SP 800-160 provides a guide, is advisory and not marked."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.stage.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "Cybersecurity requirements are applied throughout the life cycle as part of a systems engineering approach: no engineering practice that addresses cybersecurity in test fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cybersecurity requirements are integrated into the systems engineering baseline: a security requirement included in neither the performance specification nor the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-CNSSP12-0016"
     citation: {"ref": "CNSSP12", "page": 6, "anchor": "Space NSS and services must incorporate cybersecurity monitoring, auditing, and recovery measures"}
@@ -152,7 +154,9 @@ requirements:
     locator: "11"
     context: "SECTION IV- POLICY"
     statement: "11. Foreign access to U.S. space capabilities and release of communications security (COMSEC) and other cybersecurity products to foreign governments must be controlled in accordance with PL 107-296 (Reference e) and Committee on National Security Systems"
-    status: "candidate"
+    status: "partial"
+    reason: "Foreign access to the system is held by SYSD-004; release of COMSEC and cybersecurity products to foreign governments for space capabilities is not modelled."
+    evidence: [{"kind": "rule", "target": "SYSD-004", "fixture": "tests/fixtures/negative/SYSD-004.foreign.yaml", "expect": "access by foreign personnel to the system is authorized by the DoD Component head", "asserts": "Foreign access to capabilities must be controlled and authorized", "claim": "constraint", "sentence": "Foreign access to U.S. space capabilities and release of communications security (COMSEC) and other cybersecurity products to foreign governments must be controlled in accordance with PL 107-296 (Reference e) and Committee on National Security Systems"}]
     work_item: "WI-197"
   - id: "REQ-CNSSP12-0019"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "All acquisitions, contracts, agreements, and leases; bilateral and multilateral foreign government agreements;"}
@@ -160,7 +164,9 @@ requirements:
     locator: "12"
     context: "CNSSP 12"
     statement: "12. All acquisitions, contracts, agreements, and leases; bilateral and multilateral foreign government agreements; and USG interagency agreements involving applicable systems must contain clauses that enforce the requirements contained in this policy."
-    status: "candidate"
+    status: "partial"
+    reason: "Agreements are recorded per interconnection with their terms; nothing records that an agreement for a space system carries clauses enforcing CNSSP 12."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.yaml", "expect": "the mission partner agreement does not state", "asserts": "Agreements involving the system must state the cybersecurity requirements the system's policy imposes", "claim": "constraint", "sentence": "All acquisitions, contracts, agreements, and leases; bilateral and multilateral foreign government agreements; and USG interagency agreements involving applicable systems must contain clauses that enforce the requirements contained in this policy."}]
     work_item: "WI-190"
   - id: "REQ-CNSSP12-0020"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "The following cybersecurity requirements must be addressed and satisfied:"}
@@ -176,7 +182,8 @@ requirements:
     locator: "a"
     context: "CNSSP 12"
     statement: "a. Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.yaml", "expect": "the Cybersecurity Risk Management Program does not implement CNSSP 22", "asserts": "The RMF is applied as part of a Cybersecurity Risk Management Program that implements CNSSP 22", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."}, {"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.scope.yaml", "expect": ", not an integrated, organization-wide program", "asserts": "The Cybersecurity Risk Management Program is organization-wide", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Space NSS and services, and their supporting infrastructure, contain information technology, information processing capabilities, and/or network technologies and must apply the Risk Management Framework (RMF) as part of an organization-wide Cybersecurity Risk Management Program (CRMP), established by a cognizant Department or Agency, in accordance with CNS SP 22, Cybersecurity Risk Management (Reference m)."}]
     work_item: "WI-163"
   - id: "REQ-CNSSP12-0022"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "b. NIST SP 800-37, Guide for Applying the Risk Management Framework to"}
@@ -216,7 +223,9 @@ requirements:
     locator: "f"
     context: "CNSSP 12"
     statement: "f. In accordance with C SSI 1200, National Information Assurance Instruction for Space Systems used to support National Security Missions (Reference q), cybersecurity requirements and information systems security architectures for space NSS and services must be assessed by the cognizant AO, in coordination with SA, prior to program initiation for new systems and prior to all major acquisition milestones."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-006 holds the assessment by the cognizant AO with NSA (the SA of the extracted text is NSA with its N lost, as in 'C SSI' for CNSSI) before each major milestone passed. Unheld: 'prior to program initiation for new systems'; no program initiation date is recorded apart from the milestones."
+    evidence: [{"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.yaml", "expect": "NSA and the cognizant AO assess the cybersecurity requirements and security architecture of a National Security System before", "claim": "presence", "asserts": "cybersecurity requirements and security architectures of space NSS must be assessed before all major acquisition milestones: NSA and the cognizant AO assess the cybersecurity requirements and security architecture of a National Security System before", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System", "sentence": "In accordance with C SSI 1200, National Information Assurance Instruction for Space Systems used to support National Security Missions (Reference q), cybersecurity requirements and information systems security architectures for space NSS and services must be assessed by the cognizant AO, in coordination with SA, prior to program initiation for new systems and prior to all major acquisition milestones."}, {"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.covers.yaml", "expect": "does not cover the", "claim": "constraint", "asserts": "the assessment covers the cybersecurity requirements and the information systems security architectures: does not cover the", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System", "sentence": "In accordance with C SSI 1200, National Information Assurance Instruction for Space Systems used to support National Security Missions (Reference q), cybersecurity requirements and information systems security architectures for space NSS and services must be assessed by the cognizant AO, in coordination with SA, prior to program initiation for new systems and prior to all major acquisition milestones."}]
     work_item: "WI-83"
   - id: "REQ-CNSSP12-0027"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "Space NSS and services must meet the requirements of PL 113-283, Federal"}
@@ -241,8 +250,11 @@ requirements:
     locator: "h.(1)"
     context: "CNSSP 12"
     statement: "(1) Continued advancement of adversarial threats may require revisiting risk tolerance thresholds and accordingly selecting and tailoring security controls over the lifecycle of a system. CNS SP 22 requires A Os to assess and continuously monitor security controls, based on risk assessments."
-    status: "candidate"
+    status: "partial"
+    reason: "awaits the ruling on its first sentence; assessing and monitoring controls on risk assessments is held at system level by the ISCM rules, not here"
+    evidence: [{"kind": "schema", "target": "framework/schema/org-context.schema.json#/properties/posture_reviews/items/properties/considered", "asserts": "Changes in adversarial threats are reviewed against risk tolerance in the organizational posture reviews", "claim": "constraint"}]
     work_item: "WI-161"
+    ruling_sought: [{"sentence": "(1) Continued advancement of adversarial threats may require revisiting risk tolerance thresholds and accordingly selecting and tailoring security controls over the lifecycle of a system.", "reason": "A possibility, not a duty: advancing threats may require revisiting risk tolerance thresholds"}]
   - id: "REQ-CNSSP12-0030"
     citation: {"ref": "CNSSP12", "page": 8, "anchor": "Space NSS and services must implement cyber defense services, including on-board intrusion"}
     kind: "lettered"
@@ -364,7 +376,9 @@ requirements:
     locator: "f"
     context: "SECTION V- RESPONSIBILITIES"
     statement: "f. In accordance with NSD-42 (Reference i), assist with the assessment of the overall security posture of applicable systems and identify cybersecurity related vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the Director, NSA, to 'assist with the assessment of the overall security posture ... and identify cybersecurity related vulnerabilities'. The run records NSA's part in each assessment (PPROT-006), but NSA's vulnerability identification is NSA's own work and no run record can fail when NSA does not do it."
+    evidence: [{"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.by.yaml", "expect": "is made by NSA in coordination with the cognizant AO", "claim": "constraint", "asserts": "NSA assists with the assessment of the security posture of applicable systems: is made by NSA in coordination with the cognizant AO", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System", "sentence": "In accordance with NSD-42 (Reference i), assist with the assessment of the overall security posture of applicable systems and identify cybersecurity related vulnerabilities."}]
     work_item: "WI-83"
   - id: "REQ-CNSSP12-0045"
     citation: {"ref": "CNSSP12", "page": 9, "anchor": "Specify the format and information content of a CSP and SK.MP to"}
@@ -398,7 +412,8 @@ requirements:
     locator: "(1)"
     context: "C SSP 12"
     statement: "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m). At a minimum ensure that:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "Applicable systems are integrated into the Department or Agency CRMP, assigned to and governed by the program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m)."}, {"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.yaml", "expect": "the Cybersecurity Risk Management Program does not implement CNSSP 22", "asserts": "Systems apply the RMF in accordance with CNSSP 22 through the program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(1) Ensuring applicable systems are integrated into the Department or Agency CRMP and are applying RMF in accordance with CNSSP 22 (Reference m)."}]
     work_item: "WI-163"
   - id: "REQ-CNSSP12-0049"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Cognizant system AOs, ISSOs, and SCAs are qualified, trained, and formally designated."}
@@ -444,7 +459,9 @@ requirements:
     locator: "(4)"
     context: "C SSP 12"
     statement: "(4) Coordinating system security architectures for applicable systems with the cognizant AO, and NSA, from program inception and periodically thereafter as the architectures evolve."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-006 fails a space NSS whose architecture was first coordinated with the AO and NSA after its first decision point. Unheld: 'periodically thereafter as the architectures evolve' names no interval and no event a rule could check without inventing one."
+    evidence: [{"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.coordination.yaml", "expect": "the space NSS security architecture is coordinated with the cognizant AO and NSA from program inception", "claim": "presence", "asserts": "space NSS system security architectures are coordinated with the cognizant AO and NSA from program inception: the space NSS security architecture is coordinated with the cognizant AO and NSA from program inception", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System that is a space NSS", "sentence": "(4) Coordinating system security architectures for applicable systems with the cognizant AO, and NSA, from program inception and periodically thereafter as the architectures evolve."}]
     work_item: "WI-83"
   - id: "REQ-CNSSP12-0055"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Verifying with the cognizant AO, and NSA, that contracts to procure, lease,"}
@@ -460,7 +477,9 @@ requirements:
     locator: "(6)"
     context: "C SSP 12"
     statement: "(6) Verifying with the cognizant AO, and NSA, that any pre-existing system components or services comply with this policy before committing to their inclusion in the architecture."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. nss-assessments.yaml records each pre-existing component of a space NSS; PPROT-006 fails one not verified with both the AO and NSA, or verified after it was committed to the architecture."
+    evidence: [{"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.preexisting.yaml", "expect": "a pre-existing component or service is verified with the cognizant AO and NSA before it is committed to the architecture", "claim": "constraint", "asserts": "pre-existing system components or services are verified with the cognizant AO and NSA before their inclusion in the architecture: a pre-existing component or service is verified with the cognizant AO and NSA before it is committed to the architecture", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System that is a space NSS", "sentence": "(6) Verifying with the cognizant AO, and NSA, that any pre-existing system components or services comply with this policy before committing to their inclusion in the architecture."}]
     work_item: "WI-83"
   - id: "REQ-CNSSP12-0057"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Ensuring applicable system SKMPs and CSPs are submitted to NSA for approval."}
@@ -477,7 +496,9 @@ requirements:
     locator: "(8)"
     context: "C SSP 12"
     statement: "(8) Timely and accurate reporting to the cognizant AO, and NSA, concerning the com pliancy status of applicable systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: PPROT-006 fails a space NSS with no compliance report reaching both the AO and NSA. Unheld: 'timely and accurate' set no window or measure, and adding one would be a rule the source does not state."
+    evidence: [{"kind": "rule", "target": "PPROT-006", "fixture": "tests/fixtures/negative/PPROT-006.reports.yaml", "expect": "no report of the compliance status of the space NSS reaches the cognizant AO and NSA", "claim": "presence", "asserts": "reporting to the cognizant AO and NSA concerning the compliancy status of the space NSS: no report of the compliance status of the space NSS reaches the cognizant AO and NSA", "holds_when": "P-16 is in scope or the run holds nss-assessments.yaml, and it records a National Security System that is a space NSS", "sentence": "(8) Timely and accurate reporting to the cognizant AO, and NSA, concerning the com pliancy status of applicable systems."}]
     work_item: "WI-83"
   - id: "REQ-CNSSP12-0059"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Through licensing, memoranda of agreement, or contracts, ensure the requirements of this"}
@@ -485,7 +506,9 @@ requirements:
     locator: "b"
     context: "C SSP 12"
     statement: "b. Through licensing, memoranda of agreement, or contracts, ensure the requirements of this policy are imposed on U.S.-, foreign government-, and commercially (domestic and foreign) owned systems involved in the launch, operation, maintenance, or decommissioning of applicable systems under their control, purview, or cognizance."
-    status: "candidate"
+    status: "partial"
+    reason: "Licensing and contract clauses imposing CNSSP 12 on systems involved in launch and operations are not modelled; interconnection agreements record cybersecurity requirements only."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.cyberreq.yaml", "expect": "the mission partner agreement does not state", "asserts": "Memoranda of agreement or contracts impose cybersecurity requirements on owned systems involved in operation", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-CNSSP12-0060"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "Ensure timely and accurate reporting of threats and vulnerabilities to the cognizant"}

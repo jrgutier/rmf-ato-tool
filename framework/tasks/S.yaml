@@ -12,7 +12,7 @@ tasks:
     purpose: >-
       Select the NSS control baseline in CNSSI 1253 Appendix D that matches the approved C/I/A
       categorization, plus the NSS privacy baseline, as the starting point for tailoring.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CAT, ART-ORG-CONTEXT, ART-REQ, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS, EXT-CATALOG]
     outputs: [ART-BASELINE]
     writes_facts: [baseline_id]
@@ -50,7 +50,7 @@ tasks:
       Tailor the selected controls into the tailored control baseline by applying overlays,
       designating common controls, scoping, compensating, assigning DoD parameter values and
       supplementing.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-AO, PER-IO, PER-ISSE, PER-PRIV], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-RA, EXT-CNSSI1253-OVERLAYS]
     outputs: [ART-BASELINE]
     writes_facts: []
@@ -100,7 +100,7 @@ tasks:
     purpose: >-
       Designate controls as system-specific, hybrid or common and allocate them to system
       elements, so the preliminary design (RV-PDR) shows where each control lives.
-    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: []}
+    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-BND, ART-ORG-CONTEXT, ART-REQ]
     outputs: [ART-BASELINE]
     writes_facts: []
@@ -134,7 +134,7 @@ tasks:
     purpose: >-
       Document the planned control implementations in the security plan and write the CM,
       contingency and incident response plans.
-    raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: []}
+    raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG, ART-RA, ART-REQ, ART-ORG-CONTEXT]
     outputs: [ART-SSP, ART-CMP, ART-CP, ART-IRP, ART-SVCA]
     writes_facts: []
@@ -151,6 +151,15 @@ tasks:
       - ART-CMP, ART-CP and ART-IRP written.
       - ART-CP rests on a business impact analysis, and ART-CMP names the configuration control
         board and the baseline configuration process.
+      - For a system processing PII, ART-SSP holds the privacy plan with the security plan
+        (ssp-records.yaml privacy_plan, whether the plans are consolidated or separate; PRIV-008).
+      - The statement of each baseline control the catalog marks as contributing to assurance
+        (`rmf catalog show --fields assurance`) says how its assurance requirements are
+        addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
+      - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build
+        with signed provenance, AI used in development, the SBOM and other machine-readable
+        evidence, integrated test and evaluation and the software program (SWA-001; DoWI
+        8430.01).
       - artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM
         control decisions, critical suppliers in contingency and incident planning, supplier
         monitoring after award, training content and the supply chain reporting M-5 follows
@@ -177,7 +186,7 @@ tasks:
       Develop the system-level continuous monitoring strategy, consistent with the
       organizational strategy, with monitoring metrics and frequencies set at the start of
       development.
-    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AO, PER-IO, PER-ISSE, PER-CSSP], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AO, PER-IO, PER-ISSE, PER-CSSP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, ART-SSP, ART-RA, EXT-THREAT]
     outputs: [ART-CONMON]
     writes_facts: []
@@ -187,6 +196,9 @@ tasks:
     entry_criteria:
       - Security plan drafted (S-4); organizational monitoring strategy available (P-7).
     exit_criteria:
+      - Every family's monitoring frequency is at least the organizational minimum in
+        ART-ORG-CONTEXT, and conmon.yaml minimum_review records the system owner's review
+        of those minimums (OCTX-009).
       - A continuous monitoring strategy for the system that reflects the organizational risk
         management strategy is developed (DoDI 8510.01 Table 3 outcome).
       - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization
@@ -209,6 +221,14 @@ tasks:
         frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
       - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and
         manual controls have defined timelines.
+      - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring
+        strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment
+        frequency, and the SAOP consulted on each control added to it (PRIV-006).
+      - conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability
+        management process across the system, the records that support it, how vulnerabilities
+        are identified, the analysis tools from development to retirement, monthly
+        authenticated and non-authenticated scans, the patch sources and the reach of
+        automated patching, and the central log repository (VULN-007).
       - The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring
         strategy.
     citations:
@@ -219,6 +239,7 @@ tasks:
       - {ref: SP800-137, section: "3.2.2"}
       - {ref: DODI8510.01, page: 10, anchor: "Ensure acquisition programs develop evaluation metrics for DT&E and OT&E, and continuous monitoring"}
       - {ref: DODCIO-CATO, page: 1, anchor: "RMF requires a CONMON strategy for each system"}
+      - {ref: DODI8531.01, page: 20, anchor: "Conduct monthly non-authenticated and authenticated vulnerability scans"}
     playbook: playbooks/S/S-5.md
   - id: S-6
     name: Plan Review and Approval
@@ -231,7 +252,7 @@ tasks:
     purpose: >-
       Have the AO (or AODR) review and approve the security plan and monitoring strategy before
       Milestone B.
-    raci: {R: [PER-AODR], A: PER-AO, C: [PER-RE, PER-CIO, PER-MDA, PER-CISO, PER-PRIV], I: [PER-PM, PER-ISSM]}
+    raci: {R: [PER-AODR], A: PER-AO, C: [PER-RE, PER-CIO, PER-MDA, PER-CISO, PER-PRIV], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, ART-CONMON, ART-RA]
     outputs: [ART-SSP]
     writes_facts: []

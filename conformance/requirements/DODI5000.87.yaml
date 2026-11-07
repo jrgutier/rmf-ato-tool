@@ -34,7 +34,9 @@ requirements:
     locator: "1.2.c"
     context: "POLICY"
     statement: "c. Programs executing the software acquisition pathway are not subject to the Joint Capabilities Integration and Development System (JCIDS), and will be handled as specifically provided for by the Vice Chairman of the Joint Chiefs of Staff, in consultation with Under Secretary of Defense for Acquisition and Sustainment (USD(A&S)) and each service acquisition executive."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: EXT-CAPDOC admits the CNS. Unheld: the Vice Chairman's provisions."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "software pathway programs are not subject to JCIDS and use the CNS", "sentence": "Programs executing the software acquisition pathway are not subject to the Joint Capabilities Integration and Development System (JCIDS), and will be handled as specifically provided for by the Vice Chairman of the Joint Chiefs of Staff, in consultation with Under Secretary of Defense for Acquisition and Sustainment (USD(A&S)) and each service acquisition executive."}]
     work_item: "WI-325"
   - id: "REQ-DODI5000.87-0005"
     citation: {"ref": "DODI5000.87", "page": 3, "anchor": "Programs executing the software acquisition pathway will not be treated as major"}
@@ -82,7 +84,9 @@ requirements:
     locator: "1.2.i"
     context: "POLICY"
     statement: "i. Cybersecurity and program protection will be addressed from program inception throughout the program’s lifecycle in accordance with applicable cybersecurity policies and issuances. A risk-based management approach will be an integral part of the program’s strategies, processes, designs, infrastructure, development, test, integration, delivery, and operations. Software assurance, cyber security, test and evaluation are integral parts of this approach to continually assess and measure cybersecurity preparedness and responsiveness, identify and address risks and execute mitigation actions."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PPP is submitted at each decision point the program passes (PPROT-001) and security risk enters technical risk management (PPROT-005). Unheld: 'throughout the lifecycle' and the risk-based approach across every activity of sentence 2 are too broad for one record."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.submission.yaml", "expect": "the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "claim": "constraint", "asserts": "cybersecurity and program protection are addressed from program inception at each decision point: the PPP is submitted for approval at each acquisition pathway decision point, and no submission precedes", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Cybersecurity and program protection will be addressed from program inception throughout the program’s lifecycle in accordance with applicable cybersecurity policies and issuances."}]
     work_item: "WI-85"
   - id: "REQ-DODI5000.87-0011"
     citation: {"ref": "DODI5000.87", "page": 4, "anchor": "Intellectual property (IP) will be addressed from program inception throughout the program’s"}
@@ -203,7 +207,9 @@ requirements:
     locator: "2.5.a"
     context: "DIRECTOR, OPERATIONAL TEST AND EVALUATION (DOT&E) The DOT&E:"
     statement: "a. For programs on the DOT&E oversight list, approves the adequacy of test strategies (including the projected level of funding) and test plans for operational test and evaluation in connection with the program."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 holds the DOT&E approval of OT&E planning. Unheld: the adequacy of the test strategy and its projected funding."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dote.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "for programs on the DOT&E oversight list the DOT&E approves test plans for operational test and evaluation: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "a. For programs on the DOT&E oversight list, approves the adequacy of test strategies (including the projected level of funding) and test plans for operational test and evaluation in connection with the program."}]
     work_item: "WI-90"
   - id: "REQ-DODI5000.87-0026"
     citation: {"ref": "DODI5000.87", "page": 6, "anchor": "Assesses results of operational test and evaluation conducted by the programs on"}
@@ -357,7 +363,9 @@ requirements:
     locator: "3.2.b.(1)"
     context: "PLANNING PHASE Phase Description"
     statement: "(1) The planning phase will be guided by a draft CNS developed by the operational community. The sponsor will approve the CNS before the execution phase starts."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: EXT-CAPDOC admits the CNS. Unheld: its approval before execution."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "the planning phase is guided by the CNS approved by the sponsor", "sentence": "(1) The planning phase will be guided by a draft CNS developed by the operational community."}]
     work_item: "WI-325"
   - id: "REQ-DODI5000.87-0045"
     citation: {"ref": "DODI5000.87", "page": 9, "anchor": "The program office and related stakeholders will actively engage users throughout the"}
@@ -428,8 +436,11 @@ requirements:
     locator: "3.2.b.(4)"
     context: "PLANNING PHASE Phase Description"
     statement: "(4) The DA will validate there are appropriate strategies, analysis, and resources are in-place to successfully transition from the planning phase to the execution phase. The approved artifacts required to enter the execution phase include the CNS, user agreement (UA), acquisition strategy, test strategy, and cost estimate. The DA may have a meeting with key stakeholders to review the program’s strategies to make the decision. Programs using the embedded software path align their strategies with the programs into which they will be integrated."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: DP-SWP-EXECUTION; the test strategy is a required artifact and TSTRAT-001 requires it on PW-SWP. Unheld: the CNS, user agreement and cost estimate."
+    evidence: [{"kind": "citation", "target": "PW-SWP", "claim": "presence", "asserts": "the DA validates the transition from the planning phase to the execution phase", "sentence": "(4) The DA will validate there are appropriate strategies, analysis, and resources are in-place to successfully transition from the planning phase to the execution phase."}]
     work_item: "WI-321"
+    ruling_sought: [{"sentence": "The DA may have a meeting with key stakeholders to review the program’s strategies to make the decision.", "reason": "Permission: 'The DA may have a meeting with key stakeholders'."}]
   - id: "REQ-DODI5000.87-0054"
     citation: {"ref": "DODI5000.87", "page": 10, "anchor": "Programs using the software acquisition pathway will be identified in component and"}
     kind: "lettered"
@@ -444,7 +455,9 @@ requirements:
     locator: "3.2.c.(1)"
     context: "PLANNING PHASE Requirements"
     statement: "(1) Programs using the software acquisition pathway are not subject to JCIDS, except pursuant to a new process as discussed in Paragraph 2.8.a., but must be effective in capturing users’ needs, priorities, and environment. The sponsor will oversee development of a draft CNS to support the initiation of a software acquisition and use of this pathway. The CNS should be clear and concise. Programs using the embedded path will align the CNS with the requirements documents of the system(s) the software will be embedded."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: EXT-CAPDOC. Unheld: CNS development and content."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "programs using the software pathway capture user needs in a CNS", "sentence": "The sponsor will oversee development of a draft CNS to support the initiation of a software acquisition and use of this pathway."}]
     work_item: "WI-325"
   - id: "REQ-DODI5000.87-0056"
     citation: {"ref": "DODI5000.87", "page": 10, "anchor": "Each DoD Component will create streamlined requirements processes to develop, coordinate, and"}
@@ -452,7 +465,9 @@ requirements:
     locator: "3.2.c.(2)"
     context: "PLANNING PHASE Requirements"
     statement: "(2) Each DoD Component will create streamlined requirements processes to develop, coordinate, and approve the CNS commensurate with the size, scope, risks, threats, and urgency of need. The Joint Staff will determine if joint equities are involved and will execute an expedited joint validation process if necessary. Insights gained during the planning phase will be incorporated into the CNS before approval. The PM will actively engage with the sponsor during the CNS development to ensure operational and technical feasibility. The sponsor will approve the CNS before entry into the execution phase. Approval of the CNS should be delegated to the lowest level practical based on the size, risk, complexity, and interdependency of the software needs."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: EXT-CAPDOC and DP-SWP-EXECUTION. Unheld: the Component process and the approval."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "the sponsor approves the CNS before entry into the execution phase", "sentence": "The sponsor will approve the CNS before entry into the execution phase."}]
     work_item: "WI-325"
   - id: "REQ-DODI5000.87-0057"
     citation: {"ref": "DODI5000.87", "page": 11, "anchor": "Current acquisition programs with approved JCIDS documents that transition to the software"}
@@ -460,7 +475,9 @@ requirements:
     locator: "3.2.c.(3)"
     context: "PLANNING PHASE Requirements"
     statement: "(3) Current acquisition programs with approved JCIDS documents that transition to the software acquisition pathway may continue to use them as the basis of requirements or develop a CNS to capture current, software-unique needs. The sponsor will periodically update the CNS throughout development as required to reflect the current high-level operational needs for the software solution. The sponsor will submit the approved CNS document into the DoD Knowledge Management and Decision Support system for awareness and archival."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: EXT-CAPDOC. Unheld: updates and archival."
+    evidence: [{"kind": "citation", "target": "EXT-CAPDOC", "claim": "presence", "asserts": "the sponsor updates the approved CNS", "sentence": "The sponsor will periodically update the CNS throughout development as required to reflect the current high-level operational needs for the software solution."}]
     work_item: "WI-325"
   - id: "REQ-DODI5000.87-0058"
     citation: {"ref": "DODI5000.87", "page": 11, "anchor": "Frequent user engagements are critical to the success of modern software development"}
@@ -748,7 +765,9 @@ requirements:
     locator: "3.2.f.(1).(b)"
     context: "PLANNING PHASE Test Strategy The test strategy defines the streamlined processes by which capabilities, features, user stories, use cases, etc., will be tested and evaluated to satisfy developmental t"
     statement: "(b) Encourage and identify test artifacts that can and will be shared across the testing and certification communities (e.g., developmental test and evaluation, operational test and evaluation, system safety assessments, and security certification)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: A-2 records which events' results A-3 reuses, and TSTRAT-003 holds their representativeness. Unheld: 'encourage and identify' sets no measure."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "claim": "presence", "asserts": "test artifacts shared across testing and certification communities are reused as assessment evidence", "sentence": "(b) Encourage and identify test artifacts that can and will be shared across the testing and certification communities (e.g., developmental test and evaluation, operational test and evaluation, system safety assessments, and security certification)."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.87-0094"
     citation: {"ref": "DODI5000.87", "page": 14, "anchor": "Identify the tools and resources necessary to assist in data collection and"}
@@ -788,7 +807,9 @@ requirements:
     locator: "3.2.f.(2)"
     context: "PLANNING PHASE Test Strategy"
     statement: "(2) Automated testing and operational monitoring should be used as much as practicable for user acceptance and to evaluate software suitability, interoperability, survivability, operational resilience, and operational effectiveness. The DA will approve the test strategy and DOT&E will be the final approver on test strategies for programs on the DOT&E Oversight List. The test strategy should include information on the verification, validation, and accreditation authority, approach, and schedule for models and simulations in accordance with applicable modeling and simulation policies. Continuous runtime monitoring of operational software will provide health-related reporting (e.g., performance, security, anomalies), as well as additional data collection opportunities to support test and continuous operational test."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: TSTRAT-001 requires DOT&E approval on oversight. Unheld: automated testing, the M&S VV&A content and runtime monitoring, which are shoulds."
+    evidence: [{"kind": "rule", "target": "TSTRAT-001", "fixture": "tests/fixtures/negative/TSTRAT-001.dote.yaml", "expect": "planned activities of a program on T&E oversight", "claim": "constraint", "asserts": "DOT&E will be the final approver on test strategies for programs on the DOT&E oversight list: planned activities of a program on T&E oversight", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "The DA will approve the test strategy and DOT&E will be the final approver on test strategies for programs on the DOT&E Oversight List."}]
     work_item: "WI-91"
   - id: "REQ-DODI5000.87-0099"
     citation: {"ref": "DODI5000.87", "page": 15, "anchor": "Before the execution phase begins, a cost estimate must be developed for"}
@@ -893,7 +914,9 @@ requirements:
     locator: "3.3.b.(5)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(5) The PM and the sponsor will use an iterative, human-centered design process to define a minimum viable capability release (MVCR) if the MVP does not have sufficient capability or performance to deploy into operations. The MVCR delivers initial warfighting capabilities to enhance mission outcomes. The MVCR for applications programs must be deployed to an operational environment within 1 year after the date on which funds are first obligated to acquire or develop new software capability including appropriate operational test. If the MVP version of the software is determined sufficient to be fielded for operational use, the MVP will become the MVCR."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: DP-SWP-MVCR, a fielding point for PPROT-002. Unheld: the one-year deadline from first obligation, a date no run record holds."
+    evidence: [{"kind": "citation", "target": "PW-SWP", "claim": "presence", "asserts": "the MVCR is deployed to an operational environment within one year", "sentence": "The MVCR for applications programs must be deployed to an operational environment within 1 year after the date on which funds are first obligated to acquire or develop new software capability including appropriate operational test."}]
     work_item: "WI-321"
   - id: "REQ-DODI5000.87-0112"
     citation: {"ref": "DODI5000.87", "page": 16, "anchor": "Subsequent capability releases will be delivered at least annually. Software updates to"}
@@ -925,7 +948,9 @@ requirements:
     locator: "3.3.b.(7)"
     context: "EXECUTION PHASE Phase Description"
     statement: "(7) Software development testing, government developmental testing, and operational testing will be integrated, streamlined, and automated to the maximum extent possible to accelerate delivery timelines based on risk strategies. Automated test scripts and test results will be made available to the test community so that critical verification functions (e.g., performance, reliability), and validation functions (e.g., effectiveness, suitability and survivability) can be assessed iteratively and incrementally."
-    status: "candidate"
+    status: "partial"
+    reason: "software.yaml test_and_evaluation records it (S-4); it is narrative no rule judges. WI-91 and WI-92 (I-12) hold the TEMP and EXT-TEST-RESULTS content."
+    evidence: [{"kind": "schema", "target": "framework/schema/software.schema.json#/properties/test_and_evaluation/properties/pipeline_integration", "claim": "presence", "asserts": "Software development testing, developmental and operational testing are integrated and automated, with automated test results available to the test community"}]
     work_item: "WI-100"
   - id: "REQ-DODI5000.87-0116"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "Automated cyber testing and continuous monitoring of operational software will be designed"}
@@ -966,7 +991,9 @@ requirements:
     locator: "3.3.b.(9).(c)"
     context: "EXECUTION PHASE Phase Description Cybersecurity and software assurance will be integral to strategies, designs, development environment, processes, supply chain, architectures, enterprise services, te"
     statement: "(c) Secure lifecycle management (e.g., vulnerability management, rigorous and persistent cybersecurity testing, and configuration control)."
-    status: "candidate"
+    status: "partial"
+    reason: "Vulnerability management is held as a process (VULN-007); persistent testing and configuration control are named examples held elsewhere (ca-7, cm-3)."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.process.yaml", "expect": "step of the DoD vulnerability management process", "claim": "constraint", "asserts": "Secure lifecycle management with vulnerability management: a strategy leaving out a step of the process fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-154"
   - id: "REQ-DODI5000.87-0121"
     citation: {"ref": "DODI5000.87", "page": 17, "anchor": "IP considerations will be tracked and managed, and the IP strategy continuously"}

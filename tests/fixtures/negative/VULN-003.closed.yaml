@@ -1,0 +1,16 @@
+rule: VULN-003
+bases:
+- minimal
+description: the completed remediation never reported within VRMN
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vdp_reports.0.vrmn_reports
+  value:
+  - date: '2026-12-04'
+    status: open
+expect:
+  errors:
+  - VULN-003
+  messages:
+  - the completed remediation is not reported within VRMN

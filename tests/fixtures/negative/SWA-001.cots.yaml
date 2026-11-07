@@ -1,0 +1,14 @@
+rule: SWA-001
+bases:
+- minimal
+description: no SBOM captured for COTS
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: evidence.sbom.cots_captured
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - SBOMs are not captured for the COTS software

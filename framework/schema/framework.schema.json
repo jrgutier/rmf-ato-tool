@@ -293,6 +293,24 @@
         "phases": {"$ref": "#/$defs/ids"},
         "description": {"$ref": "#/$defs/text"},
         "rmf_notes": {"$ref": "#/$defs/texts"},
+        "decision_points": {
+          "description": "The pathway's own decision points in order, for a pathway other than the spine, whose milestones are in milestones.yaml. A PPP submission names a milestone or decision point, an NSA assessment a milestone (PPROT-001, PPROT-006); GATE-001 reads the authorization gates.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "kind", "authority", "purpose", "citations"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^DP-[A-Z]+-[A-Z0-9-]+$"},
+              "name": {"$ref": "#/$defs/text"},
+              "kind": {"description": "As in milestones.yaml: a milestone (the pathway's equivalent of an acquisition milestone, before which NSA assesses an NSS), another decision point, or an event no authority decides.", "enum": ["milestone", "decision-point", "event"]},
+              "authorization_gate": {"description": "true: the system is fielded at this point, so an authorization (an ATO, ATO with conditions or cATO) precedes it (GATE-001).", "type": "boolean"},
+              "authority": {"$ref": "#/$defs/text"},
+              "purpose": {"$ref": "#/$defs/text"},
+              "citations": {"$ref": "#/$defs/citations"}
+            }
+          }
+        },
         "citations": {"$ref": "#/$defs/citations"},
         "enforces": {"$ref": "#/$defs/enforces"}
       }
@@ -332,12 +350,19 @@
             "R": {"$ref": "#/$defs/ids"},
             "A": {"oneOf": [{"$ref": "#/$defs/id"}, {"$ref": "#/$defs/ids"}]},
             "C": {"$ref": "#/$defs/ids"},
-            "I": {"$ref": "#/$defs/ids"}
+            "I": {"$ref": "#/$defs/ids"},
+            "when": {
+              "description": "Roles that apply only under a condition of the system: a persona of R, A or C mapped to its condition (processes-pii: the system processes PII). PRIV-009 reads it.",
+              "type": "object",
+              "propertyNames": {"pattern": "^PER-[A-Z0-9]+$"},
+              "additionalProperties": {"enum": ["processes-pii"]}
+            }
           }
         },
         "inputs": {"$ref": "#/$defs/ids"},
         "outputs": {"description": "Artifacts the task produces or updates; the producer is artifacts.yaml producer.",
                     "$ref": "#/$defs/ids"},
+        "facts_since": {"description": "The framework_version from which a run is held to write a fact of writes_facts; an older run is not.", "type": "object", "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}},
         "writes_facts": {"description": "Dotted facts.yaml paths this task sets (set_by_task).",
                          "$ref": "#/$defs/ids"},
         "depends_on": {"$ref": "#/$defs/ids"},

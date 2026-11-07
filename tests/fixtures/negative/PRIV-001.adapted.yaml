@@ -1,0 +1,19 @@
+rule: PRIV-001
+bases:
+- pii
+description: an adapted PIA for a system that is no third-party website
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.determination
+  value: adapted
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: form
+  value: DD-2930A
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - an adapted PIA (DD Form 2930A) is for a third-party website or application that may make PII available,
+    not pii-in-electronic-form

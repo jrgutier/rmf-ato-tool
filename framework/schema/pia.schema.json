@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:pia",
+  "title": "runs/<run-id>/artifacts/data/pia.yaml",
+  "description": "The privacy impact assessment (P-14, ART-PIA) on DD Form 2930 or 2930A, its coordination, reviews, approval, submission and publication (DoDI 5400.16). PRIV-002 to PRIV-004 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "form",
+    "assessment",
+    "coordination",
+    "reviews",
+    "approval",
+    "sources"
+  ],
+  "properties": {
+    "form": {
+      "title": "Form the PIA is prepared on",
+      "enum": [
+        "DD-2930",
+        "DD-2930A"
+      ]
+    },
+    "assessment": {
+      "title": "What the PIA determines, examines and evaluates",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conformance",
+        "need",
+        "risks",
+        "effects",
+        "protections",
+        "alternatives"
+      ],
+      "properties": {
+        "conformance": {
+          "title": "How PII handling conforms to legal, regulatory and policy requirements on privacy",
+          "type": "string",
+          "minLength": 1
+        },
+        "need": {
+          "title": "The need for collecting, maintaining, using and disseminating PII in electronic form",
+          "type": "string",
+          "minLength": 1
+        },
+        "risks": {
+          "title": "The privacy risks of collecting, maintaining, using and disseminating PII",
+          "type": "string",
+          "minLength": 1
+        },
+        "effects": {
+          "title": "The effects of collecting, maintaining, using and disseminating PII",
+          "type": "string",
+          "minLength": 1
+        },
+        "protections": {
+          "title": "Protections examined and evaluated to mitigate privacy risks",
+          "type": "string",
+          "minLength": 1
+        },
+        "alternatives": {
+          "title": "Alternative processes examined and evaluated to mitigate privacy risks",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "coordination": {
+      "title": "Coordination of the PIA by the PM through the ISSM, the privacy representative and the records management office",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "party",
+          "date",
+          "sources"
+        ],
+        "properties": {
+          "party": {
+            "title": "Party the PIA is coordinated through",
+            "enum": [
+              "issm",
+              "privacy-representative",
+              "records-management"
+            ]
+          },
+          "by": {
+            "$ref": "#/$defs/persona_id"
+          },
+          "office": {
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "reviews": {
+      "title": "Reviews of the completed PIA",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "by",
+          "confirms",
+          "date",
+          "sources"
+        ],
+        "properties": {
+          "by": {
+            "$ref": "#/$defs/persona_id",
+            "title": "Official who reviewed the completed PIA"
+          },
+          "designee_of": {
+            "$ref": "#/$defs/persona_id",
+            "title": "Official whose designee made the review (the senior information security officer or designee)"
+          },
+          "confirms": {
+            "title": "What the review confirms compliance with",
+            "enum": [
+              "cybersecurity-policy",
+              "privacy-policy"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "approval": {
+      "title": "Final review and approval of the PIA",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "role",
+        "date",
+        "sources"
+      ],
+      "properties": {
+        "by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "PIA final review and approval official"
+        },
+        "role": {
+          "title": "The approver serves as the Component CIO or the reviewing official",
+          "enum": [
+            "cio",
+            "reviewing-official"
+          ]
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "submission": {
+      "title": "Electronic copy of the approved PIA sent to the DoD CIO",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "to",
+        "date",
+        "sources"
+      ],
+      "properties": {
+        "to": {
+          "title": "Where the approved PIA is submitted",
+          "const": "DoD CIO"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "publication": {
+      "title": "Publication of section 1 in the Component repository, kept while PII remains",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "repository",
+        "sources"
+      ],
+      "properties": {
+        "status": {
+          "title": "What of the PIA is made public",
+          "enum": [
+            "section-1-published",
+            "restricted"
+          ]
+        },
+        "repository": {
+          "title": "Component central repository of PIAs on its public website",
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "title": "Security concern or classified or sensitive information that restricts publication",
+          "type": "string",
+          "minLength": 1
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "updates": {
+      "title": "Reviews and updates of the PIA after approval",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "trigger",
+          "sources"
+        ],
+        "properties": {
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "trigger": {
+            "title": "What required the review",
+            "enum": [
+              "change",
+              "authorization",
+              "posture"
+            ]
+          },
+          "change": {
+            "type": "string",
+            "pattern": "^CHG-\\d{3}$"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    }
+  }
+}

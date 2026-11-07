@@ -3,9 +3,10 @@ artifacts/data/requirements.yaml (ART-REQ) once its task is in the run's scope, 
 about a file that is unreadable (RUN-FM-001 reports it).
 
 The design policy statements are the DoDI 8500.01 and DoDI 5000.82 statements on system design
-that no control of the baseline carries (triage, WI-209). Each key names one sentence of the
-source; a conditional one may be marked not applicable with a reason, an unconditional one
-binds every system those instructions cover."""
+that no control of the baseline carries (triage, WI-209), and the DoWI 8430.01 policy, tenet and
+common security and resilience requirements for covered software (WI-99). Each key names one
+sentence of the source; a conditional one may be marked not applicable with a reason, an
+unconditional one binds every system those instructions cover."""
 
 from __future__ import annotations
 
@@ -13,11 +14,13 @@ from typing import Any
 
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
+from rmf_tool.check.rules.software import has_covered_software
 from rmf_tool.run import scope
 
 REQUIREMENTS_FILE = "artifacts/data/requirements.yaml"
 BOUNDARY_FILE = "artifacts/data/boundary.yaml"
 DEFINE, ALLOCATE = "P-15", "P-17"
+SOFTWARE_DP = "DP-SW-"  # DoWI 8430.01: conditional on covered software, and only on that
 # key: (register entry and gist, conditional). Conditional statements hold only where their own
 # words say: "whenever possible", "used in support of", "where required by DISA STIGs", "as
 # appropriate", "to the extent practical", or where the system has what they speak of
@@ -59,6 +62,26 @@ DESIGN_POLICY: dict[str, tuple[str, bool]] = {
                                 False),
     "DP-DATA-PROTECTION": ("REQ-DODI5000.82-0169: industry practice for authentication, "
                            "access, encryption, monitoring and data protection", True),
+    # DoWI 8430.01 binds DoW software development and deployment efforts and covered software,
+    # so each holds where the system includes software the DoW develops or deploys.
+    "DP-SW-PRACTICES": ("REQ-DOWI8430.01-0006: modern, secure, human-centric practices such "
+                        "as Agile and DevSecOps", True),
+    "DP-SW-TRACEABLE": ("REQ-DOWI8430.01-0007: measurable, testable requirements traceable to "
+                        "mission critical functions, with cybersecurity, cyber resilience and "
+                        "zero trust suitability", True),
+    "DP-SW-SECURITY-QUALITY": ("REQ-DOWI8430.01-0090: security and quality integrated into "
+                               "every step of the lifecycle", True),
+    "DP-SW-COMMON-REQUIREMENTS": ("REQ-DOWI8430.01-0175: covered software developed, tested "
+                                  "and validated against a common set of verifiable security "
+                                  "and resilience requirements", True),
+    "DP-SW-SECURE-ARCH": ("REQ-DOWI8430.01-0176: secure architecture and design: least "
+                          "privilege, defense-in-depth, modularization", True),
+    "DP-SW-INPUT-VALIDATION": ("REQ-DOWI8430.01-0178: input validation, output encoding and "
+                               "injection prevention", True),
+    "DP-SW-SAFETY": ("REQ-DOWI8430.01-0181: software safety, especially for operational "
+                     "technology and mission-critical systems", True),
+    "DP-SW-RESILIENCE": ("REQ-DOWI8430.01-0182: operational resilience: runtime protection, "
+                         "fault tolerance, rollback and recovery", True),
 }
 
 
@@ -146,11 +169,14 @@ def _allocation(ctx: Context, requirements: list[dict[str, Any]]) -> list[RunFin
 
 def design_policy(ctx: Context) -> list[RunFinding]:
     """REQS-002: every design policy statement is addressed once, an unconditional one
-    applies, and one that applies is carried by a requirement the matrix holds."""
+    applies, a DoWI 8430.01 one applies wherever the system has covered software (SWA-001's
+    reading of software.yaml and the product kind), and one that applies is carried by a
+    requirement the matrix holds."""
     data = _data(ctx, DEFINE)
     if data is None:
         return []
     held = {_key(r.get("id")) for r in _records(data, "requirements")}
+    software = has_covered_software(ctx)
     records = _records(data, "design_policy")
     addressed = {_key(r.get("statement")) for r in records}
     traces = {(_key(r.get("id")), _key(k)) for r in _records(data, "requirements")
@@ -182,6 +208,9 @@ def design_policy(ctx: Context) -> list[RunFinding]:
         if record.get("applies") is not True and not DESIGN_POLICY[key][1]:
             out.append(_finding("REQS-002", f"{key} binds every system, so it cannot be "
                                 "marked not applicable"))
+        elif record.get("applies") is not True and software and key.startswith(SOFTWARE_DP):
+            out.append(_finding("REQS-002", f"{key} binds a system with covered software, so it "
+                                "cannot be marked not applicable"))
         elif record.get("applies") is not True and not record.get("reason"):
             out.append(_finding("REQS-002", f"{key} is marked not applicable without saying why "
                                 "its condition does not hold"))

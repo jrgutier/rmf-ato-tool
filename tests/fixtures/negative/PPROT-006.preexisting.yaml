@@ -1,0 +1,40 @@
+rule: PPROT-006
+bases:
+- minimal
+description: a pre-existing component checked with the AO only
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: architecture_coordination
+  value:
+  - date: '2025-10-01'
+    with:
+    - NSA
+    - PER-AO
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: compliance_reports
+  value:
+  - date: '2026-03-20'
+    to:
+    - NSA
+    - PER-AO
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: preexisting_components
+  value:
+  - component: Legacy ground modem
+    verified_with:
+    - PER-AO
+    verified: '2026-01-01'
+    included: '2026-02-01'
+expect:
+  errors:
+  - PPROT-006
+  messages:
+  - a pre-existing component or service is verified with the cognizant AO and NSA before it is 
+    committed to the architecture

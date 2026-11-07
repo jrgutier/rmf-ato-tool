@@ -9,7 +9,8 @@ team:
   role: Lead assessor
   independent: true
   qualification:
-    basis: Current DoD 8140 assessor qualification and two prior RMF assessments.
+    basis: Current DoD 8140 assessor qualification and two prior RMF 
+      assessments.
     verified_by: PER-CISO
     verified: '2026-10-29'
 schedule:
@@ -19,11 +20,17 @@ schedule:
   - date: '2026-11-02'
     description: Kickoff
     kind: kickoff
-rules_of_engagement: Testing uses the developmental test environment only; no production data.
+  - date: '2026-11-09'
+    description: Penetration test of the relay appliance
+    kind: penetration-test
+rules_of_engagement: Testing uses the developmental test environment only; no 
+  production data.
 sources:
 - INT-008.A1
-objectives: Determine whether the controls of the tailored baseline are implemented correctly and produce the desired outcome.
-level_of_effort: Two assessors for two weeks on the developmental test environment.
+objectives: Determine whether the controls of the tailored baseline are 
+  implemented correctly and produce the desired outcome.
+level_of_effort: Two assessors for two weeks on the developmental test 
+  environment.
 approval:
   reviewed_by: PER-SCA
   approved_by: PER-AO
@@ -31,7 +38,8 @@ approval:
 assessor_independence:
   required: independent
   determined_by: PER-AO
-  rationale: A moderate-impact system needs assessors outside the program office.
+  rationale: A moderate-impact system needs assessors outside the program 
+    office.
 preparation:
   informed_by: PER-PM
   officials_notified:
@@ -44,7 +52,8 @@ preparation:
   resources:
     allocated_by: PER-PM
     allocated: '2026-10-29'
-    description: Two assessors and the developmental test environment for the schedule.
+    description: Two assessors and the developmental test environment for the 
+      schedule.
   access:
   - to: system
     provided_by: PER-PM
@@ -68,7 +77,8 @@ preparation:
   - ART-SSP
   - ART-STIG
   elements:
-  - responsible_for: Develops and updates the system security plan and its procedures.
+  - responsible_for: Develops and updates the system security plan and its 
+      procedures.
     persona: PER-ISSM
   channels:
   - among:
@@ -84,7 +94,8 @@ preparation:
     - PER-ISSM
     means: A daily review of draft observations before they become findings.
   understanding:
-    summary: The relay supports the mission thread named in the organizational context.
+    summary: The relay supports the mission thread named in the organizational 
+      context.
     sources:
     - ART-ORG-CONTEXT
 procedures:
@@ -104,7 +115,8 @@ procedures:
   - mechanisms
   - activities
   - individuals
-  rationale: The controls in the risk assessment need all three methods to reach the objectives.
+  rationale: The controls in the risk assessment need all three methods to reach
+    the objectives.
   depth: focused
   coverage: focused
   risk_results: &id001
@@ -131,7 +143,8 @@ procedures:
 optimization:
   reviewed_by: PER-SCA
   tailoring_guidance: The organization provides none beyond SP 800-53A.
-  notes: Interviews are consolidated by persona; configuration runs last so scans inform it.
+  notes: Interviews are consolidated by persona; configuration runs last so 
+    scans inform it.
 reuse_policy:
   max_age_days: 365
   source: ART-ORG-CONTEXT
@@ -182,7 +195,8 @@ external_providers:
     by: PER-SCA
     date: '2026-10-29'
     assurances: The agreement commits the provider to its ATO controls.
-  procedure_adjustment: Inherited sign-in controls are assessed from the provider ATO package and an interview.
+  procedure_adjustment: Inherited sign-in controls are assessed from the 
+    provider ATO package and an interview.
   provider_assessment:
     scope: A full assessment for the provider ATO.
     independence: independent
@@ -192,3 +206,32 @@ external_providers:
     other_assessments: None in progress.
   sources:
   - INT-008.A1
+penetration_test:
+  scope:
+    environment:
+    - The developmental test enclave and its operators
+    attack_surface:
+    - Relay service API
+    - operator console
+    - management VLAN
+    threat_sources:
+    - External targeted attacker
+    - malicious insider operator
+    objectives:
+    - Gain administrator access on the relay appliance and alter stored reports
+    level_of_effort: Two testers for three days, sized to the cost and time 
+      available.
+    rules_of_engagement: No denial of service; test environment only; stop on 
+      any production data.
+  components:
+  - CMP-RELAY
+  - CMP-CONSOLE
+  assessor:
+    party: third-party
+    qualified: true
+    name: Example Red Team
+  guidance: NIST SP 800-115
+  environments:
+  - development
+  - operational
+  option: cora

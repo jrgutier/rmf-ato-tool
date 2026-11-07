@@ -1,0 +1,14 @@
+rule: SWA-001
+bases:
+- minimal
+description: an SBOM without the third-party components
+mutations:
+- op: set_field
+  file: artifacts/data/software.yaml
+  path: evidence.sbom.third_party_included
+  value: false
+expect:
+  errors:
+  - SWA-001
+  messages:
+  - the SBOM leaves out third-party components

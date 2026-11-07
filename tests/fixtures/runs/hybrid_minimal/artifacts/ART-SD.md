@@ -22,12 +22,19 @@ analysis enclave [[INT-003.A1]] [[product/architecture.md#overview]].
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none | C-2 |
 | Categorization approved | yes (PER-AO) | C-3 |
 | Control baseline | CNSSI1253-M-M-L-SUBSET-6 | S-1 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Example Program Office | C-1 |
+| System version | 1.0 (released 2026-09-01) | C-1 |
+| Operational environment | test | C-1 |
+| Life-cycle phase | PH-EMD | C-1 |
 <!-- END rmf:facts -->
 
 ## Users
 
 Operators monitor relay health; administrators manage the appliance [[product/users.md]].
 
-## Leveraged authorizations
+## Interconnections and leveraged authorizations
 
-Sign-in relies on the separately authorized enterprise identity provider [[INT-003.A1]].
+The relay has no interconnection with another system; sign-in relies on the separately
+authorized enterprise identity provider [[INT-003.A1]].

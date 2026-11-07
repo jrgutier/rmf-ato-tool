@@ -37,6 +37,7 @@ approval:
   approved_by: PER-AODR
   date: '2026-10-29'
   sources: [INT-031.A1]
+minimum_review: {by: PER-PM, sufficient: true, date: '2026-06-01'}
 organizational_frequencies:
   families: [au, ia]
   sources: [INT-018.A1]
@@ -101,3 +102,32 @@ risk_assessment:
   updates: Threats, vulnerabilities and risk ratings in ART-RA.
   communicated_to: [PER-AO, PER-ISSM]
 sources: [INT-030.A1, INT-018.A1]
+detection_coverage:
+  - {asset_class: networks, means: CSSP network sensors on the enclave boundary}
+  - {asset_class: physical-environment, means: Badge and camera logs of the server room}
+  - {asset_class: personnel-activity, means: SIEM alerts on anomalous logons}
+  - {asset_class: external-providers, means: Identity provider audit feed}
+  - {asset_class: computing, means: Endpoint agent on the appliance and console}
+tuning: The CSSP reviews alert thresholds monthly against false positives and missed detections.
+vulnerability_management:
+  process: [identification, analysis, analysis-reporting, remediation-mitigation, verification-monitoring]
+  supported_by: {configuration: ART-CMP, asset: ART-INV, remediation: ART-POAM, mitigation: ART-POAM}
+  identification:
+    scanning_reference: SP800-115
+    identified_from: [cve, vendor-bulletins, scans, vdp, directed-actions, incident-history, risk-assessment]
+    cross_reference: [cve, risk-assessment, vendor-bulletins]
+    manual:
+    - {activity: Review of the appliance firmware against vendor bulletins, reason: No scanner reads the appliance firmware.}
+  tools:
+  - {tool: TOOL-01, phases: [development, operational-test, operations-sustainment, retirement]}
+  scans:
+  - {kind: authenticated, frequency: monthly}
+  - {kind: non-authenticated, frequency: monthly}
+  patching:
+    patch_sources:
+    - {covers: Operating system and relay service packages, source: dod-enterprise}
+    - {covers: Appliance firmware outside enterprise patching, source: vendor}
+    coverage_scan: {tool: TOOL-01, frequency: monthly}
+    noncompliant_devices: Network access control quarantines a device missing patches until the ISSO brings it to the baseline.
+  log_repository: The enclave SIEM keeps scan results and logs.
+  sources: [INT-030.A1]

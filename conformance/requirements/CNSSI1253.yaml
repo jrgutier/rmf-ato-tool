@@ -391,8 +391,11 @@ requirements:
     locator: "3.1.1.2"
     context: "Determine Impact Levels for Information Types To determine impact levels for information types, the following activities are completed:"
     statement: "2. Determine each information type’s provisional security impact level, and adjust the information types’ provisional security impact levels (see FIPS 199, NIST SP 800-60, Volume I, Section 4, and NIST SP 800-60, Volume II22). If the system processes PII, the provisional security impact levels may need to be adjusted to address PII impact levels.23 If the information type is not identified in NIST SP 800-60 Volume II, document the information type consistent with the guidance in NIST SP 800-60, Volume I."
-    status: "candidate"
+    status: "partial"
+    reason: "Provisional levels and per-type adjustments are recorded and the system never falls below their high-water mark; sentence 2 is a permission awaiting the user's ruling, and documenting a type outside SP 800-60 Volume II is prose."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.below.yaml", "expect": "below the high-water mark", "asserts": "The system's impact levels follow the information types' provisional and adjusted security impact levels, judged against the high-water mark", "claim": "constraint", "sentence": "Determine each information type’s provisional security impact level, and adjust the information types’ provisional security impact levels (see FIPS 199, NIST SP 800-60, Volume I, Section 4, and NIST SP 800-60, Volume II22)."}, {"kind": "prose", "target": "playbooks/P/P-12.md", "asserts": "An information type not identified in SP 800-60 Volume II is documented with an empty sp800_60_ids and its selection basis", "claim": "presence", "sentence": "If the information type is not identified in NIST SP 800-60 Volume II, document the information type consistent with the guidance in NIST SP 800-60, Volume I."}]
     work_item: "WI-173"
+    ruling_sought: [{"sentence": "If the system processes PII, the provisional security impact levels may need to be adjusted to address PII impact levels.23", "reason": "A permission: the levels may need adjusting for PII; whether they do is judgment, so no run can fail it."}]
   - id: "REQ-CNSSI1253-0050"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "Once the potential security impact level for each information type on the"}
     kind: "modal"
@@ -596,7 +599,9 @@ requirements:
     locator: "3.2.2.f.6"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "6. Document in the security and privacy plans the relevant decisions made during the tailoring process, providing a sound risk-based rationale for those decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "The tailoring rationale is required in tailoring.yaml (TLR-002), held under ART-BASELINE beside the plan rather than in ART-SSP; nothing makes the plan carry it."
+    evidence: [{"kind": "rule", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.yaml", "expect": "is removed with no basis", "claim": "presence", "asserts": "Tailoring decisions carry a risk-based rationale, and a removed control with no basis fails"}]
     work_item: "WI-141"
   - id: "REQ-CNSSI1253-0076"
     citation: {"ref": "CNSSI1253", "page": 16, "anchor": "Document and justify in the security and privacy plans any controls from"}
@@ -604,7 +609,9 @@ requirements:
     locator: "3.2.2.f.7"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "7. Document and justify in the security and privacy plans any controls from the selected NSS baseline that cannot or will not be implemented in the system and for which no compensating control(s) will be substituted. This information, and the associated risks, must also be included in the corresponding plan of action and milestones."
-    status: "candidate"
+    status: "partial"
+    reason: "A removed control needs its basis in tailoring.yaml (TLR-002) and SSP-COV-001 asks a statement for each baseline control; nothing ties a control that will not be implemented to a POA&M item."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-2.md", "asserts": "S-2 justifies each control of the selected NSS baseline that will not be implemented, in tailoring.yaml", "claim": "presence", "sentence": "Document and justify in the security and privacy plans any controls from the selected NSS baseline that cannot or will not be implemented in the system and for which no compensating control(s) will be substituted."}]
     work_item: "WI-141"
   - id: "REQ-CNSSI1253-0077"
     citation: {"ref": "CNSSI1253", "page": 16, "anchor": "The security and privacy plans, including all tailoring decisions, must be approved"}

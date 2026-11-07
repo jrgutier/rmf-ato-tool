@@ -1,0 +1,18 @@
+rule: PRIV-003
+bases:
+- pii
+description: a PIA approved after the ATO that took it
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: approval.date
+  value: '2026-11-25'
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: submission.date
+  value: '2026-11-26'
+expect:
+  errors:
+  - PRIV-003
+  messages:
+  - the PIA approved on 2026-11-25 was not in the package for the authorization decision AUTH-002 of 2026-11-20

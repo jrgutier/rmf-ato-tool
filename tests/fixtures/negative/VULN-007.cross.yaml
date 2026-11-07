@@ -1,0 +1,15 @@
+rule: VULN-007
+bases:
+- minimal
+description: incident history cross-referenced only with CVE
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.identification.cross_reference
+  value:
+  - cve
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - previous incident reports and logs are not cross-referenced with risk assessment data

@@ -1,0 +1,26 @@
+rule: CATG-002
+bases:
+- minimal
+description: CUI at low confidentiality
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.c
+  value: low
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.confidentiality
+  value:
+    base: low
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.1.confidentiality
+  value:
+    base: low
+expect:
+  errors:
+  - CATG-002
+  also:
+  - GEN-STALE-001
+  messages:
+  - the system processes controlled unclassified information (INF-01, INF-02) and its confidentiality is low, below moderate

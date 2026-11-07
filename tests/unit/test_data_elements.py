@@ -23,7 +23,10 @@ FILE_SCHEMAS = {"artifacts/data/rar.yaml": "rar", "artifacts/data/ra.yaml": "ra"
                 "artifacts/data/boundary.yaml": "boundary", "artifacts/data/sap.yaml": "sap",
                 "artifacts/data/infotypes.yaml": "infotypes",
                 "artifacts/sar/results/*.yaml": "sar-results",
-                "artifacts/data/sar-report.yaml": "sar-report"}
+                "artifacts/data/sar-report.yaml": "sar-report",
+                "artifacts/data/system-description.yaml": "system-description",
+                "artifacts/data/users.yaml": "users", "artifacts/data/inventory.yaml": "inventory",
+                "artifacts/data/sar-summary.yaml": "sar-summary"}
 
 
 def _load(name):

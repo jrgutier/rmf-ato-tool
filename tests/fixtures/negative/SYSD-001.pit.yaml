@@ -1,0 +1,22 @@
+rule: SYSD-001
+bases:
+- minimal
+description: a PIT system nobody designated
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: system_type.value
+  value: pit-system
+- op: set_field
+  file: facts.yaml
+  path: system_type.registered_in
+  value: Component PIT register
+- op: set_field
+  file: facts.yaml
+  path: system_type.pit_ao_appointed
+  value: true
+expect:
+  errors:
+  - SYSD-001
+  messages:
+  - the PIT system is not designated by the responsible OSD or DoD Component head or a delegate

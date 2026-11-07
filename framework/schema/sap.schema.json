@@ -177,6 +177,7 @@
                   "scan",
                   "interview",
                   "out-brief",
+                  "penetration-test",
                   "other"
                 ]
               }
@@ -1033,6 +1034,185 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "penetration_test": {
+      "title": "The penetration test the plan schedules: its scope at the minimum SP 800-53A Appendix D lists, the assessor, the guidance and, on a cATO path, the environments and the kind of assessment",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "assessor",
+        "guidance",
+        "components"
+      ],
+      "properties": {
+        "scope": {
+          "title": "The clearly defined scope of the test",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "environment",
+            "attack_surface",
+            "threat_sources",
+            "objectives",
+            "level_of_effort",
+            "rules_of_engagement"
+          ],
+          "properties": {
+            "environment": {
+              "title": "Definition of the environment subject to testing: facilities, users, organizational groups",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "x-enforces": [
+                "REQ-SP800-53AR5-0279"
+              ]
+            },
+            "attack_surface": {
+              "title": "Definition of the attack surface to be tested",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "x-enforces": [
+                "REQ-SP800-53AR5-0280"
+              ]
+            },
+            "threat_sources": {
+              "title": "Definition of the threat sources to simulate, as attacker profiles",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "x-enforces": [
+                "REQ-SP800-53AR5-0277",
+                "REQ-SP800-53AR5-0281"
+              ]
+            },
+            "objectives": {
+              "title": "Definition of the objectives for the simulated attacker",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "x-enforces": [
+                "REQ-SP800-53AR5-0282"
+              ]
+            },
+            "level_of_effort": {
+              "title": "Definition of the level of effort, time and resources, to be expended, considering cost and time available",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-DODI8531.01-0126",
+                "REQ-SP800-53AR5-0283"
+              ]
+            },
+            "rules_of_engagement": {
+              "title": "Definition of the rules of engagement",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-53AR5-0274",
+                "REQ-SP800-53AR5-0284"
+              ]
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-53AR5-0278"
+          ]
+        },
+        "components": {
+          "title": "The components subject to penetration testing",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^CMP-[A-Z0-9-]+$"
+          },
+          "x-enforces": [
+            "REQ-SP800-53AR5-0273"
+          ]
+        },
+        "assessor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "party",
+            "qualified"
+          ],
+          "properties": {
+            "party": {
+              "title": "Who performs the test",
+              "enum": [
+                "third-party",
+                "internal"
+              ]
+            },
+            "qualified": {
+              "title": "Whether the assessor is qualified",
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "guidance": {
+          "title": "The guidelines the test uses as reference",
+          "enum": [
+            "NIST SP 800-115",
+            "other"
+          ]
+        },
+        "environments": {
+          "title": "Environments tested",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "development",
+              "operational",
+              "test"
+            ]
+          }
+        },
+        "option": {
+          "title": "Kind of assessment on a cATO path: a Cyber Operations Rapid Assessment, a red or blue team assessment, or another type under an exception to policy",
+          "enum": [
+            "cora",
+            "red-blue-team",
+            "other"
+          ]
+        },
+        "exception_to_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "approved",
+            "reference"
+          ],
+          "properties": {
+            "approved": {
+              "type": "boolean"
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1
             }
           }
         }

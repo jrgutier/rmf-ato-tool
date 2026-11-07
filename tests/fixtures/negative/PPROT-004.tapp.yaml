@@ -1,0 +1,23 @@
+rule: PPROT-004
+bases:
+- minimal
+description: a TAPP read at P-14 that P-15 does not name
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: inputs.tapps
+  value:
+  - id: TAPP-ME
+    area: microelectronics
+    title: Microelectronics TAPP
+    date: '2026-02-01'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.informed_by
+  value:
+  - TAPP-ME
+expect:
+  errors:
+  - PPROT-004
+  messages:
+  - protection-requirements.yaml does not name TAPP-ME, a TAPP the run read

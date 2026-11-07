@@ -20,7 +20,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Privacy
 
-<<FILL: which information types contain PII and about whom, or a sentence saying none and what was checked, with tokens>>
+<<FILL: which information types contain PII and about whom (pii.subjects), whether any holds PHI or SSNs, or a sentence saying none and what was checked; for a system with PII, the issuances its handling complies with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), its SORN, the SSN justification, the records office and schedule, and the PIA determination with its DoDI 5400.16 basis and due date (infotypes.yaml privacy; PRIV-001), with tokens>>
 
 ## Information owners
 

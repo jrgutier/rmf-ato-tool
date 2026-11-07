@@ -101,13 +101,14 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[Developer](../../personas/PER-DEV.md) Developer / Integrator<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[LSE](../../personas/PER-LSE.md) Lead Systems Engineer |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs | outside input (reference) |
+| [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
@@ -157,6 +158,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 | Responsible | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[Developer](../../personas/PER-DEV.md) Developer / Integrator |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[LSE](../../personas/PER-LSE.md) Lead Systems Engineer |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -186,6 +188,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 - Changes to the planned implementation of controls are documented, and the security and privacy plans are updated from what was learned during implementation (DoDI 8510.01 Table 4 outcome).
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
 - A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
+- plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010).
 
 **Alignment**
 
@@ -217,6 +220,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -268,6 +272,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Responsible | [SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[CDT](../../personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](../../personas/PER-OTA.md) Operational Test Agency Representative |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -279,6 +284,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
+| [EXT-TEST-STRATEGY](../../MANUAL.md#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
 
 **Outputs**
 
@@ -298,6 +304,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
 - Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (ASMT-001).
 - Each scoped control has procedures selected and tailored from the risk results (ASMT-002); each reused result meets the reuse criteria (ASMT-003); each external provider is reviewed before its controls or results are leveraged (ASMT-004).
+- test-strategy.yaml records the TEMP or test strategy the pathway calls for, who approved each part of it, its schedule against decision points, its cybersecurity test objectives and the cybersecurity test events, including independent threat-representative penetration and exploitation testing (TSTRAT-001, TSTRAT-002).
 - The assessment plan reads each requirement's verification method and measure from requirements.yaml.
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
@@ -336,6 +343,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[CDT](../../personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](../../personas/PER-OTA.md) Operational Test Agency Representative<br>[Developer](../../personas/PER-DEV.md) Developer / Integrator |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -346,6 +354,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
 | [EXT-TEST-RESULTS](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [EXT-SOFTWARE-EVIDENCE](../../MANUAL.md#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
 
 **Outputs**
 
@@ -360,8 +369,10 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- A determination of an inherited control rests on the common control provider's assessment and the assessor's check that the system inherits it (sar-results inherited; OCTX-006), and the SAR is not delivered before those results are available.
 - Control assessments are conducted per the plan, supported by developer, engineering, developmental and operational test events, with reuse of earlier results and automation considered (DoDI 8510.01 Table 5 outcome).
 - sar/results holds a determination for every scoped control (SAR-COV-001), with a finding for each determination statement (ASMT-005), and stig-summary.yaml holds the scan results.
+- Test results reused as assessment evidence come from a test event in test-strategy.yaml run on a production-representative system in an operationally representative environment, with its configuration and conditions recorded (TSTRAT-003).
 
 **Alignment**
 
@@ -397,6 +408,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -450,6 +462,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[Developer](../../personas/PER-DEV.md) Developer / Integrator |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -476,6 +489,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Remediation actions are taken and the security and privacy plans are updated to reflect the resulting control implementation changes (DoDI 8510.01 Table 5 outcome).
 - Remediated findings are reassessed and closed in sar/results; the security plan reflects the changes.
 - Every finding is triaged from the risk assessment; only substantive findings go on to the POA&M (ASMT-006).
+- plan-reviews.yaml changes logs the A-5 update of the plans after the assessments and remediation, covering the privacy plan for a system processing PII (PRIV-010).
 
 **Alignment**
 
@@ -506,6 +520,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -563,6 +578,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -572,6 +588,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
+| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [ART-PIA](../../MANUAL.md#art-pia) | Privacy impact assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -589,6 +607,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - An authorization package is developed for submission to the AO (DoDI 8510.01 Table 6 outcome).
 - package/manifest.yaml generated by rmf package lists every core artifact (PKG-001), and each core document carries the Annex C data elements mapped to it (PKG-003).
 - ART-DIAS states the assurance levels chosen with the ia family at S-4 (DIAS-001).
+- For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
+- The package carries the PPP approval recorded in protection.yaml, and that approval was made by the authority the program's ACAT, decision authority and pathway call for (PPROT-001).
 
 **Alignment**
 
@@ -624,6 +644,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -683,6 +704,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Responsible | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -691,6 +713,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [EXT-ADM](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
@@ -706,10 +730,12 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
+- Courses of action are selected and their responses communicated as the organization's risk response strategy in ART-ORG-CONTEXT (org-context.yaml risk_response) directs.
 - Risk responses for determined risks are provided (DoDI 8510.01 Table 6 outcome).
 - Every risk in rar.yaml has a response; mitigations are reflected in the POA&M.
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).
 - Where risks are not fully mitigated, the operators are told the potential impacts.
+- On urgent capability acquisition the MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment is read from EXT-ADM; it does not accept security risk, which only the AO does, and a mission-critical cybersecurity vulnerability is still eliminated before fielding.
 - Each supply chain risk outside tolerance has an R-3 response in scrm.yaml with two or more alternatives and their acceptable level, and a decision among them taken at the level its reach calls for (SCRM-013).
 
 **Alignment**
@@ -742,6 +768,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Informed | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority<br>[UR](../../personas/PER-UR.md) User Representative |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 
@@ -750,6 +777,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
+| [EXT-ADM](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
 
 **Outputs**
 
@@ -809,6 +837,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
 | Informed | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority |
+| Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
 

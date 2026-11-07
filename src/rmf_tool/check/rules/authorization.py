@@ -439,11 +439,15 @@ def risk_executive(ctx: Context) -> list[RunFinding]:
         if given and found.get("input_relevant", True) and found.get("input") != given:
             err(r, "the risk executive (function) input from R-2 is not documented in the "
                 "authorization decision")
-        coordinated = (r.get("privacy_coordination") or {}).get("by")
+        privacy = r.get("privacy_coordination") or {}
+        coordinated, reviewed = privacy.get("by"), _day(privacy.get("date"))
         if ctx.processes_pii and kind.get("effect") == "authorize" \
                 and coordinated != "PER-PRIV":
             err(r, "a system processing PII coordinates the authorization decision with the "
                 f"privacy official, not {coordinated}")
+        elif ctx.processes_pii and date is not None and reviewed is not None and reviewed > date:
+            err(r, f"the privacy official reviewed the authorization package on {reviewed}, "
+                f"after the authorization decision of {date}")
     return out
 
 

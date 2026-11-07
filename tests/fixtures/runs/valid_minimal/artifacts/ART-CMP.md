@@ -4,6 +4,7 @@ run_id: valid-minimal
 produced_by_task: S-4
 touched_by: [S-4, I-2]
 sources: [INT-007.A1, INT-033.A1]
+handling: CUI
 ---
 # Configuration management plan
 

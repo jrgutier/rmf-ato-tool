@@ -489,7 +489,49 @@ with the next ID; never edit or delete an existing entry.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
 
-## L-0070 · 2026-11-07 · run: phase-11 · tags: framework, runs
+## L-0070 · 2026-11-07 · run: phase-11 · tags: facts, contract
+- Symptom: the six system facts C-1 now records (classification, IT type, owning organization, version, operational environment, life-cycle phase) could not go into `writes_facts` without FACTS-001 and `rmf status` refusing the example run, which is at contract 0.1.0; making `roles` required in users.schema.json likewise broke a valid older users record.
+- Root cause: `writes_facts` and a schema's `required` hold every run whatever its contract; only rules carried `since`.
+- Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
+- Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
+- Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: rules, should
+- Symptom: a first cut of PPROT-002 and PPROT-004 refused every contract award with no PPP update and every RFP without PPP countermeasures, though DoDI 5000.83 5.3.c.(2)(b) says lead systems engineers *should* do both; the register showed the items as plain lettered entries.
+- Root cause: the extractor cuts a lead-in from its items, so an item under a should lead-in reads like a will, and the modal sits in the lead-in's context, not in the item.
+- Fix: those clauses accept a recorded reason for not updating or a deviation on the RFP, and tests/unit/test_protection.py holds each permitted case.
+- Rule: Before writing a clause from a lettered item, read its lead-in; a clause from a should accepts a recorded reason, a clause from a will or must does not.
+- Promotion: none — the permitted-case tests hold it for these rules, and a register-wide check would need the lead-in's modal on each item, which the extractor does not record.
+
+## L-0073 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
+- Symptom: valid_minimal failed TRACE-002 with "malformed trace token 'cve'" once conmon.yaml held `vulnerability_management.identification.sources: [cve, vendor-bulletins]` and `patching.sources`.
+- Root cause: TRACE-002 reads every key named `sources` anywhere in run data as a list of trace tokens, so a schema that names a list of origin kinds `sources` makes every run that fills it fail.
+- Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.
+- Rule: In a run-data schema, `sources` means trace tokens and nothing else; name any other list of origins for what it holds.
+- Promotion: check: tests/unit/test_framework_schema.py::test_sources_properties_hold_trace_tokens
+
+## L-0074 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: FW-REQ-003 denied every SWA-001 rule item: "'the SBOM leaves out third-party components' is not literal in a failing message in the rule's source", though the rule reported exactly that message and the negative fixture declared it.
+- Root cause: the messages lived in a dict of duty to message and the rule appended `err(message)` in a loop; the judge finds a clause by the string constant inside the failing call, and a variable holds none.
+- Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.
+- Rule: Write each failing message of a rule inline in the call that reports it, so the clause that leads to it can be found and judged.
+- Promotion: none — FW-REQ-003 already refuses such an item as denied, so the mistake cannot reach the register.
+
+## L-0075 · 2026-11-07 · run: phase-11 · tags: fixtures, privacy
+- Symptom: the privacy rules apply only to a system processing PII, valid_minimal processes none, and the two older privacy fixtures had set `privacy: true` on minimal, so every new privacy rule fired in them too and each fixture had to restate the whole privacy record to fail on one clause.
+- Root cause: a fixture base fixes the system's conditions; a rule gated on a condition no base meets has no clean base to mutate, and copying a run to make one would drift from the run it copies.
+- Fix: tests/unit/test_check_rules.py derives a base `pii` from valid_minimal by the mutations in tests/fixtures/runs/pii.yaml; test_base_has_no_findings holds it clean, and the PRIV fixtures, AODM-010.privacy and RAR-002.privacy mutate it.
+- Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
+- Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.
+
+## L-0076 · 2026-11-07 · run: phase-11 · tags: framework, runs
 - Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
 - Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
 - Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.

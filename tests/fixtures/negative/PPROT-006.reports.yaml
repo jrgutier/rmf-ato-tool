@@ -1,0 +1,37 @@
+rule: PPROT-006
+bases:
+- minimal
+description: space NSS compliance reported to the AO only
+mutations:
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: space_nss
+  value: true
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: architecture_coordination
+  value:
+  - date: '2025-10-01'
+    with:
+    - NSA
+    - PER-AO
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: compliance_reports
+  value:
+  - date: '2026-03-20'
+    to:
+    - NSA
+    - PER-AO
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: compliance_reports
+  value:
+  - date: '2026-03-20'
+    to:
+    - PER-AO
+expect:
+  errors:
+  - PPROT-006
+  messages:
+  - no report of the compliance status of the space NSS reaches the cognizant AO and NSA

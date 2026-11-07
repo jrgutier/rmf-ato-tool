@@ -1,0 +1,57 @@
+rule: PPROT-002
+bases:
+- minimal
+description: AT in a fielded system not monitored
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: MS-IOC
+    date: '2026-06-01'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.submissions
+  value:
+  - decision_point: MS-A
+    date: '2026-03-10'
+  - decision_point: MS-IOC
+    date: '2026-05-20'
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: assessments
+  value:
+  - decision_point: MS-A
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-03-01'
+  - decision_point: MS-IOC
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-05-15'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.anti_tamper
+  value:
+    outside_us_control: false
+    required: true
+    guidance: []
+    coordinated_with: Army AT OPR
+    monitored: false
+expect:
+  errors:
+  - PPROT-002
+  messages:
+  - AT protections implemented in fielded systems are monitored
