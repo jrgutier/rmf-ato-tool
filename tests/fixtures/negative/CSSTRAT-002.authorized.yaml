@@ -1,0 +1,25 @@
+rule: CSSTRAT-002
+bases:
+- minimal
+description: an award said to be authorized at a milestone not passed
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: contract_awards
+  value:
+  - id: K-001
+    date: '2026-05-01'
+    no_update_reason: Award for spares only.
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: program.contract_awards
+  value:
+  - id: K-001
+    date: '2026-05-01'
+    authorized_at: MS-B
+expect:
+  errors:
+  - CSSTRAT-002
+  messages:
+  - contract award K-001 is authorized at MS-B, which is no milestone decision the program passed before
+    the award

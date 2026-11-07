@@ -49,8 +49,8 @@ RISK_SOURCES = ("design-vulnerability", "supply-chain-exploit-insertion", "battl
 # Full-rate production or full-deployment decision (DoDI 5000.83 5.3.c.(3)).
 FULL_RATE = ("MS-FRP", "DP-DBS-FULL")
 # Decision points after which the system is fielded.
-FIELDED = ("MS-IOC", "MS-FOC", "DP-UCA-PRODUCTION", "DP-DBS-LIMITED", "DP-DBS-FULL",
-           "DP-SWP-MVCR")
+FIELDED = ("MS-FIELD", "MS-IOC", "MS-FOC", "DP-UCA-PRODUCTION", "DP-UCA-DEPLOYMENT",
+           "DP-DBS-LIMITED", "DP-DBS-FULL", "DP-SWP-MVCR")
 # DoDI 5000.88 3.5.b.(1)(b): before Milestones A and B and the LRIP and FRP decisions.
 ITRA_POINTS = ("MS-A", "MS-B", "MS-C", "MS-FRP")
 SPONSOR = "PER-SPONSOR"
@@ -104,6 +104,17 @@ def _record(ctx: Context, rule: str, rel: str, task: str,
 def _pathway(ctx: Context) -> str | None:
     acquisition = facts_mod.get(ctx.facts, "acquisition")
     return acquisition.get("pathway") if isinstance(acquisition, dict) else None
+
+
+def program_pathways(ctx: Context) -> list[str]:
+    """Every pathway the program uses: facts.yaml acquisition.pathways for a program that
+    combines pathways (DoDI 5000.02 4.1.a), else the system's own pathway."""
+    acquisition = _dict(facts_mod.get(ctx.facts, "acquisition"))
+    combined = acquisition.get("pathways")
+    if isinstance(combined, list) and (named := [p for p in combined if isinstance(p, str)]):
+        return named
+    own = acquisition.get("pathway")
+    return [own] if isinstance(own, str) else []
 
 
 def decision_points(ctx: Context, pathway: str | None,
@@ -163,7 +174,9 @@ def ppp_approval(ctx: Context) -> list[RunFinding]:
             err("the Component acquisition executive or a designee approves the PPP of an urgent, "
                 f"middle tier or software program, not {authority}")
     valid = decision_points(ctx, pathway)
-    every = decision_points(ctx, pathway, ("milestone", "decision-point", "event"))
+    # A program combining pathways passes the decision points of each of them.
+    every = {p for way in program_pathways(ctx) or [pathway]
+             for p in decision_points(ctx, way, ("milestone", "decision-point", "event"))}
     passed = _passed(program)
     for point in sorted(p for p in passed if every and p not in every):
         err(f"{point} is no decision point of the {pathway} pathway")

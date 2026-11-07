@@ -267,7 +267,9 @@ requirements:
     locator: "INSTRUCTION.i.(1)"
     context: "Cybersecurity Workforce"
     statement: "(1) Cybersecurity workforce functions must be identified and managed, and personnel performing cybersecurity functions will be appropriately screened in accordance with this instruction and DoD Manual (DoDM) 5200.2 (Reference (w)), and qualified in accordance with DoDD 8140.01 (Reference (x)) and supporting issuances."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. OCTX-013 fails a cybersecurity position not designated with its suitability and fitness requirements met (screening under DoDM 5200.02); WFQ-001 fails personnel performing cybersecurity functions who are not qualified in accordance with DoDD 8140.01."
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.suitability.yaml", "expect": "the position is not designated with its suitability and fitness requirements met", "claim": "constraint", "asserts": "Personnel performing cybersecurity functions are appropriately screened: a position whose suitability and fitness requirements are not met fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}, {"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Personnel performing cybersecurity functions are qualified in accordance with DoDD 8140.01: an ISSO not meeting the qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8500.01-0035"
     citation: {"ref": "DODI8500.01", "page": 4, "anchor": "Qualified cybersecurity personnel must be identified and integrated into all phases of"}
@@ -799,7 +801,9 @@ requirements:
     locator: "ENCLOSURE 2.j"
     context: "RESPONSIBILITIES"
     statement: "j. Ensures that acquisition community personnel with IT development responsibilities are qualified in accordance with Reference (x) and DoD 8570.01-M (Reference (ay))."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. WFQ-001 treats PER-DEV as a cyberspace work role and fails a developer who is not qualified."
+    evidence: [{"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.developer.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Acquisition community personnel with IT development responsibilities are qualified: a developer not meeting the qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8500.01-0101"
     citation: {"ref": "DODI8500.01", "page": 18, "anchor": "Coordinates with the DoD Test Resource Management Center for establishment of developmental"}
@@ -1284,7 +1288,9 @@ requirements:
     locator: "ENCLOSURE 2.k.(2)"
     context: "RESPONSIBILITIES Ensure that personnel occupying cybersecurity positions are:"
     statement: "(2) Trained and qualified in accordance with References (x) and (ay)."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. WFQ-001 fails an appointee with no training recorded and one not qualified."
+    evidence: [{"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Qualified in accordance with the references: an appointee not meeting the qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8500.01-0162"
     citation: {"ref": "DODI8500.01", "page": 23, "anchor": "Assigned a position designation using the criteria found in Reference (w) and"}
@@ -1722,7 +1728,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(2)"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "(2) Cybersecurity risk management is planned for and documented in a cybersecurity strategy in accordance with References (ar) and (at), and included in the PPP for all acquisition programs. Periodic reviews of the PPP and associated systems engineering documents should evaluate the status of cybersecurity solutions as part of the larger systems development."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial. The CSS is recorded on every pathway and is an appendix to the PPP on the pathways that have one (PPROT-001), but DoDI 5000.82 3.5.b.(5) makes it stand-alone where there is no PPP (business systems, services), which this 2014 sentence ('included in the PPP for all acquisition programs') does not allow: a source conflict for the user. References (ar) and (at) are not in the library. The second sentence, periodic PPP reviews evaluating the status of cybersecurity solutions, has no record yet."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.appendix.yaml", "expect": "the cybersecurity strategy is submitted as an appendix to the PPP", "asserts": "Cybersecurity risk management is documented in a cybersecurity strategy included in the PPP as its appendix", "claim": "constraint", "sentence": "(2) Cybersecurity risk management is planned for and documented in a cybersecurity strategy in accordance with References (ar) and (at), and included in the PPP for all acquisition programs."}]
     work_item: "WI-30"
   - id: "REQ-DODI8500.01-0217"
     citation: {"ref": "DODI8500.01", "page": 28, "anchor": "Risk management must continue during operations and sustainment. This may include the"}
@@ -2669,7 +2677,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(4)"
     context: "Figure 2. DoD Information Technology"
     statement: "(4) All acquisitions of qualifying IT must have an adequate and appropriate cybersecurity strategy that will be reviewed prior to acquisition milestone decisions and acquisition contract awards in accordance with References (ar), (at), and Section 811 of Public Law 106-398 (Reference (dd)) and must plan for developmental test oversight by DASD(DT&E) and operational test oversight by DOT&E."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial. The CSS is reviewed before each acquisition milestone decision and contract award (CSSTRAT-002). Planning for DASD(DT&E) and DOT&E test oversight is recorded in test-strategy.yaml oversight as declared booleans, and no rule refuses a run that leaves the planning out; 'adequate and appropriate' has no test."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.yaml", "expect": "reviewed prior to acquisition milestone decision", "asserts": "The cybersecurity strategy is reviewed prior to acquisition milestone decisions", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.award.yaml", "expect": "reviewed prior to contract award", "asserts": "The cybersecurity strategy is reviewed prior to acquisition contract awards", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI8500.01-0332"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Each mobile code technology used in DoD information systems must undergo a"}
@@ -2891,7 +2901,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. All cybersecurity personnel must be assigned in writing to identified cybersecurity positions, and trained and qualified in accordance with References (x) and (ay)."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. OCTX-013 fails a cybersecurity appointee given no written statement of responsibilities or in a position the manpower structure does not identify; WFQ-001 fails one untrained or not qualified."
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.duties.yaml", "expect": "the appointee was given no written statement of cybersecurity responsibilities", "claim": "constraint", "asserts": "Cybersecurity personnel are assigned in writing to identified cybersecurity positions: no written statement fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}, {"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Cybersecurity personnel are trained and qualified: an ISSO not meeting the qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-DODI8500.01-0358"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "All authorized users of DoD IS must receive initial cybersecurity awareness orientation"}

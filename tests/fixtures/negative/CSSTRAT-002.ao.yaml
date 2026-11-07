@@ -1,0 +1,19 @@
+rule: CSSTRAT-002
+bases:
+- minimal
+description: a threat-driven CSS review not coordinated with the AO
+mutations:
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: reviews.0.prompted_by
+  value:
+  - threat-assessment
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: reviews.0.no_validation_reason
+  value: The AO validates at the next ATO.
+expect:
+  errors:
+  - CSSTRAT-002
+  messages:
+  - the PM revisits the cybersecurity posture in coordination with the AO

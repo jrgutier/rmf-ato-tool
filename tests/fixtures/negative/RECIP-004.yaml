@@ -1,0 +1,35 @@
+rule: RECIP-004
+bases:
+- minimal
+description: a separate instance operating before its own authorization
+mutations:
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: origin
+  value:
+    kind: separate-instance
+    organization: Fleet Systems Command
+    authorization:
+      ao: Fleet Systems Command AO
+      decision: AD-ATO
+      date: '2025-06-01'
+    relinquished: []
+    operating: '2026-06-01'
+    reuse:
+    - document: ART-SSP
+      reused: true
+    - document: ART-SAR
+      reused: true
+    - document: ART-RAR
+      reused: true
+    - document: ART-POAM
+      reused: true
+    - document: ART-AODM
+      reused: true
+    sources:
+    - INT-003.A1
+expect:
+  errors:
+  - RECIP-004
+  messages:
+  - the separate-instance operated before its receiving AO authorized it, on 2026-06-01

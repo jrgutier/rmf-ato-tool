@@ -27,6 +27,7 @@ def tables():
 
 def test_committed_yaml_is_regenerated_output(result):
     assert (REPO_ROOT / cnssi1253.YAML_PATH).read_text(encoding="utf-8") == result.text
+    assert (REPO_ROOT / cnssi1253.PIC_PATH).read_text(encoding="utf-8") == result.pic
     assert cnssi1253.main(["--check", "--repo", str(REPO_ROOT)]) == 0
 
 
@@ -123,11 +124,15 @@ def test_every_block_cites_a_page_that_resolves(tables):
         + len(inputs["policy_controls"])
     specs = sum(len(controls) for controls in overlay_specs.load(REPO_ROOT).values())
     assert specs == 108 + 315  # overlay-specs.yaml: one block per Section 6 control
-    # file, tables, overlays, overlay specifications, inputs
+    pic = YAML(typ="safe").load((REPO_ROOT / cnssi1253.PIC_PATH).read_text(encoding="utf-8"))
+    pic_blocks = sum(1 + len(d["blocks"]) for d in pic["documents"])  # each document, its pages
+    # file, tables, overlays, overlay specifications, inputs, parameter values, privacy
+    # implementation considerations
     unlisted = 1  # the Space Platform Overlay's controls in neither of its tables
     from rmf_tool import cnssi1253_params
     params = 1 + len(cnssi1253_params.load(REPO_ROOT))  # the column's definition, one per row
-    assert len(cited) == 1 + 136 + overlay_pages + unlisted + specs + blocks + params
+    assert len(cited) == (1 + 136 + overlay_pages + unlisted + specs + blocks + params
+                          + pic_blocks)
     assert all("page" in e.data["citations"][0] for e in cited if e.data["id"] != "CNSSI-1253")
     result = validate(REAL, REPO_ROOT, P3A)
     assert not [f for f in result.findings if "baselines" in (f.path or "")]
@@ -164,10 +169,33 @@ def _row(**cells):
 
 def test_text_disagreement_is_reported():
     row = _row(cM="X", cH="X")
-    text = cnssi1253.TextTables({(25, "AC-2"): ["X", "X", "X"]}, {})
+    text = cnssi1253.TextTables({(25, "AC-2"): ["X", "X", "X"]}, {}, {})
     problems = cnssi1253.cross_check_text([row], text, set())
     assert problems and "PDF geometry gives ['X', 'X']" in problems[0]
     assert cnssi1253.cross_check_text([row], text, {(25, "AC-2")}) == []
+
+
+def test_privacy_implementation_disagreement_is_reported():
+    row = _row(cM="X")
+    row.pic = (3,)
+    text = cnssi1253.TextTables({(25, "AC-2"): ["X"]}, {(25, "AC-2"): (2, 3)}, {})
+    problems = cnssi1253.cross_check_text([row], text, set())
+    assert problems == ["page 25 AC-2: text has Privacy Implementation Considerations (2, 3), "
+                        "PDF geometry gives (3,)"]
+
+
+def test_implication_marks_are_read_from_subscripts_only():
+    assert cnssi1253.pic_marks("√2,3") == (2, 3)
+    assert cnssi1253.pic_marks("√") is None  # a tailoring-considerations check, not this column
+
+
+def test_privacy_considerations_cover_the_column():
+    data = YAML(typ="safe").load((REPO_ROOT / cnssi1253.PIC_PATH).read_text(encoding="utf-8"))
+    marks = {d["ref"]: {c: m for b in d["blocks"] for c, m in b["pic"].items()}
+             for d in data["documents"]}
+    assert len(marks["CNSSI1253"]) == 114
+    assert marks["CNSSI1253"]["pe-6.3"] == [2, 3]  # the video surveillance of footnote 11
+    assert len(marks[cnssi1253.CLASSIFIED]) == 21
 
 
 def test_overrides_apply_and_must_change_something():

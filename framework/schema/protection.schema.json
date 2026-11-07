@@ -97,6 +97,57 @@
             }
           }
         },
+        "pss": {
+          "title": "The product support strategy the MDA approved, on which O&S is based (ACQLC-003)",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["approved_by", "date"],
+          "properties": {
+            "approved_by": {"$ref": "#/$defs/persona_id"},
+            "date": {"$ref": "#/$defs/date"}
+          }
+        },
+        "transitions": {
+          "title": "Each transition of a program that combines pathways from one pathway to another: the transition point, the new pathway's entry point, the information requirements at that entry point and the transition approach the DA approved (ACQLC-001)",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to", "at", "entry", "date", "information_requirements", "approach"],
+            "properties": {
+              "from": {"type": "string", "pattern": "^PW-[A-Z]+$"},
+              "to": {"type": "string", "pattern": "^PW-[A-Z]+$"},
+              "at": {"title": "The transition point: the decision point of the pathway the program leaves", "$ref": "#/$defs/decision_point"},
+              "entry": {"title": "The new pathway's entry point", "$ref": "#/$defs/decision_point"},
+              "date": {"$ref": "#/$defs/date"},
+              "information_requirements": {
+                "title": "The information requirements at the new pathway entry point, anticipated, developed and coordinated before the transition",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["id", "coordinated_with"],
+                  "properties": {
+                    "id": {"type": "string", "pattern": "^(ART|EXT)-[A-Z0-9-]+$"},
+                    "coordinated_with": {"type": "array", "items": {"$ref": "#/$defs/persona_id"}}
+                  }
+                }
+              },
+              "approach": {
+                "title": "The transition approach the PM and stakeholders identify and the MDA or DA approves, tailoring processes, reviews and documentation",
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["identified_by", "approved_by", "date", "tailors"],
+                "properties": {
+                  "identified_by": {"type": "array", "items": {"$ref": "#/$defs/persona_id"}},
+                  "approved_by": {"$ref": "#/$defs/persona_id"},
+                  "date": {"$ref": "#/$defs/date"},
+                  "tailors": {"type": "array", "uniqueItems": true, "items": {"enum": ["processes", "reviews", "documentation"]}}
+                }
+              }
+            }
+          }
+        },
         "itra_waiver": {
           "title": "A USD(R&E) waiver of the ITRA, open only to a program initiated or at Milestone A before October 1, 2017",
           "type": "object",

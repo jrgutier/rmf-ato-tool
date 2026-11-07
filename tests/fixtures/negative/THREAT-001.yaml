@@ -1,0 +1,14 @@
+rule: THREAT-001
+description: the relay's risk is designated low although the stolen-credential threat to the relay host is moderate
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: system_risk.level
+  value: low
+expect:
+  errors:
+  - THREAT-001
+  messages:
+  - "the system's risk is designated low, below the moderate risk of TE-01 to field report integrity, the most severe threat to any individual component"

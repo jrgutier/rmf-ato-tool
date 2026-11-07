@@ -113,6 +113,41 @@
         }
       }
     },
+    "privacy_implementation": {
+      "title": "Coordination with the SAOP or designee before implementing a selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, the Classified System Overlay Table 1), one record per control (PIC-001)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control_id", "by", "implications", "finding", "sources"],
+        "properties": {
+          "control_id": {"$ref": "#/$defs/control_id"},
+          "by": {
+            "title": "The SAOP or designee the system owner conferred with",
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "designee_of": {
+            "title": "The SAOP whose designee conferred, when by is the designee",
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "implications": {
+            "title": "The subscripted implications of the checkmark the coordination addressed: 1 coordination, 2 design choices, 3 implementation choices, 4 PII flow into a system not authorized to process PII",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"enum": [1, 2, 3, 4]}
+          },
+          "finding": {
+            "title": "The privacy risks and mitigation considerations the SAOP or designee found, and any additional steps required to protect privacy",
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {"$ref": "#/$defs/sources"}
+        }
+      }
+    },
     "actions": {
       "type": "array",
       "items": {

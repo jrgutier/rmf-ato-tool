@@ -1,0 +1,14 @@
+rule: RECIP-001
+bases:
+- minimal
+description: the integrating component left out of the review
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.integration
+  value: []
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the risk of integrating CMP-IDP with the system is not considered in the review'

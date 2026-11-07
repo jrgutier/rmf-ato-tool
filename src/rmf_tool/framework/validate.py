@@ -496,6 +496,7 @@ def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
 
 TAILORING_INPUTS = "tailoring-inputs.yaml"  # what S-2 tests a system against (TLR-003, TLR-005)
 OVERLAY_SPECS = "overlay-specs.yaml"  # overlay Section 6 per control (OVS-001 to OVS-003)
+PRIVACY_CONSIDERATIONS = "privacy-considerations.yaml"  # the column PIC-001 reads
 NSS_PARAMETERS = "cnssi-1253-parameters.yaml"  # Appendix D Parameter Value column (WI-20)
 
 
@@ -516,9 +517,10 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
             continue
         inputs = path.name == TAILORING_INPUTS
         specs = path.name == OVERLAY_SPECS
+        pic = path.name == PRIVACY_CONSIDERATIONS
         params = path.name == NSS_PARAMETERS
         name = ("tailoring-inputs" if inputs else "overlay-specs" if specs
-                else path.stem if params else "baselines")
+                else "privacy-considerations" if pic else path.stem if params else "baselines")
         errors = schema_errors(repo, name, data)
         findings += [Finding("FW-SCHEMA-001", "E", e, shown) for e in errors]
         if errors:
@@ -535,6 +537,15 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
                                            "citations": [s["citation"]]},
                              Location(shown, s.lc.line + 1))
                       for o in data["overlays"] for s in o["specs"]]
+            continue
+        if pic:
+            cited += [Entity("baselines", {"id": f"{path.stem} {d['ref']}",
+                                           "citations": [d["citation"]]},
+                             Location(shown, d.lc.line + 1)) for d in data["documents"]]
+            cited += [Entity("baselines", {"id": f"{path.stem} {d['ref']} block",
+                                           "citations": [b["citation"]]},
+                             Location(shown, b.lc.line + 1))
+                      for d in data["documents"] for b in d["blocks"]]
             continue
         if inputs:
             cited += [Entity("baselines", {"id": f"{path.stem} {i['id']}",

@@ -1,14 +1,21 @@
 rule: OCTX-001
-bases: [minimal]
-description: the PAO for the business mission area is appointed by the USD(I), not the Chief Management Officer
+bases:
+- minimal
+description: the PAO for the business mission area is appointed by the USD(I), not the Chief Management
+  Officer
 mutations:
-  - op: replace_text
-    file: artifacts/data/org-context.yaml
-    old: "manpower_structure:"
-    new: |2-
-        - {id: RA-14, role: PER-PAO, name: X (fixture), title: T, organization: DoD, contact: {email: x@example.mil}, appointed_by: usd-i, citizenship: us, affiliation: dod-civilian, mission_area: bma, sources: [INT-013.A1]}
-      manpower_structure:
+- op: replace_text
+  file: artifacts/data/org-context.yaml
+  old: 'manpower_structure:'
+  new: '  - {id: RA-14, role: PER-PAO, name: X (fixture), title: T, organization: DoD, contact: {email:
+    x@example.mil}, appointed_by: usd-i, citizenship: us, affiliation: dod-civilian, mission_area: bma,
+    sources: [INT-013.A1]}
+
+    manpower_structure:'
 expect:
-  errors: [OCTX-001]
+  errors:
+  - OCTX-001
   messages:
-    - 'RA-14: the PAO for mission area bma is appointed by usd-i, not the DoD MA owner of that mission area'
+  - 'RA-14: the PAO for mission area bma is appointed by usd-i, not the DoD MA owner of that mission area'
+  also:
+  - WFQ-001

@@ -1,0 +1,42 @@
+rule: CSSTRAT-001
+bases:
+- minimal
+description: a BCAT I business system's CSS without Component CIO approval
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-DBS
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: DP-DBS-SOLUTION
+    date: '2026-04-01'
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: program.bcat
+  value: I
+- op: set_field
+  file: artifacts/data/cybersecurity-strategy.yaml
+  path: approvals
+  value:
+  - authority: DoD-CIO
+    version: '1.0'
+    date: '2026-03-20'
+    before: DP-DBS-SOLUTION
+expect:
+  errors:
+  - CSSTRAT-001
+  messages:
+  - a BCAT I business program obtains Component CIO and DoD CIO approval of the CSS before DP-DBS-SOLUTION;
+    no Component-CIO approval precedes it
+  also:
+  - ACQLC-004
+  - CSSTRAT-003
+  - TSTRAT-001
+  - TSTRAT-002

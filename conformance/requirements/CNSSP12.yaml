@@ -218,7 +218,9 @@ requirements:
     locator: "e"
     context: "SECTION IV- POLICY"
     statement: "e. Space NSS and services must identify and manage supply chain risk early and throughout the space NSS and services system life cycle through the use of acquisition and engineering mitigations informed by all-source supply chain threat information in accordance with Committee on National Security Systems Directive 505 (CNSSD 505), Supply Chain Risk Management (Reference p )."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial. A space NSS must have acquisition and engineering mitigations, each informed by all-source supply chain threat information (PMSCRM-002). 'Early and throughout the system life cycle' is not held: the source sets no point by which identification is early and no cadence, and inventing one would refuse runs it allows."
+    evidence: [{"kind": "rule", "target": "PMSCRM-002", "fixture": "tests/fixtures/negative/PMSCRM-002.space.yaml", "expect": "manages supply chain risk through", "asserts": "Space NSS manage supply chain risk through acquisition and engineering mitigations", "claim": "constraint"}, {"kind": "rule", "target": "PMSCRM-002", "fixture": "tests/fixtures/negative/PMSCRM-002.allsource.yaml", "expect": "is not informed by all-source supply chain threat information", "asserts": "Space NSS mitigations of supply chain risk are informed by all-source supply chain threat information", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-CNSSP12-0026"
     citation: {"ref": "CNSSP12", "page": 7, "anchor": "In accordance with C SSI 1200, National Information Assurance Instruction for Space"}
@@ -431,7 +433,9 @@ requirements:
     locator: "a.(1).(a)"
     context: "SECTION V- RESPONSIBILITIES Ensure compliance with the requirements of this policy for the entire life cycle of all space NSS and services under their control, purview, or cognizance, as well as for a"
     statement: "(a) Cognizant system AOs, ISSOs, and SCAs are qualified, trained, and formally designated."
-    status: "candidate"
+    status: "covered"
+    reason: "Built: org-context.yaml role records carry qualification (status against the DoD cyberspace workforce policy, training, verified_by) and the DCWF code; P-1 exit criterion. WFQ-001 fails an ISSO, AO or SCA appointee not qualified or with no training recorded; formal designation is OCTX-001's."
+    evidence: [{"kind": "rule", "target": "WFQ-001", "fixture": "tests/fixtures/negative/WFQ-001.yaml", "expect": "does not meet the qualification standard of the DoD cyberspace workforce policy", "claim": "constraint", "asserts": "Cognizant ISSOs are qualified: an ISSO not meeting the qualification standard fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-37"
   - id: "REQ-CNSSP12-0050"
     citation: {"ref": "CNSSP12", "page": 10, "anchor": "The roles, responsibilities, and decision authority of designated officials are clearly defined."}

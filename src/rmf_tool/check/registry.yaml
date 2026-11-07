@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 312 rules, 36 repo-scope and 276 run-scope. Authoritative;
+# Rule registry (plan §6.5): 330 rules, 36 repo-scope and 294 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -950,7 +950,7 @@ rules:
     applies_after: R-4
     summary: an authorization issue went to the wrong forum, is resolved without a resolution, or an ISRMC direction is open at a decision
     fixture: tests/fixtures/negative/AODM-011.yaml
-    hint: A mission area issue goes to its PAO, a space system issue to USSPACECOM, shared community risk to the DSAWG, a process dispute to the DoD CISO, an appeal or a direction to the ISRMC; a decision follows compliance with any ISRMC direction.
+    hint: A mission area issue goes to its PAO, a space system issue to USSPACECOM, shared community risk to the DSAWG, a process dispute to the DoD CISO, an appeal or a direction to the ISRMC, and on an NSS an interagency risk issue to the ISRMC; a decision follows compliance with any ISRMC direction.
     enforces:
       - REQ-DODI8510.01-0076
       - REQ-DODI8510.01-0158
@@ -958,6 +958,7 @@ rules:
       - REQ-DODI8510.01-0166
       - REQ-DODI8510.01-0189
       - REQ-DODI8510.01-0218
+      - REQ-CNSSP22-0027
   - id: ENT-001
     scope: run
     severity: E
@@ -1076,6 +1077,65 @@ rules:
     hint: Each leveraged record names its arrangement; an organizational system holds a valid authorization and the inheriting AO is aware; a common control provider is the provider of a common allocation.
     enforces:
       - REQ-SP800-37R2-0583
+  - id: RECIP-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: the provider's authorization package is not reviewed before the decision that relies on it, or the review leaves out its risk factors, an integrating component or an overlay
+    fixture: tests/fixtures/negative/RECIP-001.yaml
+    hint: Give each leveraged record that is neither a common control provider nor an Enterprise system (ENT-002) a package_review dated before the first authorization decision (or before the later decision its relied_on_by names, for a system leveraged after the first), with its risk factors, every boundary component naming the record under integration and every overlay of the categorization under overlays.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0028
+      - REQ-DODCIO-RECIPROCITY-0130
+      - REQ-DODCIO-RECIPROCITY-0138
+      - REQ-DODCIO-RECIPROCITY-0164
+      - REQ-DODCIO-RECIPROCITY-0133
+      - REQ-SP800-37R2-0582
+      - REQ-DODCIO-RECIPROCITY-0132
+  - id: RECIP-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a control the customer organization adds beyond the provider's is not in the baseline or not implemented
+    fixture: tests/fixtures/negative/RECIP-002.yaml
+    hint: Each additional_controls entry of a leveraged record is in baseline.json and implemented in the SSP; SSP-COV-001, SAR-COV-001 and CONMON-001 then hold it documented, assessed and monitored.
+    enforces:
+      - REQ-SP800-37R2-0587
+  - id: RECIP-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a system its Granting organization no longer supports is still used without a full authorization of this organization
+    fixture: tests/fixtures/negative/RECIP-003.yaml
+    hint: When granting_support.continued is true, granting_support.authorization names an authorizations.yaml record whose decision authorizes.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0148
+  - id: RECIP-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a system another organization authorized operates here before this organization's AO authorizes it, names its own organization as the provider, or leaves a core document of the provider neither reused nor explained
+    fixture: tests/fixtures/negative/RECIP-004.yaml
+    hint: system-description.yaml origin names another organization; a separate instance, or a transfer whose provider relinquished configuration and maintenance, operates only under an authorization of this organization's AO; each RMF core document of the provider is reused or carries a reason.
+    enforces:
+      - REQ-DODI8510.01-0007
+      - REQ-CNSSI1254-0125
+      - REQ-DODCIO-RECIPROCITY-0010
+      - REQ-CNSSI1254-0122
+      - REQ-CNSSI1254-0124
+      - REQ-DODCIO-RECIPROCITY-0060
   - id: MPOA-001
     scope: run
     severity: E
@@ -2218,6 +2278,89 @@ rules:
     enforces:
       - REQ-DOWI8430.01-0198
       - REQ-SP800-37R2-0330
+  - id: PIC-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a selected control with a Privacy Implementation Considerations checkmark has no coordination with the SAOP or designee before it is implemented, or one that leaves an implication of the checkmark unaddressed
+    fixture: tests/fixtures/negative/PIC-001.yaml
+    hint: "Record tailoring.yaml privacy_implementation for each selected control with a pic mark in framework/baselines/cnssi-1253.yaml (Appendix D, or the Table 1 of an applied overlay): by PER-PRIV (or a designee with designee_of: PER-PRIV), the implications of its checkmark addressed, the finding and its sources."
+    enforces:
+      - REQ-CNSSI1253-0013
+      - REQ-CNSSI1253-0018
+      - REQ-CNSSI1253-0019
+      - REQ-CNSSI1253-0040
+      - REQ-CNSSI1253-0059
+      - REQ-CNSSI1253-0081
+      - REQ-CNSSI1253-0082
+      - REQ-CNSSI1253-0083
+      - REQ-CNSSI1253-0084
+      - REQ-CNSSI1253-0085
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0024
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0025
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0026
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0027
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0028
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0298
+  - id: WFQ-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: an RMF appointee whose training is not recorded or verified by another official, or one in a cyberspace work role with no DCWF code or not meeting the qualification standard of the DoD cyberspace workforce policy
+    fixture: tests/fixtures/negative/WFQ-001.yaml
+    hint: "At P-1 give each org-context.yaml role record a qualification: its status against the DoD cyberspace workforce policy (met, pending with the due date, or not-a-work-role), the training completed, and verified_by, an official other than the appointee; a cyberspace work role also names position.dcwf_code."
+    enforces:
+      - REQ-CNSSP12-0049
+      - REQ-DODCIO-CATO-EVAL-0179
+      - REQ-DODD8140.01-0004
+      - REQ-DODD8140.01-0010
+      - REQ-DODD8140.01-0021
+      - REQ-DODD8140.01-0026
+      - REQ-DODD8140.01-0052
+      - REQ-DODD8140.01-0055
+      - REQ-DODI8500.01-0034
+      - REQ-DODI8500.01-0100
+      - REQ-DODI8500.01-0161
+      - REQ-DODI8500.01-0357
+      - REQ-DODI8510.01-0062
+      - REQ-DODI8510.01-0196
+      - REQ-DODI8530.01-0260
+      - REQ-DOWI8430.01-0258
+      - REQ-SP800-160V1R1-0891
+      - REQ-SP800-160V1R1-0909
+      - REQ-SP800-18R1-0041
+  - id: WFQ-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the ISSO, a primary role of the task, gave no interview at a task that has written its outputs
+    fixture: tests/fixtures/negative/WFQ-002.yaml
+    hint: "Interview PER-ISSO at each task whose RACI makes the ISSO primary (P-14, P-17, S-3) before writing its outputs."
+    enforces:
+      - REQ-DODI8510.01-0101
+      - REQ-DODI8510.01-0104
+      - REQ-DODI8510.01-0112
+  - id: THREAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the risk assessment designates no risk for the system, or one below the most severe threat to any individual component or subcomponent
+    fixture: tests/fixtures/negative/THREAT-001.yaml
+    hint: "At P-14 record ra.yaml system_risk: the level designated for the system, no lower than the highest risk ra.yaml rates against a component (threat events, external connections, supply chain), and set_by, the threat that sets it."
+    enforces:
+      - REQ-DODI8510.01-0147
   - id: PRIV-001
     scope: run
     severity: E
@@ -3830,11 +3973,14 @@ rules:
     fixture: tests/fixtures/negative/OCTX-013.yaml
     hint: "Each roles record of a cybersecurity position carries position, duties_statement and, where needed, personnel_security and supervised_by."
     enforces:
+      - REQ-DODI8500.01-0034
+      - REQ-DODI8500.01-0357
       - REQ-DODI8500.01-0359
       - REQ-DODI8500.01-0360
       - REQ-DODI8500.01-0406
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
+      - REQ-DODI8530.01-0260
   - id: PPROT-001
     scope: run
     severity: E
@@ -3846,6 +3992,7 @@ rules:
     fixture: tests/fixtures/negative/PPROT-001.yaml
     hint: "protection.yaml ppp.approval names the authority the ACAT, MDA and pathway call for; ppp.submissions holds one per decision point passed."
     enforces:
+      - REQ-DODI5000.82-0113
       - REQ-DODI5000.83-0046
       - REQ-DODI5000.83-0047
       - REQ-DODI5000.83-0048
@@ -3857,6 +4004,7 @@ rules:
       - REQ-DODI5000.87-0010
       - REQ-DODI5000.90-0045
       - REQ-DODI8500.01-0098
+      - REQ-DODI8500.01-0216
   - id: PPROT-002
     scope: run
     severity: E
@@ -3989,6 +4137,102 @@ rules:
       - REQ-CNSSP12-0056
       - REQ-CNSSP12-0058
       - REQ-DODI8510.01-0037
+  - id: CSSTRAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy lacks the approval DoDI 5000.82 Table 2 calls for by ACAT or BCAT, or on the software pathway the DA's approval of the acquisition strategy holding it
+    fixture: tests/fixtures/negative/CSSTRAT-001.yaml
+    hint: "cybersecurity-strategy.yaml approvals name the Component CIO and DoD CIO before each milestone of an ACAT ID or BCAT I program, a CIO otherwise; acquisition_strategy records the DA's approval on PW-SWP."
+    enforces:
+      - REQ-DODI5000.82-0107
+      - REQ-DODI5000.82-0108
+      - REQ-DODI5000.82-0109
+      - REQ-DODI5000.82-0110
+      - REQ-DODI5000.82-0111
+      - REQ-DODI5000.75-0024
+      - REQ-DODI5000.75-0053
+      - REQ-DODI5000.90-0019
+      - REQ-DODI5000.90-0039
+      - REQ-DODI5000.87-0064
+      - REQ-DODI5000.82-0112
+  - id: CSSTRAT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy is not reviewed before a milestone decision or contract award, or a review lacks the program office or the AO
+    fixture: tests/fixtures/negative/CSSTRAT-002.yaml
+    hint: "Give each milestone decision and contract award a review or approval naming it in before; an award authorized at a milestone names it in authorized_at."
+    enforces:
+      - REQ-DODI8500.01-0331
+      - REQ-DODI5000.82-0112
+      - REQ-DODI5000.82-0100
+      - REQ-DODI5000.90-0100
+      - REQ-DODI5000.75-0053
+      - REQ-DODI5000.82-0108
+      - REQ-DODI5000.82-0110
+      - REQ-DODI5000.90-0019
+  - id: CSSTRAT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the cybersecurity strategy misses a life-cycle phase, Intelligence Community threat information, a basis, the RMF, its document or a software pathway assessment
+    fixture: tests/fixtures/negative/CSSTRAT-003.yaml
+    hint: "strategy.activities cover every phase of the pathway; based_on holds all five bases; documented_in holds stand-alone without a PPP and acquisition-strategy below ACAT ID."
+    enforces:
+      - REQ-DODI5000.82-0099
+      - REQ-DODI5000.82-0113
+      - REQ-DODI5000.89-0113
+      - REQ-DODI5000.90-0073
+      - REQ-DODI5000.87-0079
+      - REQ-DODI5000.90-0099
+      - REQ-DODI5000.82-0109
+      - REQ-DODI5000.82-0111
+      - REQ-DODI5000.82-0112
+  - id: PMSCRM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a Table 1 SCRM action the risk tolerance level calls for is neither taken nor explained, a TAC report rated critical or high is not flagged, or SCRM starts after the acquisition
+    fixture: tests/fixtures/negative/PMSCRM-001.yaml
+    hint: "scrm.yaml pm_actions actions hold every Table 1 action of the level and the levels above it, or not_taken gives the reason."
+    enforces:
+      - REQ-DODI5000.90-0116
+      - REQ-DODI5000.90-0117
+      - REQ-DODI5000.90-0118
+      - REQ-DODI5000.90-0119
+      - REQ-DODI5000.90-0120
+      - REQ-DODI5000.90-0122
+      - REQ-DODI5000.90-0124
+      - REQ-DODI5000.90-0125
+      - REQ-DODI5000.90-0126
+      - REQ-DODI5000.82-0114
+  - id: PMSCRM-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a mission-critical item has neither assured supplier nor SCRM countermeasure, an unvalidated IA product has no reason, or a space NSS lacks acquisition and engineering mitigations informed by all-source threat information
+    fixture: tests/fixtures/negative/PMSCRM-002.yaml
+    hint: "scrm.yaml pm_actions mission_critical covers each PPP critical function and component; unvalidated_products explains each CNSSP 11 not-compliant item."
+    enforces:
+      - REQ-DODI5000.90-0127
+      - REQ-DODI5000.83-0202
+      - REQ-CNSSP12-0025
   - id: TSTRAT-001
     scope: run
     severity: E
@@ -4083,6 +4327,74 @@ rules:
     enforces:
       - REQ-DODCIO-DEVSECOPS-0067
       - REQ-DODI5000.81-0090
+  - id: ACQLC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a combined pathway names an unknown pathway or leaves the system's own out, a covered DBS skips the DBS pathway, or a transition lacks its transition point, entry point, coordinated information requirements or approved approach
+    fixture: tests/fixtures/negative/ACQLC-001.yaml
+    hint: "List every pathway in facts.yaml acquisition.pathways and define each transition in protection.yaml program.transitions; a software pathway program states acquisition.covered_dbs."
+    enforces:
+      - REQ-DODI5000.02-0048
+      - REQ-DODI5000.02-0049
+      - REQ-DODI5000.02-0050
+      - REQ-DODI5000.02-0051
+      - REQ-DODI5000.87-0003
+      - REQ-DODI5000.87-0040
+      - REQ-DODI5000.87-0042
+  - id: ACQLC-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the Development RFP release decision point is passed with no CDD validation before it, or the CDD is validated before TMRR
+    fixture: tests/fixtures/negative/ACQLC-002.yaml
+    hint: "Record MS-CDDV in protection.yaml program.decision_points, after MS-A and before MS-DRFPRD."
+    enforces:
+      - REQ-DODI5000.85-0072
+  - id: ACQLC-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: IOC is passed before the pathway's O&S entry point (first fielding), the system is past that point while facts.yaml lifecycle_phase is not O&S, or O&S rests on no product support strategy the MDA approved
+    fixture: tests/fixtures/negative/ACQLC-003.yaml
+    hint: "Record MS-FIELD (or the pathway's point with enters: PH-OS) in protection.yaml program.decision_points and keep facts.yaml lifecycle_phase current."
+    enforces:
+      - REQ-DODI5000.85-0097
+      - REQ-DODI5000.81-0100
+  - id: ACQLC-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: a JCIDS capability document past the CDD validation point has no validation date, or has one after JCIDS was disestablished, or the capability document is not of a kind the program's pathway uses
+    fixture: tests/fixtures/negative/ACQLC-004.yaml
+    hint: "Record capability_document.validated; after August 20, 2025 use kind requirements-document on major capability acquisition."
+    enforces:
+      - REQ-DODI8510.01-0235
+  - id: ACQLC-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: where P-15 read a capability document, the categorization does not name it as the document it is documented in, or names another than the one P-15 read
+    fixture: tests/fixtures/negative/ACQLC-005.yaml
+    hint: "Set facts.yaml categorization.documented_in to the capability_document id of protection-requirements.yaml."
+    enforces:
+      - REQ-DODI8510.01-0069
+      - REQ-DODI8510.01-0235
   - id: VULN-001
     scope: run
     severity: E
@@ -4919,6 +5231,8 @@ rules:
     fixture: tests/fixtures/negative/RCP-001.yaml
     hint: "artifacts/data/reciprocity.yaml: each receiving organization's deliveries hold ssp, sar, rar, poam (the latest delivery on or after the newest POA&M item), authorization-decision, deployment-sites, body-of-evidence, deployment-instructions and installation-configuration before its first site; installation_stigs lists every STIG benchmark; visibility.via is emass, other-tool or manual-inheritance (manual-inheritance when record_keeping is incompatible); package_sharing.shared_with holds PER-IO and every boundary connection; an ATO at enterprise scope needs a receiving organization or co_use with its notification processes; visibility.record_keeping is compatible or incompatible."
     enforces:
+      - REQ-CNSSP22-0003
+      - REQ-CNSSP22-0028
       - REQ-CNSSI1254-0015
       - REQ-CNSSI1254-0116
       - REQ-CNSSI1254-0127
@@ -5018,6 +5332,9 @@ rules:
     fixture: tests/fixtures/negative/RCP-005.yaml
     hint: "artifacts/data/reciprocity.yaml received_systems: an Enterprise system's coordination_point is PER-CISO; an accepted one has atu by PER-AO with risk acceptable, a copy to the Granting AO and sites_notified with scope authorized-configuration; hosting_update names a change of changes.yaml with the augmenting controls and the installation documents, and the difference tests when a difference is recorded; installation implemented on or after the package is received, with each difference tested; every inherited control provided."
     enforces:
+      - REQ-DODCIO-RECIPROCITY-0029
+      - REQ-DODCIO-RECIPROCITY-0129
+      - REQ-DODCIO-RECIPROCITY-0030
       - REQ-DODI8500.01-0229
       - REQ-CNSSI1254-0120
       - REQ-DODCIO-RECIPROCITY-0049
@@ -5048,6 +5365,8 @@ rules:
     fixture: tests/fixtures/negative/RCP-006.yaml
     hint: "artifacts/data/reciprocity.yaml agreements: one executed documented agreement (such as an MOU, MOA, SLA or ISA) per receiving organization and accepted received system (before the decision), with every minimum topic (an ISA also the AO Committee's), package-sharing in covers (and software-delivery and feedback for a software factory), this side's POC a role of the run, a technical POC on each side, notification processes, timing, requirements and recipients pm and original-ao, termination factors for an MOU or MOA, pre-agreement tasks with a responsible party completed before execution, deviations accepted by both, and core documents."
     enforces:
+      - REQ-CNSSP22-0020
+      - REQ-DODCIO-RECIPROCITY-0138
       - REQ-CNSSI1254-0005
       - REQ-CNSSI1254-0112
       - REQ-CNSSI1254-0140
@@ -5075,6 +5394,8 @@ rules:
     fixture: tests/fixtures/negative/RCP-007.yaml
     hint: "artifacts/data/reciprocity.yaml received_systems: when received_documents lack one of ssp, sar, rar, poam and authorization-decision, body_of_evidence.considered lists every named item as considered or unavailable; when the system is decided; each request is endorsed by PER-CISO, or an equivalent with its title and authority, before it is forwarded; a refusal is decided_by PER-AO on insufficient-content or excessive-risk, reported to the Granting AO within 10 business days, provided on request, and escalated ao, rmf-tag-chair (notified rmf-tag-secretariat), ao-council (chair DoD CISO) only while unresolved."
     enforces:
+      - REQ-DODCIO-RECIPROCITY-0010
+      - REQ-DODCIO-RECIPROCITY-0138
       - REQ-DODCIO-RECIPROCITY-0139
       - REQ-DODCIO-RECIPROCITY-0140
       - REQ-DODCIO-RECIPROCITY-0141

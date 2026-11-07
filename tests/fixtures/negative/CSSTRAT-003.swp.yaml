@@ -1,0 +1,28 @@
+rule: CSSTRAT-003
+bases:
+- minimal
+description: a software pathway CSS without recurring assessments
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-SWP
+- op: set_field
+  file: facts.yaml
+  path: acquisition.covered_dbs
+  value: false
+- op: set_field
+  file: artifacts/data/protection-requirements.yaml
+  path: capability_document.kind
+  value: cns
+expect:
+  errors:
+  - CSSTRAT-003
+  messages:
+  - a software pathway CSS includes recurring assessment of the supply chain
+  also:
+  - CSSTRAT-001
+  - PPROT-001
+  - PPROT-002
+  - TSTRAT-001
+  - TSTRAT-002

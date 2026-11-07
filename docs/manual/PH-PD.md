@@ -41,11 +41,13 @@ Produce and field the system; operational test and evaluation confirms security 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
 | <a id="ms-frp"></a>**FRP/FD** Full-Rate Production or Full Deployment Decision | decision point | [MDA](../../MANUAL.md#per-mda) | Approve full-rate production or full deployment after operational test and evaluation, including its cybersecurity results. The operational cybersecurity assessments (CVPA and adversarial assessment) and any new validated threat environment inform the decision. | — |
-| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | The first units are fielded and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](PH-EMD.md#task-r-4), [M-1](PH-OS.md#task-m-1) |
+| <a id="ms-field"></a>**First fielding** First fielding | event | — | The first system or systems are fielded, under a current authorization. The O&S phase begins here, which may precede IOC; production and deployment continue alongside (ACQLC-003). | — |
+| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](PH-EMD.md#task-r-4), [M-1](PH-OS.md#task-m-1) |
 
 Sources:
 
 - **FRP/FD**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Ensure acquisition programs submit cybersecurity T&E results to the appropriate AO"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 17, "3.14. FRP DECISION OR FD DECISION."; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 17, "informed by consideration of any new validated threat environments"; [DODI5000.89](../../MANUAL.md#ref-dodi5000-89), p. 16, "cooperative vulnerability and penetration assessment (CVPA) and an adversarial assessment"
+- **First fielding**: [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 18, "The O&S phase begins upon fielding of the first system"; [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Operate only authorized DoD systems with a current authorization to operate"
 - **IOC**: [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 10, "Operate only authorized DoD systems with a current authorization to operate"; [DODI5000.85](../../MANUAL.md#ref-dodi5000-85), p. 17, "will declare initial operational capability (IOC)"; [DODI5000.89](../../MANUAL.md#ref-dodi5000-89), p. 17, "each of which should then be eliminated before fielding the system"
 
 ## P&D technical reviews

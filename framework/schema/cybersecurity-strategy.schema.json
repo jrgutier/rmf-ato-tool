@@ -1,0 +1,465 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:cybersecurity-strategy",
+  "title": "runs/<run-id>/artifacts/data/cybersecurity-strategy.yaml",
+  "description": "The cybersecurity strategy (CSS) record P-14 writes beside ART-RA: the program's category, the CSS the run read with its content, the approvals DoDI 5000.82 Table 2 calls for, and its reviews. CSSTRAT-001 to CSSTRAT-003 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "program",
+    "strategy",
+    "approvals",
+    "reviews",
+    "sources"
+  ],
+  "properties": {
+    "program": {
+      "title": "The program's business category and mission criticality; its ACAT, decision points passed and contract awards where the run holds no protection.yaml (protection.yaml is their home otherwise)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bcat",
+        "mission"
+      ],
+      "properties": {
+        "acat": {
+          "title": "Acquisition category (ACAT) of the program; none outside the ACAT system",
+          "enum": [
+            "ID",
+            "IB",
+            "IC",
+            "II",
+            "III",
+            "none"
+          ]
+        },
+        "bcat": {
+          "title": "Business category (BCAT) of a defense business system; none for any other program",
+          "enum": [
+            "I",
+            "II",
+            "III",
+            "none"
+          ]
+        },
+        "mission": {
+          "title": "Whether the system is mission-critical or mission-essential IT",
+          "enum": [
+            "mission-critical",
+            "mission-essential",
+            "other"
+          ]
+        },
+        "decision_points": {
+          "title": "Acquisition pathway decision points the program has passed, with their dates",
+          "type": "array",
+          "items": {
+            "title": "",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/point_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "contract_awards": {
+          "title": "Contract awards, and the milestone decision that authorized each one where it did",
+          "type": "array",
+          "items": {
+            "title": "",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "authorized_at": {
+                "title": "The acquisition milestone decision that authorized the award",
+                "$ref": "#/$defs/point_id"
+              }
+            }
+          }
+        }
+      }
+    },
+    "strategy": {
+      "title": "The cybersecurity strategy the run read",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "date",
+        "prepared_by",
+        "documented_in",
+        "based_on",
+        "threat_information",
+        "activities",
+        "rmf",
+        "contested_environment",
+        "rmf_integration"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/text"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "prepared_by": {
+          "title": "Who on the program staff produced the cybersecurity strategy",
+          "$ref": "#/$defs/persona_id",
+          "x-enforces": [
+            "REQ-DODI5000.90-0090"
+          ]
+        },
+        "documented_in": {
+          "title": "Where the cybersecurity strategy is documented: as an appendix to the program protection plan, in the documentation that results in the acquisition strategy, or as a stand-alone document",
+          "type": "array",
+          "items": {
+            "enum": [
+              "ppp-appendix",
+              "acquisition-strategy",
+              "stand-alone"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "based_on": {
+          "title": "What the cybersecurity strategy is based on",
+          "type": "array",
+          "items": {
+            "enum": [
+              "cssr-requirements",
+              "threats",
+              "derived-requirements",
+              "performance-specifications",
+              "operational-use"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "threat_information": {
+          "title": "Cyber threat information the strategy was developed from",
+          "type": "array",
+          "items": {
+            "title": "",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "from",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "from": {
+                "title": "Producer of the cyber threat information",
+                "enum": [
+                  "intelligence-community",
+                  "other"
+                ]
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "activities": {
+          "title": "Projected cybersecurity activities across the phases of the life cycle and the implementation status of each",
+          "type": "array",
+          "items": {
+            "title": "",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "activity",
+              "phase",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "activity": {
+                "$ref": "#/$defs/text"
+              },
+              "phase": {
+                "type": "string",
+                "pattern": "^PH-[A-Z]+$"
+              },
+              "status": {
+                "title": "Implementation status of the activity",
+                "enum": [
+                  "planned",
+                  "in-progress",
+                  "complete"
+                ]
+              }
+            }
+          }
+        },
+        "rmf": {
+          "title": "How the strategy incorporates the RMF and how the ATO decision is informed by cybersecurity testing",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "incorporated",
+            "ato_informed_by"
+          ],
+          "properties": {
+            "incorporated": {
+              "type": "boolean"
+            },
+            "ato_informed_by": {
+              "$ref": "#/$defs/text",
+              "x-enforces": [
+                "REQ-DODI5000.89-0113"
+              ],
+              "title": "How the authority to operate decision is informed by the cybersecurity testing"
+            }
+          }
+        },
+        "contested_environment": {
+          "title": "How the system will operate in a cyber-contested environment",
+          "$ref": "#/$defs/text",
+          "x-enforces": [
+            "REQ-DODI5000.90-0090"
+          ]
+        },
+        "rmf_integration": {
+          "title": "How the RMF is implemented in the program office's acquisition and engineering processes for development, procurement, testing and sustainment",
+          "$ref": "#/$defs/text",
+          "x-enforces": [
+            "REQ-DODI5000.90-0093"
+          ]
+        },
+        "recurring_assessments": {
+          "title": "Recurring assessments a software pathway strategy includes",
+          "type": "array",
+          "items": {
+            "enum": [
+              "supply-chain",
+              "development-environment",
+              "processes-and-tools",
+              "continuous-automated-testing"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "x-enforces": [
+        "REQ-DODI5000.82-0098"
+      ]
+    },
+    "acquisition_strategy": {
+      "title": "The acquisition strategy that holds the cybersecurity strategy, and its approval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "includes_css",
+        "approval"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/text"
+        },
+        "includes_css": {
+          "type": "boolean"
+        },
+        "approval": {
+          "title": "Approval of the acquisition strategy",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority",
+            "date"
+          ],
+          "properties": {
+            "authority": {
+              "title": "Who approved the acquisition strategy: the decision authority (DA), the MDA or another official",
+              "enum": [
+                "DA",
+                "MDA",
+                "other"
+              ]
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        }
+      }
+    },
+    "approvals": {
+      "title": "Approvals of the cybersecurity strategy",
+      "type": "array",
+      "items": {
+        "title": "",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "authority",
+          "version",
+          "date",
+          "before"
+        ],
+        "properties": {
+          "authority": {
+            "title": "Who approved the cybersecurity strategy",
+            "enum": [
+              "DoD-CIO",
+              "Component-CIO"
+            ]
+          },
+          "version": {
+            "$ref": "#/$defs/text"
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "before": {
+            "title": "The decision point or contract award the approval precedes",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "reviews": {
+      "title": "Reviews and updates of the cybersecurity strategy over the life of the system",
+      "type": "array",
+      "items": {
+        "title": "",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "date",
+          "by",
+          "prompted_by"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/text"
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "by": {
+            "title": "Who reviewed the strategy: the program office and the system owner",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "minItems": 1
+          },
+          "before": {
+            "title": "The decision point or contract award the review precedes, if any",
+            "$ref": "#/$defs/text"
+          },
+          "prompted_by": {
+            "title": "What prompted the review",
+            "type": "array",
+            "items": {
+              "enum": [
+                "decision-point",
+                "contract-award",
+                "threat-assessment",
+                "continuous-monitoring",
+                "change"
+              ]
+            },
+            "minItems": 1
+          },
+          "coordinated_with": {
+            "title": "Authorizing officials the PM coordinated the review with",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "ao_validation": {
+            "title": "The AO's validation of the strategy and the updated POA&M that concludes the iteration",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date"
+            ],
+            "properties": {
+              "by": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "no_validation_reason": {
+            "title": "Why the iteration did not conclude with the AO's validation (the source says should)",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "point_id": {
+      "type": "string",
+      "pattern": "^(MS|DP)-[A-Z0-9-]+$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  }
+}

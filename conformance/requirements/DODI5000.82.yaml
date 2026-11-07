@@ -791,7 +791,9 @@ requirements:
     locator: "3.5.b.(1)"
     context: "CYBERSECURITY, OPERATIONAL RESILIENCE, AND CYBER SURVIVABILITY Cybersecurity Strategy (CSS)"
     statement: "(1) All acquisitions containing IT, including NSS, will have a CSS, in accordance with DoDI 8500.01. The CSS is a statutory requirement, pursuant to Section 811 of Public Law 106- 398, for mission essential and mission critical IT systems and a regulatory requirement for all IT systems in accordance with this issuance and DoDI 8580.1."
-    status: "candidate"
+    status: "partial"
+    reason: "cybersecurity-strategy.yaml is asked for on every pathway while P-14 is in scope; no fixture removes it, and the statutory basis of the second sentence is not a run fact. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/cybersecurity-strategy.schema.json#/properties/strategy", "asserts": "All acquisitions containing IT have a CSS: the cybersecurity strategy the run read", "claim": "presence", "sentence": "(1) All acquisitions containing IT, including NSS, will have a CSS, in accordance with DoDI 8500.01."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0099"
     citation: {"ref": "DODI5000.82", "page": 14, "anchor": "The CSS outlines plans for, and implementation status of, projected cybersecurity activities"}
@@ -799,7 +801,9 @@ requirements:
     locator: "3.5.b.(2)"
     context: "CYBERSECURITY, OPERATIONAL RESILIENCE, AND CYBER SURVIVABILITY Cybersecurity Strategy (CSS)"
     statement: "(2) The CSS outlines plans for, and implementation status of, projected cybersecurity activities across all phases of a system’s lifecycle. The CSS is applicable to all adaptive acquisition framework pathways, and retains operational relevance beyond milestone and decision points into system sustainment."
-    status: "candidate"
+    status: "partial"
+    reason: "Activities with their implementation status must cover every phase of the pathway (CSSTRAT-003); that the CSS stays relevant in sustainment is the same clause, so the statement's applicability half adds nothing a run can break. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.yaml", "expect": "outlines cybersecurity activities across all phases", "asserts": "The CSS outlines plans for and implementation status of cybersecurity activities across all phases of the lifecycle", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0100"
     citation: {"ref": "DODI5000.82", "page": 14, "anchor": "The program office and the system owner will actively review, update, employ,"}
@@ -807,7 +811,9 @@ requirements:
     locator: "3.5.b.(3)"
     context: "CYBERSECURITY, OPERATIONAL RESILIENCE, AND CYBER SURVIVABILITY Cybersecurity Strategy (CSS)"
     statement: "(3) The program office and the system owner will actively review, update, employ, and maintain the CSS for the life of the system. The CSS is a foundational document to support the program office in the development of key program elements, including:"
-    status: "candidate"
+    status: "partial"
+    reason: "Each review names the program office (PER-PM, who holds the system owner here; CSSTRAT-002); that the CSS is employed and maintained for the life of the system has no record beyond the reviews. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.office.yaml", "expect": "the program office and the system owner review and", "asserts": "The program office and the system owner review and maintain the CSS", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0101"
     citation: {"ref": "DODI5000.82", "page": 14, "anchor": "Requirements generation and development."}
@@ -863,7 +869,8 @@ requirements:
     locator: "3.5.b.(4)"
     context: "CYBERSECURITY, OPERATIONAL RESILIENCE, AND CYBER SURVIVABILITY Cybersecurity Strategy (CSS)"
     statement: "(4) Appropriate review of the CSS will take place as identified in Table 2."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.cio.yaml", "expect": "gains approval from the respective CIO", "asserts": "Review and approval of the CSS take place as Table 2 identifies: the CSS gains approval from the respective CIO", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0108"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "Major Capability ACAT ID Pathway Programs | The PM will develop a"}
@@ -871,7 +878,8 @@ requirements:
     locator: "3.5"
     context: "Table 2. CSS Review Requirements"
     statement: "Major Capability ACAT ID Pathway Programs | The PM will develop a CSS and obtain Component CIO and DoD CIO approval as part of the program protection plan before the MDA makes milestone decisions or provides an update to the program protection plan before contract awards are authorized."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.yaml", "expect": "program obtains", "asserts": "An ACAT ID program obtains Component CIO and DoD CIO approval of the CSS before the MDA makes milestone decisions", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.award.yaml", "expect": "reviewed prior to contract award", "asserts": "The CSS is reviewed again before contract awards are authorized: reviewed prior to contract award", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0109"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "Major Capability Non-ACAT ID Pathway Programs | The PM will develop a"}
@@ -879,7 +887,8 @@ requirements:
     locator: "3.5"
     context: "Table 2. CSS Review Requirements"
     statement: "Major Capability Non-ACAT ID Pathway Programs | The PM will develop a CSS as part of the relevant documentation that results in an acquisition strategy customized to the unique characteristics and risks of their program to gain approval from the respective CIO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.acqstrategy.yaml", "expect": "developed as part of the documentation that results in the acquisition", "asserts": "A non-ACAT ID program develops the CSS as part of the documentation that results in an acquisition strategy", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.cio.yaml", "expect": "gains approval from the respective CIO", "asserts": "The CSS of a non-ACAT ID program gains approval from the respective CIO", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0110"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "Defense Business System BCAT I Programs | The PM will develop a"}
@@ -887,7 +896,8 @@ requirements:
     locator: "3.5"
     context: "Table 2. CSS Review Requirements"
     statement: "Defense Business System BCAT I Programs | The PM will develop a CSS and obtain Component CIO and DoD CIO approval as part of the program protection plan before the MDA makes milestone decisions or provides an update to the program protection plan before contract awards are authorized."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.bcat.yaml", "expect": "program obtains", "asserts": "A BCAT I business program obtains Component CIO and DoD CIO approval of the CSS before the MDA makes milestone decisions", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.award.yaml", "expect": "reviewed prior to contract award", "asserts": "The CSS is reviewed before contract awards are authorized: reviewed prior to contract award", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0111"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "IT Services Services ACAT I Programs | The PM will develop a"}
@@ -895,7 +905,9 @@ requirements:
     locator: "3.5"
     context: "Table 2. CSS Review Requirements"
     statement: "IT Services Services ACAT I Programs | The PM will develop a CSS as part of the relevant documentation that results in an acquisition strategy customized to the unique characteristics and risks of their program to gain approval from the respective CIO."
-    status: "candidate"
+    status: "partial"
+    reason: "On PW-AOS an ACAT I program (ID, IB or IC) is held to the acquisition strategy documentation and the respective CIO approval (CSSTRAT-003, CSSTRAT-001), but those fixtures run on PW-MCA, so nothing proves the services branch. DoDI 5000.82 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.acqstrategy.yaml", "expect": "developed as part of the documentation that results in the acquisition", "asserts": "An IT services program develops the CSS as part of the documentation that results in an acquisition strategy", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.cio.yaml", "expect": "gains approval from the respective CIO", "asserts": "The CSS of an IT services program gains approval from the respective CIO", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0112"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "Urgent Capability Acquisition, Operation of the Middle Tier of Acquisition, Software Acquisition"}
@@ -903,7 +915,8 @@ requirements:
     locator: "3.5"
     context: "Table 2. CSS Review Requirements"
     statement: "Urgent Capability Acquisition, Operation of the Middle Tier of Acquisition, Software Acquisition If the contract award is authorized as part of an acquisition milestone decision, a separate review of the CSS before contract award authorization is not required. | The PM will develop a CSS as part of the relevant documentation that results in an acquisition strategy customized to the unique characteristics and risks of their program to gain approval from the respective CIO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.acqstrategy.yaml", "expect": "developed as part of the documentation that results in the acquisition", "asserts": "An urgent, middle tier or software program develops the CSS as part of the documentation that results in an acquisition strategy", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.cio.yaml", "expect": "gains approval from the respective CIO", "asserts": "The CSS of an urgent, middle tier or software program gains approval from the respective CIO", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.authorized.yaml", "expect": "milestone decision the program passed before the award", "asserts": "A contract award authorized as part of an acquisition milestone decision needs no separate CSS review before the award", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0113"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "The approved CSS will be an appendix to the program protection plan"}
@@ -911,7 +924,8 @@ requirements:
     locator: "3.5.(5)"
     context: "Table 2. CSS Review Requirements"
     statement: "(5) The approved CSS will be an appendix to the program protection plan in accordance with DoDI 5000.83. Otherwise, it will be a stand-alone required document."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.appendix.yaml", "expect": "the cybersecurity strategy is submitted as an appendix to the PPP", "asserts": "The approved cybersecurity strategy is an appendix to the program protection plan", "claim": "constraint", "sentence": "(5) The approved CSS will be an appendix to the program protection plan in accordance with DoDI 5000.83."}, {"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.standalone.yaml", "expect": "without a program protection plan the CSS is a stand-alone required document", "asserts": "Otherwise, without a program protection plan, the CSS is a stand-alone required document", "claim": "constraint", "sentence": "Otherwise, it will be a stand-alone required document."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.82-0114"
     citation: {"ref": "DODI5000.82", "page": 15, "anchor": "MDAs, DAs, IT functional sponsors, PMs, and FSMs will minimize ICT supply"}
@@ -919,7 +933,9 @@ requirements:
     locator: "3.5.c.(1)"
     context: "Table 2. CSS Review Requirements C-SCRM"
     statement: "(1) MDAs, DAs, IT functional sponsors, PMs, and FSMs will minimize ICT supply chain risks to DoD’s warfighting capabilities, business, and enterprise information systems to maintain a technological advantage. The application of risk management practices will begin during the design of applicable systems and before the acquisition of critical programs and technology, ICT, critical components, or their integration within applicable systems, whether acquired through a commodity purchase, system acquisition, or sustainment process in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRM practices must start before the first contract award (PMSCRM-001), and the PM's Table 1 due diligence is held; 'minimize' has no measure, and the start 'during the design' has no date a rule can read. DoDI 5000.82 is not tier 1; DoDI 5200.44 is not in references/."
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.yaml", "expect": "it is neither taken nor explained", "asserts": "PMs minimize ICT supply chain risks: each due diligence action their risk tolerance calls for is taken or explained", "claim": "constraint", "sentence": "(1) MDAs, DAs, IT functional sponsors, PMs, and FSMs will minimize ICT supply chain risks to DoD’s warfighting capabilities, business, and enterprise information systems to maintain a technological advantage."}, {"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.start.yaml", "expect": "supply chain risk management practices begin before the acquisition", "asserts": "The application of supply chain risk management practices begins before the acquisition of critical components", "claim": "constraint", "sentence": "The application of risk management practices will begin during the design of applicable systems and before the acquisition of critical programs and technology, ICT, critical components, or their integration within applicable systems, whether acquired through a commodity purchase, system acquisition, or sustainment process in accordance with DoDI 5200.44."}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.82-0115"
     citation: {"ref": "DODI5000.82", "page": 16, "anchor": "DoD Components will manage C-SCRM risk by:"}

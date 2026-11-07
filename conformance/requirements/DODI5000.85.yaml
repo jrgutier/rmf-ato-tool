@@ -576,7 +576,9 @@ requirements:
     locator: "3.8.c"
     context: "TMRR PHASE"
     statement: "During the TMRR phase, the requirements validation authority will validate the CDD (or equivalent requirements document) for the program. This action will precede the Development RFP release decision point."
-    status: "candidate"
+    status: "covered"
+    reason: "MS-CDDV in milestones.yaml; ACQLC-002 refuses a CDD validation before Milestone A and a Development RFP release decision point passed without it before."
+    evidence: [{"kind": "rule", "target": "ACQLC-002", "fixture": "tests/fixtures/negative/ACQLC-002.tmrr.yaml", "expect": "the CDD is validated during the TMRR phase", "claim": "constraint", "asserts": "The CDD is validated during the TMRR phase, and a validation before it fails", "sentence": "During the TMRR phase, the requirements validation authority will validate the CDD (or equivalent requirements document) for the program."}, {"kind": "rule", "target": "ACQLC-002", "fixture": "tests/fixtures/negative/ACQLC-002.yaml", "expect": "validation does not precede the Development RFP release decision point", "claim": "constraint", "asserts": "The validation will precede the Development RFP release decision point", "sentence": "This action will precede the Development RFP release decision point."}]
     work_item: "WI-35"
   - id: "REQ-DODI5000.85-0073"
     citation: {"ref": "DODI5000.85", "page": 14, "anchor": "The purpose of the Development RFP release decision point is to ensure,"}
@@ -773,7 +775,9 @@ requirements:
     locator: "3.15.a"
     context: "OPERATIONS AND SUPPORT (O&S) PHASE"
     statement: "This phase executes the PSS, satisfies materiel readiness and operational support performance requirements including personnel training, and sustains the system over its life cycle, including disposal. The O&S phase begins upon fielding of the first system(s), which may precede IOC, and is based on an MDA-approved PSS."
-    status: "candidate"
+    status: "covered"
+    reason: "PH-OS enters at MS-FIELD (first fielding); ACQLC-003 refuses IOC before first fielding, a fielded system not in P&D or O&S, and O&S without a product support strategy the MDA approved (no order between the approval and first fielding: the PSS is updated through O&S)."
+    evidence: [{"kind": "rule", "target": "ACQLC-003", "fixture": "tests/fixtures/negative/ACQLC-003.yaml", "expect": "the O&S phase begins upon fielding of the first system", "claim": "constraint", "asserts": "The O&S phase begins upon fielding of the first systems, which may precede IOC"}, {"kind": "rule", "target": "ACQLC-003", "fixture": "tests/fixtures/negative/ACQLC-003.phase.yaml", "expect": "the capability enters O&S", "claim": "constraint", "asserts": "The capability enters the O&S phase upon fielding of the first system, and a fielded system recorded in EMD fails"}, {"kind": "rule", "target": "ACQLC-003", "fixture": "tests/fixtures/negative/ACQLC-003.approver.yaml", "expect": "O&S is based on an MDA-approved product support strategy", "claim": "constraint", "asserts": "O&S is based on an MDA-approved PSS, and another approver fails"}]
     work_item: "WI-36"
   - id: "REQ-DODI5000.85-0098"
     citation: {"ref": "DODI5000.85", "page": 18, "anchor": "During this phase the PM will deploy the support package and monitor"}

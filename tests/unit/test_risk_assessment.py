@@ -49,9 +49,10 @@ def test_the_data_template_is_valid_yaml_of_the_schema():
 def test_the_example_shape_needs_every_section():
     """Each top-level section is required, so a run cannot leave one out silently. The sections
     added after the contract opened stay optional; SWA-002 (since 0.2.0) asks for components,
-    and PRIV-007 asks `privacy` of a system processing PII."""
+    PRIV-007 asks `privacy` of a system processing PII, and THREAT-001 (since 0.2.0) asks for
+    system_risk."""
     schema = _schema()
-    optional = {"ai_capabilities", "components", "privacy"}
+    optional = {"ai_capabilities", "components", "privacy", "system_risk"}
     assert set(schema["required"]) | optional == set(schema["properties"])
 
 

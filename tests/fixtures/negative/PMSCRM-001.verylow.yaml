@@ -1,0 +1,46 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: a very low risk tolerance system not following DoDI 5200.44 and SP 800-161, without a reason
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.risk_tolerance.procurement
+  value: assured
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.risk_tolerance.level
+  value: very-low
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.actions
+  value:
+  - foci-caution
+  - approved-products-lists
+  - industry-standards
+  - balance-risk-mission
+  - verifiable-vendor-processes
+  - vendor-limitations-awareness
+  - countermeasures-critical-risks
+  - assess-critical-components
+  - implement-countermeasures
+  - assessment-vendors
+  - criticality-analysis
+  - ppp-documentation
+  - tac-requests
+  - flag-reports
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: pm_actions.tac_requests
+  value:
+  - id: TR-1
+    subjects:
+    - Relay appliance vendor
+    to: DIA-SCRM-TAC
+    date: '2026-02-10'
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - Table 1 asks a system of very-low risk tolerance for follow-dodi5200.44-sp800-161; it is neither taken
+    nor explained

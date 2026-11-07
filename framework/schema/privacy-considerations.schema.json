@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:privacy-considerations",
+  "title": "framework/baselines/privacy-considerations.yaml (generated)",
+  "description": "The Privacy Implementation Considerations column of CNSSI 1253 Appendix D and of the Classified System Overlay Table 1, per control with the subscripted implications of its checkmark, written by `uv run python -m rmf_tool.cnssi1253` from the PDF's geometry checked against the text extraction (never hand-edited, INV-2). Read by PIC-001.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["documents"],
+  "properties": {
+    "documents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "citation", "implications", "blocks"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "citation": {"$ref": "#/$defs/page_citation"},
+          "implications": {
+            "title": "The legend of the subscripted numbers, as the document words it",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["1", "2", "3", "4"],
+            "patternProperties": {"^[1-4]$": {"type": "string", "minLength": 1}}
+          },
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["citation", "pic"],
+              "properties": {
+                "citation": {"$ref": "#/$defs/page_citation"},
+                "pic": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "propertyNames": {"pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"},
+                  "additionalProperties": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {"enum": [1, 2, 3, 4]}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "page_citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "page", "anchor"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "page": {"type": "integer", "minimum": 1},
+        "anchor": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
