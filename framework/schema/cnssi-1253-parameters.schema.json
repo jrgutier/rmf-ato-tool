@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:cnssi-1253-parameters",
+  "title": "framework/baselines/cnssi-1253-parameters.yaml (generated)",
+  "description": "CNSSI 1253 Appendix D Parameter Value column: the minimum NSS values for SP 800-53r5 organization-defined parameters, per control. Written by `python -m rmf_tool.cnssi1253_params`; every control carries a page+anchor citation (FW-CITE-002).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ref", "citation", "controls"],
+  "properties": {
+    "ref": {"const": "CNSSI1253"},
+    "citation": {"$ref": "#/$defs/page_citation"},
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control", "citation", "values"],
+        "properties": {
+          "control": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(\\.\\d{1,2})?$"},
+          "citation": {"$ref": "#/$defs/page_citation"},
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["params", "value", "bound"],
+              "properties": {
+                "label": {"type": "string", "minLength": 1},
+                "params": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(\\.\\d{1,2})?_prm_\\d+$|^[a-z]{2}-\\d{2}(\\.\\d{2})?_odp(\\.\\d{2})*$"}
+                },
+                "value": {"type": "string", "minLength": 1},
+                "bound": {"enum": ["max", "min", "none"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "page_citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "page", "anchor"],
+      "properties": {
+        "ref": {"const": "CNSSI1253"},
+        "page": {"type": "integer", "minimum": 1},
+        "anchor": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

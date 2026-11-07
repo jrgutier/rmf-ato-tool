@@ -56,7 +56,7 @@ _ID_MAX_X = 90.0  # the ID column's right edge
 # add-list. The Privacy Overlay selects one of four control sets (its §4.1 two questions), so
 # it is transcribed as one overlay per set, `<ref>-<SET>` (ADR-0003); the bare reference ID
 # stays listed untranscribed so an old pick fails with a pointer to the sets. The Space
-# Platform Overlay selects per condition and is not machine-readable yet.
+# Platform Overlay adds and removes against H/H/H (Table 2), checked against Table 3.
 OVERLAYS = {
     "CNSSI1253E-ATT5-CLASSIFIED": "Classified System Overlay",
     "CNSSI1253F-ATT2-SPACE": "Space Platform Overlay",
@@ -77,6 +77,26 @@ _PRIVACY_ERRATA = {
     "ia-2.6": "the row repeats IA-2(5)'s name (Individual Authentication with Group "
               "Authentication)",
     "pt-8": "the row says 'Requirement'; the catalog title is 'Computer Matching Requirements'",
+}
+SPACE = "CNSSI1253F-ATT2-SPACE"
+_SPACE_TABLE2 = "Table 2 - Summary of Control Specifications"
+_SPACE_TABLE2_END = "# 6. Detailed Control Specifications"
+_SPACE_TABLE3 = "Table 3 - Space Platform Overlay Applicable Baseline Controls"
+_SPACE_STATED = re.compile(r"^There are (\d+) controls in the CNSSI 1253 H/H/H baseline")
+_SPACE_MARKS = {"+G": "add", "--": "remove"}
+# The overlay is written against the H/H/H baseline (page 3: "tailors the CNSSI No. 1253
+# (H/H/H) control baseline"; page 2: "this overlay is not baseline independent").
+SPACE_TAILORS = {"c": "high", "i": "high", "a": "high"}
+# CNSSI 1253 marks these "+" at High (NSS additions), and the overlay neither removes them in
+# Table 2 nor keeps them in Table 3, so Table 3 holds 306 where H/H/H less the removals is 311.
+# Table 2 lists only tailoring actions (page 7: the rest are "not specifically identified in
+# Table 2 because no tailoring action is taken"), so they stay selected.
+SPACE_UNLISTED = {
+    "sa-8.1": "SA-8(1) Clear Abstractions",
+    "sa-8.3": "SA-8(3) Modularity and Layering",
+    "sa-8.4": "SA-8(4) Partially Ordered Dependencies",
+    "sa-9.3": "SA-9(3) Establish and Maintain Trust Relationship with Providers",
+    "sc-7.13": "SC-7(13) Isolation of Security Tools, Mechanisms, and Support Components",
 }
 
 
@@ -305,6 +325,91 @@ def _privacy_rows(md: Path) -> list[tuple[int, list[str]]]:
     return rows
 
 
+@dataclass
+class SpaceOverlay:
+    """Table 2 of the Space Platform Overlay (additions ``+`` and removals ``--`` against the
+    CNSSI 1253 H/H/H baseline), by page, and Table 3 (Appendix A), the H/H/H controls it keeps."""
+    pages: dict[int, dict[str, list[str]]]
+    retained: list[str]
+    stated_retained: int  # "There are 306 controls ... not specifically identified in Table 2"
+
+    @property
+    def added(self) -> list[str]:
+        return [c for p in self.pages.values() for c in p["add"]]
+
+    @property
+    def removed(self) -> list[str]:
+        return [c for p in self.pages.values() for c in p["remove"]]
+
+
+def _space_id(cell: str) -> str | None:
+    printed = re.sub(r"\s", "", cell)  # "AC- 17(10)" in Table 3
+    return oscal_id(printed) if _ID.match(printed) else None
+
+
+def space_overlay(md: Path) -> SpaceOverlay:
+    pages: dict[int, dict[str, list[str]]] = {}
+    retained: list[str] = []
+    stated, page, table = None, 0, None
+    for line in md.read_text(encoding="utf-8").splitlines():
+        m = _PAGE.match(line)
+        if m:
+            page = int(m.group(1))
+            continue
+        if line.startswith(_SPACE_TABLE2):
+            table = 2
+        elif line.startswith(_SPACE_TABLE2_END):
+            table = None
+        elif line.startswith(_SPACE_TABLE3):
+            table = 3
+        elif (n := _SPACE_STATED.match(line)) is not None:
+            stated = int(n.group(1))
+        if table is None or not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in re.split(r"(?<!\\)\|", line.strip())[1:-1]]
+        cid = _space_id(cells[0] if table == 2 else cells[0] or cells[1])
+        if cid is None:
+            continue
+        if table == 3:
+            retained.append(cid)
+            continue
+        action = _SPACE_MARKS.get(cells[2])
+        if action is None:
+            raise ExtractError(f"{SPACE} page {page} {cells[0]}: mark {cells[2]!r} is neither "
+                               "'+G' nor '--'")
+        pages.setdefault(page, {"add": [], "remove": []})[action].append(cid)
+    if not pages or not retained or stated is None:
+        raise ExtractError(f"{SPACE}: Table 2, Table 3 or the count of retained controls not "
+                           "found")
+    return SpaceOverlay(pages, retained, stated)
+
+
+def space_problems(space: SpaceOverlay, rows: list[Row], known: dict[str, Any]) -> list[str]:
+    """The overlay must resolve against the framework's H/H/H selection: what it removes is
+    selected, what it adds is not, and every selected control is removed, kept in Table 3 or
+    one of the controls both tables leave out (SPACE_UNLISTED)."""
+    high = {r.id for r in rows if not r.withdrawn
+            and any(r.cells[f"{o}H"] in "X+" for o in OBJECTIVES)}
+    added, removed, kept = set(space.added), set(space.removed), set(space.retained)
+    out = [f"{SPACE}: {c} is not in the SP 800-53r5 catalog"
+           for c in sorted(added | removed | kept) if c not in known]
+    out += [f"{SPACE}: {c} appears twice" for lst in (space.added, space.removed, space.retained)
+            for c in sorted({c for c in lst if lst.count(c) > 1})]
+    out += [f"{SPACE}: Table 2 removes {c}, which H/H/H does not select"
+            for c in sorted(removed - high)]
+    out += [f"{SPACE}: Table 2 adds {c}, which H/H/H already selects" for c in sorted(added & high)]
+    out += [f"{SPACE}: Table 3 keeps {c}, which is not an H/H/H control or is removed"
+            for c in sorted(kept - (high - removed))]
+    if len(kept) != space.stated_retained:
+        out.append(f"{SPACE}: Table 3 lists {len(kept)} controls; Section 5 states "
+                   f"{space.stated_retained}")
+    unlisted = high - removed - kept
+    if unlisted != set(SPACE_UNLISTED):
+        out.append(f"{SPACE}: H/H/H controls in neither Table 2 nor Table 3 are "
+                   f"{sorted(unlisted)}; SPACE_UNLISTED names {sorted(SPACE_UNLISTED)}")
+    return out
+
+
 def privacy_overlay(md: Path, controls: dict[str, dict[str, Any]]) -> list[PrivacyRow]:
     """Table 2 of the Privacy Overlays: the rows that select a control in some control set.
 
@@ -488,8 +593,29 @@ def _privacy_blocks(pages: dict[int, list[PrivacyRow]]) -> list[str]:
     return out
 
 
+def _space_lines(space: SpaceOverlay) -> list[str]:
+    out = ["    tailors: {" + ", ".join(f"{o}: {lv}" for o, lv in SPACE_TAILORS.items()) + "}",
+           "    blocks:"]
+    for n, (page, acts) in enumerate(space.pages.items()):
+        anchor = _SPACE_TABLE2 if n == 0 else next(iter(acts["add"] + acts["remove"]))
+        out.append(f"      - citation: {{ref: {SPACE}, page: {page}, anchor: "
+                   f"{_q(anchor if n == 0 else _printed(anchor))}}}")
+        out += [f"        {action}: [{', '.join(ids)}]" for action, ids in acts.items() if ids]
+    out += ["    unlisted:",
+            f"      citation: {{ref: {SPACE}, page: 7, anchor: \"There are "
+            f"{space.stated_retained} controls in the CNSSI 1253 H/H/H baseline\"}}",
+            f"      controls: [{', '.join(SPACE_UNLISTED)}]"]
+    return out
+
+
+def _printed(cid: str) -> str:
+    """ac-17.10 as Table 2 prints it: AC-17(10)."""
+    base, _, enh = cid.partition(".")
+    return base.upper() + (f"({enh})" if enh else "")
+
+
 def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
-           privacy: dict[str, dict[int, list[PrivacyRow]]]) -> str:
+           privacy: dict[str, dict[int, list[PrivacyRow]]], space: SpaceOverlay) -> str:
     out = [
         f"# {YAML_PATH}: GENERATED by `uv run python -m rmf_tool.cnssi1253`; do not edit.",
         "# Cell values come from the PDF's table geometry and are checked cell for cell",
@@ -542,8 +668,10 @@ def render(rows: list[Row], text: TextTables, classified: dict[int, list[str]],
     out.append("overlays:")
     for ref, title in OVERLAYS.items():
         out += [f"  - id: {ref}", f"    title: {title}", f"    ref: {ref}",
-                f"    transcribed: {'true' if ref == CLASSIFIED else 'false'}"]
-        if ref == CLASSIFIED:
+                f"    transcribed: {'true' if ref in (CLASSIFIED, SPACE) else 'false'}"]
+        if ref == SPACE:
+            out += _space_lines(space)
+        elif ref == CLASSIFIED:
             out.append("    blocks:")
             for n, (page, ids) in enumerate(classified.items()):
                 anchor = _CLASSIFIED_TITLE if n == 0 else ids[0]
@@ -564,6 +692,7 @@ class Result:
     nist: dict[str, dict[str, list[str]]]
     classified: int  # controls the Classified System Overlay adds
     privacy: dict[str, int]  # Privacy Overlay control set suffix -> controls it adds
+    space: SpaceOverlay
 
 
 def generate(repo: Path) -> Result:
@@ -587,12 +716,15 @@ def generate(repo: Path) -> Result:
     classified = classified_overlay(repo / f"references/text/{CLASSIFIED}.md")
     problems += [f"{CLASSIFIED} page {page} {i}: {oscal_id(i)} is not in the catalog"
                  for page, ids in classified.items() for i in ids if oscal_id(i) not in known]
+    space = space_overlay(repo / f"references/text/{SPACE}.md")
+    problems += space_problems(space, rows, known)
     if problems:
         raise ExtractError(f"{len(problems)} problem(s):\n  " + "\n  ".join(problems))
     privacy = privacy_sets(privacy_overlay(repo / f"references/text/{PRIVACY}.md", known))
-    return Result(rows, render(rows, text, classified, privacy), nist_differences(repo, rows),
-                  sum(len(ids) for ids in classified.values()),
-                  {s: sum(len(rs) for rs in pages.values()) for s, pages in privacy.items()})
+    return Result(rows, render(rows, text, classified, privacy, space),
+                  nist_differences(repo, rows), sum(len(ids) for ids in classified.values()),
+                  {s: sum(len(rs) for rs in pages.values()) for s, pages in privacy.items()},
+                  space)
 
 
 def summary(result: Result) -> str:
@@ -602,6 +734,9 @@ def summary(result: Result) -> str:
     lines.append(f"privacy baseline: {sum(r.privacy in 'X+' for r in rows)}")
     lines.append(f"{CLASSIFIED}: {result.classified} control(s) added")
     lines.append(f"{PRIVACY}: " + ", ".join(f"{s}={n}" for s, n in result.privacy.items()))
+    lines.append(f"{SPACE}: {len(result.space.added)} added, {len(result.space.removed)} "
+                 f"removed, {len(result.space.retained)} kept in Table 3, "
+                 f"{len(SPACE_UNLISTED)} in neither table")
     for obj in OBJECTIVES:
         lines.append(f"{obj}: " + ", ".join(f"{lv}={len(selected(rows, obj, lv))}"
                                              for lv in LEVELS))

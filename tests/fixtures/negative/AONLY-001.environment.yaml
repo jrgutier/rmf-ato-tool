@@ -1,0 +1,16 @@
+rule: AONLY-001
+bases: [minimal]
+description: an IT service connected into an enclave under an interim authorization to test
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: system_type.value
+    value: it-service
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: acceptances
+    value: [{id: ACC-001, reviewed_by: PER-ISSM, directed_by: PER-AO, secure_configuration: approved, environment: {name: Analysis enclave, authorization: {decision: AD-IATT, date: "2026-09-01"}}, date: "2026-10-01", sources: [INT-028.A2]}]
+expect:
+  errors: [AONLY-001]
+  messages:
+    - "ACC-001: Analysis enclave is no authorized computing environment: its authorization is AD-IATT, not an ATO"

@@ -76,6 +76,65 @@
         "$ref": "#/$defs/persona_id"
       }
     },
+    "operational_awareness": {
+      "title": "Operational commanders verified to hold the system's cyber risk information, and the coordination on each risk that affects an operational requirement",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["informed", "affected_requirements", "sources"],
+      "properties": {
+        "informed": {
+          "title": "Officials the authorizing official verified to have the necessary cyber risk information on the system",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/persona_id"
+          }
+        },
+        "affected_requirements": {
+          "title": "Operational requirements a cybersecurity risk affects; empty when no risk does",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["risk", "requirement", "coordinated_with", "sources"],
+            "properties": {
+              "risk": {
+                "title": "Risk of the risk assessment report that affects the requirement",
+                "type": "string",
+                "minLength": 1
+              },
+              "requirement": {
+                "title": "Operational requirement the risk affects",
+                "type": "string",
+                "minLength": 1
+              },
+              "coordinated_with": {
+                "title": "Officials the authorizing official facilitated coordination with",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/persona_id"
+                }
+              },
+              "sources": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/source"
+                }
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
     "marking": {
       "title": "Marking of the authorization package contents, whose sensitive information is marked and protected",
       "enum": [

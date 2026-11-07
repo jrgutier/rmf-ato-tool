@@ -154,7 +154,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
@@ -218,7 +218,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -285,7 +285,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -352,7 +352,7 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Consulted | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[Sponsor](../../personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
@@ -493,7 +493,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AO](../../personas/PER-AO.md) Authorizing Official<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**

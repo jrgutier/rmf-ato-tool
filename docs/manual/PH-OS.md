@@ -227,7 +227,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](../../personas/PER-CSSP.md) Cybersecurity Service Provider<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -447,7 +447,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[DoD CISO](../../personas/PER-DODCISO.md) DoD Chief Information Security Officer |
 | Informed | [ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -529,7 +529,7 @@ Writes to `facts.yaml`: `acquisition`.
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function |
+| Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Condition | PER-PRIV only when the system processes PII |
 

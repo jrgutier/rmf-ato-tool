@@ -1,0 +1,19 @@
+rule: PVAL-002
+bases:
+- minimal
+description: an account review cadence left to policy, with no amount to compare with the NSS minimum
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.parameters
+  value:
+    ac-02_odp.06: 24 hours
+    ac-02_odp.07: 24 hours
+    ac-02_odp.08: 24 hours
+    ac-02_odp.10: as the program policy directs
+expect:
+  errors: []
+  warnings:
+  - PVAL-002
+  messages:
+  - 'ac-2 ac-02_odp.10: ''as the program policy directs'' states no amount to compare with the NSS minimum ''at least quarterly'''

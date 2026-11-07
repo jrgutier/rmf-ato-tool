@@ -63,17 +63,43 @@
           "title": {"type": "string", "minLength": 1},
           "ref": {"type": "string", "minLength": 1},
           "transcribed": {"type": "boolean"},
+          "tailors": {
+            "description": "The baseline a baseline-dependent overlay is written against (the Space Platform Overlay: H/H/H). Its removals take out what that baseline selects.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["c", "i", "a"],
+            "properties": {
+              "c": {"enum": ["low", "moderate", "high"]},
+              "i": {"enum": ["low", "moderate", "high"]},
+              "a": {"enum": ["low", "moderate", "high"]}
+            }
+          },
           "blocks": {
             "type": "array",
             "minItems": 1,
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["citation", "add"],
+              "required": ["citation"],
+              "anyOf": [{"required": ["add"]}, {"required": ["remove"]}],
               "properties": {
                 "citation": {"$ref": "#/$defs/page_citation"},
-                "add": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}}
+                "add": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}},
+                "remove": {
+                  "description": "Controls the overlay tailors out of the baseline it tailors (\"--\").",
+                  "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}
+                }
               }
+            }
+          },
+          "unlisted": {
+            "description": "Controls of the tailored baseline the overlay neither removes nor lists as kept; with no tailoring action they stay selected.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["citation", "controls"],
+            "properties": {
+              "citation": {"$ref": "#/$defs/page_citation"},
+              "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}}
             }
           }
         },

@@ -5,7 +5,10 @@
   "description": "The baseline and overlay assumptions and the overlay conditions Task S-2 tests a system against (TLR-003, TLR-005).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["assumptions", "overlay_conditions"],
+  "required": [
+    "assumptions",
+    "overlay_conditions"
+  ],
   "properties": {
     "assumptions": {
       "type": "array",
@@ -13,16 +16,45 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "text", "when", "citation"],
+        "required": [
+          "id",
+          "text",
+          "when",
+          "citation"
+        ],
         "properties": {
-          "id": {"type": "string", "pattern": "^AS-[A-Z]+-\\d+$"},
-          "text": {"type": "string", "minLength": 1},
+          "id": {
+            "type": "string",
+            "pattern": "^AS-[A-Z]+-\\d+$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
           "when": {
             "description": "holds-false: the baselines rest on it, so a system where it fails revisits the selection. holds-true: the baselines do not address it, so a system where it holds supplements.",
-            "enum": ["holds-false", "holds-true"]
+            "enum": [
+              "holds-false",
+              "holds-true"
+            ]
           },
-          "overlay": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
-          "citation": {"$ref": "#/$defs/citation"}
+          "overlay": {
+            "type": "string",
+            "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+          },
+          "citation": {
+            "$ref": "#/$defs/citation"
+          },
+          "controls": {
+            "description": "The controls the overlay tailors out on this assumption (the Space Platform Overlay's Table 1 Associated Controls). Where it does not hold, S-2 revisits each of them (TLR-003).",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+            }
+          }
         }
       }
     },
@@ -31,27 +63,113 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["overlay", "id", "question", "controls", "citation"],
+        "required": [
+          "overlay",
+          "id",
+          "question",
+          "controls",
+          "citation"
+        ],
         "properties": {
-          "overlay": {"type": "string", "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"},
-          "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
-          "question": {"type": "string", "minLength": 1},
-          "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control_id"}},
-          "citation": {"$ref": "#/$defs/citation"}
+          "overlay": {
+            "type": "string",
+            "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/control_id"
+            }
+          },
+          "citation": {
+            "$ref": "#/$defs/citation"
+          }
+        }
+      }
+    },
+    "policy_controls": {
+      "description": "Controls a policy requires of every system an overlay applies to, so S-2 may not tailor them out (SPCOV-002).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "overlay",
+          "authority",
+          "text",
+          "controls",
+          "citation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^PC-[A-Z]+-\\d+$"
+          },
+          "overlay": {
+            "type": "string",
+            "pattern": "^CNSSI1253[A-Z]?-[A-Z0-9-]+$"
+          },
+          "authority": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+            }
+          },
+          "citation": {
+            "$ref": "#/$defs/citation"
+          }
         }
       }
     }
   },
   "$defs": {
-    "control_id": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"},
+    "control_id": {
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
     "citation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ref", "page", "anchor"],
+      "required": [
+        "ref",
+        "page",
+        "anchor"
+      ],
       "properties": {
-        "ref": {"type": "string", "minLength": 1},
-        "page": {"type": "integer", "minimum": 1},
-        "anchor": {"type": "string", "minLength": 1}
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "anchor": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }
