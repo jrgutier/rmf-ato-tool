@@ -26,7 +26,9 @@ requirements:
     locator: "1.2.b"
     context: "POLICY"
     statement: "b. The software acquisition pathway is for the timely acquisition of custom software capabilities developed for the DoD. Software programs that meet the definition of a covered Defense Business System (DBS) should use the DBS pathway in accordance with DoDI 5000.75 but may elect to incorporate this pathway for custom developed software."
-    status: "candidate"
+    status: "covered"
+    reason: "facts.yaml acquisition.covered_dbs, stated by every software pathway program; ACQLC-001 refuses a covered DBS whose pathways leave out the DBS pathway."
+    evidence: [{"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.dbs.yaml", "expect": "a covered defense business system uses the DBS pathway", "claim": "constraint", "asserts": "A covered Defense Business System uses the DBS pathway and may only incorporate the software pathway"}]
     work_item: "WI-34"
   - id: "REQ-DODI5000.87-0004"
     citation: {"ref": "DODI5000.87", "page": 3, "anchor": "Programs executing the software acquisition pathway are not subject to the Joint"}
@@ -333,8 +335,11 @@ requirements:
     locator: "3.1.b.(2)"
     context: "Figure 1. The Software Acquisition Pathway"
     statement: "(2) The embedded software path provides for the rapid development, deployment, and insertion of upgrades and improvements to software embedded in weapon systems and other military-unique hardware systems. The system in which the software is embedded could be acquired via other acquisition pathways (e.g., major capability acquisition)."
-    status: "candidate"
+    status: "partial"
+    reason: "Description of the embedded software path with a permission ('could be acquired via other acquisition pathways'): ruling sought. Built: a program may list both pathways in acquisition.pathways (ACQLC-001), and AODM-007 refuses a cATO for software-enabled hardware."
+    evidence: [{"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.yaml", "expect": "no transition point is defined from another pathway to", "claim": "constraint", "asserts": "The system with embedded software acquired via other acquisition pathways defines its transition between pathways"}]
     work_item: "WI-34"
+    ruling_sought: [{"sentence": "(2) The embedded software path provides for the rapid development, deployment, and insertion of upgrades and improvements to software embedded in weapon systems and other military-unique hardware systems. The system in which the software is embedded could be acquired via other acquisition pathways (e.g., major capability acquisition).", "reason": "Describes the embedded software path and permits ('could be acquired') the host system on another pathway; no duty a run can break."}]
   - id: "REQ-DODI5000.87-0041"
     citation: {"ref": "DODI5000.87", "page": 9, "anchor": "The DA will document the decision and rationale for a program to"}
     kind: "lettered"
@@ -349,8 +354,11 @@ requirements:
     locator: "3.1.d"
     context: "Figure 1. The Software Acquisition Pathway"
     statement: "d. Existing acquisition programs may elect to update their acquisition strategy to transition to the software acquisition pathway or use it in addition to their current acquisition pathway. The PM and applicable stakeholders will identify, and the DA will approve, a transition approach to tailor processes, reviews, and documentation to effectively deliver software capabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 1 is a permission ('may elect'): ruling sought. Sentence 2 is held by ACQLC-001: the PM identifies, the MDA or DA approves, and the approach tailors processes, reviews and documentation."
+    evidence: [{"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.identified.yaml", "expect": "the PM and applicable stakeholders identify the transition approach", "claim": "constraint", "asserts": "The PM and applicable stakeholders identify the transition approach", "sentence": "The PM and applicable stakeholders will identify, and the DA will approve, a transition approach to tailor processes, reviews, and documentation to effectively deliver software capabilities."}, {"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.approver.yaml", "expect": "the MDA or DA approves the transition approach", "claim": "constraint", "asserts": "The DA will approve the transition approach, and another approver fails", "sentence": "The PM and applicable stakeholders will identify, and the DA will approve, a transition approach to tailor processes, reviews, and documentation to effectively deliver software capabilities."}, {"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.tailors.yaml", "expect": "does not tailor", "claim": "constraint", "asserts": "The transition approach tailors processes, reviews and documentation", "sentence": "The PM and applicable stakeholders will identify, and the DA will approve, a transition approach to tailor processes, reviews, and documentation to effectively deliver software capabilities."}]
     work_item: "WI-34"
+    ruling_sought: [{"sentence": "Existing acquisition programs may elect to update their acquisition strategy to transition to the software acquisition pathway or use it in addition to their current acquisition pathway.", "reason": "A permission: existing programs 'may elect' to transition to or add the software pathway."}]
   - id: "REQ-DODI5000.87-0043"
     citation: {"ref": "DODI5000.87", "page": 9, "anchor": "Value assessments will be performed at least annually after the software is"}
     kind: "lettered"

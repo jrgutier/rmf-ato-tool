@@ -9,6 +9,7 @@ from collections.abc import Callable
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
+    acquisition,
     artifacts,
     assessment,
     assets,
@@ -198,6 +199,7 @@ RULES: dict[str, Rule] = {
     **dict(secureconfig.rules()),
     **dict(governance.rules()),
     **dict(cato.rules()),
+    **dict(acquisition.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

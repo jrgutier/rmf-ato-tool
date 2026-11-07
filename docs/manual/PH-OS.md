@@ -12,7 +12,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 
 | | |
 |---|---|
-| Starts at | [IOC](PH-PD.md#ms-ioc) Initial Operational Capability |
+| Starts at | [First fielding](PH-PD.md#ms-field) First fielding |
 | Ends at | End of the life cycle (disposal) |
 | RMF steps active | [P Prepare](../../MANUAL.md#step-p), [M Monitor](../../MANUAL.md#step-m) |
 | Tasks | 7 with this primary phase; 1 more also run here |

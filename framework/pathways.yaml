@@ -1,6 +1,11 @@
 # Adaptive Acquisition Framework pathways (DoDI 5000.02). The RMF applies regardless of the
 # pathway (DoDI 8510.01 3.1.c); PW-MCA is the spine whose phases this framework uses.
 # `phases` lists the spine phases a pathway's activities roughly correspond to.
+# A program may combine pathways with MDA or DA approval (DoDI 5000.02 4.1.a): facts.yaml
+# `acquisition.pathways` lists them, and protection.yaml `program.transitions` defines each
+# transition point, the new pathway's entry point and its information requirements (ACQLC-001).
+# A decision point with `enters: PH-OS` is where the pathway enters O&S; on the spine it is the
+# PH-OS entry milestone (ACQLC-003).
 pathways:
   - id: PW-MCA
     name: Major Capability Acquisition
@@ -129,6 +134,15 @@ pathways:
         citations:
           - {ref: DODI5000.81, page: 15, anchor: "Entry into P&D is approved by the MDA"}
           - {ref: DODI5000.81, page: 16, anchor: "documents the production decision in an ADM"}
+      - id: DP-UCA-DEPLOYMENT
+        name: Deployment
+        kind: event
+        enters: PH-OS
+        authority: Program manager
+        purpose: >-
+          The capability is deployed and enters O&S (ACQLC-003).
+        citations:
+          - {ref: DODI5000.81, page: 16, anchor: "Upon deployment, the capability will enter O&S."}
     citations:
       - {ref: DODI8510.01, page: 12, anchor: "Systems without an ATO must begin the RMF"}
       - {ref: DODI5000.02, page: 12, anchor: "a. Urgent Capability Acquisition."}

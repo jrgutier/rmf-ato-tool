@@ -1,0 +1,39 @@
+rule: ACQLC-001
+bases:
+- minimal
+description: the transition approach leaves reviews untailored
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathways
+  value:
+  - PW-MCA
+  - PW-SWP
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.transitions
+  value:
+  - from: PW-MCA
+    to: PW-SWP
+    at: MS-B
+    entry: DP-SWP-PATHWAY
+    date: '2026-06-01'
+    information_requirements:
+    - id: EXT-CAPDOC
+      coordinated_with:
+      - PER-PM
+      - PER-MDA
+    approach:
+      identified_by:
+      - PER-PM
+      - PER-ISSM
+      approved_by: PER-MDA
+      date: '2026-05-01'
+      tailors:
+      - processes
+      - documentation
+expect:
+  errors:
+  - ACQLC-001
+  messages:
+  - does not tailor reviews

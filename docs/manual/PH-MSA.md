@@ -829,6 +829,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- protection.yaml program.decision_points records the CDD validation (MS-CDDV) during TMRR before the Development RFP release (ACQLC-002) and first fielding (MS-FIELD), where O&S begins, by IOC (ACQLC-003); a program that combines pathways defines each transition point, entry point, information requirement and approved transition approach in program.transitions (ACQLC-001).
 
 **Alignment**
 
@@ -899,6 +900,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- The capability document is of a kind the program's pathway uses, and a JCIDS document carries its validation date, on or before JCIDS was disestablished (ACQLC-004).
 
 **Alignment**
 
@@ -1071,7 +1073,7 @@ Writes to `facts.yaml`: `categorization`.
 **Exit criteria**
 
 - A security categorization of the system, including its information types, is completed and is consistent with the enterprise architecture and the organization's risk management strategy (DoDI 8510.01 Table 2 outcome).
-- facts.categorization (c, i, a, overlays) set_by C-2.
+- facts.categorization (c, i, a, overlays) set_by C-2, and categorization.documented_in names the capability document (the CDD or its equivalent) it is documented in (ACQLC-005).
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
 
@@ -1088,7 +1090,7 @@ Writes to `facts.yaml`: `categorization`.
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
 - [CNSSI1253](../../MANUAL.md#ref-cnssi1253), section 3.1.1
 - [CNSSI1253](../../MANUAL.md#ref-cnssi1253), p. 14, "The security categorization of a system must not be changed or modified to reflect management decisions"
-- [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the JCIDS capabilities document (for example the CDD).)
+- [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 29, "categorize systems in accordance with CNSSI 1253 and document the categorization" (The system owner also documents the categorization in the capabilities document (for example the CDD); JCIDS was disestablished on August 20, 2025 (DoDI 5000.02 Change 2), so a later program uses the requirements document that replaced it.)
 - [SP800-60V1R1](../../MANUAL.md#ref-sp800-60v1r1), section 4.3
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)

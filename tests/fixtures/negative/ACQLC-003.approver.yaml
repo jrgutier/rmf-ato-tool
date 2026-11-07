@@ -1,0 +1,30 @@
+rule: ACQLC-003
+bases:
+- minimal
+description: the product support strategy is approved by the PM
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: MS-FIELD
+    date: '2026-09-01'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.pss
+  value:
+    approved_by: PER-PM
+    date: '2026-05-01'
+- op: set_field
+  file: facts.yaml
+  path: lifecycle_phase.value
+  value: PH-OS
+expect:
+  errors:
+  - ACQLC-003
+  messages:
+  - O&S is based on an MDA-approved product support strategy

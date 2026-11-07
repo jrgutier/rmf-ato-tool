@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 244 rules, 36 repo-scope and 208 run-scope. Authoritative;
+# Rule registry (plan §6.5): 249 rules, 36 repo-scope and 213 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -3411,6 +3411,75 @@ rules:
     enforces:
       - REQ-DODCIO-DEVSECOPS-0067
       - REQ-DODI5000.81-0090
+  - id: ACQLC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a combined pathway names an unknown pathway or leaves the system's own out, a covered DBS skips the DBS pathway, or a transition lacks its transition point, entry point, coordinated information requirements or approved approach
+    fixture: tests/fixtures/negative/ACQLC-001.yaml
+    hint: "List every pathway in facts.yaml acquisition.pathways and define each transition in protection.yaml program.transitions; a software pathway program states acquisition.covered_dbs."
+    enforces:
+      - REQ-DODI5000.02-0048
+      - REQ-DODI5000.02-0049
+      - REQ-DODI5000.02-0050
+      - REQ-DODI5000.02-0051
+      - REQ-DODI5000.87-0003
+      - REQ-DODI5000.87-0040
+      - REQ-DODI5000.87-0042
+  - id: ACQLC-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the Development RFP release decision point is passed with no CDD validation before it, or the CDD is validated before TMRR
+    fixture: tests/fixtures/negative/ACQLC-002.yaml
+    hint: "Record MS-CDDV in protection.yaml program.decision_points, after MS-A and before MS-DRFPRD."
+    enforces:
+      - REQ-DODI5000.85-0072
+  - id: ACQLC-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: IOC is passed before the pathway's O&S entry point (first fielding), the system is past that point while facts.yaml lifecycle_phase is not O&S, or O&S rests on no product support strategy the MDA approved by then
+    fixture: tests/fixtures/negative/ACQLC-003.yaml
+    hint: "Record MS-FIELD (or the pathway's point with enters: PH-OS) in protection.yaml program.decision_points and keep facts.yaml lifecycle_phase current."
+    enforces:
+      - REQ-DODI5000.85-0097
+      - REQ-DODI5000.81-0100
+  - id: ACQLC-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: a JCIDS capability document has no validation date or one after JCIDS was disestablished, or the capability document is not of a kind the program's pathway uses
+    fixture: tests/fixtures/negative/ACQLC-004.yaml
+    hint: "Record capability_document.validated; after August 20, 2025 use kind requirements-document on major capability acquisition."
+    enforces:
+      - REQ-DODI5000.02-0019
+      - REQ-DODI8510.01-0235
+  - id: ACQLC-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: the categorization does not name the capability document it is documented in, or names another than the one P-15 read
+    fixture: tests/fixtures/negative/ACQLC-005.yaml
+    hint: "Set facts.yaml categorization.documented_in to the capability_document id of protection-requirements.yaml."
+    enforces:
+      - REQ-DODI8510.01-0069
+      - REQ-DODI8510.01-0235
   - id: VULN-001
     scope: run
     severity: E
