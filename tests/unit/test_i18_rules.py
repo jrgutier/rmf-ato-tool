@@ -12,10 +12,11 @@ def _messages(run_dir, rule):
 
 
 def test_a_run_may_reenter_with_later_tasks_completed(tmp_path):
-    """SP 800-37r2 2.4: a run may enter or re-enter a step, so tasks after it can be done."""
+    """SP 800-37r2 2.4: a run may enter or re-enter a step, so tasks after it can be done
+    (S-2 and I-1 are seeded, outside the run's scope)."""
     run_dir = copy_run(HYBRID_MINIMAL, tmp_path / "run")
     edit_yaml(run_dir / "run.yaml",
-              lambda d: d["entry"].__setitem__("completed", ["P-1", "P-9", "C-1", "A-2"]))
+              lambda d: d["entry"].__setitem__("completed", ["P-1", "P-9", "S-2", "I-1"]))
     assert _messages(run_dir, "ENTRY-001") == []
 
 
