@@ -516,3 +516,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.
 - Rule: In a run-data schema, `sources` means trace tokens and nothing else; name any other list of origins for what it holds.
 - Promotion: check: tests/unit/test_framework_schema.py::test_sources_properties_hold_trace_tokens
+
+## L-0074 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: FW-REQ-003 denied every SWA-001 rule item: "'the SBOM leaves out third-party components' is not literal in a failing message in the rule's source", though the rule reported exactly that message and the negative fixture declared it.
+- Root cause: the messages lived in a dict of duty to message and the rule appended `err(message)` in a loop; the judge finds a clause by the string constant inside the failing call, and a variable holds none.
+- Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.
+- Rule: Write each failing message of a rule inline in the call that reports it, so the clause that leads to it can be found and judged.
+- Promotion: none — FW-REQ-003 already refuses such an item as denied, so the mistake cannot reach the register.

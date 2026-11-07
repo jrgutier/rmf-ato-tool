@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:ssp-controls",
   "title": "runs/<run-id>/artifacts/ssp/controls/<fam>[.<n>].yaml",
-  "description": "SSP control statements for one family or chunk (S-4; updated by I-2, M-4), written whole (INV-8). Coverage and duplicates are SSP-COV-001/SSP-DUP-001; status rules are SSP-STAT-001.",
+  "description": "SSP control statements for one family or chunk (S-4; updated by I-2, M-4), written whole (INV-8). Coverage and duplicates are SSP-COV-001/SSP-DUP-001; status rules are SSP-STAT-001; assurance is SSE-003.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -135,6 +135,34 @@
             "x-enforces": [
               "REQ-SP800-18R2-0195"
             ]
+          },
+          "assurance": {
+            "title": "How the assurance requirements of a control that contributes to assurance are addressed, and whether they are satisfied",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "addressed",
+              "status"
+            ],
+            "properties": {
+              "addressed": {
+                "title": "How the assurance requirements of the control are addressed when it is implemented: the developer and implementer activities and the evidence they produce",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-SP800-37R2-0331",
+                  "REQ-SP800-39-0121"
+                ]
+              },
+              "status": {
+                "title": "Whether the minimum assurance requirements of the control are satisfied",
+                "enum": [
+                  "satisfied",
+                  "not-satisfied",
+                  "planned"
+                ]
+              }
+            }
           },
           "sources": {
             "type": "array",

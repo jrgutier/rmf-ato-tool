@@ -1,0 +1,14 @@
+rule: GEN-STALE-001
+bases: [minimal]
+description: the categorization raised availability to moderate, and the selected baseline was not resolved again
+build: false
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: categorization.a
+    value: moderate
+expect:
+  errors: [GEN-STALE-001]
+  also: [CPLAN-002, CATG-001]
+  messages:
+    - differs from a fresh `rmf baseline resolve`

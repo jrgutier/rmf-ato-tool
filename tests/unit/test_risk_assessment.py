@@ -47,9 +47,10 @@ def test_the_data_template_is_valid_yaml_of_the_schema():
 
 
 def test_the_example_shape_needs_every_section():
-    """Each top-level section is required, so a run cannot leave one out silently."""
+    """Each top-level section is required, so a run cannot leave one out silently. The sections
+    added after the contract opened stay optional; SWA-002 (since 0.2.0) asks for components."""
     schema = _schema()
-    assert set(schema["required"]) == set(schema["properties"])
+    assert set(schema["required"]) | {"ai_capabilities", "components"} == set(schema["properties"])
 
 
 def test_malformed_lists_are_reported_not_raised(minimal_run):
