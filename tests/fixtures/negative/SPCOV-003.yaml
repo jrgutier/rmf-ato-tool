@@ -1,0 +1,30 @@
+rule: SPCOV-003
+bases: [minimal]
+description: a moderate space platform applies the Space Platform Overlay written for H/H/H
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [CNSSI1253F-ATT2-SPACE]
+- op: set_field
+  file: facts.yaml
+  path: categorization.space_segments
+  value: [space-platform]
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: assumptions
+  value: []
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors: []
+  also:
+  - ASMT-002
+  - POAM-CTL-001
+  - RECIP-001
+  - RECIP-002
+  - TLR-003
+  - TLR-006
+  warnings: [SPCOV-003, SSP-COV-002, TLR-011]
+  messages:
+  - "CNSSI1253F-ATT2-SPACE tailors the H/H/H baseline, and the system is categorized moderate/moderate/low"

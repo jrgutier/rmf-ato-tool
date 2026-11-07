@@ -1,0 +1,12 @@
+rule: AUTHRPT-001
+bases: [minimal]
+description: a risk that affects an operational requirement is coordinated with the operational commanders only, not the acquisition or procurement representatives
+mutations:
+  - op: set_field
+    file: artifacts/data/authorization-report.yaml
+    path: operational_awareness.affected_requirements.0.coordinated_with
+    value: [PER-OPCDR]
+expect:
+  errors: [AUTHRPT-001]
+  messages:
+    - RSK-001 affects an operational requirement and its coordination leaves out the acquisition or procurement representatives

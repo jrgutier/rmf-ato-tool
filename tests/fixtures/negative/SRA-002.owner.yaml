@@ -1,9 +1,13 @@
 rule: SRA-002
 bases:
 - minimal
-description: under the space overlay, a non-NSS connection not considered by the mission owner and the
-  AO or AODR
+description: under the space overlay, a non-NSS connection not considered by the mission owner and the AO or AODR
 mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.space_segments
+  value:
+  - space-platform
 - op: set_field
   file: facts.yaml
   path: categorization.overlays
@@ -42,9 +46,8 @@ expect:
   errors:
   - SRA-002
   messages:
-  - the impact of non-NSS components (CMP-IDP) was not considered by both the mission owner and the AO
-    or AODR
+  - the impact of non-NSS components (CMP-IDP) was not considered by both the mission owner and the AO or AODR
   also:
-  - FACTS-001
   - GEN-STALE-001
   - RECIP-001
+  - TLR-003

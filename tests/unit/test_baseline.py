@@ -115,7 +115,6 @@ def test_privacy_overlay_acct_set_adds_controls(minimal_run):
 
 @pytest.mark.parametrize(("overlay", "message"), [
     ("CNSSI1253F-ATT6-PRIVACY", "selected per control set.*PRIVACY-ACCT"),
-    ("CNSSI1253F-ATT2-SPACE", "not transcribed"),
     ("CNSSI1253F-NOPE", "unknown overlay"),
 ])
 def test_overlay_not_available_fails_clearly(minimal_run, overlay, message):
@@ -171,3 +170,17 @@ def test_resolve_deterministic_and_matches_fixture(minimal_run):
     subset = run.config["control_subset"]
     assert baseline.control_ids(run) == [c for c in catalog.load(REPO_ROOT).order
                                          if c in subset]
+
+
+def test_space_overlay_removes_then_adds(minimal_run):
+    """The Space Platform Overlay tailors H/H/H: its "--" rows leave the selection, its "+"
+    rows join it, and a removed control the NSS privacy control baseline selects stays."""
+    _no_subset(minimal_run)
+    _categorize(minimal_run, "high", "high", "high", overlays=["CNSSI1253F-ATT2-SPACE"])
+    origins = {c["control_id"]: c["origin"]
+               for c in baseline.resolve(open_run(minimal_run, REPO_ROOT))["controls"]}
+    assert "ac-2.1" not in origins and "ma-2" not in origins  # removed, security only
+    assert origins["sc-51"] == origins["cp-12"] == "overlay"  # added
+    assert origins["sa-8.1"] == origins["ac-3"] == "baseline"  # unlisted, and kept in Table 3
+    assert origins["at-2"] == "privacy-baseline"  # removed, but in the privacy column
+

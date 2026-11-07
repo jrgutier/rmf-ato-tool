@@ -490,6 +490,7 @@ def schema_findings(loaded: Loaded, repo: Path) -> list[Finding]:
 TAILORING_INPUTS = "tailoring-inputs.yaml"  # what S-2 tests a system against (TLR-003, TLR-005)
 OVERLAY_SPECS = "overlay-specs.yaml"  # overlay Section 6 per control (OVS-001 to OVS-003)
 PRIVACY_CONSIDERATIONS = "privacy-considerations.yaml"  # the column PIC-001 reads
+NSS_PARAMETERS = "cnssi-1253-parameters.yaml"  # Appendix D Parameter Value column (WI-20)
 
 
 def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Entity]]:
@@ -510,11 +511,19 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
         inputs = path.name == TAILORING_INPUTS
         specs = path.name == OVERLAY_SPECS
         pic = path.name == PRIVACY_CONSIDERATIONS
-        name = "tailoring-inputs" if inputs else "overlay-specs" if specs \
-            else "privacy-considerations" if pic else "baselines"
+        params = path.name == NSS_PARAMETERS
+        name = ("tailoring-inputs" if inputs else "overlay-specs" if specs
+                else "privacy-considerations" if pic else path.stem if params else "baselines")
         errors = schema_errors(repo, name, data)
         findings += [Finding("FW-SCHEMA-001", "E", e, shown) for e in errors]
         if errors:
+            continue
+        if params:
+            cited.append(Entity("baselines", {"id": path.stem, "citations": [data["citation"]]},
+                                Location(shown, 1)))
+            cited += [Entity("baselines", {"id": f"{path.stem} {c['control']}",
+                                           "citations": [c["citation"]]},
+                             Location(shown, c.lc.line + 1)) for c in data["controls"]]
             continue
         if specs:
             cited += [Entity("baselines", {"id": f"{o['overlay']} {s['control']}",
@@ -535,7 +544,8 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
             cited += [Entity("baselines", {"id": f"{path.stem} {i['id']}",
                                            "citations": [i["citation"]]},
                              Location(shown, i.lc.line + 1))
-                      for i in [*data["assumptions"], *data["overlay_conditions"]]]
+                      for i in [*data["assumptions"], *data["overlay_conditions"],
+                                *data.get("policy_controls", [])]]
             continue
         cited.append(Entity("baselines", {"id": data["baseline"],
                                           "citations": data["citations"]},
@@ -543,7 +553,8 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
         blocks = [(f"{data['baseline']} table {t['table']}", b) for t in data["tables"]
                   for b in t["blocks"]]
         blocks += [(f"overlay {o['id']}", b) for o in data["overlays"]
-                   for b in o.get("blocks") or []]
+                   for b in [*(o.get("blocks") or []), *([o["unlisted"]] if "unlisted" in o
+                                                          else [])]]
         cited += [Entity("baselines", {"id": label, "citations": [b["citation"]]},
                          Location(shown, b.lc.line + 1)) for label, b in blocks]
     return findings, cited

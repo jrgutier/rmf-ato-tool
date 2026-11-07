@@ -1,0 +1,29 @@
+rule: SPCOV-001
+bases: [minimal]
+description: a ground segment applies the Space Platform Overlay
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [CNSSI1253F-ATT2-SPACE]
+- op: set_field
+  file: facts.yaml
+  path: categorization.space_segments
+  value: [ground]
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: assumptions
+  value: []
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors: [SPCOV-001]
+  also:
+  - ASMT-002
+  - POAM-CTL-001
+  - RECIP-001
+  - RECIP-002
+  - TLR-003
+  - TLR-006
+  messages:
+  - scope is the space platform and the link segment interfacing with it, and the system is the ground segment

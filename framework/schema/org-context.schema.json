@@ -114,9 +114,22 @@
                   "system-administrator",
                   "maintainer",
                   "supervisory-cybersecurity",
-                  "pki-registration-authority"
+                  "pki-registration-authority",
+                  "dod-cio",
+                  "usd-i",
+                  "dod-cmo",
+                  "cjcs"
                 ]
               }
+            ]
+          },
+          "mission_area": {
+            "title": "DoD mission area a PAO is appointed for: EIEMA, DIMA, BMA or WMA",
+            "enum": [
+              "eiema",
+              "dima",
+              "bma",
+              "wma"
             ]
           },
           "appointment": {
@@ -2924,6 +2937,121 @@
       "minItems": 1,
       "items": {
         "$ref": "#/$defs/source"
+      }
+    },
+    "obtained_overlays": {
+      "title": "Overlays the organization obtained from their owner because the library holds them not (CDS, Intelligence, a SAP authority's specifications, DoD-specific overlays on the RMF KS); C-2 applies one by its ID",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "owner",
+          "obtained_from",
+          "applicability",
+          "controls",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "title": "The ID categorization.overlays applies it by",
+            "type": "string",
+            "pattern": "^OBT-OVL-[A-Z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "title": "cds: cross domain solutions; intelligence: the Intelligence Overlay (SAP established by the DNI, SCI); sap: the specifications of another SAP authority; dod-ks: a DoD-specific overlay on the RMF KS",
+            "enum": [
+              "cds",
+              "intelligence",
+              "sap",
+              "dod-ks",
+              "other"
+            ]
+          },
+          "owner": {
+            "title": "The organization that owns the overlay",
+            "type": "string",
+            "minLength": 1
+          },
+          "obtained_from": {
+            "title": "Where the copy came from: the owning organization, the restricted CNSS site, or the RMF KS",
+            "enum": [
+              "owning-organization",
+              "cnss-restricted",
+              "rmf-ks"
+            ]
+          },
+          "applicability": {
+            "title": "The overlay's applicability questions and the system's answers",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "question",
+                "answer",
+                "sources"
+              ],
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "answer": {
+                  "type": "boolean"
+                },
+                "sources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/source"
+                  }
+                }
+              }
+            }
+          },
+          "controls": {
+            "title": "The overlay's control specifications: controls it adds and controls it tailors out",
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "properties": {
+              "add": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+                }
+              },
+              "remove": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+                }
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
       }
     }
   },

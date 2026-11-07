@@ -70,7 +70,6 @@ def test_committed_base_has_no_errors(base):
 
 @pytest.mark.parametrize(("overlay", "expected"), [
     ("CNSSI1253F-ATT6-PRIVACY", "selected per control set"),
-    ("CNSSI1253F-ATT2-SPACE", "not transcribed"),
 ])
 def test_overlay_resolve_cannot_apply_reopens_c3(overlay, expected, tmp_path):
     """L-0035: an overlay S-1 could not apply is a FACTS-001 error charged to C-2 and C-3, so

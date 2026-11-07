@@ -1,0 +1,12 @@
+rule: PVAL-001
+bases: [minimal]
+description: flaw remediation within 45 days, where the NSS minimum is 30 days
+mutations:
+  - op: set_field
+    file: artifacts/ssp/controls/si.yaml
+    path: controls.0.parameters.si-02_odp
+    value: within 45 days of release
+expect:
+  errors: [PVAL-001]
+  messages:
+    - "si-2 si-02_odp: 'within 45 days of release' is looser than the NSS minimum '30 days' (CNSSI 1253 Parameter Value)"

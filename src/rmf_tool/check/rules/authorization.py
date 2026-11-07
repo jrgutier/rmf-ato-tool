@@ -29,6 +29,8 @@ COMPLETE_REVIEW = ("initial", "reauthorization")  # SP 800-37r2 p. 168: a zero-b
 ORG_CONTEXT = "artifacts/ART-ORG-CONTEXT.md"  # holds the risk tolerance (P-2)
 RAR_FILE = "artifacts/data/rar.yaml"
 REPORT_FILE = "artifacts/data/authorization-report.yaml"
+OPERATIONAL_COMMANDERS = "PER-OPCDR"
+ACQUISITION_REPRESENTATIVES = frozenset({"PER-PM", "PER-MDA"})
 LEVERAGED_FILE = "artifacts/data/leveraged-authorizations.yaml"
 POAM_FILE = "artifacts/poam/items.yaml"
 SAR_DIR = "artifacts/sar/"
@@ -695,4 +697,39 @@ def report_valid(ctx: Context) -> list[RunFinding]:
         err(f"the retained assessment records {', '.join(gone)} do not exist")
     if missing := [d for d in (SAP_FILE, SAR_DIR) if not any(p.startswith(d) for p in kept)]:
         err(f"the assessment records retained for the audit trail lack {', '.join(missing)}")
+    _operational_awareness(ctx, report.get("operational_awareness"), err)
     return out
+
+
+def _items(value: Any) -> list[dict[str, Any]]:
+    return [i for i in value if isinstance(i, dict)] if isinstance(value, list) else []
+
+
+def _persona_ids(value: Any) -> set[str]:
+    return {p for p in value if isinstance(p, str)} if isinstance(value, list) else set()
+
+
+def _operational_awareness(ctx: Context, aware: Any, err: Callable[[str], None]) -> None:
+    """DoDI 8510.01 4.4.a(9) and (10): the AO verifies the operational commanders have the
+    system's cyber risk information, and facilitates coordination with them and with the
+    acquisition or procurement representatives on each risk that affects an operational
+    requirement."""
+    if not isinstance(aware, dict):
+        err("the report records no operational_awareness: the AO verifies the operational "
+            "commanders have the cyber risk information on the system")
+        return
+    if OPERATIONAL_COMMANDERS not in _persona_ids(aware.get("informed")):
+        err("the cyberspace and functional operational commanders are not among the officials "
+            "verified to have the necessary cyber risk information on the system")
+    rar = ctx.data(RAR_FILE)
+    risks = {r.get("id") for r in _items(rar.get("risks") if isinstance(rar, dict) else None)}
+    for item in _items(aware.get("affected_requirements")):
+        risk, parties = item.get("risk"), _persona_ids(item.get("coordinated_with"))
+        if risk not in risks:
+            err(f"{risk} affects an operational requirement but is no risk of {RAR_FILE}")
+        if OPERATIONAL_COMMANDERS not in parties:
+            err(f"{risk} affects an operational requirement and its coordination leaves out the "
+                "cyberspace and functional operational commanders")
+        if ACQUISITION_REPRESENTATIVES.isdisjoint(parties):
+            err(f"{risk} affects an operational requirement and its coordination leaves out the "
+                "acquisition or procurement representatives")

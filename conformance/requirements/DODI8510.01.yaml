@@ -351,7 +351,9 @@ requirements:
     locator: "2.7.f"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "f. Require use of the DoD-specific assignment values, overlays, implementation guidance, and assessment procedures found on the RMF KS."
-    status: "candidate"
+    status: "partial"
+    reason: "DoD-specific overlays from the RMF KS are recorded and applied (obtained_overlays kind dod-ks) and applied on their applicability (OVLX-001); assignment values are PVAL-001's CNSSI 1253 minimums. Which KS overlays and DoD values exist is on the KS, which INV-7 keeps out of references/, so nothing can require a particular one, and implementation guidance and assessment procedures are EXT-ASSESSMENT-PROCEDURES."
+    evidence: [{"kind": "rule", "target": "OVLX-001", "fixture": "tests/fixtures/negative/OVLX-001.yaml", "expect": "none of its applicability questions is answered yes", "claim": "constraint", "asserts": "DoD-specific overlays found on the RMF KS are used as obtained overlays, applied on their applicability questions; one applied with none of its applicability questions answered yes fails"}]
     work_item: "WI-22"
   - id: "REQ-DODI8510.01-0046"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Identify and allocate resources for the RMF in the DoD Planning, Programming,"}
@@ -676,7 +678,9 @@ requirements:
     locator: "3.1.c.(2)"
     context: "Figure 1. RMF Process"
     statement: "(2) Technologies below the system level (e.g., system components, hardware, software, external services) do not require an ATO. However, these technologies must still complete specific RMF assessment procedures under the “Assess Only” process. Refer to the KS for more information on these “Assess Only” processes."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: system_type pit, it-service and it-product take no ATO, AONLY-001 requires A-3 in scope and the Assess Only acceptance. The A-3 scope clause has no negative fixture, and which assessment procedures the KS's Assess Only process names is on the KS (INV-7)."
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Technologies below the system level do not require an ATO but complete the Assess Only process: one that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8510.01-0087"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "Prepare to execute the RMF from an organizational and system-level perspective by"}
@@ -684,7 +688,9 @@ requirements:
     locator: "3.2.a"
     context: "RMF STEPS"
     statement: "Prepare to execute the RMF from an organizational and system-level perspective by setting context and priorities for privacy and security risk management to carry out essential activities at the organization, mission and business process, and information system levels of the organization. The “Prepare” step tasks must be completed by the DoD Component CIO, DoD PAO, and JCA capability portfolio manager (CPM) to enable an effective risk-managed security authorization process. See Table 1 for “Prepare” step tasks. For additional guidance, see the RMF KS."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: PER-PAO and PER-JCACPM are consulted (C) on P-1 to P-7, where PER-CIO is responsible or accountable. Unheld: completion of the Prepare tasks by the DoD PAO and the JCA CPM; they act at Tiers 1 and 2, above the run, and a run records no act of theirs a test could fail on."
+    evidence: [{"kind": "prose", "target": "personas/PER-PAO.md", "asserts": "The DoD PAO completes the Prepare step tasks with the DoD Component CIO and the JCA capability portfolio manager, consulted on P-1 to P-7", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0088"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "Task P-1 Risk Management Roles | Individuals are identified and assigned key"}
@@ -1442,7 +1448,9 @@ requirements:
     locator: "4.3.a.(1).(c)"
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: JCA CPMs:"
     statement: "(c) Supported by the Office of the DoD CIO and Joint Staff J-6, develop and maintain cybersecurity risk guidance required by the RMF “Prepare” step for their JCA."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-JCACPM persona, consulted on P-1 to P-7. Unheld: the JCA CPM's Prepare-step guidance binds an official above the run; a run records no act of it, so no test can fail when it is not done. WI-27 stays open on it."
+    evidence: [{"kind": "prose", "target": "personas/PER-JCACPM.md", "asserts": "JCA CPMs develop and maintain the cybersecurity risk guidance required by the RMF Prepare step for their JCA", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0184"
     citation: {"ref": "DODI8510.01", "page": 25, "anchor": "The existing JCA structure will serve as the DoD’s common framework and"}
@@ -1482,7 +1490,9 @@ requirements:
     locator: "4.3.b.(1)"
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: PAOs:"
     statement: "(1) Represent the interests of their MA, in accordance with DoDD 8115.01 and, as required, issue cybersecurity risk guidance specific to their MA, in accordance with this issuance."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-PAO persona, consulted on P-1 to P-7. Unheld: issuing MA cybersecurity risk guidance binds an official above the run; a run records no act of it, so no test can fail when it is not done. WI-27 stays open on it."
+    evidence: [{"kind": "prose", "target": "personas/PER-PAO.md", "asserts": "PAOs represent the interests of their MA and issue cybersecurity risk guidance specific to their MA", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0189"
     citation: {"ref": "DODI8510.01", "page": 25, "anchor": "Resolve authorization issues within their respective MAs and work with other PAOs"}
@@ -1782,7 +1792,8 @@ requirements:
     locator: "4.4.a.(9)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(9) Verify the cyberspace and functional operational commanders have the necessary cyber risk information on the system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The AO verifies the cyberspace and functional operational commanders have the necessary cyber risk information on the system: the R-5 report names them among the officials verified", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.commanders.yaml", "expect": "verified to have the necessary cyber risk information", "claim": "constraint", "holds_when": "ART-AUTHRPT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0227"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "When a cybersecurity risk affects an operational requirement, facilitate coordination with:"}
@@ -1790,7 +1801,8 @@ requirements:
     locator: "4.4.a.(10)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(10) When a cybersecurity risk affects an operational requirement, facilitate coordination with:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "When a cybersecurity risk affects an operational requirement, the AO facilitates coordination with the cyberspace and functional operational commanders", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.coordination.yaml", "expect": "coordination leaves out the cyberspace and functional operational commanders", "claim": "constraint", "holds_when": "ART-AUTHRPT is produced or seeded"}, {"kind": "rule", "asserts": "When a cybersecurity risk affects an operational requirement, the AO facilitates coordination with the acquisition or procurement representatives", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.acquisition.yaml", "expect": "coordination leaves out the acquisition or procurement representatives", "claim": "constraint", "holds_when": "ART-AUTHRPT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0228"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Cyberspace and functional operational commanders."}
@@ -2029,7 +2041,8 @@ requirements:
     locator: "4.5"
     context: "Table 8. Appointment of RMF Roles"
     statement: "PAO | DoD MA owner"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The PAO is appointed by the DoD MA owner of its mission area, and a PAO record naming another appointer is refused", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0259"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "DoD CISO | DoD CIO"}
@@ -2037,7 +2050,8 @@ requirements:
     locator: "4.5"
     context: "Table 8. Appointment of RMF Roles"
     statement: "DoD CISO | DoD CIO"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The DoD CISO is appointed by the DoD CIO", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.dodciso.yaml", "expect": "the DoD CISO is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0260"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "DoD Component CIO | DoD Component head"}
@@ -2087,7 +2101,8 @@ requirements:
     locator: "4.5"
     context: "Table 8. Appointment of RMF Roles"
     statement: "RMF TAG Representative | DoD Component CISO"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The RMF TAG Representative is appointed by the DoD Component CISO", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.tag.yaml", "expect": "the RMF TAG Representative is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0267"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "SO | DoD Component head"}

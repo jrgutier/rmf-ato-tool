@@ -1,0 +1,21 @@
+rule: SPCOV-001
+bases: [minimal]
+description: a system that applies the Space Platform Overlay names no segment
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [CNSSI1253F-ATT2-SPACE]
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors: [SPCOV-001]
+  also:
+  - ASMT-002
+  - POAM-CTL-001
+  - RECIP-001
+  - RECIP-002
+  - TLR-003
+  - TLR-006
+  messages:
+  - a space NSS names its segments in categorization.space_segments

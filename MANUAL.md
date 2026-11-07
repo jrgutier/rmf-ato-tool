@@ -141,44 +141,44 @@ headings link to the persona catalog; each persona's card describes the role in 
 
 ### P Prepare
 
-| Task | [AO](#per-ao) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [P-1](#task-p-1) Risk Management Roles | C | R/A | C | C |  | I |  |  |  |  |  |  |  |  | R |  |  |  |
-| [P-2](#task-p-2) Risk Management Strategy | I | R/A | C | R |  |  |  |  |  |  |  |  |  |  | C |  |  |  |
-| [P-3](#task-p-3) Risk Assessment—Organization | C | C | R | R/A |  |  |  |  |  |  |  |  |  |  | R |  | C |  |
-| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles | C | C | C | R/A |  |  |  |  |  |  |  |  |  |  | C |  | R |  |
-| [P-5](#task-p-5) Common Control Identification | C | C | R/A | C |  | C |  |  |  |  |  |  | C |  | R |  | C |  |
-| [P-6](#task-p-6) Impact-Level Prioritization | C | C | C | R/A |  | C |  |  |  |  |  |  |  |  | C |  | C |  |
-| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | C | C | C | R/A |  | C |  |  |  |  |  |  |  | I | C |  | C |  |
-| [P-8](#task-p-8) Mission or Business Focus | C | C | C |  |  | A | I |  |  |  | C | C |  |  | C |  | R |  |
-| [P-9](#task-p-9) System Stakeholders | C | C | C |  |  | R/A | I |  |  |  |  | C |  |  | C | C | R |  |
-| [P-10](#task-p-10) Asset Identification | C |  | C |  |  | R/A | R |  |  |  |  | C |  |  | C |  | C | C |
-| [P-11](#task-p-11) Authorization Boundary | A | C | C |  |  | R | R |  | C | C |  |  |  |  | C |  | C |  |
-| [P-12](#task-p-12) Information Types |  |  |  |  |  | R/A | C |  |  |  |  | R |  |  | R |  |  |  |
-| [P-13](#task-p-13) Information Life Cycle |  | C |  |  |  | R/A |  |  | C | C |  | R |  |  | R |  | C |  |
-| [P-14](#task-p-14) Risk Assessment—System | C |  |  | C | C | R/A | C | R |  |  |  | C |  |  | R |  | C |  |
-| [P-15](#task-p-15) Requirements Definition | C |  | C |  |  | R/A | C |  | C | C | C | R |  |  | R | C | R |  |
-| [P-16](#task-p-16) Enterprise Architecture | C | C | C |  |  | A |  |  | R | R |  | C |  |  | R |  | R |  |
-| [P-17](#task-p-17) Requirements Allocation | C | C | C |  |  | A | C | R | R |  |  |  | C |  | R |  | C |  |
-| [P-18](#task-p-18) System Registration |  | I | I |  |  | R/A | R |  |  |  |  |  |  |  |  |  |  |  |
+| Task | [AO](#per-ao) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) | [PAO](#per-pao) | [JCA CPM](#per-jcacpm) |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [P-1](#task-p-1) Risk Management Roles | C | R/A | C | C |  | I |  |  |  |  |  |  |  |  | R |  |  |  | C | C |
+| [P-2](#task-p-2) Risk Management Strategy | I | R/A | C | R |  |  |  |  |  |  |  |  |  |  | C |  |  |  | C | C |
+| [P-3](#task-p-3) Risk Assessment—Organization | C | C | R | R/A |  |  |  |  |  |  |  |  |  |  | R |  | C |  | C | C |
+| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles | C | C | C | R/A |  |  |  |  |  |  |  |  |  |  | C |  | R |  | C | C |
+| [P-5](#task-p-5) Common Control Identification | C | C | R/A | C |  | C |  |  |  |  |  |  | C |  | R |  | C |  | C | C |
+| [P-6](#task-p-6) Impact-Level Prioritization | C | C | C | R/A |  | C |  |  |  |  |  |  |  |  | C |  | C |  | C | C |
+| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | C | C | C | R/A |  | C |  |  |  |  |  |  |  | I | C |  | C |  | C | C |
+| [P-8](#task-p-8) Mission or Business Focus | C | C | C |  |  | A | I |  |  |  | C | C |  |  | C |  | R |  |  |  |
+| [P-9](#task-p-9) System Stakeholders | C | C | C |  |  | R/A | I |  |  |  |  | C |  |  | C | C | R |  |  |  |
+| [P-10](#task-p-10) Asset Identification | C |  | C |  |  | R/A | R |  |  |  |  | C |  |  | C |  | C | C |  |  |
+| [P-11](#task-p-11) Authorization Boundary | A | C | C |  |  | R | R |  | C | C |  |  |  |  | C |  | C |  |  |  |
+| [P-12](#task-p-12) Information Types |  |  |  |  |  | R/A | C | C |  |  |  | R |  |  | R |  | C |  |  |  |
+| [P-13](#task-p-13) Information Life Cycle |  | C |  |  |  | R/A |  |  | C | C |  | R |  |  | R |  | C |  |  |  |
+| [P-14](#task-p-14) Risk Assessment—System | C |  |  | C | C | R/A | R | R |  |  |  | C |  |  | R |  | C |  |  |  |
+| [P-15](#task-p-15) Requirements Definition | C |  | C |  |  | R/A | C | C | C | C | C | R |  |  | R | C | R |  |  |  |
+| [P-16](#task-p-16) Enterprise Architecture | C | C | C |  |  | A |  |  | R | R |  | C |  |  | R |  | R |  |  |  |
+| [P-17](#task-p-17) Requirements Allocation | C | C | C |  |  | A | R | R | R |  |  |  | C |  | R |  | C |  |  |  |
+| [P-18](#task-p-18) System Registration |  | I | I |  |  | R/A | R | C |  |  |  |  |  |  |  |  | C |  |  |  |
 
 ### C Categorize
 
-| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [Privacy](#per-priv) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [C-1](#task-c-1) System Description | C |  |  |  |  | R/A | R |  | C |  | C | C |
-| [C-2](#task-c-2) Security Categorization | I |  |  | C | C | A | R | C |  | C | R | C |
-| [C-3](#task-c-3) Security Categorization Review and Approval | A | R | C | C | C | I | I |  |  |  |  | R |
+| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [Privacy](#per-priv) |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [C-1](#task-c-1) System Description | C |  |  |  |  | R/A | R | C |  | C |  | C | C |
+| [C-2](#task-c-2) Security Categorization | I |  | C | C | C | A | R | C | C |  | C | R | C |
+| [C-3](#task-c-3) Security Categorization Review and Approval | A | R | C | C | C | I | I |  |  |  |  |  | R |
 
 ### S Select
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) | [CCB](#per-ccb) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [S-1](#task-s-1) Control Selection | C |  |  |  |  | R/A | R |  | C | C | R |  | C |  |  |  |  |
-| [S-2](#task-s-2) Control Tailoring | C |  |  |  |  | R/A | R |  | C | C | R |  | C |  |  |  |  |
-| [S-3](#task-s-3) Control Allocation | C |  | C | C |  | A | C | R | R |  | C |  | R |  | C |  |  |
+| [S-1](#task-s-1) Control Selection | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
+| [S-2](#task-s-2) Control Tailoring | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
+| [S-3](#task-s-3) Control Allocation | C |  | C | C |  | A | R | R | R |  | C |  | R |  | C |  |  |
 | [S-4](#task-s-4) Documentation of Planned Control Implementations | C |  |  |  |  | A | R | C | R | C | R | C | C |  |  | C | C |
-| [S-5](#task-s-5) Continuous Monitoring Strategy—System | C |  | C | C | C | R/A | R |  | C | C | R | C | C |  |  |  |  |
+| [S-5](#task-s-5) Continuous Monitoring Strategy—System | C |  | C | C | C | R/A | R | C | C | C | R | C | C |  |  |  |  |
 | [S-6](#task-s-6) Plan Review and Approval | A | R | C | C | C | I | I |  |  |  |  |  | C | C |  |  |  |
 
 ### I Implement
@@ -193,33 +193,33 @@ headings link to the persona catalog; each persona's card describes the role in 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [MDA](#per-mda) | [CDT](#per-cdt) | [OTA](#per-ota) | [Developer](#per-dev) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | [A-1](#task-a-1) Assessor Selection | A | R | C | C |  | I | I |  |  |  |  |  | C |  |  |  |  |
-| [A-2](#task-a-2) Assessment Plan | A | R |  | C |  | R | C | C |  |  | C | C | C |  | C | C |  |
+| [A-2](#task-a-2) Assessment Plan | A | R |  | C |  | R | C | C | C |  | C | C | C |  | C | C |  |
 | [A-3](#task-a-3) Control Assessments | I | C |  | I |  | R/A | C | C | C |  | C | C | C |  | C | C | C |
-| [A-4](#task-a-4) Assessment Reports | I | I |  | C |  | R/A | C | C |  |  |  | C | C |  |  |  |  |
-| [A-5](#task-a-5) Remediation Actions |  | C |  | C | C | R | R/A | C |  | C | C | R | C |  |  |  | R |
-| [A-6](#task-a-6) Plan of Action and Milestones | I |  |  | C |  | C | R/A | R |  |  | C | R | C | C |  |  |  |
+| [A-4](#task-a-4) Assessment Reports | I | I |  | C |  | R/A | C | C | C |  |  | C | C |  |  |  |  |
+| [A-5](#task-a-5) Remediation Actions |  | C |  | C | C | R | R/A | C | C | C | C | R | C |  |  |  | R |
+| [A-6](#task-a-6) Plan of Action and Milestones | I |  |  | C |  | C | R/A | R | C |  | C | R | C | C |  |  |  |
 
 ### R Authorize
 
-| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSE](#per-isse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [MDA](#per-mda) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [R-1](#task-r-1) Authorization Package | I | I |  | C |  | C | R/A | R |  |  |  | R | R |  |
-| [R-2](#task-r-2) Risk Analysis and Determination | A | R |  | C | C | C | I | C |  |  |  |  | C |  |
-| [R-3](#task-r-3) Risk Response | A | R |  | C | C |  | R | C | C |  | C | C | C |  |
-| [R-4](#task-r-4) Authorization Decision | R/A | C | C | C | C |  | I | I |  | I |  |  | C | I |
-| [R-5](#task-r-5) Authorization Reporting | A | R | I | C |  |  | C | C |  |  | C | C | C | I |
+| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Operational commanders](#per-opcdr) |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [R-1](#task-r-1) Authorization Package | I | I |  | C |  | C | R/A | R | C |  |  |  | R | R |  |  |
+| [R-2](#task-r-2) Risk Analysis and Determination | A | R |  | C | C | C | I | C |  |  |  |  |  | C |  |  |
+| [R-3](#task-r-3) Risk Response | A | R |  | C | C |  | R | C | C | C |  | C | C | C |  |  |
+| [R-4](#task-r-4) Authorization Decision | R/A | C | C | C | C |  | I | I |  |  | I |  |  | C | I |  |
+| [R-5](#task-r-5) Authorization Reporting | A | R | I | C |  |  | C | C | C |  |  | C | C | C | I | I |
 
 ### M Monitor
 
-| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [CCB](#per-ccb) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [M-1](#task-m-1) System and Environment Changes | I | C |  | R | C |  | R/A | C | R |  | C | R |  | R | C |
-| [M-2](#task-m-2) Ongoing Assessments | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |
-| [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R |  | C | C | R | C | C |  |
-| [M-4](#task-m-4) Authorization Package Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |
-| [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |
-| [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  |
-| [M-7](#task-m-7) System Disposal | I | C |  |  | C |  | R/A | R | C |  | C |  |  | C |  |
+| Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [CCB](#per-ccb) | [DoD CISO](#per-dodciso) |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [M-1](#task-m-1) System and Environment Changes | I | C |  | R | C |  | R/A | C | R |  | C | R |  | R | C |  |
+| [M-2](#task-m-2) Ongoing Assessments | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |  |
+| [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R | C | C | C | R | C | C |  |  |
+| [M-4](#task-m-4) Authorization Package Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |  |
+| [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |  |
+| [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  | C |
+| [M-7](#task-m-7) System Disposal | I | C |  | C | C |  | R/A | R | C |  | C |  |  | C |  |  |
 
 ## <a id="phases"></a>4. Phases and tasks
 
@@ -309,7 +309,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer |
-| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 | Informed | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
 
 **Inputs**
@@ -366,7 +366,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[RE](personas/PER-RE.md) Risk Executive Function |
 | Accountable | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer |
-| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official |
 
 **Inputs**
@@ -424,7 +424,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [RE](personas/PER-RE.md) Risk Executive Function |
-| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[AO](personas/PER-AO.md) Authorizing Official |
+| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[AO](personas/PER-AO.md) Authorizing Official<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 
 **Inputs**
 
@@ -479,7 +479,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[RE](personas/PER-RE.md) Risk Executive Function |
 | Accountable | [RE](personas/PER-RE.md) Risk Executive Function |
-| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 
 **Inputs**
 
@@ -535,7 +535,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
-| Consulted | [Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner |
+| Consulted | [Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 
 **Inputs**
 
@@ -586,7 +586,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [RE](personas/PER-RE.md) Risk Executive Function |
 | Accountable | [RE](personas/PER-RE.md) Risk Executive Function |
-| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official |
+| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 
 **Inputs**
 
@@ -637,7 +637,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|
 | Responsible | [RE](personas/PER-RE.md) Risk Executive Function |
 | Accountable | [RE](personas/PER-RE.md) Risk Executive Function |
-| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[AO](personas/PER-AO.md) Authorizing Official |
+| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[AO](personas/PER-AO.md) Authorizing Official<br>[PAO](personas/PER-PAO.md) Principal Authorizing Official<br>[JCA CPM](personas/PER-JCACPM.md) Joint Capability Area Capability Portfolio Manager |
 | Informed | [CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider |
 
 **Inputs**
@@ -909,7 +909,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1014,9 +1014,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[SCA](personas/PER-SCA.md) Security Control Assessor |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[SCA](personas/PER-SCA.md) Security Control Assessor |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1092,7 +1092,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|
 | Responsible | [Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[LSE](personas/PER-LSE.md) Lead Systems Engineer<br>[UR](personas/PER-UR.md) User Representative |
+| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[LSE](personas/PER-LSE.md) Lead Systems Engineer<br>[UR](personas/PER-UR.md) User Representative<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1161,6 +1161,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
+| Consulted | [ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor |
 | Informed | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer |
 
 **Inputs**
@@ -1216,7 +1217,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[LSE](personas/PER-LSE.md) Lead Systems Engineer |
+| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[LSE](personas/PER-LSE.md) Lead Systems Engineer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1276,7 +1277,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 |---|---|
 | Responsible | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[IO](personas/PER-IO.md) Information Owner / Steward |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [UR](personas/PER-UR.md) User Representative<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[RE](personas/PER-RE.md) Risk Executive Function |
+| Consulted | [UR](personas/PER-UR.md) User Representative<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -1533,9 +1534,9 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
+| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1596,7 +1597,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1659,7 +1660,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Consulted | [AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1722,9 +1723,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Role | Persona |
 |---|---|
-| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
+| Responsible | [ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
+| Consulted | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[Sponsor](personas/PER-SPONSOR.md) Capability / Requirements Sponsor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -1855,7 +1856,7 @@ Writes to `facts.yaml`: `baseline_id`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AO](personas/PER-AO.md) Authorizing Official<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -2235,7 +2236,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](personas/PER-SCA.md) Security Control Assessor<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[CDT](personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](personas/PER-OTA.md) Operational Test Agency Representative |
+| Consulted | [Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[CDT](personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](personas/PER-OTA.md) Operational Test Agency Representative<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -2370,7 +2371,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](personas/PER-SCA.md) Security Control Assessor |
 | Accountable | [SCA](personas/PER-SCA.md) Security Control Assessor |
-| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -2425,7 +2426,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[SCA](personas/PER-SCA.md) Security Control Assessor<br>[Developer](personas/PER-DEV.md) Developer / Integrator |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -2482,7 +2483,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[SCA](personas/PER-SCA.md) Security Control Assessor<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority |
+| Consulted | [IO](personas/PER-IO.md) Information Owner / Steward<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[SCA](personas/PER-SCA.md) Security Control Assessor<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -2540,7 +2541,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [SCA](personas/PER-SCA.md) Security Control Assessor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Consulted | [SCA](personas/PER-SCA.md) Security Control Assessor<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -2668,7 +2669,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -2800,8 +2801,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer |
-| Informed | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority |
+| Consulted | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
+| Informed | [Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](personas/PER-MDA.md) Milestone Decision Authority<br>[Operational commanders](personas/PER-OPCDR.md) Cyberspace and Functional Operational Commanders |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -3110,7 +3111,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSE](personas/PER-ISSE.md) Information Systems Security Engineer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -3324,7 +3325,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [AO](personas/PER-AO.md) Authorizing Official |
 | Accountable | [AO](personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner |
+| Consulted | [RE](personas/PER-RE.md) Risk Executive Function<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[DoD CISO](personas/PER-DODCISO.md) DoD Chief Information Security Officer |
 | Informed | [ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -3404,7 +3405,7 @@ Writes to `facts.yaml`: `acquisition`.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[RE](personas/PER-RE.md) Risk Executive Function |
+| Consulted | [AODR](personas/PER-AODR.md) Authorizing Official Designated Representative<br>[IO](personas/PER-IO.md) Information Owner / Steward<br>[ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[RE](personas/PER-RE.md) Risk Executive Function<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -4368,13 +4369,13 @@ simulated stakeholders.
 |---|---|---|---|---|
 | [AO](#per-ao) Authorizing Official | rmf | DoD Component head; PAO for MA-managed information systems | [PER-AO.md](personas/PER-AO.md) | 2 / 11 / 19 / 11 |
 | [AODR](#per-aodr) Authorizing Official Designated Representative | rmf | AO | [PER-AODR.md](personas/PER-AODR.md) | 7 / 0 / 8 / 2 |
-| [Component CIO](#per-cio) DoD Component Chief Information Officer | organization | DoD Component head | [PER-CIO.md](personas/PER-CIO.md) | 2 / 2 / 18 / 3 |
-| [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 30 / 2 |
+| [Component CIO](#per-cio) DoD Component Chief Information Officer | organization | DoD Component head | [PER-CIO.md](personas/PER-CIO.md) | 2 / 2 / 19 / 3 |
+| [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 31 / 2 |
 | [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 16 / 0 |
 | [SCA](#per-sca) Security Control Assessor | rmf | DoD Component CISO (the Component SCA, who may formally delegate the role) | [PER-SCA.md](personas/PER-SCA.md) | 5 / 3 / 4 / 1 |
 | [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 9 / 6 |
-| [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 16 / 0 / 15 / 6 |
-| [ISSO](#per-isso) Information System Security Officer | rmf | PM or SO | [PER-ISSO.md](personas/PER-ISSO.md) | 4 / 0 / 8 / 0 |
+| [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 19 / 0 / 12 / 6 |
+| [ISSO](#per-isso) Information System Security Officer | rmf | PM or SO | [PER-ISSO.md](personas/PER-ISSO.md) | 4 / 0 / 24 / 0 |
 | [ISSE](#per-isse) Information Systems Security Engineer | engineering | — | [PER-ISSE.md](personas/PER-ISSE.md) | 5 / 0 / 11 / 0 |
 | [LSE](#per-lse) Lead Systems Engineer | engineering | — | [PER-LSE.md](personas/PER-LSE.md) | 1 / 0 / 6 / 0 |
 | [UR](#per-ur) User Representative | operations | SO (DoDI 8510.01 4.4.b(4)(b); Table 8 lists the appointer as ISO) | [PER-UR.md](personas/PER-UR.md) | 0 / 0 / 3 / 1 |
@@ -4385,9 +4386,14 @@ simulated stakeholders.
 | [MDA](#per-mda) Milestone Decision Authority | acquisition | — | [PER-MDA.md](personas/PER-MDA.md) | 0 / 0 / 4 / 2 |
 | [CDT](#per-cdt) Chief Developmental Tester | test | — | [PER-CDT.md](personas/PER-CDT.md) | 0 / 0 / 2 / 0 |
 | [OTA](#per-ota) Operational Test Agency Representative | test | — | [PER-OTA.md](personas/PER-OTA.md) | 0 / 0 / 2 / 0 |
-| [Sponsor](#per-sponsor) Capability / Requirements Sponsor | acquisition | — | [PER-SPONSOR.md](personas/PER-SPONSOR.md) | 5 / 0 / 10 / 0 |
+| [Sponsor](#per-sponsor) Capability / Requirements Sponsor | acquisition | — | [PER-SPONSOR.md](personas/PER-SPONSOR.md) | 5 / 0 / 12 / 0 |
 | [Developer](#per-dev) Developer / Integrator | engineering | — | [PER-DEV.md](personas/PER-DEV.md) | 3 / 0 / 3 / 0 |
 | [CCB](#per-ccb) Configuration Control Board Chair | engineering | — | [PER-CCB.md](personas/PER-CCB.md) | 0 / 0 / 2 / 0 |
+| [PAO](#per-pao) Principal Authorizing Official | organization | DoD MA owner (DoD CIO for the EIEMA, USD(I) for the DIMA, the CMO for the BMA, CJCS for the WMA) | [PER-PAO.md](personas/PER-PAO.md) | 0 / 0 / 7 / 0 |
+| [DoD CISO](#per-dodciso) DoD Chief Information Security Officer | organization | DoD CIO | [PER-DODCISO.md](personas/PER-DODCISO.md) | 0 / 0 / 1 / 0 |
+| [JCA CPM](#per-jcacpm) Joint Capability Area Capability Portfolio Manager | organization | — | [PER-JCACPM.md](personas/PER-JCACPM.md) | 0 / 0 / 7 / 0 |
+| [RMF TAG rep](#per-tag) RMF Technical Advisory Group Representative | organization | DoD Component CISO | [PER-TAG.md](personas/PER-TAG.md) | 0 / 0 / 0 / 0 |
+| [Operational commanders](#per-opcdr) Cyberspace and Functional Operational Commanders | operations | — | [PER-OPCDR.md](personas/PER-OPCDR.md) | 0 / 0 / 0 / 1 |
 
 ### <a id="per-ao"></a>AO: Authorizing Official
 
@@ -4434,7 +4440,7 @@ Administers the RMF in the Component cybersecurity program, communicates organiz
 - SP 800-37 Rev. 2 roles: Head of Agency, Chief Information Officer
 - Responsible for: [P-1](#task-p-1), [P-2](#task-p-2)
 - Accountable for: [P-1](#task-p-1), [P-2](#task-p-2)
-- Consulted on: [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-11](#task-p-11), [P-13](#task-p-13), [P-16](#task-p-16), [P-17](#task-p-17), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [R-4](#task-r-4), [M-6](#task-m-6)
+- Consulted on: [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-11](#task-p-11), [P-13](#task-p-13), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [R-4](#task-r-4), [M-6](#task-m-6)
 - Informed of: [P-18](#task-p-18), [R-5](#task-r-5), [M-5](#task-m-5)
 
 Citations:
@@ -4452,7 +4458,7 @@ Directs the Component cybersecurity program; owns the security control assessmen
 - SP 800-37 Rev. 2 roles: Senior Agency Information Security Officer
 - Responsible for: [P-3](#task-p-3), [P-5](#task-p-5), [M-1](#task-m-1), [M-5](#task-m-5)
 - Accountable for: [P-5](#task-p-5)
-- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6)
+- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6), [M-7](#task-m-7)
 - Informed of: [P-18](#task-p-18), [A-3](#task-a-3)
 
 Citations:
@@ -4519,9 +4525,9 @@ Leads the system cybersecurity program day to day: maintains the authorization p
 - Card: [personas/PER-ISSM.md](personas/PER-ISSM.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer
-- Responsible for: [P-10](#task-p-10), [P-11](#task-p-11), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-2](#task-i-2), [A-6](#task-a-6), [R-1](#task-r-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Responsible for: [P-10](#task-p-10), [P-11](#task-p-11), [P-14](#task-p-14), [P-17](#task-p-17), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-2](#task-i-2), [A-6](#task-a-6), [R-1](#task-r-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
 - Accountable for: none
-- Consulted on: [P-12](#task-p-12), [P-14](#task-p-14), [P-15](#task-p-15), [P-17](#task-p-17), [S-3](#task-s-3), [I-1](#task-i-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2)
+- Consulted on: [P-12](#task-p-12), [P-15](#task-p-15), [I-1](#task-i-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2)
 - Informed of: [P-8](#task-p-8), [P-9](#task-p-9), [C-3](#task-c-3), [S-6](#task-s-6), [R-4](#task-r-4), [M-6](#task-m-6)
 
 Citations:
@@ -4538,7 +4544,7 @@ Maintains the operational security posture of the system under the ISSM's direct
 - SP 800-37 Rev. 2 roles: System Security Officer, System Administrator
 - Responsible for: [P-14](#task-p-14), [P-17](#task-p-17), [S-3](#task-s-3), [M-1](#task-m-1)
 - Accountable for: none
-- Consulted on: [S-4](#task-s-4), [I-1](#task-i-1), [I-2](#task-i-2), [A-3](#task-a-3), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Consulted on: [P-12](#task-p-12), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-3](#task-r-3), [R-5](#task-r-5), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4728,7 +4734,7 @@ Owns the capability need and the requirements documents; the mission owner whose
 - SP 800-37 Rev. 2 roles: Mission or Business Owner
 - Responsible for: [P-4](#task-p-4), [P-8](#task-p-8), [P-9](#task-p-9), [P-15](#task-p-15), [P-16](#task-p-16)
 - Accountable for: none
-- Consulted on: [P-3](#task-p-3), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-10](#task-p-10), [P-11](#task-p-11), [P-13](#task-p-13), [P-14](#task-p-14), [P-17](#task-p-17), [S-3](#task-s-3)
+- Consulted on: [P-3](#task-p-3), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-17](#task-p-17), [P-18](#task-p-18), [S-3](#task-s-3)
 - Informed of: none
 
 Citations:
@@ -4769,6 +4775,95 @@ Citations:
 
 - [SP800-128](#ref-sp800-128), section 2.3.3
 - [SP800-128](#ref-sp800-128), section "APPENDIX H CCB CHARTER SAMPLE"
+
+### <a id="per-pao"></a>PAO: Principal Authorizing Official
+
+The senior official appointed for one DoD mission area who represents its interests, provides its Tier 2 governance, issues mission-area cybersecurity risk guidance the Prepare step consumes and resolves authorization issues within the mission area.
+
+- Card: [personas/PER-PAO.md](personas/PER-PAO.md)
+- Category: organization; appointed by: DoD MA owner (DoD CIO for the EIEMA, USD(I) for the DIMA, the CMO for the BMA, CJCS for the WMA)
+- SP 800-37 Rev. 2 roles: none
+- Responsible for: none
+- Accountable for: none
+- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7)
+- Informed of: none
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 25, "A PAO is appointed for each of the DoD MAs"
+- [DODI8510.01](#ref-dodi8510-01), p. 13, "must be completed by the DoD Component CIO, DoD PAO, and JCA capability portfolio manager"
+- [DODI8510.01](#ref-dodi8510-01), p. 30, "PAO | DoD MA owner"
+- [DODI8500.01](#ref-dodi8500-01), p. 28, "The PAOs for each DoD mission area provide the Tier 2 governance"
+
+### <a id="per-dodciso"></a>DoD CISO: DoD Chief Information Security Officer
+
+The DoD SISO: directs the DoD Cybersecurity Program and the RMF, oversees the RMF TAG and the RMF KS, advises the PAOs, is the DoD CIO's primary liaison to AOs, ISOs and ISSOs, and approves a continuous ATO.
+
+- Card: [personas/PER-DODCISO.md](personas/PER-DODCISO.md)
+- Category: organization; appointed by: DoD CIO
+- SP 800-37 Rev. 2 roles: none
+- Responsible for: none
+- Accountable for: none
+- Consulted on: [M-6](#task-m-6)
+- Informed of: none
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 22, "Directs and oversees the cybersecurity risk management of DoD information"
+- [DODI8510.01](#ref-dodi8510-01), p. 30, "DoD CISO | DoD CIO"
+- [DODI8500.01](#ref-dodi8500-01), p. 45, "primary liaison to DoD AOs, ISOs, and ISSOs"
+- [DODCIO-CATO-EVAL](#ref-dodcio-cato-eval), p. 8, "the DoD CISO will delegate approval authority to the Component CISO"
+
+### <a id="per-jcacpm"></a>JCA CPM: Joint Capability Area Capability Portfolio Manager
+
+Manages a JCA capability portfolio; under the direction of the DoD ISRMC recommends the portfolio's cybersecurity risk requirements and develops the cybersecurity risk guidance the Prepare step needs for the JCA.
+
+- Card: [personas/PER-JCACPM.md](personas/PER-JCACPM.md)
+- Category: organization; appointed by: not specified
+- SP 800-37 Rev. 2 roles: none
+- Responsible for: none
+- Accountable for: none
+- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7)
+- Informed of: none
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 25, "develop and maintain cybersecurity risk guidance required by the RMF"
+- [DODI8510.01](#ref-dodi8510-01), p. 13, "must be completed by the DoD Component CIO, DoD PAO, and JCA capability portfolio manager"
+
+### <a id="per-tag"></a>RMF TAG rep: RMF Technical Advisory Group Representative
+
+The Component's representative to the RMF TAG, which provides RMF implementation guidance, authors RMF KS content and recommends changes to controls, baselines, overlays and risk management processes to the DoD CISO.
+
+- Card: [personas/PER-TAG.md](personas/PER-TAG.md)
+- Category: organization; appointed by: DoD Component CISO
+- SP 800-37 Rev. 2 roles: none
+- Responsible for: none
+- Accountable for: none
+- Consulted on: none
+- Informed of: none
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 24, "The RMF TAG provides implementation guidance for the RMF"
+- [DODI8510.01](#ref-dodi8510-01), p. 30, "RMF TAG Representative | DoD Component CISO"
+
+### <a id="per-opcdr"></a>Operational commanders: Cyberspace and Functional Operational Commanders
+
+The cyberspace and functional operational commanders whose missions the system serves or defends: they need the system's cyber risk information, and the AO coordinates with them when a cybersecurity risk affects an operational requirement.
+
+- Card: [personas/PER-OPCDR.md](personas/PER-OPCDR.md)
+- Category: operations; appointed by: not specified
+- SP 800-37 Rev. 2 roles: none
+- Responsible for: none
+- Accountable for: none
+- Consulted on: none
+- Informed of: [R-5](#task-r-5)
+
+Citations:
+
+- [DODI8510.01](#ref-dodi8510-01), p. 28, "Verify the cyberspace and functional operational commanders have the necessary"
+- [DODI8510.01](#ref-dodi8510-01), p. 28, "When a cybersecurity risk affects an operational requirement"
 
 ## <a id="references"></a>9. References
 

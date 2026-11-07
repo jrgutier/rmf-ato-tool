@@ -1,0 +1,139 @@
+rule: TLR-003
+bases:
+- minimal
+description: a space platform with removable media does not revisit the controls the Space Platform Overlay tailors out on NO REMOVABLE MEDIA
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.space_segments
+  value:
+  - space-platform
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253F-ATT2-SPACE
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: assumptions
+  value:
+  - id: AS-BL-1
+    holds: true
+    rationale: Field reports persist for days on the relay.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-2
+    holds: true
+    rationale: Several analysts use the relay concurrently.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-3
+    holds: true
+    rationale: Reports are shared on need to know.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-4
+    holds: true
+    rationale: The relay is a networked general-purpose host.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-5
+    holds: true
+    rationale: The program runs the controls with enclave support.
+    sources:
+    - INT-028.A2
+  - id: AS-NSS-1
+    holds: true
+    rationale: The insider threat is in the risk assessment.
+    sources:
+    - INT-028.A2
+    - ART-RA
+  - id: AS-NSS-2
+    holds: true
+    rationale: APT targeting is in the risk assessment.
+    sources:
+    - INT-028.A2
+    - ART-RA
+  - id: AS-NSS-3
+    holds: true
+    rationale: The NSS baseline additions apply.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-1
+    holds: false
+    rationale: The relay processes no classified information.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-2
+    holds: false
+    rationale: No information needs specialized legal protection.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-3
+    holds: false
+    rationale: The relay has no cross-domain connection.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-1
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-2
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-3
+    holds: false
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-4
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-5
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-6
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-7
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-8
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-9
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-SPC-10
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - TLR-003
+  also:
+  - ASMT-002
+  - POAM-CTL-001
+  - RECIP-001
+  - RECIP-002
+  - TLR-006
+  messages:
+  - 'the controls the overlay tailors out on it are not revisited: ac-20.2, mp-1, mp-2, mp-6, mp-6.1, mp-6.2, mp-6.3, mp-7'

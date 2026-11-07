@@ -43,6 +43,9 @@ INHERENTLY_GOVERNMENTAL = {
     "PER-CISO": "the senior agency information security officer",
     "PER-PRIV": "the senior agency official for privacy",
 }
+# DoDI 8510.01 Table 8 (the DoD MA owner appoints the PAO) with DoDI 8500.01 Encl 2, which names
+# each mission area's owner.
+PAO_APPOINTERS = {"eiema": "dod-cio", "dima": "usd-i", "bma": "dod-cmo", "wma": "cjcs"}
 GOVERNMENT = ("dod-civilian", "military", "other-government")
 DOD = ("dod-civilian", "military")
 # DoDI 8500.01 Encl 3.e: positions a non-U.S. citizen may not hold.
@@ -170,6 +173,18 @@ def roles(ctx: Context) -> list[RunFinding]:
         if role == "PER-UR" and r.get("appointed_by") != SYSTEM_OWNER:
             err(f"{rid}: the user representative is appointed by {r.get('appointed_by')}, not "
                 "the information system owner")
+        by = r.get("appointed_by")
+        if role == "PER-PAO" and _key(r.get("mission_area")) not in PAO_APPOINTERS:
+            err(f"{rid}: the PAO names no mission_area ({', '.join(PAO_APPOINTERS)}), so whether "
+                "its DoD MA owner appointed it cannot be read")
+        elif role == "PER-PAO" and by != PAO_APPOINTERS.get(_key(r.get("mission_area"))):
+            err(f"{rid}: the PAO for mission area {r.get('mission_area')} is appointed by {by}, "
+                "not the DoD MA owner of that mission area")
+        if role == "PER-DODCISO" and by != "dod-cio":
+            err(f"{rid}: the DoD CISO is appointed by {by}, not the DoD CIO")
+        if role == "PER-TAG" and by != "PER-CISO":
+            err(f"{rid}: the RMF TAG Representative is appointed by {by}, not the DoD Component "
+                "CISO")
         if role in INHERENTLY_GOVERNMENTAL and held not in GOVERNMENT:
             err(f"{rid}: {INHERENTLY_GOVERNMENTAL[role]} is an inherent U.S. Government "
                 f"function and is assigned to government personnel only, not {held}")

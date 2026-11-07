@@ -167,7 +167,9 @@ requirements:
     locator: "4"
     context: ""
     statement: "SAP is defined in EO 13526, Section 4.3. If the system stores, processes or transmits classified information that requires protection within a SAP established by the Director of National Intelligence, the specification in the Intelligence Overlay apply. If the system stores, processes, or transmits, classified information that requires protection within a SAP established by another authority, consult that authority for appropriate specifications."
-    status: "candidate"
+    status: "partial"
+    reason: "A system within a SAP or SCI (AS-CLS-1 does not hold) must apply an obtained Intelligence or SAP-authority overlay (OVLX-001). The fixture breaks the DNI case; the other-authority case rides on the same clause, and the first sentence is a definition."
+    evidence: [{"kind": "rule", "target": "OVLX-001", "fixture": "tests/fixtures/negative/OVLX-001.sap.yaml", "expect": "within a SAP or SCI, and applies neither the Intelligence Overlay nor", "claim": "constraint", "asserts": "Classified information within a SAP established by the Director of National Intelligence takes the Intelligence Overlay: a system within a SAP or SCI that applies neither the Intelligence Overlay nor the SAP specifications fails", "sentence": "If the system stores, processes or transmits classified information that requires protection within a SAP established by the Director of National Intelligence, the specification in the Intelligence Overlay apply."}]
     work_item: "WI-22"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0020"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "The specifications in this overlay do not apply to systems that store,"}
@@ -386,7 +388,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "This overlay does not include control specifications for cross domain solutions (CDS), intelligence systems (to include Special Access Program or Sensitive Compartmented Information), or networks on which non-US persons have or may have access. For guidance on those areas, refer to the appropriate overlay.5"
-    status: "candidate"
+    status: "partial"
+    reason: "CDS and intelligence systems are held by OVLX-001 (cds and sap fixtures). Networks on which non-US persons have access name no overlay in the library or in any reference, so nothing can require one."
+    evidence: [{"kind": "rule", "target": "OVLX-001", "fixture": "tests/fixtures/negative/OVLX-001.cds.yaml", "expect": "communicates across security domains, and applies no cross domain solution overlay", "claim": "constraint", "asserts": "The overlay does not include control specifications for cross domain solutions; refer to the appropriate overlay: a classified system that communicates across security domains and applies no cross domain solution overlay fails", "sentence": "This overlay does not include control specifications for cross domain solutions (CDS), intelligence systems (to include Special Access Program or Sensitive Compartmented Information), or networks on which non-US persons have or may have access."}]
     work_item: "WI-22"
     promoted: {"reason": "The end of Section 1 sits on page 2, which sources.yaml excludes as Section 2 only: the overlay excludes CDS, intelligence systems and networks with non-US persons and refers the reader to the appropriate overlay."}
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0044"
