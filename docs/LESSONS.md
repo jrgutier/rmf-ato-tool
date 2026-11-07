@@ -496,7 +496,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
 - Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
 
-## L-0071 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
+## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
 - Symptom: valid_minimal failed TRACE-002 with "malformed trace token 'cve'" once conmon.yaml held `vulnerability_management.identification.sources: [cve, vendor-bulletins]` and `patching.sources`.
 - Root cause: TRACE-002 reads every key named `sources` anywhere in run data as a list of trace tokens, so a schema that names a list of origin kinds `sources` makes every run that fills it fail.
 - Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.

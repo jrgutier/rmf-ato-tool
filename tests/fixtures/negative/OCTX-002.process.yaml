@@ -1,0 +1,16 @@
+rule: OCTX-002
+bases:
+- minimal
+description: certificates are used with no designation process
+mutations:
+- op: delete_field
+  file: artifacts/data/org-context.yaml
+  path: code_signing.process
+expect:
+  errors:
+  - OCTX-002
+  also:
+  - RUN-FM-001
+  messages:
+  - code-signing certificates are used and no process designates the individuals authorized to 
+    receive them

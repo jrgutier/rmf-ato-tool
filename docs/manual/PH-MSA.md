@@ -192,9 +192,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 ## <a id="task-p-3"></a>P-3 · Risk Assessment—Organization
 
-*[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
+*[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) (continues in [O&S](PH-OS.md#ph-os)) · required · at least 1 stakeholder interview*
 
-**Purpose.** Assess organization-wide security and privacy risk, including supply chain risk, using current cyber threat information, and keep the results current.
+**Purpose.** Assess organization-wide security and privacy risk, including supply chain risk, using current cyber threat information, and keep the results current: in operations, review threat, vulnerability, technology and mission changes against the organizational risk posture.
 
 **Stakeholders (RACI)**
 
@@ -226,6 +226,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 - An organization-wide risk assessment is completed, or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT summarizes the organization-level risk assessment results.
+- Once the system operates, org-context.yaml posture_reviews records each review of threat, vulnerability, technology and mission changes against the organizational risk posture, and the sections it updated (OCTX-011).
 
 **Alignment**
 
@@ -981,6 +982,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 
 **Exit criteria**
 
+- The provider of each leveraged authorization is an external entity in org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
 - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
 

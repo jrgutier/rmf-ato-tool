@@ -1,0 +1,15 @@
+rule: OCTX-006
+bases:
+- minimal
+description: an inherited control with no provider package behind its determination
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: common_controls.0.provided_by
+  value: Another enclave
+expect:
+  errors:
+  - OCTX-006
+  messages:
+  - 'the system assessment assesses the inherited control sc-7: its determination rests on the separate
+    assessment of the common controls it inherits'

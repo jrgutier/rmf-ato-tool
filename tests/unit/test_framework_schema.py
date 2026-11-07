@@ -374,7 +374,7 @@ RUN_EXAMPLES.update({
         ("ssp-records", "space_nss", "maybe"),
         ("system-description", "ownership", "leased"),
         ("sar-summary", "assessment_type", "spot-check"),
-        ("org-context", "risk_executive", {"form": "committee"}))
+        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]))
 })
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
@@ -476,7 +476,7 @@ TRACED = sorted(p for p in SCHEMAS.glob("*.schema.json") if p.name != "baseline.
 
 @pytest.mark.parametrize("path", TRACED, ids=lambda p: p.name)
 def test_sources_properties_hold_trace_tokens(path):
-    """L-0071: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
+    """L-0072: TRACE-002 reads every `sources` key of run data as trace tokens, so a list of
     origin kinds named `sources` fails every run that fills it."""
     root = json.loads(path.read_text(encoding="utf-8"))
 

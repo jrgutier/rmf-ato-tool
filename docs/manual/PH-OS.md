@@ -14,8 +14,8 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 |---|---|
 | Starts at | [IOC](PH-PD.md#ms-ioc) Initial Operational Capability |
 | Ends at | End of the life cycle (disposal) |
-| RMF steps active | [M Monitor](../../MANUAL.md#step-m) |
-| Tasks | 7 with this primary phase |
+| RMF steps active | [P Prepare](../../MANUAL.md#step-p), [M Monitor](../../MANUAL.md#step-m) |
+| Tasks | 7 with this primary phase; 1 more also run here |
 | Authorization decisions possible | [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [cATO](../../MANUAL.md#ad-cato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc) |
 
 **Entry criteria**
@@ -59,6 +59,8 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
 | [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
 | [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | — | — |
+
+Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#task-p-3).
 
 ## <a id="task-m-1"></a>M-1 · System and Environment Changes
 
@@ -219,6 +221,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 | [EXT-INSPECTIONS](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 | [EXT-DIRECTIVES](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
@@ -238,6 +241,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Exit criteria**
 
+- Courses of action are selected and their responses communicated as the organization's risk response strategy in ART-ORG-CONTEXT (org-context.yaml risk_response) directs.
 - The output of continuous monitoring activities is analyzed and responded to appropriately (DoDI 8510.01 Table 7 outcome).
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
@@ -442,6 +446,7 @@ Writes to `facts.yaml`: `acquisition`.
 
 **Exit criteria**
 
+- Before the first continued authorization, ART-ORG-CONTEXT records the organization-wide ongoing authorization process with both transition conditions and an ISCM program in place (OCTX-010).
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
 - authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.

@@ -1,17 +1,162 @@
-risk_executive:
-  form: group
-  members: [PER-RE, PER-CIO, PER-CISO]
-  forums:
-    - {name: Component risk board, considers: [all-types-and-sources, aggregated-risk]}
-  oversight: The board reviews each authorization decision and POA&M acceptance quarterly for consistency.
-  strategic_view: The board aggregates system risk across the Component mission portfolio.
-  communication:
-    - {vehicle: Quarterly risk brief, audience: [authorizing-officials, senior-leaders, internal-stakeholders]}
-    - {vehicle: Mission partner risk exchange, audience: [external-stakeholders]}
-  subordinate_autonomy:
-    - {activity: frame, autonomy: Programs adopt the Component frame without change.}
-    - {activity: assess, autonomy: Programs assess within the Component method.}
-    - {activity: respond, autonomy: Programs accept moderate risk; high risk goes to the board.}
-    - {activity: monitor, autonomy: Programs set monitoring frequencies within the ISCM strategy.}
-  shared_authorizations: The board brokers joint authorizations between AOs sharing a system.
-sources: [product/README.md]
+roles:
+  - {id: RA-01, role: PER-CIO, name: Component CIO (fixture), title: Chief Information Officer, organization: Component HQ, contact: {email: cio@example.mil}, appointed_by: dod-component-head, appointment: {instrument: appointment-letter, reference: CHQ-2026-01}, citizenship: us, affiliation: dod-civilian, sources: [INT-013.A1]}
+  - {id: RA-02, role: PER-CISO, name: Component CISO (fixture), title: Chief Information Security Officer, organization: Component HQ, contact: {email: ciso@example.mil}, appointed_by: PER-CIO, appointment: {instrument: appointment-letter, reference: CHQ-2026-02}, citizenship: us, affiliation: dod-civilian, position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: MP-01, dcwf_code: "722"}, duties_statement: {form: written, reference: CHQ-2026-02}, primary_duty: security, heads_office: true, qualifications: CISSP and twelve years in security program management, coordinates_with: [PER-PRIV], sources: [INT-013.A1]}
+  - {id: RA-03, role: PER-AO, name: Mission area AO (fixture), title: Authorizing Official, organization: Component HQ, contact: {email: ao@example.mil}, appointed_by: PER-CIO, appointment: {instrument: appointment-letter, reference: CHQ-2026-03, basis: "DoDI 8510.01, appointment of RMF roles by the Component CIO"}, citizenship: us, affiliation: dod-civilian, position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: MP-02, dcwf_code: "611"}, duties_statement: {form: written, reference: CHQ-2026-03}, sources: [INT-013.A1]}
+  - {id: RA-04, role: PER-AODR, name: AODR (fixture), title: AO Designated Representative, organization: Component HQ, contact: {email: aodr@example.mil}, appointed_by: PER-AO, appointment: {instrument: memorandum, reference: AO-2026-01}, citizenship: us, affiliation: military, position: {designation: critical-sensitive, suitability: met, recorded_in: military-personnel-system, manpower_id: MP-03, dcwf_code: "611"}, duties_statement: {form: written, reference: AO-2026-01}, sources: [INT-013.A1]}
+  - {id: RA-05, role: PER-RE, name: Component risk executive function, title: Risk Executive (Function), organization: Component HQ, contact: {email: re@example.mil}, appointed_by: saorm, citizenship: us, affiliation: dod-civilian, sources: [INT-014.A1]}
+  - {id: RA-06, role: PER-PRIV, name: Component privacy officer (fixture), title: Senior Component Official for Privacy, organization: Component HQ, contact: {email: privacy@example.mil}, appointed_by: dod-component-head, citizenship: us, affiliation: dod-civilian, sources: [INT-013.A1]}
+  - {id: RA-07, role: PER-PM, name: Program manager (fixture), title: Program Manager, organization: FDR program office, contact: {email: pm@example.mil}, appointed_by: dod-component-head, citizenship: us, affiliation: dod-civilian, sources: [INT-013.A1]}
+  - {id: RA-08, role: PER-ISSM, name: ISSM (fixture), title: Information System Security Manager, organization: FDR program office, contact: {email: issm@example.mil}, appointed_by: PER-PM, appointment: {instrument: appointment-letter, reference: PO-2026-01}, citizenship: us, affiliation: dod-civilian, position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: MP-04, dcwf_code: "722"}, duties_statement: {form: written, reference: PO-2026-01}, personnel_security: {standard: DoDM 5200.02, status: met}, granted: [support, authority, resources], sources: [INT-013.A1]}
+  - {id: RA-09, role: PER-ISSO, name: ISSO (fixture), title: Information System Security Officer, organization: FDR program office, contact: {email: isso@example.mil}, appointed_by: PER-ISSM, appointment: {instrument: appointment-letter, reference: PO-2026-02}, citizenship: us, affiliation: contractor, position: {designation: noncritical-sensitive, suitability: met, recorded_in: contract, manpower_id: MP-05, dcwf_code: "462"}, duties_statement: {form: written, reference: PO-2026-02}, sources: [INT-013.A1]}
+  - {id: RA-10, role: PER-SCA, name: SCA team (fixture), title: Security Control Assessor, organization: Independent assessment activity, contact: {email: sca@example.mil}, appointed_by: PER-AO, citizenship: us, affiliation: dod-civilian, position: {designation: noncritical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: MP-06, dcwf_code: "612"}, duties_statement: {form: written, reference: AO-2026-02}, sources: [INT-013.A1]}
+  - {id: RA-11, role: PER-UR, name: User representative (fixture), title: User Representative, organization: Field operations, contact: {email: ur@example.mil}, appointed_by: PER-PM, citizenship: us, affiliation: military, sources: [INT-013.A1]}
+  - {id: RA-12, role: PER-CCP, name: Analysis enclave team, title: Common Control Provider, organization: Analysis enclave, contact: {email: enclave@example.mil}, appointed_by: PER-CIO, citizenship: us, affiliation: dod-civilian, sources: [INT-017.A1]}
+  - {id: RA-13, role: system-administrator, name: Relay administrator (fixture), title: System Administrator, organization: Relay integrator, contact: {email: admin@example.com}, appointed_by: PER-ISSM, citizenship: non-us, affiliation: contractor, position: {designation: noncritical-sensitive, suitability: met, recorded_in: contract, manpower_id: MP-07}, duties: [system-administration], duties_statement: {form: written, reference: PO-2026-03}, personnel_security: {standard: DoDM 5200.02, status: met}, supervised_by: RA-08, sources: [INT-013.A1]}
+manpower_structure:
+  - {id: MP-01, title: Component CISO}
+  - {id: MP-02, title: Authorizing official}
+  - {id: MP-03, title: AO designated representative}
+  - {id: MP-04, title: Program ISSM}
+  - {id: MP-05, title: Program ISSO}
+  - {id: MP-06, title: Security control assessor}
+  - {id: MP-07, title: Relay system administrator}
+open_functions:
+  - {function: PER-ISSO, open_to: [contractor, non-dod], basis: Component manpower policy allows contractor ISSOs}
+  - {function: system-administrator, open_to: [non-us-citizen, contractor, non-dod], basis: Allied integrator staff administer the relay under supervision}
+code_signing:
+  used: true
+  process: Component PKI sponsor approval, renewed yearly
+  operational_need: 2
+  designated:
+    - {name: Release engineer (fixture), role: PER-DEV, justification: Signs relay firmware releases}
+program:
+  name: Component Cybersecurity Risk Management Program
+  owner: PER-CIO
+  scope: organization-wide
+  implements: [CNSSP 22, CNSSP 22 Annex A, DoDI 8500.01]
+  integrated_with: [mission-business-risk-management, strategic-planning, operational-planning, budgeting]
+  consistent_with: [dod-siso-strategy, dod-cybersecurity-program]
+  processes: [frame, assess, respond, monitor]
+  systems: [FDR-0001]
+  governance_bodies:
+    - {name: Component cybersecurity risk board, integrates_with: [dod-enterprise-governance]}
+  sources: [INT-014.A1]
+policies:
+  - {id: POL-01, title: Component RMF policy, owner: PER-CIO, kind: policy, phases: [PH-MSA, PH-TMRR, PH-EMD, PH-PD, PH-OS], directs: [PER-PM], sse_integrated: true, reference: Component Instruction 8510, sources: [INT-014.A1]}
+resources:
+  funding: {identified_by: PER-PM, secured_by: PER-CIO, process: PPBE, made_available_to: [PER-ISSM]}
+  staffing: {identified_by: PER-ISSM, secured_by: PER-PM, made_available_to: [PER-ISSM]}
+  allocation: {determined_by: [PER-CIO, PER-AO], coordinated_with: [PER-PRIV]}
+  sources: [INT-014.A1]
+risk_frame:
+  assumptions: [Field units may be captured]
+  constraints: [Relay hardware cannot change before full rate production]
+  priorities: [Mission availability over convenience]
+  tradeoffs: [Accept moderate residual risk for developmental systems with a dated POA&M]
+  tolerance:
+    - {loss_type: mission degradation, level: moderate}
+  shaped_by: [governance, mission]
+  sources: [INT-014.A1]
+governance:
+  model: hybrid
+  reserved_decisions:
+    - {decision: Risk accepted above moderate, reserved_to: PER-CIO}
+  risk_executive:
+    form: group
+    led_by: saorm
+    structured_by: saorm
+    members: [PER-RE, PER-CIO, PER-CISO]
+    forums:
+      - {name: Component risk board, considers: [all-types-and-sources, aggregated-risk]}
+    oversight: The board reviews each authorization decision and POA&M acceptance quarterly for consistency.
+    strategic_view: The board aggregates system risk across the Component mission portfolio.
+    communication:
+      - {vehicle: Quarterly risk brief, audience: [authorizing-officials, senior-leaders, internal-stakeholders]}
+      - {vehicle: Mission partner risk exchange, audience: [external-stakeholders]}
+    subordinate_autonomy:
+      - {activity: frame, autonomy: Programs adopt the Component frame without change.}
+      - {activity: assess, autonomy: Programs assess within the Component method.}
+      - {activity: respond, autonomy: Programs accept moderate risk; high risk goes to the board.}
+      - {activity: monitor, autonomy: Programs set monitoring frequencies within the ISCM strategy.}
+    shared_authorizations: The board brokers joint authorizations between AOs sharing a system.
+  tolerance_resolution: The risk board resolves differing tolerances between mission areas
+  sources: [INT-014.A1]
+risk_assessment_guidance:
+  methods: SP 800-30 qualitative assessment
+  tools: Component risk register
+  roles: ISSM leads, SCA reviews
+  rigor: Moderate rigor for moderate systems
+  results_form: Risk register entries with SP 800-30 levels
+  threat_sources: Adversarial and accidental sources from the Component threat assessment
+  threat_events: Representative events from SP 800-30 Appendix E
+  vulnerabilities: Vulnerabilities named to the component level
+  external_dependencies: Enclave services are assessed as dependencies
+  impacts: Mission, assets and individuals
+  time_frames: The system's planned life
+  likelihood: Qualitative, assuming an adversary with field access
+  uncertainty: Stated per assessment
+  aggregation: Highest-of across systems of a mission area
+  information_sources: [Component threat assessment]
+  sources: [INT-015.A1]
+risk_response:
+  types: [accept, avoid, mitigate, share, transfer]
+  selection: The AO selects among courses of action the ISSM prepares
+  strategies: {acceptance: Within tolerance with a POA&M, avoidance: Stop a function above tolerance, sharing_transfer: Through enclave agreements, mitigation: Controls first at Tier 3}
+  coa_tools: Risk register course-of-action worksheet
+  communication: Risk board minutes and the RAR
+  sources: [INT-014.A1]
+external_entities:
+  - {id: EXT-01, name: Enterprise IT Services, relationship: actual, trust_model: mandated, sharing: Shared incident and vulnerability data, control_degree: Service level agreement, trust_evidence: Leveraged ATO package, risk_acceptable: true, accepted_by: PER-AO, accepted_on: '2026-03-15', sources: [INT-014.A1]}
+common_controls:
+  - provided_by: Analysis enclave boundary (common control)
+    persona: PER-CCP
+    controls: [sc-7, au-6]
+    authorization: {decision: AD-ATO, by: PER-AO, date: '2026-01-10'}
+    assessed_by: {assessor: Enclave SCA, chosen_by: provider, qualified: true, independence: Outside the enclave chain}
+    status_reporting: {how: Enclave dashboard shared with inheriting system owners, frequency: monthly}
+    deficiencies: false
+    plan: {reference: Enclave SSP v3, approved_by: PER-AO, approved_on: '2026-01-10', available_to: [PER-PM], available_on: '2026-01-12'}
+    sar: {reference: Enclave SAR 2026, approved_by: PER-AO, approved_on: '2026-01-10', available_to: [PER-PM], available_on: '2026-01-12'}
+    sources: [INT-017.A1]
+iscm:
+  established: '2025-06-01'
+  program_status: in-place
+  governance: [The risk board oversees the ISCM program]
+  policies:
+    - {subject: security-status-monitoring, reference: Component ISCM policy 2.1}
+    - {subject: results-to-risk-assessment, reference: Component ISCM policy 2.4}
+  processes:
+    - {name: Vulnerability scanning, mode: automated}
+    - {name: Account audit, mode: manual, verified: true, verified_by: PER-CISO}
+  objectives:
+    - {id: OBJ-01, objective: Know the vulnerability state of every system monthly}
+  activities:
+    - {name: Vulnerability scanning, objectives: [OBJ-01]}
+  monitors: [control-effectiveness, changes, organizational-state]
+  not_applicable:
+    - {element: External service monitoring, reason: The Component uses no external ISCM provider}
+  minimum_frequencies:
+    - {family: au, frequency: monthly, applies_to: [systems, common-controls], basis: Audit failures show first in the SIEM}
+    - {family: ia, frequency: quarterly, applies_to: [systems], basis: Identity provider changes are rare}
+  review_cycle: {frequency: annually}
+  reviews:
+    - {date: '2026-02-01', by: PER-CISO, considered: [threats, monitoring-results], strategy_adjusted: false, outcome: No change needed}
+  assessments:
+    - date: '2026-02-15'
+      by: Component inspector general team
+      method: SP 800-137A
+      reported_to: [PER-CIO]
+      judgments:
+        - {element: External service monitoring, judgment: satisfied}
+      findings:
+        - {id: IF-01, response: Automate the account review, priority: moderate, owner: PER-CISO, due: '2026-09-30'}
+  ongoing_authorization:
+    process: Component ongoing authorization procedure 4.2
+    conditions: [initial-authorization, iscm-program]
+    transition: The AO issues a continued authorization once the risk board confirms both conditions
+    remain: [Monthly metrics delivered on time, No unaccepted risk above moderate]
+    reporting_tools: [Component GRC dashboard]
+  sources: [INT-018.A1]
+posture_reviews:
+  - {date: '2026-12-01', by: PER-RE, considered: [threats, vulnerabilities, technologies, mission], impact: No change to the organizational risk posture, updated: [], sources: [INT-015.A1]}
+sources: [INT-013.A1, product/README.md]
