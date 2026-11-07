@@ -1,0 +1,14 @@
+rule: ISCM-002
+bases:
+- minimal
+description: an automated tool collecting less often than the strategy specifies
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.frequency
+  value: quarterly
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - 'TOOL-01 collects cm-6 quarterly, but the strategy monitors it continuously: a tool behind a continuous frequency collects at that frequency'

@@ -1,0 +1,13 @@
+rule: ISCM-002
+bases:
+- minimal
+description: a desired state tool without its desired state block
+mutations:
+- op: delete_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.desired_state
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - TOOL-01 follows the desired state strategy but defines no actual state, desired state or defect method

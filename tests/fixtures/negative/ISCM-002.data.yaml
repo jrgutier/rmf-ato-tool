@@ -1,0 +1,15 @@
+rule: ISCM-002
+bases:
+- minimal
+description: a desired state resting on data the run does not hold
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.desired_state.desired_state.data
+  value:
+  - BM-09
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - 'rests its desired state on BM-09, which is neither a benchmark in stig-summary.yaml nor a product file: the desired state is data-based'

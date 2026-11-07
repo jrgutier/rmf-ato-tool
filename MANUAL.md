@@ -1769,6 +1769,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -1784,6 +1785,10 @@ Writes to `facts.yaml`: `baseline_id`.
 
 - A continuous monitoring strategy for the system that reflects the organizational risk management strategy is developed (DoDI 8510.01 Table 3 outcome).
 - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization triggers (CONMON-001).
+- conmon.yaml states the criteria behind each frequency, established by the system owner or common control provider with other officials, or cites ART-ORG-CONTEXT for a family organizational_frequencies lists as set by the organizational strategy (ISCM-003).
+- Each automated tool names the baseline controls it assesses by the test method, with its frequency (continuous where it carries a continuously monitored control), analysis, reporting, selection criteria, upkeep and strategy; a desired-state tool defines an automated actual state, a data-based comparable desired state and its defect method; a continuously monitored control no tool covers gets a manual frequency (ISCM-002).
+- conmon.yaml states the data architecture, compliance, effectiveness and change monitoring, event criteria with thresholds and what each triggers, a periodic boundary review, threat monitoring of threat actors, protective techniques and the deployed environment (EXT-THREAT), metrics and the tasks using them, activities delegated to external partners and how the risk assessment is kept current (ISCM-001, ISCM-005, ISCM-006); posture reports reach the AO (ISCM-005).
+- conmon.yaml has room for the AO's or AODR's approval of the strategy and the minimum frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 
 **Alignment**
@@ -1842,6 +1847,7 @@ Writes to `facts.yaml`: `baseline_id`.
 
 - Security and privacy plans reflecting the controls needed to protect the system and its environment commensurate with risk are reviewed and approved by the AO (DoDI 8510.01 Table 3 outcome).
 - ART-SSP records the AO's approval (or the changes required before approval), and `approvals` in ssp-records.yaml holds each approver's full name, system role, title, signature and date, with the concurrences.
+- conmon.yaml records the AO's or AODR's approval of the monitoring strategy, if S-5 did not, with conmon.yaml rewritten whole (ISCM-004).
 
 **Alignment**
 
@@ -2828,6 +2834,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [EXT-CHANGE-REQUESTS](#ext-change-requests) | Configuration change requests | outside input (operational) |
+| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -2960,6 +2967,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 | [EXT-INSPECTIONS](#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
+| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -2978,6 +2986,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - The output of continuous monitoring activities is analyzed and responded to appropriately (DoDI 8510.01 Table 7 outcome).
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
+- Where M-2 found a risk response ineffective, ART-RA records why, and the response goes back to the part of R-3 the failure points to, its implementation for a compliance failure, the whole response, and the risk assessment if needed, for an effectiveness failure.
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
 - Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
 - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
@@ -3024,6 +3033,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
 
 **Outputs**
 
@@ -3044,6 +3054,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Authorization package artifacts reflect the current state of the system.
 - A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
 - plan-reviews.yaml logs the review of the system plan on the organization-defined schedule and each update, approved and tracked by change management (MPLAN-001).
+- ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers), what was updated is recorded, and the results reach its communicated_to officials.
 
 **Alignment**
 
@@ -3520,7 +3531,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1) |
 | [ART-BASELINE](#art-baseline) Tailored control baseline, tailoring and allocation | supporting | [S-1](#task-s-1) | [S-2](#task-s-2), [S-3](#task-s-3) | [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
 | [ART-SSP](#art-ssp) System Security Plan | core | [S-4](#task-s-4) | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-4](#task-m-4) | [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-CONMON](#art-conmon) Continuous monitoring strategy | core | [S-5](#task-s-5) | [M-2](#task-m-2) | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-5](#task-m-5) |
+| [ART-CONMON](#art-conmon) Continuous monitoring strategy | core | [S-5](#task-s-5) | [M-2](#task-m-2) | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5) |
 | [ART-CMP](#art-cmp) Configuration management plan | core | [S-4](#task-s-4) | [I-2](#task-i-2), [M-1](#task-m-1) | [M-1](#task-m-1) |
 | [ART-CP](#art-cp) Contingency plan | core | [S-4](#task-s-4) | [I-2](#task-i-2) | — |
 | [ART-IRP](#art-irp) Incident response plan | core | [S-4](#task-s-4) | [I-2](#task-i-2) | — |
@@ -3779,7 +3790,7 @@ The system-level strategy for monitoring control effectiveness, including the ti
 | OSCAL | — |
 | Produced by | [S-5](#task-s-5) |
 | Updated by | [M-2](#task-m-2) |
-| Used by | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-5](#task-m-5) |
+| Used by | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5) |
 
 Citations:
 
@@ -4115,7 +4126,7 @@ content and operational data.
 | <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [C-1](#task-c-1), [I-1](#task-i-1), [I-2](#task-i-2) |
 | <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | JCIDS documents (for example the initial capabilities document and capability development document) that state the capability need and record the categorization. | [P-8](#task-p-8), [P-9](#task-p-9), [P-15](#task-p-15) |
 | <a id="ext-org-policy"></a>**EXT-ORG-POLICY** Organizational policy and Prepare-step guidance | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [P-1](#task-p-1), [P-2](#task-p-2), [P-5](#task-p-5), [P-9](#task-p-9), [P-15](#task-p-15) |
-| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions. | [P-3](#task-p-3), [P-14](#task-p-14), [R-2](#task-r-2) |
+| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions. | [P-3](#task-p-3), [P-14](#task-p-14), [S-5](#task-s-5), [R-2](#task-r-2), [M-1](#task-m-1), [M-3](#task-m-3) |
 | <a id="ext-registry"></a>**EXT-REGISTRY** Component system registry | organization | The DoD Component registry in which programs register their systems. | [P-18](#task-p-18) |
 | <a id="ext-baselines"></a>**EXT-BASELINES** Control baselines | reference | CNSSI 1253 security control baselines for national security systems and the SP 800-53B baselines (OSCAL profiles in references/oscal/profiles). | [P-4](#task-p-4), [S-1](#task-s-1) |
 | <a id="ext-cnssi1253-overlays"></a>**EXT-CNSSI1253-OVERLAYS** CNSSI 1253 overlays | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [P-4](#task-p-4), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2) |

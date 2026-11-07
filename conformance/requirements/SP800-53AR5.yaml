@@ -3672,7 +3672,8 @@ requirements:
     locator: "ONGOING ASSESSMENT AND AUTOMATION.4"
     context: "USING AUTOMATED TECHNIQUES TO ACHIEVE MORE EFFICIENT ASSESSMENTS"
     statement: "4. As noted in [SP 800-137], security-related information is generated, correlated, analyzed, and reported using automated tools to the extent that it is possible and practical to do so. When it is not possible and practical to use automated tools, security-related information is generated, correlated, analyzed, and reported using manual or procedural methods. In this way, senior leaders are provided with the security-related information necessary to make credible, risk-based decisions regarding information security risk to the mission and business.63"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Monitoring results generated and reported by automated tools or manual methods are provided to the authorizing official, the senior leader making risk-based decisions; reports that skip the AO fail", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-254"
   - id: "REQ-SP800-53AR5-0316"
     citation: {"ref": "SP800-53AR5", "page": 732, "anchor": "Automating assessments is a fundamental element in helping organizations manage information security"}
@@ -3696,7 +3697,8 @@ requirements:
     locator: "ONGOING ASSESSMENT AND AUTOMATION.4.•"
     context: "USING AUTOMATED TECHNIQUES TO ACHIEVE MORE EFFICIENT ASSESSMENTS In order to effectively automate security and privacy control assessments using the desired state specification strategy, it is importa"
     statement: "• Automated actual state and behavior specifications are defined;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "A tool following the desired state strategy defines an automated actual state specification; one whose actual state is collected manually fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.actual.yaml", "expect": "collects its actual state manually", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded and a tool declares strategy desired-state"}, {"kind": "rule", "asserts": "A tool declaring the desired state strategy defines its actual state specification; one without the desired state block fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.strategy.yaml", "expect": "follows the desired state strategy but defines no actual state", "claim": "presence", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-254"
   - id: "REQ-SP800-53AR5-0319"
     citation: {"ref": "SP800-53AR5", "page": 733, "anchor": "Data-based desired state specifications (comparable to the actual state) are defined; and"}
@@ -3704,7 +3706,8 @@ requirements:
     locator: "ONGOING ASSESSMENT AND AUTOMATION.4.•"
     context: "USING AUTOMATED TECHNIQUES TO ACHIEVE MORE EFFICIENT ASSESSMENTS In order to effectively automate security and privacy control assessments using the desired state specification strategy, it is importa"
     statement: "• Data-based desired state specifications (comparable to the actual state) are defined; and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The desired state specification covers the controls of the actual state, so it is comparable; a desired state covering fewer controls fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.comparable.yaml", "expect": "the desired state does not cover the controls of the actual state", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded and a tool declares strategy desired-state"}, {"kind": "rule", "asserts": "The desired state specification is data-based: it rests on a STIG benchmark or product file the run holds, and other data fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.data.yaml", "expect": "nor a product file: the desired state is data-based", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded and a tool declares strategy desired-state"}, {"kind": "rule", "asserts": "A tool declaring the desired state strategy defines its data-based desired state specification; one without the desired state block fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.strategy.yaml", "expect": "follows the desired state strategy but defines no actual state", "claim": "presence", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-254"
   - id: "REQ-SP800-53AR5-0320"
     citation: {"ref": "SP800-53AR5", "page": 733, "anchor": "A method to compute or identify defects (i.e., differences between desired and"}
@@ -3712,7 +3715,9 @@ requirements:
     locator: "ONGOING ASSESSMENT AND AUTOMATION.4.•"
     context: "USING AUTOMATED TECHNIQUES TO ACHIEVE MORE EFFICIENT ASSESSMENTS In order to effectively automate security and privacy control assessments using the desired state specification strategy, it is importa"
     statement: "• A method to compute or identify defects (i.e., differences between desired and actual state and behavior) is defined."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: a tool following the desired state strategy must state defects.method and defects.recorded_in (the POA&M or the assessment results) in conmon.yaml, beside the actual and desired state ISCM-002 checks. Unheld: the method is prose, so nothing can tell whether it computes the differences between desired and actual state and behavior."
+    evidence: [{"kind": "schema", "asserts": "A desired state strategy defines a method to compute defects, the differences between desired and actual state, and where they are recorded", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/desired_state", "claim": "presence"}]
     work_item: "WI-254"
   - id: "REQ-SP800-53AR5-0321"
     citation: {"ref": "SP800-53AR5", "page": 733, "anchor": "When automated tools are used to conduct assessments, the test assessment method"}
@@ -3720,7 +3725,8 @@ requirements:
     locator: "ONGOING ASSESSMENT AND AUTOMATION.4"
     context: "USING AUTOMATED TECHNIQUES TO ACHIEVE MORE EFFICIENT ASSESSMENTS"
     statement: "When automated tools are used to conduct assessments, the test assessment method is used.64 The organization determines and documents the specific capabilities65 and privacy controls that are being assessed by the automated tool, the frequency with which the tool will assess the capabilities or controls, and the analysis and reporting requirements for the capabilities or controls."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "An automated tool used to conduct assessments uses the test assessment method; one recorded with another method fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.yaml", "expect": "is an automated tool, so it assesses by the test method", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "sentence": "When automated tools are used to conduct assessments, the test assessment method is used.64"}, {"kind": "rule", "asserts": "The strategy documents the controls each automated tool assesses; a tool naming a control outside the baseline fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.assesses.yaml", "expect": "which is not in the baseline: the strategy documents the controls", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "sentence": "The organization determines and documents the specific capabilities65 and privacy controls that are being assessed by the automated tool, the frequency with which the tool will assess the capabilities or controls, and the analysis and reporting requirements for the capabilities or controls."}, {"kind": "rule", "asserts": "The frequency with which each automated tool assesses its controls is documented, and a tool assessing a control the strategy monitors continuously runs continuously; a slower one fails", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.frequency.yaml", "expect": "but the strategy monitors it continuously", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "sentence": "The organization determines and documents the specific capabilities65 and privacy controls that are being assessed by the automated tool, the frequency with which the tool will assess the capabilities or controls, and the analysis and reporting requirements for the capabilities or controls."}, {"kind": "schema", "asserts": "Each automated tool documents the analysis requirements for the results it assesses", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/analysis", "claim": "presence", "sentence": "The organization determines and documents the specific capabilities65 and privacy controls that are being assessed by the automated tool, the frequency with which the tool will assess the capabilities or controls, and the analysis and reporting requirements for the capabilities or controls."}]
     work_item: "WI-254"
   - id: "REQ-SP800-53AR5-0322"
     citation: {"ref": "SP800-53AR5", "page": 733, "anchor": "To help automate ongoing assessment, NIST and the Department of Homeland Security"}

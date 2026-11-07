@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:conmon",
   "title": "runs/<run-id>/artifacts/data/conmon.yaml",
-  "description": "System continuous monitoring strategy (S-5; updated by M-2). Every baseline family needs a frequency (CONMON-001). MRPT-001 reads reporting.dodin, MMEAS-001 the measurement block.",
+  "description": "System continuous monitoring strategy (S-5; updated by M-2). Every baseline family needs a frequency (CONMON-001). From framework_version 0.2.0 the strategy also states its frequency criteria, automated tools, data architecture, monitoring kinds, event triggers, boundary review, threat monitoring, metrics, delegations and risk assessment upkeep (ISCM-001..006); MRPT-001 reads reporting.dodin, MMEAS-001 the measurement block; the ISCM keys stay optional here so a run on an older contract still validates.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,6 +14,7 @@
   "properties": {
     "frequencies": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -28,15 +29,10 @@
             "$ref": "#/$defs/family"
           },
           "frequency": {
-            "enum": [
-              "continuous",
-              "daily",
-              "weekly",
-              "monthly",
-              "quarterly",
-              "semi-annually",
-              "annually",
-              "event-driven"
+            "title": "How often the family is monitored, at least",
+            "$ref": "#/$defs/frequency",
+            "x-enforces": [
+              "REQ-SP800-137-0204"
             ]
           },
           "method": {
@@ -45,10 +41,50 @@
           },
           "responsible": {
             "$ref": "#/$defs/persona_id"
+          },
+          "criteria": {
+            "title": "Frequency criteria that set this frequency, or ART-ORG-CONTEXT where the organizational strategy sets it",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(FC-\\d{2}|ART-ORG-CONTEXT)$"
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0184"
+            ]
+          },
+          "overrides": {
+            "title": "Controls of the family monitored at another minimum frequency",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "control",
+                "frequency",
+                "reason"
+              ],
+              "properties": {
+                "control": {
+                  "$ref": "#/$defs/control"
+                },
+                "frequency": {
+                  "$ref": "#/$defs/frequency"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0142",
+              "REQ-SP800-137-0159"
+            ]
           }
         }
-      },
-      "minItems": 1
+      }
     },
     "ongoing_authorization": {
       "type": "object",
@@ -147,6 +183,764 @@
           }
         }
       }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approved_by",
+        "date",
+        "sources"
+      ],
+      "properties": {
+        "approved_by": {
+          "title": "Official who approved the strategy and the minimum frequency of each control",
+          "$ref": "#/$defs/persona_id"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "title": "Approval of the continuous monitoring strategy by the authorizing official"
+    },
+    "organizational_frequencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "families",
+        "sources"
+      ],
+      "properties": {
+        "families": {
+          "title": "Families whose frequency the organizational strategy sets",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/family"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "title": "Families the organizational continuous monitoring strategy sets the frequency of"
+    },
+    "frequency_criteria": {
+      "title": "Criteria for determining the frequency with which controls are monitored, where the organizational strategy does not set it",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "criterion",
+          "description",
+          "established_by",
+          "consulted",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FC-\\d{2}$"
+          },
+          "criterion": {
+            "title": "SP 800-137 consideration the criterion applies",
+            "enum": [
+              "volatility",
+              "impact-level",
+              "critical-function",
+              "known-weakness",
+              "threat-information",
+              "vulnerability-information",
+              "risk-assessment",
+              "reporting-requirement",
+              "risk-tolerance",
+              "resources",
+              "other"
+            ],
+            "x-enforces": [
+              "REQ-SP800-137-0053",
+              "REQ-SP800-137-0054",
+              "REQ-SP800-137-0144",
+              "REQ-SP800-137-0147",
+              "REQ-SP800-137-0148",
+              "REQ-SP800-137-0150",
+              "REQ-SP800-137-0152",
+              "REQ-SP800-137-0153",
+              "REQ-SP800-137-0155",
+              "REQ-SP800-137-0157",
+              "REQ-SP800-137-0158",
+              "REQ-SP800-137-0219",
+              "REQ-SP800-137-0220",
+              "REQ-SP800-39-0188"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "established_by": {
+            "title": "System owner or common control provider who established the criterion",
+            "$ref": "#/$defs/persona_id",
+            "x-enforces": [
+              "REQ-SP800-137-0104"
+            ]
+          },
+          "consulted": {
+            "title": "Organizational officials the criterion was established with",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "tools": {
+      "title": "Automated tools that assess controls",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "assesses",
+          "method",
+          "frequency",
+          "analysis",
+          "reporting",
+          "selection",
+          "upkeep",
+          "responsible",
+          "strategy"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TOOL-\\d{2}$"
+          },
+          "strategy": {
+            "title": "Assessment strategy the tool follows; desired-state needs the desired_state block",
+            "enum": [
+              "desired-state",
+              "other"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assesses": {
+            "title": "Controls the automated tool assesses",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/control"
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0205"
+            ]
+          },
+          "method": {
+            "title": "Assessment method the automated tool uses",
+            "enum": [
+              "test",
+              "examine",
+              "interview"
+            ]
+          },
+          "frequency": {
+            "title": "Frequency with which the tool assesses its controls",
+            "$ref": "#/$defs/frequency",
+            "x-enforces": [
+              "REQ-DODI5000.82-0173"
+            ]
+          },
+          "analysis": {
+            "title": "Analysis requirements for the tool's results",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-53AR5-0321"
+            ]
+          },
+          "reporting": {
+            "title": "Reporting requirements for the tool's results",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-137-0063"
+            ]
+          },
+          "selection": {
+            "title": "Criteria the tool was chosen by",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-137-0059",
+              "REQ-SP800-137-0060",
+              "REQ-SP800-137-0061",
+              "REQ-SP800-137-0062"
+            ]
+          },
+          "upkeep": {
+            "title": "How the automation is validated and kept up",
+            "type": "string",
+            "minLength": 1
+          },
+          "responsible": {
+            "$ref": "#/$defs/persona_id"
+          },
+          "desired_state": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "actual_state",
+              "desired_state",
+              "defects"
+            ],
+            "properties": {
+              "actual_state": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "collection",
+                  "controls",
+                  "specification"
+                ],
+                "properties": {
+                  "collection": {
+                    "enum": [
+                      "automated",
+                      "manual"
+                    ]
+                  },
+                  "controls": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/control"
+                    }
+                  },
+                  "specification": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "desired_state": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "controls",
+                  "data",
+                  "specification"
+                ],
+                "properties": {
+                  "controls": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/control"
+                    }
+                  },
+                  "data": {
+                    "title": "Data the desired state rests on: STIG benchmarks or product files",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(BM-\\d{2,3}|product/\\S+)$"
+                    }
+                  },
+                  "specification": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "defects": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "method",
+                  "recorded_in"
+                ],
+                "properties": {
+                  "method": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "recorded_in": {
+                    "enum": [
+                      "poam",
+                      "sar-results"
+                    ]
+                  }
+                }
+              }
+            },
+            "title": "Desired state specification strategy the tool follows",
+            "x-enforces": [
+              "REQ-SP800-53AR5-0320"
+            ]
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-137-0118"
+      ]
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collection",
+        "storage",
+        "analysis",
+        "retrieval",
+        "delivery",
+        "automated",
+        "manual"
+      ],
+      "properties": {
+        "collection": {
+          "title": "How monitoring data is collected",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0078"
+          ]
+        },
+        "storage": {
+          "title": "Where monitoring data is stored and consolidated",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0064"
+          ]
+        },
+        "analysis": {
+          "title": "How monitoring data is analyzed",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0167"
+          ]
+        },
+        "retrieval": {
+          "title": "How monitoring data is retrieved and presented",
+          "type": "string",
+          "minLength": 1
+        },
+        "delivery": {
+          "title": "How monitoring data is delivered within and between tiers",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0170"
+          ]
+        },
+        "automated": {
+          "title": "Where monitoring is automated",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0055"
+          ]
+        },
+        "manual": {
+          "title": "Where monitoring is not automated, and why",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0057"
+          ]
+        }
+      },
+      "title": "How monitoring data is collected, stored, analyzed, retrieved and delivered",
+      "x-enforces": [
+        "REQ-SP800-137-0166"
+      ]
+    },
+    "monitoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compliance",
+        "effectiveness",
+        "change"
+      ],
+      "properties": {
+        "compliance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "responsible"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "responsible": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "title": "How compliance with planned risk responses is monitored",
+          "x-enforces": [
+            "REQ-SP800-39-0182"
+          ]
+        },
+        "effectiveness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "responsible"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "responsible": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "title": "How the effectiveness of risk responses is monitored",
+          "x-enforces": [
+            "REQ-SP800-137-0027",
+            "REQ-SP800-39-0183",
+            "REQ-SP800-39-0292"
+          ]
+        },
+        "change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "responsible"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "responsible": {
+              "$ref": "#/$defs/persona_id"
+            }
+          },
+          "title": "How changes to the system and its environment are monitored",
+          "x-enforces": [
+            "REQ-SP800-39-0191"
+          ]
+        }
+      },
+      "title": "Compliance, effectiveness and change monitoring",
+      "x-enforces": [
+        "REQ-SP800-39-0030",
+        "REQ-SP800-39-0179",
+        "REQ-SP800-39-0181",
+        "REQ-SP800-39-0303"
+      ]
+    },
+    "events": {
+      "title": "Event-driven assessment and authorization criteria",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "event",
+          "description",
+          "threshold",
+          "triggers"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EV-\\d{2}$"
+          },
+          "event": {
+            "title": "Kind of event the criterion covers",
+            "enum": [
+              "incident",
+              "threat-information",
+              "significant-change",
+              "mission-change",
+              "impact-analysis",
+              "risk-assessment",
+              "other"
+            ],
+            "x-enforces": [
+              "REQ-SP800-137-0165"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "threshold": {
+            "title": "Threshold at which the event triggers",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-137-0225"
+            ]
+          },
+          "triggers": {
+            "title": "Whether the event triggers an assessment, a reauthorization or both",
+            "enum": [
+              "assessment",
+              "reauthorization",
+              "assessment-and-reauthorization"
+            ],
+            "x-enforces": [
+              "REQ-SP800-137-0223"
+            ]
+          }
+        }
+      }
+    },
+    "boundary_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frequency",
+        "responsible"
+      ],
+      "properties": {
+        "frequency": {
+          "$ref": "#/$defs/frequency"
+        },
+        "responsible": {
+          "$ref": "#/$defs/persona_id"
+        }
+      },
+      "title": "Periodic review of the authorization boundary scope"
+    },
+    "threat_monitoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responsible",
+        "frequency",
+        "feeds",
+        "watches"
+      ],
+      "properties": {
+        "responsible": {
+          "$ref": "#/$defs/persona_id"
+        },
+        "frequency": {
+          "$ref": "#/$defs/frequency"
+        },
+        "feeds": {
+          "title": "Threat information sources watched",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-DODI5000.90-0092"
+          ]
+        },
+        "watches": {
+          "title": "What threat monitoring watches",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "threat-actors",
+              "protective-techniques",
+              "deployed-environment"
+            ]
+          },
+          "x-enforces": [
+            "REQ-DODI5000.90-0103",
+            "REQ-DODI5000.90-0106"
+          ]
+        }
+      },
+      "title": "Monitoring of threat actor activity, new protective techniques and the deployed threat environment",
+      "x-enforces": [
+        "REQ-DODI5000.90-0065"
+      ]
+    },
+    "metrics": {
+      "title": "Monitoring metrics",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "measures",
+          "frequency",
+          "reported_to",
+          "used_by"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^MET-\\d{2}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "measures": {
+            "type": "string",
+            "minLength": 1
+          },
+          "frequency": {
+            "$ref": "#/$defs/frequency"
+          },
+          "reported_to": {
+            "title": "Officials each metric is reported to",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0045"
+            ]
+          },
+          "used_by": {
+            "title": "Monitor tasks that read or report the metric",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^M-[1-7]$"
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0111"
+            ]
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-137-0123"
+      ]
+    },
+    "delegations": {
+      "title": "Operations and sustainment activities delegated to external partners",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "activity",
+          "partner",
+          "agreement"
+        ],
+        "properties": {
+          "activity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "partner": {
+            "title": "External partner: a persona or a leveraged authorization",
+            "type": "string",
+            "pattern": "^(PER-[A-Z0-9]+|LA-\\d{2,3})$",
+            "x-enforces": [
+              "REQ-DODI5000.87-0106"
+            ]
+          },
+          "agreement": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frequency",
+        "triggers",
+        "updates",
+        "communicated_to"
+      ],
+      "properties": {
+        "frequency": {
+          "title": "How often the risk assessment is updated",
+          "$ref": "#/$defs/frequency",
+          "x-enforces": [
+            "REQ-SP800-30R1-0227",
+            "REQ-SP800-30R1-0229"
+          ]
+        },
+        "triggers": {
+          "title": "Circumstances under which the risk assessment is updated",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-SP800-30R1-0223",
+            "REQ-SP800-30R1-0225",
+            "REQ-SP800-30R1-0228"
+          ]
+        },
+        "updates": {
+          "title": "What an update of the risk assessment revises",
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0086",
+            "REQ-SP800-30R1-0089",
+            "REQ-SP800-30R1-0230"
+          ]
+        },
+        "communicated_to": {
+          "title": "Officials the results are communicated to",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/persona_id"
+          }
+        }
+      },
+      "title": "How the system risk assessment is maintained (from ART-ORG-CONTEXT)",
+      "x-enforces": [
+        "REQ-SP800-30R1-0029",
+        "REQ-SP800-30R1-0226",
+        "REQ-SP800-30R1-0297"
+      ]
     },
     "sources": {
       "type": "array",
@@ -348,6 +1142,22 @@
     "family": {
       "type": "string",
       "pattern": "^[a-z]{2}$"
+    },
+    "control": {
+      "type": "string",
+      "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+    },
+    "frequency": {
+      "enum": [
+        "continuous",
+        "daily",
+        "weekly",
+        "monthly",
+        "quarterly",
+        "semi-annually",
+        "annually",
+        "event-driven"
+      ]
     },
     "persona_id": {
       "type": "string",

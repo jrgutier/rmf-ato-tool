@@ -13,7 +13,7 @@ tasks:
       Monitor the system and its environment for changes that affect the security and privacy
       posture, analyzing the security impact of each change.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO]}
-    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS]
+    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS, EXT-THREAT]
     outputs: [ART-CHG, ART-INV, ART-CMP]
     writes_facts: []
     depends_on: [R-4]
@@ -95,7 +95,7 @@ tasks:
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: []}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, EXT-INSPECTIONS]
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, EXT-INSPECTIONS, EXT-THREAT]
     outputs: [ART-RA, ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [M-2]
@@ -111,6 +111,10 @@ tasks:
         the POA&M updated.
       - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as
         adequate, and records the selected response (RAR-003).
+      - Where M-2 found a risk response ineffective, ART-RA records why, and the response goes
+        back to the part of R-3 the failure points to, its implementation for a compliance
+        failure, the whole response, and the risk assessment if needed, for an effectiveness
+        failure.
       - Decisions to withhold or delay vulnerability remediation are coordinated with the
         requirements sponsor, the AO and the Component cyberspace operations forces.
       - Each readiness inspection or outside evaluation finding is in external_findings of
@@ -137,7 +141,7 @@ tasks:
       Update the security plan, assessment report, risk assessment and POA&M from continuous
       monitoring results.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO]}
-    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG]
+    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG, ART-CONMON]
     outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
     writes_facts: []
     depends_on: [M-3]
@@ -152,6 +156,8 @@ tasks:
       - A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
       - plan-reviews.yaml logs the review of the system plan on the organization-defined schedule
         and each update, approved and tracked by change management (MPLAN-001).
+      - ART-RA is updated as conmon.yaml risk_assessment says (its frequency and triggers),
+        what was updated is recorded, and the results reach its communicated_to officials.
     citations:
       - {ref: SP800-37R2, section: "TASK M-4", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-4 Authorization Package Updates"}

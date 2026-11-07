@@ -16,19 +16,35 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Strategy overview
 
-<<FILL: how the system strategy implements the organizational continuous monitoring strategy in ART-ORG-CONTEXT and supports ongoing authorization, with tokens>>
+<<FILL: how the system strategy implements the organizational continuous monitoring strategy in ART-ORG-CONTEXT and supports ongoing authorization; how compliance, effectiveness and change are each monitored (conmon.yaml monitoring), with tokens>>
 
 ## Monitoring frequencies
 
-<<FILL: per control family, how often and by what method effectiveness is monitored and who does it; the records live in artifacts/data/conmon.yaml; with tokens>>
+<<FILL: per control family, how often and by what method effectiveness is monitored and who does it, and each control monitored at another minimum frequency (overrides); the records live in artifacts/data/conmon.yaml; with tokens>>
+
+## Frequency criteria
+
+<<FILL: the criteria (frequency_criteria FC-nn: volatility, impact level, critical functions, known weaknesses, threat and vulnerability information, risk assessment results, reporting requirements, risk tolerance, resources) behind each frequency the organizational strategy does not set, who established them and with which officials, and the approval of the strategy and minimum frequencies by the AO or AODR (conmon.yaml approval), with tokens>>
+
+## Automated tools and data
+
+<<FILL: each automated tool (TOOL-nn): the controls it assesses by the test method, how often, the analysis and reporting of its results, why it was chosen and how it is validated and kept up; for a desired state strategy the actual state, the comparable desired state and how defects are computed; how monitoring data is collected, stored, analyzed, retrieved and delivered within and between tiers, where monitoring is automated and where it is not, and why (conmon.yaml tools and architecture), with tokens>>
 
 ## Ongoing authorization triggers
 
-<<FILL: the time-driven trigger in days and each event that triggers a review of the authorization, as in conmon.yaml ongoing_authorization, with tokens>>
+<<FILL: the time-driven trigger in days and each event that triggers a review of the authorization, as in conmon.yaml ongoing_authorization; each event criterion (events EV-nn) with its threshold and whether it triggers an assessment, a reauthorization or both; how often the authorization boundary is revisited (boundary_review), with tokens>>
 
-## Reporting
+## Threat monitoring
 
-<<FILL: who receives posture reports, how often and in what form, as in conmon.yaml reporting, with tokens>>
+<<FILL: who watches threat actor activity, new protective techniques and the threat environment where the system is deployed, from which sources and how often, and how a major change feeds M-1 and M-3 (conmon.yaml threat_monitoring), with tokens>>
+
+## Metrics and reporting
+
+<<FILL: each metric (MET-nn), what it measures, how often, who receives it and which Monitor tasks use it; who receives posture reports, how often and in what form, as in conmon.yaml reporting, with tokens>>
+
+## Risk assessment upkeep
+
+<<FILL: how the system risk assessment is kept current under the organization's approach in ART-ORG-CONTEXT: frequency, triggers, what is updated and to whom results are communicated (conmon.yaml risk_assessment); M-4 applies it, with tokens>>
 
 ## Security measurement
 
@@ -36,7 +52,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Roles and tools
 
-<<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and the tools used, with tokens>>
+<<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and each operations and sustainment activity delegated to an external partner with its agreement (conmon.yaml delegations), with tokens>>
 
 <!-- M-2 updates artifacts/data/conmon.yaml when ongoing assessments change a frequency or
      method, appends "## Changes after ongoing assessment" (what changed and why), and adds

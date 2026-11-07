@@ -24,7 +24,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
      - P-2 "## Risk management strategy and risk tolerance": how risk is framed, assessed,
        responded to and monitored; the SP 800-30 rating scale; the tolerance statement;
        which risk levels need Component CIO concurrence before an ATO; the maximum
-       authorization period; the organizational remediation period for weaknesses.
+       authorization period; the organizational remediation period for weaknesses; and how
+       risk assessments are maintained: what triggers an update, how often, what is
+       updated and how results are communicated (S-5 records it in conmon.yaml
+       risk_assessment, M-4 applies it).
      - P-3 "## Organization-level risk assessment": enterprise threats, dependencies and
        aggregated risks, and when the assessment was last updated.
      - P-4 "## Organizationally tailored baselines and profiles": approved or directed

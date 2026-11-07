@@ -217,7 +217,9 @@ requirements:
     locator: "ONGOING MONITORING IN SUPPORT OF RISK MANAGEMENT"
     context: ""
     statement: "It also incorporates processes to assure that response actions are taken in accordance with findings and organizational risk tolerances and to assure that said responses have the intended effects."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml monitoring separates compliance, effectiveness and change monitoring (ISCM-001 requires it), M-2 judges each risk response for effectiveness and M-3 returns an ineffective response to the right part of R-3. Unheld: no rule reads whether a response had its intended effect."
+    evidence: [{"kind": "schema", "asserts": "Effectiveness monitoring checks that response actions have the intended effects on risk", "target": "framework/schema/conmon.schema.json#/properties/monitoring/properties/effectiveness", "claim": "presence"}]
     work_item: "WI-261"
   - id: "REQ-SP800-137-0028"
     citation: {"ref": "SP800-137", "page": 12, "anchor": "Define the ISCM strategy;"}
@@ -360,7 +362,9 @@ requirements:
     locator: "2.1.1"
     context: "TIER 1- ORGANIZATION"
     statement: "and reported are determined by requirements to maintain operations within organizational risk tolerances. As part of the overall governance structure established by the organization, the Tier 1 risk management strategy and the associated monitoring requirements are communicated throughout Tiers 2 and 3."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each conmon.yaml metric names the officials it is reported to (ISCM-001 requires metrics). Unheld: that the Tier 1 monitoring requirements reach Tiers 2 and 3."
+    evidence: [{"kind": "schema", "asserts": "Each monitoring metric names the officials it is reported to, so the monitoring requirements are communicated across tiers", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/reported_to", "claim": "constraint"}]
     work_item: "WI-256"
   - id: "REQ-SP800-137-0046"
     citation: {"ref": "SP800-137", "page": 16, "anchor": "Organizational officials that are accountable for one or more missions or business"}
@@ -423,7 +427,9 @@ requirements:
     locator: "2.2"
     context: "Figure 2-2. Risk Management Framework"
     statement: "ISCM in support of ongoing assessment and authorization has the potential to be resource-intensive and time-consuming. It is impractical to collect security-related information and assess every aspect of every security control deployed across an organization at all times. A more practical approach is to establish reasonable assessment frequencies for collecting security-related information. The frequency of assessments should be sufficient to assure adequate security commensurate with risk, as determined by system categorization and ISCM strategy requirements. Sampling of information system security objects, rather than 100 percent inspection, can also be an efficient and effective means of monitoring, particularly in cases where monitoring is not automated. Important considerations in determining sample sizes and monitoring frequencies are discussed in Chapter Three."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that the frequency is sufficient for the risk."
+    evidence: [{"kind": "schema", "asserts": "The strategy records criteria such as impact level behind each assessment frequency, so frequencies are set commensurate with risk", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0054"
     citation: {"ref": "SP800-137", "page": 19, "anchor": "Monitoring frequencies (e.g., annually, quarterly, monthly, daily) are not static, and they"}
@@ -431,7 +437,9 @@ requirements:
     locator: "2.2"
     context: "Figure 2-2. Risk Management Framework"
     statement: "Monitoring frequencies (e.g., annually, quarterly, monthly, daily) are not static, and they are not uniform across all metrics. Security control assessment and monitoring frequencies, for example, are adjusted to support changes in organizational information systems or their environments of operation, including emerging information on security threats and vulnerabilities. The priorities for ISCM vary and are adjusted in response to security incidents, to identify problems with security control implementations, or to evaluate changes to systems and system components that are determined to have a significant impact on security. An ISCM strategy can deliver dynamic updates of security-related data to support system authorizations conducted at any interval. Section 3.2.2 includes a more complete discussion of factors to consider when determining monitoring frequencies."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that frequencies are adjusted when the system or threat changes."
+    evidence: [{"kind": "schema", "asserts": "Frequencies rest on criteria such as threat and vulnerability information, and M-2 adjusts them when monitoring results change", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0055"
     citation: {"ref": "SP800-137", "page": 19, "anchor": "When possible, organizations look for automated solutions to lower costs, enhance efficiency,"}
@@ -439,7 +447,9 @@ requirements:
     locator: "2.3"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "When possible, organizations look for automated solutions to lower costs, enhance efficiency, and improve the reliability of monitoring security-related information. Security is implemented through a combination of people, processes, and technology. The automation of information security deals primarily with automating aspects of security that require little human interaction. Automated tools are often able to recognize patterns and relationships that may escape the notice of human analysts, especially when the analysis is performed on large volumes of data. This includes items such as verifying technical settings on individual network endpoints or ensuring that the software on a machine is up to date with organizational policy. Automation serves to augment the security processes conducted by security professionals within an organization and may reduce the amount of time a security professional must spend on doing redundant tasks, thereby increasing the amount of time the trained professional may spend on tasks requiring human cognition."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states where monitoring is automated (ISCM-001 requires the section). Unheld: whether automation was looked for, beyond saying where it is used."
+    evidence: [{"kind": "schema", "asserts": "The strategy states where monitoring is automated to lower costs and improve the reliability of monitoring", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/automated", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0056"
     citation: {"ref": "SP800-137", "page": 19, "anchor": "The ISCM strategy does not focus solely on the security-related information that"}
@@ -455,7 +465,9 @@ requirements:
     locator: "2.3"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "When determining the extent to which the organization automates ISCM, organizations consider potential efficiencies of process standardization that may be gained with automation, and the potential value (or lack of value) of the automated security-related information from a risk management perspective. Additionally, organizations consider intangibles such as the potential value of personnel reassignment and more comprehensive situational awareness."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states where monitoring is not automated and why (ISCM-001 requires the section). Unheld: that the stated reasons weigh efficiencies and value."
+    evidence: [{"kind": "schema", "asserts": "The strategy states where monitoring is not automated and why, weighing the efficiencies and value of automation", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/manual", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0058"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "While automation of IT security has the potential to significantly reduce the"}
@@ -471,7 +483,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM Consideration is given to ISCM tools that:"
     statement: "• Pull information from a variety of sources (i.e., assessment objects22"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records each tool's selection criteria (ISCM-001 requires the section). Unheld: that the criteria include pulling from many sources."
+    evidence: [{"kind": "schema", "asserts": "Each tool's selection criteria record whether it pulls information from a variety of sources", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/selection", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0060"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "Use open specifications such as the Security Content Automation Protocol (SCAP);"}
@@ -479,7 +493,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "• Use open specifications such as the Security Content Automation Protocol (SCAP);"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records each tool's selection criteria (ISCM-001 requires the section). Unheld: that a tool uses open specifications."
+    evidence: [{"kind": "schema", "asserts": "Each tool's selection criteria record its use of open specifications such as SCAP", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/selection", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0061"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "Offer interoperability with other products such as help desk, inventory management, configuration"}
@@ -487,7 +503,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "• Offer interoperability with other products such as help desk, inventory management, configuration management, and incident response solutions;"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records each tool's selection criteria (ISCM-001 requires the section). Unheld: that a tool interoperates with those products."
+    evidence: [{"kind": "schema", "asserts": "Each tool's selection criteria record interoperability with help desk, inventory, configuration management and incident response products", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/selection", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0062"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "Support compliance with applicable federal laws, Executive Orders, directives, policies, regulations, standards,"}
@@ -495,7 +513,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "• Support compliance with applicable federal laws, Executive Orders, directives, policies, regulations, standards, and guidelines;"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records each tool's selection criteria (ISCM-001 requires the section). Unheld: that a tool supports that compliance."
+    evidence: [{"kind": "schema", "asserts": "Each tool's selection criteria record how it supports compliance with applicable laws, policies and standards", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/selection", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0063"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "Provide reporting with the ability to tailor output and drill down from"}
@@ -503,7 +523,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "• Provide reporting with the ability to tailor output and drill down from high-level, aggregate metrics to system-level metrics; and"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records each tool's reporting (ISCM-001 requires the section). Unheld: that reporting can be tailored and drilled down."
+    evidence: [{"kind": "schema", "asserts": "Each tool records the reporting of its results, including tailored output and drill down from aggregate to system-level metrics", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/reporting", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0064"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "Allow for data consolidation into Security Information and Event Management (SIEM) tools"}
@@ -511,7 +533,9 @@ requirements:
     locator: "2.3.•"
     context: "ROLE OF AUTOMATION IN ISCM"
     statement: "• Allow for data consolidation into Security Information and Event Management (SIEM) tools and dashboard products."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states where monitoring data is stored and consolidated (ISCM-001 requires the section). Unheld: that data consolidates into a SIEM or dashboard."
+    evidence: [{"kind": "schema", "asserts": "Monitoring data is stored where it consolidates into SIEM tools and dashboard products", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/storage", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0065"
     citation: {"ref": "SP800-137", "page": 20, "anchor": "This section describes the roles and responsibilities of key participants involved in"}
@@ -623,7 +647,9 @@ requirements:
     locator: "Defining an ISCM Strategy and Implementing an ISCM Program.•"
     context: "The process for developing an ISCM strategy and implementing an ISCM program is as follows:"
     statement: "• Implement an ISCM program and collect the security-related information required for metrics, assessments, and reporting. Automate collection, analysis, and reporting of data where possible."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states how monitoring data is collected (ISCM-001 requires the section). Unheld: that collection is automated where possible."
+    evidence: [{"kind": "schema", "asserts": "Monitoring data is collected for metrics, assessments and reporting, with collection, analysis and reporting automated where possible", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/collection", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0079"
     citation: {"ref": "SP800-137", "page": 23, "anchor": "Analyze the data collected and Report findings, determining the appropriate response. It"}
@@ -829,7 +855,9 @@ requirements:
     locator: "3.1.2"
     context: "INFORMATION SYSTEM (TIER 3) ISCM STRATEGY"
     statement: "System-level ISCM addresses monitoring security controls for effectiveness (assessments), monitoring for security status, and reporting findings. At a minimum, all security controls, including common and hybrid controls implemented at the system level, are assessed for effectiveness in accordance with the system security plan and the methods described in NIST SP 800-53A, as amended. System owners determine assessment frequencies of security controls based on drivers from all three tiers. A full discussion of factors to consider when determining assessment and monitoring frequencies can be found in Section 3.2.2. System-level security-related information is used to determine security status at all three tiers. Use of system-level security-related information in metrics for determining security status is addressed in Section 3.2.1."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that drivers from all three tiers are weighed."
+    evidence: [{"kind": "schema", "asserts": "System owners establish the criteria that determine assessment frequencies, citing ART-ORG-CONTEXT for drivers from the organization", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/established_by", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0105"
     citation: {"ref": "SP800-137", "page": 26, "anchor": "The ISCM strategy is designed, in part, to help ensure that compromises"}
@@ -890,7 +918,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES"
     statement: "• Take steps to respond to risk as needed (e.g., request new or revised metrics, additional or revised assessments, modifications to existing common or PM security controls, or additional controls) based on the results of ongoing monitoring activities and assessment of risk [ISCM step: Respond]."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each conmon.yaml metric names the Monitor tasks that use it; M-3 responds to risk. Unheld: no rule checks that a response requests new or revised metrics or assessments."
+    evidence: [{"kind": "schema", "asserts": "Metrics name the Monitor tasks that use them, M-3 among them to respond to risk, so a response can request new or revised metrics", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/used_by", "claim": "constraint"}]
     work_item: "WI-256"
   - id: "REQ-SP800-137-0112"
     citation: {"ref": "SP800-137", "page": 28, "anchor": "Update relevant security documentation [ISCM step: Respond]."}
@@ -947,7 +977,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES Tier 3 officials have responsibilities throughout the ISCM process including, but not limited to, the following:"
     statement: "• Support planning and implementation of security controls, the deployment of automation tools, and how those tools interface with one another in support of the ISCM strategy [ISCM step: Implement; RMF Step: Select]."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records the automated tools and how each reports (ISCM-001 requires the section). Unheld: how the tools interface with one another."
+    evidence: [{"kind": "schema", "asserts": "The strategy records the automation tools deployed in support of the strategy and how each interfaces through its reporting", "target": "framework/schema/conmon.schema.json#/properties/tools", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0119"
     citation: {"ref": "SP800-137", "page": 28, "anchor": "Determine the security impact of changes to the information system and its"}
@@ -983,7 +1015,9 @@ requirements:
     locator: "3.1.3.•"
     context: "PROCESS ROLES AND RESPONSIBILITIES"
     statement: "• Report the security status of the information system including the data needed to inform Tiers 1 and 2 metrics [ISCM step: Analyze/Report; RMF Steps: Assess, Monitor]."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml metrics and reporting record what monitoring reports and to whom. Unheld: that the status report carries the data Tiers 1 and 2 metrics need."
+    evidence: [{"kind": "schema", "asserts": "conmon.yaml metrics record the monitoring data the security status report carries to inform the metrics of higher tiers", "target": "framework/schema/conmon.schema.json#/properties/metrics", "claim": "presence"}]
     work_item: "WI-256"
   - id: "REQ-SP800-137-0124"
     citation: {"ref": "SP800-137", "page": 29, "anchor": "Review the reported security status of the information system to determine whether"}
@@ -1137,7 +1171,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "Determining frequencies for security status monitoring and for security control assessments are critical functions of the organization’s ISCM program. For some organizations, dashboards and ongoing assessments are a shift away from the model of complete security control assessments conducted at a distinct point in time. For this shift to be constructive and effective from security, assurance, and resource use perspectives, organizations determine the frequencies with which each security control or control element is assessed for effectiveness and the frequencies with which each metric is monitored."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that each frequency is the right one."
+    evidence: [{"kind": "schema", "asserts": "The strategy determines the frequency with which each control is assessed: its family's frequency, or an override for that control, and each metric's frequency", "target": "framework/schema/conmon.schema.json#/properties/frequencies/items/properties/overrides", "claim": "presence"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0143"
     citation: {"ref": "SP800-137", "page": 32, "anchor": "Security control effectiveness across a tier or throughout the organization can itself"}
@@ -1155,7 +1191,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES Organizations take the following criteria into consideration when establishing monitoring frequencies for metrics or assessment frequencies for security"
     statement: "• Security control volatility. Volatile security controls are assessed more frequently, whether the objective is establishing security control effectiveness or supporting calculation of a metric.33"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a volatile control is assessed more often."
+    evidence: [{"kind": "schema", "asserts": "Volatility is a criterion the strategy records (criterion volatility) for assessing volatile controls more frequently", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0145"
     citation: {"ref": "SP800-137", "page": 32, "anchor": "Controls in the NIST SP 800-53 Configuration Management (CM) family are a"}
@@ -1179,7 +1217,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• System categorizations/impact levels. In general, security controls implemented on systems that are categorized as high-impact are monitored more frequently than controls implemented on moderate-impact systems, which are in turn monitored more frequently than controls implemented on low-impact systems.34"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a higher impact level means more frequent monitoring."
+    evidence: [{"kind": "schema", "asserts": "The impact level of the system is a criterion (impact-level) for how frequently controls are monitored", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0148"
     citation: {"ref": "SP800-137", "page": 33, "anchor": "Security controls or specific assessment objects providing critical functions. Security controls or"}
@@ -1187,7 +1227,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• Security controls or specific assessment objects providing critical functions. Security controls or assessment objects that provide critical security functions (e.g., log management server, firewalls) are candidates for more frequent monitoring. Additionally, individual assessment objects that support critical security functions and/or are deemed critical to the system (in accordance with the Business Impact Analysis"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a critical function is monitored more often."
+    evidence: [{"kind": "schema", "asserts": "Controls providing critical security functions are a criterion (critical-function) for more frequent monitoring", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0149"
     citation: {"ref": "SP800-137", "page": 33, "anchor": ") or to the organization may be candidates for more frequent monitoring."}
@@ -1203,7 +1245,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• Security controls with identified weaknesses. Existing risks documented in security assessment reports (SARs) are considered for more frequent monitoring to ensure that risks stay within tolerance. Similarly, controls documented in the POA&M as having weaknesses are monitored more frequently until remediation of the weakness is complete. Note that not all weaknesses require the same level of monitoring. For example, weaknesses deemed in the SAR to be of minor or low-impact risk to the system or organization are monitored less frequently than a weakness with a higher-impact risk to the system or organization."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a control with an open weakness is monitored more often."
+    evidence: [{"kind": "schema", "asserts": "Controls with weaknesses in the SAR or POA&M are a criterion (known-weakness) for monitoring more frequently until remediation", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0151"
     citation: {"ref": "SP800-137", "page": 33, "anchor": "Organizational risk tolerance.36"}
@@ -1219,7 +1263,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• Threat information. Organizations consider current credible threat information, including known exploits and attack patterns, when establishing monitoring frequencies. For instance, if a specific attack is developed which exploits a vulnerability of an implemented technology, temporary or permanent increases to the monitoring frequencies for related controls or metrics may help provide protection from the threat."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that threat information changes a frequency."
+    evidence: [{"kind": "schema", "asserts": "Current credible threat information is a criterion (threat-information) when establishing monitoring frequencies", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0153"
     citation: {"ref": "SP800-137", "page": 33, "anchor": "Organizations consider current vulnerability information with respect to information technology products when"}
@@ -1227,7 +1273,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "Organizations consider current vulnerability information with respect to information technology products when establishing monitoring frequencies. For"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that vulnerability information changes a frequency."
+    evidence: [{"kind": "schema", "asserts": "Current vulnerability information on technology products is a criterion (vulnerability-information) when establishing monitoring frequencies", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0154"
     citation: {"ref": "SP800-137", "page": 33, "anchor": "System impact levels are in accordance with FIPS 199 and NIST SP"}
@@ -1243,7 +1291,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• Risk assessment results. Results from organizational and/or system-specific assessments of risk (either formal or informal) are examined and taken into consideration when establishing monitoring frequencies. For instance, if a system-specific risk assessment identifies potential threats and vulnerabilities related to nonlocal maintenance (NIST SP 800-53, MA-4), the organization considers more frequent monitoring of the records kept on nonlocal maintenance and diagnostic activities. If a risk scoring scheme is in place at the organization, the risk scores may be used as justification to increase or decrease the monitoring frequencies of related controls."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that risk assessment results change a frequency."
+    evidence: [{"kind": "schema", "asserts": "Risk assessment results are a criterion (risk-assessment) taken into consideration when establishing monitoring frequencies", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0156"
     citation: {"ref": "SP800-137", "page": 34, "anchor": "Output of monitoring strategy reviews. Review and adjustment of the monitoring strategy"}
@@ -1259,7 +1309,9 @@ requirements:
     locator: "3.2.2.•"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "• Reporting requirements. Reporting requirements do not drive the ISCM strategy but may play a role in the frequency of monitoring. For instance, if OMB policy requires quarterly reports on the number of unauthorized components detected and corrective actions taken, the organization would monitor the system for unauthorized components at least quarterly."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a reporting requirement sets a frequency."
+    evidence: [{"kind": "schema", "asserts": "Reporting requirements are a criterion (reporting-requirement) that may play a role in the frequency of monitoring", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0158"
     citation: {"ref": "SP800-137", "page": 34, "anchor": "Organizations focus on obtaining the data required at the determined frequencies and"}
@@ -1267,7 +1319,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "Organizations focus on obtaining the data required at the determined frequencies and deploy their human and capitol resources accordingly. As automation capability or resources are added, organizations may consider increasing affected monitoring frequencies. Similarly, if resource availability decreases, the organization considers adjusting affected monitoring frequencies to ensure that security-related information is appropriately analyzed while continuing to meet organizational risk management requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that frequencies follow the resources available."
+    evidence: [{"kind": "schema", "asserts": "Resources and automation capability are a criterion (resources) when adjusting affected monitoring frequencies", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0159"
     citation: {"ref": "SP800-137", "page": 34, "anchor": "Many security controls in the NIST SP 800-53 catalog have multiple implementation"}
@@ -1275,7 +1329,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "Many security controls in the NIST SP 800-53 catalog have multiple implementation requirements along with control enhancements that may also have multiple implementation requirements. It may be necessary to assess or monitor individual control requirements and/or control enhancements within a given control with differing frequencies. For instance, the control AC-2, Account Management, has ten separate requirements (a. through j.) within the base control and four control enhancements [(1) through (4)]. The monitoring frequency may vary for each requirement in accordance with the considerations discussed. For example, AC-2a involves the identification of account types. For a typical information system, once the account types have been identified and documented, they are not likely to change very often. For this reason, AC-2a is a candidate for relatively infrequent assessment. AC-2h involves the deactivation of temporary accounts and accounts of terminated or transferred users. Since personnel regularly come and go, a typical organization would most likely assess AC-2h on a more frequent basis than AC-2a. AC- 2 (3) requires that the system automatically disable accounts after a specified time period of inactivity. As an automated control and one with typically high volatility, AC-2 (3) is a candidate for relatively frequent monitoring and also may serve to automate some of the base control requirements so that they can be monitored more frequently in accordance with the organizational ISCM strategy."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that each requirement and enhancement gets the frequency its considerations call for."
+    evidence: [{"kind": "schema", "asserts": "Individual controls within a family are monitored at differing frequencies through overrides, each with a reason", "target": "framework/schema/conmon.schema.json#/properties/frequencies/items/properties/overrides", "claim": "presence"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0160"
     citation: {"ref": "SP800-137", "page": 35, "anchor": "At the mission/business processes tier, the organization establishes the minimum frequency with"}
@@ -1315,7 +1371,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "Events may occur that trigger the immediate need to assess security controls or verify security status outside of requirements expressed in the ISCM strategy. This may require an assessment that is unplanned, but of the type defined in the ISCM strategy or a customized assessment tailored to address an emerging need (e.g., a change in planned assessment or monitoring frequency). For example, if a Web application is added to a system, an existing ISCM process that includes configuration management and control, SIA, developmental vulnerability scans, etc., may be sufficient to assess controls implemented for the new Web application."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml events record what triggers an assessment outside the planned frequencies (ISCM-001). Unheld: that an event-driven assessment is carried out when its event occurs."
+    evidence: [{"kind": "rule", "asserts": "conmon.yaml records the events that trigger an assessment outside the planned frequencies, with a threshold for each", "target": "ISCM-001", "fixture": "tests/fixtures/negative/ISCM-001.yaml", "expect": "conmon.yaml has no", "claim": "presence", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-258"
   - id: "REQ-SP800-137-0165"
     citation: {"ref": "SP800-137", "page": 36, "anchor": "When defining criteria for event-driven assessments, organizations consider events such as incidents,"}
@@ -1323,7 +1381,9 @@ requirements:
     locator: "3.2.2"
     context: "ESTABLISH MONITORING AND ASSESSMENT FREQUENCIES"
     statement: "When defining criteria for event-driven assessments, organizations consider events such as incidents, new threat information, significant changes to systems and operating environments, new or additional mission responsibilities, and results of a security impact analysis (SIA) or assessment of risk."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event criterion names its kind from incidents, threat information, significant changes, mission changes, impact analysis and risk assessment results. Unheld: that every kind is considered."
+    evidence: [{"kind": "schema", "asserts": "Event-driven assessment criteria name the kind of event: incidents, new threat information, significant changes, new mission responsibilities, impact analysis or risk assessment results", "target": "framework/schema/conmon.schema.json#/properties/events/items/properties/event", "claim": "constraint"}]
     work_item: "WI-258"
   - id: "REQ-SP800-137-0166"
     citation: {"ref": "SP800-137", "page": 36, "anchor": "Organizations determine how the information will be collected and delivered within and"}
@@ -1331,7 +1391,9 @@ requirements:
     locator: "3.2.3"
     context: "DEVELOP ISCM ARCHITECTURE"
     statement: "Organizations determine how the information will be collected and delivered within and between the tiers as well as external to the organization. The core requirements of an architecture implemented to support ISCM are data collection, data storage, data analysis capabilities, and retrieval and presentation (reporting) capabilities. Methodologies are standardized to facilitate efficiencies, intra- and inter-tier information exchange, correlation, and other analysis."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states collection, storage, analysis, retrieval and delivery (ISCM-001 requires the section). Unheld: that the methods are standardized across tiers."
+    evidence: [{"kind": "schema", "asserts": "The strategy states how monitoring data is collected, stored, analyzed, retrieved and delivered within and between the tiers", "target": "framework/schema/conmon.schema.json#/properties/architecture", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0167"
     citation: {"ref": "SP800-137", "page": 36, "anchor": "Organizations use automated tools, technologies, and methodologies where appropriate to allow for"}
@@ -1339,7 +1401,9 @@ requirements:
     locator: "3.2.3"
     context: "DEVELOP ISCM ARCHITECTURE"
     statement: "Organizations use automated tools, technologies, and methodologies where appropriate to allow for increased efficiencies and insight including those gained through collection, analysis and dissemination of large volumes of data from diverse sources. The architecture and associated policies and procedures are designed to minimize data calls and maximize data reuse.39"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states how monitoring data is analyzed (ISCM-001 requires the section). Unheld: that data calls are minimized and data reused."
+    evidence: [{"kind": "schema", "asserts": "Monitoring data from diverse sources is analyzed with automated tools where appropriate", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/analysis", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0168"
     citation: {"ref": "SP800-137", "page": 36, "anchor": "Data feeds come from a heterogeneous mix of sources (e.g., authorization packages,"}
@@ -1363,7 +1427,9 @@ requirements:
     locator: "3.3"
     context: "IMPLEMENT AN ISCM PROGRAM"
     statement: "Collection, analysis, and reporting of data are automated where possible. Whether manual or automated, the data collected is assembled for analysis and reported to the organizational officials charged with correlating and analyzing it in ways that are relevant for risk management activities. As indicated in the examples above, this may mean taking data from a variety of sources, collected at various points in time, and combining it in ways that are meaningful for the official receiving it at the time that it is requested. Part of the implementation stage of the continuous monitoring process is effectively organizing and delivering ISCM data to stakeholders in accordance with decision-making requirements. Tools and methodologies are chosen for the organization-wide ISCM architecture, in order to help ensure that risk-based decisions are informed by accurate, current security-related information."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml architecture states how monitoring data is delivered (ISCM-001 requires the section). Unheld: that the data reaches the officials who correlate it."
+    evidence: [{"kind": "schema", "asserts": "Collected data is delivered to the officials charged with analyzing it, with collection, analysis and reporting automated where possible", "target": "framework/schema/conmon.schema.json#/properties/architecture/properties/delivery", "claim": "presence"}]
     work_item: "WI-259"
   - id: "REQ-SP800-137-0171"
     citation: {"ref": "SP800-137", "page": 37, "anchor": "Discrete security processes inform and are informed by ISCM data. Organizations also"}
@@ -1477,7 +1543,9 @@ requirements:
     locator: "3.5"
     context: "RESPOND TO FINDINGS"
     statement: "Going forward, new or revised controls are included in the overall continuous monitoring strategy."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a control added later is in the strategy beyond its family's frequency (CONMON-001)."
+    evidence: [{"kind": "schema", "asserts": "New or revised controls enter the overall continuous monitoring strategy through their family's frequency and the criteria that set it", "target": "framework/schema/conmon.schema.json#/properties/frequencies/items/properties/criteria", "claim": "constraint"}]
     work_item: "WI-255"
   - id: "REQ-SP800-137-0185"
     citation: {"ref": "SP800-137", "page": 41, "anchor": "ISCM strategies and programs are not static. Security control assessments, security status"}
@@ -1640,7 +1708,9 @@ requirements:
     locator: "1.1"
     context: ""
     statement: "The Federal Information Security Management Act (FISMA) of 2002 further emphasized the importance of continuously monitoring information system security by requiring agencies to conduct assessments of security controls at a frequency appropriate to risk, but no less than annually."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: an event-driven family frequency is allowed, so nothing holds no less than annually for it."
+    evidence: [{"kind": "schema", "asserts": "Each family is assessed at least at a frequency from continuous to annually, appropriate to risk", "target": "framework/schema/conmon.schema.json#/properties/frequencies/items/properties/frequency", "claim": "constraint"}]
     work_item: "WI-255"
     promoted: {"reason": "FISMA duty as the page reports it: assessments of security controls at a frequency appropriate to risk, no less than annually; the only stated periodicity in the document."}
   - id: "REQ-SP800-137-0205"
@@ -1649,7 +1719,9 @@ requirements:
     locator: "2.3"
     context: ""
     statement: "Therefore, during security control implementation (RMF Step 3), consideration is given to the capabilities inherent in available technology to support ISCM as part of the criteria in determining how best to implement a given control."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml tools records the controls each automated tool assesses (ISCM-001 requires the section). Unheld: that tool capability was weighed when implementing a control."
+    evidence: [{"kind": "schema", "asserts": "The capabilities of available technology to support monitoring are recorded per control, as the controls each automated tool assesses", "target": "framework/schema/conmon.schema.json#/properties/tools/items/properties/assesses", "claim": "constraint"}]
     work_item: "WI-259"
     promoted: {"reason": "RMF Step 3 duty: ISCM capability of available technology is a criterion in deciding how to implement a control."}
   - id: "REQ-SP800-137-0206"
@@ -1772,7 +1844,9 @@ requirements:
     locator: "3.2.2"
     context: ""
     statement: "Organizations take the following criteria into consideration when establishing monitoring frequencies for metrics or assessment frequencies for security controls:"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that every listed consideration is weighed."
+    evidence: [{"kind": "schema", "asserts": "The strategy records the criteria taken into consideration when establishing monitoring frequencies, one SP 800-137 consideration per criterion", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
     promoted: {"reason": "Lead-in duty over the frequency criteria 0144 to 0157, each with its own sentence."}
   - id: "REQ-SP800-137-0220"
@@ -1781,7 +1855,9 @@ requirements:
     locator: "3.2.2"
     context: ""
     statement: "Organizations with a low tolerance for risk (e.g., organizations that process, store, or transmit large amounts of proprietary and/or personally identifiable information (PII), organizations with numerous high-impact systems, organizations facing specific persistent threats) monitor more frequently than organizations with a higher tolerance for risk (e.g., organizations with primarily low- and moderate-impact systems that process, store, or transmit very little PII and/or proprietary information)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml frequency_criteria records the criteria behind each frequency, one SP 800-137 consideration per criterion, and ISCM-003 resolves every frequency's criteria. Unheld: that a low risk tolerance means more frequent monitoring."
+    evidence: [{"kind": "schema", "asserts": "Organizational risk tolerance is a criterion (risk-tolerance): organizations with a low tolerance for risk monitor more frequently", "target": "framework/schema/conmon.schema.json#/properties/frequency_criteria/items/properties/criterion", "claim": "constraint"}]
     work_item: "WI-255"
     promoted: {"reason": "Body of the criterion labelled in 0151: risk tolerance sets how often an organization monitors."}
   - id: "REQ-SP800-137-0221"
@@ -1806,9 +1882,12 @@ requirements:
     locator: "3.2.2"
     context: ""
     statement: "Depending on the significance of the event, an event-driven assessment may trigger one or more system reauthorizations."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: each event states whether it triggers an assessment, a reauthorization or both. A permission (may trigger), so nothing refuses either choice; the user rules on it."
+    evidence: [{"kind": "schema", "asserts": "Each event states whether it triggers an assessment, a system reauthorization or both, depending on its significance", "target": "framework/schema/conmon.schema.json#/properties/events/items/properties/triggers", "claim": "constraint"}]
     work_item: "WI-258"
     promoted: {"reason": "An event-driven assessment can trigger reauthorization, a named RMF touchpoint."}
+    ruling_sought: [{"sentence": "Depending on the significance of the event, an event-driven assessment may trigger one or more system reauthorizations.", "reason": "A permission: an event-driven assessment may trigger a reauthorization, depending on the event, so no choice can fail it. conmon.yaml events record which each event triggers."}]
   - id: "REQ-SP800-137-0224"
     citation: {"ref": "SP800-137", "page": 36, "anchor": "Primary Roles: Information System Owner/Common Control Provider, Authorizing Official, Information System Security"}
     kind: "promoted"
@@ -1823,7 +1902,9 @@ requirements:
     locator: "3.2.2"
     context: ""
     statement: "Expected Output: Documented criteria and thresholds for event-driven assessments/authorizations (e.g., significant change procedures, policy and procedures on event-driven authorizations)"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: conmon.yaml events record criteria and a threshold per event (schema), and ISCM-001 requires them. Unheld: thresholds are prose, so nothing checks they are usable."
+    evidence: [{"kind": "schema", "asserts": "Documented criteria and thresholds for event-driven assessments and authorizations are recorded per event", "target": "framework/schema/conmon.schema.json#/properties/events/items/properties/threshold", "claim": "presence"}]
     work_item: "WI-258"
     promoted: {"reason": "Step block of event-driven assessments: documented criteria and thresholds."}
   - id: "REQ-SP800-137-0226"

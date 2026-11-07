@@ -1,0 +1,15 @@
+rule: ISCM-002
+bases:
+- minimal
+description: a desired state covering fewer controls than the actual state
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: tools.0.desired_state.desired_state.controls
+  value:
+  - cm-6
+expect:
+  errors:
+  - ISCM-002
+  messages:
+  - the desired state does not cover the controls of the actual state

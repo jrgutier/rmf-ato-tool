@@ -453,3 +453,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: valid_minimal seeds ART-CHG and ART-SECRPT, so `test_base_has_no_findings` proves the positive case of each Monitor rule and each negative fixture needs one mutation.
 - Rule: A rule's positive case runs in a base run, not only its negative one.
 - Promotion: none — a fixture habit, already enforced for this cluster by test_base_has_no_findings; it binds no fork.
+
+## L-0065 · 2026-11-06 · run: phase-11 · tags: framework, contracts
+- Symptom: listing ART-CONMON as an output of S-6, so S-6 could record the AO's approval of the monitoring strategy, made the example's S-6 undone, and AODM-001 refused its R-4 decision because the tasks before R-4 had not written their outputs.
+- Root cause: task status is derived from `touched_by` on every output, so a new output reopens the task in every run already past it, whatever its `framework_version`.
+- Fix: the approval lives in conmon.yaml from S-5, which SP 800-37 Task S-5 places it in (the AO approves the strategy, possibly with the plan); ISCM-004 is gated with `since`.
+- Rule: Never add an output to an existing task; put the new record in an artifact the task already writes, or in a new task.
+- Promotion: none — the example check (p7) already fails on it; the rule saves the round trip.

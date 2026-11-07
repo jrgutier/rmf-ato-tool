@@ -38,6 +38,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: risks to individuals from the processing of PII, or a sentence saying the system processes none, with tokens>>
 
+## Maintenance
+
+<<FILL: the risk factors kept under ongoing monitoring, how often they are monitored and the circumstances in which this assessment is updated, following the organization's approach in ART-ORG-CONTEXT and conmon.yaml risk_assessment; whether the purpose, scope and assumptions still hold, with tokens>>
+
 <!-- R-2 and M-3 do not rewrite the sections above: each appends "## Update (R-2)" or
      "## Update (M-3)" with the date, what changed (new findings, threats or POA&M status) and
      the revised risks, and adds itself to touched_by. -->
