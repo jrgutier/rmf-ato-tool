@@ -422,10 +422,20 @@ def text_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def footers_of(source: Mapping[str, Any]) -> tuple[str, ...]:
-    """The footer patterns a source declares that compile; FW-REQ-001 reports the others."""
-    return tuple(f["pattern"] for f in source.get("footers", [])
-                 if extract.is_regex(f["pattern"]))
+def block_options(source: Mapping[str, Any]) -> dict[str, Any]:
+    """How a source's text splits into blocks: the footer and running-header patterns it
+    declares that compile (FW-REQ-001 reports the others) and whether it declares
+    ``cut_items``."""
+    def patterns(key: str) -> tuple[str, ...]:
+        return tuple(f["pattern"] for f in source.get(key, []) if extract.is_regex(f["pattern"]))
+
+    return {"footers": patterns("footers"), "headers": patterns("headers"),
+            "cut_items": "cut_items" in source}
+
+
+def reading_options(source: Mapping[str, Any]) -> dict[str, Any]:
+    """``block_options`` plus how the walk reads headings (``run_in_headings``)."""
+    return {**block_options(source), "run_in_headings": "run_in_headings" in source}
 
 
 def labels_for(source: Mapping[str, Any]) -> tuple[frozenset[str], frozenset[str]]:
@@ -444,11 +454,10 @@ def build(reg: Register, source: Mapping[str, Any], text: str) -> Built:
         document.update(catalog=source["catalog"], count=len(ids), ids=ids)
     skip, strip = labels_for(source)
     scopes = source.get("scopes", [])
-    footers = footers_of(source)
     found = extract.extract(text, scopes, skip_labels=skip, strip_labels=strip,
-                            footers=footers) if scopes else extract.Extraction()
+                            **reading_options(source)) if scopes else extract.Extraction()
     entries, changes = reconcile(ref, current.get("requirements", []), found.items, reg.patterns)
-    _check_promoted(entries, extract.passages(extract.blocks(text, footers)))
+    _check_promoted(entries, extract.passages(extract.blocks(text, **block_options(source))))
     document["requirements"] = [{k: e[k] for k in _ORDER if k in e} for e in entries]
     document["rejected"] = [{"page": r.page, "locator": r.locator, "reason": r.reason,
                              "text": r.text} for r in _not_promoted(found.rejected, entries)]
@@ -493,11 +502,17 @@ class MarkError(Exception):
 
 
 def mark(reg: Register, ident: str, **fields: Any) -> dict[str, Any]:
-    """Set reviewed fields on a live entry. ``None`` deletes a field. The caller writes the
-    file; the rules say whether the result is acceptable."""
+    """Set reviewed fields on a live entry. ``None`` deletes a field. A removed entry takes
+    ``removal_reason``, the review FW-REQ-004 asks of a reviewed entry that left its source,
+    and may drop its ``work_item``, since a removed entry binds nothing. The caller writes the file;
+    the rules say whether the result is acceptable."""
     entry = reg.entry(ident)
-    if entry is None or entry.get("removed"):
-        raise MarkError(f"no live entry {ident}")
+    if entry is None or (entry.get("removed") and (
+            "removal_reason" not in fields or set(fields) - {"removal_reason", "work_item"}
+            or fields.get("work_item") is not None)):
+        raise MarkError(f"no live entry {ident}" + (
+            "; a removed entry takes --removal-reason and a cleared work_item only"
+            if entry else ""))
     for key, value in fields.items():
         if key not in REVIEWED:
             raise MarkError(f"{key} is not a reviewed field; reviewed fields are "
@@ -517,8 +532,8 @@ def _rejection_at(doc: Mapping[str, Any], page: int, wanted: str) -> dict[str, A
 
 
 def _block_at(text: str, page: int, wanted: str,
-              footers: tuple[str, ...]) -> extract.Block | None:
-    for block in extract.blocks(text, footers):
+              source: Mapping[str, Any]) -> extract.Block | None:
+    for block in extract.blocks(text, **block_options(source)):
         if block.kind in ("heading", "header", "footer"):
             continue
         if block.page <= page <= (block.end_page or block.page) \
@@ -537,29 +552,45 @@ def _sentence_of(paragraph: str, wanted: str, anchor: str) -> str:
     return hits[0]
 
 
-def promote(reg: Register, ref: str, text: str, page: int, anchor: str, reason: str,
-            *, sentence: bool = False) -> dict[str, Any]:
+def _promoted_entry(doc: Mapping[str, Any], ident: str) -> dict[str, Any]:
+    entry = next((e for e in doc["requirements"] if e["id"] == ident), None)
+    if entry is None or entry.get("removed") or not entry.get("promoted"):
+        raise MarkError(f"{ident} is no live promoted entry of {doc['ref']}; --replace rebases "
+                        "only a reviewer's entry, the extractor re-reads its own")
+    return entry
+
+
+def promote(reg: Register, ref: str, text: str, page: int, anchor: str, reason: str | None,
+            *, sentence: bool = False, replace: str | None = None) -> dict[str, Any]:
     """A reviewer's entry for a passage the extractor rejected or read as context
     (`rmf conformance promote`): the rejection on ``page`` holding ``anchor``, else the block
     of the text on that page holding it; with ``sentence``, only the sentence of it that holds
     the anchor. The entry gets the next ID of its document, cites the page with the passage's
     opening words, and carries ``promoted: {reason}``. The caller writes the file; FW-REQ-001
-    then checks the citation like any other."""
+    then checks the citation like any other.
+
+    ``replace`` names a live promoted entry whose passage moved (a footer left it, a page
+    shifted): it is rebased onto the passage found the same way, keeping its ID, its status,
+    its evidence and every other reviewed field, and its reason unless ``reason`` gives a new
+    one. Rebasing is the review the move asked for, so ``needs_review`` is cleared."""
     doc = reg.files.get(ref)
     if doc is None or ref not in reg.sources:
         raise MarkError(f"no requirements file for {ref}")
+    target = _promoted_entry(doc, replace) if replace else None
+    if target is None and not reason:
+        raise MarkError("a new promoted entry needs --reason: why the passage is a requirement")
     wanted = compact(anchor)
     if not wanted:
         raise MarkError("the anchor needs a word or two of the passage")
     for entry in doc["requirements"]:
-        if not entry.get("removed") and entry["citation"]["page"] == page \
-                and wanted in compact(entry["statement"]):
+        if entry is not target and not entry.get("removed") \
+                and entry["citation"]["page"] == page and wanted in compact(entry["statement"]):
             raise MarkError(f"{entry['id']} already states that passage on page {page}")
     rejection = _rejection_at(doc, page, wanted)
     if rejection is not None:
         statement, locator = rejection["text"], rejection["locator"]
     else:
-        block = _block_at(text, page, wanted, footers_of(reg.sources[ref]))
+        block = _block_at(text, page, wanted, reg.sources[ref])
         if block is None:
             raise MarkError(f"{anchor!r} is in no rejection and no paragraph of {ref} page "
                             f"{page}; see rmf conformance page {ref} {page}")
@@ -571,6 +602,16 @@ def promote(reg: Register, ref: str, text: str, page: int, anchor: str, reason: 
         doc["rejected"].remove(rejection)  # part of it stays rejected, as re-extraction finds it
     item = extract.Item(PROMOTED_KIND, page, statement, locator, "")
     item = extract.identify([item], extract.raw_pages(text))[0]
+    if target is not None:
+        target.pop("occurrence", None)
+        target.update(_generated(ref, item))
+        target.pop("needs_review", None)
+        if reason:
+            target["promoted"] = {**target["promoted"], "reason": reason}
+        rebased = {k: target[k] for k in _ORDER if k in target}
+        target.clear()
+        target.update(rebased)
+        return target
     numbers = [int(e["id"].rsplit("-", 1)[1]) for e in doc["requirements"]]
     entry = {**_generated(ref, item), "id": f"REQ-{ref}-{max(numbers, default=0) + 1:04d}",
              "status": "candidate", "promoted": {"reason": reason}}

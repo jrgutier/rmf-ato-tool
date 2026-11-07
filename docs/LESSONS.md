@@ -558,3 +558,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.
 - Rule: Write each failing clause in the form the judge reads truthfully: presence as `not x` on a plain read, a constraint as a comparison of the value; never pick a spelling to change the claim.
 - Promotion: none — changing how the judge reads booleans would reclassify the evidence of rules already merged; the RCP clauses follow the rule and their claims are computed, not declared.
+
+## L-0080 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
+- Symptom: joining a list item cut by a blank line inside a page (I-7) across the whole register changed 175 statements, retired 110 entries and flagged 127 for review in 22 documents, most of them NIST bullets wrongly joined to the paragraph after them.
+- Root cause: a layout quirk of one PDF (DODCIO-RECIPROCITY breaks a step after its first line; CNSSP12's OCR layer does the same and repeats a running header) looks like ordinary prose structure in every other document, so a global rule cannot tell them apart.
+- Fix: the reader takes per-document options from conformance/sources.yaml, each with a reason: `cut_items`, `run_in_headings` and `headers`; only the documents that declare them change, and register diffs are measured before marking.
+- Rule: Fix a layout defect of one document with a declared reading option for that document, and measure the register diff of any extractor change before accepting it.
+- Promotion: check: conformance/schema/sources.schema.json requires a reason on each option, and tests/unit/test_conformance_extract.py::test_a_cut_item_joins_only_where_the_source_declares_it fails if the join turns global.
