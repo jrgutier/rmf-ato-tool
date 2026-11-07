@@ -1,0 +1,16 @@
+rule: RCP-009
+bases:
+- minimal
+description: an IAVA neither applied nor tracked
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.configuration_updates.0.outcome
+  value: deferred
+expect:
+  errors:
+  - RCP-009
+  messages:
+  - 'RS-01: the iava IAVA 2026-A-0050 is neither applied nor tracked in the POA&M'
+  also:
+  - RUN-FM-001

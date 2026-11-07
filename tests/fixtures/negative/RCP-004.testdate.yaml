@@ -1,0 +1,14 @@
+rule: RCP-004
+bases:
+- minimal
+description: a deployment-configured control tested before it was deployed
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.controls.1.tested
+  value: '2026-12-18'
+expect:
+  errors:
+  - RCP-004
+  messages:
+  - 'RS-01: the control cm-6 configured at deployment is not tested once it is configured on deployment'

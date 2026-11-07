@@ -443,7 +443,7 @@ def test_example_migrates_onto_the_ledger(tmp_path):
     migrate(open_run(run_dir, REPO_ROOT))
     run = open_run(run_dir, REPO_ROOT)
     assert ledger.load(run)
-    assert "have not written their outputs" in _check(run_dir, rules.records_valid)  # DIAS SVCA PIA BIA REG
+    assert "have not written their outputs" in _check(run_dir, rules.records_valid)  # DIAS SVCA PIA
     for rel in ("artifacts/ART-DIAS.md", "artifacts/data/dias.yaml", "artifacts/ART-SVCA.md",
                 "artifacts/data/service-agreements.yaml", "artifacts/ART-PIA.md",
                 "artifacts/ART-BIA.md", "artifacts/data/bia.yaml", "artifacts/ART-REG.md"):

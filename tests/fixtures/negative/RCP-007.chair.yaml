@@ -1,0 +1,25 @@
+rule: RCP-007
+bases:
+- minimal
+description: an AO Council chaired by the DoD CIO
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.1.refusal.escalation
+  value:
+  - level: ao
+    date: '2027-01-05'
+    result: unresolved
+  - level: rmf-tag-chair
+    date: '2027-01-20'
+    result: unresolved
+    notified: rmf-tag-secretariat
+  - level: ao-council
+    date: '2027-02-10'
+    result: resolved
+    chair: DoD CIO
+expect:
+  errors:
+  - RCP-007
+  messages:
+  - 'RS-02: the AO Council hearing the dispute is not chaired by the DoD CISO'

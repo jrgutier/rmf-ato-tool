@@ -1,0 +1,14 @@
+rule: RCP-004
+bases:
+- minimal
+description: a deployment-configured control tested by the Granting side
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.controls.1.tested_by
+  value: granting
+expect:
+  errors:
+  - RCP-004
+  messages:
+  - 'RS-01: the control cm-6 configured at deployment is not tested by the receiving system owner'

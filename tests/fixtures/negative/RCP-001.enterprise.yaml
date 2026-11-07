@@ -1,0 +1,14 @@
+rule: RCP-001
+bases:
+- minimal
+description: an Enterprise ATO with no Receiving organization
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: receiving_organizations
+  value: []
+expect:
+  errors:
+  - RCP-001
+  messages:
+  - AUTH-002 deploys the system at enterprise scope, but reciprocity.yaml names no Receiving organization and no co-use notification processes

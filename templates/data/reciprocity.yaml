@@ -1,0 +1,102 @@
+# Template: artifacts/data/reciprocity.yaml (ART-SD; C-1 starts it, kept up through M-7; schema
+# reciprocity). `receiving_organizations` are the organizations this system is deployed into (the
+# run is their Granting side); `received_systems` are systems deployed into this one (the run is
+# their Receiving side). Write `[]` for a side the system does not have; an ATO at enterprise
+# scope needs a Receiving organization, and an Enterprise system in
+# leveraged-authorizations.yaml needs a received system. RCP-001 to RCP-008 judge it.
+receiving_organizations:
+  - id: RO-01
+    organization: "<<FILL: Receiving organization>>"
+    receiving_ao: "<<FILL: its authorizing official>>"
+    poc: "<<FILL: its point of contact the package goes through>>"
+    joined: "2026-01-15"  # when it became a Receiving organization
+    kind: deployment  # deployment | software-delivery (a software factory deploying into its boundary)
+    visibility: {via: emass, record_keeping: compatible}  # emass | other-tool | manual-inheritance (required when incompatible)
+    sites:
+      - {site: "<<FILL: deployment site>>", projected: "2027-01-15"}
+    requirements:
+      gathered: "2026-02-01"  # before the system is developed (before system_version.release_date)
+      coordinated: ["2026-02-01", "2026-06-01"]  # early and throughout development
+      additional_controls: [si-2]  # each one assessed (SAR) and in the baseline
+    issues:
+      - {id: RI-01, summary: "<<FILL: issue raised>>", raised: "2026-06-01", resolved: "2026-06-20"}
+    deliveries:  # ssp, sar, rar, poam, authorization-decision, deployment-sites, body-of-evidence,
+                 # installation-configuration (before the first site), deployment-instructions
+      - {document: ssp, date: "2026-11-23", via: emass}
+    installation_stigs: [BM-01]  # every STIG benchmark of stig-summary.yaml
+    status_updates:
+      - {date: "2026-09-01", covers: rmf-activities}  # one at least 60 working days before the first site
+    notices:  # every change and new finding after the first delivery; plans and reauthorizations acknowledged
+      - {kind: reauthorization, event: "2027-11-20", date: "2026-11-23", acknowledged: "2026-11-30"}
+    agreement: AGR-01
+    sources: [INT-001.A1]
+# co_use:  # an Enterprise ATO with no Receiving organization: the system is used in its native
+#   notification_processes: "<<FILL>>"  # environment, and the Granting side sets how it notifies
+package_sharing:
+  shared_with: [PER-IO]  # the information owners and every boundary connection (CONN-##)
+  date: "2026-11-23"
+granting:  # once a Receiving organization exists
+  cssp:
+    provider: "<<FILL: CSSP>>"
+    accredited_by: JFHQ-DODIN
+    services: [continuous-monitoring, patch-management, iavm, ess, siem, operational-orders, poams, annual-reviews, periodic-reviews]
+  patches:  # one per implemented directed action, provided by its required date and sent to every RO
+    - {id: PAT-01, directed_action: DIR-001, required_by: "2026-12-15", provided: "2026-12-08", communicated_to: [RO-01]}
+received_systems:
+  - id: RS-01
+    system: "<<FILL: system received>>"
+    granting_organization: "<<FILL: Granting organization>>"
+    granting_ao: "<<FILL: Granting AO>>"
+    enterprise: false  # true for an Enterprise system: the DSAWG route and the CISO coordination point
+    awareness: [{date: "2026-11-25", via: emass}]  # emass | other-tool | manual-inheritance
+    package:
+      requested: "2026-11-24"
+      requested_documents: [ssp, sar, rar, poam, authorization-decision, deployment-instructions]
+      received: "2026-11-28"
+      received_documents: [ssp, sar, rar, poam, authorization-decision, deployment-instructions]
+      poam_items: ["<<FILL: Granting POA&M item>>"]
+    own_package_shared: "2026-12-01"
+    review: {by: PER-AO, date: "2026-12-09"}  # PER-AO or PER-AODR, before the decision
+    guide_reviewed: "2026-12-11"
+    impact:
+      determined: "2026-12-10"
+      via: local  # dsawg for an Enterprise system
+      augmenting_controls: [{control: si-2, implemented: "2026-12-12"}]
+    controls:
+      - {control: au-2, origin: built-in, retested: false}
+      - {control: cm-6, origin: deployment-configured, tested_by: receiving, tested: "2026-12-20"}
+      - {control: sc-7, origin: inherited, validated_by: PER-PM, evidence: [ART-SAR]}
+    outcome: accepted  # pending | accepted | refused
+    atu:
+      issued: "2026-12-18"
+      by: PER-AO  # the Receiving AO's decision
+      risk: acceptable
+      copy_to_granting_ao: "2026-12-19"
+      sites_notified: {date: "2026-12-19", scope: authorized-configuration}
+    hosting_update: {change: CHG-001, date: "2026-12-20", controls: [si-2], documents: [installation-configuration, difference-tests]}
+    installation: {implemented: "2026-12-19", differences: [{item: "<<FILL: configuration difference>>", tested: "2026-12-16"}]}
+    provided_controls: [sc-7]  # every inherited control
+    mitigations: [{poam_item: "<<FILL: Granting POA&M item>>", implemented: "2026-12-19"}]
+    patches: [{id: RP-01, released: "2026-12-20", pm_due: "2027-01-10", applied: "2027-01-05"}]
+    configuration_updates: [{id: "<<FILL: IAVA or STIG release>>", kind: iava, outcome: applied}]  # applied | poam (with poam_item)
+    findings: [{poam_item: POAM-001, reported: "2026-12-03"}]
+    agreement: AGR-02
+    sources: [INT-001.A1]
+agreements:
+  - id: AGR-01
+    instrument: moa  # a documented agreement such as mou, moa, sla or isa
+    party: RO-01
+    executed: "2026-11-15"
+    topics: [operating-constraints, operating-environment, monitoring-requirements, security-maintenance, vulnerability-scanning, iavm-compliance, lifecycle-replacement, roles-responsibilities]
+    covers: [package-sharing]  # software-delivery and feedback for a software factory
+    pocs:
+      granting: PER-ISSM  # this side's single POC, a role of the run
+      receiving: "<<FILL: the other side's POC>>"
+      technical: [{party: granting, poc: PER-ISSO}, {party: receiving, poc: "<<FILL: technical POC>>"}]
+    notification: {processes: "<<FILL>>", timing: "<<FILL>>", requirements: "<<FILL>>", recipients: [pm, original-ao]}
+    termination_factors: ["<<FILL: factor or condition justifying termination>>"]
+    pre_agreement_tasks: [{task: resources, responsible: granting, completed: "2026-11-01"}]
+    deviations: []  # {element, raised, resolved, accepted_by: [granting, receiving]}
+    documents: [ART-SSP, ART-SAR, ART-RAR, ART-POAM]
+    sources: [INT-001.A1]
+sources: [INT-001.A1]

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 295 rules, 36 repo-scope and 259 run-scope. Authoritative;
+# Rule registry (plan §6.5): 304 rules, 36 repo-scope and 268 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -790,6 +790,7 @@ rules:
       - REQ-SP800-37R2-0578
       - REQ-SP800-37R2-0601
       - REQ-SP800-37R2-0620
+      - REQ-CNSSI1254-0116
   - id: AODM-002
     scope: run
     severity: E
@@ -4757,6 +4758,223 @@ rules:
       - REQ-DODI8500.01-0297
       - REQ-DODI8500.01-0299
       - REQ-DOWI8430.01-0130
+  - id: RCP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: a Receiving organization lacks part of the package, the body of evidence, the deployment documents or visibility of the package, or the package is not shared with information owners and interconnected ISOs
+    fixture: tests/fixtures/negative/RCP-001.yaml
+    hint: "artifacts/data/reciprocity.yaml: each receiving organization's deliveries hold ssp, sar, rar, poam (the latest delivery on or after the newest POA&M item), authorization-decision, deployment-sites, body-of-evidence, deployment-instructions and installation-configuration before its first site; installation_stigs lists every STIG benchmark; visibility.via is emass, other-tool or manual-inheritance (manual-inheritance when record_keeping is incompatible); package_sharing.shared_with holds PER-IO and every boundary connection; an ATO at enterprise scope needs a receiving organization or co_use with its notification processes; visibility.record_keeping is compatible or incompatible."
+    enforces:
+      - REQ-CNSSI1254-0015
+      - REQ-CNSSI1254-0116
+      - REQ-CNSSI1254-0127
+      - REQ-CNSSI1254-0128
+      - REQ-CNSSI1254-0132
+      - REQ-DODCIO-RECIPROCITY-0024
+      - REQ-DODCIO-RECIPROCITY-0025
+      - REQ-DODCIO-RECIPROCITY-0026
+      - REQ-DODCIO-RECIPROCITY-0039
+      - REQ-DODCIO-RECIPROCITY-0091
+      - REQ-DODCIO-RECIPROCITY-0126
+      - REQ-DODCIO-RECIPROCITY-0127
+      - REQ-DODCIO-RECIPROCITY-0147
+      - REQ-DODI8500.01-0014
+      - REQ-DODI8500.01-0229
+      - REQ-DODI8510.01-0008
+  - id: RCP-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: requirements are not gathered or coordinated with a Receiving organization during development, its controls and issues are not handled, or it is not updated and notified of changes, findings, plans and reauthorization
+    fixture: tests/fixtures/negative/RCP-002.yaml
+    hint: "artifacts/data/reciprocity.yaml: for an organization joined before system_version.release_date, requirements.gathered and a coordinated date fall before it; each additional control is assessed; each issue raised before the first site is resolved by then; status_updates hold rmf-activities and one at least 60 working days before the first site; notices cover every change and POA&M item after the first delivery, every reauthorization record and the in-force ATO's termination once its notice is due by as_of (for an organization joined by then), and a decommissioning plan; a reauthorization notice comes six months before its event, and reauthorization and plan notices are acknowledged."
+    enforces:
+      - REQ-CNSSI1254-0130
+      - REQ-CNSSI1254-0146
+      - REQ-DODCIO-RECIPROCITY-0092
+      - REQ-DODCIO-RECIPROCITY-0093
+      - REQ-DODCIO-RECIPROCITY-0096
+      - REQ-DODCIO-RECIPROCITY-0097
+      - REQ-CNSSI1254-0115
+      - REQ-CNSSI1254-0129
+      - REQ-CNSSI1254-0147
+      - REQ-DODCIO-RECIPROCITY-0031
+      - REQ-DODCIO-RECIPROCITY-0033
+      - REQ-DODCIO-RECIPROCITY-0094
+      - REQ-SP800-37R2-0585
+      - REQ-DODCIO-RECIPROCITY-0086
+  - id: RCP-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a patch is not provided in time or not communicated to every Receiving organization, or the CSSP is not JFHQ-DODIN accredited or does not maintain the named services
+    fixture: tests/fixtures/negative/RCP-003.yaml
+    hint: "artifacts/data/reciprocity.yaml granting: one patch per implemented directed action, provided by required_by and communicated_to every receiving organization; cssp.accredited_by JFHQ-DODIN with every named service."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0099
+      - REQ-DODCIO-RECIPROCITY-0101
+      - REQ-DODCIO-RECIPROCITY-0168
+      - REQ-DODCIO-RECIPROCITY-0169
+      - REQ-DODCIO-RECIPROCITY-0084
+  - id: RCP-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: a received system is not tracked, requested, reviewed, assessed for impact or tested by control origin before the Receiving AO decides
+    fixture: tests/fixtures/negative/RCP-004.yaml
+    hint: "artifacts/data/reciprocity.yaml received_systems: outcome is pending, accepted or refused, and a pending system is judged only on its recorded tests; awareness via emass, other-tool or manual-inheritance; requested_documents hold the package and deployment instructions; review by PER-AO or PER-AODR before the decision; unless refused, own_package_shared, guide_reviewed, impact (via dsawg for an Enterprise system, derived from an enterprise leveraged authorization too) before the decision, augmenting controls by deployment; built-in controls not retested, deployment-configured ones tested_by receiving on or after deployment, inherited ones validated_by PER-PM; an Enterprise system in leveraged-authorizations.yaml has a record."
+    enforces:
+      - REQ-SP800-37R2-0585
+      - REQ-CNSSI1254-0121
+      - REQ-CNSSI1254-0133
+      - REQ-CNSSI1254-0134
+      - REQ-CNSSI1254-0135
+      - REQ-CNSSI1254-0136
+      - REQ-CNSSI1254-0137
+      - REQ-CNSSI1254-0138
+      - REQ-CNSSI1254-0139
+      - REQ-DODCIO-RECIPROCITY-0045
+      - REQ-DODCIO-RECIPROCITY-0046
+      - REQ-DODCIO-RECIPROCITY-0047
+      - REQ-DODCIO-RECIPROCITY-0048
+      - REQ-DODCIO-RECIPROCITY-0049
+      - REQ-DODCIO-RECIPROCITY-0050
+      - REQ-DODCIO-RECIPROCITY-0052
+      - REQ-DODCIO-RECIPROCITY-0103
+      - REQ-DODCIO-RECIPROCITY-0104
+      - REQ-DODCIO-RECIPROCITY-0167
+      - REQ-DODCIO-RECIPROCITY-0157
+  - id: RCP-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: I-2
+    summary: an accepted received system lacks the Receiving AO's authorization to use, its copy and site notice, the hosting system's updated documentation, the installation or the inherited controls
+    fixture: tests/fixtures/negative/RCP-005.yaml
+    hint: "artifacts/data/reciprocity.yaml received_systems: an Enterprise system's coordination_point is PER-CISO; an accepted one has atu by PER-AO with risk acceptable, a copy to the Granting AO and sites_notified with scope authorized-configuration; hosting_update names a change of changes.yaml with the augmenting controls and the installation documents, and the difference tests when a difference is recorded; installation implemented on or after the package is received, with each difference tested; every inherited control provided."
+    enforces:
+      - REQ-DODI8500.01-0229
+      - REQ-CNSSI1254-0120
+      - REQ-DODCIO-RECIPROCITY-0049
+      - REQ-CNSSI1254-0117
+      - REQ-CNSSI1254-0141
+      - REQ-CNSSI1254-0142
+      - REQ-CNSSI1254-0143
+      - REQ-CNSSI1254-0144
+      - REQ-CNSSI1254-0148
+      - REQ-DODCIO-RECIPROCITY-0054
+      - REQ-DODCIO-RECIPROCITY-0055
+      - REQ-DODCIO-RECIPROCITY-0061
+      - REQ-DODCIO-RECIPROCITY-0062
+      - REQ-DODCIO-RECIPROCITY-0063
+      - REQ-DODCIO-RECIPROCITY-0064
+      - REQ-DODCIO-RECIPROCITY-0105
+      - REQ-DODCIO-RECIPROCITY-0106
+      - REQ-DODCIO-RECIPROCITY-0107
+      - REQ-DODI8510.01-0214
+  - id: RCP-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a reciprocity relationship has no executed agreement, or the agreement lacks its minimum topics, sharing terms, points of contact, notification terms, termination factors, pre-agreement tasks, resolved deviations or agreed core documents
+    fixture: tests/fixtures/negative/RCP-006.yaml
+    hint: "artifacts/data/reciprocity.yaml agreements: one executed documented agreement (such as an MOU, MOA, SLA or ISA) per receiving organization and accepted received system (before the decision), with every minimum topic (an ISA also the AO Committee's), package-sharing in covers (and software-delivery and feedback for a software factory), this side's POC a role of the run, a technical POC on each side, notification processes, timing, requirements and recipients pm and original-ao, termination factors for an MOU or MOA, pre-agreement tasks with a responsible party completed before execution, deviations accepted by both, and core documents."
+    enforces:
+      - REQ-CNSSI1254-0005
+      - REQ-CNSSI1254-0112
+      - REQ-CNSSI1254-0140
+      - REQ-DODCIO-CATO-EVAL-0008
+      - REQ-DODCIO-CATO-IG-0123
+      - REQ-DODCIO-RECIPROCITY-0056
+      - REQ-DODCIO-RECIPROCITY-0057
+      - REQ-DODCIO-RECIPROCITY-0067
+      - REQ-DODCIO-RECIPROCITY-0082
+      - REQ-DODCIO-RECIPROCITY-0083
+      - REQ-DODCIO-RECIPROCITY-0088
+      - REQ-DODCIO-RECIPROCITY-0089
+      - REQ-DODCIO-RECIPROCITY-0095
+      - REQ-DODCIO-RECIPROCITY-0098
+      - REQ-DODCIO-RECIPROCITY-0108
+      - REQ-DODCIO-RECIPROCITY-0115
+      - REQ-SP800-37R2-0586
+  - id: RCP-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a Receiving AO short of the required documents leaves out an item of the body of evidence, a request beyond the package is not endorsed by the CISO, or a refusal is not documented, reported within 10 business days or escalated in order
+    fixture: tests/fixtures/negative/RCP-007.yaml
+    hint: "artifacts/data/reciprocity.yaml received_systems: when received_documents lack one of ssp, sar, rar, poam and authorization-decision, body_of_evidence.considered lists every named item as considered or unavailable; when the system is decided; each request is endorsed by PER-CISO, or an equivalent with its title and authority, before it is forwarded; a refusal is decided_by PER-AO on insufficient-content or excessive-risk, reported to the Granting AO within 10 business days, provided on request, and escalated ao, rmf-tag-chair (notified rmf-tag-secretariat), ao-council (chair DoD CISO) only while unresolved."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0139
+      - REQ-DODCIO-RECIPROCITY-0140
+      - REQ-DODCIO-RECIPROCITY-0141
+      - REQ-DODCIO-RECIPROCITY-0142
+      - REQ-DODCIO-RECIPROCITY-0143
+      - REQ-DODCIO-RECIPROCITY-0144
+      - REQ-DODCIO-RECIPROCITY-0145
+      - REQ-DODCIO-RECIPROCITY-0146
+      - REQ-CNSSI1254-0118
+      - REQ-DODCIO-RECIPROCITY-0157
+      - REQ-DODCIO-RECIPROCITY-0159
+      - REQ-DODCIO-RECIPROCITY-0160
+      - REQ-DODCIO-RECIPROCITY-0161
+  - id: RCP-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-18
+    summary: the registry record leaves out a deployment location, is not updated after a received system is accepted, or opts out of reciprocity listing without a justification
+    fixture: tests/fixtures/negative/RCP-008.yaml
+    hint: "artifacts/data/registration.yaml registry: deployment_locations holds every site of reciprocity.yaml, updates holds one per accepted received system on or after its authorization to use, and reciprocity.listed false carries exemption_justification."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0126
+      - REQ-DODCIO-RECIPROCITY-0127
+      - REQ-DODCIO-RECIPROCITY-0100
+      - REQ-DODCIO-RECIPROCITY-0109
+      - REQ-DODCIO-RECIPROCITY-0153
+  - id: RCP-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: an accepted received system's Granting POA&M mitigations, patches, IAVAs and STIGs are not kept up, or a new finding is not reported back
+    fixture: tests/fixtures/negative/RCP-009.yaml
+    hint: "artifacts/data/reciprocity.yaml received_systems: each item of package.poam_items has a mitigation implemented; patches are applied by pm_due; each configuration update is applied or tracked in a POA&M item; each finding names a POA&M item and is reported on or after it is identified."
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0170
+      - REQ-CNSSI1254-0145
+      - REQ-DODCIO-RECIPROCITY-0065
+      - REQ-DODCIO-RECIPROCITY-0110
+      - REQ-DODCIO-RECIPROCITY-0111
+      - REQ-DODCIO-RECIPROCITY-0112
+      - REQ-DODCIO-RECIPROCITY-0113
+      - REQ-DODCIO-RECIPROCITY-0085
+      - REQ-DODCIO-RECIPROCITY-0087
   - id: AODM-012
     scope: run
     severity: E
