@@ -1,0 +1,49 @@
+rule: PPROT-002
+bases:
+- minimal
+description: the PPP stays with the development PM after the full-rate production decision
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: MS-FRP
+    date: '2026-06-01'
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.submissions
+  value:
+  - decision_point: MS-A
+    date: '2026-03-10'
+  - decision_point: MS-FRP
+    date: '2026-05-20'
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: assessments
+  value:
+  - decision_point: MS-A
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-03-01'
+  - decision_point: MS-FRP
+    assessed_by:
+    - NSA
+    - PER-AO
+    covers:
+    - cybersecurity-requirements
+    - security-architecture
+    date: '2026-05-15'
+expect:
+  errors:
+  - PPROT-002
+  messages:
+  - after the full-rate production or full-deployment decision the PPP transitions to the program 
+    manager responsible for system sustainment and disposal

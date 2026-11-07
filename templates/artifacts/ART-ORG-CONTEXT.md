@@ -12,7 +12,9 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <!-- Template for ART-ORG-CONTEXT (playbook: playbooks/P/P-org-context.md). Replace every <<FILL: ...>> placeholder with traced
      prose; each ## section needs at least one [[TOKEN]] (playbooks/_shared/tagging-and-traceability.md).
-     Never write between the rmf:facts markers and never restate system facts. Delete this comment. -->
+     Never write between the rmf:facts markers and never restate system facts. The checkable
+     record is artifacts/data/org-context.yaml (template templates/data/org-context.yaml);
+     this Markdown states the same context in prose. Delete this comment. -->
 
 ## RMF role assignments
 

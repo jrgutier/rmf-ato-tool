@@ -1,0 +1,30 @@
+rule: TSTRAT-001
+bases:
+- minimal
+description: a program on live fire oversight with no DOT&E approval of LFT&E
+mutations:
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: oversight
+  value:
+    dote: true
+    usdre: false
+    lfte: true
+- op: set_field
+  file: artifacts/data/test-strategy.yaml
+  path: approvals
+  value:
+  - part: document
+    by: component
+    date: '2026-04-15'
+    decision_point: MS-B
+    submitted_to_osd: '2026-03-01'
+  - part: ot-e
+    by: DOT&E
+    date: '2026-04-15'
+expect:
+  errors:
+  - TSTRAT-001
+  messages:
+  - the DOT&E is the approval authority for the lft-e planned activities of a program on T&E 
+    oversight

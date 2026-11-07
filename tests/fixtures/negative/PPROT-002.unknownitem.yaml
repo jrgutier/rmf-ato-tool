@@ -1,0 +1,24 @@
+rule: PPROT-002
+bases:
+- minimal
+description: a countermeasure for an item the PPP does not list
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.countermeasures
+  value:
+  - id: CM-001
+    item: CI-001
+    measure: Authenticate every report source
+    mitigates:
+    - TR-001
+  - id: CM-002
+    item: CI-009
+    measure: Seal the case
+    mitigates:
+    - TR-001
+expect:
+  errors:
+  - PPROT-002
+  messages:
+  - which is no critical item of the PPP

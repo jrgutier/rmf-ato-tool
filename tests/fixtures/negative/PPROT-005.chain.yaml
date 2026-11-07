@@ -1,0 +1,26 @@
+rule: PPROT-005
+bases:
+- minimal
+description: an ACAT IB ITRA approved in the program's chain of command
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.acat
+  value: IB
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: inputs.itras
+  value:
+  - id: ITRA-1
+    decision_point: MS-A
+    conducted_by: Component engineering office
+    approved_by: component-chain
+    covers:
+    - adversarial-risk
+    informs:
+    - TR-001
+expect:
+  errors:
+  - PPROT-005
+  messages:
+  - the approval authority of an ACAT IB or IC ITRA is independent of the program's chain of command

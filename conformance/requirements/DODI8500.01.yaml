@@ -96,7 +96,8 @@ requirements:
     locator: "INSTRUCTION.a.(3)"
     context: "Risk Management"
     statement: "(3) All DoD IT will be assigned to, and governed by, a DoD Component cybersecurity program that manages risk commensurate with the importance of supported missions and the value of potentially affected information or assets."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "All DoD IT is assigned to and governed by a DoD Component cybersecurity program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(3) All DoD IT will be assigned to, and governed by, a DoD Component cybersecurity program that manages risk commensurate with the importance of supported missions and the value of potentially affected information or assets."}]
     work_item: "WI-163"
   - id: "REQ-DODI8500.01-0013"
     citation: {"ref": "DODI8500.01", "page": 2, "anchor": "Risk management will be addressed as early as possible in the acquisition"}
@@ -775,7 +776,9 @@ requirements:
     locator: "ENCLOSURE 2.h"
     context: "RESPONSIBILITIES"
     statement: "h. Ensures that policy and procedures for developing program protection plans (PPPs) required by DoDI 5200.39 (Reference (aw)) address cybersecurity in accordance with this instruction."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: binds the official who issues PPP policy and procedures. The run shows its own PPP addresses cybersecurity (the strategy as appendix, PPROT-001; cybersecurity risk sources, PPROT-002), but the policy and procedures are not a run record."
+    evidence: [{"kind": "rule", "target": "PPROT-001", "fixture": "tests/fixtures/negative/PPROT-001.appendix.yaml", "expect": "the cybersecurity strategy is submitted as an appendix to the PPP", "claim": "constraint", "asserts": "program protection plans address cybersecurity through the cybersecurity strategy appendix: the cybersecurity strategy is submitted as an appendix to the PPP", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "Ensures that policy and procedures for developing program protection plans (PPPs) required by DoDI 5200.39 (Reference (aw)) address cybersecurity in accordance with this instruction."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0099"
     citation: {"ref": "DODI8500.01", "page": 18, "anchor": "Defines, develops, and integrates systems security engineering (SSE) into the systems engineering"}
@@ -1103,7 +1106,9 @@ requirements:
     locator: "ENCLOSURE 2.a"
     context: "RESPONSIBILITIES"
     statement: "a. Ensure that IT under their purview complies with this instruction."
-    status: "candidate"
+    status: "partial"
+    reason: "that IT complies with the whole instruction is the sum of the other rules; this checks only that the system is under the Component program"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "IT under their purview is governed by the Component cybersecurity program, which ensures it complies with this instruction", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Ensure that IT under their purview complies with this instruction."}]
     work_item: "WI-163"
   - id: "REQ-DODI8500.01-0141"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Ensure that cybersecurity requirements are addressed and visible in all capability portfolios,"}
@@ -1831,7 +1836,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(1)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Supporting acquisition program protection by:"
     statement: "(1) Ensuring cybersecurity is a key element of program protection planning activities that manage risks to advance technology and mission-critical system functionality from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss throughout the system life cycle."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: the clause fails only when the run edits a literal the template already supplies (risk_sources lists all three), so it holds presence of the three risk sources, not that program protection manages them."
+    evidence: [{"kind": "rule", "target": "PPROT-002", "fixture": "tests/fixtures/negative/PPROT-002.risksource.yaml", "expect": "program protection planning manages the risk of foreign collection due to design vulnerability, supply chain exploit insertion and battlefield loss", "claim": "constraint", "asserts": "cybersecurity is a key element of program protection planning that manages risks from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss: program protection planning manages the risk of foreign collection due to design vulnerability, supply chain exploit insertion and battlefield loss", "holds_when": "P-14 is in scope or the run holds protection.yaml", "sentence": "(1) Ensuring cybersecurity is a key element of program protection planning activities that manage risks to advance technology and mission-critical system functionality from foreign collection due to design vulnerability or supply chain exploit insertion, and battlefield loss throughout the system life cycle."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0234"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Having mission criteria for identifying critical components and critical program information as"}
@@ -1839,7 +1846,9 @@ requirements:
     locator: "ENCLOSURE 3.c.(2)"
     context: "Figure 1. Three-Tiered Approach to Risk Management Supporting acquisition program protection by:"
     statement: "(2) Having mission criteria for identifying critical components and critical program information as established in References (bh) and (aw)."
-    status: "candidate"
+    status: "covered"
+    reason: "Tier 1. protection.yaml requires each critical component or item of critical program information to name at least one mission criterion that identified it."
+    evidence: [{"kind": "schema", "target": "framework/schema/protection.schema.json#/properties/ppp/properties/critical_items/items/properties/mission_criteria", "claim": "constraint", "asserts": "mission criteria for identifying critical components and critical program information are recorded for each item: Mission criteria by which the critical component or critical program information was identified", "sentence": "(2) Having mission criteria for identifying critical components and critical program information as established in References (bh) and (aw)."}]
     work_item: "WI-85"
   - id: "REQ-DODI8500.01-0235"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Planning for mission continuation in the face of degraded or unavailable information"}
@@ -2014,7 +2023,9 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "c. Penetration and Exploitation Testing. Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers. Penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E via the appropriate program test documentation."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: sentence 2 is held, TSTRAT-002 fails penetration and exploitation testing not planned in both DT&E and OT&E, and each event records its resources. Sentence 1 rests on independent, threat_representative, scope and includes_cssp, literals the template supplies, so it holds presence."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.independent.yaml", "expect": "penetration and exploitation testing is independent and threat representative", "claim": "constraint", "asserts": "evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing: penetration and exploitation testing is independent and threat representative", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers."}, {"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.complete.yaml", "expect": "penetration and exploitation testing evaluates the complete system cyberspace defenses, including the controls and protection provided by cybersecurity service providers", "claim": "constraint", "asserts": "penetration testing evaluates the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers: penetration and exploitation testing evaluates the complete system cyberspace defenses, including the controls and protection provided by cybersecurity service providers", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Evaluation of cybersecurity during an acquisition T&E event must include independent threat representative penetration and exploitation testing and evaluation of the complete system cyberspace defenses including the controls and protection provided by cybersecurity service providers."}, {"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.phases.yaml", "expect": "penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "claim": "constraint", "asserts": "penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E: penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "sentence": "Penetration and exploitation testing must be planned and resourced as part of the DT&E and OT&E via the appropriate program test documentation."}]
     work_item: "WI-91"
   - id: "REQ-DODI8500.01-0257"
     citation: {"ref": "DODI8500.01", "page": 33, "anchor": "Cyber Defense Personnel. Cyber defense personnel operating on or in DoD IS"}
@@ -2686,7 +2697,8 @@ requirements:
     locator: "ENCLOSURE 3.b.(12)"
     context: "Figure 2. DoD Information Technology"
     statement: "(12) All IT will be assigned to and governed by a DoD Component cybersecurity program."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "All IT is assigned to and governed by a DoD Component cybersecurity program", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "(12) All IT will be assigned to and governed by a DoD Component cybersecurity program."}]
     work_item: "WI-163"
   - id: "REQ-DODI8500.01-0340"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "IT below the system level (i.e., IT services and products) will be"}
@@ -2856,7 +2868,8 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. Cybersecurity functions, as defined in Reference (ay), that may be performed by non-U.S. citizens, non-DoD personnel, contractors, or non-U.S. service providers will be so identified."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.open.yaml", "expect": "appointee, and the organization has not identified it as a cybersecurity function a", "asserts": "Cybersecurity functions that contractors, non-DoD personnel or non-U.S. citizens may perform are identified before such an appointee performs them", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Cybersecurity functions, as defined in Reference (ay), that may be performed by non-U.S. citizens, non-DoD personnel, contractors, or non-U.S. service providers will be so identified."}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0360"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "All cybersecurity positions will be assigned a position designation using the criteria"}
@@ -2864,7 +2877,8 @@ requirements:
     locator: "ENCLOSURE 3.e"
     context: "Figure 2. DoD Information Technology"
     statement: "e. All cybersecurity positions will be assigned a position designation using the criteria found in References (w) and (bn) and will meet the associated suitability and fitness requirements. The position designation will be documented in the Defense Civilian Personnel Data System. Non- U.S. citizens may not serve as ISSMs, as ISSOs, in supervisory cybersecurity positions, or be responsible for PKI certificate issuance. Non-U.S. citizens may serve as system administrators and perform maintenance on cybersecurity enabled products provided they are under the immediate supervision of a U.S. citizen and meet the investigative requirements of Reference (w)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.suitability.yaml", "expect": ": the position is not designated with its suitability and fitness requirements met (", "asserts": "Each cybersecurity position is assigned a position designation and meets its suitability and fitness requirements", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "All cybersecurity positions will be assigned a position designation using the criteria found in References (w) and (bn) and will meet the associated suitability and fitness requirements."}, {"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.dcpds.yaml", "expect": ": the position designation of a civilian is documented in the Defense Civilian Personnel Data System, not", "asserts": "The position designation is documented in the Defense Civilian Personnel Data System", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "The position designation will be documented in the Defense Civilian Personnel Data System."}, {"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.noncitizen.yaml", "expect": ": a non-U.S. citizen may not serve as ISSM, ISSO, in a supervisory cybersecurity position or be responsible for PKI certificate issuance", "asserts": "Non-U.S. citizens may not serve as ISSOs or ISSMs", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Non- U.S. citizens may not serve as ISSMs, as ISSOs, in supervisory cybersecurity positions, or be responsible for PKI certificate issuance."}, {"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.pki.yaml", "expect": ": a non-U.S. citizen may not serve as ISSM, ISSO, in a supervisory cybersecurity position or be responsible for PKI certificate issuance", "asserts": "Non-U.S. citizens may not be responsible for PKI certificate issuance", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Non- U.S. citizens may not serve as ISSMs, as ISSOs, in supervisory cybersecurity positions, or be responsible for PKI certificate issuance."}, {"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.supervision.yaml", "expect": "serves under the immediate supervision of a U.S. citizen", "asserts": "A non-U.S. citizen system administrator serves under the immediate supervision of a U.S. citizen", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Non-U.S. citizens may serve as system administrators and perform maintenance on cybersecurity enabled products provided they are under the immediate supervision of a U.S. citizen and meet the investigative requirements of Reference (w)."}, {"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.investigation.yaml", "expect": "meets the investigative requirements of DoDM 5200.02", "asserts": "A non-U.S. citizen system administrator meets the investigative requirements", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Non-U.S. citizens may serve as system administrators and perform maintenance on cybersecurity enabled products provided they are under the immediate supervision of a U.S. citizen and meet the investigative requirements of Reference (w)."}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0361"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "Integral to the success of the DoD cybersecurity program is the promotion"}
@@ -3156,7 +3170,8 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 2. DoD Information Technology"
     statement: "a. On behalf of the respective DoD Component heads, develop, implement, maintain, and enforce a DoD Component cybersecurity program that is consistent with the strategy and direction of the DoD SISO and the DoD cybersecurity program, and compliant with this instruction."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.siso.yaml", "expect": "the Component cybersecurity program is not consistent with the strategy and direction of the DoD SISO", "asserts": "The DoD Component cybersecurity program is consistent with the strategy and direction of the DoD SISO", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "On behalf of the respective DoD Component heads, develop, implement, maintain, and enforce a DoD Component cybersecurity program that is consistent with the strategy and direction of the DoD SISO and the DoD cybersecurity program, and compliant with this instruction."}]
     work_item: "WI-163"
   - id: "REQ-DODI8500.01-0397"
     citation: {"ref": "DODI8500.01", "page": 47, "anchor": "Appoint DoD Component SISOs to direct and coordinate their DoD Component cybersecurity"}
@@ -3171,7 +3186,8 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 2. DoD Information Technology"
     statement: "c. When code signing certificates are used to establish provenance of software code, implement a process to designate individuals authorized to receive code-signing certificates and ensure that such designations are kept to a minimum consistent with operational requirements."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-002", "fixture": "tests/fixtures/negative/OCTX-002.yaml", "expect": "individuals are designated to receive code-signing certificates where operational requirements need", "asserts": "Designations of individuals authorized to receive code-signing certificates are kept to a minimum consistent with operational requirements", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "When code signing certificates are used to establish provenance of software code, implement a process to designate individuals authorized to receive code-signing certificates and ensure that such designations are kept to a minimum consistent with operational requirements."}, {"kind": "rule", "target": "OCTX-002", "fixture": "tests/fixtures/negative/OCTX-002.process.yaml", "expect": "code-signing certificates are used and no process designates the individuals authorized to receive them", "asserts": "When code-signing certificates are used, a process designates the individuals authorized to receive code-signing certificates", "claim": "presence", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "When code signing certificates are used to establish provenance of software code, implement a process to designate individuals authorized to receive code-signing certificates and ensure that such designations are kept to a minimum consistent with operational requirements."}, {"kind": "rule", "target": "OCTX-002", "fixture": "tests/fixtures/negative/OCTX-002.need.yaml", "expect": "code-signing certificates are used and code_signing states no operational_need, the number of holders operational requirements call for", "asserts": "When code-signing certificates are used, the operational need for holders is stated so designations can be kept to a minimum", "claim": "presence", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "When code signing certificates are used to establish provenance of software code, implement a process to designate individuals authorized to receive code-signing certificates and ensure that such designations are kept to a minimum consistent with operational requirements."}]
     work_item: "WI-155"
   - id: "REQ-DODI8500.01-0399"
     citation: {"ref": "DODI8500.01", "page": 47, "anchor": "Partner with DoD Component Acquisition Executives to ensure that all IT is"}
@@ -3232,7 +3248,8 @@ requirements:
     locator: "ENCLOSURE 3.a.(1)"
     context: "Figure 2. DoD Information Technology Ensure that:"
     statement: "(1) For DoD ISs and PIT systems under their purview, cybersecurity-related positions are identified in their organization’s manpower structure in accordance with References (x), (ay), and DoDI 1100.22 (Reference (do))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.yaml", "expect": "is not identified in the organization's manpower structure", "asserts": "Cybersecurity-related positions are identified in the organization's manpower structure", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "(1) For DoD ISs and PIT systems under their purview, cybersecurity-related positions are identified in their organization’s manpower structure in accordance with References (x), (ay), and DoDI 1100.22 (Reference (do))."}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0407"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Appointees to cybersecurity-related positions are given a written statement of cybersecurity responsibilities."}
@@ -3240,7 +3257,8 @@ requirements:
     locator: "ENCLOSURE 3.a.(2)"
     context: "Figure 2. DoD Information Technology Ensure that:"
     statement: "(2) Appointees to cybersecurity-related positions are given a written statement of cybersecurity responsibilities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.duties.yaml", "expect": ": the appointee was given no written statement of cybersecurity responsibilities", "asserts": "Appointees to cybersecurity-related positions are given a written statement of cybersecurity responsibilities", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "(2) Appointees to cybersecurity-related positions are given a written statement of cybersecurity responsibilities."}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0408"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "ISSMs meet all requirements specified in Reference (w)."}
@@ -3248,7 +3266,8 @@ requirements:
     locator: "ENCLOSURE 3.a.(3)"
     context: "Figure 2. DoD Information Technology Ensure that:"
     statement: "(3) ISSMs meet all requirements specified in Reference (w)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.psp.yaml", "expect": ": the ISSM does not meet the requirements of DoDM 5200.02", "asserts": "ISSMs meet the requirements of DoDM 5200.02, Reference (w)", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0409"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Render authorization decisions for DoD ISs and PIT systems under their purview"}
@@ -3271,7 +3290,8 @@ requirements:
     locator: "ENCLOSURE 3.d"
     context: "Figure 2. DoD Information Technology"
     statement: "d. Must be U.S. citizens and DoD officials with the authority to assume responsibility formally for operating DoD ISs or PIT systems at an acceptable level of risk to organizational operations (including mission, functions, image, or reputation), organizational assets, individuals, other organizations, and the Nation."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.aocitizen.yaml", "expect": ": the AO must be a U.S. citizen and a DoD official, not", "asserts": "Authorizing officials must be U.S. citizens", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Must be U.S. citizens and DoD officials with the authority to assume responsibility formally for operating DoD ISs or PIT systems at an acceptable level of risk to organizational operations (including mission, functions, image, or reputation), organizational assets, individuals, other organizations, and the Nation."}, {"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.aodod.yaml", "expect": ": the AO must be a U.S. citizen and a DoD official, not", "asserts": "Authorizing officials must be DoD officials", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Must be U.S. citizens and DoD officials with the authority to assume responsibility formally for operating DoD ISs or PIT systems at an acceptable level of risk to organizational operations (including mission, functions, image, or reputation), organizational assets, individuals, other organizations, and the Nation."}]
     work_item: "WI-171"
   - id: "REQ-DODI8500.01-0412"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "ISOs of DoD IT. ISOs of DoD IT:"}

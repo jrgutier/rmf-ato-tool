@@ -1,0 +1,895 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:protection",
+  "title": "runs/<run-id>/artifacts/data/protection.yaml",
+  "description": "The program protection record P-14 writes beside ART-RA: the program's acquisition position, the protection inputs read, the program protection plan (PPP) and the security technical risks. PPROT-001, PPROT-002, PPROT-003 and PPROT-005 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "program",
+    "inputs",
+    "ppp",
+    "significant_events",
+    "contract_awards",
+    "technical_risks",
+    "design_assessment",
+    "sources"
+  ],
+  "properties": {
+    "program": {
+      "title": "The program's acquisition category, decision authority, origin and decision points passed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acat",
+        "mda",
+        "origin",
+        "critical_technology",
+        "decision_points"
+      ],
+      "properties": {
+        "acat": {
+          "title": "Acquisition category (ACAT) of the program; none for a program outside the ACAT system",
+          "enum": [
+            "ID",
+            "IB",
+            "IC",
+            "II",
+            "III",
+            "none"
+          ]
+        },
+        "mda": {
+          "title": "Who is the milestone decision authority: the Defense Acquisition Executive (DAE), the Component acquisition executive, or an official below",
+          "enum": [
+            "DAE",
+            "CAE",
+            "component"
+          ]
+        },
+        "origin": {
+          "title": "Whether the program's critical technology transitions from an S&T project, which brings its S&T protection plan",
+          "enum": [
+            "new-start",
+            "st-transition"
+          ]
+        },
+        "critical_technology": {
+          "title": "Critical technology and modernization priority areas of the program",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "associated",
+            "areas"
+          ],
+          "properties": {
+            "associated": {
+              "title": "Whether the program is associated with critical technology or a modernization priority area",
+              "type": "boolean"
+            },
+            "areas": {
+              "title": "Modernization priority areas the program is associated with",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "decision_points": {
+          "title": "Acquisition pathway decision points the program has passed, with their dates",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/decision_point"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "itra_waiver": {
+          "title": "A USD(R&E) waiver of the ITRA, open only to a program initiated or at Milestone A before October 1, 2017",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "date"
+          ],
+          "properties": {
+            "by": {
+              "$ref": "#/$defs/text"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "title": "Protection inputs read: TAPPs, horizontal protection guidance, threat assessments, the SEP and ITRAs",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tapps",
+        "horizontal_protection",
+        "threat_assessments",
+        "sep",
+        "itras"
+      ],
+      "properties": {
+        "tapps": {
+          "title": "Technology area protection plans (TAPPs) read, each for its modernization priority area, with the date read",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "area",
+              "title",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "area": {
+                "$ref": "#/$defs/text"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "horizontal_protection": {
+          "title": "DoD horizontal protection guidance read",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "threat_assessments": {
+          "title": "Technology, program and system threat assessments requested from intelligence, counterintelligence and security entities",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "from",
+              "covers",
+              "date"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "from": {
+                "title": "Entity that provided the threat assessment",
+                "enum": [
+                  "intelligence",
+                  "counterintelligence",
+                  "security"
+                ]
+              },
+              "covers": {
+                "title": "What the threat assessment covers",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "enum": [
+                    "technology",
+                    "program",
+                    "system"
+                  ]
+                }
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "sep": {
+          "title": "The systems engineering plan whose technical risks were read",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "date"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/text"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "itras": {
+          "title": "Independent technical risk assessments (ITRAs) of the system design and interfaces read",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "decision_point",
+              "conducted_by",
+              "approved_by",
+              "covers",
+              "informs"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/text"
+              },
+              "decision_point": {
+                "$ref": "#/$defs/decision_point"
+              },
+              "conducted_by": {
+                "$ref": "#/$defs/text"
+              },
+              "approved_by": {
+                "title": "Who approved the independent technical risk assessment: the USD(R&E), a Component authority independent of the program's chain of command, or one in it",
+                "enum": [
+                  "USD(R&E)",
+                  "component-independent",
+                  "component-chain"
+                ]
+              },
+              "covers": {
+                "title": "Risk areas the independent technical risk assessment covers",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "enum": [
+                    "adversarial-risk",
+                    "program-protection",
+                    "cyber-vulnerabilities",
+                    "technology",
+                    "integration",
+                    "manufacturing",
+                    "software",
+                    "sustainment"
+                  ]
+                }
+              },
+              "informs": {
+                "title": "Technical risks the ITRA results inform",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^TR-\\d{3}$"
+                }
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-DODI5000.88-0138"
+          ]
+        }
+      }
+    },
+    "ppp": {
+      "title": "The program protection plan (PPP) read",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "date",
+        "prepared_by",
+        "approval",
+        "submissions",
+        "cybersecurity_strategy",
+        "sse_activities",
+        "critical_items",
+        "threats",
+        "countermeasures",
+        "risk_sources",
+        "exportability",
+        "anti_tamper",
+        "tailoring",
+        "informed_by",
+        "updates"
+      ],
+      "properties": {
+        "id": {
+          "title": "Stable identifier of the program protection plan, kept across its versions",
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/text"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "prepared_by": {
+          "title": "Who prepared the program protection plan",
+          "$ref": "#/$defs/persona_id"
+        },
+        "approval": {
+          "title": "Approval of the program protection plan by its approval authority",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority",
+            "date"
+          ],
+          "properties": {
+            "authority": {
+              "title": "PPP approval authority: the USD(R&E), the Component acquisition executive (CAE) or a designee, or another Component official",
+              "enum": [
+                "USD(R&E)",
+                "CAE",
+                "CAE-designee",
+                "component"
+              ]
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "submissions": {
+          "title": "Submissions of the PPP for approval at each acquisition pathway decision point",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "decision_point",
+              "date"
+            ],
+            "properties": {
+              "decision_point": {
+                "$ref": "#/$defs/decision_point"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "cybersecurity_strategy": {
+          "title": "How the cybersecurity strategy is submitted with the PPP",
+          "enum": [
+            "appendix",
+            "separate"
+          ]
+        },
+        "sse_activities": {
+          "title": "Systems security engineering activities and protection measures the PPP guides",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "cyber-resilient-engineering",
+              "software-assurance",
+              "hardware-assurance",
+              "scrm",
+              "anti-counterfeit",
+              "anti-tamper",
+              "operations-security",
+              "information-safeguarding",
+              "designed-in-protection",
+              "automated-ci-cd"
+            ]
+          },
+          "x-enforces": [
+            "REQ-DODI5000.83-0279"
+          ]
+        },
+        "critical_items": {
+          "title": "Critical program information, critical components and functions the PPP protects",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "name",
+              "mission_criteria"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^CI-\\d{3}$"
+              },
+              "kind": {
+                "enum": [
+                  "critical-program-information",
+                  "critical-component",
+                  "critical-function"
+                ]
+              },
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "mission_criteria": {
+                "title": "Mission criteria by which the critical component or critical program information was identified",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/text"
+                },
+                "x-enforces": [
+                  "REQ-DODI8500.01-0234"
+                ]
+              }
+            }
+          },
+          "x-enforces": [
+            "REQ-DODI5000.83-0249",
+            "REQ-DODI5000.88-0021"
+          ]
+        },
+        "threats": {
+          "title": "Threats to, and vulnerabilities of, the critical items",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "item",
+              "threat",
+              "vulnerability"
+            ],
+            "properties": {
+              "item": {
+                "type": "string",
+                "pattern": "^CI-\\d{3}$"
+              },
+              "threat": {
+                "$ref": "#/$defs/text"
+              },
+              "vulnerability": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "countermeasures": {
+          "title": "Plan to apply countermeasures to the critical items to mitigate associated risks",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "item",
+              "measure",
+              "mitigates"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^CM-\\d{3}$"
+              },
+              "item": {
+                "type": "string",
+                "pattern": "^CI-\\d{3}$"
+              },
+              "measure": {
+                "$ref": "#/$defs/text"
+              },
+              "mitigates": {
+                "title": "Technical risks the countermeasure mitigates",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "pattern": "^TR-\\d{3}$"
+                }
+              }
+            }
+          }
+        },
+        "risk_sources": {
+          "title": "Risk sources of foreign collection that program protection planning manages",
+          "type": "array",
+          "items": {
+            "enum": [
+              "design-vulnerability",
+              "supply-chain-exploit-insertion",
+              "battlefield-loss"
+            ]
+          }
+        },
+        "exportability": {
+          "title": "Planning for exportability and potential foreign involvement",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "foreign_involvement",
+            "planning"
+          ],
+          "properties": {
+            "foreign_involvement": {
+              "title": "Planning for exportability and potential foreign involvement: what foreign involvement is expected",
+              "enum": [
+                "none",
+                "potential",
+                "planned"
+              ],
+              "x-enforces": [
+                "REQ-DODI5000.83-0252",
+                "REQ-DODI5000.85-0203"
+              ]
+            },
+            "planning": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        },
+        "anti_tamper": {
+          "title": "Anti-tamper and exportability features",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "outside_us_control",
+            "required",
+            "guidance"
+          ],
+          "properties": {
+            "outside_us_control": {
+              "title": "Whether technology or the system will be outside U.S. control",
+              "type": "boolean"
+            },
+            "required": {
+              "title": "Whether anti-tamper (AT) protection is required",
+              "type": "boolean"
+            },
+            "guidance": {
+              "title": "Horizontal protection guidance applied to determine AT and exportability requirements",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/text"
+              }
+            },
+            "coordinated_with": {
+              "$ref": "#/$defs/text"
+            },
+            "monitored": {
+              "title": "Whether AT protections implemented in fielded systems are monitored",
+              "type": "boolean"
+            }
+          }
+        },
+        "tailoring": {
+          "title": "Tailoring of program protection to the acquisition pathway",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pathway",
+            "factors"
+          ],
+          "properties": {
+            "pathway": {
+              "type": "string",
+              "pattern": "^PW-[A-Z]+$"
+            },
+            "factors": {
+              "title": "Characteristics of the capability that tailor program protection",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "complexity",
+                  "risk",
+                  "urgency"
+                ]
+              },
+              "x-enforces": [
+                "REQ-DODI5000.83-0263"
+              ]
+            }
+          }
+        },
+        "informed_by": {
+          "title": "S&T protection plans and TAPPs that inform the PPP",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "updates": {
+          "title": "Updates to the PPP and what prompted each",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "after",
+              "ref",
+              "date"
+            ],
+            "properties": {
+              "after": {
+                "enum": [
+                  "contract-award",
+                  "threat-activity",
+                  "compromise",
+                  "decision-point"
+                ]
+              },
+              "ref": {
+                "$ref": "#/$defs/text"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        },
+        "transition": {
+          "title": "Transition of the PPP to the program manager responsible for sustainment and disposal",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "to",
+            "owner",
+            "date"
+          ],
+          "properties": {
+            "to": {
+              "enum": [
+                "sustainment-pm"
+              ]
+            },
+            "owner": {
+              "$ref": "#/$defs/persona_id"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        }
+      }
+    },
+    "significant_events": {
+      "title": "Significant threat activity or compromise identified",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "date"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/text"
+          },
+          "kind": {
+            "enum": [
+              "threat-activity",
+              "compromise"
+            ]
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "no_update_reason": {
+            "title": "Why the lead systems engineer did not update the PPP after it (the source says should)",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "contract_awards": {
+      "title": "Contract awards",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "date"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/text"
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "no_update_reason": {
+            "title": "Why the lead systems engineer did not update the PPP after the award (the source says should)",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "technical_risks": {
+      "title": "Technical risks, cybersecurity and related system security among them",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "security",
+          "description",
+          "drawn_from",
+          "reviews",
+          "impact",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TR-\\d{3}$"
+          },
+          "security": {
+            "title": "Whether the technical risk is a cybersecurity or related system security risk",
+            "type": "boolean"
+          },
+          "description": {
+            "$ref": "#/$defs/text"
+          },
+          "drawn_from": {
+            "title": "The SEP, ITRA or threat assessment the risk is drawn from",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "reviews": {
+            "title": "Technical reviews at which the risk is assessed",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^RV-[A-Z]+$"
+            }
+          },
+          "impact": {
+            "title": "Cost and schedule implications of the technical risk",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "cost",
+              "schedule"
+            ],
+            "properties": {
+              "cost": {
+                "title": "Cost implications of the technical risk",
+                "enum": [
+                  "none",
+                  "low",
+                  "moderate",
+                  "high"
+                ],
+                "x-enforces": [
+                  "REQ-DODI5000.83-0192",
+                  "REQ-SP800-160V1R1-0206"
+                ]
+              },
+              "schedule": {
+                "title": "Schedule implications of the technical risk",
+                "enum": [
+                  "none",
+                  "low",
+                  "moderate",
+                  "high"
+                ],
+                "x-enforces": [
+                  "REQ-DODI5000.83-0192",
+                  "REQ-SP800-30R1-0078"
+                ]
+              }
+            }
+          },
+          "status": {
+            "title": "Where the risk stands in identification, analysis, mitigation planning, implementation and tracking",
+            "enum": [
+              "identified",
+              "analyzed",
+              "mitigation-planned",
+              "mitigating",
+              "tracked",
+              "closed"
+            ]
+          }
+        }
+      }
+    },
+    "design_assessment": {
+      "title": "Allocation of security requirements to the architecture and design, and the assessment of the design for vulnerabilities",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirements_allocated",
+        "assessed",
+        "vulnerabilities"
+      ],
+      "properties": {
+        "requirements_allocated": {
+          "title": "Whether cybersecurity and related system security requirements are allocated to the system architecture and design",
+          "type": "boolean"
+        },
+        "assessed": {
+          "$ref": "#/$defs/date"
+        },
+        "vulnerabilities": {
+          "title": "Vulnerabilities found when the design was assessed",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "persona_id": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_point": {
+      "description": "A milestone of framework/milestones.yaml or a decision point of framework/pathways.yaml.",
+      "type": "string",
+      "pattern": "^(MS|DP)-[A-Z0-9-]+$"
+    }
+  }
+}

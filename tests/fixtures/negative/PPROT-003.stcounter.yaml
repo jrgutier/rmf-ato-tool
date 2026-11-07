@@ -1,0 +1,27 @@
+rule: PPROT-003
+bases:
+- minimal
+description: a critical technology element with no countermeasure
+mutations:
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.origin
+  value: st-transition
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: ppp.informed_by
+  value:
+  - STPP-RADIO-1
+- op: write_file
+  file: artifacts/data/st-protection.yaml
+  content: "id: STPP-RADIO-1\nprepared_by: S&T manager, radio lab\ncritical_technology_elements:\n- id:
+    CTE-001\n  name: Adaptive waveform\n  kind: critical-technology-element\nthreats:\n- element: CTE-001\n\
+    \  threat: Reverse engineering\n  vulnerability: Waveform tables in clear\ncountermeasures:\n- element:
+    CTE-002\n  measure: x\napproval:\n  submitted: '2025-06-01'\n  project_approved: '2025-07-01'\n  approved_by:
+    Component S&T executive\ntransition:\n  to: PER-LSE\n  conditions:\n  - technology-transition-decision\n\
+    \  - technology-transfer-requirements-met\n  date: '2025-12-01'\nsources:\n- INT-023.A1\n"
+expect:
+  errors:
+  - PPROT-003
+  messages:
+  - CTE-001 has no countermeasure selected in the S&T protection plan

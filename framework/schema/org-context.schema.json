@@ -2,155 +2,2548 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:org-context",
   "title": "runs/<run-id>/artifacts/data/org-context.yaml",
-  "description": "How the risk executive function is formed at this organization and what it does (P-2, SP 800-37r2 Appendix D.3): its form and members, its forums, its oversight of risk decisions, the vehicles that share risk information, the autonomy it gives subordinate organizations, and how it handles authorizations with shared responsibility. RISKX-001 judges it.",
+  "description": "The organizational risk context as data (P-1 to P-7, updated in operations by P-3). P-1 writes roles; each later task adds its section, writing the file whole. OCTX-* judge it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "risk_executive",
+    "roles",
     "sources"
   ],
   "properties": {
-    "risk_executive": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "form",
-        "members",
-        "forums",
-        "oversight",
-        "strategic_view",
-        "communication",
-        "subordinate_autonomy",
-        "shared_authorizations"
-      ],
-      "properties": {
-        "form": {
-          "title": "Whether the risk executive function is an individual or a group",
-          "enum": [
-            "individual",
-            "group"
-          ]
-        },
-        "members": {
-          "title": "Who fills the function",
-          "type": "array",
-          "minItems": 1,
-          "items": {
+    "roles": {
+      "title": "RMF role assignments: one record per appointee and role",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
             "type": "string",
-            "pattern": "^PER-[A-Z0-9]+$"
+            "pattern": "^RA-\\d{2}$"
+          },
+          "role": {
+            "title": "The RMF role or cybersecurity position filled: a persona ID or a position",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              {
+                "enum": [
+                  "head-of-agency",
+                  "dod-component-head",
+                  "saorm",
+                  "system-administrator",
+                  "maintainer",
+                  "supervisory-cybersecurity",
+                  "pki-registration-authority"
+                ]
+              }
+            ],
+            "x-enforces": [
+              "REQ-DODI5000.89-0079",
+              "REQ-SP800-18R2-0129"
+            ]
+          },
+          "name": {
+            "title": "Member name of the appointee",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1254-0053"
+            ]
+          },
+          "title": {
+            "title": "Official title of the appointee",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1254-0053"
+            ]
+          },
+          "organization": {
+            "title": "Parent organization of the appointee",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1254-0053"
+            ]
+          },
+          "contact": {
+            "title": "Business contact information of the appointee (phone number, email), never personal",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "email": {
+                "type": "string",
+                "minLength": 1
+              },
+              "phone": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "email"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0053",
+              "REQ-SP800-18R1-0107",
+              "REQ-SP800-18R1-0112",
+              "REQ-SP800-18R1-0113",
+              "REQ-SP800-18R1-0169",
+              "REQ-SP800-18R1-0170",
+              "REQ-SP800-18R1-0171",
+              "REQ-SP800-18R1-0172",
+              "REQ-SP800-18R2-0417",
+              "REQ-SP800-18R2-0426"
+            ]
+          },
+          "appointed_by": {
+            "title": "Who appointed the role holder",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              {
+                "enum": [
+                  "head-of-agency",
+                  "dod-component-head",
+                  "saorm",
+                  "system-administrator",
+                  "maintainer",
+                  "supervisory-cybersecurity",
+                  "pki-registration-authority"
+                ]
+              }
+            ]
+          },
+          "appointment": {
+            "title": "The written appointment and its basis",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "instrument": {
+                "enum": [
+                  "appointment-letter",
+                  "memorandum",
+                  "delegation-memorandum",
+                  "position-description",
+                  "charter",
+                  "oral"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "basis": {
+                "title": "The authority the appointment rests on",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "instrument"
+            ],
+            "x-enforces": [
+              "REQ-SP800-18R1-0107",
+              "REQ-SP800-18R1-0114"
+            ]
+          },
+          "citizenship": {
+            "title": "Citizenship of the appointee",
+            "enum": [
+              "us",
+              "non-us"
+            ]
+          },
+          "affiliation": {
+            "title": "Government or contractor status of the appointee",
+            "enum": [
+              "dod-civilian",
+              "military",
+              "other-government",
+              "contractor",
+              "non-us-provider"
+            ]
+          },
+          "position": {
+            "title": "The cybersecurity position: designation, suitability, manpower and DCWF",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "designation": {
+                "title": "Position designation (sensitivity) under DoDM 5200.02",
+                "enum": [
+                  "non-sensitive",
+                  "noncritical-sensitive",
+                  "critical-sensitive",
+                  "special-sensitive"
+                ]
+              },
+              "suitability": {
+                "title": "Whether the appointee meets the suitability and fitness requirements of the designation",
+                "enum": [
+                  "met",
+                  "pending",
+                  "not-met"
+                ]
+              },
+              "recorded_in": {
+                "title": "Personnel system holding the position designation",
+                "enum": [
+                  "DCPDS",
+                  "military-personnel-system",
+                  "contract",
+                  "none"
+                ]
+              },
+              "manpower_id": {
+                "title": "The position in the organization's manpower structure",
+                "type": "string",
+                "minLength": 1
+              },
+              "manpower_of": {
+                "title": "The other organization whose manpower structure holds the position, for an appointee from outside it",
+                "type": "string",
+                "minLength": 1
+              },
+              "dcwf_code": {
+                "title": "DCWF work role code identifying the cyberspace position",
+                "type": "string",
+                "pattern": "^\\d{3}$",
+                "x-enforces": [
+                  "REQ-DODD8140.01-0063"
+                ]
+              },
+              "supervisory": {
+                "type": "boolean"
+              }
+            }
+          },
+          "duties": {
+            "title": "Cybersecurity duties beyond the role itself",
+            "type": "array",
+            "items": {
+              "enum": [
+                "pki-certificate-issuance",
+                "system-administration",
+                "maintenance",
+                "code-signing"
+              ]
+            }
+          },
+          "duties_statement": {
+            "title": "The written statement of cybersecurity responsibilities given to the appointee",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "form": {
+                "enum": [
+                  "written",
+                  "oral",
+                  "none"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "form"
+            ]
+          },
+          "personnel_security": {
+            "title": "Personnel security requirements of DoDM 5200.02 met by the appointee",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "standard": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "met",
+                  "pending",
+                  "not-met"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "supervised_by": {
+            "title": "The role record of the U.S. citizen who immediately supervises a non-U.S. citizen",
+            "type": "string",
+            "pattern": "^RA-\\d{2}$"
+          },
+          "granted": {
+            "title": "What the appointing official gave the appointee to carry out the role",
+            "type": "array",
+            "items": {
+              "enum": [
+                "support",
+                "authority",
+                "resources"
+              ]
+            }
+          },
+          "primary_duty": {
+            "title": "The appointee's primary responsibility",
+            "enum": [
+              "security",
+              "privacy",
+              "risk-management",
+              "other"
+            ]
+          },
+          "heads_office": {
+            "title": "Whether the appointee heads an office with the mission and resources for the security program",
+            "type": "boolean"
+          },
+          "qualifications": {
+            "title": "Professional qualifications, training and experience of the appointee",
+            "type": "string",
+            "minLength": 1
+          },
+          "coordinates_with": {
+            "title": "Officials the appointee coordinates with",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
           }
         },
-        "forums": {
-          "title": "Organization-wide forums to consider all types and sources of risk, including aggregated risk",
+        "required": [
+          "id",
+          "role",
+          "name",
+          "title",
+          "organization",
+          "contact",
+          "appointed_by",
+          "citizenship",
+          "affiliation",
+          "sources"
+        ]
+      },
+      "minItems": 1,
+      "x-enforces": [
+        "REQ-SP800-128-0052",
+        "REQ-SP800-137-0217",
+        "REQ-SP800-37R2-0490"
+      ]
+    },
+    "manpower_structure": {
+      "title": "Cybersecurity-related positions identified in the organization's manpower structure",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ]
+      }
+    },
+    "open_functions": {
+      "title": "Cybersecurity functions the organization identifies as ones non-U.S. citizens, non-DoD personnel, contractors or non-U.S. service providers may perform",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "function": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              {
+                "enum": [
+                  "head-of-agency",
+                  "dod-component-head",
+                  "saorm",
+                  "system-administrator",
+                  "maintainer",
+                  "supervisory-cybersecurity",
+                  "pki-registration-authority"
+                ]
+              }
+            ]
+          },
+          "open_to": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "non-us-citizen",
+                "non-dod",
+                "contractor",
+                "non-us-provider"
+              ]
+            },
+            "minItems": 1
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "function",
+          "open_to"
+        ]
+      }
+    },
+    "code_signing": {
+      "title": "Code-signing certificates: whether used, the designation process and who is designated",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "used": {
+          "type": "boolean"
+        },
+        "process": {
+          "title": "The process that designates individuals authorized to receive code-signing certificates",
+          "type": "string",
+          "minLength": 1
+        },
+        "operational_need": {
+          "title": "How many holders operational requirements need",
+          "type": "integer",
+          "minimum": 1
+        },
+        "designated": {
           "type": "array",
-          "minItems": 1,
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "name",
-              "considers"
-            ],
             "properties": {
               "name": {
                 "type": "string",
                 "minLength": 1
               },
-              "considers": {
+              "role": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm",
+                      "system-administrator",
+                      "maintainer",
+                      "supervisory-cybersecurity",
+                      "pki-registration-authority"
+                    ]
+                  }
+                ]
+              },
+              "justification": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "justification"
+            ]
+          }
+        }
+      },
+      "required": [
+        "used"
+      ],
+      "if": {
+        "properties": {
+          "used": {
+            "const": true
+          }
+        },
+        "required": [
+          "used"
+        ]
+      },
+      "then": {
+        "required": [
+          "process",
+          "operational_need"
+        ]
+      }
+    },
+    "program": {
+      "title": "The organization's Cybersecurity Risk Management Program",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "pattern": "^PER-[A-Z]+$",
+          "x-enforces": [
+            "REQ-DODI5400.11-0080",
+            "REQ-SP800-137-0068",
+            "REQ-SP800-18R1-0195"
+          ]
+        },
+        "scope": {
+          "title": "Reach of the program",
+          "enum": [
+            "organization-wide",
+            "component",
+            "system"
+          ]
+        },
+        "implements": {
+          "title": "Issuances the program implements (CNSSP 22, its Annex A issuances, DoDI 8500.01)",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "integrated_with": {
+          "title": "Processes the program is integrated with",
+          "type": "array",
+          "items": {
+            "enum": [
+              "mission-business-risk-management",
+              "strategic-planning",
+              "operational-planning",
+              "budgeting",
+              "enterprise-risk-management"
+            ]
+          },
+          "x-enforces": [
+            "REQ-SP800-37R2-0487",
+            "REQ-SP800-39-0001",
+            "REQ-SP800-61R3-0085"
+          ]
+        },
+        "consistent_with": {
+          "title": "Strategies the Component program is consistent with",
+          "type": "array",
+          "items": {
+            "enum": [
+              "dod-siso-strategy",
+              "dod-cybersecurity-program"
+            ]
+          }
+        },
+        "processes": {
+          "title": "The risk management process steps the program carries out",
+          "type": "array",
+          "items": {
+            "enum": [
+              "frame",
+              "assess",
+              "respond",
+              "monitor"
+            ]
+          }
+        },
+        "systems": {
+          "title": "Systems assigned to and governed by the program",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "governance_bodies": {
+          "title": "Cybersecurity governance bodies and how they integrate with DoD enterprise governance",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "integrates_with": {
                 "type": "array",
-                "uniqueItems": true,
                 "items": {
                   "enum": [
-                    "all-types-and-sources",
-                    "aggregated-risk"
+                    "dod-enterprise-governance",
+                    "component-governance"
                   ]
                 }
               }
-            }
+            },
+            "required": [
+              "name",
+              "integrates_with"
+            ]
           }
         },
-        "oversight": {
-          "title": "How the function oversees the risk management activities of the organization so risk-based decisions are consistent and effective",
-          "type": "string",
-          "minLength": 1,
-          "x-enforces": [
-            "REQ-SP800-37R2-0504"
-          ]
-        },
-        "strategic_view": {
-          "title": "How the function develops a broad-based understanding of risk across the organization's integrated operations",
-          "type": "string",
-          "minLength": 1,
-          "x-enforces": [
-            "REQ-SP800-37R2-0505"
-          ]
-        },
-        "communication": {
-          "title": "Vehicles for communicating and sharing risk information among key stakeholders, internally and externally",
+        "sources": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "vehicle",
-              "audience"
-            ],
-            "properties": {
-              "vehicle": {
-                "type": "string",
-                "minLength": 1
-              },
-              "audience": {
-                "type": "array",
-                "minItems": 1,
-                "uniqueItems": true,
-                "items": {
-                  "enum": [
-                    "authorizing-officials",
-                    "senior-leaders",
-                    "internal-stakeholders",
-                    "external-stakeholders"
-                  ]
-                }
-              }
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "owner",
+        "scope",
+        "implements",
+        "integrated_with",
+        "processes",
+        "systems",
+        "sources"
+      ],
+      "x-enforces": [
+        "REQ-SP800-37R2-0471",
+        "REQ-SP800-37R2-0488",
+        "REQ-SP800-39-0214"
+      ]
+    },
+    "policies": {
+      "title": "Organizational policies, procedures and processes that carry risk management through the life cycle, with their owners",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "kind": {
+            "enum": [
+              "policy",
+              "procedure",
+              "process"
+            ]
+          },
+          "phases": {
+            "title": "Life-cycle phases the policy covers",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^PH-[A-Z]+$"
+            }
+          },
+          "directs": {
+            "title": "Who the policy directs",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            }
+          },
+          "sse_integrated": {
+            "title": "Whether systems security engineering is integrated within systems engineering",
+            "type": "boolean"
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
             }
           }
         },
-        "subordinate_autonomy": {
-          "title": "The degree of autonomy subordinate organizations have for framing, assessing, responding to and monitoring risk",
+        "required": [
+          "id",
+          "title",
+          "owner",
+          "kind",
+          "phases",
+          "sources"
+        ]
+      },
+      "x-enforces": [
+        "REQ-CNSSP22-0025",
+        "REQ-DTM-24-001-0019",
+        "REQ-SP800-39-0151",
+        "REQ-SP800-53R5-0027",
+        "REQ-SP800-60V1R1-0064",
+        "REQ-SP800-61R3-0097"
+      ]
+    },
+    "resources": {
+      "title": "Who identifies, secures and makes available the funding and qualified people for the risk management tasks",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "funding": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "identified_by": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            },
+            "secured_by": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            },
+            "process": {
+              "title": "Where resources for the RMF are identified and allocated",
+              "enum": [
+                "PPBE",
+                "other"
+              ]
+            },
+            "made_available_to": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            }
+          },
+          "required": [
+            "identified_by",
+            "secured_by",
+            "process",
+            "made_available_to"
+          ],
+          "x-enforces": [
+            "REQ-SP800-39-0070"
+          ]
+        },
+        "staffing": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "identified_by": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            },
+            "secured_by": {
+              "type": "string",
+              "pattern": "^PER-[A-Z]+$"
+            },
+            "made_available_to": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            }
+          },
+          "required": [
+            "identified_by",
+            "secured_by",
+            "made_available_to"
+          ],
+          "x-enforces": [
+            "REQ-SP800-37R2-0492"
+          ]
+        },
+        "allocation": {
+          "title": "Who determines the allocation of resources dedicated to protecting systems",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "determined_by": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            },
+            "coordinated_with": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            }
+          },
+          "required": [
+            "determined_by"
+          ],
+          "x-enforces": [
+            "REQ-SP800-39-0071"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "funding",
+        "staffing",
+        "allocation",
+        "sources"
+      ]
+    },
+    "risk_frame": {
+      "title": "The organization's risk frame: assumptions, constraints, priorities and trade-offs, tolerance by type of loss and what shaped them",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0115",
+            "REQ-SP800-39-0135",
+            "REQ-SP800-39-0142",
+            "REQ-SP800-39-0286"
+          ]
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0024",
+            "REQ-SP800-39-0148",
+            "REQ-SP800-39-0294"
+          ]
+        },
+        "priorities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0068",
+            "REQ-SP800-39-0296"
+          ]
+        },
+        "tradeoffs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0138",
+            "REQ-SP800-39-0150"
+          ]
+        },
+        "tolerance": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "activity",
-              "autonomy"
-            ],
             "properties": {
-              "activity": {
-                "enum": [
-                  "frame",
-                  "assess",
-                  "respond",
-                  "monitor"
-                ]
-              },
-              "autonomy": {
+              "loss_type": {
                 "type": "string",
                 "minLength": 1
+              },
+              "level": {
+                "enum": [
+                  "very-low",
+                  "low",
+                  "moderate",
+                  "high",
+                  "very-high"
+                ]
               }
-            }
-          }
+            },
+            "required": [
+              "loss_type",
+              "level"
+            ]
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0065",
+            "REQ-SP800-39-0133"
+          ]
         },
-        "shared_authorizations": {
-          "title": "How the function promotes cooperation among authorizing officials on authorizations requiring shared responsibility, such as joint authorizations",
+        "shaped_by": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "governance",
+              "law",
+              "finance",
+              "culture",
+              "trust",
+              "mission"
+            ]
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0125",
+            "REQ-SP800-61R3-0092"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "assumptions",
+        "constraints",
+        "priorities",
+        "tradeoffs",
+        "tolerance",
+        "shaped_by",
+        "sources"
+      ]
+    },
+    "governance": {
+      "title": "Risk governance: model, reserved decisions, the risk executive (function) with its forums, oversight, communication and the autonomy of subordinate organizations, and how differing tolerances are resolved",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "title": "Governance approach",
+          "enum": [
+            "centralized",
+            "decentralized",
+            "hybrid"
+          ],
+          "x-enforces": [
+            "REQ-SP800-39-0038",
+            "REQ-SP800-39-0257"
+          ]
+        },
+        "reserved_decisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "decision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reserved_to": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm",
+                      "system-administrator",
+                      "maintainer",
+                      "supervisory-cybersecurity",
+                      "pki-registration-authority"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "decision",
+              "reserved_to"
+            ]
+          },
+          "x-enforces": [
+            "REQ-SP800-137-0046",
+            "REQ-SP800-39-0046",
+            "REQ-SP800-39-0137"
+          ]
+        },
+        "risk_executive": {
+          "title": "The risk executive (function): who leads and structures it and how it works (OCTX-004, RISKX-001)",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "form": {
+              "title": "Whether the risk executive function is an individual or a group",
+              "enum": [
+                "individual",
+                "group"
+              ]
+            },
+            "led_by": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                },
+                {
+                  "enum": [
+                    "head-of-agency",
+                    "dod-component-head",
+                    "saorm",
+                    "system-administrator",
+                    "maintainer",
+                    "supervisory-cybersecurity",
+                    "pki-registration-authority"
+                  ]
+                }
+              ]
+            },
+            "structured_by": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                },
+                {
+                  "enum": [
+                    "head-of-agency",
+                    "dod-component-head",
+                    "saorm",
+                    "system-administrator",
+                    "maintainer",
+                    "supervisory-cybersecurity",
+                    "pki-registration-authority"
+                  ]
+                }
+              ]
+            },
+            "delegated_to": {
+              "title": "The official or group the SAORM delegated the function to",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                },
+                {
+                  "enum": [
+                    "head-of-agency",
+                    "dod-component-head",
+                    "saorm",
+                    "system-administrator",
+                    "maintainer",
+                    "supervisory-cybersecurity",
+                    "pki-registration-authority"
+                  ]
+                }
+              ]
+            },
+            "members": {
+              "title": "Who fills the function",
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm",
+                      "system-administrator",
+                      "maintainer",
+                      "supervisory-cybersecurity",
+                      "pki-registration-authority"
+                    ]
+                  }
+                ]
+              },
+              "minItems": 1
+            },
+            "forums": {
+              "title": "Organization-wide forums to consider all types and sources of risk, including aggregated risk",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "considers"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "considers": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "all-types-and-sources",
+                        "aggregated-risk"
+                      ]
+                    }
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-39-0023",
+                "REQ-SP800-39-0052",
+                "REQ-SP800-39-0058",
+                "REQ-SP800-39-0200",
+                "REQ-SP800-39-0206"
+              ]
+            },
+            "oversight": {
+              "title": "How the function oversees the risk management activities of the organization so risk-based decisions are consistent and effective",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0493",
+                "REQ-SP800-37R2-0504",
+                "REQ-SP800-39-0054",
+                "REQ-SP800-39-0064",
+                "REQ-SP800-39-0202"
+              ]
+            },
+            "strategic_view": {
+              "title": "How the function develops a broad-based understanding of risk across the organization's integrated operations",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0505"
+              ]
+            },
+            "communication": {
+              "title": "Vehicles for communicating and sharing risk information among key stakeholders, internally and externally",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "vehicle",
+                  "audience"
+                ],
+                "properties": {
+                  "vehicle": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "audience": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "authorizing-officials",
+                        "senior-leaders",
+                        "internal-stakeholders",
+                        "external-stakeholders"
+                      ]
+                    }
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-37R2-0472",
+                "REQ-SP800-39-0056",
+                "REQ-SP800-39-0204"
+              ]
+            },
+            "subordinate_autonomy": {
+              "title": "The degree of autonomy subordinate organizations have for framing, assessing, responding to and monitoring risk",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "activity",
+                  "autonomy"
+                ],
+                "properties": {
+                  "activity": {
+                    "enum": [
+                      "frame",
+                      "assess",
+                      "respond",
+                      "monitor"
+                    ]
+                  },
+                  "autonomy": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "x-enforces": [
+                "REQ-SP800-39-0057",
+                "REQ-SP800-39-0205"
+              ]
+            },
+            "shared_authorizations": {
+              "title": "How the function promotes cooperation among authorizing officials on authorizations requiring shared responsibility, such as joint authorizations",
+              "type": "string",
+              "minLength": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0508"
+              ]
+            }
+          },
+          "required": [
+            "form",
+            "led_by",
+            "structured_by",
+            "members",
+            "forums",
+            "oversight",
+            "strategic_view",
+            "communication",
+            "subordinate_autonomy",
+            "shared_authorizations"
+          ],
+          "x-enforces": [
+            "REQ-CNSSP22-0016",
+            "REQ-SP800-39-0307"
+          ]
+        },
+        "tolerance_resolution": {
+          "title": "How differing risk tolerances at Tier 2 are resolved",
           "type": "string",
           "minLength": 1,
           "x-enforces": [
-            "REQ-SP800-37R2-0508"
+            "REQ-SP800-39-0149"
           ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
         }
+      },
+      "required": [
+        "model",
+        "reserved_decisions",
+        "risk_executive",
+        "tolerance_resolution",
+        "sources"
+      ]
+    },
+    "risk_assessment_guidance": {
+      "title": "Risk assessment guidance for Tiers 2 and 3",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "methods": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0042",
+            "REQ-SP800-30R1-0075",
+            "REQ-SP800-39-0026"
+          ]
+        },
+        "tools": {
+          "type": "string",
+          "minLength": 1
+        },
+        "roles": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0027"
+          ]
+        },
+        "rigor": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0154"
+          ]
+        },
+        "results_form": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0099"
+          ]
+        },
+        "threat_sources": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0116",
+            "REQ-SP800-39-0143",
+            "REQ-SP800-39-0144"
+          ]
+        },
+        "threat_events": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0117"
+          ]
+        },
+        "vulnerabilities": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0118",
+            "REQ-SP800-39-0145"
+          ]
+        },
+        "external_dependencies": {
+          "type": "string",
+          "minLength": 1
+        },
+        "impacts": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0120",
+            "REQ-SP800-39-0146"
+          ]
+        },
+        "time_frames": {
+          "type": "string",
+          "minLength": 1
+        },
+        "likelihood": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0119",
+            "REQ-SP800-39-0147",
+            "REQ-SP800-53R5-0029"
+          ]
+        },
+        "uncertainty": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-30R1-0121",
+            "REQ-SP800-39-0162"
+          ]
+        },
+        "aggregation": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0285"
+          ]
+        },
+        "information_sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0092"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "methods",
+        "tools",
+        "roles",
+        "rigor",
+        "results_form",
+        "threat_sources",
+        "threat_events",
+        "vulnerabilities",
+        "external_dependencies",
+        "impacts",
+        "time_frames",
+        "likelihood",
+        "uncertainty",
+        "aggregation",
+        "information_sources",
+        "sources"
+      ]
+    },
+    "risk_response": {
+      "title": "The risk response strategy: response types, selection, the acceptance, avoidance, sharing and transfer and mitigation strategies, course-of-action tools and communication",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "types": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "accept",
+              "avoid",
+              "mitigate",
+              "share",
+              "transfer"
+            ]
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0271"
+          ]
+        },
+        "selection": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0029",
+            "REQ-SP800-39-0272",
+            "REQ-SP800-39-0304"
+          ]
+        },
+        "strategies": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "acceptance": {
+              "type": "string",
+              "minLength": 1
+            },
+            "avoidance": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sharing_transfer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mitigation": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "acceptance",
+            "avoidance",
+            "sharing_transfer",
+            "mitigation"
+          ],
+          "x-enforces": [
+            "REQ-SP800-39-0170",
+            "REQ-SP800-39-0171",
+            "REQ-SP800-39-0172",
+            "REQ-SP800-39-0270",
+            "REQ-SP800-39-0273",
+            "REQ-SP800-39-0274",
+            "REQ-SP800-39-0275",
+            "REQ-SP800-39-0276",
+            "REQ-SP800-39-0277",
+            "REQ-SP800-39-0278",
+            "REQ-SP800-39-0279",
+            "REQ-SP800-39-0280",
+            "REQ-SP800-39-0310"
+          ]
+        },
+        "coa_tools": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0167"
+          ]
+        },
+        "communication": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-39-0176"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "types",
+        "selection",
+        "strategies",
+        "coa_tools",
+        "communication",
+        "sources"
+      ]
+    },
+    "external_entities": {
+      "title": "External entities with an actual or potential risk relationship, the trust model behind each and how risk information is shared",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relationship": {
+            "enum": [
+              "actual",
+              "potential"
+            ]
+          },
+          "trust_model": {
+            "title": "Trust model (SP 800-39 Appendix G)",
+            "enum": [
+              "validated",
+              "direct-historical",
+              "mediated",
+              "mandated",
+              "hybrid"
+            ],
+            "x-enforces": [
+              "REQ-SP800-39-0033"
+            ]
+          },
+          "sharing": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-39-0060",
+              "REQ-SP800-39-0130",
+              "REQ-SP800-39-0208"
+            ]
+          },
+          "control_degree": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-39-0103"
+            ]
+          },
+          "trust_evidence": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-39-0105"
+            ]
+          },
+          "risk_acceptable": {
+            "type": "boolean"
+          },
+          "response": {
+            "title": "The response to a relationship whose risk is not acceptable",
+            "type": "string",
+            "minLength": 1
+          },
+          "accepted_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              {
+                "enum": [
+                  "head-of-agency",
+                  "dod-component-head",
+                  "saorm",
+                  "system-administrator",
+                  "maintainer",
+                  "supervisory-cybersecurity",
+                  "pki-registration-authority"
+                ]
+              }
+            ]
+          },
+          "accepted_on": {
+            "$ref": "#/$defs/date"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "relationship",
+          "trust_model",
+          "sharing",
+          "sources"
+        ]
+      }
+    },
+    "common_controls": {
+      "title": "Common control packages: per provider, the controls offered, the authorization, the assessment and the plan, assessment report and POA&M made available",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "provided_by": {
+            "title": "The common control provider, as the SSP's inherited_from names it",
+            "type": "string",
+            "minLength": 1
+          },
+          "persona": {
+            "title": "The common control provider's persona",
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-18R1-0021",
+              "REQ-SP800-18R1-0030",
+              "REQ-SP800-18R1-0036",
+              "REQ-SP800-18R1-0040",
+              "REQ-SP800-18R1-0043",
+              "REQ-SP800-18R1-0102",
+              "REQ-SP800-53AR5-0191",
+              "REQ-SP800-53AR5-0192",
+              "REQ-SP800-53R5-0065"
+            ]
+          },
+          "authorization": {
+            "title": "The separate authorization of the common controls",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "decision": {
+                "enum": [
+                  "AD-ATO",
+                  "AD-ATOC",
+                  "AD-IATT",
+                  "AD-DATO",
+                  "none"
+                ]
+              },
+              "by": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            },
+            "required": [
+              "decision",
+              "by"
+            ],
+            "x-enforces": [
+              "REQ-SP800-37R2-0542"
+            ]
+          },
+          "assessed_by": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "assessor": {
+                "type": "string",
+                "minLength": 1
+              },
+              "chosen_by": {
+                "enum": [
+                  "provider",
+                  "organization",
+                  "system-owner"
+                ]
+              },
+              "qualified": {
+                "type": "boolean"
+              },
+              "independence": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "assessor",
+              "chosen_by",
+              "qualified"
+            ],
+            "x-enforces": [
+              "REQ-SP800-37R2-0477",
+              "REQ-SP800-39-0224"
+            ]
+          },
+          "status_reporting": {
+            "title": "How and at what frequency the provider makes the compliance status of the inherited controls available",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "how": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frequency": {
+                "enum": [
+                  "continuous",
+                  "daily",
+                  "weekly",
+                  "monthly",
+                  "quarterly",
+                  "semi-annually",
+                  "annually",
+                  "event-driven"
+                ]
+              }
+            },
+            "required": [
+              "how",
+              "frequency"
+            ],
+            "x-enforces": [
+              "REQ-CNSSI1254-0054",
+              "REQ-SP800-137-0070",
+              "REQ-SP800-137-0071"
+            ]
+          },
+          "deficiencies": {
+            "type": "boolean",
+            "x-enforces": [
+              "REQ-SP800-37R2-0332"
+            ]
+          },
+          "plan": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approved_by": {
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "approved_on": {
+                "$ref": "#/$defs/date"
+              },
+              "available_to": {
+                "title": "Who the document is made available to: the system owners of systems inheriting the common controls",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                }
+              },
+              "available_on": {
+                "$ref": "#/$defs/date"
+              }
+            },
+            "required": [
+              "reference"
+            ],
+            "x-enforces": [
+              "REQ-SP800-18R1-0073",
+              "REQ-SP800-18R2-0200",
+              "REQ-SP800-18R2-0292"
+            ]
+          },
+          "sar": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approved_by": {
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "approved_on": {
+                "$ref": "#/$defs/date"
+              },
+              "available_to": {
+                "title": "Who the document is made available to: the system owners of systems inheriting the common controls",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                }
+              },
+              "available_on": {
+                "$ref": "#/$defs/date"
+              }
+            },
+            "required": [
+              "reference"
+            ],
+            "x-enforces": [
+              "REQ-SP800-39-0225"
+            ]
+          },
+          "poam": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approved_by": {
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "approved_on": {
+                "$ref": "#/$defs/date"
+              },
+              "available_to": {
+                "title": "Who the document is made available to: the system owners of systems inheriting the common controls",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^PER-[A-Z]+$"
+                }
+              },
+              "available_on": {
+                "$ref": "#/$defs/date"
+              }
+            },
+            "required": [
+              "reference"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        },
+        "required": [
+          "provided_by",
+          "persona",
+          "controls",
+          "authorization",
+          "assessed_by",
+          "status_reporting",
+          "deficiencies",
+          "plan",
+          "sar",
+          "sources"
+        ]
+      }
+    },
+    "iscm": {
+      "title": "The organizational continuous monitoring program and strategy (P-7)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "established": {
+          "title": "When the organizational ISCM program was established",
+          "$ref": "#/$defs/date"
+        },
+        "program_status": {
+          "title": "Whether the organizational continuous monitoring program is in place",
+          "enum": [
+            "in-place",
+            "planned"
+          ],
+          "x-enforces": [
+            "REQ-SP800-137-0137"
+          ]
+        },
+        "governance": {
+          "title": "ISCM governance structures",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0086",
+            "REQ-SP800-137A-0354"
+          ]
+        },
+        "policies": {
+          "title": "Organization-wide ISCM policies and procedures, by subject",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "subject": {
+                "enum": [
+                  "control-assessment",
+                  "security-status-monitoring",
+                  "security-status-reporting",
+                  "results-to-risk-assessment",
+                  "configuration-management",
+                  "tools",
+                  "monitoring-frequencies",
+                  "sampling",
+                  "strategy-maintenance",
+                  "risk-and-threat-information"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "subject",
+              "reference"
+            ]
+          },
+          "x-enforces": [
+            "REQ-SP800-137-0026",
+            "REQ-SP800-137-0083",
+            "REQ-SP800-137-0089",
+            "REQ-SP800-137-0090",
+            "REQ-SP800-137-0091",
+            "REQ-SP800-137-0093",
+            "REQ-SP800-137-0094",
+            "REQ-SP800-137-0095",
+            "REQ-SP800-137-0096",
+            "REQ-SP800-137-0100",
+            "REQ-SP800-137-0101",
+            "REQ-SP800-137-0172",
+            "REQ-SP800-137-0179",
+            "REQ-SP800-137-0206",
+            "REQ-SP800-137-0207",
+            "REQ-SP800-137-0210"
+          ]
+        },
+        "processes": {
+          "title": "Manual and automated ISCM processes and how manual ones are verified",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mode": {
+                "enum": [
+                  "manual",
+                  "automated"
+                ]
+              },
+              "verified": {
+                "title": "Whether a manual process is verified as repeatable",
+                "type": "boolean"
+              },
+              "verified_by": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm",
+                      "system-administrator",
+                      "maintainer",
+                      "supervisory-cybersecurity",
+                      "pki-registration-authority"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "mode"
+            ]
+          }
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "objective": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "objective"
+            ]
+          }
+        },
+        "activities": {
+          "title": "ISCM activities mapped to the strategic objectives",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "objectives": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "name",
+              "objectives"
+            ]
+          },
+          "x-enforces": [
+            "REQ-SP800-39-0302"
+          ]
+        },
+        "monitors": {
+          "title": "What organization-wide monitoring determines",
+          "type": "array",
+          "items": {
+            "enum": [
+              "control-effectiveness",
+              "changes",
+              "organizational-state"
+            ]
+          }
+        },
+        "not_applicable": {
+          "title": "Assessment elements the strategy declares not applicable to the organization",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "element": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "element",
+              "reason"
+            ]
+          }
+        },
+        "minimum_frequencies": {
+          "title": "Minimum frequency for each control family or metric across systems and common controls",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "family": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frequency": {
+                "enum": [
+                  "continuous",
+                  "daily",
+                  "weekly",
+                  "monthly",
+                  "quarterly",
+                  "semi-annually",
+                  "annually",
+                  "event-driven"
+                ]
+              },
+              "applies_to": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "systems",
+                    "common-controls"
+                  ]
+                }
+              },
+              "basis": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "family",
+              "frequency",
+              "basis"
+            ]
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-137-0161"
+          ]
+        },
+        "review_cycle": {
+          "title": "How often the organization reviews its ISCM program",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "frequency": {
+              "enum": [
+                "monthly",
+                "quarterly",
+                "semi-annually",
+                "annually"
+              ]
+            }
+          },
+          "required": [
+            "frequency"
+          ]
+        },
+        "reviews": {
+          "title": "Reviews of the ISCM program and strategy",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "by": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm",
+                      "system-administrator",
+                      "maintainer",
+                      "supervisory-cybersecurity",
+                      "pki-registration-authority"
+                    ]
+                  }
+                ]
+              },
+              "considered": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "threats",
+                    "monitoring-results",
+                    "requirements",
+                    "measurement-capabilities"
+                  ]
+                }
+              },
+              "strategy_adjusted": {
+                "type": "boolean"
+              },
+              "outcome": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "date",
+              "by",
+              "considered",
+              "strategy_adjusted"
+            ]
+          },
+          "x-enforces": [
+            "REQ-SP800-137-0015",
+            "REQ-SP800-137-0040",
+            "REQ-SP800-137-0081",
+            "REQ-SP800-137-0084",
+            "REQ-SP800-137-0088",
+            "REQ-SP800-137-0113",
+            "REQ-SP800-137-0114",
+            "REQ-SP800-137-0185",
+            "REQ-SP800-137-0186",
+            "REQ-SP800-137-0200",
+            "REQ-SP800-137-0201",
+            "REQ-SP800-137-0236"
+          ]
+        },
+        "assessments": {
+          "title": "Formal ISCM program assessments",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "method": {
+                "enum": [
+                  "SP 800-137A",
+                  "other"
+                ]
+              },
+              "reported_to": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^PER-[A-Z]+$"
+                    },
+                    {
+                      "enum": [
+                        "head-of-agency",
+                        "dod-component-head",
+                        "saorm",
+                        "system-administrator",
+                        "maintainer",
+                        "supervisory-cybersecurity",
+                        "pki-registration-authority"
+                      ]
+                    }
+                  ]
+                },
+                "minItems": 1
+              },
+              "judgments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "element": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "judgment": {
+                      "enum": [
+                        "satisfied",
+                        "other-than-satisfied",
+                        "not-applicable"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "element",
+                    "judgment"
+                  ]
+                }
+              },
+              "findings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "response": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "priority": {
+                      "enum": [
+                        "high",
+                        "moderate",
+                        "low"
+                      ]
+                    },
+                    "owner": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^PER-[A-Z]+$"
+                        },
+                        {
+                          "enum": [
+                            "head-of-agency",
+                            "dod-component-head",
+                            "saorm",
+                            "system-administrator",
+                            "maintainer",
+                            "supervisory-cybersecurity",
+                            "pki-registration-authority"
+                          ]
+                        }
+                      ]
+                    },
+                    "due": {
+                      "$ref": "#/$defs/date"
+                    },
+                    "documents_updated": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "response",
+                    "priority",
+                    "owner",
+                    "due"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "date",
+              "by",
+              "method",
+              "reported_to"
+            ]
+          }
+        },
+        "ongoing_authorization": {
+          "title": "The organization-wide ongoing authorization process",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "process": {
+              "type": "string",
+              "minLength": 1
+            },
+            "conditions": {
+              "title": "Conditions a system or common control meets to transition into ongoing authorization",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "initial-authorization",
+                  "iscm-program"
+                ]
+              },
+              "minItems": 1
+            },
+            "transition": {
+              "title": "How a system transitions into ongoing authorization",
+              "type": "string",
+              "minLength": 1
+            },
+            "remain": {
+              "title": "Conditions to remain in ongoing authorization",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-137A-0073"
+              ]
+            },
+            "reporting_tools": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "x-enforces": [
+                "REQ-SP800-37R2-0616"
+              ]
+            }
+          },
+          "required": [
+            "process",
+            "conditions",
+            "transition",
+            "remain",
+            "reporting_tools"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "established",
+        "program_status",
+        "governance",
+        "policies",
+        "processes",
+        "objectives",
+        "activities",
+        "not_applicable",
+        "minimum_frequencies",
+        "review_cycle",
+        "sources"
+      ]
+    },
+    "posture_reviews": {
+      "title": "Ongoing reviews of threat, vulnerability, technology and mission changes against the organizational risk posture (P-3, in operations)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              {
+                "enum": [
+                  "head-of-agency",
+                  "dod-component-head",
+                  "saorm",
+                  "system-administrator",
+                  "maintainer",
+                  "supervisory-cybersecurity",
+                  "pki-registration-authority"
+                ]
+              }
+            ]
+          },
+          "considered": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "threats",
+                "vulnerabilities",
+                "technologies",
+                "mission"
+              ]
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-CNSSP12-0029"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-137-0051",
+              "REQ-SP800-137-0182",
+              "REQ-SP800-61R3-0101",
+              "REQ-SP800-61R3-0106"
+            ]
+          },
+          "updated": {
+            "title": "Sections of the organizational risk context the review updated",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-SP800-137-0112",
+              "REQ-SP800-161R1-1051",
+              "REQ-SP800-39-0035",
+              "REQ-SP800-39-0139",
+              "REQ-SP800-39-0140",
+              "REQ-SP800-39-0141",
+              "REQ-SP800-39-0178",
+              "REQ-SP800-61R3-0105"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "by",
+          "considered",
+          "impact",
+          "sources"
+        ]
       }
     },
     "developed_overlays": {
@@ -485,9 +2878,20 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "string",
-        "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+        "$ref": "#/$defs/source"
       }
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "date": {
+      "description": "ISO date.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     }
   }
 }
