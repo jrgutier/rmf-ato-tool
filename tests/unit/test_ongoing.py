@@ -63,7 +63,7 @@ def _enter_at_monitoring(run_dir: Path, **entry) -> None:
 
 
 def test_an_existing_system_under_a_current_authorization_enters_at_monitoring(minimal_run):
-    _enter_at_monitoring(minimal_run, deficiencies=[])
+    _enter_at_monitoring(minimal_run, deficiencies=[], date="2027-01-15")
     assert _check(minimal_run, ongoing.existing_entry) == ""
     edit_yaml(minimal_run / FILE, lambda d: d["records"].append(
         {**_review(), "id": "AUTH-003", "decision": "AD-RESC", "task": "R-4",
@@ -83,3 +83,13 @@ def test_a_reauthorization_with_every_input_on_or_before_it_passes(minimal_run):
     edit_yaml(minimal_run / FILE, lambda d: d["records"][1].update(
         basis="reauthorization", supersedes="AUTH-001", initiation_inputs=inputs))
     assert _check(minimal_run, ongoing.reauthorization_inputs) == ""
+
+
+def test_a_lapsed_seeded_ato_is_no_current_authorization(minimal_run):
+    """SP 800-37r2 p. 21: entering at monitoring needs a current authorization in effect on the
+    date of the entry; an ATO whose termination date has passed is not one."""
+    _enter_at_monitoring(minimal_run, deficiencies=[], date="2028-01-15")
+    assert "needs a current authorization in effect" in _check(minimal_run,
+                                                               ongoing.existing_entry)
+    _enter_at_monitoring(minimal_run, deficiencies=[])
+    assert "records its date" in _check(minimal_run, ongoing.existing_entry)

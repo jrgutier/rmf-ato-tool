@@ -61,6 +61,12 @@ def _frequency(record: Record) -> int | None:
     return days if isinstance(days, int) and not isinstance(days, bool) and days > 0 else None
 
 
+def _day(value: Any) -> dt.date | None:
+    try:
+        return dt.date.fromisoformat(str(value)) if value else None
+    except ValueError:
+        return None
+
 # --- OAUTH-001: event-driven reviews, and the time-driven frequency beside them --------------
 
 def review_events(ctx: Context) -> list[RunFinding]:
@@ -126,10 +132,15 @@ def existing_entry(ctx: Context) -> list[RunFinding]:
         listed = "; ".join(map(str, deficiencies))
         err(f"the gap analysis found control deficiencies ({listed}); address them at "
             "implementation, assessment and authorization before entering at monitoring")
+    entered = _day(entry.get("date"))
+    if entered is None:
+        err(f"an entry at {task} records its date, on which the authorization in effect is "
+            "judged")
+        return out
     effect_of = ledger.effects(ctx.run)
     earlier = [r for r in _records(ctx) if r.get("task") not in active]
     held = {effect_of.get(s.record.get("decision"))
-            for s in ledger.in_force(earlier, effect_of).values()}
+            for s in ledger.in_force(earlier, effect_of, entered).values()}
     if held.isdisjoint(STANDING):
         err(f"an entry at {task} needs a current authorization in effect; without one the run "
             "continues with assessment and authorization")

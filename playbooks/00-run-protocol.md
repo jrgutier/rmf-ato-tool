@@ -72,7 +72,7 @@ already `completed` (each before the entry task), the `gaps` found, the `decisio
 rationale, the personas `notified`, and `approved_by` (PER-AO, or PER-AODR on the AO's
 behalf). ENTRY-001 checks it. An existing system entering at A, R or M lists every Prepare task,
 C-2, S-1, S-2 and I-1 as `completed` or keeps them in scope; entering at M also
-needs `deficiencies: []` from the gap analysis and a seeded ledger with an authorization in
+needs `deficiencies: []` from the gap analysis, the entry `date` and a seeded ledger with an authorization in
 force, or the run continues at assessment and authorization (OMP-001). Then seed the artifacts of the completed tasks (`seeded`) and
 defer the rest (`deferred`), so `rmf status` names the entry task next.
 
