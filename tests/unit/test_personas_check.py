@@ -28,7 +28,7 @@ def framework(root):
 
 def test_every_real_persona_has_a_complete_card(resolver):
     fw = framework(REAL)
-    assert len(fw.of("personas")) == 22
+    assert len(fw.of("personas")) == 27
     assert personas_check.missing_cards(fw, REPO_ROOT) == []
     assert personas_check.card_problems(fw, REPO_ROOT, resolver) == []
 

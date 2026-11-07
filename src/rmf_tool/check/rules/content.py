@@ -56,8 +56,9 @@ def facts_complete(ctx: Context) -> list[RunFinding]:
         except baseline_mod.BaselineError as exc:
             out.append(make("FACTS-001", str(exc), FACTS_FILE, None, owners))
         else:
+            obtained = baseline_mod.obtained_overlays(run)
             for name in overlays:
-                problem = baseline_mod.overlay_problem(tables, str(name))
+                problem = baseline_mod.overlay_problem(tables, str(name), obtained)
                 if problem:
                     out.append(make("FACTS-001", problem, FACTS_FILE, None, owners))
     approval = facts_mod.get(facts, "categorization.approved")

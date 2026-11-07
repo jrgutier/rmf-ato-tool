@@ -75,8 +75,8 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
 | Outputs | ART-ORG-CONTEXT (produces) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-CIO, PER-PRIV · A: PER-CIO · C: PER-AO, PER-RE, PER-CISO · I: PER-PM |
-| Persona cards | [PER-CIO](../../personas/PER-CIO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-AO](../../personas/PER-AO.md), [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md) |
+| RACI | R: PER-CIO, PER-PRIV · A: PER-CIO · C: PER-AO, PER-RE, PER-CISO, PER-PAO, PER-JCACPM · I: PER-PM |
+| Persona cards | [PER-CIO](../../personas/PER-CIO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-AO](../../personas/PER-AO.md), [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Identify and assign the individuals who fill the security and privacy risk management roles, free of conflicts of interest, before system-level RMF work starts with the program.
 <!-- END rmf:header P-1 -->
@@ -188,8 +188,8 @@ P-1 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-CIO, PER-RE · A: PER-CIO · C: PER-CISO, PER-PRIV · I: PER-AO |
-| Persona cards | [PER-CIO](../../personas/PER-CIO.md), [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md) |
+| RACI | R: PER-CIO, PER-RE · A: PER-CIO · C: PER-CISO, PER-PRIV, PER-PAO, PER-JCACPM · I: PER-AO |
+| Persona cards | [PER-CIO](../../personas/PER-CIO.md), [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Establish the organization's risk management strategy, including how it frames, assesses, responds to and monitors risk and the risk tolerance that the Component CIO communicates to programs.
 <!-- END rmf:header P-2 -->
@@ -316,8 +316,8 @@ P-2 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-RE, PER-CISO, PER-PRIV · A: PER-RE · C: PER-CIO, PER-SPONSOR, PER-AO · I: — |
-| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-CIO](../../personas/PER-CIO.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-AO](../../personas/PER-AO.md) |
+| RACI | R: PER-RE, PER-CISO, PER-PRIV · A: PER-RE · C: PER-CIO, PER-SPONSOR, PER-AO, PER-PAO, PER-JCACPM · I: — |
+| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-CIO](../../personas/PER-CIO.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-AO](../../personas/PER-AO.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Assess organization-wide security and privacy risk, including supply chain risk, using current cyber threat information, and keep the results current: in operations, review threat, vulnerability, technology and mission changes against the organizational risk posture.
 <!-- END rmf:header P-3 -->
@@ -405,8 +405,8 @@ P-3 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-SPONSOR, PER-RE · A: PER-RE · C: PER-CIO, PER-AO, PER-CISO, PER-PRIV · I: — |
-| Persona cards | [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md) |
+| RACI | R: PER-SPONSOR, PER-RE · A: PER-RE · C: PER-CIO, PER-AO, PER-CISO, PER-PRIV, PER-PAO, PER-JCACPM · I: — |
+| Persona cards | [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Establish and publish organizationally-tailored control baselines and/or CSF profiles (optional); in DoD they build on the CNSSI 1253 baselines, overlays and DoD assignment values.
 <!-- END rmf:header P-4 -->
@@ -500,8 +500,8 @@ P-4 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-CISO, PER-PRIV · A: PER-CISO · C: PER-SPONSOR, PER-RE, PER-CIO, PER-AO, PER-CCP, PER-PM · I: — |
-| Persona cards | [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md), [PER-CCP](../../personas/PER-CCP.md), [PER-PM](../../personas/PER-PM.md) |
+| RACI | R: PER-CISO, PER-PRIV · A: PER-CISO · C: PER-SPONSOR, PER-RE, PER-CIO, PER-AO, PER-CCP, PER-PM, PER-PAO, PER-JCACPM · I: — |
+| Persona cards | [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md), [PER-CCP](../../personas/PER-CCP.md), [PER-PM](../../personas/PER-PM.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Identify, document and publish the common controls available for inheritance and their providers, so programs can plan inheritance before they allocate requirements (P-17) and controls (S-3).
 <!-- END rmf:header P-5 -->
@@ -583,8 +583,8 @@ P-5 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-RE · A: PER-RE · C: PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO · I: — |
-| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-PM](../../personas/PER-PM.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md) |
+| RACI | R: PER-RE · A: PER-RE · C: PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO, PER-PAO, PER-JCACPM · I: — |
+| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-PM](../../personas/PER-PM.md), [PER-CIO](../../personas/PER-CIO.md), [PER-AO](../../personas/PER-AO.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Prioritize organizational systems that share an impact level into low-, moderate- and high-impact sub-categories (optional), to guide where resources go first.
 <!-- END rmf:header P-6 -->
@@ -660,8 +660,8 @@ P-6 writes no facts.
 | Outputs | ART-ORG-CONTEXT (updates) |
 | Writes facts | — |
 | Minimum interviews | 1 |
-| RACI | R: PER-RE · A: PER-RE · C: PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO · I: PER-CSSP |
-| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-PM](../../personas/PER-PM.md), [PER-AO](../../personas/PER-AO.md) |
+| RACI | R: PER-RE · A: PER-RE · C: PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO, PER-PAO, PER-JCACPM · I: PER-CSSP |
+| Persona cards | [PER-RE](../../personas/PER-RE.md), [PER-CIO](../../personas/PER-CIO.md), [PER-CISO](../../personas/PER-CISO.md), [PER-PRIV](../../personas/PER-PRIV.md), [PER-SPONSOR](../../personas/PER-SPONSOR.md), [PER-PM](../../personas/PER-PM.md), [PER-AO](../../personas/PER-AO.md), [PER-PAO](../../personas/PER-PAO.md), [PER-JCACPM](../../personas/PER-JCACPM.md) |
 
 Purpose: Develop and implement the organization-wide strategy for continuously monitoring control effectiveness, which every system strategy (S-5) must follow.
 <!-- END rmf:header P-7 -->

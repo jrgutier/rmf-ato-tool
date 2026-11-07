@@ -1,0 +1,12 @@
+rule: DASH-001
+bases: [minimal]
+description: the dashboard receives no scan results
+mutations:
+  - op: set_field
+    file: artifacts/data/cato.yaml
+    path: dashboard.feeds
+    value: [testing, monitoring, performance-metrics]
+expect:
+  errors: [DASH-001]
+  messages:
+    - "the AO has no real-time access to the results of scanning on the dashboard"

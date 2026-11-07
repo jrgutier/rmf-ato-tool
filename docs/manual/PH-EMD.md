@@ -272,7 +272,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[CDT](../../personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](../../personas/PER-OTA.md) Operational Test Agency Representative |
+| Consulted | [Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[CDT](../../personas/PER-CDT.md) Chief Developmental Tester<br>[OTA](../../personas/PER-OTA.md) Operational Test Agency Representative<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -407,7 +407,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
 | Accountable | [SCA](../../personas/PER-SCA.md) Security Control Assessor |
-| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -462,7 +462,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[Developer](../../personas/PER-DEV.md) Developer / Integrator |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[RE](../../personas/PER-RE.md) Risk Executive Function<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -519,7 +519,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority |
+| Consulted | [IO](../../personas/PER-IO.md) Information Owner / Steward<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -577,7 +577,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer |
+| Consulted | [SCA](../../personas/PER-SCA.md) Security Control Assessor<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Informed | [AO](../../personas/PER-AO.md) Authorizing Official<br>[AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Condition | PER-PRIV only when the system processes PII |
 
@@ -706,7 +706,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative<br>[PM/SO](../../personas/PER-PM.md) Program Manager / System Owner |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager |
+| Consulted | [RE](../../personas/PER-RE.md) Risk Executive Function<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSE](../../personas/PER-ISSE.md) Information Systems Security Engineer<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
@@ -838,8 +838,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|
 | Responsible | [AODR](../../personas/PER-AODR.md) Authorizing Official Designated Representative |
 | Accountable | [AO](../../personas/PER-AO.md) Authorizing Official |
-| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer |
-| Informed | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority |
+| Consulted | [PM/SO](../../personas/PER-PM.md) Program Manager / System Owner<br>[CCP](../../personas/PER-CCP.md) Common Control Provider<br>[IO](../../personas/PER-IO.md) Information Owner / Steward<br>[ISSM](../../personas/PER-ISSM.md) Information System Security Manager<br>[Component CISO](../../personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](../../personas/PER-PRIV.md) Component Privacy Officer<br>[ISSO](../../personas/PER-ISSO.md) Information System Security Officer |
+| Informed | [Component CIO](../../personas/PER-CIO.md) DoD Component Chief Information Officer<br>[MDA](../../personas/PER-MDA.md) Milestone Decision Authority<br>[Operational commanders](../../personas/PER-OPCDR.md) Cyberspace and Functional Operational Commanders |
 | Condition | PER-PRIV only when the system processes PII |
 
 **Inputs**
