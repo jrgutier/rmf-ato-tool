@@ -1,0 +1,28 @@
+rule: MPLAN-001
+bases:
+- minimal
+description: reviews further apart than the schedule
+mutations:
+- op: set_field
+  file: artifacts/data/plan-reviews.yaml
+  path: schedule.interval_days
+  value: 30
+- op: set_field
+  file: artifacts/data/plan-reviews.yaml
+  path: reviews
+  value:
+  - name: Dana Reyes
+    role: PER-ISSM
+    date: '2026-01-01'
+    trigger: scheduled
+    feedback: Fine.
+  - name: Dana Reyes
+    role: PER-ISSM
+    date: '2026-10-30'
+    trigger: scheduled
+    feedback: Fine.
+expect:
+  errors:
+  - MPLAN-001
+  messages:
+  - past the organization-defined schedule

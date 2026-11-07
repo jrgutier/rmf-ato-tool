@@ -1,0 +1,30 @@
+# Template: artifacts/data/posture-reports.yaml (M-5; schema posture-reports). One record per
+# report. MRPT-001 and MRPT-002 judge it. A GENSER or SE system also fills conmon.yaml
+# reporting.dodin; a not-connected system leaves out cmrs-free DoD status.
+reports:
+  - id: SPR-001
+    period: {from: "2026-01-01", to: "2026-03-31"}
+    issued: "2026-04-01"
+    marking: CUI  # marked, protected and handled per federal and organizational policy
+    deliveries:  # each conmon.yaml recipient, plus the bodies the designation names that required it (conmon.yaml reporting.dodin.required_by)
+      - {recipient: PER-AO, date: "2026-04-01", content: [posture]}
+      - {recipient: DISA, date: "2026-04-01", content: [poam]}  # GENSER: CDRUSSTRATCOM and DISA; SE: DIA
+      - {recipient: CDRUSSTRATCOM, date: "2026-04-01", content: [poam, findings]}
+      - {recipient: JFHQ-DODIN, date: "2026-04-01", content: [vulnerability-reports]}
+    scorecard: {reported: "2026-03-31"}
+    # cmrs: {method: automated, automated_process: developed}  # a cATO; manual | none
+    findings_shared: []  # every EXF-### of poam/items.yaml
+    vulnerability_status: []  # {poam_item, status} for each completed or risk-accepted item
+    service_changes: []  # {change, reported_to: USCYBERCOM, via, date} for an external service
+    sharing:
+      display: automated
+      audiences: [superior, peer]
+      qualities: [visible, accessible, understandable, trusted, interoperable]
+    sources: [INT-001.A1]
+organization_tier:
+  reviews:
+    - {by: PER-RE, reviewed: "2026-04-10", determination: "<<FILL: aggregate status and risk tolerance>>"}
+    - {by: PER-CISO, reviewed: "2026-04-12", determination: "<<FILL: effectiveness across systems>>"}
+  open_poam_items: 2  # the POA&M's count of items not completed or risk-accepted
+  feeds: P-7
+sources: [INT-001.A1]

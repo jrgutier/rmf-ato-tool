@@ -1,0 +1,19 @@
+rule: MISCM-001
+bases:
+- minimal
+description: an assessment that ignores the authorizing official
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: iscm_assessments.0.parties_considered
+  value:
+  - PER-PM
+  - PER-CIO
+  - PER-CISO
+  - PER-PRIV
+  - PER-RE
+expect:
+  errors:
+  - MISCM-001
+  messages:
+  - the ISCM program assessment does not consider the needs of

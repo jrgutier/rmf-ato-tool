@@ -446,3 +446,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the messages say CSSP and "Security Review Date", and the party enum says `service-provider`; the judge stays strict, since loosening it would let a real required field out through a reworded message.
 - Rule: When a rule item is weak on a required field it does not touch, reword the message; never relax the judge.
 - Promotion: none — a wording trap of the judge, reported by the judge itself with the field named, and it does not reach forks.
+
+## L-0064 · 2026-11-02 · run: phase-11 · tags: fixtures, rules
+- Symptom: every rule on M-1 and M-5 was silent on both fixture runs, which stop at R-5, so a clause could pass its negative test only with a fixture that first built a monitoring cycle by hand.
+- Root cause: a supporting artifact out of play holds nothing a rule reads, and no fixture seeded one.
+- Fix: valid_minimal seeds ART-CHG and ART-SECRPT, so `test_base_has_no_findings` proves the positive case of each Monitor rule and each negative fixture needs one mutation.
+- Rule: A rule's positive case runs in a base run, not only its negative one.
+- Promotion: none — a fixture habit, already enforced for this cluster by test_base_has_no_findings; it binds no fork.

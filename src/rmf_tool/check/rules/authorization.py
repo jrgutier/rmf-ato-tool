@@ -1,11 +1,11 @@
-"""The authorization ledger: AODM-001 to AODM-007 and AODM-009 to AODM-011, the Enterprise boarding
-and receipt of ENT-001 and ENT-002, and AUTHRPT-001 on what follows a decision. Each reads the
-records through ``rmf_tool.run.authorization`` and stays quiet about a missing or unreadable file
-(RUN-ART-001 and RUN-FM-001 report those), except AUTHRPT-001: ART-AUTHRPT is not a core artifact,
-so RUN-ART-001 never demands its data and the rule must. A record's findings belong to the task
-that wrote it. These rules test progress, not scope: a decision type has to be reachable in the
-run as it stands on disk, so a task merely being in scope never excuses a record written ahead
-of it."""
+"""The authorization ledger: AODM-001 to AODM-007, AODM-009 to AODM-011 and AOCHG-001, the
+Enterprise boarding and receipt of ENT-001 and ENT-002, and AUTHRPT-001 on what follows a decision.
+Each reads the records through ``rmf_tool.run.authorization`` and stays quiet about a missing
+or unreadable file (RUN-ART-001 and RUN-FM-001 report those), except AUTHRPT-001: ART-AUTHRPT is
+not a core artifact, so RUN-ART-001 never demands its data and the rule must. A record's findings
+belong to the task that wrote it. These rules test progress, not scope: a decision type has to be
+reachable in the run as it stands on disk, so a task merely being in scope never excuses a record
+written ahead of it."""
 
 from __future__ import annotations
 
@@ -35,6 +35,14 @@ SAR_DIR = "artifacts/sar/"
 # DoD CIO reciprocity memo 4.2.1.b.
 DSAWG_DOCUMENTS = ("ART-SSP", "ART-SAR", "ART-RAR", "ART-POAM", "ART-AODM")
 BRIEF_LEAD_BUSINESS_DAYS = 60  # DoD CIO reciprocity memo 4.2.1.h
+AO_DECISION_DOCUMENTS = frozenset({"ART-AODM", "ART-AUTHREC"})  # SP 800-37r2 p. 172
+AO_PACKAGE_OR_REPORT = frozenset({"ART-PKG", "ART-SECRPT"})
+AO_AUTOMATED_REPORT = "ART-SECRPT"  # a report from automated security management tools
+AO_RESPONSES = {"acceptable": ("signed-decision",),
+                "unacceptable": ("authorization-action", "new-terms", "denial")}
+AO_ACTIONS = ("ongoing-authorization", "reauthorization")
+AO_ACCEPTS = frozenset({"organizational-operations", "organizational-assets", "individuals",
+                        "other-organizations", "the-nation"})
 Record = dict[str, Any]
 
 
@@ -289,6 +297,41 @@ def chain(ctx: Context) -> list[RunFinding]:
                         for x in (r, replaced))
             if atd is not None and old is not None and atd > old:
                 err(r, f"a new AO's terms cannot extend the termination date {old} to {atd}")
+    return out
+
+
+# --- AOCHG-001: the new authorizing official's review, finding and response -----------------
+
+def ao_change(ctx: Context) -> list[RunFinding]:
+    out, err = _rule(ctx, "AOCHG-001")
+    for r, kind in _typed(ctx):
+        if r.get("basis") != "ao-change" or not isinstance(r.get("ao_transfer"), dict):
+            continue
+        transfer = r["ao_transfer"]
+        reviewed = set(transfer.get("reviewed") or ())
+        # SP 800-37r2 p. 172: the decision document and package, or the automated report alone
+        if AO_AUTOMATED_REPORT not in reviewed and (
+                not reviewed & AO_DECISION_DOCUMENTS or not reviewed & AO_PACKAGE_OR_REPORT):
+            err(r, "the new authorizing official has not reviewed the current authorization "
+                f"decision document and the package or a report: {', '.join(sorted(reviewed))}")
+        if transfer.get("incoming") == transfer.get("outgoing"):
+            err(r, f"responsibility is not transferred: {transfer.get('incoming')} is both "
+                "outgoing and incoming")
+        finding, response = transfer.get("risk_finding"), transfer.get("response")
+        if response not in AO_RESPONSES.get(finding, ()):
+            err(r, f"a new authorizing official who finds the current risk {finding} answers "
+                f"with {' or '.join(AO_RESPONSES.get(finding, ('a known finding',)))}, not "
+                f"{response}")
+        if response == "signed-decision" and kind.get("effect") not in ("authorize", "continuous"):
+            err(r, "acceptable risk is a new or updated authorization decision document, not "
+                f"{r.get('decision')}")
+        if response == "authorization-action" and transfer.get("action") not in AO_ACTIONS:
+            err(r, f"an authorization action is {' or '.join(AO_ACTIONS)}, not "
+                f"{transfer.get('action')}")
+        if response == "signed-decision" \
+                and (gap := sorted(AO_ACCEPTS - set(transfer.get("accepts_risk_to") or ()))):
+            err(r, f"the new authorizing official does not explicitly accept the risk to "
+                f"{', '.join(gap)}")
     return out
 
 

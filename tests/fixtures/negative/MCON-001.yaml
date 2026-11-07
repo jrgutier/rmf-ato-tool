@@ -1,0 +1,29 @@
+rule: MCON-001
+bases:
+- minimal
+description: a denied interconnection left connected
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: connections
+  value:
+  - id: CON-001
+    system: Analysis enclave
+    component: CMP-LINK
+    relationship: interconnected
+    decision: AD-DATO
+    action: connected
+    sources:
+    - INT-030.A1
+- op: replace_text
+  file: artifacts/data/boundary.yaml
+  old: 'components:
+
+    '
+  new: "components:\n  - {id: CMP-LINK, title: Analysis enclave link, type: interconnection, description:\
+    \ Link to the analysis enclave., status: operational, sources: [product/architecture.md#components]}\n"
+expect:
+  errors:
+  - MCON-001
+  messages:
+  - is not enforced; the connection stands at

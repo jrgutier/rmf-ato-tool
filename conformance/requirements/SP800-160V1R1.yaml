@@ -7297,7 +7297,8 @@ requirements:
     locator: "H.12.3. Security Activities and Tasks.OP-2.4"
     context: "OP-2 PERFORM OPERATION"
     statement: "OP-2.4 Use the measures defined in the strategy and analyze them to confirm that system security performance is within acceptable parameters."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Use the measures to confirm that performance is within acceptable parameters", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.parameters.yaml", "expect": "performance outside acceptable parameters is not recorded", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-0917"
     citation: {"ref": "SP800-160V1R1", "page": 158, "anchor": "Identify and record when system security or service performance is not within"}
@@ -7305,7 +7306,8 @@ requirements:
     locator: "H.12.3. Security Activities and Tasks.OP-2.5"
     context: "OP-2 PERFORM OPERATION"
     statement: "OP-2.5 Identify and record when system security or service performance is not within acceptable parameters."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Identify and record when performance is not within acceptable parameters", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.parameters.yaml", "expect": "performance outside acceptable parameters is not recorded", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-0918"
     citation: {"ref": "SP800-160V1R1", "page": 158, "anchor": "Record the results of secure operations and any anomalies encountered."}
@@ -9117,7 +9119,9 @@ requirements:
     locator: "I.7.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant information needs are identified."
-    status: "candidate"
+    status: "partial"
+    reason: "The shape holds the needs when the block exists; MMEAS-001 asks for the block at M-2 only"
+    evidence: [{"kind": "schema", "asserts": "Security-relevant information needs are identified", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/information_needs", "claim": "presence"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1151"
     citation: {"ref": "SP800-160V1R1", "page": 177, "anchor": "An appropriate set of security measures are identified or developed based on"}
@@ -9125,7 +9129,8 @@ requirements:
     locator: "I.7.2. Security Outcomes.-"
     context: ""
     statement: "- An appropriate set of security measures are identified or developed based on security-relevant information needs and information security protection needs."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Security measures are identified based on security-relevant information needs", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.yaml", "expect": "the measure satisfies no security-relevant information need", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1152"
     citation: {"ref": "SP800-160V1R1", "page": 177, "anchor": "Required data is securely managed."}
@@ -9141,7 +9146,9 @@ requirements:
     locator: "I.7.2. Security Outcomes.-"
     context: ""
     statement: "- Security-relevant data is analyzed, and the results are interpreted."
-    status: "candidate"
+    status: "partial"
+    reason: "Each result carries an analysis; that it interprets the data is prose"
+    evidence: [{"kind": "schema", "asserts": "Security-relevant data is analyzed and the results are interpreted against parameters", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/results/items/properties/within_parameters", "claim": "presence"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1154"
     citation: {"ref": "SP800-160V1R1", "page": 177, "anchor": "Measurement results provide objective information that supports security-relevant decisions."}
@@ -9149,7 +9156,9 @@ requirements:
     locator: "I.7.2. Security Outcomes.-"
     context: ""
     statement: "- Measurement results provide objective information that supports security-relevant decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Results reach their users; that they support a decision is not held"
+    evidence: [{"kind": "rule", "asserts": "Measurement results inform the users who take security-relevant decisions", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.informed.yaml", "expect": "are not informed", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1155"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Define the security aspects of the measurement strategy."}
@@ -9157,7 +9166,9 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-1.1"
     context: "MS-1 PREPARE FOR MEASUREMENT"
     statement: "MS-1.1 Define the security aspects of the measurement strategy."
-    status: "candidate"
+    status: "partial"
+    reason: "The procedures hold the strategy when the block exists; its security aspects are prose"
+    evidence: [{"kind": "schema", "asserts": "Define the security aspects of the measurement strategy in its procedures", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/procedures", "claim": "presence"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1156"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Describe the characteristics of the organization that are relevant to security measurement."}
@@ -9173,7 +9184,9 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-1.3"
     context: "MS-1 PREPARE FOR MEASUREMENT"
     statement: "MS-1.3 Identify and prioritize security-relevant information needs."
-    status: "candidate"
+    status: "partial"
+    reason: "Needs carry a priority when the block exists"
+    evidence: [{"kind": "schema", "asserts": "Identify and prioritize security-relevant information needs: each carries a priority", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/information_needs/items/properties/priority", "claim": "constraint"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1158"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Note: The needs are based on protection objectives, risks, and other security-relevant"}
@@ -9189,7 +9202,8 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-1.4"
     context: "MS-1 PREPARE FOR MEASUREMENT"
     statement: "MS-1.4 Select and specify measures that satisfy security-relevant information needs."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Select measures that satisfy security-relevant information needs", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.yaml", "expect": "the measure satisfies no security-relevant information need", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1160"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Define procedures for the collection, analysis, access, and reporting of security-relevant data."}
@@ -9197,7 +9211,9 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-1.5"
     context: "MS-1 PREPARE FOR MEASUREMENT"
     statement: "MS-1.5 Define procedures for the collection, analysis, access, and reporting of security-relevant data."
-    status: "candidate"
+    status: "partial"
+    reason: "The four procedures exist when the block exists; they are prose"
+    evidence: [{"kind": "schema", "asserts": "Define procedures for the collection, analysis, access and reporting of security-relevant data", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/procedures", "claim": "presence"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1161"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Define security-relevant criteria for evaluating the information items and the measurement process."}
@@ -9268,7 +9284,9 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-2.5"
     context: "MS-2 PERFORM MEASUREMENT"
     statement: "MS-2.5 Analyze security-relevant data, and develop security-relevant information items."
-    status: "candidate"
+    status: "partial"
+    reason: "Each result carries an analysis; it is free text"
+    evidence: [{"kind": "schema", "asserts": "Analyze security-relevant data against the parameters of each measure", "target": "framework/schema/conmon.schema.json#/properties/measurement/properties/results/items/properties/within_parameters", "claim": "presence"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1170"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Record security measurement results, and inform the measurement users."}
@@ -9276,7 +9294,8 @@ requirements:
     locator: "I.7.3. Security Activities and Tasks.MS-2.6"
     context: "MS-2 PERFORM MEASUREMENT"
     statement: "MS-2.6 Record security measurement results, and inform the measurement users."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Record security measurement results and inform the measurement users", "target": "MMEAS-001", "fixture": "tests/fixtures/negative/MMEAS-001.informed.yaml", "expect": "are not informed", "claim": "constraint", "holds_when": "conmon.yaml holds a measurement block"}]
     work_item: "WI-283"
   - id: "REQ-SP800-160V1R1-1171"
     citation: {"ref": "SP800-160V1R1", "page": 178, "anchor": "Note: Security measurement results are provided to stakeholders and project personnel to"}

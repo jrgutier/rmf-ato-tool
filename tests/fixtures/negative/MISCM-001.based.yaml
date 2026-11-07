@@ -1,0 +1,14 @@
+rule: MISCM-001
+bases:
+- minimal
+description: a recommendation resting on no result
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: iscm_assessments.0.recommendations.0.based_on
+  value: Governance
+expect:
+  errors:
+  - MISCM-001
+  messages:
+  - is not based on the data collected

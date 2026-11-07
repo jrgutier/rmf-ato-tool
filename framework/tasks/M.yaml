@@ -13,7 +13,7 @@ tasks:
       Monitor the system and its environment for changes that affect the security and privacy
       posture, analyzing the security impact of each change.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO]}
-    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, EXT-CHANGE-REQUESTS]
+    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS]
     outputs: [ART-CHG, ART-INV, ART-CMP]
     writes_facts: []
     depends_on: [R-4]
@@ -26,6 +26,13 @@ tasks:
         monitoring strategy (DoDI 8510.01 Table 7 outcome).
       - ART-CHG records each change with its security impact analysis and disposition; inventory
         and CM plan updated.
+      - changes.yaml carries each change through control, test, decision, notice, verification and
+        close-out, or marks it exempt or pre-approved (MCHG-001).
+      - Monitoring looks for unauthorized changes as well as requested ones, each with its root
+        cause and the POA&M item or risk that responds at M-3 (MCHG-002).
+      - A lawful LE/CI deployment is accommodated and coordinated with the AO through change
+        control (MCHG-003).
+      - The AO decision on each hosted or interconnected system is enforced (MCON-001).
       - A significant system modification re-enters the RMF at the affected task (feeds back to
         P-11 and C-1).
     citations:
@@ -35,6 +42,10 @@ tasks:
       - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
       - {ref: SP800-128, section: "2.3.9"}
       - {ref: DODI8510.01, page: 12, anchor: "and for any significant system modifications"}
+      - {ref: SP800-128, section: "3.3.2"}
+      - {ref: SP800-128, section: "3.4.1"}
+      - {ref: DODI8500.01, page: 33, anchor: "accommodate all applicable legitimate and lawful deployment of LE/CI tools"}
+      - {ref: DODI8510.01, page: 29, anchor: "Enforce AO authorization decisions for hosted or interconnected systems"}
     playbook: playbooks/M/M-1.md
   - id: M-2
     name: Ongoing Assessments
@@ -61,6 +72,8 @@ tasks:
         with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
       - sar/results updated with the ongoing assessment results; conmon.yaml adjusted where
         frequencies changed.
+      - conmon.yaml records the security measurement results of the cycle, each against its
+        measure's acceptable parameters, with the measurement users informed (MMEAS-001).
     citations:
       - {ref: SP800-37R2, section: "TASK M-2", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-2 Ongoing Assessments"}
@@ -68,6 +81,7 @@ tasks:
       - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
       - {ref: DODI8510.01, page: 29, anchor: "Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually"}
       - {ref: DODCIO-DEVSECOPS, section: "3.2.5"}
+      - {ref: SP800-160V1R1, page: 177, anchor: "Security-relevant information needs are identified"}
     playbook: playbooks/M/M-2.md
   - id: M-3
     name: Ongoing Risk Response
@@ -81,7 +95,7 @@ tasks:
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: []}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR]
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, EXT-INSPECTIONS]
     outputs: [ART-RA, ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [M-2]
@@ -99,6 +113,9 @@ tasks:
         adequate, and records the selected response (RAR-003).
       - Decisions to withhold or delay vulnerability remediation are coordinated with the
         requirements sponsor, the AO and the Component cyberspace operations forces.
+      - Each readiness inspection or outside evaluation finding is in external_findings of
+        poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
+      - The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
     citations:
       - {ref: SP800-37R2, section: "TASK M-3", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-3 Ongoing Risk Response"}
@@ -106,6 +123,7 @@ tasks:
       - {ref: SP800-137, section: "3.5"}
       - {ref: DODI5000.90, page: 11, anchor: "the PM will initiate a risk assessment to identify the risk to the platform"}
       - {ref: DODI8510.01, page: 7, anchor: "decisions to withhold or delay vulnerability remediation"}
+      - {ref: DODI8530.01, page: 36, anchor: "verify POA&Ms to correct deficiencies or weaknesses"}
     playbook: playbooks/M/M-3.md
   - id: M-4
     name: Authorization Updates
@@ -119,7 +137,7 @@ tasks:
       Update the security plan, assessment report, risk assessment and POA&M from continuous
       monitoring results.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO]}
-    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA]
+    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG]
     outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
     writes_facts: []
     depends_on: [M-3]
@@ -132,12 +150,15 @@ tasks:
         8510.01 Table 7 outcome).
       - Authorization package artifacts reflect the current state of the system.
       - A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
+      - plan-reviews.yaml logs the review of the system plan on the organization-defined schedule
+        and each update, approved and tracked by change management (MPLAN-001).
     citations:
       - {ref: SP800-37R2, section: "TASK M-4", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-4 Authorization Package Updates"}
       - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
       - {ref: SP800-18R2, section: "4.7"}
       - {ref: DODI5000.90, page: 13, anchor: "Each iteration should conclude with the AO validating the PM's cybersecurity strategy and updated POA&M"}
+      - {ref: SP800-18R2, section: "3.1"}
     playbook: playbooks/M/M-4.md
   - id: M-5
     name: Security and Privacy Reporting
@@ -150,12 +171,12 @@ tasks:
     purpose: >-
       Report the security and privacy posture to the AO and senior leaders as the monitoring
       strategy requires.
-    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP], I: [PER-AO, PER-CIO]}
-    inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA]
+    raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP, PER-RE], I: [PER-AO, PER-CIO]}
+    inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA, ART-CHG, ART-SD]
     outputs: [ART-SECRPT]
     writes_facts: []
     depends_on: [M-4]
-    feeds_back_to: []
+    feeds_back_to: [P-7]
     min_interviews: 1
     entry_criteria:
       - Authorization artifacts current (M-4).
@@ -165,6 +186,12 @@ tasks:
         outcome).
       - ART-SECRPT reports posture, open POA&M items and trends to the recipients in
         conmon.yaml.
+      - posture-reports.yaml carries each report's marking and deliveries, and the status the
+        system's GENSER or SE designation sends to DoD bodies (MRPT-001).
+      - POA&M updates and vulnerability coordination are owed as required, to each body
+        conmon.yaml names in reporting.dodin.required_by with who required them.
+      - The risk executive (function) and the CISO review the status reports at the organization
+        tier, and that review feeds P-7 (MRPT-002).
     citations:
       - {ref: SP800-37R2, section: "TASK M-5", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-5 Security and Privacy Reporting"}
@@ -172,6 +199,9 @@ tasks:
       - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
       - {ref: DODI8510.01, page: 30, anchor: "Maintain and report systems assessment and authorization status"}
       - {ref: DODCIO-CATO, page: 1, anchor: "all security controls will need to be fed into a system level dashboard view"}
+      - {ref: DODI8530.01, page: 4, anchor: "Data on the cybersecurity status of the DODIN and connected mission partner systems"}
+      - {ref: DODI8530.01, page: 36, anchor: "POA&Ms and subsequent updates will be provided to"}
+      - {ref: SP800-137, section: "3.4.2"}
     playbook: playbooks/M/M-5.md
   - id: M-6
     name: Ongoing Authorization
@@ -186,7 +216,7 @@ tasks:
       acceptable and, where monitoring is near real time, may seek a cATO through the Component
       CISO.
     raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR], I: [PER-PM, PER-ISSM]}
-    inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP]
+    inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP, EXT-ISCM-ASSESSMENT]
     outputs: [ART-AODM, ART-AUTHREC]
     writes_facts: [acquisition]
     depends_on: [M-5]
@@ -205,6 +235,10 @@ tasks:
       - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO,
         AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger
         (AODM-005); a cATO also meets AODM-007.
+      - A change of AO is an `ao-change` record whose ao_transfer states what the new official
+        reviewed, finds and does about it (AOCHG-001).
+      - An ISCM program assessment report the determination reads is in iscm_assessments of the
+        ledger (MISCM-001).
     citations:
       - {ref: SP800-37R2, section: "TASK M-6", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-6 Ongoing Authorization"}
@@ -215,6 +249,8 @@ tasks:
       - {ref: DODCIO-CATO, page: 1, anchor: "the Authorizing Official (AO) must be able to demonstrate three main"}
       - {ref: DODCIO-CATO, page: 2, anchor: "the AO will notify the component CISO of the intention to move that system to a cATO"}
       - {ref: DODI5000.90, page: 13, anchor: "While the AO may authorize a continuous ATO (cATO)"}
+      - {ref: SP800-37R2, page: 172, anchor: "When there is a change in authorizing officials"}
+      - {ref: SP800-137A, section: "3.1"}
     playbook: playbooks/M/M-6.md
   - id: M-7
     name: System Disposal

@@ -1405,8 +1405,11 @@ requirements:
     locator: "2.2.12"
     context: "Reporting of Assessment Results"
     statement: "If scoring is performed, ISCM program assessment results include the scoring results for each assessment element combined into a single score for the organization or for the part of the organization being assessed. Reports may be broken out by overall organization, individual organizational parts, organizational level, or specific assessment element attributes, such as the source of the assessment element, various aspects or categories (e.g., strategy, metrics, governance, criticality of findings), individual scores by assessment element, or other grouping meaningful to the organization."
-    status: "candidate"
+    status: "partial"
+    reason: "A single score must exist once elements are scored, but how it combines them is not held; one sentence waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Scored results are combined into a single score of the ISCM program assessment", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.score.yaml", "expect": "no single score combines the scoring results", "claim": "presence", "holds_when": "the ledger records an ISCM program assessment", "sentence": "If scoring is performed, ISCM program assessment results include the scoring results for each assessment element combined into a single score for the organization or for the part of the organization being assessed."}, {"kind": "rule", "asserts": "Scoring is performed for each assessment element", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.scored.yaml", "expect": "scoring is performed, but not for each assessment element", "claim": "presence", "holds_when": "the ledger records an ISCM program assessment", "sentence": "If scoring is performed, ISCM program assessment results include the scoring results for each assessment element combined into a single score for the organization or for the part of the organization being assessed."}]
     work_item: "WI-281"
+    ruling_sought: [{"sentence": "Reports may be broken out by overall organization, individual organizational parts, organizational level, or specific assessment element attributes, such as the source of the assessment element, various aspects or categories (e.g., strategy, metrics, governance, criticality of findings), individual scores by assessment element, or other grouping meaningful to the organization.", "reason": "A permission with an open list: reports may be broken out. Nothing is required."}]
   - id: "REQ-SP800-137A-0178"
     citation: {"ref": "SP800-137A", "page": 36, "anchor": "Note that Criticality is included in the [Catalog] for user convenience consistent"}
     kind: "modal"
@@ -1597,7 +1600,8 @@ requirements:
     locator: "3.1"
     context: "Overview of the ISCM Program Assessment Process"
     statement: "A successful ISCM program assessment requires consideration of the needs of all parties with a vested interest in the organization’s ISCM capability, including system owners, authorizing officials, chief information officers, chief information security officers, senior agency officials for privacy/chief privacy officers, chief executive officers/heads of agencies, security and privacy staff, Inspectors General or other auditing bodies, the RE(f), and the senior accountable official for risk management. Establishing an appropriate set of expectations before, during, and after an assessment is paramount to achieving an acceptable outcome—that is, producing information necessary to help the organization’s leadership make an informed decision about whether the ISCM program is adequate to meet the organization’s needs. The decision may impact authorization decisions to place systems into operation or continue operation (ongoing authorization). Figure 7 shows the overall process, and details are described in subsequent sections."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "An ISCM program assessment requires consideration of the needs of system owners, authorizing officials and the rest of the parties", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.yaml", "expect": "the ISCM program assessment does not consider the needs of", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "A successful ISCM program assessment requires consideration of the needs of all parties with a vested interest in the organization’s ISCM capability, including system owners, authorizing officials, chief information officers, chief information security officers, senior agency officials for privacy/chief privacy officers, chief executive officers/heads of agencies, security and privacy staff, Inspectors General or other auditing bodies, the RE(f), and the senior accountable official for risk management."}, {"kind": "rule", "asserts": "Expectations are set before, during and after an assessment", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.expectations.yaml", "expect": "no expectations are set", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "Establishing an appropriate set of expectations before, during, and after an assessment is paramount to achieving an acceptable outcome—that is, producing information necessary to help the organization’s leadership make an informed decision about whether the ISCM program is adequate to meet the organization’s needs."}]
     work_item: "WI-281"
   - id: "REQ-SP800-137A-0202"
     citation: {"ref": "SP800-137A", "page": 40, "anchor": "The ISCM program assessment developed under guidance of this publication evaluates the"}
@@ -2213,7 +2217,8 @@ requirements:
     locator: "3.2.3"
     context: "Report Step"
     statement: "During the Report Step of an engagement, assessors create a draft report of the assessment findings. ISCM program assessment conclusions are manually made by the assessors based on the analyzed information. Assessors make recommendations for improving ISCM programs based on the conclusions from the ISCM program assessment, as may be documented in the annotations for assessment judgments that are not Satisfied (or True). The assessment process produces qualitative results and recommendations to assist the organization in focusing subsequent efforts to improve the ISCM program. The organization is given a draft report of findings and recommendations. The draft report is reviewed by organizational leadership, including the executive sponsor, to correct any errors and to clarify misunderstandings or ambiguities. Based on feedback from the organization, the assessor produces an updated, final report. The ISCM program assessment report is described in Section 2.2.12."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessors make recommendations based on the conclusions from the assessment data collected", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.based.yaml", "expect": "is not based on the data collected", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "Assessors make recommendations for improving ISCM programs based on the conclusions from the ISCM program assessment, as may be documented in the annotations for assessment judgments that are not Satisfied (or True)."}, {"kind": "rule", "asserts": "The draft report is reviewed by organizational leadership, including the executive sponsor", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.sponsor.yaml", "expect": "the draft report is not reviewed by the executive sponsor", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "The draft report is reviewed by organizational leadership, including the executive sponsor, to correct any errors and to clarify misunderstandings or ambiguities."}, {"kind": "rule", "asserts": "The assessor produces the final report after the feedback on the draft review", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.order.yaml", "expect": "does not follow the draft reviewed on", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "Based on feedback from the organization, the assessor produces an updated, final report."}]
     work_item: "WI-281"
   - id: "REQ-SP800-137A-0279"
     citation: {"ref": "SP800-137A", "page": 51, "anchor": "The organization is accountable for responding to ISCM program assessment findings. The"}
@@ -2477,8 +2482,11 @@ requirements:
     locator: "3.3.2"
     context: "Use of Assessment Elements"
     statement: "For assessment findings that are Other than Satisfied, organizations may choose to define subcategories of findings that indicate the severity or criticality of the weaknesses or deficiencies discovered and the potential adverse effects on organizations. Defining such subcategories can help to establish priorities for needed risk mitigation actions. Regardless of whether the organization defines subcategories, assessment results include sufficient information about shortfalls to indicate what further actions are required to completely satisfy the determination statement."
-    status: "candidate"
+    status: "partial"
+    reason: "One sentence waits on a ruling"
+    evidence: [{"kind": "rule", "asserts": "Assessment results include information on each shortfall that indicates the further actions required", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.shortfall.yaml", "expect": "do not indicate the further actions required", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "Regardless of whether the organization defines subcategories, assessment results include sufficient information about shortfalls to indicate what further actions are required to completely satisfy the determination statement."}]
     work_item: "WI-281"
+    ruling_sought: [{"sentence": "For assessment findings that are Other than Satisfied, organizations may choose to define subcategories of findings that indicate the severity or criticality of the weaknesses or deficiencies discovered and the potential adverse effects on organizations.", "reason": "A permission: organizations may choose to define subcategories. Nothing is required."}]
   - id: "REQ-SP800-137A-0312"
     citation: {"ref": "SP800-137A", "page": 56, "anchor": "ID | Assessment | Level | Source | Assessment Procedure | Discussion"}
     kind: "table"
@@ -2848,7 +2856,8 @@ requirements:
     locator: "2.2.12"
     context: ""
     statement: "Assessment results include recommendations based on the data collected and analyzed."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Assessment results include recommendations based on the data collected", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.based.yaml", "expect": "is not based on the data collected", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment"}]
     work_item: "WI-281"
     promoted: {"reason": "States required content of the assessment results, unconditionally; the extractor found no marker."}
   - id: "REQ-SP800-137A-0358"
@@ -2857,7 +2866,8 @@ requirements:
     locator: "2.3.3"
     context: ""
     statement: "The primary output of the ISCM program assessment is a report of findings to the organization, which includes the following, as applicable:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The primary output is a report of findings presented to the organization", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.final.yaml", "expect": "the final report of findings is not presented to the", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment"}]
     work_item: "WI-281"
     promoted: {"reason": "The lead-in that makes the report's contents a duty; rejected, so the list items that follow have no subject without it."}
   - id: "REQ-SP800-137A-0359"
@@ -2875,7 +2885,8 @@ requirements:
     locator: "3.6"
     context: ""
     statement: "At the conclusion of an assessment, the assessors present a draft report, and after discussion with organization leadership, a final report that resolves any differences of opinion between the assessors and the organization is presented to the organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The final report follows discussion of the draft report with organization leadership", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.order.yaml", "expect": "does not follow the draft reviewed on", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment"}, {"kind": "rule", "asserts": "The final report resolves any differences of opinion between the assessors and the organization", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.differences.yaml", "expect": "the final report leaves differences of opinion open", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment"}]
     work_item: "WI-281"
     promoted: {"reason": "Duty on the output: assessors present a draft report and, after discussion with leadership, a final report resolving differences of opinion is presented to the organization. This is the report a run would read; 0278 states the steps but not the resolving of differences."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

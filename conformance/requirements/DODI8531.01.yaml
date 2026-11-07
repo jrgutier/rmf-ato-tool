@@ -119,7 +119,9 @@ requirements:
     locator: "2.1.i"
     context: "DOD SENIOR INFORMATION SECURITY OFFICER (DOD SISO) Under the authority, direction, and control of the DoD Chief Information Officer, the DoD SISO:"
     statement: "i. Integrates key VDP metrics into the DoD Cybersecurity Scorecard."
-    status: "candidate"
+    status: "partial"
+    reason: "The DoD SISO, not a run, integrates VDP metrics into the DoD Cybersecurity Scorecard; a run can only carry its side, scorecard.vdp_metrics, and no rule can fail on an act outside the run"
+    evidence: [{"kind": "schema", "asserts": "Key VDP metrics are carried to the DoD Cybersecurity Scorecard from the report", "target": "framework/schema/posture-reports.schema.json#/properties/reports/items/properties/scorecard/properties/vdp_metrics", "claim": "presence"}]
     work_item: "WI-278"
   - id: "REQ-DODI8531.01-0016"
     citation: {"ref": "DODI8531.01", "page": 5, "anchor": "Under the authority, direction, and control of the DoD Chief Information Officer,"}
@@ -573,7 +575,8 @@ requirements:
     locator: "2.10.d"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "d. Coordinate all vulnerability reports and assessments with USCYBERCOM/JFHQ-DODIN as required."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Vulnerability reports and assessments are coordinated with JFHQ-DODIN", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.vulnerability.yaml", "expect": "vulnerability reports and assessments are not coordinated with JFHQ-DODIN", "claim": "constraint", "holds_when": "ART-SECRPT is produced or seeded and conmon.yaml names a GENSER or SE designation and reporting.dodin.required_by names the body"}]
     work_item: "WI-278"
   - id: "REQ-DODI8531.01-0073"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Create a DoD Component-level or Service-level prioritization and scheduling plan for the"}
@@ -589,7 +592,8 @@ requirements:
     locator: "2.10.f"
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "f. Track and report mitigations and risk acceptance status to JFHQ-DODIN."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The mitigation and risk acceptance status of each resolved POA&M item is tracked and reported to JFHQ-DODIN, and an unreported one fails", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.status.yaml", "expect": "the mitigation or risk acceptance status of", "claim": "constraint", "holds_when": "ART-SECRPT is produced or seeded and conmon.yaml names a GENSER or SE designation"}]
     work_item: "WI-278"
   - id: "REQ-DODI8531.01-0075"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Request assistance, as needed, from the Joint Federated Assurance Center in the"}

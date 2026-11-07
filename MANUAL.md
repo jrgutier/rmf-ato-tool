@@ -215,7 +215,7 @@ headings link to the persona catalog; each persona's card describes the role in 
 | [M-2](#task-m-2) Ongoing Assessments | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |
 | [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R |  | C | C | R | C | C |  |
 | [M-4](#task-m-4) Authorization Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |
-| [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R |  |  | R/A | R | C |  |  | R | C | R |  |
+| [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |
 | [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | I | I |  |  |  |  |  | C |  |
 | [M-7](#task-m-7) System Disposal | I | C |  |  | C |  | R/A | R | C |  | C |  |  | C |  |
 
@@ -664,7 +664,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-7](playbooks/P/P-org-context.md#task-p-7)
 
-**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](#task-s-5).
+**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](#task-s-5); receives feedback from [M-5](#task-m-5).
 
 #### <a id="task-p-8"></a>P-8 · Mission or Business Focus
 
@@ -2824,6 +2824,9 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [ART-CMP](#art-cmp) | Configuration management plan | [S-4](#task-s-4) (core artifact) |
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
+| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
+| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
+| [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [EXT-CHANGE-REQUESTS](#ext-change-requests) | Configuration change requests | outside input (operational) |
 
 **Outputs**
@@ -2842,6 +2845,10 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 - The system and environment of operation are monitored in accordance with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
 - ART-CHG records each change with its security impact analysis and disposition; inventory and CM plan updated.
+- changes.yaml carries each change through control, test, decision, notice, verification and close-out, or marks it exempt or pre-approved (MCHG-001).
+- Monitoring looks for unauthorized changes as well as requested ones, each with its root cause and the POA&M item or risk that responds at M-3 (MCHG-002).
+- A lawful LE/CI deployment is accommodated and coordinated with the AO through change control (MCHG-003).
+- The AO decision on each hosted or interconnected system is enforced (MCON-001).
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
 
 **Alignment**
@@ -2857,6 +2864,10 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [SP800-128](#ref-sp800-128), section 2.3.9
 - [DODI8510.01](#ref-dodi8510-01), p. 12, "and for any significant system modifications"
+- [SP800-128](#ref-sp800-128), section 3.3.2
+- [SP800-128](#ref-sp800-128), section 3.4.1
+- [DODI8500.01](#ref-dodi8500-01), p. 33, "accommodate all applicable legitimate and lawful deployment of LE/CI tools"
+- [DODI8510.01](#ref-dodi8510-01), p. 29, "Enforce AO authorization decisions for hosted or interconnected systems"
 
 **Playbook:** [playbooks/M/M-1.md](playbooks/M/M-1.md)
 
@@ -2905,6 +2916,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 - Ongoing testing and assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy (DoDI 8510.01 Table 7 outcome).
 - sar/results updated with the ongoing assessment results; conmon.yaml adjusted where frequencies changed.
+- conmon.yaml records the security measurement results of the cycle, each against its measure's acceptable parameters, with the measurement users informed (MMEAS-001).
 
 **Alignment**
 
@@ -2918,6 +2930,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [DODI8510.01](#ref-dodi8510-01), p. 29, "Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually"
 - [DODCIO-DEVSECOPS](#ref-dodcio-devsecops), section 3.2.5
+- [SP800-160V1R1](#ref-sp800-160v1r1), p. 177, "Security-relevant information needs are identified"
 
 **Playbook:** [playbooks/M/M-2.md](playbooks/M/M-2.md)
 
@@ -2945,6 +2958,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
+| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [EXT-INSPECTIONS](#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
 
 **Outputs**
 
@@ -2964,6 +2979,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Each new or changed risk has a mitigation or an AO risk-acceptance decision; ART-RA and the POA&M updated.
 - Each new or changed risk in rar.yaml weighs courses of action, or one evaluated as adequate, and records the selected response (RAR-003).
 - Decisions to withhold or delay vulnerability remediation are coordinated with the requirements sponsor, the AO and the Component cyberspace operations forces.
+- Each readiness inspection or outside evaluation finding is in external_findings of poam/items.yaml, carried by a POA&M item or an accepted risk (MPOA-001).
+- The root cause of each unauthorized change in ART-CHG is answered here (MCHG-002).
 
 **Alignment**
 
@@ -2977,6 +2994,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-137](#ref-sp800-137), section 3.5
 - [DODI5000.90](#ref-dodi5000-90), p. 11, "the PM will initiate a risk assessment to identify the risk to the platform"
 - [DODI8510.01](#ref-dodi8510-01), p. 7, "decisions to withhold or delay vulnerability remediation"
+- [DODI8530.01](#ref-dodi8530-01), p. 36, "verify POA&Ms to correct deficiencies or weaknesses"
 
 **Playbook:** [playbooks/M/M-3.md](playbooks/M/M-3.md)
 
@@ -3005,6 +3023,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 
 **Outputs**
 
@@ -3024,6 +3043,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - Risk management documents are updated based on continuous monitoring activities (DoDI 8510.01 Table 7 outcome).
 - Authorization package artifacts reflect the current state of the system.
 - A POA&M item on a vulnerability in NSA-approved cryptography is listed in `cryptography.vulnerabilities` of ssp-records.yaml with its referral to NSA and the VEP (CRYP-003).
+- plan-reviews.yaml logs the review of the system plan on the organization-defined schedule and each update, approved and tracked by change management (MPLAN-001).
 
 **Alignment**
 
@@ -3036,6 +3056,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [SP800-18R2](#ref-sp800-18r2), section 4.7
 - [DODI5000.90](#ref-dodi5000-90), p. 13, "Each iteration should conclude with the AO validating the PM's cybersecurity strategy and updated POA&M"
+- [SP800-18R2](#ref-sp800-18r2), section 3.1
 
 **Playbook:** [playbooks/M/M-4.md](playbooks/M/M-4.md)
 
@@ -3053,7 +3074,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|
 | Responsible | [PM/SO](personas/PER-PM.md) Program Manager / System Owner<br>[CCP](personas/PER-CCP.md) Common Control Provider<br>[Component CISO](personas/PER-CISO.md) DoD Component Chief Information Security Officer<br>[Privacy](personas/PER-PRIV.md) Component Privacy Officer<br>[ISSM](personas/PER-ISSM.md) Information System Security Manager |
 | Accountable | [PM/SO](personas/PER-PM.md) Program Manager / System Owner |
-| Consulted | [ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider |
+| Consulted | [ISSO](personas/PER-ISSO.md) Information System Security Officer<br>[CSSP](personas/PER-CSSP.md) Cybersecurity Service Provider<br>[RE](personas/PER-RE.md) Risk Executive Function |
 | Informed | [AO](personas/PER-AO.md) Authorizing Official<br>[Component CIO](personas/PER-CIO.md) DoD Component Chief Information Officer |
 
 **Inputs**
@@ -3064,6 +3085,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
+| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
 
 **Outputs**
 
@@ -3079,6 +3102,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 - A process is in place to report the security, privacy and supply chain risk management posture to the AO and other senior leaders and executives (DoDI 8510.01 Table 7 outcome).
 - ART-SECRPT reports posture, open POA&M items and trends to the recipients in conmon.yaml.
+- posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
+- POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
+- The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
 
 **Alignment**
 
@@ -3092,10 +3118,13 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 8: MONITOR TASKS AND OUTCOMES"
 - [DODI8510.01](#ref-dodi8510-01), p. 30, "Maintain and report systems assessment and authorization status"
 - [DODCIO-CATO](#ref-dodcio-cato), p. 1, "all security controls will need to be fed into a system level dashboard view"
+- [DODI8530.01](#ref-dodi8530-01), p. 4, "Data on the cybersecurity status of the DODIN and connected mission partner systems"
+- [DODI8530.01](#ref-dodi8530-01), p. 36, "POA&Ms and subsequent updates will be provided to"
+- [SP800-137](#ref-sp800-137), section 3.4.2
 
 **Playbook:** [playbooks/M/M-5.md](playbooks/M/M-5.md)
 
-**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6).
+**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6); feeds back to [P-7](#task-p-7).
 
 #### <a id="task-m-6"></a>M-6 · Ongoing Authorization
 
@@ -3121,6 +3150,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
+| [EXT-ISCM-ASSESSMENT](#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
 
 **Outputs**
 
@@ -3141,6 +3171,8 @@ Writes to `facts.yaml`: `acquisition`.
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
 - authorizations.yaml restates `system_status` with the new record (SSPR-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
+- A change of AO is an `ao-change` record whose ao_transfer states what the new official reviewed, finds and does about it (AOCHG-001).
+- An ISCM program assessment report the determination reads is in iscm_assessments of the ledger (MISCM-001).
 
 **Authorization decision.** The [AO](#per-ao) decides here: [DATO](#ad-dato), [cATO](#ad-cato), [DATU](#ad-datu), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) (see [authorization decisions](#decisions)).
 
@@ -3160,6 +3192,8 @@ Writes to `facts.yaml`: `acquisition`.
 - [DODCIO-CATO](#ref-dodcio-cato), p. 1, "the Authorizing Official (AO) must be able to demonstrate three main"
 - [DODCIO-CATO](#ref-dodcio-cato), p. 2, "the AO will notify the component CISO of the intention to move that system to a cATO"
 - [DODI5000.90](#ref-dodi5000-90), p. 13, "While the AO may authorize a continuous ATO (cATO)"
+- [SP800-37R2](#ref-sp800-37r2), p. 172, "When there is a change in authorizing officials"
+- [SP800-137A](#ref-sp800-137a), section 3.1
 
 **Playbook:** [playbooks/M/M-6.md](playbooks/M/M-6.md)
 
@@ -3482,7 +3516,7 @@ listed data files; OSCAL documents are built from that data.
 | [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [C-2](#task-c-2), [S-2](#task-s-2), [S-5](#task-s-5), [S-6](#task-s-6), [A-6](#task-a-6), [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 | [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-3](#task-s-3) |
 | [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | — | — |
-| [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4) |
+| [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
 | [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1) |
 | [ART-BASELINE](#art-baseline) Tailored control baseline, tailoring and allocation | supporting | [S-1](#task-s-1) | [S-2](#task-s-2), [S-3](#task-s-3) | [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
 | [ART-SSP](#art-ssp) System Security Plan | core | [S-4](#task-s-4) | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-4](#task-m-4) | [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6), [M-7](#task-m-7) |
@@ -3494,14 +3528,14 @@ listed data files; OSCAL documents are built from that data.
 | [ART-STIG](#art-stig) STIG/SRG summary | supporting | [I-1](#task-i-1) | [A-3](#task-a-3) | [I-2](#task-i-2), [A-3](#task-a-3), [A-6](#task-a-6) |
 | [ART-SAP](#art-sap) Security assessment plan | core | [A-2](#task-a-2) | — | [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-2](#task-m-2) |
 | [ART-SAR](#art-sar) Security assessment report | core | [A-3](#task-a-3) | [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2), [M-4](#task-m-4) | [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
-| [ART-POAM](#art-poam) Plan of action and milestones | core | [A-6](#task-a-6) | [R-3](#task-r-3), [M-3](#task-m-3), [M-4](#task-m-4) | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
-| [ART-RAR](#art-rar) Risk assessment report | core | [R-2](#task-r-2) | [R-3](#task-r-3), [M-3](#task-m-3) | [R-3](#task-r-3), [R-4](#task-r-4), [M-3](#task-m-3) |
+| [ART-POAM](#art-poam) Plan of action and milestones | core | [A-6](#task-a-6) | [R-3](#task-r-3), [M-3](#task-m-3), [M-4](#task-m-4) | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
+| [ART-RAR](#art-rar) Risk assessment report | core | [R-2](#task-r-2) | [R-3](#task-r-3), [M-3](#task-m-3) | [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3) |
 | [ART-PKG](#art-pkg) Authorization package manifest | supporting | [R-1](#task-r-1) | — | [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) |
 | [ART-DIAS](#art-dias) Digital Identity Acceptance Statement | core | [R-1](#task-r-1) | — | — |
 | [ART-AODM](#art-aodm) AO decision memo | core | [R-4](#task-r-4) | [M-6](#task-m-6) | [R-5](#task-r-5) |
 | [ART-AUTHREC](#art-authrec) Authorization ledger | core | [A-2](#task-a-2) | [R-4](#task-r-4), [M-6](#task-m-6) | [R-5](#task-r-5) |
 | [ART-AUTHRPT](#art-authrpt) Authorization report | supporting | [R-5](#task-r-5) | — | — |
-| [ART-CHG](#art-chg) Change log and security impact analyses | supporting | [M-1](#task-m-1) | — | — |
+| [ART-CHG](#art-chg) Change log and security impact analyses | supporting | [M-1](#task-m-1) | — | [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
 | [ART-SECRPT](#art-secrpt) Security and privacy posture report | supporting | [M-5](#task-m-5) | — | [M-6](#task-m-6) |
 | [ART-DISP](#art-disp) Disposal plan | supporting | [M-7](#task-m-7) | — | — |
 
@@ -3668,7 +3702,7 @@ The documented characteristics of the system, its users and privileges, and the 
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
 | Produced by | [C-1](#task-c-1) |
 | Updated by | [I-2](#task-i-2) |
-| Used by | [C-2](#task-c-2), [S-4](#task-s-4) |
+| Used by | [C-2](#task-c-2), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
 
 Citations:
 
@@ -3722,7 +3756,7 @@ The security plan with a statement for every control in the tailored baseline.
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SSP.md](templates/artifacts/ART-SSP.md) |
-| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`) |
+| Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`)<br>`artifacts/data/plan-reviews.yaml` (schema `plan-reviews`) |
 | OSCAL | `ssp#control-implementation.implemented-requirements` |
 | Produced by | [S-4](#task-s-4) |
 | Updated by | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-4](#task-m-4) |
@@ -3893,7 +3927,7 @@ Remediation plan for weaknesses from the assessment and STIG findings, with mile
 | OSCAL | `poam#poam-items` |
 | Produced by | [A-6](#task-a-6) |
 | Updated by | [R-3](#task-r-3), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
+| Used by | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
 
 Citations:
 
@@ -3912,7 +3946,7 @@ Risks derived from the findings and POA&M, their likelihood, impact and level, a
 | OSCAL | `assessment-results#results.risks` |
 | Produced by | [R-2](#task-r-2) |
 | Updated by | [R-3](#task-r-3), [M-3](#task-m-3) |
-| Used by | [R-3](#task-r-3), [R-4](#task-r-4), [M-3](#task-m-3) |
+| Used by | [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3) |
 
 Citations:
 
@@ -4023,11 +4057,11 @@ Changes to the system and its environment, with their security impact analyses a
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-CHG.md](templates/artifacts/ART-CHG.md) |
-| Data files | — |
+| Data files | `artifacts/data/changes.yaml` (schema `changes`) |
 | OSCAL | — |
 | Produced by | [M-1](#task-m-1) |
 | Updated by | — |
-| Used by | — |
+| Used by | [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
 
 Citations:
 
@@ -4036,13 +4070,13 @@ Citations:
 
 ### <a id="art-secrpt"></a>ART-SECRPT: Security and privacy posture report
 
-Periodic report of the system's security and privacy posture to the AO and senior leaders.
+Periodic report of the system's security and privacy posture to the AO, senior leaders and DoD bodies, with the organization tier's review.
 
 | | |
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-SECRPT.md](templates/artifacts/ART-SECRPT.md) |
-| Data files | — |
+| Data files | `artifacts/data/posture-reports.yaml` (schema `posture-reports`) |
 | OSCAL | — |
 | Produced by | [M-5](#task-m-5) |
 | Updated by | — |
@@ -4091,6 +4125,8 @@ content and operational data.
 | <a id="ext-test-results"></a>**EXT-TEST-RESULTS** Developmental and operational test results | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence. | [A-3](#task-a-3) |
 | <a id="ext-monitoring"></a>**EXT-MONITORING** Continuous monitoring data | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [M-2](#task-m-2) |
 | <a id="ext-change-requests"></a>**EXT-CHANGE-REQUESTS** Configuration change requests | operational | Proposed changes to the system and its environment, submitted to configuration control. | [M-1](#task-m-1) |
+| <a id="ext-inspections"></a>**EXT-INSPECTIONS** Readiness inspection and outside evaluation findings | operational | Findings on the system from readiness inspections, joint compliance inspections, penetration assessments, audits and evaluations by the DoD Component or outside bodies such as CDRUSSTRATCOM, DISA, DIRNSA or DIA. | [M-3](#task-m-3) |
+| <a id="ext-iscm-assessment"></a>**EXT-ISCM-ASSESSMENT** ISCM program assessment report | organization | The final report of an SP 800-137A assessment of the organization's ISCM program, which may bear on the decision to continue operation under ongoing authorization. | [M-6](#task-m-6) |
 
 ## <a id="personas"></a>8. Persona catalog
 
@@ -4105,7 +4141,7 @@ simulated stakeholders.
 | [AODR](#per-aodr) Authorizing Official Designated Representative | rmf | AO | [PER-AODR.md](personas/PER-AODR.md) | 7 / 0 / 8 / 2 |
 | [Component CIO](#per-cio) DoD Component Chief Information Officer | organization | DoD Component head | [PER-CIO.md](personas/PER-CIO.md) | 2 / 2 / 18 / 3 |
 | [Component CISO](#per-ciso) DoD Component Chief Information Security Officer | organization | DoD Component CIO (or the Component head where no CIO position exists) | [PER-CISO.md](personas/PER-CISO.md) | 4 / 1 / 29 / 2 |
-| [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 15 / 0 |
+| [RE](#per-re) Risk Executive Function | organization | — | [PER-RE.md](personas/PER-RE.md) | 5 / 4 / 16 / 0 |
 | [SCA](#per-sca) Security Control Assessor | rmf | DoD Component CISO (the Component SCA, who may formally delegate the role) | [PER-SCA.md](personas/PER-SCA.md) | 5 / 3 / 4 / 1 |
 | [PM/SO](#per-pm) Program Manager / System Owner | acquisition | DoD Component Acquisition Executive (PM); DoD Component head (SO) | [PER-PM.md](personas/PER-PM.md) | 22 / 26 / 8 / 7 |
 | [ISSM](#per-issm) Information System Security Manager | rmf | PM or SO | [PER-ISSM.md](personas/PER-ISSM.md) | 19 / 0 / 12 / 6 |
@@ -4204,7 +4240,7 @@ The DoD ISRMC supported by the DSAWG (and Component equivalents): sets enterpris
 - SP 800-37 Rev. 2 roles: Risk Executive (Function), Senior Accountable Official for Risk Management
 - Responsible for: [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7)
 - Accountable for: [P-3](#task-p-3), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7)
-- Consulted on: [P-1](#task-p-1), [P-5](#task-p-5), [P-14](#task-p-14), [C-2](#task-c-2), [C-3](#task-c-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3), [M-6](#task-m-6), [M-7](#task-m-7)
+- Consulted on: [P-1](#task-p-1), [P-5](#task-p-5), [P-14](#task-p-14), [C-2](#task-c-2), [C-3](#task-c-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4526,6 +4562,7 @@ the whole library with checksums.
 | <a id="ref-sp800-61r3"></a>**SP800-61R3** | Incident Response Recommendations and Considerations for Cybersecurity Risk Management: A CSF 2.0 Community Profile | NIST | Rev. 3 (April 2025) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf> | [SP800-61R3.md](references/text/SP800-61R3.md) |
 | <a id="ref-sp800-128"></a>**SP800-128** | Guide for Security-Focused Configuration Management of Information Systems | NIST | August 2011 (includes updates as of 10-10-2019) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-128.pdf> | [SP800-128.md](references/text/SP800-128.md) |
 | <a id="ref-sp800-160v1r1"></a>**SP800-160V1R1** | Engineering Trustworthy Secure Systems | NIST | Vol. 1 Rev. 1 (November 2022) | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-160v1r1.pdf> | [SP800-160V1R1.md](references/text/SP800-160V1R1.md) |
+| <a id="ref-sp800-137a"></a>**SP800-137A** | Assessing Information Security Continuous Monitoring (ISCM) Programs: Developing an ISCM Program Assessment | NIST | May 2020 | <https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-137A.pdf> | [SP800-137A.md](references/text/SP800-137A.md) |
 | <a id="ref-fips199"></a>**FIPS199** | Standards for Security Categorization of Federal Information and Information Systems | NIST | February 2004 | <https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf> | [FIPS199.md](references/text/FIPS199.md) |
 | <a id="ref-dodi8510-01"></a>**DODI8510.01** | Risk Management Framework for DoD Systems | DoD | July 19, 2022 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf> | [DODI8510.01.md](references/text/DODI8510.01.md) |
 | <a id="ref-cnssi1253"></a>**CNSSI1253** | Security Categorization and Control Selection for National Security Systems | CNSS | 29 July 2022 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1253.md](references/text/CNSSI1253.md) |
@@ -4542,6 +4579,7 @@ the whole library with checksums.
 | <a id="ref-dodi5000-90"></a>**DODI5000.90** | Cybersecurity for Acquisition Decision Authorities and Program Managers | DoD | December 31, 2020 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/500090p.pdf> | [DODI5000.90.md](references/text/DODI5000.90.md) |
 | <a id="ref-dodcio-cato"></a>**DODCIO-CATO** | Continuous Authorization To Operate (cATO) memorandum | DoD CIO | February 2, 2022 | <https://dodcio.defense.gov/Library/> | [DODCIO-CATO.md](references/text/DODCIO-CATO.md) |
 | <a id="ref-dodcio-devsecops"></a>**DODCIO-DEVSECOPS** | DoD Enterprise DevSecOps Fundamentals | DoD CIO | Version 2.5 (approved October 16, 2024) | <https://dodcio.defense.gov/Library/> | [DODCIO-DEVSECOPS.md](references/text/DODCIO-DEVSECOPS.md) |
+| <a id="ref-dodi8500-01"></a>**DODI8500.01** | Cybersecurity | DoD | March 14, 2014, Change 1, October 7, 2019 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/850001_2014.pdf> | [DODI8500.01.md](references/text/DODI8500.01.md) |
 | <a id="ref-dodi8530-01"></a>**DODI8530.01** | Cybersecurity Activities Support to DoD Information Network Operations | DoD | March 7, 2016, Change 1, July 25, 2017 | <https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/853001p.pdf> | [DODI8530.01.md](references/text/DODI8530.01.md) |
 | <a id="ref-cnssi1254"></a>**CNSSI1254** | Risk Management Framework Documentation, Data Element Standards, and Reciprocity Process for National Security Systems | CNSS | August 2016 | <https://www.cnss.gov/CNSS/issuances/Instructions.cfm> | [CNSSI1254.md](references/text/CNSSI1254.md) |
 | <a id="ref-dodcio-reciprocity"></a>**DODCIO-RECIPROCITY** | DoD Cybersecurity Reciprocity Playbook | DoD CIO | Version 1.0, March 2024 | <https://dodcio.defense.gov/Portals/0/Documents/Library/(U)%202024-01-02%20DoD%20Cybersecurity%20Reciprocity%20Playbook.pdf> | [DODCIO-RECIPROCITY.md](references/text/DODCIO-RECIPROCITY.md) |

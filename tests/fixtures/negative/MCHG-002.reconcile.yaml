@@ -1,0 +1,15 @@
+rule: MCHG-002
+bases:
+- minimal
+description: monitored changes not reconciled
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: monitoring.unauthorized_changes.reconciled_against
+  value:
+  - baseline
+expect:
+  errors:
+  - MCHG-002
+  messages:
+  - changes detected by monitoring are not reconciled with

@@ -1,0 +1,26 @@
+rule: MRPT-001
+bases:
+- minimal
+description: a cATO with no statistics to CMRS
+mutations:
+- op: append_text
+  file: artifacts/data/authorizations.yaml
+  text: "- id: AUTH-003\n  decision: AD-CATO\n  subject: system\n  basis: time-driven\n  decided_by: PER-AO\n\
+    \  task: M-6\n  date: '2026-12-15'\n  risk_level: moderate\n  risk_acceptance: I accept the residual\
+    \ risk.\n  signature: pki\n  conveyed_to: [PER-PM]\n  underlying: AUTH-002\n  review: {frequency_days:\
+    \ 30, events: [significant change]}\n  rationale: Continuous monitoring is near real time.\n  sources:\
+    \ [INT-012.A1]\n"
+- op: set_field
+  file: artifacts/data/posture-reports.yaml
+  path: reports.0.cmrs.method
+  value: none
+expect:
+  errors:
+  - MRPT-001
+  also:
+  - AODM-001
+  - AODM-007
+  - SSPR-001
+  - SVCA-001
+  messages:
+  - Risk Scoring system of record

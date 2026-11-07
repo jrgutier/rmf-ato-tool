@@ -449,7 +449,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-7](../../playbooks/P/P-org-context.md#task-p-7)
 
-**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](PH-TMRR.md#task-s-5).
+**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](PH-TMRR.md#task-s-5); receives feedback from [M-5](PH-OS.md#task-m-5).
 
 ## <a id="task-p-8"></a>P-8 · Mission or Business Focus
 

@@ -241,7 +241,9 @@ requirements:
     locator: "2.2.4"
     context: "MONITORING"
     statement: "Monitoring activities are used as the mechanism within SecCM to validate that the system is adhering to organizational policies, procedures, and the approved secure baseline configuration. Planning and implementing secure configurations and then controlling configuration change is usually not sufficient to ensure that a system which was once secure will remain secure. Monitoring identifies undiscovered/undocumented system components, misconfigurations, vulnerabilities, and unauthorized changes, all of which, if not addressed, can expose organizations to increased risk. Using automated tools helps organizations to efficiently identify when the system is not consistent with the approved baseline configuration and when remediation actions are necessary. In addition, the use of automated tools often facilitates situational awareness and the documentation of deviations from the baseline configuration."
-    status: "candidate"
+    status: "partial"
+    reason: "MCHG-002 holds the reconciliation; finding undocumented components is INV-BND-001, and automated tools are not held"
+    evidence: [{"kind": "rule", "asserts": "Monitoring validates the system against the approved baseline configuration through reconciliation", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.reconcile.yaml", "expect": "changes detected by monitoring are not reconciled with", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "sentence": "Monitoring activities are used as the mechanism within SecCM to validate that the system is adhering to organizational policies, procedures, and the approved secure baseline configuration."}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0032"
     citation: {"ref": "SP800-128", "page": 21, "anchor": "Processes and requirements within all four SecCM phases do not remain static"}
@@ -1637,7 +1639,9 @@ requirements:
     locator: "3.3.2.ii"
     context: "IMPLEMENT THE CONFIGURATION CHANGE CONTROL PROCESS Although the process may have different steps and levels of rigor depending on organizational risk tolerance and/or system-impact level, configuratio"
     statement: "iii. Determine if the proposed change requires configuration control. Some types of changes may be exempt from configuration change control or pre-approved as defined in the SecCM plan and/or procedures. If the change is exempt or pre-approved, note this on the change request and allow the change to be made without further analysis or approval; however, system documentation may still require updating (e.g., the System Security Plan, the baseline configuration, system component inventory, etc.). iv. Analyze the proposed change for its security impact on the system (see Section 3.3.3)."
-    status: "candidate"
+    status: "partial"
+    reason: "The mark and the impact result are held; the documentation update on an exempt change is not"
+    evidence: [{"kind": "schema", "asserts": "The change request records whether the proposed change requires configuration control, or is exempt or pre-approved", "target": "framework/schema/changes.schema.json#/properties/changes/items/properties/control", "claim": "constraint", "sentence": "Determine if the proposed change requires configuration control."}, {"kind": "schema", "asserts": "The security impact analysis of the proposed change records its result", "target": "framework/schema/changes.schema.json#/properties/changes/items/properties/security_impact/properties/result", "claim": "constraint", "sentence": "Analyze the proposed change for its security impact on the system (see Section 3.3.3)."}]
     work_item: "WI-279"
   - id: "REQ-SP800-128-0211"
     citation: {"ref": "SP800-128", "page": 49, "anchor": "Test the proposed change for security and functional impacts. Testing confirms the"}
@@ -1645,7 +1649,8 @@ requirements:
     locator: "3.3.2.v"
     context: "IMPLEMENT THE CONFIGURATION CHANGE CONTROL PROCESS Although the process may have different steps and levels of rigor depending on organizational risk tolerance and/or system-impact level, configuratio"
     statement: "v. Test the proposed change for security and functional impacts. Testing confirms the impacts identified during analysis and/or reveals additional impacts. The impacts of the change are presented to the CCB and to the AO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Test the proposed change for security and functional impacts", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.yaml", "expect": "the proposed change is not tested for security and functional impacts", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded"}, {"kind": "rule", "asserts": "The impacts of the change are presented to the CCB and to the AO", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.presented.yaml", "expect": "the impacts of the change are not presented to", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded"}]
     work_item: "WI-279"
   - id: "REQ-SP800-128-0212"
     citation: {"ref": "SP800-128", "page": 49, "anchor": "vi. Approve the change. This step is usually performed by the CCB."}
@@ -1660,7 +1665,9 @@ requirements:
     locator: "3.3.2.v"
     context: "IMPLEMENT THE CONFIGURATION CHANGE CONTROL PROCESS Although the process may have different steps and levels of rigor depending on organizational risk tolerance and/or system-impact level, configuratio"
     statement: "Depending upon the scope of the change, it may be helpful to develop an implementation plan. Change implementation includes changes to applicable/related configuration parameters as well as updating system documentation to reflect the change(s). Stakeholders (e.g., users, management, help desk, etc.) are notified about the change, especially if the change implementation requires a service interruption or alters the functionality of the system. In the case of the latter situation, user and help desk training may be required. viii. Verify that the change was implemented correctly (e.g., vulnerability scans, post-implementation security and functionality analysis, reassessment of affected security controls, etc.). Configuration change control is not complete and a change request not closed until it has been confirmed that the change was deployed without issues. Although the initial security impact analysis and testing may have found no impact from the change, an improperly implemented change can cause its own security issues. ix. Close out the change request. With completion of the above steps, the change request is closed out in accordance with organizational procedures. Changes are also evaluated for consistency with organizational enterprise architecture. If configuration change control procedures have been defined by the organization, the system owner interprets the procedures in the context of the target system, and refines the process to make it practical to perform. Changes to the process may need to be approved by the organizational CCB in accordance with SecCM policy. It is important that IT operations and maintenance staff who support the system are active participants in the configuration change control process and are aware of their responsibility for following it. If significant business process reengineering is needed, for example, updating help desk activities or a patch management process, training may be required."
-    status: "candidate"
+    status: "partial"
+    reason: "Close-out and verification are held; notice is a free list, and training is a judgment"
+    evidence: [{"kind": "schema", "asserts": "Stakeholders are notified about the change", "target": "framework/schema/changes.schema.json#/properties/changes/items/properties/implementation/properties/notified", "claim": "constraint", "sentence": "Stakeholders (e.g., users, management, help desk, etc.) are notified about the change, especially if the change implementation requires a service interruption or alters the functionality of the system."}, {"kind": "rule", "asserts": "A change request is not closed until it has been confirmed that the change was deployed without issues", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.closed.yaml", "expect": "a change request is not closed until the change is confirmed deployed without issues", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "sentence": "Configuration change control is not complete and a change request not closed until it has been confirmed that the change was deployed without issues."}]
     work_item: "WI-279"
   - id: "REQ-SP800-128-0214"
     citation: {"ref": "SP800-128", "page": 51, "anchor": "Security impact analysis is one of the most critical steps in the"}
@@ -1690,7 +1697,9 @@ requirements:
     locator: "3.3.3.•"
     context: "CONDUCT SECURITY IMPACT ANALYSIS Security impact analyses are conducted by individuals or teams with technical knowledge of the system throughout the SDLC such that the impact of changes on security i"
     statement: "• Operations and Maintenance Phase (After a Change is Deployed) Security impact analysis in the operations and maintenance phase confirms that the original security impact analysis was correct, and that unexpected vulnerabilities or impacts to security controls not identified in the testing environment have not been introduced in the operational environment. Additionally, the security impact of unscheduled and unauthorized changes is analyzed during the operations and maintenance phase. The process for a security impact analysis consists of the following steps:"
-    status: "candidate"
+    status: "partial"
+    reason: "The impact of each change is held; that the post-deployment analysis confirms the first is not"
+    evidence: [{"kind": "schema", "asserts": "The security impact analysis of unscheduled and unauthorized changes records its result", "target": "framework/schema/changes.schema.json#/properties/changes/items/properties/security_impact/properties/result", "claim": "constraint"}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0218"
     citation: {"ref": "SP800-128", "page": 52, "anchor": "Understand the Change - If the change is being proposed, develop a"}
@@ -1747,7 +1756,9 @@ requirements:
     locator: "3.4"
     context: "SECCM MONITORING"
     statement: "If a system is inconsistent with approved configurations as defined by the organization’s baseline configurations of system CIs, the System Security Plan, etc., or if an organization’s component inventory is inaccurate, the organization may be unaware of potential vulnerabilities and not take actions that would otherwise limit those vulnerabilities and protect it from attacks (i.e., reduce risk). Monitoring activities offer the organization better visibility into the actual state of security for its systems and also support adherence to SecCM policies and procedures. SecCM monitoring also provides input to the organization’s overall continuous monitoring strategy.24 Organizations implement the configuration monitoring strategy developed during the SecCM planning phase. SecCM monitoring activities confirm that the existing configuration is identical to the current approved baseline configuration, that all items in the component inventory can be identified and are associated with the appropriate system, and, if possible, whether there are any unapproved (i.e., not recorded in the component inventory) components. Unapproved components often create a major security risk; unapproved components rarely have updated patches, are not configured using the approved baseline configurations, and are not assessed or included in the authorization to operate. For example, if a technician uses a router for testing and then forgets to remove it, or if an employee sets up a wireless access point in a remote office without management consent, the organization may be vulnerable without being aware of it."
-    status: "candidate"
+    status: "partial"
+    reason: "MCHG-002 holds the reconciliation against baseline and inventory; the rest is explanation"
+    evidence: [{"kind": "rule", "asserts": "Monitoring activities confirm the configuration against baseline configurations and the component inventory", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.reconcile.yaml", "expect": "changes detected by monitoring are not reconciled with", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "sentence": "Organizations implement the configuration monitoring strategy developed during the SecCM planning phase."}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0226"
     citation: {"ref": "SP800-128", "page": 53, "anchor": "Archived baseline configurations are protected in accordance with the system impact level."}
@@ -1860,7 +1871,8 @@ requirements:
     locator: "3.4.1.•"
     context: "ASSESSMENT AND REPORTING Examples of possible actions include:"
     statement: "• Updating baseline configurations to represent new configurations. Changes detected as a result of monitoring activities are reconciled with approved changes. Specifically, reconciliation attempts to answer the following:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Changes detected as a result of monitoring activities are reconciled with approved changes", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.reconcile.yaml", "expect": "changes detected by monitoring are not reconciled with", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded"}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0240"
     citation: {"ref": "SP800-128", "page": 55, "anchor": "Who made the change;"}
@@ -1892,7 +1904,8 @@ requirements:
     locator: "3.4.1.•"
     context: "ASSESSMENT AND REPORTING Examples of possible actions include:"
     statement: "• Whether the change corresponds with an approved change request, help desk ticket, or product release. Additionally, the results of monitoring activities are analyzed to determine the reason(s) that an unauthorized change occurred. There are many potential causes for unauthorized changes. They may stem from:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The results of monitoring activities are analyzed to determine the reason an unauthorized change occurred, its root cause", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.cause.yaml", "expect": "information about the unauthorized change is not analyzed to determine the root cause", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded"}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0244"
     citation: {"ref": "SP800-128", "page": 55, "anchor": "Accidental or unintentional changes;"}
@@ -2681,7 +2694,9 @@ requirements:
     locator: "APPENDIX H CCB CHARTER SAMPLE"
     context: ""
     statement: "COMMUNICATING STATUS <Describe how each decision that the CCB makes will be communicated to the individual who requested the change, senior management, project management, affected team members who must implement the change, higher- or lower-level CCBs, and any other stakeholders. Indicate where the decisions and any supporting information, rationale, or data will be stored.>"
-    status: "candidate"
+    status: "partial"
+    reason: "The requester is held; the other audiences and where decisions are stored are not"
+    evidence: [{"kind": "rule", "asserts": "Each decision the CCB makes is communicated to the individual who requested the change", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.communicated.yaml", "expect": "the board's decision is not communicated to the requester", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "sentence": "COMMUNICATING STATUS <Describe how each decision that the CCB makes will be communicated to the individual who requested the change, senior management, project management, affected team members who must implement the change, higher- or lower-level CCBs, and any other stakeholders."}]
     work_item: "WI-279"
   - id: "REQ-SP800-128-0343"
     citation: {"ref": "SP800-128", "page": 94, "anchor": "The following is a sample template for a Security Impact Analysis that"}
@@ -3080,7 +3095,9 @@ requirements:
     locator: "3.3.2.v"
     context: "IMPLEMENT THE CONFIGURATION CHANGE CONTROL PROCESS Although the process may have different steps and levels of rigor depending on organizational risk tolerance and/or system-impact level, configuratio"
     statement: "Unscheduled or Unauthorized Changes Unfortunately, it is not uncommon to see activities such as deploying or disposing of hardware, making changes to configurations, and installing patches occurring outside the configuration change control process even though such activities can have a significant impact on the security of a system. Additionally, situations may arise that necessitate an unscheduled (emergency) change. It is incumbent upon system owners to identify all sources of change to make certain that changes requiring configuration control go through the configuration change control process, even if it is after the fact. When unscheduled changes must be made and time does not allow for following the established configuration change control process, unscheduled changes are still managed and controlled. Organizations include instructions for handling unscheduled changes within the configuration change control procedures as well as instructions for handling unauthorized changes that are subsequently discovered. Configuration change control procedures also address flaw remediation to allow rapid but controlled change to fix software errors. Unscheduled changes are reviewed/resolved by the CCB as soon as is practical after unscheduled changes are made. SDLC Phase: Implementation/Assessment phase, ongoing during the Operations and Maintenance phase Primary Roles: System Owner; CCB; SSO Supporting Roles: SA; System User Expected Input: Organizational and/or system-level SecCM policies and procedures; System Security Plan/system security requirements Expected Output: Documented and implemented configuration change control process"
-    status: "candidate"
+    status: "partial"
+    reason: "After-the-fact control is held; the procedures are ART-CMP prose, and the board review of unscheduled changes is not dated against the change"
+    evidence: [{"kind": "rule", "asserts": "Changes outside the process go through configuration change control even after the fact", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.control.yaml", "expect": "a change outside the process goes through configuration change control even after the fact", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "sentence": "When unscheduled changes must be made and time does not allow for following the established configuration change control process, unscheduled changes are still managed and controlled."}]
     work_item: "WI-285"
   - id: "REQ-SP800-128-0392"
     citation: {"ref": "SP800-128", "page": 46, "anchor": "necessary to prioritize which systems, IT products, or CIs to target first"}

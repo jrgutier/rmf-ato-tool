@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:leveraged-authorizations",
   "title": "runs/<run-id>/artifacts/data/leveraged-authorizations.yaml",
-  "description": "Authorizations this system inherits from (C-1); OSCAL SSP system-implementation.leveraged-authorizations. `enterprise` marks an Enterprise system this organization receives; ENT-002 judges it.",
+  "description": "Authorizations this system inherits from (C-1); OSCAL SSP system-implementation.leveraged-authorizations. `arrangement` says how, and MLEV-001 judges it; `enterprise` marks an Enterprise system this organization receives, and ENT-002 judges that.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -97,6 +97,36 @@
                     ]
                   }
                 }
+              }
+            }
+          },
+          "arrangement": {
+            "title": "How the system inherits: from an approved common control provider, from another organizational system, or from an external IT service",
+            "enum": [
+              "common-control-provider",
+              "organizational-system",
+              "external-service"
+            ]
+          },
+          "authorization_termination_date": {
+            "$ref": "#/$defs/date",
+            "title": "End of the valid authorization to operate of the providing system"
+          },
+          "ao_aware": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "official",
+              "date"
+            ],
+            "properties": {
+              "official": {
+                "title": "Authorizing official of the system inheriting the controls, made aware of the inheritance",
+                "type": "string",
+                "pattern": "^PER-[A-Z0-9]+$"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
               }
             }
           }

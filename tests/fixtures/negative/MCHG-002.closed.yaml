@@ -1,0 +1,25 @@
+rule: MCHG-002
+bases:
+- minimal
+description: closed while the root cause is under analysis
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.1.root_cause.cause
+  value: under-analysis
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.1.closed
+  value: '2026-12-20'
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.1.verification
+  value:
+    method: Scan.
+    date: '2026-12-19'
+    result: pass
+expect:
+  errors:
+  - MCHG-002
+  messages:
+  - is closed before the root cause of the unauthorized change is determined

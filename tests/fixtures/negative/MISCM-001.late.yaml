@@ -1,0 +1,18 @@
+rule: MISCM-001
+bases:
+- minimal
+description: a decision reading a report not yet final
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.iscm_assessment
+  value: ISCMA-001
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: iscm_assessments.0.final.presented
+  value: '2026-12-01'
+expect:
+  errors:
+  - MISCM-001
+  messages:
+  - reads the ISCM program assessment

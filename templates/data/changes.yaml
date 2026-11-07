@@ -1,0 +1,44 @@
+# Template: artifacts/data/changes.yaml (M-1; schema changes). One record per change; write
+# `changes: []` for a period with none. MCHG-001 to MCHG-003 and MCON-001 judge it.
+monitoring:
+  unauthorized_changes:
+    from: "2026-01-01"  # no later than the first authorization
+    to: "2026-03-31"
+    method: "<<FILL: how monitoring detects unauthorized changes>>"
+    reconciled_against: [baseline, inventory, change-requests]
+changes:
+  - id: CHG-001
+    origin: requested  # requested | unscheduled | unauthorized | le-ci | dow-order
+    date: "2026-02-01"
+    summary: "<<FILL: the change>>"
+    requested_by: PER-ISSO
+    control: required  # required | exempt | pre-approved; exempt and pre-approved skip test and board
+    security_impact: {result: limited, analysis: "<<FILL: what changes for security>>"}  # none | limited | significant
+    # privacy_impact: true  # then root_cause.response is required
+    # external_service: LA-02  # a leveraged external service whose status this changes, or null; required when any leveraged record is external-service
+    test: {result: pass, date: "2026-02-05", presented_to: [PER-CCB, PER-AO]}  # pass | fail | not-run
+    decision: {by: PER-CCB, outcome: approved, date: "2026-02-08", communicated_to: [PER-ISSO, PER-PM]}
+    implementation: {date: "2026-02-10", notified: ["<<FILL: users, help desk, management>>"]}
+    verification: {method: "<<FILL: scan or reassessment>>", date: "2026-02-11", result: pass}
+    closed: "2026-02-12"
+    # root_cause:  # origin unauthorized; under-analysis only while the change stays open
+    #   cause: process-failure  # adversary-attack | process-failure | inadvertent-error | other | under-analysis
+    #   determined: "2026-02-03"
+    #   response: POAM-001  # POA&M item or risk (M-3)
+    # le_ci:  # origin le-ci
+    #   lawful: true
+    #   basis: "<<FILL: the authority for the deployment>>"
+    #   coordinated_with: PER-AO
+    #   attempted: "2026-02-01"  # on or before implementation
+    #   outcome: coordinated  # coordinated | attempted
+    sources: [INT-001.A1]
+connections:  # hosted or interconnected systems; [] when none
+  - id: CON-001
+    system: "<<FILL: the system>>"
+    component: CMP-EXAMPLE  # its boundary component of type interconnection
+    relationship: interconnected  # hosted | interconnected
+    decision: AD-ATO
+    authorization_termination_date: "2029-01-01"
+    action: connected  # connected | restricted | disconnected
+    sources: [INT-001.A1]
+sources: [INT-001.A1]
