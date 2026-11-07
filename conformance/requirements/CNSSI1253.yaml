@@ -58,7 +58,9 @@ requirements:
     locator: "1.1"
     context: "Purpose and Scope"
     statement: "The CNSS collaborates with NIST to ensure NIST SP 800-37, NIST SP 800-53, and NIST SP 800-53B address security and privacy safeguards to meet the requirements of NSS2 to the extent possible and provide a common foundation for information security and privacy across the United States (U.S.) Federal Government. CNSSI No. 1253 is a companion document to the NIST publications relevant to the RMF Steps, Categorize and Select (i.e., NIST SP 800-37; NIST SP 800-533; NIST SP 800-53B; NIST SP 800-60, Volume I, Guide for Mapping Types of Information and Information Systems to Security Categories; NIST SP 800-60, Volume II, Appendices to Guide for Mapping Types of Information and Information Systems to Security Categories; and Federal Information Processing Standards Publication [FIPS] 199, Standards for Security Categorization of Federal Information and Information Systems). CNSSI No. 1253 provides the security and privacy control baselines for NSS4. This Instruction also provides NSS-specific information on tailoring, developing, and applying overlays for the national security community, and parameter values for NIST SP 800-53 controls that are applicable to all NSS. CNSSI No. 1253 applies to all NSS. For NSS, where differences between the NIST documentation and this Instruction occur, this Instruction takes precedence."
-    status: "candidate"
+    status: "partial"
+    reason: "Parameter values applicable to all NSS are held by PVAL-001. 'CNSSI No. 1253 applies to all NSS' is held by rmf baseline resolve, which refuses high-water-mark unless the CNSSI1253 reference is degraded; that is a resolver error, not a rule with a negative fixture, so it cannot be cited."
+    evidence: [{"kind": "rule", "target": "PVAL-001", "fixture": "tests/fixtures/negative/PVAL-001.looser.yaml", "expect": "is looser than the NSS minimum", "claim": "constraint", "asserts": "Parameter values for controls applicable to all NSS are held: a recorded value that is looser than the NSS minimum fails", "sentence": "This Instruction also provides NSS-specific information on tailoring, developing, and applying overlays for the national security community, and parameter values for NIST SP 800-53 controls that are applicable to all NSS."}]
     work_item: "WI-20"
   - id: "REQ-CNSSI1253-0008"
     citation: {"ref": "CNSSI1253", "page": 6, "anchor": "This Instruction does not adopt the high-water mark (HWM) concept from FIPS"}
@@ -274,7 +276,9 @@ requirements:
     locator: "2.4"
     context: "Assumptions Related to Control Baselines These situations are specifically not addressed in the NSS baselines:"
     statement: "Overlays specific to these and other situations may be available and should be applied as part of the tailoring process, as appropriate. Additional information on overlays is available in Appendix E."
-    status: "candidate"
+    status: "partial"
+    reason: "Overlays are applied as part of tailoring: rmf baseline resolve applies each overlay categorization.overlays names, and SPCOV-001 fails a space platform without the Space Platform Overlay. 'Specific to these and other situations ... as appropriate' is open: no rule can say which overlay is appropriate for every situation, and the second sentence points to Appendix E."
+    evidence: [{"kind": "rule", "target": "SPCOV-001", "fixture": "tests/fixtures/negative/SPCOV-001.unapplied.yaml", "expect": "does not apply the Space Platform Overlay", "claim": "constraint", "asserts": "Overlays specific to these situations should be applied as part of tailoring: a space platform that does not apply the Space Platform Overlay fails", "sentence": "Overlays specific to these and other situations may be available and should be applied as part of the tailoring process, as appropriate."}]
     work_item: "WI-21"
   - id: "REQ-CNSSI1253-0035"
     citation: {"ref": "CNSSI1253", "page": 10, "anchor": "NSS baselines are a combination of NIST SP 800-53B baselines and the"}
@@ -290,7 +294,9 @@ requirements:
     locator: "2.5"
     context: "Relationship Between Baselines and Overlays"
     statement: "Overlays are a set of controls and a form of bulk tailoring agreed to by subject matter experts. Overlays are applied to address divergence from the assumptions used to create the NSS baselines (see Section 2.4), when specific controls are needed to protect a particular technology, or to address particular threats or additional requirements when processing certain types of information. The need to apply an overlay is determined by answering the applicability questions in each overlay. Overlays may or may not be baseline independent. Baseline independent overlays can be applied to any NSS baseline. As a result, there may be overlap of controls between an NSS baseline and controls identified in an overlay(s).16"
-    status: "candidate"
+    status: "partial"
+    reason: "The applicability test is held for overlays obtained from their owner (OVLX-001). The library's overlays are decided per overlay in ART-CAT '## Overlays' (C-2 step 6), prose. The other sentences define overlays and state that they may be baseline independent; nothing can fail on them."
+    evidence: [{"kind": "rule", "target": "OVLX-001", "fixture": "tests/fixtures/negative/OVLX-001.yaml", "expect": "none of its applicability questions is answered yes", "claim": "constraint", "asserts": "The need to apply an overlay is determined by answering the applicability questions in each overlay: one applied with none of its applicability questions answered yes fails", "sentence": "The need to apply an overlay is determined by answering the applicability questions in each overlay."}]
     work_item: "WI-22"
   - id: "REQ-CNSSI1253-0037"
     citation: {"ref": "CNSSI1253", "page": 10, "anchor": "Privacy is the only focus area for which there is a control"}
@@ -549,7 +555,8 @@ requirements:
     locator: "3.2.2.d"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "d. Assign values to organization-defined control parameters"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PVAL-001", "fixture": "tests/fixtures/negative/PVAL-001.yaml", "expect": "records no value for", "claim": "presence", "asserts": "Values are assigned to the organization-defined control parameters the NSS column sets; a control that records no value for one fails"}, {"kind": "rule", "target": "PVAL-001", "fixture": "tests/fixtures/negative/PVAL-001.looser.yaml", "expect": "is looser than the NSS minimum", "claim": "constraint", "asserts": "Assign values to organization-defined control parameters no looser than the NSS minimum values: a value that is looser than the NSS minimum fails"}]
     work_item: "WI-20"
   - id: "REQ-CNSSI1253-0070"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Supplement baselines with additional controls and control enhancements"}
@@ -714,7 +721,9 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.4.•"
     context: "The tables contain the following columns:"
     statement: "• Parameter Value – Contains minimum values specified for NSS; parameter values not appropriate for CNSS to define for all NSS are not included. Parameter values apply to both privacy and security baselines."
-    status: "candidate"
+    status: "partial"
+    reason: "The minimum values specified for NSS are held: PVAL-001 fails a value looser than the column's. That the values apply to both privacy and security baselines is built (PVAL-001 reads every SSP statement whatever its origin) but no fixture exercises a privacy-baseline control."
+    evidence: [{"kind": "rule", "target": "PVAL-001", "fixture": "tests/fixtures/negative/PVAL-001.looser.yaml", "expect": "is looser than the NSS minimum", "claim": "constraint", "asserts": "The Parameter Value column contains minimum values specified for NSS: a recorded value that is looser than the NSS minimum fails", "sentence": "• Parameter Value – Contains minimum values specified for NSS; parameter values not appropriate for CNSS to define for all NSS are not included."}]
     work_item: "WI-20"
   - id: "REQ-CNSSI1253-0090"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Tailoring Considerations – Columns for Assurance (control or control enhancement contributes to"}
@@ -802,8 +811,11 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.4"
     context: "The tables contain the following columns:"
     statement: "Organizations may address a parameter value in organizational policy if the policy meets or exceeds the NSS-defined parameter value."
-    status: "candidate"
+    status: "partial"
+    reason: "The sentence is a permission ('may address a parameter value in organizational policy'); its floor ('if the policy meets or exceeds the NSS-defined parameter value') is held by PVAL-001, which fails a looser value. Whether a permission with a testable condition counts as covered is the user's ruling."
+    evidence: [{"kind": "rule", "target": "PVAL-001", "fixture": "tests/fixtures/negative/PVAL-001.looser.yaml", "expect": "is looser than the NSS minimum", "claim": "constraint", "asserts": "A recorded parameter value looser than the NSS minimum value fails: is looser than the NSS minimum", "sentence": "Organizations may address a parameter value in organizational policy if the policy meets or exceeds the NSS-defined parameter value."}]
     work_item: "WI-20"
+    ruling_sought: [{"sentence": "Organizations may address a parameter value in organizational policy if the policy meets or exceeds the NSS-defined parameter value.", "reason": "A permission: organizations may set the value in policy. Its condition is held by PVAL-001; the permission itself cannot fail."}]
   - id: "REQ-CNSSI1253-0101"
     citation: {"ref": "CNSSI1253", "page": 161, "anchor": "GUIDANCE FOR SPECIAL CONDITIONS AND COMMUNITY-WIDE USE Overlays are a specification of"}
     kind: "modal"

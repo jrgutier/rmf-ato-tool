@@ -1,0 +1,14 @@
+rule: OCTX-001
+bases: [minimal]
+description: the DoD CISO is appointed by the Component CIO, not the DoD CIO
+mutations:
+  - op: replace_text
+    file: artifacts/data/org-context.yaml
+    old: "manpower_structure:"
+    new: |2-
+        - {id: RA-14, role: PER-DODCISO, name: X (fixture), title: T, organization: DoD, contact: {email: x@example.mil}, appointed_by: PER-CIO, citizenship: us, affiliation: dod-civilian, sources: [INT-013.A1]}
+      manpower_structure:
+expect:
+  errors: [OCTX-001]
+  messages:
+    - 'RA-14: the DoD CISO is appointed by PER-CIO, not the DoD CIO'

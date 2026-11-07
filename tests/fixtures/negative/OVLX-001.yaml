@@ -1,0 +1,36 @@
+rule: OVLX-001
+bases:
+- minimal
+description: an overlay obtained from the RMF KS is applied though its applicability question is answered no
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: obtained_overlays
+  value:
+  - id: OBT-OVL-KS-EXAMPLE
+    title: DoD-specific example overlay
+    kind: dod-ks
+    owner: DoD CIO
+    obtained_from: rmf-ks
+    applicability:
+    - question: Does the system host the example capability?
+      answer: false
+      sources:
+      - INT-028.A2
+    controls:
+      add:
+      - si-4
+    sources:
+    - INT-028.A2
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - OBT-OVL-KS-EXAMPLE
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - OVLX-001
+  messages:
+  - OBT-OVL-KS-EXAMPLE is applied, and none of its applicability questions is answered yes for the system

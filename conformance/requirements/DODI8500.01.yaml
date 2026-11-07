@@ -376,7 +376,8 @@ requirements:
     locator: "ENCLOSURE 2.c"
     context: "RESPONSIBILITIES"
     statement: "c. Appoints a DoD SISO in accordance with section 3554 of Title 44, U.S.C. (Reference (aa))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The DoD CIO appoints the DoD SISO, the DoD CISO; a DoD CISO record appointed by anyone else is refused", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.dodciso.yaml", "expect": "the DoD CISO is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0049"
     citation: {"ref": "DODI8500.01", "page": 14, "anchor": "Coordinates with the Under Secretary of Defense for Policy (USD(P)) to ensure"}
@@ -464,7 +465,8 @@ requirements:
     locator: "ENCLOSURE 2.l"
     context: "RESPONSIBILITIES"
     statement: "l. Appoints a PAO for DoD ISs and PIT systems governed by the Enterprise Information Environment Mission Area (EIEMA) as described in DoDD 8115.01 (Reference (ac))."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The DoD CIO appoints the PAO for systems governed by the Enterprise Information Environment Mission Area, as the DoD MA owner of that mission area", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao-eiema.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0060"
     citation: {"ref": "DODI8500.01", "page": 15, "anchor": "Coordinates with the DoD mission area owners to ensure that cybersecurity responsibilities"}
@@ -910,7 +912,8 @@ requirements:
     locator: "ENCLOSURE 2.c"
     context: "RESPONSIBILITIES"
     statement: "c. Appoints the PAO for DoD ISs and PIT systems governed by the DoD portion of the Intelligence Mission Area (DIMA) as described in Reference (ac)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The USD(I) appoints the PAO for systems governed by the DoD portion of the Intelligence Mission Area, as the DoD MA owner of that mission area", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao-dima.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0116"
     citation: {"ref": "DODI8500.01", "page": 19, "anchor": "DIRNSA/CHCSS. Under the authority, direction, and control of the USD(I), and in"}
@@ -1093,7 +1096,8 @@ requirements:
     locator: "ENCLOSURE 2.b.12"
     context: "RESPONSIBILITIES"
     statement: "12. CHIEF MANAGEMENT OFFICER OF THE DEPARTMENT OF DEFENSE. The Chief Management Officer of the Department of Defense appoints the PAO for DoD ISs and PIT systems governed by the Business Mission Area (BMA), as described in Section 2222 of Reference (aa)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The Chief Management Officer appoints the PAO for systems governed by the Business Mission Area, as the DoD MA owner of that mission area", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao-bma.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0139"
     citation: {"ref": "DODI8500.01", "page": 21, "anchor": "DoD COMPONENT HEADS. The DoD Component heads:"}
@@ -1477,7 +1481,8 @@ requirements:
     locator: "ENCLOSURE 2.d"
     context: "RESPONSIBILITIES"
     statement: "d. Appoints a PAO for DoD ISs and PIT systems governed by the Warfighting Mission Area as described in Reference (ac)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "The CJCS appoints the PAO for systems governed by the Warfighting Mission Area, as the DoD MA owner of that mission area", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0187"
     citation: {"ref": "DODI8500.01", "page": 25, "anchor": "COMMANDER, USCYBERCOM. In addition to the responsibilities in section 13 of this"}
@@ -1666,7 +1671,9 @@ requirements:
     locator: "ENCLOSURE 3.(2).(b)"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "(b) The PAOs for each DoD mission area provide the Tier 2 governance for their respective MAs."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-PAO persona, consulted on P-1 to P-7. Unheld: the Tier 2 governance of a mission area binds an official above the run; a run records no act of it, so no test can fail when it is not done. WI-27 stays open on it."
+    evidence: [{"kind": "prose", "target": "personas/PER-PAO.md", "asserts": "The PAOs provide the Tier 2 governance of their respective mission areas", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0211"
     citation: {"ref": "DODI8500.01", "page": 28, "anchor": "Tier 3 addresses risk from an IS and PIT system perspective and"}
@@ -2306,7 +2313,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "a. IT. Cybersecurity applies to all IT that receives, processes, stores, displays, or transmits DoD information, as shown in Figure 2."
-    status: "candidate"
+    status: "partial"
+    reason: "Figure 2's Assess line (PIT, IT services, products) is held by the below-system types and AONLY-001; that cybersecurity applies to all IT is the whole framework, which no rule can stand for."
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Cybersecurity applies to all IT that receives or processes DoD information, IT services and products included: an IT service that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8500.01-0290"
     citation: {"ref": "DODI8500.01", "page": 37, "anchor": "Information Systems. Cybersecurity requirements must be identified and included in the design,"}
@@ -2681,7 +2690,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(7)"
     context: "Figure 2. DoD Information Technology"
     statement: "(7) DoD use of space systems will follow cybersecurity policy established in this issuance and CNSSP 12 (Reference (db))."
-    status: "candidate"
+    status: "partial"
+    reason: "A space platform must apply the Space Platform Overlay (SPCOV-001) and keep the controls carrying CNSSP 12's duties (SPCOV-002); 'cybersecurity policy established in this issuance' is the whole of DoDI 8500.01, which no one rule can stand for."
+    evidence: [{"kind": "rule", "target": "SPCOV-001", "fixture": "tests/fixtures/negative/SPCOV-001.unapplied.yaml", "expect": "does not apply the Space Platform Overlay", "claim": "constraint", "asserts": "DoD use of space systems follows CNSSP 12 policy: a space platform that does not apply the Space Platform Overlay fails"}]
     work_item: "WI-21"
   - id: "REQ-DODI8500.01-0335"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Disposal and destruction of classified hard drives, electronic media, processing equipment components,"}
@@ -2728,7 +2739,8 @@ requirements:
     locator: "ENCLOSURE 3.b.(13)"
     context: "Figure 2. DoD Information Technology"
     statement: "(13) IT below the system level (i.e., IT services and products) will be security configured and reviewed by the cognizant ISSM (under the direction of the AO) for acceptance and connection into an authorized computing environment (i.e., an IS enclave with an ATO)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.reviewer.yaml", "expect": "not the cognizant ISSM", "claim": "constraint", "asserts": "IT below the system level is security configured and reviewed by the cognizant ISSM: a review by anyone else, not the cognizant ISSM, fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.direction.yaml", "expect": "reviews under the direction of the AO", "claim": "constraint", "asserts": "The ISSM reviews under the direction of the AO for acceptance: the ISSM reviews under the direction of the AO, not another role, or it fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.environment.yaml", "expect": "is no authorized computing environment", "claim": "constraint", "asserts": "Acceptance and connection is into an authorized computing environment, an IS enclave with an ATO: one that is no authorized computing environment fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8500.01-0341"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "Cybersecurity must be consistent with enterprise architecture principles and guidelines within the"}
@@ -3025,7 +3037,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. Serves as the DoD CIO’s primary liaison to DoD AOs, ISOs, and ISSOs."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-DODCISO persona. Unheld: serving as the DoD CIO's liaison to AOs, ISOs and ISSOs binds an official above the run; a run records no act of it, so no test can fail when it is not done. WI-27 stays open on it."
+    evidence: [{"kind": "prose", "target": "personas/PER-DODCISO.md", "asserts": "The DoD SISO serves as the DoD CIO's primary liaison to DoD AOs, ISOs and ISSOs", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0376"
     citation: {"ref": "DODI8500.01", "page": 45, "anchor": "Advises, informs, and supports DoD PAOs and their representatives."}
@@ -3246,7 +3260,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 2. DoD Information Technology"
     statement: "a. Oversee and establish guidance for the strategic implementation of cybersecurity and risk management within their MAs."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-PAO persona, consulted on P-1 to P-7. Unheld: the PAO's guidance on the strategic implementation of cybersecurity and risk management in the MA binds an official above the run; a run records no act of it, so no test can fail when it is not done. WI-27 stays open on it."
+    evidence: [{"kind": "prose", "target": "personas/PER-PAO.md", "asserts": "PAOs oversee and establish guidance for the strategic implementation of cybersecurity and risk management within their MAs", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODI8500.01-0404"
     citation: {"ref": "DODI8500.01", "page": 47, "anchor": "Appoint flag-level (e.g., general officer, senior executive) PAO representatives to, and to"}
@@ -3437,7 +3453,8 @@ requirements:
     locator: "ENCLOSURE 3.k"
     context: "Figure 2. DoD Information Technology"
     statement: "k. Ensure the secure configuration and approval of IT below the system level (i.e., products and IT services) in accordance with applicable guidance prior to acceptance into or connection to a DoD IS or PIT system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.configuration.yaml", "expect": "is accepted, and its security configuration is", "claim": "constraint", "asserts": "Secure configuration and approval of IT below the system level before acceptance into or connection to a DoD IS: accepted while its security configuration is not approved fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.environment.yaml", "expect": "is no authorized computing environment", "claim": "constraint", "asserts": "Approval of IT below the system level before acceptance into or connection to a DoD IS: the system it connects to that is no authorized computing environment fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8500.01-0428"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "INFORMATION SYSTEM SECURITY OFFICER (ISSO). When circumstances warrant, a single individual may"}

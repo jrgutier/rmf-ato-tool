@@ -4,8 +4,8 @@ The categorization must be approved (C-3). Selection (CNSSI 1253 §3.2.1, Task S
 union of the Appendix D security control baselines for each objective at its own impact
 level (C, I and A columns of ``framework/baselines/cnssi-1253.yaml``, origin ``baseline``)
 and the NSS privacy control baseline, "a default for all NSS" (origin ``privacy-baseline``
-for controls no security column selects). The overlays in
-``categorization.overlays`` are added next, then ``tailoring.yaml`` (add, remove, and from
+for controls no security column selects). The overlays in ``categorization.overlays`` apply
+next, their removals and then their additions; then ``tailoring.yaml`` (add, remove, and from
 contract 0.2.0 a compensating control taken from the catalog) and ``run.yaml:control_subset``
 apply. ``method: high-water-mark`` (the SP 800-53B profile at the
 highest of C/I/A, read as raw OSCAL JSON) is the plan §7.6 fallback, allowed only while the
@@ -92,13 +92,43 @@ def cnssi_origins(tables: dict[str, Any], cat: dict[str, str]) -> dict[str, str]
     return origins
 
 
-def overlay_problem(tables: dict[str, Any], name: str) -> str | None:
+ORG_FILE = "artifacts/data/org-context.yaml"
+OBTAINED = "OBT-OVL-"
+
+
+def obtained_overlays(run: Run) -> dict[str, dict[str, Any]]:
+    """Overlays the organization obtained from their owner (org-context.yaml
+    obtained_overlays), as table overlays: CDS, Intelligence, a SAP authority's, the RMF KS's."""
+    if not run.path(ORG_FILE).is_file():
+        return {}
+    try:
+        data = run.data(ORG_FILE)
+    except YamlError:
+        return {}
+    records = data.get("obtained_overlays") if isinstance(data, dict) else None
+    out = {}
+    for r in records if isinstance(records, list) else []:
+        controls = r.get("controls") if isinstance(r, dict) else None
+        if isinstance(r.get("id"), str) and isinstance(controls, dict):
+            out[r["id"]] = {"id": r["id"], "title": str(r.get("title")), "transcribed": True,
+                            "blocks": [{k: list(controls.get(k) or []) for k in ("add", "remove")}]}
+    return out
+
+
+def overlay_problem(tables: dict[str, Any], name: str,
+                    obtained: dict[str, dict[str, Any]] | None = None) -> str | None:
     """Why ``name`` cannot be applied from ``categorization.overlays``, or None."""
     known = {o["id"]: o for o in tables["overlays"]}
+    if name in (obtained or {}):
+        return None
     overlay = known.get(name)
     if overlay is None:
+        hint = (f"; an overlay obtained from its owner is recorded in {ORG_FILE} "
+                f"obtained_overlays and applied by its {OBTAINED}* ID"
+                if not name.startswith(OBTAINED) else
+                f"; {ORG_FILE} obtained_overlays records no {name}")
         return (f"unknown overlay {name!r} in categorization.overlays; {TABLES_PATH} lists "
-                f"{', '.join(known)}")
+                f"{', '.join(known)}{hint}")
     if overlay["transcribed"]:
         return None
     # The Privacy Overlay is transcribed per control set under its reference ID (ADR-0003).
@@ -111,15 +141,33 @@ def overlay_problem(tables: dict[str, Any], name: str) -> str | None:
             "control selections cannot be applied")
 
 
-def overlay_ids(tables: dict[str, Any], overlays: list[str]) -> list[str]:
-    known = {o["id"]: o for o in tables["overlays"]}
-    ids: list[str] = []
+def overlay_changes(tables: dict[str, Any], overlays: list[str],
+                    obtained: dict[str, dict[str, Any]] | None = None
+                    ) -> tuple[list[str], list[str]]:
+    """What the applied overlays add and what they tailor out (``remove``, the Space Platform
+    Overlay's "--" against H/H/H)."""
+    known = {o["id"]: o for o in tables["overlays"]} | (obtained or {})
+    added: list[str] = []
+    removed: list[str] = []
     for name in overlays:
-        problem = overlay_problem(tables, name)
+        problem = overlay_problem(tables, name, obtained)
         if problem:
             raise BaselineError(problem)
-        ids += [cid for block in known[name]["blocks"] for cid in block["add"]]
-    return ids
+        for block in known[name]["blocks"]:
+            added += block.get("add") or []
+            removed += block.get("remove") or []
+    return added, removed
+
+
+def overlay_ids(tables: dict[str, Any], overlays: list[str]) -> list[str]:
+    return overlay_changes(tables, overlays)[0]
+
+
+def privacy_column(tables: dict[str, Any]) -> set[str]:
+    """Controls the NSS privacy control baseline selects, "a default for all NSS"."""
+    return {row["id"] for table in tables["tables"] for block in table["blocks"]
+            for row in block["controls"]
+            if not row.get("withdrawn") and row["privacy"] in SELECTED}
 
 
 def cnssi_degraded(run: Run) -> bool:
@@ -177,7 +225,21 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
     sources.append({"path": catalog.CATALOG_PATH,
                     "sha256": _sha256(run.repo / catalog.CATALOG_PATH)})
 
-    for cid in overlay_ids(tables, overlays):
+    # Removals first, so a control one applied overlay removes and another adds is selected:
+    # an overlay's tailoring-out rests on its assumptions, an addition on the overlay's need.
+    # A removal tailors the security baseline; the NSS privacy control baseline, which every
+    # NSS implements, keeps its controls (an S-2 remove can still take one out).
+    added, removed = overlay_changes(tables, overlays, obtained_overlays(run))
+    if removed and method != CNSSI:
+        raise BaselineError("an overlay that tailors controls out is written against a CNSSI 1253 "
+                            f"baseline; method {method} cannot apply its removals")
+    privacy = privacy_column(tables) if removed and method == CNSSI else set()
+    for cid in removed:
+        if origin.get(cid) == "baseline" and cid in privacy:
+            origin[cid] = "privacy-baseline"
+        elif origin.get(cid) == "baseline":
+            del origin[cid]
+    for cid in added:
         origin.setdefault(cid, "overlay")
     tailoring = run.path(TAILORING_FILE)
     if tailoring.is_file():

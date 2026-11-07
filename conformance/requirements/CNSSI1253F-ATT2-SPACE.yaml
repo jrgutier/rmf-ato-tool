@@ -10,7 +10,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "Space national security system (NSS) maturity has developed to a point where numerous threats are now understood to pose risks for concerns such as unauthorized access, data integrity compromise, operational asset availability, and secure communications. This Space Platform Overlay identifies security control tailoring to protect portions of an overall space NSS. As notionally shown in Figure 1, a space NSS is characterized by space, ground, user, and link segments. This Space Platform Overlay’s scope is specific to the space platform and link segment capabilities that interface with the space platform. The space platform includes satellite payload(s) (e.g., imaging, communication, positioning navigation and timing), and onboard computing systems. This overlay’s scope also includes on-orbit communication relays. The link segment includes wireless communication within space and between space and the ground segment through components that utilize radio frequency communication (e.g., antennas, transceivers), data encryption, decryption, and transmission security components. It should be noted that this overlay does not address portions of the link segment interfacing with the ground and user segments. Hereafter, the term “space platform” is used to mean both the defined space platform and the related portions of the link segment interfacing with the space platform."
-    status: "candidate"
+    status: "partial"
+    reason: "The scope is held: SPCOV-001 fails the overlay on a ground or user segment. The first sentence says what the overlay is and the third defines a term; neither can fail."
+    evidence: [{"kind": "rule", "target": "SPCOV-001", "fixture": "tests/fixtures/negative/SPCOV-001.yaml", "expect": "scope is the space platform and the link segment", "claim": "constraint", "asserts": "The overlay does not address the ground and user segments; a ground segment applying it fails: scope is the space platform and the link segment", "sentence": "It should be noted that this overlay does not address portions of the link segment interfacing with the ground and user segments."}]
     work_item: "WI-21"
   - id: "REQ-CNSSI1253F-ATT2-SPACE-0002"
     citation: {"ref": "CNSSI1253F-ATT2-SPACE", "page": 1, "anchor": "Another consideration for this overlay is the applicable system development lifecycle (SDLC)"}
@@ -50,7 +52,8 @@ requirements:
     locator: "3"
     context: ""
     statement: "Note: if any vulnerability assumption is not valid for a system or mission, then the controls associated with that assumption should be revisited and considered for inclusion in the control baseline."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "TLR-003", "fixture": "tests/fixtures/negative/TLR-003.space.yaml", "expect": "the controls the overlay tailors out on it are not revisited", "claim": "constraint", "asserts": "When a vulnerability assumption does not hold, the controls associated with that assumption are revisited: the controls the overlay tailors out on it are not revisited fails", "sentence": "Note: if any vulnerability assumption is not valid for a system or mission, then the controls associated with that assumption should be revisited and considered for inclusion in the control baseline."}]
     work_item: "WI-21"
   - id: "REQ-CNSSI1253F-ATT2-SPACE-0007"
     citation: {"ref": "CNSSI1253F-ATT2-SPACE", "page": 6, "anchor": "Space platform threat assumptions are the second factor utilized to tailor in"}
@@ -66,7 +69,9 @@ requirements:
     locator: "4"
     context: ""
     statement: "The Space Platform Overlay applies under the space NSS scope defined in CNSSP 12 and CNSSI 1200 for all United States Government Departments and Agencies involved in the acquisition, development, lease, procurement, use, control, operation, or direct support of space systems and/or their components (e.g., launch systems, test ranges, space platforms, buses, payloads, operations centers, mission equipment, and user modems, terminals, and equipment) used to support National Security Missions (NSM). This policy is also applicable to all space NSS that are developed, owned, operated, controlled, or leased either by the USG or for the benefit of the USG by commercial entities (domestic and foreign) or foreign governments under bilateral or multilateral agreements that includes systems:"
-    status: "candidate"
+    status: "partial"
+    reason: "A space platform must apply the overlay (SPCOV-001). Which departments and agencies are involved, and CNSSI 1200's scope (not in the library), are not testable from a run."
+    evidence: [{"kind": "rule", "target": "SPCOV-001", "fixture": "tests/fixtures/negative/SPCOV-001.unapplied.yaml", "expect": "does not apply the Space Platform Overlay", "claim": "constraint", "asserts": "The Space Platform Overlay applies to space systems used to support National Security Missions; a space platform that does not apply the Space Platform Overlay fails", "sentence": "The Space Platform Overlay applies under the space NSS scope defined in CNSSP 12 and CNSSI 1200 for all United States Government Departments and Agencies involved in the acquisition, development, lease, procurement, use, control, operation, or direct support of space systems and/or their components (e.g., launch systems, test ranges, space platforms, buses, payloads, operations centers, mission equipment, and user modems, terminals, and equipment) used to support National Security Missions (NSM)."}]
     work_item: "WI-21"
   - id: "REQ-CNSSI1253F-ATT2-SPACE-0009"
     citation: {"ref": "CNSSI1253F-ATT2-SPACE", "page": 6, "anchor": "Used to collect, generate, process, store, display, transmit, or receive National Security"}
@@ -183,7 +188,9 @@ requirements:
     locator: ""
     context: ""
     statement: "The tailoring in this overlay defines a maximum control baseline for the space platform based on assumptions and threats defined in Section 3."
-    status: "candidate"
+    status: "partial"
+    reason: "rmf baseline resolve applies the removals and additions against H/H/H (framework/baselines/cnssi-1253.yaml tailors, tests/unit/test_baseline.py); below H/H/H the removals take out only what the per-objective baseline selects, an engine choice the overlay does not state. Nothing caps a run at the maximum."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "The overlay tailoring removes and adds controls against the H/H/H control baseline for the space platform", "claim": "presence", "sentence": "The tailoring in this overlay defines a maximum control baseline for the space platform based on assumptions and threats defined in Section 3."}]
     work_item: "WI-21"
     promoted: {"reason": "Section 1 runs onto page 2, which sources.yaml excludes as Section 2 only: the overlay's tailoring defines a maximum control baseline for the space platform, which sets how the removals and additions apply."}
   - id: "REQ-CNSSI1253F-ATT2-SPACE-0023"
@@ -192,7 +199,9 @@ requirements:
     locator: "d.5"
     context: ""
     statement: "Table 2 summarizes the overlay control tailoring for baseline additions and removals. The symbols used in the table are as follows:"
-    status: "candidate"
+    status: "partial"
+    reason: "Table 2 is transcribed (framework/baselines/cnssi-1253.yaml, 83 additions and 262 removals) and tests/unit/test_cnssi1253.py diffs it against Table 2 and Table 3; a lead-in sentence, so the proof is the test, which the judge cannot read."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "The overlay control tailoring adds 83 and removes 262 controls against the baseline", "claim": "presence"}]
     work_item: "WI-21"
     promoted: {"reason": "Lead-in of the Table 2 symbols with the table's duty: the legend rows are noise pointing at it, and it carries WI-21's binding"}
   - id: "REQ-CNSSI1253F-ATT2-SPACE-0024"

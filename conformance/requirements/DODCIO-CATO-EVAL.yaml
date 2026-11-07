@@ -178,7 +178,9 @@ requirements:
     locator: "Appendix B: DevSecOps Continuous Authorization: Implementation Guidance and.•"
     context: ""
     statement: "• CISO Issues authorization"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-DODCISO persona (consulted at M-6) and AODM-007, which refuses a cATO without dod_ciso_approval (a presence clause, which caps at partial). Unheld: who issues the cATO; AD-CATO keeps decided_by PER-AO and the approval records no approver, which is cluster I-9's cATO decision logic."
+    evidence: [{"kind": "prose", "target": "personas/PER-DODCISO.md", "asserts": "The DoD CISO issues the cATO authorization as a recorded dod_ciso_approval on the AD-CATO record", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODCIO-CATO-EVAL-0022"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 7, "anchor": "Alert/Action triggered if issue found"}
@@ -262,7 +264,9 @@ requirements:
     locator: "Appendix B: DevSecOps Continuous Authorization: Implementation Guidance and"
     context: "Figure 4. Assessment Method Overview"
     statement: "Currently, this level of authority is at the DoD-level. Once cATO criteria is standardized for the DevSecOps use case, the DoD CISO will delegate approval authority to the Component CISO or equivalent."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: the PER-DODCISO persona names the approval authority and its future delegation. Unheld: the delegation of cATO approval authority to the Component CISO once cATO criteria are standardized; the cATO decision logic is cluster I-9's, and no record names who approved."
+    evidence: [{"kind": "prose", "target": "personas/PER-DODCISO.md", "asserts": "The DoD CISO approval authority for a cATO will be delegated to the Component CISO once cATO criteria is standardized", "claim": "presence"}]
     work_item: "WI-27"
   - id: "REQ-DODCIO-CATO-EVAL-0032"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 9, "anchor": "The three competencies in the memo “Continuous Authorization to Operate (cATO),” February"}
@@ -339,7 +343,9 @@ requirements:
     locator: "Appendix D: cATO Evaluation Criteria"
     context: ""
     statement: "The presence of these activities will be partly determined through demonstrated use of system-level dashboards, which are a culmination of information received from logging, testing, and the following activities to provide a real-time view of the environment. Components are not limited to the way they conduct the following activities; however, this document offers guidelines to achieving a cATO."
-    status: "candidate"
+    status: "partial"
+    reason: "Presence of the dashboard and its demonstration; 'partly determined' is how assessors judge, which a run cannot fail."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.yaml", "expect": "the cATO package demonstrates no system-level dashboard (cato.yaml dashboard)", "claim": "presence", "asserts": "The presence of these activities is determined through demonstrated use of system-level dashboards: a package that demonstrates no system-level dashboard fails", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "The presence of these activities will be partly determined through demonstrated use of system-level dashboards, which are a culmination of information received from logging, testing, and the following activities to provide a real-time view of the environment."}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0041"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Items in bold in this section indicate documents or artifacts that must"}
@@ -521,7 +527,8 @@ requirements:
     locator: "1.0.▪"
     context: "Continuous Monitoring"
     statement: "▪ AO and designated cybersecurity personnel must have real-time access to the results of testing, scanning, monitoring, and performance metrics at the platform or application level in a mutually agreeable format (i.e., dashboards, alerts, etc.)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.feeds.yaml", "expect": "the AO has no real-time access to the results of", "claim": "constraint", "asserts": "AO and cybersecurity personnel must have real-time access to the results of testing, scanning, monitoring and performance metrics: the AO has no real-time access to the results fails", "holds_when": "a cATO is sought (cato.yaml exists)"}, {"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.access.yaml", "expect": "the AO and designated cybersecurity personnel have real-time access to the", "claim": "constraint", "asserts": "The AO and designated cybersecurity personnel must have real-time access to the dashboards: access that leaves out the AO fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0063"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Identify, assess, prioritize, and share risk information in real time"}
@@ -545,7 +552,9 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Status of dashboarding activities, including a demonstration of the dashboard in operation"
-    status: "candidate"
+    status: "partial"
+    reason: "Presence: the package records the dashboard and its demonstration (date and audience, required by the schema); what the demonstration showed cannot fail."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.yaml", "expect": "the cATO package demonstrates no system-level dashboard (cato.yaml dashboard)", "claim": "presence", "asserts": "The status of dashboarding activities includes a demonstration of the dashboard in operation: a cATO package that demonstrates no system-level dashboard fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0066"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Must be readily available and as near real time as feasible"}
@@ -553,7 +562,9 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Must be readily available and as near real time as feasible"
-    status: "candidate"
+    status: "partial"
+    reason: "DASH-001 fails a dashboard that is not near real time and records no feasibility_limit; 'as near real time as feasible' lets a recorded limit pass, so the clause tests that a reason is present, not that it is true. 'Readily available' is not tested."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.refresh.yaml", "expect": "not near real time, and records no", "claim": "presence", "asserts": "Must be readily available and as near real time as feasible: a dashboard not near real time that records no feasibility limit fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0067"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Includes a dashboard with relevant current information and requirements that helps security"}
@@ -561,7 +572,9 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Includes a dashboard with relevant current information and requirements that helps security personnel perform their tasks"
-    status: "candidate"
+    status: "partial"
+    reason: "The information the dashboard shows is held (DASH-001); whether it helps security personnel perform their tasks is a judgment."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.shows.yaml", "expect": "the dashboard does not visualize", "claim": "constraint", "asserts": "Includes a dashboard with relevant current information that helps security personnel perform their tasks: the dashboard does not visualize findings or posture fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0068"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Must provide compliance reporting statistics to the Continuous Monitoring &"}
@@ -594,7 +607,8 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Demonstrate which security controls are fed into a system-level dashboard view, providing a real time and robust mechanism for AOs to view the environment"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.fed.yaml", "expect": "all security controls are fed into the system-level dashboard view", "claim": "constraint", "asserts": "Demonstrate which security controls are fed into a system-level dashboard view: a dashboard where a baseline control is not fed fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0072"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Helps secure the software supply chain, the software development pipeline and its"}

@@ -15,7 +15,7 @@ tasks:
       Identify and assign the individuals who fill the security and privacy risk management
       roles, free of conflicts of interest, before system-level RMF work starts with the
       program.
-    raci: {R: [PER-CIO, PER-PRIV], A: PER-CIO, C: [PER-AO, PER-RE, PER-CISO], I: [PER-PM]}
+    raci: {R: [PER-CIO, PER-PRIV], A: PER-CIO, C: [PER-AO, PER-RE, PER-CISO, PER-PAO, PER-JCACPM], I: [PER-PM]}
     inputs: [EXT-ORG-POLICY]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -55,7 +55,7 @@ tasks:
       Establish the organization's risk management strategy, including how it frames, assesses,
       responds to and monitors risk and the risk tolerance that the Component CIO communicates
       to programs.
-    raci: {R: [PER-CIO, PER-RE], A: PER-CIO, C: [PER-CISO, PER-PRIV], I: [PER-AO]}
+    raci: {R: [PER-CIO, PER-RE], A: PER-CIO, C: [PER-CISO, PER-PRIV, PER-PAO, PER-JCACPM], I: [PER-AO]}
     inputs: [EXT-ORG-POLICY, ART-ORG-CONTEXT]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -103,7 +103,7 @@ tasks:
       current cyber threat information, and keep the results current: in operations, review
       threat, vulnerability, technology and mission changes against the organizational risk
       posture.
-    raci: {R: [PER-RE, PER-CISO, PER-PRIV], A: PER-RE, C: [PER-CIO, PER-SPONSOR, PER-AO], I: []}
+    raci: {R: [PER-RE, PER-CISO, PER-PRIV], A: PER-RE, C: [PER-CIO, PER-SPONSOR, PER-AO, PER-PAO, PER-JCACPM], I: []}
     inputs: [ART-ORG-CONTEXT, EXT-THREAT]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -141,7 +141,7 @@ tasks:
       Establish and publish organizationally-tailored control baselines and/or CSF profiles
       (optional); in DoD they build on the CNSSI 1253 baselines, overlays and DoD assignment
       values.
-    raci: {R: [PER-SPONSOR, PER-RE], A: PER-RE, C: [PER-CIO, PER-AO, PER-CISO, PER-PRIV], I: []}
+    raci: {R: [PER-SPONSOR, PER-RE], A: PER-RE, C: [PER-CIO, PER-AO, PER-CISO, PER-PRIV, PER-PAO, PER-JCACPM], I: []}
     inputs: [ART-ORG-CONTEXT, EXT-BASELINES, EXT-CNSSI1253-OVERLAYS]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -178,7 +178,7 @@ tasks:
       Identify, document and publish the common controls available for inheritance and their
       providers, so programs can plan inheritance before they allocate requirements (P-17) and
       controls (S-3).
-    raci: {R: [PER-CISO, PER-PRIV], A: PER-CISO, C: [PER-SPONSOR, PER-RE, PER-CIO, PER-AO, PER-CCP, PER-PM], I: []}
+    raci: {R: [PER-CISO, PER-PRIV], A: PER-CISO, C: [PER-SPONSOR, PER-RE, PER-CIO, PER-AO, PER-CCP, PER-PM, PER-PAO, PER-JCACPM], I: []}
     inputs: [ART-ORG-CONTEXT, EXT-ORG-POLICY]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -209,7 +209,7 @@ tasks:
     purpose: >-
       Prioritize organizational systems that share an impact level into low-, moderate- and
       high-impact sub-categories (optional), to guide where resources go first.
-    raci: {R: [PER-RE], A: PER-RE, C: [PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO], I: []}
+    raci: {R: [PER-RE], A: PER-RE, C: [PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-CIO, PER-AO, PER-PAO, PER-JCACPM], I: []}
     inputs: [ART-ORG-CONTEXT]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -245,7 +245,7 @@ tasks:
     purpose: >-
       Develop and implement the organization-wide strategy for continuously monitoring control
       effectiveness, which every system strategy (S-5) must follow.
-    raci: {R: [PER-RE], A: PER-RE, C: [PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO], I: [PER-CSSP]}
+    raci: {R: [PER-RE], A: PER-RE, C: [PER-CIO, PER-CISO, PER-PRIV, PER-SPONSOR, PER-PM, PER-AO, PER-PAO, PER-JCACPM], I: [PER-CSSP]}
     inputs: [ART-ORG-CONTEXT]
     outputs: [ART-ORG-CONTEXT]
     writes_facts: []
@@ -415,7 +415,7 @@ tasks:
     purpose: >-
       Identify the types of information the system processes, stores and transmits, including
       whether it processes PII.
-    raci: {R: [PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-ISSM], I: [], when: {PER-PRIV: processes-pii}}
+    raci: {R: [PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-ISSM, PER-ISSO, PER-SPONSOR], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-INV, EXT-PRODUCT]
     outputs: [ART-INFOTYPES]
     writes_facts: []
@@ -488,7 +488,7 @@ tasks:
       C-2, which reads ART-RA, so its supplier risks are a first pass: SP 800-161r1 prioritizes
       the supplier risk assessment once the impact level is defined, and C-3 feeds back to P-14
       once the categorization is approved.
-    raci: {R: [PER-PM, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
+    raci: {R: [PER-PM, PER-ISSM, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AO, PER-SPONSOR, PER-IO, PER-SCA], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-ORG-CONTEXT, ART-INV, ART-INFOTYPES, ART-BND, EXT-THREAT, EXT-PPP, EXT-STPP, EXT-ITRA, EXT-SEP]
     outputs: [ART-RA, ART-PIA]
     writes_facts: []
@@ -555,7 +555,7 @@ tasks:
       Define and prioritize the security and privacy requirements for the system and its
       environment, including cyber survivability, so they enter the requirements baseline before
       the SRR.
-    raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR], I: [], when: {PER-PRIV: processes-pii}}
+    raci: {R: [PER-SPONSOR, PER-PM, PER-IO, PER-PRIV], A: PER-PM, C: [PER-AO, PER-ISSM, PER-CISO, PER-MDA, PER-ISSE, PER-LSE, PER-UR, PER-ISSO], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-RA, ART-INFOTYPES, ART-STAKE, EXT-CAPDOC, EXT-ORG-POLICY, EXT-PPP, EXT-STPP]
     outputs: [ART-REQ]
     writes_facts: []
@@ -663,7 +663,7 @@ tasks:
       Allocate the security and privacy requirements to the system, its elements and its
       environment of operation, including common control providers, so the development RFP
       carries them.
-    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
+    raci: {R: [PER-ISSE, PER-ISSM, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-CIO, PER-AO, PER-SPONSOR, PER-CISO, PER-CCP], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-REQ, ART-ORG-CONTEXT, ART-INV]
     outputs: [ART-REQ]
     writes_facts: []
@@ -713,7 +713,7 @@ tasks:
     purpose: >-
       Register the system in the DoD Component registry for management, accountability and
       oversight, so the Component CIO and CISO can track its authorization status.
-    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [], I: [PER-CISO, PER-CIO]}
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-SPONSOR], I: [PER-CISO, PER-CIO]}
     inputs: [ART-BND, EXT-REGISTRY]
     outputs: [ART-REG]
     writes_facts: []

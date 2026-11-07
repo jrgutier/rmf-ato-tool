@@ -1,0 +1,24 @@
+rule: SPCOV-002
+bases: [minimal]
+description: a space platform tailors out flaw remediation, which carries CNSSP 12's secure patching duty
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: categorization.overlays
+    value: [CNSSI1253F-ATT2-SPACE]
+  - op: set_field
+    file: facts.yaml
+    path: categorization.space_segments
+    value: [space-platform]
+  - op: resolve_baseline
+    file: baseline.json
+  - op: delete_list_item
+    file: baseline.json
+    path: controls
+    where:
+      control_id: si-2
+expect:
+  errors: [SPCOV-002]
+  also: [TLR-003, ASMT-002, POAM-CTL-001, TLR-006, GEN-STALE-001, SVCA-001, ISCM-002]
+  messages:
+    - "PC-SPC-4: CNSSP 12 requires of a space NSS that it implement a process to securely develop and deploy software and firmware patches and updates, and si-2 is tailored out of the baseline"

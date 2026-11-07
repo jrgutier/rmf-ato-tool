@@ -116,14 +116,19 @@ def test_every_block_cites_a_page_that_resolves(tables):
     findings, cited = baseline_tables(REAL, REPO_ROOT)
     assert findings == []
     overlay_pages = sum(len(o.get("blocks") or []) for o in tables["overlays"])
-    assert overlay_pages == 5 + 55  # Classified System Overlay, Privacy Overlay control sets
+    # Classified System Overlay, Privacy Overlay control sets, Space Platform Overlay
+    assert overlay_pages == 5 + 55 + 9
     inputs = baseline.load_inputs(REPO_ROOT)  # tailoring-inputs.yaml: one block per entry
-    blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"])
+    blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"]) \
+        + len(inputs["policy_controls"])
     specs = sum(len(controls) for controls in overlay_specs.load(REPO_ROOT).values())
     assert specs == 108 + 315  # overlay-specs.yaml: one block per Section 6 control
     # file, tables, overlays, overlay specifications, inputs
-    assert len(cited) == 1 + 136 + overlay_pages + specs + blocks
-    assert all("page" in e.data["citations"][0] for e in cited[1:])
+    unlisted = 1  # the Space Platform Overlay's controls in neither of its tables
+    from rmf_tool import cnssi1253_params
+    params = 1 + len(cnssi1253_params.load(REPO_ROOT))  # the column's definition, one per row
+    assert len(cited) == 1 + 136 + overlay_pages + unlisted + specs + blocks + params
+    assert all("page" in e.data["citations"][0] for e in cited if e.data["id"] != "CNSSI-1253")
     result = validate(REAL, REPO_ROOT, P3A)
     assert not [f for f in result.findings if "baselines" in (f.path or "")]
 
@@ -182,3 +187,41 @@ def test_overrides_apply_and_must_change_something():
         [row], [{"page": 25, "table_id": "AC-2", "reason": "text drops a cell",
                  "text_differs": True}])
     assert accepted == {(25, "AC-2")}
+
+
+def _space_tables() -> tuple[dict[str, str], set[str]]:
+    """Table 2 (control -> mark) and Table 3 of the Space Platform Overlay, read here without
+    the generator: a row's first cell holding an ID, pipes inside names escaped."""
+    import re
+
+    text = (REPO_ROOT / f"references/text/{cnssi1253.SPACE}.md").read_text(encoding="utf-8")
+    table2 = text.split("Table 2 - Summary of Control Specifications")[1].split("# 6.")[0]
+    table3 = text.split("Table 3 - Space Platform Overlay Applicable Baseline Controls")[1]
+    ident = re.compile(r"^([A-Z]{2})-(\d+)(?:\((\d+)\))?$")
+
+    def rows(block: str):
+        for line in block.splitlines():
+            cells = [c.strip() for c in re.split(r"(?<!\\)\|", line)[1:-1]]
+            if cells and (m := ident.match(re.sub(r"\s", "", cells[0] or cells[1]))):
+                yield f"{m[1].lower()}-{int(m[2])}" + (f".{int(m[3])}" if m[3] else ""), cells
+
+    return ({cid: cells[2] for cid, cells in rows(table2)}, {cid for cid, _ in rows(table3)})
+
+
+def test_space_overlay_resolves_against_table_2_and_appendix_a(tables):
+    """WI-21 closes on this diff: Table 2's 83 additions and 262 removals are what the YAML
+    applies, and the H/H/H selection less the removals is Table 3's 306 kept controls plus the
+    five CNSSI 1253 marks '+' that neither table lists."""
+    marks, kept = _space_tables()
+    space = next(o for o in tables["overlays"] if o["id"] == cnssi1253.SPACE)
+    added = {c for b in space["blocks"] for c in b.get("add", [])}
+    removed = {c for b in space["blocks"] for c in b.get("remove", [])}
+    assert added == {c for c, m in marks.items() if m == "+G"} and len(added) == 83
+    assert removed == {c for c, m in marks.items() if m == "--"} and len(removed) == 262
+    assert space["tailors"] == {"c": "high", "i": "high", "a": "high"}
+    high = {r["id"] for t in tables["tables"] for b in t["blocks"] for r in b["controls"]
+            if not r.get("withdrawn") and any(r[o][2] in "X+" for o in "cia")}
+    assert len(high) == 573 and removed <= high and not added & high
+    assert len(kept) == 306
+    assert high - removed - kept == set(space["unlisted"]["controls"]) == {
+        "sa-8.1", "sa-8.3", "sa-8.4", "sa-9.3", "sc-7.13"}
