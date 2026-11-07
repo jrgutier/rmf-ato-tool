@@ -17,11 +17,10 @@ import hashlib
 import json
 from typing import Any
 
-from ruamel.yaml import YAML
-
 from rmf_tool import catalog, refs
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run.model import BASELINE_FILE, Run, YamlError
+from rmf_tool.yamlload import safe_load
 
 PROFILE_PATHS = {
     level: f"references/oscal/profiles/NIST_SP-800-53_rev5_{level.upper()}-baseline_profile.json"
@@ -54,7 +53,7 @@ def profile_ids(profile: dict[str, Any]) -> list[str]:
 def load_tables(run: Run) -> dict[str, Any]:
     path = run.repo / TABLES_PATH
     try:
-        data = YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+        data = safe_load(path.read_text(encoding="utf-8"))
     except OSError as exc:
         raise BaselineError(f"{TABLES_PATH}: {exc.strerror or exc}") from exc
     errors = run.schema_errors("baselines", data)

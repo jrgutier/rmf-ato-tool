@@ -13,7 +13,8 @@ from pathlib import Path
 from typing import Any
 
 import jsonschema
-from ruamel.yaml import YAML
+
+from rmf_tool.yamlload import safe_load
 
 REGISTRY_PATH = Path(__file__).with_name("registry.yaml")
 REGISTRY_SCHEMA_PATH = Path(__file__).with_name("registry.schema.json")
@@ -47,7 +48,7 @@ def registry_errors(data: Any) -> list[str]:
 
 @cache
 def load_registry(path: Path = REGISTRY_PATH) -> tuple[Rule, ...]:
-    data = YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+    data = safe_load(path.read_text(encoding="utf-8"))
     errors = registry_errors(data)
     if errors:
         raise ValueError(f"{path.name}: " + "; ".join(errors[:5]))

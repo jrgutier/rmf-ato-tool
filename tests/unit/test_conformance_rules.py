@@ -164,6 +164,7 @@ def sync(repo, index, only=None):
 # --- the real register ----------------------------------------------------------------------
 
 
+@pytest.mark.heavy
 def test_the_real_register_passes_every_rule():
     result = validate(REAL, REPO_ROOT, P10)
 
@@ -1472,6 +1473,7 @@ def test_the_p5_validate_step_stands_down_for_p10():
     assert sum(n.startswith("rmf validate") for n in run) == 1
 
 
+@pytest.mark.heavy
 def test_a_fork_without_examples_or_readme_keeps_a_valid_register(tmp_path):
     """A fork deletes examples/ and rewrites README.md; every FW rule still passes there."""
     for path in REPO_ROOT.iterdir():

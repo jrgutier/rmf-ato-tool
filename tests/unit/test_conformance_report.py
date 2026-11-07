@@ -217,6 +217,7 @@ def test_text_report_names_a_pending_document_as_unassessed(tmp_path, monkeypatc
         assert needle in result.stdout
 
 
+@pytest.mark.heavy
 def test_extract_check_passes_on_the_committed_register():
     result = runner.invoke(app, ["conformance", "extract", "--check"])
 

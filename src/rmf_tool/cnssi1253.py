@@ -24,9 +24,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from ruamel.yaml import YAML
-
 from rmf_tool import catalog
+from rmf_tool.yamlload import safe_load
 
 REF = "CNSSI1253"
 PDF_PATH = "references/pdf/CNSSI1253.pdf"
@@ -385,7 +384,7 @@ def privacy_sets(rows: list[PrivacyRow]) -> dict[str, dict[int, list[PrivacyRow]
 
 
 def _read_yaml(path: Path) -> Any:
-    return YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+    return safe_load(path.read_text(encoding="utf-8"))
 
 
 _OVERRIDE_KEYS = {"page", "table_id", "reason", "privacy", "c", "i", "a", "withdrawn",

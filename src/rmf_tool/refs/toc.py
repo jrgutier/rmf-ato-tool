@@ -14,11 +14,11 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-from ruamel.yaml import YAML
-
 from rmf_tool.refs.headers import normalize
+from rmf_tool.yamlload import safe_load
 
 MAX_CHARS = 100
+_NOT_ALNUM = re.compile(r"[\W_]+")
 MAX_WORDS = 14
 
 _LIST_MARKER = re.compile(r"^(?:[-*•▪◦●]|\([A-Za-z0-9]{1,3}\)|[A-Za-z0-9]{1,3}\))(?:\s|$)")
@@ -148,9 +148,13 @@ def outline_num(title: str) -> str:
     return m.group(1) if m else ""
 
 
+@lru_cache(maxsize=1 << 16)
 def compact(text: str) -> str:
-    """Alphanumerics only, casefolded: for line-break- and punctuation-blind matching."""
-    return "".join(c for c in text.casefold() if c.isalnum())
+    """Alphanumerics only, casefolded: for line-break- and punctuation-blind matching.
+    Memoized: the register compares the same statements and pages hundreds of thousands of
+    times per validate. The pattern drops what ``str.isalnum`` rejects: the re docs define a
+    word character as alphanumeric (``str.isalnum``) or the underscore."""
+    return _NOT_ALNUM.sub("", text.casefold())
 
 
 def slugify(text: str) -> str:
@@ -209,7 +213,7 @@ def load_toc(path: Path) -> list[TocEntry]:
 @lru_cache(maxsize=64)
 def _load_toc(path: str, mtime_ns: int, size: int) -> tuple[TocEntry, ...]:
     """Parsed once per file version: citation checks resolve hundreds of sections."""
-    data = YAML(typ="safe").load(Path(path).read_text(encoding="utf-8"))
+    data = safe_load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, list):
         raise ValueError(f"{path}: toc must be a YAML list")
     return tuple(TocEntry(**{k: item[k] for k in TocEntry.__dataclass_fields__}) for item in data)

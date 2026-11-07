@@ -20,12 +20,12 @@ from pathlib import Path
 from typing import Any
 
 import jsonschema
-from ruamel.yaml import YAML
 
 from rmf_tool import refs
 from rmf_tool.conformance import extract, nist_pin
 from rmf_tool.refs.currency import text_controls
 from rmf_tool.refs.toc import compact
+from rmf_tool.yamlload import safe_load
 
 DIRECTORY = "conformance"
 SCHEMA_DIR = f"{DIRECTORY}/schema"
@@ -167,7 +167,7 @@ def read(repo: Path, rel: str, schema: str, problems: list[tuple[str, str]]) -> 
         text = (repo / rel).read_text(encoding="utf-8")
         data = read_generated(text) if schema == "requirements" else None
         if data is None:
-            data = YAML(typ="safe").load(text)
+            data = safe_load(text)
     except OSError as exc:
         problems.append((rel, f"cannot read: {exc.strerror or exc}"))
         return None

@@ -11,8 +11,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from ruamel.yaml import YAML
-
 from rmf_tool.findings import Finding
 from rmf_tool.framework.model import (
     COLLECTIONS,
@@ -23,6 +21,7 @@ from rmf_tool.framework.model import (
     Framework,
     Location,
 )
+from rmf_tool.yamlload import rt_load
 
 
 @dataclass
@@ -56,7 +55,7 @@ def _line(node: Any, key: Any = None) -> int | None:
 
 def _read(path: Path, shown: str, findings: list[Finding]) -> Any:
     try:
-        return YAML(typ="rt").load(path.read_text(encoding="utf-8"))
+        return rt_load(path.read_text(encoding="utf-8"))
     except OSError as exc:
         findings.append(Finding("FW-SCHEMA-001", "E", f"cannot read: {exc.strerror or exc}",
                                 shown))

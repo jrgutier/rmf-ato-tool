@@ -6,7 +6,6 @@ anchor of a heading on it.
 
 from __future__ import annotations
 
-import hashlib
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -56,14 +55,13 @@ def section(root: Path, entry: Any, wanted: str) -> str:
 
 def _pages(md: Path) -> dict[int, tuple[str, str]]:
     """Each page's body and its compact form, split once per file content: the register
-    resolves thousands of page citations in one run. Keyed on a hash of the bytes, not on
+    resolves thousands of page citations in one run. Keyed on the text itself, not on
     mtime and size, so a same-size rewrite within one clock tick is never served stale."""
-    text = md.read_text(encoding="utf-8")
-    return _split_pages(hashlib.sha256(text.encode("utf-8")).hexdigest(), text)
+    return _split_pages(md.read_text(encoding="utf-8"))
 
 
-@lru_cache(maxsize=64)
-def _split_pages(digest: str, text: str) -> dict[int, tuple[str, str]]:
+@lru_cache(maxsize=128)
+def _split_pages(text: str) -> dict[int, tuple[str, str]]:
     pages: dict[int, list[str]] = {}
     current: list[str] | None = None
     for line in text.splitlines():

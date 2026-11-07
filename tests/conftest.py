@@ -10,8 +10,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
-    """Start the slow tests first, so a long one does not run alone after the rest finish."""
-    items.sort(key=lambda item: "slow" not in item.keywords)
+    """Start the slow and heavy tests first, so a long one does not run alone after the rest
+    finish."""
+    items.sort(key=lambda item: ("slow" not in item.keywords, "heavy" not in item.keywords))
 
 
 def entry(num: int, date: str = "2026-10-29", promotion: str = "check: SOME-001") -> str:

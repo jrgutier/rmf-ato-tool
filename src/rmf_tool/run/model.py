@@ -1,7 +1,8 @@
 """The run model (plan §7.1): a run directory, its ``run.yaml`` and the framework it executes.
 
 A ``Run`` is short-lived (one command). File contents are read on demand and never
-cached, because ``rmf build`` rewrites files between reads.
+cached, because ``rmf build`` rewrites files between reads; only the parse of an unchanged
+text is reused (``rmf_tool.yamlload``).
 """
 
 from __future__ import annotations
@@ -16,12 +17,12 @@ from typing import Any
 
 import jsonschema
 from jsonschema import FormatChecker
-from ruamel.yaml import YAML
 
 from rmf_tool.framework import graph
 from rmf_tool.framework.load import load
 from rmf_tool.framework.model import FRAMEWORK_DIR, SCHEMA_DIR, Framework, task_sort_key
 from rmf_tool.gitutil import repo_root
+from rmf_tool.yamlload import safe_load
 
 PRODUCT_PREFIX = "product/"
 RUN_FILE = "run.yaml"
@@ -55,7 +56,7 @@ class YamlError(ValueError):
 def read_yaml(path: Path) -> Any:
     """Safe-load a YAML file; raises YamlError with a short message."""
     try:
-        return YAML(typ="safe").load(path.read_text(encoding="utf-8"))
+        return safe_load(path.read_text(encoding="utf-8"))
     except OSError as exc:
         raise YamlError(f"cannot read: {exc.strerror or exc}") from exc
     except Exception as exc:  # ruamel raises several unrelated parser error types

@@ -77,6 +77,10 @@ def _pytest(ctx: Context) -> tuple[bool, list[Finding], str]:
     # 2-core runner took 65 minutes with them and 49 in series. An environment synced without
     # xdist, a dev dependency, also runs in series.
     parallel = importlib.util.find_spec("xdist") and (os.cpu_count() or 1) >= MIN_WORKER_CPUS
+    # The default load scheduler deals the collection round-robin, and conftest.py puts the
+    # slow and heavy tests first, so the long ones start at once on different workers
+    # (worksteal would hand them all to one). PYTEST_XDIST_AUTO_NUM_WORKERS caps "auto" when
+    # several suites share a machine.
     workers = ["-n", "auto"] if parallel else []
     argv = [sys.executable, "-m", "pytest", "-q", *workers, "-m", marker,
             "--cov=rmf_tool", f"--cov-fail-under={COVERAGE_MIN}"]

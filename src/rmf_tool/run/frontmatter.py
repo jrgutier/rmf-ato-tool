@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-from ruamel.yaml import YAML
+from rmf_tool.yamlload import safe_load
 
 _FENCE = re.compile(r"^---[ \t]*$", re.M)
 
@@ -31,7 +31,7 @@ def parse(text: str) -> Document:
     body = text[body_start + 1:] if body_start != -1 else ""
     body_line = text.count("\n", 0, body_start + 1) + 1 if body_start != -1 else 1
     try:
-        data = YAML(typ="safe").load(raw)
+        data = safe_load(raw)
     except Exception as exc:  # ruamel raises several unrelated parser error types
         return Document(None, f"front-matter is not valid YAML: {exc}", body, body_line)
     if not isinstance(data, dict):

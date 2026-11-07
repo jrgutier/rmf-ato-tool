@@ -13,9 +13,8 @@ import re
 from pathlib import Path
 from typing import Any
 
-from ruamel.yaml import YAML
-
 from rmf_tool.findings import Finding
+from rmf_tool.yamlload import safe_load
 
 OSCAL_VERSION = "1.2.1"
 TRESTLE_VERSION = "5.2.0"
@@ -61,7 +60,7 @@ def check(root: Path, index: Any) -> list[Finding]:
     if not vpath.is_file():
         err("file not found")
         return findings
-    pins = YAML(typ="safe").load(vpath.read_text(encoding="utf-8"))
+    pins = safe_load(vpath.read_text(encoding="utf-8"))
     expected = {
         "generated_oscal_version": OSCAL_VERSION,
         "compliance_trestle": TRESTLE_VERSION,

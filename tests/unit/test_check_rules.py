@@ -5,7 +5,6 @@ Bases: ``minimal`` (valid_minimal, scope all), ``hybrid`` (hybrid_minimal, skele
 and ``example`` (the uas-gcs synthetic run, Phase 7). Copies are re-stamped to the current
 upstream hash, so the bases start without findings."""
 
-from pathlib import Path
 
 import pytest
 from _mutations import apply
@@ -28,11 +27,9 @@ def on_old_contract(run) -> bool:
     return run.dir.name.startswith("example")
 
 
-def final_findings(run_dir: Path, severity: str) -> set[str]:
-    run = open_run(run_dir, REPO_ROOT)
-    found = {f.rule for f in engine.select(run, engine.evaluate(run), final=True)
-             if f.severity == severity}
-    return found - ({"RUN-VER-001"} if on_old_contract(run) else set())
+def _rules(run, found, severity: str) -> set[str]:
+    rules = {f.rule for f in found if f.severity == severity}
+    return rules - ({"RUN-VER-001"} if on_old_contract(run) else set())
 
 
 @pytest.mark.parametrize("base", sorted(BASES))
@@ -124,14 +121,14 @@ def test_negative(spec_path, tmp_path):
         if spec.get("build", True):
             build.build(open_run(run_dir, REPO_ROOT))
         errors = set(expect.get("errors") or []) | set(expect.get("also") or [])
-        assert final_findings(run_dir, "E") == errors, (base, spec["description"])
         run = open_run(run_dir, REPO_ROOT)
         found = engine.select(run, engine.evaluate(run), final=True)
+        assert _rules(run, found, "E") == errors, (base, spec["description"])
         for message in expect.get("messages") or ():
             assert any(f.rule == spec["rule"] and message in f.message for f in found), (
                 base, message, [f.message for f in found])
         if "warnings" in expect:
-            assert final_findings(run_dir, "W") == set(expect["warnings"]), (
+            assert _rules(run, found, "W") == set(expect["warnings"]), (
                 base, spec["description"])
 
 
