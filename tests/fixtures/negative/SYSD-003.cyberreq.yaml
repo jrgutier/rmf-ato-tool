@@ -1,0 +1,45 @@
+rule: SYSD-003
+bases:
+- minimal
+description: a mission partner agreement with no cybersecurity requirements
+mutations:
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: interconnections
+  value:
+  - id: ICX-01
+    component: CMP-IDP
+    system: Partner records system
+    organization: Partner agency
+    partner: federal-mission-partner
+    interface:
+      kind: TLS over the enclave gateway
+      ports_protocols_services: 443/TCP HTTPS
+      provider: Enclave network
+      boundaries_crossed: enclave boundary
+    agreement:
+      instrument: moa
+      reference: MOA-01
+      date: '2026-05-01'
+      signed_by:
+      - Partner CIO
+      - Component CIO
+    authorization:
+      status: ATO
+      authorizing_official: Partner AO
+    terms:
+    - dodin-operations-responsibilities
+    - data-protection-requirements
+    - incident-reporting-contacts
+    based_on:
+    - component-risk-assessment
+    - risk-tolerance-guidance
+    - interconnection-policy
+    cybersecurity_services: dod-cssp-subscription
+    sources:
+    - product/architecture.md#components
+expect:
+  errors:
+  - SYSD-003
+  messages:
+  - the mission partner agreement does not state cybersecurity-requirements

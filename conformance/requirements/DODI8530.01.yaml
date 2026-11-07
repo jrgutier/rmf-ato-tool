@@ -192,7 +192,9 @@ requirements:
     locator: "References: See Enclosure 1.d"
     context: ""
     statement: "d. DoD IT will be aligned to DoD network operations and security centers (NOSCs). The NOSC and supporting cybersecurity service provider(s) will provide any required cybersecurity services to aligned systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Alignment to a NOSC is required of a DODIN-connected system; that the NOSC and CSSP provide the services is theirs."
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.align.yaml", "expect": "the system connects to the DODIN and is aligned to no NOSC and CSSP", "asserts": "DoD IT is aligned to a NOSC", "claim": "presence", "sentence": "DoD IT will be aligned to DoD network operations and security centers (NOSCs)."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0025"
     citation: {"ref": "DODI8530.01", "page": 3, "anchor": "DoD designated cybersecurity service providers will be authorized to provide cybersecurity services"}
@@ -200,7 +202,8 @@ requirements:
     locator: "References: See Enclosure 1.e"
     context: ""
     statement: "e. DoD designated cybersecurity service providers will be authorized to provide cybersecurity services in accordance with DoD O-8530.01-M (Reference (p)). When cybersecurity services are provided, both the cybersecurity service provider and the system owner security responsibilities will be clearly documented."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.evaluation.yaml", "expect": "a CSSP offers services as evaluated under the Evaluator's Scoring Metrics", "asserts": "DoD designated cybersecurity service providers are authorized as evaluated under DoD O-8530.01-M", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "DoD designated cybersecurity service providers will be authorized to provide cybersecurity services in accordance with DoD O-8530.01-M (Reference (p))."}, {"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.parties.yaml", "expect": "CSSP and subscriber responsibilities are each assigned for every service", "asserts": "Both the cybersecurity service provider and the system owner security responsibilities are documented", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "When cybersecurity services are provided, both the cybersecurity service provider and the system owner security responsibilities will be clearly documented."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0026"
     citation: {"ref": "DODI8530.01", "page": 3, "anchor": "DoD will help protect the DODIN through criminal or counterintelligence investigations or"}
@@ -232,7 +235,8 @@ requirements:
     locator: "References: See Enclosure 1.h.(1)"
     context: "Contracts, MOAs, support agreements, international agreements, or other applicable agreements or arrangements governing the interconnection of the DODIN and mission partners’ systems developed in acco"
     statement: "(1) Specific DODIN operations responsibilities of DoD and mission partners;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dodinops.yaml", "expect": "the mission partner agreement does not state", "asserts": "The mission partner agreement states the specific DODIN operations responsibilities of DoD and mission partners", "claim": "constraint", "sentence": "(1) Specific DODIN operations responsibilities of DoD and mission partners;"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0030"
     citation: {"ref": "DODI8530.01", "page": 3, "anchor": "The cybersecurity requirements for the connected mission partners’ systems;"}
@@ -240,7 +244,8 @@ requirements:
     locator: "References: See Enclosure 1.h.(2)"
     context: "Contracts, MOAs, support agreements, international agreements, or other applicable agreements or arrangements governing the interconnection of the DODIN and mission partners’ systems developed in acco"
     statement: "(2) The cybersecurity requirements for the connected mission partners’ systems;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.cyberreq.yaml", "expect": "the mission partner agreement does not state", "asserts": "The mission partner agreement states the cybersecurity requirements for connected mission partner systems", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0031"
     citation: {"ref": "DODI8530.01", "page": 3, "anchor": "The protection requirements for DoD data resident on mission partner systems; and"}
@@ -248,7 +253,8 @@ requirements:
     locator: "References: See Enclosure 1.h.(3)"
     context: "Contracts, MOAs, support agreements, international agreements, or other applicable agreements or arrangements governing the interconnection of the DODIN and mission partners’ systems developed in acco"
     statement: "(3) The protection requirements for DoD data resident on mission partner systems; and"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dataprot.yaml", "expect": "the mission partner agreement does not state", "asserts": "The mission partner agreement states protection requirements for DoD data resident on mission partner systems", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0032"
     citation: {"ref": "DODI8530.01", "page": 3, "anchor": "Points of contact for mandatory reporting of security incidents."}
@@ -256,7 +262,8 @@ requirements:
     locator: "References: See Enclosure 1.h.(4)"
     context: "Contracts, MOAs, support agreements, international agreements, or other applicable agreements or arrangements governing the interconnection of the DODIN and mission partners’ systems developed in acco"
     statement: "(4) Points of contact for mandatory reporting of security incidents."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.yaml", "expect": "the mission partner agreement does not state", "asserts": "The mission partner agreement states points of contact for mandatory reporting of security incidents", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0033"
     citation: {"ref": "DODI8530.01", "page": 4, "anchor": "Data on the cybersecurity status of the DODIN and connected mission partner"}
@@ -422,7 +429,9 @@ requirements:
     locator: "ENCLOSURE 2.g.(4)"
     context: "RESPONSIBILITIES"
     statement: "(4) Ensures that the roles and responsibilities for managing and mission partner interconnection to the DODIN, including cybersecurity requirements, are documented in a contract, MOA, support agreement, or international agreement document. These agreements must be in accordance with References (m) and (n)."
-    status: "candidate"
+    status: "partial"
+    reason: "Roles and responsibilities, cybersecurity requirements and the instrument are held; conformance with References (m) and (n) beyond the international agreement for a foreign partner is unheld."
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dodinops.yaml", "expect": "the mission partner agreement does not state", "asserts": "Roles and responsibilities for managing mission partner interconnection to the DODIN, including cybersecurity requirements, are documented in the agreement", "claim": "constraint", "sentence": "(4) Ensures that the roles and responsibilities for managing and mission partner interconnection to the DODIN, including cybersecurity requirements, are documented in a contract, MOA, support agreement, or international agreement document."}, {"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.foreign.yaml", "expect": "a foreign mission partner is concluded as an international agreement", "asserts": "Agreements with foreign mission partners are in accordance with the international agreement reference", "claim": "constraint", "sentence": "These agreements must be in accordance with References (m) and (n)."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0053"
     citation: {"ref": "DODI8530.01", "page": 13, "anchor": "Coordinates with the USD(I) and the Director, Defense Security Service (DSS), on"}
@@ -933,7 +942,9 @@ requirements:
     locator: "ENCLOSURE 2.a.(3)"
     context: "RESPONSIBILITIES"
     statement: "(3) Conducts evaluation of DoD Component cybersecurity service providers’ services as directed by the CDRUSSTRATCOM. Evaluation documents with a recommendation are provided to the Director, DIA designated office to authorize the cybersecurity service provider to offer SE cybersecurity services."
-    status: "candidate"
+    status: "partial"
+    reason: "A DIA authorization is required of an SE CSSP; the evaluation documents passed to DIA are outside the run."
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.yaml", "expect": "a CSSP offers SE cybersecurity services as authorized by the Director, DIA", "asserts": "A CSSP offering SE cybersecurity services is authorized by the Director, DIA", "claim": "constraint", "sentence": "Evaluation documents with a recommendation are provided to the Director, DIA designated office to authorize the cybersecurity service provider to offer SE cybersecurity services."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0118"
     citation: {"ref": "DODI8530.01", "page": 18, "anchor": "Provides cybersecurity services on a subscription basis to any DoD Component organization"}
@@ -1120,7 +1131,8 @@ requirements:
     locator: "ENCLOSURE 2.d"
     context: "RESPONSIBILITIES"
     statement: "d. Use organic or external cybersecurity activities and capabilities to protect DoD Component owned or operated portion of the DODIN in accordance with References (f) and (h);"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.cssp.yaml", "expect": "no agreement names the system's CSSP", "asserts": "External cybersecurity activities and capabilities protect the DODIN portion under a named CSSP agreement", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "Use organic or external cybersecurity activities and capabilities to protect DoD Component owned or operated portion of the DODIN in accordance with References (f) and (h);"}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0142"
     citation: {"ref": "DODI8530.01", "page": 21, "anchor": "subchapter III of chapter 35 of Title 44, U. S. Code, also"}
@@ -1136,7 +1148,9 @@ requirements:
     locator: "ENCLOSURE 2.e"
     context: "RESPONSIBILITIES"
     statement: "e. Ensure DoD Component systems are aligned to a joint or DoD Component NOSC to receive and comply with orders or directives from USSTRATCOM and their DoD Component."
-    status: "candidate"
+    status: "partial"
+    reason: "Alignment to a NOSC is required of a DODIN-connected system and names it; receiving and complying with orders is outside the run."
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.align.yaml", "expect": "the system connects to the DODIN and is aligned to no NOSC and CSSP", "asserts": "Component systems are aligned to a joint or DoD Component NOSC", "claim": "presence", "sentence": "Ensure DoD Component systems are aligned to a joint or DoD Component NOSC to receive and comply with orders or directives from USSTRATCOM and their DoD Component."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0144"
     citation: {"ref": "DODI8530.01", "page": 21, "anchor": "Oversee the implementation of all directed actions required by USSTRATCOM or its"}
@@ -1216,7 +1230,8 @@ requirements:
     locator: "ENCLOSURE 2.i"
     context: "RESPONSIBILITIES"
     statement: "i. Designate DoD Component-owned or -operated portions of the DODIN as either SE or GENSER."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.genser.yaml", "expect": "a CSSP offers GENSER cybersecurity services as authorized by CDRUSSTRATCOM", "asserts": "The DODIN portion designated GENSER is served by a CSSP authorized for GENSER cybersecurity services, and one designated SE by DIA", "claim": "constraint", "sentence": "Designate DoD Component-owned or -operated portions of the DODIN as either SE or GENSER."}, {"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment/properties/designation", "claim": "constraint", "asserts": "The DODIN portion of the system is designated SE or GENSER", "read_by": "SYSD-002", "sentence": "Designate DoD Component-owned or -operated portions of the DODIN as either SE or GENSER."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0154"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "Validate that cybersecurity services provided to DoD Component organizations or offered by"}
@@ -1224,7 +1239,8 @@ requirements:
     locator: "ENCLOSURE 2.j"
     context: "RESPONSIBILITIES"
     statement: "j. Validate that cybersecurity services provided to DoD Component organizations or offered by a DoD Component cybersecurity provider to external organizations have been evaluated in accordance with Reference (p) and that CDRUSSTRATCOM has authorized the service provider to provide those cybersecurity services."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.evaluation.yaml", "expect": "a CSSP offers services as evaluated under the Evaluator's Scoring Metrics", "asserts": "Cybersecurity services provided have been evaluated in accordance with the scoring metrics", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "Validate that cybersecurity services provided to DoD Component organizations or offered by a DoD Component cybersecurity provider to external organizations have been evaluated in accordance with Reference (p) and that CDRUSSTRATCOM has authorized the service provider to provide those cybersecurity services."}, {"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.genser.yaml", "expect": "a CSSP offers GENSER cybersecurity services as authorized by CDRUSSTRATCOM", "asserts": "A CSSP offering GENSER cybersecurity services to the system is authorized by CDRUSSTRATCOM after DISA evaluation", "claim": "constraint", "sentence": "Validate that cybersecurity services provided to DoD Component organizations or offered by a DoD Component cybersecurity provider to external organizations have been evaluated in accordance with Reference (p) and that CDRUSSTRATCOM has authorized the service provider to provide those cybersecurity services."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0155"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "Provide information to the DoD CIO, as requested, to support the DODIN"}
@@ -1281,7 +1297,8 @@ requirements:
     locator: "ENCLOSURE 2.o.(1).(b)"
     context: "RESPONSIBILITIES Classified Information"
     statement: "(b) Classified information may be processed only on systems approved for such use, at the required level of classification and access control, in accordance with Reference (bd)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.classified.yaml", "expect": "information processed on a system approved for", "asserts": "Classified information is processed only on systems approved for its level of classification", "claim": "constraint", "sentence": "(b) Classified information may be processed only on systems approved for such use, at the required level of classification and access control, in accordance with Reference (bd)."}]
     work_item: "WI-174"
   - id: "REQ-DODI8530.01-0162"
     citation: {"ref": "DODI8530.01", "page": 22, "anchor": "Unauthorized disclosures of CUI will be handled and reported in accordance with"}
@@ -1305,7 +1322,9 @@ requirements:
     locator: "ENCLOSURE 2.p"
     context: "RESPONSIBILITIES"
     statement: "p. Ensure personnel creating and compiling vulnerability and technical details on the configuration of systems are aware of the need to refer to applicable security classification guides, such as DISA Circular 300-110-3 (Reference (bg)), JWICS Security Classification Guide (Reference (bh)), and DoDI O-3600.02 (Reference (bi)), for guidance on classifying and marking information."
-    status: "candidate"
+    status: "partial"
+    reason: "Awareness of the security classification guides is prose in C-1; nothing can test that personnel compiling vulnerability details refer to them."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "The playbook has the classification of the system worked out with the classification guide, and the handling of vulnerability and configuration details follows it", "claim": "presence", "sentence": "Ensure personnel creating and compiling vulnerability and technical details on the configuration of systems are aware of the need to refer to applicable security classification guides, such as DISA Circular 300-110-3 (Reference (bg)), JWICS Security Classification Guide (Reference (bh)), and DoDI O-3600.02 (Reference (bi)), for guidance on classifying and marking information."}]
     work_item: "WI-174"
   - id: "REQ-DODI8530.01-0165"
     citation: {"ref": "DODI8530.01", "page": 23, "anchor": "Vulnerability information specific to DoD IT systems, and technical details on the"}
@@ -1313,7 +1332,8 @@ requirements:
     locator: "ENCLOSURE 2.p.(1)"
     context: "RESPONSIBILITIES"
     statement: "(1) Vulnerability information specific to DoD IT systems, and technical details on the configuration of DoD IT systems, will be handled, at a minimum, as controlled unclassified information or at classification level of the systems in accordance with applicable classification guidance such as References (bg), (bh), and (bi)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.yaml", "expect": "configuration detail is handled at a minimum as CUI", "asserts": "A document holding vulnerability information or technical details on the configuration of the system is handled at a minimum as CUI", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded", "sentence": "(1) Vulnerability information specific to DoD IT systems, and technical details on the configuration of DoD IT systems, will be handled, at a minimum, as controlled unclassified information or at classification level of the systems in accordance with applicable classification guidance such as References (bg), (bh), and (bi)."}]
     work_item: "WI-174"
   - id: "REQ-DODI8530.01-0166"
     citation: {"ref": "DODI8530.01", "page": 23, "anchor": "CDRUSSTRATCOM will provide amplifying classification guidance in directives and orders for specific"}
@@ -1321,7 +1341,9 @@ requirements:
     locator: "ENCLOSURE 2.p.(2)"
     context: "RESPONSIBILITIES"
     statement: "(2) CDRUSSTRATCOM will provide amplifying classification guidance in directives and orders for specific threat, vulnerability, or configuration information, and directed DODIN operations or DCO internal measures."
-    status: "candidate"
+    status: "partial"
+    reason: "CDRUSSTRATCOM's issuance of amplifying classification guidance is outside a run; a run applies such guidance through the classification fact and SYSD-006 markings only."
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.yaml", "expect": "configuration detail is handled at a minimum as CUI", "asserts": "Configuration and vulnerability information is marked and handled per the classification guidance", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded", "sentence": "(2) CDRUSSTRATCOM will provide amplifying classification guidance in directives and orders for specific threat, vulnerability, or configuration information, and directed DODIN operations or DCO internal measures."}]
     work_item: "WI-174"
   - id: "REQ-DODI8530.01-0167"
     citation: {"ref": "DODI8530.01", "page": 23, "anchor": "Ensure all personnel understand cybersecurity best practices and compliance requirements and procedures,"}
@@ -1358,7 +1380,8 @@ requirements:
     locator: "ENCLOSURE 2.s"
     context: "RESPONSIBILITIES"
     statement: "s. Ensures that the requirements of this DoDI are incorporated, as appropriate, into contracts, MOAs, international agreements, and other agreements with non-DoD mission partners."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.cyberreq.yaml", "expect": "the mission partner agreement does not state", "asserts": "The requirements of this DoDI, its cybersecurity requirements, are incorporated into agreements with non-DoD mission partners", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0172"
     citation: {"ref": "DODI8530.01", "page": 23, "anchor": "SECRETARIES OF THE MILITARY DEPARTMENTS. In addition to the responsibilities in section"}
@@ -1580,7 +1603,8 @@ requirements:
     locator: "ENCLOSURE 2.l.(2)"
     context: "RESPONSIBILITIES"
     statement: "(2) Authorizes DoD cybersecurity service providers to offer GENSER cybersecurity services to DoD Components or DoD mission partners following DISA evaluation."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.genser.yaml", "expect": "a CSSP offers GENSER cybersecurity services as authorized by CDRUSSTRATCOM", "asserts": "A CSSP offering GENSER cybersecurity services to the system is authorized by CDRUSSTRATCOM after DISA evaluation", "claim": "constraint"}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0200"
     citation: {"ref": "DODI8530.01", "page": 26, "anchor": "Reviews reciprocity requests and supporting GENSER or SE evaluation documentation for joint"}
@@ -2088,8 +2112,11 @@ requirements:
     locator: "ENCLOSURE 4.2"
     context: "Figure 1. DODIN Operations, DCO Internal Defensive Measures, and Situational Awareness"
     statement: "2. CYBERSECURITY ACTIVITIES TO PROTECT THE DODIN. The DoD Component-owned or -operated portion of the DODIN will be aligned with a NOSC and an integrated capability to conduct cybersecurity activities. This cybersecurity capability may be obtained from within a DoD Component or from an authorized external DoD Component service provider. All service providers must be authorized in accordance with Reference (p)."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 2 is a permission that awaits the user's ruling; alignment to the NOSC is presence only."
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.cssp.yaml", "expect": "no agreement names the system's CSSP", "asserts": "The DODIN portion is aligned with an integrated capability to conduct cybersecurity activities through a CSSP", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "The DoD Component-owned or -operated portion of the DODIN will be aligned with a NOSC and an integrated capability to conduct cybersecurity activities."}, {"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.genser.yaml", "expect": "a CSSP offers GENSER cybersecurity services as authorized by CDRUSSTRATCOM", "asserts": "A CSSP offering GENSER cybersecurity services to the system is authorized by CDRUSSTRATCOM after DISA evaluation", "claim": "constraint", "sentence": "All service providers must be authorized in accordance with Reference (p)."}]
     work_item: "WI-178"
+    ruling_sought: [{"sentence": "This cybersecurity capability may be obtained from within a DoD Component or from an authorized external DoD Component service provider.", "reason": "A permission: the capability may come from within the Component or from an authorized external provider; either way is allowed, so no run can fail it."}]
   - id: "REQ-DODI8530.01-0265"
     citation: {"ref": "DODI8530.01", "page": 34, "anchor": "The system owners and authorizing officials will comply with actions directed from"}
     kind: "lettered"
@@ -2179,7 +2206,9 @@ requirements:
     locator: "ENCLOSURE 4.c.(2)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(2) Will establish and maintain records identifying cybersecurity service provider(s) and cybersecurity services provided to their organization, including the DoD Component portions of the DODIN or specified system serviced; GENSER or SE designations; authorizing official; mission criticality; internet protocol address ranges; and the corresponding physical location for each owned or operated system including those operated on behalf of the DoD Component organization by a mission partner."
-    status: "candidate"
+    status: "partial"
+    reason: "The alignment record names the CSSP agreement, designation, mission criticality, IP ranges and locations; the authorizing official is the run's PER-AO. Presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment", "claim": "presence", "asserts": "Records identify the cybersecurity service provider, GENSER or SE designations, mission criticality, IP address ranges and physical location", "sentence": "(2) Will establish and maintain records identifying cybersecurity service provider(s) and cybersecurity services provided to their organization, including the DoD Component portions of the DODIN or specified system serviced; GENSER or SE designations; authorizing official; mission criticality; internet protocol address ranges; and the corresponding physical location for each owned or operated system including those operated on behalf of the DoD Component organization by a mission partner."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0276"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Must register these systems in accordance with their DoD Component guidance and"}
@@ -2187,7 +2216,9 @@ requirements:
     locator: "ENCLOSURE 4.c.(3)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(3) Must register these systems in accordance with their DoD Component guidance and will be held accountable if found not aligned with a DoD Component or external NOSCs and supporting cybersecurity service provider(s)."
-    status: "candidate"
+    status: "partial"
+    reason: "The register is named as free text; accountability is outside the run."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment/properties/registered_in", "claim": "presence", "asserts": "Systems are registered in the DoD Component register of the alignment", "sentence": "(3) Must register these systems in accordance with their DoD Component guidance and will be held accountable if found not aligned with a DoD Component or external NOSCs and supporting cybersecurity service provider(s)."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0277"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Will monitor the effectiveness of cybersecurity services provided by either a DoD"}
@@ -2213,7 +2244,8 @@ requirements:
     locator: "ENCLOSURE 4.c.(6)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(6) Will report cybersecurity service provider changes through their DoD Component head to CDRUSSTRATCOM and Director, DISA, for GENSER systems or to Director, DIA, for SE systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.change.yaml", "expect": "on a GENSER system is reported to CDRUSSTRATCOM and the Director, DISA", "asserts": "Cybersecurity service provider changes are reported to CDRUSSTRATCOM and Director, DISA, for GENSER systems", "claim": "presence", "sentence": "(6) Will report cybersecurity service provider changes through their DoD Component head to CDRUSSTRATCOM and Director, DISA, for GENSER systems or to Director, DIA, for SE systems."}, {"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.sechange.yaml", "expect": "on an SE system is reported to the Director, DIA", "asserts": "Cybersecurity service provider changes are reported to Director, DIA, for SE systems", "claim": "constraint"}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0280"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "Will forward issues between DoD Components that cannot be resolved on the"}
@@ -2261,7 +2293,8 @@ requirements:
     locator: "ENCLOSURE 4.d"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "d. DoD Component organizations will establish a contract, MOA, support agreement, or international agreement with a mission partner that identify specific interconnection DODIN operations responsibilities between the DoD Component and mission partner; the cybersecurity requirements for mission partner systems; and protection requirements for DoD data resident on mission partner systems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dodinops.yaml", "expect": "the mission partner agreement does not state", "asserts": "The agreement with a mission partner identifies specific interconnection DODIN operations responsibilities", "claim": "constraint", "sentence": "DoD Component organizations will establish a contract, MOA, support agreement, or international agreement with a mission partner that identify specific interconnection DODIN operations responsibilities between the DoD Component and mission partner; the cybersecurity requirements for mission partner systems; and protection requirements for DoD data resident on mission partner systems."}, {"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.cyberreq.yaml", "expect": "the mission partner agreement does not state", "asserts": "The agreement with a mission partner identifies the cybersecurity requirements for mission partner systems", "claim": "constraint"}, {"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dataprot.yaml", "expect": "the mission partner agreement does not state", "asserts": "The agreement with a mission partner identifies protection requirements for DoD data resident on mission partner systems", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0286"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated"}
@@ -2269,7 +2302,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(1)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(1) Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated into formal agreements based on:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.basis.yaml", "expect": "the mission partner agreement is not based on", "asserts": "Capabilities and requirements are incorporated into formal agreements based on the listed grounds", "claim": "constraint", "sentence": "(1) Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated into formal agreements based on:"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0287"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "A DoD Component risk assessment."}
@@ -2277,7 +2311,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(1).(a)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated into formal agreements b"
     statement: "(a) A DoD Component risk assessment."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.riskassess.yaml", "expect": "the mission partner agreement is not based on", "asserts": "The formal agreement is based on a DoD Component risk assessment", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0288"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "DoD risk tolerance guidance provided by the DoD risk executive in accordance"}
@@ -2285,7 +2320,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(1).(b)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated into formal agreements b"
     statement: "(b) DoD risk tolerance guidance provided by the DoD risk executive in accordance with Reference (f)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.basis.yaml", "expect": "the mission partner agreement is not based on", "asserts": "The formal agreement is based on DoD risk tolerance guidance provided by the DoD risk executive", "claim": "constraint", "sentence": "(b) DoD risk tolerance guidance provided by the DoD risk executive in accordance with Reference (f)."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0289"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "Applicable Federal, DoD, and DoD Component policy and regulations on DoD CIO"}
@@ -2293,7 +2329,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(1).(c)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Capabilities and requirements for activities outlined in Enclosure 3 must be incorporated into formal agreements b"
     statement: "(c) Applicable Federal, DoD, and DoD Component policy and regulations on DoD CIO authorized interconnection of mission partner systems to the DODIN, including the DISA Connection Process Guide (Reference (cg)) and CDRUSSTRATCOM orders or other directives issued through CDRUSCYBERCOM."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.policy.yaml", "expect": "the mission partner agreement is not based on", "asserts": "The formal agreement is based on DoD policy on authorized interconnection of mission partner systems to the DODIN", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0290"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "Classified information processed and stored on contractor systems will be in accordance"}
@@ -2333,7 +2370,9 @@ requirements:
     locator: "ENCLOSURE 4.d.(3)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(3) Unclassified DoD information in the possession or control of non-DoD entities on non-DoD systems will have adequate cybersecurity requirements provided through all contracts, grants, or other legal agreements in accordance with DoDI 8582.01 (Reference (ck)). DoD unclassified controlled technical information resident on or transiting through DoD contractor project, enterprise, or company-wide unclassified information technology system(s), of non-DoD entities on non-DoD systems will have adequate cybersecurity requirements in accordance with Defense Federal Acquisition Regulation Supplement Clause 252.204-7012 (Reference (cl))."
-    status: "candidate"
+    status: "partial"
+    reason: "CTI on contractor systems is held to DFARS 252.204-7012; adequate cybersecurity requirements for other unclassified DoD information on non-DoD systems are not recorded."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.dfars.yaml", "expect": "protection of CTI is consistent with DFARS 252.204-7012 unless exempted by DFARS", "asserts": "DoD unclassified controlled technical information on contractor systems has adequate cybersecurity requirements under DFARS 252.204-7012", "claim": "constraint", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded", "sentence": "DoD unclassified controlled technical information resident on or transiting through DoD contractor project, enterprise, or company-wide unclassified information technology system(s), of non-DoD entities on non-DoD systems will have adequate cybersecurity requirements in accordance with Defense Federal Acquisition Regulation Supplement Clause 252.204-7012 (Reference (cl))."}]
     work_item: "WI-179"
   - id: "REQ-DODI8530.01-0295"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Mission partners will be required by contract, MOA, support agreement, or international"}
@@ -2341,7 +2380,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(4)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(4) Mission partners will be required by contract, MOA, support agreement, or international agreement to meet cybersecurity requirements or obtain cybersecurity services in order to connect to the DODIN."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.cyberreq.yaml", "expect": "the mission partner agreement does not state", "asserts": "Mission partners are required by the agreement to meet cybersecurity requirements in order to connect to the DODIN", "claim": "constraint", "sentence": "(4) Mission partners will be required by contract, MOA, support agreement, or international agreement to meet cybersecurity requirements or obtain cybersecurity services in order to connect to the DODIN."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0296"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "DoD Component contracts will require Defense contractors to meet cybersecurity requirements or"}
@@ -2349,7 +2389,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(4).(a)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(a) DoD Component contracts will require Defense contractors to meet cybersecurity requirements or obtain cybersecurity services in order to connect to the DODIN in accordance with Reference (ch)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.contractor.yaml", "expect": "a Defense contractor is required by contract to meet cybersecurity requirements to connect", "asserts": "Contracts require Defense contractors to meet cybersecurity requirements in order to connect to the DODIN", "claim": "constraint", "sentence": "(a) DoD Component contracts will require Defense contractors to meet cybersecurity requirements or obtain cybersecurity services in order to connect to the DODIN in accordance with Reference (ch)."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0297"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Support agreements such as an MOA established in collaboration with the DoD"}
@@ -2357,7 +2398,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(4).(b)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(b) Support agreements such as an MOA established in collaboration with the DoD CIO will require federal mission partners directly connected to the DODIN to subscribe to a DoD cybersecurity service provider, or establish their own equivalent cybersecurity service capability assessed by the DoD CIO and Director, DISA, as compliant with or equivalent to Reference (p) requirements, applicable Committee on National Security Systems (CNSS) requirements, and NIST guidelines."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.federal.yaml", "expect": "a federal mission partner subscribes to a DoD CSSP or holds an", "asserts": "Federal mission partners directly connected subscribe to a DoD cybersecurity service provider or hold an equivalent capability assessed by the DoD CIO and DISA", "claim": "constraint", "sentence": "(b) Support agreements such as an MOA established in collaboration with the DoD CIO will require federal mission partners directly connected to the DODIN to subscribe to a DoD cybersecurity service provider, or establish their own equivalent cybersecurity service capability assessed by the DoD CIO and Director, DISA, as compliant with or equivalent to Reference (p) requirements, applicable Committee on National Security Systems (CNSS) requirements, and NIST guidelines."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0298"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Federal mission partners connecting to the DODIN via a DoD CIO approved"}
@@ -2373,7 +2415,8 @@ requirements:
     locator: "ENCLOSURE 4.d.(4).(d)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities"
     statement: "(d) Negotiation and conclusion of international agreements for interconnection with mission partners that are allies, coalition members, host nations and other nations, and multinational organizations will be subject to and consistent with Reference (n)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.foreign.yaml", "expect": "a foreign mission partner is concluded as an international agreement", "asserts": "Interconnection with foreign mission partners is concluded as an international agreement", "claim": "constraint", "sentence": "(d) Negotiation and conclusion of international agreements for interconnection with mission partners that are allies, coalition members, host nations and other nations, and multinational organizations will be subject to and consistent with Reference (n)."}]
     work_item: "WI-190"
   - id: "REQ-DODI8530.01-0300"
     citation: {"ref": "DODI8530.01", "page": 38, "anchor": "Mission partner DMZ or point-to-point interconnections to the DODIN will be in"}
@@ -2470,7 +2513,8 @@ requirements:
     locator: "ENCLOSURE 4.b.(3)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities The DoD CIO Cybersecurity Service Provider Process Manager will:"
     statement: "(3) Validate the designation of the systems either as SE or GENSER, as defined in the Glossary."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.genser.yaml", "expect": "a CSSP offers GENSER cybersecurity services as authorized by CDRUSSTRATCOM", "asserts": "The designation of the system as GENSER is validated against the CSSP authorized for GENSER cybersecurity services", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment/properties/designation", "claim": "constraint", "asserts": "The designation of the system as SE or GENSER is validated against the CSSP's authority", "read_by": "SYSD-002"}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0311"
     citation: {"ref": "DODI8530.01", "page": 39, "anchor": "Maintain a list of DoD GENSER and SE cybersecurity service providers authorized"}
@@ -2513,7 +2557,9 @@ requirements:
     locator: "ENCLOSURE 4.c.(4)"
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities Cybersecurity service providers will:"
     statement: "(4) Document all supported entities and associated systems in accordance with DoD Component policy, MOAs, contracts, or support agreements."
-    status: "candidate"
+    status: "partial"
+    reason: "The CSSP agreement documents the system it supports; the CSSP's own documentation of all supported entities is outside the run."
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.yaml", "expect": "cybersecurity services are implemented under policy, an MOA, a contract or a support agreement", "asserts": "Supported systems are documented in DoD Component policy, MOAs, contracts or support agreements", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded", "sentence": "(4) Document all supported entities and associated systems in accordance with DoD Component policy, MOAs, contracts, or support agreements."}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0316"
     citation: {"ref": "DODI8530.01", "page": 40, "anchor": "DoD CIO CYBERSECURITY ARCHITECT. The DoD CIO Cybersecurity Architect:"}

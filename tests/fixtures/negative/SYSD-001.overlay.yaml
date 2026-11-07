@@ -1,0 +1,19 @@
+rule: SYSD-001
+bases:
+- minimal
+description: the Classified System Overlay on an unclassified system
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253E-ATT5-CLASSIFIED
+expect:
+  errors:
+  - SYSD-001
+  also:
+  - GEN-STALE-001
+  - TLR-003
+  - TLR-005
+  messages:
+  - the Classified System Overlay is applied to a system whose classification is unclassified

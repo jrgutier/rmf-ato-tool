@@ -1,0 +1,24 @@
+rule: PKG-003
+bases:
+- minimal
+description: an SSP without its facts block
+mutations:
+- op: replace_text
+  file: artifacts/ART-SSP.md
+  old: '<!-- BEGIN rmf:facts -->
+
+    '
+  new: ''
+- op: replace_text
+  file: artifacts/ART-SSP.md
+  old: '<!-- END rmf:facts -->
+
+    '
+  new: ''
+expect:
+  errors:
+  - PKG-003
+  also:
+  - TRACE-001
+  messages:
+  - ART-SSP does not carry the CNSSI 1254 data element System Lifecycle Phase (numbered) or Acquisition Milestone (lettered)

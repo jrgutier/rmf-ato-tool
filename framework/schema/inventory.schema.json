@@ -48,11 +48,17 @@
           },
           "vendor": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-128-0396"
+            ]
           },
           "product": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R2-0152"
+            ]
           },
           "version": {
             "type": "string",
@@ -74,10 +80,343 @@
             "items": {
               "$ref": "#/$defs/source"
             }
+          },
+          "uii": {
+            "title": "Unique item identifier of the item (DoDI 8320.04), unique across the inventory",
+            "type": "string",
+            "minLength": 1
+          },
+          "serial_number": {
+            "title": "Serial number of a hardware item",
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "title": "System or component owner of the item",
+            "type": "string",
+            "minLength": 1
+          },
+          "software_category": {
+            "title": "Software category: commercial off-the-shelf, government off-the-shelf or open source",
+            "enum": [
+              "cots",
+              "gots",
+              "oss"
+            ]
+          },
+          "quantity": {
+            "title": "Number of physical units this record stands for; each component is named individually, so 1",
+            "type": "integer",
+            "minimum": 1
+          },
+          "cnssp11": {
+            "title": "Compliance with CNSSP 11 for an IA or IA-enabled product",
+            "enum": [
+              "compliant",
+              "not-compliant",
+              "not-ia-product"
+            ]
+          },
+          "location": {
+            "title": "Physical and logical location of the item",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "physical": {
+                "title": "Building, room, rack and slot",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-SP800-128-0141"
+                ]
+              },
+              "logical": {
+                "title": "IP address or hosting service",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-SP800-128-0142"
+                ]
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-18R2-0154",
+              "REQ-SP800-18R2-0162"
+            ]
+          },
+          "mac_address": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-128-0143"
+            ]
+          },
+          "administrators": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-SP800-128-0144"
+            ]
+          },
+          "primary_user": {
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-128-0145"
+            ]
+          },
+          "operational_status": {
+            "enum": [
+              "operational",
+              "under-development",
+              "spare",
+              "disposal"
+            ],
+            "x-enforces": [
+              "REQ-SP800-128-0397"
+            ]
+          },
+          "license": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-SP800-18R2-0160"
+                ]
+              },
+              "expiration": {
+                "type": "string",
+                "format": "date",
+                "x-enforces": [
+                  "REQ-SP800-18R2-0161"
+                ]
+              },
+              "entitlement": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "x-enforces": [
+              "REQ-DOWI8430.01-0239"
+            ]
+          },
+          "support": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "deployment_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "warranty_end": {
+                "type": "string",
+                "format": "date"
+              },
+              "end_of_support": {
+                "type": "string",
+                "format": "date"
+              },
+              "maintenance_contract": {
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-SP800-18R2-0163"
+                ]
+              }
+            },
+            "x-enforces": [
+              "REQ-DOWI8430.01-0240",
+              "REQ-SP800-18R2-0153"
+            ]
+          },
+          "attestation": {
+            "title": "Secure software development attestation of a software item",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-18R2-0159"
+            ]
+          },
+          "unified_capability": {
+            "title": "For a unified capability (voice, video or data collaboration) product: its unified capability certification for cybersecurity (DoDI 8100.04)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "certification"
+            ],
+            "properties": {
+              "certification": {
+                "title": "Certification status of the unified capability product",
+                "enum": [
+                  "certified",
+                  "pending",
+                  "not-certified"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
           }
         }
       },
       "minItems": 1
+    },
+    "asset_scope": {
+      "title": "The organization's scope of stakeholder assets considered for protection: one record per asset class of SP 800-37 Task P-10",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "class",
+          "considered",
+          "rationale"
+        ],
+        "properties": {
+          "class": {
+            "enum": [
+              "physical-environmental",
+              "human",
+              "technology",
+              "mission-business-processes",
+              "information-data",
+              "firmware",
+              "software",
+              "services",
+              "reputation",
+              "privacy-interests"
+            ]
+          },
+          "considered": {
+            "type": "boolean"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "assets": {
+      "title": "Assets other than inventory items that require protection, with their class and protection priority",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "class",
+          "description",
+          "priority",
+          "basis",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AST-\\d{3}$"
+          },
+          "class": {
+            "enum": [
+              "physical-environmental",
+              "human",
+              "technology",
+              "mission-business-processes",
+              "information-data",
+              "firmware",
+              "software",
+              "services",
+              "reputation",
+              "privacy-interests"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "title": "Protection priority from the adverse consequences of asset loss",
+            "enum": [
+              "high",
+              "moderate",
+              "low"
+            ],
+            "x-enforces": [
+              "REQ-SP800-160V1R1-0576",
+              "REQ-SP800-160V1R1-0600"
+            ]
+          },
+          "basis": {
+            "title": "Classification, criticality, resources and mission impact behind the priority",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-61R3-0133"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-160V1R1-0116"
+      ]
+    },
+    "asset_management_system": {
+      "title": "The DoD IT asset management system or authoritative component inventory repository that holds the inventory",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "record"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record": {
+          "title": "The inventory's record or reference in that system",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "hva": {
+      "title": "Whether the system is a high-value asset under OMB M-17-09 and its entry on the Component HVA inventory",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designated",
+        "basis"
+      ],
+      "properties": {
+        "designated": {
+          "type": "boolean"
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inventory_entry": {
+          "title": "The system's entry on the Component HVA inventory",
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   },
   "$defs": {

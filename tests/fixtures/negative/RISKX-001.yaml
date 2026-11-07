@@ -1,0 +1,17 @@
+rule: RISKX-001
+bases:
+- minimal
+description: risk forums that never consider aggregated risk
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: risk_executive.forums
+  value:
+  - name: Component risk board
+    considers:
+    - all-types-and-sources
+expect:
+  errors:
+  - RISKX-001
+  messages:
+  - no organization-wide forum considers aggregated-risk risk

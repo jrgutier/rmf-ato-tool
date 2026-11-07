@@ -4,6 +4,7 @@ run_id: hybrid-minimal
 produced_by_task: I-1
 touched_by: [I-1, A-3]
 sources: [product/security.md]
+handling: CUI
 ---
 # STIG and SRG summary
 

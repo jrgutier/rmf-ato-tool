@@ -159,10 +159,16 @@ class Run:
                     if artifact in (self.tasks[t].get("outputs") or []) and t != producer]
         return ([producer] if producer else []) + updaters
 
+    def writes_facts(self, task: str) -> list[str]:
+        """The facts a task writes in this run: a fact the task's ``facts_since`` dates after
+        the run's contract is not held against it."""
+        since = self.tasks[task].get("facts_since") or {}
+        return [f for f in self.tasks[task].get("writes_facts") or [] if self.holds(since.get(f))]
+
     @cached_property
     def fact_writers(self) -> dict[str, str]:
         """Dotted fact path -> the task whose writes_facts names it."""
-        return {f: t for t in self.order for f in (self.tasks[t].get("writes_facts") or [])}
+        return {f: t for t in self.order for f in self.writes_facts(t)}
 
     # --- run views ------------------------------------------------------------------
     @property

@@ -328,7 +328,9 @@ requirements:
     locator: "2.4"
     context: "Role in the Certification and Accreditation Process"
     statement: "Security categorization is a prerequisite activity for the C&A process. The categorization should be revisited at least every three years or when significant change occurs to the system or supporting business lines. Situational changes outside the system or agency may require a reevaluation of the categorization (i.e., directed mission changes, changes in governance, elevated or targeted threat activities). For more information, see NIST SP 800-64, Security Considerations in the Information System Development Life Cycle and NIST SP 800-37, Guide for the Security Certification and Accreditation of Federal Information Systems."
-    status: "candidate"
+    status: "partial"
+    reason: "When the categorization is revisited is a free-text field; nothing tests the three-year revisit or a significant change."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/revisit", "claim": "presence", "asserts": "The categorization is revisited at least every three years or when significant change occurs"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0042"
     citation: {"ref": "SP800-60V1R1", "page": 14, "anchor": "Security Categorization is the key first step in the Risk Management Framework5"}
@@ -418,7 +420,9 @@ requirements:
     locator: "3.2"
     context: "Impact Assessment"
     statement: "FIPS 199 defines three levels of potential impact on organizations or individuals should there be a breach of security (i.e., a loss of confidentiality, integrity, or availability). The application of these definitions must take place within the context of each organization and the overall national interest. Table 2 provides FIPS 199 potential impact definitions."
-    status: "candidate"
+    status: "partial"
+    reason: "The national interest and organization are review factors CATG-001 requires; the definitions are FIPS 199's."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "asserts": "The application of these definitions takes place within the context of each organization and the overall national interest, the provisional impact levels reviewed", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0054"
     citation: {"ref": "SP800-60V1R1", "page": 18, "anchor": "Low | The potential impact is low if—The loss of confidentiality, integrity,"}
@@ -457,7 +461,8 @@ requirements:
     locator: "3.2"
     context: "Table 2: Potential Impact Levels"
     statement: "System information (e.g., network routing tables, password files, cryptographic key management information) must be protected at a level commensurate with the most critical or sensitive user information being processed by the information system to ensure confidentiality, integrity, and availability."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.sysinfo.yaml", "expect": "below the most sensitive user information", "asserts": "System information such as password files is protected at a level commensurate with the most sensitive user information", "claim": "constraint"}]
     work_item: "WI-187"
   - id: "REQ-SP800-60V1R1-0059"
     citation: {"ref": "SP800-60V1R1", "page": 19, "anchor": "Security Category information type = {(confidentiality, impact), (integrity, impact), (availability, impact)}"}
@@ -527,7 +532,8 @@ requirements:
     locator: "4.0"
     context: "Table 3: SP 800-60 Process Roadmap"
     statement: "Step 3 | • Review the appropriateness of the provisional impact levels based on the organization, environment, mission, use, and data sharing [Section 4.3] • Adjust the impact levels as necessary based on the following considerations: o Confidentiality, integrity, and availability factors [Section 4.2.2] o Situational and operational drivers (timing, lifecycle, etc.) [Section 4.3] o Legal or statutory reasons • Document all adjustments to the impact levels and provide the rationale or justification for the adjustments [Section 4.5] | SAISO; ISSO; Mission Owners; Information Owners"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "asserts": "Review the appropriateness of the provisional impact levels based on the organization, environment, mission, use and data sharing, the provisional impact levels reviewed", "claim": "constraint"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Document all adjustments to the impact levels and provide the rationale, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0068"
     citation: {"ref": "SP800-60V1R1", "page": 21, "anchor": "Step 4 | • Review identified security categorizations for the aggregate of"}
@@ -598,7 +604,9 @@ requirements:
     locator: "4.1"
     context: "Step 1: Identify Information Types"
     statement: "Although this guideline identifies a number of information types and bases its taxonomy on the BRM, only a few of the types identified are likely to be processed by any single system. Also, each system may process information that does not fall neatly into one of the listed information types. Once a set of information types identified in this guideline has been selected, it is prudent to review the information processed by each system under review to see if additional types need to be identified for impact assessment purposes. Also, it is recommended that organizational officials maintain proper documentation of identified information types per information system along with the basis for the information type selection. Guidance for documenting information types is provided in Section 4.5."
-    status: "candidate"
+    status: "partial"
+    reason: "Each type has a selection basis; reviewing for additional types is prose."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.yaml", "expect": "records no basis for selecting the information type", "asserts": "Review the information processed to see if additional information types need to be identified, each with its selection basis", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded"}]
     work_item: "WI-187"
   - id: "REQ-SP800-60V1R1-0077"
     citation: {"ref": "SP800-60V1R1", "page": 22, "anchor": "This section describes a process for identifying mission-based information types and for"}
@@ -678,7 +686,9 @@ requirements:
     locator: "4.1.2"
     context: "Table 5: Services Delivery Support Functions and Information Types15"
     statement: "The government resource management information business area includes the back office support activities enabling the Federal government to operate effectively. The five government resource management information lines of business and the sub-functions associated with each information type are identified in Table 6. Volume II, Appendix C.3, “Government Resource Management Information,” recommends provisional impact levels for confidentiality, integrity, and availability security objectives. Many departments and agencies operate their own support systems. Others obtain at least some support services from other organizations. Some agencies’ missions are primarily to support other government departments and agencies in the conduct of direct service missions. As indicated above, security objectives and associated security impact levels for administrative and management information and systems are determined by the nature of the supported direct services and constituencies being supported."
-    status: "candidate"
+    status: "partial"
+    reason: "Describes a business area; the information types record their SP 800-60 identifiers."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/sp800_60_ids", "claim": "presence", "asserts": "Government resource management information types are identified by their SP 800-60 identifiers"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0087"
     citation: {"ref": "SP800-60V1R1", "page": 25, "anchor": "The recommended information types provided in NIST SP 800-60 are established from"}
@@ -695,7 +705,9 @@ requirements:
     locator: "4.1.3"
     context: "Legislative and Executive Information Mandates"
     statement: "During the identification of information types within an information system, agency personnel should afford special consideration for applicable governances addressing the information processed and the agency’s supported mission. Volume II, Appendix E lists legislative and executive mandates establishing sensitivity and criticality guidelines for specific information types."
-    status: "candidate"
+    status: "partial"
+    reason: "The governance behind each type is part of its selection basis, as text."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.yaml", "expect": "records no basis for selecting the information type", "asserts": "Identification of information types considers applicable governance recorded in the selection basis", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded"}]
     work_item: "WI-187"
   - id: "REQ-SP800-60V1R1-0089"
     citation: {"ref": "SP800-60V1R1", "page": 26, "anchor": "The FEA BRM Information Types are provided only as a taxonomy guideline."}
@@ -741,7 +753,9 @@ requirements:
     locator: "4.2.1"
     context: "FIPS 199 Security Categorization Criteria"
     statement: "Where an information type processed by an information system is not categorized by this guideline [based on information types identified in Volume II, Appendices C and D], an initial impact determination will need to be made based on FIPS 199 categorization criteria (cited in Table 7)."
-    status: "candidate"
+    status: "partial"
+    reason: "An organization-defined type has empty SP 800-60 identifiers and a selection basis; its initial determination is prose."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.yaml", "expect": "records no basis for selecting the information type", "asserts": "An information type not categorized by the guideline gets an initial impact determination with its basis", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0095"
     citation: {"ref": "SP800-60V1R1", "page": 27, "anchor": "Agencies can assign security categories to information types and information systems by"}
@@ -749,7 +763,9 @@ requirements:
     locator: "4.2.1"
     context: "FIPS 199 Security Categorization Criteria"
     statement: "Agencies can assign security categories to information types and information systems by selecting and adjusting appropriate Table 7 values for the potential impact of compromises of confidentiality, integrity, and availability security objectives. Those responsible for impact level selection and subsequent security categorization should apply the criteria provided in Table 7 to each information type received by, processed in, stored in, and/or generated by each system for which they are responsible. The security categorization will generally be determined based on the most sensitive or critical information received by, processed in, stored in, and/or generated by the system under review."
-    status: "candidate"
+    status: "partial"
+    reason: "Levels are recorded per type and objective; the system is never below them."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.below.yaml", "expect": "below the high-water mark", "asserts": "The security categorization is determined by the most sensitive information type, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0096"
     citation: {"ref": "SP800-60V1R1", "page": 27, "anchor": "Impact levels (plural), as used here, refers to low, moderate, high, or"}
@@ -797,7 +813,9 @@ requirements:
     locator: "4.2.2"
     context: "Common Factors for Selection of Impact Levels"
     statement: "Where an agency determines security impact levels and security categorization based on local application of FIPS 199 criteria, it is recommended that the following factors be considered with respect to security impacts for each information type."
-    status: "candidate"
+    status: "partial"
+    reason: "Factors per type are guidance; the review factors are system-level."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "asserts": "Factors are considered with respect to the security impacts, the provisional impact levels reviewed", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0102"
     citation: {"ref": "SP800-60V1R1", "page": 28, "anchor": "Using the FIPS 199 potential impact criteria summarized in Table 7, each information type should be evaluated for confidentiality with"}
@@ -805,7 +823,9 @@ requirements:
     locator: "4.2.2"
     context: "Common Factors for Selection of Impact Levels"
     statement: "Using the FIPS 199 potential impact criteria summarized in Table 7, each information type should be evaluated for confidentiality with respect to the impact level associated with unauthorized disclosure of (i) each known variant of the information belonging to the type and"
-    status: "candidate"
+    status: "partial"
+    reason: "Each type carries a confidentiality level; evaluating each variant and use is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality", "claim": "presence", "asserts": "Each information type is evaluated for confidentiality"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0103"
     citation: {"ref": "SP800-60V1R1", "page": 28, "anchor": "each use of the information by the system under review. Answers to"}
@@ -813,7 +833,9 @@ requirements:
     locator: "4.2.2.(ii)"
     context: "Common Factors for Selection of Impact Levels"
     statement: "(ii) each use of the information by the system under review. Answers to the following questions will help in the evaluation process:"
-    status: "candidate"
+    status: "partial"
+    reason: "Each use of the information is not recorded per type."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/life_cycle", "claim": "presence", "asserts": "Each use of the information by the system is recorded in its life cycle"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0104"
     citation: {"ref": "SP800-60V1R1", "page": 28, "anchor": "How can a malicious adversary use the unauthorized disclosure of information to do limited/serious/severe harm to"}
@@ -845,7 +867,9 @@ requirements:
     locator: "4.2.2.(ii)"
     context: "Common Factors for Selection of Impact Levels"
     statement: "Using the FIPS 199 potential impact criteria summarized in Table 7, each information type should be evaluated for integrity with respect to the impact level associated with unauthorized modification or destruction of (i) each known variant of the information belonging to the type and (ii) each use of the information by the system under review. Answers to the following questions will help in the evaluation process:"
-    status: "candidate"
+    status: "partial"
+    reason: "Each type carries an integrity level; evaluating each variant and use is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity", "claim": "presence", "asserts": "Each information type is evaluated for integrity"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0108"
     citation: {"ref": "SP800-60V1R1", "page": 29, "anchor": "How can a malicious adversary use the unauthorized modification or destruction of"}
@@ -957,7 +981,9 @@ requirements:
     locator: "4.2.2.(ii)"
     context: "Common Factors for Selection of Impact Levels"
     statement: "Using the FIPS 199 potential impact criteria summarized in Table 7, each information type should be evaluated for availability with respect to the impact level associated with the disruption of access to or use of information of (i) each known variant of the information belonging to the type and (ii) each use of the information by the system under review. Answers to the following questions will help in the evaluation process:"
-    status: "candidate"
+    status: "partial"
+    reason: "Each type carries an availability level; evaluating each variant and use is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability", "claim": "presence", "asserts": "Each information type is evaluated for availability"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0122"
     citation: {"ref": "SP800-60V1R1", "page": 30, "anchor": "How can a malicious adversary use the disruption of access to or"}
@@ -989,7 +1015,9 @@ requirements:
     locator: "4.2.2.(ii)"
     context: "Common Factors for Selection of Impact Levels"
     statement: "In most cases, the adverse effects of a limited-duration availability compromise on an organization’s mission functions and public confidence will be limited. In contrast, for time-critical information types, availability is less likely to be restored before serious harm is done to agency assets, operations, or personnel (or to public welfare). In such instances, the documented availability impact level recommendations should indicate the information is time-critical and the basis for criticality."
-    status: "candidate"
+    status: "partial"
+    reason: "Time criticality is an adjustment factor; the per-type availability recommendation does not flag it."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Time-critical information types raise the availability impact level through a recorded adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0126"
     citation: {"ref": "SP800-60V1R1", "page": 30, "anchor": "Security Category public information = {(confidentiality, n/a), (integrity, moderate), (availability, moderate)}."}
@@ -1005,7 +1033,9 @@ requirements:
     locator: "4.3"
     context: "Step 3: Review Provisional Impact Levels and Adjust/Finalize"
     statement: "In Step 3, organizations should review and adjust the provisional security impact levels for the security objectives of each information type and arrive at a finalized state. To accomplish this, organizations should: (i) review the appropriateness of the provisional impact levels based on the organization, environment, mission, use, and data sharing; (ii) adjust the security objective impact levels as necessary using the special factors18 guidance found in Volume II, Appendices C and D; and (iii) document all adjustments to the impact levels and provide the rationale or justification for the adjustments."
-    status: "candidate"
+    status: "partial"
+    reason: "The review factors and adjustments are recorded; adjustment through Volume II special factors is prose."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "asserts": "Review the appropriateness of the provisional impact levels based on the organization, environment, mission, use and data sharing, the provisional impact levels reviewed", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0128"
     citation: {"ref": "SP800-60V1R1", "page": 31, "anchor": "When security categorization impact levels recommended in Section 4.2 or Volume II,"}
@@ -1013,7 +1043,9 @@ requirements:
     locator: "4.3"
     context: "Step 3: Review Provisional Impact Levels and Adjust/Finalize"
     statement: "When security categorization impact levels recommended in Section 4.2 or Volume II, Appendices C and D are adopted as provisional security impact levels, the agency should review the appropriateness of the provisional impact levels in the context of the organization, environment, mission, use, and data sharing associated with the information system under review. This review should include the agency’s mission importance; lifecycle and timeliness implications; configuration and security policy related information; special handling requirements; etc. The FIPS 199 factors presented in Section 4.2.2 of this document should be used as the basis for decisions regarding adjustment or finalization of the provisional impact levels. The confidentiality, integrity, and availability impact levels may be adjusted one or more times in the course of the review. Once the review and adjustment process is complete, the mapping of impact levels by information type can be finalized."
-    status: "candidate"
+    status: "partial"
+    reason: "The review factors are recorded; lifecycle, timeliness and special handling are partly factors."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "asserts": "The provisional impact levels are reviewed in the context of the organization, environment, mission, use and data sharing, the provisional impact levels reviewed", "claim": "constraint"}]
     work_item: "WI-186"
   - id: "REQ-SP800-60V1R1-0129"
     citation: {"ref": "SP800-60V1R1", "page": 31, "anchor": "The special factor guidance in NIST SP 800-60, Volume II, provides specific"}
@@ -1029,7 +1061,9 @@ requirements:
     locator: "4.3"
     context: "Step 3: Review Provisional Impact Levels and Adjust/Finalize"
     statement: "Further, information systems process many types of information. Not all of these information types are likely to have the same security impact levels. The compromise of some information types will jeopardize system functionality and agency mission more than the compromise of other information types. System security impact levels must be assessed in the context of system mission and function as well as on the basis of the aggregate of the component information types."
-    status: "candidate"
+    status: "partial"
+    reason: "The system is never below the aggregate of its information types; mission context is a review factor."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.below.yaml", "expect": "below the high-water mark", "asserts": "System security impact levels are assessed on the basis of the aggregate of the component information types, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0131"
     citation: {"ref": "SP800-60V1R1", "page": 32, "anchor": "Additionally, configuration and security policy enforcement information should be reviewed and adjusted"}
@@ -1037,7 +1071,9 @@ requirements:
     locator: "4.3"
     context: "Step 3: Review Provisional Impact Levels and Adjust/Finalize"
     statement: "Additionally, configuration and security policy enforcement information should be reviewed and adjusted considering the information processed on the system. Configuration and security policy information includes password files, network access rules, other hardware and software configuration settings, and documentation affecting access to the information system’s data, programs, and/or processes. At a minimum, a low confidentiality and integrity impact level will apply to this set of information and processes due to a potential for corruption, misuse, or abuse of system information and processes."
-    status: "candidate"
+    status: "partial"
+    reason: "Configuration and security policy information is system information held at the user information level, which is at least low."
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.sysinfo.yaml", "expect": "below the most sensitive user information", "asserts": "Configuration and security policy information is held at the level of the most sensitive user information processed", "claim": "constraint"}]
     work_item: "WI-187"
   - id: "REQ-SP800-60V1R1-0132"
     citation: {"ref": "SP800-60V1R1", "page": 32, "anchor": "A factor specific to the confidentiality objective is information subject to special"}
@@ -1045,7 +1081,9 @@ requirements:
     locator: "4.3"
     context: "Step 3: Review Provisional Impact Levels and Adjust/Finalize"
     statement: "A factor specific to the confidentiality objective is information subject to special handling (e.g., information subject to the Privacy Act of 1974, 5 U.S.C. § 552A). Regardless of other considerations, some minimum confidentiality impact level must be assigned to any information system that stores, processes, or generates such information. Examples of such information include information subject to the Trade Secrets Act, the Privacy Act, Department of Energy Safeguards Information, Internal Revenue Service Official Use Only Information, and Environmental Protection Agency Confidential Business Information (e.g., subject to Toxic Substances Control Act; Resource Conservation and Recovery Act; Comprehensive Environmental Response, Compensation, and Liability Act). Some of these statutory and regulatory specifications are listed in Volume II, Appendix E, “Legislative and Executive Sources Establishing Sensitivity/Criticality.”"
-    status: "candidate"
+    status: "partial"
+    reason: "Special handling is flagged per type; a minimum confidentiality is enforced for CUI only."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/handling/properties/special", "claim": "presence", "asserts": "Information subject to special handling such as the Privacy Act is flagged"}]
     work_item: "WI-180"
   - id: "REQ-SP800-60V1R1-0133"
     citation: {"ref": "SP800-60V1R1", "page": 33, "anchor": "FIPS 199 recognizes that determining the security category of an information system"}
@@ -1163,7 +1201,9 @@ requirements:
     locator: "4.4.2"
     context: "Guidelines for System Categorization"
     statement: "The primary factors that most commonly raise the impact levels of the system security category above that of its constituent information types are aggregation and critical system functionality. Additionally, variations in sensitivity/criticality with respect to time may need to be factored into the impact assignment process. Some information loses its sensitivity in time (e.g., economic/commodity projections after they’ve been published). Other information is particularly critical at some point in time (e.g., weather data in the terminal approach area during aircraft landing operations). This section provides some general guidelines regarding how aggregation, critical functionality, and other system factors may affect system security categorization."
-    status: "candidate"
+    status: "partial"
+    reason: "Aggregation and critical functionality are recorded adjustment factors; variations with time are prose."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Aggregation and critical system functionality raise the system impact level above the information types, recorded as an adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0148"
     citation: {"ref": "SP800-60V1R1", "page": 35, "anchor": "Agency personnel should be aware that there are several factors that should"}
@@ -1187,7 +1227,9 @@ requirements:
     locator: "4.4.2"
     context: "Guidelines for System Categorization"
     statement: "Some information may have little or no sensitivity in isolation but may be highly sensitive in aggregation. In some cases, aggregation of large quantities of a single information type can reveal sensitive patterns and plans, or facilitate access to sensitive or critical systems. In other cases, aggregation of information of several different and seemingly innocuous types can have similar effects. In general, the sensitivity of a given data element is likely to be greater in context than in isolation (e.g., association of an account number with the identity of an individual and/or institution). The availability, routine operational employment, and sophistication of data aggregation and inference tools are all increasing rapidly. If review reveals increased sensitivity or criticality associated with information aggregates, then the system security objective impact levels may need to be adjusted to a higher level than would be indicated by the security impact levels associated with any individual information type. This could be implemented by incorporating a statement that explains the aggregation and potential security objective affected as well as the modification to impact levels."
-    status: "candidate"
+    status: "partial"
+    reason: "Aggregation is an adjustment factor; nothing tests that aggregated sensitivity was weighed."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Sensitivity in aggregation is recorded as an adjustment raising the impact level, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0151"
     citation: {"ref": "SP800-60V1R1", "page": 35, "anchor": "Other systems to which the system in question is connected, or"}
@@ -1211,7 +1253,9 @@ requirements:
     locator: "4.4.2"
     context: "Guidelines for System Categorization Compromise of some information types may have low impact in the context of a system’s primary function but may have much more significance when viewed in the conte"
     statement: "Access control information for a system that processes only low impact information might initially be thought to have only low impact security objectives. However, if access to that system might result in some form of access to other systems (e.g., over a network), the sensitivity and criticality attributes of all systems to which such indirect access can result needs to be considered. Similarly, some information may, in general, have low sensitivity and/or criticality security objectives. However, that information may be used by other systems to enable extremely sensitive or critical functions (e.g., air traffic control use of weather information or use of commercial flight information to identify military combat transport systems). Loss of data integrity, availability, temporal context, or other context can have catastrophic consequences."
-    status: "candidate"
+    status: "partial"
+    reason: "Indirect access to other systems can raise the level through a recorded adjustment; nothing finds such access."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Access to other systems is weighed and any raised impact level is recorded as an adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0154"
     citation: {"ref": "SP800-60V1R1", "page": 36, "anchor": "This publication focuses on categorizing an information system based on its information"}
@@ -1219,7 +1263,9 @@ requirements:
     locator: "4.4.2"
     context: "Guidelines for System Categorization"
     statement: "This publication focuses on categorizing an information system based on its information types and associated security objective impacts. There are times when a system security objective impact level should be elevated based on reasons other than its information. For example, the information system provides critical process flow or security capability, the visibility of the system to the public, the sheer number of other systems reliant on its operation or possibly its overall cost of replacement. These examples, given a specific situation, may provide reason for the system owner to increase the overall security impact level of a system."
-    status: "candidate"
+    status: "partial"
+    reason: "Raising for reasons other than information is a recorded adjustment with its factor; whether one was warranted is judgment."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "A system security objective impact level elevated for reasons other than its information is recorded as an adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0155"
     citation: {"ref": "SP800-60V1R1", "page": 36, "anchor": "An elevation based on extenuating circumstances can be more apparent by comparing"}
@@ -1227,7 +1273,9 @@ requirements:
     locator: "4.4.2"
     context: "Guidelines for System Categorization"
     statement: "An elevation based on extenuating circumstances can be more apparent by comparing the original security categorization to the business impact analysis. If the system was categorized based on FIPS 199 at a Moderate overall impact level but the system owner has determined it needs to be operational within 4-8 hours of a disruption irrespective of the aggregated information type availability security impact level assigned, then there is a disconnect that might be caused by the system’s extenuating circumstances. Agencies must customize the information system availability security impact level as appropriate to obtain full value and accuracy."
-    status: "candidate"
+    status: "partial"
+    reason: "An elevation for extenuating circumstances is a recorded adjustment; comparison with the business impact analysis is not tested."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "An elevation of the availability impact level for extenuating circumstances is recorded as an adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0156"
     citation: {"ref": "SP800-60V1R1", "page": 36, "anchor": "Most Federal agencies maintain web pages that are accessible to the public."}
@@ -1235,7 +1283,9 @@ requirements:
     locator: "Public Information Integrity"
     context: ""
     statement: "Most Federal agencies maintain web pages that are accessible to the public. The vast majority of these public web pages permit interaction between the site and the public. In some cases, the site provides only information. In other cases, forms may be submitted via the website (e.g., applications for service or job applications). In some cases, the site is a medium for business transactions. Unauthorized modification or destruction of information affecting external communications (e.g., web pages, electronic mail) may adversely affect operations and/or public confidence in the agency. In most cases, the damage can be corrected within a relatively short period of time, and the damage is limited (impact level is low). In other cases (e.g., very large fraudulent transactions or modification of a web page belonging to an intelligence/security community component), the damage to mission function and/or public confidence in the agency can be serious. In such cases, the integrity impact associated with unauthorized modification or destruction of a public web page would be at least moderate."
-    status: "candidate"
+    status: "partial"
+    reason: "Public visibility is an adjustment factor; nothing finds a public web presence."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Public visibility of external communications raises the impact level through a recorded adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0157"
     citation: {"ref": "SP800-60V1R1", "page": 36, "anchor": "Either physical or logical destruction of major assets can result in very"}
@@ -1243,7 +1293,9 @@ requirements:
     locator: "Catastrophic Loss of System Availability"
     context: ""
     statement: "Either physical or logical destruction of major assets can result in very large expenditures to restore the assets and/or long periods of time for recovery. Permanent loss/unavailability of information system capabilities can seriously hamper agency operations and, where direct services to the public are involved, have a severe adverse effect on public confidence in Federal agencies. Particularly in the case of large systems, FIPS 199 criteria suggest that catastrophic loss of system availability may result in a high availability impact level. Whether or not the impact level of system availability should be high (and subsequent high system security impact level) is dependent on other factors, such as cost and criticality of the system, rather than on the security impact levels for the information types being processed by the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Replacement cost and catastrophic loss of availability are adjustment factors; nothing tests whether one applies."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Catastrophic loss of system availability raises the availability impact level through a recorded adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0158"
     citation: {"ref": "SP800-60V1R1", "page": 37, "anchor": "Large or complex information systems composed of multiple lower level systems often"}
@@ -1251,7 +1303,9 @@ requirements:
     locator: "Large Supporting and Interconnecting Systems"
     context: ""
     statement: "Large or complex information systems composed of multiple lower level systems often require additional consideration regarding assignment of system security categorization. This section will provide guidelines for applying and interrelating individual system security categorization results to enterprise organizations, large supporting infrastructures (such as general support systems, data warehouse applications, large data storage units, server farms, and information repositories), and interconnecting systems."
-    status: "candidate"
+    status: "partial"
+    reason: "Subsystem categorization is held; enterprise-level categorization of large infrastructures is outside the run."
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.yaml", "expect": "below the high-water mark", "asserts": "Large systems composed of lower level systems are categorized no lower than the high-water mark of their subsystems", "claim": "constraint"}]
     work_item: "WI-175"
   - id: "REQ-SP800-60V1R1-0159"
     citation: {"ref": "SP800-60V1R1", "page": 37, "anchor": "Upon security categorization identification for all information systems interacting with large infrastructure"}
@@ -1259,7 +1313,9 @@ requirements:
     locator: "Large Supporting and Interconnecting Systems"
     context: ""
     statement: "Upon security categorization identification for all information systems interacting with large infrastructure systems, senior IT and security officials have possession of valuable information that can now enable an enterprise wide security perspective. One significant activity includes levying an overall security categorization for the agency’s supporting network infrastructures. Since networks, as well as other general support systems, do not inherently “own” mission-based or management and support information types, the infrastructure’s categorization is based on the aggregation of the information systems’ security categorizations. In other words, the infrastructure’s security categorization is the high water mark of the supported information systems and is based on the information types processed, flowed, or stored on the network or general support system. Together, the top down enterprise wide threat assessment and bottom up security assessment derived by aggregation will allow an organization to look at its risk profile from a comprehensive and balanced view. Further, this analysis will ensure the proper application of common security controls supporting the multiple information systems and the protection provided by those controls are inherited by the individual systems."
-    status: "candidate"
+    status: "partial"
+    reason: "An enterprise-wide categorization of supporting networks is outside the run."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Security categorization of interacting systems informs the categorization of supporting network infrastructures", "claim": "presence"}]
     work_item: "WI-175"
   - id: "REQ-SP800-60V1R1-0160"
     citation: {"ref": "SP800-60V1R1", "page": 37, "anchor": "Where the mission served by an information system, or the information that"}
@@ -1267,7 +1323,9 @@ requirements:
     locator: "Critical Infrastructures and Key Resources"
     context: ""
     statement: "Where the mission served by an information system, or the information that the system processes, affects the security of critical infrastructures and key resources, the harm that results from a compromise requires particularly close attention. In this case, an effect on security might include a significant reduction in the effectiveness of physical or cyber security protection mechanisms, or facilitation of a terrorist attack on critical infrastructures and key resources. Accordingly, the system security categorization should be carefully determined when a loss of confidentiality, integrity, or availability will result in a negative impact on the critical infrastructures and key resources."
-    status: "candidate"
+    status: "partial"
+    reason: "Critical infrastructure is an adjustment factor and a special handling flag; nothing tests the careful determination."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "above the high-water mark", "asserts": "Where the system affects critical infrastructures the system security categorization is raised through a recorded adjustment, judged against the high-water mark", "claim": "constraint"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0161"
     citation: {"ref": "SP800-60V1R1", "page": 37, "anchor": "The Critical Information Infrastructure Act of 2002, Public Law 107-296 §§ 211-215"}
@@ -1275,7 +1333,9 @@ requirements:
     locator: "Critical Infrastructures and Key Resources"
     context: ""
     statement: "The Critical Information Infrastructure Act of 2002, Public Law 107-296 §§ 211-215 of November 25, 2002 (codified as 6 U.S.C. 131-134), defines the term \"critical infrastructure information\" to mean information not customarily in the public domain and related to the security of critical infrastructure or protected systems. Should information types be aligned with Critical Infrastructures, then action should be taken to ensure compliance with Homeland Security Presidential Directive No. 7 (HSPD 7) and to initiate an interdependency analysis."
-    status: "candidate"
+    status: "partial"
+    reason: "Critical infrastructure information is a special handling flag; HSPD 7 compliance and interdependency analysis are outside the run."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/handling/properties/special", "claim": "presence", "asserts": "Information types aligned with critical infrastructure carry the special handling flag"}]
     work_item: "WI-173"
   - id: "REQ-SP800-60V1R1-0162"
     citation: {"ref": "SP800-60V1R1", "page": 37, "anchor": "The E-Government Act of 2002 complements privacy protection requirements of the Privacy"}
@@ -1307,7 +1367,9 @@ requirements:
     locator: "Privacy Information"
     context: ""
     statement: "Categorizations should be reviewed to ensure that the adverse effects of a loss of PII confidentiality have been adequately factored into impact determinations. The confidentiality impact level should generally fall into the moderate range."
-    status: "candidate"
+    status: "partial"
+    reason: "PII confidentiality falling in the moderate range is guidance; nothing raises it."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "Loss of PII confidentiality is factored into the impact determination under the pii factor", "claim": "presence"}]
     work_item: "WI-180"
   - id: "REQ-SP800-60V1R1-0166"
     citation: {"ref": "SP800-60V1R1", "page": 38, "anchor": "There are several laws that specifically prohibit unauthorized disclosure of trade secrets"}
@@ -1315,7 +1377,9 @@ requirements:
     locator: "Trade Secrets"
     context: ""
     statement: "There are several laws that specifically prohibit unauthorized disclosure of trade secrets (e.g., 7 U.S.C., Chapter 6, Subchapter II, Section 136h and 42 U.S.C., Chapter 6A, Subchapter XII, Part E, Section 300j-4(d)(1)). Systems that store, communicate, or process trade secrets will generally be assigned at least a moderate confidentiality impact level."
-    status: "candidate"
+    status: "partial"
+    reason: "Trade secrets are flagged; the moderate confidentiality floor is not enforced."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/handling/properties/special", "claim": "presence", "asserts": "Systems that process trade secrets flag the special handling"}]
     work_item: "WI-180"
   - id: "REQ-SP800-60V1R1-0167"
     citation: {"ref": "SP800-60V1R1", "page": 38, "anchor": "Since the impact values (i.e., levels) for confidentiality, integrity, and availability may"}
@@ -1588,7 +1652,9 @@ requirements:
     locator: "4.2.3"
     context: ""
     statement: "In general, security objective impact assessment is independent of mechanisms employed to mitigate the consequences of a compromise."
-    status: "candidate"
+    status: "partial"
+    reason: "Independence of impact from mitigation is guidance C-2 follows; nothing tests it."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "Impact assessment is not lowered for mitigating mechanisms", "claim": "presence"}]
     work_item: "WI-186"
     promoted: {"reason": "Rejected as no-marker, but it is a rule of method: impact is judged without regard to mitigating mechanisms."}
   - id: "REQ-SP800-60V1R1-0201"

@@ -170,7 +170,9 @@ requirements:
     locator: "3"
     context: ""
     statement: "To protect PII within NSS, system owners must be able to identify PII and should recognize that inclusion of PII in a system may not be immediately apparent. PII is defined in CNSSI No. 4009, Glossary, and OMB Circular A-130 as, “information that can be used to distinguish or trace an individual’s identity, either alone or when combined with other information that is linked or linkable to a specific individual”. The definition of PII is not based on the location or nationality of the individual. The definition of PII also is not limited to any single type of information or technology. Rather, determining PII requires a case-by-case assessment of the specific likelihood that an individual can be identified. PII may appear in various forms and contexts in NSS. Practitioners must understand the data that is processed by their system or tool, including whether PII will or may be processed, or if data may become PII after processing. Resources that may help practitioners determine the PII their system processes or may process include the system description, data dictionaries, data stores, architecture for the data store(s), and data flow diagrams. The instances in Sections 3.1.1 - 3.1.3 provide representative examples of data that are PII. These examples are not exhaustive lists of the data elements that are PII, but rather show some of the myriad ways data elements may be PII independently or can become PII in combination. 3.1.1 Data Elements that Alone Identify an Individual Data elements that alone can distinguish or trace an individual’s identity are also referred to as direct identifiers. Direct identifiers are specific characteristics of an individual, such as biometrics, or an identifier assigned to an individual, such as a name or employee identification number."
-    status: "candidate"
+    status: "partial"
+    reason: "How PII was identified is required text for a type holding PII; whether all PII was found is not testable."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.pii.yaml", "expect": "and does not say how the PII was identified", "asserts": "System owners identify PII in the system and record how it was identified", "claim": "presence", "holds_when": "ART-INFOTYPES is in play once P-12 is active or it is seeded"}]
     work_item: "WI-187"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0022"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 8, "anchor": "Name alone – This is true whether a name is common (e.g.,"}
@@ -210,7 +212,9 @@ requirements:
     locator: "3.•"
     context: "Example:"
     statement: "• Asset information or unique alphanumeric string uniquely assigned to an individual device, person, or small well-defined group of people (e.g., Internet Protocol (IP) address or Media Access Control (MAC) address, International Mobile Equipment Identity (IMEI), advertising identifier). 3.1.2. Data Elements that in Combination Identify an Individual (Compilation) Data elements that are indirect identifiers, or data that alone or without additional context does not identify an individual, will become PII when combined with other data elements about that individual or context whereby that combination is sufficient to enable identification. This is also referred to as the compilation or mosaic effect. The mosaic effect occurs, and data becomes PII, whether identification of individuals is inadvertent or intentional. These combined data elements may be linked or associated within a single data repository or system or may be linked or associated through data processing across multiple repositories, or when the data is used for the purpose of identifying individuals within specific mission contexts. Regardless of where or when this association occurs, it is important to evaluate if the association results in the ability to identify an individual. Additionally, if the purpose of combining the data elements is to determine the identity of the individual, then by definition the mosaic effect has occurred, and the data is PII. Instance #2: Data elements about an individual that, when combined, enable identification are PII."
-    status: "candidate"
+    status: "partial"
+    reason: "Device identifiers and combinations are named in the PII identification guidance only."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-12.md", "asserts": "PII identification covers identifiers that identify an individual only in combination", "claim": "presence"}]
     work_item: "WI-187"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0027"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 9, "anchor": "Zip code alone is not PII."}
@@ -411,7 +415,9 @@ requirements:
     locator: "4.2"
     context: "Privacy Overlays Relationship to Categorize and Select in the Risk"
     statement: "For systems that require only the Accountability Overlay, the impact value for PII will be low for all three security objectives (confidentiality, integrity, and availability)."
-    status: "candidate"
+    status: "partial"
+    reason: "The Accountability Overlay's low impact value for PII is not checked against the categorization."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "asserts": "PII impact values are weighed under the pii factor of the categorization", "claim": "presence"}]
     work_item: "WI-173"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0052"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 13, "anchor": "A plus sign (“+”) indicates the control should be selected."}
