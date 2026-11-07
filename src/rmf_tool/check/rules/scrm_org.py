@@ -27,25 +27,25 @@ FRAME_OUTPUTS = ("policy", "criticality", "assessment-methodology", "response-gu
                  "monitoring-guidance", "mission-requirements", "revised-processes",
                  "operational-requirements", "acquisition-guidance")  # p. 285
 ASSESS_STEP = "P-14"  # the Assess step refines every frame assumption (pp. 290-293)
-# Table 1 Level 1 executive leadership with a persona: CIO, CISO, CRO (the risk executive
-# function) and CPO.
-EXECUTIVES = ("PER-CIO", "PER-CISO", "PER-RE", "PER-PRIV")
+# Table 1 Level 1 executive leadership ("CEO, CIO, ..., CRO, etc.") with a persona of this
+# framework: the organization-level officials, the AO and the acquisition executives.
+EXECUTIVES = ("PER-CIO", "PER-CISO", "PER-RE", "PER-PRIV", "PER-IO", "PER-AO", "PER-MDA",
+              "PER-SPONSOR")
 SENIOR_OFFICIALS = (*EXECUTIVES, "PER-AO")  # p. 257: a senior agency official as FASC liaison
 # Section 2.1.4: system owners and project managers (PER-PM), engineering (PER-LSE or
 # PER-ISSE), software developers (PER-DEV); senior leaders, p. 41.
 DUTY_HOLDERS = {"PER-PM": ("PER-PM",), "PER-DEV": ("PER-DEV",),
                 "engineering": ("PER-LSE", "PER-ISSE"), "PER-CIO": ("PER-CIO",),
                 "PER-CISO": ("PER-CISO",), "PER-RE": ("PER-RE",)}
-DELIVERABLES = {"level-1": ("strategy", "policy", "implementation-plan"),
-                "level-2": ("strategy", "policy", "implementation-plan"),
-                "level-3": ("c-scrm-plan",)}  # pp. 37, 41-47
+# pp. 37, 41-47, 210 and 217: the strategy, policy and implementation plan at Level 1 and/or
+# Level 2 (one document may hold several), the C-SCRM plan at Level 3.
+ORG_DELIVERABLES = ("strategy", "policy", "implementation-plan")
+SYSTEM_DELIVERABLES = ("c-scrm-plan",)
 # Fig. 7 and pp. 44-47: Level 1 informs Level 2, Level 2 informs Levels 1 and 3, and Level 3
 # informs Levels 1 and 2.
 INFORMS = {"level-1": ("level-2",), "level-2": ("level-1", "level-3"),
            "level-3": ("level-1", "level-2")}
 PROCESS_STEPS = ("frame", "assess", "respond", "monitor")  # p. 32
-SHARING_PRACTICES = ("goals", "internal-sources", "scope", "rules", "join", "enrich",
-                     "automate", "agreements", "protect", "support")  # SP 800-150 via p. 57
 SHARING_REACHES = ("P-3", "P-14")
 TIER_BELOW = {"sustaining": "foundational", "enhancing": "sustaining"}  # pp. 62-63
 UNDER_WAY = ("implemented", "in-progress")
@@ -56,6 +56,16 @@ FRAMEWORK_LEVELS = ("level-1", "level-2")  # p. 298
 
 def _org(ctx: Context, task: str) -> dict[str, Any] | None:
     return _doc(ctx, ORG_FILE) if _active(ctx, task) else None
+
+
+def _run_personas(ctx: Context) -> set[str]:
+    """The personas the run interviewed: the roles the system has."""
+    out = set()
+    for interview in ctx.interviews:
+        persona = (interview.front or {}).get("persona")
+        if isinstance(persona, str):
+            out.add(persona)
+    return out
 
 
 def _finding(rule: str, message: str, task: str) -> RunFinding:
@@ -154,9 +164,9 @@ def frame_outputs(ctx: Context) -> list[RunFinding]:
 
 # --- SCRM-021 ----------------------------------------------------------------------------
 def governance(ctx: Context) -> list[RunFinding]:
-    """P-1: an executive leads C-SCRM, a PMO or other dedicated function drives it, ownership
-    is delegated to the authorizing officials, and each role SP 800-161 gives a C-SCRM duty has
-    one."""
+    """P-1: an executive-level official, office or group leads C-SCRM, a PMO or other
+    dedicated function drives it, ownership is delegated to the authorizing officials, and each
+    role SP 800-161 gives a C-SCRM duty has one, among the roles the run has."""
     org = _org(ctx, ROLES)
     if org is None:
         return []
@@ -166,24 +176,28 @@ def governance(ctx: Context) -> list[RunFinding]:
         out.append(_finding("SCRM-021", message, ROLES))
 
     gov = _obj(org, "governance")
-    lead = _obj(gov, "lead").get("persona")
-    if lead not in EXECUTIVES:
-        err(f"the C-SCRM lead {lead} is not an executive-level official")
+    lead = _obj(gov, "lead")
+    # p. 41: an executive-level individual, office or group; a group is named, not a persona.
+    if lead.get("persona") not in EXECUTIVES and not lead.get("group"):
+        err(f"the C-SCRM lead {lead.get('persona')} is not an executive-level official, office "
+            "or group")
     if gov.get("pmo") == "none":
         err("the organization has no C-SCRM PMO or other dedicated C-SCRM function")
     if "PER-AO" not in _refs(gov, "owners"):
         err("ownership of supply chain risk is delegated to no authorizing official")
     holders = {_key(r, "persona") for r in _list(gov, "roles")}
+    present = _run_personas(ctx)
     for name, personas in DUTY_HOLDERS.items():
-        if not holders & set(personas):
+        # pp. 58-59 give these roles as examples; a duty is owed only by a role the run has.
+        if present & set(personas) and not holders & set(personas):
             err(f"no C-SCRM duty is defined for {name}")
     return out
 
 
 # --- SCRM-022 ----------------------------------------------------------------------------
 def levels(ctx: Context) -> list[RunFinding]:
-    """P-2: each level holds its C-SCRM deliverables and informs the levels SP 800-161 says it
-    informs, and C-SCRM sits in each step of the risk management process."""
+    """P-2: Level 1 or Level 2 provides the C-SCRM strategy, policy and implementation plan,
+    Level 3 the C-SCRM plan, and each level informs the levels SP 800-161 says it informs."""
     org = _org(ctx, FRAME)
     if org is None:
         return []
@@ -193,13 +207,17 @@ def levels(ctx: Context) -> list[RunFinding]:
         out.append(_finding("SCRM-022", message, FRAME))
 
     held = {_key(lv, "level"): lv for lv in _list(org, "levels")}
+    upper = {d for level in ("level-1", "level-2") for d in _refs(held.get(level), "deliverables")}
+    for deliverable in ORG_DELIVERABLES:
+        if deliverable not in upper:
+            err(f"neither level-1 nor level-2 provides a C-SCRM {deliverable}")
+    for deliverable in SYSTEM_DELIVERABLES:
+        if deliverable not in _refs(held.get("level-3"), "deliverables"):
+            err(f"level-3 provides no C-SCRM {deliverable}")
     for level in LEVELS:
         if level not in held:
             err(f"the C-SCRM record says nothing of what {level} holds and passes on")
             continue
-        for deliverable in DELIVERABLES[level]:
-            if deliverable not in _refs(held[level], "deliverables"):
-                err(f"{level} provides no C-SCRM {deliverable}")
         for other in INFORMS[level]:
             if other not in _refs(held[level], "informs"):
                 err(f"{level} C-SCRM outputs do not inform {other}")
@@ -219,8 +237,9 @@ def process(ctx: Context) -> list[RunFinding]:
 
 # --- SCRM-023 ----------------------------------------------------------------------------
 def sharing(ctx: Context) -> list[RunFinding]:
-    """P-3: supply chain risk information sharing follows each key practice SP 800-161 takes
-    from SP 800-150, has a senior agency official as FASC liaison, and reaches P-3 and P-14."""
+    """P-3: information-sharing processes are built into the C-SCRM program, a FASC liaison who
+    is one of the Component's personas is a senior agency official, and shared information
+    reaches P-3 and P-14."""
     org = _org(ctx, ORG_RISK)
     if org is None:
         return []
@@ -230,12 +249,13 @@ def sharing(ctx: Context) -> list[RunFinding]:
         out.append(_finding("SCRM-023", message, ORG_RISK))
 
     s = _obj(org, "sharing")
-    practices = {_key(p, "practice") for p in _list(s, "practices")}
-    for practice in SHARING_PRACTICES:
-        if practice not in practices:
-            err(f"information sharing does not establish the key practice {practice}")
+    if not _list(s, "practices"):
+        err("information sharing has no processes built into the C-SCRM program")
     liaison = _obj(s, "fasc").get("liaison")
-    if liaison not in SENIOR_OFFICIALS:
+    # p. 257: the agency designates the liaison; a Component may cite the Department's, by
+    # name, instead of one of its own personas.
+    if isinstance(liaison, str) and liaison.startswith("PER-") \
+            and liaison not in SENIOR_OFFICIALS:
         err(f"the FASC liaison {liaison} is not a senior agency official")
     for task in SHARING_REACHES:
         if task not in _refs(s, "feeds"):
@@ -245,8 +265,8 @@ def sharing(ctx: Context) -> list[RunFinding]:
 
 # --- SCRM-024 ----------------------------------------------------------------------------
 def maturity(ctx: Context) -> list[RunFinding]:
-    """P-2: a sustaining or enhancing practice is under way only once the tier below is
-    started, and what is taken up next is a practice the record holds."""
+    """P-2: a sustaining or enhancing practice is under way only once some practice of the
+    tier below is implemented, and what is taken up next is a practice the record holds."""
     org = _org(ctx, FRAME)
     if org is None:
         return []
@@ -261,15 +281,17 @@ def maturity(ctx: Context) -> list[RunFinding]:
     for name in _refs(m, "next"):
         if name not in names:
             err(f"the maturity record takes up {name} next, a practice it does not hold")
+    # pp. 62-63 judge the tier below as a whole ("broadly standardized and implemented"): a
+    # higher-tier practice waits only while no practice of the tier below is implemented.
+    implemented = {_key(q, "tier") for q in practices if q.get("status") == "implemented"}
     for p in practices:
         below = TIER_BELOW.get(str(p.get("tier")))
         if below is None or p.get("status") not in UNDER_WAY:
             continue
-        for q in practices:
-            if q.get("tier") == below and q.get("status") == "not-started":
-                err(f"a practice is under way before the tier below it is started: "
-                    f"{p.get('tier')} practice {p.get('practice')} while {below} practice "
-                    f"{q.get('practice')} is not started")
+        if below not in implemented:
+            err(f"a practice is under way before the tier below it is implemented: "
+                f"{p.get('tier')} practice {p.get('practice')} while no {below} practice "
+                "is implemented")
     return out
 
 

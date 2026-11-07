@@ -6,7 +6,6 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "plan",
     "controls",
     "contingency",
     "monitoring",
@@ -247,6 +246,37 @@
       "x-enforces": [
         "REQ-SP800-37R2-0550"
       ]
+    },
+    "inheritance": {
+      "title": "For a low-impact system without a C-SCRM plan: what the security plan identifies instead (SP 800-18r2 p. 47)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controls",
+        "tolerances",
+        "acceptance",
+        "sources"
+      ],
+      "properties": {
+        "controls": {
+          "type": "string",
+          "minLength": 1,
+          "title": "C-SCRM controls inherited from organization-level common control providers"
+        },
+        "tolerances": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Organizational and system risk tolerances"
+        },
+        "acceptance": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Acceptance, transfer or mitigation of supply chain risks via system-specific controls"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
     },
     "controls": {
       "title": "C-SCRM control selection and tailoring (S-2)",
@@ -676,7 +706,10 @@
             "items": {
               "enum": [
                 "extent",
+                "implementation",
+                "efficiency",
                 "effectiveness",
+                "exposure",
                 "urgent-conditions",
                 "metrics",
                 "top-risks"

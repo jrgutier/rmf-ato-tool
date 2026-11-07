@@ -50,8 +50,6 @@ MITIGATIONS = ("software-assurance", "hardware-assurance", "procurement-strategi
 EXCLUSION_APPROVERS = ("contracting-officer", "counsel")
 CONTRACT_TERMS = ("qualifying-condition", "flow-down", "revalidation", "reporting",
                   "response-roles", "termination")  # pp. 55-56
-SCREENING_LISTS = ("sdn", "ssi", "fse", "sam-exclusions", "capta", "blocked-persons",
-                   "bis-unverified", "ndaa-889", "other-federal-restriction")  # p. 254-255
 PLAN_CONSIDERATIONS = ("vendor-saas", "hybrid-or-cloud", "open-source", "non-taa-ict-ot",
                        "unauthorized-resellers", "emerging-technology")  # SP 800-18r2 p. 47
 CONSIDERATION_OF_KIND = {"open-source": "open-source", "cloud-service-provider":
@@ -63,8 +61,10 @@ MONITORED = ("compliance", "effectiveness", "change")  # SP 800-39 via p. 304
 OUTSIDE_TOLERANCE = ("requires-mitigation", "share")
 REACH = ("system", "mission", "enterprise")
 # What a report at each level covers: Level 1 (p. 43) and Level 3 (p. 47).
-REPORT_CONTENT = {"level-1": ("extent", "effectiveness", "urgent-conditions", "metrics"),
-                  "level-3": ("effectiveness", "metrics")}
+REPORT_CONTENT = {"level-1": ("extent", "effectiveness", "urgent-conditions", "metrics",
+                              "top-risks"),
+                  "level-3": ("implementation", "efficiency", "effectiveness", "exposure",
+                              "metrics")}
 SYSTEM_OWNERS = ("PER-PM",)
 URGENT_RECIPIENTS = {"PER-MDA": ("PER-MDA",), "the authorizing official": ("PER-AO", "PER-AODR"),
                      "dod-cio": ("dod-cio",)}
@@ -173,11 +173,14 @@ def suppliers(ctx: Context) -> list[RunFinding]:
     for sid in _critical(scrm):
         if sid not in assessed:
             err(f"critical supplier {sid} has no supply chain risk assessment")
-    ranks = [(s.get("priority"), _id(s), s.get("criticality")) for s in sups
-             if isinstance(s.get("priority"), int)]
-    for p_crit, crit, kind in ranks:
-        for p_other, other, other_kind in ranks:
-            if kind == "critical" and other_kind == "non-critical" and p_crit > p_other:
+    # p. 247: externally driven priorities (policy direction, a regulatory requirement) may
+    # rank a non-critical source ahead; the record names the driver.
+    ranks = [(s.get("priority"), _id(s), s.get("criticality"), s.get("priority_driver"))
+             for s in sups if isinstance(s.get("priority"), int)]
+    for p_crit, crit, kind, _ in ranks:
+        for p_other, other, other_kind, driver in ranks:
+            if kind == "critical" and other_kind == "non-critical" and p_crit > p_other \
+                    and not driver:
                 err(f"{crit} is critical yet its assessment priority {p_crit} ranks below "
                     f"non-critical {other} at {p_other}")
     return out
@@ -237,13 +240,13 @@ def baseline_factors(ctx: Context) -> list[RunFinding]:
     for a in _list(scrm, "assessments"):
         aid, sid = _id(a), _id(a, "supplier")
         factors = _list(a, "factors")
+        if sid not in critical:  # p. 247: factors of a non-critical source are discretionary
+            continue
         for f in factors:
             if f.get("status") == "not-relevant" and f.get("factor") != OPTIONAL_FACTOR:
                 out.append(make("SCRM-003", f"{aid} marks {f.get('factor')} not relevant; only "
                                 "counterfeit and non-conforming products may be left out of "
                                 "the baseline", SCRM_FILE, None, {ASSESS}))
-        if sid not in critical:
-            continue
         held = {_key(f, "factor") for f in factors}
         for factor in TABLE28:
             if factor not in held:
@@ -399,16 +402,20 @@ def terms(ctx: Context) -> list[RunFinding]:
     if acq is None or not _active(ctx, ALLOCATE):
         return []
     kinds = {_key(t, "term") for t in _list(acq, "terms")}
+    # p. 56: flow-down "if and when applicable"; a contract recorded with no subcontractors
+    # needs none.
+    owed = [t for t in CONTRACT_TERMS
+            if t != "flow-down" or acq.get("subcontractors") is not False]
     return [make("SCRM-015", f"the contract carries no {term} term for C-SCRM",
                  ACQUISITION_FILE, None, {ALLOCATE})
-            for term in CONTRACT_TERMS if term not in kinds]
+            for term in owed if term not in kinds]
 
 # --- SCRM-008 ----------------------------------------------------------------------------
 def selection(ctx: Context) -> list[RunFinding]:
-    """P-17: each supplier has a selection record screened against every prohibited supplier
-    list of pp. 254-255; a listed supplier is not selected; an excluded source is excluded under
-    legal authority with the contracting officer's and counsel's approval (DoDI 5000.83); open
-    source software comes from a vetted and approved library."""
+    """P-17: each supplier has a selection record with the prohibited supplier lists screened
+    (pp. 254-255 are not inclusive); a listed supplier is not selected; an excluded source is
+    excluded under legal authority with the contracting officer's and counsel's approval
+    (DoDI 5000.83); open source software comes from a vetted and approved library."""
     acq, scrm = _doc(ctx, ACQUISITION_FILE), _doc(ctx, SCRM_FILE)
     if acq is None or scrm is None or not _active(ctx, ALLOCATE):
         return []
@@ -426,13 +433,11 @@ def selection(ctx: Context) -> list[RunFinding]:
         if record is None:
             err(f"{sid} has no selection record with due diligence and screening")
             continue
-        screened = {_id(s, "list"): s for s in _list(record, "screening")}
-        for name in SCREENING_LISTS:
-            if name not in screened:
-                err(f"{sid} was not screened against the {name} list")
-            elif screened[name].get("result") == "listed" and record.get("selected") is True:
-                err(f"{sid} is on the {name} list yet selected; a prohibited supplier is "
-                    "excluded from procurement")
+        # p. 254: the lists are "not inclusive"; the record holds the screenings done.
+        for entry in _list(record, "screening"):
+            if entry.get("result") == "listed" and record.get("selected") is True:
+                err(f"{sid} is on the {entry.get('list')} list yet selected; a prohibited "
+                    "supplier is excluded from procurement")
         exclusion = _obj(record, "exclusion")
         if record.get("selected") is False and not exclusion.get("authority"):
             err(f"{sid} is excluded on SCRM grounds without the legal authority exercised")
@@ -444,6 +449,14 @@ def selection(ctx: Context) -> list[RunFinding]:
                 record.get("approved_source") != "vetted-library":
             err(f"{sid} supplies open source software from no vetted and approved library")
     return out
+
+
+def _plan_owed(ctx: Context) -> bool:
+    """SP 800-18r2 p. 47: the C-SCRM plan is developed for moderate- and high-impact systems; a
+    low-impact system's security plan may identify inherited C-SCRM controls instead."""
+    cat = ctx.facts.get("categorization") if isinstance(ctx.facts, dict) else None
+    values = [cat.get(k) for k in ("c", "i", "a")] if isinstance(cat, dict) else []
+    return not values or any(v in ("moderate", "high") for v in values)
 
 
 # --- SCRM-009 ----------------------------------------------------------------------------
@@ -464,6 +477,13 @@ def plan_content(ctx: Context) -> list[RunFinding]:
         out.append(make("SCRM-009", message, PLAN_FILE, None, {PLAN}))
 
     plan = _obj(doc, "plan")
+    if not plan:
+        if _plan_owed(ctx):
+            err("a moderate- or high-impact system has no C-SCRM plan in scrm-plan.yaml")
+        elif not _obj(doc, "inheritance"):
+            err("a low-impact system without a C-SCRM plan states no inheritance of C-SCRM "
+                "controls, tolerances and risk acceptance in scrm-plan.yaml")
+        return out
     scrm = _doc(ctx, SCRM_FILE) or {}
     described = set(_refs(plan, "requirements"))
     for rid in _refs(_doc(ctx, ACQUISITION_FILE), "requirements"):
@@ -545,14 +565,24 @@ def control_decisions(ctx: Context) -> list[RunFinding]:
     return out
 
 
+def _sustaining(ctx: Context) -> bool:
+    practices = _list(_obj(_doc(ctx, ORG_FILE), "maturity"), "practices")
+    return any(p.get("tier") == "sustaining" and p.get("status") == "implemented"
+               for p in practices)
+
+
 # --- SCRM-011 ----------------------------------------------------------------------------
 def supplier_continuity(ctx: Context) -> list[RunFinding]:
-    """S-4: every critical supplier takes part in contingency planning, incident response,
-    disaster recovery planning and their testing."""
+    """S-4: once the organization implements a sustaining practice, every critical supplier
+    takes part in contingency planning, incident response, disaster recovery planning and
+    their testing."""
     doc, scrm = _doc(ctx, PLAN_FILE), _doc(ctx, SCRM_FILE)
     if doc is None or scrm is None or not _active(ctx, PLAN):
         return []
     out: list[RunFinding] = []
+    # p. 62: including critical suppliers in contingency, incident and recovery planning is a
+    # sustaining practice, owed once the organization implements one (SCRM-024).
+    owed = _sustaining(ctx)
     known = _ids(_list(scrm, "suppliers"))
     included = {_key(a, "activity"): set(_refs(a, "suppliers"))
                 for a in _list(_obj(doc, "contingency"), "activities")}
@@ -560,7 +590,7 @@ def supplier_continuity(ctx: Context) -> list[RunFinding]:
         for sid in sorted(sups - known):
             out.append(make("SCRM-011", f"{activity} includes {sid}, which is no supplier in "
                             "scrm.yaml", PLAN_FILE, None, {PLAN}))
-    for sid in _critical(scrm):
+    for sid in _critical(scrm) if owed else ():
         for activity in INCLUDE_SUPPLIERS:
             if sid not in included.get(activity, set()):
                 out.append(make("SCRM-011", f"critical supplier {sid} is not included in "
@@ -619,7 +649,9 @@ def response(ctx: Context) -> list[RunFinding]:
             err(f"the response to {aid} decides {decision.get('action')}, which is not among "
                 "the alternatives evaluated")
         reach, level = r.get("reach"), decision.get("level")
-        if reach in REACH and level in REACH and REACH.index(level) < REACH.index(reach):
+        # p. 298: the risk executive may delegate a decision; a recorded delegation stands.
+        if reach in REACH and level in REACH and REACH.index(level) < REACH.index(reach) \
+                and not decision.get("delegated_by"):
             err(f"the response to {aid} is decided at {level} level for an impact that "
                 f"reaches the {reach}")
     return out
@@ -628,10 +660,10 @@ def response(ctx: Context) -> list[RunFinding]:
 # --- SCRM-014 ----------------------------------------------------------------------------
 def reporting(ctx: Context) -> list[RunFinding]:
     """S-4: the plan sets the supply chain reporting the M-5 posture reports follow. A Level 1
-    report covers extent, effectiveness, urgent conditions and metrics and a Level 3 one
-    effectiveness and metrics for the system owner; top C-SCRM risks and metrics reach the risk
-    executive function; urgent threats reach the MDA, the authorizing official and the DoD
-    CIO."""
+    report, where the system has one, reaches the risk executive function with extent,
+    effectiveness, urgent conditions, metrics and top risks (pp. 43, 62); a Level 3 one reaches
+    the system owner with implementation, efficiency, effectiveness, exposure and metrics
+    (p. 47); urgent threats reach the MDA, the authorizing official and the DoD CIO."""
     doc = _doc(ctx, PLAN_FILE)
     if doc is None or not _active(ctx, PLAN):
         return []
@@ -651,12 +683,8 @@ def reporting(ctx: Context) -> list[RunFinding]:
                 err(f"the {level} supply chain report leaves out {content}")
         if level == "level-3" and not set(_refs(r, "audience")) & set(SYSTEM_OWNERS):
             err("the level-3 supply chain report does not reach the system owner")
-    elevated = {c for r in reports if "PER-RE" in _refs(r, "audience")
-                for c in _refs(r, "content")}
-    if "top-risks" not in elevated:
-        err("no supply chain report elevates top C-SCRM risks to the risk executive function")
-    if "metrics" not in elevated:
-        err("no supply chain report gives C-SCRM metrics to the risk executive function")
+        if level == "level-1" and "PER-RE" not in _refs(r, "audience"):
+            err("the level-1 supply chain report does not reach the risk executive function")
     notified = set(_refs(_obj(doc, "urgent"), "notified"))
     for who, accepted in URGENT_RECIPIENTS.items():
         if not notified & set(accepted):
