@@ -1,0 +1,14 @@
+rule: PRIV-003
+bases:
+- pii
+description: the privacy officer confirms the wrong policy
+mutations:
+- op: set_field
+  file: artifacts/data/pia.yaml
+  path: reviews.1.confirms
+  value: cybersecurity-policy
+expect:
+  errors:
+  - PRIV-003
+  messages:
+  - PER-PRIV does not review the completed PIA and confirm its compliance with privacy policy

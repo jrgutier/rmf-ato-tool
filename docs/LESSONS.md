@@ -523,3 +523,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.
 - Rule: Write each failing message of a rule inline in the call that reports it, so the clause that leads to it can be found and judged.
 - Promotion: none — FW-REQ-003 already refuses such an item as denied, so the mistake cannot reach the register.
+
+## L-0075 · 2026-11-07 · run: phase-11 · tags: fixtures, privacy
+- Symptom: the privacy rules apply only to a system processing PII, valid_minimal processes none, and the two older privacy fixtures had set `privacy: true` on minimal, so every new privacy rule fired in them too and each fixture had to restate the whole privacy record to fail on one clause.
+- Root cause: a fixture base fixes the system's conditions; a rule gated on a condition no base meets has no clean base to mutate, and copying a run to make one would drift from the run it copies.
+- Fix: tests/unit/test_check_rules.py derives a base `pii` from valid_minimal by the mutations in tests/fixtures/runs/pii.yaml; test_base_has_no_findings holds it clean, and the PRIV fixtures, AODM-010.privacy and RAR-002.privacy mutate it.
+- Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
+- Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.

@@ -1,0 +1,13 @@
+rule: PRIV-001
+bases:
+- pii
+description: a PII information type that says nothing of whom it is about
+mutations:
+- op: delete_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.1.pii
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - contains PII and does not say whom it is about or whether it holds PHI or SSNs

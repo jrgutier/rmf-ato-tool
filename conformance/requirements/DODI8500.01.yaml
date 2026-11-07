@@ -2192,7 +2192,9 @@ requirements:
     locator: "ENCLOSURE 3.i"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "i. DoD IT that processes or stores PII or protected health information must comply with Reference (bl), DoDI 5400.16 (Reference (cv)), and DoD 8580.02-R (Reference (cw))."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-001 fails a system processing PII whose compliance record leaves out DoD 5400.11-R or DoDI 5400.16, and one holding PHI that leaves out DoD 8580.02-R."
+    evidence: [{"kind": "rule", "target": "PRIV-001", "fixture": "tests/fixtures/negative/PRIV-001.compliance.yaml", "expect": "complies with DoD 5400.11-R and DoDI 5400.16", "claim": "constraint", "asserts": "DoD IT that processes PII must comply with DoD 5400.11-R and DoDI 5400.16, and a record that leaves one out fails as it complies with neither"}, {"kind": "rule", "target": "PRIV-001", "fixture": "tests/fixtures/negative/PRIV-001.phi.yaml", "expect": "processes protected health information complies with DoD 8580.02-R", "claim": "constraint", "asserts": "DoD IT that processes protected health information must comply with DoD 8580.02-R, and PHI without it fails"}]
     work_item: "WI-132"
   - id: "REQ-DODI8500.01-0277"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "In accordance with Reference (cv), a privacy impact assessment is required for"}
@@ -2200,7 +2202,9 @@ requirements:
     locator: "ENCLOSURE 3.j"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "j. In accordance with Reference (cv), a privacy impact assessment is required for DoD ISs that collect, maintain, use, or disseminate PII about members of the public, federal personnel, contractors, or foreign nationals employed at U.S. military facilities internationally."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-001 fails a determination that no PIA is required for PII about members of the public, federal personnel, contractors or foreign nationals at U.S. military facilities abroad, unless DoDI 5400.16 excludes it."
+    evidence: [{"kind": "rule", "target": "PRIV-001", "fixture": "tests/fixtures/negative/PRIV-001.required.yaml", "expect": "a PIA is required for a DoD IS that collects PII about members of the public", "claim": "constraint", "asserts": "A privacy impact assessment is required for DoD ISs that collect PII about members of the public, federal personnel or contractors, and a determination of no PIA on a basis that excludes none fails"}]
     work_item: "WI-135"
   - id: "REQ-DODI8500.01-0278"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "All non-DoD entities that process unclassified DoD information on non-DoD ISs, to"}

@@ -30,6 +30,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
        risk assessments are maintained: what triggers an update, how often, what is
        updated and how results are communicated (S-5 records it in conmon.yaml
        risk_assessment, M-4 applies it).
+     - P-2 "## Privacy program": the Component privacy and civil liberties program, its SCOP
+       and PCLO with their staffing and reporting lines to the DoD SAOP, complaint and
+       alleged violation procedures, training and awareness, how privacy controls are
+       designated (program management, common, system-specific, hybrid), and whether the
+       SCOP approves or, in an OSD Component, primarily advises.
        P-2 also appends "## Software program": the Component's direction under DoWI 8430.01
        for software the organization develops or deploys: governance adapted to iterative
        development and continuous delivery, delegated decisions verified by automated
