@@ -1,0 +1,22 @@
+rule: SCRM-022
+bases:
+- minimal
+description: neither Level 1 nor Level 2 provides a strategy
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: levels.0.deliverables
+  value:
+  - policy
+  - implementation-plan
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: levels.1.deliverables
+  value:
+  - policy
+  - implementation-plan
+expect:
+  errors:
+  - SCRM-022
+  messages:
+  - neither level-1 nor level-2 provides a C-SCRM strategy

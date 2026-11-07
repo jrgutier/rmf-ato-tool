@@ -1,0 +1,18 @@
+rule: SCRM-001
+bases:
+- minimal
+description: a critical supplier without an assessment
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.supplier
+  value: SUP-01
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.covered_articles.0.item
+  value: INV-001
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - critical supplier SUP-03 has no supply chain risk assessment

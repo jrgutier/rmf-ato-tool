@@ -1,0 +1,21 @@
+rule: RCP-006
+bases:
+- minimal
+description: an agreement silent on vulnerability scanning
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: agreements.0.topics
+  value:
+  - operating-constraints
+  - operating-environment
+  - monitoring-requirements
+  - security-maintenance
+  - iavm-compliance
+  - lifecycle-replacement
+  - roles-responsibilities
+expect:
+  errors:
+  - RCP-006
+  messages:
+  - 'AGR-01: the agreement does not address vulnerability scanning'

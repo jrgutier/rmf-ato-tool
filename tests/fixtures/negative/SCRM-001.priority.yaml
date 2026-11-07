@@ -1,0 +1,14 @@
+rule: SCRM-001
+bases:
+- minimal
+description: a critical supplier prioritized below a non-critical one
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.2.priority
+  value: 3
+expect:
+  errors:
+  - SCRM-001
+  messages:
+  - SUP-03 is critical yet its assessment priority 3 ranks below non-critical SUP-01 at 2

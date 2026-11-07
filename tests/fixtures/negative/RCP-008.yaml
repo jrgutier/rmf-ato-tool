@@ -1,0 +1,15 @@
+rule: RCP-008
+bases:
+- minimal
+description: a deployment location missing from the registry
+mutations:
+- op: set_field
+  file: artifacts/data/registration.yaml
+  path: registry.deployment_locations
+  value:
+  - Component A data center
+expect:
+  errors:
+  - RCP-008
+  messages:
+  - the deployment location Component A relay enclave is not maintained in the authorization tracking tool

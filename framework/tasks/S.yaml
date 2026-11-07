@@ -77,6 +77,8 @@ tasks:
         remove and compensating action is tested against law, regulation, policy and OMB policy
         (TLR-002); every compensating control carries its source, reason and the risk
         acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
+      - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's
+        acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
     citations:
       - {ref: SP800-37R2, section: "TASK S-2", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 15, anchor: "Task S-2 Control Tailoring"}
@@ -133,7 +135,7 @@ tasks:
       Document the planned control implementations in the security plan and write the CM,
       contingency and incident response plans.
     raci: {R: [PER-ISSM, PER-CCP, PER-ISSE], A: PER-PM, C: [PER-AO, PER-IO, PER-PRIV, PER-ISSO, PER-DEV, PER-CSSP, PER-CCB], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG]
+    inputs: [ART-BASELINE, ART-SD, ART-BND, ART-INV, EXT-CATALOG, ART-RA, ART-REQ, ART-ORG-CONTEXT]
     outputs: [ART-SSP, ART-CMP, ART-CP, ART-IRP, ART-SVCA]
     writes_facts: []
     depends_on: [S-3]
@@ -162,6 +164,10 @@ tasks:
         with signed provenance, AI used in development, the SBOM and other machine-readable
         evidence, integrated test and evaluation and the software program (SWA-001; DoWI
         8430.01).
+      - artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM
+        control decisions, critical suppliers in contingency and incident planning, supplier
+        monitoring after award, training content and the supply chain reporting M-5 follows
+        (SCRM-009 to SCRM-012, SCRM-014).
     citations:
       - {ref: SP800-37R2, section: "TASK S-4", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-4 Documentation of Planned Control Implementations"}
@@ -230,6 +236,12 @@ tasks:
         are identified, the analysis tools from development to retirement, monthly
         authenticated and non-authenticated scans, the patch sources and the reach of
         automated patching, and the central log repository (VULN-007).
+      - The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring
+        strategy.
+      - With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP
+        maintaining every service the DoD CIO reciprocity playbook names, and each implemented
+        directed action as a patch provided in time and communicated to every Receiving organization
+        (RCP-003).
     citations:
       - {ref: SP800-37R2, section: "TASK S-5", note: "SDLC phase: New – Development/Acquisition; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 16, anchor: "Task S-5 Continuous Monitoring Strategy – System"}

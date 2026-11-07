@@ -1,0 +1,16 @@
+rule: SCRM-004
+bases:
+- minimal
+description: an assessment of a supplier the record does not hold
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.supplier
+  value: SUP-09
+expect:
+  errors:
+  - SCRM-004
+  messages:
+  - SA-01 assesses SUP-09, which is no supplier in scrm.yaml
+  also:
+  - SCRM-001

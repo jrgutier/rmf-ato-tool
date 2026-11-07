@@ -1,0 +1,194 @@
+frame:
+  supply_chain:
+    processes: [Field intelligence reporting]
+    systems: [Field Data Relay, Analysis enclave]
+    services: [Developer sustainment contract]
+    products: [Server hardware, Operating systems, Database software]
+    ot_suppliers: true
+    dependencies: The relay depends on its developer and that developer's code hosting service, a critical fourth party.
+    review_interval: P1Y
+    sources: [INT-014.A1]
+  criticality:
+    factors: [National security concerns, CNSSI 1253 impact values, Scope of use, Interconnections]
+    levels: A supplier is critical when it supplies an item that performs a mission-critical function at Level 3.
+  assumptions:
+    - {kind: threat, statement: Adversaries target developers of mission software through their code hosts., basis: refined, information: [DIA supply chain threat assessments, FASC notices], refined_at: [P-3, P-14], sources: [INT-014.A1]}
+    - {kind: vulnerability, statement: Single-developer software is the main supply chain weakness., basis: developed, information: [Component SCRA history], refined_at: [P-14], sources: [INT-014.A1]}
+    - {kind: impact, statement: Loss of report integrity is the impact that matters most., basis: inherited, information: [Component business impact analysis], refined_at: [P-3, P-14], sources: [INT-014.A1]}
+    - {kind: likelihood, statement: A compromise of a small developer within a year is moderately likely., basis: refined, information: [Peer agency incident history, Internal expert elicitation], refined_at: [P-14], sources: [INT-014.A1]}
+  threat_sources:
+    addressed: [adversarial, accidental, structural, environmental]
+    not_addressed: []
+    ttps: Code host compromise, build tampering and counterfeit hardware.
+    classified: The Component CISO's office processes classified supply chain intelligence.
+  impact_directions: [top-down, bottom-up]
+  likelihood_horizon: P1Y
+  constraints:
+    agency: [DoD and Component C-SCRM policy, Sustainment budget]
+    supply_chain: [One qualified developer for the relay]
+  appetite:
+    statement: The Component accepts low supply chain risk to mission-critical functions and moderate risk elsewhere.
+    set_at: level-1
+    considered: [threats, vulnerabilities, constraints, criticality]
+    outside: A period in the review zone triggers a review of the operational decisions and of the appetite and tolerance.
+  tolerance:
+    - {level: level-2, statement: The reporting mission tolerates moderate supply chain risk outside mission-critical functions., thresholds: [No unmitigated high supply chain risk]}
+    - {level: level-3, statement: A system tolerates low supply chain risk to its mission-critical functions., thresholds: [A critical supplier above low risk needs a response]}
+  priorities:
+    - {statement: Report integrity comes before cost; a second developer is funded before features., considered: [appetite, tolerance, threats, vulnerabilities, constraints, criticality]}
+  outputs:
+    - {output: policy, held_in: Component C-SCRM policy}
+    - {output: criticality, held_in: Component business impact analysis}
+    - {output: assessment-methodology, held_in: Component SCRA methodology}
+    - {output: response-guidance, held_in: Component C-SCRM strategy}
+    - {output: monitoring-guidance, held_in: Component C-SCRM strategy}
+    - {output: mission-requirements, held_in: Component C-SCRM policy}
+    - {output: revised-processes, held_in: Component enterprise architecture}
+    - {output: operational-requirements, held_in: System C-SCRM plans}
+    - {output: acquisition-guidance, held_in: Component acquisition security guidance}
+  sources: [INT-014.A1]
+governance:
+  lead: {persona: PER-CISO, office: Component CISO's office}
+  head: The Component head, who delegates ownership of supply chain risk to the authorizing officials.
+  owners: [PER-AO]
+  delegates: [PER-AODR]
+  escalation: {when: 'A supplier risk at SCRSS level 2 or above, or above a Level 3 tolerance.', how: The ISSM raises it to the AO and the C-SCRM council within five working days.}
+  council:
+    members:
+      - {function: Information security, persona: PER-CISO}
+      - {function: Procurement}
+      - {function: Enterprise risk management, persona: PER-RE}
+      - {function: Engineering, persona: PER-LSE}
+    charter: {goals: Set C-SCRM priorities and develop the C-SCRM strategy., authorities: Recommends to the CIO; approves supplier risk responses at Level 2., cadence: P1M, responsibilities: 'Strategy, policy review and escalated supplier risk.'}
+  pmo: matrixed
+  operating_model: {model: A matrixed C-SCRM PMO under the CISO., rationale: The Component's size does not support a dedicated office.}
+  roles:
+    - {persona: PER-CIO, duty: Approves the C-SCRM strategy and policy.}
+    - {persona: PER-CISO, duty: Leads agency-wide C-SCRM.}
+    - {persona: PER-RE, duty: Holds supply chain risk in the enterprise risk profile.}
+    - {persona: PER-AO, duty: Owns supply chain risk for the systems it authorizes.}
+    - {persona: PER-PM, duty: Manages C-SCRM for the system as its owner and keeps it in the project plan.}
+    - {persona: PER-LSE, duty: Understands the requirements for the use of open source components.}
+    - {persona: PER-DEV, duty: Finds and fixes software weaknesses early.}
+  cleared: [PER-CISO, PER-ISSM]
+  sources: [INT-013.A1]
+policy:
+  title: Component C-SCRM policy
+  levels: [level-1, level-2]
+  purpose: Sets how the Component manages supply chain risk; leadership will adhere to it and enforce its controls.
+  authorities: [FASCSA 2018, DoDI 5000.90, DoDI 5200.44, NIST SP 800-161r1]
+  statements: [Every mission-critical supplier is assessed before award.]
+  roles:
+    - {persona: PER-CISO, responsibility: Leads and maintains the policy.}
+    - {persona: PER-PM, responsibility: Applies it to the program.}
+  integration_points: [risk-management-process, sdlc]
+  enforcement: Contracting officers refuse awards without the C-SCRM clauses.
+  responsible:
+    - {persona: PER-CISO, role: 'Policy owner, Component CISO'}
+  revisions: {interval: P1Y, table: [{date: '2026-01-15', change: First issue.}]}
+  sources: [INT-013.A1]
+strategy:
+  purpose: Guides the Component toward sustained C-SCRM; held in the Component policy library.
+  anchored_to: The Component risk management strategy of ART-ORG-CONTEXT.
+  authorities: [FASCSA 2018, DoDI 5000.90]
+  objectives: [Assess every critical supplier before award, Monitor critical suppliers yearly]
+  acquisition: Each acquisition carries the C-SCRM checklist and contract terms.
+  funding: The sustainment budget funds the C-SCRM PMO staff.
+  milestones:
+    - {milestone: Every critical supplier assessed, date: '2027-06-30'}
+  escalation: Issues go to the C-SCRM council; feedback returns in the yearly revision.
+  suppliers: The PMO keeps an inventory of supplier relationships and contracts, grouped by criticality.
+  contingency_acquisition: In an emergency, a sole-source buy from an approved products list skips market research.
+  responsible:
+    - {persona: PER-CISO, role: 'Strategy owner, Component CISO'}
+  revisions: {interval: P1Y, table: [{date: '2026-01-15', change: First issue.}]}
+  sources: [INT-014.A1]
+levels:
+  - {level: level-1, deliverables: [strategy, policy, implementation-plan], informs: [level-2]}
+  - {level: level-2, deliverables: [strategy, policy, implementation-plan], informs: [level-1, level-3]}
+  - {level: level-3, deliverables: [c-scrm-plan], informs: [level-1, level-2]}
+process:
+  steps:
+    - {step: frame, c_scrm: 'The frame names the supply chain, its assumptions, constraints, appetite and tolerance.'}
+    - {step: assess, c_scrm: 'Suppliers are assessed for criticality, threat and vulnerability.'}
+    - {step: respond, c_scrm: C-SCRM controls are selected and tailored on the risk determination.}
+    - {step: monitor, c_scrm: Suppliers and supply chain changes are tracked.}
+  sdlc: C-SCRM activities run at each SDLC phase, from requirements to disposal.
+  adopted: The Component adopted SP 800-161r1's foundational practices and tailored its templates to its size.
+  integration: SCRA results enter the Component risk register through the risk executive function.
+  methodologies: SP 800-30 scales with the SCRSS mapping.
+  handoff: Levels 1 and 2 hand the policy, appetite, tolerance and SCRA methodology to P-14, P-17 and S-4.
+  opsec: SCRA requests and findings follow the Component OPSEC plan; supplier names in requests are limited to need to know.
+  sources: [INT-014.A1]
+sharing:
+  practices:
+    - {practice: goals, how: Sharing supports supplier assessment and acquisition.}
+    - {practice: internal-sources, how: SCRA records and incident reports.}
+    - {practice: scope, how: Supplier findings up to CUI.}
+    - {practice: rules, how: Shared only through the FASC process and the DIB ISAC.}
+    - {practice: join, how: Member of the DIB ISAC.}
+    - {practice: enrich, how: Adds context to FASC notices it receives.}
+    - {practice: automate, how: Indicators are exchanged in STIX.}
+    - {practice: agreements, how: An ISAC membership agreement.}
+    - {practice: protect, how: CUI markings and need to know.}
+    - {practice: support, how: The PMO staffs sharing.}
+  communities:
+    - {name: DIB ISAC, agreement: Membership agreement}
+  fasc: {liaison: PER-CISO, process: The CISO's office sends and receives SCRI with the FASC through the ISA.}
+  scope: {classification: CUI, data_types: [SCRA findings, Incident indicators]}
+  handling: Sharing at SCRSS level 3 and above is mandatory; below it voluntary; each item carries its confidence.
+  feeds: [P-3, P-14]
+  sources: [INT-013.A1]
+maturity:
+  practices:
+    - {practice: Dedicated multidisciplinary C-SCRM team, tier: foundational, status: implemented}
+    - {practice: Formal supplier monitoring intervals, tier: sustaining, status: in-progress}
+    - {practice: Automated C-SCRM processes, tier: enhancing, status: not-started}
+    - {practice: Critical suppliers in contingency and incident planning, tier: sustaining, status: implemented}
+  next: [Formal supplier monitoring intervals]
+  sources: [INT-014.A1]
+measures:
+  framework: The Component cybersecurity measurement framework.
+  stakeholders: {primary: [PER-CIO, PER-CISO], secondary: [PER-PM]}
+  goals:
+    - {goal: Every critical supplier assessed before award., validated_with: [PER-CIO]}
+  measures:
+    - {id: MEAS-01, kind: implementation, indicator: kpi, against: objective, measure: Share of critical suppliers assessed before award., target: 100 percent, data_source: SCRA records}
+    - {id: MEAS-02, kind: efficiency-effectiveness, indicator: kri, against: tolerance, measure: Critical suppliers above their tolerance., target: None, data_source: SCRA records}
+    - {id: MEAS-03, kind: mission-impact, indicator: kri, against: appetite, measure: Supply chain incidents affecting a mission-critical function., target: None in a year, data_source: Incident reports}
+  feedback: Measures are reviewed with the stakeholders each year.
+  monitoring: {purpose: Track supply chain risk exposure., type: Supplier reviews and incident trends., frequency: P90D}
+  supplier_data: Supplier data is held as CUI in the PMO's records system.
+  sources: [INT-018.A1]
+response_framework:
+  - level: level-1
+    threat_source: Adversary targeting developers
+    threat_event: Tampering with source code at a code host
+    vulnerability: Single-developer mission software
+    outcome: Tampered mission software in operation
+    likelihood: moderate
+    impact: high
+    exposure: moderate
+    mitigations:
+      - {strategy: Government-controlled source mirrors, cost: Low, effectiveness: High}
+    baseline_changes: sr-3 joins the Component common control baseline.
+    references: [System C-SCRM plans]
+  - level: level-2
+    threat_source: Accidental supplier error
+    threat_event: A faulty update from the operating system supplier
+    vulnerability: Updates applied without staging
+    outcome: Relay outage during a mission
+    likelihood: low
+    impact: moderate
+    exposure: low
+    mitigations:
+      - {strategy: Stage supplier updates before the relay takes them, cost: Low, effectiveness: Moderate}
+    baseline_changes: None.
+    references: [Level 1 Risk Response Framework, System C-SCRM plans]
+training:
+  baseline: Every user takes yearly C-SCRM awareness in the Level 1 baseline.
+  role_criteria: Acquisition and engineering roles take role-based C-SCRM training.
+  framework: NICE Framework work roles.
+  assessors: SCRA staff take the Component SCRA course.
+  sources: [INT-013.A1]
+sources: [INT-014.A1]

@@ -1,0 +1,22 @@
+rule: SCRM-007
+bases:
+- minimal
+description: a C-SCRM requirement requirements.yaml does not hold
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-acquisition.yaml
+  path: requirements
+  value:
+  - REQ-07
+  - REQ-09
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.requirements
+  value:
+  - REQ-07
+  - REQ-09
+expect:
+  errors:
+  - SCRM-007
+  messages:
+  - C-SCRM requirement REQ-09 is no requirement in requirements.yaml

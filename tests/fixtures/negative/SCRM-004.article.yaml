@@ -1,0 +1,14 @@
+rule: SCRM-004
+bases:
+- minimal
+description: an assessment covers an article its supplier does not provide
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: assessments.0.covered_articles.0.item
+  value: INV-001
+expect:
+  errors:
+  - SCRM-004
+  messages:
+  - 'SA-01 covers an article its supplier does not provide: INV-001 is not among the items of SUP-03'

@@ -99,7 +99,8 @@ requirements:
     locator: "Executive Summary.1.•"
     context: ""
     statement: "• The C-SCRM plan describes the system’s C-SCRM requirements, including the controls to manage, implement, and monitor the supply chain and to develop and sustain the system across mission and business functions."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.requirement.yaml", "expect": "does not describe C-SCRM requirement", "asserts": "The C-SCRM plan describes the system's C-SCRM requirements, including those the contracts carry", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0013"
     citation: {"ref": "SP800-18R2", "page": 12, "anchor": "The NIST Risk Management Framework (RMF) [SP800-37] provides a flexible methodology for"}
@@ -530,7 +531,9 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Identifies policy implementations, requirements, constraints, and implications that are specific to the cybersecurity supply chain at the system level and that derive from the organization-level C-SCRM strategy and mission/business process risk priorities;"
-    status: "candidate"
+    status: "partial"
+    reason: "plan.policy_implementations is free text; no rule can tell it identifies what the organization-level strategy implies for the system."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/policy_implementations", "asserts": "The plan identifies policy implementations, requirements, constraints and implications specific to the system", "claim": "presence"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0065"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Describes the system’s approach to managing supply chain risks that are associated"}
@@ -538,7 +541,9 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Describes the system’s approach to managing supply chain risks that are associated with the research, development, design, manufacturing, acquisition, delivery, integration, operations, maintenance, and disposal of its components or services;"
-    status: "candidate"
+    status: "partial"
+    reason: "plan.approach is free text; no rule can tell it covers each life cycle stage."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/approach", "asserts": "The plan describes the system's approach to managing supply chain risks across research, development, acquisition, integration, operations and disposal", "claim": "presence"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0066"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Describes the system in the context of the organizational supply chain risk"}
@@ -546,7 +551,9 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Describes the system in the context of the organizational supply chain risk tolerance, including acceptable supply chain risk response strategies or controls, a process for the continuous evaluation and monitoring of supply chain risks, approaches for implementing and communicating the plan, and a description of and justification for the supply chain risk mitigation measures that are taken;"
-    status: "candidate"
+    status: "partial"
+    reason: "plan.risk_tolerance is free text; the organization's tolerance is in scrm-org.yaml, but no rule can tell the plan places the system inside it."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/risk_tolerance", "asserts": "The plan describes the system in the context of the organizational supply chain risk tolerance", "claim": "presence"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0067"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Includes supplier and component inventories that specify the associated criticality to the"}
@@ -554,7 +561,8 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Includes supplier and component inventories that specify the associated criticality to the system and identify key individuals who fill supply chain-relevant roles;"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.inventory.yaml", "expect": "is missing from the plan's supplier", "asserts": "The plan includes a supplier and component inventory that holds every supplier", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.rating.yaml", "expect": "but scrm.yaml rates it", "asserts": "The supplier inventory specifies the associated criticality to the system, the one scrm.yaml gives", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/suppliers/items/properties/roles", "asserts": "The inventory identifies key individuals in supply chain-relevant roles", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0068"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Considers security control implementation information that is specific to supply chain considerations,"}
@@ -562,7 +570,9 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Considers security control implementation information that is specific to supply chain considerations, system diagrams, and interdependencies with other systems; and"
-    status: "candidate"
+    status: "partial"
+    reason: "plan.control_considerations is free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/control_considerations", "asserts": "The plan considers control implementation specific to supply chain considerations, diagrams and interdependencies", "claim": "presence"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0069"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Defines the relationships between key suppliers and the system owner by establishing"}
@@ -570,7 +580,8 @@ requirements:
     locator: "2.3.•"
     context: "Cybersecurity Supply Chain Risk Management Plan The C-SCRM plan:"
     statement: "• Defines the relationships between key suppliers and the system owner by establishing roles and responsibilities, setting stakeholder expectations, managing supplier performance, and enumerating policies, processes, and procedures for supplier governance that can evolve as the system C-SCRM plan matures."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.relationship.yaml", "expect": "defines no relationship", "asserts": "The plan defines the relationships between key suppliers and the system owner", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0070"
     citation: {"ref": "SP800-18R2", "page": 18, "anchor": "Different types of systems may have specific considerations that can be addressed"}
@@ -614,7 +625,8 @@ requirements:
     locator: "2.4.•"
     context: "Consolidated System Plan For a consolidated plan:"
     statement: "• Roles and responsibilities are defined to support the ongoing collaboration between individuals who are responsible for meeting system security, privacy, and C-SCRM requirements."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-021", "fixture": "tests/fixtures/negative/SCRM-021.per-pm.yaml", "expect": "no C-SCRM duty is defined for", "asserts": "Roles and responsibilities of individuals responsible for meeting C-SCRM requirements are defined, such as the system owner", "claim": "constraint"}]
     work_item: "WI-108"
   - id: "REQ-SP800-18R2-0075"
     citation: {"ref": "SP800-18R2", "page": 19, "anchor": "Each control that is allocated, tailored, and implemented or planned for implementation"}
@@ -1053,7 +1065,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Discussion: Identify the role of each individual that has responsibilities for coordinating system-specific risk management activities. An individual’s organizational job title may not clearly demonstrate or align with the risk management role and responsibilities. Identified individuals are generally held accountable for the ongoing operation of the system, the continuous monitoring of the implemented controls, and additional risk mitigation efforts that are required throughout the system life cycle. Based on the plan type, key roles include the system security officer, system privacy officer, and personnel who support the C-SCRM Program Management Office (PMO)."
-    status: "candidate"
+    status: "partial"
+    reason: "The plan's supplier inventory names the key individuals in supply chain roles; that each individual coordinating risk management is identified is not tested, and two sentences describe."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/suppliers/items/properties/roles", "asserts": "Identify the role of each individual with supply chain risk management responsibilities", "sentence": "Discussion: Identify the role of each individual that has responsibilities for coordinating system-specific risk management activities.", "claim": "constraint"}]
     work_item: "WI-108"
   - id: "REQ-SP800-18R2-0128"
     citation: {"ref": "SP800-18R2", "page": 28, "anchor": "Common roles and responsibilities of key participants involved in risk management activities"}
@@ -1151,7 +1165,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify the sources of specific requirements for the:"
     statement: "• Acquisition of trustworthy system components through the supply chain"
-    status: "candidate"
+    status: "partial"
+    reason: "A source of supply chain requirements for the plan: the C-SCRM requirements the plan describes (SCRM-009) include those for trustworthy components, but trustworthiness itself is not checked."
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.requirement.yaml", "expect": "does not describe C-SCRM requirement", "asserts": "Requirements for acquisition of trustworthy system components through the supply chain are described in the plan", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0140"
     citation: {"ref": "SP800-18R2", "page": 29, "anchor": "Organizational policies may identify the laws, regulations, and policies that are applicable"}
@@ -1735,7 +1751,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details To address the inheritance of controls from common control providers, the control implementation details in the system plan may:"
     statement: "Control implementation details in the C-SCRM plan reflect the mitigation of cybersecurity risks throughout the supply chain. [SP800-161] Appendix A, C-SCRM Security Controls, discusses the application of C-SCRM controls, requiring controls to flow down through key suppliers, and controls for monitoring adherence with organizational supply chain requirements. Implementation details for C-SCRM controls reference applicable organizational and mission/business process policies that provide inherited controls or are issued by the chief information officer (CIO), senior accountable official for risk management, C-SCRM PMO, or senior procurement executive."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held in part by SCRM-007's flow-down term; that control implementation details reference the organizational policies that provide inherited controls is free text in the SSP statements."
+    evidence: [{"kind": "rule", "target": "SCRM-015", "fixture": "tests/fixtures/negative/SCRM-015.flow-down.yaml", "expect": "the contract carries no", "asserts": "Control implementation details reflect supply chain mitigation, requiring controls the contract carries to flow down through key suppliers", "sentence": "Control implementation details in the C-SCRM plan reflect the mitigation of cybersecurity risks throughout the supply chain. [SP800-161] Appendix A, C-SCRM Security Controls, discusses the application of C-SCRM controls, requiring controls to flow down through key suppliers, and controls for monitoring adherence with organizational supply chain requirements.", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0206"
     citation: {"ref": "SP800-18R2", "page": 35, "anchor": "Scope and focus: While the system security plan primarily addresses safeguarding the"}
@@ -1804,7 +1822,8 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details For example:"
     statement: "• C-SCRM plan approval includes coordination with the C-SCRM PMO."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.pmo.yaml", "expect": "not coordinated with the C-SCRM PMO", "asserts": "C-SCRM plan approval includes coordination with the C-SCRM PMO", "claim": "constraint"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0214"
     citation: {"ref": "SP800-18R2", "page": 36, "anchor": "System plan approval includes the full names, system roles, organizational titles, signatures,"}
@@ -2446,7 +2465,8 @@ requirements:
     locator: "4.1"
     context: "Prepare"
     statement: "System plans support organization- and system-level risk management strategies, including regulatory and compliance obligations that define system-level requirements. To enable oversight and promote accountability, the plans designate individuals with roles and responsibilities for security, privacy, and supply chain risk management, such as those identified in [SP800-37] Appendix D, Roles and Responsibilities. These roles align with broader organizational information security and privacy program plans [SP800-37] and the C-SCRM strategy and implementation plan [SP800-161] for consistency across all systems within the organization."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.inventory.yaml", "expect": "is missing from the plan's supplier", "asserts": "The plans list every supplier with the individuals who hold supply chain risk management roles", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/suppliers/items/properties/roles", "asserts": "The plans designate individuals with roles and responsibilities for supply chain risk management", "read_by": "SCRM-009", "claim": "constraint"}]
     work_item: "WI-108"
   - id: "REQ-SP800-18R2-0292"
     citation: {"ref": "SP800-18R2", "page": 45, "anchor": "Common control providers develop system plan artifacts that identify and provide implementation"}
@@ -2534,7 +2554,9 @@ requirements:
     locator: "4.1"
     context: "Prepare"
     statement: "The system-level C-SCRM plan provides a context for how organizational C-SCRM policies are applied at the system level by enumerating requirements, describing constraints, and addressing other supply chain risk implications. C-SCRM plans for systems align with the established organization-wide risk tolerances and C-SCRM strategy. Many organizations choose to enable systems to inherit common controls that support the organization or enterprise C-SCRM requirements. In cases where multiple components within an organization are responsible for different subsets of the same system, the organization decides the scope of the C-SCRM plan."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held by SCRM-009: the plan enumerates the C-SCRM requirements. Alignment with organization-wide tolerance is free text; the third describes a common choice and the fourth the organization's decision on scope."
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.requirement.yaml", "expect": "does not describe C-SCRM requirement", "asserts": "The system-level C-SCRM plan enumerates requirements to apply organizational C-SCRM policies", "sentence": "The system-level C-SCRM plan provides a context for how organizational C-SCRM policies are applied at the system level by enumerating requirements, describing constraints, and addressing other supply chain risk implications.", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/risk_tolerance", "asserts": "C-SCRM plans for systems align with organization-wide risk tolerances", "sentence": "C-SCRM plans for systems align with the established organization-wide risk tolerances and C-SCRM strategy.", "claim": "presence"}]
     work_item: "WI-124"
   - id: "REQ-SP800-18R2-0303"
     citation: {"ref": "SP800-18R2", "page": 46, "anchor": "During each of the subsequent RMF steps, the system plans are revised"}
@@ -2560,8 +2582,11 @@ requirements:
     locator: "4.2"
     context: "Categorize"
     statement: "The system’s [FIPS199] security categorization reflects potential adverse impacts of the loss of confidentiality, integrity, or availability; determines the [FIPS200] minimum security requirements; and supports the RMF Select step. Security categorization information in the system plan provides the rationale for categorization decisions, including privacy and C-SCRM impacts [SP800-60v2]. Approving the security categorization may require additional input from the senior agency official for privacy and the senior procurement official."
-    status: "candidate"
+    status: "partial"
+    reason: "The plan names the system's information types, which infotypes.yaml categorizes (SCRM-009); the sentences describe what categorization does or permit input to its approval."
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.infotype.yaml", "expect": "does not specify information type", "asserts": "The security categorization information in the plan reflects each information type", "sentence": "The system’s [FIPS199] security categorization reflects potential adverse impacts of the loss of confidentiality, integrity, or availability; determines the [FIPS200] minimum security requirements; and supports the RMF Select step.", "claim": "constraint"}]
     work_item: "WI-112"
+    ruling_sought: [{"sentence": "Approving the security categorization may require additional input from the senior agency official for privacy and the senior procurement official.", "reason": "A permission: approving the categorization 'may require' input from the privacy and procurement officials."}]
   - id: "REQ-SP800-18R2-0306"
     citation: {"ref": "SP800-18R2", "page": 47, "anchor": "To account for both privacy and security risks in system plans, impact"}
     kind: "indicative"
@@ -2578,8 +2603,11 @@ requirements:
     locator: "4.2"
     context: "Categorize"
     statement: "The C-SCRM plan is generally developed for high- and moderate-impact systems, as indicated in [SP800-161]. However, there is value in developing the C-SCRM plan to protect low-impact systems as well, particularly if the low-impact system uses the same components found in high-and moderate-impact systems. In the absence of a C-SCRM plan for a low-impact system, the system security plan can identify the inheritance of C-SCRM controls from organization-level common control providers, enumerate organizational and system risk tolerances, and demonstrate the acceptance versus the transfer or mitigation of cybersecurity supply chain risks via system-specific controls."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRM-009 asks the plan of every system once S-4 is in scope, kept as part of ART-SSP, so a low-impact system's SSP holds it as SP 800-18r2 allows; the first sentence describes practice."
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.yaml", "expect": "has no artifacts/data/scrm-plan.yaml", "asserts": "The C-SCRM plan is developed for the system as scrm-plan.yaml", "sentence": "The C-SCRM plan is generally developed for high- and moderate-impact systems, as indicated in [SP800-161].", "claim": "constraint"}]
     work_item: "WI-124"
+    ruling_sought: [{"sentence": "In the absence of a C-SCRM plan for a low-impact system, the system security plan can identify the inheritance of C-SCRM controls from organization-level common control providers, enumerate organizational and system risk tolerances, and demonstrate the acceptance versus the transfer or mitigation of cybersecurity supply chain risks via system-specific controls.", "reason": "A permission: in the absence of a plan for a low-impact system, the security plan 'can identify' inheritance and tolerances."}]
   - id: "REQ-SP800-18R2-0308"
     citation: {"ref": "SP800-18R2", "page": 47, "anchor": "The organization determines the approach for selecting, tailoring, and allocating controls for"}
     kind: "indicative"
@@ -2716,7 +2744,8 @@ requirements:
     locator: "4.3.1"
     context: "Control Tailoring"
     statement: "Security, privacy, and supply chain risk management officials coordinate to adequately address overlapping requirements and potential conflicts related to tailoring activities, and all decisions are approved through the system plan approval process. However, only the authorizing official can accept the risks associated with removing controls from the selected baseline."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-010", "fixture": "tests/fixtures/negative/SCRM-010.coordinated.yaml", "expect": "did not coordinate the C-SCRM", "asserts": "Security, privacy and supply chain risk management officials coordinate the tailoring decisions", "sentence": "Security, privacy, and supply chain risk management officials coordinate to adequately address overlapping requirements and potential conflicts related to tailoring activities, and all decisions are approved through the system plan approval process.", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-010", "fixture": "tests/fixtures/negative/SCRM-010.yaml", "expect": "only the authorizing official accepts that risk", "asserts": "Only the authorizing official can accept the risks associated with removing controls from the selected baseline", "sentence": "However, only the authorizing official can accept the risks associated with removing controls from the selected baseline.", "claim": "constraint"}]
     work_item: "WI-106"
   - id: "REQ-SP800-18R2-0325"
     citation: {"ref": "SP800-18R2", "page": 49, "anchor": "Tailoring can involve enhancing existing controls to meet system-specific operational needs, such"}
@@ -3550,7 +3579,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "Summarize the system’s supply chain profile and highlight C-SCRM-relevant technologies (e.g., foreign-sourced components, vendor-managed services, TAA/Common Criteria/NIAP compliance or open-source dependencies) to support a holistic understanding of system risks and to ensure alignment of security, privacy, and C-SCRM risk management."
-    status: "candidate"
+    status: "partial"
+    reason: "plan.profile is free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/profile", "asserts": "Summarize the system's supply chain profile and highlight C-SCRM-relevant technologies", "claim": "presence"}]
     work_item: "WI-124"
     promoted: {"reason": "Rejected as no-marker. Imperative of the System Overview element: summarize the supply chain profile and C-SCRM-relevant technologies."}
   - id: "REQ-SP800-18R2-0426"
@@ -3668,7 +3699,8 @@ requirements:
     locator: "4.1"
     context: ""
     statement: "C-SCRM plan considerations include vendor-controlled SaaS offerings, hybrid or cloud environments, open-source software, information and communications technology and operational technology from suppliers outside of Trade Agreements Act nations, general procurement from unauthorized resellers, and supply chains of emerging technologies, such as artificial intelligence capabilities."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.vendor-saas.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include vendor-controlled SaaS offerings", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.hybrid-or-cloud.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include hybrid or cloud environments", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.open-source.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include open-source software", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.non-taa-ict-ot.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include technology from suppliers outside Trade Agreements Act nations", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.unauthorized-resellers.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include procurement from unauthorized resellers", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-009", "fixture": "tests/fixtures/negative/SCRM-009.emerging-technology.yaml", "expect": "does not address consideration", "asserts": "C-SCRM plan considerations include supply chains of emerging technologies", "claim": "constraint"}]
     work_item: "WI-124"
     promoted: {"reason": "Names what the C-SCRM plan considers, stated as content of the plan and not under the 'may include' of the sentence before it."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

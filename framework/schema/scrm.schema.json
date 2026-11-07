@@ -1,0 +1,1157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:scrm",
+  "title": "runs/<run-id>/artifacts/data/scrm.yaml",
+  "description": "The system's cybersecurity supply chain risk management record (ART-RA): criticality analysis, suppliers, threat analysis and supply chain risk assessments (P-14), and C-SCRM in acquisition (P-17). SCRM-001 to SCRM-006 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "criticality",
+    "suppliers",
+    "threat_analysis",
+    "assessments",
+    "aggregation",
+    "sources"
+  ],
+  "properties": {
+    "criticality": {
+      "title": "Criticality analysis of the system's functions and supplied items (P-14; DoDI 5200.44 trusted systems and networks)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "functions",
+        "focal_point",
+        "tsn",
+        "sources"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Process for identifying and measuring the criticality of suppliers, products and services",
+          "x-enforces": [
+            "REQ-SP800-161R1-0858"
+          ]
+        },
+        "functions": {
+          "title": "Mission-critical functions and the components that perform them",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "function",
+              "items",
+              "assurance",
+              "sources"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^CF-\\d{2}$"
+              },
+              "function": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Mission-critical function"
+              },
+              "items": {
+                "title": "Inventory items that perform it",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^INV-\\d{3}$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "assurance": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Level of assurance the software is protected to, consistent with criticality",
+                "x-enforces": [
+                  "REQ-DOWI8430.01-0056"
+                ]
+              },
+              "sources": {
+                "$ref": "#/$defs/sources"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "focal_point": {
+          "title": "Engagement of the Component trusted systems and networks focal point",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "threat_analysis",
+            "guidance",
+            "sources"
+          ],
+          "properties": {
+            "threat_analysis": {
+              "title": "Threat analysis of suppliers of critical components requested through the focal point",
+              "enum": [
+                "requested",
+                "received",
+                "not-required"
+              ],
+              "x-enforces": [
+                "REQ-DODI5000.82-0116"
+              ]
+            },
+            "guidance": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Guidance on managing identified risk",
+              "x-enforces": [
+                "REQ-DODI5000.82-0119"
+              ]
+            },
+            "sources": {
+              "$ref": "#/$defs/sources"
+            }
+          }
+        },
+        "tsn": {
+          "title": "TSN practices applied before acquiring or integrating critical components",
+          "type": "array",
+          "items": {
+            "enum": [
+              "criticality-analysis",
+              "all-source-threat-assessment",
+              "software-assurance",
+              "hardware-assurance",
+              "procurement-strategies",
+              "anti-counterfeit",
+              "assured-suppliers",
+              "scrm-countermeasures",
+              "cyber-test-and-evaluation"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "suppliers": {
+      "title": "Suppliers and the items they provide, with criticality",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "items",
+          "supply_chain",
+          "criticality",
+          "priority",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SUP-\\d{2,3}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Supplier name"
+          },
+          "kind": {
+            "title": "Kind of source, including acquiring processes outside procurement",
+            "enum": [
+              "oem",
+              "authorized-reseller",
+              "distributor",
+              "integrator",
+              "developer",
+              "service-provider",
+              "cloud-service-provider",
+              "open-source",
+              "in-house-shared-service",
+              "repurposed"
+            ],
+            "x-enforces": [
+              "REQ-SP800-161R1-0203"
+            ]
+          },
+          "items": {
+            "title": "Inventory items the supplier provides",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^INV-\\d{3}$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "supply_chain": {
+            "title": "The ra.yaml supply chain record it belongs to",
+            "type": "string",
+            "pattern": "^SC-\\d{2,3}$"
+          },
+          "criticality": {
+            "title": "Criticality of the supplier, product or service to the system",
+            "enum": [
+              "critical",
+              "non-critical"
+            ]
+          },
+          "functions": {
+            "title": "Mission-critical functions the supplied items perform",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^CF-\\d{2}$"
+            },
+            "uniqueItems": true
+          },
+          "priority": {
+            "title": "Tiered priority level of its SCRA, commensurate with criticality and potential impact; 1 highest",
+            "type": "integer",
+            "minimum": 1
+          },
+          "fourth_parties": {
+            "title": "Critical fourth-party suppliers it depends on",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "priority_driver": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Externally driven priority, such as a regulatory requirement, that ranks the source"
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "threat_analysis": {
+      "title": "Supply chain cybersecurity threat and vulnerability analysis",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data",
+        "vulnerability_approach",
+        "likelihood_inputs",
+        "likelihood_horizon",
+        "acceptable_level",
+        "sources"
+      ],
+      "properties": {
+        "data": {
+          "title": "Threat data captured",
+          "type": "array",
+          "items": {
+            "enum": [
+              "attacks-observed",
+              "incident-data",
+              "ttps",
+              "disasters"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-0844"
+          ]
+        },
+        "vulnerability_approach": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Approach to characterizing supply chain vulnerabilities, consistent with the threat characterization",
+          "x-enforces": [
+            "REQ-SP800-161R1-0851",
+            "REQ-SP800-161R1-1123",
+            "REQ-SP800-161R1-1236"
+          ]
+        },
+        "likelihood_inputs": {
+          "title": "What the likelihood determination considers",
+          "type": "array",
+          "items": {
+            "enum": [
+              "threat-assumptions",
+              "threat-information",
+              "peer-history",
+              "expert-perspective",
+              "external-exposure"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "likelihood_horizon": {
+          "title": "Time span of the likelihood estimates",
+          "$ref": "#/$defs/duration"
+        },
+        "acceptable_level": {
+          "title": "Acceptable level of supply chain risk for the system, from the impact analysis",
+          "$ref": "#/$defs/level",
+          "x-enforces": [
+            "REQ-SP800-161R1-1260"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "assessments": {
+      "title": "Supply chain risk assessment records of suppliers and covered articles",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "supplier",
+          "conducted_by",
+          "date",
+          "temporal_findings",
+          "source_profile",
+          "covered_articles",
+          "purpose",
+          "methodology",
+          "factors",
+          "findings",
+          "impact",
+          "tolerance",
+          "severity",
+          "escalation",
+          "response",
+          "review",
+          "handling",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SA-\\d{2,3}$"
+          },
+          "supplier": {
+            "type": "string",
+            "pattern": "^SUP-\\d{2,3}$"
+          },
+          "conducted_by": {
+            "title": "Agency responsible for the assessment: points of contact and any non-federal personnel, tools or data sources that supported it",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "points_of_contact",
+              "non_federal_support"
+            ],
+            "properties": {
+              "points_of_contact": {
+                "title": "Points of contact",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-161R1-0877",
+                  "REQ-SP800-161R1-0979",
+                  "REQ-SP800-161R1-0983"
+                ]
+              },
+              "non_federal_support": {
+                "title": "Non-federal personnel, tools and data sources",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "x-enforces": [
+                  "REQ-SP800-161R1-0210",
+                  "REQ-SP800-161R1-0983"
+                ]
+              }
+            }
+          },
+          "date": {
+            "title": "Date of the assessment",
+            "$ref": "#/$defs/date",
+            "x-enforces": [
+              "REQ-SP800-161R1-0979",
+              "REQ-SP800-161R1-0984"
+            ]
+          },
+          "temporal_findings": {
+            "title": "Findings that are temporal in nature and subject to change",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0984"
+            ]
+          },
+          "source_profile": {
+            "title": "Source profile: identifier and descriptive information about the assessed supplier",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "legal_name",
+              "domicile",
+              "identifiers",
+              "family_tree"
+            ],
+            "properties": {
+              "legal_name": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Supplier legal name"
+              },
+              "domicile": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Domicile and physical address"
+              },
+              "identifiers": {
+                "title": "Unique entity identifiers",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "family_tree": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Corporate family tree"
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0905",
+              "REQ-SP800-161R1-0985"
+            ]
+          },
+          "covered_articles": {
+            "title": "Identifier and descriptive information about each assessed covered article",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "item",
+                "name",
+                "identifier",
+                "description"
+              ],
+              "properties": {
+                "item": {
+                  "type": "string",
+                  "pattern": "^INV-\\d{3}$"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Product name"
+                },
+                "identifier": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Unique identifier: model, version or serial number"
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Brief description"
+                }
+              }
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-161R1-0986"
+            ]
+          },
+          "purpose": {
+            "title": "Summary of purpose and context of the assessment",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "life_cycle_phase",
+              "context"
+            ],
+            "properties": {
+              "life_cycle_phase": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Life cycle phase when the assessment occurred"
+              },
+              "context": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Purpose and context of the assessment"
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0742",
+              "REQ-SP800-161R1-0987"
+            ]
+          },
+          "methodology": {
+            "title": "Assessment methodology referenced, and any deviations from it",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reference",
+              "deviations"
+            ],
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1,
+                "title": "The documented SCRA and risk determination methodology",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0980"
+                ]
+              },
+              "deviations": {
+                "title": "Deviations from the methodology",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "x-enforces": [
+                  "REQ-SP800-161R1-0980"
+                ]
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0864",
+              "REQ-SP800-161R1-0980",
+              "REQ-SP800-161R1-0988"
+            ]
+          },
+          "factors": {
+            "title": "Baseline risk factors of Table 28 assessed, each mapped to the agency's methodology",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "factor",
+                "status",
+                "finding",
+                "agency_factor",
+                "sources"
+              ],
+              "properties": {
+                "factor": {
+                  "title": "Baseline risk factor of SP 800-161 Table 28",
+                  "enum": [
+                    "purpose",
+                    "criticality",
+                    "information-and-data",
+                    "reliance",
+                    "operational-environment",
+                    "external-interdependencies",
+                    "functionality",
+                    "company-information",
+                    "quality-past-performance",
+                    "personnel",
+                    "physical",
+                    "geopolitical",
+                    "foci",
+                    "compliance-legal",
+                    "fraud-corruption-sanctions",
+                    "cybersecurity",
+                    "counterfeit-nonconforming",
+                    "supply-chain-relationships"
+                  ]
+                },
+                "status": {
+                  "title": "Whether the factor was assessed, no information was found, or it is not relevant (counterfeit products only)",
+                  "enum": [
+                    "assessed",
+                    "no-information",
+                    "not-relevant"
+                  ],
+                  "x-enforces": [
+                    "REQ-SP800-161R1-0945"
+                  ]
+                },
+                "finding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Finding on the factor, or what was searched when no information was found"
+                },
+                "agency_factor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "The factor of the agency's own SCRA methodology it maps to"
+                },
+                "sources": {
+                  "$ref": "#/$defs/sources"
+                }
+              }
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-161R1-0227",
+              "REQ-SP800-161R1-0981"
+            ]
+          },
+          "additional_factors": {
+            "title": "Factors the use case calls for beyond the baseline",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "factor",
+                "finding",
+                "sources"
+              ],
+              "properties": {
+                "factor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Additional risk factor"
+                },
+                "finding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Finding"
+                },
+                "sources": {
+                  "$ref": "#/$defs/sources"
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0914"
+            ]
+          },
+          "findings": {
+            "title": "Research, findings and risk assessment results",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "summary",
+              "analysis",
+              "rationale",
+              "threat_type",
+              "assumptions",
+              "confidence"
+            ],
+            "properties": {
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Summation of the key findings"
+              },
+              "analysis": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Analysis of those findings",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0947"
+                ]
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Rationale for the risk level determination",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0989"
+                ]
+              },
+              "threat_type": {
+                "title": "Whether the threat is adversarial, non-adversarial or indeterminate",
+                "enum": [
+                  "adversarial",
+                  "non-adversarial",
+                  "indeterminate"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-161R1-0989"
+                ]
+              },
+              "assumptions": {
+                "title": "Assumptions and constraints of the assessment",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-161R1-0989",
+                  "REQ-SP800-161R1-1145"
+                ]
+              },
+              "confidence": {
+                "title": "Confidence level in the findings",
+                "enum": [
+                  "low",
+                  "moderate",
+                  "high"
+                ],
+                "x-enforces": [
+                  "REQ-SP800-161R1-0981",
+                  "REQ-SP800-161R1-0995"
+                ]
+              }
+            }
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Impact assessment: potential for impact given type, scope and severity",
+            "x-enforces": [
+              "REQ-SP800-161R1-0990",
+              "REQ-SP800-161R1-1259",
+              "REQ-SP800-161R1-1260"
+            ]
+          },
+          "tolerance": {
+            "title": "Determination for negative findings: within tolerance, requires mitigation, or compels information sharing",
+            "enum": [
+              "within-tolerance",
+              "requires-mitigation",
+              "share"
+            ],
+            "x-enforces": [
+              "REQ-SP800-161R1-0921",
+              "REQ-SP800-161R1-0946"
+            ]
+          },
+          "mitigation": {
+            "title": "Mitigation of unresolved or unacceptable risks: viable options and the source's capability and willingness to mitigate",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "severity": {
+            "title": "Risk severity level of the Supply Chain Risk Severity Schema (Table 29)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "level",
+              "agency_score",
+              "explanation"
+            ],
+            "properties": {
+              "level": {
+                "title": "SCRSS level number",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "x-enforces": [
+                  "REQ-SP800-161R1-0349",
+                  "REQ-SP800-161R1-0992",
+                  "REQ-SP800-161R1-1247",
+                  "REQ-SP800-161R1-1550"
+                ]
+              },
+              "agency_score": {
+                "type": "string",
+                "minLength": 1,
+                "title": "The assessment's own risk result the level maps from",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0969"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Why this level was assigned, with its implications",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0992"
+                ]
+              }
+            }
+          },
+          "escalation": {
+            "title": "Escalation and sharing the severity level calls for",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "legal_counsel",
+              "fasc"
+            ],
+            "properties": {
+              "officials": {
+                "title": "Senior agency officials the assessment was escalated to",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                }
+              },
+              "legal_counsel": {
+                "type": "boolean",
+                "title": "Legal counsel received the assessment information"
+              },
+              "fasc": {
+                "title": "Sharing with the FASC through its Information Sharing Agency",
+                "enum": [
+                  "mandatory",
+                  "voluntary",
+                  "none"
+                ]
+              },
+              "considered": {
+                "title": "Equities considered before responding or engaging the source",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "law-enforcement",
+                    "counter-intelligence",
+                    "legal",
+                    "existing-activities"
+                  ]
+                },
+                "uniqueItems": true
+              }
+            }
+          },
+          "response": {
+            "title": "Risk response decision or action taken",
+            "enum": [
+              "accept",
+              "avoid",
+              "mitigate",
+              "transfer",
+              "share",
+              "escalate"
+            ],
+            "x-enforces": [
+              "REQ-SP800-161R1-0993"
+            ]
+          },
+          "other_information": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Any other information, as the FASC directs or at agency discretion",
+            "x-enforces": [
+              "REQ-SP800-161R1-0994"
+            ]
+          },
+          "review": {
+            "title": "Review and clearance of the assessment record",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reviewed_by",
+              "senior_leadership",
+              "legal_counsel"
+            ],
+            "properties": {
+              "reviewed_by": {
+                "title": "Officials who reviewed and cleared the record",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-161R1-0912"
+                ]
+              },
+              "senior_leadership": {
+                "type": "boolean",
+                "title": "Applicable senior leadership cleared it"
+              },
+              "legal_counsel": {
+                "type": "boolean",
+                "title": "Legal counsel cleared it"
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0913"
+            ]
+          },
+          "handling": {
+            "title": "Safeguarding, marking, handling, retention and dissemination of the record",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "marking",
+              "retention",
+              "dissemination"
+            ],
+            "properties": {
+              "marking": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Marking of the record",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0995"
+                ]
+              },
+              "retention": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Retention of the record",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0996"
+                ]
+              },
+              "dissemination": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Dissemination limits"
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-161R1-0912",
+              "REQ-SP800-161R1-0982",
+              "REQ-SP800-161R1-0996"
+            ]
+          },
+          "services_agreement": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Agreement limiting scope, data use, access, disposal and retention when assessment services or commercial information were obtained"
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-161R1-0905",
+        "REQ-SP800-161R1-0978"
+      ]
+    },
+    "aggregation": {
+      "title": "Aggregation of supply chain risk into enterprise risk",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "reported_to",
+        "sources"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How results are aggregated and normalized with other enterprise risk assessments",
+          "x-enforces": [
+            "REQ-SP800-161R1-1189",
+            "REQ-SP800-161R1-1264",
+            "REQ-SP800-161R1-1265"
+          ]
+        },
+        "reported_to": {
+          "title": "Levels the results are communicated to",
+          "type": "array",
+          "items": {
+            "enum": [
+              "level-1",
+              "level-2"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-0108",
+            "REQ-SP800-161R1-0165",
+            "REQ-SP800-161R1-1189",
+            "REQ-SP800-161R1-1262"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "response": {
+      "title": "R-3: the response to each supply chain risk outside tolerance",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assessment",
+          "acceptable_level",
+          "alternatives",
+          "reach",
+          "decision",
+          "enterprise_response",
+          "sources"
+        ],
+        "properties": {
+          "assessment": {
+            "type": "string",
+            "pattern": "^SA-\\d{2,3}$"
+          },
+          "acceptable_level": {
+            "title": "Acceptable level of risk the alternatives are evaluated from",
+            "$ref": "#/$defs/level",
+            "x-enforces": [
+              "REQ-SP800-161R1-1300"
+            ]
+          },
+          "alternatives": {
+            "title": "Alternative courses of action identified and evaluated",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "action",
+                "acceptable_level",
+                "evaluation"
+              ],
+              "properties": {
+                "action": {
+                  "title": "Course of action",
+                  "enum": [
+                    "accept",
+                    "avoid",
+                    "mitigate",
+                    "transfer",
+                    "share"
+                  ]
+                },
+                "acceptable_level": {
+                  "title": "Acceptable level of risk of the option",
+                  "$ref": "#/$defs/level",
+                  "x-enforces": [
+                    "REQ-SP800-161R1-1273",
+                    "REQ-SP800-161R1-1301"
+                  ]
+                },
+                "evaluation": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Evaluation of its efficacy against the risk threshold",
+                  "x-enforces": [
+                    "REQ-SP800-161R1-1552"
+                  ]
+                }
+              }
+            },
+            "minItems": 2
+          },
+          "reach": {
+            "title": "Reach of the impact",
+            "enum": [
+              "system",
+              "mission",
+              "enterprise"
+            ]
+          },
+          "decision": {
+            "title": "Decision on the course of action",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "action",
+              "decided_by",
+              "level"
+            ],
+            "properties": {
+              "action": {
+                "title": "Course of action decided",
+                "enum": [
+                  "accept",
+                  "avoid",
+                  "mitigate",
+                  "transfer",
+                  "share"
+                ]
+              },
+              "decided_by": {
+                "$ref": "#/$defs/persona"
+              },
+              "level": {
+                "title": "Level the decision was taken at",
+                "enum": [
+                  "system",
+                  "mission",
+                  "enterprise"
+                ]
+              },
+              "delegated_by": {
+                "$ref": "#/$defs/persona",
+                "title": "The risk executive function (PER-RE) that delegated the decision"
+              }
+            }
+          },
+          "enterprise_response": {
+            "type": "string",
+            "minLength": 1,
+            "title": "How the response joins the enterprise risk response",
+            "x-enforces": [
+              "REQ-SP800-161R1-1274"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "persona": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "duration": {
+      "description": "ISO 8601 duration, such as P1Y or P90D.",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?$",
+      "minLength": 3
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+rule: RCP-004
+bases:
+- minimal
+description: a control of unknown origin
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.controls.0.origin
+  value: embedded
+expect:
+  errors:
+  - RCP-004
+  messages:
+  - 'RS-01: the control au-2 is neither built in, configured at deployment, inherited nor hybrid'
+  also:
+  - RUN-FM-001

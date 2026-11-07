@@ -1,0 +1,21 @@
+rule: SCRM-008
+bases:
+- minimal
+description: an exclusion not approved by counsel
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-acquisition.yaml
+  path: selection.4.selected
+  value: false
+- op: set_field
+  file: artifacts/data/scrm-acquisition.yaml
+  path: selection.4.exclusion
+  value:
+    authority: FAR 9.4
+    approved_by:
+    - contracting-officer
+expect:
+  errors:
+  - SCRM-008
+  messages:
+  - the exclusion of SUP-05 is not approved by both the contracting officer and counsel

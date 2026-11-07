@@ -117,6 +117,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - Individuals are identified and assigned key roles for executing the RMF (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT records the RMF role assignments, with no AO also acting as system owner or common control provider for what it authorizes.
 - Each AO is government personnel with expertise in the technology being authorized and has completed AO or RMF training.
+- artifacts/data/scrm-org.yaml names an executive C-SCRM lead, a PMO or other dedicated C-SCRM function, the authorizing officials who own supply chain risk, the council and its charter, and the C-SCRM duty of each run role (SCRM-021).
 
 **Alignment**
 
@@ -174,6 +175,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - ART-ORG-CONTEXT states the risk management strategy and the organizational risk tolerance.
 - ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI 8430.01 for the software it develops or deploys.
 - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
+- artifacts/data/scrm-org.yaml states the C-SCRM frame of SP 800-161 Tasks 1-1 to 1-4 (OT suppliers in scope, each assumption refined at P-14, threat sources addressed, appetite at Level 1, tolerance at Levels 2 and 3, priorities and the nine framing outputs), the C-SCRM policy and strategy, what each level holds and informs, the process steps and the maturity of the key practices (SCRM-020, SCRM-022, SCRM-024, SCRM-027 to SCRM-029).
 
 **Alignment**
 
@@ -229,6 +231,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - An organization-wide risk assessment is completed, or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT summarizes the organization-level risk assessment results.
 - Once the system operates, org-context.yaml posture_reviews records each review of threat, vulnerability, technology and mission changes against the organizational risk posture, and the sections it updated (OCTX-011).
+- scrm-org.yaml sharing follows each SP 800-150 key practice, has an executive FASC liaison and feeds P-3 and P-14 as EXT-THREAT (SCRM-023).
 
 **Alignment**
 
@@ -283,6 +286,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 - Organizationally-tailored control baselines and/or CSF profiles are established and made available (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT lists the approved or directed tailored baselines and overlays, or records that none apply.
+- scrm-org.yaml keeps a C-SCRM Risk Response Framework at Levels 1 and 2 (SCRM-026).
 
 **Alignment**
 
@@ -437,6 +441,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 - An organization-wide strategy for monitoring control effectiveness is developed and implemented (DoDI 8510.01 Table 1 outcome).
 - ART-ORG-CONTEXT summarizes the organizational continuous monitoring strategy that system strategies (S-5) must follow.
+- scrm-org.yaml measures the C-SCRM program by implementation, efficiency and effectiveness, and mission impact, against appetite and tolerance, with goals validated by its stakeholders (SCRM-025).
 
 **Alignment**
 
@@ -829,6 +834,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
 - protection.yaml records the PPP the run read with its approval at each decision point passed, its critical items with their threats, vulnerabilities and countermeasures, exportability, anti-tamper, updates and transition (PPROT-001, PPROT-002); the TAPPs, horizontal protection guidance and S&T protection plan read (PPROT-003); and the security technical risks from the SEP and ITRAs with the reviews that assess them (PPROT-005).
+- artifacts/data/scrm.yaml records the criticality analysis and TSN practices, a supplier for every inventory item tied to its ra.yaml supply chain record, the threat analysis, and an assessment of every critical supplier covering each Table 28 factor, with its SCRSS level, escalation and FASC sharing (SCRM-001 to SCRM-006).
 
 **Alignment**
 
@@ -899,6 +905,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - requirements.yaml derivation records how the lead systems engineer derived the security and exportability requirements (DoDI 5000.83 3.3.c.(1)) - informed by the capability requirements document, CONOPS, operational mode summary and mission profiles, by methods that together address design, implementation, interfaces and access points - and the key performance parameters and attributes that establish survivability, sustainment and security measures; each security requirement is included in the system performance specification or the product support needs (SSE-001).
 - requirements.yaml engineering records the system security engineering practices for cybersecurity, cyber resilience and cyber survivability in design, test, manufacture and sustainment, for program protection and, with PII, for privacy, the SP 800-160v1r1 Appendix E principles they apply, and the level of assurance with its basis and the requirements that carry it (SSE-002).
 - protection-requirements.yaml names the PPP, TAPPs, S&T protection plans and horizontal protection guidance read, records whether the capability document holds the protection content the CJCS puts in JCIDS capability requirements, raises each gap to the sponsor, and traces the protection requirements it derives (PPROT-004).
+- Each Receiving organization that joined before the system's release has its requirements in reciprocity.yaml gathered and coordinated before release, and each control it asks for is assessed (RCP-002).
 
 **Alignment**
 
@@ -954,6 +961,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
 - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
 - An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
+- registration.yaml lists every deployment site of reciprocity.yaml, an update after each received system accepted, and an exemption justification when reciprocity listing is deselected (RCP-008).
 
 **Alignment**
 
@@ -1014,6 +1022,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 - The provider of each leveraged authorization is an external entity in org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
 - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
+- reciprocity.yaml names each Receiving organization and received system, each resting on an executed agreement with its minimum content (RCP-006).
 
 **Alignment**
 

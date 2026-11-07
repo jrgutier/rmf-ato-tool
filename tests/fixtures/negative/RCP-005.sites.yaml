@@ -1,0 +1,14 @@
+rule: RCP-005
+bases:
+- minimal
+description: sites notified without the configuration limit
+mutations:
+- op: set_field
+  file: artifacts/data/reciprocity.yaml
+  path: received_systems.0.atu.sites_notified.scope
+  value: other
+expect:
+  errors:
+  - RCP-005
+  messages:
+  - 'RS-01: subordinate sites are not notified that the system may operate only in the authorized configuration'
