@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 191 rules, 36 repo-scope and 155 run-scope. Authoritative;
+# Rule registry (plan §6.5): 201 rules, 36 repo-scope and 165 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -2712,3 +2712,251 @@ rules:
       - REQ-DODI8500.01-0406
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
+  - id: PPROT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the PPP is approved by the wrong authority, misses a decision point, or carries the cybersecurity strategy apart
+    fixture: tests/fixtures/negative/PPROT-001.yaml
+    hint: "protection.yaml ppp.approval names the authority the ACAT, MDA and pathway call for; ppp.submissions holds one per decision point passed."
+    enforces:
+      - REQ-DODI5000.83-0046
+      - REQ-DODI5000.83-0047
+      - REQ-DODI5000.83-0048
+      - REQ-DODI5000.83-0049
+      - REQ-DODI5000.83-0078
+      - REQ-DODI5000.83-0253
+      - REQ-DODI5000.83-0254
+      - REQ-DODI5000.85-0059
+      - REQ-DODI5000.87-0010
+      - REQ-DODI5000.90-0045
+      - REQ-DODI8500.01-0098
+  - id: PPROT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the PPP lacks a preparer, countermeasure, threat, risk source, AT basis, update or transition the source requires
+    fixture: tests/fixtures/negative/PPROT-002.yaml
+    hint: "Give every critical item its threats and countermeasures, update the PPP after each award or significant event, and record its transition."
+    enforces:
+      - REQ-DODI5000.83-0077
+      - REQ-DODI5000.83-0086
+      - REQ-DODI5000.83-0100
+      - REQ-DODI5000.83-0131
+      - REQ-DODI5000.83-0194
+      - REQ-DODI5000.83-0195
+      - REQ-DODI5000.83-0196
+      - REQ-DODI5000.83-0221
+      - REQ-DODI5000.83-0248
+      - REQ-DODI5000.83-0249
+      - REQ-DODI5000.83-0250
+      - REQ-DODI5000.83-0251
+      - REQ-DODI5000.83-0256
+      - REQ-DODI5000.83-0257
+      - REQ-DODI5000.83-0258
+      - REQ-DODI5000.83-0263
+      - REQ-DODI5000.83-0267
+      - REQ-DODI5000.83-0272
+      - REQ-DODI5000.83-0276
+      - REQ-DODI5000.88-0125
+      - REQ-DODI8500.01-0233
+  - id: PPROT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: a modernization priority area has no TAPP, or the S&T protection plan is missing, incomplete, late or not transitioned
+    fixture: tests/fixtures/negative/PPROT-003.yaml
+    hint: "protection.yaml inputs.tapps covers each area; st-protection.yaml holds the S&T plan of an S&T transition."
+    enforces:
+      - REQ-DODI5000.83-0009
+      - REQ-DODI5000.83-0011
+      - REQ-DODI5000.83-0045
+      - REQ-DODI5000.83-0077
+      - REQ-DODI5000.83-0078
+      - REQ-DODI5000.83-0228
+      - REQ-DODI5000.83-0235
+      - REQ-DODI5000.83-0238
+      - REQ-DODI5000.83-0239
+      - REQ-DODI5000.83-0240
+      - REQ-DODI5000.83-0245
+      - REQ-DODI5000.83-0246
+      - REQ-DODI5000.83-0247
+      - REQ-DODI5000.83-0258
+      - REQ-DODI5000.83-0265
+      - REQ-DODI5000.83-0266
+      - REQ-DODI5000.83-0270
+      - REQ-DODI5000.83-0271
+  - id: PPROT-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: the capability document's protection content, the plans read, or the solicitations fall short of the PPP
+    fixture: tests/fixtures/negative/PPROT-004.yaml
+    hint: "protection-requirements.yaml records each JCIDS protection topic, the plans read, and what each RFP and contract carries."
+    enforces:
+      - REQ-DODI5000.83-0082
+      - REQ-DODI5000.83-0083
+      - REQ-DODI5000.83-0084
+      - REQ-DODI5000.83-0085
+      - REQ-DODI5000.83-0174
+      - REQ-DODI5000.83-0209
+      - REQ-DODI5000.83-0219
+      - REQ-DODI5000.83-0255
+  - id: PPROT-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: security risk stays out of technical risk management, or an ITRA is missing, unapproved or informs nothing
+    fixture: tests/fixtures/negative/PPROT-005.yaml
+    hint: "protection.yaml technical_risks holds the security risks, drawn from what was read and assessed at technical reviews."
+    enforces:
+      - REQ-DODI5000.02-0033
+      - REQ-DODI5000.02-0034
+      - REQ-DODI5000.80-0060
+      - REQ-DODI5000.80-0065
+      - REQ-DODI5000.83-0180
+      - REQ-DODI5000.83-0190
+      - REQ-DODI5000.83-0191
+      - REQ-DODI5000.83-0193
+      - REQ-DODI5000.83-0223
+      - REQ-DODI5000.83-0259
+      - REQ-DODI5000.85-0051
+      - REQ-DODI5000.85-0086
+      - REQ-DODI5000.85-0096
+      - REQ-DODI5000.88-0012
+      - REQ-DODI5000.88-0024
+      - REQ-DODI5000.88-0103
+      - REQ-DODI5000.88-0120
+      - REQ-DODI5000.88-0126
+      - REQ-DODI5000.88-0136
+      - REQ-DODI5000.88-0137
+      - REQ-DODI5000.88-0139
+      - REQ-DODI5000.88-0148
+      - REQ-DODI5000.90-0003
+      - REQ-DODI5000.90-0034
+  - id: PPROT-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-16
+    summary: an NSS lacks NSA's assessment with the AO before a milestone, or a space NSS lacks coordination, verification or reports
+    fixture: tests/fixtures/negative/PPROT-006.yaml
+    hint: "nss-assessments.yaml holds one assessment per decision point passed, by NSA and the cognizant AO."
+    enforces:
+      - REQ-CNSSP12-0026
+      - REQ-CNSSP12-0044
+      - REQ-CNSSP12-0054
+      - REQ-CNSSP12-0056
+      - REQ-CNSSP12-0058
+      - REQ-DODI8510.01-0037
+  - id: TSTRAT-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the test planning document does not fit the pathway or lacks the approval its oversight calls for
+    fixture: tests/fixtures/negative/TSTRAT-001.yaml
+    hint: "test-strategy.yaml document.kind follows the pathway; approvals names DOT&E, USD(R&E) or the Component as the source requires."
+    enforces:
+      - REQ-DODI5000.02-0036
+      - REQ-DODI5000.75-0189
+      - REQ-DODI5000.75-0194
+      - REQ-DODI5000.81-0013
+      - REQ-DODI5000.81-0065
+      - REQ-DODI5000.81-0083
+      - REQ-DODI5000.81-0084
+      - REQ-DODI5000.81-0085
+      - REQ-DODI5000.82-0041
+      - REQ-DODI5000.87-0025
+      - REQ-DODI5000.87-0098
+      - REQ-DODI5000.89-0011
+      - REQ-DODI5000.89-0025
+      - REQ-DODI5000.89-0056
+      - REQ-DODI5000.89-0064
+      - REQ-DODI5000.89-0074
+      - REQ-DODI5000.89-0075
+      - REQ-DODI5000.89-0095
+      - REQ-DODI5000.89-0096
+      - REQ-DODI5000.89-0137
+      - REQ-DODI5000.89-0144
+      - REQ-DODI5000.89-0163
+      - REQ-DODI5000.89-0180
+      - REQ-DODI8510.01-0251
+  - id: TSTRAT-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the test strategy omits a cybersecurity test event, framework or penetration test the source requires
+    fixture: tests/fixtures/negative/TSTRAT-002.yaml
+    hint: "Plan DT and OT cybersecurity events, a CVPA and AA, DCO evaluation and independent penetration and exploitation testing."
+    enforces:
+      - REQ-DODI5000.75-0190
+      - REQ-DODI5000.75-0191
+      - REQ-DODI5000.89-0029
+      - REQ-DODI5000.89-0052
+      - REQ-DODI5000.89-0053
+      - REQ-DODI5000.89-0094
+      - REQ-DODI5000.89-0098
+      - REQ-DODI5000.89-0099
+      - REQ-DODI5000.89-0100
+      - REQ-DODI5000.89-0104
+      - REQ-DODI5000.89-0112
+      - REQ-DODI5000.89-0116
+      - REQ-DODI5000.89-0118
+      - REQ-DODI5000.89-0120
+      - REQ-DODI5000.89-0122
+      - REQ-DODI5000.89-0125
+      - REQ-DODI5000.89-0160
+      - REQ-DODI5000.89-0181
+      - REQ-DODI5000.89-0182
+      - REQ-DODI5000.89-0210
+      - REQ-DODI8500.01-0256
+  - id: TSTRAT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: reused test results or an adversarial assessment come from an unrepresentative system or environment
+    fixture: tests/fixtures/negative/TSTRAT-003.yaml
+    hint: "Reuse only results of events on a production-representative system in an operationally representative environment."
+    enforces:
+      - REQ-DODI5000.89-0119
+      - REQ-DODI5000.89-0124
+      - REQ-DODI5000.89-0149
+  - id: GATE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the system passes a pathway decision point that fields it with no authorization dated before
+    fixture: tests/fixtures/negative/GATE-001.yaml
+    hint: "Decide the ATO at R-4 before the MVCR, the UCA production milestone or a DBS deployment ATP (pathways.yaml authorization_gate)."
+    enforces:
+      - REQ-DODCIO-DEVSECOPS-0067
+      - REQ-DODI5000.81-0090

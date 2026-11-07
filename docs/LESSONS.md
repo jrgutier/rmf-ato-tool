@@ -502,3 +502,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
 - Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
 - Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: rules, should
+- Symptom: a first cut of PPROT-002 and PPROT-004 refused every contract award with no PPP update and every RFP without PPP countermeasures, though DoDI 5000.83 5.3.c.(2)(b) says lead systems engineers *should* do both; the register showed the items as plain lettered entries.
+- Root cause: the extractor cuts a lead-in from its items, so an item under a should lead-in reads like a will, and the modal sits in the lead-in's context, not in the item.
+- Fix: those clauses accept a recorded reason for not updating or a deviation on the RFP, and tests/unit/test_protection.py holds each permitted case.
+- Rule: Before writing a clause from a lettered item, read its lead-in; a clause from a should accepts a recorded reason, a clause from a will or must does not.
+- Promotion: none — the permitted-case tests hold it for these rules, and a register-wide check would need the lead-in's modal on each item, which the extractor does not record.

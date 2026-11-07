@@ -29,7 +29,9 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
                      "requirements", "system-description", "sar-summary",
-                     "org-context", "disposal"}
+                     "org-context", "disposal",
+                     "protection", "st-protection", "protection-requirements", "nss-assessments",
+                     "test-strategy"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -369,8 +371,15 @@ RUN_EXAMPLES.update({
         ("ssp-records", "space_nss", "maybe"),
         ("system-description", "ownership", "leased"),
         ("sar-summary", "assessment_type", "spot-check"),
-        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]))
+        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]),
+        ("protection", "program", {"acat": "IV", "mda": "DAE"}),
+        ("protection-requirements", "read", {"ppp": "PPP-1"}),
+        ("nss-assessments", "nss", "perhaps"),
+        ("test-strategy", "approvals", []))
 })
+_ST = YAML(typ="safe").load(
+    (REPO_ROOT / "templates/data/st-protection.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["st-protection"] = (_ST, {**_ST, "critical_technology_elements": []})
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},
      "residual_check": {"date": "2030-01-01", "no_detrimental_factors": True},

@@ -1,0 +1,28 @@
+rule: PPROT-004
+bases:
+- minimal
+description: a bridge RFP's deviation leaves the development RFP without countermeasures
+mutations:
+- op: set_field
+  file: artifacts/data/protection-requirements.yaml
+  path: solicitations
+  value:
+  - id: RFP-BRIDGE
+    kind: rfp
+    countermeasures: []
+    cyber_resilient_requirements: []
+    assurance_remediation:
+    - software-assurance
+    deviation: Six-month bridge for the legacy relay.
+  - id: RFP-DEV-001
+    kind: rfp
+    countermeasures: []
+    cyber_resilient_requirements:
+    - Keeps relaying under attack.
+    assurance_remediation:
+    - software-assurance
+expect:
+  errors:
+  - PPROT-004
+  messages:
+  - no request for proposal carries a PPP countermeasure

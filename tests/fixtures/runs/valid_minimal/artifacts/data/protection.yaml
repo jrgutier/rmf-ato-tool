@@ -1,0 +1,57 @@
+# P-14: the program protection record beside ART-RA (schema protection; PPROT-001 to PPROT-005).
+program:
+  acat: II
+  mda: CAE
+  origin: new-start
+  critical_technology: {associated: false, areas: []}
+  decision_points:
+    - {id: MS-MDD, date: "2025-10-01"}
+    - {id: MS-A, date: "2026-03-15"}
+inputs:
+  tapps: []
+  horizontal_protection:
+    - {id: HPG-2025, title: DoD horizontal protection guidance for communications relays}
+  threat_assessments:
+    - {id: TA-001, from: intelligence, covers: [system, program], date: "2026-02-01"}
+  sep: {id: SEP-FDR-1.0, date: "2026-02-15"}
+  itras: []
+ppp:
+  id: PPP-FDR
+  version: "1.0"
+  date: "2026-03-01"
+  prepared_by: PER-LSE
+  approval: {authority: CAE, date: "2026-03-10"}
+  submissions:
+    - {decision_point: MS-A, date: "2026-03-10"}
+  cybersecurity_strategy: appendix
+  sse_activities: [cyber-resilient-engineering, software-assurance, scrm]
+  critical_items:
+    - id: CI-001
+      kind: critical-function
+      name: Report relay and routing
+      mission_criteria: [Loss stops field reports reaching the command post]
+  threats:
+    - {item: CI-001, threat: Spoofed reports from the radio-side network, vulnerability: Unauthenticated report ingestion}
+  countermeasures:
+    - {id: CM-001, item: CI-001, measure: Authenticate every report source before relay, mitigates: [TR-001]}
+  risk_sources: [design-vulnerability, supply-chain-exploit-insertion, battlefield-loss]
+  exportability: {foreign_involvement: none, planning: No foreign sales or cooperative development is planned.}
+  anti_tamper: {outside_us_control: false, required: false, guidance: []}
+  tailoring: {pathway: PW-MCA, factors: [complexity, risk]}
+  informed_by: []
+  updates: []
+significant_events: []
+contract_awards: []
+technical_risks:
+  - id: TR-001
+    security: true
+    description: Spoofed reports reach the command post through the radio-side interface.
+    drawn_from: [SEP-FDR-1.0, TA-001]
+    reviews: [RV-SRR]
+    impact: {cost: low, schedule: moderate}
+    status: mitigation-planned
+design_assessment:
+  requirements_allocated: true
+  assessed: "2026-03-01"
+  vulnerabilities: [Unauthenticated report ingestion]
+sources: [INT-023.A1]

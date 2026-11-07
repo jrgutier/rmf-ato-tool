@@ -1,0 +1,55 @@
+# Template: artifacts/data/protection.yaml (P-14; schema protection). PPROT-001, PPROT-002,
+# PPROT-003 and PPROT-005 judge it; playbooks/P/P-14.md says how to fill it from the PPP.
+program:
+  acat: II  # ID | IB | IC | II | III | none
+  mda: CAE  # DAE | CAE | component
+  origin: new-start  # new-start | st-transition (then write st-protection.yaml)
+  critical_technology: {associated: false, areas: []}  # modernization priority areas
+  decision_points:  # every decision point of the pathway the program has passed
+    - {id: MS-MDD, date: "2026-01-01"}
+  # itra_waiver: {by: USD(R&E), date: "2026-01-01"}  # only a program initiated before 2017-10-01
+inputs:
+  tapps: []  # {id, area, title, date}: one per modernization priority area, with the date read
+  horizontal_protection: []  # {id, title}
+  threat_assessments:
+    - {id: TA-001, from: intelligence, covers: [system], date: "2026-01-01"}  # intelligence | counterintelligence | security
+  sep: {id: "<<FILL: SEP version>>", date: "2026-01-01"}
+  itras: []  # {id, decision_point, conducted_by, approved_by, covers, informs: [TR-nnn]}
+ppp:
+  id: "<<FILL: PPP identifier, kept across versions>>"
+  version: "<<FILL: PPP version>>"
+  date: "2026-01-01"
+  prepared_by: PER-LSE  # the lead systems engineer (the PM under DoDI 5000.88)
+  approval: {authority: CAE, date: "2026-01-01"}  # USD(R&E) | CAE | CAE-designee | component
+  submissions:
+    - {decision_point: MS-A, date: "2026-01-01"}  # one per decision point passed but the MDD
+  cybersecurity_strategy: appendix  # appendix | separate
+  sse_activities: [cyber-resilient-engineering]
+  critical_items:
+    - id: CI-001
+      kind: critical-function  # critical-program-information | critical-component | critical-function
+      name: "<<FILL: the item>>"
+      mission_criteria: ["<<FILL: the mission criterion that identified it>>"]
+  threats:
+    - {item: CI-001, threat: "<<FILL: threat>>", vulnerability: "<<FILL: vulnerability>>"}
+  countermeasures:
+    - {id: CM-001, item: CI-001, measure: "<<FILL: countermeasure>>", mitigates: [TR-001]}
+  risk_sources: [design-vulnerability, supply-chain-exploit-insertion, battlefield-loss]
+  exportability: {foreign_involvement: none, planning: "<<FILL: exportability and foreign involvement planning>>"}
+  anti_tamper: {outside_us_control: false, required: false, guidance: []}  # guidance: horizontal_protection ids
+  tailoring: {pathway: PW-MCA, factors: [complexity, risk, urgency]}
+  informed_by: []  # the S&T protection plan and TAPP ids that inform the PPP
+  updates: []  # {after: contract-award | threat-activity | compromise | decision-point, ref, date}
+  # transition: {to: sustainment-pm, owner: PER-PM, date: "2026-01-01"}  # after FRP or full deployment
+significant_events: []  # {id, kind: threat-activity | compromise, date}
+contract_awards: []  # {id, date}
+technical_risks:
+  - id: TR-001
+    security: true
+    description: "<<FILL: the risk>>"
+    drawn_from: [TA-001]  # the SEP, ITRA or threat assessment ids above
+    reviews: [RV-SRR]
+    impact: {cost: low, schedule: low}  # none | low | moderate | high
+    status: identified  # identified | analyzed | mitigation-planned | mitigating | tracked | closed
+design_assessment: {requirements_allocated: true, assessed: "2026-01-01", vulnerabilities: []}
+sources: [INT-001.A1]
