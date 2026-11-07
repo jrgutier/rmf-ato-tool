@@ -45,3 +45,20 @@ logs or account records take the ACCT set. Table 2 (pp15-27) marks, per control,
   the tables file changes, so they are re-resolved (no control changes without overlays).
 - The Space Platform Overlay remains untranscribed; FACTS-001 now reports a run that picks
   it at C-3 rather than at S-1.
+
+## The PIA on an NSS, and the privacy plan, 2026-11-07 (p11, I-15)
+
+- DoDI 5400.16 Enclosure 3 1d(2) excludes national security systems from the PIA requirement
+  and still asks that their privacy implications be considered; the Privacy Overlay that
+  replaces the PCIL analysis on an NSS can select RA-8. A selected RA-8 makes the PIA a control
+  the system implements, so PRIV-001 reads the exclusion as void once ra-8 is in the baseline,
+  and accepts it otherwise only on a Privacy Overlay control set and a statement of the privacy
+  implications considered (I-32).
+- SP 800-37r2 lets an organization keep separate security and privacy plans, and
+  `plan_structure.consolidation` may say so. This framework has one plan artifact, ART-SSP, so a
+  system processing PII records its privacy plan in `ssp-records.yaml` `privacy_plan` either way
+  (PRIV-008); a separate plan's own artifact (ART-PRIVPLAN) is planned under WI-02. A first cut
+  refused `separate`, a choice the source permits; Fable's review of I-15 removed the refusal.
+- PER-PRIV stands for the senior agency official for privacy and the system privacy officer
+  until PER-SPO exists (WI-02); every system-level task names it under `raci.when:
+  processes-pii`, and PRIV-009 asks its interview where it is responsible.

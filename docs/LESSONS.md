@@ -517,7 +517,28 @@ with the next ID; never edit or delete an existing entry.
 - Rule: In a run-data schema, `sources` means trace tokens and nothing else; name any other list of origins for what it holds.
 - Promotion: check: tests/unit/test_framework_schema.py::test_sources_properties_hold_trace_tokens
 
-## L-0074 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
+## L-0074 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: FW-REQ-003 denied every SWA-001 rule item: "'the SBOM leaves out third-party components' is not literal in a failing message in the rule's source", though the rule reported exactly that message and the negative fixture declared it.
+- Root cause: the messages lived in a dict of duty to message and the rule appended `err(message)` in a loop; the judge finds a clause by the string constant inside the failing call, and a variable holds none.
+- Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.
+- Rule: Write each failing message of a rule inline in the call that reports it, so the clause that leads to it can be found and judged.
+- Promotion: none — FW-REQ-003 already refuses such an item as denied, so the mistake cannot reach the register.
+
+## L-0075 · 2026-11-07 · run: phase-11 · tags: fixtures, privacy
+- Symptom: the privacy rules apply only to a system processing PII, valid_minimal processes none, and the two older privacy fixtures had set `privacy: true` on minimal, so every new privacy rule fired in them too and each fixture had to restate the whole privacy record to fail on one clause.
+- Root cause: a fixture base fixes the system's conditions; a rule gated on a condition no base meets has no clean base to mutate, and copying a run to make one would drift from the run it copies.
+- Fix: tests/unit/test_check_rules.py derives a base `pii` from valid_minimal by the mutations in tests/fixtures/runs/pii.yaml; test_base_has_no_findings holds it clean, and the PRIV fixtures, AODM-010.privacy and RAR-002.privacy mutate it.
+- Rule: For a rule gated on a system condition the committed bases lack, derive a base by mutations of a committed one rather than copying a run or piling the condition into each fixture.
+- Promotion: none — a test-suite habit that binds no fork; test_base_has_no_findings[pii] fails when the derived base drifts.
+
+## L-0076 · 2026-11-07 · run: phase-11 · tags: references, extraction
+- Symptom: the first transcription of the Privacy Overlays' Section 6 gave AC-16 no guidance and AC-16(3) one, against Table 2's marks, and ran the rest of AC-16's guidance into its justification.
+- Root cause: the PDF prints AC-16's Guidance as a two-column box; the text extraction made it a table and placed it after the next heading, so reading Section 6 in line order files it under the wrong control.
+- Fix: rmf_tool.overlay_specs checks every specification against its summary-table marks (G, V, R, E per control set), and a named repair puts the box back under AC-16, failing when the text no longer matches it.
+- Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
+- Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
+
+## L-0077 · 2026-11-07 · run: phase-11 · tags: conformance, evidence, rules
 - Symptom: a first cut of RCP-001 tested `tool.get("compatible") is False` and FW-REQ-003 read the clause as presence, while `len(early) < 1` in RCP-002 read as a constraint though it only asks that a list be non-empty.
 - Root cause: the judge's absence test compares against None, "" and 0, and `False == 0` in Python, so `is False` counts as a read of absence; a comparison it does not know, such as `< 1`, counts as a constraint.
 - Fix: the clause compares an enum (`record_keeping == "incompatible"`); a clause that only asks for presence is written `if not x:` on a plain field read, and a date clause as `d is None or d > limit`, so the judge's reading matches what the fixture breaks.

@@ -190,16 +190,16 @@ requirements:
     locator: "5.•"
     context: "Summary of Control Specifications"
     statement: "• The letter “G” indicates there is guidance related to the control."
-    status: "candidate"
-    work_item: "WI-79"
+    status: "not-a-requirement"
+    reason: "Legend of the G symbol in Table 1: it defines the notation and binds no one. The transcription (rmf_tool.overlay_specs) fails when a G has no Guidance subheading in Section 6, or the reverse."
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0023"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 5, "anchor": "The letter “R” indicates there is a reference(s) that requires the control"}
     kind: "lettered"
     locator: "5.•"
     context: "Summary of Control Specifications"
     statement: "• The letter “R” indicates there is a reference(s) that requires the control selection or that the control helps to meet the regulatory, statutory, or other legal requirements."
-    status: "candidate"
-    work_item: "WI-79"
+    status: "not-a-requirement"
+    reason: "Legend of the R symbol in Table 1: 'requires' here describes what the mark means, the notation of the table, and binds no one, like the G legend (0022). What the R marks stand for is held where each control's references are: OVS-001 on the laws, regulations and policies among them. Lead default, for the user to confirm at p13."
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0024"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 5, "anchor": "The letter “V” indicates this overlay defines a parameter value for the"}
     kind: "lettered"
@@ -348,7 +348,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "While tailoring AT-2 out may have minimal risk to unclassified NSS, there could be significant risk to systems processing classified information if users with access to such systems and classified information on those systems are not properly and regularly trained on their responsibilities regarding protection of classified information. For NSS that process personally identifiable information (PII) and must address system-specific privacy risks3, the Privacy Overlays may apply. Security and dissemination restrictions provided by classified systems are separate and distinct from privacy controls and handling requirements for addressing privacy risk. Organizations must ensure appropriate privacy control specifications are applied to classified systems that process4 PII consistent with the Privacy Overlay, and document them (e.g., in the privacy plan). Consult the Privacy Overlay to determine whether a system has PII and therefore must apply the Privacy Overlay in addition to applying this overlay."
-    status: "candidate"
+    status: "partial"
+    reason: "Tailoring at-2 out needs a basis (TLR-002); the classified-risk judgment is prose in ART-BASELINE."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-2.md", "asserts": "S-2 records why tailoring a training control out is acceptable for a classified system", "claim": "presence"}]
     work_item: "WI-141"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0041"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 4, "anchor": "These procedures consist of safeguards to properly store, reproduce, transfer, and destroy"}
@@ -503,15 +505,19 @@ requirements:
     locator: "6"
     context: ""
     statement: "This section is a comprehensive view of the control specifications as they apply to this overlay. The guidance provided in this section elaborates on the guidance in NIST SP 800-53. For controls that should be selected, a justification is provided based on the defined overlay characteristics. In addition to a justification, a control may have other specifications that include guidance, parameter values, and regulatory/statutory references. The specifications in this section are summarized by Section 5, Table 1. Per NIST SP 800-53, control enhancements cannot be selected independently from or without also selecting the corresponding base security control (i.e., if a control enhancement is selected, then the corresponding base control must also be selected). Controls and enhancements are explicitly identified in an overlay only if they directly support the overlay topic. Tailor all controls and enhancements in the final control set as appropriate using the general tailoring guidance in CNSSI No. 1253. Controls and enhancements in a baseline or overlay either meet regulatory requirements or mitigate an anticipated threat. During tailoring, care must be taken that controls are not removed without a thorough understanding of the system, mission, environment, threats present (in the operational or development environment), regulatory requirements, and network, as removal may affect meeting a regulatory requirement and the security posture of the system, ultimately jeopardizing a system authorization. AC-1, (Access Control) Policy and Procedures"
-    status: "candidate"
-    work_item: "WI-59"
+    status: "partial"
+    reason: "Built: Section 6 is transcribed per control in framework/baselines/overlay-specs.yaml and shown by rmf catalog show --fields overlay. Held: an enhancement selected without its base control fails (TLR-007); removing an overlay control without naming the laws, regulations and policies its references cite fails (OVS-001). Unheld: 'a thorough understanding of the system, mission, environment and threats' before a removal is prose."
+    evidence: [{"kind": "rule", "target": "TLR-007", "fixture": "tests/fixtures/negative/TLR-007.yaml", "expect": "is selected without the selection of its base control", "claim": "constraint", "asserts": "A control enhancement is not selected without also selecting the corresponding base control"}, {"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "During tailoring a control is not removed without testing the regulatory requirements its references cite for it"}]
+    work_item: "WI-79"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0060"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 10, "anchor": "Justification to Select: CNSSD No. 504 requires the implementation of standardized access"}
     kind: "modal"
     locator: "6"
     context: ""
     statement: "Justification to Select: CNSSD No. 504 requires the implementation of standardized access control methodologies (e.g., Identify and Access Management) for classified information. Organizations that process classified information must include appropriate content in their access control policy and procedures. Guidance: The tighter coupling of the identity to a trusted credential will enhance the ability to enforce, control, and manage the access of users on NSS and prevent the threat of a malicious insider inappropriately using another user's credentials in an attempt to obfuscate involvement in the misuse of national security information. Reference(s): EO 13526, Sec. 4.1, para. (d); CNSSD No. 504. AC-3(2), Access Enforcement | Dual Authorization"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing AC-1 without naming EO 13526, CNSSD No. 504 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for AC-1 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the guidance for AC-1 is prose the SSP author reads through rmf catalog show --fields overlay; no rule judges it; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "AC-1 is selected because CNSSD No. 504 requires the implementation of standardized access control methodologies (e.g., Identify and; removing it names each law, regulation or policy the overlay references cite for it (EO 13526; CNSSD No. 504)"}]
     work_item: "WI-57"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0061"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 10, "anchor": "Justification to Select: CNSSD No. 504 requires the implementation of two-person controls"}
@@ -519,7 +525,9 @@ requirements:
     locator: "6"
     context: ""
     statement: "Justification to Select: CNSSD No. 504 requires the implementation of two-person controls (review and concurrence of a second person) for operations when protection is necessary to prevent significant disruptions and reduce the risk related to insider threats. Reference(s): EO 13587, Sec 6.1.; CNSSD No. 504."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing AC-3.2 without naming EO 13587, CNSSD No. 504 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for AC-3.2 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "AC-3.2 is selected because CNSSD No. 504 requires the implementation of two-person controls (review and concurrence of a; removing it names each law, regulation or policy the overlay references cite for it (EO 13587; CNSSD No. 504)"}]
     work_item: "WI-57"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0062"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 11, "anchor": "Justification to Select: EO 13526 requires that classified information be accessible only to those with the appropriate need-to-know. Discretionary access"}
@@ -527,7 +535,9 @@ requirements:
     locator: "6"
     context: ""
     statement: "Justification to Select: EO 13526 requires that classified information be accessible only to those with the appropriate need-to-know. Discretionary access controls provide a means to reduce the opportunities cleared individuals may have to gain access to information for which they do not have a need-to-know. Reference(s): EO 13526, Sec 4.1, para. (a). AC-5, Separation of Duties"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing AC-3.4 without naming EO 13526 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for AC-3.4 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "AC-3.4 is selected because EO 13526 requires that classified information be accessible only to those with the appropriate; removing it names each law, regulation or policy the overlay references cite for it (EO 13526)"}]
     work_item: "WI-57"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0063"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 11, "anchor": "Justification to Select: EO 13587 requires the establishment of an insider threat program for deterring, detecting, and mitigating insider threats, including the safeguarding of classified information from exploitation, compromise, or other unauthorized disclosure. CNSSD No. 504 requires the implementation of"}
@@ -719,7 +729,9 @@ requirements:
     locator: "a"
     context: ""
     statement: "Justification to Select: EO 13526 requires organizations to provide training on the proper safeguarding of classified information. Guidance: The organization provides training on the proper safeguarding of classified information and on the criminal, civil, and administrative sanctions that may be imposed on an individual who fails to protect classified information from unauthorized disclosure. This training is provided upon granting a person a clearance and at least annually for as long as the user has access to the system. Parameter Value: a.1.: As part of initial training for new users and annually for as long as the user has access to the system thereafter; c.: Update literacy training and awareness content at least annually and following [Assignment: organization-defined events]; Reference(s): EO 13526, Sec 4.1, para. (b). AT-2(2), Literacy Awareness Training | Insider Threat"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing AT-2 without naming EO 13526 fails (OVS-001); an SSP statement of AT-2 recording no value for at-02_odp.01, at-02_odp.02, at-02_odp.03, at-02_odp.04, at-02_odp.05, at-02_odp.06, at-02_odp.07 fails (OVS-003). Unheld: the overlay does not say whether each authority cited for AT-2 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; whether the recorded value is the overlay's or stricter is not compared."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "AT-2 is selected because EO 13526 requires organizations to provide training on the proper safeguarding of classified information; removing it names each law, regulation or policy the overlay references cite for it (EO 13526)"}, {"kind": "rule", "target": "OVS-003", "fixture": "tests/fixtures/negative/OVS-003.yaml", "expect": "assigns a parameter value for it", "claim": "constraint", "asserts": "A value is recorded for each ODP the overlay assigns a parameter value for in AT-2 (EO 13526 requires organizations to provide training on the proper safeguarding of): at-02_odp.01, at-02_odp.02, at-02_odp.03, at-02_odp.04, at-02_odp.05, at-02_odp.06, at-02_odp.07"}]
     work_item: "WI-59"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0087"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 17, "anchor": "Justification to Select: CNSSD No. 504 requires, as part of an organization’s"}
@@ -727,7 +739,9 @@ requirements:
     locator: "a"
     context: ""
     statement: "Justification to Select: CNSSD No. 504 requires, as part of an organization’s insider threat program, insider threat awareness training to all cleared employees. Reference(s): CNSSD No. 504."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing AT-2.2 without naming CNSSD No. 504 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for AT-2.2 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "AT-2.2 is selected because CNSSD No. 504 requires, as part of an organization’s insider threat program, insider threat; removing it names each law, regulation or policy the overlay references cite for it (CNSSD No. 504)"}]
     work_item: "WI-59"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0088"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 18, "anchor": "Justification to Select: EO 13587 requires the establishment of an insider threat program for deterring, detecting, and mitigating insider threats, including the safeguarding of classified information from exploitation, compromise, or other unauthorized disclosure. CNSSD No. 504 requires agencies to monitor and audit user activity on classified networks. Reviewing"}
@@ -815,7 +829,9 @@ requirements:
     locator: "a"
     context: ""
     statement: "a. Approve and manage the exchange of information between the system and other systems using interconnection security agreements;"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: an SSP statement of CA-3 recording no value for ca-03_odp.01, ca-03_odp.02 fails (OVS-003). Unheld: whether the recorded value is the overlay's or stricter is not compared."
+    evidence: [{"kind": "rule", "target": "OVS-003", "fixture": "tests/fixtures/negative/OVS-003.yaml", "expect": "assigns a parameter value for it", "claim": "constraint", "asserts": "A value is recorded for each ODP the overlay assigns a parameter value for in CA-3 (a. Approve and manage the exchange of information between the system and): ca-03_odp.01, ca-03_odp.02"}]
     work_item: "WI-61"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0099"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 21, "anchor": "Review and update the agreements at least annually or as changes to"}
@@ -887,7 +903,9 @@ requirements:
     locator: "a"
     context: ""
     statement: "a. Require personnel to report suspected incidents to the organizational incident response capability within 2 hours; and"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: an SSP statement of IR-6 recording no value for ir-06_odp.01 fails (OVS-003). Unheld: whether the recorded value is the overlay's or stricter is not compared."
+    evidence: [{"kind": "rule", "target": "OVS-003", "fixture": "tests/fixtures/negative/OVS-003.yaml", "expect": "assigns a parameter value for it", "claim": "constraint", "asserts": "A value is recorded for each ODP the overlay assigns a parameter value for in IR-6 (a. Require personnel to report suspected incidents to the organizational incident response): ir-06_odp.01"}]
     work_item: "WI-65"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0108"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 23, "anchor": "Report incident information to the National Manager through the appropriate Federal Cyber"}
@@ -1167,7 +1185,9 @@ requirements:
     locator: "a"
     context: ""
     statement: "Justification to Select: EO 13587 requires the establishment of an insider threat program for deterring, detecting, and mitigating insider threats, including the safeguarding of classified information from exploitation, compromise, or other unauthorized disclosure. Guidance: This control has been identified as having privacy implementation considerations (see Table 1). Reference(s): EO 13587, Sec. 2.1(b) and Sec 5.2; CNSSD No. 504."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing PM-12 without naming EO 13587, CNSSD No. 504 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for PM-12 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the guidance for PM-12 is prose the SSP author reads through rmf catalog show --fields overlay; no rule judges it; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "PM-12 is selected because EO 13587 requires the establishment of an insider threat program for deterring, detecting, and; removing it names each law, regulation or policy the overlay references cite for it (EO 13587; CNSSD No. 504)"}]
     work_item: "WI-70"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0143"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 31, "anchor": "Justification to Select: EO 13526 states that all personnel that have access to classified information must be cleared through a determination of eligibility, NDA, and have the appropriate need to know for"}
@@ -1239,7 +1259,9 @@ requirements:
     locator: "c"
     context: ""
     statement: "Justification to Select: Organizations need to identify protections commensurate with an information’s classification when developing agreements to share all-source intelligence information or resulting decisions with other organizations to assist in the analysis of risk. Reference(s): EO 13526, Sec. 4.1, para. (f) and (g). RA-5, Vulnerability Monitoring and Scanning"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing RA-3.2 without naming EO 13526 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for RA-3.2 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "RA-3.2 is selected because Organizations need to identify protections commensurate with an information’s classification when developing agreements to; removing it names each law, regulation or policy the overlay references cite for it (EO 13526)"}]
     work_item: "WI-73"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0152"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 33, "anchor": "Justification to Select: Classified information may be more appealing to adversaries, who"}
@@ -1247,7 +1269,9 @@ requirements:
     locator: "c"
     context: ""
     statement: "Justification to Select: Classified information may be more appealing to adversaries, who would want to take advantage of any vulnerabilities of a system that has classified information on it. Organizations with classified information on their systems should ensure vulnerability monitoring and scanning is implemented for its system components, ensuring that the potential sources of vulnerabilities—such as infrastructure components (e.g., switches, routers, firewalls, sensors), networked printers, scanners, and copiers— are not overlooked. This will allow organizations to ensure that any new vulnerabilities to systems that process, store, or transmit classified information are identified, mitigated, and reported as quickly as possible. Reference(s): EO 13526, Sec. 4.1, para. (f) and (g). RA-6, Technical Surveillance Countermeasures Survey"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing RA-5 without naming EO 13526 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for RA-5 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "RA-5 is selected because Classified information may be more appealing to adversaries, who would want to take advantage; removing it names each law, regulation or policy the overlay references cite for it (EO 13526)"}]
     work_item: "WI-73"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0153"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 33, "anchor": "Justification to Select: EO 13526 requires that classified information be accessible only to those with the appropriate clearance and need-to-know. Many information technology products"}
@@ -1255,7 +1279,9 @@ requirements:
     locator: "c"
     context: ""
     statement: "Justification to Select: EO 13526 requires that classified information be accessible only to those with the appropriate clearance and need-to-know. Many information technology products are vulnerable to inadvertent, or intentional, surveillance actions and need to be countered to prevent information leakage to unauthorized personnel. This control serves to ensure the organization takes conscious actions to minimize the technical surveillance risk and protect the confidentiality of classified information. Guidance: This control has been identified as having privacy implementation considerations (see Table 1)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing RA-6 without naming EO 13526 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for RA-6 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the guidance for RA-6 is prose the SSP author reads through rmf catalog show --fields overlay; no rule judges it; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "RA-6 is selected because EO 13526 requires that classified information be accessible only to those with the appropriate; removing it names each law, regulation or policy the overlay references cite for it (EO 13526)"}]
     work_item: "WI-73"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0154"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 34, "anchor": "Justification to Select: NSM-8 invokes EO 14028, which, in Section 7(b) requires"}
@@ -1263,7 +1289,9 @@ requirements:
     locator: "c"
     context: ""
     statement: "Justification to Select: NSM-8 invokes EO 14028, which, in Section 7(b) requires deployment of an Endpoint Detection and Response (EDR) initiative to support proactive detection of cybersecurity incidents within Federal Government infrastructure, active cyber hunting, containment and remediation, and incident response. Guidance: This control has been identified as having privacy implementation considerations (see Table 1). Reference(s): NSM-8, Sec 1(e). SA-3(2), System Development Life Cycle | Use of Live or Operational Data"
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing RA-10 without naming NSM-8 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for RA-10 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the guidance for RA-10 is prose the SSP author reads through rmf catalog show --fields overlay; no rule judges it; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "RA-10 is selected because NSM-8 invokes EO 14028, which, in Section 7(b) requires deployment of an Endpoint Detection; removing it names each law, regulation or policy the overlay references cite for it (NSM-8)"}]
     work_item: "WI-73"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0155"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 34, "anchor": "Justification to Select: EO 13526 directs the safeguarding of classified information while stored, processed, or when transmitted. When used in"}
@@ -1424,7 +1452,9 @@ requirements:
     locator: "b.(b)"
     context: ""
     statement: "Guidance: The organization may define exceptions to allow remote activation of sensor capabilities such as secure VTC, provided that the sensor capabilities are designed, configured, and operated securely. Organizations may designate some areas acceptable for temporary storage, processing, transmission, or discussion of classified information; however, during the periods when classified information is not being stored, processed, transmitted or discussed, the organization may allow remote activation of devices with sensor capabilities in those areas. This control has been identified as having privacy implementation considerations (see Table 1)."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: nothing a rule can fail. Unheld: the guidance for SC-42 is prose the SSP author reads through rmf catalog show --fields overlay; no rule judges it."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "claim": "presence", "asserts": "The SSP author reads the overlay's specification through rmf catalog show --fields overlay"}]
     work_item: "WI-75"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0175"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 39, "anchor": "Justification to Select: EO 13587 requires the establishment of an insider threat program for deterring, detecting, and mitigating insider threats, including the safeguarding of classified information from exploitation, compromise, and other unauthorized disclosure. Monitoring wireless networks"}
@@ -1456,7 +1486,9 @@ requirements:
     locator: "b.(b)"
     context: ""
     statement: "Justification to Select: EO 13873 requires the USG to protect against supply chain risks from foreign adversaries, reducing the probability of adversaries successfully identifying and targeting the supply chain, and limiting harm that can be done by unauthorized persons to classified information."
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing SR-3 without naming EO 13873, EO 14032, CNSSD No. 505 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for SR-3 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "SR-3 is selected because EO 13873 requires the USG to protect against supply chain risks from foreign adversaries; removing it names each law, regulation or policy the overlay references cite for it (EO 13873; EO 14032; CNSSD No. 505)"}]
     work_item: "WI-77"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0179"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 41, "anchor": "Justification to Select: EO 13873 requires the USG to protect against supply chain risks from foreign adversaries, reducing the probability of adversaries successfully identifying and targeting the supply chain, and limiting harm that can be done by unauthorized persons to classified information. Reference(s): EO"}
@@ -1465,7 +1497,9 @@ requirements:
     context: ""
     statement: "Justification to Select: EO 13873 requires the USG to protect against supply chain risks from foreign adversaries, reducing the probability of adversaries successfully identifying and targeting the supply chain, and limiting harm that can be done by unauthorized persons to classified information. Reference(s): EO 13873 Sec. 1.a.; EO 14032; CNSSD No. 505."
     occurrence: 2
-    status: "candidate"
+    status: "partial"
+    reason: "Built: framework/baselines/overlay-specs.yaml carries this specification, checked against the overlay's summary table. Held: removing SR-3 without naming EO 13873, EO 14032, CNSSD No. 505 fails (OVS-001). Unheld: the overlay does not say whether each authority cited for SR-3 requires its selection or the control only helps to meet it, so a removal is held to all of them alike; the justification reaches the run as text; selection is the Classified System Overlay table in cnssi-1253.yaml."
+    evidence: [{"kind": "rule", "target": "OVS-001", "fixture": "tests/fixtures/negative/OVS-001.yaml", "expect": "references cite for it", "claim": "constraint", "asserts": "SR-3 is selected because EO 13873 requires the USG to protect against supply chain risks from foreign adversaries; removing it names each law, regulation or policy the overlay references cite for it (EO 13873; EO 14032; CNSSD No. 505)"}]
     work_item: "WI-77"
   - id: "REQ-CNSSI1253E-ATT5-CLASSIFIED-0180"
     citation: {"ref": "CNSSI1253E-ATT5-CLASSIFIED", "page": 29, "anchor": "Parameter Value(s): Test downgrading equipment and procedures at least annually to ensure"}

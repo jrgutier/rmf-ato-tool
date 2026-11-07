@@ -1,0 +1,14 @@
+rule: SWA-002
+bases:
+- minimal
+description: a COTS component that declines a validated product without a reason
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: components.1.validation
+  value: {outcome: not-selected}
+expect:
+  errors:
+  - SWA-002
+  messages:
+  - does not use an available validated product and does not say why

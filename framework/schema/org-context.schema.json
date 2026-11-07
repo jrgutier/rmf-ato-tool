@@ -2546,6 +2546,332 @@
         ]
       }
     },
+    "developed_overlays": {
+      "title": "Overlays the organization develops itself at P-4, each with its justification, risk-based decisions and control specifications (SP 800-53B Appendix C, CNSSI 1253E Attachment 1)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "concerns",
+          "baseline",
+          "justification",
+          "risk_decisions",
+          "characteristics",
+          "applicability",
+          "controls",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "title": "A unique name for the overlay",
+            "type": "string",
+            "pattern": "^ORG-OVL-[A-Z0-9-]+$",
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0001"
+            ]
+          },
+          "title": {
+            "title": "The overlay's title",
+            "type": "string",
+            "minLength": 1
+          },
+          "concerns": {
+            "title": "What concerns the overlay is intended to address",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0001"
+            ]
+          },
+          "baseline": {
+            "title": "Whether the overlay is baseline independent or adopts a CNSS baseline, and which",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "independent",
+                  "dependent"
+                ],
+                "x-enforces": [
+                  "REQ-CNSSI1253E-ATT1-TEMPLATE-0001",
+                  "REQ-CNSSI1253E-ATT1-TEMPLATE-0010"
+                ]
+              },
+              "baseline": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "other_overlays": {
+            "title": "Other overlays to consider in conjunction with this one",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0001"
+            ]
+          },
+          "sp800_53_version": {
+            "title": "The version of NIST SP 800-53 used to create the overlay",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0081"
+            ]
+          },
+          "documents": {
+            "title": "Other documents (Executive Orders, NIST or CNSS issuances) used to create the overlay",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0081"
+            ]
+          },
+          "update_events": {
+            "title": "Events that can cause the overlay to be modified or updated",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0081"
+            ]
+          },
+          "justification": {
+            "title": "The justification and rationale for the overlay",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-SP800-53B-0106"
+            ]
+          },
+          "risk_decisions": {
+            "title": "The risk-based decisions made in developing the overlay",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "decision",
+                "rationale",
+                "sources"
+              ],
+              "properties": {
+                "decision": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rationale": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/source"
+                  }
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-53B-0106"
+            ]
+          },
+          "characteristics": {
+            "title": "The characteristics of a system (environment, information, functionality) that justify the control specifications and the applicability",
+            "type": "string",
+            "minLength": 1,
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0010"
+            ]
+          },
+          "assumptions": {
+            "title": "Assumptions about the systems, differing from the baselines', that justify the specifications",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0010"
+            ]
+          },
+          "applicability": {
+            "title": "Questions whose answers decide whether the overlay applies to a system",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "question",
+                "applies_when"
+              ],
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "applies_when": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0023"
+            ]
+          },
+          "controls": {
+            "title": "The control specifications, one per control the overlay selects or justifies not selecting",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "control_id",
+                "disposition",
+                "justification"
+              ],
+              "properties": {
+                "control_id": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+                },
+                "disposition": {
+                  "title": "Whether the overlay selects the control or justifies not selecting it",
+                  "enum": [
+                    "select",
+                    "not-select"
+                  ],
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0029"
+                  ]
+                },
+                "justification": {
+                  "title": "The justification to select or not select, tied to the risk of the overlay's characteristics",
+                  "type": "string",
+                  "minLength": 1,
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0055"
+                  ]
+                },
+                "extension": {
+                  "title": "A control extension: the capability the overlay adds, alters or limits",
+                  "type": "string",
+                  "minLength": 1,
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0035"
+                  ]
+                },
+                "guidance": {
+                  "title": "Guidance modified for the overlay's characteristics and environments",
+                  "type": "string",
+                  "minLength": 1,
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0055"
+                  ]
+                },
+                "parameter_values": {
+                  "title": "Values the overlay establishes for the control's organization-defined parameters",
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0055"
+                  ]
+                },
+                "references": {
+                  "title": "Regulatory/statutory references that require the selection or that the control helps to meet, with title, section and paragraph",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x-enforces": [
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0036",
+                    "REQ-CNSSI1253E-ATT1-TEMPLATE-0055"
+                  ]
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0029"
+            ]
+          },
+          "tailoring_considerations": {
+            "title": "What system owners and AOs consider when implementing specific capabilities",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0065"
+            ]
+          },
+          "definitions": {
+            "title": "Terms unique to the overlay; terms of parent issuances are referenced, not repeated",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "term",
+                "definition"
+              ],
+              "properties": {
+                "term": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "definition": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "x-enforces": [
+              "REQ-CNSSI1253E-ATT1-TEMPLATE-0072"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
     "sources": {
       "type": "array",
       "minItems": 1,

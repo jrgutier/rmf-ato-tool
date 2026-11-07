@@ -1,0 +1,15 @@
+rule: PRIV-007
+bases:
+- pii
+description: a privacy risk assessment that leaves out the FIPPs
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: privacy.legal_requirements.2.authority
+  value: OTHER
+expect:
+  errors:
+  - PRIV-007
+  messages:
+  - the privacy risk assessment does not consider the Fair Information Practice Principles in evaluating
+    the system

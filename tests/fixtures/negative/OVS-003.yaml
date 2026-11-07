@@ -1,0 +1,21 @@
+rule: OVS-003
+description: the SSP statement of an account management control the Privacy Overlay assigns parameter values for records none of them
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253F-ATT6-PRIVACY-ACCT
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: "assurance:"
+  new: "  - {id: AS-PRV-1, holds: true, rationale: Users complete privacy training before their accounts are enabled., sources: [INT-028.A2]}\nassurance:"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - OVS-003
+  messages:
+  - ac-2 records no value for ac-02_odp.04, ac-02_odp.05, ac-02_odp.06, ac-02_odp.07, ac-02_odp.08, ac-02_odp.09; the Privacy Overlay assigns a parameter value for it

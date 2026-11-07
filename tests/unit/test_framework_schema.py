@@ -28,11 +28,12 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements", "system-description", "sar-summary",
+                     "requirements", "software", "system-description", "sar-summary",
                      "org-context", "disposal",
                      "protection", "st-protection", "protection-requirements", "nss-assessments",
-                     "test-strategy", "registration"}
-FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
+                     "test-strategy", "registration", "pia", "reciprocity"}
+# framework/baselines/*.yaml (ADR-0002)
+FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs", "overlay-specs"}
 
 
 def schema(name):
@@ -100,6 +101,16 @@ REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["
 AGREEMENT = {"analysis": "a", "feedback": "f",
              "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
              "sources": SRC}
+DERIVATION = {
+    "informed_by": [{"kind": "concept-of-operations", "document": "CONOPS"}],
+    "methods": [{"method": "misuse cases", "addresses": ["design"], "requirements": ["REQ-01"]}],
+    "key_performance": [{"name": "Survivability KPP", "establishes": ["survivability"]}],
+    "exportability": ["REQ-01"], "sources": SRC}
+ENGINEERING = {
+    "practices": [{"area": "cybersecurity", "stages": ["design"], "practice": "p"}],
+    "assurance": {"level": "l", "requirements": ["REQ-01"], "commensurate_with": {
+        "technology": "t", "program": "p", "system": "s", "mission": "m"}},
+    "sources": SRC}
 RUN_EXAMPLES = {
     "capabilities": (
         {"capabilities": [{"id": "CAP-01", "name": "Secure remote authentication",
@@ -327,6 +338,11 @@ RUN_EXAMPLES = {
                       "scorecard": {"reported": "2026-02-01"}, "sources": SRC}],
          "organization_tier": {"reviews": [], "open_poam_items": 0, "feeds": "P-1"},
          "sources": SRC}),
+    "reciprocity": (
+        {"receiving_organizations": [], "received_systems": [], "agreements": [],
+         "sources": SRC},
+        {"receiving_organizations": [{"id": "ORG-1"}], "received_systems": [],
+         "agreements": [], "sources": SRC}),
     "registration": (
         {"ppsm": {"registered": "2026-01-02", "registry_id": "PPSM-1",
                   "connections": ["CONN-01"]}, "sources": SRC},
@@ -353,11 +369,17 @@ RUN_EXAMPLES = {
         {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
          "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
                             "sources": SRC}],
-         "agreement": AGREEMENT},
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING},
         {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
             "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
-         "agreement": AGREEMENT}),
+         "agreement": AGREEMENT, "derivation": DERIVATION, "engineering": ENGINEERING}),
+    "software": (
+        {"covered_software": False, "sources": SRC},
+        {"covered_software": True, "pipeline": {"automated": True}, "sources": SRC}),
 }
+
+_PIA = YAML(typ="safe").load((REPO_ROOT / "templates/data/pia.yaml").read_text(encoding="utf-8"))
+RUN_EXAMPLES["pia"] = (_PIA, {**_PIA, "form": "DD-9999"})
 
 _FIXTURE_RECORDS = REPO_ROOT / "tests/fixtures/runs/valid_minimal/artifacts/data"
 

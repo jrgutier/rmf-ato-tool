@@ -1,0 +1,17 @@
+rule: PRIV-009
+bases:
+- pii
+description: the SAOP gives no R-1 interview
+mutations:
+- op: delete_file
+  file: interviews/INT-048-R-1-PER-PRIV.md
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.privacy_coordination.sources
+  value:
+  - INT-042.A1
+expect:
+  errors:
+  - PRIV-009
+  messages:
+  - PER-PRIV is a primary role at R-1 for a system processing PII, and gave no R-1 interview

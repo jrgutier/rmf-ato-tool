@@ -1,0 +1,20 @@
+rule: PRIV-001
+bases:
+- pii
+description: no PIA because no PII, on a system with PII
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.determination
+  value: not-required
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: privacy.pia.basis
+  value: no-pii
+expect:
+  errors:
+  - PRIV-001
+  messages:
+  - the PIA is not required because no PII is collected, yet the system processes PII
+  also:
+  - PRIV-005

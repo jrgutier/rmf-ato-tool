@@ -12,7 +12,7 @@ tasks:
       Implement the controls in the approved security plan through systems security engineering,
       applying STIG/SRG secure configurations, and design them into the product baseline by the
       CDR.
-    raci: {R: [PER-PM, PER-CCP, PER-DEV, PER-ISSE], A: PER-PM, C: [PER-IO, PER-PRIV, PER-ISSM, PER-ISSO, PER-LSE], I: []}
+    raci: {R: [PER-PM, PER-CCP, PER-DEV, PER-ISSE], A: PER-PM, C: [PER-IO, PER-PRIV, PER-ISSM, PER-ISSO, PER-LSE], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, EXT-STIG, EXT-PRODUCT]
     outputs: [ART-STIG]
     writes_facts: []
@@ -48,7 +48,7 @@ tasks:
     purpose: >-
       Update the security plan and related artifacts to the as-implemented state, with the
       configuration baseline, before test readiness.
-    raci: {R: [PER-ISSM, PER-CCP, PER-DEV], A: PER-PM, C: [PER-IO, PER-ISSE, PER-PRIV, PER-ISSO, PER-LSE], I: []}
+    raci: {R: [PER-ISSM, PER-CCP, PER-DEV], A: PER-PM, C: [PER-IO, PER-ISSE, PER-PRIV, PER-ISSO, PER-LSE], I: [], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SSP, ART-STIG, EXT-PRODUCT]
     outputs: [ART-SSP, ART-SD, ART-INV, ART-CMP, ART-CP, ART-IRP]
     writes_facts: []
@@ -66,6 +66,8 @@ tasks:
       - A security-relevant constraint that implementation or integration raises on the
         requirements is reported to PER-ISSE for the next revisit of P-15, which records it in
         requirements.yaml with its origin.
+      - plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented
+        details, covering the privacy plan for a system processing PII (PRIV-010).
       - Each received system accepted in reciprocity.yaml has the Receiving AO's authorization to
         use on an acceptable risk, its copy to the Granting AO, notice to subordinate sites, this
         system's authorization documentation updated through the change log, the installation

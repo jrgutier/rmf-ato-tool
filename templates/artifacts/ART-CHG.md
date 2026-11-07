@@ -30,6 +30,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: each hosted or interconnected system, the AO decision on it and what the program did to enforce it, as in changes.yaml connections, or a sentence saying none, with tokens>>
 
+## Privacy impact of changes
+
+<<FILL: for a system processing PII, whether each change creates new privacy risk (privacy_impact) and the PIA review each such change led to (pia.yaml updates; PRIV-005), or a sentence saying the system processes no PII, with tokens>>
+
 ## Security impact analyses
 
 <<FILL: for each change with a security impact: what changed, the vulnerabilities and risk it introduced, the controls affected and the mitigation, with tokens>>

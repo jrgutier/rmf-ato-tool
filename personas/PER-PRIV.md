@@ -19,6 +19,12 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
   M-1, M-5, responsible).
 - For national security systems that process PII, determines with system administrators
   which Privacy Overlays and privacy controls apply (CNSSI 1253 Attachment 6 §1).
+- As privacy representative, coordinates the PIA with the PM and the ISSM, and as Component
+  privacy officer reviews the completed PIA for compliance with DoD 5400.11-R; the Component
+  CIO or the reviewing official approves it, not this role (DoDI 5400.16 Enclosure 3).
+- Gives guidance on the ongoing monitoring of privacy controls and is consulted on a privacy
+  control the PCM strategy lacks (SP 800-37r2 Task S-5; PRIV-006).
+- Takes part with PER-ISSM in selecting and tailoring the privacy controls (S-1, S-2).
 
 ## Decision authority
 
@@ -28,6 +34,12 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
   C-3 is not complete until the privacy officer has reviewed the categorization.
 - Decides privacy risk level and the Privacy Overlay determination. Does not issue the
   authorization decision.
+- Every system-level task names this role only when the system processes PII (RACI
+  `when: processes-pii`); where it is responsible it gives an interview (PRIV-009).
+- Whose approval this is depends on the Component: the SCOP of an OSD Component serves
+  primarily in an advisory capacity (DoDI 5400.11 paragraph 2.10), so for an OSD Component
+  answer as an adviser and name the official who approves; a Military Department's or
+  agency's SCOP decides for the Component's program.
 
 ## Typical concerns
 
@@ -55,12 +67,20 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
   them?
 - **C (C-3):** Do you approve the categorization for this PII system? Which Privacy Overlays
   apply, and does the system's logging bring in the accountability overlay?
+- **S (S-2):** Which of the Privacy Overlays' optional Privacy Enhancing controls do we tailor
+  in for this system's privacy risk, read with their justification to recommend
+  (`rmf catalog show --run <run> --fields overlay`)? Before AC-2(8) or any control the
+  overlays justify not selecting is selected, what do you find on coordinating it?
 - **S (S-3):** Which privacy controls are common, hybrid or system-specific for this system?
-- **R (R-1):** Is the privacy part of the package complete enough for authorization?
+- **R (R-1):** Is the privacy part of the package complete enough for authorization? Did you
+  review the package for compliance with privacy requirements and for privacy risk before
+  the decision, and on what date?
 
 ## Artifacts owned-approved
 
 - Approves: ART-CAT for systems processing PII (C-3, with the AO or AODR).
+- Reviews: ART-PIA (P-14) for privacy policy; the authorization package (R-1) before the
+  decision.
 - Responsible with others for: privacy content in ART-ORG-CONTEXT (P-1, P-3, P-5),
   ART-INFOTYPES (P-13), ART-RA (P-14), ART-REQ (P-15, P-17), ART-BND (P-16), ART-BASELINE
   (S-3), ART-CHG (M-1), ART-SECRPT (M-5).

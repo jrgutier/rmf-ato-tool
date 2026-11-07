@@ -38,6 +38,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: what reached each body in the period (POA&M updates, inspection findings, vulnerability and risk acceptance status, external service status changes, scorecard and CMRS statistics) and how the data is shared, with tokens>>
 
+## Privacy reporting
+
+<<FILL: for a system processing PII, the Component's privacy report path: the PCLO through the SCOP to the Chief, DPCLTD, the semiannual Section 803 and FISMA privacy inputs this system feeds, and any system of records with PII that cannot be appropriately protected, made known to the DoD SAOP; or a sentence saying the system processes no PII, with tokens>>
+
 ## Organization tier review
 
 <<FILL: the review of these reports by the risk executive (function) and the CISO, the aggregate POA&M position and what it feeds into the organizational strategy at P-7, with tokens>>

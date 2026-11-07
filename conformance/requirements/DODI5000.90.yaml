@@ -426,7 +426,9 @@ requirements:
     locator: "2.6.b.(3)"
     context: "DOD AND OSD COMPONENT HEADS PMs are responsible for the cybersecurity of their programs, systems, and information, as assisted by supporting organizations. PMs:"
     statement: "(3) In accordance with DoDI 5000.02T, must ensure that their Program Management Office includes and decomposes cybersecurity requirements throughout the acquisition lifecycle: from needed security capabilities, to operational requirements for security, to system and technical requirements, to specifications as implemented controls."
-    status: "candidate"
+    status: "partial"
+    reason: "REQS-001 fails a derived requirement whose parent the matrix does not hold, and SSE-001 one included in no specification; the decomposition from capability to operational to technical requirements is not judged."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.derived.yaml", "expect": "which the traceability matrix does not hold", "claim": "constraint", "asserts": "Cybersecurity requirements are decomposed to system and technical requirements: a derived requirement whose parent requirement the traceability matrix does not hold fails", "holds_when": "P-15 is in the run's scope"}, {"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.included.yaml", "expect": "is included in neither the system performance specification nor the product support needs", "claim": "constraint", "asserts": "Cybersecurity requirements are decomposed to specifications: a security requirement included in neither the performance specification nor the product support needs fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-102"
   - id: "REQ-DODI5000.90-0053"
     citation: {"ref": "DODI5000.90", "page": 8, "anchor": "Consults with the USD(A&S), as appropriate, on the joint force warfighting implications"}
@@ -587,7 +589,9 @@ requirements:
     locator: "3.2"
     context: "CYBERSECURITY DRIVEN BY THREAT"
     statement: "PMs will incorporate cybersecurity requirements and apply controls to mitigate observed, anticipated, or emerging threats so that DoD systems are effective in cyber-contested operational environments. Designs and architectures must address technology and cyber threat evolution to maintain mission effectiveness beyond the near term."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-001 fails derivation methods that leave a vulnerability source without derived requirements; designs that address threat evolution are narrative."
+    evidence: [{"kind": "rule", "target": "SSE-001", "fixture": "tests/fixtures/negative/SSE-001.methods.yaml", "expect": "no derivation method derives requirements that minimize vulnerabilities introduced by", "claim": "constraint", "asserts": "PMs incorporate cybersecurity requirements to mitigate threats: no derivation method that derives requirements to minimize vulnerabilities introduced by implementation fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.90-0073"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "PMs must use cyber threat information produced by the Intelligence Community in"}
@@ -773,7 +777,9 @@ requirements:
     locator: "3.3.a.(2).(d)"
     context: "CYBERSECURITY PLANNING AND EXECUTION Planning Cybersecurity Activities The PM is expected to delegate responsibility to members of the program staff with technical knowledge of cybersecurity to produc"
     statement: "(d) The need for operational cyber resilience and, if appropriate, the resulting monitoring, responding, and recovering of the system and mitigation of the vulnerabilities."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that leave cybersecurity, cyber resilience or cyber survivability unaddressed in design, test, manufacture or sustainment, or apply no principle of SP 800-160v1r1 Appendix E; the monitoring, response and recovery that follow from the need are narrative."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.resilience.yaml", "expect": "no system security engineering practice addresses", "claim": "constraint", "asserts": "The need for operational cyber resilience is planned: no engineering practice that addresses cyber-resilience in test fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-DODI5000.90-0095"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "Executing Cybersecurity Throughout the Acquisition Lifecycle."}

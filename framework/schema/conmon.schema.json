@@ -1471,6 +1471,94 @@
           }
         }
       }
+    },
+    "privacy": {
+      "title": "Privacy continuous monitoring strategy and program (PRIV-006)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guidance_by",
+        "guidance",
+        "controls",
+        "sources"
+      ],
+      "properties": {
+        "guidance_by": {
+          "$ref": "#/$defs/persona_id",
+          "title": "Senior agency official for privacy who gave guidance on the ongoing monitoring of privacy controls"
+        },
+        "guidance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "controls": {
+          "title": "Privacy controls in the privacy continuous monitoring strategy, each with its assessment frequency",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "control",
+              "frequency",
+              "origin"
+            ],
+            "properties": {
+              "control": {
+                "$ref": "#/$defs/control"
+              },
+              "frequency": {
+                "$ref": "#/$defs/frequency",
+                "title": "Organization-defined assessment frequency of the privacy control"
+              },
+              "origin": {
+                "title": "In the organization's PCM strategy, or added to it for this system",
+                "enum": [
+                  "strategy",
+                  "added"
+                ]
+              },
+              "consultation": {
+                "title": "Consultation of the senior agency official for privacy on a privacy control not in the PCM strategy",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "by",
+                  "date",
+                  "appropriate",
+                  "sources"
+                ],
+                "properties": {
+                  "by": {
+                    "$ref": "#/$defs/persona_id"
+                  },
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "appropriate": {
+                    "title": "Whether the SAOP found the control appropriate for the use case",
+                    "type": "boolean"
+                  },
+                  "sources": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/source"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   },
   "$defs": {

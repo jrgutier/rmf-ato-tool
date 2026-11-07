@@ -1,0 +1,18 @@
+rule: REQS-002
+bases:
+- minimal
+description: a DoWI 8430.01 design policy statement marked not applicable for a system with covered software
+mutations:
+- op: replace_text
+  file: artifacts/data/requirements.yaml
+  old: "  - {statement: DP-SW-SAFETY, applies: true, requirements: [REQ-06], sources: [INT-024.A1]}"
+  new: "  - {statement: DP-SW-SAFETY, applies: false, reason: The relay is not operational technology., sources: [INT-024.A1]}"
+- op: replace_text
+  file: artifacts/data/requirements.yaml
+  old: "DP-SW-INPUT-VALIDATION, DP-SW-SAFETY, DP-SW-RESILIENCE]"
+  new: "DP-SW-INPUT-VALIDATION, DP-SW-RESILIENCE]"
+expect:
+  errors:
+  - REQS-002
+  messages:
+  - DP-SW-SAFETY binds a system with covered software, so it cannot be marked not applicable

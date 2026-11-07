@@ -18,6 +18,10 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: how the controls are implemented across the components, and why the security, privacy and C-SCRM plans are consolidated or separate as `plan_structure` in artifacts/data/ssp-records.yaml records, with tokens; the statements live in artifacts/ssp/controls/FAM.yaml>>
 
+## Privacy plan
+
+<<FILL: for a system processing PII, the privacy plan this plan holds with the security plan: an overview of the privacy requirements, the methodologies and metrics that assess the privacy controls, and the PIA it references (ssp-records.yaml privacy_plan; PRIV-008); or a sentence saying the system processes no PII, with tokens>>
+
 ## Inheritance and shared responsibility
 
 <<FILL: one paragraph per provider: what it implements and what the system does, with tokens>>

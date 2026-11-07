@@ -24,6 +24,7 @@ requirements:
     measure: {kind: assurance, statement: "<<FILL: how technical achievement is measured>>"}
     verification: {method: test, description: "<<FILL: what is verified and its success criteria>>"}  # inspection | analysis | demonstration | test | other
     # allocated_to: [CMP-EXAMPLE]  # P-17: CMP-*, environment, common-control-provider or contract
+    included_in: [performance-specification]  # and/or product-support (SSE-001)
     sources: [INT-001.A1]
 constraints:  # security-relevant constraints on the solution
   - id: CON-01
@@ -48,9 +49,42 @@ agreement:
   agreed:  # one per stakeholder who holds a need (REQS-003)
     - {stakeholder: PER-IO, date: "2025-01-15", decisions: "<<FILL: key decisions agreed and their rationale>>"}
   sources: [INT-001.A1]
+derivation:  # DoDI 5000.83 3.3.c.(1), by the lead systems engineer (SSE-001)
+  informed_by:  # each of the four kinds at least once
+    - {kind: capability-requirements, document: "<<FILL: draft or validated CDD or equivalent>>", sources: [INT-001.A1]}
+    - {kind: concept-of-operations, document: "<<FILL: the CONOPS>>", sources: [INT-001.A1]}
+    - {kind: operational-mode-summary, document: "<<FILL: the OMS>>", sources: [INT-001.A1]}
+    - {kind: mission-profiles, document: "<<FILL: the mission profiles>>", sources: [INT-001.A1]}
+  methods:  # such as system modeling and analysis, misuse cases, criticality or vulnerability analysis
+    - {method: "<<FILL: the derivation method>>", addresses: [design, implementation, interfaces, access-points], requirements: [REQ-01], sources: [INT-001.A1]}
+  key_performance:  # together they establish survivability, sustainment and security measures
+    - {name: "<<FILL: KPP or attribute>>", kind: kpp, establishes: [survivability, sustainment], requirements: [REQ-01], sources: [INT-001.A1]}
+    - {name: "<<FILL: KPP or attribute>>", kind: kpp-attribute, establishes: [security], based_on: [confidentiality, integrity], measures: "<<FILL: such as cryptography and key distribution>>", sources: [INT-001.A1]}
+  exportability: [REQ-01]  # the derived exportability requirements, or [] with:
+  # exportability_none: "<<FILL: why none is derived, such as nothing planned for foreign release>>"
+  sources: [INT-001.A1]
+engineering:  # DoDI 5000.83 1.2.c (SSE-002)
+  practices:  # cybersecurity, cyber-resilience and cyber-survivability each in all four stages
+    # (a software product or service has no manufacture stage of its own)
+    - {area: cybersecurity, stages: [design, test, manufacture, sustainment], practice: "<<FILL: the method or practice>>", principles: [least-privilege], sources: [INT-001.A1]}
+    - {area: program-protection, stages: [design], practice: "<<FILL: the program protection practice>>", sources: [INT-001.A1]}
+    # privacy-engineering: one practice when the system processes PII
+  assurance:
+    level: "<<FILL: the level of assurance the practices provide>>"
+    commensurate_with: {technology: "<<FILL>>", program: "<<FILL>>", system: "<<FILL>>", mission: "<<FILL>>"}
+    requirements: [REQ-01]  # requirements with an assurance measure that carry it
+  sources: [INT-001.A1]
 # workforce:  # P-17 (REQS-004)
 #   contracted_work_roles: []  # cyberspace work roles contractor personnel perform
 #   qualification_requirement: REQ-02  # a requirement allocated to the contract
 #   dfars_239_71: applied     # applied | not-applied
 #   qualifications_documented: true
 #   sources: [INT-001.A1]
+# For a system of records (infotypes.yaml privacy.sorn published or pending), each Privacy Act
+# rule no control states, carried by requirements or not applicable with a reason (PRIV-007):
+# privacy_act:
+#   - {rule: direct-collection, applies: true, requirements: [REQ-07], sources: [INT-001.A1]}
+#   - {rule: disclosure-bar, applies: true, requirements: [REQ-07], sources: [INT-001.A1]}
+#   - {rule: first-amendment, applies: true, requirements: [REQ-07], sources: [INT-001.A1]}
+#   - {rule: access-appeals, applies: true, requirements: [REQ-07], sources: [INT-001.A1]}
+#   - {rule: rules-of-conduct, applies: true, requirements: [REQ-07], sources: [INT-001.A1]}

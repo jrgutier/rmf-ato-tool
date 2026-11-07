@@ -682,7 +682,9 @@ requirements:
     locator: "2.4.3"
     context: "Information Security Architecture"
     statement: "Organizations employ sound system and security engineering principles and techniques to ensure that information security requirements are effectively implemented in organizational information systems."
-    status: "candidate"
+    status: "partial"
+    reason: "SSE-002 fails practices that apply no principle of Appendix E; that the requirements are effectively implemented is judged at assessment, not here."
+    evidence: [{"kind": "rule", "target": "SSE-002", "fixture": "tests/fixtures/negative/SSE-002.applied.yaml", "expect": "no practice applies a principle for trustworthy secure design to develop and integrate the system components", "claim": "constraint", "asserts": "Organizations employ sound security engineering principles: no practice that applies a principle for trustworthy secure design fails", "holds_when": "P-15 is in the run's scope"}]
     work_item: "WI-101"
   - id: "REQ-SP800-39-0081"
     citation: {"ref": "SP800-39", "page": 29, "anchor": "Information security requirements defined in the segment architecture are implemented in the"}
@@ -1025,7 +1027,9 @@ requirements:
     locator: "2.6.2"
     context: "Trustworthiness of Information Systems"
     statement: "The concepts of assurance and trustworthiness are closely related. Assurance contributes to the trustworthiness determination relative to an information technology product or an information system. Developers/implementers of information technology products or systems may provide assurance evidence by generating appropriate artifacts (e.g., the results of independent testing and evaluation, design documentation, high-level or low-level specifications, source code analysis). Organizations using information technology products or systems may perform, or rely on others to perform, some form of assessment on the products or systems. Organizations may also have direct experience with the product or system, or may receive information about the performance of the product or system from third parties. Organizations typically evaluate all of the available assurance evidence, often applying different weighting factors as appropriate, to determine the trustworthiness of the product or system relative to the circumstances."
-    status: "candidate"
+    status: "partial"
+    reason: "Indicative; ssp-controls assurance records how the assurance requirements of a control are addressed, the evidence developers produce."
+    evidence: [{"kind": "schema", "target": "framework/schema/ssp-controls.schema.json#/properties/controls/items/properties/assurance/properties/addressed", "claim": "presence", "asserts": "Developers and implementers provide assurance evidence, the activities and evidence they produce"}]
     work_item: "WI-95"
   - id: "REQ-SP800-39-0122"
     citation: {"ref": "SP800-39", "page": 36, "anchor": "Information technology products and systems exhibiting a higher degree of trustworthiness (i.e.,"}
@@ -2052,7 +2056,9 @@ requirements:
     locator: "APPENDIX D.(iv)"
     context: "KEY PARTICIPANTS IN THE RISK MANAGEMENT PROCESS T"
     statement: "The information system security engineer is an individual, group, or organization responsible for conducting information system security engineering activities. Information system security engineering is a process that captures and refines information security requirements and ensures that the requirements are effectively integrated into information technology component products and information systems through purposeful security architecting, design, development, and configuration. Information system security engineers are an integral part of the development team (e.g., integrated project team) designing and developing organizational information systems or upgrading legacy systems. Information system security engineers employ best practices when implementing security controls within an information system including software engineering methodologies, system/security engineering principles, secure design, secure architecture, and secure coding techniques. System security engineers coordinate their security-related activities with information security architects, senior information security officers, information system owners, common control providers, and information system security officers."
-    status: "candidate"
+    status: "partial"
+    reason: "Describes the information system security engineer (PER-ISSE, R at I-1); requirements.yaml engineering records the practices, which no rule ties to a role."
+    evidence: [{"kind": "schema", "target": "framework/schema/requirements.schema.json#/$defs/engineering/properties/practices/items/properties/practice", "claim": "presence", "asserts": "Information system security engineering activities employ secure design, secure architecture and secure coding, the engineering method or practice"}]
     work_item: "WI-101"
   - id: "REQ-SP800-39-0235"
     citation: {"ref": "SP800-39", "page": 78, "anchor": "The security control assessor is an individual, group, or organization responsible for"}
@@ -2702,7 +2708,9 @@ requirements:
     locator: "2.6.2"
     context: ""
     statement: "For other than national security systems, organizations meet minimum assurance requirements specified in NIST Special Publication 800-53, Appendix E."
-    status: "candidate"
+    status: "covered"
+    reason: "SSE-003 fails an assurance-related baseline control whose minimum assurance requirements are unsatisfied once in place, and one whose SSP statement does not address them."
+    evidence: [{"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "Organizations meet the minimum assurance requirements of SP 800-53: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}]
     work_item: "WI-95"
     promoted: {"reason": "Footnote 56 states a minimum assurance duty for systems other than NSS."}
   - id: "REQ-SP800-39-0309"
