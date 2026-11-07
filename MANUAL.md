@@ -1180,7 +1180,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-SD](#art-sd) | System description, users and leveraged authorizations | produces | core |
 | [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
-Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`.
+Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
 **Entry criteria**
 
@@ -1189,7 +1189,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 **Exit criteria**
 
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
-- ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+- ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
 
 **Alignment**
 
@@ -1960,7 +1960,7 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [EXT-STIG](#ext-stig) | DISA STIGs and SRGs | outside input (reference) |
+| [EXT-STIG](#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
 | [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
@@ -3513,7 +3513,7 @@ RMF role assignments, risk management strategy and risk tolerance, organization-
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-ORG-CONTEXT.md](templates/artifacts/ART-ORG-CONTEXT.md) |
-| Data files | — |
+| Data files | `artifacts/data/org-context.yaml` (schema `org-context`) |
 | OSCAL | — |
 | Produced by | [P-1](#task-p-1) |
 | Updated by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
@@ -3664,7 +3664,7 @@ The documented characteristics of the system, its users and privileges, and the 
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
-| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`) |
+| Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`) |
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
 | Produced by | [C-1](#task-c-1) |
 | Updated by | [I-2](#task-i-2) |
@@ -3870,7 +3870,7 @@ Assessment determinations per control, findings and recommendations, including t
 |---|---|
 | Package | core |
 | Template | [templates/artifacts/ART-SAR.md](templates/artifacts/ART-SAR.md) |
-| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`) |
+| Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`)<br>`artifacts/data/sar-summary.yaml` (schema `sar-summary`) |
 | OSCAL | `assessment-results#results.findings`<br>`assessment-results#results.observations` |
 | Produced by | [A-3](#task-a-3) |
 | Updated by | [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2), [M-4](#task-m-4) |
@@ -4061,7 +4061,7 @@ System disposal strategy and the actions taken when the system is removed from o
 |---|---|
 | Package | supporting |
 | Template | [templates/artifacts/ART-DISP.md](templates/artifacts/ART-DISP.md) |
-| Data files | — |
+| Data files | `artifacts/data/disposal.yaml` (schema `disposal`) |
 | OSCAL | — |
 | Produced by | [M-7](#task-m-7) |
 | Updated by | — |
@@ -4087,7 +4087,7 @@ content and operational data.
 | <a id="ext-cnssi1253-overlays"></a>**EXT-CNSSI1253-OVERLAYS** CNSSI 1253 overlays | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [P-4](#task-p-4), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2) |
 | <a id="ext-catalog"></a>**EXT-CATALOG** SP 800-53 Rev. 5 control catalog | reference | The OSCAL 800-53r5 catalog (references/oscal/catalog), the source of control text, parameters and assessment objectives. | [S-1](#task-s-1), [S-4](#task-s-4) |
 | <a id="ext-assessment-procedures"></a>**EXT-ASSESSMENT-PROCEDURES** SP 800-53A assessment procedures | reference | SP 800-53A Rev. 5 assessment objects, methods and objectives, with the DoD-specific assessment procedures on the RMF Knowledge Service. | [A-2](#task-a-2), [A-3](#task-a-3) |
-| <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory. | [I-1](#task-i-1) |
+| <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs, and other secure configuration guidance | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory, and where none applies NSA/CSS security implementation and mitigation guidance, DoD security configuration guides, NIST checklists and mitigation guidelines, or vendor hardening guidance. An exception is documented and approved by the responsible AO (SCFG-001). | [I-1](#task-i-1) |
 | <a id="ext-test-results"></a>**EXT-TEST-RESULTS** Developmental and operational test results | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence. | [A-3](#task-a-3) |
 | <a id="ext-monitoring"></a>**EXT-MONITORING** Continuous monitoring data | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [M-2](#task-m-2) |
 | <a id="ext-change-requests"></a>**EXT-CHANGE-REQUESTS** Configuration change requests | operational | Proposed changes to the system and its environment, submitted to configuration control. | [M-1](#task-m-1) |

@@ -173,7 +173,9 @@ interview, write whole files, then `rmf build` and `rmf check --task T` until 0 
 and append a journal CHECKPOINT. S-4 writes each plan as Markdown beside a judged record
 (`artifacts/data/cm-plan.yaml`, `contingency.yaml`, `incident-response.yaml`,
 `service-agreements.yaml`, `ssp-records.yaml`). Session units are one RMF step (at most 3 control
-families). State is always derived from disk, so a fresh session can resume.
+families). State is always derived from disk, so a fresh session can resume. C-1 writes
+`artifacts/data/system-description.yaml`, P-2 `org-context.yaml`, A-3 `sar-summary.yaml`;
+a run entering past P-1 records `entry` in run.yaml first (ENTRY-001).
 
 ## Learned rules
 

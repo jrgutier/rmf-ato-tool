@@ -1,12 +1,43 @@
 # Template: artifacts/data/inventory.yaml (P-10; schema framework/schema/inventory.schema.json).
-# One record per hardware or software item inside the boundary. Replace every <<FILL: ...>> and
-# every example value; keep product INV-### IDs (playbooks/P/P-10.md).
+# One record per hardware or software item inside the boundary, each named individually.
+# Replace every <<FILL: ...>> and every example value; keep product INV-### IDs
+# (playbooks/P/P-10.md). ASSET-001..003 judge it.
+asset_management_system:
+  name: "<<FILL: DoD IT asset management system or authoritative inventory repository>>"
+  record: "<<FILL: the inventory's record in it>>"
+hva:
+  designated: false  # a high-value asset under OMB M-17-09
+  basis: "<<FILL: why the system is or is not an HVA>>"
+  # inventory_entry: "<<FILL: entry on the Component HVA inventory>>"  # when designated
+asset_scope:  # every class, considered or not, with why (SP 800-37 Task P-10)
+  - {class: physical-environmental, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: human, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: technology, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: mission-business-processes, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: information-data, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: firmware, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: software, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: services, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: reputation, considered: true, rationale: "<<FILL: rationale>>"}
+  - {class: privacy-interests, considered: true, rationale: "<<FILL: rationale>>"}
+assets:  # assets other than inventory items, prioritized by the consequences of their loss
+  - id: AST-001
+    class: mission-business-processes
+    description: "<<FILL: the asset>>"
+    priority: high  # high | moderate | low
+    basis: "<<FILL: classification, criticality, resources and mission impact>>"
+    sources: [INT-001.A1]
 items:
   - id: INV-001
     description: "<<FILL: what the item is and what it does>>"
     kind: software  # hardware | software | operating-system | firmware | virtual-machine | network-device | database | service
     component: CMP-EXAMPLE  # the boundary component (CMP-*) the item belongs to
-    vendor: "<<FILL: vendor, when known>>"
-    product: "<<FILL: product name, when known>>"
-    version: "<<FILL: version, when known>>"
+    vendor: "<<FILL: manufacturer or vendor>>"
+    product: "<<FILL: product and model>>"
+    version: "<<FILL: version number>>"
+    software_category: cots  # cots | gots | oss (software kinds)
+    uii: "<<FILL: unique item identifier, unique in this inventory>>"
+    owner: "<<FILL: system or component owner>>"
+    # serial_number: "<<FILL: serial number>>"  # hardware
+    # hostname, cnssp11, location, mac_address, administrators, primary_user, operational_status, license, support, attestation
     sources: [INT-001.A1]  # the answers and product passages behind the record

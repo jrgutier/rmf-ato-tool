@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:disposal",
+  "title": "runs/<run-id>/artifacts/data/disposal.yaml",
+  "description": "The secure end state of disposal (M-7, SP 800-160v1r1 Disposal process): the state the environment returns to, the check that nothing detrimental remains, storage criteria if the system is stored, and how elements not for reuse are kept out of the supply chain.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "end_state",
+    "environment",
+    "residual_check",
+    "storage",
+    "supply_chain",
+    "sources"
+  ],
+  "properties": {
+    "end_state": {
+      "title": "The secure end state disposal reaches",
+      "type": "string",
+      "minLength": 1
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "restored_to"
+      ],
+      "properties": {
+        "restored_to": {
+          "title": "Whether the environment returns to its original secure state or a secure state specified by agreement",
+          "enum": [
+            "original",
+            "agreed"
+          ],
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0970",
+            "REQ-SP800-160V1R1-0991"
+          ]
+        },
+        "agreement": {
+          "title": "The agreement that specifies the secure state",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "residual_check": {
+      "title": "Confirmation that no detrimental security factors exist following disposal",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "no_detrimental_factors"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "no_detrimental_factors": {
+          "type": "boolean",
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0990"
+          ],
+          "title": "Whether no detrimental security factors exist following disposal"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "storage": {
+      "title": "Whether the system is stored, and the security criteria for containment facilities, storage locations, inspection and storage periods",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stored"
+      ],
+      "properties": {
+        "stored": {
+          "type": "boolean"
+        },
+        "containment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locations": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inspection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "periods": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-160V1R1-0981"
+      ]
+    },
+    "supply_chain": {
+      "title": "Elements and materials not to be repurposed, reclaimed or reused, and how they are kept from re-entering the supply chain",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "non_reuse_elements",
+        "prevention"
+      ],
+      "properties": {
+        "non_reuse_elements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0988"
+          ],
+          "title": "System elements and parts not intended for reuse, repurposing or reclamation"
+        },
+        "prevention": {
+          "type": "string",
+          "minLength": 1,
+          "x-enforces": [
+            "REQ-SP800-160V1R1-0982"
+          ],
+          "title": "Preventive methods that preclude disposed elements and materials from re-entering the supply chain"
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+      }
+    }
+  }
+}

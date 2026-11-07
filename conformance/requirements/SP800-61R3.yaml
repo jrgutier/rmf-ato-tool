@@ -864,7 +864,8 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "GV.SC-02 | Cybersecurity roles and responsibilities for suppliers, customers, and partners are established, communicated, and coordinated internally and externally | Low | N1: See GV.RR-02 for additional information on cybersecurity incident response-related roles and responsibilities for third parties."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.dodinops.yaml", "expect": "the mission partner agreement does not state", "asserts": "Cybersecurity roles and responsibilities for partners are established in the mission partner agreement", "claim": "constraint"}]
     work_item: "WI-190"
   - id: "REQ-SP800-61R3-0110"
     citation: {"ref": "SP800-61R3", "page": 22, "anchor": "GV.SC-03 | Cybersecurity supply chain risk"}
@@ -999,7 +1000,8 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "ID.AM-01 | Inventories of hardware | Medium | R1: Make current and automatically"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.serial.yaml", "expect": "is hardware with no serial number", "asserts": "Inventories of hardware are maintained with each hardware item individually identified", "claim": "presence"}]
     work_item: "WI-172"
   - id: "REQ-SP800-61R3-0127"
     citation: {"ref": "SP800-61R3", "page": 23, "anchor": "managed by the organization | updated inventories of the internal and"}
@@ -1031,7 +1033,9 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "ID.AM-02 | Inventories of software, services, and systems managed by the organization are maintained | Medium | R1: Make current and automatically updated inventories of the internal and external software, services, and systems used by the organization available for use in finding and addressing vulnerabilities, monitoring operations and usage to detect adverse cybersecurity events, and identifying “shadow IT” usage."
-    status: "candidate"
+    status: "partial"
+    reason: "Software, services and systems are inventoried; that inventories are current and automatically updated is not tested."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.version.yaml", "expect": "is software with no version number", "asserts": "Inventories of software are maintained with each version", "claim": "presence"}]
     work_item: "WI-172"
   - id: "REQ-SP800-61R3-0131"
     citation: {"ref": "SP800-61R3", "page": 24, "anchor": "ID.AM-03 | Representations of the organization’s authorized network communication and internal and"}
@@ -1047,7 +1051,9 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "ID.AM-04 | Inventories of services provided by suppliers are maintained | Medium | R1: Current and automatically updated inventories of the services provided by the organization’s suppliers should be available for use in finding and addressing vulnerabilities, monitoring operations and usage to detect adverse cybersecurity events, and identifying “shadow IT” usage."
-    status: "candidate"
+    status: "partial"
+    reason: "Supplier services are boundary components and leveraged authorizations, not inventory items."
+    evidence: [{"kind": "schema", "target": "framework/schema/leveraged-authorizations.schema.json#/properties/leveraged_authorizations/items/properties/service", "claim": "presence", "asserts": "Services provided by suppliers are maintained in an inventory of consumed services"}]
     work_item: "WI-172"
   - id: "REQ-SP800-61R3-0133"
     citation: {"ref": "SP800-61R3", "page": 24, "anchor": "ID.AM-05 | Assets are prioritized based on classification, criticality, resources, and impact"}
@@ -1055,7 +1061,9 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "ID.AM-05 | Assets are prioritized based on classification, criticality, resources, and impact on the mission | Medium | R1: Prioritizing the organization’s assets — including hardware, software, services, systems, and data — and being aware of the dependencies between those and other assets should help indicate where the organization should focus its resources in terms of protection, detection, response, and recovery."
-    status: "candidate"
+    status: "partial"
+    reason: "Assets carry a priority and its basis; dependencies between assets are not recorded."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets/items/properties/basis", "claim": "presence", "asserts": "Assets are prioritized based on classification, criticality, resources and impact on the mission"}]
     work_item: "WI-172"
   - id: "REQ-SP800-61R3-0134"
     citation: {"ref": "SP800-61R3", "page": 24, "anchor": "ID.AM-07 | Inventories of data and corresponding metadata for designated data types"}
@@ -1490,7 +1498,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM (Continuous Monitoring) | Assets are monitored to find anomalies, indicators of compromise, and other potentially adverse events | High | R1: Continuous monitoring for unauthorized activity, deviations from expected activity, and changes in security posture should involve the following types of assets at all times: networks and network services; computing hardware and software, runtime environments, and their data; the physical environment; personnel activity and technology usage; and external service provider activities. C1: Consider using cyber threat information with continuous monitoring to help identify potentially malicious activities that may have otherwise been considered benign."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "Continuous monitoring covers networks, physical environment, personnel, external providers and computing assets at all times", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0192"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "R2: Tune the continuous monitoring technologies to reduce false positives and false"}
@@ -1498,7 +1507,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "R2: Tune the continuous monitoring technologies to reduce false positives and false negatives to acceptable levels."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.tuning.yaml", "expect": "nothing says how monitoring is tuned against false positives and false negatives", "asserts": "Tune the continuous monitoring technologies to reduce false positives and false negatives", "claim": "presence"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0193"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "DE.CM-01 | Networks and network services are monitored to find potentially adverse"}
@@ -1506,7 +1516,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM-01 | Networks and network services are monitored to find potentially adverse events | High | R1: Monitoring should include wired and wireless networks, network communications and flows, network services (e.g., DNS and BGP), and the presence of unauthorized or rogue networks within facilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Networks are a required monitored asset class; what network monitoring includes is prose."
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "Networks and network services are monitored as a covered asset class", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0194"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "DE.CM-02 | The physical environment is monitored to find potentially adverse events"}
@@ -1514,7 +1526,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM-02 | The physical environment is monitored to find potentially adverse events | High | R1: Monitoring the physical environment should include all successful and failed access attempts into all controlled areas, the movement of people and equipment into and out of secure areas of facilities, and signs of tampering with physical access controls."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "The physical environment is monitored to find potentially adverse events", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0195"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "DE.CM-03 | Personnel activity and technology usage are monitored to find potentially"}
@@ -1522,7 +1535,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM-03 | Personnel activity and technology usage are monitored to find potentially adverse events | High | R1: Monitoring personnel activity and technology usage should include anomalous user activity or unusual patterns of activity, authentication and logical access attempts, and the use of deception technology."
-    status: "candidate"
+    status: "partial"
+    reason: "Personnel activity is a required monitored asset class; what it includes is prose."
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "Personnel activity and technology usage are monitored as a covered asset class", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0196"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "DE.CM-06 | External service provider activities and services are monitored to find"}
@@ -1530,7 +1545,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM-06 | External service provider activities and services are monitored to find potentially adverse events | High | R1: Monitoring external service provider activities and services should include remote and on-site administration and maintenance activities that providers perform on organizational systems and deviations from expected behavior by cloud-based services, internet service providers, and other service providers."
-    status: "candidate"
+    status: "partial"
+    reason: "External providers are a required monitored asset class; what it includes is prose."
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "External service provider activities and services are monitored as a covered asset class", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0197"
     citation: {"ref": "SP800-61R3", "page": 32, "anchor": "DE.CM-09 | Computing hardware and software, runtime environments, and their data are"}
@@ -1538,7 +1555,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.CM-09 | Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events | High | R1: Monitor email, web, file sharing, collaboration services, and other common attack vectors to detect malware, phishing, data leaks, exfiltration, and other adverse events. R2: Monitor authentication attempts to identify attacks against credentials and unauthorized credential use. R3: Monitor software and hardware configurations for deviations from security baselines. R4: Monitor hardware and software, including cybersecurity protection mechanisms, for signs of tampering, failure, or compromise. R5: Monitor endpoints for cyber health issues (e.g., missing patches, malware infections, or unauthorized software), and redirect endpoints with issues to a remediation environment before access is authorized."
-    status: "candidate"
+    status: "partial"
+    reason: "Computing is a required monitored asset class; what it includes is prose."
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.coverage.yaml", "expect": "continuous monitoring does not cover", "asserts": "Computing hardware and software, runtime environments and their data are monitored as a covered asset class", "claim": "constraint"}]
     work_item: "WI-182"
   - id: "REQ-SP800-61R3-0198"
     citation: {"ref": "SP800-61R3", "page": 33, "anchor": "DE.AE (Adverse Event Analysis) | Anomalies, indicators of compromise, and other potentially"}
@@ -1553,7 +1572,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.AE-02 | Potentially adverse events are analyzed to better understand associated activities | High | R1: Use tools (e.g., security information and event management [SIEM]; security orchestration, automation, and response [SOAR]) to continuously monitor log events for known malicious and suspicious activity and to generate reports on their findings. R2: Utilize up-to-date CTI in log analysis tools to improve detection accuracy and characterize threat actors, their methods, and indicators of compromise. R3: Regularly conduct manual reviews of log events for technologies that cannot be sufficiently monitored through automation."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.yaml", "expect": "up-to-date cyber threat intelligence is not used in", "asserts": "Utilize up-to-date CTI in log analysis tools, and correlate events, to analyze potentially adverse events", "claim": "constraint"}]
     work_item: "WI-181"
   - id: "REQ-SP800-61R3-0200"
     citation: {"ref": "SP800-61R3", "page": 33, "anchor": "DE.AE-03 | Information is correlated from multiple sources | High | R1:"}
@@ -1561,7 +1581,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.AE-03 | Information is correlated from multiple sources | High | R1: Constantly transfer the log data generated by other sources to a relatively small number of log servers. R2: Use event correlation technology (e.g., SIEM, SOAR) to gather pieces of related data captured by multiple sources. R3: Utilize CTI to help correlate events among log sources."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.yaml", "expect": "up-to-date cyber threat intelligence is not used in", "asserts": "Utilize up-to-date cyber threat intelligence to correlate events among log sources from multiple sources", "claim": "constraint"}]
     work_item: "WI-181"
   - id: "REQ-SP800-61R3-0201"
     citation: {"ref": "SP800-61R3", "page": 34, "anchor": "DE.AE-04 | DE.AE-04 | The estimated impact and scope of adverse events"}
@@ -1584,7 +1605,9 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "understood | SIEM, SOAR) and/or manual means, and review and refine the estimates."
-    status: "candidate"
+    status: "partial"
+    reason: "Estimating and refining impact and scope is an optional detection field."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/detection/properties/estimates", "claim": "presence", "asserts": "Review and refine the estimates of impact and scope by SIEM, SOAR or manual means"}]
     work_item: "WI-181"
   - id: "REQ-SP800-61R3-0204"
     citation: {"ref": "SP800-61R3", "page": 34, "anchor": "DE.AE-06 | Information on adverse events is provided to authorized staff and"}
@@ -1599,7 +1622,8 @@ requirements:
     locator: "3.2"
     context: "Table 3. CSF 2.0 Community Profile part 2: Incident Response"
     statement: "DE.AE-07 | Cyber threat intelligence and other contextual information are integrated into the analysis | High | R1: Integrate up-to-date CTI and other contextual information (e.g., asset inventories) into adverse event analysis to improve detection accuracy and characterize threat actors, their methods, and indicators of compromise. R2: Rapidly acquire and analyze vulnerability disclosures for the organization’s technologies from suppliers, vendors, and third-party security advisories. N1: See [SP800-150] for guidelines on consuming, using, and storing CTIs, as well as establishing CTI relationships."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "DETC-001", "fixture": "tests/fixtures/negative/DETC-001.yaml", "expect": "up-to-date cyber threat intelligence is not used in", "asserts": "Integrate up-to-date CTI and contextual information into adverse event analysis", "claim": "constraint"}]
     work_item: "WI-181"
   - id: "REQ-SP800-61R3-0206"
     citation: {"ref": "SP800-61R3", "page": 34, "anchor": "DE.AE-08 | Incidents are declared when adverse events meet the defined incident"}

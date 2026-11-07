@@ -21,6 +21,12 @@ LABELS = {
     "categorization": "Security categorization",
     "categorization.approved": "Categorization approved",
     "baseline_id": "Control baseline",
+    "classification": "Classification and handling markings",
+    "system_type": "IT type",
+    "owning_organization": "Owning organization",
+    "system_version": "System version",
+    "operational_environment": "Operational environment",
+    "lifecycle_phase": "Life-cycle phase",
 }
 
 
@@ -67,6 +73,13 @@ def display(facts: dict[str, Any], dotted: str) -> str | None:
         overlays = ", ".join(node.get("overlays") or []) or "none"
         return f"C/I/A {cia}; overlays: {overlays}"
     val = node.get("value")
+    if dotted == "classification" and val is not None:
+        marks = [*(node.get("compartments") or ()), *(node.get("handling_markings") or ())]
+        return f"{val}; markings: {', '.join(map(str, marks)) or 'none'}"
+    if dotted == "system_type" and val is not None:
+        return f"{val}, {node.get('connectivity')}"
+    if dotted == "system_version" and val is not None and node.get("release_date"):
+        return f"{val} (released {node['release_date']})"
     if isinstance(val, bool):
         by = node.get("approved_by")
         return ("yes" if val else "no") + (f" ({by})" if by else "")

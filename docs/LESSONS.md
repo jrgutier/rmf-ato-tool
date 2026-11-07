@@ -446,3 +446,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the messages say CSSP and "Security Review Date", and the party enum says `service-provider`; the judge stays strict, since loosening it would let a real required field out through a reworded message.
 - Rule: When a rule item is weak on a required field it does not touch, reword the message; never relax the judge.
 - Promotion: none — a wording trap of the judge, reported by the judge itself with the field named, and it does not reach forks.
+
+## L-0064 · 2026-11-07 · run: phase-11 · tags: facts, contract
+- Symptom: the six system facts C-1 now records (classification, IT type, owning organization, version, operational environment, life-cycle phase) could not go into `writes_facts` without FACTS-001 and `rmf status` refusing the example run, which is at contract 0.1.0; making `roles` required in users.schema.json likewise broke a valid older users record.
+- Root cause: `writes_facts` and a schema's `required` hold every run whatever its contract; only rules carried `since`.
+- Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
+- Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
+- Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since

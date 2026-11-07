@@ -54,7 +54,8 @@
             "items": {
               "type": "string",
               "minLength": 1
-            }
+            },
+            "title": "System roles of the group, identifying each privileged user's role and function"
           },
           "authorized_privileges": {
             "type": "array",
@@ -86,6 +87,113 @@
             "minItems": 1,
             "items": {
               "$ref": "#/$defs/source"
+            }
+          },
+          "category": {
+            "title": "User category: organization personnel, contractors, federal, state or local, foreign nationals, coalition partners or general public",
+            "enum": [
+              "organization-personnel",
+              "contractor",
+              "federal-state-local",
+              "foreign-national",
+              "coalition-partner",
+              "general-public"
+            ]
+          },
+          "access_requirements": {
+            "title": "User access requirements, restrictions and constraints: clearance, compartment and citizenship",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "clearance",
+              "citizenship"
+            ],
+            "properties": {
+              "clearance": {
+                "title": "Clearance the group needs for access",
+                "enum": [
+                  "none",
+                  "confidential",
+                  "secret",
+                  "top-secret"
+                ]
+              },
+              "compartments": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "citizenship": {
+                "title": "Citizenship requirement for access",
+                "type": "string",
+                "minLength": 1
+              },
+              "other": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "privileged_access": {
+            "title": "For a privileged group: the qualification its members hold and their signed Statement of Acceptance of Responsibilities",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "qualified",
+              "qualification",
+              "statement_signed"
+            ],
+            "properties": {
+              "qualified": {
+                "title": "Whether personnel filling the privileged positions are qualified",
+                "type": "boolean"
+              },
+              "qualification": {
+                "title": "The qualification standard they meet",
+                "type": "string",
+                "minLength": 1
+              },
+              "statement_signed": {
+                "title": "Whether each has signed a Statement of Acceptance of Responsibilities",
+                "type": "boolean"
+              }
+            },
+            "x-enforces": [
+              "REQ-SP800-18R2-0126"
+            ]
+          },
+          "foreign_access": {
+            "title": "For foreign exchange personnel and representatives of foreign nations, coalitions or international organizations: who authorized their access and what limits it",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "authorized_by",
+              "disclosure_basis",
+              "release_limits"
+            ],
+            "properties": {
+              "authorized_by": {
+                "title": "Who authorized the access",
+                "enum": [
+                  "dod-component-head",
+                  "other"
+                ]
+              },
+              "disclosure_basis": {
+                "title": "The DoD, Department of State or ODNI disclosure guidance followed",
+                "type": "string",
+                "minLength": 1
+              },
+              "release_limits": {
+                "title": "Mechanisms that limit access to information cleared for release to the represented nation, coalition or organization",
+                "type": "string",
+                "minLength": 1,
+                "x-enforces": [
+                  "REQ-DODI8500.01-0365"
+                ]
+              }
             }
           }
         }

@@ -965,7 +965,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | produces | core |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
-Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`.
+Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
 **Entry criteria**
 
@@ -974,7 +974,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 **Exit criteria**
 
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
-- ART-SD, users.yaml and leveraged-authorizations.yaml describe the system; facts system_id, system_name, acronym, aliases and lifecycle_state set_by C-1.
+- ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
 
 **Alignment**
 

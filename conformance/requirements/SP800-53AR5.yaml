@@ -3317,8 +3317,11 @@ requirements:
     locator: "PENETRATION TESTING"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "Organizations may consider adding controlled penetration testing to their arsenal of tools and techniques used to assess the security and privacy controls in organizational systems. Penetration testing is a specific type of assessment in which assessors simulate the actions of a given class of attacker by using a defined set of documentation (i.e., documentation representative of what that class of attacker is likely to possess) and working under other specific constraints to attempt to circumvent the security or privacy features of a system."
-    status: "candidate"
+    status: "partial"
+    reason: "The sentence is a permission awaiting the user's ruling; a run that adds a test records it in sap.yaml."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "asserts": "Organizations adding controlled penetration testing record it in the penetration_test block of the plan", "claim": "presence"}]
     work_item: "WI-191"
+    ruling_sought: [{"sentence": "Organizations may consider adding controlled penetration testing to their arsenal of tools and techniques used to assess the security and privacy controls in organizational systems.", "reason": "A permission: organizations may consider adding penetration testing; not adding it is allowed, so no run can fail it."}]
   - id: "REQ-SP800-53AR5-0271"
     citation: {"ref": "SP800-53AR5", "page": 726, "anchor": "Penetration testing is conducted as a controlled attempt to breach the security"}
     kind: "indicative"
@@ -3333,15 +3336,20 @@ requirements:
     locator: "PENETRATION TESTING"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "Penetration testing exercises can be scheduled and/or random in accordance with organizational policy and organizational assessments of risk. Consideration can be given to performing penetration tests on any newly developed system (or legacy system undergoing a major upgrade) before the system is authorized for operation, after important changes are made to the environment in which the system operates, and when a new type of attack is discovered that may impact the system. Organizations actively monitor the system environment and threat landscape (e.g., new vulnerabilities, attack techniques, new technology deployments, user security, and privacy awareness and training) to identify changes that require out-of-cycle penetration testing."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentences 1 and 2 are permissions awaiting the user's ruling; monitoring the environment and threat landscape for changes that call for a new test is ISCM's and not held here."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "asserts": "Organizations actively monitor the threat landscape to identify changes that call for penetration testing", "claim": "presence", "sentence": "Organizations actively monitor the system environment and threat landscape (e.g., new vulnerabilities, attack techniques, new technology deployments, user security, and privacy awareness and training) to identify changes that require out-of-cycle penetration testing."}]
     work_item: "WI-191"
+    ruling_sought: [{"sentence": "Penetration testing exercises can be scheduled and/or random in accordance with organizational policy and organizational assessments of risk.", "reason": "A permission: exercises can be scheduled or random; either is allowed."}, {"sentence": "Consideration can be given to performing penetration tests on any newly developed system (or legacy system undergoing a major upgrade) before the system is authorized for operation, after important changes are made to the environment in which the system operates, and when a new type of attack is discovered that may impact the system.", "reason": "A permission: consideration can be given to testing a new or upgraded system; it is not required."}]
   - id: "REQ-SP800-53AR5-0273"
     citation: {"ref": "SP800-53AR5", "page": 726, "anchor": "Organizations specify which components within the system are subject to penetration testing"}
     kind: "indicative"
     locator: "PENETRATION TESTING"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "Organizations specify which components within the system are subject to penetration testing as well as the attacker’s profile to be adopted throughout the penetration testing exercises. Organizations train selected personnel in the use and maintenance of penetration testing tools and techniques. Effective penetration testing tools have the capability to readily update the list of attack techniques and exploitable vulnerabilities used during the exercises. Organizations update the list of attack techniques and exploitable vulnerabilities used in penetration testing based on an organizational assessment of risk or when significant new vulnerabilities or threats are identified and reported. Whenever possible, organizations employ tools and attack techniques that include the capability to perform penetration testing exercises on systems and security and privacy controls in an automated manner.58"
-    status: "candidate"
+    status: "partial"
+    reason: "Components and attacker profiles are required fields of the test; updating attack techniques and using automated tools are not tested. The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/components", "claim": "constraint", "asserts": "Organizations specify which components within the system are subject to penetration testing", "sentence": "Organizations specify which components within the system are subject to penetration testing as well as the attacker’s profile to be adopted throughout the penetration testing exercises."}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0274"
     citation: {"ref": "SP800-53AR5", "page": 726, "anchor": "While automated penetration testing tools provide repeatable results and reduce the resources"}
@@ -3349,7 +3357,9 @@ requirements:
     locator: "PENETRATION TESTING"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "While automated penetration testing tools provide repeatable results and reduce the resources used, organizations should carefully consider the potential detrimental effects of automated exploits on system availability. Additionally, penetration testing based solely on automated tools may not provide the level of attempted system compromise that organizations might experience from an actual attacker."
-    status: "candidate"
+    status: "partial"
+    reason: "The effects of automated exploits on availability are for the rules of engagement, as prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/rules_of_engagement", "claim": "presence", "asserts": "Rules of engagement consider the detrimental effects of automated exploits on system availability"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0275"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "Organizations consider the following criteria when developing and implementing a controlled penetration"}
@@ -3357,7 +3367,9 @@ requirements:
     locator: "PENETRATION TESTING"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "Organizations consider the following criteria when developing and implementing a controlled penetration testing program. An effective penetration test:"
-    status: "candidate"
+    status: "partial"
+    reason: "An introduction to the criteria; each criterion is its own entry."
+    evidence: [{"kind": "prose", "target": "playbooks/A/A-2.md", "asserts": "Organizations consider the criteria when developing a controlled penetration testing program", "claim": "presence"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0276"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "Goes beyond vulnerability scanning to provide explicit proof of mission risks and"}
@@ -3365,7 +3377,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "• Goes beyond vulnerability scanning to provide explicit proof of mission risks and an indicator of the level of effort that an adversary would need to expend in order to cause harm to the organization’s operations and assets, individuals, other organizations, or the Nation"
-    status: "candidate"
+    status: "partial"
+    reason: "The likelihood from the effort expended is a required result field; proof of mission risk is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/penetration_test/properties/likelihood", "claim": "presence", "asserts": "An indicator of the level of effort that an adversary would need to expend", "sentence": "• Goes beyond vulnerability scanning to provide explicit proof of mission risks and an indicator of the level of effort that an adversary would need to expend in order to cause harm to the organization’s operations and assets, individuals, other organizations, or the Nation"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0277"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "Approaches the system as the adversary would – considering vulnerabilities, incorrect system"}
@@ -3373,7 +3387,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "• Approaches the system as the adversary would – considering vulnerabilities, incorrect system configurations, trust relationships between organizations, and architectural weaknesses in the environment being tested"
-    status: "candidate"
+    status: "partial"
+    reason: "The threat sources and attack surface frame the adversary's approach; nothing tests it."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/threat_sources", "claim": "constraint", "asserts": "Approaches the system as the adversary would through the threat sources simulated"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0278"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "Has a clearly defined scope and contains as a minimum:"}
@@ -3381,7 +3397,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "• Has a clearly defined scope and contains as a minimum:"
-    status: "candidate"
+    status: "partial"
+    reason: "The scope is required with its six elements; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope", "claim": "presence", "asserts": "Has a clearly defined scope and contains as a minimum the listed definitions"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0279"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "A definition of the environment subject to testing (e.g., facilities, users, organizational"}
@@ -3389,7 +3407,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "o A definition of the environment subject to testing (e.g., facilities, users, organizational groups)"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/environment", "claim": "constraint", "asserts": "A definition of the environment subject to testing"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0280"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "A definition of the attack surface to be tested (e.g., servers, desktop"}
@@ -3397,7 +3417,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "o A definition of the attack surface to be tested (e.g., servers, desktop systems, wireless networks, web applications, intrusion detection and prevention systems, firewalls, email accounts, user security and privacy awareness and training posture, and incident response posture, including breaches of personally identifiable information)"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/attack_surface", "claim": "constraint", "asserts": "A definition of the attack surface to be tested"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0281"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "A definition of the threat sources to simulate (e.g., an enumeration of"}
@@ -3405,7 +3427,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "o A definition of the threat sources to simulate (e.g., an enumeration of attackers’ profiles to be used, such as an internal attacker, casual attacker, single or group of external targeted attackers, nation/state actor, or criminal organization)"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/threat_sources", "claim": "constraint", "asserts": "A definition of the threat sources to simulate"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0282"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "A definition of the objectives for the simulated attacker (e.g., gain domain"}
@@ -3413,7 +3437,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "o A definition of the objectives for the simulated attacker (e.g., gain domain administrator access on the organization’s LDAP [Lightweight Directory Access Protocol] structure and access and modify information in the organization’s financial system)"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/objectives", "claim": "constraint", "asserts": "A definition of the objectives for the simulated attacker"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0283"
     citation: {"ref": "SP800-53AR5", "page": 727, "anchor": "A definition of level of effort (e.g., time and resources) to be"}
@@ -3421,7 +3447,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES An effective penetration test:"
     statement: "o A definition of level of effort (e.g., time and resources) to be expended"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/level_of_effort", "claim": "presence", "asserts": "A definition of level of effort, time and resources, to be expended"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0284"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "A definition of the rules of engagement"}
@@ -3429,7 +3457,9 @@ requirements:
     locator: "PENETRATION TESTING.o"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "o A definition of the rules of engagement"
-    status: "candidate"
+    status: "partial"
+    reason: "Required scope field; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/rules_of_engagement", "claim": "presence", "asserts": "A definition of the rules of engagement"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0285"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "Thoroughly documents all activities performed during the test, including all exploited vulnerabilities"}
@@ -3437,7 +3467,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "• Thoroughly documents all activities performed during the test, including all exploited vulnerabilities and how the vulnerabilities were combined into attacks"
-    status: "candidate"
+    status: "partial"
+    reason: "Exploited vulnerabilities and how they were combined are required result fields; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/penetration_test/properties/exploited", "claim": "presence", "asserts": "Thoroughly documents all exploited vulnerabilities and how the vulnerabilities were combined into attacks"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0286"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "Produces results indicating a likelihood of occurrence for a given attack by"}
@@ -3445,7 +3477,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "• Produces results indicating a likelihood of occurrence for a given attack by using the level of effort that the team needed to expend to penetrate the system as an indicator of the penetration resistance of the system"
-    status: "candidate"
+    status: "partial"
+    reason: "Likelihood is a required result field; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/penetration_test/properties/likelihood", "claim": "presence", "asserts": "Produces results indicating a likelihood of occurrence for a given attack using the level of effort expended"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0287"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "Validates existing security and privacy controls (including risk mitigation mechanisms, such as"}
@@ -3453,7 +3487,8 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "• Validates existing security and privacy controls (including risk mitigation mechanisms, such as firewalls and intrusion detection and prevention systems)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.controls.yaml", "expect": "the penetration test validates", "asserts": "The penetration test validates existing security and privacy controls, which are controls the SAR assessed", "claim": "constraint", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0288"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "Provides a verifiable and reproducible log of all the activities performed during"}
@@ -3461,7 +3496,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "• Provides a verifiable and reproducible log of all the activities performed during the test"
-    status: "candidate"
+    status: "partial"
+    reason: "The activities log is a required result field; whether it is verifiable and reproducible is not testable."
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/penetration_test/properties/activities_log", "claim": "presence", "asserts": "Provides a verifiable and reproducible log of all the activities performed during the test"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0289"
     citation: {"ref": "SP800-53AR5", "page": 728, "anchor": "Provides actionable results with information about possible remediation measures for the successful"}
@@ -3469,7 +3506,9 @@ requirements:
     locator: "PENETRATION TESTING.•"
     context: "ASSESSMENT TOOLS AND TECHNIQUES TO IDENTIFY SYSTEM WEAKNESSES"
     statement: "• Provides actionable results with information about possible remediation measures for the successful attacks performed."
-    status: "candidate"
+    status: "partial"
+    reason: "Remediation is required when attacks succeeded; presence only."
+    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.remediation.yaml", "expect": "reports successful attacks and no possible remediation measures", "asserts": "Provides actionable results with possible remediation measures for the successful attacks performed", "claim": "presence", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}]
     work_item: "WI-191"
   - id: "REQ-SP800-53AR5-0290"
     citation: {"ref": "SP800-53AR5", "page": 729, "anchor": "The primary purpose of the security and privacy assessment reports is to"}
@@ -3509,7 +3548,8 @@ requirements:
     locator: "ASSESSMENT REPORTS.•"
     context: "DOCUMENTING THE FINDINGS FROM SECURITY AND PRIVACY CONTROL ASSESSMENTS"
     statement: "• Site(s) assessed and assessment date(s)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/sites", "claim": "constraint", "asserts": "Sites assessed and assessment dates are listed, at least one site with its dates"}]
     work_item: "WI-193"
   - id: "REQ-SP800-53AR5-0295"
     citation: {"ref": "SP800-53AR5", "page": 729, "anchor": "Previous assessment results (if reused)"}
@@ -3884,7 +3924,9 @@ requirements:
     locator: "ASSESSMENT REPORTS.•"
     context: ""
     statement: "• Assessor’s name/identification"
-    status: "candidate"
+    status: "partial"
+    reason: "The SCA's name is a required field; presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/sca/properties/name", "claim": "presence", "asserts": "Assessor's name and identification"}]
     work_item: "WI-193"
     promoted: {"reason": "A key element of the assessment report, rejected as a bare label; its siblings under the lead-in are entries and this element has no home yet."}
   - id: "REQ-SP800-53AR5-0342"

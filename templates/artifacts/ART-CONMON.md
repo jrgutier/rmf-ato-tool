@@ -32,7 +32,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Roles and tools
 
-<<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and the tools used, with tokens>>
+<<FILL: who collects, analyzes and reports monitoring data, including the CSSP and common control providers, and the tools used; which asset classes detection covers at all times (networks, the physical environment, personnel activity, external providers, computing) and how monitoring is tuned against false positives and negatives, as in conmon.yaml detection_coverage and tuning, with tokens>>
 
 <!-- M-2 updates artifacts/data/conmon.yaml when ongoing assessments change a frequency or
      method, appends "## Changes after ongoing assessment" (what changed and why), and adds

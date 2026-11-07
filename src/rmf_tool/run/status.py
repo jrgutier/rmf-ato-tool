@@ -130,7 +130,7 @@ def derive(run: Run, findings: list[RunFinding]) -> Status:
         missing: list[str] = []
         if sc.state == scope.ACTIVE:
             missing += _artifact_problems(run, t)
-            missing += [f"fact {f} not set_by {t}" for f in task.get("writes_facts") or []
+            missing += [f"fact {f} not set_by {t}" for f in run.writes_facts(t)
                         if facts_mod.set_by(facts, f) != t]
             need = int(task.get("min_interviews") or 0)
             if counts.get(t, 0) < need:

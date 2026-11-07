@@ -1,0 +1,14 @@
+rule: SYSD-004
+bases:
+- minimal
+description: privileged users who signed no statement
+mutations:
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.1.privileged_access.statement_signed
+  value: false
+expect:
+  errors:
+  - SYSD-004
+  messages:
+  - personnel with privileged access have not signed a Statement of Acceptance of Responsibilities

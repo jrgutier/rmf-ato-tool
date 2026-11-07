@@ -1,0 +1,14 @@
+rule: SYSD-003
+bases:
+- minimal
+description: an interconnection component with no record
+mutations:
+- op: replace_text
+  file: artifacts/data/boundary.yaml
+  old: '  - {id: CMP-IDP,'
+  new: "  - {id: CMP-LINK, title: Partner link, type: interconnection, description: Link to the partner system., status: operational, external: true, sources: [product/architecture.md#components]}\n  - {id: CMP-IDP,"
+expect:
+  errors:
+  - SYSD-003
+  messages:
+  - the interconnection CMP-LINK has no interconnection record

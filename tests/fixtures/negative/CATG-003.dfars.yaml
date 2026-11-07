@@ -1,0 +1,24 @@
+rule: CATG-003
+bases:
+- minimal
+description: CTI protected under no DFARS clause
+mutations:
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: information_types.0.handling.cti
+  value: true
+- op: set_field
+  file: artifacts/data/infotypes.yaml
+  path: cti
+  value:
+    exposure: Design data on the contractor's unclassified network; exposure would aid an adversary's countermeasures.
+    protection: none
+    agreements_include_8582: true
+    incident_losses: No incident reported under the contract.
+expect:
+  errors:
+  - CATG-003
+  also:
+  - RUN-FM-001
+  messages:
+  - protection of CTI is consistent with DFARS 252.204-7012 unless exempted by DFARS 252.204-7000(a)(3), not none

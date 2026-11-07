@@ -1,0 +1,21 @@
+rule: SCFG-001
+bases:
+- minimal
+description: a STIG exception the ISSM approved
+mutations:
+- op: set_field
+  file: artifacts/data/stig-summary.yaml
+  path: findings.0.status
+  value: exception
+- op: set_field
+  file: artifacts/data/stig-summary.yaml
+  path: findings.0.exception
+  value:
+    rationale: The console vendor does not support the session lock setting.
+    approved_by: PER-ISSM
+    date: '2026-11-06'
+expect:
+  errors:
+  - SCFG-001
+  messages:
+  - 'STG-001: an exception to the configuration guidance is approved by the responsible AO, not PER-ISSM'

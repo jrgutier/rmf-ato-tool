@@ -1,10 +1,18 @@
 # Template: artifacts/data/leveraged-authorizations.yaml (C-1; schema
 # leveraged-authorizations). One record per separately authorized provider whose controls the
-# system inherits; write `leveraged_authorizations: []` when there are none.
+# system inherits; write `leveraged_authorizations: []` when there are none. SYSD-005 judges
+# the service and its agreement.
 leveraged_authorizations:
   - id: LA-01
     title: "<<FILL: authorization name>>"
     provider: "<<FILL: providing organization or system>>"
     date_authorized: "2026-01-01"  # the provider's decision date
     decision: AD-ATO  # AD-ATO | AD-ATOC | ...
+    service:
+      kind: internal  # internal (provided within DoD): an SLA | external: an interagency agreement, statement of work or contract
+      agreement:
+        instrument: sla  # sla | interagency-agreement | statement-of-work | contract
+        reference: "<<FILL: agreement identifier>>"
+        enterprise: true  # a DoD enterprise-level agreement, used when possible
+        security_requirements: true  # it incorporates the DoDI 8500.01 security control requirements
     sources: [INT-001.A1]
