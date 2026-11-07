@@ -55,3 +55,16 @@ def test_an_added_output_reopens_the_task_of_a_current_run(tmp_path):
         "touched_by: [P-18, C-1, C-3, R-5]", "touched_by: [P-18, C-1, C-3]"), encoding="utf-8")
     run = open_run(path, REPO)
     assert "ART-REG touched_by does not list R-5" in status._artifact_problems(run, "R-5")
+
+
+def test_a_since_key_names_a_listed_input_output_or_fact():
+    """FW-IO-001: a stray key in inputs_since, outputs_since or facts_since gates nothing, so
+    the framework refuses it."""
+    from rmf_tool.framework import validate as fw
+
+    root = Path(__file__).resolve().parents[2]
+    loaded = fw.load(root / "framework", root)
+    task = next(t for t in loaded.framework.of("tasks") if t.id == "C-2")
+    task.data["inputs_since"] = {**(task.data.get("inputs_since") or {}), "ART-NOPE": "0.2.0"}
+    found = fw.rule_inputs(fw.Context(loaded.framework, root, None))
+    assert any("inputs_since names ART-NOPE" in f.message for f in found)
