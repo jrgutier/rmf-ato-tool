@@ -1192,12 +1192,14 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: R-5
-    summary: the decision and package are not received, retained, available or verified as required
+    summary: the decision and package are not received, retained, available or verified as required, or the operational commanders are not informed or coordinated with
     fixture: tests/fixtures/negative/AUTHRPT-001.yaml
-    hint: artifacts/data/authorization-report.yaml names a ledger record; its receiver retains the decision and package, every official told can read them, retention outlasts the termination date, the AO verifies the terms, and the SAP and SAR records are kept.
+    hint: artifacts/data/authorization-report.yaml names a ledger record; its receiver retains the decision and package, every official told can read them, retention outlasts the termination date, the AO verifies the terms, the SAP and SAR records are kept, operational_awareness names PER-OPCDR among the informed, and each risk that affects an operational requirement is coordinated with PER-OPCDR and PER-PM or PER-MDA.
     enforces:
       - REQ-SP800-37R2-0602
       - REQ-SP800-53AR5-0296
+      - REQ-DODI8510.01-0226
+      - REQ-DODI8510.01-0227
   - id: RUN-VER-001
     scope: run
     severity: W
@@ -1528,6 +1530,7 @@ rules:
     fixture: tests/fixtures/negative/TLR-003.yaml
     hint: "Record each assumption of framework/baselines/tailoring-inputs.yaml in tailoring.yaml; a failed baseline assumption names tailored controls or overlays, an additional assumption that holds names controls in the baseline or added, overlays, or outcome revisited-no-change."
     enforces:
+      - REQ-CNSSI1253F-ATT2-SPACE-0006
       - REQ-CNSSI1253-0020
       - REQ-CNSSI1253-0030
       - REQ-CNSSI1253E-ATT1-TEMPLATE-0078
@@ -1696,6 +1699,82 @@ rules:
     hint: "Record privacy_coordination (by PER-PRIV, or by a designee with designee_of: PER-PRIV, with its sources) on the tailoring action that adds or keeps the control, or remove it."
     enforces:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0112
+  - id: PVAL-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a baseline control records no value for a parameter the CNSSI 1253 Parameter Value column sets, or a value looser than that NSS minimum
+    fixture: tests/fixtures/negative/PVAL-001.yaml
+    hint: "Record under the SSP statement's parameters a value for each ODP framework/baselines/cnssi-1253-parameters.yaml names, no looser than the NSS value (CNSSI 1253 pages 22 and 24)."
+    enforces:
+      - REQ-CNSSI1253-0069
+      - REQ-CNSSI1253-0089
+      - REQ-CNSSI1253-0100
+      - REQ-CNSSI1253-0007
+  - id: AONLY-001
+    scope: run
+    severity: E
+    ac: [AC-36]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: IT below the system level skips the Assess Only assessment, or is accepted into an environment without the ISSM's approved review under the AO's direction, or into one with no ATO
+    fixture: tests/fixtures/negative/AONLY-001.yaml
+    hint: "For system_type pit, it-service or it-product keep A-3 in scope and record authorizations.yaml acceptances (reviewed_by PER-ISSM, directed_by PER-AO or PER-AODR, secure_configuration approved, the environment and its ATO)."
+    enforces:
+      - REQ-DODI8500.01-0289
+      - REQ-DODI8510.01-0086
+      - REQ-DODI8500.01-0340
+      - REQ-DODI8500.01-0427
+  - id: OVLX-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: an obtained overlay is applied without a yes to its applicability questions, or a classified system with SAP or SCI, or across security domains, applies no Intelligence, SAP authority or CDS overlay
+    fixture: tests/fixtures/negative/OVLX-001.yaml
+    hint: "Record an overlay the library does not hold in org-context.yaml obtained_overlays (owner, kind, applicability answers, controls) and apply it by its OBT-OVL-* ID (CNSSI 1253 pages 10 and 161; Classified System Overlay pages 2 and 4)."
+    enforces:
+      - REQ-CNSSI1253-0036
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0019
+      - REQ-CNSSI1253E-ATT5-CLASSIFIED-0043
+      - REQ-DODI8510.01-0045
+  - id: SPCOV-002
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a space NSS tailors out a Space Platform Overlay control that carries a CNSSP 12 duty
+    fixture: tests/fixtures/negative/SPCOV-002.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml policy_controls lists for an applied overlay; CNSSP 12 says space NSS must implement them."
+    enforces:
+      - REQ-CNSSP12-0017
+      - REQ-CNSSP12-0030
+      - REQ-CNSSP12-0031
+      - REQ-CNSSP12-0032
+      - REQ-CNSSP12-0036
+  - id: SPCOV-001
+    scope: run
+    severity: E
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: the Space Platform Overlay is applied outside its scope, a space platform does not apply it, or a space NSS names no segment
+    fixture: tests/fixtures/negative/SPCOV-001.yaml
+    hint: "Set categorization.space_segments (space-platform, link, ground, user) and apply CNSSI1253F-ATT2-SPACE to the space platform and its link segment only (Space Platform Overlay Sections 1 and 4)."
+    enforces:
+      - REQ-DODI8500.01-0334
+      - REQ-CNSSI1253-0034
+      - REQ-CNSSI1253F-ATT2-SPACE-0001
+      - REQ-CNSSI1253F-ATT2-SPACE-0008
   - id: OVS-003
     scope: run
     severity: E
@@ -2948,6 +3027,14 @@ rules:
       - REQ-SP800-37R2-0739
       - REQ-SP800-39-0210
       - REQ-SP800-39-0220
+      - REQ-DODI8500.01-0048
+      - REQ-DODI8500.01-0059
+      - REQ-DODI8500.01-0115
+      - REQ-DODI8500.01-0138
+      - REQ-DODI8500.01-0186
+      - REQ-DODI8510.01-0258
+      - REQ-DODI8510.01-0259
+      - REQ-DODI8510.01-0266
   - id: OCTX-002
     scope: run
     severity: E

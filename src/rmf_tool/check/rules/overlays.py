@@ -150,3 +150,116 @@ def parameter_values(ctx: Context) -> list[RunFinding]:
                                     f"the {spec.title} assigns a parameter value for it",
                                     rel, None, {"S-4"}))
     return out
+
+
+# --- SPCOV-001: the Space Platform Overlay's scope -----------------------------------------
+
+SPACE = "CNSSI1253F-ATT2-SPACE"
+SPACE_SCOPE = ("space-platform", "link")
+SSP_RECORDS = "artifacts/data/ssp-records.yaml"
+
+
+def space_scope(ctx: Context) -> list[RunFinding]:
+    """The overlay's scope is the space platform and the link segment interfacing with it, not
+    the ground or user segment (its Section 1), and it applies to every space NSS in that scope
+    (Section 4). A system declared a space NSS elsewhere names its segments, so leaving them out
+    is no way past the second test."""
+    cat = _categorization(ctx)
+    overlays = [o for o in cat.get("overlays") or () if isinstance(o, str)] \
+        if isinstance(cat.get("overlays"), list) else []
+    segments = cat.get("space_segments")
+    segments = [s for s in segments if isinstance(s, str)] if isinstance(segments, list) else None
+    records = ctx.data(SSP_RECORDS)
+    declared = isinstance(records, dict) and records.get("space_nss") is True
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("SPCOV-001", message, "facts.yaml", None, {"C-2"}))
+
+    if (SPACE in overlays or declared) and segments is None:
+        err("a space NSS names its segments in categorization.space_segments (space-platform, "
+            "link, ground, user)")
+    if SPACE in overlays and segments and set(segments).isdisjoint(SPACE_SCOPE):
+        err("the Space Platform Overlay's scope is the space platform and the link segment "
+            f"interfacing with it, and the system is the {', '.join(segments)} segment")
+    if segments and set(segments) & set(SPACE_SCOPE) and SPACE not in overlays:
+        err("the system is a space platform or its link segment, and categorization.overlays "
+            f"does not apply the Space Platform Overlay ({SPACE})")
+    return out
+
+
+# --- SPCOV-002: controls CNSSP 12 requires of a space NSS stay selected ---------------------
+
+def space_policy_controls(ctx: Context) -> list[RunFinding]:
+    """CNSSP 12 says what space NSS "must implement"; the Space Platform Overlay's controls
+    whose guidance carries each duty stay in the baseline (framework/baselines/
+    tailoring-inputs.yaml policy_controls), whatever S-2 tailors."""
+    overlays = _categorization(ctx).get("overlays")
+    applied = [o for o in overlays if isinstance(o, str)] if isinstance(overlays, list) else []
+    required = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("policy_controls") or []
+                if p["overlay"] in applied]
+    base = baseline_mod.load(ctx.run)
+    if not required or base is None:
+        return []
+    selected = set(baseline_mod.control_ids(ctx.run))
+    subset = ctx.run.config.get("control_subset")
+    out = []
+    for policy in required:
+        absent = [c for c in policy["controls"] if c not in selected
+                  and (not isinstance(subset, list) or c in subset)]
+        if absent:
+            duty = policy["text"][len("Space NSS "):].rstrip(".")
+            out.append(make("SPCOV-002", f"{policy['id']}: {policy['authority']} requires of a "
+                            f"space NSS that it {duty}, and "
+                            f"{', '.join(absent)} is tailored out of the baseline",
+                            "baseline.json", None, {"S-2"}))
+    return out
+
+
+# --- OVLX-001: overlays obtained from their owner -------------------------------------------
+
+CLASSIFIED = "CNSSI1253E-ATT5-CLASSIFIED"
+SAP_ASSUMPTION = "AS-CLS-1"  # holds: no SAP or SCI
+DOMAINS_ASSUMPTION = "AS-ADD-3"  # holds: communicates across security domains
+
+def _org_records(ctx: Context) -> list[dict[str, Any]]:
+    data = ctx.data(baseline_mod.ORG_FILE)
+    records = data.get("obtained_overlays") if isinstance(data, dict) else None
+    return [r for r in records if isinstance(r, dict)] if isinstance(records, list) else []
+
+
+def _assumption(data: dict[str, Any], aid: str) -> Any:
+    return next((r.get("holds") for r in data.get("assumptions") or ()
+                 if isinstance(r, dict) and r.get("id") == aid), None)
+
+
+def obtained(ctx: Context) -> list[RunFinding]:
+    """An overlay the library does not hold reaches a run through its owner (CNSSI 1253 page
+    161): the CDS overlay and the Intelligence Overlay the Classified System Overlay leaves to
+    them (its pages 2 and 4), a SAP authority's specifications, DoD-specific overlays on the RMF
+    KS. One applied is applied on its applicability questions (CNSSI 1253 page 10)."""
+    overlays = _categorization(ctx).get("overlays")
+    applied = {o for o in overlays if isinstance(o, str)} if isinstance(overlays, list) else set()
+    records = _org_records(ctx)
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("OVLX-001", message, "facts.yaml", None, {"C-2"}))
+
+    kinds = {str(r.get("kind")) for r in records if r.get("id") in applied}
+    for r in records:
+        answers = [a.get("answer") for a in r.get("applicability") or () if isinstance(a, dict)]
+        if r.get("id") in applied and True not in answers:
+            err(f"{r.get('id')} is applied, and none of its applicability questions is answered "
+                "yes for the system")
+    if CLASSIFIED in applied:
+        data = _tailoring(ctx) or {}
+        if _assumption(data, SAP_ASSUMPTION) is False and kinds.isdisjoint(("intelligence", "sap")):
+            err("the system holds classified information within a SAP or SCI, and applies "
+                "neither the Intelligence Overlay nor the SAP authority's specifications "
+                f"({baseline_mod.ORG_FILE} obtained_overlays, kind intelligence or sap)")
+        if _assumption(data, DOMAINS_ASSUMPTION) is True and "cds" not in kinds:
+            err("the classified system communicates across security domains, and applies no "
+                f"cross domain solution overlay ({baseline_mod.ORG_FILE} obtained_overlays, "
+                "kind cds)")
+    return out

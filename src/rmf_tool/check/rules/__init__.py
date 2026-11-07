@@ -9,6 +9,7 @@ from collections.abc import Callable
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
+    assess_only,
     artifacts,
     assessment,
     assets,
@@ -27,6 +28,7 @@ from rmf_tool.check.rules import (
     journal,
     monitor,
     org_context,
+    nss_params,
     overlays,
     pentest,
     plans,
@@ -90,6 +92,11 @@ RULES: dict[str, Rule] = {
     "OVS-001": overlays.removal_authorities,
     "OVS-002": overlays.not_selected,
     "OVS-003": overlays.parameter_values,
+    "SPCOV-001": overlays.space_scope,
+    "SPCOV-002": overlays.space_policy_controls,
+    "OVLX-001": overlays.obtained,
+    "AONLY-001": assess_only.assess_only,
+    "PVAL-001": nss_params.nss_values,
     "TLR-001": tailoring.compensating,
     "TLR-002": tailoring.removal,
     "TLR-003": tailoring.assumptions,

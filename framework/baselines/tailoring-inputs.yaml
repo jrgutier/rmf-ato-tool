@@ -8,7 +8,9 @@
 #     hold revisits the selection (scoping, compensating, supplementing or an overlay).
 #   holds-true: the assumption is one the baselines do not address; a system where it holds
 #     supplements the baseline or applies an overlay.
-# An assumption with `overlay` applies only to a run that applies that overlay.
+# An assumption with `overlay` applies only to a run that applies that overlay. `controls`
+# lists what the overlay tailors out on the assumption (Space Platform Overlay Table 1); where
+# the assumption does not hold, S-2 revisits each of them.
 #
 # overlay_conditions: conditions an overlay names under which a control must be selected
 # (TLR-005). A run applying the overlay answers each; a condition that applies selects
@@ -83,6 +85,66 @@ assumptions:
     when: holds-false
     overlay: CNSSI1253F-ATT6-PRIVACY
     citation: {ref: CNSSI1253F-ATT6-PRIVACY, page: 11, anchor: "Workforce is required to complete privacy training and receive access permissions before"}
+  - id: AS-SPC-1
+    text: "CONSTRAINED RESOURCES: Due to limitations in space platform size, weight, and power resources, space platforms are not general-purpose systems."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-19.5, au-6.5, au-11, au-11.1, cm-2.3, si-2.2, si-2.3, si-2.4, si-4.23, si-15]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 3, anchor: "CONSTRAINED RESOURCES"}
+  - id: AS-SPC-2
+    text: "NO PHYSICAL MAINTENANCE: Once deployed on orbit, human physical access for maintenance is not possible."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ma-1, ma-2, ma-2.2, ma-3, ma-3.1, ma-3.2, ma-3.3, ma-3.4, ma-3.5, ma-3.6, ma-4, ma-4.1, ma-4.3, ma-4.4, ma-4.6, ma-4.7, ma-5, ma-5.1, ma-6, ma-6.1, pe-5, pe-8, pe-8.1, pe-8.3, sa-3.3, sa-4.10, sa-22, sc-15, sr-11.2]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 3, anchor: "NO PHYSICAL MAINTENANCE"}
+  - id: AS-SPC-3
+    text: "NO REMOVABLE MEDIA: The space platform does not have removable media that is accessible during operation."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-20.2, mp-1, mp-2, mp-6, mp-6.1, mp-6.2, mp-6.3, mp-7]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 4, anchor: "NO REMOVABLE MEDIA"}
+  - id: AS-SPC-4
+    text: "NO USER ACCOUNTS: Architecture does not utilize user accounts for identification and authentication specifically for space platform."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-2, ac-2.1, ac-2.2, ac-2.3, ac-2.4, ac-2.5, ac-2.7, ac-2.9, ac-2.11, ac-2.12, ac-2.13, ac-6.1, ac-6.2, ac-6.5, ac-6.7, ac-6.8, ac-6.10, ac-7, ac-10, au-9.4, au-9.6, au-14, au-14.1, au-14.3, au-16.1, ia-2, ia-2.1, ia-2.2, ia-2.5, ia-2.6, ia-2.8, ia-2.12, ia-4.4, ia-5.1, ia-5.2, ia-5.8, ia-5.16, ia-8, ia-8.1, ia-8.2, ia-8.4, ia-11, ia-12, ia-12.1, sa-8.27, si-4.20]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 4, anchor: "NO USER ACCOUNTS"}
+  - id: AS-SPC-5
+    text: "NON-TRADITIONAL NETWORKING: Although a space system may use TCP/IP protocols for ground communication transport and even possibly within a space platform bus, the space platform command and control does not utilize traditional networking capabilities."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-6.3, ac-17.3, sa-8.17, sc-7.3, sc-7.4, sc-7.7, sc-7.8, sc-7.15, sc-7.25, sc-7.28, sc-20, sc-21, sc-22, si-4.22]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 4, anchor: "NON-TRADITIONAL NETWORKING"}
+  - id: AS-SPC-6
+    text: "NON-TRADITIONAL WIRELESS: All communications with the space platform are inherently wireless, but not in the sense of ground-based network wireless access points."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-18, ac-18.1, ac-18.3, ac-18.4, ac-18.5, si-4.14, si-4.15]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 4, anchor: "NON-TRADITIONAL WIRELESS"}
+  - id: AS-SPC-7
+    text: "NOT GENERAL PURPOSE: Due to the operational nature and environment, as well as resource limitations for size, weight, and power, systems operating in the space platform should not be considered general-purpose systems."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-4.4, ac-8, ac-16, ac-16.6, ac-16.7, ac-21, ac-22, ac-23, au-6.3, au-6.6, au-7, au-7.1, au-12.1, au-16, au-16.2, cm-6.1, cm-6.2, cm-7.3, cm-11, cm-11.2, cp-9, cp-9.1, cp-9.2, cp-9.3, cp-9.5, cp-9.8, cp-10.2, ia-5.13, ia-5.14, ir-4.4, ir-4.7, ir-4.8, ir-4.11, ir-4.14, ir-6.1, ir-6.3, ir-7, ir-7.1, ir-7.2, ir-9, ir-9.3, ir-9.4, pl-9, ra-5.10, ra-5.11, sa-4.7, sa-8.20, sa-8.28, sa-9.1, sc-7.12, sc-17, sc-18, sc-18.1, sc-18.2, sc-18.3, sc-18.4, sc-23.5, si-5, si-5.1, si-6.3, si-8, si-8.2, si-12.3, sr-8]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 5, anchor: "NOT GENERAL PURPOSE"}
+  - id: AS-SPC-8
+    text: "SPACE ENVIRONMENT: Risks arising from terrestrial or human-created disasters (e.g., fire, flood, and earthquake) do not apply for the space platform."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-5, ac-11, ac-11.1, ac-19, au-10, ca-8.3, cm-2.7, cp-6, cp-6.1, cp-6.2, cp-6.3, cp-7, cp-7.1, cp-7.2, cp-7.3, cp-7.4, cp-8, cp-8.1, cp-8.2, cp-8.3, cp-8.4, cp-8.5, ia-6, mp-3, mp-4, mp-5, pe-2, pe-3, pe-3.1, pe-4, pe-12, pe-13, pe-13.1, pe-13.2, pe-13.4, pe-15, pe-15.1, pe-16, pe-17, pe-22, pe-23, sa-9.8]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 5, anchor: "SPACE ENVIRONMENT"}
+  - id: AS-SPC-9
+    text: "UNCREWED: The space platform's scope is for uncrewed platforms, so any direct personnel interaction is not possible."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [ac-17.9, ia-12.2, ia-12.3, ia-12.4, ps-1, ps-2, ps-3, ps-3.4, ps-4, ps-4.1, ps-4.2, ps-5, ps-6, ps-6.3, ps-7, ps-8, ps-9, sa-21, si-4.19]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 5, anchor: "UNCREWED"}
+  - id: AS-SPC-10
+    text: "USER TRAINING: Operational components within the space platform are not typically involved in the training of system users."
+    when: holds-false
+    overlay: CNSSI1253F-ATT2-SPACE
+    controls: [at-1, at-2, at-2.2, at-2.3, at-2.4, at-2.5, at-2.6, at-3, at-3.1, at-3.2, at-4, at-6, cp-3, cp-3.1, ir-2, ir-2.1, ir-2.2, ir-9.2, pl-4, pl-4.1, sa-8.32, sa-16, sr-11.1]
+    citation: {ref: CNSSI1253F-ATT2-SPACE, page: 5, anchor: "USER TRAINING"}
 overlay_conditions:
   - overlay: CNSSI1253E-ATT5-CLASSIFIED
     id: wireless
@@ -104,3 +166,37 @@ overlay_conditions:
     question: Does the organization intend to implement capabilities to determine if organizational data has been exfiltrated or improperly removed from the organization?
     controls: [si-20]
     citation: {ref: CNSSI1253E-ATT5-CLASSIFIED, page: 43, anchor: "If the organization intends to implement capabilities on its systems or system components"}
+# policy_controls: controls a policy requires of every system an overlay applies to; each maps
+# a CNSSP 12 duty to the Space Platform Overlay controls whose guidance carries it (overlay
+# pages in the comment). S-2 may not tailor them out (SPCOV-002).
+policy_controls:
+  - id: PC-SPC-1
+    overlay: CNSSI1253F-ATT2-SPACE
+    authority: CNSSP 12
+    text: Space NSS are designed to adapt to evolving cybersecurity threats and operate through related attacks.
+    controls: [cp-12, si-13, si-17]  # Safe Mode p. 30, Predictable Failure Prevention p. 64, Fail-Safe Procedures p. 66
+    citation: {ref: CNSSP12, page: 6, anchor: "designed to adapt to evolving cybersecurity threats and operate through"}
+  - id: PC-SPC-2
+    overlay: CNSSI1253F-ATT2-SPACE
+    authority: CNSSP 12
+    text: Space NSS implement cyber defense services, including on-board intrusion detection and intrusion prevention systems.
+    controls: [si-4.7, si-4.13]  # on-orbit IDS response p. 62
+    citation: {ref: CNSSP12, page: 8, anchor: "Space NSS and services must implement cyber defense services, including on-board"}
+  - id: PC-SPC-3
+    overlay: CNSSI1253F-ATT2-SPACE
+    authority: CNSSP 12
+    text: Space NSS implement a secure boot process using a hardware root of trust that restores the vehicle to a known trusted state.
+    controls: [sc-51, si-7.6, si-7.12]  # secure boot and root of trust p. 61, rollback to a known-good image p. 64
+    citation: {ref: CNSSP12, page: 8, anchor: "Space NSS and services must implement a secure boot process using a"}
+  - id: PC-SPC-4
+    overlay: CNSSI1253F-ATT2-SPACE
+    authority: CNSSP 12
+    text: Space NSS implement a process to securely develop and deploy software and firmware patches and updates.
+    controls: [si-2, sa-10, si-7.12]  # integrity of an update before it runs on the vehicle p. 64
+    citation: {ref: CNSSP12, page: 8, anchor: "Space NSS and services must implement a process to securely develop and"}
+  - id: PC-SPC-5
+    overlay: CNSSI1253F-ATT2-SPACE
+    authority: CNSSP 12
+    text: Space NSS implement TRANSEC measures in accordance with CNSSP 3 and a System TRANSEC Plan approved by the cognizant AO.
+    controls: [sc-8.3, sc-8.4, sc-40]  # "The AO should consult the System TRANSEC Plan" p. 56, p. 59
+    citation: {ref: CNSSP12, page: 8, anchor: "Space NSS and services must implement TRANSEC measures in accordance with"}

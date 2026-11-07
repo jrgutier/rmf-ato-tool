@@ -1,0 +1,12 @@
+rule: AONLY-001
+bases: [minimal]
+description: an IT service below the system level is connected with no acceptance recorded
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: system_type.value
+    value: it-service
+expect:
+  errors: [AONLY-001]
+  messages:
+    - "the it-service is below the system level and is accepted into an authorized computing environment through the ISSM's review; authorizations.yaml records no acceptance"

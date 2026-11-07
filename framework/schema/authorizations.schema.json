@@ -70,6 +70,92 @@
       "items": {
         "$ref": "#/$defs/iscm_assessment"
       }
+    },
+    "acceptances": {
+      "title": "Assess Only: IT below the system level security configured and reviewed by the ISSM, under the direction of the AO, for acceptance into or connection to an authorized computing environment (DoDI 8500.01 pp. 41, 49)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "reviewed_by",
+          "directed_by",
+          "secure_configuration",
+          "environment",
+          "date",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ACC-\\d{3}$"
+          },
+          "reviewed_by": {
+            "title": "The cognizant ISSM who reviewed the security configuration",
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "directed_by": {
+            "title": "The AO, or the AODR acting for the AO, under whose direction the ISSM reviewed it",
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          },
+          "secure_configuration": {
+            "title": "The outcome of the ISSM's review of the security configuration",
+            "enum": [
+              "approved",
+              "not-approved"
+            ]
+          },
+          "environment": {
+            "title": "The authorized computing environment (an IS enclave with an ATO) it is accepted into or connected to",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "authorization"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "authorization": {
+                "title": "The environment's ATO: its decision type and date",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "decision",
+                  "date"
+                ],
+                "properties": {
+                  "decision": {
+                    "type": "string",
+                    "pattern": "^AD-[A-Z]+$"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              }
+            }
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {

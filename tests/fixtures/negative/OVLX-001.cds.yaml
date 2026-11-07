@@ -1,0 +1,125 @@
+rule: OVLX-001
+bases:
+- minimal
+description: a classified system connected across security domains applies no CDS overlay
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value:
+  - CNSSI1253E-ATT5-CLASSIFIED
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: assumptions
+  value:
+  - id: AS-BL-1
+    holds: true
+    rationale: Field reports persist for days on the relay.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-2
+    holds: true
+    rationale: Several analysts use the relay concurrently.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-3
+    holds: true
+    rationale: Reports are shared on need to know.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-4
+    holds: true
+    rationale: The relay is a networked general-purpose host.
+    sources:
+    - INT-028.A2
+  - id: AS-BL-5
+    holds: true
+    rationale: The program runs the controls with enclave support.
+    sources:
+    - INT-028.A2
+  - id: AS-NSS-1
+    holds: true
+    rationale: The insider threat is in the risk assessment.
+    sources:
+    - INT-028.A2
+    - ART-RA
+  - id: AS-NSS-2
+    holds: true
+    rationale: APT targeting is in the risk assessment.
+    sources:
+    - INT-028.A2
+    - ART-RA
+  - id: AS-NSS-3
+    holds: true
+    rationale: The NSS baseline additions apply.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-1
+    holds: false
+    rationale: The relay processes no classified information.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-2
+    holds: false
+    rationale: No information needs specialized legal protection.
+    sources:
+    - INT-028.A2
+  - id: AS-ADD-3
+    holds: true
+    rationale: The relay has no cross-domain connection.
+    sources:
+    - INT-028.A2
+  - id: AS-CLS-1
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-CLS-2
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-CLS-4
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+  - id: AS-CLS-3
+    holds: true
+    rationale: Fixture answer.
+    sources:
+    - INT-028.A2
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: overlay_conditions
+  value:
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    condition: wireless
+    applies: false
+    sources:
+    - INT-028.A2
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    condition: mobile-devices
+    applies: false
+    sources:
+    - INT-028.A2
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    condition: external-outside-us
+    applies: false
+    sources:
+    - INT-028.A2
+  - overlay: CNSSI1253E-ATT5-CLASSIFIED
+    condition: data-tainting
+    applies: false
+    sources:
+    - INT-028.A2
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - OVLX-001
+  also:
+  - SYSD-001
+  - TLR-003
+  messages:
+  - the classified system communicates across security domains, and applies no cross domain solution overlay

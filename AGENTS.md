@@ -29,7 +29,7 @@ fork owns. A fork may delete `examples/`.
 |---|---|---|
 | `src/rmf_tool/` | upstream | the `rmf` CLI (Python, `uv`) |
 | `tests/` | upstream | unit, integration, e2e (`slow`), agent lane (`agent`, local only) |
-| `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, 22 personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
+| `framework/` | upstream | RMF YAML: phases, milestones, reviews, steps, 47 tasks, 27 personas, artifacts; `schema/` holds the framework and run-data JSON schemas |
 | `playbooks/` | upstream | one playbook per RMF task, plus `00-run-protocol.md` and `_shared/` |
 | `personas/` | upstream | persona cards, one per DoD RMF role |
 | `templates/` | upstream | artifact, interview, journal and workspace templates |

@@ -298,6 +298,12 @@ def assumptions(ctx: Context) -> list[RunFinding]:
         if diverges and untouched:
             err(f"the assumption {aid} does not hold, and no tailoring action revisits "
                 f"{', '.join(untouched)}")
+        # The Space Platform Overlay tailors out Table 1's Associated Controls on each of its
+        # assumptions: where one fails, they "should be revisited and considered for inclusion".
+        tailored_out = sorted(c for c in spec.get("controls") or () if c not in acted)
+        if diverges and tailored_out:
+            err(f"the assumption {aid} does not hold, and the controls the overlay tailors out "
+                f"on it are not revisited: {', '.join(tailored_out)}")
         if applies and not controls and not named and not no_change:
             err(f"the assumption {aid} applies, so additional controls are likely needed, and "
                 "no control, overlay or revisited-no-change outcome is named")

@@ -1,0 +1,16 @@
+rule: AONLY-001
+bases: [minimal]
+description: an IT service whose configuration the program manager reviewed
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: system_type.value
+    value: it-service
+  - op: set_field
+    file: artifacts/data/authorizations.yaml
+    path: acceptances
+    value: [{id: ACC-001, reviewed_by: PER-PM, directed_by: PER-AO, secure_configuration: approved, environment: {name: Analysis enclave, authorization: {decision: AD-ATO, date: "2026-09-01"}}, date: "2026-10-01", sources: [INT-028.A2]}]
+expect:
+  errors: [AONLY-001]
+  messages:
+    - "ACC-001: the security configuration is reviewed by PER-PM, not the cognizant ISSM"
