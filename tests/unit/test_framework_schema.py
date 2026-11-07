@@ -29,7 +29,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
                      "requirements", "system-description", "sar-summary",
-                     "org-context", "disposal"}
+                     "org-context", "disposal", "cloud"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -369,7 +369,8 @@ RUN_EXAMPLES.update({
         ("ssp-records", "space_nss", "maybe"),
         ("system-description", "ownership", "leased"),
         ("sar-summary", "assessment_type", "spot-check"),
-        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]))
+        ("org-context", "roles", [{"id": "RA-01", "role": "PER-AO", "citizenship": "dual"}]),
+        ("cloud", "mission_impact_level", {"level": "IL3"}))
 })
 RUN_EXAMPLES["disposal"] = (
     {"end_state": "Sanitized and removed", "environment": {"restored_to": "original"},

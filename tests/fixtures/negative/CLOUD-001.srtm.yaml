@@ -1,0 +1,16 @@
+rule: CLOUD-001
+bases:
+- minimal
+description: an IL4 mission owner reads only the SSP
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.inheritance.documents
+  value:
+  - ssp
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - "CSO-01: at IL4 the mission owner uses the CSO's SSP and SRTM to understand control implementation
+    guidance, not ssp"

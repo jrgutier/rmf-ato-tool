@@ -1,0 +1,15 @@
+rule: CLOUD-001
+bases:
+- minimal
+description: a negotiated measure stays out of the contract
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.additional_measures.0.in_contract
+  value: false
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: the additional security measure Customer-managed encryption keys is not documented in the
+    contract agreement with the IT service provider'

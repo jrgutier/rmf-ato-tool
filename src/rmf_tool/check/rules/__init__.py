@@ -14,6 +14,7 @@ from rmf_tool.check.rules import (
     assets,
     authorization,
     categorize,
+    cloud,
     config,
     connections,
     consistency,
@@ -167,6 +168,7 @@ RULES: dict[str, Rule] = {
     **dict(pentest.rules()),
     **dict(secureconfig.rules()),
     **dict(governance.rules()),
+    **dict(cloud.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

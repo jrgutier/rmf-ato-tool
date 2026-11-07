@@ -1,0 +1,23 @@
+rule: CLOUD-002
+bases:
+- minimal
+description: IL2 for data whose disclosure is serious
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: mission_impact_level
+  value:
+    level: IL2
+    data:
+    - public
+    disclosure_effect: serious
+    determined_by: PER-AO
+    date: '2026-03-01'
+    sources:
+    - INT-005.A1
+expect:
+  errors:
+  - CLOUD-002
+  messages:
+  - IL2 accommodates data whose unauthorized disclosure could be expected to have a limited adverse 
+    effect, not a serious one

@@ -1,0 +1,15 @@
+rule: CLOUD-001
+bases:
+- minimal
+description: the provisional authorization is recorded as a conditional ATO
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.1.decision
+  value: AD-ATOC
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: a FedRAMP or DoD provisional authorization is considered a valid authorization to operate;
+    LA-02 records AD-ATOC'

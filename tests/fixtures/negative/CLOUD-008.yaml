@@ -1,0 +1,14 @@
+rule: CLOUD-008
+bases:
+- minimal
+description: an oral approval of the penetration test
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: events.0.approval.written
+  value: false
+expect:
+  errors:
+  - CLOUD-008
+  messages:
+  - "EVT-01: the mission owner's written approval precedes the penetration-test"

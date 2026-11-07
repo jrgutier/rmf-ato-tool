@@ -502,3 +502,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
 - Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
 - Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: references, rules
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities have empty cells, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the text extractor drops, while the ● and ○ keys survive; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and the paragraph text for each activity (Att 3, 3.a to 3.d) agrees with it row by row.
+- Rule: When a table's cells are empty in references/text but its key names a marker, read the PDF page before deciding the rows are unconstrained.
+- Promotion: none — which glyphs an extractor drops is a property of one PDF; the agreement of the table with its own paragraphs is checked by reading, not by a rule.

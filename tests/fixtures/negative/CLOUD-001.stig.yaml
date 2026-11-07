@@ -1,0 +1,15 @@
+rule: CLOUD-001
+bases:
+- minimal
+description: the CSP follows its own hardening guide
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.configuration_guidance
+  value:
+  - other
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - 'CSO-01: CSP systems comply with configuration guidance by using STIGs or SRGs, not other'

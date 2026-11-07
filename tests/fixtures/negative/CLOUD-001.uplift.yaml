@@ -1,0 +1,22 @@
+rule: CLOUD-001
+bases:
+- minimal
+description: the PM, not the DoD Sponsor, asks DISA for the uplift
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.authorization.path
+  value: uplift
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: offerings.0.authorization.uplift_request
+  value:
+    requested_by: PER-PM
+    via: dcas
+    date: '2025-09-01'
+expect:
+  errors:
+  - CLOUD-001
+  messages:
+  - "CSO-01: uplifting an IL2 offering to IL4/5 needs a DoD Sponsor's request to DISA through the DoD
+    Cloud Authorization Services"
