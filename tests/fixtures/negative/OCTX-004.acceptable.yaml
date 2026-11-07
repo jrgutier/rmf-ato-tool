@@ -1,0 +1,15 @@
+rule: OCTX-004
+bases:
+- minimal
+description: an actual relationship whose risk is not judged acceptable
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: external_entities.0.risk_acceptable
+  value: false
+expect:
+  errors:
+  - OCTX-004
+  messages:
+  - 'EXT-01: the ongoing risk of the relationship with Enterprise IT Services is neither determined acceptable
+    nor given a response'

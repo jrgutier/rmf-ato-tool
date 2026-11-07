@@ -1,0 +1,17 @@
+rule: OCTX-011
+bases:
+- minimal
+description: a posture review that leaves out technology changes
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: posture_reviews.0.considered
+  value:
+  - threats
+  - vulnerabilities
+  - mission
+expect:
+  errors:
+  - OCTX-011
+  messages:
+  - the posture reviews do not review technologies changes against the organizational risk posture

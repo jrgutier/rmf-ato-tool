@@ -496,7 +496,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
 - Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
 
-## L-0071 · 2026-11-07 · run: phase-11 · tags: rules, should
+## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: rules, should
 - Symptom: a first cut of PPROT-002 and PPROT-004 refused every contract award with no PPP update and every RFP without PPP countermeasures, though DoDI 5000.83 5.3.c.(2)(b) says lead systems engineers *should* do both; the register showed the items as plain lettered entries.
 - Root cause: the extractor cuts a lead-in from its items, so an item under a should lead-in reads like a will, and the modal sits in the lead-in's context, not in the item.
 - Fix: those clauses accept a recorded reason for not updating or a deviation on the RFP, and tests/unit/test_protection.py holds each permitted case.
