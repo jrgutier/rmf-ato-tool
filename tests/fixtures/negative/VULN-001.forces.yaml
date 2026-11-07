@@ -1,0 +1,27 @@
+rule: VULN-001
+bases:
+- minimal
+description: a directed action withheld without the cyberspace operations forces
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.1.response
+  value: withheld
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.1.withheld
+  value:
+    date: '2026-12-03'
+    coordinated_with:
+    - PER-SPONSOR
+    - PER-AO
+    reason: The patch would break the mission partner interface.
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: directed_actions.1.compliance_reports.0.status
+  value: withheld
+expect:
+  errors:
+  - VULN-001
+  messages:
+  - is not coordinated with the Component cyberspace operations forces

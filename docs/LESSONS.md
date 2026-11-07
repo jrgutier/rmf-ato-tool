@@ -509,3 +509,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: those clauses accept a recorded reason for not updating or a deviation on the RFP, and tests/unit/test_protection.py holds each permitted case.
 - Rule: Before writing a clause from a lettered item, read its lead-in; a clause from a should accepts a recorded reason, a clause from a will or must does not.
 - Promotion: none — the permitted-case tests hold it for these rules, and a register-wide check would need the lead-in's modal on each item, which the extractor does not record.
+
+## L-0073 · 2026-11-07 · run: phase-11 · tags: run-data, schema, trace
+- Symptom: valid_minimal failed TRACE-002 with "malformed trace token 'cve'" once conmon.yaml held `vulnerability_management.identification.sources: [cve, vendor-bulletins]` and `patching.sources`.
+- Root cause: TRACE-002 reads every key named `sources` anywhere in run data as a list of trace tokens, so a schema that names a list of origin kinds `sources` makes every run that fills it fail.
+- Fix: the lists became `identified_from` and `patch_sources`; a schema test asserts every `sources` property in framework/schema holds `#/$defs/source` items.
+- Rule: In a run-data schema, `sources` means trace tokens and nothing else; name any other list of origins for what it holds.
+- Promotion: check: tests/unit/test_framework_schema.py::test_sources_properties_hold_trace_tokens

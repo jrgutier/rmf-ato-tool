@@ -1,0 +1,17 @@
+rule: VULN-007
+bases:
+- minimal
+description: a provider's plan approved by the ISSM
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.provider_plan
+  value:
+    provider: Cloud provider
+    approved_by: PER-ISSM
+    date: '2026-10-01'
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - the vulnerability management plan of Cloud provider is not approved by the authorizing official

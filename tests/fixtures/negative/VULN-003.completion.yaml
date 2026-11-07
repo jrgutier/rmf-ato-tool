@@ -1,0 +1,16 @@
+rule: VULN-003
+bases:
+- minimal
+description: the system owner never told of completion
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vdp_reports.0.owner_informed
+  value:
+  - date: '2026-12-15'
+    about: progress
+expect:
+  errors:
+  - VULN-003
+  messages:
+  - the system owner is not informed of the completion of remediation

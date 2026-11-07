@@ -1,0 +1,16 @@
+rule: VULN-005
+bases:
+- minimal
+description: a fix verified by one scan alone
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: vulnerabilities.0.verification.scans
+  value:
+  - date: '2026-12-15'
+    result: absent
+expect:
+  errors:
+  - VULN-005
+  messages:
+  - successive vulnerability scans do not show the vulnerability remediated

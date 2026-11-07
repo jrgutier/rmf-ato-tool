@@ -1,0 +1,14 @@
+rule: VULN-007
+bases:
+- minimal
+description: a patch coverage scan by a tool the strategy lacks
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: vulnerability_management.patching.coverage_scan.tool
+  value: TOOL-99
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - the scan of the reach of automated patching names no tool of the strategy

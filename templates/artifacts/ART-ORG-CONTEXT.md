@@ -39,4 +39,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
      - P-6 "## Impact-level prioritization": how systems of the same impact level are
        placed in low, moderate and high sub-categories.
      - P-7 "## Organizational continuous monitoring strategy": the metrics, frequencies and
-       reporting every system's strategy (S-5) must implement. -->
+       reporting every system's strategy (S-5) must implement; and the Component's
+       vulnerability management program (DoDI 8531.01 2.10) that S-5 and M-3 read: the
+       organizations designated to direct and manage it and to coordinate with JFHQ-DODIN, the
+       asset, configuration, remediation and mitigation programs that support it, the
+       prioritization and scheduling plan for deploying patches, updates and directed
+       actions, the guidance to system owners on mitigation deployment and who may accept
+       risk, what the Component requires system owners to mitigate, and its audits of
+       patching, compliance and reporting. -->

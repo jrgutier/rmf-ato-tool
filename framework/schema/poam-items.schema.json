@@ -27,9 +27,9 @@
             "pattern": "^POAM-\\d{3}$"
           },
           "finding_ref": {
-            "description": "A SAR finding (FND-###), a STIG finding (STG-###) or an outside finding (EXF-###).",
+            "description": "A SAR finding (FND-###), a STIG finding (STG-###), an outside finding (EXF-###), a directed action (DIR-###), a VDP report (VDP-###) or an analyzed vulnerability (VUL-###).",
             "type": "string",
-            "pattern": "^(FND|STG|EXF)-\\d{3}$"
+            "pattern": "^(FND|STG|EXF|DIR|VDP|VUL)-\\d{3}$"
           },
           "control_id": {
             "$ref": "#/$defs/control_id"
@@ -49,6 +49,8 @@
               "conmon",
               "inspection",
               "audit",
+              "directed-action",
+              "vdp",
               "other"
             ]
           },
@@ -348,6 +350,661 @@
               },
               "date": {
                 "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "directed_actions": {
+      "title": "Orders and directives the system received and its response (M-3, EXT-DIRECTIVES)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "reference",
+          "issued_by",
+          "received_through",
+          "received",
+          "action",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^DIR-\\d{3}$"
+          },
+          "kind": {
+            "title": "Kind of order or directive: an operation, fragmentary, tasking or execute order, an IAVM vulnerability management alert or bulletin, or a CPCON change",
+            "enum": [
+              "opord",
+              "fragord",
+              "taskord",
+              "exord",
+              "vm-alert",
+              "vm-bulletin",
+              "cpcon"
+            ]
+          },
+          "reference": {
+            "title": "Number of the order, alert or bulletin",
+            "type": "string",
+            "minLength": 1
+          },
+          "issued_by": {
+            "title": "Authority that issued the directed action",
+            "enum": [
+              "CDRUSSTRATCOM",
+              "CDRUSCYBERCOM",
+              "JFHQ-DODIN",
+              "DoD-Component"
+            ]
+          },
+          "received_through": {
+            "title": "Channel through which the system received the order",
+            "enum": [
+              "NOSC",
+              "CSSP",
+              "Component-headquarters"
+            ]
+          },
+          "received": {
+            "$ref": "#/$defs/date"
+          },
+          "action": {
+            "title": "What the order directs the system to do",
+            "type": "string",
+            "minLength": 1
+          },
+          "implementers": {
+            "title": "Who implements the directed action: a persona, or a role DoDI 8530.01 names that has none",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/persona_id"
+                },
+                {
+                  "enum": [
+                    "commander",
+                    "supervisor",
+                    "project-lead",
+                    "network-administrator",
+                    "system-administrator",
+                    "user"
+                  ]
+                }
+              ]
+            }
+          },
+          "response": {
+            "title": "Implemented, tracked in a POA&M item, withheld after coordination, or not applicable to the system",
+            "enum": [
+              "implemented",
+              "poam",
+              "withheld",
+              "not-applicable"
+            ]
+          },
+          "not_applicable_reason": {
+            "title": "Why the order does not apply to the system",
+            "type": "string",
+            "minLength": 1
+          },
+          "implemented": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "change": {
+                "title": "Change log record that made a patch or configuration change",
+                "type": "string",
+                "pattern": "^CHG-\\d{3}$"
+              }
+            }
+          },
+          "poam_item": {
+            "title": "POA&M item that carries it",
+            "type": "string",
+            "pattern": "^POAM-\\d{3}$"
+          },
+          "withheld": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "coordinated_with",
+              "reason"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "coordinated_with": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "PER-SPONSOR",
+                    "PER-AO",
+                    "PER-AODR",
+                    "Component-cyberspace-forces"
+                  ]
+                },
+                "minItems": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "compliance_reports": {
+            "title": "Compliance status reported to the chain",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "to",
+                "through",
+                "status"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "to": {
+                  "enum": [
+                    "CDRUSCYBERCOM",
+                    "JFHQ-DODIN"
+                  ]
+                },
+                "through": {
+                  "enum": [
+                    "Component-reporting-chain",
+                    "Component-headquarters",
+                    "CSSP"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "compliant",
+                    "poam",
+                    "withheld",
+                    "not-applicable"
+                  ]
+                }
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "vdp_reports": {
+      "title": "Vulnerability disclosure reports that reached the system (M-3, EXT-VDP)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "received",
+          "received_from",
+          "summary",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^VDP-\\d{3}$"
+          },
+          "received": {
+            "$ref": "#/$defs/date"
+          },
+          "received_from": {
+            "title": "Who delivered the vulnerability disclosure report",
+            "enum": [
+              "DC3",
+              "JFHQ-DODIN",
+              "USCYBERCOM"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "validation": {
+            "title": "Validation of the reported vulnerability",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "date",
+              "result"
+            ],
+            "properties": {
+              "by": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "result": {
+                "enum": [
+                  "valid",
+                  "not-valid"
+                ]
+              }
+            }
+          },
+          "vulnerability": {
+            "title": "Vulnerability analysis record that rates its severity",
+            "type": "string",
+            "pattern": "^VUL-\\d{3}$"
+          },
+          "poam_item": {
+            "title": "POA&M item that carries it",
+            "type": "string",
+            "pattern": "^POAM-\\d{3}$"
+          },
+          "owner_informed": {
+            "title": "When the system owner was told of actions and completion",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "about"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "about": {
+                  "enum": [
+                    "progress",
+                    "completion"
+                  ]
+                }
+              }
+            }
+          },
+          "ao_advised": {
+            "title": "When the authorizing official was advised of the actions",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "to",
+              "date"
+            ],
+            "properties": {
+              "to": {
+                "$ref": "#/$defs/persona_id"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "vrmn_reports": {
+            "title": "Reports through the chain of command to DC3 and USCYBERCOM within VRMN",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "status"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "status": {
+                  "enum": [
+                    "open",
+                    "remediated",
+                    "mitigated",
+                    "not-valid"
+                  ]
+                }
+              }
+            }
+          },
+          "details_requested": {
+            "title": "Requests to DC3 for more information, through the chain of command",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "date",
+                "through"
+              ],
+              "properties": {
+                "date": {
+                  "$ref": "#/$defs/date"
+                },
+                "through": {
+                  "enum": [
+                    "USCYBERCOM",
+                    "Component-CIO"
+                  ]
+                }
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "vulnerabilities": {
+      "title": "Vulnerability analysis records: the analysis report per vulnerability (M-2, M-3)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "discovered",
+          "cvss",
+          "publicly_known",
+          "newly_discovered",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^VUL-\\d{3}$"
+          },
+          "name": {
+            "title": "Name of the vulnerability",
+            "type": "string",
+            "minLength": 1
+          },
+          "cve": {
+            "type": "string",
+            "pattern": "^CVE-\\d{4}-\\d{4,}$"
+          },
+          "advisory": {
+            "title": "Public advisory or bulletin naming it",
+            "type": "string",
+            "minLength": 1
+          },
+          "discovered": {
+            "$ref": "#/$defs/date"
+          },
+          "reported": {
+            "title": "When and to whom the vulnerability was reported",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "to"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "cvss": {
+            "title": "CVSS 3.1 score and qualitative severity rating",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "version",
+              "score",
+              "rating"
+            ],
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "rating": {
+                "enum": [
+                  "none",
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ]
+              }
+            }
+          },
+          "impact": {
+            "title": "Expected loss of confidentiality, integrity and availability if not remediated",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "confidentiality": {
+                "enum": [
+                  "none",
+                  "limited",
+                  "serious",
+                  "catastrophic",
+                  "cataclysmic"
+                ]
+              },
+              "integrity": {
+                "enum": [
+                  "none",
+                  "limited",
+                  "serious",
+                  "catastrophic",
+                  "cataclysmic"
+                ]
+              },
+              "availability": {
+                "enum": [
+                  "none",
+                  "limited",
+                  "serious",
+                  "catastrophic",
+                  "cataclysmic"
+                ]
+              }
+            }
+          },
+          "recommendation": {
+            "title": "Recommendation to correct the vulnerability",
+            "type": "string",
+            "minLength": 1
+          },
+          "publicly_known": {
+            "type": "boolean"
+          },
+          "newly_discovered": {
+            "type": "boolean"
+          },
+          "vep_submission": {
+            "title": "Submission toward the Vulnerabilities Equities Process",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "to": {
+                "enum": [
+                  "USCYBERCOM",
+                  "NSA-direct"
+                ]
+              },
+              "prior": {
+                "type": "boolean"
+              },
+              "reference": {
+                "title": "The earlier submission",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "remediation": {
+            "title": "Method chosen case by case, and the options and factors weighed",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "method",
+              "options",
+              "considers",
+              "poam_item"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "remediation",
+                  "mitigation"
+                ]
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "method",
+                    "description"
+                  ],
+                  "properties": {
+                    "method": {
+                      "enum": [
+                        "remediation",
+                        "mitigation"
+                      ]
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "minItems": 1
+              },
+              "considers": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "confidentiality",
+                    "integrity",
+                    "availability"
+                  ]
+                }
+              },
+              "factors": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [],
+                "properties": {
+                  "asset_value": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "exposure_factor": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "single_loss_expectancy": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "annual_rate_of_occurrence": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "annualized_loss_expectancy": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "total_cost_of_ownership": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                }
+              },
+              "poam_item": {
+                "title": "POA&M item that carries it",
+                "type": "string",
+                "pattern": "^POAM-\\d{3}$"
+              }
+            }
+          },
+          "verification": {
+            "title": "Verification of the fix on completion",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "scans"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "scans": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "date",
+                    "result"
+                  ],
+                  "properties": {
+                    "date": {
+                      "$ref": "#/$defs/date"
+                    },
+                    "result": {
+                      "enum": [
+                        "present",
+                        "absent"
+                      ]
+                    }
+                  }
+                }
+              },
+              "baseline_restored": {
+                "type": "boolean"
               }
             }
           },

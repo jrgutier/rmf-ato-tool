@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 201 rules, 36 repo-scope and 165 run-scope. Authoritative;
+# Rule registry (plan §6.5): 209 rules, 36 repo-scope and 173 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -2960,3 +2960,166 @@ rules:
     enforces:
       - REQ-DODCIO-DEVSECOPS-0067
       - REQ-DODI5000.81-0090
+  - id: VULN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action the system received has no response, or is implemented, tracked or withheld without what each needs
+    fixture: tests/fixtures/negative/VULN-001.yaml
+    hint: In poam/items.yaml directed_actions, record each order, alert or bulletin with response implemented (with its date, and a dow-order change where one made it), poam (with the POA&M item) withheld (coordinated with the requirements sponsor, the AO or AODR and the Component cyberspace operations forces), or not-applicable with not_applicable_reason.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0034
+      - REQ-DODCIO-RECIPROCITY-0165
+      - REQ-DODI8500.01-0148
+      - REQ-DODI8530.01-0144
+      - REQ-DODI8530.01-0145
+      - REQ-DODI8530.01-0184
+      - REQ-DODI8530.01-0196
+      - REQ-DODI8530.01-0229
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0262
+      - REQ-DODI8530.01-0265
+      - REQ-DODI8530.01-0266
+      - REQ-DODI8530.01-0314
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0101
+      - REQ-DODI8531.01-0102
+      - REQ-DODI8531.01-0103
+      - REQ-DODI8531.01-0137
+      - REQ-DOWI8430.01-0075
+      - REQ-DTM-24-001-0211
+      - REQ-DTM-24-001-0217
+  - id: VULN-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a directed action names no one who implements it, or its compliance status is not reported up the chain
+    fixture: tests/fixtures/negative/VULN-002.yaml
+    hint: Name the implementers of each directed action (personas, or the roles DoDI 8530.01 names without one, commander, supervisor, project-lead, network-administrator, system-administrator, user) and report its compliance status to CDRUSCYBERCOM through the Component reporting chain, on or after receipt, the last report agreeing with the response.
+    enforces:
+      - REQ-DODI8530.01-0027
+      - REQ-DODI8530.01-0230
+      - REQ-DODI8530.01-0255
+      - REQ-DODI8530.01-0256
+      - REQ-DODI8530.01-0268
+      - REQ-DODI8531.01-0104
+      - REQ-DTM-24-001-0215
+  - id: VULN-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability disclosure report is not validated, rated, planned, communicated or reported within VRMN
+    fixture: tests/fixtures/negative/VULN-003.yaml
+    hint: Validate each VDP report and report it within VRMN on or after validation, a not-valid one as not-valid; a valid one links a vulnerabilities record, a POA&M item with source_of_weakness vdp opened no earlier than receipt, owner notices through completion, the AO or AODR advised, and a VRMN report after completion.
+    enforces:
+      - REQ-DODI8531.01-0087
+      - REQ-DODI8531.01-0106
+      - REQ-DODI8531.01-0133
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0136
+      - REQ-DODI8531.01-0138
+      - REQ-DODI8531.01-0139
+      - REQ-DODI8531.01-0141
+      - REQ-DODI8531.01-0142
+      - REQ-DODI8531.01-0143
+      - REQ-SP800-61R3-0146
+  - id: VULN-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: an analyzed vulnerability is not rated on CVSS 3.1, its rating disagrees with its score, its impact is unassessed or it is not reported
+    fixture: tests/fixtures/negative/VULN-004.yaml
+    hint: Each vulnerabilities record carries cvss version 3.1 with a score and the Table 1 rating for it, the expected loss of confidentiality, integrity and availability, and the date it was reported, not before its discovery.
+    enforces:
+      - REQ-DODI8531.01-0135
+      - REQ-DODI8531.01-0148
+      - REQ-DODI8531.01-0153
+      - REQ-DODI8531.01-0161
+      - REQ-DODI8531.01-0162
+      - REQ-DODI8531.01-0186
+      - REQ-SP800-61R3-0138
+  - id: VULN-005
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: the fix of a vulnerability is not chosen case by case, not tracked, or not verified by successive scans on completion
+    fixture: tests/fixtures/negative/VULN-005.yaml
+    hint: Record remediation with the method chosen among the options weighed, the loss of confidentiality, integrity and availability considered, the six cost factors and the POA&M item; once the item is completed, verify on or after completion, restoring the baseline, with at least two successive scans, the last on or after completion finding it absent.
+    enforces:
+      - REQ-DODI5000.90-0105
+      - REQ-DODI8531.01-0077
+      - REQ-DODI8531.01-0112
+      - REQ-DODI8531.01-0168
+      - REQ-DODI8531.01-0169
+      - REQ-DODI8531.01-0180
+      - REQ-DODI8531.01-0181
+      - REQ-SP800-18R2-0198
+  - id: VULN-006
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-3
+    summary: a vulnerability that is not publicly known is not submitted toward the VEP, or one called public cites nothing
+    fixture: tests/fixtures/negative/VULN-006.yaml
+    hint: A vulnerabilities record with publicly_known false carries vep_submission to USCYBERCOM (NSA-direct for NSA), dated on or after discovery when newly_discovered is true, or for one not new prior set true with the reference of the earlier submission; publicly_known true cites a CVE or a public advisory.
+    enforces:
+      - REQ-DODI8531.01-0005
+      - REQ-DODI8531.01-0108
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0146
+  - id: VULN-007
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the continuous monitoring strategy lacks the vulnerability management process, its identification sources, tools across the life cycle, monthly scans or patch reach
+    fixture: tests/fixtures/negative/VULN-007.yaml
+    hint: conmon.yaml vulnerability_management lists the five DoD steps, the artifact behind configuration, asset, remediation and mitigation management, CVE as a source, incident reports cross-referenced with CVE, risk assessment data and vendor bulletins, tools of the strategy covering development to retirement, authenticated and non-authenticated scans at least monthly, and a patch coverage scan by a tool of the strategy; a provider's plan recorded there is approved by the AO or AODR.
+    enforces:
+      - REQ-DODI5000.83-0206
+      - REQ-DODI5000.83-0220
+      - REQ-DODI5000.87-0120
+      - REQ-DODI5000.90-0104
+      - REQ-DODI8510.01-0079
+      - REQ-DODI8531.01-0002
+      - REQ-DODI8531.01-0003
+      - REQ-DODI8531.01-0004
+      - REQ-DODI8531.01-0119
+      - REQ-DODI8531.01-0123
+      - REQ-DODI8531.01-0130
+      - REQ-DODI8531.01-0174
+      - REQ-DODI8531.01-0183
+      - REQ-DTM-24-001-0127
+  - id: PPSM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-18
+    summary: an Enterprise system is not registered in the DoD PPSM Registry for every connection of its boundary
+    fixture: tests/fixtures/negative/PPSM-001.yaml
+    hint: When an authorization deploys the system at enterprise scope, record ppsm in artifacts/data/registration.yaml with its registration date, number and every boundary connection.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0035
+      - REQ-DODI8500.01-0087
+      - REQ-DODI8500.01-0333
