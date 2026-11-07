@@ -310,9 +310,11 @@ def chain(ctx: Context) -> list[RunFinding]:
 def _provider_valid(record: Record, provider: Record, date: dt.date | None,
                     err: Callable[[Record, str], None]) -> None:
     """An authorization to use rests on a valid ATO of the provider (SP 800-37r2 pp. 163-164):
-    one with a termination date not passed on the decision date, or under a cATO."""
+    one with a termination date not passed on the decision date, or one whose termination date
+    is lifted, under a cATO or under ongoing authorization."""
     ends = _day(provider.get("termination_date"))
-    if ends is None and provider.get("continuous") is not True:
+    lifted = provider.get("continuous") is True or provider.get("ongoing") is True
+    if ends is None and not lifted:
         err(record, f"{record['decision']} records the termination_date of the provider's ATO, "
             "or continuous: true under a cATO")
     elif ends is not None and date is not None and ends < date:

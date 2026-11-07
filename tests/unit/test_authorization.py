@@ -292,6 +292,14 @@ def test_atu_needs_the_providers_completed_ato(minimal_run):
     assert _check(minimal_run, rules.chain) == ""
 
 
+def test_atu_rests_on_a_provider_ato_under_ongoing_authorization(minimal_run):
+    """Ongoing authorization lifts the provider's termination date (SP 800-37r2 p. 163)."""
+    _set(minimal_run, decision="AD-ATU")
+    _set(minimal_run, provider={"organization": "DISA", "decision": "AD-ATO",
+                                "date": "2026-01-01", "package": "eMASS 1", "ongoing": True})
+    assert "termination_date of the provider's ATO" not in _check(minimal_run, rules.chain)
+
+
 def test_common_control_authorization_needs_its_subject_and_provider(minimal_run):
     _set(minimal_run, decision="AD-CCA")
     assert "decides on common-controls, not system" in _check(minimal_run, rules.parties_valid)

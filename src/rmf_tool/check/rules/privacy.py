@@ -1,7 +1,7 @@
-"""Privacy rules of a system processing PII: PRIV-001 to PRIV-012, PASM-001 and PASM-002. Each
-stays quiet for a system that processes no PII (``Context.processes_pii``), PRIV-012's AO approval
-of the plans aside, for a task outside the run's scope, and about a file that is missing or
-unreadable where another rule reports it (RUN-ART-001, RUN-FM-001).
+"""Privacy rules of a system processing PII: PRIV-001 to PRIV-012, PASM-001 and PASM-002. Each stays
+quiet for a system that processes no PII (``Context.processes_pii``), for a task outside the run's
+scope, and about a file that is missing or unreadable where another rule reports it (RUN-ART-001,
+RUN-FM-001).
 
 Who does what follows the sources. DoDI 5400.16 makes the PIA, on DD Form 2930 (2930A when
 adapted), coordinated by the PM through the ISSM, the privacy representative and the records
@@ -563,22 +563,24 @@ def _touched(ctx: Context, aid: str, task: str) -> bool:
     return doc is not None and task in _list(_dict(doc.data).get("touched_by"))
 
 
-def _first_authorization(ctx: Context) -> dt.date | None:
-    """The date of the system's first decision that authorizes it, from the ledger."""
+def _first_authorization(ctx: Context, since: dt.date) -> dt.date | None:
+    """The date of the first decision that authorizes the system on or after ``since``, the AO's
+    approval of the plans: the authorization these plans feed. An earlier ATO a reauthorization
+    run carries in its ledger is not that decision."""
     effect = ledger.effects(ctx.run)
     dates = [_day(r.get("date")) for r in ledger.load(ctx.run) or ()
              if effect.get(str(r.get("decision"))) == "authorize"]
-    return min((d for d in dates if d is not None), default=None)
+    return min((d for d in dates if d is not None and d >= since), default=None)
 
 
 def saop_approval(ctx: Context) -> list[RunFinding]:
-    """PRIV-012: once S-6 has written ART-SSP, the AO or AODR has approved the plans, and for a
-    system processing PII the senior agency official for privacy (PER-PRIV, the role a designee
+    """PRIV-012: for a system processing PII, once S-6 has written ART-SSP, the AO or AODR has
+    approved the plans, and the senior agency official for privacy (PER-PRIV, the role a designee
     acts in) reviewed and approved the privacy plan first: the first such approval precedes the
     AO's or AODR's approval of the plans and the first authorization decision (SP 800-37r2 S-4
     and S-6, DoDI 5400.11 3.1.b.(4), CNSSI 1253 3.2.2.f.7)."""
     data = _record(ctx, SSP_RECORDS)
-    if data is None or "S-6" not in scope.active_tasks(ctx.run) \
+    if not ctx.processes_pii or data is None or "S-6" not in scope.active_tasks(ctx.run) \
             or not _touched(ctx, "ART-SSP", "S-6"):
         return []
     by_ao = [_day(a.get("date")) for a in _dicts(data.get("approvals"))
@@ -588,8 +590,6 @@ def saop_approval(ctx: Context) -> list[RunFinding]:
         return [_finding("PRIV-012", "S-6 wrote ART-SSP, and no approval of the security and "
                          "privacy plans by the authorizing official or designated representative "
                          "is on record", SSP_RECORDS, "S-6")]
-    if not ctx.processes_pii:
-        return []
     plan = _dict(data.get("privacy_plan"))
     approvals = _dicts(plan.get("approvals"))
     if not approvals:
@@ -610,7 +610,7 @@ def saop_approval(ctx: Context) -> list[RunFinding]:
         out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
                             f"privacy plan on {first}, after the authorizing official's approval "
                             f"of the plans on {ao}", SSP_RECORDS, "S-6"))
-    decided = _first_authorization(ctx)
+    decided = _first_authorization(ctx, ao)
     if decided is not None and first > decided:
         out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
                             f"privacy plan on {first}, after the authorization decision of "
