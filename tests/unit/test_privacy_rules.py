@@ -156,6 +156,8 @@ def test_an_earlier_ato_in_the_ledger_is_not_the_authorization_the_plan_feeds(pi
         first.update(id="AUTH-000", date="2022-01-03",
                      authorization_termination_date="2025-01-03")
         d["records"].insert(0, first)
+        renewed = next(r for r in d["records"][1:] if r["decision"] != "AD-IATT")
+        renewed.update(basis="reauthorization", supersedes="AUTH-000")
     edit_yaml(pii / "artifacts/data/authorizations.yaml", old_ato)
     run = open_run(pii, REPO_ROOT)
     found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PRIV-012"]

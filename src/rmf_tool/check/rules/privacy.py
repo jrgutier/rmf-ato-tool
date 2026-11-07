@@ -563,14 +563,17 @@ def _touched(ctx: Context, aid: str, task: str) -> bool:
     return doc is not None and task in _list(_dict(doc.data).get("touched_by"))
 
 
-def _first_authorization(ctx: Context, since: dt.date) -> dt.date | None:
-    """The date of the first decision that authorizes the system on or after ``since``, the AO's
-    approval of the plans: the authorization these plans feed. An earlier ATO a reauthorization
-    run carries in its ledger is not that decision."""
+def _first_authorization(ctx: Context) -> dt.date | None:
+    """The date of the first decision that authorizes the system and that no later record
+    supersedes: the authorization these plans feed. The old ATO a reauthorization replaces is
+    not that decision."""
     effect = ledger.effects(ctx.run)
-    dates = [_day(r.get("date")) for r in ledger.load(ctx.run) or ()
-             if effect.get(str(r.get("decision"))) == "authorize"]
-    return min((d for d in dates if d is not None and d >= since), default=None)
+    records = ledger.load(ctx.run) or ()
+    replaced = {str(r.get("supersedes")) for r in records if r.get("supersedes")}
+    dates = [_day(r.get("date")) for r in records
+             if effect.get(str(r.get("decision"))) == "authorize"
+             and str(r.get("id")) not in replaced]
+    return min((d for d in dates if d is not None), default=None)
 
 
 def saop_approval(ctx: Context) -> list[RunFinding]:
@@ -610,7 +613,7 @@ def saop_approval(ctx: Context) -> list[RunFinding]:
         out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
                             f"privacy plan on {first}, after the authorizing official's approval "
                             f"of the plans on {ao}", SSP_RECORDS, "S-6"))
-    decided = _first_authorization(ctx, ao)
+    decided = _first_authorization(ctx)
     if decided is not None and first > decided:
         out.append(_finding("PRIV-012", f"the senior agency official for privacy approved the "
                             f"privacy plan on {first}, after the authorization decision of "
