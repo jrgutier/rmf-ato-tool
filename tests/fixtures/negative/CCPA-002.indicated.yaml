@@ -1,0 +1,10 @@
+rule: CCPA-002
+bases: [minimal]
+description: an offering that does not indicate the controls were assessed
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: offerings, value: [{id: OFR-001, controls: [AC-2], offered: '2026-11-25', authorization: AUTH-002, indicated: [implemented, authorized, available], access: {documentation: [ART-SSP, ART-SAR], tools: [eMASS]}, sources: [INT-012.A1]}]}
+expect:
+  errors: [CCPA-002]
+  also: []
+  messages:
+    - the common control provider does not indicate the controls are assessed

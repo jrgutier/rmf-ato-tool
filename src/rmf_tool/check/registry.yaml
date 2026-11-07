@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 225 rules, 36 repo-scope and 189 run-scope. Authoritative;
+# Rule registry (plan §6.5): 229 rules, 36 repo-scope and 193 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -861,6 +861,7 @@ rules:
       - REQ-SP800-37R2-0580
       - REQ-SP800-37R2-0581
       - REQ-SP800-37R2-0588
+      - REQ-SP800-37R2-0589
       - REQ-SP800-37R2-0593
       - REQ-SP800-37R2-0613
       - REQ-SP800-37R2-0614
@@ -952,6 +953,57 @@ rules:
       - REQ-DODI8510.01-0166
       - REQ-DODI8510.01-0189
       - REQ-DODI8510.01-0218
+  - id: AODM-012
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an authorization to use lacks the Receiving AO's connection approval, the copy to the Granting AO, or the site guidance, or dates them against the ATU
+    fixture: tests/fixtures/negative/AODM-012.yaml
+    hint: An ATU records connection_approval (by the AO who decides, not after the ATU), granting_ao_copy (not before the ATU) and site_guidance (an artifact of the run holding the authorized configuration, sites notified not before the ATU).
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0012
+      - REQ-DODCIO-RECIPROCITY-0058
+  - id: AODM-013
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a denial leaves an authorization of its subject standing, or lacks the POA&M revision with the system owner or common control provider
+    fixture: tests/fixtures/negative/AODM-013.yaml
+    hint: A denial lists in halts every authorization of the same subject in force on its date; AD-DATO and AD-DCCA record poam_revision by PER-AO or PER-AODR with PER-PM (system) or PER-CCP (common controls), naming items of the POA&M.
+    enforces:
+      - REQ-SP800-18R2-0340
+      - REQ-SP800-37R2-0594
+  - id: CCPA-001
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a common control decision does not say whether the controls are system-based, or the package of ones that are not lacks the record of implementation details
+    fixture: tests/fixtures/negative/CCPA-001.yaml
+    hint: A record with subject common-controls carries common_controls.system_based; when false, implementation_record names a file of an artifact, which rmf build lists in package/manifest.yaml.
+    enforces:
+      - REQ-SP800-37R2-0549
+  - id: CCPA-002
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: common controls are offered for inheritance before an authorization of them is in force, or without the provider's indication or access to documentation
+    fixture: tests/fixtures/negative/CCPA-002.yaml
+    hint: Each offerings item names an AD-CCA (or the system ATO of system-based controls) in force on its offered date, indicates implemented, assessed, authorized and available, and gives access to artifacts of the run.
+    enforces:
+      - REQ-SP800-37R2-0200
+      - REQ-SP800-37R2-0577
   - id: ENT-001
     scope: run
     severity: E
