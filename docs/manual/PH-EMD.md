@@ -691,6 +691,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
 | [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
@@ -709,6 +710,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - Every risk in rar.yaml has a response; mitigations are reflected in the POA&M.
 - Each risk weighs courses of action, or one evaluated as adequate, selects one that matches its response and states who is responsible, the effectiveness criteria, dependencies, timeline, monitoring plan and triggers, interim measures and who is told (RAR-003).
 - Where risks are not fully mitigated, the operators are told the potential impacts.
+- Each supply chain risk outside tolerance has an R-3 response in scrm.yaml with two or more alternatives and their acceptable level, and a decision among them taken at the level its reach calls for (SCRM-013).
 
 **Alignment**
 

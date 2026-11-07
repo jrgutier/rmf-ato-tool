@@ -1,0 +1,14 @@
+rule: SCRM-012
+bases:
+- minimal
+description: a critical supplier not monitored
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: monitoring.suppliers.0.supplier
+  value: SUP-01
+expect:
+  errors:
+  - SCRM-012
+  messages:
+  - critical supplier SUP-03 has no monitoring after award

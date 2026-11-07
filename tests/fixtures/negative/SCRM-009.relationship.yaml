@@ -1,0 +1,14 @@
+rule: SCRM-009
+bases:
+- minimal
+description: no relationship for a critical supplier
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.relationships.0.supplier
+  value: SUP-01
+expect:
+  errors:
+  - SCRM-009
+  messages:
+  - the plan defines no relationship between critical supplier SUP-03 and the system owner

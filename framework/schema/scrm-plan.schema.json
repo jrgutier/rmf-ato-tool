@@ -1,0 +1,773 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:scrm-plan",
+  "title": "runs/<run-id>/artifacts/data/scrm-plan.yaml",
+  "description": "The system C-SCRM plan (ART-SSP; S-4): plan content of SP 800-18r2, C-SCRM control decisions (S-2), suppliers in contingency and incident planning, supplier monitoring after award, C-SCRM training content, and the supply chain reporting the M-5 posture reports follow. SCRM-009 to SCRM-012 and SCRM-014 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan",
+    "controls",
+    "contingency",
+    "monitoring",
+    "training",
+    "reporting",
+    "urgent",
+    "sources"
+  ],
+  "properties": {
+    "plan": {
+      "title": "The system C-SCRM plan (SP 800-18r2)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirements",
+        "policy_implementations",
+        "approach",
+        "risk_tolerance",
+        "suppliers",
+        "relationships",
+        "control_considerations",
+        "profile",
+        "offboarding",
+        "considerations",
+        "information_types",
+        "approval",
+        "review_interval",
+        "sources"
+      ],
+      "properties": {
+        "requirements": {
+          "title": "The system's C-SCRM requirements",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^REQ-\\d{2,3}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "policy_implementations": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Policy implementations, requirements, constraints and implications specific to the system",
+          "x-enforces": [
+            "REQ-SP800-18R2-0064"
+          ]
+        },
+        "approach": {
+          "type": "string",
+          "minLength": 1,
+          "title": "The system's approach to managing supply chain risk across research, development, acquisition, delivery, integration, operations and disposal",
+          "x-enforces": [
+            "REQ-SP800-18R2-0065"
+          ]
+        },
+        "risk_tolerance": {
+          "type": "string",
+          "minLength": 1,
+          "title": "The system in the context of the organizational supply chain risk tolerance",
+          "x-enforces": [
+            "REQ-SP800-18R2-0066",
+            "REQ-SP800-18R2-0302"
+          ]
+        },
+        "suppliers": {
+          "title": "Supplier and component inventory with criticality to the system",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "supplier",
+              "criticality",
+              "roles"
+            ],
+            "properties": {
+              "supplier": {
+                "type": "string",
+                "pattern": "^SUP-\\d{2,3}$"
+              },
+              "criticality": {
+                "title": "Criticality to the system",
+                "enum": [
+                  "critical",
+                  "non-critical"
+                ]
+              },
+              "roles": {
+                "title": "Key individuals in supply chain-relevant roles",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-18R2-0067",
+                  "REQ-SP800-18R2-0127",
+                  "REQ-SP800-18R2-0291"
+                ]
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "relationships": {
+          "title": "Relationships between key suppliers and the system owner",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "supplier",
+              "responsibilities"
+            ],
+            "properties": {
+              "supplier": {
+                "type": "string",
+                "pattern": "^SUP-\\d{2,3}$"
+              },
+              "responsibilities": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Roles and responsibilities, expectations and supplier performance management"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "control_considerations": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Control implementation specific to supply chain considerations, diagrams and interdependencies",
+          "x-enforces": [
+            "REQ-SP800-161R1-0927",
+            "REQ-SP800-18R2-0068"
+          ]
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Supply chain profile, highlighting C-SCRM-relevant technologies",
+          "x-enforces": [
+            "REQ-SP800-18R2-0425"
+          ]
+        },
+        "offboarding": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Provisions for activities after a supplier relationship or partnership ends",
+          "x-enforces": [
+            "REQ-SP800-61R3-0121"
+          ]
+        },
+        "considerations": {
+          "title": "C-SCRM plan considerations of SP 800-18r2",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "applies",
+              "treatment"
+            ],
+            "properties": {
+              "kind": {
+                "title": "Consideration",
+                "enum": [
+                  "vendor-saas",
+                  "hybrid-or-cloud",
+                  "open-source",
+                  "non-taa-ict-ot",
+                  "unauthorized-resellers",
+                  "emerging-technology"
+                ]
+              },
+              "applies": {
+                "type": "boolean",
+                "title": "Whether it applies to the system"
+              },
+              "treatment": {
+                "type": "string",
+                "minLength": 1,
+                "title": "How the plan treats it, or why it does not apply"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "information_types": {
+          "title": "Information types the system and its in-boundary supply chain process",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^INF-\\d{2,3}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "approval": {
+          "title": "Approval of the plan",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "approved_by",
+            "pmo",
+            "date"
+          ],
+          "properties": {
+            "approved_by": {
+              "$ref": "#/$defs/persona"
+            },
+            "pmo": {
+              "title": "Coordination with the C-SCRM PMO",
+              "enum": [
+                "coordinated",
+                "no-pmo"
+              ]
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "review_interval": {
+          "$ref": "#/$defs/duration",
+          "title": "Interval at which the plan is reviewed and refreshed",
+          "x-enforces": [
+            "REQ-SP800-161R1-0121",
+            "REQ-SP800-161R1-0182"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-37R2-0550"
+      ]
+    },
+    "controls": {
+      "title": "C-SCRM control selection and tailoring (S-2)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisions",
+        "procurement",
+        "cloud",
+        "coordinated",
+        "sources"
+      ],
+      "properties": {
+        "decisions": {
+          "title": "C-SCRM controls selected or tailored",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "control",
+              "decision",
+              "rationale",
+              "cost",
+              "cost_of_not_implementing"
+            ],
+            "properties": {
+              "control": {
+                "type": "string",
+                "pattern": "^[a-z]{2}-\\d+(?:\\.\\d+)?$"
+              },
+              "decision": {
+                "title": "Decision",
+                "enum": [
+                  "selected",
+                  "tailored",
+                  "removed"
+                ]
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Rationale from the risk determination",
+                "x-enforces": [
+                  "REQ-SP800-161R1-1298",
+                  "REQ-SP800-161R1-1305"
+                ]
+              },
+              "cost": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Cost of implementing it"
+              },
+              "cost_of_not_implementing": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Cost of not implementing it",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0082",
+                  "REQ-SP800-161R1-0151"
+                ]
+              },
+              "owner": {
+                "$ref": "#/$defs/persona",
+                "title": "Who is responsible for its execution"
+              },
+              "plan": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Time- or event-phased plan for its implementation through the SDLC"
+              },
+              "accepted_by": {
+                "$ref": "#/$defs/persona"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0087",
+            "REQ-SP800-37R2-0135"
+          ]
+        },
+        "procurement": {
+          "title": "Control selection for a specific acquisition",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "supplier",
+              "controls",
+              "consulted",
+              "source_selection"
+            ],
+            "properties": {
+              "supplier": {
+                "type": "string",
+                "pattern": "^SUP-\\d{2,3}$"
+              },
+              "controls": {
+                "title": "C-SCRM and SP 800-53 controls selected for it",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z]{2}-\\d+(?:\\.\\d+)?$"
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "x-enforces": [
+                  "REQ-SP800-161R1-0221",
+                  "REQ-SP800-39-0094"
+                ]
+              },
+              "consulted": {
+                "title": "Information security personnel consulted",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/persona"
+                },
+                "minItems": 1
+              },
+              "source_selection": {
+                "title": "Source selection process",
+                "enum": [
+                  "best-value-tradeoff",
+                  "lpta",
+                  "other"
+                ]
+              }
+            }
+          }
+        },
+        "cloud": {
+          "title": "Cloud service providers: FedRAMP first",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "supplier",
+              "fedramp",
+              "beyond_fedramp"
+            ],
+            "properties": {
+              "supplier": {
+                "type": "string",
+                "pattern": "^SUP-\\d{2,3}$"
+              },
+              "fedramp": {
+                "title": "FedRAMP authorization status",
+                "enum": [
+                  "authorized",
+                  "in-process",
+                  "not-authorized"
+                ]
+              },
+              "beyond_fedramp": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Processes and controls FedRAMP does not address, to which SP 800-161 is applied"
+              }
+            }
+          }
+        },
+        "coordinated": {
+          "type": "boolean",
+          "title": "Security, privacy and supply chain officials coordinated the tailoring"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "contingency": {
+      "title": "Critical suppliers in contingency planning, incident response and disaster recovery",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activities",
+        "root_cause",
+        "compromise_criteria",
+        "sources"
+      ],
+      "properties": {
+        "activities": {
+          "title": "Planning and testing activities that include suppliers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "activity",
+              "suppliers"
+            ],
+            "properties": {
+              "activity": {
+                "title": "Activity",
+                "enum": [
+                  "contingency-planning",
+                  "incident-response",
+                  "disaster-recovery",
+                  "testing"
+                ]
+              },
+              "suppliers": {
+                "title": "Suppliers included",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^SUP-\\d{2,3}$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "root_cause": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How incident handling finds root causes that originate in the supply chain",
+          "x-enforces": [
+            "REQ-SP800-161R1-0285",
+            "REQ-SP800-61R3-0218"
+          ]
+        },
+        "compromise_criteria": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Criteria for when an incident is a supply chain compromise",
+          "x-enforces": [
+            "REQ-SP800-161R1-1238"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "monitoring": {
+      "title": "Monitoring of suppliers and supplied products after award",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suppliers",
+        "software",
+        "conmon",
+        "sources"
+      ],
+      "properties": {
+        "suppliers": {
+          "title": "Supplier monitoring",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "supplier",
+              "monitors",
+              "interval",
+              "triggers",
+              "disclosure"
+            ],
+            "properties": {
+              "supplier": {
+                "type": "string",
+                "pattern": "^SUP-\\d{2,3}$"
+              },
+              "monitors": {
+                "title": "What is monitored",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "compliance",
+                    "effectiveness",
+                    "change"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "interval": {
+                "$ref": "#/$defs/duration",
+                "title": "Interval at which the supplier is reviewed",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0291",
+                  "REQ-SP800-161R1-1395"
+                ]
+              },
+              "triggers": {
+                "title": "Off-cycle triggers of a reassessment",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "x-enforces": [
+                  "REQ-SP800-161R1-1336",
+                  "REQ-SP800-161R1-1395",
+                  "REQ-SP800-161R1-1397"
+                ]
+              },
+              "disclosure": {
+                "type": "string",
+                "minLength": 1,
+                "title": "How the supplier's identification and disclosure of vulnerabilities is validated",
+                "x-enforces": [
+                  "REQ-SP800-161R1-0286"
+                ]
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "software": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Continuous monitoring of deployed software for vulnerabilities and supply chain risks",
+          "x-enforces": [
+            "REQ-DOWI8430.01-0187"
+          ]
+        },
+        "conmon": {
+          "type": "string",
+          "minLength": 1,
+          "title": "How C-SCRM is integrated into the continuous monitoring program",
+          "x-enforces": [
+            "REQ-SP800-161R1-1351"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "training": {
+      "title": "C-SCRM content of awareness and role-based training",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "awareness",
+        "role_based",
+        "sources"
+      ],
+      "properties": {
+        "awareness": {
+          "type": "string",
+          "minLength": 1,
+          "title": "C-SCRM content of AT-2 literacy training",
+          "x-enforces": [
+            "REQ-SP800-161R1-0262",
+            "REQ-SP800-161R1-0273"
+          ]
+        },
+        "role_based": {
+          "title": "Role-based C-SCRM training",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "role",
+              "content"
+            ],
+            "properties": {
+              "role": {
+                "$ref": "#/$defs/persona"
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1,
+                "title": "C-SCRM content for the role"
+              }
+            }
+          },
+          "minItems": 1,
+          "x-enforces": [
+            "REQ-SP800-161R1-0263",
+            "REQ-SP800-161R1-0274",
+            "REQ-SP800-161R1-0295",
+            "REQ-SP800-161R1-0343"
+          ]
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "reporting": {
+      "title": "Supply chain reporting the plan sets for the M-5 posture reports",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "level",
+          "audience",
+          "content",
+          "frequency",
+          "format"
+        ],
+        "properties": {
+          "level": {
+            "title": "Level reported to",
+            "enum": [
+              "level-1",
+              "level-2",
+              "level-3"
+            ]
+          },
+          "audience": {
+            "title": "Audience that receives the report",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/persona"
+            },
+            "minItems": 1,
+            "x-enforces": [
+              "REQ-SP800-161R1-1398"
+            ]
+          },
+          "content": {
+            "title": "What it reports",
+            "type": "array",
+            "items": {
+              "enum": [
+                "extent",
+                "effectiveness",
+                "urgent-conditions",
+                "metrics",
+                "top-risks"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "x-enforces": [
+              "REQ-SP800-161R1-0175"
+            ]
+          },
+          "frequency": {
+            "$ref": "#/$defs/duration",
+            "title": "Reporting frequency"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Scope and format agreed with its audience",
+            "x-enforces": [
+              "REQ-SP800-161R1-0166"
+            ]
+          }
+        }
+      }
+    },
+    "urgent": {
+      "title": "Mission-critical threats and vulnerabilities that cannot reasonably be addressed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "notified",
+        "sources"
+      ],
+      "properties": {
+        "notified": {
+          "title": "Who is notified",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(PER-[A-Z0-9]+|dod-cio)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "persona": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "duration": {
+      "description": "ISO 8601 duration, such as P1Y or P90D.",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?$",
+      "minLength": 3
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    }
+  }
+}

@@ -92,6 +92,12 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    a table of role, persona ID, holder's title (not a personal name unless the fork gives
    one) and appointing authority, traced. Do not add the later sections; P-2 to P-7 append
    them (step 4 of "How these tasks run").
+   Write `artifacts/data/scrm-org.yaml` whole from `templates/data/scrm-org.yaml` (schema
+   `framework/schema/scrm-org.schema.json`) and fill its `governance` now: an executive persona
+   leads C-SCRM, `pmo` is dedicated or matrixed, PER-AO is among `owners` (an AO may delegate
+   day-to-day risk to `delegates` such as PER-AODR), the council and its charter, and a C-SCRM
+   duty for PER-PM, PER-DEV, PER-LSE or PER-ISSE, PER-CIO, PER-CISO and PER-RE (SCRM-021).
+   Leave the other sections as the template's placeholders until their task.
 6. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
    until 0 errors. **Journal** a CHECKPOINT.
 
@@ -115,6 +121,7 @@ At least 1 interview with `task: P-1`.
 | File | Front-matter | Notes |
 |---|---|---|
 | `artifacts/ART-ORG-CONTEXT.md` | `artifact_id: ART-ORG-CONTEXT`, `produced_by_task: P-1`, `touched_by: [P-1]` | the role assignments section only |
+| `artifacts/data/scrm-org.yaml` | none (data) | C-SCRM governance; the other sections are filled by P-2 to P-7 |
 
 ### Facts
 
@@ -175,6 +182,12 @@ Purpose: Establish the organization's risk management strategy, including how it
    maintenance approach. S-5 records it for the system in `conmon.yaml#risk_assessment` and
    M-4 applies it. Keep the risk tolerance
    concrete; R-2 and R-4 compare the system's risk with it.
+   Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
+   to 1-4 (OT suppliers in scope; threat, vulnerability, impact and likelihood assumptions
+   each refined at P-14; which threat source kinds are addressed; appetite set at level-1 and
+   tolerance with thresholds at level-2 and level-3; priorities; the nine framing outputs),
+   the `policy`, `strategy`, `levels`, `process`, `maturity` and `training` (SCRM-020,
+   SCRM-022, SCRM-024, SCRM-027 to SCRM-029). The policy is the C-SCRM item of EXT-ORG-POLICY.
 5. **Build and check** with `--task P-2`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -251,6 +264,10 @@ Purpose: Assess organization-wide security and privacy risk, including supply ch
    `## Organization-level risk assessment` with the main risks, their likelihood and
    impact on the SP 800-30 scale, and the update cycle, traced. System risk assessments
    (P-14) start from these results.
+   Rewrite `artifacts/data/scrm-org.yaml` whole with `sharing`: each SP 800-150 key practice,
+   the communities, an executive FASC liaison, the scope approved per supplier, and `feeds`
+   naming P-3 and P-14, where shared supply chain risk information arrives as EXT-THREAT
+   (SCRM-023).
 5. **Build and check** with `--task P-3`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -331,6 +348,10 @@ Purpose: Establish and publish organizationally-tailored control baselines and/o
    `## Organizationally tailored baselines and profiles` with each baseline or overlay,
    its scope and its approval, or a traced sentence that none apply. S-1 and S-2 read this
    section.
+   Rewrite `artifacts/data/scrm-org.yaml` whole with a `response_framework` entry at level-1
+   and at level-2: threat source, event, vulnerability and outcome, likelihood, impact and
+   exposure, mitigations with cost and effectiveness, and changes to common control
+   baselines (SCRM-026).
 5. **Build and check** with `--task P-4`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -558,6 +579,10 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-7` to `touched_by` and append
    `## Organizational continuous monitoring strategy`, traced. S-5 builds the system
    strategy (`conmon.yaml`) to be consistent with this section.
+   Rewrite `artifacts/data/scrm-org.yaml` whole with `measures`: stakeholders, goals validated
+   with them, measures of implementation, efficiency and effectiveness, and mission impact,
+   KPIs or KRIs against appetite and against tolerance, each with a target, and the
+   enterprise risk monitoring strategy (SCRM-025).
 5. **Build and check** with `--task P-7`, then **journal** a CHECKPOINT.
 
 ### Interviews

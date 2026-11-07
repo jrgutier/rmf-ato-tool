@@ -1,0 +1,16 @@
+rule: SCRM-012
+bases:
+- minimal
+description: monitoring without change
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: monitoring.suppliers.0.monitors
+  value:
+  - compliance
+  - effectiveness
+expect:
+  errors:
+  - SCRM-012
+  messages:
+  - monitoring of SUP-03 does not cover change

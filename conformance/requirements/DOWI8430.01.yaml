@@ -322,7 +322,9 @@ requirements:
     locator: "2.5.c"
     context: "UNDER SECRETARY OF WAR FOR INTELLIGENCE AND SECURITY The USW(I&S):"
     statement: "c. Directs all-source intelligence and counterintelligence analysis of information and communications technology supply chain threats and ensures methods for sharing threat information are integrated into development processes in accordance with DoDI 5200.44."
-    status: "candidate"
+    status: "partial"
+    reason: "All-source intelligence analysis is directed by USW(I&S), outside a run; the run consumes it as the all-source threat assessment SCRM-002 asks. DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-002", "fixture": "tests/fixtures/negative/SCRM-002.threat.yaml", "expect": "mission-critical functions but applies no TSN practice", "asserts": "All-source intelligence analysis of supply chain threats informs the all-source threat assessment practice for mission-critical functions", "claim": "constraint"}]
     work_item: "WI-130"
   - id: "REQ-DOWI8430.01-0041"
     citation: {"ref": "DOWI8430.01", "page": 8, "anchor": "Under the authority, direction, and control of the USW(I&S); under the authority,"}
@@ -450,7 +452,9 @@ requirements:
     locator: "2.8.g.(1)"
     context: "DOW COMPONENT HEADS The DoW Component heads: Ensure that:"
     statement: "(1) Software that provides a mission critical function or is a critical component in accordance with DoDI 5200.44, is protected to a level of assurance consistent with system criticality and its function in the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Each mission-critical function states the assurance its software is protected to (criticality.functions.assurance), free text; whether that is consistent with criticality is a judgment."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/criticality/properties/functions/items/properties/assurance", "asserts": "Software that provides a mission critical function is protected to a level of assurance consistent with system criticality", "claim": "presence"}]
     work_item: "WI-130"
   - id: "REQ-DOWI8430.01-0057"
     citation: {"ref": "DOWI8430.01", "page": 10, "anchor": "Such protections and the generation of assurance evidence are automated to the"}
@@ -1499,7 +1503,9 @@ requirements:
     locator: "3.5.h.(1)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(1) DoW Components will continuously monitor software (e.g., COTS, custom-developed) deployed on DoW networks for vulnerabilities and supply chain risks in alignment with supply chain risk management policies."
-    status: "candidate"
+    status: "partial"
+    reason: "monitoring.software states how deployed software is continuously monitored for vulnerabilities and supply chain risks, free text; DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/monitoring/properties/software", "asserts": "Continuously monitor deployed software for vulnerabilities and supply chain risks", "claim": "presence"}]
     work_item: "WI-123"
   - id: "REQ-DOWI8430.01-0188"
     citation: {"ref": "DOWI8430.01", "page": 21, "anchor": "DoW Components will require vendors and developers to report any discovery of"}
@@ -1507,7 +1513,9 @@ requirements:
     locator: "3.5.h.(2)"
     context: "SECURE SOFTWARE DEVELOPMENT AND SUPPLY CHAIN INTEGRITY"
     statement: "(2) DoW Components will require vendors and developers to report any discovery of critical or actively exploited vulnerabilities to the designated authority within a timeframe specified by the DoW CIO as a condition for deployment or continued use."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRM-007 asks a reporting term of the contract for vulnerabilities and incidents; the DoW CIO's timeframe and the condition for deployment are in the term's text, which no rule reads. DoWI 8430.01 is not tier 1."
+    evidence: [{"kind": "rule", "target": "SCRM-015", "fixture": "tests/fixtures/negative/SCRM-015.reporting.yaml", "expect": "the contract carries no", "asserts": "Vendors and developers are required by a reporting term the contract carries to report discovery of critical or actively exploited vulnerabilities", "claim": "constraint"}]
     work_item: "WI-105"
   - id: "REQ-DOWI8430.01-0189"
     citation: {"ref": "DOWI8430.01", "page": 21, "anchor": "Risk Management Considerations for Third-Party and Open-Source Software."}

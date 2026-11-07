@@ -28,7 +28,7 @@ EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-
                      "service-agreements", "ssp-records",
                      "changes", "posture-reports", "plan-reviews", "capabilities",
                      "sar-report", "ra",
-                     "requirements"}
+                     "requirements", "scrm", "scrm-acquisition", "scrm-plan", "scrm-org"}
 FRAMEWORK_DATA_SCHEMAS = {"baselines", "tailoring-inputs"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -365,7 +365,11 @@ RUN_EXAMPLES.update({
         ("contingency", "exercises", [{"id": "EX-1", "type": "drill"}]),
         ("incident-response", "reporting_paths", [{"case": "unknown"}]),
         ("service-agreements", "agreements", [{"id": "SVA-1", "role": "vendor"}]),
-        ("ssp-records", "space_nss", "maybe"))
+        ("ssp-records", "space_nss", "maybe"),
+        ("scrm", "suppliers", [{"id": "SUP-01", "kind": "friend"}]),
+        ("scrm-acquisition", "terms", [{"term": "handshake"}]),
+        ("scrm-plan", "plan", {"approval": {"pmo": "maybe"}}),
+        ("scrm-org", "levels", [{"level": "level-9"}]))
 })
 
 

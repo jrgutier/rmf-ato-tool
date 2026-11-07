@@ -488,3 +488,10 @@ with the next ID; never edit or delete an existing entry.
 - Fix: CONN-001 holds mission partner interconnections to the DISN connection process; REQ-DODI8530.01-0300 stays partial, with the drift stated, until the user rules on the reading.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
+
+## L-0070 · 2026-11-07 · run: phase-11 · tags: framework, runs
+- Symptom: adding ART-RA to the outputs of R-3, so R-3 could own the supply chain responses it writes to scrm.yaml, made the example run and valid_minimal fail AODM-001: the R-4 decision saw R-3 undone.
+- Root cause: task status is derived from `touched_by` of every output, so a new output reopens the task in every run that wrote the old outputs, including a run kept at an older contract.
+- Fix: R-3 lists ART-RA as an input only; SCRM-013 reads the response section of scrm.yaml once R-3 is in scope.
+- Rule: Add an artifact to a task's outputs only with a `framework_version` bump and `rmf run migrate` handling; a later task that fills a section of an existing data file takes the artifact as input.
+- Promotion: none — the p7 example check and test_base_has_no_findings already fail on it; the lesson records why.

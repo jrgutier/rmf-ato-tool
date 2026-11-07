@@ -1,0 +1,19 @@
+rule: SCRM-027
+bases:
+- minimal
+description: priorities do not consider vulnerabilities
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-org.yaml
+  path: frame.priorities.0.considered
+  value:
+  - appetite
+  - tolerance
+  - threats
+  - constraints
+  - criticality
+expect:
+  errors:
+  - SCRM-027
+  messages:
+  - the priorities and trade-offs do not consider vulnerabilities

@@ -1,0 +1,15 @@
+rule: SCRM-002
+bases:
+- minimal
+description: threat analysis of critical suppliers marked not required
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: criticality.focal_point.threat_analysis
+  value: not-required
+expect:
+  errors:
+  - SCRM-002
+  messages:
+  - threat analysis of suppliers of critical components is marked not required, yet the system has 
+    mission-critical functions

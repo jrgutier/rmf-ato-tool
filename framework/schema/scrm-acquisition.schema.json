@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rmf-tool:schema:scrm-acquisition",
+  "title": "runs/<run-id>/artifacts/data/scrm-acquisition.yaml",
+  "description": "C-SCRM in acquisition (ART-REQ; P-17): the C-SCRM requirements contracts carry, the contract terms, revalidation of suppliers, and supplier selection with due diligence and screening against prohibited supplier lists. SCRM-007 and SCRM-008 judge it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requirements",
+    "terms",
+    "revalidation",
+    "selection",
+    "sources"
+  ],
+  "properties": {
+    "requirements": {
+      "title": "C-SCRM requirements of requirements.yaml that contracts carry",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^REQ-\\d{2,3}$"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "x-enforces": [
+        "REQ-SP800-161R1-0209",
+        "REQ-SP800-161R1-1539"
+      ]
+    },
+    "terms": {
+      "title": "Contract terms for C-SCRM",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "term",
+          "requirements",
+          "statement",
+          "sources"
+        ],
+        "properties": {
+          "term": {
+            "title": "Kind of contract term",
+            "enum": [
+              "qualifying-condition",
+              "flow-down",
+              "revalidation",
+              "reporting",
+              "response-roles",
+              "termination"
+            ]
+          },
+          "requirements": {
+            "title": "Requirements the term carries",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^REQ-\\d{2,3}$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1,
+            "title": "The term as written for the solicitation and contract"
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "revalidation": {
+      "title": "Periodic revalidation of supplier adherence",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "methods",
+        "interval",
+        "sources"
+      ],
+      "properties": {
+        "methods": {
+          "title": "Validation and revalidation methods",
+          "type": "array",
+          "items": {
+            "enum": [
+              "certification",
+              "site-visit",
+              "third-party-assessment",
+              "self-attestation"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "x-enforces": [
+            "REQ-SP800-161R1-0083",
+            "REQ-SP800-161R1-0235",
+            "REQ-SP800-161R1-0290"
+          ]
+        },
+        "interval": {
+          "$ref": "#/$defs/duration",
+          "title": "Revalidation interval"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
+      }
+    },
+    "selection": {
+      "title": "Supplier selection: due diligence and screening",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "supplier",
+          "due_diligence",
+          "approved_source",
+          "screening",
+          "selected",
+          "other_agency_requirements",
+          "vendor",
+          "ownership",
+          "technology_relationships",
+          "sources"
+        ],
+        "properties": {
+          "supplier": {
+            "type": "string",
+            "pattern": "^SUP-\\d{2,3}$"
+          },
+          "due_diligence": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Due diligence on the bidder's responsibility and risk posture",
+            "x-enforces": [
+              "REQ-SP800-161R1-0079"
+            ]
+          },
+          "approved_source": {
+            "title": "Approved products list, qualified supplier, original manufacturer or authorized reseller",
+            "enum": [
+              "approved-products-list",
+              "qualified-supplier",
+              "oem",
+              "authorized-reseller",
+              "vetted-library",
+              "none"
+            ],
+            "x-enforces": [
+              "REQ-SP800-161R1-0215",
+              "REQ-SP800-161R1-0284"
+            ]
+          },
+          "screening": {
+            "title": "Prohibited supplier lists screened",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "list",
+                "result",
+                "date"
+              ],
+              "properties": {
+                "list": {
+                  "title": "List screened",
+                  "enum": [
+                    "sdn",
+                    "ssi",
+                    "fse",
+                    "sam-exclusions",
+                    "capta",
+                    "blocked-persons",
+                    "bis-unverified",
+                    "ndaa-889",
+                    "other-federal-restriction"
+                  ]
+                },
+                "result": {
+                  "title": "Result",
+                  "enum": [
+                    "clear",
+                    "listed"
+                  ]
+                },
+                "date": {
+                  "$ref": "#/$defs/date"
+                }
+              }
+            },
+            "minItems": 1
+          },
+          "selected": {
+            "type": "boolean",
+            "title": "Selected for award or use"
+          },
+          "exclusion": {
+            "title": "Exclusion of the source on SCRM grounds",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "approved_by"
+            ],
+            "properties": {
+              "authority": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Legal authority exercised to exclude the source"
+              },
+              "approved_by": {
+                "title": "Approvals of the exclusion",
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "contracting-officer",
+                    "counsel"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          },
+          "other_agency_requirements": {
+            "type": "string",
+            "minLength": 1,
+            "title": "C-SCRM requirements the supplier already carries for other agencies",
+            "x-enforces": [
+              "REQ-SP800-161R1-0008"
+            ]
+          },
+          "vendor": {
+            "title": "Answers to the minimum vendor questions of DoDI 5000.90",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "oem_or_authorized",
+              "prior_intrusions",
+              "cmmc_level"
+            ],
+            "properties": {
+              "oem_or_authorized": {
+                "type": "boolean",
+                "title": "Provides products sourced through original equipment manufacturers or authorized resellers",
+                "x-enforces": [
+                  "REQ-DODI5000.90-0109"
+                ]
+              },
+              "prior_intrusions": {
+                "type": "boolean",
+                "title": "Has incurred significant malicious intrusions, data breaches or loss of client data or intellectual property",
+                "x-enforces": [
+                  "REQ-DODI5000.90-0110"
+                ]
+              },
+              "cmmc_level": {
+                "type": "string",
+                "minLength": 1,
+                "title": "CMMC certification level obtained",
+                "x-enforces": [
+                  "REQ-DODI5000.90-0111"
+                ]
+              }
+            }
+          },
+          "ownership": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Ownership of the company supplying components, and any influence or control by threat actors",
+            "x-enforces": [
+              "REQ-DODI5000.90-0113",
+              "REQ-DODI5000.90-0114"
+            ]
+          },
+          "technology_relationships": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Technology relationships with companies under the influence or control of threat actors",
+            "x-enforces": [
+              "REQ-DODI5000.90-0115"
+            ]
+          },
+          "sources": {
+            "$ref": "#/$defs/sources"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "sources": {
+      "$ref": "#/$defs/sources"
+    }
+  },
+  "$defs": {
+    "source": {
+      "description": "Trace token: an interview answer (INT-007.A3), an assumption (ASM-012, ASM-BASELINE-001), a product file with optional anchor (product/architecture.md#identity) or an artifact (ART-SSP).",
+      "type": "string",
+      "pattern": "^(INT-\\d{3}\\.A\\d+|ASM-(?:[A-Z]+-)?\\d{3}|product/[^\\s#]+(?:#[A-Za-z0-9_.-]+)?|ART-[A-Z]+(?:-[A-Z]+)*)$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "persona": {
+      "type": "string",
+      "pattern": "^PER-[A-Z0-9]+$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "duration": {
+      "description": "ISO 8601 duration, such as P1Y or P90D.",
+      "type": "string",
+      "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?$",
+      "minLength": 3
+    },
+    "level": {
+      "description": "SP 800-30 qualitative scale.",
+      "enum": [
+        "very-low",
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    }
+  }
+}

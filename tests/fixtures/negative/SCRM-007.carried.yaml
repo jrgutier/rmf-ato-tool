@@ -1,0 +1,15 @@
+rule: SCRM-007
+bases:
+- minimal
+description: a term carries a requirement that is not a C-SCRM requirement
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-acquisition.yaml
+  path: terms.0.requirements
+  value:
+  - REQ-01
+expect:
+  errors:
+  - SCRM-007
+  messages:
+  - the qualifying-condition term carries REQ-01, which is not a C-SCRM requirement of the contract

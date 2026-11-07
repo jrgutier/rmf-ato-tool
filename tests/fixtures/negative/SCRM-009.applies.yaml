@@ -1,0 +1,14 @@
+rule: SCRM-009
+bases:
+- minimal
+description: the plan says open source does not apply though a supplier is one
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.considerations.2.applies
+  value: false
+expect:
+  errors:
+  - SCRM-009
+  messages:
+  - the plan says open-source does not apply, yet SUP-04 is a supplier of that kind
