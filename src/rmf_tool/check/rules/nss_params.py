@@ -19,7 +19,7 @@ from rmf_tool.check.rules.tailoring import _tailoring
 COMPARED = ("max", "min")
 
 
-def nss_values(ctx: Context) -> list[RunFinding]:
+def _findings(ctx: Context) -> list[RunFinding]:
     table = cnssi1253_params.load(ctx.run.repo)
     tailored = _tailored_values(_tailoring(ctx) or {})
     out: list[RunFinding] = []
@@ -52,6 +52,17 @@ def nss_values(ctx: Context) -> list[RunFinding]:
                     err(f"{cid} {pid}: {value!r} is looser than the NSS minimum "
                         f"{nss['value']!r} (CNSSI 1253 Parameter Value)")
                 elif verdict is None:
-                    err(f"{cid} {pid}: {value!r} states no amount to compare with the NSS "
-                        f"minimum {nss['value']!r}")
+                    # A stricter value may be one no parser reads ("on every change"), so an
+                    # unreadable value is a warning to state the amount, never an error.
+                    out.append(make("PVAL-002", f"{cid} {pid}: {value!r} states no amount to "
+                                    f"compare with the NSS minimum {nss['value']!r}", rel, None,
+                                    {"S-4"}))
     return out
+
+
+def nss_values(ctx: Context) -> list[RunFinding]:
+    return [f for f in _findings(ctx) if f.rule == "PVAL-001"]
+
+
+def unstated_amounts(ctx: Context) -> list[RunFinding]:
+    return [f for f in _findings(ctx) if f.rule == "PVAL-002"]

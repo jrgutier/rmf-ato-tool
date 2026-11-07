@@ -65,13 +65,21 @@ TEXT_DIFFERS: dict[tuple[int, str], str] = {}
 _DAYS = {"minute": 1 / 1440, "hour": 1 / 24, "day": 1, "week": 7, "month": 31, "quarter": 92,
          "year": 366}
 _EVERY = {"daily": 1, "weekly": 7, "monthly": 31, "quarterly": 92, "annually": 366,
-          "annual": 366, "continuously": 0}
+          "annual": 366, "continuously": 0, "semi-annually": 183, "semiannually": 183,
+          "semi-annual": 183, "bi-weekly": 14, "biweekly": 14, "hourly": 1 / 24,
+          "immediately": 0, "real time": 0, "real-time": 0, "same day": 1, "same-day": 1}
+# Longest first, and never inside a longer word: "semi-annually" is no "annually", and "near
+# real time" is no amount.
+_EVERY_RE = "|".join(re.escape(k).replace(r"\ ", r"\s+")
+                     for k in sorted(_EVERY, key=len, reverse=True))
 _NUMBERS = {"a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
             "seven": 7, "eight": 8, "nine": 9, "ten": 10, "twelve": 12}
 _NUM = rf"\d+(?:\.\d+)?|{'|'.join(_NUMBERS)}"
 _AMOUNT = re.compile(
-    rf"\b(?P<n1>{_NUM})\s*(?:\(\d+\)\s*)?-?\s*(?:working\s+)?(?P<unit>{'|'.join(_DAYS)})s?\b"
-    rf"|\b(?P<every>{'|'.join(_EVERY)})\b"
+    rf"\b(?P<nt>{_NUM})\s+times?\s+(?:per|a|each)\s+(?P<tunit>{'|'.join(_DAYS)})\b"
+    rf"|\b(?P<n1>{_NUM})\s*(?:\(\d+\)\s*)?-?\s*(?:(?:working|business)\s+)?"
+    rf"(?P<unit>{'|'.join(_DAYS)})s?\b"
+    rf"|(?<![-\w])(?<!near )(?P<every>{_EVERY_RE})\b"
     rf"|\b(?P<n2>{_NUM})\s*-?\s*(?:characters?|attempts?|sessions?|versions?)\b"
     rf"|(?P<pct>\d+(?:\.\d+)?)\s*%"
     rf"|\b(?:at least|maximum of|minimum of|no more than)\s+(?P<n3>{_NUM})\b(?!\s*[(%\w-])",
@@ -91,10 +99,12 @@ def amount(value: str) -> tuple[float, str] | None:
     m = _AMOUNT.search(value)
     if m is None:
         return None
+    if m["tunit"]:
+        return _DAYS[m["tunit"].lower()] / _number(m["nt"]), "days"
     if m["unit"]:
         return _number(m["n1"]) * _DAYS[m["unit"].lower()], "days"
     if m["every"]:
-        return float(_EVERY[m["every"].lower()]), "days"
+        return float(_EVERY[" ".join(m["every"].lower().split())]), "days"
     if m["pct"]:
         return float(m["pct"]), "percent"
     return _number(m["n2"] or m["n3"]), "count"

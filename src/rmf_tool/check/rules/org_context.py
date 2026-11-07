@@ -174,7 +174,10 @@ def roles(ctx: Context) -> list[RunFinding]:
             err(f"{rid}: the user representative is appointed by {r.get('appointed_by')}, not "
                 "the information system owner")
         by = r.get("appointed_by")
-        if role == "PER-PAO" and by != PAO_APPOINTERS.get(_key(r.get("mission_area"))):
+        if role == "PER-PAO" and _key(r.get("mission_area")) not in PAO_APPOINTERS:
+            err(f"{rid}: the PAO names no mission_area ({', '.join(PAO_APPOINTERS)}), so whether "
+                "its DoD MA owner appointed it cannot be read")
+        elif role == "PER-PAO" and by != PAO_APPOINTERS.get(_key(r.get("mission_area"))):
             err(f"{rid}: the PAO for mission area {r.get('mission_area')} is appointed by {by}, "
                 "not the DoD MA owner of that mission area")
         if role == "PER-DODCISO" and by != "dod-cio":

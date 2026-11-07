@@ -230,6 +230,9 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
     # A removal tailors the security baseline; the NSS privacy control baseline, which every
     # NSS implements, keeps its controls (an S-2 remove can still take one out).
     added, removed = overlay_changes(tables, overlays, obtained_overlays(run))
+    if removed and method != CNSSI:
+        raise BaselineError("an overlay that tailors controls out is written against a CNSSI 1253 "
+                            f"baseline; method {method} cannot apply its removals")
     privacy = privacy_column(tables) if removed and method == CNSSI else set()
     for cid in removed:
         if origin.get(cid) == "baseline" and cid in privacy:

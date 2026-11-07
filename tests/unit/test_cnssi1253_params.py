@@ -99,3 +99,17 @@ def test_every_row_with_a_value_in_the_text_is_transcribed(values):
         params.oscal_id(i) for i in unread}
     assert transcribed == set(values)
     assert len(values) == 162
+
+
+@pytest.mark.parametrize(("run", "nss", "loose"), [
+    ("same day", "not to exceed 5 working days", False),
+    ("immediately", "2 hours", False),
+    ("real time", "continuously", False),
+    ("3 times per month", "at least every 30 days", False),
+    ("1 business day", "at least every 30 days", False),
+    ("semi-annually", "at least quarterly", True),
+    ("bi-weekly", "at least weekly", True),
+])
+def test_stricter_words_are_read_not_refused(run, nss, loose):
+    """Fable F3: a stricter value in words PVAL-001 once could not read was an error."""
+    assert params.looser(run, {"value": nss, "bound": "max"}) is loose

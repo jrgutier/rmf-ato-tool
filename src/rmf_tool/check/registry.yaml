@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 295 rules, 36 repo-scope and 259 run-scope. Authoritative;
+# Rule registry (plan §6.5): 297 rules, 36 repo-scope and 261 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1701,6 +1701,17 @@ rules:
     hint: "Record privacy_coordination (by PER-PRIV, or by a designee with designee_of: PER-PRIV, with its sources) on the tailoring action that adds or keeps the control, or remove it."
     enforces:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0112
+  - id: PVAL-002
+    scope: run
+    severity: W
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a parameter value states no amount PVAL-001 can compare with the CNSSI 1253 NSS minimum
+    fixture: tests/fixtures/negative/PVAL-002.yaml
+    hint: "State the value as an amount (every 30 days, within 24 hours, 3 times per month) so PVAL-001 can show it meets or exceeds the NSS minimum."
+    enforces: []
   - id: PVAL-001
     scope: run
     severity: E
@@ -1773,6 +1784,17 @@ rules:
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0019
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0043
       - REQ-DODI8510.01-0045
+  - id: SPCOV-003
+    scope: run
+    severity: W
+    ac: [AC-17]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a baseline-dependent overlay is applied to a system categorized other than the baseline it tailors
+    fixture: tests/fixtures/negative/SPCOV-003.yaml
+    hint: "The Space Platform Overlay tailors H/H/H; below it, revisit its removals and additions at S-2 (Space Platform Overlay pages 2 and 3)."
+    enforces: []
   - id: SPCOV-002
     scope: run
     severity: E

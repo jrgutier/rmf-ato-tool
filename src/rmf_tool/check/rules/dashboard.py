@@ -43,8 +43,10 @@ def dashboard(ctx: Context) -> list[RunFinding]:
     if AO not in _strs(dash.get("access")):
         err("the AO and designated cybersecurity personnel have real-time access to the "
             f"dashboard, and its access names {', '.join(_strs(dash.get('access')))}")
-    if dash.get("refresh") not in REAL_TIME:
-        err(f"the dashboard is as near real time as feasible, not {dash.get('refresh')}")
+    limit = _mapping(dash.get("feasibility_limit"))
+    if dash.get("refresh") not in REAL_TIME and not str(limit.get("reason") or "").strip():
+        err(f"the dashboard is {dash.get('refresh')}, not near real time, and records no "
+            "feasibility_limit saying why a nearer view is not feasible")
     unshown = lacks(dash.get("shows"), SHOWS) + lacks(dash.get("scope"), SCOPE)
     if unshown:
         err(f"the dashboard does not visualize {', '.join(unshown)}")

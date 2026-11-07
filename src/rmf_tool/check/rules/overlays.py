@@ -219,6 +219,8 @@ def space_policy_controls(ctx: Context) -> list[RunFinding]:
 # --- OVLX-001: overlays obtained from their owner -------------------------------------------
 
 CLASSIFIED = "CNSSI1253E-ATT5-CLASSIFIED"
+# Kinds whose overlay is no authority's own specification set, so a removal there is tailoring.
+UNOWNED_KINDS = ("other", "dod-ks")
 SAP_ASSUMPTION = "AS-CLS-1"  # holds: no SAP or SCI
 DOMAINS_ASSUMPTION = "AS-ADD-3"  # holds: communicates across security domains
 
@@ -248,6 +250,11 @@ def obtained(ctx: Context) -> list[RunFinding]:
 
     kinds = {str(r.get("kind")) for r in records if r.get("id") in applied}
     for r in records:
+        controls = r.get("controls") if isinstance(r.get("controls"), dict) else {}
+        if controls.get("remove") and r.get("kind") in UNOWNED_KINDS:
+            err(f"{r.get('id')} ({r.get('kind')}) tailors out "
+                f"{', '.join(map(str, controls['remove']))}; a removal outside an overlay "
+                "authority's own specifications is S-2 tailoring, tested by TLR-002")
         answers = [a.get("answer") for a in r.get("applicability") or () if isinstance(a, dict)]
         if r.get("id") in applied and True not in answers:
             err(f"{r.get('id')} is applied, and none of its applicability questions is answered "
@@ -262,4 +269,33 @@ def obtained(ctx: Context) -> list[RunFinding]:
             err("the classified system communicates across security domains, and applies no "
                 f"cross domain solution overlay ({baseline_mod.ORG_FILE} obtained_overlays, "
                 "kind cds)")
+    return out
+
+
+# --- SPCOV-003: a baseline-dependent overlay applied to another baseline --------------------
+
+def tailored_baseline(ctx: Context) -> list[RunFinding]:
+    """The Space Platform Overlay "is not baseline independent" and "tailors the CNSSI No. 1253
+    (H/H/H) control baseline": applied to a system categorized otherwise, its removals and
+    additions were not written for the baseline they change. A warning: the source does not
+    forbid it, and S-2 tailoring can answer it."""
+    cat = _categorization(ctx)
+    overlays = cat.get("overlays")
+    if not isinstance(overlays, list):
+        return []
+    try:
+        tables = baseline_mod.load_tables(ctx.run)
+    except baseline_mod.BaselineError:
+        return []
+    out = []
+    for o in tables["overlays"]:
+        tailors = o.get("tailors")
+        if o["id"] not in overlays or not tailors:
+            continue
+        actual = {k: cat.get(k) for k in ("c", "i", "a")}
+        if actual != tailors:
+            out.append(make("SPCOV-003", f"{o['id']} tailors the "
+                            f"{'/'.join(tailors[k][0].upper() for k in 'cia')} baseline, and the "
+                            f"system is categorized {'/'.join(str(actual[k]) for k in 'cia')}",
+                            "facts.yaml", None, {"S-2"}))
     return out

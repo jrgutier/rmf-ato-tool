@@ -292,7 +292,7 @@ def assumptions(ctx: Context) -> list[RunFinding]:
         untouched = sorted(c for c in controls if c not in acted)
         unmet = sorted(c for c in controls if c not in added and c not in selected)
         no_change = record.get("outcome") == "revisited-no-change"
-        if diverges and not controls and not named:
+        if diverges and not controls and not named and not spec.get("controls"):
             err(f"the assumption {aid} does not hold, and the control selection is not "
                 "revisited by an overlay or by tailoring")
         if diverges and untouched:
@@ -300,8 +300,9 @@ def assumptions(ctx: Context) -> list[RunFinding]:
                 f"{', '.join(untouched)}")
         # The Space Platform Overlay tailors out Table 1's Associated Controls on each of its
         # assumptions: where one fails, they "should be revisited and considered for inclusion".
+        # Considered and kept out is a revisit too: the record says so with its rationale.
         tailored_out = sorted(c for c in spec.get("controls") or () if c not in acted)
-        if diverges and tailored_out:
+        if diverges and tailored_out and record.get("outcome") != "revisited-no-change":
             err(f"the assumption {aid} does not hold, and the controls the overlay tailors out "
                 f"on it are not revisited: {', '.join(tailored_out)}")
         if applies and not controls and not named and not no_change:
