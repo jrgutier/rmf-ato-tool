@@ -426,19 +426,39 @@
             "minLength": 1
           },
           "implementers": {
-            "title": "Who implements the directed action",
+            "title": "Who implements the directed action: a persona, or a role DoDI 8530.01 names that has none",
             "type": "array",
             "items": {
-              "$ref": "#/$defs/persona_id"
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/persona_id"
+                },
+                {
+                  "enum": [
+                    "commander",
+                    "supervisor",
+                    "project-lead",
+                    "network-administrator",
+                    "system-administrator",
+                    "user"
+                  ]
+                }
+              ]
             }
           },
           "response": {
-            "title": "Implemented, tracked in a POA&M item, or withheld after coordination",
+            "title": "Implemented, tracked in a POA&M item, withheld after coordination, or not applicable to the system",
             "enum": [
               "implemented",
               "poam",
-              "withheld"
+              "withheld",
+              "not-applicable"
             ]
+          },
+          "not_applicable_reason": {
+            "title": "Why the order does not apply to the system",
+            "type": "string",
+            "minLength": 1
           },
           "implemented": {
             "type": "object",
@@ -525,7 +545,8 @@
                   "enum": [
                     "compliant",
                     "poam",
-                    "withheld"
+                    "withheld",
+                    "not-applicable"
                   ]
                 }
               }
@@ -838,10 +859,7 @@
             "title": "Submission toward the Vulnerabilities Equities Process",
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "date",
-              "to"
-            ],
+            "required": [],
             "properties": {
               "date": {
                 "$ref": "#/$defs/date"
@@ -851,6 +869,14 @@
                   "USCYBERCOM",
                   "NSA-direct"
                 ]
+              },
+              "prior": {
+                "type": "boolean"
+              },
+              "reference": {
+                "title": "The earlier submission",
+                "type": "string",
+                "minLength": 1
               }
             }
           },
