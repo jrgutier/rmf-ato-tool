@@ -50,7 +50,9 @@ requirements:
     locator: "References"
     context: "CRITICAL SYSTEM BEHAVIORS OF THE FUTURE"
     statement: "The term security is used in this publication to mean freedom from the conditions that can cause a loss of assets with unacceptable consequences.4 Stakeholders must define the scope of security in terms of the assets to which security applies and the consequences against which security is assessed.5 Systems engineering provides a foundation for a disciplined and structured approach to building assured, trustworthy secure systems. As a systems engineering subdiscipline, systems security engineering addresses security-relevant considerations intended to produce secure outcomes. The engineering efforts are conducted at the appropriate level of fidelity and rigor needed to achieve trustworthiness and assurance objectives."
-    status: "candidate"
+    status: "partial"
+    reason: "The scope of assets is held class by class; the consequences against which security is assessed are the asset priorities, as free text."
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Stakeholders define the scope of security in terms of the assets to which security applies", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0007"
     citation: {"ref": "SP800-160V1R1", "page": 17, "anchor": "“By trustworthiness, we mean simply worthy of being trusted to fulfill whatever"}
@@ -940,7 +942,9 @@ requirements:
     locator: "2.1.2"
     context: "Table 1. Common Asset Classes"
     statement: "Assets may also be considered as individual items or as an aggregate or group of items that spans asset types or asset classes (e.g., personnel data, fire control function, environmental sensor capability). This publication uses the term asset of interest to emphasize and establish bounds on the scope of reasoning for a specific asset, asset type, or asset class. The valuation of an asset is a key input in decision-making about investments to protect an asset (Section 3.6). For those cases where an asset is associated with multiple stakeholders, there may be differing, contradictory, competing, or conflicting views about the valuation that must be resolved."
-    status: "candidate"
+    status: "partial"
+    reason: "Assets may be recorded singly or by class; valuation is the priority and its basis, as free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets", "claim": "presence", "asserts": "Assets considered individually or as an asset class, with a priority from their valuation"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0117"
     citation: {"ref": "SP800-160V1R1", "page": 34, "anchor": "Loss is the experience of having an asset taken away or destroyed"}
@@ -4642,7 +4646,8 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Stakeholder assets and asset classes are identified."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Stakeholder assets and asset classes are identified in the asset scope", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0575"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Adversities presented by the environment are characterized."}
@@ -4657,7 +4662,9 @@ requirements:
     locator: "H.2.2. Security Outcomes.-"
     context: ""
     statement: "- Asset protection priorities are determined."
-    status: "candidate"
+    status: "partial"
+    reason: "Each asset record carries a priority; nothing compares priorities with consequences."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets/items/properties/priority", "claim": "constraint", "asserts": "Asset protection priorities are determined for each asset"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0577"
     citation: {"ref": "SP800-160V1R1", "page": 133, "anchor": "Stakeholder protection needs are defined."}
@@ -4852,7 +4859,8 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.2"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.2 Identify stakeholder assets and asset classes."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "asserts": "Identify stakeholder assets and asset classes in the asset scope", "claim": "constraint"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0599"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Identify loss concerns for each identified asset and each asset class."}
@@ -4870,7 +4878,9 @@ requirements:
     locator: "References: [4] [30] [31] [61] [91] [97] [98] [99] [100] [101] [102] [103] [104].SN-3.4"
     context: "SN-3 DEFINE STAKEHOLDER NEEDS"
     statement: "SN-3.4 Prioritize assets based on the adverse consequences of asset loss."
-    status: "candidate"
+    status: "partial"
+    reason: "Priorities are recorded with a basis; that they follow the adverse consequences of loss is prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/assets/items/properties/priority", "claim": "constraint", "asserts": "Prioritize assets based on the adverse consequences of asset loss"}]
     work_item: "WI-172"
   - id: "REQ-SP800-160V1R1-0601"
     citation: {"ref": "SP800-160V1R1", "page": 135, "anchor": "Characterize adversities present in the environment."}
@@ -6254,7 +6264,9 @@ requirements:
     locator: "References: [4] [30] [61] [98] [99] [111] [112] [113].IP-2.1.-"
     context: "IP-2 PERFORM IMPLEMENTATION Note: System elements can include:"
     statement: "- Services: System elements implemented by obtaining or leasing services are subject to the same criteria used to acquire hardware, firmware, and software but must also address the security considerations associated with utilization and support resources."
-    status: "candidate"
+    status: "partial"
+    reason: "Leased services carry an agreement with security requirements; the acquisition criteria for services are not modelled."
+    evidence: [{"kind": "rule", "target": "SYSD-005", "fixture": "tests/fixtures/negative/SYSD-005.security.yaml", "expect": "the agreement for the external service does not incorporate the security requirements of DoDI 8500.01", "asserts": "Services obtained or leased must address security considerations in the agreement", "claim": "constraint"}]
     work_item: "WI-195"
   - id: "REQ-SP800-160V1R1-0767"
     citation: {"ref": "SP800-160V1R1", "page": 146, "anchor": "Utilization and Support Resources: The security considerations of acquired or leased services"}
@@ -6262,7 +6274,9 @@ requirements:
     locator: "References: [4] [30] [61] [98] [99] [111] [112] [113].IP-2.1.-"
     context: "IP-2 PERFORM IMPLEMENTATION Note: System elements can include:"
     statement: "- Utilization and Support Resources: The security considerations of acquired or leased services account for the specific roles and responsibilities of individuals of the service/lease provider and their ability to account for all of the security requirements and constraints associated with the delivery, utilization, and sustainment of the service or capability being leased."
-    status: "candidate"
+    status: "partial"
+    reason: "Provider roles and responsibilities are recorded for CSSP services (SVCA-001), not for every leased service."
+    evidence: [{"kind": "rule", "target": "SVCA-001", "fixture": "tests/fixtures/negative/SVCA-001.parties.yaml", "expect": "CSSP and subscriber responsibilities are each assigned for every service", "asserts": "The roles and responsibilities of the service provider are assigned for each leased service", "claim": "constraint", "holds_when": "ART-SVCA is in play once S-4 is active or it is seeded"}]
     work_item: "WI-195"
   - id: "REQ-SP800-160V1R1-0768"
     citation: {"ref": "SP800-160V1R1", "page": 147, "anchor": "Place the system element in a secure state for future use, as"}
@@ -7910,7 +7924,9 @@ requirements:
     locator: "H.14.2. Security Outcomes.-"
     context: ""
     statement: "- The environment is securely returned to its original secure or an agreed-upon secure state."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it while M-7 is outside every fixture's scope."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/environment/properties/restored_to", "claim": "constraint", "asserts": "The environment is securely returned to its original secure or an agreed-upon secure state"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0971"
     citation: {"ref": "SP800-160V1R1", "page": 162, "anchor": "Records of the security aspects of disposal actions and analysis are available."}
@@ -7998,7 +8014,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-1.6"
     context: "DS-1 PREPARE FOR DISPOSAL"
     statement: "DS-1.6 Specify security criteria for containment facilities, storage locations, inspection, and storage periods (if the system is to be stored)."
-    status: "candidate"
+    status: "partial"
+    reason: "Storage criteria are optional fields of disposal.yaml; no rule reads them."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/storage", "claim": "presence", "asserts": "Specify security criteria for containment facilities, storage locations, inspection and storage periods"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0982"
     citation: {"ref": "SP800-160V1R1", "page": 163, "anchor": "Define the security aspects of preventive methods to preclude disposed elements and"}
@@ -8006,7 +8024,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-1.7"
     context: "DS-1 PREPARE FOR DISPOSAL"
     statement: "DS-1.7 Define the security aspects of preventive methods to preclude disposed elements and materials that should not be repurposed, reclaimed, or reused from re-entering the supply chain."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/supply_chain/properties/prevention", "claim": "presence", "asserts": "Preventive methods preclude disposed elements from re-entering the supply chain"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0983"
     citation: {"ref": "SP800-160V1R1", "page": 163, "anchor": "Securely deactivate the system or system element to prepare it for secure"}
@@ -8052,7 +8072,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-2.5"
     context: "DS-2 PERFORM DISPOSAL"
     statement: "DS-2.5 Securely handle system elements and their parts that are not intended for reuse in a manner that will help ensure that they do not get back into the supply chain."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/supply_chain/properties/non_reuse_elements", "claim": "presence", "asserts": "System elements not intended for reuse are handled so they do not get back into the supply chain"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0989"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Conduct secure sanitization and destruction of the system elements and life cycle"}
@@ -8067,7 +8089,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-3.1"
     context: "DS-3 FINALIZE THE DISPOSAL"
     statement: "DS-3.1 Confirm that no detrimental security factors exist following disposal."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/residual_check/properties/no_detrimental_factors", "claim": "presence", "asserts": "Confirm that no detrimental security factors exist following disposal"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0991"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Return the environment to its original secure state or to a secure"}
@@ -8075,7 +8099,9 @@ requirements:
     locator: "H.14.3. Security Activities and Tasks.DS-3.2"
     context: "DS-3 FINALIZE THE DISPOSAL"
     statement: "DS-3.2 Return the environment to its original secure state or to a secure state specified by agreement."
-    status: "candidate"
+    status: "partial"
+    reason: "A required field of disposal.yaml; no rule reads it."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/environment/properties/restored_to", "claim": "constraint", "asserts": "Return the environment to its original secure state or to a secure state specified by agreement"}]
     work_item: "WI-183"
   - id: "REQ-SP800-160V1R1-0992"
     citation: {"ref": "SP800-160V1R1", "page": 164, "anchor": "Securely archive data and information gathered through the lifetime of the system"}

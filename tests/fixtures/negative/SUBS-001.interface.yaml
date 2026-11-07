@@ -1,0 +1,41 @@
+rule: SUBS-001
+bases:
+- minimal
+description: subsystems that differ with no examined interface
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: authorization_boundary.diagrams.0.shows
+  value:
+  - components
+  - subsystems
+  - internal-boundaries
+  - third-party-services
+  - physical-protections
+  - isolated-components
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: subsystems
+  value:
+  - id: SUB-RELAY
+    title: SUB-RELAY
+    components:
+    - CMP-RELAY
+    - CMP-STORE
+    c: moderate
+    i: moderate
+    a: low
+    status: under-development
+  - id: SUB-CONSOLE
+    title: SUB-CONSOLE
+    components:
+    - CMP-CONSOLE
+    c: low
+    i: moderate
+    a: low
+    status: under-development
+expect:
+  errors:
+  - SUBS-001
+  messages:
+  - SUB-RELAY and SUB-CONSOLE differ in categorization and no interface record examines their interfaces, flows and dependencies

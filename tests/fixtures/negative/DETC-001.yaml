@@ -1,0 +1,16 @@
+rule: DETC-001
+bases:
+- minimal
+description: CTI not used to correlate events
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: detection.cti_used_in
+  value:
+  - log-analysis
+  - adverse-event-analysis
+expect:
+  errors:
+  - DETC-001
+  messages:
+  - up-to-date cyber threat intelligence is not used in correlation

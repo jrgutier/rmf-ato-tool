@@ -1,0 +1,21 @@
+rule: SYSD-004
+bases:
+- minimal
+description: foreign users whose access no Component head authorized
+mutations:
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.0.category
+  value: foreign-national
+- op: set_field
+  file: artifacts/data/users.yaml
+  path: users.0.foreign_access
+  value:
+    authorized_by: other
+    disclosure_basis: DoDD 5230.11
+    release_limits: Releasable records only, by role.
+expect:
+  errors:
+  - SYSD-004
+  messages:
+  - access by foreign personnel to the system is authorized by the DoD Component head, not other

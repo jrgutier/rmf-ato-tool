@@ -11,7 +11,9 @@ from rmf_tool.check.findings import RunFinding
 from rmf_tool.check.rules import (
     artifacts,
     assessment,
+    assets,
     authorization,
+    categorize,
     config,
     connections,
     consistency,
@@ -19,14 +21,19 @@ from rmf_tool.check.rules import (
     coverage,
     engineering,
     generated,
+    governance,
     hybrid,
     iscm,
     journal,
     monitor,
+    pentest,
     plans,
     requirements,
     risk_assessment,
+    secureconfig,
     software,
+    subsystems,
+    system,
     tailoring,
 )
 
@@ -146,6 +153,13 @@ RULES: dict[str, Rule] = {
     "DEGRADED-001": config.degraded,
     "TASK-DEF-001": consistency.deferrals,
     **dict(plans.rules()),
+    **dict(system.rules()),
+    **dict(assets.rules()),
+    **dict(categorize.rules()),
+    **dict(subsystems.rules()),
+    **dict(pentest.rules()),
+    **dict(secureconfig.rules()),
+    **dict(governance.rules()),
 }
 JOURNAL_RULE = "JOURNAL-001"
 UNFILTERED = frozenset({"DEGRADED-001"})  # non-suppressible (plan §7.6): every selection keeps it

@@ -21,6 +21,7 @@ CONMON_FILE = "artifacts/data/conmon.yaml"
 CORE_DOCUMENTS = {"ART-SSP": "SSP", "ART-SAR": "SAR", "ART-RAR": "RAR", "ART-POAM": "POA&M",
                   "ART-AODM": "Authorization Decision Document"}
 PLACEHOLDER = "<<FILL"
+FACTS_BLOCK = "<!-- BEGIN rmf:facts -->"
 UNREAD_HOMES = {"pending", "rule"}  # not built yet, or a rule already holds the element
 SSP_STATUSES = ("implemented", "partial", "planned", "alternative", "not-applicable",
                 "inherited")
@@ -176,7 +177,12 @@ def _value_at(data: Any, path: list[str]) -> list[Any]:
 
 def _carried(ctx: Context, aid: str, element: dict[str, Any]) -> bool:
     if "fact" in element:
-        return facts_mod.get(ctx.facts, element["fact"]) is not None
+        # The document shows the fact only through its rmf:facts block (`rmf assemble`).
+        doc = ctx.docs.get(f"artifacts/{aid}.md")
+        label = facts_mod.LABELS.get(element["fact"])
+        shown = doc is not None and label is not None and FACTS_BLOCK in doc.body \
+            and f"| {label} |" in doc.body
+        return shown and facts_mod.get(ctx.facts, element["fact"]) is not None
     if "heading" in element:
         doc = ctx.docs.get(f"artifacts/{element.get('artifact', aid)}.md")
         return doc is not None and any(

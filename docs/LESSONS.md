@@ -489,7 +489,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: Before building on "in accordance with Reference (x)", read (x) in the issuance's own reference list and check the neighbouring body citations agree with it.
 - Promotion: none — whether body and list letters agree is a reading of one document's drift; no rule can tell a misprint from a citation.
 
-## L-0070 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+## L-0070 · 2026-11-07 · run: phase-11 · tags: facts, contract
+- Symptom: the six system facts C-1 now records (classification, IT type, owning organization, version, operational environment, life-cycle phase) could not go into `writes_facts` without FACTS-001 and `rmf status` refusing the example run, which is at contract 0.1.0; making `roles` required in users.schema.json likewise broke a valid older users record.
+- Root cause: `writes_facts` and a schema's `required` hold every run whatever its contract; only rules carried `since`.
+- Fix: a task's `facts_since` dates a fact it writes, and `Run.writes_facts` drops a fact the run's contract predates, for FACTS-001 and status alike; new run-data fields stay optional in the schema and a rule with `since` requires them.
+- Rule: A new required run field is gated by the run's contract (`since`, `facts_since`), never by `required` in a schema an older run is validated against.
+- Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
+
+## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
 - Symptom: FW-REQ-003 denied every SWA-001 rule item: "'the SBOM leaves out third-party components' is not literal in a failing message in the rule's source", though the rule reported exactly that message and the negative fixture declared it.
 - Root cause: the messages lived in a dict of duty to message and the rule appended `err(message)` in a loop; the judge finds a clause by the string constant inside the failing call, and a variable holds none.
 - Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.

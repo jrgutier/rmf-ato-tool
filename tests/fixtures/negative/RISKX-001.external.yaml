@@ -1,0 +1,19 @@
+rule: RISKX-001
+bases:
+- minimal
+description: risk information shared inside the organization only
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: risk_executive.communication
+  value:
+  - vehicle: Quarterly risk brief
+    audience:
+    - authorizing-officials
+    - senior-leaders
+    - internal-stakeholders
+expect:
+  errors:
+  - RISKX-001
+  messages:
+  - no vehicle shares risk information with external-stakeholders

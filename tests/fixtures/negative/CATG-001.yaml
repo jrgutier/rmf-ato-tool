@@ -1,0 +1,17 @@
+rule: CATG-001
+bases:
+- minimal
+description: availability raised above the high-water mark with no adjustment
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.a
+  value: moderate
+expect:
+  errors:
+  - CATG-001
+  also:
+  - CPLAN-002
+  - GEN-STALE-001
+  messages:
+  - availability is raised to moderate above the high-water mark low of the information types with no recorded adjustment

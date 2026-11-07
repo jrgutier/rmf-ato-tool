@@ -1,11 +1,24 @@
 # Template: artifacts/data/users.yaml (C-1; schema users). One record per user group
-# (playbooks/C/C-1.md). Replace every <<FILL: ...>> and example value.
+# (playbooks/C/C-1.md). Replace every <<FILL: ...>> and example value. SYSD-004 judges it.
 users:
   - id: USR-EXAMPLE
     title: "<<FILL: user group name>>"
     description: "<<FILL: who they are and how they use the system>>"
     type: internal  # internal | external | general-public
+    category: organization-personnel  # organization-personnel | contractor | federal-state-local | foreign-national | coalition-partner | general-public
     privilege_level: privileged  # privileged | non-privileged | no-logical-access
+    access_requirements:
+      clearance: secret  # none | confidential | secret | top-secret
+      citizenship: "<<FILL: citizenship requirement>>"
+      # compartments: ["<<FILL: compartment>>"]
+    privileged_access:  # a privileged group: the qualification and the signed Statement of Acceptance of Responsibilities
+      qualified: true
+      qualification: "<<FILL: qualification standard the members meet>>"
+      statement_signed: true
+    # foreign_access:  # a foreign-national or coalition-partner group
+    #   authorized_by: dod-component-head
+    #   disclosure_basis: "<<FILL: DoD, Department of State or ODNI disclosure guidance>>"
+    #   release_limits: "<<FILL: mechanisms limiting access to information cleared for release>>"
     roles: ["<<FILL: system role name>>"]
     access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}  # not for no-logical-access
     training: {ensured_by: PER-PM, requirement: "<<FILL: the requisite security and privacy training>>"}  # not for general-public

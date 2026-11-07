@@ -679,7 +679,8 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Prepare | P-8, Mission or Business Focus C-1, System Description | System Type | Identify the type of system."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.pit.yaml", "expect": "the PIT system is not designated by the responsible OSD or DoD Component head or a delegate", "asserts": "C-1 identifies the type of system in the IT type, and a PIT system is designated", "claim": "constraint"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0085"
     citation: {"ref": "SP800-18R2", "page": 22, "anchor": "Prepare | P-8, Mission or Business Focus"}
@@ -731,7 +732,8 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Prepare | P-10, Asset Identification | Authorization Boundary Description | Authorization Boundary | Define the scope of the system protections that encompass the authorization boundary, including all components and subsystems of the system to be authorized for operation. | Define the scope of the system protections that encompass the"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.subsystems.yaml", "expect": "no diagram shows", "asserts": "The authorization boundary includes all components and subsystems of the system, and a diagram shows the subsystems", "claim": "constraint"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R2-0092"
     citation: {"ref": "SP800-18R2", "page": 22, "anchor": "P-11, Authorization Boundary | Description | authorization boundary, including all components and"}
@@ -770,7 +772,9 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "Prepare | P-10, Asset Identification P-11, Authorization Boundary P-13, Information Life Cycle P-16, Enterprise Architecture M-1, System and Environment Changes | Environment of Operation Diagrams | Include system diagrams that clearly depict the components of the system architecture within the authorization boundary."
-    status: "candidate"
+    status: "partial"
+    reason: "Every listed diagram exists and the set shows the components; that it depicts them clearly is not testable."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.file.yaml", "expect": "is not a file in the run directory", "asserts": "Include system diagrams, each a file in the run directory, that depict the components of the system architecture within the authorization boundary", "claim": "constraint"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0097"
     citation: {"ref": "SP800-18R2", "page": 23, "anchor": "Categorize | C-2, Security Categorization C-3, Security Categorization Review and Approval |"}
@@ -793,7 +797,8 @@ requirements:
     locator: "3.1"
     context: "Table 1. System Plan Elements Summary"
     statement: "and Approval | system security category reflects the high-water mark of the security category of all designated subsystems."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-001", "fixture": "tests/fixtures/negative/SUBS-001.yaml", "expect": "below the high-water mark", "asserts": "The system security category reflects the high-water mark of the security category of all designated subsystems", "claim": "constraint"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R2-0100"
     citation: {"ref": "SP800-18R2", "page": 23, "anchor": "Select | P-4, Organizationally-Tailored | Control Implementation Details | Provide implementation details"}
@@ -943,7 +948,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• Common control provider (e.g., data center facility, enterprise architecture services)"
-    status: "candidate"
+    status: "partial"
+    reason: "Common control providers are recorded as leveraged authorizations and service agreements; the plan field itself is not modelled."
+    evidence: [{"kind": "schema", "target": "framework/schema/leveraged-authorizations.schema.json#/properties/leveraged_authorizations/items/properties/service", "claim": "presence", "asserts": "The common control provider service a system consumes is recorded with its agreement"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0119"
     citation: {"ref": "SP800-18R2", "page": 26, "anchor": "Implemented or supported technology (e.g., operational technology, cloud-based system, cloud-supported application, artificial"}
@@ -951,7 +958,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• Implemented or supported technology (e.g., operational technology, cloud-based system, cloud-supported application, artificial intelligence system, high-performance computing)"
-    status: "candidate"
+    status: "partial"
+    reason: "Implemented or supported technology is described in the function narrative only."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/function", "claim": "presence", "asserts": "The function narrative describes the implemented or supported technology of the system"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0120"
     citation: {"ref": "SP800-18R2", "page": 26, "anchor": "Environment Type (e.g., development, testing, training, production)"}
@@ -959,7 +968,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• Environment Type (e.g., development, testing, training, production)"
-    status: "candidate"
+    status: "partial"
+    reason: "The environment type is the operational environment fact, optional in the facts schema and required by SYSD-001 for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/operational_environment", "claim": "presence", "asserts": "The environment type, such as development, testing or production, is the operational environment"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0121"
     citation: {"ref": "SP800-18R2", "page": 26, "anchor": "System exposure (e.g., restricted access, public-facing system, physically or logically isolated)"}
@@ -967,7 +978,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• System exposure (e.g., restricted access, public-facing system, physically or logically isolated)"
-    status: "candidate"
+    status: "partial"
+    reason: "Exposure is described by the DODIN connection and connectivity of the IT type fact; public-facing exposure is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_type/properties/connectivity", "claim": "constraint", "asserts": "System exposure is recorded as stand-alone or networked"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0122"
     citation: {"ref": "SP800-18R2", "page": 26, "anchor": "System criticality11 (e.g., organization-critical, mission-critical, high-availability, low-priority)"}
@@ -975,7 +988,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• System criticality11 (e.g., organization-critical, mission-critical, high-availability, low-priority)"
-    status: "candidate"
+    status: "partial"
+    reason: "Criticality is recorded as the mission criticality of the CSSP alignment, as free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment/properties/mission_criticality", "claim": "presence", "asserts": "System criticality is recorded as the mission criticality of the system"}]
     work_item: "WI-196"
   - id: "REQ-SP800-18R2-0123"
     citation: {"ref": "SP800-18R2", "page": 26, "anchor": "Ownership of the system (e.g., federal information system; government-owned, contractor-supported system; contractor-owned"}
@@ -983,7 +998,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details Discussion: Identify key characteristics that define the type of system, such as:"
     statement: "• Ownership of the system (e.g., federal information system; government-owned, contractor-supported system; contractor-owned and operated system)"
-    status: "candidate"
+    status: "partial"
+    reason: "Ownership is a required enum of system-description.yaml; the file is required by SYSD-002 for presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/ownership", "claim": "constraint", "asserts": "Ownership of the system, government-owned contractor-operated or contractor-owned and operated, is recorded"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R2-0124"
     citation: {"ref": "SP800-18R2", "page": 27, "anchor": "Function of the system (e.g., transaction processing, operational management, decision support, customer"}
@@ -998,7 +1015,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Summarize the data and information types handled by the system (e.g., CUI, privacy). Highlight the relationship between the system owner and data owner responsibilities for data collection, processing, and disposal as provided from the organization or system data governance strategy. In the privacy plan, the overview aligns with the information provided in the PIA, PRA, and other applicable privacy documentation (e.g., notices to the public, information exchange agreements)."
-    status: "candidate"
+    status: "partial"
+    reason: "Data types (CUI, privacy) are information types; the relationship between system and data owner responsibilities is prose."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "The handling markings summarize the data types handled by the system such as CUI and privacy", "claim": "presence"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R2-0126"
     citation: {"ref": "SP800-18R2", "page": 27, "anchor": "Identify the system user base and user roles that require privileged access"}
@@ -1006,7 +1025,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Identify the system user base and user roles that require privileged access to specific components, enclaves, or data flows that contain data about individuals to ensure accountability and transparency."
-    status: "candidate"
+    status: "partial"
+    reason: "Privileged user groups and roles are recorded; which components or data flows with data about individuals they reach is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/users.schema.json#/properties/users/items/properties/privileged_access", "claim": "presence", "asserts": "Privileged access users are identified with their qualification and accountability"}]
     work_item: "WI-194"
   - id: "REQ-SP800-18R2-0127"
     citation: {"ref": "SP800-18R2", "page": 28, "anchor": "Discussion: Identify the role of each individual that has responsibilities for coordinating"}
@@ -1204,7 +1225,8 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Unique component identifier (e.g., serial number, asset tracking identifier, other service codes that identify supply chain information, designation for physical or virtual implementation)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.yaml", "expect": "is shared by more than one item", "asserts": "A unique component identifier is held by each item and never shared", "claim": "constraint"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0152"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Manufacturer and model, including sub-model identifiers or distinctions (e.g., subcomponent country of"}
@@ -1212,7 +1234,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Manufacturer and model, including sub-model identifiers or distinctions (e.g., subcomponent country of origin)"
-    status: "candidate"
+    status: "partial"
+    reason: "Vendor and product are recorded when known; sub-model and country of origin are not."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/product", "claim": "presence", "asserts": "Manufacturer and model of the component"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0153"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Deployment date, warranty duration, expiration date, and maintenance support contract status"}
@@ -1220,7 +1244,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Deployment date, warranty duration, expiration date, and maintenance support contract status"
-    status: "candidate"
+    status: "partial"
+    reason: "Deployment date, warranty and support are optional fields."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/support", "claim": "presence", "asserts": "Deployment date, warranty duration, expiration date and maintenance support contract status"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0154"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Specific physical locations (e.g., room number, rack and slot number) or logical"}
@@ -1228,7 +1254,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Specific physical locations (e.g., room number, rack and slot number) or logical locations for virtualized components either hosted on-premises or using external third-party services"
-    status: "candidate"
+    status: "partial"
+    reason: "Locations are optional fields."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/location", "claim": "presence", "asserts": "Specific physical locations or logical locations for virtualized components"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0155"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Differentiate between physical and virtual “hardware” components that host the software products"}
@@ -1251,7 +1279,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Product type (e.g., COTS, GOTS)"
-    status: "candidate"
+    status: "partial"
+    reason: "Software category is required of software; hardware product type is not."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.category.yaml", "expect": "has no software category (COTS, GOTS or OSS)", "asserts": "Product type such as COTS or GOTS is recorded", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0158"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Software developer, manufacturer, vendor, and version or build information, as indicated in"}
@@ -1267,7 +1297,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Secure software development attestation13"
-    status: "candidate"
+    status: "partial"
+    reason: "Attestation is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/attestation", "claim": "presence", "asserts": "Secure software development attestation"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0160"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Type (e.g., single user, volume license, public license, freeware)"}
@@ -1275,7 +1307,9 @@ requirements:
     locator: "3.2.▪"
     context: "System Plan Element Details"
     statement: "▪ Type (e.g., single user, volume license, public license, freeware)"
-    status: "candidate"
+    status: "partial"
+    reason: "License type is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/license/properties/type", "claim": "presence", "asserts": "License type such as single user or volume license"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0161"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Expiration date/renewal date"}
@@ -1283,7 +1317,9 @@ requirements:
     locator: "3.2.▪"
     context: "System Plan Element Details"
     statement: "▪ Expiration date/renewal date"
-    status: "candidate"
+    status: "partial"
+    reason: "License expiration is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/license/properties/expiration", "claim": "constraint", "asserts": "Expiration date or renewal date of the license"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0162"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Component installation location"}
@@ -1291,7 +1327,9 @@ requirements:
     locator: "3.2.▪"
     context: "System Plan Element Details"
     statement: "▪ Component installation location"
-    status: "candidate"
+    status: "partial"
+    reason: "Installation location is an optional field."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/location", "claim": "presence", "asserts": "Component installation location"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0163"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "Software warranty and maintenance support contract status"}
@@ -1299,7 +1337,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Software warranty and maintenance support contract status"
-    status: "candidate"
+    status: "partial"
+    reason: "Warranty and maintenance contract are optional fields."
+    evidence: [{"kind": "schema", "target": "framework/schema/inventory.schema.json#/properties/items/items/properties/support/properties/maintenance_contract", "claim": "presence", "asserts": "Software warranty and maintenance support contract status"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0164"
     citation: {"ref": "SP800-18R2", "page": 31, "anchor": "[SP800-218] discusses the Secure Software Development Framework (SSDF), which supports the provisions"}
@@ -1323,7 +1363,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Provide a reference to the authoritative system component inventory data repository. The system component inventory is often distinct from the organization’s physical inventory, which may be handled through a distinct procurement and property management repository. For instance, the system component inventory accounts for hardware as well as instances of virtualized components on host devices that may not be included in the physical inventory repository."
-    status: "candidate"
+    status: "partial"
+    reason: "The reference to the authoritative repository is required; that it is authoritative is not tested."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Provide a reference to the authoritative system component inventory data repository", "claim": "presence"}]
     work_item: "WI-188"
   - id: "REQ-SP800-18R2-0167"
     citation: {"ref": "SP800-18R2", "page": 32, "anchor": "Discussion: Provide visual representations of key internal boundaries, critical components, subsystems, primary"}
@@ -1331,7 +1373,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Discussion: Provide visual representations of key internal boundaries, critical components, subsystems, primary and secondary data stores, virtual components, information exchanges, and services from third-party providers to demonstrate how resilience and redundancy are addressed in the system architecture. Supporting topology narratives may be included."
-    status: "candidate"
+    status: "partial"
+    reason: "The diagrams record what they show from the listed content; resilience and redundancy are prose."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.shows.yaml", "expect": "no diagram shows", "asserts": "Provide visual representations of internal boundaries, data stores and third-party services that a diagram shows", "claim": "constraint"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0168"
     citation: {"ref": "SP800-18R2", "page": 32, "anchor": "When developing or generating diagrams, certain system architecture information (e.g., IP addresses,"}
@@ -1347,7 +1391,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Identify the physical and logical locations of active system components in the authorization boundary inventory. Components are identified based on their roles in the system, such as application interfaces, information data stores, or development, test, and production environments. Diagrams account for all system components, whether they are located on premises, hosted by an external system, virtualized on system host devices, physically or logically isolated within the authorization boundary, or physically or virtually hosted by third-party service providers. Automation may be used to link the components represented in the diagram to the inventory source data."
-    status: "candidate"
+    status: "partial"
+    reason: "Locations are an optional value of shows and optional inventory fields; no rule requires them."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Diagrams account for all system components and their physical and logical locations", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0170"
     citation: {"ref": "SP800-18R2", "page": 32, "anchor": "Physical and environmental protections are identified, including physical entry points and the"}
@@ -1355,7 +1401,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Physical and environmental protections are identified, including physical entry points and the locations of key environmental control systems (e.g., climate control, fire control, water control and detection) components, such as sensors and shut-off valves."
-    status: "candidate"
+    status: "partial"
+    reason: "Physical protections are an optional value of shows; nothing records which components protect others, so no rule can require it."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Physical and environmental protections are identified in the diagrams", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0171"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Technologies used to define the authorization boundary and to enable communication between"}
@@ -1363,7 +1411,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details Illustrate the physical and logical boundaries for communication between system components, including:"
     statement: "o Technologies used to define the authorization boundary and to enable communication between components and services within the boundary or from third-party providers"
-    status: "candidate"
+    status: "partial"
+    reason: "Communication technologies are described in the network architecture; shows records external connections."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.yaml", "expect": "carries no diagram", "asserts": "Technologies used to define the boundary and enable communication between components are shown in the network architecture diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0172"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Data routing and traffic controls, including monitoring for suspicious network activity"}
@@ -1371,7 +1421,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details Illustrate the physical and logical boundaries for communication between system components, including:"
     statement: "o Data routing and traffic controls, including monitoring for suspicious network activity"
-    status: "candidate"
+    status: "partial"
+    reason: "Routing controls are an optional value of shows."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.yaml", "expect": "carries no diagram", "asserts": "Data routing and traffic controls are shown in the network architecture diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0173"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Communication routes for specialized components (e.g., operational technology,"}
@@ -1379,7 +1431,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details Illustrate the physical and logical boundaries for communication between system components, including:"
     statement: "o Communication routes for specialized components (e.g., operational technology,"
-    status: "candidate"
+    status: "partial"
+    reason: "Specialized components are not distinguished."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.yaml", "expect": "carries no diagram", "asserts": "Communication routes for specialized components are shown in the network architecture diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0174"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Components involved in the physical and logical protection of other components"}
@@ -1387,7 +1441,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Components involved in the physical and logical protection of other components"
-    status: "candidate"
+    status: "partial"
+    reason: "Protective components are not recorded, so the shows value is optional."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Components involved in the physical and logical protection of other components are shown in a diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0175"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Components that are physically or logically isolated (e.g., air-gapped)"}
@@ -1395,7 +1451,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details"
     statement: "o Components that are physically or logically isolated (e.g., air-gapped)"
-    status: "candidate"
+    status: "partial"
+    reason: "Isolation is not recorded on components, so the shows value is optional."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "Components that are physically or logically isolated are shown in a diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0176"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Data types (e.g., privacy, CUI) and associated security impact levels"}
@@ -1403,7 +1461,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details Identify the direction of data exchanges and the components that receive and transmit data, including:"
     statement: "o Data types (e.g., privacy, CUI) and associated security impact levels"
-    status: "candidate"
+    status: "partial"
+    reason: "Data types are a required value of shows; their impact levels are in infotypes.yaml."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.shows.yaml", "expect": "no diagram shows", "asserts": "Data types and associated security impact levels are shown in a diagram", "claim": "constraint"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0177"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Where data is created, processed, and delivered (e.g., database servers, application servers,"}
@@ -1425,7 +1485,9 @@ requirements:
     locator: "3.2.o"
     context: "System Plan Element Details Identify the direction of data exchanges and the components that receive and transmit data, including:"
     statement: "o The flow of information that results from information exchanges with external organization systems, including any data movement constraints due to laws, regulations, policies, or agreement limitations"
-    status: "candidate"
+    status: "partial"
+    reason: "External flows are required of the diagrams once a component is external (SUBS-002); data movement constraints are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/P/P-11.md", "asserts": "The flow of information from information exchanges with external systems is shown in a diagram", "claim": "presence"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0180"
     citation: {"ref": "SP800-18R2", "page": 33, "anchor": "Impact levels are based on risk management activities, system artifacts (e.g., Risk"}
@@ -1984,7 +2046,9 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "For complex systems, include the operational status of the subsystems within the authorization boundary. Using automation, the operational status of key components within the system or subsystems can be identified to provide organizational management with a full accounting of the status of the mission or business process supported by the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Each subsystem carries its operational status; automation of the status is not modelled."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/subsystems/items/properties/status", "claim": "constraint", "asserts": "For complex systems include the operational status of the subsystems within the authorization boundary"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R2-0248"
     citation: {"ref": "SP800-18R2", "page": 40, "anchor": "Discussion: System plan reviews ensure accountability for periodic (e.g., life cycle milestones,"}
@@ -2292,7 +2356,9 @@ requirements:
     locator: "3.3.4"
     context: "System Plan Information Protection"
     statement: "Organizations determine the level of protection required for system plan element information based on the system’s information types [SP800-60v2] and organizational requirements. Centralized access control policies in an organization-wide information management tool can manage logical access to information about the system to:"
-    status: "candidate"
+    status: "partial"
+    reason: "The protection level of plan information follows the information types and the classification; access control in the organization's tool is outside the run."
+    evidence: [{"kind": "rule", "target": "SYSD-006", "fixture": "tests/fixtures/negative/SYSD-006.yaml", "expect": "configuration detail is handled at a minimum as CUI", "asserts": "The level of protection required for system plan information is the handling marking set from the classification", "claim": "constraint", "holds_when": "the document is in play once its producer is active or it is seeded"}]
     work_item: "WI-174"
   - id: "REQ-SP800-18R2-0286"
     citation: {"ref": "SP800-18R2", "page": 44, "anchor": "Limit the visibility of information about the system to specific access holders"}
@@ -2442,7 +2508,9 @@ requirements:
     locator: "4.1"
     context: "Prepare"
     statement: "The system plans identify how data flows through various subsystems, third-party services, and external networks to ensure that privacy risks are managed comprehensively. The authorization boundary establishes the scope of protection for the system based on mission, management, or budgetary responsibilities. Privacy risks can arise at any stage of data processing because of the interconnected nature of modern systems, and identifying and responding to them may require looking beyond the authorization boundary."
-    status: "candidate"
+    status: "partial"
+    reason: "Data flows are described and diagrammed; privacy risk across subsystems and third parties is prose."
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.shows.yaml", "expect": "no diagram shows", "asserts": "The system plans identify how data flows through subsystems and external networks, and a diagram shows the direction of data", "claim": "constraint"}]
     work_item: "WI-175"
   - id: "REQ-SP800-18R2-0305"
     citation: {"ref": "SP800-18R2", "page": 47, "anchor": "The system’s [FIPS199] security categorization reflects potential adverse impacts of the loss"}
@@ -3359,7 +3427,8 @@ requirements:
     locator: "3.2"
     context: "System Plan Element Details"
     statement: "Identify the direction of data exchanges and the components that receive and transmit data, including:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.shows.yaml", "expect": "no diagram shows", "asserts": "Identify the direction of data exchanges, which a data flow diagram shows", "claim": "constraint"}]
     work_item: "WI-184"
   - id: "REQ-SP800-18R2-0419"
     citation: {"ref": "SP800-18R2", "page": 35, "anchor": "Control implementation details in a system privacy plan differ from those in"}
@@ -3408,7 +3477,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "Compile a list of the technologies being used to support the mission/business functions and factors that present additional security- or privacy-specific risks, such as cloud-based products and services, “bring your own device” (BYOD) policies, or the processing of data about individuals. Reference key design considerations (e.g., centralization methods, continuous integration and continuous delivery, zero trust architecture, emerging technologies) in the approach for identifying and managing system risks."
-    status: "candidate"
+    status: "partial"
+    reason: "Technologies and their added risks are prose in the function narrative."
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/function", "claim": "presence", "asserts": "The function narrative names the technologies used to support the mission functions"}]
     work_item: "WI-194"
     promoted: {"reason": "Rejected as no-marker. Imperatives of the System Overview element: list the technologies and risk factors, and reference key design considerations."}
   - id: "REQ-SP800-18R2-0425"
@@ -3435,7 +3506,8 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "Discussion: Identify the subsystems and system elements that comprise the system to be authorized for operation or use by an authorizing official (i.e., the scope of the authorization). Summarize key aspects of the system architecture, including the use of subsystems and external service providers; physical or logical separations; local and remote management functionalities; customized or specialized components, functions, or data flows; and the use of private, public, or hybrid cloud service provider services."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "SUBS-002", "fixture": "tests/fixtures/negative/SUBS-002.subsystems.yaml", "expect": "no diagram shows", "asserts": "Identify the subsystems that comprise the system to be authorized, and a diagram shows them", "claim": "constraint"}]
     work_item: "WI-175"
     promoted: {"reason": "Rejected as no-marker. The imperatives of the Authorization Boundary Description element: identify subsystems and elements, summarize the architecture."}
   - id: "REQ-SP800-18R2-0428"
@@ -3478,7 +3550,9 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "Discussion: Identify the readiness of the system and related subsystems within the environment of operation."
-    status: "candidate"
+    status: "partial"
+    reason: "Readiness is an optional field of the subsystem."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/subsystems/items/properties/readiness", "claim": "presence", "asserts": "Identify the readiness of the system and related subsystems within the environment of operation"}]
     work_item: "WI-175"
     promoted: {"reason": "Rejected as no-marker. The imperative of the System Operational Status element, covering subsystems."}
   - id: "REQ-SP800-18R2-0433"
@@ -3509,7 +3583,9 @@ requirements:
     locator: "4.3.3"
     context: ""
     statement: "If the common control provider implementation details are considered controlled information (e.g., those associated with a cloud service provider or cloud service offering), restrictions in applicable service agreements related to the distribution of organizational and system information are followed."
-    status: "candidate"
+    status: "partial"
+    reason: "Distribution restrictions in service agreements are not recorded; the handling marking holds for documents with vulnerability detail."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-1.md", "asserts": "Restrictions in service agreements on distribution of system information are followed through the handling markings", "claim": "presence"}]
     work_item: "WI-195"
     promoted: {"reason": "Footnote 22 states a condition and a duty: when provider implementation details are controlled information, restrictions in the applicable service agreements are followed."}
   - id: "REQ-SP800-18R2-0436"
