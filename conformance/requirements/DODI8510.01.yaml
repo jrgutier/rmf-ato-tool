@@ -546,7 +546,9 @@ requirements:
     locator: "2.8.b"
     context: "CHAIRMAN OF THE JOINT CHIEFS OF STAFF In coordination with the DoD CISO, and in addition to the responsibilities in Paragraph 2.7., the Chairman of the Joint Chiefs of Staff:"
     statement: "b. Maps systems to dependent missions."
-    status: "candidate"
+    status: "partial"
+    reason: "The duty is the Chairman of the Joint Chiefs of Staff's (paragraph 2.8): mapping systems to dependent missions across the Department. The run holds this system's side of that map, the dependent missions P-8 identifies in facts.yaml (MSN-001, a presence clause), and cannot hold the Department-wide mapping."
+    evidence: [{"kind": "rule", "asserts": "Systems mapped to dependent missions: a run whose P-8 identifies no mission fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope"}]
     work_item: "WI-19"
   - id: "REQ-DODI8510.01-0071"
     citation: {"ref": "DODI8510.01", "page": 11, "anchor": "Supports JCA owners in developing required RMF guidance for their portfolios."}
@@ -749,7 +751,8 @@ requirements:
     locator: "3.2"
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Task P-8 Mission or Business Focus | Missions, business functions, and mission or business processes that the system is intended to support are identified. [CSF: Profile; Implementation Tiers; ID.BE] | Mission or Business Owner"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Missions, business functions and mission or business processes the system is intended to support are identified at Task P-8", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope"}, {"kind": "rule", "asserts": "Identified by the Mission or Business Owner, not another persona", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.owner.yaml", "expect": "the mission or business owner identifies the missions the system supports, not", "claim": "constraint", "holds_when": "P-8 is in the run's scope"}]
     work_item: "WI-19"
   - id: "REQ-DODI8510.01-0096"
     citation: {"ref": "DODI8510.01", "page": 14, "anchor": "Task P-9 System Stakeholders | The stakeholders having an interest in the"}
@@ -952,7 +955,8 @@ requirements:
     locator: "3.2"
     context: "Table 5. Assessment Tasks and Outcomes"
     statement: "Task A-1 Assessor Selection | • An assessor or assessment team is selected to conduct the control assessments. • The appropriate level of independence is achieved for the assessor or assessment team selected. | • AO or AODR"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "asserts": "Task A-1 Assessor Selection: an assessor or assessment team is selected; no selection recorded fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected by the AO or AODR, not another persona", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The appropriate level of independence is achieved: the AO found the level insufficient fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.insufficient.yaml", "expect": "insufficient to provide confidence that the assessment results are sound", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The level of independence achieved for the assessment team selected: a member lacking the required degree fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.independence.yaml", "expect": "lacks the required degree of independence", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-19"
   - id: "REQ-DODI8510.01-0121"
     citation: {"ref": "DODI8510.01", "page": 17, "anchor": "Task A-2 Assessment Plan | • Documentation needed to conduct the assessments"}

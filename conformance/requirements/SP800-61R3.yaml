@@ -1070,7 +1070,9 @@ requirements:
     locator: "3.1"
     context: "Table 2. CSF 2.0 Community Profile part 1: Preparation and Lessons Learned"
     statement: "ID.AM-03 | Representations of the organization’s authorized network communication and internal and external network data flows are maintained | Medium | N1: Maintaining network data flow representations can improve the accuracy of detecting malicious data flows and communication. C1: Consider leveraging automation and zero trust architectures to automatically create and maintain network data flow representations."
-    status: "candidate"
+    status: "covered"
+    reason: "boundary.yaml requires the network architecture and the data flows (with external connections), and ISCM-005 fails a strategy that does not revisit the boundary periodically, so the representations are maintained"
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/data_flow", "asserts": "Representations of internal and external network data flows are recorded", "claim": "presence"}, {"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/network_architecture", "asserts": "Representations of the authorized network communication are recorded", "claim": "presence"}, {"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.boundary.yaml", "expect": "not periodically: its scope is revisited on a schedule", "asserts": "The network communication and data flow representations are maintained: the authorization boundary is revisited periodically, on a schedule", "claim": "constraint", "holds_when": "S-5 is active"}]
     work_item: "WI-12"
   - id: "REQ-SP800-61R3-0132"
     citation: {"ref": "SP800-61R3", "page": 24, "anchor": "ID.AM-04 | Inventories of services provided by suppliers are maintained | Medium"}

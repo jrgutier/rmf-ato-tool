@@ -1,0 +1,19 @@
+rule: AUTY-002
+bases:
+- joint
+description: a type authorization recorded on an interim authorization to test
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.0.type_authorization
+  value:
+    archetype: Relay 1.0
+    environment: Test enclave
+    identical:
+    - software
+    site_controls: facility
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - a type authorization represents an authorization to operate, not AD-IATT

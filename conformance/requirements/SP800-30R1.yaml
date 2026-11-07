@@ -919,7 +919,9 @@ requirements:
     locator: "3.1"
     context: "IDENTIFY SCOPE"
     statement: "Supplemental Guidance: The scope of the risk assessment determines what will be considered in the assessment. Risk assessment scope affects the range of information available to make risk-based decisions and is determined by the organizational official requesting the assessment and the risk management strategy. Establishing the scope of the risk assessment helps organizations to determine: (i) what tiers are addressed in the assessment; (ii) what parts of organizations are affected by the assessment and how they are affected; (iii) what decisions the assessment results support; (iv) how long assessment results are relevant; and (v) what influences the need to update the assessment. Establishing the scope of the risk assessment helps to determine the form and content of the risk assessment report, as well as the information to be shared as a result of conducting the assessment. At Tier 3, the scope of a risk assessment can depend on the authorization boundary for the information system. Appendix K provides an example of the type of information that may be included in a risk assessment report or the preferred vehicle for risk communication."
-    status: "candidate"
+    status: "partial"
+    reason: "The scope records applicability, time frame and architecture (schema), at Tier 3 tied to the authorization boundary; what influences the need to update is held in conmon.yaml risk_assessment; Appendix K is an example"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/scope/properties/applicability", "asserts": "The risk assessment scope determines the tiers and parts of the organization the assessment considers", "claim": "presence", "sentence": "Establishing the scope of the risk assessment helps organizations to determine: (i) what tiers are addressed in the assessment; (ii) what parts of organizations are affected by the assessment and how they are affected; (iii) what decisions the assessment results support; (iv) how long assessment results are relevant; and (v) what influences the need to update the assessment."}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0111"
     citation: {"ref": "SP800-30R1", "page": 34, "anchor": "Organizational Applicability Organizational applicability describes which parts of the organization or suborganizations"}
@@ -2163,7 +2165,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List the date of the risk assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "RARC-001 fails an undated risk assessment; presence only"
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.date.yaml", "expect": "the date of the risk assessment", "asserts": "List the date of the risk assessment: ra.yaml with no date fails", "claim": "presence", "holds_when": "P-14 is active"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/date", "asserts": "The risk assessment lists its date", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0254"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "Summarize the purpose of the risk assessment."}
@@ -2171,7 +2175,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Summarize the purpose of the risk assessment."
-    status: "candidate"
+    status: "partial"
+    reason: "purpose.statement is required by the schema; presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "asserts": "The risk assessment summarizes its purpose", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0255"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "Describe the scope of the risk assessment."}
@@ -2186,7 +2192,8 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.-"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "- For Tier 1 and Tier 2 risk assessments, identify: organizational governance structures or processes associated with the assessment (e.g., risk executive [function], budget process, acquisition process, systems engineering process, enterprise architecture, information security architecture, organizational missions/business functions, mission/business processes, information systems supporting the mission/business processes)."
-    status: "candidate"
+    status: "not-applicable"
+    reason: "Governance structures are identified for Tier 1 and Tier 2 risk assessments; a system risk assessment (ART-RA) is a Tier 3 assessment"
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0257"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "For Tier 3 risk assessments, identify: the information system name and location(s),"}
@@ -2201,7 +2208,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• State whether this is an initial or subsequent risk assessment. If a subsequent risk assessment, state the circumstances that prompted the update and include a reference to the previous Risk Assessment Report."
-    status: "candidate"
+    status: "partial"
+    reason: "RARC-001 fails a subsequent assessment that states no circumstances or no previous report; whether the reference resolves to a real report is not tested"
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.subsequent.yaml", "expect": "a reference to the previous risk assessment report", "asserts": "A subsequent risk assessment states the circumstances that prompted the update and a reference to the previous risk assessment report", "claim": "presence", "holds_when": "P-14 is active"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/update", "asserts": "A subsequent risk assessment states what prompted the update and the previous report", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0259"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "Describe the overall level of risk (e.g., Very Low, Low, Moderate, High,"}
@@ -2216,7 +2225,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List the number of risks identified for each level of risk (e.g., Very Low, Low, Moderate, High, or Very High)."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event carries its risk level, so the number of risks per level derives from ra.yaml; the report renders no count"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/risk", "asserts": "Each risk identified carries its level of risk, from which the number per level is counted", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0261"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "Describe the purpose of the risk assessment, including questions to be answered"}
@@ -2224,7 +2235,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Describe the purpose of the risk assessment, including questions to be answered by the assessment. For example:"
-    status: "candidate"
+    status: "partial"
+    reason: "purpose.statement and purpose.decisions state the purpose and the decisions it supports; the questions to be answered are prose, presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/purpose/properties/statement", "asserts": "The risk assessment describes its purpose, the questions it answers", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0262"
     citation: {"ref": "SP800-30R1", "page": 92, "anchor": "The essential elements of information described in this appendix are informative and"}
@@ -2256,7 +2269,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Identify assumptions and constraints."
-    status: "candidate"
+    status: "partial"
+    reason: "assumptions and constraints are required records of ra.yaml; presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/assumptions", "asserts": "The risk assessment identifies its assumptions", "claim": "constraint"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/constraints", "asserts": "The risk assessment identifies its constraints", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0266"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "Describe risk tolerance inputs to the risk assessment (including the range of"}
@@ -2264,7 +2279,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Describe risk tolerance inputs to the risk assessment (including the range of consequences to be considered)."
-    status: "candidate"
+    status: "partial"
+    reason: "risk_tolerance is a required record with its range of consequences; presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/risk_tolerance", "asserts": "The risk assessment describes its risk tolerance inputs and range of consequences", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0267"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "Identify and describe the risk model and analytic approach; provide a reference"}
@@ -2272,7 +2289,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Identify and describe the risk model and analytic approach; provide a reference or include as an appendix, identifying risk factors, value scales, and algorithms for combining values."
-    status: "candidate"
+    status: "partial"
+    reason: "The risk model records its factors, with RARC-001 failing one that leaves out an SP 800-30 factor, its scales and its combination algorithm (schema); the description of the analytic approach is prose"
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.yaml", "expect": "all of the risk factors of SP 800-30 are used across the DoD", "asserts": "The risk model identifies its risk factors: one leaving out an SP 800-30 risk factor fails", "claim": "constraint", "holds_when": "P-14 is active"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/risk_model/properties/factors", "asserts": "The risk model identifies its risk factors", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0268"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "Provide a rationale for any risk-related decisions during the risk assessment process."}
@@ -2280,7 +2299,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Provide a rationale for any risk-related decisions during the risk assessment process."
-    status: "candidate"
+    status: "partial"
+    reason: "RARC-001 fails a risk assessment with no rationales; that every risk-related decision has one is not testable"
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.rationales.yaml", "expect": "the rationale for each risk-related decision", "asserts": "Provide a rationale for any risk-related decisions during the risk assessment", "claim": "presence", "holds_when": "P-14 is active"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/rationales", "asserts": "Each risk-related decision of the assessment states its rationale", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0269"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "Describe the uncertainties within the risk assessment process and how those uncertainties"}
@@ -2288,7 +2309,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Describe the uncertainties within the risk assessment process and how those uncertainties influence decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Each threat event states its uncertainty (schema); how uncertainties influence decisions is prose, presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/threat_events/items/properties/uncertainty", "asserts": "The risk assessment describes the uncertainties within the assessment", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0270"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "If the risk assessment includes organizational missions/business functions, describe the missions/functions (e.g.,"}
@@ -2296,7 +2319,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• If the risk assessment includes organizational missions/business functions, describe the missions/functions (e.g., mission/business processes supporting the missions/functions, interconnections and dependencies among related missions/business functions, and information technology that supports the missions/business functions)."
-    status: "candidate"
+    status: "partial"
+    reason: "scope.applicability names the missions and parts of the organization the assessment covers; their processes, interconnections and supporting technology are not held in ra.yaml"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/scope/properties/applicability", "asserts": "The risk assessment describes the missions and business functions it includes", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0271"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "If the risk assessment includes organizational information systems, describe the systems (e.g.,"}
@@ -2318,7 +2343,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• Identify the time frame for which the risk assessment is valid (i.e., time frame for which the assessment is intended to support decisions)."
-    status: "candidate"
+    status: "partial"
+    reason: "scope.time_frame is required by the schema; presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/scope/properties/time_frame", "asserts": "The risk assessment identifies the time frame for which it is valid", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0274"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "List the risks due to adversarial threats (see Table F-1)."}
@@ -2326,7 +2353,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List the risks due to adversarial threats (see Table F-1)."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat events name typed threat sources, so the risks due to adversarial threats derive from ra.yaml; the report renders no separate list"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/type", "asserts": "Risks due to adversarial threats are listed through their threat sources' type", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0275"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "List the risks due to non-adversarial threats (see Table F-2)."}
@@ -2334,7 +2363,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List the risks due to non-adversarial threats (see Table F-2)."
-    status: "candidate"
+    status: "partial"
+    reason: "Threat events name typed threat sources, so the risks due to non-adversarial threats derive from ra.yaml; the report renders no separate list"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/type", "asserts": "Risks due to non-adversarial threats are listed through their threat sources' type", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0276"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "List references and sources of information."}
@@ -2349,7 +2380,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List the team or individuals conducting the risk assessment including contact information."
-    status: "candidate"
+    status: "partial"
+    reason: "RARC-001 fails a risk assessment that lists no team; contact information is held by presence"
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.team.yaml", "expect": "the team or individuals conducting it, with contact information", "asserts": "List the team or individuals conducting the risk assessment including contact information", "claim": "presence", "holds_when": "P-14 is active"}, {"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/team", "asserts": "The risk assessment lists its team with contact information", "claim": "presence"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0278"
     citation: {"ref": "SP800-30R1", "page": 93, "anchor": "List risk assessment details and any supporting evidence (e.g., Tables D-7, D-8,"}
@@ -2357,7 +2390,9 @@ requirements:
     locator: "RISK ASSESSMENT REPORTS.•"
     context: "ESSENTIAL ELEMENTS OF INFORMATION"
     statement: "• List risk assessment details and any supporting evidence (e.g., Tables D-7, D-8, E-5, F-3, F-6, H-4), as needed to understand and enable reuse of results (e.g., for reciprocity, for subsequent risk assessments, to serve as input to Tier 1 and Tier 2 risk assessments)."
-    status: "candidate"
+    status: "partial"
+    reason: "communication.shared records whether supporting evidence is shared for reuse; the evidence tables themselves are not required"
+    evidence: [{"kind": "schema", "target": "framework/schema/ra.schema.json#/properties/communication/properties/shared", "asserts": "Risk assessment details and supporting evidence are shared to enable reuse", "claim": "constraint"}]
     work_item: "WI-18"
   - id: "REQ-SP800-30R1-0279"
     citation: {"ref": "SP800-30R1", "page": 19, "anchor": "In general, risks materialize as a result of a series of threat"}

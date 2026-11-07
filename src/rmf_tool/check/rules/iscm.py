@@ -247,3 +247,64 @@ def delegations(ctx: Context) -> list[RunFinding]:
             out.append(make("ISCM-006", f"a delegation names {partner}, which "
                             "leveraged-authorizations.yaml does not hold", CONMON_FILE))
     return out
+
+
+# --- METR: the metrics the strategy reports ---------------------------------------------
+def metrics(ctx: Context) -> list[RunFinding]:
+    conmon = _strategy(ctx)
+    if conmon is None or "metrics" not in conmon:
+        return []
+    found = _records(conmon, "metrics")
+    if not found:
+        return [make("METR-001", "conmon.yaml lists no metrics: the ISCM program has a set of "
+                     "metrics and corresponding review procedures", CONMON_FILE)]
+    out = []
+    for metric in found:
+        mid = metric.get("id")
+        missing = []
+        if not metric.get("objective"):
+            missing.append("states no objective: each metric states the specific objective it "
+                           "is derived from")
+        if not metric.get("controls"):
+            missing.append("states no controls: each metric states the controls it is "
+                           "calculated from")
+        if not metric.get("baseline"):
+            missing.append("states no baseline: each metric states the baseline its values are "
+                           "evaluated against")
+        if not metric.get("threshold"):
+            missing.append("states no threshold: each metric states the threshold that shows "
+                           "nonconformance")
+        if not metric.get("review"):
+            missing.append("states no review: each metric states its review procedure")
+        out.extend(make("METR-001", f"metric {mid} {what}", CONMON_FILE) for what in missing)
+        review = metric.get("review") if isinstance(metric.get("review"), dict) else {}
+        recipients = set(_strs(metric.get("reported_to")))
+        for official in _strs(review.get("by")):
+            if official not in recipients:
+                out.append(make("METR-001", f"metric {mid} is reviewed by {official}, who is not "
+                                "among the officials it is reported to: metrics are reported to "
+                                "the designated officials who review them", CONMON_FILE))
+    return out
+
+
+def _strs(value: Any) -> list[str]:
+    """The strings a list field holds; a malformed field is RUN-FM-001's to report."""
+    return [v for v in value if isinstance(v, str)] if isinstance(value, list) else []
+
+
+def metric_timing(ctx: Context) -> list[RunFinding]:
+    """Each control a metric reads is in the baseline, so the metric is calculated from the
+    security architecture's controls. SP 800-137 lets a metric's inputs change at their own
+    frequencies (policies yearly, assets daily), so no ordering of frequencies is imposed."""
+    conmon = _strategy(ctx)
+    if conmon is None or baseline_mod.load(ctx.run) is None:
+        return []
+    baseline = set(baseline_mod.control_ids(ctx.run))
+    out = []
+    for metric in _records(conmon, "metrics"):
+        for cid in _strs(metric.get("controls")):
+            if cid not in baseline:
+                out.append(make("METR-002", f"metric {metric.get('id')} reads {cid}, which is "
+                                "not in the baseline, so it is not calculated from the security "
+                                "architecture's controls", CONMON_FILE))
+    return out

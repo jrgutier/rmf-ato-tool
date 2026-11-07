@@ -8,6 +8,50 @@ handling: CUI
 ---
 # Configuration management plan
 
+## Purpose and scope
+
+Purpose and scope for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Roles and responsibilities
+
+Roles and responsibilities for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Configuration control board
+
+Configuration control board for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Configuration items and component inventory
+
+Configuration items and component inventory for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Baseline configurations
+
+Baseline configurations for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Configuration change control
+
+Configuration change control for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Security impact analysis
+
+Security impact analysis for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Access restrictions for change
+
+Access restrictions for change for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Configuration monitoring
+
+Configuration monitoring for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Records and tools
+
+Records and tools for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
+## Plan maintenance and exceptions
+
+Plan maintenance and exceptions for the configuration management plan of this system, as the interview records [[INT-007.A1]].
+
 ## Baseline configuration
 
 The relay appliance and console are built from STIG-hardened images; the image definitions

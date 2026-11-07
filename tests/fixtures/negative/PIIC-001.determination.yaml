@@ -1,0 +1,14 @@
+rule: PIIC-001
+bases:
+- pii
+description: the approved PII determination says no PII while an information type holds PII
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.approved.privacy.pii
+  value: false
+expect:
+  errors:
+  - PIIC-001
+  messages:
+  - the approved PII determination is False, and the information types hold PII

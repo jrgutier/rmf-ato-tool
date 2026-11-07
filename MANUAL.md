@@ -714,6 +714,8 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 |---|---|---|---|
 | [ART-BIA](#art-bia) | Business impact and criticality analysis | produces | supporting |
 
+Writes to `facts.yaml`: `missions`.
+
 **Entry criteria**
 
 - A capability need is documented (EXT-CAPDOC) and the organizational context is available.
@@ -723,6 +725,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 - Missions, business functions and mission/business processes that the system is intended to support are identified (DoDI 8510.01 Table 1 outcome).
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
+- facts.yaml `missions` (from framework 0.2.0) lists each mission, business function and mission/business process with its kind and whether it is mission essential, identified by the mission or business owner; an essential function names its supporting assets and data once P-11 and P-12 put them on record (MSN-001).
 - artifacts/data/bia.yaml records whether mission critical functions are present and which, and each supported process with the impact of its disruption, the users' recovery time requirement and its interdependencies (BIA-001).
 
 **Alignment**
@@ -1070,6 +1073,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - A system-level risk assessment is completed or an existing risk assessment is updated (DoDI 8510.01 Table 1 outcome).
 - ART-RA records threats, vulnerabilities, likelihood, impact and the resulting risks.
 - artifacts/data/ra.yaml states the purpose, scope, assumptions, constraints, dated information sources, risk model, analytic approach and risk tolerance, rates each threat source, threat event, vulnerability and predisposing condition, and holds the risk of each connection, external provider and supplier, the priority order and to whom the results are communicated (SRA-001 to SRA-003).
+- ra.yaml is dated, lists the team with contact information, the rationale of each risk-related decision and any tailoring of its robustness with how far the results can be relied on, communicated to the AO or AODR; a subsequent assessment states what prompted it and the previous report; the risk model uses every SP 800-30 risk factor (RARC-001).
 - ART-RA identifies the system elements and interfaces that need specific attention in test events, for the cybersecurity strategy and the TEMP.
 - For a system processing PII, artifacts/data/ra.yaml `privacy` assesses the nature of the processing and its impact on individuals and evaluates each legal and policy privacy requirement, OMB A-130 among them, with what the privacy baseline leaves unmet (PRIV-007); where P-12 found a PIA required, artifacts/data/pia.yaml holds it on DD Form 2930 (2930A when adapted), coordinated through the ISSM, the privacy representative and the records office, reviewed by PER-CISO and PER-PRIV and approved by PER-CIO or the reviewing official (PRIV-002, PRIV-003).
 - ra.yaml components records each third-party and open-source software component with the six risk factors of DoWI 8430.01 3.5.i.(2), the further governance, community and license review of a non-trivial open-source component, and any independent third-party validation of a commercial product (SWA-002); ra.yaml ai_capabilities records each AI-enabled capability's use case risk, benchmarks, verification before deployment, monitoring and bias handling (DoWI 8430.01 3.6.e).
@@ -1952,6 +1956,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - conmon.yaml states the criteria behind each frequency, established by the system owner or common control provider with other officials, or cites ART-ORG-CONTEXT for a family organizational_frequencies lists as set by the organizational strategy (ISCM-003).
 - Each automated tool names the baseline controls it assesses by the test method, with its frequency (continuous where it carries a continuously monitored control), analysis, reporting, selection criteria, upkeep and strategy; a desired-state tool defines an automated actual state, a data-based comparable desired state and its defect method; a continuously monitored control no tool covers gets a manual frequency (ISCM-002).
 - conmon.yaml states the data architecture, compliance, effectiveness and change monitoring, event criteria with thresholds and what each triggers, a periodic boundary review, threat monitoring of threat actors, protective techniques and the deployed environment (EXT-THREAT), metrics and the tasks using them, activities delegated to external partners and how the risk assessment is kept current (ISCM-001, ISCM-005, ISCM-006); posture reports reach the AO (ISCM-005).
+- Each conmon.yaml metric states the objective it serves, the baseline controls it reads, its baseline and threshold, and a review procedure by officials it is reported to (METR-001, METR-002).
 - conmon.yaml has room for the AO's or AODR's approval of the strategy and the minimum frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
@@ -2653,6 +2658,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - An authorization package is developed for submission to the AO (DoDI 8510.01 Table 6 outcome).
 - package/manifest.yaml generated by rmf package lists every core artifact (PKG-001), and each core document carries the Annex C data elements mapped to it (PKG-003).
 - ART-DIAS states the assurance levels chosen with the ia family at S-4 (DIAS-001).
+- artifacts/data/package-summary.yaml (template templates/data/package-summary.yaml) holds the package executive summary, a consolidated view of its security and, for a system processing PII, privacy information, with the risk management issues it highlights, and the submission of the package by the system owner or common control provider to the AO or AODR before the decision (XSUM-001).
 - For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
 - The package carries the PPP approval recorded in protection.yaml, and that approval was made by the authority the program's ACAT, decision authority and pathway call for (PPROT-001).
 - Each Receiving organization in reciprocity.yaml has the package, a current POA&M, the body of evidence, the deployment instructions and, before its first site, the installation and configuration requirements with every STIG, and visibility of the package; the package is shared with the information owners and every interconnected system (RCP-001).
@@ -4311,7 +4317,7 @@ Generated manifest of the authorization package contents (security plan, assessm
 |---|---|
 | Package | supporting (generated by `rmf` from run data) |
 | Template | none (generated by `rmf`) |
-| Data files | `package/manifest.yaml` |
+| Data files | `package/manifest.yaml`<br>`artifacts/data/package-summary.yaml` (schema `package-summary`) |
 | OSCAL | — |
 | Produced by | [R-1](#task-r-1) |
 | Updated by | — |

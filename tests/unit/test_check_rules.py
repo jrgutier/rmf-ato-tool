@@ -23,6 +23,7 @@ if (EXAMPLE_RUN / "run.yaml").is_file():  # a fork deletes examples/ (plan §4.3
     BASES["example"] = EXAMPLE_RUN
 # A derived base: a committed base plus mutations, so it cannot drift from what it extends.
 DERIVED = {"pii": REPO_ROOT / "tests/fixtures/runs/pii.yaml",
+           "joint": REPO_ROOT / "tests/fixtures/runs/joint.yaml",
            "cloud": REPO_ROOT / "tests/fixtures/runs/cloud.yaml"}
 SPECS = sorted(NEGATIVE.glob("*.yaml"))
 
@@ -277,3 +278,20 @@ def test_an_optional_data_file_is_not_required_with_its_artifact(tmp_path):
     run = open_run(run_dir, REPO_ROOT)
     found = engine.select(run, engine.evaluate(run), final=True)
     assert [f for f in found if f.severity == "E"] == []
+
+
+def _auty_002(run_dir):
+    run = open_run(run_dir, REPO_ROOT)
+    return [f.finding.message for f in engine.evaluate(run).findings if f.rule == "AUTY-002"]
+
+
+def test_type_authorization_used_with_site_specific_controls_needs_no_facility(tmp_path):
+    """SP 800-37r2 App. F: a type authorization is used with authorized site-specific controls
+    or with a facility authorization, so a site without a facility package is allowed."""
+    run_dir = base_copy("joint", tmp_path / "joint")
+    _edit_ato(run_dir, provider={"organization": "Relay program office", "decision": "AD-ATO",
+                                 "date": "2026-06-01", "package": "Relay archetype package",
+                                 "type_authorization": True, "site_controls": "site-specific"})
+    messages = _auty_002(run_dir)
+    assert not any("facility" in m for m in messages), messages
+    assert not any("does not say whether" in m for m in messages), messages

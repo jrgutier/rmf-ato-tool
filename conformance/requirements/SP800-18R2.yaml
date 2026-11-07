@@ -1658,7 +1658,9 @@ requirements:
     locator: "3.2.•"
     context: "System Plan Element Details System-specific implementation details or common control implementation details for a common control plan indicate how to address risk management requirements based on the"
     statement: "• Description of metrics that are collected and analyzed to monitor the control implementation, including the baseline and threshold definitions used to evaluate control conformance to implementation procedures and parameters"
-    status: "candidate"
+    status: "partial"
+    reason: "METR-001 holds that each metric states the controls it monitors, its baseline and its threshold, by presence; whether the definitions evaluate conformance to the implementation procedures and parameters is not tested"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.threshold.yaml", "expect": "states no threshold: each metric states the threshold that shows nonconformance", "asserts": "Metrics collected to monitor control implementation include the threshold definitions used to evaluate conformance", "claim": "presence", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/baseline", "asserts": "Each metric includes the baseline definition used to evaluate control conformance", "claim": "presence"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/threshold", "asserts": "Each metric includes the threshold definition used to evaluate control conformance", "claim": "presence"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/controls", "asserts": "Each metric describes the controls whose implementation it monitors", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-18R2-0195"
     citation: {"ref": "SP800-18R2", "page": 35, "anchor": "Inherited risks from the common control implementations"}

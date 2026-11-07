@@ -1,0 +1,16 @@
+rule: RIGR-003
+bases:
+- minimal
+description: an examine sample that leaves out selected object types
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: procedures.0.sampling.0.types
+  value:
+  - type: specifications
+    number: 2
+expect:
+  errors:
+  - RIGR-003
+  messages:
+  - 'PRC-001 examine: the object type activities the procedure selects is not sampled, so the sample lacks the diversity of types selected'

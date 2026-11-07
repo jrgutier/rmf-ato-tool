@@ -129,6 +129,23 @@
                 "$ref": "#/$defs/date"
               }
             }
+          },
+          "contract": {
+            "title": "For contracted assessment services: whether the system or program owner is directly involved in the contracting process and can unduly influence the assessor's independence",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "owner_involved",
+              "owner_can_influence"
+            ],
+            "properties": {
+              "owner_involved": {
+                "type": "boolean"
+              },
+              "owner_can_influence": {
+                "type": "boolean"
+              }
+            }
           }
         }
       },
@@ -222,6 +239,71 @@
         "rationale": {
           "type": "string",
           "minLength": 1
+        },
+        "basis": {
+          "title": "What the required level of independence rests on: the security categorization (ART-CAT) and the risk to operations, assets, individuals, other organizations and the Nation (ART-RA)",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^ART-[A-Z]+(-[A-Z]+)*$"
+          }
+        },
+        "sufficiency": {
+          "title": "Whether the level of assessor independence is sufficient to provide confidence that the assessment results are sound",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "determined_by",
+            "sufficient",
+            "date"
+          ],
+          "properties": {
+            "determined_by": {
+              "title": "The authorizing official or designated representative who determined the sufficiency",
+              "$ref": "#/$defs/persona_id"
+            },
+            "sufficient": {
+              "type": "boolean"
+            },
+            "date": {
+              "$ref": "#/$defs/date"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "achieved_by": {
+          "title": "How independence is achieved: by the assessors themselves, or in special situations by an independent team of experts reviewing the results",
+          "enum": [
+            "assessor",
+            "independent-review"
+          ]
+        },
+        "review": {
+          "title": "The independent team of experts that reviews and analyzes the assessment results when the assessors are in the system owner's chain",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "situation"
+          ],
+          "properties": {
+            "by": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/persona_id"
+              }
+            },
+            "situation": {
+              "title": "The special situation: a small organization, or a structure that puts the assessors in the developmental, operational or management chain of the system owner",
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       }
     },
@@ -762,6 +844,101 @@
             "title": "Order of the procedure among the assessment procedures; procedures run together share one",
             "type": "integer",
             "minimum": 1
+          },
+          "assurance_requirement": {
+            "title": "The assurance requirement of rigor.assurance_requirements the procedure meets",
+            "type": "string",
+            "pattern": "^AR-\\d{3}$"
+          },
+          "sampling": {
+            "title": "One record per method: the type, number and specific objects the organization directs",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "types",
+                "selection"
+              ],
+              "properties": {
+                "method": {
+                  "enum": [
+                    "examine",
+                    "interview",
+                    "test"
+                  ]
+                },
+                "types": {
+                  "title": "The object types sampled (an interview samples personas) and how many of each",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "number"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "number": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  }
+                },
+                "specific": {
+                  "title": "Specific objects or individuals deemed particularly important, beside the representative sample",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "selection": {
+                  "title": "How the sample is drawn",
+                  "enum": [
+                    "random",
+                    "targeted",
+                    "random-and-targeted"
+                  ]
+                },
+                "bias_control": {
+                  "title": "How bias is avoided when the sample is not random",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "extent": {
+                  "title": "For mechanism-related testing, the extent of the testing: what is counted and how many",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "measure",
+                      "count"
+                    ],
+                    "properties": {
+                      "measure": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "count": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1248,6 +1425,147 @@
           "minItems": 1,
           "items": {
             "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "selection": {
+      "title": "The assessor selection (Task A-1): the authorizing official or designated representative selects the assessor or assessment team for the type of control assessment to be conducted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_by",
+        "date",
+        "assessment_type",
+        "expertise"
+      ],
+      "properties": {
+        "selected_by": {
+          "$ref": "#/$defs/persona_id"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "assessment_type": {
+          "title": "The type of control assessment the assessor was selected for",
+          "enum": [
+            "security",
+            "privacy",
+            "security-and-privacy"
+          ]
+        },
+        "expertise": {
+          "title": "The technical expertise the selection considered: the skills and technical expertise required to assess the system-specific, hybrid and common controls",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "rigor": {
+      "title": "What the rigor and scope of the assessment rest on (SP 800-53A 1.1, 2.4, appendix C)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "categorization",
+        "plans",
+        "assurance_requirements",
+        "direction"
+      ],
+      "properties": {
+        "categorization": {
+          "title": "The security categorization the level of effort rests on",
+          "$ref": "#/$defs/source"
+        },
+        "privacy_risk_assessment": {
+          "title": "The privacy risk assessment the level of effort rests on when the system processes PII",
+          "$ref": "#/$defs/source"
+        },
+        "plans": {
+          "title": "The approved plans whose controls are assessed",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "assurance_requirements": {
+          "title": "The assurance requirements the organization intends to meet",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "requirement",
+              "specified_by",
+              "depth",
+              "coverage"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^AR-\\d{3}$"
+              },
+              "requirement": {
+                "title": "The assurance the organization intends to meet",
+                "type": "string",
+                "minLength": 1
+              },
+              "specified_by": {
+                "title": "The persona of the organization, outside the team, who specified it",
+                "$ref": "#/$defs/persona_id"
+              },
+              "depth": {
+                "title": "The least depth attribute value meeting the requirement",
+                "enum": [
+                  "basic",
+                  "focused",
+                  "comprehensive"
+                ]
+              },
+              "coverage": {
+                "title": "The least coverage attribute value meeting the requirement",
+                "enum": [
+                  "basic",
+                  "focused",
+                  "comprehensive"
+                ]
+              }
+            }
+          }
+        },
+        "direction": {
+          "title": "The organization's direction on the type, number and specific objects to be assessed",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by",
+            "conferred_with",
+            "factors"
+          ],
+          "properties": {
+            "by": {
+              "title": "The persona of the organization, outside the team, who directs",
+              "$ref": "#/$defs/persona_id"
+            },
+            "conferred_with": {
+              "title": "The assessors conferred with",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/persona_id"
+              }
+            },
+            "factors": {
+              "title": "The factors considered, such as available resources and the importance of the assessment",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
           }
         }
       }

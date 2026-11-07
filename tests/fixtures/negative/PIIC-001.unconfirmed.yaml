@@ -1,0 +1,13 @@
+rule: PIIC-001
+bases:
+- pii
+description: a system processing PII whose logs are not confirmed free of PII
+mutations:
+- op: delete_field
+  file: facts.yaml
+  path: categorization.approved.privacy.logs_pii
+expect:
+  errors:
+  - PIIC-001
+  messages:
+  - the system processes PII and the SAOP or designee has not confirmed whether its logs include PII

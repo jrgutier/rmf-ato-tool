@@ -1,0 +1,17 @@
+rule: AUTY-002
+bases:
+- joint
+description: a type authorization that names no identical element
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.type_authorization.identical
+  value:
+  - firmware
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - the type authorization names no identical element its deployed instances share
+  also:
+  - RUN-FM-001

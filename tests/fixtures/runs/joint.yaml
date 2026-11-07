@@ -1,0 +1,38 @@
+# Derived base `joint` of tests/unit/test_check_rules.py: valid_minimal plus these mutations.
+base: minimal
+description: 'valid_minimal authorized jointly by its AO and a co-authorizing official of a partner Component, as a type authorization of the relay archetype used with a facility authorization at each site.'
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.approach
+  value: joint
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.joint
+  value:
+    acceptances:
+    - {official: PER-AO, organization: Component A, accepted: '2026-11-20', signature: pki}
+    - {official: Partner Component AO, organization: Component B, accepted: '2026-11-19', signature: pki}
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.type_authorization
+  value:
+    archetype: Field data relay appliance 1.0
+    environment: Component tactical relay enclaves
+    identical: [architecture, software, configurations]
+    site_controls: facility
+- op: set_field
+  file: artifacts/data/ssp-records.yaml
+  path: joint_authorization
+  value:
+    officials:
+    - {official: PER-AO, organization: Component A}
+    - {official: Partner Component AO, organization: Component B}
+    collaboration: [categorization, control-selection, assessment-plan, poam, monitoring-strategy]
+    terms:
+      established_by: [PER-AO, Partner Component AO]
+      ongoing_risk: Both officials review the monthly posture report and either may call a joint review.
+    progress:
+    - {task: C-2, status: done}
+    - {task: R-4, status: done}
+    sources: [INT-012.A1]

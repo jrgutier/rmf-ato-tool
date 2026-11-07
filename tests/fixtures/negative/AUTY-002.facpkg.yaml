@@ -1,0 +1,22 @@
+rule: AUTY-002
+bases:
+- joint
+description: an authorization to use of a type authorization used with a facility authorization, leveraging
+  no facility package
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.provider
+  value:
+    organization: Relay program office
+    decision: AD-ATO
+    date: '2026-06-01'
+    package: Relay archetype package
+    type_authorization: true
+    facility_package: LA-99
+    site_controls: facility
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - 'the authorization to use leverages the facility common controls: LA-99 is no leveraged authorization'

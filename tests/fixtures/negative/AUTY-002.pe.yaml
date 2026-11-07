@@ -1,0 +1,18 @@
+rule: AUTY-002
+bases:
+- joint
+description: a facility authorization without physical and environmental controls
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.facility
+  value:
+    environment: Component A relay enclave
+    impact_level: moderate
+    controls:
+    - sc-7
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - a facility authorization addresses the physical and environmental controls of the facility

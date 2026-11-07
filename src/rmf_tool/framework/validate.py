@@ -236,6 +236,27 @@ def rule_artifact_producer(ctx: Context) -> list[Finding]:
     return out
 
 
+def rule_template_sections(ctx: Context) -> list[Finding]:
+    """FW-TPL-001: each required section of an artifact is an H2 heading of its template, so
+    the heading a run must keep is the one the template hands it."""
+    out = []
+    for a in ctx.fw.of("artifacts"):
+        required = a.data.get("required_sections") or ()
+        template = a.data.get("template")
+        if required and not template:
+            out.append(_err("FW-TPL-001", a, "required_sections names headings, but the "
+                            "artifact has no template"))
+            continue
+        path = ctx.repo / str(template)
+        lines = path.read_text(encoding="utf-8").splitlines() if path.is_file() else []
+        headings = {line[3:].strip() for line in lines if line.startswith("## ")}
+        for heading in required:
+            if heading not in headings:
+                out.append(_err("FW-TPL-001", a, f"required section {heading!r} is not a "
+                                f"heading of {template}"))
+    return out
+
+
 def rule_producer_order(ctx: Context) -> list[Finding]:
     listers = _listers(ctx.fw)
     tasks = ctx.fw.index("tasks")
@@ -439,6 +460,7 @@ RULES: dict[str, Callable[[Context], list[Finding]]] = {
     "FW-ID-002": rule_id_pattern,
     "FW-REF-001": rule_references,
     "FW-ART-001": rule_artifact_producer,
+    "FW-TPL-001": rule_template_sections,
     "FW-ORD-001": rule_producer_order,
     "FW-IO-001": rule_inputs,
     "FW-RACI-001": rule_raci,

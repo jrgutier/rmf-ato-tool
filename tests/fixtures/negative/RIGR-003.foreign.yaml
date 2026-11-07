@@ -1,0 +1,20 @@
+rule: RIGR-003
+bases:
+- minimal
+description: an examine sample of a type the procedure does not examine
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: procedures.1.sampling.0.types
+  value:
+  - type: specifications
+    number: 2
+  - type: mechanisms
+    number: 2
+  - type: individuals
+    number: 1
+expect:
+  errors:
+  - RIGR-003
+  messages:
+  - 'PRC-002 examine: the sampled object type individuals is not one the procedure selects for the examine method'

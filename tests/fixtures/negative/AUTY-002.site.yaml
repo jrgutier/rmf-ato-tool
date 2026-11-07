@@ -1,0 +1,16 @@
+rule: AUTY-002
+bases:
+- joint
+description: a type authorization used with neither site-specific controls nor a facility authorization
+mutations:
+- op: set_field
+  file: artifacts/data/authorizations.yaml
+  path: records.1.type_authorization.site_controls
+  value: none
+expect:
+  errors:
+  - AUTY-002
+  messages:
+  - a type authorization is used with authorized site-specific controls or a facility authorization
+  also:
+  - RUN-FM-001

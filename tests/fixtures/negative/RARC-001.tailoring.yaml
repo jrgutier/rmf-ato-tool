@@ -1,0 +1,16 @@
+rule: RARC-001
+bases: [minimal]
+description: a tailored assessment communicated to no AO or AODR
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: tailoring
+  value:
+  - {aspect: threat, cause: risk-factor-information, explanation: No relay-specific threat reporting exists., reliance: Likelihood is indicative only.}
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: communication.recipients
+  value: [PER-PM, PER-RE]
+expect:
+  errors: [RARC-001]
+  messages: ['ra.yaml tailors the robustness of the assessment but communicates the results to no AO or AODR: tailoring is explained so AOs understand to what degree they can rely on the results']

@@ -550,6 +550,28 @@
             "ongoing": {
               "const": true,
               "title": "The provider's authorization to operate is under ongoing authorization, which lifts its termination date"
+            },
+            "type_authorization": {
+              "title": "The provider's authorization is a type authorization of an archetype system, which the site accepts with an authorization to use (omit otherwise)",
+              "const": true,
+              "x-enforces": [
+                "REQ-SP800-37R2-0658"
+              ]
+            },
+            "site_controls": {
+              "title": "Whether the type authorization is used here with authorized site-specific controls or with a facility authorization",
+              "enum": [
+                "site-specific",
+                "facility"
+              ]
+            },
+            "facility_package": {
+              "title": "Leveraged authorization of the facility common controls the authorization to use leverages",
+              "type": "string",
+              "pattern": "^LA-\\d{2,3}$",
+              "x-enforces": [
+                "REQ-SP800-37R2-0658"
+              ]
             }
           },
           "description": "The provider's completed authorization to operate. It carries its termination_date, continuous: true under a cATO, or ongoing: true under ongoing authorization; an authorization to use stands only while that ATO holds (AODM-005, SP 800-37r2 p. 164)."
@@ -971,6 +993,138 @@
             },
             "date": {
               "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "approach": {
+          "title": "Authorization approach: a single authorizing official (traditional) or several (joint)",
+          "enum": [
+            "traditional",
+            "joint"
+          ]
+        },
+        "joint": {
+          "title": "The authorizing officials of a joint authorization, each accepting the risk",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "acceptances"
+          ],
+          "properties": {
+            "acceptances": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "official",
+                  "organization",
+                  "accepted",
+                  "signature"
+                ],
+                "properties": {
+                  "official": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Authorizing official (co-authorizing official) who jointly accepts the risk"
+                  },
+                  "organization": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "signature": {
+                    "enum": [
+                      "manual",
+                      "pki"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type_authorization": {
+          "title": "Type authorization: one package for an archetype version deployed to multiple sites",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "archetype",
+            "environment",
+            "identical",
+            "site_controls"
+          ],
+          "properties": {
+            "archetype": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Archetype (common) version of the system the package covers"
+            },
+            "environment": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Defined environment the identical instances are deployed in"
+            },
+            "identical": {
+              "title": "What the deployed instances share identically",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "architecture",
+                  "software",
+                  "information-types",
+                  "hardware",
+                  "processing",
+                  "control-implementations",
+                  "configurations"
+                ]
+              }
+            },
+            "site_controls": {
+              "title": "What the type authorization is used with at each site",
+              "enum": [
+                "site-specific",
+                "facility"
+              ]
+            }
+          }
+        },
+        "facility": {
+          "title": "Facility authorization: common controls of a defined environment offered to the systems residing in it",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "environment",
+            "impact_level",
+            "controls"
+          ],
+          "properties": {
+            "environment": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Facility or defined environment of operation"
+            },
+            "impact_level": {
+              "title": "Impact level the facility common controls are provided at",
+              "enum": [
+                "low",
+                "moderate",
+                "high"
+              ]
+            },
+            "controls": {
+              "title": "Common controls of the facility available for inheritance",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+              }
             }
           }
         }

@@ -45,8 +45,12 @@ def test_methods_are_not_limited_to_all_three(tmp_path):
     """Organizations are not expected to employ every method: the plan and the result may use
     one."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1].update(methods=["examine"],
-                                                                 objects=["specifications"]))
+    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1].update(
+        methods=["examine"], objects=["specifications"],
+        sampling=[s for s in d["procedures"][1]["sampling"] if s["method"] == "examine"]))
+    edit_yaml(run_dir / SAP, lambda d: d["procedures"][1]["sampling"][0].update(
+        types=[t for t in d["procedures"][1]["sampling"][0]["types"]
+               if t["type"] == "specifications"]))
     edit_yaml(run_dir / "artifacts/sar/results/cm.yaml",
               lambda d: d["determinations"][0].update(methods=["examine"]))
     assert built(run_dir) == []
@@ -181,3 +185,53 @@ def test_the_designated_representative_may_act_for_the_ao(tmp_path):
     edit_yaml(run_dir / SAP, lambda d: d["assessor_independence"].update(
         determined_by="PER-AODR"))
     assert [f for f in errors(run_dir) if f.rule == "ASMT-007"] == []
+
+
+def test_rigor_rules_report_malformed_fields_instead_of_raising(minimal_run):
+    """RIGR-001 to RIGR-003 read lists and identifiers that RUN-FM-001 judges; a scalar where a
+    list belongs, or a mapping where an identifier belongs, is a finding, never a crash."""
+    def mangle(d):
+        d["rigor"]["plans"] = 3
+        d["rigor"]["assurance_requirements"][0]["id"] = ["AR-01"]
+        d["rigor"]["direction"]["conferred_with"] = 7
+        d["rigor"]["direction"]["by"] = ["PER-SCA"]
+        p = d["procedures"][0]
+        p["assurance_requirement"] = {"id": "AR-01"}
+        for sample in p["sampling"]:
+            sample["types"], sample["extent"] = 4, 2
+    edit_yaml(minimal_run / SAP, mangle)
+    found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
+    assert any(f.rule == "RIGR-001" for f in found)
+
+
+def _msn(run_dir) -> list[str]:
+    found = engine.evaluate(open_run(run_dir, REPO_ROOT)).findings
+    return [f.finding.message for f in found if f.rule == "MSN-001"]
+
+
+def test_missions_rule_reports_malformed_ids_instead_of_raising(minimal_run):
+    def mangle(d):
+        d["missions"]["items"][0]["supported_by"] = [["CMP-RELAY"]]
+        d["missions"]["items"][0]["data"] = [{"id": "INF-01"}]
+    edit_yaml(minimal_run / "facts.yaml", mangle)
+    assert _msn(minimal_run)
+
+
+def test_an_essential_function_is_not_refused_while_the_boundary_lists_no_components(
+        minimal_run):
+    edit_yaml(minimal_run / "artifacts/data/boundary.yaml",
+              lambda d: d.update(components=[]))
+    edit_yaml(minimal_run / "facts.yaml",
+              lambda d: d["missions"]["items"][0].update(supported_by=[]))
+    assert not [m for m in _msn(minimal_run) if "no supporting assets" in m]
+
+
+def test_interview_samples_may_be_typed_as_individuals(minimal_run):
+    def individuals(d):
+        for p in d["procedures"]:
+            for sample in p.get("sampling") or ():
+                if sample.get("method") == "interview":
+                    sample["types"] = [{"type": "individuals", "number": 6}]
+    edit_yaml(minimal_run / SAP, individuals)
+    found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
+    assert not [f for f in found if f.rule == "RIGR-003" and "no persona" in f.finding.message]

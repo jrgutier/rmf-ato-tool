@@ -1,0 +1,14 @@
+rule: ASMT-007
+bases:
+- pii
+description: a system processing PII whose assessor was selected for a security assessment only
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: selection.assessment_type
+  value: security
+expect:
+  errors:
+  - ASMT-007
+  messages:
+  - the assessor was selected for a security assessment only

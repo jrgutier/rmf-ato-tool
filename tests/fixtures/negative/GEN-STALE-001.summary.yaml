@@ -1,0 +1,13 @@
+rule: GEN-STALE-001
+bases: [minimal]
+description: the executive summary changed after the package manifest was generated
+build: false
+mutations:
+  - op: replace_text
+    file: artifacts/data/package-summary.yaml
+    old: "residual risk is moderate"
+    new: "residual risk is low"
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+    - differs from a fresh `rmf package`

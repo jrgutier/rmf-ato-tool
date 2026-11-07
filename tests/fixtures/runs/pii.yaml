@@ -250,6 +250,15 @@ mutations:
     - control: au-2
       frequency: monthly
       origin: strategy
+    - control: ac-2
+      frequency: monthly
+      origin: strategy
+    - control: ia-2
+      frequency: monthly
+      origin: strategy
+    - control: sc-7
+      frequency: monthly
+      origin: strategy
     sources:
     - INT-042.A1
 - op: set_field
@@ -378,6 +387,9 @@ mutations:
     assessors:
     - PER-SCA
     controls:
+    - ac-2
+    - ia-2
+    - sc-7
     - au-2
     sources:
     - INT-042.A1
@@ -414,3 +426,46 @@ mutations:
   file: artifacts/data/changes.yaml
   path: changes.4.privacy_impact
   value: false
+- op: set_field
+  file: artifacts/data/package-summary.yaml
+  path: privacy
+  value: The privacy plan, the approved PIA and the privacy controls' assessment cover the operator account records; no privacy weakness is open.
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: rigor.privacy_risk_assessment
+  value: ART-RA
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: selection.assessment_type
+  value: security-and-privacy
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [CNSSI1253F-ATT6-PRIVACY-MODERATE]
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.overlays
+  value:
+  - overlay: CNSSI1253F-ATT6-PRIVACY-MODERATE
+    consideration: The identity provider holds operator account records, so the review weighs the Privacy Overlay's account controls against its package.
+- op: set_field
+  file: facts.yaml
+  path: categorization.approved.privacy
+  value: {pii: true, by: PER-PRIV, date: '2026-10-29', overlays: [CNSSI1253F-ATT6-PRIVACY-MODERATE],
+    logs_pii: false}
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - {id: AS-ADD-3, holds: false, rationale: The relay has no cross-domain connection., sources: [INT-028.A2]}'
+  new: "  - {id: AS-ADD-3, holds: false, rationale: The relay has no cross-domain connection., sources: [INT-028.A2]}\n  - {id: AS-PRV-1, holds: true, rationale: Operators complete privacy training before an account is issued., sources: [INT-028.A2]}"
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.parameters
+  value:
+    ac-02_odp.04: operator accounts need a completed privacy training record and a sponsor request
+    ac-02_odp.05: PER-ISSO
+    ac-02_odp.06: 24 hours
+    ac-02_odp.07: 8 hours
+    ac-02_odp.08: 8 hours
+    ac-02_odp.09: role and mission assignment only
+- op: resolve_baseline
+  file: baseline.json

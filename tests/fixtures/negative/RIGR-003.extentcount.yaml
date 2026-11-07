@@ -1,0 +1,16 @@
+rule: RIGR-003
+bases:
+- minimal
+description: a mechanism test whose extent counts nothing
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: procedures.0.sampling.2.extent.0.count
+  value: 0
+expect:
+  errors:
+  - RIGR-003
+  messages:
+  - the extent of the testing counts 0 test cases, not at least one
+  also:
+  - RUN-FM-001

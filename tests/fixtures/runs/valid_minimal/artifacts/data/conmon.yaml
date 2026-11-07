@@ -92,7 +92,17 @@ threat_monitoring:
   feeds: [CSSP threat bulletins, USCYBERCOM advisories]
   watches: [threat-actors, protective-techniques, deployed-environment]
 metrics:
-  - {id: MET-01, name: Open CAT I findings, measures: Open CAT I findings past due, frequency: monthly, reported_to: [PER-AO], used_by: [M-2, M-5]}
+  - id: MET-01
+    name: Open CAT I findings
+    measures: Open CAT I findings past due
+    frequency: monthly
+    reported_to: [PER-AO, PER-ISSM]
+    used_by: [M-2, M-5]
+    objective: Keep the relay free of known high-severity weaknesses past their remediation date.
+    controls: [si-2, cm-6]
+    baseline: No open CAT I finding older than its POA&M milestone.
+    threshold: Any CAT I finding past due, or more than two open at once.
+    review: {by: [PER-ISSM, PER-AO], procedure: The ISSM reviews the count each month with the scan results and escalates a breached threshold to the AO with a POA&M update.}
 delegations:
   - {activity: Threat monitoring and incident handling, partner: PER-CSSP, agreement: CSSP service level agreement}
   - {activity: Operation of the inherited identity provider, partner: LA-01, agreement: Enterprise IT Services inheritance agreement}

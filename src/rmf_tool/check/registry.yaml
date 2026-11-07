@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 330 rules, 36 repo-scope and 294 run-scope. Authoritative;
+# Rule registry (plan §6.5): 343 rules, 37 repo-scope and 306 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -50,6 +50,15 @@ rules:
     summary: artifact without a producer (no task outputs it, or its producer does not)
     fixture: tests/fixtures/framework_neg/FW-ART-001/
     hint: List the artifact in its producer task's outputs, or fix artifacts.yaml producer.
+  - id: FW-TPL-001
+    scope: repo
+    severity: E
+    ac: [AC-7]
+    phase: p11
+    applies_after: null
+    summary: a required section of an artifact is not a heading of its template
+    fixture: tests/unit/test_template_sections.py::test_fw_tpl_001_fires_on_a_heading_the_template_lacks
+    hint: Name in required_sections only H2 headings of the artifact's template, or restore the heading in the template.
   - id: FW-ORD-001
     scope: repo
     severity: E
@@ -399,14 +408,15 @@ rules:
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
     enforces:
+      - REQ-FIPS200-0035
       - REQ-FIPS200-0036
       - REQ-FIPS200-0037
       - REQ-FIPS200-0038
-      - REQ-FIPS200-0035
       - REQ-SP800-18R1-0134
       - REQ-SP800-18R1-0135
       - REQ-SP800-18R1-0136
       - REQ-SP800-18R1-0197
+      - REQ-SP800-37R2-0392
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -611,13 +621,18 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: "an assessor is not shown qualified, or independence is not determined by the AO"
+    summary: "an assessor is not shown qualified or selected by the AO for the type of assessment, or independence is not determined, grounded and found sufficient by the AO"
     fixture: tests/fixtures/negative/ASMT-007.yaml
-    hint: "Each team member has a qualification the CISO verified; the AO determines assessor_independence."
+    hint: "Each team member has a qualification the CISO verified; the AO or AODR records the selection (type, expertise) and determines assessor_independence on ART-CAT and ART-RA with its sufficiency; a contracted member the owner can influence is not independent; an independent review may stand in for independence."
     enforces:
       - REQ-DODI8500.01-0310
+      - REQ-DODI8510.01-0120
       - REQ-DODI8510.01-0209
+      - REQ-SP800-37R2-0347
       - REQ-SP800-53AR5-0134
+      - REQ-SP800-53AR5-0159
+      - REQ-SP800-53AR5-0160
+      - REQ-SP800-53AR5-0163
       - REQ-DODCIO-CSRMC-TENETS-0003
   - id: ASMT-008
     scope: run
@@ -1340,6 +1355,36 @@ rules:
       - REQ-DODI5000.90-0005
       - REQ-DODI5000.90-0082
       - REQ-SP800-137-0164
+  - id: METR-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: the strategy lists no metrics, a metric leaves out its objective, controls, baseline, threshold or review procedure, or is reviewed by an official it is not reported to
+    fixture: tests/fixtures/negative/METR-001.yaml
+    hint: Give each conmon.yaml metric objective, controls, baseline, threshold and review {by, procedure}; its reviewers are officials in reported_to.
+    enforces:
+      - REQ-DODI5000.87-0122
+      - REQ-SP800-137-0077
+      - REQ-SP800-137-0138
+      - REQ-SP800-137A-0052
+      - REQ-SP800-137A-0070
+      - REQ-SP800-137A-0093
+      - REQ-SP800-18R2-0194
+  - id: METR-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a metric reads a control outside the baseline
+    fixture: tests/fixtures/negative/METR-002.yaml
+    hint: Name baseline controls in each metric's controls; each is monitored at the frequency the strategy gives it, which may differ from the metric's.
+    enforces:
+      - REQ-SP800-137-0141
   - id: ISCM-002
     scope: run
     severity: E
@@ -1393,6 +1438,7 @@ rules:
       - REQ-SP800-37R2-0119
       - REQ-SP800-37R2-0617
       - REQ-SP800-53AR5-0315
+      - REQ-SP800-61R3-0131
   - id: ISCM-006
     scope: run
     severity: E
@@ -1506,7 +1552,52 @@ rules:
     hint: Run `rmf package <run>`.
     enforces:
       - REQ-SP800-37R2-0377
+      - REQ-SP800-37R2-0392
+      - REQ-SP800-37R2-0547
       - REQ-CNSSP12-0024
+  - id: AUTY-001
+    scope: run
+    severity: E
+    ac: [AC-18, AC-42]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: an authorization names no traditional or joint approach, or a joint authorization lacks co-authorizing officials who each accept the risk, an agreement in the security and privacy plans, its collaboration, terms and progress, or is relied on after the agreement ended
+    fixture: tests/fixtures/negative/AUTY-001.yaml
+    hint: Set approach on each authorize record; for joint, list each official's acceptance in joint.acceptances and write joint_authorization in ssp-records.yaml with the same officials.
+    enforces:
+      - REQ-SP800-37R2-0460
+      - REQ-SP800-37R2-0660
+      - REQ-SP800-37R2-0661
+      - REQ-SP800-37R2-0664
+  - id: AUTY-002
+    scope: run
+    severity: E
+    ac: [AC-18, AC-42]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: a type authorization is not an ATO of identical instances with site or facility controls, a site's use of it is not an authorization to use leveraging the facility package, or a facility authorization is not a common control authorization of physical and environmental controls at an impact level
+    fixture: tests/fixtures/negative/AUTY-002.yaml
+    hint: Put type_authorization on an AD-ATO or AD-ATOC, provider.type_authorization with facility_package on an AD-ATU, and facility on an AD-CCA.
+    enforces:
+      - REQ-SP800-37R2-0658
+      - REQ-SP800-37R2-0659
+  - id: XSUM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: the authorization package lacks its executive summary, the summary misses the risk management issues or the privacy view, or the package is not submitted by the system owner or common control provider to the AO before the decision
+    fixture: tests/fixtures/negative/XSUM-001.yaml
+    hint: Write artifacts/data/package-summary.yaml at R-1 from templates/data/package-summary.yaml; each issue cites POA&M items of the package, and the submission is dated on or before the R-4 decision.
+    enforces:
+      - REQ-SP800-37R2-0392
+      - REQ-SP800-37R2-0547
+      - REQ-SP800-37R2-0555
+      - REQ-SP800-37R2-0735
   - id: PKG-003
     scope: run
     severity: E
@@ -1539,6 +1630,16 @@ rules:
       - REQ-CNSSI1254-0065
       - REQ-CNSSI1254-0066
       - REQ-CNSSI1254-0037
+  - id: TPL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a produced artifact drops or leaves unwritten a section its template names in required_sections
+    fixture: tests/fixtures/negative/TPL-001.yaml
+    hint: Keep every heading of the template that required_sections in framework/artifacts.yaml names, each with traced content; add sections after them, never in their place.
   - id: TLR-001
     scope: run
     severity: E
@@ -1942,6 +2043,77 @@ rules:
     hint: Name only controls of the ia family that artifacts/ssp/controls/ia.yaml holds.
     enforces:
       - REQ-SP800-18R2-0239
+  - id: RIGR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the plan's rigor and scope do not rest on the categorization, the privacy risk assessment, the approved plans and the organization's assurance requirements"
+    fixture: tests/fixtures/negative/RIGR-001.yaml
+    hint: "sap.yaml rigor names ART-CAT, ART-RA when PII, ART-SSP among plans, and assurance_requirements specified outside the team; each procedure names its assurance_requirement and selects depth and coverage not below it."
+    enforces:
+      - REQ-SP800-53AR5-0010
+      - REQ-SP800-53AR5-0011
+      - REQ-SP800-53AR5-0014
+      - REQ-SP800-53AR5-0015
+      - REQ-SP800-53AR5-0063
+      - REQ-SP800-53AR5-0182
+      - REQ-SP800-53AR5-0189
+      - REQ-SP800-53AR5-0336
+  - id: RIGR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: "a determination of a planned control records no depth or coverage the assessors applied, or one below the plan's"
+    fixture: tests/fixtures/negative/RIGR-002.yaml
+    hint: "Each determination in artifacts/sar/results/<fam>.yaml records depth and coverage, not below the highest value a sap.yaml procedure of the control selects."
+    enforces:
+      - REQ-SP800-53AR5-0299
+      - REQ-SP800-53AR5-0329
+  - id: RIGR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the organization does not direct the type, number and specific objects each assessment method samples"
+    fixture: tests/fixtures/negative/RIGR-003.yaml
+    hint: "sap.yaml rigor.direction names by (outside the team), conferred_with (on the team) and factors; each procedure carries one sampling record per method: types with a number each (personas for interview), specific objects for focused or comprehensive coverage, bias_control unless random, extent for mechanism tests."
+    enforces:
+      - REQ-SP800-137-0107
+      - REQ-SP800-137-0126
+      - REQ-SP800-137-0127
+      - REQ-SP800-137-0128
+      - REQ-SP800-137-0136
+      - REQ-SP800-137-0214
+      - REQ-SP800-137-0216
+      - REQ-SP800-53AR5-0246
+      - REQ-SP800-53AR5-0257
+      - REQ-SP800-53AR5-0269
+  - id: MSN-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-8
+    summary: "the missions the system supports are not identified by the mission or business owner, or a mission essential function names no supporting assets or data on record"
+    fixture: tests/fixtures/negative/MSN-001.yaml
+    hint: "facts.yaml missions: identified_by the mission or business owner (PER-SPONSOR or PER-UR), items with kind and essential; an essential function lists supported_by components and data information types once boundary.yaml and infotypes.yaml exist."
+    enforces:
+      - REQ-DODCIO-CATO-IG-0126
+      - REQ-DODI8510.01-0070
+      - REQ-DODI8510.01-0095
+      - REQ-SP800-37R2-0236
+      - REQ-SP800-60V1R1-0034
+      - REQ-SP800-60V1R1-0065
+      - REQ-SP800-60V1R1-0081
   - id: SRA-001
     scope: run
     severity: E
@@ -1971,6 +2143,23 @@ rules:
       - REQ-SP800-30R1-0287
       - REQ-SP800-30R1-0289
       - REQ-SP800-30R1-0290
+  - id: RARC-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: the risk assessment report leaves out its date, team, decision rationales or tailoring, a subsequent assessment its circumstances or previous report, the risk model an SP 800-30 risk factor, or a tailored assessment reaches no AO or AODR
+    fixture: tests/fixtures/negative/RARC-001.yaml
+    hint: ra.yaml states date, team, rationales and tailoring (empty lists are answers), purpose.update for a subsequent assessment, all five risk factors, and communicates a tailored assessment to PER-AO or PER-AODR.
+    enforces:
+      - REQ-DODI8500.01-0221
+      - REQ-SP800-30R1-0253
+      - REQ-SP800-30R1-0258
+      - REQ-SP800-30R1-0267
+      - REQ-SP800-30R1-0268
+      - REQ-SP800-30R1-0277
   - id: SRA-002
     scope: run
     severity: E
@@ -3560,6 +3749,10 @@ rules:
       - REQ-SP800-60V1R1-0125
       - REQ-SP800-60V1R1-0127
       - REQ-SP800-60V1R1-0128
+      - REQ-CNSSI1253-0050
+      - REQ-CNSSI1253-0051
+      - REQ-FIPS199-0018
+      - REQ-FIPS199-0020
   - id: CATG-002
     scope: run
     severity: E
@@ -3599,6 +3792,33 @@ rules:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0021
       - REQ-SP800-60V1R1-0076
       - REQ-SP800-60V1R1-0088
+      - REQ-CNSSI1253-0048
+  - id: PIIC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-3
+    summary: the PII determination, the Privacy Overlays or the categorization of a PII system lack the approval of the SAOP or designee before the AO's review, or a PII system applies no Privacy Overlay
+    fixture: tests/fixtures/negative/PIIC-001.yaml
+    hint: "Record categorization.approved.privacy (pii, by PER-PRIV or designee_of PER-PRIV, date, overlays, logs_pii) and the approval date in facts.yaml."
+    enforces:
+      - REQ-CNSSI1253-0012
+      - REQ-CNSSI1253-0039
+      - REQ-CNSSI1253-0048
+      - REQ-CNSSI1253-0053
+      - REQ-CNSSI1253-0061
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0001
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0003
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0046
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0050
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0067
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0070
+      - REQ-SP800-37R2-0282
+      - REQ-SP800-37R2-0283
+      - REQ-SP800-37R2-0520
+      - REQ-SP800-53B-0024
   - id: SUBS-001
     scope: run
     severity: E

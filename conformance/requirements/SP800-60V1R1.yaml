@@ -274,7 +274,9 @@ requirements:
     locator: "2.1"
     context: "Agencies Support the Security Categorization Process"
     statement: "Agencies support the categorization process by establishing mission-based information types for the organization. The approach to establishing mission-based information types at an agency begins by documenting the agency’s mission and business areas. In the case of mission-based information, the responsible individuals, in coordination with management, operational, enterprise architecture, and security stakeholders, should compile a comprehensive set of the agency’s lines of business and mission areas. In addition, responsible individuals should identify the applicable sub-functions necessary to accomplish the organization’s mission. For example, one organization’s mission might be related to economic development. Sub-functions that are part of the organization’s economic development mission might include business and industry development, intellectual property protection, or financial sector oversight. Each of these sub-functions represents an information type."
-    status: "candidate"
+    status: "partial"
+    reason: "S1 (agencies establish mission-based information types) and S3 (sub-functions) are agency-level duties outside the run. S2 is held as presence: the lines of business and mission areas the system serves are the missions P-8 identifies (MSN-001); infotypes.yaml ties each information type to the mission it supports through selection_basis (CATG-003)."
+    evidence: [{"kind": "rule", "asserts": "A comprehensive set of lines of business and mission areas compiled: a run identifying no mission fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope", "sentence": "In the case of mission-based information, the responsible individuals, in coordination with management, operational, enterprise architecture, and security stakeholders, should compile a comprehensive set of the agency’s lines of business and mission areas."}]
     work_item: "WI-19"
   - id: "REQ-SP800-60V1R1-0035"
     citation: {"ref": "SP800-60V1R1", "page": 12, "anchor": "Agencies should conduct FIPS 199 security categorizations of their information systems as"}
@@ -477,7 +479,8 @@ requirements:
     locator: "3.2"
     context: "Table 2: Potential Impact Levels"
     statement: "The potential impact value of not applicable may be applied only to the confidentiality security objective."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity/properties/base", "claim": "constraint", "asserts": "The potential impact value of an information type for integrity is low, moderate or high; not applicable is applied only to the confidentiality security objective", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability/properties/base", "claim": "constraint", "asserts": "The potential impact value of an information type for availability is low, moderate or high; not applicable is applied only to the confidentiality security objective", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The potential impact value of not applicable may be applied to the confidentiality security objective of an information type", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0061"
     citation: {"ref": "SP800-60V1R1", "page": 20, "anchor": "Assign System Security Category"}
@@ -519,7 +522,9 @@ requirements:
     locator: "4.0"
     context: "Table 3: SP 800-60 Process Roadmap"
     statement: "Step 1 | • Document the agency’s business and mission areas • Identify all of the information types that are input, stored, processed, and/or output from each system [Section 4.1] o Identify Mission–based Information Type categories based on supporting FEA Lines of Business [Section 4.1.1] o As applicable, identify Management and Support Information Type categories based on supporting FEA Lines of Business [Section 4.1.2] o Specify applicable sub-functions for the identified Mission-based and Management and Support categories [Volume II, Appendices C and D] o As necessary, identify other required information types [Sections 4.1.3, 4.1.4] • Document applicable information types for the identified information system along with the basis for the information type selection [Section 4.5] | Mission Owners; Information Owners"
-    status: "candidate"
+    status: "partial"
+    reason: "The row is Step 1 of the agency's categorization process: documenting business and mission areas is held (MSN-001, presence) and the information types a mission is supported by must be ones infotypes.yaml declares; the FEA line-of-business categories and sub-functions of Volume II are not modelled."
+    evidence: [{"kind": "rule", "asserts": "Document the agency's business and mission areas: a run identifying no mission fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope"}, {"kind": "rule", "asserts": "Information types identified for the system: a mission supported by an information type infotypes.yaml does not declare fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.infotype.yaml", "expect": "which the information types on record do not declare", "claim": "constraint", "holds_when": "P-8 is in the run's scope and ART-INFOTYPES is produced or seeded"}]
     work_item: "WI-19"
   - id: "REQ-SP800-60V1R1-0066"
     citation: {"ref": "SP800-60V1R1", "page": 21, "anchor": "Step 2 | • Select the security impact levels for the identified"}
@@ -543,7 +548,9 @@ requirements:
     locator: "4.0"
     context: "Table 3: SP 800-60 Process Roadmap"
     statement: "Step 4 | • Review identified security categorizations for the aggregate of information types. • Determine the system security categorization by identifying the security impact level high water mark for each of the security objectives (confidentiality, integrity, availability): SC System X = {(confidentiality, impact), (integrity, impact), (availability, impact)} • Adjust the security impact level high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2. • Assign the overall information system impact level based on the highest impact level for the system security objectives (confidentiality, integrity, availability) • Follow the agency’s oversight process for reviewing, approving, and documenting all determinations or decisions [Section 4.5] | CIO, SAISO; ISSO; Mission Owners; Information Owners"
-    status: "candidate"
+    status: "partial"
+    reason: "The high-water mark, the factor review and recorded adjustments are held by CATG-001 (the rule fan-out is full, so not cited here); no overall information system impact level is recorded as its own field, and the oversight process is held by C-3 and FACTS-001."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system security categorization is the high water mark of the security impact level for each security objective over the aggregate of information types, adjusted by the factors", "sentence": "Step 4 | • Review identified security categorizations for the aggregate of information types. • Determine the system security categorization by identifying the security impact level high water mark for each of the security objectives (confidentiality, integrity, availability): SC System X = {(confidentiality, impact), (integrity, impact), (availability, impact)} • Adjust the security impact level high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2. • Assign the overall information system impact level based on the highest impact level for the system security objectives (confidentiality, integrity, availability) • Follow the agency’s oversight process for reviewing, approving, and documenting all determinations or decisions [Section 4.5] | CIO, SAISO; ISSO; Mission Owners; Information Owners"}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0069"
     citation: {"ref": "SP800-60V1R1", "page": 21, "anchor": "Output: Security Categorization | • Output that can be used as input"}
@@ -648,7 +655,9 @@ requirements:
     locator: "4.1.1"
     context: "Table 4: Mission-Based Information Types and Delivery Mechanisms14"
     statement: "The approach to establishing mission-based information types at an agency level begins by documenting the agency’s business and mission areas. The owner, or designee, of each information system is responsible for identifying the information types stored in, processed by, or generated by that information system. In the case of mission-based information, the responsible individuals, in coordination with management, operational, and security stakeholders, should compile a comprehensive set of lines of business and mission areas conducted by the agency. In addition, the responsible individuals should identify the applicable sub-functions necessary to conduct agency business and in turn accomplish the agency’s mission. For example, one mission conducted by an agency might be law enforcement. Sub-functions that are part of the agency’s law enforcement mission might include criminal investigation and surveillance, criminal apprehension, criminal incarceration, citizen protection, crime prevention, and property protection. Each of these sub-functions would represent an information type."
-    status: "candidate"
+    status: "partial"
+    reason: "S2 (compile the lines of business and mission areas) is held as presence through the missions P-8 identifies (MSN-001). S1, the owner identifying the information types, is the P-12 duty CATG-003 judges; S3 (sub-functions) is not modelled."
+    evidence: [{"kind": "rule", "asserts": "Lines of business and mission areas conducted by the agency compiled: a run identifying no mission fails", "target": "MSN-001", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "holds_when": "P-8 is in the run's scope", "sentence": "In the case of mission-based information, the responsible individuals, in coordination with management, operational, and security stakeholders, should compile a comprehensive set of lines of business and mission areas conducted by the agency."}]
     work_item: "WI-19"
   - id: "REQ-SP800-60V1R1-0082"
     citation: {"ref": "SP800-60V1R1", "page": 24, "anchor": "Recommended mission-based lines of business and constituent sub-functions that may be processed"}
@@ -775,7 +784,9 @@ requirements:
     locator: "4.2.1"
     context: "FIPS 199 Security Categorization Criteria"
     statement: "Impact levels (plural), as used here, refers to low, moderate, high, or not applicable values assigned to each security objective (i.e., confidentiality, integrity, and availability) used in expressing the security category of an information type or information systems. The value of not applicable only applies to information types and not to information systems."
-    status: "candidate"
+    status: "partial"
+    reason: "The information type schema allows not applicable for confidentiality and the system schema does not; categorization is optional in facts.yaml until C-2, and CATG-001, which refuses a system value below low, is at its fan-out limit, so no rule item pairs the system leg."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The value of not applicable applies to the confidentiality of information types", "sentence": "The value of not applicable only applies to information types and not to information systems."}, {"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "asserts": "The value of not applicable does not apply to information systems: their confidentiality is low, moderate or high", "sentence": "The value of not applicable only applies to information types and not to information systems."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0097"
     citation: {"ref": "SP800-60V1R1", "page": 28, "anchor": "SECURITY OBJECTIVE | LOW | MODERATE | HIGH"}
@@ -1093,7 +1104,9 @@ requirements:
     locator: "4.4.1"
     context: "FIPS 199 Process for System Security Categorization"
     statement: "FIPS 199 recognizes that determining the security category of an information system requires additional analysis and must consider the security categories of all information types resident on the information system. For an information system, the potential security impact levels assigned to each of the respective security objectives (confidentiality, integrity, availability) are the highest level (i.e., high water mark) for any one of these objectives that has been determined for the types of information resident on the information system."
-    status: "candidate"
+    status: "partial"
+    reason: "Held by CATG-001 (a system value below the high-water mark of all types fails), which is at its fan-out limit and is not cited here."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system categorization considers the security categories of all information types, the highest value over all information types", "sentence": "FIPS 199 recognizes that determining the security category of an information system requires additional analysis and must consider the security categories of all information types resident on the information system."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0134"
     citation: {"ref": "SP800-60V1R1", "page": 33, "anchor": "Information systems are composed of both computer programs and information. Programs in"}
@@ -1651,7 +1664,8 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "where the acceptable values for potential impact are low, moderate, high, or not applicable.9"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The acceptable values for potential impact on confidentiality are low, moderate, high, or not applicable", "sentence": "where the acceptable values for potential impact are low, moderate, high, or not applicable.9"}]
     work_item: "WI-13"
     promoted: {"reason": "Rejected as no-marker, but it is the second half of the sentence that 0059 starts: it states the values an information type may take, including not applicable, the value WI-13 names."}
   - id: "REQ-SP800-60V1R1-0200"
@@ -1671,7 +1685,9 @@ requirements:
     locator: "4.4"
     context: ""
     statement: "Once the security impact levels have been selected, reviewed and adjusted as necessary for the security objectives of each individual information type processed by an information system, it is necessary to assign a system security category based on the aggregate of information types. The Step 4 activities include the following: (i) review identified security categorizations for the aggregate of information types; (ii) determine the system security categorization by identifying the high water mark for each of the security objectives (confidentiality, integrity, availability) based on the aggregate of the information types; (iii) adjust the high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2; (iv) assign the overall information system impact level based on the highest impact level for the system security objectives; and (v) document all security categorization determinations and decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Steps (i) to (iii) are held by CATG-001 (fan-out full, not cited); the overall impact level of step (iv) is no field of its own, and documenting the determinations in ART-CAT is prose."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system security category is the high water mark for each security objective over the aggregate of the information types, adjusted as necessary by the factors", "sentence": "Once the security impact levels have been selected, reviewed and adjusted as necessary for the security objectives of each individual information type processed by an information system, it is necessary to assign a system security category based on the aggregate of information types. The Step 4 activities include the following: (i) review identified security categorizations for the aggregate of information types; (ii) determine the system security categorization by identifying the high water mark for each of the security objectives (confidentiality, integrity, availability) based on the aggregate of the information types; (iii) adjust the high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2; (iv) assign the overall information system impact level based on the highest impact level for the system security objectives; and (v) document all security categorization determinations and decisions."}]
     work_item: "WI-13"
     promoted: {"reason": "Rejected as no-marker: the opening of section 4.4 states Step 4 and lists its five activities, including documenting all determinations and decisions."}
   - id: "REQ-SP800-60V1R1-0202"
