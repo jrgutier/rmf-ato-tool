@@ -54,7 +54,8 @@ def risk_executive(ctx: Context) -> list[RunFinding]:
     if not ctx.run.path(ORG_FILE).is_file():
         err(f"{ORG_FILE} is missing; P-2 describes the risk executive function there")
         return out
-    function = _mapping(_mapping(ctx.data(ORG_FILE)).get("risk_executive"))
+    governance = _mapping(_mapping(ctx.data(ORG_FILE)).get("governance"))
+    function = _mapping(governance.get("risk_executive"))
     considered = {str(c) for f in _dicts(function.get("forums")) for c in _list(f.get("considers"))}
     unconsidered = [c for c in FORUM_SCOPE if c not in considered]
     if unconsidered:

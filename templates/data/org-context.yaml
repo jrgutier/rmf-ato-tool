@@ -1,21 +1,283 @@
-# Template: artifacts/data/org-context.yaml (P-2; schema org-context). Written whole (INV-8).
-# How the risk executive function is formed and works here (SP 800-37r2 Appendix D.3,
-# SP 800-39 2.3.2); RISKX-001 judges it. Replace every <<FILL: ...>> and example value.
-risk_executive:
-  form: group  # individual | group
-  members: [PER-RE]
-  forums:
-    - name: "<<FILL: the organization-wide forum>>"
+# Template: artifacts/data/org-context.yaml (ART-ORG-CONTEXT; schema org-context). Written
+# whole (INV-8). P-1 writes roles, manpower_structure, open_functions and code_signing; P-2 adds
+# program, policies, resources, risk_frame, governance, risk_assessment_guidance, risk_response
+# and external_entities; P-5 adds common_controls; P-7 adds iscm; P-3 adds posture_reviews once
+# the system operates. OCTX-001..013 and RISKX-001 judge it. Enum values and persona IDs below
+# are examples to replace; the schema lists every allowed value.
+roles:
+- id: RA-02
+  role: PER-CISO
+  name: '<<FILL: name>>'
+  title: '<<FILL: title>>'
+  organization: '<<FILL: organization>>'
+  contact: {email: '<<FILL: email>>'}
+  appointed_by: PER-CIO
+  appointment: {instrument: appointment-letter, reference: '<<FILL: reference>>'}
+  citizenship: us
+  affiliation: dod-civilian
+  position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: 
+      MP-01, dcwf_code: '722'}
+  duties_statement: {form: written, reference: '<<FILL: reference>>'}
+  primary_duty: security
+  heads_office: true
+  qualifications: '<<FILL: qualifications>>'
+  coordinates_with: [PER-PRIV]
+  sources: [INT-013.A1]
+- id: RA-03
+  role: PER-AO
+  name: '<<FILL: name>>'
+  title: '<<FILL: title>>'
+  organization: '<<FILL: organization>>'
+  contact: {email: '<<FILL: email>>'}
+  appointed_by: PER-CIO
+  appointment: {instrument: appointment-letter, reference: '<<FILL: reference>>', basis: '<<FILL: basis>>'}
+  citizenship: us
+  affiliation: dod-civilian
+  position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: 
+      MP-02, dcwf_code: '611'}
+  duties_statement: {form: written, reference: '<<FILL: reference>>'}
+  sources: [INT-013.A1]
+- id: RA-08
+  role: PER-ISSM
+  name: '<<FILL: name>>'
+  title: '<<FILL: title>>'
+  organization: '<<FILL: organization>>'
+  contact: {email: '<<FILL: email>>'}
+  appointed_by: PER-PM
+  appointment: {instrument: appointment-letter, reference: '<<FILL: reference>>'}
+  citizenship: us
+  affiliation: dod-civilian
+  position: {designation: critical-sensitive, suitability: met, recorded_in: DCPDS, manpower_id: 
+      MP-04, dcwf_code: '722'}
+  duties_statement: {form: written, reference: '<<FILL: reference>>'}
+  personnel_security: {standard: DoDM 5200.02, status: met}
+  granted: [support, authority, resources]
+  sources: [INT-013.A1]
+- id: RA-11
+  role: PER-UR
+  name: '<<FILL: name>>'
+  title: '<<FILL: title>>'
+  organization: '<<FILL: organization>>'
+  contact: {email: '<<FILL: email>>'}
+  appointed_by: PER-PM
+  citizenship: us
+  affiliation: military
+  sources: [INT-013.A1]
+- id: RA-13
+  role: system-administrator
+  name: '<<FILL: name>>'
+  title: '<<FILL: title>>'
+  organization: '<<FILL: organization>>'
+  contact: {email: '<<FILL: email>>'}
+  appointed_by: PER-ISSM
+  citizenship: non-us
+  affiliation: contractor
+  position: {designation: noncritical-sensitive, suitability: met, recorded_in: contract, 
+      manpower_id: MP-07}
+  duties: [system-administration]
+  duties_statement: {form: written, reference: '<<FILL: reference>>'}
+  personnel_security: {standard: DoDM 5200.02, status: met}
+  supervised_by: RA-08
+  sources: [INT-013.A1]
+manpower_structure:
+- {id: MP-01, title: '<<FILL: title>>'}
+open_functions:
+- function: PER-ISSO
+  open_to: [contractor, non-dod]
+  basis: '<<FILL: basis>>'
+- function: system-administrator
+  open_to: [non-us-citizen, contractor, non-dod]
+  basis: '<<FILL: basis>>'
+code_signing:
+  used: true
+  process: '<<FILL: process>>'
+  operational_need: 2
+  designated:
+  - {name: '<<FILL: name>>', role: PER-DEV, justification: '<<FILL: justification>>'}
+program:
+  name: '<<FILL: name>>'
+  owner: PER-CIO
+  scope: organization-wide
+  implements: [CNSSP 22, CNSSP 22 Annex A, DoDI 8500.01]
+  integrated_with: [mission-business-risk-management, budgeting]
+  consistent_with: [dod-siso-strategy, dod-cybersecurity-program]
+  processes: [frame, assess, respond, monitor]
+  systems: [FDR-0001]
+  governance_bodies:
+  - name: '<<FILL: name>>'
+    integrates_with: [dod-enterprise-governance]
+  sources: [INT-014.A1]
+policies:
+- id: POL-01
+  title: '<<FILL: title>>'
+  owner: PER-CIO
+  kind: policy
+  phases: [PH-MSA, PH-TMRR, PH-EMD, PH-PD, PH-OS]
+  directs: [PER-PM]
+  sse_integrated: true
+  reference: '<<FILL: reference>>'
+  sources: [INT-014.A1]
+resources:
+  funding:
+    identified_by: PER-PM
+    secured_by: PER-CIO
+    process: PPBE
+    made_available_to: [PER-ISSM]
+  staffing:
+    identified_by: PER-ISSM
+    secured_by: PER-PM
+    made_available_to: [PER-ISSM]
+  allocation:
+    determined_by: [PER-CIO, PER-AO]
+  sources: [INT-014.A1]
+risk_frame:
+  assumptions: ['<<FILL: assumptions>>']
+  constraints: ['<<FILL: constraints>>']
+  priorities: ['<<FILL: priorities>>']
+  tradeoffs: ['<<FILL: tradeoffs>>']
+  tolerance:
+  - {loss_type: '<<FILL: loss_type>>', level: moderate}
+  shaped_by: [governance, mission]
+  sources: [INT-014.A1]
+governance:
+  model: hybrid
+  reserved_decisions:
+  - {decision: '<<FILL: decision>>', reserved_to: PER-CIO}
+  risk_executive:
+    form: group  # individual | group
+    led_by: saorm
+    structured_by: saorm
+    members: [PER-RE, PER-CIO, PER-CISO]
+    forums:
+    - name: '<<FILL: the organization-wide forum>>'
       considers: [all-types-and-sources, aggregated-risk]
-  oversight: "<<FILL: how it oversees risk management activities so risk decisions are consistent>>"
-  strategic_view: "<<FILL: how it builds a broad-based understanding of risk across integrated operations>>"
-  communication:
-    - vehicle: "<<FILL: the vehicle that shares risk information>>"
+    oversight: '<<FILL: how it oversees risk management activities so risk decisions are consistent>>'
+    strategic_view: '<<FILL: how it builds a broad-based understanding of risk across integrated operations>>'
+    communication:
+    - vehicle: '<<FILL: the vehicle that shares risk information>>'
       audience: [authorizing-officials, senior-leaders, internal-stakeholders, external-stakeholders]
-  subordinate_autonomy:  # one per risk activity
-    - {activity: frame, autonomy: "<<FILL: what subordinate organizations may decide>>"}
-    - {activity: assess, autonomy: "<<FILL: what subordinate organizations may decide>>"}
-    - {activity: respond, autonomy: "<<FILL: what subordinate organizations may decide>>"}
-    - {activity: monitor, autonomy: "<<FILL: what subordinate organizations may decide>>"}
-  shared_authorizations: "<<FILL: how it promotes cooperation among AOs on joint authorizations>>"
-sources: [INT-001.A1]
+    subordinate_autonomy:  # one per risk activity
+    - {activity: frame, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: assess, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: respond, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    - {activity: monitor, autonomy: '<<FILL: what subordinate organizations may decide>>'}
+    shared_authorizations: '<<FILL: how it promotes cooperation among AOs on joint authorizations>>'
+  tolerance_resolution: '<<FILL: tolerance_resolution>>'
+  sources: [INT-014.A1]
+risk_assessment_guidance:
+  methods: '<<FILL: methods>>'
+  tools: '<<FILL: tools>>'
+  roles: '<<FILL: roles>>'
+  rigor: '<<FILL: rigor>>'
+  results_form: '<<FILL: results_form>>'
+  threat_sources: '<<FILL: threat_sources>>'
+  threat_events: '<<FILL: threat_events>>'
+  vulnerabilities: '<<FILL: vulnerabilities>>'
+  external_dependencies: '<<FILL: external_dependencies>>'
+  impacts: '<<FILL: impacts>>'
+  time_frames: '<<FILL: time_frames>>'
+  likelihood: '<<FILL: likelihood>>'
+  uncertainty: '<<FILL: uncertainty>>'
+  aggregation: '<<FILL: aggregation>>'
+  information_sources: ['<<FILL: information_sources>>']
+  sources: [INT-015.A1]
+risk_response:
+  types: [accept, avoid, mitigate, share, transfer]
+  selection: '<<FILL: selection>>'
+  strategies: {acceptance: '<<FILL: acceptance>>', avoidance: '<<FILL: avoidance>>', 
+      sharing_transfer: '<<FILL: sharing_transfer>>', mitigation: '<<FILL: mitigation>>'}
+  coa_tools: '<<FILL: coa_tools>>'
+  communication: '<<FILL: communication>>'
+  sources: [INT-014.A1]
+external_entities:
+- id: EXT-01
+  name: '<<FILL: name>>'
+  relationship: actual
+  trust_model: mandated
+  sharing: '<<FILL: sharing>>'
+  control_degree: '<<FILL: control_degree>>'
+  trust_evidence: '<<FILL: trust_evidence>>'
+  risk_acceptable: true
+  accepted_by: PER-AO
+  accepted_on: '2026-03-15'
+  sources: [INT-014.A1]
+common_controls:
+- provided_by: Analysis enclave boundary (common control)
+  persona: PER-CCP
+  controls: [sc-7, au-6]
+  authorization: {decision: AD-ATO, by: PER-AO, date: '2026-01-10'}
+  assessed_by: {assessor: '<<FILL: assessor>>', chosen_by: provider, qualified: true, independence: '<<FILL:
+      independence>>'}
+  status_reporting: {how: '<<FILL: how the compliance status reaches inheriting system owners>>', frequency: monthly}
+  deficiencies: false
+  plan:
+    reference: '<<FILL: reference>>'
+    approved_by: PER-AO
+    approved_on: '2026-01-10'
+    available_to: [PER-PM]
+    available_on: '2026-01-12'
+  sar:
+    reference: '<<FILL: reference>>'
+    approved_by: PER-AO
+    approved_on: '2026-01-10'
+    available_to: [PER-PM]
+    available_on: '2026-01-12'
+  sources: [INT-017.A1]
+iscm:
+  established: '2025-06-01'
+  program_status: in-place
+  governance: ['<<FILL: ISCM governance structures>>']
+  policies:
+  - {subject: security-status-monitoring, reference: '<<FILL: reference>>'}
+  - {subject: results-to-risk-assessment, reference: '<<FILL: reference>>'}
+  processes:
+  - {name: '<<FILL: name>>', mode: automated}
+  - {name: '<<FILL: name>>', mode: manual, verified: true, verified_by: PER-CISO}
+  objectives:
+  - {id: OBJ-01, objective: '<<FILL: objective>>'}
+  activities:
+  - name: '<<FILL: name>>'
+    objectives: [OBJ-01]
+  monitors: [control-effectiveness, changes, organizational-state]
+  not_applicable:
+  - {element: '<<FILL: element>>', reason: '<<FILL: reason>>'}
+  minimum_frequencies:
+  - family: au
+    frequency: monthly
+    applies_to: [systems, common-controls]
+    basis: '<<FILL: basis>>'
+  - family: ia
+    frequency: quarterly
+    applies_to: [systems]
+    basis: '<<FILL: basis>>'
+  review_cycle: {frequency: annually}
+  reviews:
+  - date: '2026-02-01'
+    by: PER-CISO
+    considered: [threats, monitoring-results]
+    strategy_adjusted: false
+    outcome: '<<FILL: outcome>>'
+  assessments:
+  - date: '2026-02-15'
+    by: Component inspector general team
+    method: SP 800-137A
+    reported_to: [PER-CIO]
+    judgments:
+    - {element: '<<FILL: element>>', judgment: satisfied}
+    findings:
+    - {id: IF-01, response: '<<FILL: response>>', priority: moderate, owner: PER-CISO, due: '2026-09-30'}
+  ongoing_authorization:
+    process: '<<FILL: process>>'
+    conditions: [initial-authorization, iscm-program]
+    transition: '<<FILL: transition>>'
+    remain: ['<<FILL: remain>>']
+    reporting_tools: ['<<FILL: reporting_tools>>']
+  sources: [INT-018.A1]
+posture_reviews:
+- date: '2026-12-01'
+  by: PER-RE
+  considered: [threats, vulnerabilities, technologies, mission]
+  impact: '<<FILL: impact>>'
+  updated: []
+  sources: [INT-015.A1]
+sources: [INT-013.A1]

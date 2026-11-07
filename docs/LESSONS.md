@@ -497,6 +497,13 @@ with the next ID; never edit or delete an existing entry.
 - Promotion: check: FACTS-001 on the example run at contract 0.1.0 (p7), which fails when a new fact lacks facts_since
 
 ## L-0071 · 2026-11-07 · run: phase-11 · tags: conformance, rules
+- Symptom: rule items on org-context.yaml judged weak with "review is a decision's required field" and "provider is a decision's required field", though no decision record was in play: a fixture's process was named "Account review", an assessment element "External service provider monitoring", and the rules read keys named `review` and `provider`.
+- Root cause: FW-REQ-003 finds a decision's `requires` field in a fixture's mutated paths, its declared message and the fields the rule reads; a run-data key or a fixture value spelled like one of those fields is read as that field.
+- Fix: the keys became `review_cycle` and `provided_by`, the fixture values lost the words, and one message was reworded so it names no such field.
+- Rule: Name run-data keys and fixture values apart from the decision `requires` fields (risk_executive, underlying, review, provider, threat_assessment, deployment, ongoing_acknowledgment, revocation_reason, the CISO approval fields) unless the rule does judge that field.
+- Promotion: none — FW-REQ-003 already reports it on the first validate, naming the field; the rule saves the round trip.
+
+## L-0072 · 2026-11-07 · run: phase-11 · tags: conformance, rules
 - Symptom: FW-REQ-003 denied every SWA-001 rule item: "'the SBOM leaves out third-party components' is not literal in a failing message in the rule's source", though the rule reported exactly that message and the negative fixture declared it.
 - Root cause: the messages lived in a dict of duty to message and the rule appended `err(message)` in a loop; the judge finds a clause by the string constant inside the failing call, and a variable holds none.
 - Fix: each SBOM and AI tool clause of SWA-001 writes its message inline in its own `if` and call.

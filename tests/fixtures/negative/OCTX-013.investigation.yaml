@@ -1,0 +1,14 @@
+rule: OCTX-013
+bases:
+- minimal
+description: a non-U.S. citizen administrator has not met the investigation
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.12.personnel_security.status
+  value: pending
+expect:
+  errors:
+  - OCTX-013
+  messages:
+  - 'RA-13: a non-U.S. citizen system-administrator meets the investigative requirements of DoDM 5200.02'

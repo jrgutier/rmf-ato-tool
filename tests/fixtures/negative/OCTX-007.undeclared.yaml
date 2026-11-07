@@ -1,0 +1,19 @@
+rule: OCTX-007
+bases:
+- minimal
+description: an element judged not applicable the strategy never declared
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.not_applicable.0.element
+  value: Sampling
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.assessments.0.judgments.0.judgment
+  value: not-applicable
+expect:
+  errors:
+  - OCTX-007
+  messages:
+  - External service monitoring is judged not applicable, and the organization-wide ISCM strategy 
+    does not specify that it is not applicable

@@ -1,0 +1,17 @@
+rule: OCTX-013
+bases:
+- minimal
+description: a non-U.S. citizen system administrator issues PKI certificates
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.12.duties
+  value:
+  - system-administration
+  - pki-certificate-issuance
+expect:
+  errors:
+  - OCTX-013
+  messages:
+  - 'RA-13: a non-U.S. citizen may not serve as ISSM, ISSO, in a supervisory cybersecurity position or
+    be responsible for PKI certificate issuance'

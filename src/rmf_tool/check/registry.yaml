@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 183 rules, 36 repo-scope and 147 run-scope. Authoritative;
+# Rule registry (plan §6.5): 196 rules, 36 repo-scope and 160 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -2602,3 +2602,240 @@ rules:
       - REQ-SP800-61R3-0195
       - REQ-SP800-61R3-0196
       - REQ-SP800-61R3-0197
+  - id: OCTX-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: a role is not appointed, or is appointed by the wrong official, to someone outside government, or without the AO's basis, the ISSM's means or the CISO's terms
+    fixture: tests/fixtures/negative/OCTX-001.yaml
+    hint: "artifacts/data/org-context.yaml roles holds one record per appointee (P-1)."
+    enforces:
+      - REQ-DODI8500.01-0411
+      - REQ-DODI8510.01-0063
+      - REQ-DODI8510.01-0236
+      - REQ-DODI8510.01-0241
+      - REQ-DODI8510.01-0306
+      - REQ-SP800-18R1-0112
+      - REQ-SP800-37R2-0466
+      - REQ-SP800-37R2-0517
+      - REQ-SP800-37R2-0739
+      - REQ-SP800-39-0210
+      - REQ-SP800-39-0220
+  - id: OCTX-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: code-signing certificates are used without a designation process or a stated operational need, or more individuals are designated than that need
+    fixture: tests/fixtures/negative/OCTX-002.yaml
+    hint: "Record code_signing in org-context.yaml, with operational_need whenever certificates are used."
+    enforces:
+      - REQ-DODI8500.01-0398
+  - id: OCTX-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the Cybersecurity Risk Management Program falls short of CNSSP 22, DoDI 8500.01 or DoDI 8510.01 on scope, issuances, integration, steps, assignment or governance
+    fixture: tests/fixtures/negative/OCTX-003.yaml
+    hint: "P-2 records program, policies and resources in org-context.yaml."
+    enforces:
+      - REQ-CNSSP12-0021
+      - REQ-CNSSP12-0048
+      - REQ-CNSSP22-0002
+      - REQ-CNSSP22-0010
+      - REQ-CNSSP22-0014
+      - REQ-CNSSP22-0023
+      - REQ-DODI8500.01-0012
+      - REQ-DODI8500.01-0140
+      - REQ-DODI8500.01-0339
+      - REQ-DODI8500.01-0396
+      - REQ-DODI8510.01-0042
+      - REQ-DODI8510.01-0049
+      - REQ-SP800-161R1-1002
+      - REQ-SP800-18R1-0003
+      - REQ-SP800-37R2-0070
+      - REQ-SP800-37R2-0468
+      - REQ-SP800-37R2-0469
+      - REQ-SP800-37R2-0489
+      - REQ-SP800-39-0193
+      - REQ-SP800-39-0211
+  - id: OCTX-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the risk strategy lacks its frame, governance, assessment guidance or response strategy, or an external risk relationship is not accepted by a senior leader
+    fixture: tests/fixtures/negative/OCTX-004.yaml
+    hint: "P-2 records risk_frame, governance, risk_assessment_guidance, risk_response and external_entities; C-1 adds the provider of each leveraged authorization."
+    enforces:
+      - REQ-SP800-37R2-0496
+      - REQ-SP800-37R2-0516
+      - REQ-SP800-39-0107
+      - REQ-SP800-39-0108
+      - REQ-SP800-39-0112
+  - id: OCTX-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-5
+    summary: a common control package lacks its authorization, a qualified assessor chosen by the provider or organization, a POA&M for deficiencies, or AO approval before reaching the system owner
+    fixture: tests/fixtures/negative/OCTX-005.yaml
+    hint: "P-5 records common_controls in org-context.yaml, one package per provider."
+    enforces:
+      - REQ-SP800-37R2-0204
+      - REQ-SP800-37R2-0362
+      - REQ-SP800-37R2-0474
+      - REQ-SP800-37R2-0545
+      - REQ-SP800-53AR5-0144
+      - REQ-SP800-53AR5-0190
+      - REQ-SP800-53AR5-0194
+  - id: OCTX-006
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: the system assessment assesses an inherited control itself, does not verify the inheritance, or is delivered before the provider's results are available
+    fixture: tests/fixtures/negative/OCTX-006.yaml
+    hint: "A determination of an inherited control rests on the provider's assessment (inherited.basis) and the assessor verifies the inheritance."
+    enforces:
+      - REQ-SP800-37R2-0477
+      - REQ-SP800-37R2-0618
+      - REQ-SP800-53AR5-0183
+      - REQ-SP800-53AR5-0188
+      - REQ-SP800-53AR5-0193
+      - REQ-SP800-53AR5-0194
+  - id: OCTX-007
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-7
+    summary: the organizational ISCM strategy leaves a manual process unverified, a required policy out, an activity unmapped, or misjudges a not-applicable element
+    fixture: tests/fixtures/negative/OCTX-007.yaml
+    hint: "P-7 records iscm in org-context.yaml."
+    enforces:
+      - REQ-SP800-137-0056
+      - REQ-SP800-137-0169
+      - REQ-SP800-137A-0048
+      - REQ-SP800-137A-0089
+      - REQ-SP800-137A-0091
+      - REQ-SP800-137A-0137
+      - REQ-SP800-137A-0140
+      - REQ-SP800-137A-0352
+      - REQ-SP800-39-0187
+      - REQ-SP800-39-0190
+      - REQ-SP800-53R5-0028
+  - id: OCTX-008
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-7
+    summary: the ISCM program is not reviewed at its frequency, its reviews ignore threats, or its formal assessment is not reported or its findings not owned
+    fixture: tests/fixtures/negative/OCTX-008.yaml
+    hint: "P-7 records iscm.reviews and iscm.assessments; each finding names an owner and a due date."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0037
+      - REQ-SP800-137A-0014
+      - REQ-SP800-137A-0017
+      - REQ-SP800-137A-0056
+      - REQ-SP800-137A-0094
+      - REQ-SP800-137A-0279
+  - id: OCTX-009
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-5
+    summary: a system monitoring frequency is less frequent than the organizational minimum, or the system owner has not reviewed the minimums
+    fixture: tests/fixtures/negative/OCTX-009.yaml
+    hint: "conmon.yaml minimum_review records the system owner's review of the organizational minimums."
+    enforces:
+      - REQ-SP800-137-0160
+      - REQ-SP800-137-0162
+      - REQ-SP800-137-0163
+      - REQ-SP800-37R2-0615
+  - id: OCTX-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: a system under ongoing authorization has no organization-wide ongoing authorization process, or the process or the ISCM program does not hold its conditions
+    fixture: tests/fixtures/negative/OCTX-010.yaml
+    hint: "P-7 records iscm.ongoing_authorization before a system transitions (AD-CONT)."
+    enforces:
+      - REQ-SP800-137A-0073
+      - REQ-SP800-37R2-0613
+      - REQ-SP800-37R2-0615
+      - REQ-SP800-37R2-0616
+  - id: OCTX-011
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-3
+    summary: operations bring no review of threat, vulnerability, technology and mission changes against the organizational risk posture
+    fixture: tests/fixtures/negative/OCTX-011.yaml
+    hint: "P-3 records posture_reviews in org-context.yaml once the system operates."
+    enforces:
+      - REQ-CNSSP22-0026
+      - REQ-SP800-137-0116
+      - REQ-SP800-30R1-0092
+      - REQ-SP800-39-0157
+      - REQ-SP800-39-0186
+  - id: OCTX-012
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: the organizational policies do not carry risk management through the life cycle, or the funding, staffing and allocation owners hold no role or skip PPBE
+    fixture: tests/fixtures/negative/OCTX-012.yaml
+    hint: "P-2 records policies and resources in org-context.yaml; every owner holds a role in roles."
+    enforces:
+      - REQ-CNSSP22-0019
+      - REQ-CNSSP22-0024
+      - REQ-DODI8510.01-0046
+      - REQ-DODI8510.01-0059
+      - REQ-SP800-37R2-0070
+      - REQ-SP800-37R2-0473
+      - REQ-SP800-37R2-0685
+      - REQ-SP800-39-0216
+      - REQ-SP800-61R3-0094
+  - id: OCTX-013
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: a cybersecurity position is held against the citizenship bars, without its designation, DCPDS record, manpower position or written duties, or by a function the organization has not opened
+    fixture: tests/fixtures/negative/OCTX-013.yaml
+    hint: "Each roles record of a cybersecurity position carries position, duties_statement and, where needed, personnel_security and supervised_by."
+    enforces:
+      - REQ-DODI8500.01-0359
+      - REQ-DODI8500.01-0360
+      - REQ-DODI8500.01-0406
+      - REQ-DODI8500.01-0407
+      - REQ-DODI8500.01-0408

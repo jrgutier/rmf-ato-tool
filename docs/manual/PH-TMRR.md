@@ -473,6 +473,7 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Exit criteria**
 
+- Every family's monitoring frequency is at least the organizational minimum in ART-ORG-CONTEXT, and conmon.yaml minimum_review records the system owner's review of those minimums (OCTX-009).
 - A continuous monitoring strategy for the system that reflects the organizational risk management strategy is developed (DoDI 8510.01 Table 3 outcome).
 - conmon.yaml gives every baseline family a frequency and sets the ongoing-authorization triggers (CONMON-001).
 - conmon.yaml states the criteria behind each frequency, established by the system owner or common control provider with other officials, or cites ART-ORG-CONTEXT for a family organizational_frequencies lists as set by the organizational strategy (ISCM-003).
