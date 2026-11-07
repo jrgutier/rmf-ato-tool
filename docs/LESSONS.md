@@ -538,7 +538,14 @@ with the next ID; never edit or delete an existing entry.
 - Rule: A per-control transcription is checked against the document's own summary of it, and a repair of the extraction is named and fails when the text changes.
 - Promotion: check: test_specs_match_the_summary_tables and the generator's mark cross-check, which fail on a misfiled subheading
 
-## L-0077 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
+## L-0077 · 2026-11-07 · run: phase-11 · tags: references, rules
+- Symptom: in references/text/DTM-24-001.md, Table 1's rows for incident categorization, malware notification and five other activities look empty in a terminal or editor, so the extraction reads as if nothing constrains who performs them.
+- Root cause: the "CSSP must perform" key is a star glyph the extractor maps to the private-use code point U+F0E9, which renders as blank, while the ● and ○ keys come through as themselves; the page image on p. 9 shows a star in every cell of those rows.
+- Fix: CLOUD-003 encodes Table 1 from the PDF page (TABLE_1 in rules/cloud.py), and tests/unit/test_cloud.py pins every p. 9 row of the text, star included, to its key.
+- Rule: When a table's cells look empty in references/text but its key names a marker, read the PDF page and the raw code points before deciding the rows are unconstrained.
+- Promotion: check: tests/unit/test_cloud.py::test_table_1_page_9_matches_the_text
+
+## L-0078 · 2026-11-07 · run: phase-11 · tags: conformance, extraction
 - Symptom: joining a list item cut by a blank line inside a page (I-7) across the whole register changed 175 statements, retired 110 entries and flagged 127 for review in 22 documents, most of them NIST bullets wrongly joined to the paragraph after them.
 - Root cause: a layout quirk of one PDF (DODCIO-RECIPROCITY breaks a step after its first line; CNSSP12's OCR layer does the same and repeats a running header) looks like ordinary prose structure in every other document, so a global rule cannot tell them apart.
 - Fix: the reader takes per-document options from conformance/sources.yaml, each with a reason: `cut_items`, `run_in_headings` and `headers`; only the documents that declare them change, and register diffs are measured before marking.

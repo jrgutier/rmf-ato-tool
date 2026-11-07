@@ -1,0 +1,16 @@
+rule: CLOUD-003
+bases:
+- cloud
+description: no one scans and the AO has not accepted the gap
+mutations:
+- op: set_field
+  file: artifacts/data/cloud.yaml
+  path: checklist.activities.0.performer
+  value:
+    entity: none
+expect:
+  errors:
+  - CLOUD-003
+  messages:
+  - external-vulnerability-scans on CSO-01 has no provider, and the authorizing official does not 
+    accept the risk of the gap
