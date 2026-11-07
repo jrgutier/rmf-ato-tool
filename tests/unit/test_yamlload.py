@@ -34,3 +34,11 @@ def test_round_trip_copies_keep_line_numbers():
     first["b"]["c"] = 9
     second = rt_load(text)
     assert second["b"]["c"] == 2 and second.lc.key("b") == (1, 0)
+
+
+def test_round_trip_copies_keep_empty_sequence_lines_and_time_zones():
+    text = "a: []\nt: 2026-01-02T03:04:05.5+02:00\n"
+    for _ in range(2):
+        data = rt_load(text)
+        assert (data["a"].lc.line, data["a"].lc.col) == (0, 3)
+        assert data["t"].tzinfo is not None and data["t"].microsecond == 500000
