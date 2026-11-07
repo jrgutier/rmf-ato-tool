@@ -1,0 +1,14 @@
+rule: UPD-002
+bases:
+- minimal
+description: a significant change implemented without an update of the system plan
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: changes.0.security_impact.result
+  value: significant
+expect:
+  errors:
+  - UPD-002
+  messages:
+  - 'CHG-001: a significant change was implemented but the system security plan was not updated for it (no plan change references it)'

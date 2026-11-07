@@ -74,9 +74,9 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [P-14](#task-p-14) Risk Assessment—System | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-RA](../../MANUAL.md#art-ra), [ART-PIA](../../MANUAL.md#art-pia) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 | [P-15](#task-p-15) Requirements Definition | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REQ](../../MANUAL.md#art-req) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 | [P-18](#task-p-18) System Registration | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REG](../../MANUAL.md#art-reg) | — | [MS A](#ms-a) |
-| [C-1](#task-c-1) System Description | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-SD](../../MANUAL.md#art-sd) | [ART-BND](../../MANUAL.md#art-bnd) | [MS A](#ms-a) |
+| [C-1](#task-c-1) System Description | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-SD](../../MANUAL.md#art-sd) | [ART-BND](../../MANUAL.md#art-bnd), [ART-REG](../../MANUAL.md#art-reg) | [MS A](#ms-a) |
 | [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-CAT](../../MANUAL.md#art-cat) | [ART-BIA](../../MANUAL.md#art-bia) | [MS A](#ms-a) |
-| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](../../MANUAL.md#per-ao) | — | [ART-CAT](../../MANUAL.md#art-cat) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
+| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](../../MANUAL.md#per-ao) | — | [ART-CAT](../../MANUAL.md#art-cat), [ART-REG](../../MANUAL.md#art-reg) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 
 Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#task-p-16).
 
@@ -212,6 +212,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 |---|---|---|
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -267,6 +268,8 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-BASELINES](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -371,6 +374,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -422,6 +426,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -477,6 +482,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 | [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -533,6 +539,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 | [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
 | [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -589,6 +596,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 | [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -643,6 +651,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -698,6 +707,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|---|
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
 
 **Outputs**
 
@@ -754,6 +764,9 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
 
 **Outputs**
 
@@ -813,6 +826,8 @@ Writes to `facts.yaml`: `boundary_id`.
 | [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
 | [EXT-ITRA](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
 | [EXT-SEP](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
+| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -882,6 +897,10 @@ Writes to `facts.yaml`: `boundary_id`.
 | [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 | [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
 | [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
@@ -943,6 +962,8 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|---|
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
 | [EXT-REGISTRY](../../MANUAL.md#ext-registry) | Component system registry | outside input (organization) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -959,6 +980,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - The system is registered for purposes of management, accountability, coordination and oversight (DoDI 8510.01 Table 1 outcome).
 - ART-REG records the registry entry for the system, in registration.yaml with ART-REG.
 - An Enterprise system registers the ports, protocols and services of every boundary connection in the DoD PPSM Registry (registration.yaml ppsm, PPSM-001).
+- registration.yaml registry records where the system is reported (reported_in, eMASS or ERS) and the Component's tool; an alternate tool records how its system data is imported into ERS (ers_import, UPD-001).
 
 **Alignment**
 
@@ -1000,6 +1022,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
 | [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 
 **Outputs**
 
@@ -1007,6 +1030,7 @@ Writes to `facts.yaml`: `boundary_id`.
 |---|---|---|---|
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | produces | core |
 | [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
+| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
@@ -1019,6 +1043,7 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 - The provider of each leveraged authorization is an external entity in org-context.yaml, with its trust model and the acceptance of its risk (OCTX-004).
 - The characteristics of the system are described and documented (DoDI 8510.01 Table 2 outcome).
 - ART-SD, users.yaml, leveraged-authorizations.yaml and system-description.yaml describe the system; facts system_id, system_name, acronym, aliases, lifecycle_state, classification, system_type, owning_organization, system_version, operational_environment and lifecycle_phase set_by C-1.
+- ART-REG lists C-1 in touched_by and registration.yaml updates holds the characterization update by C-1 (UPD-001).
 
 **Alignment**
 
@@ -1061,6 +1086,10 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
 | [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
@@ -1125,12 +1154,14 @@ Writes to `facts.yaml`: `categorization`.
 | Input | What it is | Comes from |
 |---|---|---|
 | [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | updates | core |
+| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `categorization.approved`.
 
@@ -1143,6 +1174,7 @@ Writes to `facts.yaml`: `categorization.approved`.
 - The security categorization results are reviewed, and the categorization decision is approved by senior leaders in the organization (DoDI 8510.01 Table 2 outcome).
 - facts.categorization.approved set_by C-3; ART-CAT records the approval.
 - For a system that processes PII, ART-CAT also records the SAOP's (or designee's) approval.
+- ART-REG lists C-3 in touched_by and registration.yaml updates holds the categorization update by C-3 (UPD-001).
 
 **Alignment**
 

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:registration",
   "title": "runs/<run-id>/artifacts/data/registration.yaml",
-  "description": "Registration data behind ART-REG (P-18): the Component registry entry, and the system's registration of its ports, protocols and services in the DoD PPSM Registry. PPSM-001 judges it.",
+  "description": "Registration data behind ART-REG (P-18): the Component registry entry, and the system's registration of its ports, protocols and services in the DoD PPSM Registry. UPD-001 and PPSM-001 judge it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,12 +16,27 @@
       "required": [
         "name",
         "date",
-        "record"
+        "record",
+        "reported_in",
+        "tool"
       ],
       "properties": {
         "name": {
           "type": "string",
           "minLength": 1
+        },
+        "reported_in": {
+          "title": "Where the system is reported: eMASS or ERS",
+          "x-enforces": ["REQ-DODI8500.01-0172", "REQ-DODI8500.01-0301"],
+          "enum": ["eMASS", "ERS"]
+        },
+        "tool": {
+          "title": "The Component's tool for system data: eMASS, ERS, or an alternate tool",
+          "enum": ["eMASS", "ERS", "alternate"]
+        },
+        "ers_import": {
+          "title": "How the system data of an alternate tool is regularly imported into ERS, as worked out with the DoD CIO",
+          "type": ["string", "null"]
         },
         "date": {
           "$ref": "#/$defs/date"
@@ -29,6 +44,24 @@
         "record": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "updates": {
+      "title": "Updates of the registration information after registration, each by the task that makes it (UPD-001)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["task", "content", "date"],
+        "properties": {
+          "task": {"enum": ["C-1", "C-3", "R-5", "M-7"]},
+          "content": {
+            "title": "What the update adds: the characterization (C-1), the categorization (C-3), the authorization decision (R-5) or the removal from service (M-7)",
+            "enum": ["characterization", "categorization", "authorization", "disposal"]
+          },
+          "date": {"$ref": "#/$defs/date"},
+          "notes": {"type": "string"}
         }
       }
     },

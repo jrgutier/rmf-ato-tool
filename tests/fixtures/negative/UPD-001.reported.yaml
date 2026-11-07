@@ -1,0 +1,16 @@
+rule: UPD-001
+bases:
+- minimal
+description: the system is reported in a registry other than eMASS or ERS
+mutations:
+- op: set_field
+  file: artifacts/data/registration.yaml
+  path: registry.reported_in
+  value: DITPR
+expect:
+  errors:
+  - UPD-001
+  also:
+  - RUN-FM-001
+  messages:
+  - the system is not reported in either eMASS or ERS (reported_in is 'DITPR')

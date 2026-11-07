@@ -13,8 +13,10 @@ tasks:
       Monitor the system and its environment for changes that affect the security and privacy
       posture, analyzing the security impact of each change.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS, EXT-THREAT]
-    outputs: [ART-CHG, ART-INV, ART-CMP]
+    inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS, EXT-THREAT, ART-ORG-CONTEXT, ART-SAR, EXT-MONITORING, EXT-ORG-POLICY, EXT-PRODUCT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0, ART-SAR: 0.2.0, EXT-MONITORING: 0.2.0, EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
+    outputs: [ART-CHG, ART-INV, ART-CMP, ART-POAM, ART-SAR, ART-SSP, ART-CP]
+    outputs_since: {ART-POAM: 0.2.0, ART-SAR: 0.2.0, ART-SSP: 0.2.0, ART-CP: 0.2.0}
     writes_facts: []
     depends_on: [R-4]
     feeds_back_to: [P-11, C-1]
@@ -38,6 +40,8 @@ tasks:
       - For a system processing PII, each change states whether it creates new privacy risk
         (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates
         (PRIV-005).
+      - An implemented change of significant security impact has a system plan change in
+        plan-reviews.yaml that references it (change_ref, UPD-002).
     citations:
       - {ref: SP800-37R2, section: "TASK M-1", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-1 System and Environment Changes"}
@@ -49,6 +53,7 @@ tasks:
       - {ref: SP800-128, section: "3.4.1"}
       - {ref: DODI8500.01, page: 33, anchor: "accommodate all applicable legitimate and lawful deployment of LE/CI tools"}
       - {ref: DODI8510.01, page: 29, anchor: "Enforce AO authorization decisions for hosted or interconnected systems"}
+    enforces: [REQ-SP800-34R1-0221]
     playbook: playbooks/M/M-1.md
   - id: M-2
     name: Ongoing Assessments
@@ -62,8 +67,10 @@ tasks:
       Assess implemented and inherited controls on the frequencies of the continuous monitoring
       strategy, with reviews of the system at least annually.
     raci: {R: [PER-SCA], A: PER-SCA, C: [PER-AODR, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-ISSO, PER-PRIV, PER-CISO, PER-CSSP], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-CONMON, ART-SSP, ART-SAP, ART-SAR, ART-POAM, ART-SVCA, EXT-MONITORING]
-    outputs: [ART-SAR, ART-CONMON, ART-SVCA]
+    inputs: [ART-CONMON, ART-SSP, ART-SAP, ART-SAR, ART-POAM, ART-SVCA, EXT-MONITORING, ART-ORG-CONTEXT, ART-RA, EXT-TEST-RESULTS]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0, ART-RA: 0.2.0, EXT-TEST-RESULTS: 0.2.0}
+    outputs: [ART-SAR, ART-CONMON, ART-SVCA, ART-SAP]
+    outputs_since: {ART-SAP: 0.2.0}
     writes_facts: []
     depends_on: [M-1, S-5]
     feeds_back_to: []
@@ -85,6 +92,7 @@ tasks:
       - {ref: DODI8510.01, page: 29, anchor: "Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually"}
       - {ref: DODCIO-DEVSECOPS, section: "3.2.5"}
       - {ref: SP800-160V1R1, page: 177, anchor: "Security-relevant information needs are identified"}
+    enforces: [REQ-SP800-137-0073]
     playbook: playbooks/M/M-2.md
   - id: M-3
     name: Ongoing Risk Response
@@ -98,8 +106,10 @@ tasks:
       Respond to risk from ongoing monitoring, risk assessments, emerging threats and
       outstanding POA&M items.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-AO, C: [PER-RE, PER-PRIV, PER-AODR, PER-IO, PER-ISSE, PER-CSSP], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, ART-ORG-CONTEXT, EXT-INSPECTIONS, EXT-THREAT, EXT-DIRECTIVES, EXT-VDP]
-    outputs: [ART-RA, ART-POAM, ART-RAR]
+    inputs: [ART-SAR, ART-RA, ART-POAM, ART-RAR, ART-CHG, ART-ORG-CONTEXT, EXT-INSPECTIONS, EXT-THREAT, EXT-DIRECTIVES, EXT-VDP, ART-SSP]
+    inputs_since: {ART-SSP: 0.2.0}
+    outputs: [ART-RA, ART-POAM, ART-RAR, ART-SAR]
+    outputs_since: {ART-SAR: 0.2.0}
     writes_facts: []
     depends_on: [M-2]
     feeds_back_to: [A-5]
@@ -167,8 +177,10 @@ tasks:
       Update the security plan, assessment report, risk assessment and POA&M from continuous
       monitoring results.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-ISSO, PER-PRIV, PER-CISO], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG, ART-CONMON]
-    outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA]
+    inputs: [ART-SAR, ART-POAM, ART-SSP, ART-RA, ART-CHG, ART-CONMON, ART-ORG-CONTEXT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0}
+    outputs: [ART-SSP, ART-SAR, ART-POAM, ART-RA, ART-IRP]
+    outputs_since: {ART-IRP: 0.2.0}
     writes_facts: []
     depends_on: [M-3]
     feeds_back_to: []
@@ -193,6 +205,7 @@ tasks:
       - {ref: SP800-18R2, section: "4.7"}
       - {ref: DODI5000.90, page: 13, anchor: "Each iteration should conclude with the AO validating the PM's cybersecurity strategy and updated POA&M"}
       - {ref: SP800-18R2, section: "3.1"}
+    enforces: [REQ-SP800-61R3-0155]
     playbook: playbooks/M/M-4.md
   - id: M-5
     name: Security and Privacy Reporting
@@ -206,7 +219,8 @@ tasks:
       Report the security and privacy posture to the AO and senior leaders as the monitoring
       strategy requires.
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSM], A: PER-PM, C: [PER-ISSO, PER-CSSP, PER-RE], I: [PER-AO, PER-CIO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA, ART-CHG, ART-SD]
+    inputs: [ART-SAR, ART-POAM, ART-CONMON, ART-RA, ART-CHG, ART-SD, ART-ORG-CONTEXT, ART-SSP]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0, ART-SSP: 0.2.0}
     outputs: [ART-SECRPT]
     writes_facts: []
     depends_on: [M-4]
@@ -256,7 +270,8 @@ tasks:
       CISO.
     raci: {R: [PER-AO], A: PER-AO, C: [PER-RE, PER-CIO, PER-CISO, PER-PRIV, PER-AODR], I: [PER-PM, PER-ISSM], when: {PER-PRIV: processes-pii}}
     inputs: [ART-SECRPT, ART-POAM, ART-RA, ART-ORG-CONTEXT, ART-SSP, EXT-ISCM-ASSESSMENT]
-    outputs: [ART-AODM, ART-AUTHREC]
+    outputs: [ART-AODM, ART-AUTHREC, ART-RAR]
+    outputs_since: {ART-RAR: 0.2.0}
     writes_facts: [acquisition]
     depends_on: [M-5]
     feeds_back_to: [R-2]
@@ -310,8 +325,10 @@ tasks:
       Implement the disposal strategy and execute the required actions when the system is
       removed from operation.
     raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-AODR, PER-IO, PER-ISSO, PER-PRIV, PER-RE], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SSP, ART-INV, ART-RA]
-    outputs: [ART-DISP]
+    inputs: [ART-SSP, ART-INV, ART-RA, ART-ORG-CONTEXT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0}
+    outputs: [ART-DISP, ART-INV, ART-SSP]
+    outputs_since: {ART-INV: 0.2.0, ART-SSP: 0.2.0}
     writes_facts: []
     depends_on: [M-6]
     feeds_back_to: []
@@ -323,9 +340,12 @@ tasks:
         outcome).
       - ART-DISP records the disposal strategy, media sanitization and registry and inventory
         updates.
+      - The inventory of information systems shows the removal; ART-INV and ART-SSP list M-7 in
+        touched_by, and registration.yaml updates holds the disposal update by M-7 (UPD-001).
     citations:
       - {ref: SP800-37R2, section: "TASK M-7", note: "SDLC phase: New – Not Applicable; Existing – Disposal."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-7 System Disposal"}
       - {ref: SP800-37R2, section: "TABLE 8: MONITOR TASKS AND OUTCOMES"}
       - {ref: DODI5000.85, page: 18, anchor: "sustains the system over its life cycle, including disposal"}
+    enforces: [REQ-SP800-37R2-0457]
     playbook: playbooks/M/M-7.md
