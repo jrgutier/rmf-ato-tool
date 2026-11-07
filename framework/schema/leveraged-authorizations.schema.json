@@ -188,6 +188,129 @@
               "REQ-SP800-39-0102",
               "REQ-SP800-61R3-0132"
             ]
+          },
+          "package_review": {
+            "title": "The customer organization's review of the provider's authorization package, the basis for determining risk (RECIP-001)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "date",
+              "factors",
+              "integration",
+              "overlays"
+            ],
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date",
+                "title": "Date the provider's authorization package was reviewed, before the authorization decision that relies on it"
+              },
+              "factors": {
+                "title": "Risk factors considered in the review",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "factor",
+                    "finding"
+                  ],
+                  "properties": {
+                    "factor": {
+                      "title": "Risk factor",
+                      "enum": [
+                        "time-elapsed",
+                        "environment",
+                        "impact-level",
+                        "risk-tolerance",
+                        "other"
+                      ]
+                    },
+                    "finding": {
+                      "type": "string",
+                      "minLength": 1,
+                      "title": "What the review found on this factor"
+                    }
+                  }
+                }
+              },
+              "integration": {
+                "title": "Boundary components that integrate the shared system, application or service with this system, each with its risk considered",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "component",
+                    "risk"
+                  ],
+                  "properties": {
+                    "component": {
+                      "type": "string",
+                      "pattern": "^CMP-[A-Z0-9-]+$"
+                    },
+                    "risk": {
+                      "type": "string",
+                      "minLength": 1,
+                      "title": "The risk of the integration as considered"
+                    }
+                  }
+                }
+              },
+              "overlays": {
+                "title": "Consideration given to each security control overlay of the categorization",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "overlay",
+                    "consideration"
+                  ],
+                  "properties": {
+                    "overlay": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "consideration": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "additional_controls": {
+            "title": "Controls the customer organization implements beyond the provider's to reduce risk to an acceptable level: each is documented, implemented, assessed, authorized and monitored (RECIP-002)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d+(\\.\\d+)?$"
+            }
+          },
+          "granting_support": {
+            "title": "The providing (Granting) organization's support of the system, application or cloud service, once it ends (RECIP-003)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ended",
+              "continued"
+            ],
+            "properties": {
+              "ended": {
+                "$ref": "#/$defs/date",
+                "title": "Date the Granting organization stopped supporting it"
+              },
+              "continued": {
+                "type": "boolean",
+                "title": "Whether this organization continues using it"
+              },
+              "authorization": {
+                "type": "string",
+                "pattern": "^AUTH-\\d{3}$",
+                "title": "The full authorization this organization establishes and maintains for it: a record of authorizations.yaml"
+              }
+            }
           }
         }
       }

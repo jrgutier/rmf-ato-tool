@@ -1,0 +1,13 @@
+rule: RECIP-001
+bases:
+- minimal
+description: no review of the provider package
+mutations:
+- op: delete_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the customer organization does not review the provider''s authorization package'

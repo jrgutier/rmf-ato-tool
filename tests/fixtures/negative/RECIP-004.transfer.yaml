@@ -1,0 +1,38 @@
+rule: RECIP-004
+bases:
+- minimal
+description: a transfer whose provider relinquished configuration and maintenance, operating before its
+  own authorization
+mutations:
+- op: set_field
+  file: artifacts/data/system-description.yaml
+  path: origin
+  value:
+    kind: ownership-transfer
+    organization: Fleet Systems Command
+    authorization:
+      ao: Fleet Systems Command AO
+      decision: AD-ATO
+      date: '2025-06-01'
+    relinquished:
+    - configuration
+    - maintenance
+    operating: '2026-06-01'
+    reuse:
+    - document: ART-SSP
+      reused: true
+    - document: ART-SAR
+      reused: true
+    - document: ART-RAR
+      reused: true
+    - document: ART-POAM
+      reused: true
+    - document: ART-AODM
+      reused: true
+    sources:
+    - INT-003.A1
+expect:
+  errors:
+  - RECIP-004
+  messages:
+  - the ownership-transfer operated before its receiving AO authorized it, on 2026-06-01

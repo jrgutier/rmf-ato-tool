@@ -1,0 +1,18 @@
+rule: RECIP-003
+bases:
+- minimal
+description: continued use after support ended, on no authorization
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.granting_support
+  value:
+    ended: '2026-10-01'
+    continued: true
+    authorization: AUTH-001
+expect:
+  errors:
+  - RECIP-003
+  messages:
+  - 'LA-01: the Granting organization stopped supporting it on 2026-10-01 and this organization continues
+    using it without a full authorization of its own'

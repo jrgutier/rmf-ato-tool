@@ -944,7 +944,7 @@ rules:
     applies_after: R-4
     summary: an authorization issue went to the wrong forum, is resolved without a resolution, or an ISRMC direction is open at a decision
     fixture: tests/fixtures/negative/AODM-011.yaml
-    hint: A mission area issue goes to its PAO, a space system issue to USSPACECOM, shared community risk to the DSAWG, a process dispute to the DoD CISO, an appeal or a direction to the ISRMC; a decision follows compliance with any ISRMC direction.
+    hint: A mission area issue goes to its PAO, a space system issue to USSPACECOM, shared community risk to the DSAWG, a process dispute to the DoD CISO, an appeal or a direction to the ISRMC, and on an NSS an interagency risk issue to the ISRMC; a decision follows compliance with any ISRMC direction.
     enforces:
       - REQ-DODI8510.01-0076
       - REQ-DODI8510.01-0158
@@ -952,6 +952,7 @@ rules:
       - REQ-DODI8510.01-0166
       - REQ-DODI8510.01-0189
       - REQ-DODI8510.01-0218
+      - REQ-CNSSP22-0027
   - id: ENT-001
     scope: run
     severity: E
@@ -1070,6 +1071,57 @@ rules:
     hint: Each leveraged record names its arrangement; an organizational system holds a valid authorization and the inheriting AO is aware; a common control provider is the provider of a common allocation.
     enforces:
       - REQ-SP800-37R2-0583
+  - id: RECIP-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: the provider's authorization package is not reviewed before the decision that relies on it, or the review leaves out its risk factors, an integrating component or an overlay
+    fixture: tests/fixtures/negative/RECIP-001.yaml
+    hint: Give each leveraged record that is neither a common control provider nor an Enterprise system (ENT-002) a package_review dated before the first authorization decision, with its risk factors, every boundary component naming the record under integration and every overlay of the categorization under overlays.
+    enforces:
+      - REQ-SP800-37R2-0582
+      - REQ-DODCIO-RECIPROCITY-0132
+  - id: RECIP-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a control the customer organization adds beyond the provider's is not in the baseline or not implemented
+    fixture: tests/fixtures/negative/RECIP-002.yaml
+    hint: Each additional_controls entry of a leveraged record is in baseline.json and implemented in the SSP; SSP-COV-001, SAR-COV-001 and CONMON-001 then hold it documented, assessed and monitored.
+    enforces:
+      - REQ-SP800-37R2-0587
+  - id: RECIP-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a system its Granting organization no longer supports is still used without a full authorization of this organization
+    fixture: tests/fixtures/negative/RECIP-003.yaml
+    hint: When granting_support.continued is true, granting_support.authorization names an authorizations.yaml record whose decision authorizes.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0148
+  - id: RECIP-004
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: a system another organization authorized operates here before this organization's AO authorizes it, names its own organization as the provider, or leaves a core document of the provider neither reused nor explained
+    fixture: tests/fixtures/negative/RECIP-004.yaml
+    hint: system-description.yaml origin names another organization; a separate instance, or a transfer whose provider relinquished configuration and maintenance, operates only under an authorization of this organization's AO; each RMF core document of the provider is reused or carries a reason.
+    enforces:
+      - REQ-CNSSI1254-0122
+      - REQ-CNSSI1254-0124
+      - REQ-DODCIO-RECIPROCITY-0060
   - id: MPOA-001
     scope: run
     severity: E
