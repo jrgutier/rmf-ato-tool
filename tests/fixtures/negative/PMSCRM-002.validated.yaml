@@ -1,0 +1,15 @@
+rule: PMSCRM-002
+bases:
+- minimal
+description: an unvalidated IA product with no reason
+mutations:
+- op: set_field
+  file: artifacts/data/inventory.yaml
+  path: items.1.cnssp11
+  value: not-compliant
+expect:
+  errors:
+  - PMSCRM-002
+  messages:
+  - IA product INV-002 is not validated and the record gives no reason that a validated one is not available
+    or not cost effective

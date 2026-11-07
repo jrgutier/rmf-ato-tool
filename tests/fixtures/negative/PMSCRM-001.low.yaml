@@ -1,0 +1,31 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: a low risk tolerance system skipping assessment vendors without a reason
+mutations:
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.procurement
+  value: engineered
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.level
+  value: low
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: actions
+  value:
+  - foci-caution
+  - approved-products-lists
+  - industry-standards
+  - balance-risk-mission
+  - verifiable-vendor-processes
+  - vendor-limitations-awareness
+  - countermeasures-critical-risks
+  - assess-critical-components
+  - implement-countermeasures
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - Table 1 asks a system of low risk tolerance for assessment-vendors; it is neither taken nor explained

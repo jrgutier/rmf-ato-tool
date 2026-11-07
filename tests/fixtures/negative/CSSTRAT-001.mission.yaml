@@ -1,0 +1,29 @@
+rule: CSSTRAT-001
+bases:
+- minimal
+description: a mission-essential business system's CSS without DoD CIO approval
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: acquisition.pathway
+  value: PW-DBS
+- op: set_field
+  file: artifacts/data/protection.yaml
+  path: program.decision_points
+  value:
+  - id: MS-MDD
+    date: '2025-10-01'
+  - id: MS-A
+    date: '2026-03-15'
+  - id: DP-DBS-SOLUTION
+    date: '2026-04-01'
+expect:
+  errors:
+  - CSSTRAT-001
+  messages:
+  - the DoD CIO approves the CSS of mission-essential IT before ATP decision point DP-DBS-SOLUTION
+  also:
+  - CSSTRAT-002
+  - CSSTRAT-003
+  - TSTRAT-001
+  - TSTRAT-002

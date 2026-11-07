@@ -1,0 +1,37 @@
+rule: PMSCRM-001
+bases:
+- minimal
+description: a very low risk tolerance system sending no TAC request
+mutations:
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.procurement
+  value: assured
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: risk_tolerance.level
+  value: very-low
+- op: set_field
+  file: artifacts/data/pm-scrm.yaml
+  path: actions
+  value:
+  - foci-caution
+  - approved-products-lists
+  - industry-standards
+  - balance-risk-mission
+  - verifiable-vendor-processes
+  - vendor-limitations-awareness
+  - countermeasures-critical-risks
+  - assess-critical-components
+  - implement-countermeasures
+  - assessment-vendors
+  - follow-dodi5200.44-sp800-161
+  - criticality-analysis
+  - ppp-documentation
+  - tac-requests
+  - flag-reports
+expect:
+  errors:
+  - PMSCRM-001
+  messages:
+  - no request on critical components or suppliers is sent to the DIA SCRM TAC or other CI sources

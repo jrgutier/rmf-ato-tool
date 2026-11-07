@@ -154,7 +154,8 @@ requirements:
     locator: "2.3.c"
     context: "DOD CIO In addition to the responsibilities in Paragraph 2.6., the DoD CIO:"
     statement: "c. In accordance with DoDI 5000.UH, reviews and approves the cybersecurity strategy for all Acquisition Category ID programs containing IT, including National Security Systems, before the MDA/DA makes milestone decisions or contract awards."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.yaml", "expect": "program obtains", "asserts": "The DoD CIO approves the cybersecurity strategy of ACAT ID programs before the MDA makes milestone decisions", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.award.yaml", "expect": "reviewed prior to contract award", "asserts": "The cybersecurity strategy of ACAT ID programs is reviewed before contract awards: reviewed prior to contract award", "claim": "constraint"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0020"
     citation: {"ref": "DODI5000.90", "page": 5, "anchor": "Interoperability requirements development."}
@@ -320,7 +321,9 @@ requirements:
     locator: "2.6.a.(3)"
     context: "DOD AND OSD COMPONENT HEADS MDA/DAs:"
     statement: "(3) Ensure that the cybersecurity plans and results produced by PMs are in accordance with this issuance, including the requirement for Cybersecurity Strategies for all critical and mission essential systems containing IT. Component-required procedures will not supersede the requirements for acquisition programs stated in this issuance."
-    status: "candidate"
+    status: "partial"
+    reason: "The CSS that PMs produce is held to its approvals (CSSTRAT-001); that Component procedures do not supersede this issuance is a precedence rule no run record carries. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-001", "fixture": "tests/fixtures/negative/CSSTRAT-001.cio.yaml", "expect": "gains approval from the respective CIO", "asserts": "Cybersecurity strategies produced by PMs gain approval from the respective CIO", "claim": "constraint", "sentence": "(3) Ensure that the cybersecurity plans and results produced by PMs are in accordance with this issuance, including the requirement for Cybersecurity Strategies for all critical and mission essential systems containing IT."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0040"
     citation: {"ref": "DODI5000.90", "page": 7, "anchor": "PMs are responsible for the cybersecurity of their programs, systems, and information,"}
@@ -557,7 +560,9 @@ requirements:
     locator: "3.1.f.(2)"
     context: "Figure 1. AAF Cybersecurity as a foundational requirement is:"
     statement: "(2) Continuously enforced through the risk management framework (RMF) and SCRM systems described in Paragraphs 3.3 and 3.4."
-    status: "candidate"
+    status: "partial"
+    reason: "The PM's SCRM actions are recorded (pm-scrm.yaml actions); 'continuously enforced through the RMF and SCRM systems' has no record a rule can break. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/pm-scrm.schema.json#/properties/actions", "asserts": "SCRM is continuously enforced through the SCRM due diligence actions the PM takes", "claim": "presence"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0069"
     citation: {"ref": "DODI5000.90", "page": 10, "anchor": "In all acquisition programs using any of the acquisition pathways of the"}
@@ -599,8 +604,11 @@ requirements:
     locator: "3.2.a.(1)"
     context: "CYBERSECURITY DRIVEN BY THREAT System Threat Analysis"
     statement: "(1) PMs must use cyber threat information produced by the Intelligence Community in development of their cyber security strategy and assessment of risk. Intelligence Community products that specifically support acquisition programs include, but are not limited to:"
-    status: "candidate"
+    status: "partial"
+    reason: "Intelligence Community threat information in the CSS is held (CSSTRAT-003). The second sentence opens a list 'include, but are not limited to', which can never fail; ruling sought. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.threat.yaml", "expect": "cyber threat information produced by the Intelligence Community", "asserts": "PMs use cyber threat information produced by the Intelligence Community in development of their cybersecurity strategy", "claim": "constraint", "sentence": "(1) PMs must use cyber threat information produced by the Intelligence Community in development of their cyber security strategy and assessment of risk."}]
     work_item: "WI-30"
+    ruling_sought: [{"sentence": "Intelligence Community products that specifically support acquisition programs include, but are not limited to:", "reason": "An open list of examples ('include, but are not limited to'); no product of it is required, so nothing can fail."}]
   - id: "REQ-DODI5000.90-0074"
     citation: {"ref": "DODI5000.90", "page": 11, "anchor": "Threat modules."}
     kind: "lettered"
@@ -744,7 +752,9 @@ requirements:
     locator: "3.3.a.(2)"
     context: "CYBERSECURITY PLANNING AND EXECUTION Planning Cybersecurity Activities"
     statement: "(2) The PM is expected to delegate responsibility to members of the program staff with technical knowledge of cybersecurity to produce the Cybersecurity Strategy Annex of the Program Protection Plan in accordance with DoDI 5000.02T. The cybersecurity annex will document how the system will operate in a cyber-contested environment. For platform and weapon systems that require an ATO in accordance with DoDI 8510.01, the cybersecurity annex will document the following:"
-    status: "candidate"
+    status: "partial"
+    reason: "Who produced the strategy and how the system operates in a cyber-contested environment are recorded as presence (strategy.prepared_by, strategy.contested_environment); the lead-in's items 0091 to 0094 have their own homes. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/cybersecurity-strategy.schema.json#/properties/strategy/properties/prepared_by", "asserts": "The PM delegates producing the cybersecurity strategy annex to program staff with cybersecurity knowledge: who on the program staff produced it", "claim": "constraint", "sentence": "(2) The PM is expected to delegate responsibility to members of the program staff with technical knowledge of cybersecurity to produce the Cybersecurity Strategy Annex of the Program Protection Plan in accordance with DoDI 5000.02T."}, {"kind": "schema", "target": "framework/schema/cybersecurity-strategy.schema.json#/properties/strategy/properties/contested_environment", "asserts": "The cybersecurity annex documents how the system will operate in a cyber-contested environment", "claim": "presence", "sentence": "The cybersecurity annex will document how the system will operate in a cyber-contested environment."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0091"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "A plan of action and milestones (POA&M) to address known vulnerabilities."}
@@ -769,7 +779,9 @@ requirements:
     locator: "3.3.a.(2).(c)"
     context: "CYBERSECURITY PLANNING AND EXECUTION Planning Cybersecurity Activities The PM is expected to delegate responsibility to members of the program staff with technical knowledge of cybersecurity to produc"
     statement: "(c) Implementation of the RMF process within the program management office’s acquisition and engineering processes for development, procurement, testing, and sustainment."
-    status: "candidate"
+    status: "partial"
+    reason: "Recorded as free text (strategy.rmf_integration); nothing can refuse a wrong description. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/cybersecurity-strategy.schema.json#/properties/strategy/properties/rmf_integration", "asserts": "Implementation of the RMF within the program management office's acquisition and engineering processes for development, procurement, testing and sustainment", "claim": "presence"}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0094"
     citation: {"ref": "DODI5000.90", "page": 12, "anchor": "The need for operational cyber resilience and, if appropriate, the resulting monitoring,"}
@@ -822,7 +834,9 @@ requirements:
     locator: "3.3.b.(4)"
     context: "CYBERSECURITY PLANNING AND EXECUTION"
     statement: "(4) Figure 2 represents the implementation of threat-based cybersecurity throughout the Acquisition Lifecycle. While this figure depicts the Major Capability Acquisition pathway, the concepts apply to all pathways. In essence, PMs must design, build, test, field, and sustain their product. Likewise, PMs have associated cybersecurity activities they must accomplish. This starts with the PM’s cybersecurity strategy and continues through the RMF process leading to an ATO."
-    status: "candidate"
+    status: "partial"
+    reason: "Figure 2's order, the CSS before the RMF reaches an ATO, is held (CSSTRAT-003: the CSS may not postdate the first authorization decision), but that sentence is not a marked sentence of the entry; the marked sentences state that the concepts apply to all pathways and that PMs have cybersecurity activities, which the activities across all phases hold. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.order.yaml", "expect": "the CSS is dated after the first authorization decision", "asserts": "PMs have associated cybersecurity activities they must accomplish, starting with the cybersecurity strategy, never dated after the first authorization decision", "claim": "constraint", "sentence": "Likewise, PMs have associated cybersecurity activities they must accomplish."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0100"
     citation: {"ref": "DODI5000.90", "page": 13, "anchor": "PMs, in coordination with AOs, must revisit a program’s cybersecurity posture based"}
@@ -830,7 +844,9 @@ requirements:
     locator: "3.3.b.(5)"
     context: "CYBERSECURITY PLANNING AND EXECUTION"
     statement: "(5) PMs, in coordination with AOs, must revisit a program’s cybersecurity posture based on threat assessments and continuous monitoring. Each iteration should conclude with the AO validating the PM’s cybersecurity strategy and updated POA&M in accordance with Figure 2."
-    status: "candidate"
+    status: "partial"
+    reason: "A review prompted by a threat assessment or continuous monitoring is coordinated with the AO or AODR and concludes with the AO's validation or a reason (CSSTRAT-002); that such a review takes place after each threat assessment is not checked, since the source sets no trigger a rule could read. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.ao.yaml", "expect": "revisits the cybersecurity posture in", "asserts": "PMs revisit the cybersecurity posture in coordination with AOs based on threat assessments and continuous monitoring", "claim": "constraint", "sentence": "(5) PMs, in coordination with AOs, must revisit a program’s cybersecurity posture based on threat assessments and continuous monitoring."}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.validation.yaml", "expect": "the iteration concludes with the AO validating the", "asserts": "Each iteration concludes with the AO validating the cybersecurity strategy and updated POA&M", "claim": "presence", "sentence": "Each iteration should conclude with the AO validating the PM’s cybersecurity strategy and updated POA&M in accordance with Figure 2."}]
     work_item: "WI-30"
   - id: "REQ-DODI5000.90-0101"
     citation: {"ref": "DODI5000.90", "page": 13, "anchor": "While the AO may authorize a continuous ATO (cATO), a cATO is"}
@@ -904,7 +920,9 @@ requirements:
     locator: "3.4.a"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM:"
     statement: "a. PMs will conduct SCRM, to include Cyber-SCRM. This includes, at a minimum, conducting market research to assess potential vendors to determine if they:"
-    status: "candidate"
+    status: "partial"
+    reason: "Market research of potential vendors is required (pm-scrm.yaml market_research, at least one) with free-text findings; the three questions are entries 0109 to 0111. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/pm-scrm.schema.json#/properties/market_research", "asserts": "PMs conduct SCRM, at a minimum conducting market research to assess potential vendors", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0109"
     citation: {"ref": "DODI5000.90", "page": 14, "anchor": "Provide products and components, or sub-components, sourced through original equipment manufacturers or"}
@@ -936,7 +954,9 @@ requirements:
     locator: "3.4.b"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM:"
     statement: "b. The PMs will consider maintaining a visualization (illumination) of the supply chain in order to have situational awareness of the risks and vulnerabilities throughout the program’s supply chain, especially those on the USD(R&E) Critical Technology List."
-    status: "candidate"
+    status: "partial"
+    reason: "'Will consider': the decision and what was weighed are recorded (pm-scrm.yaml illumination); nothing can refuse a decision not to illuminate. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/pm-scrm.schema.json#/properties/illumination", "asserts": "PMs consider maintaining a visualization (illumination) of the supply chain for situational awareness of its risks", "claim": "presence"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0113"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Consider the source of products that may be supplied to fulfill program"}
@@ -968,7 +988,8 @@ requirements:
     locator: "3.4.c.(2)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will:"
     statement: "(2) Take action to manage supply chain risks, including those associated with foreign ownership, control, or influence concerns, commensurate with the risk tolerance level of the system or mission in question."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.yaml", "expect": "it is neither taken nor explained", "asserts": "PMs take action to manage supply chain risks, including foreign ownership, control or influence, commensurate with the risk tolerance level: each Table 1 action is taken or explained, taken or explained", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0117"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Counter risks to and from a product by applying a framework for"}
@@ -976,7 +997,8 @@ requirements:
     locator: "3.4.c.(3)"
     context: "CYBERSECURITY IN THE SUPPLY CHAIN For SCRM: PMs will:"
     statement: "(3) Counter risks to and from a product by applying a framework for cybersecurity SCRM due diligence, that links supply chain risk tolerance with the importance of the systems purchased (see Table 2)."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.yaml", "expect": "it is neither taken nor explained", "asserts": "PMs counter supply chain risks by applying the SCRM due diligence framework that links risk tolerance with the importance of the systems purchased, taken or explained", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0118"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Moderate Risk Tolerance | Moderate risk tolerance applies to structured procurements, like"}
@@ -984,7 +1006,8 @@ requirements:
     locator: "3.4"
     context: "Table 1. SCRM Actions by Risk Tolerance Level"
     statement: "Moderate Risk Tolerance | Moderate risk tolerance applies to structured procurements, like wireless networks at a forward deployed base. PMs should implement all previous strategies and: - Use verifiable vendor processes for product integrity (e.g., SSAE18-SOC2). - Improve awareness of vendor/product limitations. - Manage critical SCRM risks through countermeasures."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.procurement.yaml", "expect": "tolerates more risk than that", "asserts": "Table 1 applies each risk tolerance level to its kind of procurement; a level that tolerates more risk than that is refused", "claim": "constraint", "sentence": "Moderate Risk Tolerance | Moderate risk tolerance applies to structured procurements, like wireless networks at a forward deployed base."}, {"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.yaml", "expect": "it is neither taken nor explained", "asserts": "At moderate risk tolerance PMs implement all previous strategies and the row's own: each action taken or explained", "claim": "constraint", "sentence": "PMs should implement all previous strategies and: - Use verifiable vendor processes for product integrity (e.g., SSAE18-SOC2). - Improve awareness of vendor/product limitations. - Manage critical SCRM risks through countermeasures."}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0119"
     citation: {"ref": "DODI5000.90", "page": 15, "anchor": "Low Risk Tolerance | Low risk tolerance applies to engineered procurements, like"}
@@ -992,7 +1015,8 @@ requirements:
     locator: "3.4"
     context: "Table 1. SCRM Actions by Risk Tolerance Level"
     statement: "Low Risk Tolerance | Low risk tolerance applies to engineered procurements, like industrial control systems in a tank. PMs should implement all previous strategies and: - Assess critical components. - Implement available countermeasures. - Utilize commercial assessment vendors, the Joint Federated Assurance Center, interagency and close and trusted international partners, national labs/FFRDCs, and intelligence and CI."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.procurement.yaml", "expect": "tolerates more risk than that", "asserts": "Table 1 applies each risk tolerance level to its kind of procurement; a level that tolerates more risk than that is refused", "claim": "constraint", "sentence": "Low Risk Tolerance | Low risk tolerance applies to engineered procurements, like industrial control systems in a tank."}, {"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.low.yaml", "expect": "it is neither taken nor explained", "asserts": "At low risk tolerance PMs implement all previous strategies and the row's own: each action taken or explained", "claim": "constraint", "sentence": "PMs should implement all previous strategies and: - Assess critical components. - Implement available countermeasures. - Utilize commercial assessment vendors, the Joint Federated Assurance Center, interagency and close and trusted international partners, national labs/FFRDCs, and intelligence and CI."}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0120"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Very low risk tolerance applies to assured procurements, like nuclear command and"}
@@ -1000,7 +1024,8 @@ requirements:
     locator: "3.4"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "Very low risk tolerance applies to assured procurements, like nuclear command and control systems. PMs should implement all previous strategies and:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.procurement.yaml", "expect": "tolerates more risk than that", "asserts": "Table 1 applies each risk tolerance level to its kind of procurement; a level that tolerates more risk than that is refused", "claim": "constraint", "sentence": "Very low risk tolerance applies to assured procurements, like nuclear command and control systems."}, {"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.verylow.yaml", "expect": "it is neither taken nor explained", "asserts": "At very low risk tolerance PMs implement all previous strategies and the row's own: each action taken or explained", "claim": "constraint", "sentence": "PMs should implement all previous strategies and:"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0121"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Very Low Risk Tolerance"}
@@ -1016,7 +1041,9 @@ requirements:
     locator: "3.4.-"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "- Follow all requirements in DoDI 5200.44 and NIST SP 800-161; including:"
-    status: "candidate"
+    status: "partial"
+    reason: "Following DoDI 5200.44 and SP 800-161 is a Table 1 action taken or explained (PMSCRM-001); DoDI 5200.44 is not in references/, so what following it means is not checked. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.verylow.yaml", "expect": "it is neither taken nor explained", "asserts": "At very low risk tolerance PMs follow all requirements in DoDI 5200.44 and NIST SP 800-161, taken or explained", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0123"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Conducting criticality analysis."}
@@ -1024,7 +1051,9 @@ requirements:
     locator: "3.4.•"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "• Conducting criticality analysis."
-    status: "candidate"
+    status: "partial"
+    reason: "Conducting criticality analysis is a Table 1 action taken or explained (pm-scrm.yaml actions); the analysis itself is protection.yaml critical items, and a clause tying the two was dropped because the PPP schema already requires critical items. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "schema", "target": "framework/schema/pm-scrm.schema.json#/properties/actions", "asserts": "At very low risk tolerance PMs conduct criticality analysis, a due diligence action taken or explained", "claim": "presence"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0124"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Documenting in Program Protection Plan."}
@@ -1032,7 +1061,8 @@ requirements:
     locator: "3.4.•"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "• Documenting in Program Protection Plan."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.ppp.yaml", "expect": "SCRM is documented in the program protection plan", "asserts": "At very low risk tolerance SCRM is documented in the Program Protection Plan", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0125"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Sending requests on critical components/suppliers to the DIA SCRM TAC or other"}
@@ -1040,7 +1070,8 @@ requirements:
     locator: "3.4.•"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "• Sending requests on critical components/suppliers to the DIA SCRM TAC or other CI sources."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.tac.yaml", "expect": "no request on critical components or suppliers is sent to the DIA SCRM TAC", "asserts": "Sending requests on critical components and suppliers to the DIA SCRM TAC or other CI sources", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0126"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Flagging reports that come back critical, high, or select medium. Utilize the"}
@@ -1048,7 +1079,8 @@ requirements:
     locator: "3.4.•"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "• Flagging reports that come back critical, high, or select medium. Utilize the scoping and mitigations process to make mitigation decisions commensurate with risk."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.flag.yaml", "expect": "came back", "asserts": "Flagging reports that came back critical or high", "claim": "constraint"}, {"kind": "rule", "target": "PMSCRM-001", "fixture": "tests/fixtures/negative/PMSCRM-001.mitigation.yaml", "expect": "has no mitigation decision commensurate with risk", "asserts": "Flagged reports get a mitigation decision commensurate with risk through the scoping and mitigations process", "claim": "presence"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0127"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Use assured suppliers or appropriate SCRM countermeasures for system elements that perform"}
@@ -1056,7 +1088,9 @@ requirements:
     locator: "3.4.(4)"
     context: "Table 1. SCRM Actions by Risk Tolerance Level, Continued"
     statement: "(4) Use assured suppliers or appropriate SCRM countermeasures for system elements that perform mission-critical functions. In accordance with DoDI 5200.44, cyber protection measures for mission-critical functions and critical components must, at minimum, include the following:"
-    status: "candidate"
+    status: "partial"
+    reason: "Each PPP critical function and critical component has an assured supplier or an SCRM countermeasure (PMSCRM-002); the minimum cyber protection measures are entries 0128 to 0131. DoDI 5000.90 is not tier 1."
+    evidence: [{"kind": "rule", "target": "PMSCRM-002", "fixture": "tests/fixtures/negative/PMSCRM-002.yaml", "expect": "performs a mission-critical function with neither an assured", "asserts": "Use assured suppliers or appropriate SCRM countermeasures for system elements that perform mission-critical functions", "claim": "constraint"}]
     work_item: "WI-31"
   - id: "REQ-DODI5000.90-0128"
     citation: {"ref": "DODI5000.90", "page": 16, "anchor": "Software assurance."}
