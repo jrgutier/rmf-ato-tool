@@ -256,12 +256,12 @@ def rule_inputs(ctx: Context) -> list[Finding]:
     tasks = ctx.fw.index("tasks")
     out = []
     for t in ctx.fw.of("tasks"):
-        for field, key in (("inputs", "inputs"), ("outputs", "outputs"),
-                           ("facts", "writes_facts")):
-            since = t.data.get(f"{field}_since")
+        for kind, key in (("inputs", "inputs"), ("outputs", "outputs"),
+                          ("facts", "writes_facts")):
+            since = t.data.get(f"{kind}_since")
             listed = set(t.data.get(key) or [])
             for name in sorted(set(since) - listed) if isinstance(since, dict) else ():
-                out.append(_err("FW-IO-001", t, f"{field}_since names {name}, which is not "
+                out.append(_err("FW-IO-001", t, f"{kind}_since names {name}, which is not "
                                 f"in {key}"))
         for name in t.data.get("inputs") or []:
             art = artifacts.get(name)
