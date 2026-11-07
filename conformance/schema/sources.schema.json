@@ -137,6 +137,57 @@
           },
           "description": "Regexes for a footer the extraction left in the text, matched against the paragraphs that close a page. A match is neither joined nor in the way of a join."
         },
+        "headers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pattern",
+              "reason"
+            ],
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
+              }
+            }
+          },
+          "description": "Regexes for a running header the extraction left in the text, matched against the paragraphs that open a page. A match is neither joined nor in the way of a join, as a footer."
+        },
+        "cut_items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 10
+            }
+          },
+          "description": "Join a list item cut by a blank line inside a page: an item that opens with a label, has six words or more and stops mid-sentence takes the paragraph after it (I-7). Declared per document because a NIST bullet with no closing punctuation is followed by a paragraph of its own far more often."
+        },
+        "run_in_headings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 10
+            }
+          },
+          "description": "Read `5. CAPS TITLE` alone, and the capitals that open `2.5. CAPS TITLE. Prose`, as section headings, so locator and context follow the section (I-5). Declared per document because the form is a list item in others."
+        },
         "scopes": {
           "type": "array",
           "minItems": 1,

@@ -92,7 +92,7 @@ TASKS_80037: dict[str, str] = {
     "M-1": "System and Environment Changes",
     "M-2": "Ongoing Assessments",
     "M-3": "Ongoing Risk Response",
-    "M-4": "Authorization Updates",
+    "M-4": "Authorization Package Updates",
     "M-5": "Security and Privacy Reporting",
     "M-6": "Ongoing Authorization",
     "M-7": "System Disposal",

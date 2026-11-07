@@ -385,7 +385,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 **Entry criteria**
 
 - Organization-level risk assessment available (P-3).
-- The organization's systems have already been categorized; prioritization applies the high-water mark first.
+- The organization's systems have already been categorized. Under FIPS 199 and 200 the prioritization applies the high-water mark first; a National Security System follows CNSSI 1253, which does not apply the high-water mark (SP 800-37r2 footnote 62), so it keeps its per-objective C/I/A values and ART-ORG-CONTEXT says which impact designation groups systems before they are prioritized.
 
 **Exit criteria**
 
@@ -401,6 +401,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TASK P-6"
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 14, "Task P-6 Impact – Level Prioritization"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"
+- [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), p. 53, "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253]"
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-6](../../playbooks/P/P-org-context.md#task-p-6)
 
@@ -792,7 +793,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
-**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle.
+**Purpose.** Conduct a system-level (mission-based cyber) risk assessment using Intelligence Community threat information, and keep its results current through the life cycle. P-14 runs before C-2, which reads ART-RA, so its supplier risks are a first pass: SP 800-161r1 prioritizes the supplier risk assessment once the impact level is defined, and C-3 feeds back to P-14 once the categorization is approved.
 
 **Stakeholders (RACI)**
 
@@ -847,6 +848,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Citations**
 
+- [SP800-161R1](../../MANUAL.md#ref-sp800-161r1), p. 61, "Establish and begin using supplier risk-assessment processes on a prioritized basis"
 - [SP800-37R2](../../MANUAL.md#ref-sp800-37r2), section "TASK P-14" (SDLC phase: New – Initiation (concept/requirements definition); Existing – Operations/Maintenance.)
 - [DODI8510.01](../../MANUAL.md#ref-dodi8510-01), p. 14, "Task P-14 Mission-Based Cyber Risk Assessment"
 - [SP800-30R1](../../MANUAL.md#ref-sp800-30r1), section 3.2
@@ -858,7 +860,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3).
+**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-3](#task-c-3).
 
 ## <a id="task-p-15"></a>P-15 · Requirements Definition
 
@@ -1163,4 +1165,4 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](../../playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](PH-TMRR.md#task-s-1).
+**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](PH-TMRR.md#task-s-1); feeds back to [P-14](#task-p-14).

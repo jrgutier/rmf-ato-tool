@@ -83,19 +83,21 @@ def _coverage_problems(ref: str, source: Mapping[str, Any], text: str) -> list[s
 def _footer_problems(ref: str, source: Mapping[str, Any], text: str) -> list[str]:
     """A declared footer pattern that cannot work would leave the join it was added to fix."""
     out = []
-    found = [b.text for b in extract.blocks(text, register.footers_of(source))
+    found = [b.text for b in extract.blocks(text, **register.block_options(source))
              if b.kind == "footer"]
-    for footer in source.get("footers", []):
-        pattern = footer["pattern"]
-        if not extract.is_regex(pattern):
-            out.append(f"{ref}: footer pattern {pattern!r} is not a regex")
-            continue
-        hits = [line for line in found if re.search(pattern, line)]
-        if not hits:
-            out.append(f"{ref}: footer pattern {pattern!r} matches no page-closing paragraph")
-        if any(extract.MODAL.search(line) or extract.SHOULD.search(line) for line in hits):
-            out.append(f"{ref}: footer pattern {pattern!r} matches a paragraph that states a "
-                       "duty; a footer never does")
+    for key, name, where in (("footers", "footer", "page-closing"),
+                             ("headers", "header", "page-opening")):
+        for footer in source.get(key, []):
+            pattern = footer["pattern"]
+            if not extract.is_regex(pattern):
+                out.append(f"{ref}: {name} pattern {pattern!r} is not a regex")
+                continue
+            hits = [line for line in found if re.search(pattern, line)]
+            if not hits:
+                out.append(f"{ref}: {name} pattern {pattern!r} matches no {where} paragraph")
+            if any(extract.MODAL.search(line) or extract.SHOULD.search(line) for line in hits):
+                out.append(f"{ref}: {name} pattern {pattern!r} matches a paragraph that states "
+                           f"a duty; a {name} never does")
     return out
 
 
@@ -176,9 +178,9 @@ def _entry_problems(reg: Register, resolver: Resolver, repo: Path,
         passages: dict[int, str] | None = {}
         if ref in index and index[ref].get("text") and doc["requirements"]:
             try:
-                footers = register.footers_of(reg.sources.get(ref, {}))
+                options = register.block_options(reg.sources.get(ref, {}))
                 text = register.text_of(repo, index[ref])
-                passages = extract.passages(extract.blocks(text, footers))
+                passages = extract.passages(extract.blocks(text, **options))
             except OSError:
                 passages = None  # reported once by _source_problems
         counts = Counter(e["id"] for e in doc["requirements"])
