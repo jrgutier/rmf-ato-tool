@@ -695,6 +695,12 @@ def report_valid(ctx: Context) -> list[RunFinding]:
     return out
 
 
+def _identified(item: Record) -> dt.date | None:
+    """The date a POA&M item's weakness was identified (identified.date)."""
+    found = item.get("identified")
+    return _day(found.get("date")) if isinstance(found, dict) else None
+
+
 # --- XSUM-001: the package's executive summary and its submission -----------------------------
 
 def executive_summary(ctx: Context) -> list[RunFinding]:
@@ -720,8 +726,12 @@ def executive_summary(ctx: Context) -> list[RunFinding]:
     sent = summary.get("submission") if isinstance(summary.get("submission"), dict) else {}
     submitted = _day(sent.get("date"))
     # the POA&M as it stood when the package went in: an item identified later is no omission
-    pending = {k for k, i in poam.items() if i.get("status") != "completed"
-               and (_day(i.get("identified")) or dt.date.min) <= (submitted or dt.date.max)}
+    # and an item completed only after the submission was still open when it went in
+    pending = {k for k, i in poam.items()
+               if (_identified(i) or dt.date.min) <= (submitted or dt.date.max)
+               and (i.get("status") != "completed"
+                    or (submitted is not None and (_day(i.get("completed_on")) or dt.date.max)
+                        > submitted))}
     cited = {str(p) for i in issues for p in _list(i.get("poam_items"))}
     if pending and cited.isdisjoint(pending):
         err("the executive summary highlights no risk management issue among the open POA&M "

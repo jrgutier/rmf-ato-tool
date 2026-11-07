@@ -28,7 +28,9 @@ def _ids(ctx: Context, artifact: str, rel: str, key: str) -> set[Any] | None:
     if not scope.produced_or_seeded(ctx.run, artifact):
         return None
     data = ctx.data(rel)
-    return {r.get("id") for r in _records(data, key)} if isinstance(data, dict) else set()
+    if not isinstance(data, dict):
+        return set()
+    return {r["id"] for r in _records(data, key) if isinstance(r.get("id"), str)}
 
 
 def _listed(item: dict[str, Any], key: str) -> list[Any]:

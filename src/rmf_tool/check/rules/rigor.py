@@ -35,13 +35,23 @@ def _rank(value: Any) -> int:
     return LEVELS.index(value) if value in LEVELS else -1
 
 
+def _list(value: Any) -> list[Any]:
+    """A list field as written, or nothing when it is not a list (RUN-FM-001 reports that)."""
+    return value if isinstance(value, list) else []
+
+
+def _key(value: Any) -> Any:
+    """An identifier usable as a key: a malformed one (a list or a mapping) matches nothing."""
+    return value if isinstance(value, (str, int)) else None
+
+
 def _count(value: Any) -> int:
     return value if isinstance(value, int) and not isinstance(value, bool) else 0
 
 
 def _organization(who: Any, ctx: Context, team: set[Any]) -> bool:
     """The organization speaks through a framework persona who is not an assessor."""
-    return who in ctx.run.personas and who not in team
+    return isinstance(who, str) and who in ctx.run.personas and who not in team
 
 
 def _sources(ctx: Context, rigor: dict[str, Any], err: Err) -> None:
@@ -52,13 +62,13 @@ def _sources(ctx: Context, rigor: dict[str, Any], err: Err) -> None:
     if ctx.processes_pii and privacy != PRIVACY_RISK_ASSESSMENT:
         err("the system processes PII, so the rigor and scope of the assessment rest on the "
             f"privacy risk assessment {PRIVACY_RISK_ASSESSMENT}, not {privacy}")
-    if SECURITY_PLAN not in (rigor.get("plans") or ()):
+    if SECURITY_PLAN not in _list(rigor.get("plans")):
         err("the controls assessed are those of the approved plans: rigor.plans omits the "
             f"security plan {SECURITY_PLAN}")
 
 
 def _assurance(ctx: Context, rigor: dict[str, Any], team: set[Any], err: Err) -> dict[Any, Any]:
-    requirements = {r.get("id"): r for r in _records(rigor, "assurance_requirements")}
+    requirements = {_key(r.get("id")): r for r in _records(rigor, "assurance_requirements")}
     if not requirements:
         err("no assurance requirement the organization intends to meet is specified, so "
             "nothing grounds the depth and coverage of the assessment")
@@ -75,7 +85,7 @@ def _direction(ctx: Context, rigor: dict[str, Any], team: set[Any], err: Err) ->
     if not _organization(by, ctx, team):
         err("the organization provides direction on the type, number and specific objects "
             f"to be assessed through a persona outside the assessment team, not {by}")
-    if team.isdisjoint(c for c in direction.get("conferred_with") or () if isinstance(c, str)):
+    if team.isdisjoint(c for c in _list(direction.get("conferred_with")) if isinstance(c, str)):
         err("the organization confers with the assessors on the sampling direction: "
             "conferred_with names no member of the assessment team")
     if not direction.get("factors"):
@@ -84,7 +94,7 @@ def _direction(ctx: Context, rigor: dict[str, Any], team: set[Any], err: Err) ->
 
 
 def _levels(pid: Any, p: dict[str, Any], requirements: dict[Any, Any], err: Err) -> None:
-    ident = p.get("assurance_requirement")
+    ident = _key(p.get("assurance_requirement"))
     requirement = requirements.get(ident)
     if requirement is None:
         err(f"{pid} meets the assurance requirement {ident}, which the organization never "
@@ -102,7 +112,7 @@ def _types(pid: Any, method: Any, p: dict[str, Any], sample: dict[str, Any], ctx
            err: Err) -> set[Any]:
     """The object types the record samples, checked against what the procedure selects for
     the method; an interview samples organizational roles, the framework's personas."""
-    types = [t for t in sample.get("types") or () if isinstance(t, dict)]
+    types = [t for t in _list(sample.get("types")) if isinstance(t, dict)]
     sampled = {t.get("type") for t in types if isinstance(t.get("type"), str)}
     for t in types:
         if _count(t.get("number")) < 1:
@@ -113,7 +123,7 @@ def _types(pid: Any, method: Any, p: dict[str, Any], sample: dict[str, Any], ctx
             err(f"{pid} interview: the individuals to be interviewed are sampled by "
                 f"organizational role, and {role} is no persona of the framework")
         return sampled
-    selected = {o for o in p.get("objects") or () if isinstance(o, str)}
+    selected = {o for o in _list(p.get("objects")) if isinstance(o, str)}
     selected &= METHOD_OBJECTS.get(method, set())
     for foreign in sorted(sampled - selected, key=str):
         err(f"{pid} {method}: the sampled object type {foreign} is not one the procedure "
@@ -135,7 +145,7 @@ def _sample(pid: Any, method: Any, p: dict[str, Any], sample: dict[str, Any], ct
             "to avoid bias, and no bias control is recorded")
     if method != "test" or MECHANISMS not in sampled:
         return
-    extent = [e for e in sample.get("extent") or () if isinstance(e, dict)]
+    extent = [e for e in _list(sample.get("extent")) if isinstance(e, dict)]
     if not extent:
         err(f"{pid} test: mechanism-related testing records the extent of the testing "
             "conducted, and none is recorded")
@@ -146,7 +156,7 @@ def _sample(pid: Any, method: Any, p: dict[str, Any], sample: dict[str, Any], ct
 
 
 def _sampling(pid: Any, p: dict[str, Any], ctx: Context, err: Err) -> None:
-    methods = [m for m in p.get("methods") or () if isinstance(m, str)]
+    methods = [m for m in _list(p.get("methods")) if isinstance(m, str)]
     directed: dict[Any, dict[str, Any]] = {}
     for sample in _records(p, "sampling"):
         method = sample.get("method")
@@ -195,7 +205,7 @@ def _planned(sap: dict[str, Any]) -> dict[Any, dict[str, int]]:
     """Per control, the highest depth and coverage rank any procedure assessing it selects."""
     planned: dict[Any, dict[str, int]] = {}
     for p in _records(sap, "procedures"):
-        for cid in p.get("controls") or ():
+        for cid in (c for c in _list(p.get("controls")) if isinstance(c, str)):
             levels = planned.setdefault(cid, {"depth": -1, "coverage": -1})
             for attribute in levels:
                 levels[attribute] = max(levels[attribute], _rank(p.get(attribute)))
@@ -220,7 +230,7 @@ def applied(ctx: Context) -> list[RunFinding]:
     planned = _planned(_sap(ctx) or {})
     out: list[RunFinding] = []
     for rel, d in family_records(ctx, SAR_DIR, "determinations"):
-        if d.get("control_id") in planned:
+        if _key(d.get("control_id")) in planned:
             found, err = _reporter("RIGR-002", rel)
             _applied(d, planned[d["control_id"]], err)
             out.extend(found)

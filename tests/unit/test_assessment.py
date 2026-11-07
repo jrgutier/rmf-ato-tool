@@ -185,3 +185,20 @@ def test_the_designated_representative_may_act_for_the_ao(tmp_path):
     edit_yaml(run_dir / SAP, lambda d: d["assessor_independence"].update(
         determined_by="PER-AODR"))
     assert [f for f in errors(run_dir) if f.rule == "ASMT-007"] == []
+
+
+def test_rigor_rules_report_malformed_fields_instead_of_raising(minimal_run):
+    """RIGR-001 to RIGR-003 read lists and identifiers that RUN-FM-001 judges; a scalar where a
+    list belongs, or a mapping where an identifier belongs, is a finding, never a crash."""
+    def mangle(d):
+        d["rigor"]["plans"] = 3
+        d["rigor"]["assurance_requirements"][0]["id"] = ["AR-01"]
+        d["rigor"]["direction"]["conferred_with"] = 7
+        d["rigor"]["direction"]["by"] = ["PER-SCA"]
+        p = d["procedures"][0]
+        p["assurance_requirement"] = {"id": "AR-01"}
+        for sample in p["sampling"]:
+            sample["types"], sample["extent"] = 4, 2
+    edit_yaml(minimal_run / SAP, mangle)
+    found = engine.evaluate(open_run(minimal_run, REPO_ROOT)).findings
+    assert any(f.rule == "RIGR-001" for f in found)
