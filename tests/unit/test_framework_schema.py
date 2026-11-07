@@ -22,7 +22,7 @@ PLAN_RUN_SCHEMAS = {
     "authorizations",
 }
 EXTRA_RUN_SCHEMAS = {"tailoring", "allocation", "conmon", "rar", "authorization-report",
-                     "dias"}  # data named in plan §6.4, then the ones p11 added
+                     "dias", "requirements"}  # data named in plan §6.4, then the ones p11 added
 FRAMEWORK_DATA_SCHEMAS = {"baselines"}  # framework/baselines/*.yaml (ADR-0002)
 
 
@@ -82,6 +82,14 @@ def test_frontmatter_schema_rejects_fact_fields():
 
 
 SRC = ["INT-001.A1"]
+NEED = {"id": "NEED-01", "stakeholder": "PER-IO", "kind": "loss-concern", "concern": "c",
+        "assets": ["a"], "success_criteria": "s", "priority": 1, "rationale": "r", "sources": SRC}
+REQUIREMENT = {"id": "REQ-01", "statement": "s", "kind": "security", "needs": ["NEED-01"],
+               "priority": 1, "criticality": 1, "measure": {"kind": "assurance", "statement": "m"},
+               "verification": {"method": "test", "description": "d"}, "sources": SRC}
+AGREEMENT = {"analysis": "a", "feedback": "f",
+             "agreed": [{"stakeholder": "PER-IO", "date": "2026-01-02", "decisions": "d"}],
+             "sources": SRC}
 RUN_EXAMPLES = {
     "run-config": (
         {"mode": "hybrid", "run_id": "example-synthetic-01", "product": "../../product",
@@ -282,6 +290,14 @@ RUN_EXAMPLES = {
         {"assurance": {"identity_proofing": "IAL9", "authentication": "AAL2",
                        "federation": "not-applicable"},
          "controls": ["ac-2"], "processes": "p", "compensating_controls": [], "sources": SRC}),
+    "requirements": (
+        {"needs": [NEED], "requirements": [REQUIREMENT], "constraints": [],
+         "design_policy": [{"statement": "DP-SCAP", "applies": True, "requirements": ["REQ-01"],
+                            "sources": SRC}],
+         "agreement": AGREEMENT},
+        {"needs": [NEED], "requirements": [{**REQUIREMENT, "verification": {
+            "method": "guess", "description": "d"}}], "constraints": [], "design_policy": [],
+         "agreement": AGREEMENT}),
 }
 
 

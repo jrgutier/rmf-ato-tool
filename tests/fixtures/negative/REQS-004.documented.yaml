@@ -1,0 +1,27 @@
+rule: REQS-004
+bases:
+- minimal
+description: contractor qualifications not documented
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.allocated_to
+  value:
+  - CMP-RELAY
+  - contract
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: workforce
+  value:
+    contracted_work_roles:
+    - Cyber Defense Analyst
+    qualification_requirement: REQ-04
+    dfars_239_71: applied
+    qualifications_documented: false
+    sources:
+    - INT-026.A1
+expect:
+  errors:
+  - REQS-004
+  messages:
+  - contractor personnel performing cyberspace work roles do not have their qualifications documented

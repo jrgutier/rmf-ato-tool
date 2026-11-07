@@ -185,6 +185,7 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 - Changes to the planned implementation of controls are documented, and the security and privacy plans are updated from what was learned during implementation (DoDI 8510.01 Table 4 outcome).
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
+- A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
 
 **Alignment**
 
@@ -273,6 +274,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|---|
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](PH-TMRR.md#task-s-1) (supporting artifact) |
+| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
 | [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
 
 **Outputs**
@@ -291,6 +293,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001).
+- The assessment plan reads each requirement's verification method and measure from requirements.yaml.
 - authorizations.yaml exists; it holds an AD-IATT record when a test event runs on a live network or with live data, and an empty record list when none does (AODM-001, AODM-006).
 
 **Authorization decision.** The [AO](../../MANUAL.md#per-ao) decides here: [IATT](../../MANUAL.md#ad-iatt) (see [authorization decisions](../../MANUAL.md#decisions)).

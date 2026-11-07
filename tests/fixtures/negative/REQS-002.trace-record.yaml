@@ -1,0 +1,16 @@
+rule: REQS-002
+bases:
+- minimal
+description: a requirement tracing to a statement whose record does not list it
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.policy
+  value:
+  - DP-RESILIENCE-AUDIT
+  - DP-SCAP
+expect:
+  errors:
+  - REQS-002
+  messages:
+  - REQ-04 traces to DP-SCAP, but the DP-SCAP record does not list it as carrying the statement

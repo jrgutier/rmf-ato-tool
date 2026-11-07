@@ -1,0 +1,15 @@
+rule: REQS-001
+bases:
+- minimal
+description: a requirement derived from itself
+mutations:
+- op: set_field
+  file: artifacts/data/requirements.yaml
+  path: requirements.3.derived_from
+  value:
+  - REQ-04
+expect:
+  errors:
+  - REQS-001
+  messages:
+  - REQ-04 is derived from itself, which traces it to no parent

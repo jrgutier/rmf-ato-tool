@@ -1,0 +1,34 @@
+rule: CONN-002
+bases:
+- minimal
+description: the DISA enterprise CD service recorded as an internal component
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain
+  value: true
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.approvals
+  value:
+  - authority: DISA
+    status: requested
+    sources: &id001
+    - INT-025.A1
+  - authority: ISRMC
+    status: requested
+    sources: *id001
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.cross_domain_solution
+  value:
+    provider: disa-enterprise
+    component: CMP-RELAY
+    considered:
+    - disa-enterprise
+    rationale: Enterprise CD service.
+expect:
+  errors:
+  - CONN-002
+  messages:
+  - 'CONN-01: the DISA-provided enterprise CD service is not an external boundary component'

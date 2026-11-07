@@ -541,6 +541,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - The stakeholders having an interest in the system are identified (DoDI 8510.01 Table 1 outcome).
 - ART-STAKE lists the stakeholders and the persona that represents each in interviews.
 - Every information owner is identified, because each sets the impact level for its own information types (CNSSI 1253).
+- ART-STAKE records each stakeholder's security concerns, loss concerns and trust expectations, which P-15 turns into protection needs.
 
 **Alignment**
 
@@ -865,6 +866,10 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - Security and privacy requirements are defined and prioritized (DoDI 8510.01 Table 1 outcome).
 - ART-REQ lists prioritized security and privacy requirements traced to their sources.
+- requirements.yaml records each stakeholder protection need with its success criteria, priority and rationale; a requirement traces to it and its stakeholder agrees the requirements address it (REQS-003). A change to the requirements reassesses the needs.
+- Each requirement traces to a protection need, a design policy statement or the requirement it is derived from, and carries a verification method, a performance or assurance measure and its relative criticality (REQS-001).
+- Every DoD design policy statement REQS-002 lists is addressed; one that applies is carried by a requirement, and only a conditional one may be marked not applicable.
+- The security-relevant constraints on the solution are recorded with their origin.
 
 **Alignment**
 

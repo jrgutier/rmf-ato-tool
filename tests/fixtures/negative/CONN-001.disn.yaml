@@ -1,0 +1,22 @@
+rule: CONN-001
+bases:
+- minimal
+description: a DISN connection approved only by the DSAWG, outside DISA's connection approval process
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.network
+  value: disn
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.approvals
+  value:
+  - authority: DSAWG
+    status: requested
+    sources:
+    - INT-025.A1
+expect:
+  errors:
+  - CONN-001
+  messages:
+  - CONN-01 connects to the DISN without going through the DISA connection approval process

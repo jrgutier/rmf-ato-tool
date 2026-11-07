@@ -12,12 +12,14 @@ from rmf_tool.check.rules import (
     artifacts,
     authorization,
     config,
+    connections,
     consistency,
     content,
     coverage,
     generated,
     hybrid,
     journal,
+    requirements,
 )
 
 Rule = Callable[[Context], list[RunFinding]]
@@ -74,6 +76,14 @@ RULES: dict[str, Rule] = {
     "HYB-003": hybrid.humans_crosscheck,
     "LES-001": journal.lesson_refs,
     "PKG-001": coverage.package_complete,
+    "CONN-001": connections.approvals,
+    "CONN-002": connections.cross_domain,
+    "CONN-003": connections.mission_partner,
+    "CONN-004": connections.dodin,
+    "REQS-001": requirements.matrix,
+    "REQS-002": requirements.design_policy,
+    "REQS-003": requirements.needs_and_agreement,
+    "REQS-004": requirements.workforce,
     "DEGRADED-001": config.degraded,
     "TASK-DEF-001": consistency.deferrals,
 }

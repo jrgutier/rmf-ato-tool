@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:boundary",
   "title": "runs/<run-id>/artifacts/data/boundary.yaml",
-  "description": "Authorization boundary, network architecture, data flow and components (P-11; updated by P-16, C-1). The boundary ID itself lives in facts.yaml (INV-4).",
+  "description": "Authorization boundary, network architecture, data flow and components (P-11; updated by P-16, C-1). The connections and the DODIN position are P-16's; CONN-001 to CONN-004 judge them. The boundary ID itself lives in facts.yaml (INV-4).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -212,6 +212,295 @@
         }
       },
       "minItems": 1
+    },
+    "dodin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "position",
+        "sources"
+      ],
+      "properties": {
+        "position": {
+          "title": "Whether the system operates on the DoD Information Network or outside it under a DODIN waiver",
+          "enum": [
+            "inside",
+            "outside"
+          ]
+        },
+        "waiver": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reviewed_by",
+            "reviewed",
+            "granted",
+            "reference"
+          ],
+          "properties": {
+            "reviewed_by": {
+              "title": "Who reviewed the system's cybersecurity posture before the DODIN waiver",
+              "enum": [
+                "DOD-CIO"
+              ]
+            },
+            "reviewed": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "title": "Date the cybersecurity posture review was completed"
+            },
+            "granted": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "title": "Date the DODIN waiver was granted"
+            },
+            "reference": {
+              "title": "DODIN waiver reference",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "connections": {
+      "title": "External connections, with detailed information and the approvals each needs",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "component",
+          "network",
+          "cross_domain",
+          "detail",
+          "approvals",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CONN-\\d{2,3}$"
+          },
+          "component": {
+            "title": "External boundary component the connection reaches",
+            "type": "string",
+            "pattern": "^CMP-[A-Z0-9-]+$"
+          },
+          "network": {
+            "title": "A DISN connection (NIPRNet, SIPRNet and others), a mission partner's interconnection with the DODIN, or another external connection",
+            "enum": [
+              "disn",
+              "mission-partner",
+              "other"
+            ]
+          },
+          "cross_domain": {
+            "title": "Whether the connection crosses security domains",
+            "type": "boolean"
+          },
+          "detail": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ports_protocols",
+              "data",
+              "direction"
+            ],
+            "properties": {
+              "ports_protocols": {
+                "title": "Ports, protocols and services used",
+                "type": "string",
+                "minLength": 1
+              },
+              "data": {
+                "title": "Information exchanged and its classification or sensitivity",
+                "type": "string",
+                "minLength": 1
+              },
+              "direction": {
+                "title": "Direction of the information flow",
+                "enum": [
+                  "inbound",
+                  "outbound",
+                  "bidirectional"
+                ]
+              }
+            }
+          },
+          "cross_domain_solution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "provider",
+              "considered",
+              "rationale"
+            ],
+            "properties": {
+              "provider": {
+                "title": "Cross-domain solution used: the DISA-provided enterprise CD service or another",
+                "enum": [
+                  "disa-enterprise",
+                  "other"
+                ]
+              },
+              "component": {
+                "title": "Boundary component that is the cross-domain solution",
+                "type": "string",
+                "pattern": "^CMP-[A-Z0-9-]+$"
+              },
+              "considered": {
+                "title": "Cross-domain options considered, the DISA-provided service first",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "enum": [
+                    "disa-enterprise",
+                    "other"
+                  ]
+                }
+              },
+              "rationale": {
+                "title": "Why this solution meets the cross-domain requirement",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "mission_partner": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "partner",
+              "sponsor",
+              "interconnection",
+              "requirement_approved_by",
+              "fulfillment",
+              "partner_package"
+            ],
+            "properties": {
+              "partner": {
+                "title": "Non-DoD mission partner",
+                "type": "string",
+                "minLength": 1
+              },
+              "sponsor": {
+                "title": "Sponsoring DoD Component",
+                "type": "string",
+                "minLength": 1
+              },
+              "interconnection": {
+                "title": "Authorized interconnection point: a mission partner DMZ or a point-to-point interconnection",
+                "enum": [
+                  "dmz",
+                  "point-to-point"
+                ]
+              },
+              "dmz": {
+                "title": "Mission partner DMZ, such as the FED or REL DMZ",
+                "type": "string",
+                "minLength": 1
+              },
+              "requirement_approved_by": {
+                "title": "Who approved the validated requirement for the interconnection",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "sponsor",
+                    "DOD-CIO"
+                  ]
+                }
+              },
+              "fulfillment": {
+                "title": "Status of the connection request fulfillment actions the sponsor ensures",
+                "enum": [
+                  "in-progress",
+                  "complete"
+                ],
+                "x-enforces": [
+                  "REQ-DODI8530.01-0302"
+                ]
+              },
+              "partner_package": {
+                "title": "How the partner's authorization package is provided: completed by the sponsor or by the partner with the sponsor's assistance",
+                "enum": [
+                  "sponsor",
+                  "partner-assisted"
+                ]
+              }
+            }
+          },
+          "approvals": {
+            "title": "Approvals the connection needs and their status",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "authority",
+                "status",
+                "sources"
+              ],
+              "properties": {
+                "authority": {
+                  "title": "Body that approves the connection: DISA's connection approval process, the DoD ISRMC or the DSAWG in its support, or the DoD CIO",
+                  "enum": [
+                    "DISA",
+                    "ISRMC",
+                    "DSAWG",
+                    "DOD-CIO"
+                  ]
+                },
+                "status": {
+                  "title": "Status of the connection approval",
+                  "enum": [
+                    "planned",
+                    "requested",
+                    "approved",
+                    "disapproved"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "title": "Date of the latest status"
+                },
+                "reference": {
+                  "title": "Approval or request reference",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/source"
+                  }
+                }
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {

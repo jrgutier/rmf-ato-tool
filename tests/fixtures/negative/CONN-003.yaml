@@ -1,0 +1,44 @@
+rule: CONN-003
+bases:
+- minimal
+description: a mission partner interconnection through a VPN, neither a DMZ nor point-to-point
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.network
+  value: mission-partner
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.mission_partner
+  value:
+    partner: Allied ground station
+    sponsor: Army
+    interconnection: vpn
+    dmz: REL DMZ
+    requirement_approved_by:
+    - sponsor
+    - DOD-CIO
+    fulfillment: in-progress
+    partner_package: partner-assisted
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.approvals
+  value:
+  - authority: DISA
+    status: requested
+    sources: &id001
+    - INT-025.A1
+  - authority: DOD-CIO
+    status: requested
+    sources: *id001
+  - authority: ISRMC
+    status: requested
+    sources: *id001
+expect:
+  errors:
+  - CONN-003
+  messages:
+  - 'CONN-01: a mission partner interconnection uses neither a mission partner DMZ nor a point-to-point
+    interconnection'
+  also:
+  - RUN-FM-001

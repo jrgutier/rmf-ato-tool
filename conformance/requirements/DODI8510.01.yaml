@@ -1205,7 +1205,9 @@ requirements:
     locator: "4.2.b.(1).(a)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: DoD ISRMC:"
     statement: "(a) Provides strategic guidance to Levels 2 and 3, assesses Level 1 risk, and authorizes information exchanges and connections for DoD enterprise systems, cross-mission area systems, cross security domain connections, and mission partner connections."
-    status: "candidate"
+    status: "covered"
+    reason: "The ISRMC's side: CONN-001 fails a cross security domain or mission partner connection that the DoD ISRMC, or the DSAWG in its support, has not been asked to authorize. Enterprise systems are ENT-001's."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.risk-executive.yaml", "expect": "needs authorization by the DoD ISRMC or the DSAWG in its support", "claim": "constraint", "asserts": "Cross security domain connections and mission partner connections are authorized by the DoD ISRMC, or the DSAWG in its support, and one without that authorization fails", "holds_when": "P-16 is in the run's scope"}]
     work_item: "WI-208"
   - id: "REQ-DODI8510.01-0160"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Performs the Risk Executive Function as described in DoDI 8500.01 and NIST"}
@@ -1262,7 +1264,9 @@ requirements:
     locator: "4.2.b.(2).(b)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: The DSAWG, in support of the DoD ISRMC:"
     statement: "(b) Develops and provides guidance to the AOs for system connections to the DoD Information Enterprise. AOs who disagree with DSAWG decisions may appeal to the DoD ISRMC."
-    status: "candidate"
+    status: "covered"
+    reason: "CONN-001 records the DSAWG's decision on a cross-domain or mission partner connection as the approval it needs; AODM-011 sends an appeal of a DSAWG decision to the DoD ISRMC."
+    evidence: [{"kind": "rule", "target": "CONN-001", "fixture": "tests/fixtures/negative/CONN-001.risk-executive.yaml", "expect": "needs authorization by the DoD ISRMC or the DSAWG in its support", "claim": "constraint", "asserts": "AOs take system connections to the DSAWG, in support of the DoD ISRMC, for its decision, and a connection with no DSAWG or ISRMC authorization fails", "holds_when": "P-16 is in the run's scope"}, {"kind": "rule", "target": "AODM-011", "fixture": "tests/fixtures/negative/AODM-011.appeal.yaml", "expect": "goes to the DoD ISRMC", "claim": "constraint", "asserts": "AOs who disagree with DSAWG decisions appeal to the DoD ISRMC, and an appeal sent elsewhere fails"}]
     work_item: "WI-208"
   - id: "REQ-DODI8510.01-0167"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Reference the RMF KS for additional processes needed for environment specific requirements."}

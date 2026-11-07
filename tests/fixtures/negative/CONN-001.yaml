@@ -1,0 +1,14 @@
+rule: CONN-001
+bases:
+- minimal
+description: the identity provider connection is recorded against an internal component
+mutations:
+- op: set_field
+  file: artifacts/data/boundary.yaml
+  path: connections.0.component
+  value: CMP-RELAY
+expect:
+  errors:
+  - CONN-001
+  messages:
+  - external connection CMP-IDP has no connection record with its ports, protocols, data and direction

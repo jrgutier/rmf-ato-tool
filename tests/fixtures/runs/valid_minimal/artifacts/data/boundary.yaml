@@ -15,3 +15,12 @@ components:
   - {id: CMP-STORE, title: Report store, type: software, description: The PostgreSQL report store., status: under-development, sources: [product/architecture.md#components]}
   - {id: CMP-CONSOLE, title: Operator console, type: hardware, description: The operator console workstation., status: under-development, sources: [product/architecture.md#components]}
   - {id: CMP-IDP, title: Enterprise identity provider, type: service, description: Enterprise sign-in with CAC multi-factor authentication., status: operational, external: true, leveraged_authorization: LA-01, sources: [product/architecture.md#components, INT-003.A1]}
+dodin: {position: inside, sources: [INT-025.A1]}
+connections:
+  - id: CONN-01
+    component: CMP-IDP
+    network: other  # reached through the enclave's own DISN attachment, approved for the enclave, not per peer
+    cross_domain: false
+    detail: {ports_protocols: HTTPS 443 for SAML sign-in, data: Authentication assertions (CUI), direction: bidirectional}
+    approvals: []
+    sources: [INT-025.A1, product/architecture.md#network]
