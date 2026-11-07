@@ -418,7 +418,9 @@ requirements:
     locator: "2.1.2.2"
     context: "ISCM Process Steps The six ISCM steps are referred to as “process steps” in this publication and are:"
     statement: "2. Establish ISCM Program (Establish) – Establish an ISCM program, determining metrics, status monitoring frequencies, control assessment frequencies, and an ISCM technical architecture."
-    status: "candidate"
+    status: "partial"
+    reason: "The system strategy determines metrics (METR-001), monitoring and assessment frequencies (CONMON-001) and its technical architecture (ISCM-001) by presence; establishing the organization's ISCM program is the organization's, recorded in ART-ORG-CONTEXT"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.empty.yaml", "expect": "lists no metrics", "asserts": "The ISCM program determines metrics: a strategy with no metrics fails", "claim": "presence", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "The ISCM strategy determines its metrics with their frequencies", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137A-0053"
     citation: {"ref": "SP800-137A", "page": 19, "anchor": "Implement ISCM Program (Implement) – Implement the ISCM program and collect the"}
@@ -558,7 +560,9 @@ requirements:
     locator: "2.1.6"
     context: "ISCM Metrics"
     statement: "The ISCM program assessment accommodates organization-defined metrics. The ISCM program assessment verifies that the ISCM program addresses the specification, development, maintenance, and sustainment of metrics. The ISCM program assessment also verifies that the organization: (i) specifies frequencies of collecting metrics data; (ii) determines metrics from data at Levels 1, 2, and 3; and (iii) applies the metrics as needed to make risk-based decisions. In addition, the ISCM program assessment verifies that ISCM metrics are reported to designated officials at each level who review the relevant metrics."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-001 fails a metric reviewed by an official it is not reported to; that officials at each level (tier) receive and review the relevant metrics is not held, since a system strategy records no tier per recipient"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.yaml", "expect": "who is not among the officials it is reported to", "asserts": "ISCM metrics are reported to designated officials who review the relevant metrics", "claim": "constraint", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/review", "asserts": "Metrics are reviewed by the designated officials they are reported to", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137A-0071"
     citation: {"ref": "SP800-137A", "page": 22, "anchor": "ISCM benefits the organization by facilitating OA, which streamlines the system authorization"}
@@ -597,7 +601,9 @@ requirements:
     locator: "2.1.7.•"
     context: "Ongoing Authorization"
     statement: "• The metrics provided by the ISCM program are considered sufficiently stable and robust for informing OA decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Each metric states baseline, threshold and the baseline controls it reads, monitored as often as it is refreshed (METR-001, METR-002); whether the metrics are sufficiently stable and robust to inform ongoing authorization decisions is a judgment no rule can test"
+    evidence: [{"kind": "rule", "target": "METR-002", "fixture": "tests/fixtures/negative/METR-002.yaml", "expect": "monitored with frequencies consistent with its timing", "asserts": "The metrics provided by the ISCM program are robust: the controls they read are monitored as often as the metric is refreshed", "claim": "constraint", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "ISCM metrics are recorded for informing ongoing authorization decisions", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137A-0076"
     citation: {"ref": "SP800-137A", "page": 23, "anchor": "The ISCM program monitors the security status of systems and the environments"}
@@ -740,7 +746,9 @@ requirements:
     locator: "2.2.1.•"
     context: "ISCM Program Assessment Criteria The following are examples of assessment elements:"
     statement: "• There is a set of ISCM metrics and corresponding review procedures. (Assessment Element 2-024)"
-    status: "candidate"
+    status: "covered"
+    reason: "METR-001 fails a strategy with no metrics and a metric whose review procedure is by an official it is not reported to"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.yaml", "expect": "who is not among the officials it is reported to", "asserts": "Each ISCM metric has corresponding review procedures, by the officials it is reported to", "claim": "constraint", "holds_when": "S-5 is active"}, {"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.empty.yaml", "expect": "lists no metrics", "asserts": "There is a set of ISCM metrics: a strategy that lists no metrics fails", "claim": "presence", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/review", "asserts": "Each ISCM metric has a corresponding review procedure", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137A-0094"
     citation: {"ref": "SP800-137A", "page": 24, "anchor": "The ISCM strategy is reviewed to identify ways that may improve the"}

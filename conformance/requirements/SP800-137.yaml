@@ -18,7 +18,9 @@ requirements:
     locator: "INTRODUCTION"
     context: ""
     statement: "Organizational security status is determined using metrics established by the organization to best convey the security posture of an organization’s information and information systems, along with organizational resilience given known threat information. This necessitates:"
-    status: "candidate"
+    status: "partial"
+    reason: "The system strategy establishes metrics that convey the system's security posture (METR-001); determining organizational security status from them is the organization's"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "Metrics established by the organization convey the security posture of its information systems", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0003"
     citation: {"ref": "SP800-137", "page": 8, "anchor": "Maintaining situational awareness of all systems across the organization;"}
@@ -286,7 +288,9 @@ requirements:
     locator: "ONGOING MONITORING IN SUPPORT OF RISK MANAGEMENT"
     context: ""
     statement: "Organizations implement processes to manage organizational security and metrics that provide insight into those processes and hence into organizational security status. Some of those security processes will align with individual security controls, and others will align with components or combinations of controls. Discussions of metrics can be found in Section 3.2.1 and in NIST SP 800-55, Performance Measurement Guide for Information Security, as amended."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-001 holds metrics, each naming the controls it gives insight into (METR-002); managing the organization's security processes is held at organization level only"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "Metrics provide insight into security processes and the controls they align with", "claim": "presence", "sentence": "Organizations implement processes to manage organizational security and metrics that provide insight into those processes and hence into organizational security status."}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0036"
     citation: {"ref": "SP800-137", "page": 13, "anchor": "Organizations increase situational awareness through enhanced monitoring capabilities and subsequently increase insight"}
@@ -344,7 +348,8 @@ requirements:
     locator: "2.1"
     context: "ORGANIZATION-WIDE VIEW OF ISCM"
     statement: "Care must be taken in determining how best to use security-related information from individual information systems in calculating organizational metrics for security and risk. Dashboards and metrics, designed to provide organizational situational awareness of security and risk, can provide a false sense of security if used without continued assurance of the relevance of the metrics."
-    status: "candidate"
+    status: "not-applicable"
+    reason: "Calculating organizational metrics from the security-related information of individual systems is the organization's, not one system's; a system run records its own metrics only"
     work_item: "WI-15"
   - id: "REQ-SP800-137-0043"
     citation: {"ref": "SP800-137", "page": 14, "anchor": "If an organization does not have the resources or infrastructure necessary to"}
@@ -360,7 +365,8 @@ requirements:
     locator: "2.1.1"
     context: "TIER 1- ORGANIZATION"
     statement: "Tier 1 risk management activities address high-level information security governance policy as it relates to risk to the organization as a whole, to its core missions, and to its business functions. At this tier, the criteria for ISCM are defined by the organization’s risk management strategy, including how the organization plans to assess, respond to, and monitor risk, and the oversight required to ensure that the risk management strategy is effective. Security controls, security status, and other metrics defined and monitored by officials at this tier are designed to deliver information necessary to make risk management decisions in support of governance. Tier 1 metrics are developed for supporting governance decisions regarding the organization, its core missions, and its business functions. Tier 1 metrics may be calculated based on security-related information from common, hybrid, and system-specific security controls. The metrics and the frequency with which they are monitored15"
-    status: "candidate"
+    status: "not-applicable"
+    reason: "Tier 1 metrics support governance decisions about the organization and its missions; they are set in the organization's ISCM strategy, not in a system run, which records Tier 3 metrics"
     work_item: "WI-15"
   - id: "REQ-SP800-137-0045"
     citation: {"ref": "SP800-137", "page": 16, "anchor": "and reported are determined by requirements to maintain operations within organizational risk"}
@@ -657,7 +663,9 @@ requirements:
     locator: "Defining an ISCM Strategy and Implementing an ISCM Program.•"
     context: "The process for developing an ISCM strategy and implementing an ISCM program is as follows:"
     statement: "• Establish an ISCM program determining metrics, status monitoring frequencies, control assessment frequencies, and an ISCM technical architecture."
-    status: "candidate"
+    status: "partial"
+    reason: "The system strategy determines metrics (METR-001), status monitoring and control assessment frequencies (CONMON-001) and its technical architecture (ISCM-001), by presence; establishing the program is the organization's"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.empty.yaml", "expect": "lists no metrics", "asserts": "The ISCM program determines metrics: a strategy with no metrics fails", "claim": "presence", "holds_when": "S-5 is active"}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "The ISCM program determines metrics and status monitoring frequencies", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0078"
     citation: {"ref": "SP800-137", "page": 23, "anchor": "Implement an ISCM program and collect the security-related information required for metrics,"}
@@ -747,7 +755,9 @@ requirements:
     locator: "3.1.1.•"
     context: "ORGANIZATION (TIER 1) AND MISSION/BUSINESS PROCESSES (TIER 2) ISCM STRATEGY When developed at Tiers 1 and/or 2, the following policies, procedures, and templates facilitate organization-wide, standard"
     statement: "• Policy that defines key metrics;"
-    status: "candidate"
+    status: "partial"
+    reason: "The system strategy defines its metrics (METR-001); the policy that defines key metrics is the organization's ISCM policy, recorded in ART-ORG-CONTEXT"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "Key metrics are defined for the ISCM program", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0088"
     citation: {"ref": "SP800-137", "page": 25, "anchor": "Policy for modifications to and maintenance of the monitoring strategy;"}
@@ -845,7 +855,9 @@ requirements:
     locator: "3.1.1.•"
     context: "ORGANIZATION (TIER 1) AND MISSION/BUSINESS PROCESSES (TIER 2) ISCM STRATEGY When developed at Tiers 1 and/or 2, the following policies, procedures, and templates facilitate organization-wide, standard"
     statement: "• Procedures for determining security metrics and data sources;"
-    status: "candidate"
+    status: "partial"
+    reason: "Each metric names the baseline controls that are its data sources (METR-001, METR-002); the procedures for determining metrics are held by presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/controls", "asserts": "Procedures for determining security metrics name their data sources, the controls a metric is calculated from", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0098"
     citation: {"ref": "SP800-137", "page": 25, "anchor": "See NIST SP 800-39, as amended, for a discussion of the risk"}
@@ -1208,7 +1220,9 @@ requirements:
     locator: "3.2.1"
     context: "DETERMINE METRICS"
     statement: "Organizations determine metrics to be used to evaluate and control ongoing risk to the organization. Metrics, which include all the security-related information from assessments and monitoring produced by automated tools and manual procedures, are organized into meaningful information to support decision making and reporting requirements. Metrics should be derived from specific objectives that will maintain or improve security posture. Metrics are developed for system-level data to make it meaningful in the context of mission/business or organizational risk management."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-001 holds that metrics are determined and each states the specific objective it is derived from, by presence; that system-level data is made meaningful in the mission or organizational risk context is not held"
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.empty.yaml", "expect": "lists no metrics", "asserts": "Organizations determine metrics to be used to evaluate and control ongoing risk", "claim": "presence", "holds_when": "S-5 is active", "sentence": "Organizations determine metrics to be used to evaluate and control ongoing risk to the organization."}, {"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.objective.yaml", "expect": "states no objective: each metric states the specific objective it is derived from", "asserts": "Metrics are derived from specific objectives: a metric that states no objective fails", "claim": "presence", "holds_when": "S-5 is active", "sentence": "Metrics should be derived from specific objectives that will maintain or improve security posture."}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/objective", "asserts": "Each metric states the specific objective it is derived from", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0139"
     citation: {"ref": "SP800-137", "page": 31, "anchor": "Metrics may use security-related information acquired at different frequencies and therefore with"}
@@ -1224,7 +1238,9 @@ requirements:
     locator: "3.2.1"
     context: "DETERMINE METRICS"
     statement: "As an example, a metric that an organization might use to monitor status of authorized and unauthorized components on a network could rely on related metrics such as physical asset locations, logical asset locations (subnets/Internet protocol (IP) addresses), media access control (MAC) addresses, system association, and policies/procedures for network connectivity. The metrics would be refreshed at various frequencies in accordance with the ISCM strategy. The metrics might be computed hourly, daily, or weekly. Though logical asset information might change daily, it is likely that policies and procedures for network connectivity will be reviewed or revised no more than annually. These metrics are informative only and are not recommended metrics. They are included to assist in explaining the concept of metrics as they are applied across tiers. Organizations define their own metrics and associated monitoring frequencies. In order to calculate metrics, associated controls and/or their objects are assessed and monitored with frequencies consistent with the timing requirements expressed in the metric."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-002 fails a metric whose controls are monitored less often than the metric is refreshed; the frequencies of the metrics follow the strategy by schema; the other sentences are informative examples"
+    evidence: [{"kind": "rule", "target": "METR-002", "fixture": "tests/fixtures/negative/METR-002.yaml", "expect": "monitored with frequencies consistent with its timing", "asserts": "To calculate metrics, the associated controls are assessed and monitored with frequencies consistent with the timing requirements expressed in the metric", "claim": "constraint", "holds_when": "S-5 is active", "sentence": "In order to calculate metrics, associated controls and/or their objects are assessed and monitored with frequencies consistent with the timing requirements expressed in the metric."}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/controls", "asserts": "The controls associated with a metric are named so their monitoring frequencies can be compared with the metric's", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0141"
     citation: {"ref": "SP800-137", "page": 31, "anchor": "It should be noted that metrics are fundamentally flawed without assurance that"}
@@ -1232,7 +1248,9 @@ requirements:
     locator: "3.2.1"
     context: "DETERMINE METRICS"
     statement: "It should be noted that metrics are fundamentally flawed without assurance that all security controls are implemented correctly. Metrics are defined or calculated in accordance with output from the security architecture. Collecting metrics from a security architecture with security controls that have not been assessed is equivalent to using a broken or uncalibrated scale. The interpretation of metrics data presumes that controls directly and indirectly used in the metric calculation are implemented and working as anticipated. If a metric indicates a problem, the root cause could be any number of things. Without fundamental assurance of correct implementation and continued effectiveness of security controls that are not associated with the metric, the root cause analysis is going to be hampered, and the analysis may be inappropriately narrowed to a predetermined list, overlooking the true problem. For detailed information on establishing metrics, see NIST SP 800-55, as amended."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-002 fails a metric that reads a control outside the baseline, so metrics are calculated from the security architecture's controls; assurance that every control is implemented correctly is the assessment's (ASMT rules), not the metric's"
+    evidence: [{"kind": "rule", "target": "METR-002", "fixture": "tests/fixtures/negative/METR-002.baseline.yaml", "expect": "so it is not calculated from the security architecture's controls", "asserts": "Metrics are defined or calculated in accordance with the security architecture: a metric reading a control outside the baseline fails", "claim": "constraint", "holds_when": "S-5 is active", "sentence": "Metrics are defined or calculated in accordance with output from the security architecture."}, {"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/controls", "asserts": "Metrics are calculated from the baseline controls of the security architecture", "claim": "presence"}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0142"
     citation: {"ref": "SP800-137", "page": 32, "anchor": "Determining frequencies for security status monitoring and for security control assessments are"}
@@ -1593,7 +1611,9 @@ requirements:
     locator: "3.4.3"
     context: "REPORT ON SECURITY STATUS MONITORING"
     statement: "Organizations develop procedures for reporting on security status monitoring. Security status data is derived from monitoring the predefined metrics across the organization using output generated by organization-wide tools (often implemented as common controls). The organization-wide tools may be part of a specific system or systems, but the security-related information generated may not be system-specific."
-    status: "candidate"
+    status: "partial"
+    reason: "Each metric has a review procedure (METR-001) and posture reports reach the AO (ISCM-005); a procedure for reporting on status monitoring is held by presence only"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics/items/properties/review", "asserts": "Organizations develop procedures for reviewing and reporting security status monitoring metrics", "claim": "presence", "sentence": "Organizations develop procedures for reporting on security status monitoring."}]
     work_item: "WI-15"
   - id: "REQ-SP800-137-0181"
     citation: {"ref": "SP800-137", "page": 40, "anchor": "Security-related information obtained from monitoring is analyzed and met with appropriate responses."}
@@ -1940,7 +1960,9 @@ requirements:
     locator: "3.2.1"
     context: ""
     statement: "Expected Output: Established metrics to convey security status and security control effectiveness at all three tiers, and to give recipients/users of reports visibility into assets, awareness of vulnerabilities, and knowledge of threats"
-    status: "candidate"
+    status: "partial"
+    reason: "The system strategy establishes metrics that convey security status and control effectiveness to the officials they are reported to (METR-001); metrics at all three tiers are the organization's"
+    evidence: [{"kind": "schema", "target": "framework/schema/conmon.schema.json#/properties/metrics", "asserts": "Established metrics convey security status and security control effectiveness to recipients of reports", "claim": "presence"}]
     work_item: "WI-15"
     promoted: {"reason": "Step block of 3.2.1: what the step produces."}
   - id: "REQ-SP800-137-0219"

@@ -1,0 +1,11 @@
+rule: RARC-001
+bases: [minimal]
+description: a risk model that leaves out predisposing conditions
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: risk_model.factors
+  value: [threat, vulnerability, impact, likelihood]
+expect:
+  errors: [RARC-001]
+  messages: ['the risk model leaves out predisposing-condition: all of the risk factors of SP 800-30 are used across the DoD']

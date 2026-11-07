@@ -1,0 +1,15 @@
+rule: RARC-001
+bases: [minimal]
+description: a subsequent assessment that names no previous report
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: purpose.update
+  value: {circumstances: A new relay firmware release changed the threat surface.}
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: purpose.kind
+  value: subsequent
+expect:
+  errors: [RARC-001]
+  messages: ['ra.yaml is a subsequent risk assessment with no update.previous: it states a reference to the previous risk assessment report']

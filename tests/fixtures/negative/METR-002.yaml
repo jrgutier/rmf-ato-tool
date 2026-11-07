@@ -1,0 +1,11 @@
+rule: METR-002
+bases: [minimal]
+description: a monthly metric read from a control monitored quarterly
+mutations:
+- op: set_field
+  file: artifacts/data/conmon.yaml
+  path: metrics.0.controls
+  value: [ia-2]
+expect:
+  errors: [METR-002]
+  messages: ['metric MET-01 is refreshed monthly but ia-2 is monitored quarterly: the controls a metric is calculated from are monitored with frequencies consistent with its timing']

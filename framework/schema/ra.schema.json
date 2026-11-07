@@ -48,6 +48,8 @@
             "REQ-SP800-30R1-0108",
             "REQ-SP800-30R1-0127",
             "REQ-SP800-30R1-0139",
+            "REQ-SP800-30R1-0254",
+            "REQ-SP800-30R1-0261",
             "REQ-SP800-30R1-0285"
           ]
         },
@@ -75,6 +77,26 @@
           "x-enforces": [
             "REQ-SP800-30R1-0082",
             "REQ-SP800-30R1-0108"
+          ]
+        },
+        "update": {
+          "title": "For a subsequent assessment: what prompted the update and the previous report",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "circumstances": {
+              "title": "Circumstances that prompted the update",
+              "type": "string",
+              "minLength": 1
+            },
+            "previous": {
+              "title": "Reference to the previous risk assessment report",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "x-enforces": [
+            "REQ-SP800-30R1-0258"
           ]
         }
       }
@@ -136,6 +158,8 @@
           "minLength": 1,
           "title": "Organizational applicability: the tier, systems and parts of the organization the assessment covers",
           "x-enforces": [
+            "REQ-SP800-30R1-0110",
+            "REQ-SP800-30R1-0270",
             "REQ-SP800-30R1-0286"
           ]
         },
@@ -145,6 +169,7 @@
           "title": "Effectiveness time frame: how long the results can inform risk-based decisions",
           "x-enforces": [
             "REQ-SP800-30R1-0112",
+            "REQ-SP800-30R1-0273",
             "REQ-SP800-30R1-0286"
           ]
         },
@@ -169,7 +194,8 @@
       "x-enforces": [
         "REQ-SP800-30R1-0105",
         "REQ-SP800-30R1-0114",
-        "REQ-SP800-30R1-0129"
+        "REQ-SP800-30R1-0129",
+        "REQ-SP800-30R1-0265"
       ]
     },
     "constraints": {
@@ -183,7 +209,8 @@
       "x-enforces": [
         "REQ-SP800-30R1-0105",
         "REQ-SP800-30R1-0114",
-        "REQ-SP800-30R1-0129"
+        "REQ-SP800-30R1-0129",
+        "REQ-SP800-30R1-0265"
       ]
     },
     "information_sources": {
@@ -337,6 +364,7 @@
             "REQ-SP800-30R1-0107",
             "REQ-SP800-30R1-0125",
             "REQ-SP800-30R1-0131",
+            "REQ-SP800-30R1-0267",
             "REQ-SP800-30R1-0288",
             "REQ-SP800-30R1-0302"
           ]
@@ -511,7 +539,10 @@
             "REQ-DODI8510.01-0080"
           ]
         }
-      }
+      },
+      "x-enforces": [
+        "REQ-SP800-30R1-0266"
+      ]
     },
     "threat_sources": {
       "title": "Threat sources of concern",
@@ -547,6 +578,10 @@
               "accidental",
               "structural",
               "environmental"
+            ],
+            "x-enforces": [
+              "REQ-SP800-30R1-0274",
+              "REQ-SP800-30R1-0275"
             ]
           },
           "in_scope": {
@@ -805,7 +840,8 @@
             "title": "Level of risk of the threat event: a combination of likelihood and impact",
             "$ref": "#/$defs/level",
             "x-enforces": [
-              "REQ-SP800-30R1-0138"
+              "REQ-SP800-30R1-0138",
+              "REQ-SP800-30R1-0260"
             ]
           },
           "uncertainty": {
@@ -817,6 +853,7 @@
               "REQ-SP800-30R1-0132",
               "REQ-SP800-30R1-0138",
               "REQ-SP800-30R1-0206",
+              "REQ-SP800-30R1-0269",
               "REQ-SP800-30R1-0299",
               "REQ-SP800-39-0159",
               "REQ-SP800-39-0160"
@@ -1477,6 +1514,7 @@
             "REQ-SP800-30R1-0214",
             "REQ-SP800-30R1-0216",
             "REQ-SP800-30R1-0219",
+            "REQ-SP800-30R1-0278",
             "REQ-SP800-30R1-0296"
           ]
         },
@@ -1884,6 +1922,122 @@
           "$ref": "#/$defs/sources"
         }
       }
+    },
+    "date": {
+      "title": "Date of the risk assessment",
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "x-enforces": [
+        "REQ-SP800-30R1-0253"
+      ]
+    },
+    "team": {
+      "title": "Team or individuals conducting the risk assessment, with contact information",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "role",
+          "contact"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "persona": {
+            "type": "string",
+            "pattern": "^PER-[A-Z0-9]+$"
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-30R1-0277"
+      ]
+    },
+    "rationales": {
+      "title": "Rationale for each risk-related decision taken during the assessment; an empty list is an answer",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision",
+          "rationale"
+        ],
+        "properties": {
+          "decision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-SP800-30R1-0268"
+      ]
+    },
+    "tailoring": {
+      "title": "Tailoring of the assessment's robustness, explained so the AO knows how far to rely on the results; an empty list states none",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "aspect",
+          "cause",
+          "explanation",
+          "reliance"
+        ],
+        "properties": {
+          "aspect": {
+            "title": "What was assessed with less rigor",
+            "enum": [
+              "threat",
+              "vulnerability",
+              "impact",
+              "likelihood",
+              "predisposing-condition",
+              "level-of-detail",
+              "scope"
+            ]
+          },
+          "cause": {
+            "title": "Why: resource constraints or the availability of detailed risk factor information",
+            "enum": [
+              "resource-constraints",
+              "risk-factor-information"
+            ]
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reliance": {
+            "title": "To what degree the AO can rely on the results it affects",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "x-enforces": [
+        "REQ-DODI8500.01-0221"
+      ]
     }
   },
   "$defs": {
