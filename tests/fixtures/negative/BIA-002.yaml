@@ -1,0 +1,11 @@
+rule: BIA-002
+bases:
+- minimal
+description: a high disruption impact beside a low availability impact, not reevaluated
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: processes.0.disruption_impact, value: high}
+expect:
+  errors:
+  - BIA-002
+  messages:
+  - process BP-01 has a high disruption impact but the availability impact is low, and no reevaluation records the conflict

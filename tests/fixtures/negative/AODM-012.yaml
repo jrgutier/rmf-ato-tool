@@ -1,0 +1,13 @@
+rule: AODM-012
+bases: [minimal]
+description: an authorization to use with no connection approval, copy to the Granting AO or site guidance
+mutations:
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.decision, value: AD-ATU}
+  - {op: set_field, file: artifacts/data/authorizations.yaml, path: records.1.provider, value: {organization: DISA, decision: AD-ATO, date: '2026-01-01', package: eMASS 1, termination_date: '2029-01-01'}}
+expect:
+  errors: [AODM-012]
+  also: [SSPR-001]
+  messages:
+    - records connection_approval
+    - records granting_ao_copy
+    - records site_guidance

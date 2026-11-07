@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 310 rules, 37 repo-scope and 273 run-scope. Authoritative;
+# Rule registry (plan §6.5): 325 rules, 37 repo-scope and 288 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -881,6 +881,7 @@ rules:
       - REQ-SP800-37R2-0580
       - REQ-SP800-37R2-0581
       - REQ-SP800-37R2-0588
+      - REQ-SP800-37R2-0589
       - REQ-SP800-37R2-0593
       - REQ-SP800-37R2-0613
       - REQ-SP800-37R2-0614
@@ -1559,6 +1560,7 @@ rules:
       - REQ-CNSSI1254-0058
       - REQ-CNSSI1254-0030
       - REQ-CNSSI1254-0057
+      - REQ-CNSSI1254-0050
       - REQ-CNSSI1254-0051
       - REQ-CNSSI1254-0052
       - REQ-CNSSI1254-0060
@@ -2586,10 +2588,11 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: I-2
-    summary: "I-2, A-5 or M-4 wrote ART-SSP without an update in the plan change log, or one that leaves out the privacy plan"
+    summary: "I-2, A-5, M-1, M-4 or M-7 wrote ART-SSP without an update in the plan change log, or one that leaves out the privacy plan"
     fixture: tests/fixtures/negative/PRIV-010.yaml
     hint: "Log each update of the plans in plan-reviews.yaml changes with the task that made it and the plans it changed (security, privacy)."
     enforces:
+      - REQ-SP800-18R2-0303
       - REQ-DODI8510.01-0118
       - REQ-DODI8510.01-0124
       - REQ-SP800-37R2-0327
@@ -5341,3 +5344,220 @@ rules:
       - REQ-DODCIO-RECIPROCITY-0113
       - REQ-DODCIO-RECIPROCITY-0085
       - REQ-DODCIO-RECIPROCITY-0087
+  - id: AODM-012
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: an authorization to use lacks the Receiving AO's connection approval, the copy to the Granting AO, or the site guidance, or dates them against the ATU
+    fixture: tests/fixtures/negative/AODM-012.yaml
+    hint: An ATU records connection_approval (by the AO who decides, not after the ATU), granting_ao_copy (not before the ATU) and site_guidance (an artifact of the run holding the authorized configuration, sites notified not before the ATU).
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0012
+      - REQ-DODCIO-RECIPROCITY-0058
+  - id: AODM-013
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a denial leaves an authorization of its subject standing, or lacks the POA&M revision with the system owner or common control provider
+    fixture: tests/fixtures/negative/AODM-013.yaml
+    hint: A denial lists in halts every authorization of the same subject in force on its date; AD-DATO and AD-DCCA record poam_revision by PER-AO or PER-AODR with PER-PM (system) or PER-CCP (common controls), naming items of the POA&M.
+    enforces:
+      - REQ-SP800-18R2-0340
+      - REQ-SP800-37R2-0594
+  - id: CCPA-001
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a common control decision does not say whether the controls are system-based, or the package of ones that are not lacks the record of implementation details
+    fixture: tests/fixtures/negative/CCPA-001.yaml
+    hint: A record with subject common-controls carries common_controls.system_based; when false, implementation_record names a file of an artifact, which rmf build lists in package/manifest.yaml.
+    enforces:
+      - REQ-SP800-37R2-0549
+  - id: CCPA-002
+    scope: run
+    severity: E
+    ac: [AC-38]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: common controls are offered for inheritance before an authorization of them is in force, or without the provider's indication or access to documentation
+    fixture: tests/fixtures/negative/CCPA-002.yaml
+    hint: Each offerings item names an AD-CCA (or the system ATO of system-based controls) in force on its offered date, indicates implemented, assessed, authorized and available, and gives access to artifacts of the run.
+    enforces:
+      - REQ-SP800-37R2-0200
+      - REQ-SP800-37R2-0577
+  - id: BIA-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-8
+    summary: "the business impact and criticality analysis does not answer whether mission critical functions are present, or names a function's process it does not list"
+    fixture: tests/fixtures/negative/BIA-001.yaml
+    hint: "At P-8 write bia.yaml: mission_critical true with each mission critical function and the processes that carry it, or false with no functions; every process a function names is in processes."
+    enforces:
+      - REQ-CNSSI1254-0050
+  - id: BIA-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: "a process whose disruption impact exceeds the availability impact of the categorization is not reevaluated by the mission and data owners"
+    fixture: tests/fixtures/negative/BIA-002.yaml
+    hint: "At C-2 compare each bia.yaml process's disruption_impact with categorization a; for each that exceeds it, record a reevaluation of that process by PER-SPONSOR and PER-IO with its outcome, revising the categorization or the BIA, or retaining both with a rationale."
+    enforces:
+      - REQ-SP800-60V1R1-0193
+  - id: PRIV-012
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-6
+    summary: "for a system processing PII, S-6 has no AO or AODR approval of the plans, or the privacy plan reaches the AO, or the authorization it feeds, without the SAOP's prior approval"
+    fixture: tests/fixtures/negative/PRIV-012.yaml
+    hint: "S-6 records the AO's or AODR's approval in ssp-records.yaml approvals. For a system processing PII, record privacy_plan.approvals: PER-PRIV (or a designee acting in that role) reviews and approves the privacy plan, dated before the AO's or AODR's approval of the plans and before the first authorization decision; keep each approval."
+    enforces:
+      - REQ-CNSSI1253-0077
+      - REQ-DODI5400.11-0119
+      - REQ-DODI8510.01-0115
+      - REQ-SP800-18R2-0328
+      - REQ-SP800-18R2-0330
+      - REQ-SP800-37R2-0298
+      - REQ-SP800-37R2-0312
+      - REQ-SP800-37R2-0319
+      - REQ-SP800-37R2-0322
+      - REQ-SP800-37R2-0323
+      - REQ-SP800-37R2-0523
+  - id: PASM-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the assessment plan of a system processing PII has no privacy scope, or its privacy assessors are wrong"
+    fixture: tests/fixtures/negative/PASM-001.yaml
+    hint: "Record sap.yaml privacy: every privacy control of the baseline in controls, and assessors on the team who are PER-PRIV or independent."
+    enforces:
+      - REQ-DODI8510.01-0119
+      - REQ-DODI8510.01-0121
+      - REQ-SP800-37R2-0350
+      - REQ-SP800-37R2-0354
+      - REQ-SP800-37R2-0357
+      - REQ-SP800-37R2-0525
+      - REQ-SP800-53AR5-0047
+      - REQ-SP800-53AR5-0161
+      - REQ-SP800-53AR5-0168
+  - id: PASM-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-4
+    summary: "the assessment report of a system processing PII documents no privacy assessment, or it does not reach the AO from the SAOP"
+    fixture: tests/fixtures/negative/PASM-002.yaml
+    hint: "Record sar-report.yaml privacy: the privacy assessors of the plan who documented the results, the date, and provided by PER-PRIV to PER-AO or PER-AODR."
+    enforces:
+      - REQ-DODI8510.01-0122
+      - REQ-SP800-37R2-0340
+      - REQ-SP800-37R2-0341
+      - REQ-SP800-37R2-0350
+      - REQ-SP800-37R2-0365
+      - REQ-SP800-37R2-0366
+      - REQ-SP800-37R2-0479
+      - REQ-SP800-37R2-0525
+      - REQ-SP800-37R2-0557
+      - REQ-SP800-37R2-0621
+      - REQ-SP800-53AR5-0217
+      - REQ-SP800-53AR5-0290
+  - id: OAUTH-001
+    scope: run
+    severity: E
+    ac: [AC-35]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-6
+    summary: an event-driven review names no trigger, a trigger after the review, or a trigger raised by others that is no defined trigger event
+    fixture: tests/fixtures/negative/OAUTH-001.yaml
+    hint: Record trigger on an event-driven record (event, raised_by, date); an event someone other than the deciding AO raises is one of the review events defined earlier on the authorization.
+  - id: OMP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: null
+    summary: an existing system entering at assessment, authorization or monitoring has not completed the Prepare tasks (the privacy risk assessment among them) or confirmed categorization and controls selected, tailored and implemented; or enters at monitoring with deficiencies or no current authorization
+    fixture: tests/fixtures/negative/OMP-001.yaml
+    hint: An entry at step A, R or M lists every Prepare task, C-2, S-1, S-2 and I-1 as completed or keeps them in scope; an entry at M also records its date and deficiencies (an empty list) and a seeded ledger with an authorization in force.
+    enforces:
+      - REQ-DODCIO-RECIPROCITY-0007
+      - REQ-DODI8510.01-0083
+      - REQ-SP800-37R2-0144
+      - REQ-SP800-37R2-0145
+  - id: OMP-002
+    scope: run
+    severity: E
+    ac: [AC-35]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-4
+    summary: a reauthorization record lacks the input of the CISO, the privacy official or the risk executive to the decision to reauthorize, or an input postdates it
+    fixture: tests/fixtures/negative/OMP-002.yaml
+    hint: Record initiation_inputs on a reauthorization record, one {by, date} each for PER-CISO, PER-PRIV and PER-RE, on or before the decision.
+    enforces:
+      - REQ-SP800-37R2-0451
+      - REQ-SP800-37R2-0741
+  - id: UPD-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-18
+    summary: the system is not reported in eMASS or ERS, an alternate tool has no ERS import, or C-1, C-3, R-5 or M-7 did its work without updating the registration information
+    fixture: tests/fixtures/negative/UPD-001.yaml
+    hint: "Record registry.reported_in (eMASS or ERS) and registry.tool in artifacts/data/registration.yaml, with ers_import for an alternate tool; each of C-1, C-3, R-5 and M-7 adds an updates entry (task, content, date) once it has done its work."
+    enforces:
+      - REQ-DODI8500.01-0172
+      - REQ-DODI8500.01-0301
+      - REQ-SP800-37R2-0266
+      - REQ-SP800-37R2-0734
+  - id: UPD-002
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: a significant change was implemented and no system plan change references it
+    fixture: tests/fixtures/negative/UPD-002.yaml
+    hint: "When changes.yaml holds an implemented change whose security impact is significant, log the update of the system plan in plan-reviews.yaml changes with change_ref set to the change."
+    enforces:
+      - REQ-SP800-18R1-0029
+  - id: TIN-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: the security categorization or the control selection does not list the Prepare decisions (ART-ORG-CONTEXT, and for categorization ART-INFOTYPES) among its sources
+    fixture: tests/fixtures/negative/TIN-001.yaml
+    hint: "Read ART-ORG-CONTEXT (and ART-INFOTYPES at C-2) and list it in the sources of ART-CAT and ART-BASELINE; both are inputs of C-2 and S-1."
+    enforces:
+      - REQ-CNSSI1253-0014

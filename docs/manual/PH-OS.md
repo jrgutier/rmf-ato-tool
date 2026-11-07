@@ -52,13 +52,13 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
-| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca) | — |
-| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | — |
-| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra) | — |
+| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-POAM](../../MANUAL.md#art-poam), [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp), [ART-CP](../../MANUAL.md#art-cp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
+| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca), [ART-SAP](../../MANUAL.md#art-sap) | — |
+| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar), [ART-SAR](../../MANUAL.md#art-sar) | — |
+| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra), [ART-IRP](../../MANUAL.md#art-irp) | — |
 | [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
-| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
-| [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | — | — |
+| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec), [ART-RAR](../../MANUAL.md#art-rar) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
+| [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | [ART-INV](../../MANUAL.md#art-inv), [ART-SSP](../../MANUAL.md#art-ssp) | — |
 
 Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#task-p-3).
 
@@ -91,6 +91,11 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
 | [EXT-CHANGE-REQUESTS](../../MANUAL.md#ext-change-requests) | Configuration change requests | outside input (operational) |
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
+| [EXT-MONITORING](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -99,6 +104,10 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | produces | supporting |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
 | [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | updates | core |
+| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
 
 **Entry criteria**
 
@@ -114,6 +123,7 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 - The AO decision on each hosted or interconnected system is enforced (MCON-001).
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
 - For a system processing PII, each change states whether it creates new privacy risk (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates (PRIV-005).
+- An implemented change of significant security impact has a system plan change in plan-reviews.yaml that references it (change_ref, UPD-002).
 
 **Alignment**
 
@@ -164,6 +174,9 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
 | [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | [S-4](PH-TMRR.md#task-s-4) (supporting artifact) |
 | [EXT-MONITORING](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [EXT-TEST-RESULTS](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
 
 **Outputs**
 
@@ -172,6 +185,7 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 | [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
 | [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | updates | supporting |
+| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | updates | core |
 
 **Entry criteria**
 
@@ -230,6 +244,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 | [EXT-DIRECTIVES](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
 | [EXT-VDP](../../MANUAL.md#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
+| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
@@ -238,6 +253,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
 | [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
+| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 
 **Entry criteria**
 
@@ -306,6 +322,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 | [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
@@ -315,6 +332,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 | [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
+| [ART-IRP](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -372,6 +390,8 @@ Not tied to a specific acquisition event; runs as part of its phase.
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
 | [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
 | [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
@@ -448,6 +468,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 |---|---|---|---|
 | [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | updates | core |
 | [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
+| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
 
 Writes to `facts.yaml`: `acquisition`.
 
@@ -462,6 +483,7 @@ Writes to `facts.yaml`: `acquisition`.
 - Before the first continued authorization, ART-ORG-CONTEXT records the organization-wide ongoing authorization process with both transition conditions and an ISCM program in place (OCTX-010).
 - The AO conducts ongoing authorization using the results of continuous monitoring and communicates changes in risk determination and acceptance decisions (DoDI 8510.01 Table 7 outcome).
 - authorizations.yaml restates `system_status` with the new record (SSPR-001).
+- An event-driven review records its `trigger` (event, `raised_by` a persona or `automated-tool`, date); an event raised by anyone but the deciding AO is one of the review events defined earlier on the authorization, and the time-driven frequency runs from the last time-driven review, not from an event review (OAUTH-001).
 - authorizations.yaml gains a record of the determination (AD-CONT, AD-CATO, AD-RCATO, AD-RESC or a denial) naming the authorization it rests on, which stays in the ledger (AODM-005); a cATO also meets AODM-007.
 - A change of AO is an `ao-change` record whose ao_transfer states what the new official reviewed, finds and does about it (AOCHG-001).
 - An ISCM program assessment report the determination reads is in iscm_assessments of the ledger (MISCM-001).
@@ -518,12 +540,15 @@ Writes to `facts.yaml`: `acquisition`.
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
 | [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
 | [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [ART-DISP](../../MANUAL.md#art-disp) | Disposal plan | produces | supporting |
+| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
+| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -533,6 +558,7 @@ Writes to `facts.yaml`: `acquisition`.
 
 - A system disposal strategy is developed and implemented, as needed (DoDI 8510.01 Table 7 outcome).
 - ART-DISP records the disposal strategy, media sanitization and registry and inventory updates.
+- The inventory of information systems shows the removal; ART-INV and ART-SSP list M-7 in touched_by, and registration.yaml updates holds the disposal update by M-7 (UPD-001).
 
 **Alignment**
 

@@ -307,38 +307,6 @@
         }
       }
     },
-    "selection": {
-      "title": "The assessor selection (Task A-1): the authorizing official or designated representative selects the assessor or assessment team for the type of control assessment to be conducted",
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "selected_by",
-        "date",
-        "assessment_type",
-        "expertise"
-      ],
-      "properties": {
-        "selected_by": {
-          "$ref": "#/$defs/persona_id"
-        },
-        "date": {
-          "$ref": "#/$defs/date"
-        },
-        "assessment_type": {
-          "title": "The type of control assessment the assessor was selected for",
-          "enum": [
-            "security",
-            "privacy",
-            "security-and-privacy"
-          ]
-        },
-        "expertise": {
-          "title": "The technical expertise the selection considered: the skills and technical expertise required to assess the system-specific, hybrid and common controls",
-          "type": "string",
-          "minLength": 1
-        }
-      }
-    },
     "objectives": {
       "title": "The objective of the control assessment",
       "type": "string",
@@ -1424,6 +1392,72 @@
               "minLength": 1
             }
           }
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy assessment plan of a system processing PII: the privacy controls in scope and their assessors (PASM-001)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessors",
+        "controls",
+        "sources"
+      ],
+      "properties": {
+        "assessors": {
+          "title": "Privacy control assessors: the senior agency official for privacy or an independent assessor on the team",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/persona_id"
+          }
+        },
+        "controls": {
+          "title": "Privacy controls of the baseline the privacy assessment plan scopes",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control_id"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "selection": {
+      "title": "The assessor selection (Task A-1): the authorizing official or designated representative selects the assessor or assessment team for the type of control assessment to be conducted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_by",
+        "date",
+        "assessment_type",
+        "expertise"
+      ],
+      "properties": {
+        "selected_by": {
+          "$ref": "#/$defs/persona_id"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "assessment_type": {
+          "title": "The type of control assessment the assessor was selected for",
+          "enum": [
+            "security",
+            "privacy",
+            "security-and-privacy"
+          ]
+        },
+        "expertise": {
+          "title": "The technical expertise the selection considered: the skills and technical expertise required to assess the system-specific, hybrid and common controls",
+          "type": "string",
+          "minLength": 1
         }
       }
     },

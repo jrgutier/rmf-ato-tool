@@ -1,0 +1,15 @@
+rule: BIA-001
+bases:
+- minimal
+description: a mission critical function carried by a process the analysis does not list
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: mission_critical, value: true}
+- op: set_field
+  file: artifacts/data/bia.yaml
+  path: functions
+  value: [{id: MCF-01, function: Relay field reports to the analysis enclave, processes: [BP-09], sources: [INT-019.A1]}]
+expect:
+  errors:
+  - BIA-001
+  messages:
+  - mission critical function MCF-01 names process BP-09, which the analysis does not list

@@ -359,7 +359,9 @@ requirements:
     locator: "1.3.2.•"
     context: "Document Organization Based on the organization’s risk management strategy and NIST guidelines (e.g., [SP800-37], [SP800-53], [SP800-161]), system plans:"
     statement: "• Consider requirements for information technology, operational technology, and emerging technologies that may be informed by system artifacts, such as risk assessments, business impact analyses (BIAs), and information exchange agreements;"
-    status: "candidate"
+    status: "partial"
+    reason: "P-15 reads ART-BIA beside ART-RA, so requirements can be informed by the BIA; considering requirements is not a duty a rule can fail"
+    evidence: [{"kind": "citation", "target": "P-15", "asserts": "Requirements consider system artifacts such as risk assessments and business impact analyses", "claim": "presence"}]
     work_item: "WI-09"
   - id: "REQ-SP800-18R2-0045"
     citation: {"ref": "SP800-18R2", "page": 16, "anchor": "Address organizationally defined parameters, acceptable risk thresholds, and organizational policies that support"}
@@ -2566,7 +2568,9 @@ requirements:
     locator: "4.1"
     context: "Prepare"
     statement: "During each of the subsequent RMF steps, the system plans are revised or updated to add additional information as the system is developed."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 fails when a task that updates ART-SSP (I-2, A-5, M-1, M-4, M-7) writes it without a plan change by that task. Unheld: no Authorize task updates the system plans, so 'each of the subsequent RMF steps' is not held at R."
+    evidence: [{"kind": "rule", "asserts": "The system plans are updated by the tasks of the subsequent RMF steps", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "records no update of the plans by", "claim": "presence", "sentence": "During each of the subsequent RMF steps, the system plans are revised or updated to add additional information as the system is developed.", "holds_when": "S-4 is active"}]
     work_item: "WI-07"
   - id: "REQ-SP800-18R2-0304"
     citation: {"ref": "SP800-18R2", "page": 46, "anchor": "The system plans identify how data flows through various subsystems, third-party services,"}
@@ -2782,7 +2786,9 @@ requirements:
     locator: "4.3.3"
     context: "Plan Review and Approval"
     statement: "The senior agency official for privacy is responsible for reviewing and approving the system privacy plan or consolidated plan before it is submitted to the authorizing official or designated representative. This review ensures that privacy risks have been thoroughly identified and that privacy controls and risk management strategies are aligned with organizational policies, legal requirements, and privacy objectives. When reviewing the system-specific C-SCRM plan in the authorization package, authorizing officials consult with the C-SCRM PMO as well as acquisitions personnel in cases of technology procurements. The C-SCRM review ensures that the C-SCRM controls and risk management strategies align with the overall organizational risk tolerances."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-012 fails a privacy plan the senior agency official for privacy approved after the AO's approval of the plans; what the review ensures is prose, and the C-SCRM review is the SCRM work items'."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.order.yaml", "expect": "after the authorizing official's approval of the plans", "claim": "constraint", "asserts": "The senior agency official for privacy reviews and approves the privacy plan before the authorizing official's approval of the plans", "sentence": "The senior agency official for privacy is responsible for reviewing and approving the system privacy plan or consolidated plan before it is submitted to the authorizing official or designated representative."}]
     work_item: "WI-02"
   - id: "REQ-SP800-18R2-0329"
     citation: {"ref": "SP800-18R2", "page": 50, "anchor": "The authorizing official may request additional input from the senior accountable official"}
@@ -2798,7 +2804,9 @@ requirements:
     locator: "4.3.3.•"
     context: "Plan Review and Approval"
     statement: "• If the system plans are acceptable, the authorizing official or designated representative approves the system plans, enabling the system owner to begin execution of the RMF Implement step."
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-012 fails S-6 when no approval of the plans by the AO or AODR is on record; I-1 depends on S-6, so Implement starts after the approval."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "no approval of the security and privacy plans by the authorizing official or designated representative", "claim": "constraint", "asserts": "The authorizing official or designated representative approves the system plans before the Implement step"}]
     work_item: "WI-02"
   - id: "REQ-SP800-18R2-0331"
     citation: {"ref": "SP800-18R2", "page": 50, "anchor": "If the system plans are unacceptable, the authorizing official or designated representative"}
@@ -2885,8 +2893,8 @@ requirements:
     context: "Authorize The authorizing official relies on information in the system plan and feedback from the system owner and senior agency officials to:"
     statement: "• Deny authorization to the system or common control provider to protect the organization from risks that are outside of established organizational risk tolerances."
     status: "partial"
-    reason: "The types exist; nothing tests a denial protects the organization"
-    evidence: [{"kind": "pinned", "asserts": "Denial of authorization to the common control provider is a record that denies", "target": "AD-DCCA", "field": "effect", "value": "deny", "claim": "constraint"}]
+    reason: "That the risk lies outside the established organizational risk tolerances is the AO's judgement, not tested"
+    evidence: [{"kind": "pinned", "asserts": "Denial of authorization to the common control provider is a record that denies", "target": "AD-DCCA", "field": "effect", "value": "deny", "claim": "constraint"}, {"kind": "rule", "asserts": "Deny authorization to the system to protect the organization: a denial that leaves the system's authorization in force and its activity running is refused", "target": "AODM-013", "fixture": "tests/fixtures/negative/AODM-013.yaml", "expect": "if the subject is in operation, all activity is halted", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-01"
   - id: "REQ-SP800-18R2-0341"
     citation: {"ref": "SP800-18R2", "page": 51, "anchor": "The authorization decision is included in the authorization package, identified in the"}

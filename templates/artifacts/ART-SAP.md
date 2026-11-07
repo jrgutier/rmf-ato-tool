@@ -28,7 +28,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Team and independence
 
-<<FILL: assessors, roles and independence, with tokens>>
+<<FILL: assessors, roles and independence; for a system processing PII, the privacy controls in scope and their assessors (the senior agency official for privacy or an independent assessor; sap.yaml privacy), with tokens>>
 
 ## Schedule
 
