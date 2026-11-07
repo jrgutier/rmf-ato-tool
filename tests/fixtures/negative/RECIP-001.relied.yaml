@@ -1,0 +1,14 @@
+rule: RECIP-001
+bases:
+- minimal
+description: the review is said to be relied on by a ledger record that is no authorization decision
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.package_review.relied_on_by
+  value: AUTH-001
+expect:
+  errors:
+  - RECIP-001
+  messages:
+  - 'LA-01: the review is relied on by AUTH-001, which is no authorization decision on the ledger'

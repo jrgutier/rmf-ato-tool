@@ -30,7 +30,6 @@ from rmf_tool.check.rules.protection import (
     _record,
     decision_points,
 )
-from rmf_tool.run import authorization as ledger
 
 CSS_FILE = "artifacts/data/cybersecurity-strategy.yaml"
 DOD_CIO, COMPONENT_CIO = "DoD-CIO", "Component-CIO"
@@ -211,12 +210,6 @@ def content(ctx: Context) -> list[RunFinding]:
             err("a software pathway CSS includes recurring assessment of the supply chain, the "
                 "development environment, processes and tools, and continuous automated testing; "
                 f"it leaves out {', '.join(sorted(left))}")
-    first = min((d for d in (_day(r.get("date")) for r in ledger.load(ctx.run) or ()) if d),
-                default=None)
-    written = _day(strategy.get("date"))
-    if first is not None and written is not None and written > first:
-        err("the PM's cybersecurity activities start with the CSS and continue through the RMF "
-            f"to an ATO; the CSS is dated after the first authorization decision ({first})")
     return out
 
 

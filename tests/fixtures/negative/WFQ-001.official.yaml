@@ -1,0 +1,14 @@
+rule: WFQ-001
+description: the AO's training and qualification are verified by a persona the framework does not define
+bases:
+- minimal
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.2.qualification.verified_by
+  value: PER-NOBODY
+expect:
+  errors:
+  - WFQ-001
+  messages:
+  - "RA-03: the training and qualification of PER-AO are verified by PER-NOBODY, which is no official of the framework"

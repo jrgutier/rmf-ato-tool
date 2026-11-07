@@ -37,6 +37,7 @@ def qualification(ctx: Context) -> list[RunFinding]:
     data, out, err = _record(ctx, "WFQ-001", "P-1")
     if data is None:
         return out
+    personas = ctx.run.framework.ids("personas")
     for r in _roles(data):
         rid, role = r.get("id"), r.get("role")
         q = r.get("qualification")
@@ -50,6 +51,9 @@ def qualification(ctx: Context) -> list[RunFinding]:
         if not isinstance(verifier, str) or verifier == role:
             err(f"{rid}: the training and qualification of {role} are not verified by another "
                 "official")
+        elif verifier.startswith("PER-") and verifier not in personas:
+            err(f"{rid}: the training and qualification of {role} are verified by {verifier}, "
+                "which is no official of the framework")
         if not _work_role(r):
             continue
         if not _sub(r, "position").get("dcwf_code"):

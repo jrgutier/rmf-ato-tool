@@ -1085,7 +1085,7 @@ rules:
     applies_after: C-1
     summary: the provider's authorization package is not reviewed before the decision that relies on it, or the review leaves out its risk factors, an integrating component or an overlay
     fixture: tests/fixtures/negative/RECIP-001.yaml
-    hint: Give each leveraged record that is neither a common control provider nor an Enterprise system (ENT-002) a package_review dated before the first authorization decision, with its risk factors, every boundary component naming the record under integration and every overlay of the categorization under overlays.
+    hint: Give each leveraged record that is neither a common control provider nor an Enterprise system (ENT-002) a package_review dated before the first authorization decision (or before the later decision its relied_on_by names, for a system leveraged after the first), with its risk factors, every boundary component naming the record under integration and every overlay of the categorization under overlays.
     enforces:
       - REQ-SP800-37R2-0582
       - REQ-DODCIO-RECIPROCITY-0132
@@ -4038,7 +4038,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-14
-    summary: the cybersecurity strategy misses a life-cycle phase, Intelligence Community threat information, a basis, the RMF, its document or a software pathway assessment, or postdates the first authorization
+    summary: the cybersecurity strategy misses a life-cycle phase, Intelligence Community threat information, a basis, the RMF, its document or a software pathway assessment
     fixture: tests/fixtures/negative/CSSTRAT-003.yaml
     hint: "strategy.activities cover every phase of the pathway; based_on holds all five bases; documented_in holds stand-alone without a PPP and acquisition-strategy below ACAT ID."
     enforces:
@@ -4217,7 +4217,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-14
-    summary: IOC is passed before the pathway's O&S entry point (first fielding), the system is past that point while facts.yaml lifecycle_phase is not O&S, or O&S rests on no product support strategy the MDA approved by then
+    summary: IOC is passed before the pathway's O&S entry point (first fielding), the system is past that point while facts.yaml lifecycle_phase is not O&S, or O&S rests on no product support strategy the MDA approved
     fixture: tests/fixtures/negative/ACQLC-003.yaml
     hint: "Record MS-FIELD (or the pathway's point with enters: PH-OS) in protection.yaml program.decision_points and keep facts.yaml lifecycle_phase current."
     enforces:
@@ -4230,11 +4230,10 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-15
-    summary: a JCIDS capability document has no validation date or one after JCIDS was disestablished, or the capability document is not of a kind the program's pathway uses
+    summary: a JCIDS capability document past the CDD validation point has no validation date, or has one after JCIDS was disestablished, or the capability document is not of a kind the program's pathway uses
     fixture: tests/fixtures/negative/ACQLC-004.yaml
     hint: "Record capability_document.validated; after August 20, 2025 use kind requirements-document on major capability acquisition."
     enforces:
-      - REQ-DODI5000.02-0019
       - REQ-DODI8510.01-0235
   - id: ACQLC-005
     scope: run
@@ -4243,7 +4242,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: C-2
-    summary: the categorization does not name the capability document it is documented in, or names another than the one P-15 read
+    summary: where P-15 read a capability document, the categorization does not name it as the document it is documented in, or names another than the one P-15 read
     fixture: tests/fixtures/negative/ACQLC-005.yaml
     hint: "Set facts.yaml categorization.documented_in to the capability_document id of protection-requirements.yaml."
     enforces:

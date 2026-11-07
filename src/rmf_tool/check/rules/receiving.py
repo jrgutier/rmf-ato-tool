@@ -50,11 +50,16 @@ def _leveraged(ctx: Context) -> list[Record]:
     return _items(ctx.data(LEVERAGED_FILE), "leveraged_authorizations")
 
 
-def _first_authorization(ctx: Context) -> dt.date | None:
+def _authorizations(ctx: Context) -> dict[str, dt.date]:
+    """The date of each dated authorize decision on the ledger, by record ID."""
     effect_of = ledger.effects(ctx.run)
-    dates = [ledger.parse_date(r.get("date")) for r in ctx.ledger or ()
-             if isinstance(r, dict) and effect_of.get(r.get("decision")) == "authorize"]
-    return min((d for d in dates if d), default=None)
+    out: dict[str, dt.date] = {}
+    for r in ctx.ledger or ():
+        if isinstance(r, dict) and effect_of.get(r.get("decision")) == "authorize":
+            date = ledger.parse_date(r.get("date"))
+            if date is not None:
+                out[str(r.get("id"))] = date
+    return out
 
 
 def _collector(rule: str, path: str) -> tuple[list[RunFinding], Any]:
@@ -70,7 +75,8 @@ def _collector(rule: str, path: str) -> tuple[list[RunFinding], Any]:
 
 def package_review(ctx: Context) -> list[RunFinding]:
     out, err = _collector("RECIP-001", LEVERAGED_FILE)
-    decided = _first_authorization(ctx)
+    authorizations = _authorizations(ctx)
+    decided = min(authorizations.values(), default=None)
     components = _items(ctx.data(BOUNDARY_FILE), "components")
     categorization = ctx.facts.get("categorization") if isinstance(ctx.facts, dict) else None
     overlays = _strings(categorization, "overlays")
@@ -84,9 +90,15 @@ def package_review(ctx: Context) -> list[RunFinding]:
                 "package")
             continue
         reviewed = ledger.parse_date(review.get("date"))
-        if reviewed is not None and decided is not None and reviewed > decided:
+        relied = decided
+        if "relied_on_by" in review:
+            relied = authorizations.get(str(review["relied_on_by"]))
+            if relied is None:
+                err(f"{lid}: the review is relied on by {review['relied_on_by']}, which is no "
+                    "authorization decision on the ledger")
+        if reviewed is not None and relied is not None and reviewed > relied:
             err(f"{lid}: the provider's authorization package is reviewed on {reviewed}, after "
-                f"the authorization decision of {decided} that relies on it")
+                f"the authorization decision of {relied} that relies on it")
         if not _items(review, "factors"):
             err(f"{lid}: the review of the provider's authorization package considers no risk "
                 "factor")

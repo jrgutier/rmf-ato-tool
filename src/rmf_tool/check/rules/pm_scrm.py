@@ -6,7 +6,8 @@ countermeasure of each mission-critical item, validated products, and the supply
 mitigations with the threat information behind them.
 
 Table 1 rows say should, so an action the level calls for is taken or carries a reason. The
-risk tolerance level is the run's own: the source gives examples, not classes. Critical items
+risk tolerance level is the run's own, with its basis: Table 1 names the procurement each level
+applies to by example, so a level above its procurement's row is not refused. Critical items
 come from protection.yaml and IA products from inventory.yaml, read only when the run holds them.
 """
 
@@ -33,9 +34,7 @@ TABLE_1 = {
                  "tac-requests", "flag-reports"),
 }
 LEVELS = tuple(TABLE_1)
-# Table 1: the kind of procurement each level applies to.
-PROCUREMENT = {"simplified": "high", "structured": "moderate", "engineered": "low",
-               "assured": "very-low"}
+
 FLAG_ALWAYS = ("critical", "high")  # "select medium" is the PM's choice
 MISSION_ITEMS = ("critical-function", "critical-component")
 MITIGATION_KINDS = ("acquisition", "engineering")  # CNSSP 12 3.e
@@ -66,11 +65,7 @@ def due_diligence(ctx: Context) -> list[RunFinding]:
     if data is None:
         return out
     tolerance = _dict(data.get("risk_tolerance"))
-    level, procurement = tolerance.get("level"), tolerance.get("procurement")
-    expected = PROCUREMENT.get(str(procurement))
-    if expected and level in LEVELS and LEVELS.index(level) < LEVELS.index(expected):
-        err(f"Table 1 applies {expected} risk tolerance to {procurement} procurements; "
-            f"{level} tolerates more risk than that")
+    level = tolerance.get("level")
     taken = _ids(data.get("actions"))
     explained = {str(n.get("action")) for n in _dicts(data.get("not_taken")) if n.get("reason")}
     for action in _owed(level):

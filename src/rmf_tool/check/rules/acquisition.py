@@ -103,8 +103,10 @@ def combined_pathways(ctx: Context) -> list[RunFinding]:
             "its ACAT", PROT_FILE)
     transitions = _dicts(program.get("transitions"))
     reached = {t.get("to") for t in transitions}
+    # DoDI 5000.87 1.2.b: a covered DBS incorporates the software pathway; it moves to no new one.
+    incorporated = {SWP} if acquisition.get("covered_dbs") is True else set()
     for p in pathways[1:]:
-        if p not in reached:
+        if p not in reached and p not in incorporated:
             err(f"no transition point is defined from another pathway to {p}", PROT_FILE)
     artifacts = ctx.run.framework.ids("artifacts", "external_inputs")
     personas = ctx.run.framework.ids("personas")
@@ -141,10 +143,11 @@ def _transition(ctx: Context, t: dict[str, Any], pathways: list[str], artifacts:
     if approach.get("approved_by") != MDA:
         err(f"the MDA or DA approves the transition approach {name}, not "
             f"{approach.get('approved_by')}", PROT_FILE)
-    if PM not in _strs(approach.get("identified_by")):
+    if target == SWP and PM not in _strs(approach.get("identified_by")):
         err(f"the PM and applicable stakeholders identify the transition approach {name}",
             PROT_FILE)
-    if gaps := [k for k in TAILORS if k not in _strs(approach.get("tailors"))]:
+    gaps = [k for k in TAILORS if k not in _strs(approach.get("tailors"))]
+    if target == SWP and gaps:
         err(f"the transition approach {name} does not tailor {', '.join(gaps)}", PROT_FILE)
     approved, moved = _day(approach.get("date")), _day(t.get("date"))
     if approved and moved and approved > moved:
@@ -209,12 +212,11 @@ def operations(ctx: Context) -> list[RunFinding]:
     fielded, ioc = passed.get(entry), passed.get(IOC)
     if entry in passed:
         pss = _dict(_dict(_held(ctx, PROT_FILE).get("program")).get("pss"))
-        if pss.get("approved_by") != MDA:
+        if not pss:
+            err("O&S rests on no product support strategy: program.pss records none")
+        elif pss.get("approved_by") != MDA:
             err(f"O&S is based on an MDA-approved product support strategy: program.pss is "
                 f"approved by {pss.get('approved_by')}, not the MDA")
-        elif (_day(pss.get("date")) or dt.date.max) > (fielded or dt.date.max):
-            err(f"O&S begins at {entry} on {fielded}, before the MDA approved the product "
-                f"support strategy on {pss.get('date')}")
     if IOC in passed and (entry not in passed or (fielded and ioc and fielded > ioc)):
         err(f"the O&S phase begins upon fielding of the first system, which may precede IOC: "
             f"{entry} is not passed by {IOC}")
@@ -243,7 +245,9 @@ def capability_document(ctx: Context) -> list[RunFinding]:
         out.append(make("ACQLC-004", message, PREQ_FILE, None, {"P-15"}))
 
     kind, validated = document.get("kind"), _day(document.get("validated"))
-    if kind == "jcids" and validated is None:
+    # P-15 may read the draft CDD during TMRR; it is validated by the CDD validation point.
+    cdd_passed = CDD_VALIDATION in _passed(_dict(_held(ctx, PROT_FILE).get("program")))
+    if kind == "jcids" and validated is None and cdd_passed:
         err("a JCIDS capability document records when it was validated: "
             "capability_document.validated")
     if kind == "jcids" and validated and validated > JCIDS_END:
@@ -266,7 +270,8 @@ def categorization_documented(ctx: Context) -> list[RunFinding]:
     capabilities document (the CDD, or the equivalent requirements document after JCIDS)."""
     out: list[RunFinding] = []
     categorization = _dict(facts_mod.get(ctx.facts, "categorization"))
-    if not categorization:
+    document = _dict(_held(ctx, PREQ_FILE).get("capability_document"))
+    if not categorization or not document:  # a system with no capability document has none
         return out
 
     def err(message: str) -> None:
@@ -277,8 +282,7 @@ def categorization_documented(ctx: Context) -> list[RunFinding]:
         err("document the categorization in the capability document: "
             "categorization.documented_in")
         return out
-    document = _dict(_held(ctx, PREQ_FILE).get("capability_document"))
-    if document and where != document.get("id"):
+    if where != document.get("id"):
         err(f"the categorization is documented in {where}, not in the capability document "
             f"{document.get('id')} the program's requirements rest on")
     return out

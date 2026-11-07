@@ -6,7 +6,7 @@ T&E. ra.yaml records system_risk. Every risk ra.yaml rates against a part of the
 a threat: each threat event (against the assets it harms), each external connection (against
 its component) and each supply chain risk (against its items), so the designation is judged
 against the union of them. A designation above the worst threat is the organization's to make
-and is not refused.
+and is not refused; it names no threat as its source, only its rationale.
 """
 
 from __future__ import annotations
@@ -56,8 +56,13 @@ def designation(ctx: Context) -> list[RunFinding]:
         err(f"the system's risk is designated {level}, below the {risk} risk of {worst} to "
             f"{', '.join(sorted(set(parts))) or 'a component'}, the most severe threat to any "
             "individual component")
+    if LEVELS.index(level) > LEVELS.index(risk):
+        if not designated.get("rationale"):
+            err(f"the system's risk is designated {level}, above the most severe threat "
+                f"({risk}), with no rationale for the organization's designation")
+        return out
     set_by = designated.get("set_by")
-    if not isinstance(set_by, str) or set_by not in {t[0] for t in threats}:
-        err(f"system_risk is set by {set_by}, which is not a threat ra.yaml "
-            "rates against a component")
+    if set_by not in {t[0] for t in threats if t[1] == risk}:
+        err(f"system_risk is set by {set_by}, which is not a {risk} threat ra.yaml rates "
+            "against a component, the most severe")
     return out
