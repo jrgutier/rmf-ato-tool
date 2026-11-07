@@ -434,7 +434,10 @@ def selection(ctx: Context) -> list[RunFinding]:
             err(f"{sid} has no selection record with due diligence and screening")
             continue
         # p. 254: the lists are "not inclusive"; the record holds the screenings done.
-        for entry in _list(record, "screening"):
+        screening = _list(record, "screening")
+        if not screening:
+            err(f"{sid} was screened against no prohibited supplier list")
+        for entry in screening:
             if entry.get("result") == "listed" and record.get("selected") is True:
                 err(f"{sid} is on the {entry.get('list')} list yet selected; a prohibited "
                     "supplier is excluded from procurement")
@@ -649,9 +652,9 @@ def response(ctx: Context) -> list[RunFinding]:
             err(f"the response to {aid} decides {decision.get('action')}, which is not among "
                 "the alternatives evaluated")
         reach, level = r.get("reach"), decision.get("level")
-        # p. 298: the risk executive may delegate a decision; a recorded delegation stands.
+        # p. 298: the risk executive (PER-RE) may delegate a decision; its delegation stands.
         if reach in REACH and level in REACH and REACH.index(level) < REACH.index(reach) \
-                and not decision.get("delegated_by"):
+                and decision.get("delegated_by") != "PER-RE":
             err(f"the response to {aid} is decided at {level} level for an impact that "
                 f"reaches the {reach}")
     return out
