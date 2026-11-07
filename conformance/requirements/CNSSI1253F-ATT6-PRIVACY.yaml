@@ -10,7 +10,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "The Privacy Overlays support the Categorize and Select steps of the National Institute of Standards, and Technology (NIST) Risk Management Framework (RMF). The Privacy Overlays identify security and privacy control specifications required to protect Personally Identifiable Information (PII) in National Security Systems (NSS) and reduce privacy risks to individuals, agencies, and organizations throughout the information lifecycle. The Privacy Overlays do not supersede or change privacy requirements established by statutes, regulations, Executive Orders (EO), or applicable Federal policies or alter any agency authorities. Where certain activities are not required for NSS by relevant authorities, the Privacy Overlays may still require the activities for NSS to reduce privacy risk levels at as matter of policy. Agencies have significant flexibility in implementing the RMF, including these Privacy Overlays, as long as they are meeting all applicable requirements and effectively managing security and privacy risk. Systems used for activities under EO 12333, both classified and unclassified, process PII, including United States Persons Information (USPI) about U.S. citizens and lawful resident aliens, as well as information about foreign nationals.1 The Privacy Act of 1974, as amended, (hereinafter Privacy Act) protects records about U.S. citizens and lawful resident aliens (collectively called U.S. Persons, or USP) maintained in systems of records. Additional policies protect PII about U.S. citizens, lawful permanent residents, and foreign nationals.2 Therefore, NSS must apply the Privacy Overlays to protect PII about USP and foreign nationals.3 Note, applying the Privacy Overlays protects PII in NSS but does not create new legal obligations nor grant any new rights or privileges to individuals that did not already exist."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 5 is held by PIIC-001; sentences 1 to 4 describe the overlays."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.overlay.yaml", "expect": "applies no Privacy Overlay", "asserts": "NSS must apply the Privacy Overlays to protect PII: a system processing PII with no Privacy Overlay fails", "claim": "constraint", "sentence": "Therefore, NSS must apply the Privacy Overlays to protect PII about USP and foreign nationals.3"}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0002"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 1, "anchor": "PII about foreign nationals may present varied privacy and security risks to"}
@@ -28,7 +30,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "The Fair Information Practice Principles (FIPPs)5 inform Federal statutes and laws, including the Privacy Act, and are critical to how the government approaches information management, including the processing of PII. Implementing the FIPPS, the Privacy Act established the requirement for “appropriate administrative, technical, and physical safeguards to ensure the security and confidentiality of records” and to “protect... the integrity” of systems. 6 Fifty years after the establishment of the Privacy Act, as technology and threats to technology evolve, organizations continue to modernize how they protect information. NIST Special Publication (SP) 800-53 provides the current catalog of security and privacy controls for federal systems to protect information. CNSSI No. 1253 Appendix D Tables D-1 through D-20 establish a Privacy Implementation Considerations column, which identifies controls that are not included in the privacy control baseline but may introduce privacy risk if selected to meet security objectives. CNSSI No. 1253 requires that the privacy control baseline must be selected regardless of whether or not the system processes PII. The Privacy Overlays complement the privacy control baseline by identifying additional controls that must be selected for systems that create, collect, use, process, store, maintain, disseminate, disclose, or dispose of (collectively referred to as “process”)7 PII based on the privacy risk for the system as discussed in this document. System owners must consult with the Senior Agency Official for Privacy (SAOP), or designee to determine the complete list of applicable privacy controls and privacy requirements for an NSS that processes PII. Building privacy safeguards into IT systems helps prevent the loss, breach, misuse, or abuse of data, or processing data in unintended ways."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 5 is held by PIIC-001; the privacy control baseline of sentence 3 is selected for every system by rmf baseline resolve, and sentences 1, 2 and 4 describe the overlays."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.selected.yaml", "expect": "is selected without the approval of the SAOP or designee", "asserts": "System owners consult the SAOP or designee on the applicable privacy controls: each Privacy Overlay selected is approved by the SAOP or designee", "claim": "constraint", "sentence": "System owners must consult with the Senior Agency Official for Privacy (SAOP), or designee to determine the complete list of applicable privacy controls and privacy requirements for an NSS that processes PII."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0004"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 2, "anchor": "“Establish appropriate administrative, technical, and physical safeguards to ensure the security and"}
@@ -384,7 +388,9 @@ requirements:
     locator: "3.3"
     context: "Assumptions The Privacy Overlays are based on the following assumptions about PII that drive the control selections:"
     statement: "Follow the two-question approach below to apply the Privacy Overlays.19 Consult with the SAOP, or designee, to determine the complete list of applicable privacy controls for an NSS that processes PII."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 2 is held by PIIC-001; following the two-question approach is the reasoning of the overlay selection, prose in the C-2 playbook."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.selected.yaml", "expect": "is selected without the approval of the SAOP or designee", "asserts": "Consult with the SAOP or designee to determine the applicable privacy controls: each Privacy Overlay selected for an NSS that processes PII is approved by the SAOP or designee", "claim": "constraint", "sentence": "Consult with the SAOP, or designee, to determine the complete list of applicable privacy controls for an NSS that processes PII."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0047"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 12, "anchor": "Question 1: Does the system process any PII other than, or in"}
@@ -419,7 +425,9 @@ requirements:
     locator: "4.2"
     context: "Privacy Overlays Relationship to Categorize and Select in the Risk"
     statement: "If a system has logs of any type that include PII, then the ACCT Overlay is required. If a system owner believes that the system does not have any logs that include PII, then the system owner must consult with the SAOP, or designee, to confirm that the logs do not have any PII and do not require a Privacy Overlay."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 1 is held by PIIC-001; the confirmation of sentence 2 is the logs_pii field of the SAOP approval, which PIIC-001 requires for a PII system (PIIC-001.unconfirmed.yaml), a presence check."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.logs.yaml", "expect": "the ACCT Overlay is not applied", "asserts": "If a system has logs that include PII, then the ACCT Overlay is required: logs with PII and no ACCT Overlay fail", "claim": "constraint", "sentence": "If a system has logs of any type that include PII, then the ACCT Overlay is required."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0051"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 12, "anchor": "For systems that require only the Accountability Overlay, the impact value for"}
@@ -559,8 +567,11 @@ requirements:
     locator: "4.2.b"
     context: "SC-13, CRYPTOGRAPHIC PROTECTION Parameter Value:"
     statement: "b. Next, consider the risk levels of the factors collectively and determine the overall privacy risk level of the PII, and by extension of the system. The Privacy Overlays do not follow a high watermark approach for evaluating privacy risk factors. Agencies may weight factors equally or weight them corresponding to the specific circumstances or context of the PII or system. Additionally, if a factor is a higher risk level than all other factors for the system, the agency could select the lower risk level and tailor in supplemental controls that specifically address the risk of the outlying factor. Appendix D provides system risk analysis use cases. The SAOP, or designee, must approve the Privacy Overlays selected for the system."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 3 is held by PIIC-001; sentence 1 describes how privacy risk is weighed, and sentence 2 is a permission sought as a ruling."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.selected.yaml", "expect": "is selected without the approval of the SAOP or designee", "asserts": "The SAOP or designee approves the Privacy Overlays selected for the system: an overlay selected without that approval fails", "claim": "constraint", "sentence": "The SAOP, or designee, must approve the Privacy Overlays selected for the system."}]
     work_item: "WI-17"
+    ruling_sought: [{"sentence": "Agencies may weight factors equally or weight them corresponding to the specific circumstances or context of the PII or system.", "reason": "A permission: agencies may weight the privacy risk factors equally or by context; either choice is allowed, so no run can fail it."}]
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0068"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 94, "anchor": "Select the applicable control set – Low, Moderate, or High."}
     kind: "lettered"
@@ -582,7 +593,9 @@ requirements:
     locator: "1"
     context: ""
     statement: "NSS administrators will consult with the SAOP, or their designees, and may consult with agency legal counsel, through a system-specific analyses of the relevant privacy risks to individuals and organizations, as well as the underlying legal, policy, and regulatory authorities, to determine the complete list of privacy controls that are applicable to an individual NSS that processes PII. NSS administrators also should review the privacy controls and make any tailoring determinations.4 Tailoring is a critical activity to ensure informed risk management decisions reflect safeguards needed to support ability to execute its mission."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 1 is held by PIIC-001 for the overlay selection (legal counsel is a permission); reviewing the privacy controls for tailoring (sentence 2) is S-2, and sentence 3 describes tailoring."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.selected.yaml", "expect": "is selected without the approval of the SAOP or designee", "asserts": "NSS administrators consult with the SAOP or designees to determine the privacy controls applicable to an NSS that processes PII: each Privacy Overlay selected is approved by the SAOP or designee", "claim": "constraint", "sentence": "NSS administrators will consult with the SAOP, or their designees, and may consult with agency legal counsel, through a system-specific analyses of the relevant privacy risks to individuals and organizations, as well as the underlying legal, policy, and regulatory authorities, to determine the complete list of privacy controls that are applicable to an individual NSS that processes PII."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253F-ATT6-PRIVACY-0071"
     citation: {"ref": "CNSSI1253F-ATT6-PRIVACY", "page": 2, "anchor": "As new programs are developed and old programs renewed, systematically identifying the"}

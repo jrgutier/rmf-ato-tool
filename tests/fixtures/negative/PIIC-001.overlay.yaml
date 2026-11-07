@@ -1,0 +1,18 @@
+rule: PIIC-001
+bases:
+- pii
+description: a system processing PII with no Privacy Overlay applied
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: []
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - PIIC-001
+  also:
+  - TLR-003
+  messages:
+  - the system processes PII and applies no Privacy Overlay (low, moderate or high)

@@ -41,8 +41,8 @@
       "properties": {
         "c": {
           "$ref": "#/$defs/impact",
-          "x-enforces": ["REQ-FIPS199-0010"],
-          "title": "System confidentiality impact level: one of the three levels of potential impact, low, moderate or high"
+          "x-enforces": ["REQ-FIPS199-0010", "REQ-FIPS199-0020", "REQ-SP800-60V1R1-0096"],
+          "title": "System confidentiality impact level: one of the three levels of potential impact, low, moderate or high; the value of not applicable cannot be assigned to a security objective of an information system"
         },
         "i": {"$ref": "#/$defs/impact", "title": "System integrity impact level: one of the three levels of potential impact, low, moderate or high"},
         "a": {"$ref": "#/$defs/impact", "title": "System availability impact level: one of the three levels of potential impact, low, moderate or high"},
@@ -88,6 +88,21 @@
           "properties": {
             "value": {"type": "boolean"},
             "approved_by": {"type": "string", "pattern": "^PER-[A-Z0-9]+$"},
+            "date": {"title": "Date of the review of the categorization by the authorizing official or designated representative", "type": "string", "format": "date"},
+            "privacy": {
+              "title": "Approval by the SAOP or designee of the determination whether the system processes PII, of the Privacy Overlays selected, and for a system that processes PII of its security categorization",
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["pii", "by", "date"],
+              "properties": {
+                "pii": {"type": "boolean", "title": "The approved determination whether the system processes PII"},
+                "by": {"type": "string", "pattern": "^PER-[A-Z0-9]+$"},
+                "designee_of": {"title": "PER-PRIV when the approval is by the designee of the SAOP", "type": "string", "pattern": "^PER-[A-Z0-9]+$"},
+                "date": {"type": "string", "format": "date"},
+                "overlays": {"title": "The Privacy Overlays the SAOP or designee approved for the system", "type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+                "logs_pii": {"title": "Whether any log of the system includes PII; false is the SAOP's or designee's confirmation that the logs need no Privacy Overlay", "type": "boolean"}
+              }
+            },
             "set_by_task": {"$ref": "#/$defs/task_id"},
             "sources": {"$ref": "#/$defs/sources"}
           }

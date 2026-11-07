@@ -14,11 +14,15 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
+from rmf_tool.run.authorization import parse_date as ledger_day
 from rmf_tool.run.model import FACTS_FILE
 
 INFOTYPES_FILE = "artifacts/data/infotypes.yaml"
 C2, P12 = "C-2", "P-12"
 LEVELS = ("low", "moderate", "high")
+# FIPS 199 and SP 800-60: not applicable is a value for the confidentiality of an information
+# type only, never for a system, whose floor is low.
+NOT_APPLICABLE = "not-applicable"
 CLASSIFICATIONS = ("unclassified", "confidential", "secret", "top-secret")
 OBJECTIVES = {"c": "confidentiality", "i": "integrity", "a": "availability"}
 # SP 800-60v1r1 Step 3 and FIPS 199 section 3: organization, environment, mission, use and data
@@ -43,7 +47,17 @@ def _dicts(items: Any) -> list[dict[str, Any]]:
 
 
 def _rank(value: Any) -> int:
-    return LEVELS.index(value) if value in LEVELS else -1
+    """low, moderate and high in order, not applicable below low, anything malformed below that."""
+    if value in LEVELS:
+        return LEVELS.index(value)
+    return -1 if value == NOT_APPLICABLE else -2
+
+
+def _system_mark(levels: Iterator[str | None]) -> str | None:
+    """The high-water mark the system's value is judged against: not applicable on every
+    information type leaves the system at low."""
+    mark = max(levels, key=_rank, default=None)
+    return LEVELS[0] if mark == NOT_APPLICABLE else mark
 
 
 def _types(ctx: Context) -> list[dict[str, Any]]:
@@ -85,7 +99,7 @@ def high_water(ctx: Context) -> list[RunFinding]:
     adjusted = {(_key(a.get("objective")), _key(a.get("to")))
                 for a in _dicts(cat.get("adjustments"))}
     for key, name in OBJECTIVES.items():
-        mark = max((_level(t, key) for t in types), key=_rank, default=None)
+        mark = _system_mark(_level(t, key) for t in types)
         value = cat.get(key)
         if _rank(value) < _rank(mark):
             err(f"{name} is {value}, below the high-water mark {mark} of the information types")
@@ -158,6 +172,9 @@ def information_types(ctx: Context) -> list[RunFinding]:
         ident = info.get("id")
         if not info.get("selection_basis"):
             err(f"{ident} records no basis for selecting the information type")
+        if not isinstance(info.get("privacy"), bool):
+            err(f"{ident} does not identify whether the information type is personally "
+                "identifiable information")
         if info.get("privacy") is True and not info.get("pii_identification"):
             err(f"{ident} holds PII and does not say how the PII was identified")
         if not _handling(info):
@@ -178,6 +195,69 @@ def information_types(ctx: Context) -> list[RunFinding]:
     return out
 
 
+SAOP, C3 = "PER-PRIV", "C-3"
+REVIEWERS = ("PER-AO", "PER-AODR")
+PRIVACY_OVERLAY = "CNSSI1253F-ATT6-PRIVACY"
+PRIVACY_LEVELS = tuple(f"{PRIVACY_OVERLAY}-{x}" for x in ("LOW", "MODERATE", "HIGH"))
+ACCT = f"{PRIVACY_OVERLAY}-ACCT"
+
+
+def privacy_approval(ctx: Context) -> list[RunFinding]:
+    """PIIC-001: the SAOP or designee approves the determination whether the system processes
+    PII and the Privacy Overlays selected, a system processing PII applies a Privacy Overlay (and
+    the ACCT Overlay when its logs include PII), and the SAOP approves its categorization before
+    the authorizing official or designated representative reviews it."""
+    if C3 not in scope.active_tasks(ctx.run):
+        return []
+    cat = facts_mod.get(ctx.facts, "categorization")
+    approved = cat.get("approved") if isinstance(cat, dict) else None
+    if not isinstance(approved, dict) or approved.get("value") is not True:
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("PIIC-001", message, FACTS_FILE, None, {C3}))
+
+    reviewer = approved.get("approved_by")
+    if reviewer not in REVIEWERS:
+        err("the security categorization is reviewed by the authorizing official or designated "
+            f"representative, not {reviewer}")
+    privacy = approved.get("privacy")
+    if not isinstance(privacy, dict):
+        err("the determination whether the system processes PII and whether the Privacy Overlay "
+            "applies is not approved by the SAOP or designee")
+        return out
+    by = privacy.get("by")
+    if SAOP not in (by, privacy.get("designee_of")):
+        err(f"the PII determination is approved by {by}, not the SAOP or designee")
+    pii = ctx.processes_pii
+    if privacy.get("pii") is not pii:
+        err(f"the approved PII determination is {privacy.get('pii')}, and the information types "
+            f"{'hold' if pii else 'hold no'} PII")
+    overlays = {o for o in _list(cat.get("overlays")) if isinstance(o, str)}
+    if pii and not overlays & set(PRIVACY_LEVELS):
+        err("the system processes PII and applies no Privacy Overlay (low, moderate or high)")
+    logs = privacy.get("logs_pii")
+    if pii and not isinstance(logs, bool):
+        err("the system processes PII and the SAOP or designee has not confirmed whether its "
+            "logs include PII")
+    if logs is True and ACCT not in overlays:
+        err("the system has logs that include PII, and the ACCT Overlay is not applied")
+    agreed = {o for o in _list(privacy.get("overlays")) if isinstance(o, str)}
+    for overlay in sorted(o for o in overlays - agreed if o.startswith(PRIVACY_OVERLAY)):
+        err(f"the Privacy Overlay {overlay} is selected without the approval of the SAOP or "
+            "designee")
+    if pii:
+        signed, reviewed = (ledger_day(privacy.get("date")), ledger_day(approved.get("date")))
+        if reviewed is None:
+            err("the categorization of a system processing PII records no date of the "
+                "authorizing official's review, so the SAOP approval cannot be shown before it")
+        elif signed is not None and signed > reviewed:
+            err(f"the SAOP approved the categorization of a system processing PII on {signed}, "
+                f"after the authorizing official's review of {reviewed}")
+    return out
+
+
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("CATG-001", high_water), ("CATG-002", handling_floors),
-                ("CATG-003", information_types))
+                ("CATG-003", information_types), ("PIIC-001", privacy_approval))

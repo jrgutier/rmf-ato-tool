@@ -250,6 +250,15 @@ mutations:
     - control: au-2
       frequency: monthly
       origin: strategy
+    - control: ac-2
+      frequency: monthly
+      origin: strategy
+    - control: ia-2
+      frequency: monthly
+      origin: strategy
+    - control: sc-7
+      frequency: monthly
+      origin: strategy
     sources:
     - INT-042.A1
 - op: set_field
@@ -363,3 +372,18 @@ mutations:
   file: artifacts/data/changes.yaml
   path: changes.3.privacy_impact
   value: false
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [CNSSI1253F-ATT6-PRIVACY-MODERATE]
+- op: set_field
+  file: facts.yaml
+  path: categorization.approved.privacy
+  value: {pii: true, by: PER-PRIV, date: '2026-10-29', overlays: [CNSSI1253F-ATT6-PRIVACY-MODERATE],
+    logs_pii: false}
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - {id: AS-ADD-3, holds: false, rationale: The relay has no cross-domain connection., sources: [INT-028.A2]}'
+  new: "  - {id: AS-ADD-3, holds: false, rationale: The relay has no cross-domain connection., sources: [INT-028.A2]}\n  - {id: AS-PRV-1, holds: true, rationale: Operators complete privacy training before an account is issued., sources: [INT-028.A2]}"
+- op: resolve_baseline
+  file: baseline.json

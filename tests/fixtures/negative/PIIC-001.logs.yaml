@@ -1,0 +1,14 @@
+rule: PIIC-001
+bases:
+- pii
+description: logs that include PII with no ACCT Overlay
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.approved.privacy.logs_pii
+  value: true
+expect:
+  errors:
+  - PIIC-001
+  messages:
+  - the system has logs that include PII, and the ACCT Overlay is not applied

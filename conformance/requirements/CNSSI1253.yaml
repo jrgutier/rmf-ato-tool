@@ -97,7 +97,8 @@ requirements:
     locator: "1.2.•"
     context: "Differences Between CNSSI No. 1253 and NIST Publications The major differences between this Instruction and the NIST publications relevant to the RMF Steps Categorize and Select are:"
     statement: "• Controls specific to systems that create, collect, use, process, store, maintain, disseminate, disclose, or dispose of (collectively referred to as “process”)5 PII have been removed from the NIST privacy control baseline and incorporated into the Privacy Overlays. The determination whether a system processes PII and whether the Privacy Overlay applies must be approved by the Senior Agency Official for Privacy (SAOP) or designee."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.approver.yaml", "expect": "not the SAOP or designee", "asserts": "The determination whether a system processes PII is approved by the SAOP or designee, not another official", "claim": "constraint", "sentence": "The determination whether a system processes PII and whether the Privacy Overlay applies must be approved by the Senior Agency Official for Privacy (SAOP) or designee."}, {"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.determination.yaml", "expect": "the approved PII determination", "asserts": "The approved determination whether a system processes PII matches the information types", "claim": "constraint", "sentence": "The determination whether a system processes PII and whether the Privacy Overlay applies must be approved by the Senior Agency Official for Privacy (SAOP) or designee."}, {"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.overlay.yaml", "expect": "applies no Privacy Overlay", "asserts": "A system that processes PII applies the Privacy Overlay", "claim": "constraint", "sentence": "The determination whether a system processes PII and whether the Privacy Overlay applies must be approved by the Senior Agency Official for Privacy (SAOP) or designee."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253-0013"
     citation: {"ref": "CNSSI1253", "page": 6, "anchor": "Tables D-1 through D-20 in Appendix D include a Privacy Implementation Considerations"}
@@ -313,7 +314,9 @@ requirements:
     locator: "2.5.1.•"
     context: "Relationship between Privacy Control Baseline and Privacy Overlays"
     statement: "• Systems that process17 PII will implement both the NSS Privacy Control Baseline and the appropriate Privacy Overlay."
-    status: "candidate"
+    status: "partial"
+    reason: "The Privacy Overlay is held by PIIC-001; the NSS Privacy Control Baseline is selected for every system by rmf baseline resolve and kept by GEN-STALE-001, which no item here cites."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.overlay.yaml", "expect": "applies no Privacy Overlay", "asserts": "Systems that process PII implement the appropriate Privacy Overlay: a system processing PII with none fails", "claim": "constraint", "sentence": "• Systems that process17 PII will implement both the NSS Privacy Control Baseline and the appropriate Privacy Overlay."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253-0040"
     citation: {"ref": "CNSSI1253", "page": 11, "anchor": "While some systems may be designed specifically to process PII, in other"}
@@ -383,7 +386,9 @@ requirements:
     locator: "3.1.1.1"
     context: "Determine Impact Levels for Information Types To determine impact levels for information types, the following activities are completed:"
     statement: "1. Identify all types of information processed, stored, or transmitted by the system, including whether the information is PII. The determination whether a system processes PII must be approved by the SAOP or designee."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 2 is held by PIIC-001; sentence 1 is held by CATG-003, which refuses an information type that does not say whether it is PII, a presence check the judge caps at partial."
+    evidence: [{"kind": "rule", "target": "CATG-003", "fixture": "tests/fixtures/negative/CATG-003.privacy.yaml", "expect": "does not identify whether the information type is personally", "asserts": "Each type of information processed by the system says whether the information is PII", "claim": "constraint", "sentence": "Identify all types of information processed, stored, or transmitted by the system, including whether the information is PII."}, {"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.approver.yaml", "expect": "not the SAOP or designee", "asserts": "The determination whether a system processes PII is approved by the SAOP or designee, not another official", "claim": "constraint", "sentence": "The determination whether a system processes PII must be approved by the SAOP or designee."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253-0049"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "Determine each information type’s provisional security impact level, and adjust the information"}
@@ -402,7 +407,8 @@ requirements:
     locator: "3.1.2"
     context: "Determine Impact Levels for the System"
     statement: "Once the potential security impact level for each information type on the system is determined, the overall high water mark for each security objective must be determined which is the security categorization for the system. To do this:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.below.yaml", "expect": "below the high-water mark", "asserts": "The security categorization for the system is the overall high water mark for each security objective over the impact level of each information type: a system value below it fails", "claim": "constraint", "sentence": "Once the potential security impact level for each information type on the system is determined, the overall high water mark for each security objective must be determined which is the security categorization for the system."}]
     work_item: "WI-13"
   - id: "REQ-CNSSI1253-0051"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "For each security objective, determine the overall high water mark for information"}
@@ -410,8 +416,11 @@ requirements:
     locator: "3.1.2.1"
     context: "Determine Impact Levels for the System To do this:"
     statement: "1. For each security objective, determine the overall high water mark for information types on the system (see FIPS 199) and make any necessary adjustments (see NIST SP 800-60, Volume I, Section 4.4.2). This results in three distinct high water marks, one for each security objective (confidentiality, integrity, and availability), shown as a trigraph categorization (e.g., L-L-L, M-M-H). The security categorization of a system must not be changed or modified to reflect management decisions to allocate more stringent or less stringent security controls. The tailoring guidance in Section 3.2.2 should be used to address these issues."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 1 is held by CATG-001 both ways; sentence 2 recommends the tailoring guidance, held in the C-2 playbook as prose, and is sought as a ruling."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "with no recorded adjustment", "asserts": "The security categorization is not changed to allocate more stringent security controls: a value raised above the high water mark with no recorded adjustment fails", "claim": "constraint", "sentence": "The security categorization of a system must not be changed or modified to reflect management decisions to allocate more stringent or less stringent security controls."}, {"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The tailoring guidance at S-2 addresses control stringency, never the security categorization", "sentence": "The tailoring guidance in Section 3.2.2 should be used to address these issues."}]
     work_item: "WI-13"
+    ruling_sought: [{"sentence": "The tailoring guidance in Section 3.2.2 should be used to address these issues.", "reason": "A recommendation: the tailoring guidance should be used for control stringency; it names where to go, and no run can fail it beyond sentence 1."}]
   - id: "REQ-CNSSI1253-0052"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "Document the security categorization results in the security plan."}
     kind: "lettered"
@@ -425,7 +434,8 @@ requirements:
     locator: "3.1.2.3"
     context: "Determine Impact Levels for the System To do this:"
     statement: "3. Obtain the SAOP’s, or designee’s, approval of the security categorization for systems that process PII."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.order.yaml", "expect": "after the authorizing official's review", "asserts": "The SAOP's approval of the security categorization for systems that process PII is obtained before the authorizing official's review", "claim": "constraint", "sentence": "Obtain the SAOP’s, or designee’s, approval of the security categorization for systems that process PII."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253-0054"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "Obtain AO’s or AO’s designated representative’s approval of the security categorization."}
@@ -485,7 +495,9 @@ requirements:
     locator: "3.2.2.1"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "1. Apply any applicable overlay(s). To determine applicability of an overlay, refer to the questions provided in the Applicability section of each overlay document. The SAOP or designee must approve the determination as to whether a system processes PII and whether the Privacy Overlay applies."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 3 is held by PIIC-001; applying any applicable overlay and answering each overlay's applicability questions (sentences 1 and 2) are the overlay applicability of the I-8 OVS rules, not this work item."
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.approver.yaml", "expect": "not the SAOP or designee", "asserts": "The SAOP or designee approves the determination whether a system processes PII, not another official", "claim": "constraint", "sentence": "The SAOP or designee must approve the determination as to whether a system processes PII and whether the Privacy Overlay applies."}, {"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.overlay.yaml", "expect": "applies no Privacy Overlay", "asserts": "A system that processes PII applies the Privacy Overlay: the determination whether the Privacy Overlay applies follows the PII determination", "claim": "constraint", "sentence": "The SAOP or designee must approve the determination as to whether a system processes PII and whether the Privacy Overlay applies."}]
     work_item: "WI-17"
   - id: "REQ-CNSSI1253-0062"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "If the use of multiple overlays results in conflicts between the application"}

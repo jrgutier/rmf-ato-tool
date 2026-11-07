@@ -477,7 +477,8 @@ requirements:
     locator: "3.2"
     context: "Table 2: Potential Impact Levels"
     statement: "The potential impact value of not applicable may be applied only to the confidentiality security objective."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity/properties/base", "claim": "constraint", "asserts": "The potential impact value of an information type for integrity is low, moderate or high; not applicable is applied only to the confidentiality security objective", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability/properties/base", "claim": "constraint", "asserts": "The potential impact value of an information type for availability is low, moderate or high; not applicable is applied only to the confidentiality security objective", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The potential impact value of not applicable may be applied to the confidentiality security objective of an information type", "sentence": "The potential impact value of not applicable may be applied only to the confidentiality security objective."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0061"
     citation: {"ref": "SP800-60V1R1", "page": 20, "anchor": "Assign System Security Category"}
@@ -543,7 +544,9 @@ requirements:
     locator: "4.0"
     context: "Table 3: SP 800-60 Process Roadmap"
     statement: "Step 4 | • Review identified security categorizations for the aggregate of information types. • Determine the system security categorization by identifying the security impact level high water mark for each of the security objectives (confidentiality, integrity, availability): SC System X = {(confidentiality, impact), (integrity, impact), (availability, impact)} • Adjust the security impact level high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2. • Assign the overall information system impact level based on the highest impact level for the system security objectives (confidentiality, integrity, availability) • Follow the agency’s oversight process for reviewing, approving, and documenting all determinations or decisions [Section 4.5] | CIO, SAISO; ISSO; Mission Owners; Information Owners"
-    status: "candidate"
+    status: "partial"
+    reason: "The high-water mark, the factor review and recorded adjustments are held by CATG-001 (the rule fan-out is full, so not cited here); no overall information system impact level is recorded as its own field, and the oversight process is held by C-3 and FACTS-001."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system security categorization is the high water mark of the security impact level for each security objective over the aggregate of information types, adjusted by the factors", "sentence": "Step 4 | • Review identified security categorizations for the aggregate of information types. • Determine the system security categorization by identifying the security impact level high water mark for each of the security objectives (confidentiality, integrity, availability): SC System X = {(confidentiality, impact), (integrity, impact), (availability, impact)} • Adjust the security impact level high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2. • Assign the overall information system impact level based on the highest impact level for the system security objectives (confidentiality, integrity, availability) • Follow the agency’s oversight process for reviewing, approving, and documenting all determinations or decisions [Section 4.5] | CIO, SAISO; ISSO; Mission Owners; Information Owners"}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0069"
     citation: {"ref": "SP800-60V1R1", "page": 21, "anchor": "Output: Security Categorization | • Output that can be used as input"}
@@ -775,7 +778,9 @@ requirements:
     locator: "4.2.1"
     context: "FIPS 199 Security Categorization Criteria"
     statement: "Impact levels (plural), as used here, refers to low, moderate, high, or not applicable values assigned to each security objective (i.e., confidentiality, integrity, and availability) used in expressing the security category of an information type or information systems. The value of not applicable only applies to information types and not to information systems."
-    status: "candidate"
+    status: "partial"
+    reason: "The information type schema allows not applicable for confidentiality and the system schema does not; categorization is optional in facts.yaml until C-2, and CATG-001, which refuses a system value below low, is at its fan-out limit, so no rule item pairs the system leg."
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The value of not applicable applies to the confidentiality of information types", "sentence": "The value of not applicable only applies to information types and not to information systems."}, {"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "asserts": "The value of not applicable does not apply to information systems: their confidentiality is low, moderate or high", "sentence": "The value of not applicable only applies to information types and not to information systems."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0097"
     citation: {"ref": "SP800-60V1R1", "page": 28, "anchor": "SECURITY OBJECTIVE | LOW | MODERATE | HIGH"}
@@ -1093,7 +1098,9 @@ requirements:
     locator: "4.4.1"
     context: "FIPS 199 Process for System Security Categorization"
     statement: "FIPS 199 recognizes that determining the security category of an information system requires additional analysis and must consider the security categories of all information types resident on the information system. For an information system, the potential security impact levels assigned to each of the respective security objectives (confidentiality, integrity, availability) are the highest level (i.e., high water mark) for any one of these objectives that has been determined for the types of information resident on the information system."
-    status: "candidate"
+    status: "partial"
+    reason: "Held by CATG-001 (a system value below the high-water mark of all types fails), which is at its fan-out limit and is not cited here."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system categorization considers the security categories of all information types, the highest value over all information types", "sentence": "FIPS 199 recognizes that determining the security category of an information system requires additional analysis and must consider the security categories of all information types resident on the information system."}]
     work_item: "WI-13"
   - id: "REQ-SP800-60V1R1-0134"
     citation: {"ref": "SP800-60V1R1", "page": 33, "anchor": "Information systems are composed of both computer programs and information. Programs in"}
@@ -1649,7 +1656,8 @@ requirements:
     locator: "3.2"
     context: ""
     statement: "where the acceptable values for potential impact are low, moderate, high, or not applicable.9"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The acceptable values for potential impact on confidentiality are low, moderate, high, or not applicable", "sentence": "where the acceptable values for potential impact are low, moderate, high, or not applicable.9"}]
     work_item: "WI-13"
     promoted: {"reason": "Rejected as no-marker, but it is the second half of the sentence that 0059 starts: it states the values an information type may take, including not applicable, the value WI-13 names."}
   - id: "REQ-SP800-60V1R1-0200"
@@ -1669,7 +1677,9 @@ requirements:
     locator: "4.4"
     context: ""
     statement: "Once the security impact levels have been selected, reviewed and adjusted as necessary for the security objectives of each individual information type processed by an information system, it is necessary to assign a system security category based on the aggregate of information types. The Step 4 activities include the following: (i) review identified security categorizations for the aggregate of information types; (ii) determine the system security categorization by identifying the high water mark for each of the security objectives (confidentiality, integrity, availability) based on the aggregate of the information types; (iii) adjust the high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2; (iv) assign the overall information system impact level based on the highest impact level for the system security objectives; and (v) document all security categorization determinations and decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "Steps (i) to (iii) are held by CATG-001 (fan-out full, not cited); the overall impact level of step (iv) is no field of its own, and documenting the determinations in ART-CAT is prose."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "The system security category is the high water mark for each security objective over the aggregate of the information types, adjusted as necessary by the factors", "sentence": "Once the security impact levels have been selected, reviewed and adjusted as necessary for the security objectives of each individual information type processed by an information system, it is necessary to assign a system security category based on the aggregate of information types. The Step 4 activities include the following: (i) review identified security categorizations for the aggregate of information types; (ii) determine the system security categorization by identifying the high water mark for each of the security objectives (confidentiality, integrity, availability) based on the aggregate of the information types; (iii) adjust the high water mark for each system security objective, as necessary, by applying the factors discussed in section 4.4.2; (iv) assign the overall information system impact level based on the highest impact level for the system security objectives; and (v) document all security categorization determinations and decisions."}]
     work_item: "WI-13"
     promoted: {"reason": "Rejected as no-marker: the opening of section 4.4 states Step 4 and lists its five activities, including documenting all determinations and decisions."}
   - id: "REQ-SP800-60V1R1-0202"
