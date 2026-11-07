@@ -62,7 +62,8 @@ APPROVERS = {"cio": "PER-CIO"}
 PREPARER = "PER-PM"  # E3 2b: the PM or designee completes and coordinates the PIA
 OMB_A130 = "OMB-A-130"
 FIPPS = "FIPPS"  # DoDI 5400.11 5.2: systems are evaluated against the FIPPs
-PLAN_TASKS = ("I-2", "A-5", "M-4")  # tasks that update the plans with what they learned
+# Tasks that update the plans with what they learned.
+PLAN_TASKS = ("I-2", "A-5", "M-1", "M-4", "M-7")
 
 
 def _list(value: Any) -> list[Any]:
@@ -474,8 +475,8 @@ def privacy_plan(ctx: Context) -> list[RunFinding]:
 # --- PRIV-010: the plans are updated by the tasks that learn something --------------------------
 
 def plan_updates(ctx: Context) -> list[RunFinding]:
-    """PRIV-010: once I-2, A-5 or M-4 has written ART-SSP, the plan change log holds its update,
-    and for a system processing PII that update covers the privacy plan."""
+    """PRIV-010: once I-2, A-5, M-1, M-4 or M-7 has written ART-SSP, the plan change log holds
+    its update, and for a system processing PII that update covers the privacy plan."""
     data = _record(ctx, PLAN_REVIEWS)
     doc = ctx.docs.get(SSP_DOC)
     if data is None or doc is None or "S-4" not in scope.active_tasks(ctx.run):

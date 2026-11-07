@@ -96,7 +96,8 @@ tasks:
       Identify and implement the preferred course of action (accept, avoid, mitigate, share or
       transfer) for each determined risk.
     raci: {R: [PER-AODR, PER-PM], A: PER-AO, C: [PER-RE, PER-CISO, PER-PRIV, PER-CCP, PER-IO, PER-ISSE, PER-ISSM], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-RAR, ART-POAM, ART-PKG, ART-ORG-CONTEXT, EXT-ADM]
+    inputs: [ART-RAR, ART-POAM, ART-PKG, ART-ORG-CONTEXT, EXT-ADM, ART-RA]
+    inputs_since: {ART-RA: 0.2.0}
     outputs: [ART-POAM, ART-RAR]
     writes_facts: []
     depends_on: [R-2]
@@ -185,7 +186,8 @@ tasks:
       and update the registry.
     raci: {R: [PER-AODR], A: PER-AO, C: [PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CISO, PER-PRIV], I: [PER-CIO, PER-MDA], when: {PER-PRIV: processes-pii}}
     inputs: [ART-AODM, ART-AUTHREC, ART-PKG]
-    outputs: [ART-AUTHRPT]
+    outputs: [ART-AUTHRPT, ART-REG]
+    outputs_since: {ART-REG: 0.2.0}
     writes_facts: []
     depends_on: [R-4]
     feeds_back_to: []
@@ -199,6 +201,8 @@ tasks:
       - authorization-report.yaml records that the system owner or common control provider
         received and retains the decision and package, how the package is marked and how long it
         is retained, who can read it, and that the AO verifies the terms (AUTHRPT-001).
+      - The system registry is annotated with the decision; ART-REG lists R-5 in touched_by and
+        registration.yaml updates holds the authorization update by R-5 (UPD-001).
     citations:
       - {ref: SP800-37R2, section: "TASK R-5", note: "SDLC phase: New – Implementation/Assessment; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 18, anchor: "Task R-5 Authorization Reporting"}

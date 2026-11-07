@@ -1366,10 +1366,10 @@ def test_a_supporting_role_may_hold_any_raci_letter(framework, real_reg):
 
 def test_closing_a_gap_makes_its_waiver_an_error(framework, real_reg):
     """The rule tightens: p11 cannot close a gap and leave the waiver behind."""
-    framework.index("tasks")["M-1"].data["outputs"].append("ART-SSP")
+    framework.index("tasks")["P-8"].data["outputs"].append("ART-ORG-CONTEXT")
 
     assert messages(contract(framework, real_reg)) == [
-        "waiver no longer needed: M-1 outputs: lacks ART-SSP"]
+        "waiver no longer needed: P-8 outputs: lacks ART-ORG-CONTEXT"]
 
 
 def test_a_forward_ordered_input_is_a_task_scoped_omission_with_a_rationale(real_reg):

@@ -2072,7 +2072,9 @@ requirements:
     locator: "TASK P-18"
     context: ""
     statement: "System registration, in accordance with organizational policy, serves to inform the governing organization of plans to develop the system or the existence of the system; the key characteristics of the system; and the expected security and privacy implications for the organization due to the operation and use of the system. System registration provides organizations with a management and tracking tool to facilitate bringing the system into the enterprise architecture, implementation of protections that are commensurate with risk, and security and privacy posture reporting in accordance with applicable laws, executive orders, directives, regulations, policies, or standards. As part of the system registration process, organizations add the system to the organization-wide system inventory. System registration information is updated with security categorization and system characterization information upon completion of the Categorize step."
-    status: "candidate"
+    status: "partial"
+    reason: "The registration update after the Categorize step fails UPD-001 when C-1 or C-3 did its work without an update entry in registration.yaml. Unheld: 'organizations add the system to the organization-wide system inventory' is the P-18 registry record, which the schema shapes but no rule requires to exist."
+    evidence: [{"kind": "rule", "asserts": "Registration information is updated with the security categorization upon completion of the Categorize step", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.yaml", "expect": "but the registration information is not updated with it", "claim": "constraint", "sentence": "System registration information is updated with security categorization and system characterization information upon completion of the Categorize step.", "holds_when": "ART-REG is produced or seeded"}]
     work_item: "WI-07"
   - id: "REQ-SP800-37R2-0267"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "TASK C-1 | • The characteristics of the system are described and"}
@@ -3646,7 +3648,9 @@ requirements:
     locator: "TASK M-7"
     context: ""
     statement: "When a system is removed from operation, several risk management actions are required. Organizations ensure that controls addressing system disposal are implemented. Examples include media sanitization; configuration management and control; component authenticity; and record retention. Organizational tracking and management systems (including inventory systems) are updated to indicate the system that is being removed from service. Security and privacy posture reports reflect the security and privacy status of the system. Users and application owners hosted on the disposed system are notified as appropriate, and any control inheritance relationships are reviewed and assessed for impact. This task also applies to system elements that are removed from operation. Organizations removing a system from operation update the inventory of information systems to reflect the removal. System owners and security personnel ensure that disposed systems comply with relevant federal laws, regulations, directives, policies, and standards."
-    status: "candidate"
+    status: "partial"
+    reason: "M-7 lists ART-INV and ART-SSP as outputs from contract 0.2.0, and UPD-001 fails when M-7 wrote ART-DISP without a disposal update of the registration information. Unheld: no fixture runs M-7, so the disposal clause is not proven by a failing test; the disposal controls, notifications and compliance sentences rest on the ART-DISP template."
+    evidence: [{"kind": "pinned", "asserts": "Organizational inventory systems are updated to indicate the system being removed from service", "target": "M-7", "field": "outputs", "value": ["ART-DISP", "ART-INV", "ART-SSP"], "claim": "constraint", "sentence": "Organizational tracking and management systems (including inventory systems) are updated to indicate the system that is being removed from service."}]
     work_item: "WI-07"
   - id: "REQ-SP800-37R2-0458"
     citation: {"ref": "SP800-37R2", "page": 133, "anchor": "he following sections describe the roles and responsibilities of key participants involved"}
@@ -5985,7 +5989,9 @@ requirements:
     locator: "TASK C-1"
     context: ""
     statement: "System registration information is updated with the system characterization information (see Task P-18)."
-    status: "candidate"
+    status: "covered"
+    reason: "C-1 lists ART-REG as an output from contract 0.2.0, and UPD-001 fails when C-1 characterized the system without a characterization update of the registration information."
+    evidence: [{"kind": "rule", "asserts": "System registration information is updated with the system characterization information", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.characterization.yaml", "expect": "but the registration information is not updated with it", "claim": "constraint", "sentence": "System registration information is updated with the system characterization information (see Task P-18).", "holds_when": "ART-REG is produced or seeded"}]
     work_item: "WI-07"
     promoted: {"reason": "The last sentence of the rejected C-1 examples paragraph is a duty: registration information is updated with the characterization."}
   - id: "REQ-SP800-37R2-0735"

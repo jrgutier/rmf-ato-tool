@@ -14,7 +14,8 @@ tasks:
       Select an assessor or assessment team with the level of independence the assessment
       requires; the Component CISO is the SCA or formally delegates the role.
     raci: {R: [PER-AODR], A: PER-AO, C: [PER-CIO, PER-CISO, PER-PRIV], I: [PER-PM, PER-SCA], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SSP, ART-ORG-CONTEXT]
+    inputs: [ART-SSP, ART-ORG-CONTEXT, EXT-ORG-POLICY, EXT-PRODUCT]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: []
     writes_facts: []
     depends_on: [S-6]
@@ -49,7 +50,8 @@ tasks:
       and operational test events, before the TRR for the first event that supplies assessment
       evidence.
     raci: {R: [PER-SCA, PER-AODR], A: PER-AO, C: [PER-CISO, PER-PRIV, PER-PM, PER-CCP, PER-IO, PER-ISSM, PER-CDT, PER-OTA], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ, EXT-TEST-STRATEGY]
+    inputs: [ART-SSP, ART-BASELINE, ART-RA, ART-ORG-CONTEXT, EXT-ASSESSMENT-PROCEDURES, ART-REQ, EXT-TEST-STRATEGY, EXT-ORG-POLICY, EXT-PRODUCT]
+    inputs_since: {EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
     outputs: [ART-SAP, ART-AUTHREC]
     writes_facts: []
     depends_on: [A-1, I-2]
@@ -180,7 +182,8 @@ tasks:
       Take initial remediation actions on deficient controls and have the assessor reassess
       them.
     raci: {R: [PER-PM, PER-CCP, PER-SCA, PER-DEV], A: PER-PM, C: [PER-AODR, PER-CISO, PER-PRIV, PER-RE, PER-IO, PER-ISSE, PER-ISSM], I: [], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-SSP, ART-SAP, ART-RA]
+    inputs: [ART-SAR, ART-SSP, ART-SAP, ART-RA, ART-ORG-CONTEXT]
+    inputs_since: {ART-ORG-CONTEXT: 0.2.0}
     outputs: [ART-SAR, ART-SSP]
     writes_facts: []
     depends_on: [A-4]
@@ -215,7 +218,8 @@ tasks:
       Prepare the POA&M for every open finding from the assessment report and every open CAT I
       STIG finding.
     raci: {R: [PER-PM, PER-CCP, PER-ISSM], A: PER-PM, C: [PER-IO, PER-PRIV, PER-CISO, PER-SCA, PER-MDA], I: [PER-AO], when: {PER-PRIV: processes-pii}}
-    inputs: [ART-SAR, ART-RA, ART-ORG-CONTEXT, ART-STIG]
+    inputs: [ART-SAR, ART-RA, ART-ORG-CONTEXT, ART-STIG, ART-SSP]
+    inputs_since: {ART-SSP: 0.2.0}
     outputs: [ART-POAM]
     writes_facts: []
     depends_on: [A-5]

@@ -39,6 +39,7 @@ from rmf_tool.check.rules import (
     system,
     tailoring,
     teststrategy,
+    updates,
     vulnerability,
 )
 
@@ -184,6 +185,7 @@ RULES: dict[str, Rule] = {
     **dict(plans.rules()),
     **dict(protection.rules()),
     **dict(teststrategy.rules()),
+    **updates.RULES,
     **vulnerability.RULES,
     **dict(system.rules()),
     **dict(assets.rules()),
