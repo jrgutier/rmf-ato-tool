@@ -1,0 +1,12 @@
+rule: DASH-001
+bases: [minimal]
+description: only the access control is fed into the dashboard
+mutations:
+  - op: set_field
+    file: artifacts/data/cato.yaml
+    path: dashboard.controls_fed
+    value: [ac-2]
+expect:
+  errors: [DASH-001]
+  messages:
+    - "all security controls are fed into the system-level dashboard view, and au-2, cm-6, ia-2, sc-7, sc-15, si-2 is not"

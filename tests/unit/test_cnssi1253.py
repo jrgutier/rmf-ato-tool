@@ -119,13 +119,16 @@ def test_every_block_cites_a_page_that_resolves(tables):
     # Classified System Overlay, Privacy Overlay control sets, Space Platform Overlay
     assert overlay_pages == 5 + 55 + 9
     inputs = baseline.load_inputs(REPO_ROOT)  # tailoring-inputs.yaml: one block per entry
-    blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"])
+    blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"]) \
+        + len(inputs["policy_controls"])
     specs = sum(len(controls) for controls in overlay_specs.load(REPO_ROOT).values())
     assert specs == 108 + 315  # overlay-specs.yaml: one block per Section 6 control
     # file, tables, overlays, overlay specifications, inputs
     unlisted = 1  # the Space Platform Overlay's controls in neither of its tables
-    assert len(cited) == 1 + 136 + overlay_pages + unlisted + specs + blocks
-    assert all("page" in e.data["citations"][0] for e in cited[1:])
+    from rmf_tool import cnssi1253_params
+    params = 1 + len(cnssi1253_params.load(REPO_ROOT))  # the column's definition, one per row
+    assert len(cited) == 1 + 136 + overlay_pages + unlisted + specs + blocks + params
+    assert all("page" in e.data["citations"][0] for e in cited if e.data["id"] != "CNSSI-1253")
     result = validate(REAL, REPO_ROOT, P3A)
     assert not [f for f in result.findings if "baselines" in (f.path or "")]
 

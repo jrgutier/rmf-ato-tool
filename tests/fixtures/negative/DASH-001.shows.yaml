@@ -1,0 +1,12 @@
+rule: DASH-001
+bases: [minimal]
+description: the dashboard shows no residual risk and covers the environment only
+mutations:
+  - op: set_field
+    file: artifacts/data/cato.yaml
+    path: dashboard.shows
+    value: [findings, poam, security-posture, vulnerability-analysis, compliance-scans, control-effectiveness]
+expect:
+  errors: [DASH-001]
+  messages:
+    - "the dashboard does not visualize residual-risk"

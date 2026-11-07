@@ -1535,6 +1535,135 @@
       "items": {
         "$ref": "#/$defs/source"
       }
+    },
+    "dashboard": {
+      "title": "The system-level dashboard the cATO package demonstrates: the controls fed into it, the results it shows in real time, who has access, and its demonstration (EVAL pp. 10-11, IG pp. 9 and 20, DoD CIO cATO memo p. 1)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controls_fed",
+        "feeds",
+        "shows",
+        "scope",
+        "access",
+        "refresh",
+        "automated_alerts",
+        "demonstrated",
+        "sources"
+      ],
+      "properties": {
+        "controls_fed": {
+          "title": "The security controls fed into the system-level dashboard view: all, or the control IDs",
+          "anyOf": [
+            {
+              "const": "all"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+              }
+            }
+          ]
+        },
+        "feeds": {
+          "title": "The results the dashboard receives",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "testing",
+              "scanning",
+              "monitoring",
+              "performance-metrics",
+              "logging"
+            ]
+          }
+        },
+        "shows": {
+          "title": "What the dashboard visualizes",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "findings",
+              "poam",
+              "security-posture",
+              "residual-risk",
+              "vulnerability-analysis",
+              "compliance-scans",
+              "control-effectiveness"
+            ]
+          }
+        },
+        "scope": {
+          "title": "What its results cover",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "environment",
+              "applications"
+            ]
+          }
+        },
+        "access": {
+          "title": "Who has access to it",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^PER-[A-Z]+$"
+          }
+        },
+        "refresh": {
+          "title": "How current the view is",
+          "enum": [
+            "real-time",
+            "near-real-time",
+            "periodic"
+          ]
+        },
+        "automated_alerts": {
+          "title": "Whether the dashboard raises automated alerts",
+          "type": "boolean"
+        },
+        "demonstrated": {
+          "title": "The demonstration of the dashboard in operation for the package",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "to"
+          ],
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
     }
   },
   "$defs": {

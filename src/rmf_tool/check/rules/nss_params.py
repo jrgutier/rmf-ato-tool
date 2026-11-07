@@ -23,11 +23,15 @@ def nss_values(ctx: Context) -> list[RunFinding]:
     table = cnssi1253_params.load(ctx.run.repo)
     tailored = _tailored_values(_tailoring(ctx) or {})
     out: list[RunFinding] = []
+    # A control's values are judged over all its statements; a duplicate is SSP-DUP-001's.
+    statements: dict[str, tuple[str, dict[str, Any]]] = {}
     for rel, item in family_records(ctx, SSP_DIR, "controls"):
         cid = item.get("control_id")
         if not isinstance(cid, str) or cid not in table or item.get("status") in NO_OWN_VALUES:
             continue
-        recorded: dict[str, Any] = {**tailored.get(cid, {}), **_mapping(item.get("parameters"))}
+        first, values = statements.get(cid, (rel, dict(tailored.get(cid, {}))))
+        statements[cid] = (first, {**values, **_mapping(item.get("parameters"))})
+    for cid, (rel, recorded) in statements.items():
 
         def err(message: str, rel: str = rel) -> None:
             out.append(make("PVAL-001", message, rel, None, {"S-4"}))
