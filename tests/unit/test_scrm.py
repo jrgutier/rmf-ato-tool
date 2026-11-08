@@ -146,3 +146,8 @@ def test_a_low_impact_system_that_inherits_needs_no_sdlc_map(run):
                             "acceptance": "Enclave AO", "sources": ["INT-007.A1"]}
     edit_yaml(run / D / "scrm-plan.yaml", edit)
     assert messages(run, "SCRM-030") == []
+
+
+def test_an_absent_approver_is_the_schema_s_not_a_persona_finding(run):
+    edit_yaml(run / D / "scrm-plan.yaml", lambda d: d["plan"]["approval"].pop("approved_by"))
+    assert not [m for m in messages(run, "SCRM-009") if "approver" in m]
