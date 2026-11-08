@@ -1,0 +1,16 @@
+rule: FACTS-001
+bases:
+- minimal
+description: the security categorization is not approved before control selection
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.approved.value
+  value: false
+expect:
+  errors:
+  - FACTS-001
+  also:
+  - GEN-STALE-001
+  messages:
+  - categorization is not approved (categorization.approved.value must be true before S-1)

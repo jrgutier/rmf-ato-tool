@@ -590,6 +590,12 @@ def _tests(sid: Any, system: Record, err: Err) -> None:
         if origin == INHERITED and not evidence:
             err(f"{sid}: no supporting documentation or artifact is developed for the inherited "
                 f"control {cid}")
+        if origin == "hybrid" and control.get("established_by") != RECEIVING:
+            err(f"{sid}: inheritance for the hybrid control {cid} is not established by the "
+                f"receiving organization, but {control.get('established_by')}")
+        elif origin == "hybrid" and not evidence:
+            err(f"{sid}: no supporting evidence supports the implementation of the hybrid control "
+                f"{cid} within the receiving system")
 
 
 # --- RCP-005: the authorization to use and what follows it ----------------------------------
