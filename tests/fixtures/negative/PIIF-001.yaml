@@ -1,0 +1,11 @@
+rule: PIIF-001
+bases:
+- pii
+description: a system processing PII whose data flows do not name its PII information type
+mutations:
+- {op: set_field, file: artifacts/data/boundary.yaml, path: data_flow.pii_types, value: []}
+expect:
+  errors:
+  - PIIF-001
+  messages:
+  - 'the data flows do not name INF-02, an information type of PII'

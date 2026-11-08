@@ -469,7 +469,9 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring (measures) to establish patterns and discern threats such as:"
     statement: "o Include data flows (including Personal Identifiable Information (PII)"
-    status: "candidate"
+    status: "partial"
+    reason: "PIIF-001 fails, for a system processing PII, data flows that say they carry no PII or leave out an information type of PII that ART-INFOTYPES marks. Unheld: which individual flow carries which type, since boundary.yaml describes the flows as a whole."
+    evidence: [{"kind": "rule", "target": "PIIF-001", "fixture": "tests/fixtures/negative/PIIF-001.flag.yaml", "expect": "the system processes PII and its data flows do not say they carry PII", "claim": "constraint", "holds_when": "the system processes PII and P-11 is active", "asserts": "Data flows include PII: a system processing PII whose data flows do not say they carry PII fails"}]
     work_item: "WI-503"
   - id: "REQ-DODCIO-CATO-EVAL-0055"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Include detailed information for all external connections IAW Appendix E"}

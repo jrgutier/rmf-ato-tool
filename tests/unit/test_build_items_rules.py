@@ -94,3 +94,20 @@ def test_posture_report_listing_the_plan_change_passes(tmp_path):
     edit_yaml(run_dir / "artifacts/data/posture-reports.yaml",
               lambda d: d["reports"][0].update(plan_changes=["1.1"]))
     assert _messages(run_dir, "MRPT-003") == []
+
+
+def test_classified_media_destroyed_under_dodm_and_cnssi_passes(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "run.yaml", lambda d: d["seeded"].append(
+        {"artifact": "ART-DISP", "from_task": "M-7", "path": "artifacts/data/disposal.yaml"}))
+    (run_dir / "artifacts/data/disposal.yaml").write_text(
+        "end_state: No data recoverable.\nenvironment: {restored_to: original}\n"
+        "residual_check: {date: '2027-03-01', no_detrimental_factors: true}\n"
+        "storage: {stored: false}\n"
+        "supply_chain: {non_reuse_elements: [Drives], prevention: Shredded on site.}\n"
+        "media:\n- {class: classified, items: Drives, action: destroy,"
+        " issuances: [DODM5200.01-V3, CNSSI4004.1], sources: [INT-030.A1]}\n"
+        "- {class: unclassified, items: Console disks, action: sanitize,"
+        " issuances: [SP800-88], sources: [INT-030.A1]}\n"
+        "sources: [INT-030.A1]\n", encoding="utf-8")
+    assert _messages(run_dir, "DISP-001") == []

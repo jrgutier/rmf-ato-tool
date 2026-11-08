@@ -130,8 +130,9 @@ requirements:
     locator: "2.2"
     context: "Privacy Risk in NSS"
     statement: "Personally identifiable information (PII) processed in systems (such as in mission or administrative systems or resident in audit logs) creates privacy risk. All organizations have some systems that create, collect, use, process, store, maintain, disseminate, disclose, or dispose of (collectively referred to as “process”) PII; therefore, privacy risk must be addressed at both the organizational and system levels. Failure to address privacy risk can cause individuals and organizations to experience other types of risk (e.g., psychological, reputational, financial, legal, compliance, operational security, and mission) as well as loss of trust and impact to information sharing and missions. Increasingly, failure to properly protect or manage PII may result in misuse of PII data sets (e.g., leveraging credentials of a legitimate user for adversarial purposes causing harm to national security interests, the organization, or individuals)."
-    status: "candidate"
-    reason: "Privacy risk is addressed at the organization level at P-3 and at the system level in ART-RA '## Privacy risk' at P-14 with PER-PRIV responsible, in prose and RACI; no rule fails a run that leaves either level out"
+    status: "partial"
+    reason: "PRIV-007 fails, for a system processing PII, a privacy risk assessment that finds OMB A-130 not to apply to a federal information system, so privacy risk is addressed at the system level. Unheld: privacy risk at the organizational level (P-3), and the other types of risk a failure causes, which are descriptive."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.applies.yaml", "expect": "and the privacy risk assessment finds it does not", "claim": "constraint", "holds_when": "the system processes PII and ART-RA is produced or seeded", "asserts": "Privacy risk is addressed at the system level for systems that process PII: a privacy risk assessment that finds OMB A-130 does not apply fails"}]
     work_item: "WI-140"
   - id: "REQ-CNSSI1253-0016"
     citation: {"ref": "CNSSI1253", "page": 8, "anchor": "While security and privacy are independent and separate disciplines, they are closely"}
@@ -557,8 +558,9 @@ requirements:
     locator: "3.2.2.2"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "2. If the use of multiple overlays results in conflicts between the application or removal of security or privacy controls, the AO (or designee) and SAOP (or designee), in coordination with the information owner/steward, information system owner, and risk executive (function) resolve the conflict."
-    status: "candidate"
-    reason: "S-2 exit criterion 4 and step 3 have the AO and the SAOP resolve an overlay conflict; the coordination with the information owner, system owner and risk executive (function) is unheld"
+    status: "partial"
+    reason: "OVC-001 fails a conflict between overlays recorded in tailoring.yaml that is not resolved by the AO or AODR together with the SAOP, or not in coordination with the information owner, the system owner and the risk executive (function). Unheld: a conflict between applied overlays that tailoring.yaml does not record; no rule computes conflicts from the overlay specifications."
+    evidence: [{"kind": "rule", "target": "OVC-001", "fixture": "tests/fixtures/negative/OVC-001.yaml", "expect": "is not resolved by the AO (or designee) and the SAOP (or designee)", "claim": "constraint", "asserts": "A conflict from multiple overlays is resolved by the AO (or designee) and SAOP (or designee): a conflict resolved by the AO alone fails"}, {"kind": "rule", "target": "OVC-001", "fixture": "tests/fixtures/negative/OVC-001.coordination.yaml", "expect": "is resolved without coordination with", "claim": "constraint", "asserts": "The overlay conflict is resolved in coordination with the information owner, system owner and risk executive (function): a conflict resolved without coordination with the risk executive fails"}]
     work_item: "WI-484"
   - id: "REQ-CNSSI1253-0063"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Use tailoring guidance from Section 2.6 and NIST SP 800-53B, Section 2.4"}
@@ -646,8 +648,9 @@ requirements:
     locator: "3.2.2.f.4"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "4. Use risk assessments, established risk tolerances, or other risk information (e.g., privacy risk assessments if appropriate) to inform tailoring. Evaluate the baseline controls to determine if there are any controls that do not address risks faced by the system; controls that may unnecessarily increase complexity, long term maintenance and assessment costs; or controls that may result in decreased trustworthiness and assurance. Controls should be removed only because of risk-based determinations and not because of an inability to implement a control."
-    status: "candidate"
-    reason: "S-2 reads ART-RA and TLR-002 refuses a removal or downgrade with no basis or not supported by ART-RA (at its fan-out cap); the evaluation for complexity and long-term maintenance and assessment cost is unheld"
+    status: "partial"
+    reason: "TRADE-001 fails tailoring that weighs no cost, schedule or performance trade-off and records complexity, maintenance and assessment cost where weighed; a removal it names must match a remove action, whose basis the schema limits to a risk-based one (no inability to implement). Unheld: that each baseline control is evaluated for not addressing a risk or for decreased trustworthiness, and that risk assessments and tolerances inform it (S-2 reads ART-RA)."
+    evidence: [{"kind": "rule", "target": "TRADE-001", "fixture": "tests/fixtures/negative/TRADE-001.removed.yaml", "expect": "which no remove action of tailoring.yaml removes", "claim": "constraint", "sentence": "Controls should be removed only because of risk-based determinations and not because of an inability to implement a control.", "asserts": "Controls are removed only because of risk-based determinations: a trade-off that removes a control which no remove action removes fails"}]
     work_item: "WI-485"
   - id: "REQ-CNSSI1253-0073"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Since controls and control enhancements are statements of security or privacy functions"}

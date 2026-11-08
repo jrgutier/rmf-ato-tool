@@ -2827,7 +2827,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(1)"
     context: "Figure 2. DoD Information Technology"
     statement: "(1) All acquisitions of DoD IS will comply with Reference (ar) and USD(AT&L) Memorandum (Reference (cz))."
-    status: "candidate"
+    status: "partial"
+    reason: "ACQLC-001 fails a program combining the major capability and software pathways of the Adaptive Acquisition Framework (DoDI 5000.02) with no transition point defined between them. Unheld: compliance with DoDI 5000.02 and the USD(AT&L) memorandum as a whole, which the acquisition rules hold in part."
+    evidence: [{"kind": "rule", "target": "ACQLC-001", "fixture": "tests/fixtures/negative/ACQLC-001.yaml", "expect": "no transition point is defined from another pathway to", "claim": "constraint", "asserts": "All acquisitions of DoD IS comply with the acquisition framework of Reference (ar): a combined pathway with no transition point defined from another pathway fails"}]
     work_item: "WI-30"
   - id: "REQ-DODI8500.01-0329"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "SMs and PMs must use TSN tools, techniques, and practices, including the"}
@@ -2893,7 +2895,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(8)"
     context: "Figure 2. DoD Information Technology"
     statement: "(8) Disposal and destruction of classified hard drives, electronic media, processing equipment components, and the like will be accomplished in accordance with Reference (bj), CNSSI 4004.1 (Reference (dc)), and applicable security controls."
-    status: "candidate"
+    status: "partial"
+    reason: "DISP-001 fails classified media disposed of without DoDM 5200.01 Volume 3 or CNSSI 4004.1 among the issuances disposal.yaml records, and a destruction outside CNSSI 4004.1. Unheld: the applicable security controls (mp-6 is in the baseline), and that the disposal followed the issuances it names."
+    evidence: [{"kind": "rule", "target": "DISP-001", "fixture": "tests/fixtures/negative/DISP-001.destroy.yaml", "expect": "are destroyed, not in accordance with CNSSI 4004.1", "claim": "constraint", "holds_when": "ART-DISP is produced or seeded", "asserts": "Destruction of hard drives and electronic media is accomplished in accordance with CNSSI 4004.1: media destroyed not in accordance with CNSSI 4004.1 fail"}]
     work_item: "WI-421"
   - id: "REQ-DODI8500.01-0336"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Disposal of unclassified electronic media will be accomplished in accordance with the"}
@@ -2901,7 +2905,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(9)"
     context: "Figure 2. DoD Information Technology"
     statement: "(9) Disposal of unclassified electronic media will be accomplished in accordance with the guidelines provided in NIST SP 800-88 (Reference (dd)) and applicable security controls."
-    status: "candidate"
+    status: "partial"
+    reason: "DISP-001 fails unclassified media disposed of without NIST SP 800-88 among the issuances disposal.yaml records. Unheld: the applicable security controls, and that the sanitization followed SP 800-88 in fact."
+    evidence: [{"kind": "rule", "target": "DISP-001", "fixture": "tests/fixtures/negative/DISP-001.yaml", "expect": "which DoDI 8500.01 names for them", "claim": "constraint", "holds_when": "ART-DISP is produced or seeded", "asserts": "Disposal of unclassified electronic media is accomplished per NIST SP 800-88: unclassified media disposed of without SP800-88, which DoDI 8500.01 names for them, fail"}]
     work_item: "WI-421"
   - id: "REQ-DODI8500.01-0337"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Cryptographic products used to protect IT and the information that resides in"}
@@ -3645,7 +3651,9 @@ requirements:
     locator: "ENCLOSURE 3.f"
     context: "Figure 2. DoD Information Technology"
     statement: "f. Ensure that cybersecurity inspections, tests, and reviews are synchronized and coordinated with affected parties and organizations."
-    status: "candidate"
+    status: "partial"
+    reason: "APREP-001 fails an assessment whose notified officials leave out the AO, so the system's tests and assessment are coordinated with the parties they affect. Unheld: inspections and reviews by outside bodies (a readiness inspection) synchronized with the affected parties, which no step plans (WI-422)."
+    evidence: [{"kind": "rule", "target": "APREP-001", "fixture": "tests/fixtures/negative/APREP-001.aonotified.yaml", "expect": "the authorizing official is not among the key organizational officials notified", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Cybersecurity tests and reviews are coordinated with affected parties and organizations: an assessment of which the authorizing official is not among the officials notified fails"}]
     work_item: "WI-422"
   - id: "REQ-DODI8500.01-0423"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "Ensure implementation of IS security measures and procedures, including reporting incidents to"}
@@ -3821,7 +3829,9 @@ requirements:
     locator: "ENCLOSURE 3.g"
     context: "Figure 2. DoD Information Technology"
     statement: "g. Not unilaterally bypass, strain, or test cybersecurity mechanisms. If cybersecurity mechanisms must be bypassed, users will coordinate the procedure with the ISSO and receive written approval from the ISSM."
-    status: "candidate"
+    status: "partial"
+    reason: "BYP-001 fails a recorded bypass of a cybersecurity mechanism whose procedure is not coordinated with the ISSO, or without the ISSM's written approval. Unheld: a bypass, strain or test no one records, and the users' duty not to act unilaterally, which pl-4 rules of behavior carry."
+    evidence: [{"kind": "rule", "target": "BYP-001", "fixture": "tests/fixtures/negative/BYP-001.yaml", "expect": "the bypass has no written approval from the ISSM", "claim": "constraint", "holds_when": "ART-CMP is produced or seeded", "asserts": "If cybersecurity mechanisms must be bypassed, users receive written approval from the ISSM: a bypass with no written approval from the ISSM fails"}, {"kind": "rule", "target": "BYP-001", "fixture": "tests/fixtures/negative/BYP-001.isso.yaml", "expect": "the bypass procedure is not coordinated with the ISSO", "claim": "constraint", "holds_when": "ART-CMP is produced or seeded", "asserts": "Users coordinate the bypass procedure with the ISSO: a bypass procedure not coordinated with the ISSO fails"}]
     work_item: "WI-424"
   - id: "REQ-DODI8500.01-0444"
     citation: {"ref": "DODI8500.01", "page": 51, "anchor": "Not introduce or use software, firmware, or hardware that has not been"}

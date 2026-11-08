@@ -136,6 +136,22 @@
         }
       }
     },
+    "media": {
+      "title": "Each class of media and equipment disposed of, the action taken and the issuances applied (DISP-001): DoDM 5200.01 Volume 3 and CNSSI 4004.1 for classified media, NIST SP 800-88 for unclassified, CNSSI 4004.1 for any destruction",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["class", "items", "action", "issuances", "sources"],
+        "properties": {
+          "class": {"enum": ["classified", "unclassified"]},
+          "items": {"title": "The hard drives, electronic media, processing equipment components and the like", "type": "string", "minLength": 1},
+          "action": {"enum": ["sanitize", "destroy"]},
+          "issuances": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["DODM5200.01-V3", "CNSSI4004.1", "SP800-88", "DODD5015.2"]}},
+          "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
     "sources": {
       "type": "array",
       "minItems": 1,

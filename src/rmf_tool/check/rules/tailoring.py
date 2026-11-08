@@ -613,3 +613,74 @@ def inheritance(ctx: Context) -> list[RunFinding]:
                 "when determining if the common control is adequate to mitigate "
                 "system-specific risks")
     return out
+
+
+# --- TRADE-001: cost, schedule and performance weighed in tailoring -------------------------
+
+TRADE_FACTORS = ("cost", "schedule", "performance")  # SP 800-53B 2.4
+
+
+def trade_offs(ctx: Context) -> list[RunFinding]:
+    """TRADE-001: S-2 records the risk-related issues weighed in deciding which controls to
+    employ, cost, schedule and performance each at least once (SP 800-53B 2.4), and a trade-off
+    that removed a control matches a remove action of tailoring.yaml, whose basis TLR-002
+    holds to a risk-based determination (CNSSI 1253 3.2.2 3.f.4)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("TRADE-001", message, TAILORING, None, {"S-2"}))
+
+    if "trade_offs" not in data:
+        err("tailoring.yaml records no trade-offs of cost, schedule and performance weighed in "
+            "deciding which controls to employ")
+        return out
+    records = [r for r in data.get("trade_offs") or [] if isinstance(r, dict)]
+    weighed = {r.get("factor") for r in records}
+    for factor in TRADE_FACTORS:
+        if factor not in weighed:
+            err(f"tailoring weighs no {factor} trade-off in deciding which controls to employ")
+    removed = {a.get("control_id") for a in _actions(data) if a.get("action") == "remove"}
+    for r in records:
+        if r.get("outcome") != "removed":
+            continue
+        for cid in r.get("controls") or []:
+            if cid not in removed:
+                err(f"a {r.get('factor')} trade-off removes {cid}, which no remove action of "
+                    "tailoring.yaml removes")
+    return out
+
+
+# --- OVC-001: conflicts between overlays, and who resolves them -----------------------------
+
+CONFLICT_DECIDERS = (("PER-AO", "PER-AODR"), ("PER-PRIV",))
+CONFLICT_PARTIES = {"PER-IO": "the information owner", "PER-PM": "the information system owner",
+                    "PER-RE": "the risk executive (function)"}
+
+
+def overlay_conflicts(ctx: Context) -> list[RunFinding]:
+    """OVC-001: a conflict between overlays over applying or removing a control is resolved by
+    the AO or its designee (PER-AODR) and the SAOP, in coordination with the information owner,
+    the system owner and the risk executive (function) (CNSSI 1253 3.2.2.2)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+    for c in data.get("overlay_conflicts") or []:
+        if not isinstance(c, dict):
+            continue
+        what = ", ".join(str(x) for x in c.get("controls") or [])
+        deciders = set(c.get("resolved_by") or [])
+        if not all(deciders & set(group) for group in CONFLICT_DECIDERS):
+            out.append(make("OVC-001", f"the overlay conflict over {what} is not resolved by the "
+                            "AO (or designee) and the SAOP (or designee)", TAILORING, None,
+                            {"S-2"}))
+        parties = set(c.get("coordinated_with") or [])
+        for persona, name in CONFLICT_PARTIES.items():
+            if persona not in parties:
+                out.append(make("OVC-001", f"the overlay conflict over {what} is resolved without "
+                                f"coordination with {name} ({persona})", TAILORING, None,
+                                {"S-2"}))
+    return out

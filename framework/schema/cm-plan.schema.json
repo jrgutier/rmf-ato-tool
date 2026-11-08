@@ -344,6 +344,32 @@
         "REQ-SP800-128-0249"
       ]
     },
+    "bypasses": {
+      "title": "Each bypass of a cybersecurity mechanism: the procedure coordinated with the ISSO and the ISSM's written approval (BYP-001); none when nothing is bypassed",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "mechanism", "procedure", "coordinated_with", "approval", "sources"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^BYP-\\d{2}$"},
+          "mechanism": {"type": "string", "minLength": 1},
+          "procedure": {"type": "string", "minLength": 1},
+          "coordinated_with": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^PER-[A-Z]+$"}},
+          "approval": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["by", "form", "date"],
+            "properties": {
+              "by": {"type": "string", "pattern": "^PER-[A-Z]+$"},
+              "form": {"enum": ["written", "oral"]},
+              "date": {"type": "string", "format": "date"}
+            }
+          },
+          "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
     "sources": {
       "type": "array",
       "minItems": 1,

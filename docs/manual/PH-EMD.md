@@ -251,6 +251,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
 - The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ASMT-007).
+- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001).
 
 **Alignment**
 

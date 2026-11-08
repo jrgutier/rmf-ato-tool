@@ -554,7 +554,9 @@ requirements:
     locator: "2.1.4"
     context: "NIST Risk Management Framework and ISCM"
     statement: "Although frequency requirements may differ, each organizational level receives the benefit of security-related information that is current and applicable to affected processes. RMF Monitor activities that are performed within the context of the ISCM program and support system risk determination on an ongoing basis are foundational for ongoing authorization (OA). When the ISCM program is found to be adequate for determining risk across all (or part) of the organization, ISCM supports OA across all (or part) of the organization. The ISCM program assessment verifies that applicable ISCM results, which may include relevant metrics, are made available to the OA process to make decisions about system authorization. OA is discussed in Section 2.1.7."
-    status: "candidate"
+    status: "partial"
+    reason: "MISCM-001 fails an ongoing authorization decision that reads an ISCM program assessment not yet final or not on the ledger, so the ISCM results it verifies reach the OA process. Unheld: that each organizational level receives current information, and the metrics among the results."
+    evidence: [{"kind": "rule", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.decision.yaml", "expect": "which is no ISCM program assessment", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "sentence": "The ISCM program assessment verifies that applicable ISCM results, which may include relevant metrics, are made available to the OA process to make decisions about system authorization.", "asserts": "The ISCM program assessment verifies ISCM results are made available to the OA process to make decisions: a decision reading an assessment which is no ISCM program assessment fails"}]
     work_item: "WI-281"
   - id: "REQ-SP800-137A-0067"
     citation: {"ref": "SP800-137A", "page": 21, "anchor": "ISCM governance is part of overall organizational governance, which provides oversight to"}
@@ -2911,7 +2913,9 @@ requirements:
     locator: "2.1.7"
     context: ""
     statement: "The ISCM program assessment verifies that ISCM information is available for making OA decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "MISCM-001 fails an ongoing authorization decision that reads an ISCM program assessment the ledger does not record, and one that reads a report before it is final. Unheld: what the assessment verifies of the ISCM information beyond its completeness, which the assessment report states in prose."
+    evidence: [{"kind": "rule", "target": "MISCM-001", "fixture": "tests/fixtures/negative/MISCM-001.decision.yaml", "expect": "which is no ISCM program assessment", "claim": "constraint", "holds_when": "the ledger records an ISCM program assessment", "asserts": "The ISCM program assessment makes ISCM information available for OA decisions: a decision reading an assessment which is no ISCM program assessment fails"}]
     work_item: "WI-281"
     promoted: {"reason": "States that ISCM information is verified available for ongoing authorization decisions, a touchpoint of a run; the extractor rejected the paragraph with its lead-in."}
   - id: "REQ-SP800-137A-0356"

@@ -546,6 +546,33 @@ def triage(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- INDEP-001: officials consulted on assessor independence -----------------------------------
+
+# SP 800-37r2 A-1: the AO consults the Office of the Inspector General, the CIO, the SAOP and the
+# SISO (the Component CISO) to guide and inform decisions on assessor independence. A run has no
+# persona for the Inspector General, so it records the office by name when consulted.
+INDEPENDENCE_ADVISERS = {"PER-CIO": "chief information officer",
+                         "PER-PRIV": "senior agency official for privacy",
+                         "PER-CISO": "senior agency information security officer"}
+
+
+def independence_consultation(ctx: Context) -> list[RunFinding]:
+    """INDEP-001: the determination of assessor independence is informed by the CIO, the SAOP
+    and the SISO the AO consults."""
+    sap = _sap(ctx)
+    if sap is None:
+        return []
+    out, err = _reporter("INDEP-001", SAP_FILE)
+    independence = _block(sap, "assessor_independence")
+    raw = independence.get("consulted")
+    consulted = {str(c) for c in raw} if isinstance(raw, list) else set()
+    for persona, office in INDEPENDENCE_ADVISERS.items():
+        if persona not in consulted:
+            err(f"the decision on assessor independence is not informed by consulting the {office} "
+                f"({persona})")
+    return out
+
+
 # --- ASMT-007: the assessment team --------------------------------------------------------------
 
 def team(ctx: Context) -> list[RunFinding]:

@@ -191,6 +191,7 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
 - The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 - artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
+- scrm-acquisition.yaml procurement_steps incorporates C-SCRM considerations into each step of the procurement and contract management life cycle, and into charge card purchases when the program makes them (SCRMLC-001).
 
 **Alignment**
 
@@ -326,6 +327,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
 - Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
+- tailoring.yaml trade_offs records the cost, schedule and performance trade-offs (and any complexity, maintenance, assessment cost, supply chain or trustworthiness ones) weighed in deciding which controls to employ, a removal matching a remove action (TRADE-001).
+- tailoring.yaml overlay_conflicts records each conflict between overlays resolved by the AO or AODR and the SAOP, in coordination with the information owner, the system owner and the risk executive (function) (OVC-001).
 
 **Alignment**
 
@@ -465,6 +468,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
 - artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM control decisions, critical suppliers in contingency and incident planning, supplier monitoring after award, training content and the supply chain reporting M-5 follows (SCRM-009 to SCRM-012, SCRM-014).
+- cm-plan.yaml bypasses records each bypass of a cybersecurity mechanism on a procedure coordinated with the ISSO and approved in writing by the ISSM (BYP-001).
 
 **Alignment**
 

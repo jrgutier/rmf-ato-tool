@@ -681,6 +681,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - The authorization boundary (that is, the system) is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND and boundary.yaml describe the boundary, network architecture, data flows and components; facts.boundary_id set_by P-11.
+- For a system processing PII, boundary.yaml data_flow says the flows carry PII and names each information type of PII they carry (PIIF-001).
 
 **Alignment**
 

@@ -495,6 +495,37 @@ def posture_changes(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- DISP-001: media disposed of under the issuances DoDI 8500.01 and 8531.01 name ----------
+
+DISPOSAL_FILE = "artifacts/data/disposal.yaml"
+# DoDI 8500.01 Encl 3.18.a(8) and (9); DoDI 8531.01 3.5.j: destruction under CNSSI 4004.1.
+MEDIA_ISSUANCES = {"classified": ("DODM5200.01-V3", "CNSSI4004.1"), "unclassified": ("SP800-88",)}
+DESTRUCTION = "CNSSI4004.1"
+
+
+def disposal_media(ctx: Context) -> list[RunFinding]:
+    """DISP-001: M-7 records each class of media and equipment disposed of with the issuances
+    applied: classified media under DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media
+    under NIST SP 800-88, and any destruction under CNSSI 4004.1."""
+    data = ctx.data(DISPOSAL_FILE)
+    if not _in_play(ctx, "ART-DISP") or not isinstance(data, dict):
+        return []
+    out, err = _collector("DISP-001", DISPOSAL_FILE, "M-7")
+    media = _items(data, "media")
+    if not media:
+        err("disposal.yaml records no class of media or equipment disposed of with the issuances "
+            "applied")
+    for item in media:
+        applied = _strings(item, "issuances")
+        for issuance in MEDIA_ISSUANCES.get(str(item.get("class")), ()):
+            if issuance not in applied:
+                err(f"{item.get('class')} media ({item.get('items')}) are disposed of without "
+                    f"{issuance}, which DoDI 8500.01 names for them")
+        if item.get("action") == "destroy" and DESTRUCTION not in applied:
+            err(f"{item.get('items')} are destroyed, not in accordance with CNSSI 4004.1")
+    return out
+
+
 # --- MISCM-001: the ISCM program assessment a decision reads --------------------------------
 
 def _iscm_report(a: Record, err: Err) -> None:

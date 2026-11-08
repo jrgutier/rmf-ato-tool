@@ -2778,8 +2778,9 @@ requirements:
     locator: "TASK S-5"
     context: ""
     statement: "An important aspect of risk management is the ongoing monitoring of controls implemented within or inherited by an information system. An effective continuous monitoring strategy at the system level is developed and implemented in coordination with the organizational continuous monitoring strategy early in the SDLC (i.e., during initial system design or procurement decision). The system-level continuous monitoring strategy is consistent with and supplements the continuous monitoring strategy for the organization. The system-level strategy addresses monitoring those controls for which monitoring is not provided as part of the continuous monitoring strategy and implementation for the organization. The system-level strategy identifies the frequency of monitoring for controls not addressed by the organization-level strategy and defines the approach to be used for assessing those controls. The system-level continuous monitoring strategy, consistent with the organizational monitoring strategy, defines how changes to the system and the environment of operation81 are to be monitored; how risk assessments are to be conducted; and the security and privacy posture reporting requirements including recipients of the reports. The system-level continuous monitoring strategy can be included in security and privacy plans.82"
-    status: "candidate"
-    reason: "conmon.yaml holds frequencies and recipients; how changes are monitored and how risk assessments are conducted are unheld (WI-410), and no rule reads the strategy's timing in the SDLC."
+    status: "partial"
+    reason: "ISCM-005 fails posture reports that skip the AO, a recipient the strategy's reporting requirements name. Unheld: how changes to the system and environment are monitored and how risk assessments are conducted (WI-410), the strategy's timing early in the SDLC, and its consistency with the organizational strategy."
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "sentence": "The system-level continuous monitoring strategy, consistent with the organizational monitoring strategy, defines how changes to the system and the environment of operation81 are to be monitored; how risk assessments are to be conducted; and the security and privacy posture reporting requirements including recipients of the reports.", "asserts": "The system-level strategy defines the posture reporting requirements including recipients of the reports: monitoring results that do not reach the authorizing official fail"}]
     work_item: "WI-410"
   - id: "REQ-SP800-37R2-0317"
     citation: {"ref": "SP800-37R2", "page": 75, "anchor": "For controls that are not addressed by the organizational continuous monitoring strategy,"}
@@ -3100,8 +3101,9 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "Organizations can conduct self-assessments of controls or obtain the services of an independent control assessor. An independent assessor is an individual or group that can conduct an impartial assessment. Impartiality means that assessors are free from perceived or actual conflicts of interest with respect to the determination of control effectiveness or the development, operation, or management of the system, common controls, or program management controls. The authorizing official determines the level of assessor independence based on applicable laws, executive orders, directives, regulations, policies, or standards. The authorizing official consults with the Office of the Inspector General, chief information officer, senior agency official for privacy, and senior agency information security officer to help guide and inform decisions regarding assessor independence."
-    status: "candidate"
-    reason: "Describes self-assessment and independence; the AO's consultation with the Office of the Inspector General is unheld (WI-408)."
+    status: "partial"
+    reason: "INDEP-001 fails a decision on assessor independence not informed by consulting the CIO, the SAOP and the SISO; ASMT-007 holds the AO's determination of the level of independence and its basis. Unheld: the consultation of the Office of the Inspector General, which a run records by name only, and the first sentence is a permission (self-assessment or an independent assessor)."
+    evidence: [{"kind": "rule", "target": "INDEP-001", "fixture": "tests/fixtures/negative/INDEP-001.yaml", "expect": "the decision on assessor independence is not informed by consulting the", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "The authorizing official consults with the Office of the Inspector General, chief information officer, senior agency official for privacy, and senior agency information security officer to help guide and inform decisions regarding assessor independence.", "asserts": "The authorizing official consults the senior agency official for privacy to guide and inform decisions regarding assessor independence: a decision not informed by consulting the senior agency official for privacy fails"}]
     work_item: "WI-408"
   - id: "REQ-SP800-37R2-0350"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "The system privacy officer is responsible for identifying assessment methodologies and metrics"}
@@ -3550,8 +3552,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "When an information system is under ongoing authorization, the authorization package is presented to the authorizing official via automated reports to provide information in the most efficient and timely manner possible.97 Information to be presented to the authorizing official in assessment reports is generated in the format and with the frequency determined by the organization using information from the information security and privacy continuous monitoring programs."
-    status: "candidate"
-    reason: "Under ongoing authorization the package reaches the AO through automated reports; no field names the tool or the format (WI-409)."
+    status: "partial"
+    reason: "For a cATO, the DoD form of ongoing authorization, DASH-001 fails a dashboard that gives the AO no real-time access to scan results, so the package does not reach the AO by automated report. Unheld: ongoing authorization outside a cATO, and the format and frequency of the assessment information the organization sets."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.feeds.yaml", "expect": "the AO has no real-time access to the results of", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "When an information system is under ongoing authorization, the authorization package is presented to the authorizing official via automated reports to provide information in the most efficient and timely manner possible.97", "asserts": "Under ongoing authorization the authorizing official receives the package via automated reports: a dashboard where the AO has no real-time access to the results of scanning fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0397"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "The assessment reports presented to the authorizing official include information about deficiencies"}
@@ -3559,8 +3562,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "The assessment reports presented to the authorizing official include information about deficiencies in system-specific, hybrid, and common controls (i.e., other than satisfied findings determined by assessors). The authorizing official uses automated security/privacy management and reporting tools or other automated methods, whenever practicable, to access the security and privacy plans and the plans of action and milestones. The authorization documents are updated at an organization-defined frequency using automated or manual processes in accordance with the risk management objectives of the organization.98"
-    status: "candidate"
-    reason: "Deficiencies reach the AO in ART-SAR; the AO's automated access to plans and POA&Ms and the update frequency of the documents are unheld (WI-409)."
+    status: "partial"
+    reason: "ASMT-005 fails an other than satisfied determination statement no finding names, so deficiencies reach the AO in the assessment report; for a cATO, DASH-001 fails a dashboard that does not visualize residual risk, findings or the POA&M for the AO. Unheld: the AO's automated access to the plans outside a cATO, and the organization-defined frequency of updates to the authorization documents."
+    evidence: [{"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.unnamed.yaml", "expect": "no finding names the other than satisfied statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "The assessment reports presented to the authorizing official include information about deficiencies in system-specific, hybrid, and common controls (i.e., other than satisfied findings determined by assessors).", "asserts": "Assessment reports include information about deficiencies, the other than satisfied findings: an other than satisfied statement no finding names fails"}, {"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.shows.yaml", "expect": "the dashboard does not visualize", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "The authorizing official uses automated security/privacy management and reporting tools or other automated methods, whenever practicable, to access the security and privacy plans and the plans of action and milestones.", "asserts": "The authorizing official uses automated reporting tools to access the plans and plans of action: a dashboard that does not visualize what the AO needs fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0398"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "While the objective is to fully automate all components of the authorization"}
@@ -3627,8 +3631,9 @@ requirements:
     locator: "TASK R-2"
     context: ""
     statement: "When the system is operating under an ongoing authorization, the risk determination task is effectively unchanged. The authorizing official analyzes the relevant security and privacy information provided by the automated security/privacy management and reporting tool to determine the current security and privacy posture of the system."
-    status: "candidate"
-    reason: "M-6 feeds back to R-2 with ART-SECRPT; the automated reporting tool is unheld (WI-409)."
+    status: "partial"
+    reason: "For a cATO, DASH-001 fails a dashboard, the automated management and reporting tool, that gives the AO no real-time access to scan results to determine the current posture. Unheld: ongoing authorization outside a cATO, where the AO reads ART-SECRPT at M-6."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.feeds.yaml", "expect": "the AO has no real-time access to the results of", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "asserts": "The authorizing official analyzes the information provided by the automated reporting tool: a dashboard where the AO has no real-time access to the results of scanning fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0405"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "Identify and implement a preferred course of action in response to the"}
@@ -3769,8 +3774,9 @@ requirements:
     locator: "TASK R-4"
     context: ""
     statement: "If control assessments are conducted by qualified assessors with the level of independence104 required, the assessment results support ongoing authorization and may be applied to a reauthorization. Organizational policies regarding ongoing authorization and reauthorization are consistent with laws, executive orders, directives, regulations, and policies."
-    status: "candidate"
-    reason: "Reuse of assessment results for reauthorization is the existing O&M path of WI-08."
+    status: "partial"
+    reason: "ASMT-003 fails a reused self-assessment where independence is required, so only results of assessors with the required independence are applied again. Unheld: reauthorization on the existing O&M path (WI-08), and the consistency of organizational policy with law."
+    evidence: [{"kind": "rule", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "cannot be reused", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "If control assessments are conducted by qualified assessors with the level of independence104 required, the assessment results support ongoing authorization and may be applied to a reauthorization.", "asserts": "Assessment results by assessors with the level of independence required may be applied again: a previous assessment reused when the current assessment requires more independence fails"}]
     work_item: "WI-08"
   - id: "REQ-SP800-37R2-0420"
     citation: {"ref": "SP800-37R2", "page": 93, "anchor": "In accordance with [OMB A-130], an independent evaluation of privacy program and"}
@@ -5746,9 +5752,11 @@ requirements:
     locator: "Denial of Authorization"
     context: "REAUTHORIZATION"
     statement: "For security and privacy assessments associated with reauthorization, organizations leverage security and privacy information generated by the continuous monitoring program and fill in gaps with manual assessments. Organizations may supplement automatically-generated assessment information with manually-generated information in situations where an increased level of assurance is needed. If the security control assessments are conducted by qualified assessors with the necessary independence, use appropriate security standards and guidelines, and are based on the needs of the authorizing official, the assessment results can be applied to the reauthorization.158"
-    status: "candidate"
-    reason: "Reauthorization reuse of continuous monitoring information is the existing O&M path of WI-08."
+    status: "partial"
+    reason: "ASMT-003 fails a reused self-assessment where independence is required, so results applied again come from assessors with the necessary independence. Unheld: reauthorization on the existing O&M path (WI-08), filling the gaps of continuous monitoring with manual assessments; the second sentence is a permission."
+    evidence: [{"kind": "rule", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "cannot be reused", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "If the security control assessments are conducted by qualified assessors with the necessary independence, use appropriate security standards and guidelines, and are based on the needs of the authorizing official, the assessment results can be applied to the reauthorization.158", "asserts": "Assessment results by assessors with the necessary independence can be applied: a previous assessment reused when the current assessment requires more independence fails"}]
     work_item: "WI-08"
+    ruling_sought: [{"sentence": "Organizations may supplement automatically-generated assessment information with manually-generated information in situations where an increased level of assurance is needed.", "reason": "A permission: organizations may supplement automated information with manual information."}]
   - id: "REQ-SP800-37R2-0632"
     citation: {"ref": "SP800-37R2", "page": 171, "anchor": "The senior agency official for privacy is responsible for assessing privacy controls and those assessment results"}
     kind: "modal"
@@ -5967,9 +5975,11 @@ requirements:
     locator: "Denial of Authorization"
     context: "EVENT-DRIVEN TRIGGERS AND SIGNIFICANT CHANGES"
     statement: "Risk assessment results or the results from an impact analysis may be used to determine if changes to systems or common controls are significant and trigger an authorization action. If an authorization action is initiated, the organization targets only the specific controls affected by the changes and reuses previous assessment results wherever possible. An effective monitoring program can significantly reduce the overall cost and level of effort of authorization actions. Most changes to a system or its environment of operation can be handled through the continuous monitoring program and ongoing authorization."
-    status: "candidate"
-    reason: "Significant change and targeted reauthorization are the existing O&M path of WI-08."
+    status: "partial"
+    reason: "OAUTH-001 fails an event-driven review prompted by a trigger that is not one of the defined trigger events, such as a significant change. The marked sentence is a permission (risk assessment or impact analysis results may be used), sought for a ruling; targeting only the affected controls in an authorization action is unheld (WI-08)."
+    evidence: [{"kind": "rule", "target": "OAUTH-001", "fixture": "tests/fixtures/negative/OAUTH-001.undefined.yaml", "expect": "is not one of the defined trigger events", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "asserts": "Changes to systems that are significant trigger an authorization action: a trigger that is not one of the defined trigger events fails"}]
     work_item: "WI-08"
+    ruling_sought: [{"sentence": "Risk assessment results or the results from an impact analysis may be used to determine if changes to systems or common controls are significant and trigger an authorization action.", "reason": "A permission: the results may be used to determine significance; any sound basis meets the sentence."}]
   - id: "REQ-SP800-37R2-0658"
     citation: {"ref": "SP800-37R2", "page": 173, "anchor": "A type authorization159 is an official authorization decision that allows for a"}
     kind: "modal"

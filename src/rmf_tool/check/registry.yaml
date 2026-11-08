@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 350 rules, 37 repo-scope and 313 run-scope. Authoritative;
+# Rule registry (plan §6.5): 362 rules, 37 repo-scope and 325 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -572,6 +572,7 @@ rules:
       - REQ-SP800-53AR5-0151
       - REQ-SP800-53AR5-0156
       - REQ-SP800-53AR5-0045
+      - REQ-DODI8500.01-0422
   - id: ASMT-002
     scope: run
     severity: E
@@ -624,6 +625,8 @@ rules:
       - REQ-SP800-53AR5-0199
       - REQ-SP800-53AR5-0200
       - REQ-SP800-53AR5-0031
+      - REQ-SP800-37R2-0419
+      - REQ-SP800-37R2-0631
   - id: ASMT-004
     scope: run
     severity: E
@@ -669,6 +672,7 @@ rules:
       - REQ-SP800-53AR5-0301
       - REQ-SP800-53AR5-0295
       - REQ-SP800-53R5-0031
+      - REQ-SP800-37R2-0397
   - id: ASMT-006
     scope: run
     severity: E
@@ -1270,6 +1274,8 @@ rules:
       - REQ-CNSSI1254-0122
       - REQ-CNSSI1254-0124
       - REQ-DODCIO-RECIPROCITY-0060
+      - REQ-DODCIO-RECIPROCITY-0114
+      - REQ-DODI8510.01-0221
   - id: MPOA-001
     scope: run
     severity: E
@@ -1356,6 +1362,8 @@ rules:
       - REQ-SP800-137A-0357
       - REQ-SP800-137A-0358
       - REQ-SP800-137A-0360
+      - REQ-SP800-137A-0066
+      - REQ-SP800-137A-0355
   - id: MMEAS-001
     scope: run
     severity: E
@@ -1587,6 +1595,7 @@ rules:
       - REQ-SP800-37R2-0318
       - REQ-SP800-53AR5-0039
       - REQ-DODI8500.01-0410
+      - REQ-SP800-53R5-0030
   - id: ISCM-005
     scope: run
     severity: E
@@ -1614,6 +1623,7 @@ rules:
       - REQ-SP800-37R2-0429
       - REQ-SP800-37R2-0449
       - REQ-SP800-37R2-0450
+      - REQ-SP800-37R2-0316
   - id: ISCM-006
     scope: run
     severity: E
@@ -2044,6 +2054,7 @@ rules:
       - REQ-SP800-53B-0034
       - REQ-SP800-53R5-0052
       - REQ-SP800-53R5-0057
+      - REQ-DODI8510.01-0116
   - id: TLR-008
     scope: run
     severity: E
@@ -2197,6 +2208,9 @@ rules:
       - REQ-DODCIO-CATO-IG-0156
       - REQ-DODCIO-CATO-IG-0169
       - REQ-DODCIO-CATO-0005
+      - REQ-SP800-37R2-0396
+      - REQ-SP800-37R2-0397
+      - REQ-SP800-37R2-0404
   - id: AONLY-001
     scope: run
     severity: E
@@ -3000,6 +3014,7 @@ rules:
       - REQ-DODI5400.11-0180
       - REQ-SP800-53B-0031
       - REQ-SP800-53B-0033
+      - REQ-CNSSI1253-0015
   - id: PRIV-008
     scope: run
     severity: E
@@ -4848,6 +4863,7 @@ rules:
       - REQ-DODI8500.01-0141
       - REQ-DODI8500.01-0246
       - REQ-DODI8500.01-0330
+      - REQ-SP800-161R1-0204
   - id: PMSCRM-001
     scope: run
     severity: E
@@ -5001,6 +5017,7 @@ rules:
       - REQ-DODI5000.87-0003
       - REQ-DODI5000.87-0040
       - REQ-DODI5000.87-0042
+      - REQ-DODI8500.01-0328
   - id: ACQLC-002
     scope: run
     severity: E
@@ -5169,6 +5186,7 @@ rules:
       - REQ-SP800-18R2-0198
       - REQ-DODI8510.01-0048
       - REQ-DODI8510.01-0140
+      - REQ-DODI8531.01-0173
   - id: VULN-006
     scope: run
     severity: E
@@ -6295,6 +6313,96 @@ rules:
     enforces:
       - REQ-CNSSI1253-0047
       - REQ-DODI8500.01-0418
+  - id: TRADE-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: "S-2 records no trade-offs weighed in tailoring, leaves out cost, schedule or performance, or names a removal no remove action makes"
+    fixture: tests/fixtures/negative/TRADE-001.yaml
+    hint: "In tailoring.yaml trade_offs, record each risk-related issue weighed in deciding which controls to employ and how (cost, schedule and performance at least once each; complexity, maintenance and assessment cost, supply chain or trustworthiness where weighed), with the controls, what was weighed and the outcome; a trade-off that removes a control matches a remove action whose basis is risk-based (TLR-002)."
+    enforces:
+      - REQ-SP800-53B-0048
+      - REQ-SP800-53B-0055
+      - REQ-CNSSI1253-0072
+  - id: SCRMLC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-17
+    summary: "C-SCRM considerations are not incorporated into a step of the procurement and contract management life cycle, or into charge card purchases the program makes"
+    fixture: tests/fixtures/negative/SCRMLC-001.yaml
+    hint: "In scrm-acquisition.yaml procurement_steps, say how C-SCRM considerations enter each NISTIR 7622 step: plan-procurement, define-requirements, market-analysis, complete-procurement, ensure-compliance and monitor-performance; set charge_card_purchases and, when true, add the charge-card-purchases step."
+    enforces:
+      - REQ-SP800-161R1-0204
+      - REQ-SP800-161R1-0222
+      - REQ-SP800-161R1-0223
+  - id: DISP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-7
+    summary: "disposal records no class of media disposed of, classified media without DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media without NIST SP 800-88, or a destruction outside CNSSI 4004.1"
+    fixture: tests/fixtures/negative/DISP-001.yaml
+    hint: "In disposal.yaml media, record each class of media and equipment disposed of, the action (sanitize or destroy) and the issuances applied: DODM5200.01-V3 and CNSSI4004.1 for classified, SP800-88 for unclassified, and CNSSI4004.1 for any destruction."
+    enforces:
+      - REQ-DODI8500.01-0335
+      - REQ-DODI8500.01-0336
+      - REQ-DODI8531.01-0177
+  - id: INDEP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-1
+    summary: "the decision on assessor independence is not informed by consulting the CIO, the SAOP and the SISO"
+    fixture: tests/fixtures/negative/INDEP-001.yaml
+    hint: "In sap.yaml assessor_independence.consulted, list PER-CIO, PER-PRIV and PER-CISO, whom the AO consults on assessor independence, and the Office of the Inspector General by name where the organization has one."
+    enforces:
+      - REQ-SP800-37R2-0349
+  - id: BYP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: "a bypass of a cybersecurity mechanism not coordinated with the ISSO or without the ISSM's written approval"
+    fixture: tests/fixtures/negative/BYP-001.yaml
+    hint: "In cm-plan.yaml bypasses, record each bypass of a cybersecurity mechanism with the procedure, coordinated_with including PER-ISSO, and approval {by: PER-ISSM, form: written, date}."
+    enforces:
+      - REQ-DODI8500.01-0443
+  - id: PIIF-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-11
+    summary: "for a system processing PII, the data flows do not say they carry PII or leave out an information type of PII"
+    fixture: tests/fixtures/negative/PIIF-001.yaml
+    hint: "In boundary.yaml data_flow, set carries_pii: true and list in pii_types each ART-INFOTYPES information type marked privacy: true."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0054
+  - id: OVC-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: "a conflict between overlays is not resolved by the AO (or designee) and the SAOP (or designee), or not in coordination with the information owner, the system owner and the risk executive (function)"
+    fixture: tests/fixtures/negative/OVC-001.yaml
+    hint: "In tailoring.yaml overlay_conflicts, record each conflict between overlays over applying or removing a control, resolved_by PER-AO or PER-AODR with PER-PRIV, and coordinated_with PER-IO, PER-PM and PER-RE."
+    enforces:
+      - REQ-CNSSI1253-0062
   - id: PRIV-012
     scope: run
     severity: E
@@ -6376,6 +6484,8 @@ rules:
     summary: an event-driven review names no trigger, a trigger after the review, or a trigger raised by others that is no defined trigger event
     fixture: tests/fixtures/negative/OAUTH-001.yaml
     hint: Record trigger on an event-driven record (event, raised_by, date); an event someone other than the deciding AO raises is one of the review events defined earlier on the authorization.
+    enforces:
+      - REQ-SP800-37R2-0657
   - id: OMP-001
     scope: run
     severity: E
