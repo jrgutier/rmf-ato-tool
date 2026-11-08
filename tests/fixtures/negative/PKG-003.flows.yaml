@@ -1,0 +1,13 @@
+rule: PKG-003
+bases:
+- minimal
+description: the data flow states no information flows or paths
+mutations:
+- {op: set_field, file: artifacts/data/boundary.yaml, path: data_flow.description, value: ''}
+expect:
+  errors:
+  - PKG-003
+  messages:
+  - ART-SSP does not carry the CNSSI 1254 data element Information Flows/Paths
+  also:
+  - RUN-FM-001

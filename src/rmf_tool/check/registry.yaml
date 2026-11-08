@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 343 rules, 37 repo-scope and 306 run-scope. Authoritative;
+# Rule registry (plan §6.5): 344 rules, 37 repo-scope and 307 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -398,6 +398,10 @@ rules:
     summary: facts incomplete, missing set_by_task, or categorization unapproved before S-1
     fixture: tests/fixtures/negative/FACTS-001.yaml
     hint: Each fact carries set_by_task; C-3 must approve the categorization before S-1.
+    enforces:
+      - REQ-FIPS199-0019
+      - REQ-CNSSI1253-0046
+      - REQ-CNSSI1253-0045
   - id: GEN-STALE-001
     scope: run
     severity: E
@@ -417,6 +421,22 @@ rules:
       - REQ-SP800-18R1-0136
       - REQ-SP800-18R1-0197
       - REQ-SP800-37R2-0392
+      - REQ-CNSSI1253-0052
+      - REQ-CNSSI1253-0057
+      - REQ-CNSSI1253-0008
+      - REQ-CNSSI1253-0017
+      - REQ-CNSSI1253-0038
+      - REQ-CNSSI1253-0058
+      - REQ-CNSSI1253-0080
+      - REQ-CNSSI1253-0070
+      - REQ-SP800-53B-0084
+      - REQ-SP800-53B-0136
+      - REQ-SP800-53B-0093
+      - REQ-SP800-53B-0025
+      - REQ-SP800-53B-0026
+      - REQ-SP800-53B-0029
+      - REQ-SP800-53R5-0004
+      - REQ-SP800-53R5-0012
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -1630,6 +1650,38 @@ rules:
       - REQ-CNSSI1254-0065
       - REQ-CNSSI1254-0066
       - REQ-CNSSI1254-0037
+      - REQ-CNSSI1254-0047
+      - REQ-CNSSI1254-0048
+      - REQ-CNSSI1254-0049
+      - REQ-CNSSI1254-0064
+  - id: DEL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: the RAR, the POA&M or the authorization decision document does not carry a CNSSI 1254 Annex C data element mapped to it (split from PKG-003)
+    fixture: tests/fixtures/negative/DEL-001.yaml
+    hint: Fill the heading or field that `data_elements` in framework/artifacts.yaml names.
+    enforces:
+      - REQ-CNSSI1254-0031
+      - REQ-CNSSI1254-0032
+      - REQ-CNSSI1254-0033
+      - REQ-CNSSI1254-0034
+      - REQ-CNSSI1254-0038
+      - REQ-CNSSI1254-0074
+      - REQ-CNSSI1254-0075
+      - REQ-CNSSI1254-0078
+      - REQ-CNSSI1254-0082
+      - REQ-CNSSI1254-0083
+      - REQ-CNSSI1254-0087
+      - REQ-CNSSI1254-0088
+      - REQ-CNSSI1254-0091
+      - REQ-CNSSI1254-0094
+      - REQ-CNSSI1254-0096
+      - REQ-CNSSI1254-0102
+      - REQ-CNSSI1254-0110
   - id: TPL-001
     scope: run
     severity: E
@@ -1659,6 +1711,7 @@ rules:
       - REQ-SP800-53B-0077
       - REQ-SP800-53B-0079
       - REQ-SP800-53B-0081
+      - REQ-SP800-53B-0075
   - id: TLR-002
     scope: run
     severity: E
@@ -3819,6 +3872,7 @@ rules:
       - REQ-SP800-37R2-0283
       - REQ-SP800-37R2-0520
       - REQ-SP800-53B-0024
+      - REQ-CNSSI1253-0054
   - id: SUBS-001
     scope: run
     severity: E
@@ -3982,6 +4036,7 @@ rules:
       - REQ-DODI8510.01-0258
       - REQ-DODI8510.01-0259
       - REQ-DODI8510.01-0266
+      - REQ-CNSSP12-0022
   - id: OCTX-002
     scope: run
     severity: E
@@ -4059,6 +4114,7 @@ rules:
       - REQ-SP800-53AR5-0144
       - REQ-SP800-53AR5-0190
       - REQ-SP800-53AR5-0194
+      - REQ-CNSSI1253-0064
   - id: OCTX-006
     scope: run
     severity: E
@@ -4086,7 +4142,7 @@ rules:
     applies_after: P-7
     summary: the organizational ISCM strategy leaves a manual process unverified, a required policy out, an activity unmapped, or misjudges a not-applicable element
     fixture: tests/fixtures/negative/OCTX-007.yaml
-    hint: "P-7 records iscm in org-context.yaml."
+    hint: "P-7 records iscm in org-context.yaml; from contract 0.2.0 iscm.monitors also lists threat-and-vulnerability-awareness and asset-visibility (CNSSP 22 IV.f)."
     enforces:
       - REQ-SP800-137-0056
       - REQ-SP800-137-0169
@@ -4099,6 +4155,7 @@ rules:
       - REQ-SP800-39-0187
       - REQ-SP800-39-0190
       - REQ-SP800-53R5-0028
+      - REQ-CNSSP22-0021
   - id: OCTX-008
     scope: run
     severity: E
@@ -4182,6 +4239,7 @@ rules:
       - REQ-SP800-37R2-0685
       - REQ-SP800-39-0216
       - REQ-SP800-61R3-0094
+      - REQ-CNSSP22-0004
   - id: OCTX-013
     scope: run
     severity: E
