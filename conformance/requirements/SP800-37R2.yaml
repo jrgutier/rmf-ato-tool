@@ -442,7 +442,10 @@ requirements:
     locator: "2.1"
     context: "FIGURE 1: ORGANIZATION-WIDE RISK MANAGEMENT APPROACH"
     statement: "In contrast to the Level 1 and 2 activities that prepare the organization for the execution of the RMF, Level 3 addresses risk from an information system perspective and is guided and informed by the risk decisions at the organization and mission/business process levels. The risk decisions at Levels 1 and 2 can impact the selection and implementation of controls at the system level. Controls are designated by the organization as system-specific, hybrid, or common (inherited) controls in accordance with the enterprise architecture, security or privacy architecture, and any tailored control baselines or overlays that have been developed by the organization.24"
-    status: "candidate"
+    status: "partial"
+    reason: "allocation.yaml designates each control system-specific, hybrid or common; how Level 1 and 2 decisions guide system-level selection is description."
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/type", "claim": "constraint", "asserts": "Controls are designated by the organization as system-specific, hybrid or common (inherited) controls"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0056"
     citation: {"ref": "SP800-37R2", "page": 27, "anchor": "Organizations establish traceability of controls to the security and privacy requirements that"}
     kind: "indicative"
@@ -490,6 +493,8 @@ requirements:
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "Impact of loss is one of four risk factors considered during risk assessment activities—the other three factors being threats, vulnerabilities, and likelihood of occurrence [SP 800-30]. Organizations leverage risk assessment results when categorizing information and systems. For national security systems, it may be important to consider specific issues affecting risk factors as part of categorization, such as, whether the system processes, stores, or transmits classified or intelligence information; whether the system will be accessed directly or indirectly by non-U.S. personnel; and whether the information processed, stored, or transmitted by the system will cross security domains. [CNSSI 1253] provides additional information on categorizing national security systems."
     status: "candidate"
+    reason: "C-2 reads ART-RA and its playbook asks about classified information; no rule fails a categorization that does not leverage the risk assessment or the NSS factors."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0062"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Select an initial set of controls for the system and tailor the"}
     kind: "lettered"
@@ -1744,6 +1749,8 @@ requirements:
     context: ""
     statement: "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253] which does not apply the high-water mark concept."
     status: "candidate"
+    reason: "The run records one value per objective and resolves CNSSI 1253 baselines; CATG-001, which fails a categorization below the information types per objective, is at its fan-out cap."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0212"
     citation: {"ref": "SP800-37R2", "page": 53, "anchor": "Organizations can also elect to use an alternative, organization-defined categorization approach to"}
     kind: "should"
@@ -2260,7 +2267,10 @@ requirements:
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-1 | • The characteristics of the system are described and documented."
-    status: "candidate"
+    status: "covered"
+    reason: "system-description.yaml must hold the system's function and its ownership (required properties), so the characteristics are described"
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/ownership", "claim": "constraint", "asserts": "The characteristics of the system are described and documented, its ownership and operation among them"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0268"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "SYSTEM DESCRIPTION | [Cybersecurity Framework: Profile]"}
     kind: "table"
@@ -2275,7 +2285,10 @@ requirements:
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-2 SECURITY CATEGORIZATION | TASK C-2 | • A security categorization of the system, including the information"
-    status: "candidate"
+    status: "partial"
+    reason: "FACTS-001 fails a categorization fact written by any task but C-2, so the categorization is recorded where it belongs; whether it represents every organization-identified information type is CATG-001's, at its fan-out cap."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "A security categorization of the system is completed at C-2: a categorization set by another task, not C-2 which writes it, fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0270"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "SECURITY CATEGORIZATION | processed by the system represented by the organization- identified"}
     kind: "table"
@@ -2283,20 +2296,28 @@ requirements:
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "SECURITY CATEGORIZATION | processed by the system represented by the organization- identified information types, is completed. [Cybersecurity Framework: ID.AM-1; ID.AM-2; ID.AM-3; ID.AM-4; ID.AM-5] • Security categorization results are documented in the security, privacy, and SCRM plans. [Cybersecurity Framework: Profile] • Security categorization results are consistent with the enterprise architecture and commitment to protecting organizational missions, business functions, and mission/business processes. [Cybersecurity Framework: Profile] • Security categorization results reflect the organization’s risk management strategy."
     status: "candidate"
+    reason: "That categorization results are documented in the security, privacy and SCRM plans and are consistent with the enterprise architecture is held by C-2 exit criteria only; CATG-001 holds the high-water mark and is at its fan-out cap."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0271"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "TASK C-3 | • The security categorization results are reviewed and the"}
     kind: "table"
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-3 | • The security categorization results are reviewed and the"
-    status: "candidate"
+    status: "covered"
+    reason: "FACTS-001 fails a categorization not approved before S-1; cut pair with 0272"
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "The security categorization results are reviewed and the categorization decision is approved: categorization is not approved fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0272"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "SECURITY CATEGORIZATION REVIEW AND | categorization decision is approved by senior leaders"}
     kind: "table"
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "SECURITY CATEGORIZATION REVIEW AND | categorization decision is approved by senior leaders in the"
-    status: "candidate"
+    status: "covered"
+    reason: "FACTS-001 fails a categorization not approved before S-1; cut pair with 0271"
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "The categorization decision is approved by senior leaders: categorization is not approved before S-1 fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0273"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
     kind: "modal"
@@ -2312,14 +2333,20 @@ requirements:
     locator: "TASK C-1"
     context: ""
     statement: "Document the characteristics of the system."
-    status: "candidate"
+    status: "covered"
+    reason: "system-description.yaml must state the ownership and operation of the system from a fixed set, and its function"
+    evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/ownership", "claim": "constraint", "asserts": "Document the characteristics of the system: the ownership and operation of the system are documented"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0275"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "The RMF Categorize step is a precondition for the selection of security"}
     kind: "indicative"
     locator: "TASK C-1"
     context: ""
     statement: "The RMF Categorize step is a precondition for the selection of security controls. However, for privacy, there are other factors considered by organizations that guide and inform the selection of privacy controls. These factors are described in the RMF Prepare-System Level step, Task P-15."
-    status: "candidate"
+    status: "covered"
+    reason: "FACTS-001 fails a run whose categorization is not approved before control selection (S-1)"
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "The Categorize step is a precondition for the selection of security controls: categorization is not approved before S-1 fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0276"
     citation: {"ref": "SP800-37R2", "page": 66, "anchor": "A description of the system characteristics is documented in the security and"}
     kind: "indicative"
@@ -2327,6 +2354,8 @@ requirements:
     context: ""
     statement: "A description of the system characteristics is documented in the security and privacy plans, included in attachments to the plans, or referenced in other standard sources for the information generated as part of the SDLC. Duplication of information is avoided, whenever possible. The level of detail in the security and privacy plans is determined by the organization and is commensurate with the security categorization and the security and privacy risk assessments of the system. Information may be added to or updated in the system description as it becomes available during the system life cycle, during the execution of the RMF steps, and as any system characteristics change."
     status: "candidate"
+    reason: "ART-SD holds the description, and INV-4 keeps facts in one home; no rule judges where the description is documented or that its detail is commensurate with the categorization."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0277"
     citation: {"ref": "SP800-37R2", "page": 66, "anchor": "Examples of different types of descriptive information that organizations can include in"}
     kind: "indicative"
@@ -2341,7 +2370,10 @@ requirements:
     locator: "TASK C-2"
     context: ""
     statement: "Categorize the system and document the security categorization results."
-    status: "candidate"
+    status: "partial"
+    reason: "FACTS-001 fails a categorization fact written by any task but C-2; that the categorization is right is CATG-001's, at its fan-out cap."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "Categorize the system and document the security categorization results: a categorization set by another task, not C-2 which writes it, fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0279"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "Security categorization determinations consider potential adverse impacts to organizational operations, organizational assets,"}
     kind: "modal"
@@ -2349,6 +2381,8 @@ requirements:
     context: ""
     statement: "Security categorization determinations consider potential adverse impacts to organizational operations, organizational assets, individuals, other organizations, and the Nation resulting from the loss of confidentiality, integrity, or availability of information. Organizations have flexibility in conducting a security categorization using either [FIPS 200] to establish a single impact level for a system based on the high-water mark concept (for other than national security systems), or [CNSSI 1253] to establish three impact values that may vary for each of the security objectives of confidentiality, integrity, and availability (for national security systems). The security categorization process is carried out by the system owner and the information owner or steward in cooperation and collaboration with senior leaders and executives with mission, business function, or risk management responsibilities. Cooperation and collaboration helps to ensure that individual systems are categorized based on the mission and business objectives of the organization. The system owner and information owner or steward consider the results from the security risk assessment (and the privacy risk assessment when the system processes PII) as a part of the security categorization decision. The decision is consistent with the risk management strategy. The results of the categorization process influence the selection of security controls for the system. Security categorization information is documented in the system security plan or included as an attachment to the plan and can be cross-referenced in a privacy plan when the system processes PII."
     status: "candidate"
+    reason: "C-2 reads ART-RA and records one value per objective; the impacts considered and the choice of method are playbook prose, and the high-water mark is CATG-001's, at its fan-out cap."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0280"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "The security categorization results for the system can be further refined by"}
     kind: "should"
@@ -2363,7 +2397,10 @@ requirements:
     locator: "TASK C-3"
     context: ""
     statement: "Review and approve the security categorization results and decision."
-    status: "candidate"
+    status: "covered"
+    reason: "FACTS-001 fails a categorization not approved before S-1"
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "Review and approve the security categorization results and decision: categorization is not approved before S-1 fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0282"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "The senior agency official for privacy participates in determining whether the information"}
     kind: "indicative"
@@ -2399,6 +2436,8 @@ requirements:
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-1 CONTROL SELECTION | TASK S-1 | • Control baselines necessary to protect the system commensurate"
     status: "candidate"
+    reason: "rmf baseline resolve writes baseline.json from the approved categorization and GEN-STALE-001 fails a stale one; GEN-STALE-001 is at its fan-out cap of 25."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0286"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"}
     kind: "table"
@@ -2406,13 +2445,18 @@ requirements:
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"
     status: "candidate"
+    reason: "rmf baseline resolve writes baseline.json from the approved categorization and GEN-STALE-001 fails a stale one; GEN-STALE-001 is at its fan-out cap of 25."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0287"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "TASK S-2 | • Controls are tailored producing tailored control baselines."}
     kind: "table"
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-2 | • Controls are tailored producing tailored control baselines."
-    status: "candidate"
+    status: "covered"
+    reason: "tailoring.yaml must record its actions, each one of the tailoring actions of a fixed set, from which baseline.json is regenerated"
+    evidence: [{"kind": "schema", "target": "framework/schema/tailoring.schema.json#/properties/actions/items/properties/action", "claim": "constraint", "asserts": "Controls are tailored producing tailored control baselines: each tailoring action applied to the baseline is recorded"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0288"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "CONTROL TAILORING | [Cybersecurity Framework: Profile]"}
     kind: "table"
@@ -2427,21 +2471,30 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-3 CONTROL ALLOCATION | TASK S-3 | • Controls are designated as system-specific, hybrid, or common"
-    status: "candidate"
+    status: "covered"
+    reason: "allocation.yaml designates each control system-specific, hybrid or common, from a fixed set (required)"
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/type", "claim": "constraint", "asserts": "Controls are designated as system-specific, hybrid or common controls in allocation.yaml"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0290"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "CONTROL ALLOCATION | controls. • Controls are allocated to the specific system"}
     kind: "table"
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "CONTROL ALLOCATION | controls. • Controls are allocated to the specific system elements (i.e., machine, physical, or human elements). [Cybersecurity Framework: Profile; PR.IP]"
-    status: "candidate"
+    status: "covered"
+    reason: "allocation.yaml allocates each control to at least one system element (required, minItems 1)"
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/components", "claim": "constraint", "asserts": "Controls are allocated to the specific system elements they protect, at least one each"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0291"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "TASK S-4 | • Controls and associated tailoring actions are documented in"}
     kind: "table"
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-4 | • Controls and associated tailoring actions are documented in"
-    status: "candidate"
+    status: "covered"
+    reason: "SSP-COV-001 fails a baseline control with no statement in the security and privacy plan"
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Controls and associated tailoring actions are documented in the plans: a baseline control that has no SSP statement fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0292"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "DOCUMENTATION OF PLANNED CONTROL | security and privacy plans or equivalent documents."}
     kind: "table"
@@ -2466,14 +2519,20 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-5 | • A continuous monitoring strategy for the system that reflects the"
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-001 fails a system continuous monitoring strategy that leaves out a part it states"
+    evidence: [{"kind": "rule", "target": "ISCM-001", "fixture": "tests/fixtures/negative/ISCM-001.yaml", "expect": ": the strategy states", "claim": "presence", "holds_when": "S-5 is active and ART-CONMON is produced or seeded", "asserts": "A continuous monitoring strategy for the system is developed: a conmon.yaml that leaves out a part the strategy states fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0295"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "CONTINUOUS MONITORING STRATEGY— | organizational risk management strategy is developed."}
     kind: "table"
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "CONTINUOUS MONITORING STRATEGY— | organizational risk management strategy is developed."
-    status: "candidate"
+    status: "covered"
+    reason: "OCTX-009 fails a system monitoring frequency less frequent than the organization's minimum, so the system strategy reflects the organizational one"
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "The system continuous monitoring strategy reflects the organizational strategy: a frequency less frequent than the organization's minimum fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0296"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "SYSTEM | [Cybersecurity Framework: ID.GV; DE.CM]"}
     kind: "table"
@@ -2488,7 +2547,10 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-6 PLAN REVIEW AND APPROVAL | TASK S-6 | • Security and privacy plans reflecting the selection of controls"
-    status: "candidate"
+    status: "covered"
+    reason: "PRIV-012 fails an S-6 whose security and privacy plans carry no approval by the AO or AODR"
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "S-6 wrote ART-SSP, and no approval of the security and privacy plans by the authorizing official or designated representative is on record", "claim": "constraint", "asserts": "Security and privacy plans are approved at S-6: no approval of the security and privacy plans by the authorizing official fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0298"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "PLAN REVIEW AND APPROVAL | necessary to protect the system and the"}
     kind: "table"
@@ -2515,6 +2577,8 @@ requirements:
     context: ""
     statement: "Select the controls for the system and the environment of operation."
     status: "candidate"
+    reason: "Selection is rmf baseline resolve from the approved categorization; GEN-STALE-001, which fails a stale baseline, is at its fan-out cap of 25."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0301"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "There are two approaches that can be used for the initial selection"}
     kind: "modal"
@@ -2522,6 +2586,8 @@ requirements:
     context: ""
     statement: "There are two approaches that can be used for the initial selection of controls: a baseline control selection approach, or an organization-generated control selection approach. The baseline control selection approach uses control baselines, which are pre-defined sets of controls specifically assembled to address the protection needs of a group, organization, or community of interest. Control baselines serve as a starting point for the protection of individuals’ privacy, information, and information systems. Federal control baselines are provided in [SP 800-53B]. The system security categorization (see Task C-2) and the security requirements derived from stakeholder protection needs, laws, executive orders, regulations, policies, directives, instructions, and standards (see Task P-15) can help inform the selection of security control baselines. A privacy risk assessment (see Task P-14) and privacy requirements derived from stakeholder protection needs, laws, executive orders, regulations, policies, directives, instructions, and standards (see Task P-15) can help inform the selection of privacy control baselines. Privacy programs use security and privacy control baselines to manage the privacy risks arising from both unauthorized system activity or behavior, as well as from authorized activities. After the pre-defined control baseline is selected, organizations tailor the baseline in accordance with the guidance provided (see Task S-2). The baseline control selection approach can provide consistency across a broad community of interest."
     status: "candidate"
+    reason: "Describes the two selection approaches; the run uses CNSSI 1253 baselines through rmf baseline resolve, which no rule fails beyond GEN-STALE-001, at its cap."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0302"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "The organization-generated control selection approach differs from the baseline selection approach because"}
     kind: "indicative"
@@ -2537,13 +2603,18 @@ requirements:
     context: ""
     statement: "In both the baseline control selection approach and organization-generated control selection approach, organizations develop a well-defined set of security and privacy requirements using a life cycle-based systems engineering process (e.g., [ISO 15288] and [SP 800-160 v1] as described in the RMF Prepare- System Level step, Task P-15. This process generates a set of requirements that can be used to guide and inform the selection of a set of controls to satisfy the requirements (whether the organization starts with a control baseline or generates the set of controls from its own selection process). Similarly, organizations can use the [NIST CSF] to develop Cybersecurity Framework Profiles representing a set of organization-specific security and privacy requirements—and thus, guiding and informing control selection from [SP 800-53]. Tailoring may also be required in the organization-generated control selection approach (see Task S-2). Organizations do not need to choose one approach for the selection of controls for each of their systems, but instead, may use different approaches as circumstances dictate."
     status: "candidate"
+    reason: "The requirements of P-15 feed selection by S-1's inputs; no rule fails a selection that does not read them."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0304"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "Tailor the controls selected for the system and the environment of operation."}
     kind: "imperative"
     locator: "TASK S-2"
     context: ""
     statement: "Tailor the controls selected for the system and the environment of operation."
-    status: "candidate"
+    status: "partial"
+    reason: "tailoring.yaml records each tailoring action from a fixed set and baseline.json is regenerated from it; whether the tailoring answers the risk assessment is the TLR rules' per action, not held for the step."
+    evidence: [{"kind": "schema", "target": "framework/schema/tailoring.schema.json#/properties/actions/items/properties/action", "claim": "constraint", "asserts": "Tailor the controls selected for the system: each tailoring action applied to the baseline is recorded"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0305"
     citation: {"ref": "SP800-37R2", "page": 71, "anchor": "After selecting the applicable control baselines, organizations tailor the controls based on"}
     kind: "modal"
@@ -2562,20 +2633,28 @@ requirements:
     context: ""
     statement: "Organizations use risk assessments to inform and guide the tailoring process. Threat information from security risk assessments provides information on adversary capabilities, intent, and targeting that may affect organizational decisions regarding the selection of security controls, including the associated costs and benefits. Privacy risk assessments, including the contextual factors therein, will also influence tailoring when an information system processes PII.80 Risk assessment results are also leveraged when identifying common controls to determine if the controls available for inheritance meet the security and privacy requirements for the system and its environment of operation. When common controls provided by the organization do not provide adequate protection for the systems inheriting the controls, system owners can either supplement the common controls with system-specific or hybrid controls to achieve the required level of protection or recommend a greater acceptance of risk to the authorizing official. Organizations may also consider federally or organizationally directed or approved overlays, tailored baselines, or Cybersecurity Framework Profiles when tailoring controls (see Task P-4)."
     status: "candidate"
+    reason: "S-2 reads ART-RA by its inputs; no rule fails a tailoring decision that is not informed by the risk assessment."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0307"
     citation: {"ref": "SP800-37R2", "page": 72, "anchor": "Allocate security and privacy controls to the system and to the environment"}
     kind: "imperative"
     locator: "TASK S-3"
     context: ""
     statement: "Allocate security and privacy controls to the system and to the environment of operation."
-    status: "candidate"
+    status: "covered"
+    reason: "allocation.yaml allocates each control to at least one system element (required, minItems 1)"
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/components", "claim": "constraint", "asserts": "Allocate controls to the environment of operation and the system elements they are allocated to, at least one each"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0308"
     citation: {"ref": "SP800-37R2", "page": 72, "anchor": "The organization designates controls as system-specific, hybrid, or common, and allocates the"}
     kind: "modal"
     locator: "TASK S-3"
     context: ""
     statement: "The organization designates controls as system-specific, hybrid, or common, and allocates the controls to the system elements (i.e, machine, physical, or human elements) responsible for providing a security or privacy capability. Controls are allocated to a system or an organization consistent with the organization’s enterprise architecture and security or privacy architecture and the allocated security and privacy requirements. Not all controls need to be allocated to every system element. Controls providing a specific security or privacy capability are only allocated to system elements that require that capability. The security categorization, privacy risk assessment, security and privacy architectures, and the allocation of controls work together to help achieve a suitable balance between security and privacy protections and the mission-based function of the system."
-    status: "candidate"
+    status: "partial"
+    reason: "allocation.yaml designates each control and allocates it to system elements; consistency with the enterprise and security architecture is S-3 prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/type", "claim": "constraint", "asserts": "The organization designates controls as system-specific, hybrid or common and allocates them to system elements", "sentence": "The organization designates controls as system-specific, hybrid, or common, and allocates the controls to the system elements (i.e, machine, physical, or human elements) responsible for providing a security or privacy capability."}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0309"
     citation: {"ref": "SP800-37R2", "page": 72, "anchor": "Security and privacy requirements allocated to the system, system elements, and the"}
     kind: "indicative"
@@ -2583,6 +2662,8 @@ requirements:
     context: ""
     statement: "Security and privacy requirements allocated to the system, system elements, and the environment of operation (see Task P-17) guide and inform control allocation to system elements. Common controls that are made available by the organization during the RMF Prepare-Organization Level step (see Task P-5), are selected for inheritance; hybrid controls are also selected. Common controls satisfy security and privacy requirements allocated to the organization and provide a protection capability that is inherited by one or more systems. Hybrid controls satisfy security and privacy requirements allocated to the system and to the organization and provide a protection capability that is partially inherited by one or more systems. And finally, system-specific controls satisfy security and privacy requirements allocated to the system and provide a protection capability for that system. Controls can be allocated to specific system elements rather than to every element within a system. For example, system-specific controls associated with management of audit logs may be allocated to a log management server and need not be implemented on every system element."
     status: "candidate"
+    reason: "The S-3 playbook cross-checks the P-17 allocation and selects common and hybrid controls by provider; no rule fails a control allocation the requirements allocation does not inform."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0310"
     citation: {"ref": "SP800-37R2", "page": 73, "anchor": "Document the controls for the system and environment of operation in security"}
     kind: "imperative"
@@ -2599,7 +2680,10 @@ requirements:
     locator: "TASK S-4"
     context: ""
     statement: "Security and privacy plans contain an overview of the security and privacy requirements for the system and the controls selected to satisfy the requirements. The plans describe the intended application of each selected control in the context of the system with a sufficient level of detail to correctly implement the control and to subsequently assess the effectiveness of the control. The control documentation describes how system-specific and hybrid controls are implemented and the plans and expectations regarding the functionality of the system. The description includes planned inputs, expected behavior, and expected outputs where appropriate, typically for those controls implemented in the hardware, software, or firmware components of the system. Common controls are also identified in the plans. There is no requirement to provide implementation details for inherited common controls. Rather, those details are provided in the plans for common control providers and are made available to system owners. For hybrid controls, the organization specifies in the system-level plans the parts of the control that are provided by the common control provider and the parts of the control that are implemented at the system level."
-    status: "candidate"
+    status: "partial"
+    reason: "SSP-COV-001 fails a baseline control with no statement in the plan; the overview of requirements and the planned inputs, behavior and outputs are unheld (WI-411)."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "presence", "asserts": "The plans describe the intended application of each selected control: a control that has no SSP statement fails"}]
+    work_item: "WI-411"
   - id: "REQ-SP800-37R2-0312"
     citation: {"ref": "SP800-37R2", "page": 73, "anchor": "Organizations may develop a consolidated plan that incorporates security and privacy plans"}
     kind: "modal"
@@ -2628,13 +2712,18 @@ requirements:
     context: ""
     statement: "For controls that are mechanism-based, organizations take advantage of the functional specifications provided by or obtainable from manufacturers, vendors, and systems integrators. This includes any documentation that may assist the organization during the development, implementation, assessment, and monitoring of controls. For certain controls, organizations obtain control implementation information from the appropriate organizational entities (e.g., physical security offices, facilities offices, records management offices, and human resource offices). Since the enterprise architecture and the security and privacy architectures established by the organization guide and inform the organizational approach used to plan for and implement controls, documenting the process helps to ensure traceability in meeting the security and privacy requirements."
     status: "candidate"
+    reason: "S-4 interviews the developer, engineer and providers and every SSP record carries sources; no rule refuses one without functional specifications or implementation information."
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0315"
     citation: {"ref": "SP800-37R2", "page": 74, "anchor": "Develop and implement a system-level strategy for monitoring control effectiveness that is"}
     kind: "indicative"
     locator: "TASK S-5"
     context: ""
     statement: "Develop and implement a system-level strategy for monitoring control effectiveness that is consistent with and supplements the organizational continuous monitoring strategy."
-    status: "candidate"
+    status: "covered"
+    reason: "OCTX-009 fails a system monitoring frequency less frequent than the organizational minimum, so the system strategy is consistent with and supplements the organizational one"
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Develop a system-level monitoring strategy consistent with the organizational strategy: a frequency less frequent than the organization's minimum fails"}]
+    work_item: "WI-402"
   - id: "REQ-SP800-37R2-0316"
     citation: {"ref": "SP800-37R2", "page": 74, "anchor": "An important aspect of risk management is the ongoing monitoring of controls"}
     kind: "indicative"
@@ -2642,6 +2731,8 @@ requirements:
     context: ""
     statement: "An important aspect of risk management is the ongoing monitoring of controls implemented within or inherited by an information system. An effective continuous monitoring strategy at the system level is developed and implemented in coordination with the organizational continuous monitoring strategy early in the SDLC (i.e., during initial system design or procurement decision). The system-level continuous monitoring strategy is consistent with and supplements the continuous monitoring strategy for the organization. The system-level strategy addresses monitoring those controls for which monitoring is not provided as part of the continuous monitoring strategy and implementation for the organization. The system-level strategy identifies the frequency of monitoring for controls not addressed by the organization-level strategy and defines the approach to be used for assessing those controls. The system-level continuous monitoring strategy, consistent with the organizational monitoring strategy, defines how changes to the system and the environment of operation81 are to be monitored; how risk assessments are to be conducted; and the security and privacy posture reporting requirements including recipients of the reports. The system-level continuous monitoring strategy can be included in security and privacy plans.82"
     status: "candidate"
+    reason: "conmon.yaml holds frequencies and recipients; how changes are monitored and how risk assessments are conducted are unheld (WI-410), and no rule reads the strategy's timing in the SDLC."
+    work_item: "WI-410"
   - id: "REQ-SP800-37R2-0317"
     citation: {"ref": "SP800-37R2", "page": 75, "anchor": "For controls that are not addressed by the organizational continuous monitoring strategy,"}
     kind: "modal"
@@ -6242,6 +6333,8 @@ requirements:
     context: ""
     statement: "If a system contains information at multiple impact levels, the system is categorized at the highest impact level."
     status: "candidate"
+    reason: "C-2 applies the highest impact per objective; CATG-001, which fails a categorization below the high-water mark of the information types, is at its fan-out cap."
+    work_item: "WI-402"
     promoted: {"reason": "Footnote 43 states the categorization rule: a system with information at several impact levels is categorized at the highest of them."}
   - id: "REQ-SP800-37R2-0730"
     citation: {"ref": "SP800-37R2", "page": 40, "anchor": "When system elements process PII, SCRM practices address both information security and"}
