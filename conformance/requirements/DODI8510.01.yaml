@@ -127,7 +127,9 @@ requirements:
     locator: "2.1.c.(1)"
     context: "DOD CISO Under the authority, direction, and control of the DoD Chief Information Officer (CIO), the DoD CISO: Establishes the construct and program for AOs, including qualification and training requi"
     statement: "(1) Oversee cybersecurity activities, findings, and remediation actions from developmental, operational, and cybersecurity testing or assessment activities throughout the system lifecycle."
-    status: "candidate"
+    status: "partial"
+    reason: "MPOA-001 fails a POA&M item not reviewed by the authorizing official, so the AO oversees findings and remediation actions; oversight of the developmental and operational test activities themselves is unheld."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.review.yaml", "expect": "is not reviewed by the authorizing official", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "The AO oversees cybersecurity findings and remediation actions from testing and assessment: a POA&M item not reviewed by the authorizing official fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0016"
     citation: {"ref": "DODI8510.01", "page": 6, "anchor": "Ensure data from those activities are captured in security authorization packages to"}
@@ -344,7 +346,9 @@ requirements:
     locator: "2.7.b"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "b. Manage Component cybersecurity risks to respective systems in accordance with the principles and processes contained in this issuance."
-    status: "candidate"
+    status: "partial"
+    reason: "For the run's system, managing its cybersecurity risk is held in part by RAR-003 (a risk whose selected course of action does not match its response fails); the Component's management of its other systems is outside the run."
+    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.response.yaml", "expect": "but the selected course of action is", "claim": "constraint", "holds_when": "ART-RAR is produced or seeded", "asserts": "Manage cybersecurity risks to the respective systems: a risk whose selected course of action differs from its response fails", "sentence": "Manage Component cybersecurity risks to respective systems in accordance with the principles and processes contained in this issuance."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0042"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Establish and maintain cybersecurity governance bodies and methods to monitor and manage"}
@@ -426,7 +430,9 @@ requirements:
     locator: "2.7.k"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "k. Conduct RMF activities in all phases of the DoD acquisition process (i.e., requirements development, procurement, DT&E, OT&E, and sustainment) to increase security and decrease cost."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that do not carry risk management into every phase of the acquisition life cycle; that the RMF activities are in fact conducted in each phase is the run's tasks per phase, unheld by one rule."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.yaml", "expect": "policies carry it throughout the system life cycle", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Conduct RMF activities in all phases of the DoD acquisition process: policies that do not carry risk management throughout the system life cycle phases fail", "sentence": "Conduct RMF activities in all phases of the DoD acquisition process (i.e., requirements development, procurement, DT&E, OT&E, and sustainment) to increase security and decrease cost."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0051"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Verify the appointment of a PM or SO for all Component systems."}
@@ -524,7 +530,9 @@ requirements:
     locator: "2.7.r"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "r. Manage, maintain, and mitigate risks throughout the system lifecycle in accordance with cybersecurity operational requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "MPOA-001 fails an inspection finding not leveraged in a POA&M item or an accepted risk, so risks are mitigated or accepted throughout the life cycle; maintenance per operational requirements is unheld."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.yaml", "expect": "is not leveraged in a POA&M item or an accepted risk", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "Manage and mitigate risks throughout the system lifecycle: a finding not leveraged in a POA&M item or an accepted risk fails", "sentence": "Manage, maintain, and mitigate risks throughout the system lifecycle in accordance with cybersecurity operational requirements."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0062"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Oversee and verify that personnel engaged in, or supporting, the RMF are"}
@@ -879,7 +887,9 @@ requirements:
     locator: "3.2"
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Task P-13 Information Life Cycle | All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [CSF: ID.AM-3; ID.AM-4] | • Senior Agency Official for Privacy • SO • IO or Steward"
-    status: "candidate"
+    status: "partial"
+    reason: "INFL-001 fails an information type whose life cycle identifies no creation or collection stage or no disposition stage; that every intermediate stage is identified and understood is unheld."
+    evidence: [{"kind": "rule", "target": "INFL-001", "fixture": "tests/fixtures/negative/INFL-001.yaml", "expect": "the information life cycle identifies no ", "claim": "constraint", "asserts": "All stages of the information life cycle are identified for each information type: a type whose life cycle identifies no disposition stage fails", "sentence": "Task P-13 Information Life Cycle | All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [CSF: ID.AM-3; ID.AM-4] | • Senior Agency Official for Privacy • SO • IO or Steward"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0101"
     citation: {"ref": "DODI8510.01", "page": 14, "anchor": "Task P-14 Mission-Based Cyber Risk Assessment | A system-level risk assessment is"}
@@ -1289,7 +1299,9 @@ requirements:
     locator: "3.2"
     context: "Table 7. Monitor Tasks and Outcomes"
     statement: "Task M-7 System Disposal | A system disposal strategy is developed and implemented, as needed. | • PM or SO"
-    status: "candidate"
+    status: "partial"
+    reason: "The disposal record requires the secure end state disposal reaches, once M-7 is in play, so a disposal strategy is developed; that it is implemented as needed is unheld by a rule."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/end_state", "claim": "presence", "asserts": "A system disposal strategy is developed: the disposal record requires the secure end state disposal reaches"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0145"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "RMF activities must be initiated as early as possible in the DoD"}
@@ -1297,7 +1309,9 @@ requirements:
     locator: "3.3.a.(1)"
     context: "INTEGRATING THE RMF INTO THE DEFENSE ACQUISITION MANAGEMENT SYSTEM"
     statement: "(1) RMF activities must be initiated as early as possible in the DoD acquisition process to increase security and decrease cost."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that leave a life-cycle phase, the earliest included, without risk management; that the run starts its RMF activities as early as possible is unheld."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.yaml", "expect": "policies carry it throughout the system life cycle", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "RMF activities must be initiated as early as possible in the DoD acquisition process: policies that do not carry risk management throughout the system life cycle phases, the earliest included, fail", "sentence": "(1) RMF activities must be initiated as early as possible in the DoD acquisition process to increase security and decrease cost."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0146"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "Requirements, development, procurement, and T&E processes must apply the RMF in the"}
@@ -1305,7 +1319,9 @@ requirements:
     locator: "3.3.a.(2)"
     context: "INTEGRATING THE RMF INTO THE DEFENSE ACQUISITION MANAGEMENT SYSTEM"
     statement: "(2) Requirements, development, procurement, and T&E processes must apply the RMF in the acquisition of DoD information technology."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that leave a life-cycle phase without risk management, and one with no policy integrating systems security engineering within systems engineering; the requirements, procurement and T&E processes applying the RMF are unheld beyond that."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.sse.yaml", "expect": "no organizational policy integrates systems security engineering within systems engineering", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Development processes must apply the RMF in the acquisition of DoD IT: no organizational policy that integrates systems security engineering within systems engineering fails", "sentence": "(2) Requirements, development, procurement, and T&E processes must apply the RMF in the acquisition of DoD information technology."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0147"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "Risks to systems must be designated consistent with the most severe threat"}
@@ -1431,7 +1447,9 @@ requirements:
     locator: "4.2.b.(1).(c)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: DoD ISRMC:"
     statement: "(c) Identifies and manages enterprise level cybersecurity risks."
-    status: "candidate"
+    status: "partial"
+    reason: "RISKX-001 fails a risk executive function with no organization-wide forum for all and aggregated risk, part of the ISRMC (PER-RE) identifying and managing enterprise-level risks; the DoD ISRMC's own enterprise management is outside a run."
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "The risk executive identifies and manages enterprise level cybersecurity risks: no organization-wide forum that considers all and aggregated risk fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0162"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Oversees cybersecurity risk guidance development for DoD business and mission functions."}
@@ -1671,7 +1689,9 @@ requirements:
     locator: "4.3.b.(3)"
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: PAOs:"
     statement: "(3) Designate AOs for MA systems supporting MAs communities of interest specified in DoDI 8320.07 in coordination with appropriate DoD Component heads, if required."
-    status: "candidate"
+    status: "partial"
+    reason: "RAPT-001 fails an AO appointed by an official DoDI 8510.01 Table 8 does not name (the Component head, or a recorded PER-PAO for an MA system); it does not demand that an MA system's AO come from the PAO rather than the Component head, and coordination with the Component heads is unheld."
+    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "PAOs designate AOs for MA systems: an AO appointed by the Component CIO, which Table 8 does not name as its appointing authority, fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0191"
     citation: {"ref": "DODI8510.01", "page": 25, "anchor": "Designate information security architects or systems security engineers for MA segments or"}
@@ -1925,7 +1945,9 @@ requirements:
     locator: "4.4.a.(2)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(2) Initiate and complete all appropriate RMF tasks, with appropriate documentation, for assigned systems."
-    status: "candidate"
+    status: "partial"
+    reason: "TASK-DEF-001 fails the deferral of an in-scope task that produces a core artifact, so the tasks of the authorization package are completed; their appropriate documentation is each task's own rules."
+    evidence: [{"kind": "rule", "target": "TASK-DEF-001", "fixture": "tests/fixtures/negative/TASK-DEF-001.core.yaml", "expect": "produces core artifact", "claim": "constraint", "asserts": "Initiate and complete all appropriate RMF tasks for assigned systems: an in-scope task that produces a core artifact and is deferred fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0220"
     citation: {"ref": "DODI8510.01", "page": 27, "anchor": "Monitor and track the overall execution of system-level POA&Ms."}
@@ -2135,7 +2157,9 @@ requirements:
     locator: "4.4.b.(5).(c)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: PMs (or SO, if no PM is assigned):"
     statement: "(c) Implement the RMF for assigned systems."
-    status: "candidate"
+    status: "partial"
+    reason: "TASK-DEF-001 fails the deferral of an in-scope task that produces a core artifact, part of implementing the RMF for the system; the rest is each task's own rules."
+    evidence: [{"kind": "rule", "target": "TASK-DEF-001", "fixture": "tests/fixtures/negative/TASK-DEF-001.core.yaml", "expect": "produces core artifact", "claim": "constraint", "asserts": "Implement the RMF for assigned systems: an in-scope task that produces a core artifact and is deferred fails"}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0244"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Verify that the planning and execution of all RMF activities are aligned,"}
@@ -2236,7 +2260,9 @@ requirements:
     locator: "4.4.b.(7).(a)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: ISSMs, in addition to the responsibilities established in DoDI 8500.01:"
     statement: "(a) Support implementing the RMF."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-001 fails a system with no ISSM appointed, so an ISSM supports the RMF; the support itself is the ISSM's tasks one by one."
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.issm.yaml", "expect": "no ISSM is appointed for the system", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "The ISSM supports implementing the RMF: no ISSM appointed for the system fails"}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0255"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "Maintain and report systems assessment and authorization status and issues in accordance"}

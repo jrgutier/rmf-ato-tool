@@ -117,6 +117,7 @@ RULES: dict[str, Rule] = {
     "RAR-003": consistency.rar_courses,
     "DIAS-001": consistency.dias_controls,
     "PKG-003": coverage.data_elements,
+    "SAREL-001": coverage.report_elements,
     "DEL-001": coverage.decision_elements,
     "TPL-001": coverage.required_sections,
     "OVS-001": overlays.removal_authorities,
