@@ -52,7 +52,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-POAM](../../MANUAL.md#art-poam), [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp), [ART-CP](../../MANUAL.md#art-cp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
+| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-POAM](../../MANUAL.md#art-poam), [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp), [ART-CP](../../MANUAL.md#art-cp), [ART-BIA](../../MANUAL.md#art-bia) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
 | [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca), [ART-SAP](../../MANUAL.md#art-sap) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar), [ART-SAR](../../MANUAL.md#art-sar) | — |
 | [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra), [ART-IRP](../../MANUAL.md#art-irp) | — |
@@ -108,6 +108,7 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 | [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 | [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 | [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
+| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 **Entry criteria**
 
@@ -124,6 +125,7 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
 - For a system processing PII, each change states whether it creates new privacy risk (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates (PRIV-005).
 - An implemented change of significant security impact has a system plan change in plan-reviews.yaml that references it (change_ref, UPD-002).
+- Each change of significant security impact has a Monitor iteration of the criticality analysis in bia.yaml criticality naming it, dated on or after the change, and no more than a year passes between iterations (BIA-003).
 
 **Alignment**
 
@@ -410,6 +412,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- Each posture report lists in plan_changes every change of the security and privacy plans made since the last report (MRPT-003).
 - For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 - The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 - The posture reports carry the supply chain reporting scrm-plan.yaml sets.

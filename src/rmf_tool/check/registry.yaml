@@ -546,6 +546,7 @@ rules:
       - REQ-SP800-53AR5-0176
       - REQ-SP800-53AR5-0212
       - REQ-SP800-53AR5-0205
+      - REQ-SP800-37R2-0353
   - id: APREP-001
     scope: run
     severity: E
@@ -667,6 +668,7 @@ rules:
       - REQ-SP800-53AR5-0215
       - REQ-SP800-53AR5-0301
       - REQ-SP800-53AR5-0295
+      - REQ-SP800-53R5-0031
   - id: ASMT-006
     scope: run
     severity: E
@@ -1527,6 +1529,7 @@ rules:
       - REQ-SP800-137A-0070
       - REQ-SP800-137A-0093
       - REQ-SP800-18R2-0194
+      - REQ-DODI8500.01-0169
   - id: METR-002
     scope: run
     severity: E
@@ -1583,6 +1586,7 @@ rules:
     enforces:
       - REQ-SP800-37R2-0318
       - REQ-SP800-53AR5-0039
+      - REQ-DODI8500.01-0410
   - id: ISCM-005
     scope: run
     severity: E
@@ -4946,6 +4950,7 @@ rules:
       - REQ-DODI5000.89-0182
       - REQ-DODI5000.89-0210
       - REQ-DODI8500.01-0256
+      - REQ-DODI8510.01-0068
   - id: TSTRAT-003
     scope: run
     severity: E
@@ -5186,9 +5191,9 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-5
-    summary: the continuous monitoring strategy lacks the vulnerability management process, its identification sources, tools across the life cycle, monthly scans or patch reach
+    summary: the continuous monitoring strategy lacks the vulnerability management process, its identification sources, tools across the life cycle, monthly scans, patch reach or patching metrics of the strategy
     fixture: tests/fixtures/negative/VULN-007.yaml
-    hint: conmon.yaml vulnerability_management lists the five DoD steps, the artifact behind configuration, asset, remediation and mitigation management, CVE as a source, incident reports cross-referenced with CVE, risk assessment data and vendor bulletins, tools of the strategy covering development to retirement, authenticated and non-authenticated scans at least monthly, and a patch coverage scan by a tool of the strategy; a provider's plan recorded there is approved by the AO or AODR.
+    hint: conmon.yaml vulnerability_management lists the five DoD steps, the artifact behind configuration, asset, remediation and mitigation management, CVE as a source, incident reports cross-referenced with CVE, risk assessment data and vendor bulletins, tools of the strategy covering development to retirement, authenticated and non-authenticated scans at least monthly, a patch coverage scan by a tool of the strategy, and patching.metrics naming metrics of conmon.yaml metrics that evaluate patching effectiveness over time; a provider's plan recorded there is approved by the AO or AODR.
     enforces:
       - REQ-DODCIO-CATO-EVAL-0099
       - REQ-DODI5000.83-0206
@@ -5205,6 +5210,7 @@ rules:
       - REQ-DODI8531.01-0183
       - REQ-DTM-24-001-0127
       - REQ-DODI8510.01-0047
+      - REQ-DODI8531.01-0170
   - id: PPSM-001
     scope: run
     severity: E
@@ -6217,6 +6223,78 @@ rules:
     hint: "At C-2 compare each bia.yaml process's disruption_impact with categorization a; for each that exceeds it, record a reevaluation of that process by PER-SPONSOR and PER-IO with its outcome, revising the categorization or the BIA, or retaining both with a rationale."
     enforces:
       - REQ-SP800-60V1R1-0193
+  - id: BIA-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-8
+    summary: "the criticality analysis has no Frame iteration, no Assess iteration once the system is categorized, no Monitor iteration for a significant change, a gap of more than a year, or critical items that are not a prioritized list underpinning the analysis's processes, boundary components and mission critical processes"
+    fixture: tests/fixtures/negative/BIA-003.yaml
+    hint: "In bia.yaml criticality, record a frame iteration at P-8, an assess iteration at C-2 (not before the frame one), a monitor iteration at M-1 naming each change whose security impact is significant (on or after its date), with no more than a year between iterations; rank critical_items 1 to n, each underpinning processes the analysis lists, a component item naming a boundary component, every mission critical process underpinned, and a defensive item (access control, identity management, crypto) when mission critical functions are present."
+    enforces:
+      - REQ-SP800-161R1-1086
+      - REQ-SP800-161R1-1087
+      - REQ-SP800-161R1-1091
+      - REQ-SP800-161R1-1098
+      - REQ-SP800-161R1-1221
+      - REQ-SP800-161R1-1225
+      - REQ-SP800-161R1-1234
+      - REQ-SP800-161R1-1549
+  - id: RCUR-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: "P-2 records no check of the governing references for a later edition, leaves one out, or leaves a later edition of a CNSS issuance or DoDI 8510.01, or of SP 800-53 a year after its publication, unadopted"
+    fixture: tests/fixtures/negative/RCUR-001.yaml
+    hint: "In org-context.yaml reference_currency, record the date of the check and, for CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 (those the library holds), the edition the run uses and any later edition found, with its publication date and whether the run adopts it. A later CNSS issuance or DoDI 8510.01 is adopted; a later SP 800-53 within a year of its final publication."
+    enforces:
+      - REQ-CNSSI1254-0016
+      - REQ-CNSSP22-0030
+      - REQ-DODI8510.01-0269
+      - REQ-FIPS200-0007
+      - REQ-FIPS200-0040
+  - id: MRPT-003
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-5
+    summary: "a security and privacy posture report does not summarize a plan change made since the last report"
+    fixture: tests/fixtures/negative/MRPT-003.yaml
+    hint: "In posture-reports.yaml, list in each report's plan_changes the version of every plan-reviews.yaml change dated after the previous report's issue (for the first report, after the start of its period) and on or before its own issue."
+    enforces:
+      - REQ-SP800-37R2-0738
+  - id: CATG-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: "the system is categorized by a method other than CNSSI 1253 while CNSSI 1253 is not a degraded reference"
+    fixture: tests/fixtures/negative/CATG-004.yaml
+    hint: "Set facts.yaml categorization.method to cnssi1253; the high-water mark is for the degraded policy only, when CNSSI 1253 is a degraded reference the run cites."
+    enforces:
+      - REQ-DODI8500.01-0223
+  - id: CATG-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-12
+    summary: "an information type has no identified information owner, an owner gave no P-12 or C-2 interview, or a type's impact levels trace to no answer of its owner"
+    fixture: tests/fixtures/negative/CATG-005.yaml
+    hint: "In infotypes.yaml information_owners, name each owner or steward (the persona interviewed, its organization and the types whose impact levels it sets) so every type has one; interview each at P-12 or C-2 and cite the owner's answer in each type's sources."
+    enforces:
+      - REQ-CNSSI1253-0047
+      - REQ-DODI8500.01-0418
   - id: PRIV-012
     scope: run
     severity: E
@@ -6261,6 +6339,10 @@ rules:
       - REQ-SP800-53AR5-0047
       - REQ-SP800-53AR5-0161
       - REQ-SP800-53AR5-0168
+      - REQ-SP800-37R2-0353
+      - REQ-SP800-37R2-0475
+      - REQ-SP800-37R2-0522
+      - REQ-SP800-37R2-0348
   - id: PASM-002
     scope: run
     severity: E

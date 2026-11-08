@@ -633,7 +633,8 @@ def _privacy_assessment(ctx: Context, rel: str, aid: str, task: str) -> dict[str
 def privacy_assessment_plan(ctx: Context) -> list[RunFinding]:
     """PASM-001: the assessment plan of a system processing PII scopes every privacy control of
     the baseline, and its privacy assessors are on the team and are the senior agency official
-    for privacy or an independent assessor (SP 800-37r2 A-1 to A-3)."""
+    for privacy or an independent assessor (SP 800-37r2 A-1 to A-3); the senior agency official
+    for privacy identifies its methodologies and metrics (Appendix D)."""
     data = _privacy_assessment(ctx, SAP, "ART-SAP", "A-2")
     if data is None:
         return []
@@ -652,6 +653,11 @@ def privacy_assessment_plan(ctx: Context) -> list[RunFinding]:
             out.append(_finding("PASM-001", "privacy controls are assessed by the senior agency "
                                 f"official for privacy or an independent assessor, not {persona}",
                                 SAP, "A-2"))
+    method = _dict(privacy.get("methodology"))
+    if method and method.get("identified_by") != PRIVACY:
+        out.append(_finding("PASM-001", "the privacy assessment methodologies and metrics are "
+                            f"identified by {method.get('identified_by')}, not the senior agency "
+                            "official for privacy", SAP, "A-2"))
     scoped = _strings(privacy.get("controls"))
     for control in sorted(_privacy_controls(ctx) - scoped):
         out.append(_finding("PASM-001", f"privacy control {control} of the baseline is outside "

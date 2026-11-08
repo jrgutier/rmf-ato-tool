@@ -1,0 +1,21 @@
+rule: BIA-003
+bases:
+- minimal
+description: a mission critical process no critical item underpins
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: mission_critical, value: true}
+- op: set_field
+  file: artifacts/data/bia.yaml
+  path: processes
+  value:
+  - {id: BP-01, name: Relay field reports, disruption_impact: low, recovery_time_hours: 24, interdependencies: [Analysis enclave], sources: [INT-019.A1]}
+  - {id: BP-02, name: Alert the analysis cell, disruption_impact: low, recovery_time_hours: 24, interdependencies: [], sources: [INT-019.A1]}
+- op: set_field
+  file: artifacts/data/bia.yaml
+  path: functions
+  value: [{id: MCF-01, function: Alert the analysis cell to urgent reports, processes: [BP-02], sources: [INT-019.A1]}]
+expect:
+  errors:
+  - BIA-003
+  messages:
+  - 'the criticality analysis leaves mission critical process BP-02 underpinned by no critical item'

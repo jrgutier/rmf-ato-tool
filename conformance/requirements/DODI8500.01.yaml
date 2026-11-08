@@ -1436,7 +1436,9 @@ requirements:
     locator: "ENCLOSURE 2.q"
     context: "RESPONSIBILITIES"
     statement: "q. Collect and report cybersecurity metrics, and ensure that an annual assessment of theDoD Component cybersecurity program is conducted as required by section 3555 of Reference (aa)."
-    status: "candidate"
+    status: "partial"
+    reason: "METR-001 fails a cybersecurity metric of the system's strategy reviewed by an official it is not reported to, and one with no objective, controls, baseline, threshold or review procedure. Unheld: the Component head's collection and reporting of metrics across the Component and the annual assessment of the Component cybersecurity program under 44 U.S.C. 3555, which sit above a run."
+    evidence: [{"kind": "rule", "target": "METR-001", "fixture": "tests/fixtures/negative/METR-001.yaml", "expect": "who is not among the officials it is reported to", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "asserts": "Collect and report cybersecurity metrics: a metric reviewed by an official it is not reported to fails"}]
     work_item: "WI-15"
   - id: "REQ-DODI8500.01-0170"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Develop DoD IS contingency plans and conduct exercises to recover IS services"}
@@ -1893,7 +1895,9 @@ requirements:
     locator: "ENCLOSURE 3.g.(1)"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "(1) All DoD IS and PIT systems will be categorized in accordance with Reference (cb) and will implement a corresponding set of security controls that are published in Reference (cc) regardless of whether they are National Security System (NSS) or non-NSS."
-    status: "candidate"
+    status: "partial"
+    reason: "CATG-004 fails a system categorized by a method other than CNSSI 1253 while CNSSI 1253 is not a degraded reference, NSS or not. Unheld: that the system implements the corresponding set of SP 800-53 controls, which the S-1 baseline resolver and the S-2 tailoring rules hold, not this rule."
+    evidence: [{"kind": "rule", "target": "CATG-004", "fixture": "tests/fixtures/negative/CATG-004.yaml", "expect": "not in accordance with CNSSI 1253, which DoDI 8500.01 requires of every DoD IS and PIT system", "claim": "constraint", "asserts": "All DoD IS and PIT systems are categorized in accordance with CNSSI 1253: a system categorized by the high-water mark fails"}]
     work_item: "WI-426"
   - id: "REQ-DODI8500.01-0224"
     citation: {"ref": "DODI8500.01", "page": 29, "anchor": "All security controls used by DoD are published in the security control"}
@@ -3530,7 +3534,9 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 2. DoD Information Technology"
     statement: "c. Establish guidance for and oversee IS-level risk management activities consistent with Commander, USCYBERCOM, and DoD Component guidance and direction."
-    status: "candidate"
+    status: "partial"
+    reason: "ISCM-004 fails a continuous monitoring strategy, the system's IS-level risk management of its operations, not approved by the AO or AODR. Unheld: the AO's guidance for IS-level risk management, and its consistency with USCYBERCOM and Component guidance."
+    evidence: [{"kind": "rule", "target": "ISCM-004", "fixture": "tests/fixtures/negative/ISCM-004.yaml", "expect": "the authorizing official or designated representative approves the continuous monitoring strategy", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "asserts": "The authorizing official oversees IS-level risk management activities: a continuous monitoring strategy the authorizing official or designated representative does not approve fails"}]
     work_item: "WI-426"
   - id: "REQ-DODI8500.01-0411"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Must be U.S. citizens and DoD officials with the authority to assume"}
@@ -3599,7 +3605,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. Ensure that information owners and stewards associated with DoD information received, processed, stored, displayed, or transmitted on each DoD IS and PIT system are identified in order to establish accountability, access approvals, and special handling requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "CATG-005 fails an information type with no identified information owner, and an owner who gave no P-12 or C-2 interview. Unheld: that owners identified establish accountability, access approvals and special handling (ASMT-013 holds access decided with the owner)."
+    evidence: [{"kind": "rule", "target": "CATG-005", "fixture": "tests/fixtures/negative/CATG-005.interview.yaml", "expect": "so its input to the impact levels is not on record", "claim": "constraint", "asserts": "Information owners of DoD information on the system are identified to establish accountability: an owner who gave no interview, so its input is not on record, fails"}, {"kind": "rule", "target": "CATG-005", "fixture": "tests/fixtures/negative/CATG-005.yaml", "expect": "has no information owner identified", "claim": "presence", "asserts": "Information owners and stewards of DoD information on the system are identified: an information type with no information owner identified fails"}]
     work_item: "WI-426"
   - id: "REQ-DODI8500.01-0419"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "Maintain a repository for all organizational or system-level cybersecurity-related documentation."}

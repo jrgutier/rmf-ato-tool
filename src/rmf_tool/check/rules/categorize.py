@@ -258,6 +258,67 @@ def privacy_approval(ctx: Context) -> list[RunFinding]:
     return out
 
 
+def cnssi_method(ctx: Context) -> list[RunFinding]:
+    """CATG-004: DoDI 8500.01 Encl 3.g(1) categorizes every DoD IS and PIT system under CNSSI
+    1253, NSS or not. The high-water mark stands in only under the degraded policy (plan 7.6),
+    while CNSSI 1253 is a degraded reference the run cites."""
+    cat = _categorization(ctx)
+    if cat is None or "method" not in cat or cat.get("method") == "cnssi1253":
+        return []
+    if "CNSSI1253" in ctx.degraded_refs:
+        return []
+    return [make("CATG-004", f"the system is categorized by {cat.get('method')}, not in "
+                 "accordance with CNSSI 1253, which DoDI 8500.01 requires of every DoD IS and PIT "
+                 "system", FACTS_FILE, None, {C2})]
+
+
+def information_owners(ctx: Context) -> list[RunFinding]:
+    """CATG-005: every information type has an identified information owner, each owner gave a
+    P-12 or C-2 interview, and each type's impact levels trace to an answer of its owner
+    (CNSSI 1253 3.1: all information owners are identified to provide inputs, and each sets the
+    impact level for their information type; DoDI 8500.01 Encl 3.18.b)."""
+    data = ctx.data(INFOTYPES_FILE)
+    if P12 not in scope.active_tasks(ctx.run) or not isinstance(data, dict):
+        return []
+    types = _dicts(data.get("information_types"))
+    if not types:
+        return []
+
+    def err(message: str) -> RunFinding:
+        return make("CATG-005", message, INFOTYPES_FILE, None, {P12})
+
+    owners = _dicts(data.get("information_owners"))
+    if not owners:
+        return [err("infotypes.yaml identifies no information owners of its information types")]
+    personas: dict[str, str] = {}
+    for i in ctx.interviews:
+        if i.task in (P12, C2) and i.front:
+            for a in i.answers:
+                personas[a.id] = str(i.front.get("persona"))
+    interviewed = set(personas.values())
+    owned_by: dict[str, set[str]] = {}
+    out = []
+    for owner in owners:
+        who = str(owner.get("persona"))
+        if who not in interviewed:
+            out.append(err(f"information owner {who} gave no P-12 or C-2 interview, so its "
+                           "input to the impact levels is not on record"))
+        for tid in _list(owner.get("types")):
+            owned_by.setdefault(str(tid), set()).add(who)
+    for info in types:
+        tid = str(info.get("id"))
+        mine = owned_by.get(tid, set())
+        if not mine:
+            out.append(err(f"{tid} has no information owner identified"))
+            continue
+        answered = {personas.get(str(s)) for s in _list(info.get("sources"))}
+        if not answered & mine:
+            out.append(err(f"the impact levels of {tid} trace to no answer of its information "
+                           f"owner ({', '.join(sorted(mine))})"))
+    return out
+
+
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("CATG-001", high_water), ("CATG-002", handling_floors),
-                ("CATG-003", information_types), ("PIIC-001", privacy_approval))
+                ("CATG-003", information_types), ("PIIC-001", privacy_approval),
+                ("CATG-004", cnssi_method), ("CATG-005", information_owners))

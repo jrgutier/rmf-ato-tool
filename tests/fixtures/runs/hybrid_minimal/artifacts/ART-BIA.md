@@ -25,3 +25,8 @@ No external stakeholder depends on the relay's processes [[product/README.md]].
 
 At C-2 no process's disruption impact exceeds the low availability impact, so none is
 reevaluated [[product/README.md]].
+
+## Criticality analysis
+
+The Frame iteration ranked relaying field reports first; the Assess iteration at C-2 kept it
+first and narrowed the list to its critical items [[product/README.md]].

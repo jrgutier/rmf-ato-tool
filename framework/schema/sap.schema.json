@@ -1415,6 +1415,7 @@
       "required": [
         "assessors",
         "controls",
+        "methodology",
         "sources"
       ],
       "properties": {
@@ -1431,6 +1432,17 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/control_id"
+          }
+        },
+        "methodology": {
+          "title": "Assessment methodologies and metrics the senior agency official for privacy identifies to determine whether the privacy controls are implemented correctly, operating as intended and sufficient for the privacy requirements (PASM-001)",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["identified_by", "methods", "metrics"],
+          "properties": {
+            "identified_by": {"$ref": "#/$defs/persona_id"},
+            "methods": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["examine", "interview", "test"]}},
+            "metrics": {"title": "Metrics that show the privacy controls effective and the privacy requirements met", "type": "string", "minLength": 1}
           }
         },
         "sources": {

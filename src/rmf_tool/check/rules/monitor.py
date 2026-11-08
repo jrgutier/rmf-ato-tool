@@ -468,6 +468,33 @@ def organization_tier(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- MRPT-003: a posture report summarizes the plan changes since the last one ---------------
+
+def posture_changes(ctx: Context) -> list[RunFinding]:
+    """MRPT-003: each posture report lists in plan_changes every change of the security and
+    privacy plans (plan-reviews.yaml changes) made since the report before it, or since the
+    start of its period for the first, up to its issue (SP 800-37r2 M-5: at a minimum, posture
+    reports summarize the changes since the last report)."""
+    data = ctx.data(REPORTS_FILE)
+    if not _in_play(ctx, "ART-SECRPT") or not isinstance(data, dict):
+        return []
+    out, err = _collector("MRPT-003", REPORTS_FILE, "M-5")
+    changes = [(c, _day(c.get("date"))) for c in _items(ctx.data(PLAN_REVIEWS_FILE), "changes")]
+    reports = sorted(((r, _day(r.get("issued"))) for r in _items(data, "reports")
+                      if _day(r.get("issued"))), key=lambda pair: pair[1])
+    since = None
+    for report, issued in reports:
+        start = since or _day(_block(report, "period").get("from"))
+        listed = _strings(report, "plan_changes")
+        for change, day in changes:
+            if day and start and start < day <= issued \
+                    and str(change.get("version")) not in listed:
+                err(f"{report.get('id')} does not summarize the plan change "
+                    f"{change.get('version')} of {day}, made since the last report")
+        since = issued
+    return out
+
+
 # --- MISCM-001: the ISCM program assessment a decision reads --------------------------------
 
 def _iscm_report(a: Record, err: Err) -> None:

@@ -1,0 +1,11 @@
+rule: BIA-003
+bases:
+- minimal
+description: critical items ranked 1 and 3, not a prioritized list
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: criticality.critical_items.1.rank, value: 3}
+expect:
+  errors:
+  - BIA-003
+  messages:
+  - 'the criticality analysis is not a prioritized list: ranks [1, 3] are not 1 to 2'

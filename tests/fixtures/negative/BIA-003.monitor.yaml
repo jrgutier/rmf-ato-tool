@@ -1,0 +1,13 @@
+rule: BIA-003
+bases:
+- minimal
+description: a change with a significant security impact and no Monitor iteration of the criticality analysis
+mutations:
+- {op: set_field, file: artifacts/data/changes.yaml, path: changes.0.security_impact.result, value: significant}
+expect:
+  errors:
+  - BIA-003
+  also:
+  - UPD-002
+  messages:
+  - 'the criticality analysis has no Monitor iteration for CHG-001, a change with a significant security impact'

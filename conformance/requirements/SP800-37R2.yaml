@@ -3090,8 +3090,9 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "Organizations consider both the technical expertise and level of independence87 required in selecting control assessors.88 Organizations ensure that control assessors possess the required skills and technical expertise to develop effective assessment plans and to conduct assessments of program management, system-specific, hybrid, and common controls, as appropriate. This includes general knowledge of risk management concepts and approaches as well as comprehensive knowledge of and experience with the hardware, software, and firmware components implemented. In organizations where the assessment capability is centrally managed, the senior agency information security officer may have the responsibility of selecting and managing the security control assessors or assessment teams for organizational systems. As controls may be implemented to achieve security and privacy objectives, organizations consider the degree of collaboration between security control and privacy control assessors that is necessary."
-    status: "candidate"
-    reason: "ASMT-007 holds qualification and independence; the skills and expertise for each kind of control and the collaboration of security and privacy assessors are unheld (WI-408, WI-03)."
+    status: "partial"
+    reason: "PASM-001 fails a privacy assessor who is not on the assessment team of the plan, where the security and privacy control assessors collaborate. Unheld: the technical expertise and independence considered in selecting assessors beyond what ASMT-007 records, the skills and expertise for each kind of control (program management, system-specific, hybrid, common) and knowledge of the components implemented (WI-408), and the SISO's selection of assessors where assessment is centrally managed (a permission)."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.team.yaml", "expect": "is not on the assessment team of the plan", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "sentence": "As controls may be implemented to achieve security and privacy objectives, organizations consider the degree of collaboration between security control and privacy control assessors that is necessary.", "asserts": "Organizations consider the collaboration between security control and privacy control assessors: a privacy assessor who is not on the assessment team of the plan fails"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0349"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "Organizations can conduct self-assessments of controls or obtain the services of an"}
@@ -3135,8 +3136,9 @@ requirements:
     locator: "TASK A-2"
     context: ""
     statement: "Develop, review, and approve plans to assess implemented controls."
-    status: "candidate"
-    reason: "ASMT-001 holds the review and approval of the security assessment plan and is at its fan-out cap; the privacy assessment plan is WI-03."
+    status: "covered"
+    reason: "ASMT-001 fails an assessment plan not reviewed by the SCA or not approved by the AO or AODR before the assessment starts; for a system processing PII, PASM-001 fails a plan whose privacy scope leaves out a privacy control of the baseline, so the privacy assessment plan is developed with the security one."
+    evidence: [{"kind": "rule", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.approver.yaml", "expect": "assessment plans are approved by the authorizing official or designated representative", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Approve plans to assess implemented controls: assessment plans approved by anyone but the authorizing official or designated representative fail"}, {"kind": "rule", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.reviewer.yaml", "expect": "the assessment plan is reviewed by the security control assessor, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Review plans to assess implemented controls: an assessment plan reviewed by someone other than the security control assessor fails"}, {"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.scopeother.yaml", "expect": "of the baseline is outside the privacy scope of the assessment plan", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "asserts": "Develop plans to assess implemented privacy controls: a privacy control of the baseline outside the scope of the assessment plan fails"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0354"
     citation: {"ref": "SP800-37R2", "page": 82, "anchor": "Security and privacy assessment plans are developed by control assessors based on"}
@@ -4309,8 +4311,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "COMMON CONTROL PROVIDER"
     statement: "The senior agency official for privacy is responsible for designating which privacy controls may be treated as common controls. Privacy controls that are designated as common controls are documented in the organization’s privacy program plan.119 The senior agency official for privacy has oversight responsibility for common controls in place or planned for meeting applicable privacy requirements and managing privacy risks and is responsible for assessing those controls. At the discretion of the organization, privacy controls that are designated as common controls may be assessed by an independent assessor. In all cases, however, the senior agency official for privacy retains responsibility and accountability for the organization’s privacy program, including any privacy functions performed by independent assessors. Privacy plans and privacy control assessment reports are made available to systems owners whose systems inherit privacy controls that are designated as common controls."
-    status: "candidate"
-    reason: "PER-PRIV is R on P-5 and S-3; the assessment of privacy common controls is WI-03 and the privacy program plan WI-05."
+    status: "partial"
+    reason: "PASM-001 fails, for a system processing PII, privacy controls assessed by anyone but the senior agency official for privacy or an independent assessor. Unheld: the SAOP's designation of privacy common controls and their place in the privacy program plan (WI-05), and that privacy plans and privacy assessment reports reach the owners of systems inheriting them."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.independent.yaml", "expect": "official for privacy or an independent assessor, not", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "sentence": "The senior agency official for privacy has oversight responsibility for common controls in place or planned for meeting applicable privacy requirements and managing privacy risks and is responsible for assessing those controls.", "asserts": "The senior agency official for privacy is responsible for assessing privacy controls: privacy controls assessed by the ISSM, neither the senior agency official for privacy nor an independent assessor, fail"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0476"
     citation: {"ref": "SP800-37R2", "page": 135, "anchor": "Organizations can have multiple common control providers depending on how security and"}
@@ -4743,8 +4746,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Identifying assessment methodologies and metrics to determine whether privacy controls are implemented correctly, operating as intended, and sufficient to ensure compliance with applicable privacy requirements and manage privacy risks;"
-    status: "candidate"
-    reason: "Privacy assessment methodologies and metrics are the privacy assessment plan of WI-03."
+    status: "partial"
+    reason: "PASM-001 fails, for a system processing PII, privacy assessment methodologies and metrics in sap.yaml privacy identified by anyone but the senior agency official for privacy; the schema requires the methods and the metrics. Unheld: that the metrics determine the privacy controls correct, operating as intended and sufficient, which a run states in prose."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.methodology.yaml", "expect": "the privacy assessment methodologies and metrics are identified by", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "asserts": "The senior agency official for privacy identifies assessment methodologies and metrics for privacy controls: methodologies and metrics identified by the ISSM fail"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0523"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Reviewing and approving privacy plans for information systems prior to authorization, reauthorization,"}
@@ -6698,8 +6702,9 @@ requirements:
     locator: "TASK M-5"
     context: ""
     statement: "At a minimum, security and privacy posture reports summarize changes to the security and privacy plans, security and privacy assessment reports, and plans of action and milestones that have occurred since the last report."
-    status: "candidate"
-    reason: "ART-SECRPT '## Changes since the last report' summarizes changes in prose; no rule reads it, and privacy plans and assessment reports are WI-02 and WI-03."
+    status: "partial"
+    reason: "MRPT-003 fails a posture report that does not list a change of the security and privacy plans (plan-reviews.yaml changes) made since the last report. Unheld: the changes to the security and privacy assessment reports and to the POA&M, whose records carry no change dates a rule can window."
+    evidence: [{"kind": "rule", "target": "MRPT-003", "fixture": "tests/fixtures/negative/MRPT-003.yaml", "expect": "made since the last report", "claim": "constraint", "holds_when": "ART-SECRPT is produced or seeded", "asserts": "Posture reports summarize changes to the security and privacy plans that have occurred since the last report: a plan change made since the last report and not summarized fails"}]
     work_item: "WI-03"
     promoted: {"reason": "'At a minimum' sets required report content inside a paragraph otherwise about flexibility; rejected for no marker."}
   - id: "REQ-SP800-37R2-0739"

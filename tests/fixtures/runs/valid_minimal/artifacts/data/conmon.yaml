@@ -103,6 +103,17 @@ metrics:
     baseline: No open CAT I finding older than its POA&M milestone.
     threshold: Any CAT I finding past due, or more than two open at once.
     review: {by: [PER-ISSM, PER-AO], procedure: The ISSM reviews the count each month with the scan results and escalates a breached threshold to the AO with a POA&M update.}
+  - id: MET-02
+    name: Mean time to patch
+    measures: Mean days from a patch's release to its deployment on the relay, kept month over month
+    frequency: monthly
+    reported_to: [PER-ISSM]
+    used_by: [M-2, M-3]
+    objective: Show whether the patching process keeps up with released fixes.
+    controls: [si-2]
+    baseline: Patches deployed within 30 days of release.
+    threshold: A monthly mean above 30 days.
+    review: {by: [PER-ISSM], procedure: The ISSM compares the monthly mean with the last six months and raises a rising trend at the next posture report.}
 delegations:
   - {activity: Threat monitoring and incident handling, partner: PER-CSSP, agreement: CSSP service level agreement}
   - {activity: Operation of the inherited identity provider, partner: LA-01, agreement: Enterprise IT Services inheritance agreement}
@@ -139,6 +150,8 @@ vulnerability_management:
     - {covers: Appliance firmware outside enterprise patching, source: vendor}
     coverage_scan: {tool: TOOL-01, frequency: monthly}
     noncompliant_devices: Network access control quarantines a device missing patches until the ISSO brings it to the baseline.
+    metrics:
+    - {metric: MET-02, measure: mean-time-to-patch}
   log_repository: The enclave SIEM keeps scan results and logs.
   sources: [INT-030.A1]
 lifecycle_approach:

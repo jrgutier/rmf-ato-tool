@@ -1,0 +1,14 @@
+rule: RCUR-001
+bases:
+- minimal
+description: a later SP 800-53 release published more than a year before the check and not adopted
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: reference_currency.references.3.later_edition
+  value: {edition: Release 5.3.0, published: '2025-09-01', adopted: false}
+expect:
+  errors:
+  - RCUR-001
+  messages:
+  - 'SP800-53R5 has a later edition, Release 5.3.0, published on 2025-09-01, more than a year before the check, and the run does not adopt it'

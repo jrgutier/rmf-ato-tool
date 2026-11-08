@@ -14,6 +14,7 @@ from collections.abc import Callable
 from typing import Any
 
 from rmf_tool import baseline as baseline_mod
+from rmf_tool import refs
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import SAR_DIR, SSP_DIR, family_records
@@ -834,4 +835,49 @@ def role_conflicts(ctx: Context) -> list[RunFinding]:
             err(f"{name} holds both the authorizing official and the system owner role: an "
                 "authorizing official cannot occupy the role of system owner for a system it "
                 "authorizes")
+    return out
+
+
+# --- RCUR-001: governing references checked for a later edition (P-2) -----------------------
+
+# Whose later editions apply at once (CNSSI 1254 para. 10, CNSSP 22 para. 9: future updates to
+# referenced documents apply; DoDI 8510.01 5.1: the most up-to-date DoD intent), and SP 800-53,
+# whose most current version FIPS 200 requires, with up to a year from final publication.
+APPLY_AT_ONCE = ("CNSSI1254", "CNSSP22", "DODI8510.01")
+WITHIN_A_YEAR = ("SP800-53R5",)
+YEAR_DAYS = 365
+
+
+def reference_currency(ctx: Context) -> list[RunFinding]:
+    """RCUR-001: P-2 records a check of each governing reference the library holds for a later
+    edition; a later edition of a CNSS issuance or DoDI 8510.01 is adopted, and one of SP 800-53
+    by a year after its final publication (FIPS 200 sec. 10)."""
+    data, out, err = _record(ctx, "RCUR-001", "P-2")
+    if data is None or "P-2" not in scope.active_tasks(ctx.run):
+        return out
+    record = data.get("reference_currency")
+    if not isinstance(record, dict):
+        err("org-context.yaml records no check of the governing references for a later edition")
+        return out
+    try:
+        held = {str(r.get("id")) for r in refs.load_index(ctx.run.repo)["references"]}
+    except refs.IndexFileError:
+        return out
+    checked = _date(record.get("checked"))
+    listed = {str(r.get("ref")): r for r in _dicts(record.get("references"))}
+    for ref in (*APPLY_AT_ONCE, *WITHIN_A_YEAR):
+        if ref in held and ref not in listed:
+            err(f"the check for later editions leaves out {ref}, whose later editions apply")
+    for ref, entry in sorted(listed.items()):
+        later = entry.get("later_edition")
+        if not isinstance(later, dict) or later.get("adopted") is True:
+            continue
+        published = _date(later.get("published"))
+        if ref in APPLY_AT_ONCE:
+            err(f"{ref} has a later edition, {later.get('edition')}, which applies to this "
+                "policy, and the run does not adopt it")
+        elif ref in WITHIN_A_YEAR and published and checked \
+                and (checked - published).days > YEAR_DAYS:
+            err(f"{ref} has a later edition, {later.get('edition')}, published on {published}, "
+                "more than a year before the check, and the run does not adopt it")
     return out

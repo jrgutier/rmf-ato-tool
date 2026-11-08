@@ -1457,7 +1457,9 @@ requirements:
     locator: "3.5.c"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "c. Compute and maintain metrics (mean time to patch, average patch deployment success rate, average vulnerability exposure, and others over time), to evaluate the effectiveness of patching processes."
-    status: "candidate"
+    status: "partial"
+    reason: "VULN-007 fails a patching metric of conmon.yaml vulnerability_management that is not a metric the strategy computes and maintains; the schema asks for at least one, measuring mean time to patch, patch deployment success rate, vulnerability exposure or another. Unheld: that the metrics are computed from patch data and kept over time, and that they are used to evaluate the patching process."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.metric.yaml", "expect": "named as a metric of patching effectiveness, is not a metric the strategy computes and maintains", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "asserts": "Compute and maintain metrics to evaluate the effectiveness of patching: a patching metric that is not a metric the strategy computes and maintains fails"}]
     work_item: "WI-15"
   - id: "REQ-DODI8531.01-0171"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Monitor compliance, remediation, mitigation, and document deviations from established configuration procedures and"}

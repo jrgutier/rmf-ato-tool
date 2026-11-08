@@ -177,6 +177,7 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 - ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI 8430.01 for the software it develops or deploys.
 - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
 - artifacts/data/scrm-org.yaml states the C-SCRM frame of SP 800-161 Tasks 1-1 to 1-4 (OT suppliers in scope, each assumption refined at P-14, threat sources addressed, appetite at Level 1, tolerance at Levels 2 and 3, priorities and the nine framing outputs), the C-SCRM policy and strategy, what each level holds and informs, the process steps and the maturity of the key practices (SCRM-020, SCRM-022, SCRM-024, SCRM-027 to SCRM-029).
+- org-context.yaml reference_currency records the check of CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 for a later edition, and adopts a later edition of the first three and of SP 800-53 within a year of its final publication (RCUR-001).
 
 **Alignment**
 
@@ -510,6 +511,7 @@ Writes to `facts.yaml`: `missions`.
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
 - facts.yaml `missions` (from framework 0.2.0) lists each mission, business function and mission/business process with its kind and whether it is mission essential, identified by the mission or business owner; an essential function names its supporting assets and data once P-11 and P-12 put them on record (MSN-001).
 - artifacts/data/bia.yaml records whether mission critical functions are present and which, and each supported process with the impact of its disruption, the users' recovery time requirement and its interdependencies (BIA-001).
+- bia.yaml criticality records the Frame iteration of the SP 800-161 criticality analysis and a prioritized list of the critical processes, systems and components, each underpinning processes the analysis lists (BIA-003).
 
 **Alignment**
 
@@ -735,6 +737,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - ART-INFOTYPES and infotypes.yaml list each information type with its SP 800-60 identifier and provisional impact levels.
 - The determination of whether the system processes PII is recorded for approval by the SAOP or designee.
 - For a system processing PII, each PII information type records whom the PII is about and whether it holds PHI or SSNs, and infotypes.yaml privacy records the issuances its handling complies with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN, the SSN justification, records coordination and the PIA determination with its DoDI 5400.16 basis and due date (PRIV-001).
+- infotypes.yaml information_owners identifies the owner or steward of every information type, each interviewed at P-12 or C-2, and each type's impact levels cite its owner's answer (CATG-005).
 
 **Alignment**
 
@@ -1134,6 +1137,7 @@ Writes to `facts.yaml`: `categorization`.
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
 - A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
+- bia.yaml criticality records an Assess iteration, not dated before the Frame one, that updates the criticality analysis with the categorization and narrows the prioritized critical items, a component item naming a boundary component (BIA-003).
 
 **Alignment**
 

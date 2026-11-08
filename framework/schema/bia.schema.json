@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:bia",
   "title": "runs/<run-id>/artifacts/data/bia.yaml",
-  "description": "The system business impact and criticality analysis (P-8, ART-BIA; C-2 adds reevaluations): whether mission critical functions are present and which, the mission and business processes the system supports with the impact of their disruption, the users' recovery time requirement and interdependencies, the external stakeholders that depend on them, and the reevaluations a conflict with the categorization triggers. P-10, P-14, P-15, C-2, S-1, S-2, S-4 and I-1 read it; the S-4 contingency BIA (contingency.yaml bia) refines it. BIA-001 and BIA-002 judge it.",
+  "description": "The system business impact and criticality analysis (P-8, ART-BIA; C-2 adds reevaluations): whether mission critical functions are present and which, the mission and business processes the system supports with the impact of their disruption, the users' recovery time requirement and interdependencies, the external stakeholders that depend on them, and the reevaluations a conflict with the categorization triggers. P-10, P-14, P-15, C-2, S-1, S-2, S-4 and I-1 read it; the S-4 contingency BIA (contingency.yaml bia) refines it. The criticality block is the SP 800-161 Appendix G criticality analysis, iterated at P-8 (Frame), C-2 (Assess) and M-1 (Monitor). BIA-001 to BIA-003 judge it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,6 +11,7 @@
     "processes",
     "external_dependents",
     "reevaluations",
+    "criticality",
     "sources"
   ],
   "properties": {
@@ -118,6 +119,57 @@
           },
           "rationale": {"type": "string", "minLength": 1},
           "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "criticality": {
+      "title": "The criticality analysis of SP 800-161 Appendix G: its iterations in Frame (P-8), Assess (C-2) and Monitor (M-1), and the prioritized list of critical processes, systems and components it narrows to",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["iterations", "critical_items"],
+      "properties": {
+        "iterations": {
+          "title": "Each iteration of the criticality analysis: Frame at P-8, Assess at C-2 updating it, Monitor at M-1 for a change warranting iteration",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["step", "date", "summary", "sources"],
+            "properties": {
+              "step": {"title": "Risk management step of the iteration", "enum": ["frame", "assess", "monitor"]},
+              "date": {"type": "string", "format": "date"},
+              "change": {"title": "Monitor: the change that warranted the iteration", "type": "string", "pattern": "^CHG-\\d{3}$"},
+              "summary": {"title": "What the iteration found or refined", "type": "string", "minLength": 1},
+              "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+            }
+          }
+        },
+        "critical_items": {
+          "title": "The narrowed, prioritized list of critical processes, systems and system components, rank 1 the most critical",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rank", "kind", "item", "role", "processes", "sources"],
+            "properties": {
+              "rank": {"title": "Priority of the critical item, 1 the highest; ranks run 1 to n", "type": "integer", "minimum": 1},
+              "kind": {"enum": ["process", "system", "component"]},
+              "item": {"title": "The process (BP-nn), the system, or the boundary component (CMP-...)", "type": "string", "minLength": 1},
+              "role": {
+                "title": "Why it is critical: it carries a mission process, delivers a defensive and commonly shared process (access control, identity management, crypto), or is enabling infrastructure with unmediated access (power supply)",
+                "enum": ["mission", "defensive", "infrastructure"]
+              },
+              "processes": {
+                "title": "The processes it underpins",
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {"type": "string", "pattern": "^BP-\\d{2}$"}
+              },
+              "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+            }
+          }
         }
       }
     },

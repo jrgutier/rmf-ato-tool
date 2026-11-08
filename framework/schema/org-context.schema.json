@@ -2944,6 +2944,47 @@
         "$ref": "#/$defs/source"
       }
     },
+    "reference_currency": {
+      "title": "The check, at P-2, of each governing reference for a later edition: the edition the run uses, any later edition found, and whether it is adopted (RCUR-001)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checked", "references", "sources"],
+      "properties": {
+        "checked": {"type": "string", "format": "date"},
+        "references": {
+          "title": "Governing references checked for a later edition: the CNSS issuances whose future updates apply, SP 800-53 (the most current version, FIPS 200) and DoDI 8510.01 (the most up-to-date DoD intent)",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref", "edition_used", "later_edition", "sources"],
+            "properties": {
+              "ref": {"title": "Reference ID in references/index.yaml", "type": "string", "pattern": "^[A-Z][A-Z0-9.-]+$"},
+              "edition_used": {"title": "The edition the run applies", "type": "string", "minLength": 1},
+              "later_edition": {
+                "title": "A later edition found by the check, or null when none is published",
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["edition", "published", "adopted"],
+                    "properties": {
+                      "edition": {"type": "string", "minLength": 1},
+                      "published": {"type": "string", "format": "date"},
+                      "adopted": {"title": "Whether the run applies the later edition", "type": "boolean"}
+                    }
+                  }
+                ]
+              },
+              "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+            }
+          }
+        },
+        "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+      }
+    },
     "obtained_overlays": {
       "title": "Overlays the organization obtained from their owner because the library holds them not (CDS, Intelligence, a SAP authority's specifications, DoD-specific overlays on the RMF KS); C-2 applies one by its ID",
       "type": "array",
