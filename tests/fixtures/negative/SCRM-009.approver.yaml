@@ -1,0 +1,14 @@
+rule: SCRM-009
+bases:
+- minimal
+description: a C-SCRM plan approved by no persona of the framework
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.approval.approved_by
+  value: PER-NOBODY
+expect:
+  errors:
+  - SCRM-009
+  messages:
+  - the plan's approver PER-NOBODY is no framework persona, so no role is stated as responsible for the plan

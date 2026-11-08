@@ -537,6 +537,10 @@ def plan_content(ctx: Context) -> list[RunFinding]:
         err(f"the C-SCRM plan does not specify information type {inf}")
     for inf in sorted(named - held) if _doc(ctx, INFOTYPES_FILE) is not None else ():
         err(f"the C-SCRM plan names {inf}, which infotypes.yaml does not hold")
+    approver = _obj(plan, "approval").get("approved_by")
+    if approver not in ctx.run.personas:
+        err(f"the plan's approver {approver} is no framework persona, so no role is stated as "
+            "responsible for the plan")
     pmo = _obj(_doc(ctx, ORG_FILE), "governance").get("pmo")
     if pmo in ("dedicated", "matrixed") and _obj(plan, "approval").get("pmo") != "coordinated":
         err("the plan's approval was not coordinated with the C-SCRM PMO the organization "
