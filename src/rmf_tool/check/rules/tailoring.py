@@ -594,6 +594,24 @@ def requirement_trace(ctx: Context) -> list[RunFinding]:
 
 # --- TLR-010: common control inheritance -----------------------------------------------
 
+def referenced(ctx: Context) -> list[RunFinding]:
+    """SSPI-001: a control S-3 allocates as a common control is referenced in the inheriting
+    system's security plan as inherited, from a named provider (SP 800-37r2 2.4, Task S-4)."""
+    data = ctx.data(ALLOCATION_FILE)
+    if not isinstance(data, dict) or not (_active(ctx, "S-3") and _active(ctx, "S-4")):
+        return []
+    common = {str(a.get("control_id")): a.get("provider") for a in data.get("allocations") or []
+              if isinstance(a, dict) and a.get("type") == "common"}
+    out: list[RunFinding] = []
+    for rel, item in family_records(ctx, SSP_DIR, "controls"):
+        cid = str(item.get("control_id"))
+        if cid in common and item.get("status") != "inherited":
+            out.append(make("SSPI-001", f"{cid} is allocated as a common control of "
+                            f"{common[cid]}, and the security plan does not reference it as "
+                            f"inherited (status {item.get('status')})", rel, None, {"S-4"}))
+    return out
+
+
 def inheritance(ctx: Context) -> list[RunFinding]:
     """The system owner and the AO determine, for each provider, that the common controls on
     offer protect the inheriting system commensurate with risk, having examined their

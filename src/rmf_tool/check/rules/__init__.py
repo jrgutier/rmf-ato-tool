@@ -147,6 +147,7 @@ RULES: dict[str, Rule] = {
     "TLR-008": tailoring.capabilities,
     "TLR-009": tailoring.requirement_trace,
     "TLR-010": tailoring.inheritance,
+    "SSPI-001": tailoring.referenced,
     "TLR-011": tailoring.capability_gaps,
     "ASMT-001": assessment.preparation,
     "APREP-001": assessment.prepared,

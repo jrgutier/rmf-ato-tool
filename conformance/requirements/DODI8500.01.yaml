@@ -201,8 +201,8 @@ requirements:
     context: "Performance"
     statement: "(1) Implementation of cybersecurity will be overseen and governed through the integrated decision structures and processes described in this instruction."
     status: "partial"
-    reason: "RISKX-001 refuses risk forums that never consider aggregated risk; the governance bodies integrating with the DoD enterprise structures (OCTX-003's clause) cannot be cited, OCTX-003 being at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "claim": "constraint", "asserts": "Cybersecurity is governed through the decision structures this instruction describes: no organization-wide forum that considers aggregated risk fails", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}]
+    reason: "RISKX-001 refuses risk forums that never consider aggregated risk, and OGOV-001 a program with no governance body integrating with the DoD enterprise governance processes; the decision structures this instruction describes beyond those are unheld."
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "claim": "constraint", "asserts": "Cybersecurity is governed through the decision structures this instruction describes: no organization-wide forum that considers aggregated risk fails", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}, {"kind": "rule", "target": "OGOV-001", "fixture": "tests/fixtures/negative/OGOV-001.governance.yaml", "expect": "no cybersecurity governance body integrates with the DoD enterprise governance processes", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Implementation of cybersecurity is overseen and governed through the integrated decision structures: no cybersecurity governance body that integrates with the DoD enterprise governance processes fails", "sentence": "(1) Implementation of cybersecurity will be overseen and governed through the integrated decision structures and processes described in this instruction."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0024"
     citation: {"ref": "DODI8500.01", "page": 3, "anchor": "Performance will be measured, assessed for effectiveness, and managed relative to contributions"}
@@ -236,7 +236,9 @@ requirements:
     locator: "INSTRUCTION.f"
     context: ""
     statement: "f. DoD Information. All DoD information in electronic format will be given an appropriate level of confidentiality, integrity, and availability that reflects the importance of both information sharing and protection."
-    status: "candidate"
+    status: "partial"
+    reason: "CATG-001 fails a system confidentiality of not applicable, so the system's information takes a level for each objective; that the level reflects the importance of both information sharing and protection is a judgment no record fails."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.na.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "All DoD information is given an appropriate level of confidentiality, integrity and availability: a system confidentiality of not-applicable, below the high-water mark, fails", "sentence": "All DoD information in electronic format will be given an appropriate level of confidentiality, integrity, and availability that reflects the importance of both information sharing and protection."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0028"
     citation: {"ref": "DODI8500.01", "page": 4, "anchor": "Identity assurance must be used to ensure strong identification, authentication, and eliminate"}
@@ -311,8 +313,8 @@ requirements:
     context: "Cybersecurity Workforce"
     statement: "(2) Qualified cybersecurity personnel must be identified and integrated into all phases of the system development life cycle."
     status: "partial"
-    reason: "Qualification is held by WFQ-001 and assignment by OCTX-013; identification of an ISSM sits in OCTX-001, at its fan-out cap, and integration into all life-cycle phases rests on task RACI."
-    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.writing.yaml", "expect": "the cybersecurity position is not assigned in writing", "claim": "constraint", "asserts": "Qualified cybersecurity personnel must be identified: a cybersecurity position not assigned in writing fails", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}]
+    reason: "Qualification is held by WFQ-001 and assignment by OCTX-013; the identification of an ISSM is held by OCTX-001 (no ISSM appointed for the system fails), and integration into all life-cycle phases rests on task RACI."
+    evidence: [{"kind": "rule", "target": "OCTX-013", "fixture": "tests/fixtures/negative/OCTX-013.writing.yaml", "expect": "the cybersecurity position is not assigned in writing", "claim": "constraint", "asserts": "Qualified cybersecurity personnel must be identified: a cybersecurity position not assigned in writing fails", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}, {"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.issm.yaml", "expect": "no ISSM is appointed for the system", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "Qualified cybersecurity personnel must be identified: no ISSM appointed for the system fails"}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0036"
     citation: {"ref": "DODI8500.01", "page": 4, "anchor": "Capabilities built to support cybersecurity objectives that are shared with mission partners will be consistent with"}
@@ -328,7 +330,9 @@ requirements:
     locator: "INSTRUCTION.j.(2)"
     context: "Mission Partners"
     statement: "(2) DoD-originated and DoD-provided information residing on mission partner ISs must be properly and adequately safeguarded, with documented agreements indicating required levels of protection."
-    status: "candidate"
+    status: "partial"
+    reason: "The documented agreements are held: MPAG-001 fails a mission partner agreement that does not state the data protection requirements. That DoD information on the partner's systems is in fact properly and adequately safeguarded is the partner's, which no run record can fail."
+    evidence: [{"kind": "rule", "target": "MPAG-001", "fixture": "tests/fixtures/negative/MPAG-001.dataprot.yaml", "expect": "the mission partner agreement does not state", "claim": "constraint", "asserts": "DoD information residing on mission partner systems is safeguarded with documented agreements indicating required levels of protection: a mission partner agreement that does not state data-protection-requirements fails", "sentence": "(2) DoD-originated and DoD-provided information residing on mission partner ISs must be properly and adequately safeguarded, with documented agreements indicating required levels of protection."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0038"
     citation: {"ref": "DODI8500.01", "page": 5, "anchor": "RELEASABILITY. Cleared for public release. This instruction is available on the Directives"}
@@ -1190,8 +1194,8 @@ requirements:
     context: "RESPONSIBILITIES"
     statement: "c. Appoint an AO for all DoD IS and PIT systems under their purview and ensure all DoD ISs and PIT systems are authorized in accordance with Reference (q)."
     status: "partial"
-    reason: "GATE-001 refuses fielding with no ATO in force, a presence test; the AO's appointment by the Component head sits in OCTX-001, at its fan-out cap. The only item is a presence clause, so nothing here fails on a wrong value; the entry is honestly partial."
-    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "asserts": "Ensure all DoD ISs and PIT systems are authorized: a system fielded when no ATO or ATO with conditions stands on that date fails"}]
+    reason: "The appointment of an AO by the Component head is held: RAPT-001 fails an AO appointed by the Component CIO, not the Component head, as DoDI 8510.01 Table 8 names. Authorization of every system rests on GATE-001, a presence clause (fielding with no ATO in force)."
+    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "asserts": "Ensure all DoD ISs and PIT systems are authorized: a system fielded when no ATO or ATO with conditions stands on that date fails"}, {"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "Appoint an AO for all DoD IS and PIT systems under their purview: an AO appointed by the Component CIO, which Table 8 does not name as its appointing authority, fails", "sentence": "Appoint an AO for all DoD IS and PIT systems under their purview and ensure all DoD ISs and PIT systems are authorized in accordance with Reference (q)."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0143"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Ensure that PIT systems are identified, designated as such, and centrally registered"}
@@ -1428,7 +1432,9 @@ requirements:
     locator: "ENCLOSURE 2.p"
     context: "RESPONSIBILITIES"
     statement: "p. Ensure that the cybersecurity testing and evaluation is conducted throughout the acquisition life cycle and integrated with interoperability and other functional testing, and that a cybersecurity representative participates in planning, execution, and reporting of integrated T&E activities as discussed in Enclosure 6 of Reference (at)."
-    status: "candidate"
+    status: "partial"
+    reason: "Cybersecurity T&E throughout the acquisition life cycle is held in part: TSTRAT-002 fails a test strategy whose penetration and exploitation testing is not planned and resourced in both DT&E and OT&E. Integration with interoperability and other functional testing, and the participation of a cybersecurity representative in integrated T&E planning, execution and reporting, are unheld by a rule."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.phases.yaml", "expect": "penetration and exploitation testing is planned and resourced as part of both the DT&E and the OT&E", "claim": "constraint", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml", "asserts": "Cybersecurity testing and evaluation is conducted throughout the acquisition life cycle: penetration and exploitation testing not planned and resourced as part of both the DT&E and the OT&E fails", "sentence": "Ensure that the cybersecurity testing and evaluation is conducted throughout the acquisition life cycle and integrated with interoperability and other functional testing, and that a cybersecurity representative participates in planning, execution, and reporting of integrated T&E activities as discussed in Enclosure 6 of Reference (at)."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0169"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Collect and report cybersecurity metrics, and ensure that an annual assessment of"}
@@ -1867,7 +1873,9 @@ requirements:
     locator: "ENCLOSURE 3.f"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "f. Risk Assessment. Risk assessment is a key step in the organizational risk management process. Risk assessments will be performed in accordance with the process in Reference (by) and as described on the Knowledge Service (KS) (i.e., recommending preferred risk assessment approaches and analysis approaches). In particular, all of the risk factors described in Reference"
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 2 is held in part: SRAT-001 fails an adversarial threat source with no assessed capability, a risk factor of the SP 800-30 process (Reference (by)) the assessment follows. Sentence 1 describes risk assessment; the Knowledge Service approaches and the remaining risk factors are unheld by a rule."
+    evidence: [{"kind": "rule", "target": "SRAT-001", "fixture": "tests/fixtures/negative/SRAT-001.yaml", "expect": "is an adversarial threat source with no assessed capability", "claim": "constraint", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "asserts": "Risk assessments are performed in accordance with the SP 800-30 process: an adversarial threat source with no assessed capability fails", "sentence": "Risk assessments will be performed in accordance with the process in Reference (by) and as described on the Knowledge Service (KS) (i.e., recommending preferred risk assessment approaches and analysis approaches)."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0221"
     citation: {"ref": "DODI8500.01", "page": 29, "anchor": "must be used across components and agencies of the DoD to ensure"}
@@ -1969,7 +1977,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "b. Performing developmental T&E of cybersecurity in accordance with Reference (at) and OT&E in accordance with Reference (ba), including the ability to detect and react to penetrations and exploitations and to protect and restore data and information, in order to inform acquisition and fielding decisions."
-    status: "candidate"
+    status: "partial"
+    reason: "OT&E of cybersecurity, including the ability to detect and react to penetrations and exploitations, is held: TSTRAT-002 fails OT&E that does not evaluate cybersecurity through a cooperative vulnerability and penetration assessment and an adversarial assessment. Developmental T&E of cybersecurity rests on TSTRAT-002's DT clause, a presence test not cited here, and that the results inform acquisition and fielding decisions is unheld."
+    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.cvpa.yaml", "expect": "OT&E evaluates cybersecurity through a CVPA and an adversarial assessment", "claim": "constraint", "holds_when": "A-2 is in scope or the run holds test-strategy.yaml, and the strategy plans OT events", "asserts": "Performing OT&E of cybersecurity, including the ability to detect and react to penetrations and exploitations: OT&E that does not evaluate cybersecurity through a CVPA and an adversarial assessment fails", "sentence": "Performing developmental T&E of cybersecurity in accordance with Reference (at) and OT&E in accordance with Reference (ba), including the ability to detect and react to penetrations and exploitations and to protect and restore data and information, in order to inform acquisition and fielding decisions."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0233"
     citation: {"ref": "DODI8500.01", "page": 30, "anchor": "Ensuring cybersecurity is a key element of program protection planning activities that"}
@@ -2650,8 +2660,8 @@ requirements:
     context: "Figure 2. DoD Information Technology PIT"
     statement: "2. All DoD PIT systems will be categorized as defined in Reference (cb) and authorized in accordance with Reference (q)."
     status: "partial"
-    reason: "GATE-001 refuses a PIT system fielded with no ATO in force; its categorization as CNSSI 1253 defines rests on C-2 and CATG-001, at its fan-out cap. The only item is a presence clause, so nothing here fails on a wrong value; the entry is honestly partial."
-    evidence: [{"asserts": "All DoD PIT systems are authorized in accordance with DoDI 8510.01 once categorized: a PIT system fielded when no ATO or ATO with conditions stands fails", "claim": "presence", "expect": "no ATO or ATO with conditions of the system stands on that date", "fixture": "tests/fixtures/negative/GATE-001.yaml", "kind": "rule", "target": "GATE-001"}]
+    reason: "Categorization under CNSSI 1253 (Reference (cb)) is held: BSEL-001 fails a baseline selected by the FIPS 200 high-water-mark method instead of CNSSI 1253. Authorization under DoDI 8510.01 rests on GATE-001, a presence clause (a PIT system fielded with no ATO in force)."
+    evidence: [{"asserts": "All DoD PIT systems are authorized in accordance with DoDI 8510.01 once categorized: a PIT system fielded when no ATO or ATO with conditions stands fails", "claim": "presence", "expect": "no ATO or ATO with conditions of the system stands on that date", "fixture": "tests/fixtures/negative/GATE-001.yaml", "kind": "rule", "target": "GATE-001"}, {"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.method.yaml", "expect": "method the categorization calls for", "claim": "constraint", "asserts": "All DoD PIT systems are categorized as CNSSI 1253 defines: a baseline selected by the high-water-mark method instead of the cnssi1253 method the categorization calls for fails", "sentence": "All DoD PIT systems will be categorized as defined in Reference (cb) and authorized in accordance with Reference (q)."}]
     work_item: "WI-426"
   - id: "REQ-DODI8500.01-0310"
     citation: {"ref": "DODI8500.01", "page": 39, "anchor": "Although other federal departments and agencies may treat PIT systems as a"}
@@ -3416,7 +3426,9 @@ requirements:
     locator: "ENCLOSURE 3.b"
     context: "Figure 2. DoD Information Technology"
     statement: "b. Appoint DoD Component SISOs to direct and coordinate their DoD Component cybersecurity program."
-    status: "candidate"
+    status: "covered"
+    reason: "The DoD Component CIO appoints the Component SISO (the CISO): OAPP-001 fails a CISO designated by anyone but the CIO (or the Component head where no Component CIO exists)."
+    evidence: [{"kind": "rule", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.ciso.yaml", "expect": ": the senior agency information security officer is designated by", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "Appoint DoD Component SISOs to direct the Component cybersecurity program: a senior agency information security officer designated by PER-AO, not the chief information officer, fails", "sentence": "Appoint DoD Component SISOs to direct and coordinate their DoD Component cybersecurity program."}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0398"
     citation: {"ref": "DODI8500.01", "page": 47, "anchor": "When code signing certificates are used to establish provenance of software code,"}

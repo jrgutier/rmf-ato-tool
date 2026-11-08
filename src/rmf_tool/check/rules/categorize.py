@@ -18,7 +18,7 @@ from rmf_tool.run.authorization import parse_date as ledger_day
 from rmf_tool.run.model import FACTS_FILE
 
 INFOTYPES_FILE = "artifacts/data/infotypes.yaml"
-C2, P12 = "C-2", "P-12"
+C2, P12, P13 = "C-2", "P-12", "P-13"
 LEVELS = ("low", "moderate", "high")
 # FIPS 199 and SP 800-60: not applicable is a value for the confidentiality of an information
 # type only, never for a system, whose floor is low.
@@ -274,7 +274,30 @@ def privacy_approval(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# SP 800-37r2 Task P-13: the life cycle runs from creation or collection to disposition.
+LIFE_CYCLE_START = ("creation", "collection")
+LIFE_CYCLE_END = "disposition"
+
+
+def life_cycle(ctx: Context) -> list[RunFinding]:
+    """INFL-001: P-13 identifies the stages of the information life cycle of each information
+    type, from its creation or collection to its disposition (SP 800-37r2 Task P-13)."""
+    if P13 not in scope.active_tasks(ctx.run):
+        return []
+    out: list[RunFinding] = []
+    for info in _types(ctx):
+        stages = {s.get("stage") for s in _dicts(info.get("life_cycle"))}
+        missing = ([] if stages & set(LIFE_CYCLE_START) else ["creation or collection"]) + (
+            [] if LIFE_CYCLE_END in stages else [LIFE_CYCLE_END])
+        if missing:
+            out.append(make("INFL-001", f"{info.get('id')}: the information life cycle "
+                            f"identifies no {' and no '.join(missing)} stage", INFOTYPES_FILE,
+                            None, {P13}))
+    return out
+
+
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("CATG-001", high_water), ("CADJ-001", adjustments),
                 ("CATG-002", handling_floors),
-                ("CATG-003", information_types), ("PIIC-001", privacy_approval))
+                ("CATG-003", information_types), ("PIIC-001", privacy_approval),
+                ("INFL-001", life_cycle))

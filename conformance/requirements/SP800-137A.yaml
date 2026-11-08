@@ -407,7 +407,7 @@ requirements:
     statement: "An effective ISCM program facilitates ongoing authorization and reauthorization decisions for systems [SP800-37], as discussed in Section 2.1.7. Security-related information collected during continuous monitoring is used to make updates to the authorization package and supporting artifacts for each applicable system. Updated artifacts provide evidence that the baseline controls continue to safeguard the system as originally planned."
     status: "partial"
     reason: "Tier 1, left partial: MPLAN-001 fails a system plan update not approved under change management; that monitoring information updates the package artifacts is the M-4 exit criterion only."
-    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "asserts": "Continuous monitoring information makes updates to the authorization package: a system plan update not approved under change management fails"}]
+    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "asserts": "Continuous monitoring information makes updates to the authorization package: a system plan update not approved under change management fails", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists"}]
     work_item: "WI-504"
   - id: "REQ-SP800-137A-0050"
     citation: {"ref": "SP800-137A", "page": 18, "anchor": "For federal agencies, a uniform approach to ISCM across the Federal Government"}
@@ -446,7 +446,7 @@ requirements:
     statement: "3. Implement ISCM Program (Implement) – Implement the ISCM program and collect the security-related information required for metrics, assessments, and reporting. Automate collection, analysis, and reporting of data where possible."
     status: "partial"
     reason: "Tier 1, left partial: ISCM-002 fails an automated tool that does not assess by the test method, which holds automated collection where used; that the program collects the information metrics, assessments and reporting need is not judged."
-    evidence: [{"kind": "rule", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.yaml", "expect": "is an automated tool, so it assesses by the test method", "claim": "constraint", "asserts": "Automate collection and analysis of data where possible: an automated tool that does not assess by the test method fails"}]
+    evidence: [{"kind": "rule", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.yaml", "expect": "is an automated tool, so it assesses by the test method", "claim": "constraint", "asserts": "Automate collection and analysis of data where possible: an automated tool that does not assess by the test method fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-504"
   - id: "REQ-SP800-137A-0054"
     citation: {"ref": "SP800-137A", "page": 19, "anchor": "Analyze ISCM Data and Report Findings (Analyze/Report) – Analyze the data collected,"}
@@ -606,7 +606,7 @@ requirements:
     statement: "Organizations make OA decisions for systems by leveraging security-related information gathered through the ISCM capability. A robust ISCM program defines, establishes, and implements a continuous process by which manual, automated, and procedural tools can be used to manage and govern the risks of operating authorized systems."
     status: "partial"
     reason: "Tier 1, left partial: OCTX-010 fails a system under ongoing authorization with no organization-wide ongoing authorization process; that OA decisions leverage the ISCM information is the M-6 exit criterion only."
-    evidence: [{"kind": "rule", "target": "OCTX-010", "fixture": "tests/fixtures/negative/OCTX-010.yaml", "expect": "the system is under ongoing authorization and the organization records no organization-wide", "claim": "constraint", "asserts": "Organizations make ongoing authorization decisions through the ISCM process: a system under ongoing authorization with no organization-wide process fails"}]
+    evidence: [{"kind": "rule", "target": "OCTX-010", "fixture": "tests/fixtures/negative/OCTX-010.yaml", "expect": "the system is under ongoing authorization and the organization records no organization-wide", "claim": "presence", "asserts": "Organizations make ongoing authorization decisions through the ISCM process: a system under ongoing authorization with no organization-wide process fails", "holds_when": "ART-ORG-CONTEXT is in play and the system is under ongoing authorization"}]
     work_item: "WI-504"
   - id: "REQ-SP800-137A-0073"
     citation: {"ref": "SP800-137A", "page": 23, "anchor": "There is an organization-wide process for OA. The OA process addresses how"}
@@ -2891,7 +2891,7 @@ requirements:
     statement: "Security-related information is obtained and acted on at Level 3, and is communicated to Levels 1 and 2 to be incorporated into organization-wide and mission/business process risk determinations. The ISCM program assessment verifies the flow of information between levels."
     status: "partial"
     reason: "Tier 1, left partial: MRPT-002 fails an organization tier review of the status reports that lacks its content, so Level 3 information reaches Level 1; incorporation into the risk determinations and the program assessment's verification are not judged."
-    evidence: [{"kind": "rule", "target": "MRPT-002", "fixture": "tests/fixtures/negative/MRPT-002.yaml", "expect": "the organization tier review of status reports lacks", "claim": "constraint", "asserts": "Security-related information obtained at Level 3 is communicated to the organization levels: an organization tier review of status reports that lacks its content fails"}]
+    evidence: [{"kind": "rule", "target": "MRPT-002", "fixture": "tests/fixtures/negative/MRPT-002.yaml", "expect": "the organization tier review of status reports lacks", "claim": "constraint", "asserts": "Security-related information obtained at Level 3 is communicated to the organization levels: an organization tier review of status reports that lacks its content fails", "holds_when": "ART-SECRPT is produced or seeded"}]
     work_item: "WI-504"
     promoted: {"reason": "States that system-level information is communicated to Levels 1 and 2 and that the flow between levels is verified, a reporting duty the extractor passed over."}
   - id: "REQ-SP800-137A-0354"
