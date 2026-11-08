@@ -153,3 +153,16 @@ def test_levels_traced_to_an_owner_answer_at_another_task_pass(tmp_path):
     edit_yaml(run_dir / "artifacts/data/infotypes.yaml",
               lambda d: d["information_types"][0].update(sources=["INT-022.A1"]))
     assert _messages(run_dir, "CATG-005") == []
+
+
+def test_a_disposal_with_no_physical_media_records_an_empty_list_and_passes(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "run.yaml", lambda d: d["seeded"].append(
+        {"artifact": "ART-DISP", "from_task": "M-7", "path": "artifacts/data/disposal.yaml"}))
+    (run_dir / "artifacts/data/disposal.yaml").write_text(
+        "end_state: The SaaS tenant is closed.\nenvironment: {restored_to: original}\n"
+        "residual_check: {date: '2027-03-01', no_detrimental_factors: true}\n"
+        "storage: {stored: false}\n"
+        "supply_chain: {non_reuse_elements: [], prevention: No hardware leaves the provider.}\n"
+        "media: []\nsources: [INT-030.A1]\n", encoding="utf-8")
+    assert _messages(run_dir, "DISP-001") == []

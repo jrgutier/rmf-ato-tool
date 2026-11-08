@@ -515,15 +515,16 @@ def disposal_media(ctx: Context) -> list[RunFinding]:
     """DISP-001: M-7 records each class of media and equipment disposed of with the issuances
     applied: classified media under DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media
     under NIST SP 800-88, and a destruction under CNSSI 4004.1 unless the media are unclassified
-    and destroyed under SP 800-88."""
+    and destroyed under SP 800-88. A disposal with no physical media (a SaaS system) records
+    media: []."""
     data = ctx.data(DISPOSAL_FILE)
     if not _in_play(ctx, "ART-DISP") or not isinstance(data, dict):
         return []
     out, err = _collector("DISP-001", DISPOSAL_FILE, "M-7")
     media = _items(data, "media")
-    if not media:
+    if "media" not in data:
         err("disposal.yaml records no class of media or equipment disposed of with the issuances "
-            "applied")
+            "applied, nor media: [] for a disposal with none")
     for item in media:
         applied = _strings(item, "issuances")
         for issuance in MEDIA_ISSUANCES.get(str(item.get("class")), ()):
