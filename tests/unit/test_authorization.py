@@ -309,7 +309,7 @@ def test_common_control_authorization_needs_its_subject_and_provider(minimal_run
     assert _check(minimal_run, rules.parties_valid) == ""
     edit_yaml(minimal_run / FILE, lambda d: d["records"][-1].pop(
         "authorization_termination_date"))
-    assert "needs an authorization_termination_date" in _check(minimal_run, rules.records_valid)
+    assert "needs an authorization_termination_date" in _check(minimal_run, rules.record_terms)
 
 
 def test_new_ao_cannot_extend_the_termination_date(minimal_run):

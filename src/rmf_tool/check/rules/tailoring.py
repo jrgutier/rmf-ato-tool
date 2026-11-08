@@ -172,9 +172,9 @@ def _downgrade_problem(ctx: Context, cid: str, objectives: list[str]) -> str | N
 
 
 def removal(ctx: Context) -> list[RunFinding]:
-    """A remove action rests on a scoping consideration, the absence of risk, or a legal or
-    policy requirement whose circumstances do not apply; a downgrade states its three
-    conditions; and every remove and compensating action is tested against the laws,
+    """TLR-002: a remove action rests on a scoping consideration, the absence of risk, or a legal
+    or policy requirement whose circumstances do not apply (a downgrade's conditions are
+    TLRB-001); and every remove and compensating action is tested against the laws,
     regulations and policies that carry the control (CNSSI 1253 2.6, SP 800-53B 2.4)."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
@@ -198,21 +198,6 @@ def removal(ctx: Context) -> list[RunFinding]:
                     "circumstances do not apply")
             elif basis == "scoping" and consideration is None:
                 err(f"{cid} is removed by scoping and names no scoping consideration")
-            downgrade = a.get("downgrade") or {}
-            objectives = list(downgrade.get("objectives") or [])
-            if consideration == "security-objective" and not objectives:
-                err(f"{cid} is downgraded under the security objective consideration and "
-                    "names no security objective it supports")
-            problem = _downgrade_problem(ctx, cid, objectives) if objectives else None
-            if problem:
-                err(f"{cid}: the downgrade does not reflect the FIPS 199 security category of "
-                    f"the security objectives it supports; {problem}")
-            if objectives and RISK_ASSESSMENT not in (downgrade.get("sources") or []):
-                err(f"{cid}: the downgrade is not supported by the organizational assessment "
-                    "of risk ART-RA")
-            if objectives and downgrade.get("security_relevant_unaffected") is not True:
-                err(f"{cid}: the downgrade affects the protection of the security-relevant "
-                    "information within the system")
         law = a.get("law_policy")
         if not isinstance(law, dict):
             err(f"{cid}: the {kind} action records no test against the laws, regulations and "
@@ -236,6 +221,42 @@ def removal(ctx: Context) -> list[RunFinding]:
         if kind == "compensating" and law.get("requires_control") is True:
             err(f"{cid}: compensating controls are not used to avoid the need to comply with "
                 "a legislative, regulatory or policy requirement that requires the control")
+    return out
+
+
+def downgrade(ctx: Context) -> list[RunFinding]:
+    """TLRB-001, split from TLR-002: a removal under the security objective consideration names
+    the objectives it supports, reflects their FIPS 199 category, rests on the organizational
+    assessment of risk and leaves the security-relevant information protected (CNSSI 1253
+    2.6)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("TLRB-001", message, TAILORING, None, {"S-2"}))
+
+    for a in _actions(data):
+        if a.get("action") != "remove":
+            continue
+        cid = a.get("control_id")
+        consideration = (a.get("scoping") or {}).get("consideration")
+        down = a.get("downgrade") or {}
+        objectives = list(down.get("objectives") or [])
+        if consideration == "security-objective" and not objectives:
+            err(f"{cid} is downgraded under the security objective consideration and names no "
+                "security objective it supports")
+        problem = _downgrade_problem(ctx, cid, objectives) if objectives else None
+        if problem:
+            err(f"{cid}: the downgrade does not reflect the FIPS 199 security category of the "
+                f"security objectives it supports; {problem}")
+        if objectives and RISK_ASSESSMENT not in (down.get("sources") or []):
+            err(f"{cid}: the downgrade is not supported by the organizational assessment of risk "
+                "ART-RA")
+        if objectives and down.get("security_relevant_unaffected") is not True:
+            err(f"{cid}: the downgrade affects the protection of the security-relevant "
+                "information within the system")
     return out
 
 

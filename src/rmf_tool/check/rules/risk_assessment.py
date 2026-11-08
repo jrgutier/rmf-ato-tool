@@ -55,7 +55,8 @@ def _ids(items: list[dict[str, Any]]) -> set[str]:
 # --- SRA-001 ----------------------------------------------------------------------------
 
 def threat_model(ctx: Context) -> list[RunFinding]:
-    """The threat sources, events, vulnerabilities and information sources hold together."""
+    """SRA-001: the threat events, vulnerabilities, scenarios and information sources hold
+    together; what each threat source is assessed for is SRAT-001."""
     if not _in_play(ctx):
         return []
     out: list[RunFinding] = []
@@ -74,20 +75,6 @@ def threat_model(ctx: Context) -> list[RunFinding]:
     weaknesses = _ids(_list(data, "vulnerabilities")) | _ids(
         _list(data, "predisposing_conditions"))
     events = _list(data, "threat_events")
-    for s in sources.values():
-        if s.get("type") == "adversarial":
-            if s.get("capability") == "not-applicable":
-                err(f"{s.get('id')} is an adversarial threat source with no assessed capability "
-                    "to initiate a threat event")
-            if s.get("intent") == "not-applicable":
-                err(f"{s.get('id')} is an adversarial threat source with no assessed intent "
-                    "to initiate a threat event")
-            if s.get("targeting") == "not-applicable":
-                err(f"{s.get('id')} is an adversarial threat source with no assessed targeting "
-                    "of the system")
-        elif s.get("range_of_effects") == "not-applicable":
-            err(f"{s.get('id')} is a non-adversarial threat source with no assessed range of "
-                "effects")
     for e in events:
         named = [ref for ref in _refs(e, "threat_sources") if ref in sources]
         for ref in _refs(e, "threat_sources"):
@@ -111,6 +98,36 @@ def threat_model(ctx: Context) -> list[RunFinding]:
     if missing:
         err(f"ra.yaml names no source of {', '.join(missing)} information; the sources of "
             "threat, vulnerability and impact information are identified")
+    return out
+
+
+# --- SRAT-001 (split from SRA-001) ------------------------------------------------------
+
+def threat_sources(ctx: Context) -> list[RunFinding]:
+    """SRAT-001: each adversarial threat source has an assessed capability, intent and
+    targeting, and each non-adversarial one an assessed range of effects (SP 800-30 Task 2-1)."""
+    data = _ra(ctx)
+    if data is None:
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("SRAT-001", message, RA_FILE))
+
+    for s in _list(data, "threat_sources"):
+        if s.get("type") == "adversarial":
+            if s.get("capability") == "not-applicable":
+                err(f"{s.get('id')} is an adversarial threat source with no assessed capability "
+                    "to initiate a threat event")
+            if s.get("intent") == "not-applicable":
+                err(f"{s.get('id')} is an adversarial threat source with no assessed intent "
+                    "to initiate a threat event")
+            if s.get("targeting") == "not-applicable":
+                err(f"{s.get('id')} is an adversarial threat source with no assessed targeting "
+                    "of the system")
+        elif s.get("range_of_effects") == "not-applicable":
+            err(f"{s.get('id')} is a non-adversarial threat source with no assessed range of "
+                "effects")
     return out
 
 

@@ -2209,7 +2209,7 @@ NEGATIVE = "tests/fixtures/negative/"
 
 
 @pytest.mark.parametrize(("rule", "fixture", "expect", "claim"), [
-    ("AODM-001", "AODM-001.atd", "needs an authorization_termination_date", "presence"),  # deletes
+    ("AOREC-001", "AOREC-001.atd", "needs an authorization_termination_date", "presence"),
     ("AODM-001", "AODM-001.rar", "must rest on the risk assessment report", "presence"),  # deletes
     ("AODM-001", "AODM-001.rarother", "must rest on the risk assessment report", "constraint"),
     ("AODM-001", "AODM-001.type", "not one of the decision types", "constraint"),
@@ -2314,8 +2314,8 @@ def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     sources = evidence.rule_sources()
     absent = {
         "AODM-001": ("recorded no decision", "is not an active task of this run",
-                     "needs an authorization_termination_date", "needs conditions",
                      "the run depends on degraded reference(s)"),
+        "AOREC-001": ("needs an authorization_termination_date", "needs conditions"),
         "AODM-002": ("records the review that triggered it", "needs ongoing_acknowledgment",
                      "needs review"),
         "AODM-003": ("a non-concurrence records", "risk needs cio_concurrence"),
@@ -2354,7 +2354,7 @@ def _live(framework, ident):
 def test_a_declared_claim_that_disagrees_with_the_fixture_is_denied(framework):
     """Probe H2: 0620 reached covered on a deleted field by writing `claim: constraint`."""
     entry, probe = _live(framework, "REQ-SP800-37R2-0620")
-    item = next(i for i in entry["evidence"] if i["fixture"].endswith("AODM-001.atd.yaml"))
+    item = next(i for i in entry["evidence"] if i["fixture"].endswith("AOREC-001.atd.yaml"))
     assert evidence.judge(probe, item, entry).strength == evidence.WEAK
     found = evidence.judge(probe, {**item, "claim": "constraint"}, entry)
     assert found.strength == evidence.DENIED and "is presence by its fixture" in found.message

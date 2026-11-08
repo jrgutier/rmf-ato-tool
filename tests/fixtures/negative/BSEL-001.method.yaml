@@ -1,0 +1,14 @@
+rule: BSEL-001
+bases: [minimal]
+description: the baseline records a FIPS 200 high-water-mark selection where CNSSI 1253 selects per security objective
+build: false
+mutations:
+- op: replace_text
+  file: baseline.json
+  old: '"method": "cnssi1253"'
+  new: '"method": "high-water-mark"'
+expect:
+  errors: [BSEL-001]
+  also: [GEN-STALE-001]
+  messages:
+    - "the baseline is selected by the high-water-mark method, not the cnssi1253 method the categorization calls for"

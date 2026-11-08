@@ -85,8 +85,26 @@ def _categorization(ctx: Context) -> dict[str, Any] | None:
 
 
 def high_water(ctx: Context) -> list[RunFinding]:
-    """CATG-001: the system against the high-water mark of its information types, each
-    adjustment recorded, and the review factors weighed."""
+    """CATG-001: the system is not below the high-water mark of its information types. An
+    adjustment above it and the review of the factors are CADJ-001."""
+    cat = _categorization(ctx)
+    types = _types(ctx)
+    if cat is None or not types:
+        return []
+    out: list[RunFinding] = []
+    for key, name in OBJECTIVES.items():
+        mark = _system_mark(_level(t, key) for t in types)
+        value = cat.get(key)
+        if _rank(value) < _rank(mark):
+            out.append(make("CATG-001", f"{name} is {value}, below the high-water mark {mark} "
+                            "of the information types", FACTS_FILE, None, {C2}))
+    return out
+
+
+def adjustments(ctx: Context) -> list[RunFinding]:
+    """CADJ-001, split from CATG-001: each objective raised above the high-water mark has its
+    adjustment recorded, and the provisional levels are reviewed against the SP 800-60 Step 3
+    and FIPS 199 factors."""
     cat = _categorization(ctx)
     types = _types(ctx)
     if cat is None or not types:
@@ -94,15 +112,13 @@ def high_water(ctx: Context) -> list[RunFinding]:
     out: list[RunFinding] = []
 
     def err(message: str) -> None:
-        out.append(make("CATG-001", message, FACTS_FILE, None, {C2}))
+        out.append(make("CADJ-001", message, FACTS_FILE, None, {C2}))
 
     adjusted = {(_key(a.get("objective")), _key(a.get("to")))
                 for a in _dicts(cat.get("adjustments"))}
     for key, name in OBJECTIVES.items():
         mark = _system_mark(_level(t, key) for t in types)
         value = cat.get(key)
-        if _rank(value) < _rank(mark):
-            err(f"{name} is {value}, below the high-water mark {mark} of the information types")
         if _rank(value) > _rank(mark) and (key, _key(value)) not in adjusted:
             err(f"{name} is raised to {value} above the high-water mark {mark} of the "
                 "information types with no recorded adjustment")
@@ -259,5 +275,6 @@ def privacy_approval(ctx: Context) -> list[RunFinding]:
 
 
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
-    yield from (("CATG-001", high_water), ("CATG-002", handling_floors),
+    yield from (("CATG-001", high_water), ("CADJ-001", adjustments),
+                ("CATG-002", handling_floors),
                 ("CATG-003", information_types), ("PIIC-001", privacy_approval))

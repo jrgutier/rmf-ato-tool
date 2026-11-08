@@ -1,0 +1,14 @@
+rule: BSEL-001
+bases: [minimal]
+description: the categorization raised availability to moderate, and the selected baseline was not resolved again
+build: false
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: categorization.a
+    value: moderate
+expect:
+  errors: [BSEL-001]
+  also: [CPLAN-002, CADJ-001, GEN-STALE-001]
+  messages:
+    - "the baseline is selected for impact values {'c': 'moderate', 'i': 'moderate', 'a': 'low'}, not the approved categorization {'c': 'moderate', 'i': 'moderate', 'a': 'moderate'}"

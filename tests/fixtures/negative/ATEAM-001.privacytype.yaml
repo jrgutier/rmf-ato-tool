@@ -1,0 +1,14 @@
+rule: ATEAM-001
+bases:
+- pii
+description: a system processing PII whose assessor was selected for a security assessment only
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: selection.assessment_type
+  value: security
+expect:
+  errors:
+  - ATEAM-001
+  messages:
+  - the assessor was selected for a security assessment only
