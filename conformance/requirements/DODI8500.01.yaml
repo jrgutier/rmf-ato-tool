@@ -1299,8 +1299,8 @@ requirements:
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(4) Establish procedures to ensure prompt management action and reporting in accordance with:"
     status: "partial"
-    reason: "Tier 1, left partial: the authorities the stem lists are held by IRPT-001 under (a) 0152, (b) 0153 and (c) 0154; (d) is 0155, outside this cluster. Unheld: 'prompt management action' names no owner, timeline or measure a rule could fail on, so the per-case owner and timeline in reporting_paths are recorded, not judged."
-    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case, with its owner and timeline, so procedures ensure prompt management action and reporting"}]
+    reason: "Tier 1, left partial: IRPT-001 fails a reporting path that follows the wrong authority (a compromise of classified information reported under anything but DoDM 5200.01 Volume 3), so the procedures report in accordance with the listed authorities. Unheld: 'prompt management action' names no owner, timeline or measure a rule could fail on, so the per-case owner and timeline in reporting_paths are recorded, not judged."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case, with its owner and timeline, so procedures ensure prompt management action and reporting"}, {"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.yaml", "expect": "an actual or potential compromise of classified information is reported under", "claim": "constraint", "asserts": "Procedures ensure reporting in accordance with the listed authorities: a compromise of classified information reported under the wrong authority fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0152"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "DoDM 5200.01, Volume 3 (Reference (bj)) for an actual or potential compromise"}
@@ -1344,8 +1344,8 @@ requirements:
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(5) Comply with CNSS Instruction (CNSSI) 1010 (Reference (bm))."
     status: "partial"
-    reason: "Tier 1, left partial: IRPT-001 checks only that the cnssi-1010 path names CNSSI 1010, which proves the name and not compliance; CNSSI 1010's own requirements are not in the references, so nothing can fail on a run that does not comply. Asks the user whether the named path discharges it."
-    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case: the cnssi-1010 path names CNSS Instruction CNSSI 1010 as its reference"}]
+    reason: "Tier 1, left partial: IRPT-001 fails a cnssi-1010 reporting path that names any reference but CNSSI 1010. Unheld: that proves the path follows CNSSI 1010 by name, not compliance; CNSSI 1010's own requirements are not in the references, so nothing can fail on a run that names it and does not comply."
+    evidence: [{"kind": "schema", "target": "framework/schema/incident-response.schema.json#/properties/reporting_paths", "claim": "presence", "asserts": "Reporting path for each case: the cnssi-1010 path names CNSS Instruction CNSSI 1010 as its reference"}, {"kind": "rule", "target": "IRPT-001", "fixture": "tests/fixtures/negative/IRPT-001.cnssi.yaml", "expect": "cyber incident response and reporting complies with", "claim": "constraint", "asserts": "Incident reporting complies with CNSS Instruction CNSSI 1010: a cnssi-1010 path that names another reference fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-245"
   - id: "REQ-DODI8500.01-0157"
     citation: {"ref": "DODI8500.01", "page": 23, "anchor": "Ensure that contracts and other agreements include specific requirements to provide cybersecurity"}
@@ -1756,7 +1756,9 @@ requirements:
     locator: "ENCLOSURE 3.a.(2)"
     context: "PROCEDURES"
     statement: "(2) DoD IS and PIT systems will transition to CNSSI 1253 (Reference (cb)), NIST SP 800-53 (Reference (cc)), and Reference (ca) in accordance with transition guidance provided in Reference (q)."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: BSEL-001 fails a baseline selected by any method but the CNSSI 1253 method the categorization calls for, and baseline resolve selects SP 800-53 controls, so the system stands on CNSSI 1253 and SP 800-53. Unheld: the transition guidance of DoDI 8510.01 for a system moving off the old control sets is not read by any rule; a new run starts on the new sets."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.method.yaml", "expect": "method the categorization calls for", "claim": "constraint", "asserts": "DoD IS and PIT systems transition to CNSSI 1253: a baseline selected by another method than the cnssi1253 method the categorization calls for fails"}]
     work_item: "WI-480"
   - id: "REQ-DODI8500.01-0204"
     citation: {"ref": "DODI8500.01", "page": 27, "anchor": "Integrated Organization-Wide Risk Management. Risk management can be viewed as a holistic"}
@@ -2514,8 +2516,8 @@ requirements:
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "a. IT. Cybersecurity applies to all IT that receives, processes, stores, displays, or transmits DoD information, as shown in Figure 2."
     status: "partial"
-    reason: "Figure 2's Assess line (PIT, IT services, products) is held by the below-system types and AONLY-001; that cybersecurity applies to all IT is the whole framework, which no rule can stand for."
-    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Cybersecurity applies to all IT that receives or processes DoD information, IT services and products included: an IT service that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
+    reason: "Tier 1, left partial: AONLY-001 fails an IT service or product accepted while its security configuration is not approved, so Figure 2's Assess line applies cybersecurity below the system level. Unheld: that cybersecurity applies to all IT is the whole framework, which no rule can stand for."
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Cybersecurity applies to all IT that receives or processes DoD information, IT services and products included: an IT service that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.configuration.yaml", "expect": "is accepted, and its security configuration is", "claim": "constraint", "asserts": "Cybersecurity applies to all IT, IT services included: an IT service accepted while its security configuration is not approved fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8500.01-0290"
     citation: {"ref": "DODI8500.01", "page": 37, "anchor": "Information Systems. Cybersecurity requirements must be identified and included in the design,"}
@@ -2634,8 +2636,8 @@ requirements:
     context: "Figure 2. DoD Information Technology"
     statement: "(c) Stand-Alone Systems. DoD ISs and PIT systems that are stand-alone must be authorized to operate, but assigned security control sets may be tailored as appropriate with the approval of the AO (e.g., network-related controls may be eliminated)."
     status: "partial"
-    reason: "GATE-001 refuses a system fielded with no ATO in force, which holds 'must be authorized to operate'; the tailoring clause is a permission ('may be tailored as appropriate with the approval of the AO') inside the same sentence, with no AO-approval record for a tailoring action. The only item is a presence clause, so nothing here fails on a wrong value; the entry is honestly partial."
-    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "asserts": "Stand-alone DoD ISs and PIT systems must be authorized to operate: a system fielded with no ATO standing fails"}]
+    reason: "Tier 1, left partial: AODM-006 fails a live test event under no IATT or authorization in force, and GATE-001 a system fielded with no ATO standing (a presence clause), so a stand-alone system operates only when authorized. Unheld: the tailoring clause is a permission ('may be tailored as appropriate with the approval of the AO') with no AO-approval record for a tailoring action, and operation outside a test event or fielding point is not recorded."
+    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "asserts": "Stand-alone DoD ISs and PIT systems must be authorized to operate: a system fielded with no ATO standing fails"}, {"kind": "rule", "target": "AODM-006", "fixture": "tests/fixtures/negative/AODM-006.yaml", "expect": "falls under no IATT or authorization in force", "claim": "constraint", "asserts": "Stand-alone systems must be authorized to operate: a live test event that falls under no IATT or authorization in force fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-426"
   - id: "REQ-DODI8500.01-0303"
     citation: {"ref": "DODI8500.01", "page": 38, "anchor": "Notice and Consent Banners. Standard mandatory notice and consent banners must be"}
@@ -3127,8 +3129,8 @@ requirements:
     context: "Figure 2. DoD Information Technology"
     statement: "(24) All DoD IT that is designated as an NSS must comply with CNSS policy issuances."
     status: "partial"
-    reason: "Tier 1, left partial: 'must comply with CNSS policy issuances' is a blanket duty over every CNSS issuance. S-4 names the issuances the framework holds (CNSSI 1253 baseline, CNSSP 15 by CRYP-001, CNSSP 12 by CRYP-002, CNSSI 1010 by IRPT-001); no rule can fail on the set of all CNSS issuances. Asks the user whether these discharge it."
-    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "claim": "presence", "asserts": "A system designated an NSS complies with CNSS policy issuances"}]
+    reason: "Tier 1, left partial: CRYP-001 fails cryptography implemented under any policy basis but CNSSP 15, and IRPT-001 a reporting path not under CNSSI 1010, so the CNSS issuances the framework holds are held by rules. Unheld: 'must comply with CNSS policy issuances' is a blanket duty over every CNSS issuance, and no rule can fail on the set of all of them."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-4.md", "claim": "presence", "asserts": "A system designated an NSS complies with CNSS policy issuances"}, {"kind": "rule", "target": "CRYP-001", "fixture": "tests/fixtures/negative/CRYP-001.yaml", "expect": "cryptography protecting DoD information is implemented under", "claim": "constraint", "asserts": "DoD IT designated as an NSS complies with CNSS policy issuances: cryptography protecting DoD information implemented under anything but CNSSP 15 fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
     work_item: "WI-248"
   - id: "REQ-DODI8500.01-0356"
     citation: {"ref": "DODI8500.01", "page": 43, "anchor": "The DoD Cyber Workforce Improvement Program develops and maintains a trained and"}
@@ -3660,7 +3662,9 @@ requirements:
     locator: "ENCLOSURE 3.a"
     context: "Figure 2. DoD Information Technology"
     statement: "a. Develop and maintain an organizational or system-level cybersecurity program that includes cybersecurity architecture, requirements, objectives and policies, cybersecurity personnel, and cybersecurity processes and procedures."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: OGOV-001 fails a system not assigned to and governed by the Component cybersecurity program, so the system sits in a maintained cybersecurity program. Unheld: that the ISSM's program includes the cybersecurity architecture, requirements, objectives and policies, personnel, and processes and procedures is not tested part by part."
+    evidence: [{"kind": "rule", "target": "OGOV-001", "fixture": "tests/fixtures/negative/OGOV-001.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "claim": "constraint", "asserts": "Develop and maintain an organizational or system-level cybersecurity program: a system not assigned to and governed by the Component cybersecurity program fails", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section"}]
     work_item: "WI-427"
   - id: "REQ-DODI8500.01-0418"
     citation: {"ref": "DODI8500.01", "page": 48, "anchor": "Ensure that information owners and stewards associated with DoD information"}
