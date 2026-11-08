@@ -1146,6 +1146,8 @@ requirements:
     context: "RMF ALIGNMENT WITH THE SDLC"
     statement: "There may be other opportunities to diverge from the sequential nature of the tasks when it is more effective, efficient, or cost-effective to do so. For example, while the control assessment tasks are listed after the control implementation tasks, organizations may begin the assessment of controls as soon as they are implemented but prior to the complete implementation of all controls described in the system security plans and privacy plans. Assessing controls as soon as they are implemented may result in organizations assessing the physical and environmental protection controls within a facility prior to assessing the controls implemented in the hardware, firmware, or software components of the system (which may be implemented later). Regardless of the task ordering, the final action before a system is placed into operation is the explicit acceptance of risk by the authorizing official."
     status: "candidate"
+    reason: "A permission to depart from the task order; the run derives order from disk and no rule refuses an early assessment."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0143"
     citation: {"ref": "SP800-37R2", "page": 42, "anchor": "Appendix D describes the roles and responsibilities of key participants involved in"}
     kind: "modal"
@@ -1182,6 +1184,8 @@ requirements:
     context: "TASK DELEGATION"
     statement: "The roles specified in the Primary Responsibility section for each RMF task are responsible for ensuring that the task is completed. The roles with primary responsibility may complete a task or may delegate completion of a task to one or more supporting roles except where delegation is specifically prohibited or disallowed in the task Discussion section or Appendix D. If completion of a task is delegated, the role with primary responsibility for that task remains accountable for task completion."
     status: "candidate"
+    reason: "Primary roles are R and A in the RACI, which FW-RACI-001 and FW-TASK-002 judge as repo rules the evidence judge does not read (WI-480); no run rule fails a task delegated without the primary role accountable."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0147"
     citation: {"ref": "SP800-37R2", "page": 44, "anchor": "Use the tasks and outputs of the Organization-Level and System-Level Prepare Step"}
     kind: "lettered"
@@ -2818,6 +2822,8 @@ requirements:
     context: "TABLE 5: IMPLEMENT TASKS AND OUTCOMES"
     statement: "TASK I-1 CONTROL IMPLEMENTATION | TASK I-1 | • Controls specified in the security and privacy plans are"
     status: "candidate"
+    reason: "I-1 implements the controls of ART-SSP; nothing in a run records an implementation against its statement for a rule to fail."
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0326"
     citation: {"ref": "SP800-37R2", "page": 77, "anchor": "CONTROL IMPLEMENTATION | implemented. [Cybersecurity Framework: PR.IP-1] • Systems security and privacy"}
     kind: "table"
@@ -2913,7 +2919,10 @@ requirements:
     locator: "TASK I-2"
     context: ""
     statement: "Document changes to planned control implementations based on the “as-implemented” state of controls."
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-010 fails an I-2 that wrote ART-SSP with no update in the plan change log; whether the changes reflect the as-implemented state is unheld."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Document changes to planned control implementations at I-2: I-2 wrote ART-SSP and the plan change log records no update fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0336"
     citation: {"ref": "SP800-37R2", "page": 79, "anchor": "Despite the control implementation details in the security and privacy plans and"}
     kind: "indicative"
@@ -2930,14 +2939,20 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-1 ASSESSOR SELECTION | TASK A-1 | • An assessor or assessment team is selected to conduct the"
-    status: "candidate"
+    status: "covered"
+    reason: "ASMT-007 fails an assessment plan that records no assessor selection"
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "An assessor or assessment team is selected to conduct the control assessments: no assessor selection is recorded fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0338"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "ASSESSOR SELECTION | control assessments. • The appropriate level of independence is"}
     kind: "table"
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "ASSESSOR SELECTION | control assessments. • The appropriate level of independence is achieved for the assessor or assessment team selected."
-    status: "candidate"
+    status: "covered"
+    reason: "ASMT-007 fails an assessor who lacks the degree of independence the AO determined"
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.independence.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "The appropriate level of independence is achieved for the assessor selected: an assessor that lacks the required degree of independence fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0339"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-2 ASSESSMENT PLAN | • Documentation needed to conduct the assessments"}
     kind: "table"
@@ -2973,14 +2988,20 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "ASSESSMENT REPORTS | and recommendations are completed."
-    status: "candidate"
+    status: "covered"
+    reason: "ASMT-008 fails an assessment report that states another methodology with no rationale, and one without the CISO's quality review"
+    evidence: [{"kind": "rule", "target": "ASMT-008", "fixture": "tests/fixtures/negative/ASMT-008.noreview.yaml", "expect": "no quality_review: the CISO is responsible for assessing security control assessments", "claim": "presence", "holds_when": "A-4 is active and ART-SAR is produced or seeded", "asserts": "Assessment reports with findings and recommendations are completed: a report with no quality_review of the security control assessments fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0343"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-5 REMEDIATION ACTIONS | TASK A-5 | • Remediation actions to"}
     kind: "table"
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-5 REMEDIATION ACTIONS | TASK A-5 | • Remediation actions to address deficiencies in the controls"
-    status: "candidate"
+    status: "partial"
+    reason: "ASMT-006 fails an assessor finding with no triage, the review that decides remediation; that remediation actions are taken for each deficiency is unheld."
+    evidence: [{"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.yaml", "expect": "has no triage: organizations review assessor findings to determine their significance", "claim": "presence", "holds_when": "A-5 is active and ART-SAR is produced or seeded", "asserts": "Remediation actions to address deficiencies follow a review of assessor findings: a finding that has no triage fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0344"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "REMEDIATION ACTIONS | implemented in the system and environment of operation are"}
     kind: "table"
@@ -2997,7 +3018,9 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-6 PLAN OF ACTION AND MILESTONES | • A plan of action and milestones detailing remediation plans for unacceptable risks identified in security and privacy assessment reports is developed. [Cybersecurity Framework: ID.RA-6]"
-    status: "candidate"
+    status: "partial"
+    reason: "MPOA-001 fails a POA&M item not documented in the assessment reports; privacy assessment reports as a source of items are WI-03."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.documented.yaml", "expect": "is not documented in the assessment reports", "claim": "constraint", "holds_when": "A-6 is active and ART-POAM is produced or seeded", "asserts": "A plan of action and milestones detailing remediation plans for risks identified in assessment reports: an item not documented in the assessment reports fails"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0346"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
@@ -3024,6 +3047,7 @@ requirements:
     context: ""
     statement: "Organizations consider both the technical expertise and level of independence87 required in selecting control assessors.88 Organizations ensure that control assessors possess the required skills and technical expertise to develop effective assessment plans and to conduct assessments of program management, system-specific, hybrid, and common controls, as appropriate. This includes general knowledge of risk management concepts and approaches as well as comprehensive knowledge of and experience with the hardware, software, and firmware components implemented. In organizations where the assessment capability is centrally managed, the senior agency information security officer may have the responsibility of selecting and managing the security control assessors or assessment teams for organizational systems. As controls may be implemented to achieve security and privacy objectives, organizations consider the degree of collaboration between security control and privacy control assessors that is necessary."
     status: "candidate"
+    reason: "ASMT-007 holds qualification and independence; the skills and expertise for each kind of control and the collaboration of security and privacy assessors are unheld (WI-408, WI-03)."
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0349"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "Organizations can conduct self-assessments of controls or obtain the services of an"}
@@ -3032,6 +3056,8 @@ requirements:
     context: ""
     statement: "Organizations can conduct self-assessments of controls or obtain the services of an independent control assessor. An independent assessor is an individual or group that can conduct an impartial assessment. Impartiality means that assessors are free from perceived or actual conflicts of interest with respect to the determination of control effectiveness or the development, operation, or management of the system, common controls, or program management controls. The authorizing official determines the level of assessor independence based on applicable laws, executive orders, directives, regulations, policies, or standards. The authorizing official consults with the Office of the Inspector General, chief information officer, senior agency official for privacy, and senior agency information security officer to help guide and inform decisions regarding assessor independence."
     status: "candidate"
+    reason: "Describes self-assessment and independence; the AO's consultation with the Office of the Inspector General is unheld (WI-408)."
+    work_item: "WI-408"
   - id: "REQ-SP800-37R2-0350"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "The system privacy officer is responsible for identifying assessment methodologies and metrics"}
     kind: "modal"
@@ -3066,6 +3092,7 @@ requirements:
     context: ""
     statement: "Develop, review, and approve plans to assess implemented controls."
     status: "candidate"
+    reason: "ASMT-001 holds the review and approval of the security assessment plan and is at its fan-out cap; the privacy assessment plan is WI-03."
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0354"
     citation: {"ref": "SP800-37R2", "page": 82, "anchor": "Security and privacy assessment plans are developed by control assessors based on"}
@@ -3095,7 +3122,10 @@ requirements:
     locator: "TASK A-3"
     context: ""
     statement: "Assess the controls in accordance with the assessment procedures described in assessment plans."
-    status: "candidate"
+    status: "partial"
+    reason: "SAR-COV-001 fails a scoped control with no determination, so every control of the plan is assessed; that the procedures applied are the plan's is ASMT-002's, at its cap."
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.determination.yaml", "expect": " has no assessment determination", "claim": "presence", "holds_when": "A-3 is active and ART-SAR is produced or seeded", "asserts": "Assess the controls described in assessment plans: a scoped control that has no assessment determination fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0357"
     citation: {"ref": "SP800-37R2", "page": 83, "anchor": "Control assessments determine the extent to which the selected controls are implemented"}
     kind: "modal"
@@ -3216,7 +3246,10 @@ requirements:
     locator: "TASK A-5"
     context: ""
     statement: "Conduct initial remediation actions on the controls and reassess remediated controls."
-    status: "candidate"
+    status: "partial"
+    reason: "ASMT-006 fails an assessor finding with no triage, from which remediation follows; that remediation is conducted and remediated controls are reassessed is unheld."
+    evidence: [{"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.yaml", "expect": "has no triage: organizations review assessor findings to determine their significance", "claim": "presence", "holds_when": "A-5 is active and ART-SAR is produced or seeded", "asserts": "Conduct initial remediation actions on the controls once assessor findings are reviewed: a finding that has no triage fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0370"
     citation: {"ref": "SP800-37R2", "page": 85, "anchor": "The security and privacy assessment reports describe deficiencies in the controls that"}
     kind: "modal"
@@ -3276,7 +3309,10 @@ requirements:
     locator: "TASK A-6"
     context: ""
     statement: "Prepare the plan of action and milestones based on the findings and recommendations of the assessment reports."
-    status: "candidate"
+    status: "covered"
+    reason: "MPOA-001 fails a POA&M item that rests on no assessment report, so the plan is prepared from the reports' findings"
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.documented.yaml", "expect": "is not documented in the assessment reports", "claim": "constraint", "holds_when": "A-6 is active and ART-POAM is produced or seeded", "asserts": "Prepare the plan of action and milestones based on the findings of the assessment reports: an item not documented in the assessment reports fails"}]
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0376"
     citation: {"ref": "SP800-37R2", "page": 86, "anchor": "Risk assessments are conducted as needed at the organizational level, mission/business level,"}
     kind: "indicative"
@@ -3284,6 +3320,8 @@ requirements:
     context: ""
     statement: "Risk assessments are conducted as needed at the organizational level, mission/business level, and at the system level throughout the SDLC. Risk assessment is specified as part of the RMF Prepare-Organization Level step, Task P-3 and RMF Prepare-System Level step, Task P-14."
     status: "candidate"
+    reason: "ART-RA is updated at R-2, M-3 and M-4 by the tasks' outputs; no rule fails a run whose risk assessment is not conducted as needed."
+    work_item: "WI-403"
   - id: "REQ-SP800-37R2-0377"
     citation: {"ref": "SP800-37R2", "page": 87, "anchor": "The plan of action and milestones is included as part of the"}
     kind: "modal"
@@ -3317,7 +3355,10 @@ requirements:
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "TASK R-1 | • An authorization package is developed for submission to the"
-    status: "candidate"
+    status: "covered"
+    reason: "PKG-001 fails a package manifest that leaves a core artifact out"
+    evidence: [{"kind": "rule", "target": "PKG-001", "fixture": "tests/fixtures/negative/PKG-001.poam.yaml", "expect": "is not in the manifest; run `rmf build`", "claim": "constraint", "holds_when": "R-1 is active and the package is produced", "asserts": "An authorization package is developed for submission: a core artifact that is not in the manifest fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0381"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "AUTHORIZATION PACKAGE | authorizing official."}
     kind: "table"
@@ -3332,21 +3373,30 @@ requirements:
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "TASK R-2 | • A risk determination by the authorizing official that reflects the"
-    status: "candidate"
+    status: "covered"
+    reason: "RAR-002 fails a rar.yaml that records no determination of risk"
+    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.missing.yaml", "expect": "rar.yaml records no determination of risk", "claim": "presence", "holds_when": "R-2 is active and ART-RAR is produced or seeded", "asserts": "A risk determination by the authorizing official is rendered: rar.yaml records no determination of risk fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0383"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "RISK ANALYSIS AND DETERMINATION | risk management strategy including risk tolerance, is"}
     kind: "table"
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "RISK ANALYSIS AND DETERMINATION | risk management strategy including risk tolerance, is rendered."
-    status: "candidate"
+    status: "partial"
+    reason: "RAR-002 fails a missing determination; that it reflects the risk management strategy and its risk tolerance is unheld."
+    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.missing.yaml", "expect": "rar.yaml records no determination of risk", "claim": "presence", "holds_when": "R-2 is active and ART-RAR is produced or seeded", "asserts": "The risk determination reflecting the risk management strategy is rendered: rar.yaml records no determination of risk fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0384"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "TASK R-3 | • Risk responses for determined risks are provided."}
     kind: "table"
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "TASK R-3 | • Risk responses for determined risks are provided."
-    status: "candidate"
+    status: "covered"
+    reason: "RAR-003 fails a risk that weighs no course of action"
+    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.yaml", "expect": "weighs no course of action", "claim": "presence", "holds_when": "R-3 is active and ART-RAR is produced or seeded", "asserts": "Risk responses for determined risks are provided: a risk that weighs no course of action fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0385"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "RISK RESPONSE | [Cybersecurity Framework: ID.RA-6]"}
     kind: "table"
@@ -3371,20 +3421,28 @@ requirements:
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "AUTHORIZATION DECISION | approved or denied."
     status: "candidate"
+    reason: "AODM-001 fails an R-4 that records no decision and is at its fan-out cap."
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0388"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "TASK R-5 | • Authorization decisions, significant vulnerabilities, and risks are"}
     kind: "table"
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "TASK R-5 | • Authorization decisions, significant vulnerabilities, and risks are"
-    status: "candidate"
+    status: "covered"
+    reason: "AUTHRPT-001 fails a decision reported to an official who cannot read the authorization documents"
+    evidence: [{"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "Authorization decisions are reported to organizational officials: authorization documents are not available to an official told of them fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0389"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "AUTHORIZATION REPORTING | reported to organizational officials."}
     kind: "table"
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "AUTHORIZATION REPORTING | reported to organizational officials."
-    status: "candidate"
+    status: "covered"
+    reason: "AUTHRPT-001 fails a decision reported to an official who cannot read the authorization documents"
+    evidence: [{"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "Authorization reporting to organizational officials: authorization documents are not available to an official fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0390"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
     kind: "modal"
@@ -3448,6 +3506,8 @@ requirements:
     context: ""
     statement: "When an information system is under ongoing authorization, the authorization package is presented to the authorizing official via automated reports to provide information in the most efficient and timely manner possible.97 Information to be presented to the authorizing official in assessment reports is generated in the format and with the frequency determined by the organization using information from the information security and privacy continuous monitoring programs."
     status: "candidate"
+    reason: "Under ongoing authorization the package reaches the AO through automated reports; no field names the tool or the format (WI-409)."
+    work_item: "WI-409"
   - id: "REQ-SP800-37R2-0397"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "The assessment reports presented to the authorizing official include information about deficiencies"}
     kind: "modal"
@@ -3455,6 +3515,8 @@ requirements:
     context: ""
     statement: "The assessment reports presented to the authorizing official include information about deficiencies in system-specific, hybrid, and common controls (i.e., other than satisfied findings determined by assessors). The authorizing official uses automated security/privacy management and reporting tools or other automated methods, whenever practicable, to access the security and privacy plans and the plans of action and milestones. The authorization documents are updated at an organization-defined frequency using automated or manual processes in accordance with the risk management objectives of the organization.98"
     status: "candidate"
+    reason: "Deficiencies reach the AO in ART-SAR; the AO's automated access to plans and POA&Ms and the update frequency of the documents are unheld (WI-409)."
+    work_item: "WI-409"
   - id: "REQ-SP800-37R2-0398"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "While the objective is to fully automate all components of the authorization"}
     kind: "should"
@@ -3521,13 +3583,18 @@ requirements:
     context: ""
     statement: "When the system is operating under an ongoing authorization, the risk determination task is effectively unchanged. The authorizing official analyzes the relevant security and privacy information provided by the automated security/privacy management and reporting tool to determine the current security and privacy posture of the system."
     status: "candidate"
+    reason: "M-6 feeds back to R-2 with ART-SECRPT; the automated reporting tool is unheld (WI-409)."
+    work_item: "WI-409"
   - id: "REQ-SP800-37R2-0405"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "Identify and implement a preferred course of action in response to the"}
     kind: "imperative"
     locator: "TASK R-3"
     context: ""
     statement: "Identify and implement a preferred course of action in response to the risk determined."
-    status: "candidate"
+    status: "partial"
+    reason: "RAR-003 fails a risk that selects no single course of action; that the course is implemented is unheld."
+    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.selected.yaml", "expect": "courses of action", "claim": "presence", "holds_when": "R-3 is active and ART-RAR is produced or seeded", "asserts": "Identify and implement a preferred course of action in response to the risk: a risk that selects other than one of its courses of action fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0406"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "After risk is analyzed and determined, organizations can respond to risk in"}
     kind: "indicative"
@@ -3629,7 +3696,10 @@ requirements:
     locator: "TASK R-4"
     context: ""
     statement: "The authorization decision is included with the authorization package and is transmitted to the system owner or common control provider. Upon receipt of the authorization decision and the authorization package, the system owner or common control provider acknowledges and implements the terms and conditions of the authorization. The organization ensures that the authorization package, including the authorization decision for systems and common controls, is made available to organizational officials (e.g., system owners inheriting common controls; chief information officers; senior accountable officials for risk management or risk executive [function]; senior agency information security officers; senior agency officials for privacy; and system security and privacy officers). The authorizing official verifies on an ongoing basis as part of continuous monitoring (see Task M-2) that the established terms and conditions for authorization are being followed by the system owner or common control provider."
-    status: "candidate"
+    status: "partial"
+    reason: "AUTHRPT-001 fails a decision and package received by anyone but the system owner, and documents not available to the officials told; the acknowledgement of the terms and conditions and the AO's ongoing verification that they are followed are unheld (WI-407)."
+    evidence: [{"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.yaml", "expect": "the authorization decision and package are received by", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "The authorization decision with the authorization package is transmitted to the system owner: the decision and package are received by another fails", "sentence": "The authorization decision is included with the authorization package and is transmitted to the system owner or common control provider."}, {"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "The authorization package and decision are made available to organizational officials: authorization documents are not available to an official fails", "sentence": "The organization ensures that the authorization package, including the authorization decision for systems and common controls, is made available to organizational officials (e.g., system owners inheriting common controls; chief information officers; senior accountable officials for risk management or risk executive [function]; senior agency information security officers; senior agency officials for privacy; and system security and privacy officers)."}]
+    work_item: "WI-407"
   - id: "REQ-SP800-37R2-0417"
     citation: {"ref": "SP800-37R2", "page": 93, "anchor": "When the system is operating under ongoing authorization, the authorizing official continues"}
     kind: "modal"
@@ -3655,6 +3725,7 @@ requirements:
     context: ""
     statement: "If control assessments are conducted by qualified assessors with the level of independence104 required, the assessment results support ongoing authorization and may be applied to a reauthorization. Organizational policies regarding ongoing authorization and reauthorization are consistent with laws, executive orders, directives, regulations, and policies."
     status: "candidate"
+    reason: "Reuse of assessment results for reauthorization is the existing O&M path of WI-08."
     work_item: "WI-08"
   - id: "REQ-SP800-37R2-0420"
     citation: {"ref": "SP800-37R2", "page": 93, "anchor": "In accordance with [OMB A-130], an independent evaluation of privacy program and"}
@@ -3671,14 +3742,20 @@ requirements:
     locator: "TASK R-5"
     context: ""
     statement: "Report the authorization decision and any deficiencies in controls that represent significant security or privacy risk."
-    status: "candidate"
+    status: "partial"
+    reason: "AUTHRPT-001 fails a decision whose documents are not available to the officials told of it; the reporting of significant deficiencies is ART-AUTHRPT prose."
+    evidence: [{"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "Report the authorization decision: authorization documents are not available to an official the decision is reported to fails"}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0422"
     citation: {"ref": "SP800-37R2", "page": 94, "anchor": "Authorizing officials report authorization decisions for systems and common controls to designated"}
     kind: "indicative"
     locator: "TASK R-5"
     context: ""
     statement: "Authorizing officials report authorization decisions for systems and common controls to designated organizational officials so the individual risk decisions can be viewed in the context of organization-wide security and privacy risk to organizational operations and assets, individuals, other organizations, and the Nation. Reporting occurs only in situations where organizations have delegated the authorization functions to levels of the organization below the head of agency. Authorizing officials also report exploitable deficiencies (i.e., vulnerabilities) in the system or controls noted during the assessment and continuous monitoring that represent significant security or privacy risk. Organizations determine, and the organizational policy reflects, what constitutes a significant security or privacy risk for reporting. Deficiencies that represent significant vulnerabilities and risk can be reported using the Subcategories, Categories, and Functions in the [NIST CSF]. Authorization decisions may be tracked and reflected as part of the organization-wide system registration process at the organization’s discretion (see Task P-18)."
-    status: "candidate"
+    status: "partial"
+    reason: "AUTHRPT-001 fails authorization documents not available to the officials the decision is reported to; the reporting of significant deficiencies and the organization's threshold for them are R-5 prose, and tracking in registration is permitted."
+    evidence: [{"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "holds_when": "R-5 is active and the authorization report is produced or seeded", "asserts": "Authorizing officials report authorization decisions to designated organizational officials: documents not available to an official fails", "sentence": "Authorizing officials report authorization decisions for systems and common controls to designated organizational officials so the individual risk decisions can be viewed in the context of organization-wide security and privacy risk to organizational operations and assets, individuals, other organizations, and the Nation."}]
+    work_item: "WI-404"
   - id: "REQ-SP800-37R2-0423"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-1 SYSTEM AND ENVIRONMENT CHANGES | TASK M-1 | • The"}
     kind: "table"
