@@ -1263,8 +1263,10 @@ requirements:
     locator: "ENCLOSURE 2.h.(3)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(3) Collect and keep audit data to support technical analysis relating to misuse, penetration, or other incidents involving IT under their purview, and provide this data to appropriate law enforcement (LE) or other investigating agencies."
-    status: "covered"
-    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.custody.yaml", "expect": "audit data of anomalous user activity is kept with its chain of custody", "claim": "constraint", "asserts": "Collect and keep audit data to support technical analysis of misuse and incidents: audit data kept without its chain of custody fails", "holds_when": "the record is in play once its artifact is produced or seeded"}, {"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.lawful.yaml", "expect": "incidents that appear to violate federal law are reported to the defense criminal", "claim": "constraint", "asserts": "Provide incident data to law enforcement or other investigating agencies: incidents that appear to violate federal law not reported to law enforcement fail", "holds_when": "the record is in play once its artifact is produced or seeded"}]
+    status: "partial"
+    reason: "IRPT-002 refuses audit data of anomalous activity kept without its chain of custody, which holds collecting and keeping audit data; providing that data to law enforcement or other investigating agencies is not checked (the federal-law reporting path reports incidents, not audit data)."
+    evidence: [{"kind": "rule", "target": "IRPT-002", "fixture": "tests/fixtures/negative/IRPT-002.custody.yaml", "expect": "audit data of anomalous user activity is kept with its chain of custody", "claim": "constraint", "asserts": "Collect and keep audit data to support technical analysis of misuse and incidents: audit data kept without its chain of custody fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
+    work_item: "WI-426"
   - id: "REQ-DODI8500.01-0151"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Establish procedures to ensure prompt management action and reporting in accordance with:"}
     kind: "lettered"
@@ -1442,8 +1444,10 @@ requirements:
     locator: "ENCLOSURE 2.r"
     context: "RESPONSIBILITIES"
     statement: "r. Develop DoD IS contingency plans and conduct exercises to recover IS services following an emergency or IS disruption using guidance found in NIST SP 800-34 (Reference (bq))."
-    status: "covered"
-    evidence: [{"kind": "rule", "target": "CPLAN-002", "fixture": "tests/fixtures/negative/CPLAN-002.yaml", "expect": "a moderate-impact system needs a functional exercise, not a tabletop", "claim": "constraint", "asserts": "Develop IS contingency plans and conduct exercises to recover IS services under SP 800-34: a moderate-impact system that exercises only a tabletop instead of a functional exercise fails", "holds_when": "the record is in play once its artifact is produced or seeded"}, {"kind": "rule", "target": "CPLAN-003", "fixture": "tests/fixtures/negative/CPLAN-003.yaml", "expect": "no exercise is held under realistic cyber conditions", "claim": "constraint", "asserts": "Conduct exercises to recover IS services following an IS disruption: no exercise held under realistic cyber conditions fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
+    status: "partial"
+    reason: "CPLAN-002 refuses exercises shallower than the availability impact asks, which holds conducting recovery exercises; developing the contingency plans using the guidance of NIST SP 800-34 is not checked."
+    evidence: [{"kind": "rule", "target": "CPLAN-002", "fixture": "tests/fixtures/negative/CPLAN-002.yaml", "expect": "a moderate-impact system needs a functional exercise, not a tabletop", "claim": "constraint", "asserts": "Develop IS contingency plans and conduct exercises to recover IS services under SP 800-34: a moderate-impact system that exercises only a tabletop instead of a functional exercise fails", "holds_when": "the record is in play once its artifact is produced or seeded"}]
+    work_item: "WI-426"
   - id: "REQ-DODI8500.01-0171"
     citation: {"ref": "DODI8500.01", "page": 24, "anchor": "Establish a physical security program to protect DoD IT from damage, loss,"}
     kind: "lettered"
@@ -1531,8 +1535,8 @@ requirements:
     context: "RESPONSIBILITIES"
     statement: "z. Ensure that requirements of CNSSP 300 (Reference (bu)), CNSSI 7000 (Reference (bv)), and other DIRNSA/CHNSS-issued guidance on compromising emanations (i.e., TEMPEST) are funded and implemented."
     status: "partial"
-    reason: "SYSD-001 refuses a secret system without the Classified System Overlay, which adds pe-19 and pe-19.1; funding the CNSSP 300 and CNSSI 7000 requirements is the Component head's and outside a run."
-    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.yaml", "expect": "the Classified System Overlay is not applied", "claim": "constraint", "asserts": "TEMPEST requirements of CNSSP 300 and CNSSI 7000 are implemented: a secret system where the Classified System Overlay is not applied fails"}]
+    reason: "DPOL-001 (PC-DOD-37) refuses tailoring pe-19 or pe-19.1 out of a networked system's baseline, which holds 'implemented'; funding the requirements, and their conformance to CNSSP 300, CNSSI 7000 and DIRNSA/CHNSS guidance, are not checked."
+    evidence: [{"kind": "rule", "target": "DPOL-001", "fixture": "tests/fixtures/negative/DPOL-001.dod-37.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "TEMPEST requirements of CNSSP 300 and CNSSI 7000 are implemented: pe-19 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0181"
     citation: {"ref": "DODI8500.01", "page": 25, "anchor": "Implement cybersecurity and cyberspace defense activities responsive to DoD requirements in accordance"}
@@ -2065,8 +2069,8 @@ requirements:
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "(3) Compromising emanations (i.e., TEMPEST) countermeasures must be applied in accordance with policy in Reference (bu), guidance in Reference (bv), and other TEMPEST guidance as issued by the DIRNSA/CHCSS."
     status: "partial"
-    reason: "SYSD-001 refuses a secret system without the Classified System Overlay, which adds pe-19 and pe-19.1 for TEMPEST; that the countermeasures follow CNSSP 300 and CNSSI 7000 rests on the overlay text, and an unclassified system has no pe-19."
-    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.yaml", "expect": "the Classified System Overlay is not applied", "claim": "constraint", "asserts": "Compromising emanations TEMPEST countermeasures must be applied: a secret system where the Classified System Overlay, which carries pe-19, is not applied fails"}]
+    reason: "DPOL-001 (PC-DOD-37) refuses tailoring pe-19 or pe-19.1 out of a networked system's baseline, where the Classified System Overlay selects them; conformance of the countermeasures to CNSSP 300, CNSSI 7000 and other DIRNSA/CHCSS TEMPEST guidance is not checked."
+    evidence: [{"kind": "rule", "target": "DPOL-001", "fixture": "tests/fixtures/negative/DPOL-001.dod-37.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Compromising emanations TEMPEST countermeasures must be applied: pe-19 information leakage tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0244"
     citation: {"ref": "DODI8500.01", "page": 31, "anchor": "Using automation whenever possible in support of cybersecurity objectives including, but not"}
@@ -3603,8 +3607,10 @@ requirements:
     locator: "ENCLOSURE 3.c"
     context: "Figure 2. DoD Information Technology"
     statement: "c. Maintain a repository for all organizational or system-level cybersecurity-related documentation."
-    status: "covered"
+    status: "partial"
+    reason: "PKG-001 refuses a core artifact missing from the authorization package manifest; the package is not a repository of all organizational or system-level cybersecurity-related documentation, which is not checked."
     evidence: [{"kind": "rule", "target": "PKG-001", "fixture": "tests/fixtures/negative/PKG-001.poam.yaml", "expect": "is not in the manifest; run `rmf build`", "claim": "constraint", "asserts": "Maintain a repository for all system-level cybersecurity-related documentation: a core artifact that is not in the package manifest fails", "holds_when": "the manifest is in play once R-1 has run"}]
+    work_item: "WI-426"
   - id: "REQ-DODI8500.01-0420"
     citation: {"ref": "DODI8500.01", "page": 49, "anchor": "Ensure that ISSOs are appointed in writing and provide oversight to ensure"}
     kind: "lettered"
