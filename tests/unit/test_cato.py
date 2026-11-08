@@ -125,3 +125,19 @@ def test_a_practice_whose_row_is_not_owed_is_not_judged(tmp_path):
         d["practices"]["proactive_capabilities"] = []
     edit_yaml(run_dir / CATO, edit)
     assert _messages(run_dir, "CATT-001") == []
+
+
+def test_cm05_accepts_an_on_change_monitor_and_cm01_either_capability(tmp_path):
+    """CM05 asks only that secure configurations are monitored for change, so an on-change
+    monitor holds it (PP07's periodic checks are owed separately); CM01 reads "preventive /
+    resiliency" as either."""
+    run_dir = _run(tmp_path)
+    _score(run_dir, "PP07", result="not-applicable",
+           reason="The application runs outside the DSOP production system.")
+
+    def edit(d):
+        d["practices"]["configuration_checks"] = "on-change"
+        d["practices"]["proactive_capabilities"] = ["resiliency"]
+        d["practices"]["baseline_posture_evidence"] = ["penetration-test-report"]
+    edit_yaml(run_dir / CATO, edit)
+    assert _messages(run_dir, "CATT-001") == []

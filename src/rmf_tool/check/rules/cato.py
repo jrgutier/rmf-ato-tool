@@ -835,14 +835,14 @@ def tolerances(ctx: Context) -> list[RunFinding]:
 
 THREAT_TARGETS = ("network-data-architecture", "mission-assets",
                   "cybersecurity-architecture")  # IG IC03
-POSTURE_EVIDENCE = ("assessment-results", "risk-determination")  # IG IC04
 RISK_ASSESSMENTS = ("mission-based", "threat-based", "resiliency-survivability-based")  # SA06
 CYBER_AREAS = ("cybersecurity", "cyber-resiliency", "cyber-survivability")  # IG SA07, RM02
 CONFIGURATIONS = ("system", "control")  # IG SA08
 PRIORITIZATION = ("vulnerability-identification", "impact-analysis")  # IG RM03
-PROACTIVE = ("preventive", "resiliency")  # IG CM01
+PROACTIVE = ("preventive", "resiliency")  # IG CM01: "preventive / resiliency", either
 VALIDATED = ("secure-configurations", "control-compliance")  # IG p. 13
-CHECKS = ("periodic", "continuous")  # IG p. 12
+CHECKS = ("periodic", "continuous")  # IG p. 12: periodic checks of secure configurations
+CHANGE_MONITORS = (*CHECKS, "on-change")  # IG CM05: monitor for change, by any method
 
 
 def owed(ctx: Context, data: dict[str, Any], row: str) -> bool:
@@ -862,7 +862,7 @@ def owed(ctx: Context, data: dict[str, Any], row: str) -> bool:
 
 def practices(ctx: Context) -> list[RunFinding]:
     """CATT-001: the Table 2 practices and DSOP key practices the record shows performed (IG
-    pp. 11-13, 19-21: IC03, IC04, SA03, SA06-SA08, CM01, CM05, RM02, RM03, PP06, PP07), each
+    pp. 11-13, 19-21: IC03, IC04, SA06-SA08, CM01, CM05, CM06, RM02, RM03, PP06, PP07), each
     judged only while owed() says it is owed."""
     data, out, err = _record(ctx, "CATT-001")
     if data is None:
@@ -871,10 +871,9 @@ def practices(ctx: Context) -> list[RunFinding]:
     if owed(ctx, data, "IC03") and (gaps := lacks(p.get("threats_identified_to"),
                                                   THREAT_TARGETS)):
         err(f"cyber threats are not identified to the {', '.join(gaps)}")
-    if owed(ctx, data, "IC04") and (gaps := lacks(p.get("baseline_posture_evidence"),
-                                                  POSTURE_EVIDENCE)):
-        err(f"the evidence collected for a baseline risk posture leaves out the "
-            f"{', '.join(gaps)}")
+    # IC04 names no kind of evidence, so any collected evidence holds it.
+    if owed(ctx, data, "IC04") and not _strs(p.get("baseline_posture_evidence")):
+        err("no evidence is collected for establishing a baseline risk posture")
     if owed(ctx, data, "SA06") and (gaps := lacks(p.get("risk_assessments"), RISK_ASSESSMENTS)):
         err(f"the risk assessments performed leave out the {', '.join(gaps)} one")
     if owed(ctx, data, "SA07") and (gaps := lacks(p.get("verification_validation"),
@@ -897,16 +896,21 @@ def practices(ctx: Context) -> list[RunFinding]:
     if owed(ctx, data, "CM01"):
         if p.get("behavior_monitoring") != "continuous":
             err(f"behavior is monitored {p.get('behavior_monitoring')}, not continuously")
-        if gaps := lacks(p.get("proactive_capabilities"), PROACTIVE):
-            err(f"no proactive {', '.join(gaps)} capability is implemented or improved")
-    if (owed(ctx, data, "CM05") or owed(ctx, data, "PP07")) \
-            and p.get("configuration_checks") not in CHECKS:
+        if not set(PROACTIVE) & set(_strs(p.get("proactive_capabilities"))):
+            err("no proactive preventive or resiliency capability is implemented or improved")
+    if owed(ctx, data, "CM05") and p.get("configuration_checks") not in CHANGE_MONITORS:
+        err(f"secure configurations are not monitored for change: "
+            f"{p.get('configuration_checks')}")
+    if owed(ctx, data, "PP07") and p.get("configuration_checks") not in CHECKS:
         err(f"the automation provides no periodic checks of secure configurations: "
             f"{p.get('configuration_checks')}")
     if owed(ctx, data, "PP07") and p.get("posture_monitoring") != "automated":
         err(f"the application security posture is not monitored using security automation, but "
             f"{p.get('posture_monitoring')}")
-    if owed(ctx, data, "SA03") and (gaps := lacks(p.get("continuous_validation"), VALIDATED)):
+    # The p. 13 practice belongs to the threshold rows CM05 (secure configurations) and CM06
+    # (control compliance), so an objective SA03 left unscored cannot excuse it.
+    if (owed(ctx, data, "CM05") or owed(ctx, data, "CM06")) \
+            and (gaps := lacks(p.get("continuous_validation"), VALIDATED)):
         err(f"the DevSecOps team does not continuously validate {', '.join(gaps)} using "
             "security automation")
     inheritance = _mapping(p.get("inheritance"))
