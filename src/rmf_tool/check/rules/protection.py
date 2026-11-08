@@ -563,8 +563,9 @@ def authorization_gates(ctx: Context) -> list[RunFinding]:
         if point not in gates or date is None:
             continue
         standing = ledger.in_force(records, effect_of, on=date).values()
-        if not any(s.record.get("decision") in AUTHORIZING
-                   and s.record.get("subject") == "system" for s in standing):
+        authorizing = [s for s in standing if s.record.get("decision") in AUTHORIZING
+                       and s.record.get("subject") == "system"]
+        if len(authorizing) == 0:
             out.append(make("GATE-001", f"the system is fielded at {point}, and no ATO or ATO with "
                             "conditions of the system stands on that date", ledger.LEDGER_FILE,
                             None, {"R-4"}))

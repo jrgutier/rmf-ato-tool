@@ -242,6 +242,7 @@ RULES: dict[str, Rule] = {
     "CONN-004": connections.dodin,
     "REQS-001": requirements.matrix,
     "REQS-002": requirements.design_policy,
+    "REQS-005": requirements.design_policy_carried,
     "REQS-003": requirements.needs_and_agreement,
     "REQS-004": requirements.workforce,
     "BIA-001": bia.criticality,
