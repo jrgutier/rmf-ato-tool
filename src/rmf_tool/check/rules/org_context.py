@@ -733,3 +733,34 @@ def posture_reviews(ctx: Context) -> list[RunFinding]:
         err(f"the posture reviews do not review {', '.join(missing)} changes against the "
             "organizational risk posture")
     return out
+
+
+# --- RMR-001: no conflict of interest between roles, and a privacy official designated (P-1) --
+
+def role_conflicts(ctx: Context) -> list[RunFinding]:
+    """RMR-001 (SP 800-37r2 Task P-1 and Appendix D): one individual in several roles holds no
+    conflict of interest, so the authorizing official is not also the system owner of what it
+    authorizes; and P-1 designates a senior agency official for privacy. Individuals are
+    compared by name, the field that identifies the appointee. The common control provider half
+    of the source's example is not checked: org-context.yaml cannot tell whether this run's AO
+    authorizes the provider's common controls, which their own AO may do."""
+    data, out, err = _record(ctx, "RMR-001", "P-1")
+    if data is None:
+        return out
+    if "P-1" in scope.active_tasks(ctx.run) and "PER-PRIV" not in _holders(data):
+        err("no senior agency official for privacy is designated for the organization")
+    named: dict[str, set[str]] = {}
+    shown: dict[str, str] = {}
+    for r in _roles(data):
+        name = r.get("name")
+        if isinstance(name, str) and name.strip():
+            key = name.strip().casefold()
+            shown.setdefault(key, name.strip())
+            named.setdefault(key, set()).add(str(r.get("role")))
+    for key, held in sorted(named.items()):
+        name = shown[key]
+        if {"PER-AO", SYSTEM_OWNER} <= held:
+            err(f"{name} holds both the authorizing official and the system owner role: an "
+                "authorizing official cannot occupy the role of system owner for a system it "
+                "authorizes")
+    return out
