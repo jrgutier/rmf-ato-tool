@@ -1,0 +1,25 @@
+rule: CFLR-003
+bases:
+- minimal
+description: au-6 is tailored out of a networked system although it carries CF-CATO-4, a duty the 
+  DoD CIO cATO evaluation criteria places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: au-6\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-003
+  messages:
+  - 'CF-CATO-4: the DoD CIO cATO evaluation criteria requires that audit logs are collected, analyzed,
+    alerted on, reviewed and retained under the NIST SP 800-53 controls, and au-6 is tailored out of the
+    baseline'
+  also:
+  - CFLR-001
+  - CFLR-002

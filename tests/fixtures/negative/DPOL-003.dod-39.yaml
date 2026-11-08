@@ -1,0 +1,23 @@
+rule: DPOL-003
+bases:
+- minimal
+description: ia-2.12 is tailored out of a networked system although it carries PC-DOD-39, a duty 
+  DoDI 8500.01 places on DoD IT through the DoD Component cybersecurity program
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ia-2.12\n    action: remove\n    basis: scoping\n    scoping: {consideration:
+    technology}\n    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n    \
+    \  requires_control: false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need
+    no such control.\n    sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - DPOL-003
+  messages:
+  - 'PC-DOD-39: DoDI 8500.01 requires that DoD ISs are public key-enabled under the DoD-wide PKI, and
+    ia-2.12 is tailored out of the baseline'
+  also:
+  - DPOL-001

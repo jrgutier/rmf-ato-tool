@@ -1237,8 +1237,9 @@ requirements:
     locator: "INTRODUCTION.•"
     context: "THE NEED TO PROTECT INFORMATION, SYSTEMS, ORGANIZATIONS, AND INDIVIDUALS Organizations should answer several key questions when addressing information security and privacy controls:"
     statement: "• Have the selected controls been implemented or is there a plan in place to do so?"
-    status: "candidate"
-    reason: "Control-held: implementation status is required on every SSP statement (PL-2, SSP-COV-001, SSP-STAT-001) and a control not yet in place reaches the POA&M under CA-5; only the generic coverage rules fail a selected control that is neither implemented nor planned"
+    status: "partial"
+    reason: "Proxy: a floor control of CFLR-001 recorded not-applicable in the SSP, neither implemented nor planned, fails; for the other selected controls the question is answered only by the status SSP-STAT-001 reads and the generic coverage rules."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.ssp.yaml", "expect": "is recorded not-applicable in the SSP", "claim": "constraint", "asserts": "Have the selected controls been implemented or is there a plan: a selected control recorded not-applicable in the SSP fails"}]
     work_item: "WI-488"
   - id: "REQ-SP800-53R5-0006"
     citation: {"ref": "SP800-53R5", "page": 28, "anchor": "What is the required level of assurance (i.e., grounds for confidence) that"}
@@ -1651,8 +1652,9 @@ requirements:
     locator: "2.2"
     context: "FIGURE 1: CONTROL STRUCTURE"
     statement: "The control section prescribes a security or privacy capability to be implemented. Security and privacy capabilities are achieved by the activities or actions, automated or nonautomated, carried out by information systems and organizations. Organizations designate the responsibility for control development, implementation, assessment, and monitoring. Organizations have the flexibility to implement the controls selected in whatever manner that satisfies organizational mission or business needs consistent with law, regulation, and policy."
-    status: "candidate"
-    reason: "Control-held: responsibility for development and implementation is responsible_roles on every SSP statement (PL-2, SSP-COV-001), assessment the SAP team (CA-2) and monitoring the conmon frequencies (CA-7); 'Organizations have the flexibility' is a permission and the rest describes the control section"
+    status: "partial"
+    reason: "Every SSP statement names the roles responsible for developing and implementing the control (ssp-controls responsible_roles, required, at least one persona); responsibility for assessment (the SAP team) and monitoring (the conmon frequencies) is held by other records no item here cites. 'Organizations have the flexibility' is a permission and the opening sentences describe the control section."
+    evidence: [{"kind": "schema", "target": "framework/schema/ssp-controls.schema.json#/properties/controls/items/properties/responsible_roles", "claim": "constraint", "asserts": "Organizations designate the responsibility for control development and implementation: every SSP statement names the roles responsible for developing and implementing the control"}]
     work_item: "WI-488"
   - id: "REQ-SP800-53R5-0055"
     citation: {"ref": "SP800-53R5", "page": 37, "anchor": "The discussion section provides additional information about a control. Organizations can use"}

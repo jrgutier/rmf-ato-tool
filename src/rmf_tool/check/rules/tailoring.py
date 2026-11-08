@@ -245,10 +245,12 @@ def basis_applies(action: dict[str, Any]) -> bool:
     return action.get("basis") in ("scoping", "no-risk")
 
 
-# --- DPOL-001, DPOL-002: controls that carry a DoDI 8500.01 duty -------------------------
+# --- DPOL-001 to DPOL-003, CFLR-001 to CFLR-003: control floors --------------------------
 
 STAND_ALONE = "stand-alone"
 NOT_APPLICABLE = "not-applicable"
+CATO_FILE = "artifacts/data/cato.yaml"
+CATO = "AD-CATO"
 
 
 def _approvals(data: dict[str, Any], kind: str, key: str) -> dict[Any, Any]:
@@ -256,16 +258,30 @@ def _approvals(data: dict[str, Any], kind: str, key: str) -> dict[Any, Any]:
     return {a.get(key): a.get("approved_by") for a in _actions(data) if a.get("action") == kind}
 
 
-def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
-    """A control framework/baselines/tailoring-inputs.yaml dod_policy_controls maps to a duty
-    DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline
-    and in effect, whatever law_policy says: it is not removed, not recorded not-applicable in
-    the SSP, and not stood in for by a compensating control whose risk the AO or AODR did not
-    accept (risk.accepted_by, as TLR-001 reads it; a lead default, for the user's ruling). A
+def _binds(ctx: Context, record: dict[str, Any], system_type: dict[str, Any]) -> bool:
+    """Whether a floor record's duty binds this system: its ``applies_to`` system types, and
+    ``applies_when: cato`` while a cATO is sought (an AD-CATO record or the cATO record)."""
+    kinds = record.get("applies_to")
+    if kinds and system_type.get("value") not in kinds:
+        return False
+    if record.get("applies_when") == "cato":
+        ledger = ctx.ledger if isinstance(ctx.ledger, list) else []
+        return ctx.run.path(CATO_FILE).is_file() or any(
+            isinstance(r, dict) and r.get("decision") == CATO for r in ledger)
+    return True
+
+
+def _floor(ctx: Context, rule: str, records: list[dict[str, Any]]) -> list[RunFinding]:
+    """A control a floor record of framework/baselines/tailoring-inputs.yaml maps to a duty its
+    source places on the system, its users or its program stays in the baseline and in effect,
+    whatever law_policy says: it is not removed, not recorded not-applicable in the SSP, and
+    not stood in for by a compensating control whose risk the AO or AODR did not accept
+    (risk.accepted_by, as TLR-001 reads it; a lead default, for the user's ruling). A
     stand-alone system with no DODIN connection may tailor its control set as appropriate with
-    the approval of the AO (DoDI 8500.01 p. 38 1.e.(1).(c), p. 39 1.e.(2).(d).5); that
-    permission is exercised by a remove action, which records the approver in approved_by.
-    Inheriting a control is no removal."""
+    the approval of the AO (DoDI 8500.01 p. 38 1.e.(1).(c), p. 39 1.e.(2).(d).5, which governs
+    every DoD IS); that permission is exercised by a remove action, which records the approver
+    in approved_by. Inheriting a control is no removal. A record binds only the system types it
+    names in applies_to, and under its applies_when condition."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
@@ -273,8 +289,6 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     system_type = system_type if isinstance(system_type, dict) else {}
     stand_alone = system_type.get("connectivity") == STAND_ALONE \
         and system_type.get("dodin_connection") == "none"
-    records = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
-               if p["subject"] == subject]
     removed = _approvals(data, "remove", "control_id")
     compensated = {a.get("compensating_for"): (a.get("risk") or {}).get("accepted_by")
                    for a in _actions(data) if a.get("action") == "compensating"}
@@ -286,6 +300,8 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
                         f"{policy['text']}, and {what}", TAILORING, None, {"S-2"}))
 
     for policy in records:
+        if not _binds(ctx, policy, system_type):
+            continue
         controls = policy["controls"]
         cut = [c for c in controls if c in removed and not stand_alone]
         unapproved = [c for c in controls if c in removed and stand_alone
@@ -306,6 +322,18 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     return out
 
 
+def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
+    """The dod_policy_controls records of one subject: DoDI 8500.01's duties."""
+    records = baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
+    return _floor(ctx, rule, [p for p in records if p["subject"] == subject])
+
+
+def _control_floor(ctx: Context, rule: str) -> list[RunFinding]:
+    """The control_floors records one rule judges, one source family each."""
+    records = baseline_mod.load_inputs(ctx.run.repo).get("control_floors") or []
+    return _floor(ctx, rule, [p for p in records if p["rule"] == rule])
+
+
 def dod_system_controls(ctx: Context) -> list[RunFinding]:
     """DPOL-001: the controls that carry DoDI 8500.01's duties on the system."""
     return _dod_policy(ctx, "DPOL-001", "system")
@@ -315,6 +343,29 @@ def dod_user_controls(ctx: Context) -> list[RunFinding]:
     """DPOL-002: the controls that carry DoDI 8500.01's duties on the ISSO, privileged users and
     authorized users."""
     return _dod_policy(ctx, "DPOL-002", "users")
+
+
+def dod_program_controls(ctx: Context) -> list[RunFinding]:
+    """DPOL-003: the controls that carry DoDI 8500.01's duties on DoD IT through the DoD
+    Component's cybersecurity program."""
+    return _dod_policy(ctx, "DPOL-003", "program")
+
+
+def nist_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-001: the controls that carry FIPS 200's minimum security requirements and the SP
+    800-53A assessment policy."""
+    return _control_floor(ctx, "CFLR-001")
+
+
+def dodin_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-002: the controls that carry DoDI 8530.01's DODIN protection duties."""
+    return _control_floor(ctx, "CFLR-002")
+
+
+def dod_acquisition_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-003: the controls that carry the duties of DoDI 5000.83, DoDI 8531.01 and the DoD
+    CIO cATO evaluation criteria."""
+    return _control_floor(ctx, "CFLR-003")
 
 
 # --- TLR-003: baseline and overlay assumptions -----------------------------------------

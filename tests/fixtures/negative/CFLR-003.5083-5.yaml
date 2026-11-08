@@ -1,0 +1,23 @@
+rule: CFLR-003
+bases:
+- minimal
+description: si-4 is tailored out of a networked system although it carries CF-5083-5, a duty DoDI 
+  5000.83 places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: si-4\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-003
+  messages:
+  - 'CF-5083-5: DoDI 5000.83 requires that the system architecture and design address how the system monitors,
+    detects and responds to security anomalies, and si-4 is tailored out of the baseline'
+  also:
+  - CFLR-002

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 350 rules, 37 repo-scope and 313 run-scope. Authoritative;
+# Rule registry (plan §6.5): 354 rules, 37 repo-scope and 317 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1956,6 +1956,113 @@ rules:
       - REQ-DODI8500.01-0444
       - REQ-DODI8500.01-0445
       - REQ-DODI8500.01-0446
+  - id: DPOL-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a duty DoDI 8500.01 places on DoD IT through the DoD Component's cybersecurity program is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/DPOL-003.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml dod_policy_controls lists with subject program in the baseline and the SSP, for the system types its applies_to names; a compensating action or a stand-alone system's remove action records PER-AO or PER-AODR."
+    enforces:
+      - REQ-DODI8500.01-0016
+      - REQ-DODI8500.01-0029
+      - REQ-DODI8500.01-0149
+      - REQ-DODI8500.01-0281
+      - REQ-DODI8500.01-0311
+      - REQ-DODI8500.01-0332
+      - REQ-DODI8500.01-0344
+  - id: CFLR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a FIPS 200 minimum security requirement or the SP 800-53A assessment policy is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-001.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-001 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-FIPS200-0005
+      - REQ-FIPS200-0017
+      - REQ-FIPS200-0018
+      - REQ-FIPS200-0019
+      - REQ-FIPS200-0020
+      - REQ-FIPS200-0021
+      - REQ-FIPS200-0022
+      - REQ-FIPS200-0023
+      - REQ-FIPS200-0024
+      - REQ-FIPS200-0025
+      - REQ-FIPS200-0026
+      - REQ-FIPS200-0027
+      - REQ-FIPS200-0028
+      - REQ-FIPS200-0029
+      - REQ-FIPS200-0030
+      - REQ-FIPS200-0031
+      - REQ-FIPS200-0032
+      - REQ-FIPS200-0033
+      - REQ-FIPS200-0034
+      - REQ-SP800-53AR5-0136
+      - REQ-SP800-53B-0003
+      - REQ-SP800-53R5-0005
+  - id: CFLR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a DoDI 8530.01 duty to protect the DODIN is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-002.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-002 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-DODI8530.01-0014
+      - REQ-DODI8530.01-0016
+      - REQ-DODI8530.01-0159
+      - REQ-DODI8530.01-0163
+      - REQ-DODI8530.01-0167
+      - REQ-DODI8530.01-0169
+      - REQ-DODI8530.01-0222
+      - REQ-DODI8530.01-0228
+      - REQ-DODI8530.01-0232
+      - REQ-DODI8530.01-0233
+      - REQ-DODI8530.01-0234
+      - REQ-DODI8530.01-0235
+      - REQ-DODI8530.01-0237
+      - REQ-DODI8530.01-0243
+      - REQ-DODI8530.01-0244
+      - REQ-DODI8530.01-0246
+      - REQ-DODI8530.01-0247
+      - REQ-DODI8530.01-0248
+      - REQ-DODI8530.01-0252
+      - REQ-DODI8530.01-0272
+  - id: CFLR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a duty of DoDI 5000.83, DoDI 8531.01 or, while a cATO is sought, the DoD CIO cATO evaluation criteria is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-003.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-003 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0070
+      - REQ-DODCIO-CATO-EVAL-0093
+      - REQ-DODCIO-CATO-EVAL-0094
+      - REQ-DODCIO-CATO-EVAL-0103
+      - REQ-DODCIO-CATO-EVAL-0163
+      - REQ-DODI5000.83-0181
+      - REQ-DODI5000.83-0182
+      - REQ-DODI5000.83-0183
+      - REQ-DODI5000.83-0184
+      - REQ-DODI5000.83-0187
+      - REQ-DODI5000.83-0188
+      - REQ-DODI8531.01-0120
+      - REQ-DODI8531.01-0122
+      - REQ-DODI8531.01-0171
   - id: TLR-003
     scope: run
     severity: E
@@ -2250,6 +2357,7 @@ rules:
       - REQ-CNSSP12-0031
       - REQ-CNSSP12-0032
       - REQ-CNSSP12-0036
+      - REQ-CNSSP12-0053
   - id: SPCOV-001
     scope: run
     severity: E

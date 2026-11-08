@@ -1,0 +1,41 @@
+rule: DPOL-003
+bases:
+- minimal
+description: ca-3 is tailored out of a networked system although it carries PC-DOD-42, a duty DoDI 
+  8500.01 places on DoD IT through the DoD Component cybersecurity program
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: system_type.value
+  value: pit-system
+- op: set_field
+  file: facts.yaml
+  path: system_type.designated_by
+  value: dod-component-head
+- op: set_field
+  file: facts.yaml
+  path: system_type.registered_in
+  value: Component PIT register
+- op: set_field
+  file: facts.yaml
+  path: system_type.pit_ao_appointed
+  value: true
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ca-3\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - DPOL-003
+  messages:
+  - 'PC-DOD-42: DoDI 8500.01 requires that interconnections between a PIT system and other PIT systems
+    or DoD ISs are protected by security controls on the PIT system or the DoD IS, and ca-3 is tailored
+    out of the baseline'
+  also:
+  - CFLR-001
+  - CFLR-003
