@@ -34,8 +34,11 @@ requirements:
     locator: "Executive Summary"
     context: ""
     statement: "Additionally, it provides the recommended processes and information required for software factories to generate a cATO package and send to DCIO(CS) for review and approval. Appendix A outlines the two use cases for which requesting a DevSecOps (DSO) cATO is appropriate. Appendix B highlights the baseline guidance and assessment overview as well as the specific information required for the cATO package. Please note that due to evolving requirements, this is a living document on the RMF Knowledge Service. Appropriate communities will be notified as updates are made."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: AODM-007 refuses a cATO with no recorded DoD CISO approval, a presence clause on a decision's required field. Sending the package to DCIO(CS) itself is not recorded. The second and third sentences describe the document and how its readers are told of updates, awaiting the user's ruling."
+    evidence: [{"kind": "rule", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.yaml", "expect": "a cATO needs a recorded dod_ciso_approval", "claim": "presence", "sentence": "Additionally, it provides the recommended processes and information required for software factories to generate a cATO package and send to DCIO(CS) for review and approval.", "asserts": "The cATO package goes to DCIO(CS) for review and approval: a cATO with no recorded DoD CISO approval fails"}]
     work_item: "WI-24"
+    ruling_sought: [{"sentence": "Appendix A outlines the two use cases for which requesting a DevSecOps (DSO) cATO is appropriate.", "reason": "Describes the document's appendix; binds no reader."}, {"sentence": "Appropriate communities will be notified as updates are made.", "reason": "Says how the DoD CIO tells communities of updates to the document; no run record can break it."}]
   - id: "REQ-DODCIO-CATO-EVAL-0005"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 3, "anchor": "Continuous Authorization to Operate (cATO) – Evaluation Criteria Page 3"}
     kind: "modal"
@@ -337,6 +340,7 @@ requirements:
     context: ""
     statement: "The following list of activities associated with the Continuous Authorization to Operate (cATO) competencies are what the DoD CISO considers when Component CISOs present systems that are requesting to move into a cATO state."
     status: "candidate"
+    work_item: "WI-481"
   - id: "REQ-DODCIO-CATO-EVAL-0040"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "The presence of these activities will be partly determined through demonstrated use"}
     kind: "modal"
@@ -353,7 +357,9 @@ requirements:
     locator: "Appendix D: cATO Evaluation Criteria"
     context: ""
     statement: "Items in bold in this section indicate documents or artifacts that must be delivered as part of the application for cATO package."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: CATO-001 fails a cATO sought with no cato.yaml, a presence clause, and CATO-001 to CATO-015 and CATT-001 judge most bold deliverables inside it; the list of bold items is invisible in the text, so no rule holds that each is delivered."
+    evidence: [{"kind": "rule", "target": "CATO-001", "fixture": "tests/fixtures/negative/CATO-001.yaml", "expect": "is missing; M-6 records the cATO assessment there", "claim": "constraint", "asserts": "The documents and artifacts are delivered as part of the application for cATO package: a cATO sought with no cato.yaml fails"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-EVAL-0042"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "cATO Risk Management Strategy"}
@@ -387,7 +393,10 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Will be assessed IAW organizational Risk Management Strategy"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: OCTX-009 fails a system monitoring frequency less frequent than the organization's minimum, which assesses the strategy against the organization's; that the whole CONMON strategy is assessed against the organizational Risk Management Strategy is not judged."
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "asserts": "The CONMON strategy is assessed against the organizational strategy: a monitoring frequency less frequent than the organization's minimum fails"}]
+    work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-EVAL-0046"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Includes plan to continuously assess and track vulnerabilities on all the system"}
     kind: "lettered"
@@ -436,7 +445,8 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring (measures) to establish patterns and discern threats such as:"
     statement: "o Includes timelines for continuous monitoring of security controls (automated every hour, minute, second; manual once a year, etc.)"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CONMON-001", "fixture": "tests/fixtures/negative/CONMON-001.yaml", "expect": "has no monitoring frequency", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "asserts": "The strategy includes timelines for continuous monitoring of security controls: a baseline family with no monitoring frequency fails"}]
   - id: "REQ-DODCIO-CATO-EVAL-0052"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Includes tight coupling with auditing and incident response strategies"}
     kind: "lettered"
@@ -461,6 +471,7 @@ requirements:
     context: "Continuous Monitoring (measures) to establish patterns and discern threats such as:"
     statement: "o Include data flows (including Personal Identifiable Information (PII)"
     status: "candidate"
+    work_item: "WI-503"
   - id: "REQ-DODCIO-CATO-EVAL-0055"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Include detailed information for all external connections IAW Appendix E"}
     kind: "lettered"
@@ -600,7 +611,10 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Includes an alerting capability that contacts security personnel when appropriate"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: held by control si-4(5) (system-generated alerts to named personnel), in every NSS baseline; SSP-COV-001 forces its statement, and nothing judges what it says."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "The alerting capability that contacts security personnel rests on si-4(5): a baseline control with no SSP statement in the plan fails"}]
+    work_item: "WI-500"
   - id: "REQ-DODCIO-CATO-EVAL-0071"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Demonstrate which security controls are fed into a system-level dashboard view, providing"}
     kind: "lettered"
@@ -651,7 +665,10 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Update documents in response to CONMON process"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: MPLAN-001 fails a system plan update not approved under change management; that documents are updated in response to the CONMON process is the M-4 exit criterion only."
+    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "asserts": "Documents are updated in response to the CONMON process: a system plan update not approved under change management fails"}]
+    work_item: "WI-07"
   - id: "REQ-DODCIO-CATO-EVAL-0077"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Ensure it covers the DSOP supporting full lifecycle, including the delivery pipeline"}
     kind: "lettered"
@@ -739,7 +756,8 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Evidence of COOP/DRP testing"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CPLAN-002", "fixture": "tests/fixtures/negative/CPLAN-002.yaml", "expect": "a moderate-impact system needs a functional exercise, not a tabletop", "claim": "constraint", "asserts": "Evidence of COOP/DRP testing: a contingency plan tested only by tabletop where the impact needs a functional exercise fails", "holds_when": "ART-CP is produced or seeded"}]
   - id: "REQ-DODCIO-CATO-EVAL-0088"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 12, "anchor": "Read-throughs, walk-throughs, simulations etc."}
     kind: "lettered"
@@ -788,14 +806,20 @@ requirements:
     locator: "1.0.•"
     context: "Continuous Monitoring"
     statement: "• Behavior Monitoring evidence"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: held by controls si-4 and ac-2(12) (atypical use), with results in sar/results at A-3; SSP-COV-001 forces their statements, and nothing judges the behavior monitoring evidence itself."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Behavior monitoring evidence rests on si-4: a baseline control with no SSP statement in the plan fails"}]
+    work_item: "WI-500"
   - id: "REQ-DODCIO-CATO-EVAL-0094"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 12, "anchor": "Intrusion Detection/Prevention Systems evidence"}
     kind: "lettered"
     locator: "1.0.•"
     context: "Continuous Monitoring"
     statement: "• Intrusion Detection/Prevention Systems evidence"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: held by control si-4 (monitoring to detect attacks and unauthorized connections); SSP-COV-001 forces its statement, and nothing judges the intrusion detection and prevention evidence itself."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Intrusion detection and prevention systems evidence rests on si-4: a baseline control with no SSP statement in the plan fails"}]
+    work_item: "WI-500"
   - id: "REQ-DODCIO-CATO-EVAL-0095"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 12, "anchor": "Evidence of mitigation"}
     kind: "lettered"
@@ -837,7 +861,8 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Vulnerability scanning procedures IAW DoDI 8530.01"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.scans.yaml", "expect": "vulnerability scan monthly or more often", "claim": "constraint", "asserts": "Vulnerability scanning procedures IAW DoDI 8530.01: a strategy with no authenticated vulnerability scan monthly fails", "holds_when": "ART-CONMON is produced or seeded"}]
   - id: "REQ-DODCIO-CATO-EVAL-0100"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 12, "anchor": "Leverage process and automation to enable identification of highest priority items and"}
     kind: "lettered"
@@ -871,7 +896,10 @@ requirements:
     locator: "1.0.o"
     context: "Continuous Monitoring"
     statement: "o Collect, analyze, alert, review, and retain audit logs IAW NIST SP 800-53 security controls"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: held by controls au-2, au-3, au-6, au-11, au-12 and si-4(5), as the source names NIST SP 800-53; SSP-COV-001 forces their statements, and nothing judges what they say."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Collect, analyze, review and retain audit logs IAW NIST SP 800-53 controls au-2 to au-12: a baseline control au-2 with no SSP statement in the plan fails"}]
+    work_item: "WI-500"
   - id: "REQ-DODCIO-CATO-EVAL-0104"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 13, "anchor": "Evaluation of events that could help detect, understand, or recover from an"}
     kind: "lettered"
@@ -1111,7 +1139,10 @@ requirements:
     locator: "2.0.o"
     context: "Active Cyber Defense (ACD)"
     statement: "o Documentation and evaluation of the impact of system or environment changes to the cybersecurity defense posture"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: MCHG-001 fails a proposed system change not tested for its security impacts; the evaluation of a change in the environment of operation to the defense posture has no record a rule reads."
+    evidence: [{"kind": "rule", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.yaml", "expect": "the proposed change is not tested for security and functional impacts", "claim": "constraint", "asserts": "Documentation and evaluation of the impact of system changes: a proposed change not tested for security impacts fails", "holds_when": "changes.yaml is in play once M-1 is reached"}]
+    work_item: "WI-07"
   - id: "REQ-DODCIO-CATO-EVAL-0131"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "Use of a DevSecOps Platform (DSOP) that implements an approved DevSecOps Reference"}
     kind: "lettered"
@@ -1401,7 +1432,10 @@ requirements:
     locator: "3.3.o"
     context: "Authorize the People"
     statement: "o Demonstrate appropriate separation of duties and least privilege are applied to all personnel"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: held by controls ac-5 (separation of duties) and ac-6 (least privilege), stated at S-4 and assessed at A-3; SSP-COV-001 forces their statements, and nothing judges the demonstration."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Separation of duties and least privilege rest on ac-5 and ac-6: a baseline control with no SSP statement in the plan fails"}]
+    work_item: "WI-500"
   - id: "REQ-DODCIO-CATO-EVAL-0164"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 16, "anchor": "Periodically conduct Tabletop Exercises with the whole team and produce After"}
     kind: "lettered"
@@ -1635,7 +1669,8 @@ requirements:
     locator: "Glossary"
     context: ""
     statement: "Continuous Authorization to Operate (cATO) is the state achieved when the organization that develops, secures, and operates a system has demonstrated sufficient maturity in their ability to maintain a resilient cybersecurity posture that traditional risk assessments and authorizations become redundant. This organization must have implemented robust information security continuous monitoring capabilities, active cyber defense, and secure software supply chain requirements to enable continuous delivery of capabilities without adversely impacting the system’s cyber posture."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "the cATO evidence has not demonstrated the", "claim": "constraint", "asserts": "The organization must have implemented continuous monitoring, active cyber defense and secure software supply chain: cATO evidence that has not demonstrated active cyber defense fails"}]
   - id: "REQ-DODCIO-CATO-EVAL-0191"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 18, "anchor": "Control gate is a defined point in the project lifecycle when specific"}
     kind: "modal"
