@@ -143,6 +143,7 @@ RULES: dict[str, Rule] = {
     "TLR-010": tailoring.inheritance,
     "TLR-011": tailoring.capability_gaps,
     "ASMT-001": assessment.preparation,
+    "APREP-001": assessment.prepared,
     "ASMT-002": assessment.procedures,
     "ASMT-003": assessment.reuse,
     "ASMT-004": assessment.external,
