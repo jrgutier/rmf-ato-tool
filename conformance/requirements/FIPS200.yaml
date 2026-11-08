@@ -144,9 +144,10 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Policies and procedures play an important role in the effective implementation of enterprise-wide information security programs within the federal government and the success of the resulting security measures employed to protect federal information and information systems. Thus, organizations must develop and promulgate formal, documented policies and procedures governing the minimum security requirements set forth in this standard and must ensure their effective implementation."
-    status: "covered"
-    reason: "CFLR-001 (CF-FIPS-POL) keeps the policy and procedures control of each of the seventeen areas, ac-1 through si-1, in the baseline and the SSP."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-POL) keeps the policy and procedures control of each of the seventeen areas, ac-1 through si-1, in the baseline and the SSP, so the policies and procedures are developed and promulgated; 'must ensure their effective implementation' is held by nothing a floor can fail on."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations develop and promulgate formal documented policies and procedures governing the minimum security requirements: ac-1 tailored out of the baseline fails"}]
+    work_item: "WI-462"
   - id: "REQ-FIPS200-0018"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Access Control (AC): Organizations must limit information system access to authorized users,"}
     kind: "modal"
@@ -154,7 +155,7 @@ requirements:
     context: ""
     statement: "Access Control (AC): Organizations must limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems) and to the types of transactions and functions that authorized users are permitted to exercise."
     status: "covered"
-    reason: "CFLR-001 (CF-FIPS-AC) keeps ac-2, ac-3, ac-6 and ca-3 in the baseline and the SSP."
+    reason: "CFLR-001 (CF-FIPS-AC) keeps ac-2, ac-3 and ac-6 in the baseline and the SSP; ac-3 and ia-3 limit access by devices and other systems, and ca-3 is left out of the floor because a system with no information exchange scopes it out."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ac.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations limit information system access to authorized users, processes and devices, and to permitted transactions and functions: ac-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0019"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Awareness and Training (AT): Organizations must: (i) ensure that managers and users"}
@@ -180,9 +181,10 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Certification, Accreditation, and Security Assessments (CA): Organizations must: (i) periodically assess the security controls in organizational information systems to determine if the controls are effective in their application; (ii) develop and implement plans of action designed to correct deficiencies and reduce or eliminate vulnerabilities in organizational information systems; (iii) authorize the operation of organizational information systems and any associated information system connections; and (iv) monitor information system security controls on an ongoing basis to ensure the continued effectiveness of the controls."
-    status: "covered"
-    reason: "CFLR-001 (CF-FIPS-CA) keeps ca-2 (i), ca-5 (ii), ca-6 and ca-3 (iii) and ca-7 (iv) in the baseline and the SSP."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-CA) keeps ca-2 (i), ca-5 (ii), ca-6 (iii, the authorization) and ca-7 (iv) in the baseline and the SSP; authorizing 'any associated information system connections' rests on ca-3, which a system with no information exchange scopes out, so the floor leaves it out and that part is unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ca.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations periodically assess the security controls, develop plans of action, authorize operation and monitor the controls: ca-2 tailored out of the baseline fails"}]
+    work_item: "WI-462"
   - id: "REQ-FIPS200-0022"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Configuration Management (CM): Organizations must: (i) establish and maintain baseline configurations and"}
     kind: "modal"
@@ -208,7 +210,7 @@ requirements:
     context: ""
     statement: "Identification and Authentication (IA): Organizations must identify information system users, processes acting on behalf of users, or devices and authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems."
     status: "covered"
-    reason: "CFLR-001 (CF-FIPS-IA) keeps ia-2, ia-3, ia-8 and ia-9 in the baseline and the SSP."
+    reason: "CFLR-001 (CF-FIPS-IA) keeps ia-2 (users and processes acting for them) and ia-3 (devices) in the baseline and the SSP; ia-8 and ia-9 apply only to non-organizational users and to services, so they are left out of the floor."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ia.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations identify and authenticate users, processes and devices as a prerequisite to allowing access: ia-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0025"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Incident Response (IR): Organizations must: (i) establish an operational incident handling capability"}
@@ -226,7 +228,7 @@ requirements:
     context: ""
     statement: "Maintenance (MA): Organizations must: (i) perform periodic and timely maintenance on organizational information systems; and (ii) provide effective controls on the tools, techniques, mechanisms, and personnel used to conduct information system maintenance."
     status: "partial"
-    reason: "CFLR-001 (CF-FIPS-MA) keeps ma-2, ma-3, ma-4 and ma-5 in the baseline and the SSP; 'timely' maintenance is ma-6, which CNSSI 1253 selects only for moderate and high availability, so below that it is unheld."
+    reason: "CFLR-001 (CF-FIPS-MA) keeps ma-2, ma-3 and ma-5 in the baseline and the SSP; 'timely' maintenance is ma-6, which CNSSI 1253 selects only for moderate and high availability, and nonlocal maintenance (ma-4) applies only where it is done, so both are unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ma.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations perform periodic maintenance and control the maintenance tools, techniques and personnel: ma-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0027"
@@ -245,7 +247,7 @@ requirements:
     context: ""
     statement: "Physical and Environmental Protection (PE): Organizations must: (i) limit physical access to information systems, equipment, and the respective operating environments to authorized individuals; (ii) protect the physical plant and support infrastructure for information systems; (iii) provide supporting utilities for information systems; (iv) protect information systems against environmental hazards; and (v) provide appropriate environmental controls in facilities containing information systems."
     status: "partial"
-    reason: "Proxy for clauses ii and iii: CFLR-001 (CF-FIPS-PE) keeps pe-2 and pe-3 (clause i) and pe-12 to pe-15 (clauses iv and v) in effect; the physical plant and supporting utilities rest on pe-9 to pe-11, which CNSSI 1253 selects only for moderate and high availability, so no floor control carries them at every level."
+    reason: "Proxy for clauses ii and iii: CFLR-001 (CF-FIPS-PE) keeps pe-2 and pe-3 (clause i) and pe-12 to pe-14 (clauses iv and v) in effect; the physical plant and supporting utilities rest on pe-9 to pe-11, which CNSSI 1253 selects only for moderate and high availability, and water damage protection (pe-15) applies only where water lines exist, so they are unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-pe.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations limit physical access to authorized individuals and protect systems against environmental hazards: pe-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0029"
@@ -263,9 +265,10 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Personnel Security (PS): Organizations must: (i) ensure that individuals occupying positions of responsibility within organizations (including third-party service providers) are trustworthy and meet established security criteria for those positions; (ii) ensure that organizational information and information systems are protected during and after personnel actions such as terminations and transfers; and (iii) employ formal sanctions for personnel failing to comply with organizational security policies and procedures."
-    status: "covered"
-    reason: "CFLR-001 (CF-FIPS-PS) keeps ps-2, ps-3 and ps-7 (clause i), ps-4 and ps-5 (clause ii) and ps-8 (clause iii) in the baseline and the SSP."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-PS) keeps ps-2 and ps-3 (clause i), ps-4 and ps-5 (clause ii) and ps-8 (clause iii) in the baseline and the SSP; the trustworthiness of third-party service providers rests on ps-7, which a system with no external personnel scopes out, so that part is unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ps.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Individuals occupying positions of responsibility are trustworthy, systems are protected during terminations and transfers, and formal sanctions are employed: ps-2 tailored out of the baseline fails"}]
+    work_item: "WI-462"
   - id: "REQ-FIPS200-0031"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Risk Assessment (RA): Organizations must periodically assess the risk to organizational operations"}
     kind: "modal"
@@ -281,18 +284,20 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "System and Services Acquisition (SA): Organizations must: (i) allocate sufficient resources to adequately protect organizational information systems; (ii) employ system development life cycle processes that incorporate information security considerations; (iii) employ software usage and installation restrictions; and (iv) ensure that third-party providers employ adequate security measures to protect information, applications, and/or services outsourced from the organization."
-    status: "covered"
-    reason: "CFLR-001 (CF-FIPS-SA) keeps sa-2 (i), sa-3 (ii), cm-10 and cm-11 (iii) and sa-9 (iv) in the baseline and the SSP."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-SA) keeps sa-2 (i), sa-3 (ii), cm-10 and cm-11 (iii) in the baseline and the SSP; clause iv, third-party providers employing adequate security, rests on sa-9, which a system with no external services scopes out, so it is unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-sa.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations allocate resources, employ life cycle processes with security, restrict software usage and installation, and ensure third-party providers employ security measures: sa-2 tailored out of the baseline fails"}]
+    work_item: "WI-462"
   - id: "REQ-FIPS200-0033"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "System and Communications Protection (SC): Organizations must: (i) monitor, control, and protect"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "System and Communications Protection (SC): Organizations must: (i) monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems; and (ii) employ architectural designs, software development techniques, and systems engineering principles that promote effective information security within organizational information systems."
-    status: "covered"
-    reason: "CFLR-001 (CF-FIPS-SC) keeps sc-7 (clause i) and pl-8, sa-8 and sa-15 (clause ii) in the baseline and the SSP."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-SC) keeps sc-7 (clause i) and pl-8 and sa-8 (clause ii, architectural designs and engineering principles) in the baseline and the SSP; software development techniques rest on sa-15, which a system with no development (COTS only) scopes out, so that part is unheld."
     evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-sc.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations monitor, control and protect communications at the boundaries and employ architectural designs and engineering principles: pl-8 tailored out of the baseline fails"}]
+    work_item: "WI-462"
   - id: "REQ-FIPS200-0034"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "System and Information Integrity (SI): Organizations must: (i) identify, report, and correct"}
     kind: "modal"

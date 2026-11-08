@@ -353,7 +353,9 @@ def dod_program_controls(ctx: Context) -> list[RunFinding]:
 
 def nist_floor(ctx: Context) -> list[RunFinding]:
     """CFLR-001: the controls that carry FIPS 200's minimum security requirements and the SP
-    800-53A assessment policy."""
+    800-53A assessment policy. The stand-alone permission _floor allows is DoDI 8500.01's
+    (pp. 38-39), which governs every DoD IS, FIPS 200 floors included; FIPS 200 itself allows
+    no waiver (p. 5). A lead default, for the user's ruling."""
     return _control_floor(ctx, "CFLR-001")
 
 

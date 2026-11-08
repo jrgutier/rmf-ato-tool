@@ -429,49 +429,42 @@ dod_policy_controls:
     citation: {ref: DODI8500.01, page: 31, anchor: "Compromising emanations (i.e., TEMPEST) countermeasures must be applied in accordance with policy"}
   # subject program: a duty DoDI 8500.01 places on DoD IT through the DoD Component's
   # cybersecurity program (the policy of section 3, enclosure 2 and enclosure 3), carried by
-  # the system's own controls (DPOL-003). Each is a proxy: the issuance names no control.
+  # the system's own controls (DPOL-003). Each is a proxy (mapping): the issuance names no control.
   - id: PC-DOD-38
     subject: program
     authority: DoDI 8500.01
     text: information and services are available to authorized users whenever and wherever required according to mission needs
     controls: [cp-2, cp-10]
+    mapping: proxy
     citation: {ref: DODI8500.01, page: 2, anchor: "Information and services are available to authorized users whenever and wherever required"}
   - id: PC-DOD-39
     subject: program
     authority: DoDI 8500.01
     text: DoD ISs are public key-enabled under the DoD-wide PKI
     controls: [ia-2.12, ia-5]
+    mapping: proxy
     citation: {ref: DODI8500.01, page: 4, anchor: "DoD will public key-enable DoD ISs and implement a DoD-wide Public Key"}
   - id: PC-DOD-40
     subject: program
     authority: DoDI 8500.01
     text: incident response limits damage and restores effective service following an incident
     controls: [ir-4, cp-10]
+    mapping: proxy
     citation: {ref: DODI8500.01, page: 22, anchor: "Limit damage and restore effective service following an incident."}
-  - id: PC-DOD-41
-    subject: program
-    authority: DoDI 8500.01
-    text: DoD information proposed for publication on public Internet media is reviewed and approved for public dissemination
-    controls: [ac-22]
-    citation: {ref: DODI8500.01, page: 35, anchor: "DoD information proposed or projected for publication on public Internet media (e.g.,"}
   - id: PC-DOD-42
     subject: program
     authority: DoDI 8500.01
     text: interconnections between a PIT system and other PIT systems or DoD ISs are protected by security controls on the PIT system or the DoD IS
-    controls: [ca-3, sc-7]
+    controls: [sc-7]
+    mapping: proxy
     applies_to: [pit-system]
     citation: {ref: DODI8500.01, page: 39, anchor: "Interconnections between PIT systems and other PIT systems or DoD ISs must"}
-  - id: PC-DOD-43
-    subject: program
-    authority: DoDI 8500.01
-    text: each mobile code technology used is risk-assessed, assigned a mobile code risk category and has its use regulated
-    controls: [sc-18]
-    citation: {ref: DODI8500.01, page: 41, anchor: "Each mobile code technology used in DoD information systems must undergo a"}
   - id: PC-DOD-44
     subject: program
     authority: DoDI 8500.01
     text: persons entrusted with the management of DoD IT are responsible for its proper use, care, physical protection and disposal
     controls: [pl-4, mp-6]
+    mapping: proxy
     citation: {ref: DODI8500.01, page: 42, anchor: "All persons entrusted with the management of DoD IT will be responsible"}
 # control_floors: controls that carry a duty of a source other than DoDI 8500.01, one record
 # per duty, each read against its page. mapping says how: the source names the controls
@@ -484,7 +477,10 @@ dod_policy_controls:
 # (DoDI 8500.01 pp. 38 and 39 governs every DoD IS), and inheriting a control is no removal.
 # FIPS 200 allows the SP 800-53 tailoring guidance (p. 10), of which a compensating control
 # is the case that still meets the minimum requirement; it allows no waiver (p. 5).
-# Every control here is selected by CNSSI 1253 at every level (or in the privacy column).
+# Every control here is selected by CNSSI 1253 at every level (or in the privacy column), and
+# each is one no SP 800-53B scoping consideration removes (p. 25): a control that applies only
+# where a technology, a connection, a provider or a development effort exists (ca-3, ia-8, ia-9,
+# ma-4, ps-7, sa-9 under FIPS 200, sa-15, pe-15) is left out, and its clause named in the entry.
 control_floors:
   - id: CF-FIPS-POL
     rule: CFLR-001
@@ -497,7 +493,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: system access is limited to authorized users, processes acting for them and devices, and to the transactions and functions authorized users may exercise
-    controls: [ac-2, ac-3, ac-6, ca-3]
+    controls: [ac-2, ac-3, ac-6]
     mapping: sole
     citation: {ref: FIPS200, page: 8, anchor: "Access Control (AC): Organizations must limit information system access to authorized users,"}
   - id: CF-FIPS-AT
@@ -518,7 +514,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: the controls are periodically assessed, plans of action correct deficiencies, the system and its connections are authorized, and the controls are monitored on an ongoing basis
-    controls: [ca-2, ca-3, ca-5, ca-6, ca-7]
+    controls: [ca-2, ca-5, ca-6, ca-7]
     mapping: sole
     citation: {ref: FIPS200, page: 8, anchor: "Certification, Accreditation, and Security Assessments (CA): Organizations must: (i) periodically assess the"}
   - id: CF-FIPS-CM
@@ -539,7 +535,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: users, processes acting for them and devices are identified and authenticated before access is allowed
-    controls: [ia-2, ia-3, ia-8, ia-9]
+    controls: [ia-2, ia-3]
     mapping: sole
     citation: {ref: FIPS200, page: 9, anchor: "Identification and Authentication (IA): Organizations must identify information system users, processes acting"}
   - id: CF-FIPS-IR
@@ -553,7 +549,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: periodic maintenance is performed, and the tools, techniques, mechanisms and personnel of maintenance are controlled
-    controls: [ma-2, ma-3, ma-4, ma-5]
+    controls: [ma-2, ma-3, ma-5]
     mapping: sole
     citation: {ref: FIPS200, page: 9, anchor: "Maintenance (MA): Organizations must: (i) perform periodic and timely maintenance on organizational"}
   - id: CF-FIPS-MP
@@ -567,7 +563,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: physical access is limited to authorized individuals, and the system is protected against environmental hazards in facilities with environmental controls
-    controls: [pe-2, pe-3, pe-12, pe-13, pe-14, pe-15]
+    controls: [pe-2, pe-3, pe-12, pe-13, pe-14]
     mapping: proxy
     citation: {ref: FIPS200, page: 9, anchor: "Physical and Environmental Protection (PE): Organizations must: (i) limit physical access to"}
   - id: CF-FIPS-PL
@@ -581,7 +577,7 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: individuals in positions of responsibility are trustworthy, systems are protected through terminations and transfers, and formal sanctions are employed
-    controls: [ps-2, ps-3, ps-4, ps-5, ps-7, ps-8]
+    controls: [ps-2, ps-3, ps-4, ps-5, ps-8]
     mapping: sole
     citation: {ref: FIPS200, page: 9, anchor: "Personnel Security (PS): Organizations must: (i) ensure that individuals occupying positions of"}
   - id: CF-FIPS-RA
@@ -595,14 +591,14 @@ control_floors:
     rule: CFLR-001
     authority: FIPS 200
     text: resources are allocated to protect the system, the life cycle incorporates security, software usage and installation are restricted, and third-party providers employ adequate security
-    controls: [sa-2, sa-3, cm-10, cm-11, sa-9]
+    controls: [sa-2, sa-3, cm-10, cm-11]
     mapping: sole
     citation: {ref: FIPS200, page: 9, anchor: "System and Services Acquisition (SA): Organizations must: (i) allocate sufficient resources to"}
   - id: CF-FIPS-SC
     rule: CFLR-001
     authority: FIPS 200
     text: communications are monitored, controlled and protected at the external and key internal boundaries, under architectural designs, development techniques and engineering principles that promote security
-    controls: [sc-7, pl-8, sa-8, sa-15]
+    controls: [sc-7, pl-8, sa-8]
     mapping: sole
     citation: {ref: FIPS200, page: 10, anchor: "System and Communications Protection (SC): Organizations must: (i) monitor, control, and protect"}
   - id: CF-FIPS-SI
@@ -757,7 +753,7 @@ control_floors:
     authority: DoDI 8530.01
     text: the cybersecurity service subscriber ensures appropriate controls and oversight measures with respect to its agreements
     controls: [sa-9]
-    mapping: sole
+    mapping: proxy
     citation: {ref: DODI8530.01, page: 36, anchor: "The cybersecurity service subscriber will ensure the use of appropriate controls and"}
   - id: CF-CATO-1
     rule: CFLR-003
@@ -788,7 +784,7 @@ control_floors:
     authority: the DoD CIO cATO evaluation criteria
     text: audit logs are collected, analyzed, alerted on, reviewed and retained under the NIST SP 800-53 controls
     controls: [au-2, au-6, au-11, au-12, si-4.5]
-    mapping: named
+    mapping: sole
     applies_when: cato
     citation: {ref: DODCIO-CATO-EVAL, page: 13, anchor: "Collect, analyze, alert, review, and retain audit logs IAW NIST SP 800-53"}
   - id: CF-CATO-5
@@ -838,7 +834,7 @@ control_floors:
     rule: CFLR-003
     authority: DoDI 5000.83
     text: the system architecture and design address how the system interfaces with the DoD Information Network or other external services
-    controls: [ca-3, sc-7]
+    controls: [sc-7]
     mapping: proxy
     citation: {ref: DODI5000.83, page: 16, anchor: "Interfaces with the DoD Information Network or other external services."}
   - id: CF-8531-1

@@ -271,10 +271,10 @@ def test_an_inherited_floor_control_passes(tmp_path):
 
 
 def test_a_pit_interconnection_floor_binds_only_a_pit_system(tmp_path):
-    """DoDI 8500.01 p. 39 item 4 binds interconnections of PIT systems: ca-3 removed from a
+    """DoDI 8500.01 p. 39 item 4 binds interconnections of PIT systems: sc-7 removed from a
     major application is no PC-DOD-42 finding (the FIPS 200 and DoDI 5000.83 floors judge it)."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    _add_action(run_dir, {**REMOVE_PL4, "control_id": "ca-3"})
+    _add_action(run_dir, {**REMOVE_PL4, "control_id": "sc-7"})
     found = _floors(run_dir)
     assert found and not any(m.startswith("PC-DOD-42:") for m in found)
 
@@ -292,11 +292,14 @@ def test_a_cato_floor_binds_only_while_a_cato_is_sought(tmp_path):
 
 
 def test_an_entry_resting_on_a_proxy_floor_record_is_not_covered():
-    """A proxy record (the source names no control and several could meet the duty) cannot carry
-    covered: a covered entry may cite no fixture whose declared message is a proxy record's."""
+    """A proxy record (the source names no control and several could meet the duty), in
+    control_floors or dod_policy_controls, cannot carry covered: a covered entry may cite no
+    fixture whose declared message is a proxy record's."""
     load = YAML(typ="safe").load
     inputs = baseline.load_inputs(REPO_ROOT)
-    proxies = {r["id"] for r in inputs["control_floors"] if r["mapping"] == "proxy"}
+    records = [*inputs["control_floors"], *inputs["dod_policy_controls"]]
+    proxies = {r["id"] for r in records if r.get("mapping") == "proxy"}
+    assert {"PC-DOD-38", "PC-DOD-44"} <= proxies
     assert proxies
     leaning = []
     for path in sorted((REPO_ROOT / "conformance/requirements").glob("*.yaml")):
