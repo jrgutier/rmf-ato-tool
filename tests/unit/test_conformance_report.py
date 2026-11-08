@@ -148,14 +148,16 @@ def test_a_mostly_covered_register_is_not():
     assert "WARNING" not in "\n".join(report.render(report.build(reg, index)))
 
 
-@pytest.mark.parametrize("kind, tier, blocks", [
-    ("should", 1, True), ("table", 1, True), ("modal", None, True), ("lettered", 2, True),
-    ("indicative", None, True), ("imperative", 2, True), ("should", None, False),
-    ("should", 2, False), ("table", None, False), ("table", 2, False),
+@pytest.mark.parametrize("kind, status, tier, blocks", [
+    ("should", "candidate", 1, "candidate"), ("table", "candidate", 1, "candidate"),
+    ("modal", "candidate", None, None), ("lettered", "candidate", 2, None),
+    ("should", "candidate", None, None), ("modal", "covered", 1, None),
+    ("modal", "deferred", 1, None),
 ])
-def test_what_blocks_the_p13_freeze(kind, tier, blocks):
-    """FW-REQ-002 (ADR-0005): tier 1 and obligations block; should and table elsewhere warn."""
-    assert report.blocks_freeze(kind, tier) is blocks
+def test_what_blocks_the_p13_freeze(kind, status, tier, blocks):
+    """FW-REQ-002 (ADR-0005, 2026-11-08): only tier 1 blocks, whatever the kind."""
+    entry = {"kind": kind, "status": status}
+    assert report.rules.blocks_freeze(None, entry, tier) == blocks
 
 
 def test_the_report_splits_candidates_by_what_blocks_the_freeze():
@@ -169,9 +171,10 @@ def test_the_report_splits_candidates_by_what_blocks_the_freeze():
     text = "\n".join(report.render(report.build(reg, index)))
 
     assert report.build(reg, index)["summary"]["freeze"] == {
-        "tier_1": 1, "obligations_elsewhere": 9, "advisory_elsewhere": 2, "deferred": 0,
-        "partial_on_weak_evidence": 1}
-    assert "1 in tier 1 documents and 9 obligations elsewhere block it; 2 should or table" in text
+        "tier_1": 1, "tier_1_partial_without_strong": 0, "advisory_elsewhere": 11,
+        "deferred": 0, "partial_on_weak_evidence": 1}
+    assert ("1 tier 1 candidates and 0 tier 1 partials with no strong item; 11 candidates "
+            "outside tier 1 are advisory") in text
     assert "0 deferred, 1 partial on evidence that cannot fail" in text
 
 

@@ -13,37 +13,30 @@ from rmf_tool.conformance.register import STATUSES, Register
 # `partial` caps what evidence can prove, so a register resting on it must stay visible.
 PARTIAL_WARNING_SHARE = 0.5
 TIER_1 = 1
-# Kinds that state an obligation; `should` and `table` are advisory outside tier 1.
-OBLIGATION_KINDS = frozenset({"lettered", "modal", "indicative", "imperative",
-                              register.PROMOTED_KIND})
 
 
-def blocks_freeze(kind: str, tier: int | None) -> bool:
-    """FW-REQ-002 at p13 (ADR-0005): a candidate blocks the freeze when its document is tier 1
-    or its kind states an obligation; a should or table candidate elsewhere only warns."""
-    return tier == TIER_1 or kind in OBLIGATION_KINDS
-
-
-def freeze_split(reg: Register, index: Mapping[str, Any]) -> dict[str, int]:
-    """Live candidates by what they will mean at p13, and the entries set aside without proof
+def freeze_split(reg: Register, index: Mapping[str, Any],
+                 probe: evidence.Probe | None = None) -> dict[str, int]:
+    """What FW-REQ-002 at p13 reads (ADR-0005, 2026-11-08): the tier 1 candidates and the tier 1
+    partials with no strong item, which block the freeze (the second judged only with a probe);
+    the candidates outside tier 1, which are advisory; and the entries set aside without proof
     (deferred, partial on evidence that cannot fail) that the sign-off at p13 reads, so a
     scripted loop of `mark --status deferred` is as visible as a loop of `not-applicable`
     (FW-REQ-004)."""
-    out = {"tier_1": 0, "obligations_elsewhere": 0, "advisory_elsewhere": 0, "deferred": 0,
-           "partial_on_weak_evidence": 0}
+    out = {"tier_1": 0, "tier_1_partial_without_strong": 0, "advisory_elsewhere": 0,
+           "deferred": 0, "partial_on_weak_evidence": 0}
     for ref, entry in reg.live():
         if entry["status"] == "deferred":
             out["deferred"] += 1
         elif entry["status"] == "partial" and rules.retired(entry):
             out["partial_on_weak_evidence"] += 1
-        if entry["status"] != "candidate":
-            continue
         tier = (index.get(ref) or {}).get("tier")
-        if tier == TIER_1:
+        blocker = rules.blocks_freeze(probe, entry, tier)
+        if blocker == rules.FREEZE_CANDIDATE:
             out["tier_1"] += 1
-        elif blocks_freeze(entry["kind"], tier):
-            out["obligations_elsewhere"] += 1
-        else:
+        elif blocker == rules.FREEZE_NO_STRONG:
+            out["tier_1_partial_without_strong"] += 1
+        elif entry["status"] == "candidate":
             out["advisory_elsewhere"] += 1
     return out
 
@@ -53,22 +46,30 @@ def evidence_state(reg: Register, index: Mapping[str, Any],
     """What ``covered`` rests on and what ``partial`` still owes: covered entries that hold only
     under a precondition, each partial entry's sentences with no strong item, and the sentences
     that wait on the user's ruling. Tier 1 owes full proof, so its unresolved sentences are the
-    debt the freeze reads; a sentence that can never fail is no debt, and waits apart."""
+    debt the freeze reads; a sentence that can never fail is no debt, and waits apart. A tier 1
+    partial whose every sentence a strong item holds still owes what its reason names: it is
+    counted apart (``tier1_partial_by_reason``), since no sentence of it is unresolved."""
     unresolved = []
     awaiting = []
-    conditional = debt = 0
+    conditional = debt = partial_1 = by_reason = 0
     for ref, entry in reg.live():
         if sentences := evidence.pending_rulings(entry):
             awaiting.append({"id": entry["id"], "tier": (index.get(ref) or {}).get("tier"),
                              "sentences": sentences})
+        tier = (index.get(ref) or {}).get("tier")
         if entry["status"] == "covered":
             conditional += any(i.get("holds_when") for i in entry.get("evidence") or ())
-        elif sentences := rules.unresolved_sentences(probe, entry):
-            tier = (index.get(ref) or {}).get("tier")
+            continue
+        sentences = rules.unresolved_sentences(probe, entry)
+        if entry["status"] == "partial" and tier == TIER_1:
+            partial_1 += 1
+            by_reason += not sentences and not evidence.pending_rulings(entry)
+        if sentences:
             debt += len(sentences) if tier == TIER_1 else 0
             unresolved.append({"id": entry["id"], "tier": tier, "sentences": sentences})
     return {"conditional": conditional, "tier1_debt": debt, "unresolved": unresolved,
-            "awaiting_ruling": awaiting}
+            "awaiting_ruling": awaiting, "tier1_partial_entries": partial_1,
+            "tier1_partial_by_reason": by_reason}
 
 
 def build(reg: Register, index: Mapping[str, Any], *,
@@ -113,7 +114,8 @@ def build(reg: Register, index: Mapping[str, Any], *,
     reviewed = live_total - total["candidate"]
     assessed = total["covered"] + total["partial"]
     state = evidence_state(reg, index, probe) if probe else {
-        "conditional": 0, "tier1_debt": 0, "unresolved": [], "awaiting_ruling": []}
+        "conditional": 0, "tier1_debt": 0, "unresolved": [], "awaiting_ruling": [],
+        "tier1_partial_entries": 0, "tier1_partial_by_reason": 0}
     closure = Counter(w["status"] for w in reg.work_items.values())
     summary = {
         "total": live_total,
@@ -124,6 +126,8 @@ def build(reg: Register, index: Mapping[str, Any], *,
         "closed_partial_items": closure["closed-partial"],
         "conditional": state["conditional"],
         "tier1_debt": state["tier1_debt"],
+        "tier1_partial_entries": state["tier1_partial_entries"],
+        "tier1_partial_by_reason": state["tier1_partial_by_reason"],
         "awaiting_ruling": sum(len(a["sentences"]) for a in state["awaiting_ruling"]),
         "unassessed": len(unassessed),
         "waivers": len(waivers or []),
@@ -131,7 +135,7 @@ def build(reg: Register, index: Mapping[str, Any], *,
         "partial_share": round(total["partial"] / assessed, 3) if assessed else 0.0,
         "kinds": dict(sorted(kinds.items())),
         "promoted": promoted,
-        "freeze": freeze_split(reg, index),
+        "freeze": freeze_split(reg, index, probe),
         "rejected": sum(rejected_by_reason.values()),
         "rejected_by_reason": dict(sorted(rejected_by_reason.items())),
     }
@@ -174,6 +178,9 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"{s['conditional']} of {s['covered']} covered entries hold under a precondition "
                  f"(holds_when); tier 1 debt: {s['tier1_debt']} unresolved sentences in "
                  f"{sum(u['tier'] == TIER_1 for u in report['unresolved'])} partial entries")
+    lines.append(f"tier 1 partial entries: {s['tier1_partial_entries']}, of which "
+                 f"{s['tier1_partial_by_reason']} hold every sentence and owe only what their "
+                 "reason names")
     lines.append(f"awaiting the user's ruling: {s['awaiting_ruling']} sentences in "
                  f"{len(report['awaiting_ruling'])} entries")
     for a in report["awaiting_ruling"]:
@@ -181,9 +188,9 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"work items closed {s['closed_items']}, closed-partial "
                  f"{s['closed_partial_items']}, open {s['work_items']}")
     freeze = s["freeze"]
-    lines.append(f"candidates at the p13 freeze: {freeze['tier_1']} in tier 1 documents and "
-                 f"{freeze['obligations_elsewhere']} obligations elsewhere block it; "
-                 f"{freeze['advisory_elsewhere']} should or table entries elsewhere warn")
+    lines.append(f"blocking the p13 freeze (FW-REQ-002): {freeze['tier_1']} tier 1 candidates and "
+                 f"{freeze['tier_1_partial_without_strong']} tier 1 partials with no strong item; "
+                 f"{freeze['advisory_elsewhere']} candidates outside tier 1 are advisory")
     lines.append(f"set aside without proof, for the p13 sign-off: {freeze['deferred']} deferred, "
                  f"{freeze['partial_on_weak_evidence']} partial on evidence that cannot fail "
                  "(FW-REQ-004)")

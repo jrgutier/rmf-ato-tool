@@ -4,6 +4,7 @@ import pytest
 
 from rmf_tool import ci
 from rmf_tool.profiles import (
+    AHEAD,
     PHASES,
     Profile,
     ProfileError,
@@ -53,15 +54,23 @@ def test_rule_phase_gating(tmp_path):
 def test_release_profile_includes_all(tmp_path):
     profile = resolve(tmp_path, "release")
 
-    assert profile.phases == set(PHASES)
+    assert profile.phases == set(PHASES) - AHEAD
     assert profile.examples and profile.agent_severity == "E"
     assert resolve(tmp_path, "p35").agent_severity == "W"
+
+
+def test_a_phase_built_ahead_joins_release_once_it_closes(tmp_path):
+    close(tmp_path, "p13")
+
+    assert "p13" in resolve(tmp_path, "release").phases
+    assert "p13" in resolve(tmp_path, "fork").phases
+    assert "p13" in resolve(tmp_path / "missing", "p13").phases
 
 
 def test_fork_profile_skips_examples_and_agent(tmp_path):
     profile = resolve(tmp_path, "fork")
 
-    assert profile.phases == set(PHASES)
+    assert profile.phases == set(PHASES) - AHEAD
     assert not profile.examples
     assert profile.agent_severity is None
 

@@ -236,9 +236,11 @@ STEPS: tuple[Step, ...] = (
     # p10: the register and the NIST task pin, FW-REQ-* and FW-TASK-002 in `rmf validate`, so
     # this step replaces the p5 one.
     Step("rmf validate (requirements register, NIST task pin)", "p10",
-         framework_validate.IMPLEMENTED, _framework),
+         framework_validate.IMPLEMENTED, _framework, unless="p13"),
     # p11: run contracts; a run is held to the contract it was created under.
     Step("run contracts", "p11", ("RUN-VER-001",), _contracts),
+    # p13: the register freeze, FW-REQ-002 in `rmf validate`, so this step replaces the p10 one.
+    Step("rmf validate (register freeze)", "p13", framework_validate.IMPLEMENTED, _framework),
     Step("ruff", None, (), _ruff),
     Step("pytest", None, (), _pytest),
 )
