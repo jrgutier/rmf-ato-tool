@@ -135,7 +135,7 @@ def test_an_external_driver_may_rank_a_non_critical_source_first(run):
 
 def test_a_phase_may_repeat_for_spiral_or_agile_cycles(run):
     edit_yaml(run / D / "scrm-plan.yaml", lambda d: d["plan"]["lifecycle"].append(
-        {"phase": "integration", "activities": "Each sprint re-runs the pipeline's supplier checks."}))
+        {"phase": "integration", "activities": "Each sprint reruns the supplier checks."}))
     assert messages(run, "SCRM-030") == []
 
 
