@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 344 rules, 37 repo-scope and 307 run-scope. Authoritative;
+# Rule registry (plan §6.5): 345 rules, 37 repo-scope and 308 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -448,6 +448,7 @@ rules:
     hint: Use `rmf catalog show --missing` and write the whole family file.
     enforces:
       - REQ-DODI8510.01-0113
+      - REQ-DODI8510.01-0116
       - REQ-SP800-37R2-0292
       - REQ-SP800-37R2-0310
       - REQ-SP800-37R2-0556
@@ -507,6 +508,8 @@ rules:
     fixture: tests/fixtures/negative/SAR-POAM-001.yaml
     hint: Add a POA&M item whose finding_ref is the finding ID, or close the finding with evidence.
     enforces:
+      - REQ-DODI8510.01-0048
+      - REQ-DODI8510.01-0125
       - REQ-SP800-37R2-0377
   - id: ASMT-001
     scope: run
@@ -666,6 +669,8 @@ rules:
     hint: "sar-report.yaml holds methodology, delivered and quality_review."
     enforces:
       - REQ-CNSSI1254-0067
+      - REQ-DODI8510.01-0123
+      - REQ-DODI8510.01-0205
       - REQ-DODI8510.01-0211
       - REQ-SP800-37R2-0529
   - id: ASMT-009
@@ -681,6 +686,7 @@ rules:
     enforces:
       - REQ-CNSSI1254-0093
       - REQ-CNSSI1254-0095
+      - REQ-DODI8510.01-0247
       - REQ-SP800-37R2-0378
       - REQ-SP800-37R2-0563
   - id: ASMT-010
@@ -711,6 +717,8 @@ rules:
       - REQ-CNSSI1254-0097
       - REQ-CNSSI1254-0098
       - REQ-CNSSI1254-0101
+      - REQ-DODI8510.01-0200
+      - REQ-DODI8510.01-0247
   - id: ASMT-012
     scope: run
     severity: E
@@ -783,6 +791,9 @@ rules:
     hint: rar.yaml determination names the AO or AODR, collaboration with PER-CISO (and PER-PRIV for PII), PER-ISSM as technical advisor, and ART-RA among what it rests on.
     enforces:
       - REQ-DODI8500.01-0425
+      - REQ-DODI8510.01-0126
+      - REQ-DODI8510.01-0128
+      - REQ-DODI8510.01-0213
       - REQ-SP800-37R2-0401
       - REQ-SP800-37R2-0402
   - id: RAR-003
@@ -796,6 +807,7 @@ rules:
     fixture: tests/fixtures/negative/RAR-003.yaml
     hint: Each risk lists courses_of_action, a lone one with adequacy adequate, exactly one selected and matching response, and a selected_response.
     enforces:
+      - REQ-DODI8510.01-0129
       - REQ-SP800-39-0177
       - REQ-SP800-39-0291
       - REQ-SP800-39-0298
@@ -880,6 +892,8 @@ rules:
     hint: Record threat_assessment on an ATO, issued by the Intelligence Community within the 12 months before the decision (DoDI 5000.90 p. 11).
     enforces:
       - REQ-DODI5000.90-0081
+      - REQ-DODI8510.01-0039
+      - REQ-DODI8510.01-0230
   - id: AODM-005
     scope: run
     severity: E
@@ -1052,6 +1066,7 @@ rules:
     fixture: tests/fixtures/negative/MCHG-001.yaml
     hint: artifacts/data/changes.yaml carries each controlled change through its test, the impacts presented to the CCB and the AO or AODR, the decision told to the requester, and verification before close-out.
     enforces:
+      - REQ-DODI8510.01-0137
       - REQ-DTM-24-001-0212
       - REQ-DTM-24-001-0213
       - REQ-SP800-128-0211
@@ -1069,6 +1084,7 @@ rules:
     fixture: tests/fixtures/negative/MCHG-002.yaml
     hint: Monitoring runs from the first authorization and reconciles against baseline, inventory and change requests; an unauthorized change has a root cause and a POA&M item or risk that responds.
     enforces:
+      - REQ-DODI8510.01-0138
       - REQ-SP800-128-0031
       - REQ-SP800-128-0225
       - REQ-SP800-128-0239
@@ -1202,6 +1218,8 @@ rules:
       - REQ-DODI5000.82-0134
       - REQ-DODI8500.01-0282
       - REQ-DODI8500.01-0321
+      - REQ-DODI8510.01-0234
+      - REQ-DODI8510.01-0255
       - REQ-DODI8530.01-0033
       - REQ-DODI8530.01-0034
       - REQ-DODI8530.01-0035
@@ -1225,6 +1243,7 @@ rules:
     fixture: tests/fixtures/negative/MRPT-002.yaml
     hint: The risk executive (function) and the CISO review after the last report, and the organization tier records the aggregate count of open POA&M items.
     enforces:
+      - REQ-DODI8510.01-0208
       - REQ-SP800-137-0050
       - REQ-SP800-137-0067
       - REQ-SP800-137-0108
@@ -1279,6 +1298,9 @@ rules:
     fixture: tests/fixtures/negative/MPLAN-001.yaml
     hint: plan-reviews.yaml logs reviews within the organization-defined interval, and each update names an approver under change management and a change in the log.
     enforces:
+      - REQ-DODI8510.01-0141
+      - REQ-DODI8510.01-0237
+      - REQ-DODI8510.01-0246
       - REQ-SP800-18R1-0015
       - REQ-SP800-18R1-0157
       - REQ-SP800-18R2-0047
@@ -1297,10 +1319,12 @@ rules:
     fixture: tests/fixtures/negative/AUTHRPT-001.yaml
     hint: artifacts/data/authorization-report.yaml names a ledger record; its receiver retains the decision and package, every official told can read them, retention outlasts the termination date, the AO verifies the terms, the SAP and SAR records are kept, operational_awareness names PER-OPCDR among the informed, and each risk that affects an operational requirement is coordinated with PER-OPCDR and PER-PM or PER-MDA.
     enforces:
-      - REQ-SP800-37R2-0602
-      - REQ-SP800-53AR5-0296
+      - REQ-DODI8510.01-0126
+      - REQ-DODI8510.01-0131
       - REQ-DODI8510.01-0226
       - REQ-DODI8510.01-0227
+      - REQ-SP800-37R2-0602
+      - REQ-SP800-53AR5-0296
   - id: RUN-VER-001
     scope: run
     severity: W
@@ -1571,10 +1595,11 @@ rules:
     fixture: tests/fixtures/negative/PKG-001.yaml
     hint: Run `rmf package <run>`.
     enforces:
+      - REQ-CNSSP12-0024
+      - REQ-DODI8510.01-0132
       - REQ-SP800-37R2-0377
       - REQ-SP800-37R2-0392
       - REQ-SP800-37R2-0547
-      - REQ-CNSSP12-0024
   - id: AUTY-001
     scope: run
     severity: E
@@ -1614,6 +1639,7 @@ rules:
     fixture: tests/fixtures/negative/XSUM-001.yaml
     hint: Write artifacts/data/package-summary.yaml at R-1 from templates/data/package-summary.yaml; each issue cites POA&M items of the package, and the submission is dated on or before the R-4 decision.
     enforces:
+      - REQ-DODI8510.01-0127
       - REQ-SP800-37R2-0392
       - REQ-SP800-37R2-0547
       - REQ-SP800-37R2-0555
@@ -1753,7 +1779,6 @@ rules:
     fixture: tests/fixtures/negative/TLR-003.yaml
     hint: "Record each assumption of framework/baselines/tailoring-inputs.yaml in tailoring.yaml; a failed baseline assumption names tailored controls or overlays, an additional assumption that holds names controls in the baseline or added, overlays, or outcome revisited-no-change."
     enforces:
-      - REQ-CNSSI1253F-ATT2-SPACE-0006
       - REQ-CNSSI1253-0020
       - REQ-CNSSI1253-0030
       - REQ-CNSSI1253E-ATT1-TEMPLATE-0078
@@ -1761,7 +1786,9 @@ rules:
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0014
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0015
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0016
+      - REQ-CNSSI1253F-ATT2-SPACE-0006
       - REQ-CNSSI1253F-ATT6-PRIVACY-0045
+      - REQ-DODI8510.01-0111
       - REQ-SP800-53B-0041
       - REQ-SP800-53B-0130
   - id: TLR-004
@@ -2326,6 +2353,7 @@ rules:
     fixture: tests/fixtures/negative/CONN-004.yaml
     hint: boundary.yaml dodin says inside or outside; outside holds a waiver granted after the DoD CIO reviewed the system's cybersecurity posture.
     enforces:
+      - REQ-DODI8510.01-0103
       - REQ-DODI8530.01-0060
   - id: REQS-001
     scope: run
@@ -2341,14 +2369,16 @@ rules:
       - REQ-DODI5000.75-0244
       - REQ-DODI5000.83-0179
       - REQ-DODI5000.83-0189
+      - REQ-DODI5000.90-0052
+      - REQ-DODI8510.01-0005
+      - REQ-DODI8510.01-0102
+      - REQ-SP800-160V1R1-0049
+      - REQ-SP800-160V1R1-0247
       - REQ-SP800-160V1R1-0583
       - REQ-SP800-160V1R1-0616
       - REQ-SP800-160V1R1-0624
       - REQ-SP800-160V1R1-0645
       - REQ-SP800-160V1R1-0646
-      - REQ-DODI5000.90-0052
-      - REQ-SP800-160V1R1-0049
-      - REQ-SP800-160V1R1-0247
   - id: REQS-002
     scope: run
     severity: E
@@ -2386,19 +2416,20 @@ rules:
     fixture: tests/fixtures/negative/REQS-003.yaml
     hint: Each need names the persona who holds it, a loss concern names its assets, a requirement traces to it, and agreement.agreed records that stakeholder's agreement.
     enforces:
+      - REQ-DODI8510.01-0096
+      - REQ-SP800-160V1R1-0218
       - REQ-SP800-160V1R1-0572
+      - REQ-SP800-160V1R1-0579
       - REQ-SP800-160V1R1-0581
       - REQ-SP800-160V1R1-0583
       - REQ-SP800-160V1R1-0584
       - REQ-SP800-160V1R1-0599
+      - REQ-SP800-160V1R1-0608
       - REQ-SP800-160V1R1-0609
       - REQ-SP800-160V1R1-0614
       - REQ-SP800-160V1R1-0615
       - REQ-SP800-160V1R1-0616
       - REQ-SP800-160V1R1-0643
-      - REQ-SP800-160V1R1-0218
-      - REQ-SP800-160V1R1-0579
-      - REQ-SP800-160V1R1-0608
       - REQ-SP800-160V1R1-1386
   - id: REQS-004
     scope: run
@@ -2414,6 +2445,7 @@ rules:
       - REQ-DODD8140.01-0022
       - REQ-DODD8140.01-0053
       - REQ-DODD8140.01-0054
+      - REQ-DODI8510.01-0065
   - id: SSE-001
     scope: run
     severity: E
@@ -2447,21 +2479,22 @@ rules:
     fixture: tests/fixtures/negative/SSE-002.yaml
     hint: At P-15 record requirements.yaml engineering (DoDI 5000.83 1.2.c); name principles of SP 800-160v1r1 Appendix E.
     enforces:
+      - REQ-CNSSP12-0015
+      - REQ-DODI5000.82-0128
       - REQ-DODI5000.83-0010
       - REQ-DODI5000.83-0283
-      - REQ-CNSSP12-0015
-      - REQ-SP800-53R5-0026
-      - REQ-DODI5000.82-0128
       - REQ-DODI5000.90-0094
+      - REQ-DODI8510.01-0040
       - REQ-SP800-160V1R1-0050
-      - REQ-SP800-160V1R1-0263
-      - REQ-SP800-18R2-0042
-      - REQ-SP800-39-0080
       - REQ-SP800-160V1R1-0246
-      - REQ-SP800-160V1R1-0493
+      - REQ-SP800-160V1R1-0263
       - REQ-SP800-160V1R1-0473
+      - REQ-SP800-160V1R1-0493
+      - REQ-SP800-18R2-0042
       - REQ-SP800-37R2-0330
+      - REQ-SP800-39-0080
       - REQ-SP800-53R5-0006
+      - REQ-SP800-53R5-0026
   - id: SSE-003
     scope: run
     severity: E
@@ -2570,6 +2603,7 @@ rules:
       - REQ-DODI8500.01-0100
       - REQ-DODI8500.01-0161
       - REQ-DODI8500.01-0357
+      - REQ-DODI8510.01-0056
       - REQ-DODI8510.01-0062
       - REQ-DODI8510.01-0196
       - REQ-DODI8530.01-0260
@@ -2985,6 +3019,7 @@ rules:
     hint: "Write artifacts/data/scrm-acquisition.yaml from templates/data/scrm-acquisition.yaml: C-SCRM requirements of requirements.yaml allocated to the contract, and terms that carry only those."
     enforces:
       - REQ-DODI5000.90-0089
+      - REQ-DODI8510.01-0065
       - REQ-SP800-161R1-0036
       - REQ-SP800-161R1-0078
       - REQ-SP800-161R1-0225
@@ -3313,6 +3348,8 @@ rules:
     fixture: tests/fixtures/negative/SCRM-027.yaml
     hint: "Set frame.appetite at level-1 with the four inputs it considers, tolerance with thresholds at level-2 and level-3, and priorities that together consider appetite, tolerance, threats, vulnerabilities, constraints and criticality."
     enforces:
+      - REQ-DODI8510.01-0089
+      - REQ-DODI8510.01-0199
       - REQ-SP800-161R1-0292
       - REQ-SP800-161R1-1160
       - REQ-SP800-161R1-1161
@@ -3627,6 +3664,7 @@ rules:
     fixture: tests/fixtures/negative/SYSD-002.yaml
     hint: "Write artifacts/data/system-description.yaml from templates/data/system-description.yaml."
     enforces:
+      - REQ-DODI8510.01-0107
       - REQ-DODI8530.01-0024
       - REQ-DODI8530.01-0117
       - REQ-DODI8530.01-0143
@@ -3680,11 +3718,13 @@ rules:
     fixture: tests/fixtures/negative/SYSD-004.yaml
     hint: "Fill category, access_requirements, privileged_access and foreign_access in users.yaml."
     enforces:
+      - REQ-CNSSI1254-0061
       - REQ-CNSSP12-0018
       - REQ-DODI8500.01-0178
       - REQ-DODI8500.01-0363
       - REQ-DODI8500.01-0364
-      - REQ-CNSSI1254-0061
+      - REQ-DODI8510.01-0107
+      - REQ-DODI8510.01-0249
   - id: SYSD-005
     scope: run
     severity: E
@@ -3742,13 +3782,13 @@ rules:
     fixture: tests/fixtures/negative/ASSET-002.yaml
     hint: "Give each item uii, owner, serial_number (hardware), version and software_category (software); name asset_management_system."
     enforces:
-      - REQ-SP800-61R3-0126
-      - REQ-SP800-61R3-0130
       - REQ-CNSSI1254-0045
       - REQ-CNSSI1254-0056
+      - REQ-DODI5000.88-0253
+      - REQ-DODI8500.01-0323
+      - REQ-DODI8510.01-0097
       - REQ-DODI8531.01-0080
       - REQ-DODI8531.01-0082
-      - REQ-DODI5000.88-0253
       - REQ-DOWI8430.01-0018
       - REQ-DOWI8430.01-0022
       - REQ-DOWI8430.01-0064
@@ -3759,7 +3799,8 @@ rules:
       - REQ-SP800-18R2-0151
       - REQ-SP800-18R2-0157
       - REQ-SP800-18R2-0166
-      - REQ-DODI8500.01-0323
+      - REQ-SP800-61R3-0126
+      - REQ-SP800-61R3-0130
   - id: ASSET-003
     scope: run
     severity: E
@@ -3785,8 +3826,18 @@ rules:
     hint: "Record categorization.factors_reviewed and one adjustments record per raised objective in facts.yaml."
     enforces:
       - REQ-CNSSI1253-0049
+      - REQ-CNSSI1253-0050
+      - REQ-CNSSI1253-0051
       - REQ-FIPS199-0010
+      - REQ-FIPS199-0018
+      - REQ-FIPS199-0020
       - REQ-SP800-60V1R1-0053
+      - REQ-SP800-60V1R1-0067
+      - REQ-SP800-60V1R1-0095
+      - REQ-SP800-60V1R1-0101
+      - REQ-SP800-60V1R1-0125
+      - REQ-SP800-60V1R1-0127
+      - REQ-SP800-60V1R1-0128
       - REQ-SP800-60V1R1-0130
       - REQ-SP800-60V1R1-0147
       - REQ-SP800-60V1R1-0150
@@ -3796,16 +3847,6 @@ rules:
       - REQ-SP800-60V1R1-0156
       - REQ-SP800-60V1R1-0157
       - REQ-SP800-60V1R1-0160
-      - REQ-SP800-60V1R1-0067
-      - REQ-SP800-60V1R1-0095
-      - REQ-SP800-60V1R1-0101
-      - REQ-SP800-60V1R1-0125
-      - REQ-SP800-60V1R1-0127
-      - REQ-SP800-60V1R1-0128
-      - REQ-CNSSI1253-0050
-      - REQ-CNSSI1253-0051
-      - REQ-FIPS199-0018
-      - REQ-FIPS199-0020
   - id: CATG-002
     scope: run
     severity: E
@@ -3818,12 +3859,14 @@ rules:
     hint: "Raise the categorization, or correct the handling recorded on the information type."
     enforces:
       - REQ-DODI8500.01-0268
+      - REQ-DODI8510.01-0044
+      - REQ-DODI8510.01-0106
+      - REQ-DODI8530.01-0161
       - REQ-DOWI8430.01-0171
       - REQ-DOWI8430.01-0172
       - REQ-FIPS199-0016
       - REQ-SP800-60V1R1-0058
       - REQ-SP800-60V1R1-0131
-      - REQ-DODI8530.01-0161
   - id: CATG-003
     scope: run
     severity: E
@@ -3835,17 +3878,18 @@ rules:
     fixture: tests/fixtures/negative/CATG-003.yaml
     hint: "Fill selection_basis, pii_identification and handling per type, and cti when a type holds CTI."
     enforces:
+      - REQ-CNSSI1253-0048
+      - REQ-CNSSI1253F-ATT6-PRIVACY-0021
+      - REQ-DODI5000.82-0174
       - REQ-DODI5000.83-0134
       - REQ-DODI5000.83-0146
       - REQ-DODI5000.83-0147
+      - REQ-DODI8510.01-0099
       - REQ-DODI8530.01-0294
-      - REQ-DODI5000.82-0174
       - REQ-DOWI8430.01-0103
-      - REQ-SP800-60V1R1-0094
-      - REQ-CNSSI1253F-ATT6-PRIVACY-0021
       - REQ-SP800-60V1R1-0076
       - REQ-SP800-60V1R1-0088
-      - REQ-CNSSI1253-0048
+      - REQ-SP800-60V1R1-0094
   - id: PIIC-001
     scope: run
     severity: E
@@ -3861,6 +3905,7 @@ rules:
       - REQ-CNSSI1253-0039
       - REQ-CNSSI1253-0048
       - REQ-CNSSI1253-0053
+      - REQ-CNSSI1253-0054
       - REQ-CNSSI1253-0061
       - REQ-CNSSI1253F-ATT6-PRIVACY-0001
       - REQ-CNSSI1253F-ATT6-PRIVACY-0003
@@ -3868,11 +3913,11 @@ rules:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0050
       - REQ-CNSSI1253F-ATT6-PRIVACY-0067
       - REQ-CNSSI1253F-ATT6-PRIVACY-0070
+      - REQ-DODI8510.01-0109
       - REQ-SP800-37R2-0282
       - REQ-SP800-37R2-0283
       - REQ-SP800-37R2-0520
       - REQ-SP800-53B-0024
-      - REQ-CNSSI1253-0054
   - id: SUBS-001
     scope: run
     severity: E
@@ -3884,12 +3929,13 @@ rules:
     fixture: tests/fixtures/negative/SUBS-001.yaml
     hint: "List subsystems and subsystem_interfaces in boundary.yaml; select interconnection controls from the baseline."
     enforces:
+      - REQ-DODI8510.01-0098
+      - REQ-SP800-18R1-0069
+      - REQ-SP800-18R2-0099
       - REQ-SP800-37R2-0670
       - REQ-SP800-37R2-0671
       - REQ-SP800-37R2-0742
       - REQ-SP800-37R2-0743
-      - REQ-SP800-18R1-0069
-      - REQ-SP800-18R2-0099
       - REQ-SP800-60V1R1-0158
   - id: SUBS-002
     scope: run
@@ -3941,6 +3987,10 @@ rules:
       - REQ-DODCIO-CATO-EVAL-0123
       - REQ-DODCIO-CATO-EVAL-0124
       - REQ-DODCIO-CATO-EVAL-0126
+      - REQ-DODI8510.01-0016
+      - REQ-DODI8510.01-0066
+      - REQ-DODI8510.01-0067
+      - REQ-DODI8510.01-0123
       - REQ-SP800-53AR5-0287
       - REQ-SP800-53AR5-0289
   - id: SCFG-001
@@ -4017,10 +4067,19 @@ rules:
     fixture: tests/fixtures/negative/OCTX-001.yaml
     hint: "artifacts/data/org-context.yaml roles holds one record per appointee (P-1)."
     enforces:
+      - REQ-CNSSP12-0022
+      - REQ-DODI8500.01-0048
+      - REQ-DODI8500.01-0059
+      - REQ-DODI8500.01-0115
+      - REQ-DODI8500.01-0138
+      - REQ-DODI8500.01-0186
       - REQ-DODI8500.01-0411
       - REQ-DODI8510.01-0063
       - REQ-DODI8510.01-0236
       - REQ-DODI8510.01-0241
+      - REQ-DODI8510.01-0258
+      - REQ-DODI8510.01-0259
+      - REQ-DODI8510.01-0266
       - REQ-DODI8510.01-0306
       - REQ-SP800-18R1-0112
       - REQ-SP800-37R2-0466
@@ -4028,15 +4087,6 @@ rules:
       - REQ-SP800-37R2-0739
       - REQ-SP800-39-0210
       - REQ-SP800-39-0220
-      - REQ-DODI8500.01-0048
-      - REQ-DODI8500.01-0059
-      - REQ-DODI8500.01-0115
-      - REQ-DODI8500.01-0138
-      - REQ-DODI8500.01-0186
-      - REQ-DODI8510.01-0258
-      - REQ-DODI8510.01-0259
-      - REQ-DODI8510.01-0266
-      - REQ-CNSSP12-0022
   - id: OCTX-002
     scope: run
     severity: E
@@ -4107,6 +4157,8 @@ rules:
     fixture: tests/fixtures/negative/OCTX-005.yaml
     hint: "P-5 records common_controls in org-context.yaml, one package per provider."
     enforces:
+      - REQ-CNSSI1253-0064
+      - REQ-DODI8510.01-0092
       - REQ-SP800-37R2-0204
       - REQ-SP800-37R2-0362
       - REQ-SP800-37R2-0474
@@ -4114,7 +4166,6 @@ rules:
       - REQ-SP800-53AR5-0144
       - REQ-SP800-53AR5-0190
       - REQ-SP800-53AR5-0194
-      - REQ-CNSSI1253-0064
   - id: OCTX-006
     scope: run
     severity: E
@@ -4144,6 +4195,8 @@ rules:
     fixture: tests/fixtures/negative/OCTX-007.yaml
     hint: "P-7 records iscm in org-context.yaml; from contract 0.2.0 iscm.monitors also lists threat-and-vulnerability-awareness and asset-visibility (CNSSP 22 IV.f)."
     enforces:
+      - REQ-CNSSP22-0021
+      - REQ-DODI8510.01-0094
       - REQ-SP800-137-0056
       - REQ-SP800-137-0169
       - REQ-SP800-137A-0048
@@ -4155,7 +4208,6 @@ rules:
       - REQ-SP800-39-0187
       - REQ-SP800-39-0190
       - REQ-SP800-53R5-0028
-      - REQ-CNSSP22-0021
   - id: OCTX-008
     scope: run
     severity: E
@@ -4184,6 +4236,7 @@ rules:
     fixture: tests/fixtures/negative/OCTX-009.yaml
     hint: "conmon.yaml minimum_review records the system owner's review of the organizational minimums."
     enforces:
+      - REQ-DODI8510.01-0114
       - REQ-SP800-137-0160
       - REQ-SP800-137-0162
       - REQ-SP800-137-0163
@@ -4215,6 +4268,7 @@ rules:
     hint: "P-3 records posture_reviews in org-context.yaml once the system operates."
     enforces:
       - REQ-CNSSP22-0026
+      - REQ-DODI8510.01-0090
       - REQ-SP800-137-0116
       - REQ-SP800-30R1-0092
       - REQ-SP800-39-0157
@@ -4269,7 +4323,24 @@ rules:
     summary: a role is appointed by an official DoDI 8510.01 Table 8 does not name, no AO or no PM or SO is appointed, the PM or SO not in writing, or the AO role is re-delegated outside government
     fixture: tests/fixtures/negative/RAPT-001.yaml
     hint: "In artifacts/data/org-context.yaml roles, set appointed_by to the Table 8 authority: the Component head for the CIO and the AO (the PAO for an MA-managed system), the AO for the AODR, the CISO for a delegated SCA, the CAE or Component head for the PM or SO, the PM or SO for the ISSM and ISSO; record the PM's written appointment."
-    enforces: []
+    enforces:
+      - REQ-DODI8510.01-0051
+      - REQ-DODI8510.01-0052
+      - REQ-DODI8510.01-0053
+      - REQ-DODI8510.01-0088
+      - REQ-DODI8510.01-0198
+      - REQ-DODI8510.01-0201
+      - REQ-DODI8510.01-0207
+      - REQ-DODI8510.01-0217
+      - REQ-DODI8510.01-0260
+      - REQ-DODI8510.01-0261
+      - REQ-DODI8510.01-0262
+      - REQ-DODI8510.01-0263
+      - REQ-DODI8510.01-0264
+      - REQ-DODI8510.01-0265
+      - REQ-DODI8510.01-0267
+      - REQ-DODI8510.01-0268
+      - REQ-DODI8510.01-0305
   - id: PPROT-001
     scope: run
     severity: E
@@ -4616,6 +4687,8 @@ rules:
     enforces:
       - REQ-DODCIO-DEVSECOPS-0067
       - REQ-DODI5000.81-0090
+      - REQ-DODI8510.01-0060
+      - REQ-DODI8510.01-0244
   - id: ACQLC-001
     scope: run
     severity: E
@@ -4698,6 +4771,8 @@ rules:
       - REQ-DODCIO-RECIPROCITY-0034
       - REQ-DODCIO-RECIPROCITY-0165
       - REQ-DODI8500.01-0148
+      - REQ-DODI8510.01-0026
+      - REQ-DODI8510.01-0140
       - REQ-DODI8530.01-0144
       - REQ-DODI8530.01-0145
       - REQ-DODI8530.01-0184
@@ -4787,6 +4862,8 @@ rules:
     hint: Record remediation with the method chosen among the options weighed, the loss of confidentiality, integrity and availability considered, the six cost factors and the POA&M item; once the item is completed, verify on or after completion, restoring the baseline, with at least two successive scans, the last on or after completion finding it absent.
     enforces:
       - REQ-DODI5000.90-0105
+      - REQ-DODI8510.01-0048
+      - REQ-DODI8510.01-0140
       - REQ-DODI8531.01-0002
       - REQ-DODI8531.01-0077
       - REQ-DODI8531.01-0112
@@ -4825,6 +4902,7 @@ rules:
       - REQ-DODI5000.83-0220
       - REQ-DODI5000.87-0120
       - REQ-DODI5000.90-0104
+      - REQ-DODI8510.01-0047
       - REQ-DODI8510.01-0079
       - REQ-DODI8531.01-0003
       - REQ-DODI8531.01-0004
@@ -5925,6 +6003,10 @@ rules:
     enforces:
       - REQ-DODI8500.01-0172
       - REQ-DODI8500.01-0301
+      - REQ-DODI8510.01-0105
+      - REQ-DODI8510.01-0195
+      - REQ-DODI8510.01-0197
+      - REQ-DODI8510.01-0250
       - REQ-SP800-37R2-0266
       - REQ-SP800-37R2-0734
   - id: UPD-002
@@ -5938,6 +6020,7 @@ rules:
     fixture: tests/fixtures/negative/UPD-002.yaml
     hint: "When changes.yaml holds an implemented change whose security impact is significant, log the update of the system plan in plan-reviews.yaml changes with change_ref set to the change."
     enforces:
+      - REQ-DODI8510.01-0082
       - REQ-SP800-18R1-0029
   - id: TIN-001
     scope: run
@@ -5951,3 +6034,7 @@ rules:
     hint: "Read ART-ORG-CONTEXT (and ART-INFOTYPES at C-2) and list it in the sources of ART-CAT and ART-BASELINE; both are inputs of C-2 and S-1."
     enforces:
       - REQ-CNSSI1253-0014
+      - REQ-DODI8510.01-0044
+      - REQ-DODI8510.01-0110
+      - REQ-DODI8510.01-0233
+      - REQ-DODI8510.01-0304

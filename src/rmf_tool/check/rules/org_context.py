@@ -64,7 +64,7 @@ ISSM_GRANTS = ("support", "authority", "resources")
 # Component Acquisition Executive) and the SO (by the Component head). The PAO appoints the AO of
 # an MA-managed system, so it counts only where the roles hold a PAO. The CISO is the Component
 # SCA and may formally delegate the role, so a separate SCA record is the CISO's delegate. The
-# CISO's own appointer is checked below, with the SP 800-37r2 designation.
+# CISO is appointed by the Component CIO, or by the Component head where no CIO exists.
 TABLE_8 = {
     "PER-CIO": ("dod-component-head",),
     "PER-AO": ("dod-component-head", "PER-PAO"),
@@ -257,7 +257,8 @@ def roles(ctx: Context) -> list[RunFinding]:
 
 def appointments(ctx: Context) -> list[RunFinding]:
     """RAPT-001: each Table 8 role is appointed by the official Table 8 names, an AO and a PM or
-    SO are appointed for the system, the PM or SO in writing (4.3.c(3)), and the AO role is
+    SO are appointed for the system, as is the Component CISO (4.3.c(6)), the PM or SO in
+    writing (4.3.c(3)), and the AO role is
     re-delegated only to government personnel (2.7.m(1)). A context seeded from outside the run
     is judged on the records it holds."""
     data, out, err = _record(ctx, "RAPT-001", "P-1")
@@ -269,10 +270,14 @@ def appointments(ctx: Context) -> list[RunFinding]:
             err("no AO is appointed for the system")
         if "PER-PM" not in holders:
             err("no PM or SO is appointed for the system")
+        if "PER-CISO" not in holders:
+            err("no DoD Component CISO is appointed to direct the Component cybersecurity program")
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
         by = r.get("appointed_by")
         allowed = [a for a in TABLE_8.get(role or "", ()) if a != "PER-PAO" or a in holders]
+        if role == "PER-CISO":  # the Component head only where no Component CIO exists
+            allowed = ["PER-CIO" if "PER-CIO" in holders else "dod-component-head"]
         if allowed and by not in allowed:
             err(f"{rid}: {role} is appointed by {by}, which DoDI 8510.01 Table 8 does not name "
                 f"as its appointing authority ({' or '.join(allowed)})")

@@ -1,0 +1,16 @@
+rule: RAPT-001
+bases:
+- minimal
+description: no Component CISO is appointed, the CISO record holds another role
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.1.role
+  value: PER-CCP
+expect:
+  errors:
+  - RAPT-001
+  also:
+  - OCTX-008
+  messages:
+  - 'no DoD Component CISO is appointed to direct the Component cybersecurity program'
