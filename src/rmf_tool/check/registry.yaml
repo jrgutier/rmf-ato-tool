@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 382 rules, 38 repo-scope and 344 run-scope. Authoritative;
+# Rule registry (plan §6.5): 383 rules, 38 repo-scope and 345 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -3589,7 +3589,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-4
-    summary: a removed C-SCRM control accepted by anyone but the AO, a cloud service provider without FedRAMP first, a procurement selection without security personnel, or uncoordinated tailoring
+    summary: an implemented C-SCRM control with no owner or an owner who is no persona, a removed one accepted by anyone but the AO, a cloud service provider without FedRAMP first, a procurement selection without security personnel, or uncoordinated tailoring
     fixture: tests/fixtures/negative/SCRM-010.yaml
     hint: "Record in controls who accepts each removal (the AO), a FedRAMP record per cloud service provider, the information security personnel each procurement's selection consulted, and coordinated: true."
     enforces:
@@ -6708,6 +6708,24 @@ rules:
       - REQ-SP800-53B-0048
       - REQ-SP800-53B-0055
       - REQ-CNSSI1253-0072
+  - id: SCRM-030
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a C-SCRM plan that maps no C-SCRM activity to an SDLC phase SP 800-161 names, from research and development through disposal
+    fixture: tests/fixtures/negative/SCRM-030.yaml
+    hint: "List under scrm-plan.yaml plan.lifecycle the C-SCRM activities of each phase: research-and-development, design, manufacturing, acquisition, delivery, integration, operations-and-maintenance and disposal; a phase may hold several entries."
+    enforces:
+      - REQ-SP800-161R1-0056
+      - REQ-SP800-161R1-0088
+      - REQ-SP800-161R1-0296
+      - REQ-SP800-161R1-0676
+      - REQ-SP800-161R1-0681
+      - REQ-SP800-161R1-0697
+      - REQ-SP800-161R1-0730
   - id: SCRM-031
     scope: run
     severity: E

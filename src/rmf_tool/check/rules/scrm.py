@@ -57,6 +57,8 @@ CONSIDERATION_OF_KIND = {"open-source": "open-source", "cloud-service-provider":
 SECURITY_PERSONNEL = ("PER-CISO", "PER-ISSM", "PER-ISSO", "PER-ISSE")
 INCLUDE_SUPPLIERS = ("contingency-planning", "incident-response", "disaster-recovery",
                      "testing")
+SDLC_PHASES = ("research-and-development", "design", "manufacturing", "acquisition", "delivery",
+               "integration", "operations-and-maintenance", "disposal")  # pp. 223, 225, 230
 MONITORED = ("compliance", "effectiveness", "change")  # SP 800-39 via p. 304
 OUTSIDE_TOLERANCE = ("requires-mitigation", "share")
 REACH = ("system", "mission", "enterprise")
@@ -542,6 +544,27 @@ def plan_content(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- SCRM-030 ----------------------------------------------------------------------------
+def plan_lifecycle(ctx: Context) -> list[RunFinding]:
+    """S-4: the system C-SCRM plan maps its C-SCRM activities to every SDLC phase SP 800-161
+    names, from research and development through disposal (pp. 223, 225, 230). A phase may
+    hold several entries, for activities repeated in spiral or agile cycles."""
+    doc = _doc(ctx, PLAN_FILE)
+    if doc is None or not _active(ctx, PLAN):
+        return []
+    plan = _obj(doc, "plan")
+    if not plan:
+        return []
+    stages = _list(plan, "lifecycle")
+    if not stages:
+        return [make("SCRM-030", "the C-SCRM plan maps no C-SCRM activity to the phases of the "
+                     "SDLC", PLAN_FILE, None, {PLAN})]
+    covered = {_key(s, "phase") for s in stages if str(s.get("activities") or "").strip()}
+    return [make("SCRM-030", f"the C-SCRM plan covers no C-SCRM activity in the {phase} phase "
+                 "of the SDLC", PLAN_FILE, None, {PLAN})
+            for phase in SDLC_PHASES if phase not in covered]
+
+
 # --- SCRM-032 (split from SCRM-009) -------------------------------------------------------
 def plan_considerations(ctx: Context) -> list[RunFinding]:
     """S-4: the system C-SCRM plan addresses each consideration of SP 800-18r2 and does not
@@ -590,6 +613,10 @@ def control_decisions(ctx: Context) -> list[RunFinding]:
     for d in _list(controls, "decisions"):
         if d.get("decision") in ("selected", "tailored") and not d.get("owner"):
             err(f"{d.get('control')} is implemented with no one responsible for its execution")
+        elif d.get("decision") in ("selected", "tailored") \
+                and d.get("owner") not in ctx.run.personas:
+            err(f"{d.get('control')} names owner {d.get('owner')}, who is no framework persona "
+                "responsible for its execution")
         if d.get("decision") == "removed" and d.get("accepted_by") != "PER-AO":
             err(f"{d.get('control')} is removed from the baseline but its risk is accepted by "
                 f"{d.get('accepted_by')}; only the authorizing official accepts that risk")

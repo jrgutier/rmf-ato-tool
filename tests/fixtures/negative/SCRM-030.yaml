@@ -1,0 +1,22 @@
+rule: SCRM-030
+bases:
+- minimal
+description: a C-SCRM plan whose SDLC map stops before disposal
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: plan.lifecycle
+  value:
+  - {phase: research-and-development, activities: Prototype components come only from inventoried suppliers.}
+  - {phase: design, activities: The design review checks each component against REQ-07.}
+  - {phase: manufacturing, activities: The developer builds from the vetted package library.}
+  - {phase: acquisition, activities: Procurements carry REQ-07 and the C-SCRM contract terms.}
+  - {phase: delivery, activities: Delivered packages are verified against their hashes.}
+  - {phase: integration, activities: Integration runs in the build pipeline.}
+  - {phase: operations-and-maintenance, activities: Suppliers are reviewed yearly.}
+  - {phase: operations-and-maintenance, activities: Retired components are left in place.}
+expect:
+  errors:
+  - SCRM-030
+  messages:
+  - the C-SCRM plan covers no C-SCRM activity in the disposal phase of the SDLC
