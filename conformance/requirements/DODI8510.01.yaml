@@ -1820,7 +1820,7 @@ requirements:
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: DoD Component CISOs:"
     statement: "(3) Perform as the SCA or formally delegate the security control assessment role for governed systems."
     status: "covered"
-    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; a PER-SCA record held by the CISO (same name or email) is the CISO performing as the SCA and keeps the CISO's appointer."
+    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; a PER-SCA record held by the CISO (same name and email) is the CISO performing as the SCA and is judged by the CISO's own appointer (RAPT-001.cisosca)."
     evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The CISO performs as the SCA or formally delegates the security control assessment role: a delegated SCA appointed by the AO, not by the CISO, fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0208"
     citation: {"ref": "DODI8510.01", "page": 27, "anchor": "Track the assessment and authorization status of systems governed by the DoD"}
@@ -2315,8 +2315,8 @@ requirements:
     context: "Table 8. Appointment of RMF Roles"
     statement: "SCA | DoD Component CISO is the Component SCA but may formally delegate the SCA role as appropriate."
     status: "covered"
-    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; the CISO performing as the SCA is recorded as a PER-SCA record with the CISO's own name and appointer, which passes."
-    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is the Component SCA and may formally delegate the SCA role; a delegated SCA appointed by the AO, not by the CISO, fails its Table 8 appointing authority", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; the CISO performing as the SCA, a PER-SCA record with the CISO's own name and email, is judged by the CISO's own appointer."
+    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is the Component SCA and may formally delegate the SCA role; a delegated SCA appointed by the AO, not by the CISO, fails its Table 8 appointing authority", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}, {"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.cisosca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is the Component SCA: the CISO acting as SCA keeps the CISO's own appointing authority, and an SCA record of the CISO appointed by the ISSM fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0264"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "PM | DoD Component Acquisition Executive"}
     kind: "table"

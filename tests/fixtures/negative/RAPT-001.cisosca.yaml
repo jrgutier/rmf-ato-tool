@@ -1,0 +1,22 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the CISO performing as the SCA records the ISSM as appointer, not the CISO's own appointer
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.9.name
+  value: Component CISO (fixture)
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.9.contact.email
+  value: ciso@example.mil
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.9.appointed_by
+  value: PER-ISSM
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-10: PER-SCA is appointed by PER-ISSM, which DoDI 8510.01 Table 8 does not name as its appointing authority (PER-CIO)'

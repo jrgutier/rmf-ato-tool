@@ -259,7 +259,7 @@ def appointments(ctx: Context) -> list[RunFinding]:
     SO are appointed for the system, as is the Component CISO (4.3.c(6)), the PM or SO in
     writing (4.3.c(3)), and the AO role is re-delegated only to government personnel
     (2.7.m(1)). The Component CISO's own appointer is OCTX-001's clause, not restated here. A
-    PER-SCA record held by the CISO (same name or email) is the CISO performing as the SCA and
+    PER-SCA record held by the CISO (same name and email) is the CISO performing as the SCA and
     is judged by the CISO's appointer; only a delegate must be appointed by the CISO. A context
     seeded from outside the run is judged on the records it holds."""
     data, out, err = _record(ctx, "RAPT-001", "P-1")
@@ -279,7 +279,8 @@ def appointments(ctx: Context) -> list[RunFinding]:
         by = r.get("appointed_by")
         allowed = [a for a in TABLE_8.get(role or "", ()) if a != "PER-PAO" or a in holders]
         if role == "PER-SCA" and any(_same_holder(r, c) for c in cisos):
-            allowed = []
+            allowed = sorted({_key(c.get("appointed_by")) for c in cisos
+                              if _same_holder(r, c)} - {None})
         if allowed and by not in allowed:
             err(f"{rid}: {role} is appointed by {by}, which DoDI 8510.01 Table 8 does not name "
                 f"as its appointing authority ({' or '.join(allowed)})")
@@ -293,10 +294,11 @@ def appointments(ctx: Context) -> list[RunFinding]:
 
 
 def _same_holder(one: dict[str, Any], other: dict[str, Any]) -> bool:
-    """Whether two role records name the same person: the same name or business email."""
+    """Whether two role records name the same person: the same name and business email. A
+    delegate who uses the office's mailbox is still another person."""
     name, email = _key(one.get("name")), _key(_sub(one, "contact").get("email"))
-    return (name is not None and name == _key(other.get("name"))) or \
-        (email is not None and email == _key(_sub(other, "contact").get("email")))
+    return name is not None and email is not None and name == _key(other.get("name")) \
+        and email == _key(_sub(other, "contact").get("email"))
 
 
 # --- OCTX-013: who may hold a cybersecurity position, and on what terms (P-1) ---------------
