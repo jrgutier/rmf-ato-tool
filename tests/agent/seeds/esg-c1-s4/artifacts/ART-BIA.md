@@ -2,7 +2,7 @@
 artifact_id: ART-BIA
 run_id: esg-c1-s4
 produced_by_task: P-8
-touched_by: [P-8, C-2]
+touched_by: [P-8]
 sources: [product/conops.md#mission, product/conops.md#availability]
 ---
 # Business impact and criticality analysis

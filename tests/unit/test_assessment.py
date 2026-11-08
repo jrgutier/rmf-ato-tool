@@ -246,6 +246,9 @@ def test_interview_samples_may_be_typed_as_individuals(minimal_run):
     (AC, lambda d: d["determinations"][0].update(methods="examine"), "methods is 'examine'"),
     (AC, lambda d: d["determinations"][0].update(methods=5), "methods is 5, not a list"),
     (AC, lambda d: d["determinations"][0].update(reused=3), "reused is 3, not a list"),
+    (SAP, lambda d: d["procedures"][0].update(controls=[7]), "controls holds 7, not a string"),
+    (SAP, lambda d: d["procedures"][0].update(objects=[["x"]]), "objects holds ['x']"),
+    (AC, lambda d: d["determinations"][0].update(methods=[{"m": 1}]), "methods holds {'m': 1}"),
 ])
 def test_a_scalar_where_a_list_belongs_is_a_finding_not_a_crash(tmp_path, rel, edit, needle):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")

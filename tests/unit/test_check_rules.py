@@ -134,6 +134,10 @@ def test_negative(spec_path, tmp_path):
         for mutation in spec["mutations"]:
             if base in mutation.get("only", [base]):
                 apply(run_dir, mutation)
+                if mutation["op"] == "delete_list_item":
+                    # the judge reads a list emptied as presence only when written so
+                    assert _left(run_dir, mutation), (
+                        base, f"{mutation['path']} is left empty: write set_field: []")
         if spec.get("build", True):
             build.build(open_run(run_dir, REPO_ROOT))
         errors = set(expect.get("errors") or []) | set(expect.get("also") or [])
@@ -146,6 +150,13 @@ def test_negative(spec_path, tmp_path):
         if "warnings" in expect:
             assert _rules(run, found, "W") == set(expect["warnings"]), (
                 base, spec["description"])
+
+
+def _left(run_dir, mutation) -> int:
+    data = YAML(typ="safe").load((run_dir / mutation["file"]).read_text(encoding="utf-8"))
+    for part in str(mutation["path"]).split("."):
+        data = data[int(part) if part.isdigit() else part]
+    return len(data)
 
 
 def _edit_ato(run_dir, **fields):

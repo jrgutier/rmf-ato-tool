@@ -2275,6 +2275,25 @@ def test_a_fixture_that_sets_a_wrong_value_stays_constraint(value):
     assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
 
 
+CLAUSE = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
+
+
+@pytest.mark.parametrize(("mutation", "claim"), [
+    ({"op": "delete_file", "file": "f.yaml"}, "presence"),
+    ({"op": "replace_text", "file": "f.yaml", "old": "handling: CUI\n", "new": ""}, "presence"),
+    ({"op": "replace_text", "file": "f.yaml", "old": "a: 1\nhandling: CUI\n", "new": "a: 1\n"},
+     "presence"),  # a key erased, the rest kept
+    ({"op": "replace_text", "file": "f.yaml", "old": "handling: CUI\n", "new": "handling: FOUO\n"},
+     "constraint"),  # a wrong value
+    ({"op": "replace_text", "file": "f.yaml", "old": "a: 1\n", "new": "a: 1\nb: 2\n"},
+     "constraint"),  # adds text
+    ({"op": "delete_list_item", "file": "f.yaml", "path": "x", "where": {"id": "A"}},
+     "constraint"),  # leaves the list non-empty; test_negative refuses one that empties it
+])
+def test_a_fixture_that_only_removes_is_presence_whatever_its_op(mutation, claim):
+    assert evidence.rule_claim({"mutations": [mutation]}, CLAUSE, "x is bad") == claim
+
+
 def test_a_fixture_that_empties_one_field_and_sets_another_wrong_stays_constraint():
     source = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
     spec = {"mutations": [

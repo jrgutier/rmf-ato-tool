@@ -75,6 +75,7 @@ CONSTRAINT_KEYWORDS = ("enum", "const", "pattern", "format", "minimum", "maximum
 # read, it refuses a state of the run.
 ABSENCE_READS = ("get", "strip", "isinstance", "any")
 DELETE_FIELD, SET_FIELD = "delete_field", "set_field"
+DELETE_FILE, REPLACE_TEXT = "delete_file", "replace_text"
 MIN_EXPECT_WORDS = 2
 NEGATIVE_FIXTURES = "tests/fixtures/negative/"
 QUIET_UNLESS_IN_PLAY = "produced_or_seeded"  # a rule calling it returns [] for an absent artifact
@@ -303,11 +304,20 @@ def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False)
 
 
 def _deletes(mutation: Mapping[str, Any]) -> bool:
-    """A mutation that removes a value: a deletion, or a set to an empty value (``[]``, ``{}``,
-    ``""`` or null), which a rule refuses for the same silence."""
-    if mutation["op"] == DELETE_FIELD:
+    """A mutation that removes a value: a deleted field or file, a set to an empty value
+    (``[]``, ``{}``, ``""`` or null), or a text replacement that only erases lines (a key with
+    its value), which a rule refuses for the same silence. A list item deleted is not seen here:
+    the fixture that empties a list writes it as ``set_field: []`` (test_negative holds that)."""
+    op = mutation["op"]
+    if op in (DELETE_FIELD, DELETE_FILE):
         return True
-    return mutation["op"] == SET_FIELD and mutation.get("value") in (None, "", [], {})
+    if op == SET_FIELD:
+        return mutation.get("value") in (None, "", [], {})
+    if op == REPLACE_TEXT:
+        old = str(mutation.get("old") or "").splitlines()
+        new = [line for line in str(mutation.get("new") or "").splitlines() if line.strip()]
+        return all(line in old for line in new) and len(new) < len([o for o in old if o.strip()])
+    return False
 
 
 def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:

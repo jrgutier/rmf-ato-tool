@@ -64,8 +64,8 @@ def _records(data: dict[str, Any], key: str) -> list[dict[str, Any]]:
 
 
 def _seq(record: dict[str, Any], key: str, ident: Any = None, err: Err | None = None) -> list[str]:
-    """The strings of a list field; a scalar in its place is reported (when ``err`` is given)
-    and read as empty, never iterated."""
+    """The strings of a list field; a scalar in its place, or a member that is not a string,
+    is reported (when ``err`` is given) and left out, never iterated or hashed."""
     value = record.get(key)
     if value is None:
         return []
@@ -73,6 +73,9 @@ def _seq(record: dict[str, Any], key: str, ident: Any = None, err: Err | None = 
         if err is not None:
             err(f"{ident}: {key} is {value!r}, not a list")
         return []
+    for v in value:
+        if not isinstance(v, str) and err is not None:
+            err(f"{ident}: {key} holds {v!r}, not a string")
     return [v for v in value if isinstance(v, str)]
 
 

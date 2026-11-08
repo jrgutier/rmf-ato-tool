@@ -2,7 +2,7 @@
 artifact_id: ART-REG
 run_id: esg-skeleton
 produced_by_task: P-18
-touched_by: [P-18, C-1, C-3]
+touched_by: [P-18]
 sources: [product/conops.md#program]
 ---
 # System registration

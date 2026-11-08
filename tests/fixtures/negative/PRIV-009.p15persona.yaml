@@ -1,0 +1,16 @@
+rule: PRIV-009
+bases:
+- pii
+description: the P-15 interview meant for the privacy officer was given by the ISSM
+mutations:
+- op: replace_text
+  file: interviews/INT-043-P-15-PER-PRIV.md
+  old: "persona: PER-PRIV\n"
+  new: "persona: PER-ISSM\n"
+expect:
+  errors:
+  - PRIV-009
+  also:
+  - INT-001  # the heading and file name still name the expected persona
+  messages:
+  - PER-PRIV is a primary role at P-15 for a system processing PII, and gave no P-15 interview
