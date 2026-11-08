@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:sap",
   "title": "runs/<run-id>/artifacts/data/sap.yaml",
-  "description": "The agent-written part of the security assessment plan (A-2): scope exclusions, team, schedule, rules of engagement and test events. Reviewed controls and methods are derived from baseline.json and the catalog (plan §7.5).",
+  "description": "The agent-written part of the security assessment plan (A-2): scope exclusions, team, schedule, rules of engagement and test events. Reviewed controls and methods are derived from baseline.json and the catalog (plan \u00a77.5).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -23,7 +23,11 @@
       ],
       "properties": {
         "include": {
-          "const": "baseline"
+          "const": "baseline",
+          "title": "What the scope of the assessment includes: the whole baseline",
+          "x-enforces": [
+            "REQ-SP800-53AR5-0138"
+          ]
         },
         "excluded_controls": {
           "type": "array",
@@ -49,7 +53,9 @@
     },
     "assessment_subjects": {
       "title": "The systems and components assessed within the authorization boundary, by type",
-      "x-enforces": ["REQ-CNSSI1254-0070"],
+      "x-enforces": [
+        "REQ-CNSSI1254-0070"
+      ],
       "type": "array",
       "items": {
         "type": "object",
@@ -165,7 +171,12 @@
           "$ref": "#/$defs/date"
         },
         "end": {
-          "$ref": "#/$defs/date"
+          "$ref": "#/$defs/date",
+          "title": "The date the assessment ends, the time frame for completing it",
+          "x-enforces": [
+            "REQ-SP800-53AR5-0142",
+            "REQ-SP800-53AR5-0205"
+          ]
         },
         "events": {
           "type": "array",
