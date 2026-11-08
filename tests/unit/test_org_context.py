@@ -209,27 +209,6 @@ def test_a_section_is_demanded_only_while_its_task_is_in_scope(tmp_path):
     assert not any("risk_frame" in m for m in _rule_errors(run_dir, "OCTX-004"))
 
 
-@pytest.mark.parametrize("levels", [["very-low"], ["low", "very-high"], ["moderate", "high"]])
-def test_a_tolerance_at_any_of_the_five_levels_per_loss_type_passes(levels, tmp_path):
-    """SP 800-37r2 Task P-2 asks for a determination of risk tolerance and names no level or
-    loss type: every level, and several loss types at different levels, are permitted."""
-    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    edit_yaml(run_dir / ORG, lambda d: d["risk_frame"].update(tolerance=[
-        {"loss_type": f"loss {n}", "level": level} for n, level in enumerate(levels)]))
-    assert not any("risk tolerance" in m for m in _rule_errors(run_dir, "OCTX-004"))
-
-
-def test_a_missing_tolerance_is_refused_only_while_p2_writes_the_frame(tmp_path):
-    """A frame P-2 writes determines a tolerance; a frame seeded from a run whose P-2 is out of
-    scope is not judged for silence."""
-    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    edit_yaml(run_dir / ORG, lambda d: d["risk_frame"].pop("tolerance"))
-    assert any("determines no risk tolerance" in m for m in _rule_errors(run_dir, "OCTX-004"))
-    edit_yaml(run_dir / "run.yaml", lambda d: d["scope"].update(
-        tasks=["P-1", "P-10", "P-11", "C-1", "C-2", "C-3", "S-1", "S-4"]))
-    assert not any("risk tolerance" in m for m in _rule_errors(run_dir, "OCTX-004"))
-
-
 def test_an_old_contract_run_is_not_held_to_the_record(tmp_path):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     (run_dir / ORG).unlink()

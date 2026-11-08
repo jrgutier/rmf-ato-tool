@@ -193,10 +193,9 @@ def _inclusion(data: dict[str, Any]) -> list[RunFinding]:
 def practices(ctx: Context) -> list[RunFinding]:
     """SSE-002: the program employs system security engineering practices for cybersecurity,
     cyber resilience and cyber survivability in design, test, manufacture (none for a software
-    product or service) and sustainment, for
-    program protection, and for privacy where the system holds PII; they apply named principles
-    of trustworthy secure design; and the assurance level is commensurate with the technology,
-    program, system and mission objectives (DoDI 5000.83 1.2.c and 3.2.a)."""
+    product or service) and sustainment, and for program protection; and the assurance level is
+    carried by a requirement of the traceability matrix (DoDI 5000.83 1.2.c). Privacy
+    engineering and the principles of trustworthy secure design are SSEP-001."""
     data, record = _section(ctx, "engineering")
     if data is None:
         return []
