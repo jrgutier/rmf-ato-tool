@@ -581,8 +581,8 @@ requirements:
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "a. Establish the DoD Vulnerability Management Process through a vulnerability management program for systems, subsystems, and system components."
     status: "partial"
-    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Component heads establish the vulnerability management program for systems, recorded in the organizational context", "claim": "presence"}]
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; the run holds the system's side, where a vulnerability management strategy that leaves out a step of the DoD Vulnerability Management Process fails (VULN-007). Unheld: the Component program itself is described in prose in ART-ORG-CONTEXT's P-7 section."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Component heads establish the vulnerability management program for systems, recorded in the organizational context", "claim": "presence"}, {"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.process.yaml", "expect": "step of the DoD vulnerability management process", "claim": "constraint", "asserts": "The vulnerability management program establishes the DoD Vulnerability Management Process for systems: a strategy that leaves out a step of the DoD vulnerability management process fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0070"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Establish asset management, configuration management, and remediation and mitigation programs to support"}
@@ -591,8 +591,8 @@ requirements:
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "b. Establish asset management, configuration management, and remediation and mitigation programs to support their vulnerability management process."
     status: "partial"
-    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Asset, configuration, remediation and mitigation programs support the vulnerability management process", "claim": "presence"}]
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; the run holds the system's side, where a strategy naming no asset management that supports vulnerability management fails (VULN-007). Unheld: the configuration management and remediation and mitigation programs of the Component are prose in ART-ORG-CONTEXT."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Asset, configuration, remediation and mitigation programs support the vulnerability management process", "claim": "presence"}, {"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.supported.yaml", "expect": "management supports vulnerability management", "claim": "constraint", "asserts": "Asset management supports the vulnerability management process: a strategy that names no artifact whose asset management supports vulnerability management fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0071"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Designate the organizations responsible for directing and managing the vulnerability management program"}
@@ -601,8 +601,8 @@ requirements:
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "c. Designate the organizations responsible for directing and managing the vulnerability management program and coordinating with JFHQ-DODIN."
     status: "partial"
-    reason: "Tier 1, left partial: the duty is the DoD Component heads'; ART-ORG-CONTEXT's P-7 section is to describe the Component vulnerability management program in prose, and no record a rule reads holds it, pending the organizational context data (artifacts/data/org-context.yaml) of another cluster."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Organizations designated for directing and managing the vulnerability management program and coordinating with JFHQ-DODIN", "claim": "presence"}]
+    reason: "Tier 1, left partial: the duty is the DoD Component heads'; vulnerability reports and assessments not coordinated with JFHQ-DODIN fail (MRPT-001). Unheld: the designation of the organizations that direct and manage the program is prose in ART-ORG-CONTEXT."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-ORG-CONTEXT.md", "asserts": "Organizations designated for directing and managing the vulnerability management program and coordinating with JFHQ-DODIN", "claim": "presence"}, {"kind": "rule", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.vulnerability.yaml", "expect": "vulnerability reports and assessments are not coordinated with JFHQ-DODIN", "claim": "constraint", "asserts": "The organizations managing the vulnerability management program coordinate with JFHQ-DODIN: vulnerability reports and assessments not coordinated with JFHQ-DODIN fail", "holds_when": "ART-SECRPT is produced or seeded and conmon.yaml names a GENSER or SE designation"}]
     work_item: "WI-152"
   - id: "REQ-DODI8531.01-0072"
     citation: {"ref": "DODI8531.01", "page": 10, "anchor": "Coordinate all vulnerability reports and assessments with USCYBERCOM/JFHQ-DODIN as required."}
@@ -686,8 +686,8 @@ requirements:
     context: "DOD COMPONENT HEADS The DoD Component heads:"
     statement: "l. Account for all software, firmware, and hardware items used on systems, system components, and devices owned or operated on behalf of the DoD Component; maintain current inventory in DoD information technology asset management systems."
     status: "partial"
-    reason: "Items are accounted for per boundary component (INV-BND-002 warns) and the asset management system is named; that the inventory there is current is not tested."
-    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Maintain current inventory of software, firmware and hardware items in DoD IT asset management systems", "claim": "presence"}]
+    reason: "Tier 1, left partial: cm-8, the system component inventory, stays in the baseline (CFLR-003, CF-8531-4, a proxy mapping: the source names no control), and items are accounted for per boundary component with the asset management system named (ASSET-002). Unheld: that the inventory held there is current is not tested."
+    evidence: [{"kind": "rule", "target": "ASSET-002", "fixture": "tests/fixtures/negative/ASSET-002.system.yaml", "expect": "the inventory names no DoD IT asset management system that holds it", "asserts": "Maintain current inventory of software, firmware and hardware items in DoD IT asset management systems", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-4.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Account for all software, firmware and hardware items in a current inventory: cm-8, the system component inventory, tailored out of the baseline fails"}]
     work_item: "WI-188"
   - id: "REQ-DODI8531.01-0081"
     citation: {"ref": "DODI8531.01", "page": 11, "anchor": "Ensure DoD Component conducts audits for patching, compliance, and reporting."}
@@ -1011,8 +1011,8 @@ requirements:
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(1) Perform vulnerability scanning procedures using the guidelines in NIST SP 800-115 as reference."
     status: "partial"
-    reason: "Tier 1, left partial: the strategy takes NIST SP 800-115 as its scanning reference (schema enum); whether each scan follows it is not recorded, and SP 800-115 is not in the library."
-    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Perform vulnerability scanning procedures using the guidelines in NIST SP 800-115 as reference", "claim": "presence"}]
+    reason: "Tier 1, left partial: ra-5 stays in the baseline (CFLR-003, CF-8531-5, a proxy mapping), and the strategy takes NIST SP 800-115 as its scanning reference (schema enum). Unheld: whether each scan follows SP 800-115 is not recorded, and SP 800-115 is not in the library."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Perform vulnerability scanning procedures using the guidelines in NIST SP 800-115 as reference", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-5.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Perform vulnerability scanning procedures: ra-5, vulnerability monitoring and scanning, tailored out of the baseline fails"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0119"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Use the Common Vulnerability and Exposure website available at https://cve.mitre.org/about/index.html#why_cve to identify"}
@@ -1039,8 +1039,8 @@ requirements:
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(4) Identify unpatched vulnerabilities using automated services wherever possible and use manual processes only when necessary."
     status: "partial"
-    reason: "Tier 1, left partial: each manual identification activity states why no automation does it, which the schema requires and only refuses silence; nothing judges whether automation was possible."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Identify unpatched vulnerabilities using automated services, and manual processes only when necessary", "claim": "presence"}]
+    reason: "Tier 1, left partial: ra-5 stays in the baseline (CFLR-003, CF-8531-6, a proxy mapping), and each manual identification activity states why no automation does it. Unheld: whether automation was possible is not judged."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Identify unpatched vulnerabilities using automated services, and manual processes only when necessary", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-6.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Identify unpatched vulnerabilities using automated services: ra-5, vulnerability monitoring and scanning, tailored out of the baseline fails"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0122"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Identify and maintain oversight of acquired, created, and discovered software; track software"}
@@ -1084,8 +1084,8 @@ requirements:
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(1) Perform penetration testing considering cost and time available."
     status: "partial"
-    reason: "The level of effort is a required scope field sized to cost and time; The penetration_test block is optional in sap.yaml (a run at the old contract has none) and is required only where ca-8 or a cATO calls for it, so its fields hold for presence only."
-    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/level_of_effort", "claim": "presence", "asserts": "Perform penetration testing considering the cost and time available for the level of effort"}]
+    reason: "Tier 1, left partial: a cATO schedule with no penetration-test event fails (PENT-001), and the level of effort is a scope field sized to cost and time. Unheld: outside a cATO the penetration_test block is required only where ca-8 calls for it, and that cost and time were considered is presence only."
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/penetration_test/properties/scope/properties/level_of_effort", "claim": "presence", "asserts": "Perform penetration testing considering the cost and time available for the level of effort"}, {"kind": "rule", "target": "PENT-001", "fixture": "tests/fixtures/negative/PENT-001.event.yaml", "expect": "the schedule has no penetration-test event", "claim": "constraint", "asserts": "Perform penetration testing: a schedule with no penetration-test event fails"}]
     work_item: "WI-191"
   - id: "REQ-DODI8531.01-0127"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Perform penetration testing using the guidelines in NIST SP 800-115 as reference."}
@@ -1494,8 +1494,9 @@ requirements:
     locator: "3.5.f"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "f. Recommend configuration changes to ensure the correct application of remediation or mitigation actions."
-    status: "candidate"
-    reason: "No rule holds the configuration changes recommended to apply a remediation or mitigation correctly: the vulnerability record carries the chosen fix (VULN-005), not the configuration changes it needs. A recommended_configuration_changes field on the remediation record and a rule reading it would hold it (WI-153)."
+    status: "partial"
+    reason: "Tier 1, left partial: cm-3, configuration change control, stays in the baseline (CFLR-003, CF-8531-7, a proxy mapping). Unheld: the vulnerability record carries the chosen fix (VULN-005), not the configuration changes recommended to apply it; a recommended_configuration_changes field on the remediation record and a rule reading it would hold it (WI-153)."
+    evidence: [{"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-7.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Recommend configuration changes to apply remediation correctly: cm-3, configuration change control, tailored out of the baseline fails"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0174"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Use a vulnerability scan to identify physical or virtual devices that require"}
@@ -1514,8 +1515,8 @@ requirements:
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "h. Ensure patches are available to operators of patch deployment systems for software, firmware, and hardware not supported by enterprise systems."
     status: "partial"
-    reason: "Tier 1, left partial: the strategy names where patches come from for what enterprise patching does not reach (patching.patch_sources, at least one), which only refuses silence."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Patches available for software, firmware, and hardware not supported by enterprise systems", "claim": "presence"}]
+    reason: "Tier 1, left partial: si-2 stays in the baseline (CFLR-003, CF-8531-8, a proxy mapping), and the strategy names where patches come from for what enterprise patching does not reach (patching.patch_sources). Unheld: that the patches reach the operators is presence only."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Patches available for software, firmware, and hardware not supported by enterprise systems", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-8.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Ensure patches are available for what enterprise systems do not support: si-2, flaw remediation, tailored out of the baseline fails"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0176"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Establish infrastructure discovery and procedures to gain logical or physical control of"}
@@ -1524,8 +1525,8 @@ requirements:
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "i. Establish infrastructure discovery and procedures to gain logical or physical control of non-compliant devices and bring them into compliance in accordance with respective device compliance policies."
     status: "partial"
-    reason: "Tier 1, left partial: the strategy states how non-compliant devices are found and brought into compliance (patching.noncompliant_devices), which only refuses silence."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Procedures to gain control of non-compliant devices and bring them into compliance", "claim": "presence"}]
+    reason: "Tier 1, left partial: cm-8 and cm-6 stay in the baseline (CFLR-003, CF-8531-9, a proxy mapping), and the strategy states how non-compliant devices are found and brought into compliance (patching.noncompliant_devices). Unheld: the procedure's content is presence only."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Procedures to gain control of non-compliant devices and bring them into compliance", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-9.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Establish infrastructure discovery to bring non-compliant devices into compliance: cm-8, the component inventory, tailored out of the baseline fails"}]
     work_item: "WI-154"
   - id: "REQ-DODI8531.01-0177"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Destroy devices or media in accordance with CNSSI 4004.1."}
@@ -1580,8 +1581,8 @@ requirements:
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "c. Monitor remediated or mitigated systems, subsystems, or system components for any more codependent vulnerabilities."
     status: "partial"
-    reason: "Tier 1, left partial: M-2 keeps watching a remediated component for codependent vulnerabilities in its playbook; no record shows the watching."
-    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Monitor remediated system components for codependent vulnerabilities", "claim": "presence"}]
+    reason: "Tier 1, left partial: ra-5 and ca-7 stay in the baseline (CFLR-003, CF-8531-10, a proxy mapping), and M-2 keeps watching a remediated component in its playbook. Unheld: no record shows the watching for codependent vulnerabilities."
+    evidence: [{"kind": "prose", "target": "playbooks/M/M-2.md", "asserts": "Monitor remediated system components for codependent vulnerabilities", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-10.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Monitor remediated components for codependent vulnerabilities: ca-7, continuous monitoring, tailored out of the baseline fails"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0183"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Conduct monthly non-authenticated and authenticated vulnerability scans to obtain accurate system information"}
@@ -1599,8 +1600,8 @@ requirements:
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "e. Store logs in a central repository or security information and event management platform."
     status: "partial"
-    reason: "Tier 1, left partial: conmon.yaml vulnerability_management names the central log repository or SIEM, required by its schema, which only refuses silence."
-    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Store logs in a central repository or security information and event management platform", "claim": "presence"}]
+    reason: "Tier 1, left partial: au-6 stays in the baseline (CFLR-003, CF-8531-11, a proxy mapping), and conmon.yaml vulnerability_management names the central log repository or SIEM, which its schema requires. Unheld: that logs are stored there is presence only."
+    evidence: [{"kind": "prose", "target": "templates/artifacts/ART-CONMON.md", "asserts": "Store logs in a central repository or security information and event management platform", "claim": "presence"}, {"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-11.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Store logs in a central repository or SIEM: au-6, audit record review and analysis, tailored out of the baseline fails"}]
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0185"
     citation: {"ref": "DODI8531.01", "page": 20, "anchor": "Comply with the DoD Information Security Continuous Monitoring program to meet Federal"}
@@ -1619,8 +1620,8 @@ requirements:
     context: ""
     statement: "Vulnerability analysis evaluates vulnerabilities through impact assessment and analysis prioritization to assign severity levels to vulnerabilities as quickly as possible."
     status: "partial"
-    reason: "Tier 1, left partial: each analyzed vulnerability is rated on CVSS 3.1 (VULN-004); 'as quickly as possible' sets no window a rule could hold."
-    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.rating.yaml", "expect": "has the severity rating", "claim": "presence", "asserts": "Vulnerability analysis assigns severity levels to vulnerabilities, and a severity rating that disagrees with the score fails", "holds_when": "ART-POAM is produced or seeded"}]
+    reason: "Tier 1, left partial: each analyzed vulnerability carries an impact assessment whose losses are on the scale and a CVSS 3.1 rating that agrees with its score (VULN-004). Unheld: 'as quickly as possible' sets no window a rule could hold."
+    evidence: [{"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.rating.yaml", "expect": "has the severity rating", "claim": "presence", "asserts": "Vulnerability analysis assigns severity levels to vulnerabilities, and a severity rating that disagrees with the score fails", "holds_when": "ART-POAM is produced or seeded"}, {"kind": "rule", "target": "VULN-004", "fixture": "tests/fixtures/negative/VULN-004.impact.yaml", "expect": "the impact assessment does not determine the expected loss of", "claim": "constraint", "asserts": "Vulnerability analysis evaluates vulnerabilities through impact assessment: an impact assessment with a loss off the scale fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-153"
     promoted: {"reason": "Rejected as no-marker, but this paragraph holds the only timing on Step 2: severity levels are assigned as quickly as possible; the duty words of 0148 and 0149 state no time."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

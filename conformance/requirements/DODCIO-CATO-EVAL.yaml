@@ -393,8 +393,8 @@ requirements:
     context: "Continuous Monitoring"
     statement: "o Will be assessed IAW organizational Risk Management Strategy"
     status: "partial"
-    reason: "Tier 1, left partial: OCTX-009 fails a system monitoring frequency less frequent than the organization's minimum, which assesses the strategy against the organization's; that the whole CONMON strategy is assessed against the organizational Risk Management Strategy is not judged."
-    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "asserts": "The CONMON strategy is assessed against the organizational strategy: a monitoring frequency less frequent than the organization's minimum fails"}]
+    reason: "Tier 1, left partial: a system monitoring frequency less frequent than the organization's minimum fails (OCTX-009), so the strategy is assessed against the organization's. Unheld: that the whole CONMON strategy is assessed against the organizational Risk Management Strategy is not judged."
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "asserts": "The continuous monitoring strategy is assessed against the organizational risk management strategy: a system monitoring frequency less frequent than the organization's minimum fails", "holds_when": "ART-ORG-CONTEXT records minimum frequencies and ART-CONMON is in play"}]
     work_item: "WI-288"
   - id: "REQ-DODCIO-CATO-EVAL-0046"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Includes plan to continuously assess and track vulnerabilities on all the system"}
@@ -641,8 +641,8 @@ requirements:
     context: "Continuous Monitoring"
     statement: "• System Authorization Package Documentation (leveraged from the Component’s RMF Inventory Tool)"
     status: "partial"
-    reason: "The authorization package is ART-PKG (PKG-001), and the system is reported in eMASS or ERS, the Component's RMF inventory tool (UPD-001). Unheld: nothing records that the package documentation is drawn from that tool."
-    evidence: [{"kind": "pinned", "asserts": "System authorization package documentation is leveraged from the Component's RMF inventory tool", "target": "P-18", "field": "outputs", "value": ["ART-REG"], "claim": "constraint", "sentence": "• System Authorization Package Documentation (leveraged from the Component’s RMF Inventory Tool)"}]
+    reason: "Tier 1, left partial: the authorization package is ART-PKG (PKG-001), and a system not reported in eMASS or ERS, the Component's RMF inventory tool, fails (UPD-001). Unheld: nothing records that the package documentation is drawn from that tool."
+    evidence: [{"kind": "pinned", "asserts": "System authorization package documentation is leveraged from the Component's RMF inventory tool", "target": "P-18", "field": "outputs", "value": ["ART-REG"], "claim": "constraint", "sentence": "• System Authorization Package Documentation (leveraged from the Component’s RMF Inventory Tool)"}, {"kind": "rule", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.reported.yaml", "expect": "the system is not reported in either eMASS or ERS (reported_in is", "claim": "constraint", "asserts": "The authorization package documentation is leveraged from the Component's RMF inventory tool: a system not reported in eMASS or ERS fails", "holds_when": "ART-REG is produced or seeded"}]
     work_item: "WI-07"
   - id: "REQ-DODCIO-CATO-EVAL-0074"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "ATO memo (Signed)"}
@@ -667,8 +667,8 @@ requirements:
     context: "Continuous Monitoring"
     statement: "o Update documents in response to CONMON process"
     status: "partial"
-    reason: "Tier 1, left partial: MPLAN-001 fails a system plan update not approved under change management; that documents are updated in response to the CONMON process is the M-4 exit criterion only."
-    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "asserts": "Documents are updated in response to the CONMON process: a system plan update not approved under change management fails"}]
+    reason: "Tier 1, left partial: a system plan update past the organization-defined schedule fails (MPLAN-001), as does one not approved under change management. Unheld: that documents are updated in response to the CONMON process is the M-4 exit criterion only."
+    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.yaml", "expect": "the update to the system plan is approved under change management", "claim": "constraint", "asserts": "Documents are updated in response to the CONMON process: a system plan update not approved under change management fails"}, {"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "asserts": "Documents are updated in response to the continuous monitoring process: a system plan update past the organization-defined schedule fails", "holds_when": "ART-SSP is produced or seeded and plan-reviews.yaml exists"}]
     work_item: "WI-07"
   - id: "REQ-DODCIO-CATO-EVAL-0077"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Ensure it covers the DSOP supporting full lifecycle, including the delivery pipeline"}
@@ -1073,8 +1073,8 @@ requirements:
     context: "Active Cyber Defense (ACD)"
     statement: "o Provide a Vulnerability and Penetration Assessment"
     status: "partial"
-    reason: "A planned test's results are required in the SAR summary; presence only."
-    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.results.yaml", "expect": "the plan scheduled a penetration test and the SAR records no results", "asserts": "Provide a vulnerability and penetration assessment as penetration test results", "claim": "presence", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}]
+    reason: "Tier 1, left partial: a cATO schedule with no penetration-test event fails (PENT-001), and a planned test's results are required in the SAR summary (PENT-002). Unheld: the vulnerability assessment's own content is presence only."
+    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.results.yaml", "expect": "the plan scheduled a penetration test and the SAR records no results", "asserts": "Provide a vulnerability and penetration assessment as penetration test results", "claim": "presence", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}, {"kind": "rule", "target": "PENT-001", "fixture": "tests/fixtures/negative/PENT-001.event.yaml", "expect": "the schedule has no penetration-test event", "claim": "constraint", "asserts": "Provide a vulnerability and penetration assessment: a cATO schedule with no penetration-test event fails"}]
     work_item: "WI-191"
   - id: "REQ-DODCIO-CATO-EVAL-0124"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "AO provided results with findings and planned mitigations."}

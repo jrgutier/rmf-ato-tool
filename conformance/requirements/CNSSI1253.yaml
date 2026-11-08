@@ -678,8 +678,8 @@ requirements:
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "6. Document in the security and privacy plans the relevant decisions made during the tailoring process, providing a sound risk-based rationale for those decisions."
     status: "partial"
-    reason: "The tailoring rationale is required in tailoring.yaml (TLR-002), held under ART-BASELINE beside the plan rather than in ART-SSP; nothing makes the plan carry it."
-    evidence: [{"kind": "rule", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.yaml", "expect": "is removed with no basis", "claim": "presence", "asserts": "Tailoring decisions carry a risk-based rationale, and a removed control with no basis fails"}]
+    reason: "Tier 1, left partial: a tailoring decision whose rationale is not risk-based fails (TLRB-001 a downgrade not supported by ART-RA, TLR-001 a compensating control not resting on ART-RA), and TLR-002 asks a removal its basis. Unheld: the rationale is recorded in tailoring.yaml under ART-BASELINE, and nothing makes the security and privacy plans carry it."
+    evidence: [{"kind": "rule", "target": "TLR-002", "fixture": "tests/fixtures/negative/TLR-002.yaml", "expect": "is removed with no basis", "claim": "presence", "asserts": "Tailoring decisions carry a risk-based rationale, and a removed control with no basis fails"}, {"kind": "rule", "target": "TLRB-001", "fixture": "tests/fixtures/negative/TLRB-001.risk.yaml", "expect": "not supported by the organizational assessment of risk", "claim": "constraint", "asserts": "A tailoring decision carries a risk-based rationale: a security-objective downgrade not supported by the organizational assessment of risk fails"}, {"kind": "rule", "target": "TLR-001", "fixture": "tests/fixtures/negative/TLR-001.ra.yaml", "expect": "does not rest on the risk assessment ART-RA", "claim": "constraint", "asserts": "A tailoring decision carries a risk-based rationale: a compensating control that does not rest on the risk assessment fails"}]
     work_item: "WI-141"
   - id: "REQ-CNSSI1253-0076"
     citation: {"ref": "CNSSI1253", "page": 16, "anchor": "Document and justify in the security and privacy plans any controls from"}
@@ -948,7 +948,9 @@ requirements:
     locator: "Appendix E Overlays"
     context: ""
     statement: "Consult the owning organizations for a copy of overlays not available through the CNSS."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: an overlay neither in the CNSSI 1253 tables nor obtained from its owner (org-context obtained_overlays, obtained_from) fails baseline resolution (BSEL-001), so a run applies only an overlay it holds a copy of. Unheld: that the owning organization was consulted is the obtained_from value the run declares."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.overlay.yaml", "expect": "the baseline exists but `rmf baseline resolve` fails:", "claim": "constraint", "asserts": "An overlay not available through the CNSS is applied from a copy obtained from its owning organization: an overlay neither in the CNSSI 1253 tables nor obtained fails baseline resolution"}]
     work_item: "WI-22"
   - id: "REQ-CNSSI1253-0107"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "To determine impact levels for information types, the following activities are completed:"}

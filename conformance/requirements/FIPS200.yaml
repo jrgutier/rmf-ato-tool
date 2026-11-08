@@ -376,7 +376,9 @@ requirements:
     locator: "4 SECURITY CONTROL SELECTION"
     context: ""
     statement: "Security categorization must be accomplished as an enterprise-wide activity with the involvement of senior-level organizational officials including, but not limited to, chief information officers, senior agency information security officers, authorizing officials (a.k.a. accreditation authorities), information system owners, and information owners."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: a categorization that does not draw on the organization-level decisions of the Prepare step fails (TIN-001), and one the authorizing official has not approved fails (FACTS-001). Unheld: the involvement of the CIO, SAISO, system owner and information owners in the categorization is not recorded."
+    evidence: [{"kind": "rule", "target": "TIN-001", "fixture": "tests/fixtures/negative/TIN-001.yaml", "expect": "does not incorporate the decisions made during the Prepare step:", "claim": "constraint", "asserts": "Security categorization is an enterprise-wide activity: a categorization that does not incorporate the organization-level decisions of the Prepare step fails"}, {"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "Security categorization involves the authorizing official: a categorization the authorizing official has not approved fails"}]
     work_item: "WI-463"
   - id: "REQ-FIPS200-0042"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "Tailoring guidance for security control baselines is provided in NIST Special Publication"}
