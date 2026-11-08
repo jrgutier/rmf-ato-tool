@@ -369,9 +369,10 @@ requirements:
     locator: "2.7.e"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "e. Categorize systems and select controls in accordance with CNSSI 1253 and implement a corresponding set of security controls in accordance with NIST SP 800-53."
-    status: "covered"
-    reason: "CATG-002 fails system information categorized below the most sensitive user information and CUI below moderate, the CNSSI 1253 floors; CATG-001 (at its fan-out cap) fails a categorization below the high-water mark; TIN-001 a selection not incorporating the Prepare decisions. Implementation per SP 800-53 is SSP-STAT-001's and SSP-COV-001's, generic coverage rules."
+    status: "partial"
+    reason: "CATG-002 fails a categorization below the CNSSI 1253 floors and TIN-001 a selection not incorporating the Prepare decisions; implementing a corresponding set of SP 800-53 controls rests on PL-2 and CA-2 through SSP-COV-001 and SSP-STAT-001, generic coverage rules near their fan-out cap, and is not cited."
     evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.sysinfo.yaml", "expect": "below the most sensitive user information", "claim": "constraint", "asserts": "Systems are categorized in accordance with CNSSI 1253: system information categorized below the most sensitive user information fails", "holds_when": "ART-CAT is produced or seeded"}, {"kind": "rule", "target": "TIN-001", "fixture": "tests/fixtures/negative/TIN-001.selection.yaml", "expect": "does not incorporate the decisions made during the Prepare step", "claim": "constraint", "asserts": "Controls are selected in accordance with CNSSI 1253 from the categorization: a control selection that does not incorporate the Prepare decisions fails", "holds_when": "ART-BASELINE is produced or seeded"}]
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0045"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Require use of the DoD-specific assignment values, overlays, implementation guidance, and assessment"}
     kind: "lettered"
@@ -442,18 +443,20 @@ requirements:
     locator: "2.7.m"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "m. Appoint an AO for every system operating within or on behalf of the Component in accordance with DoDI 8500.01 and Appendix D, Paragraph D.6 of NIST SP 800-39 and authorize systems in accordance with this issuance. The AOs must:"
-    status: "covered"
-    reason: "RAPT-001 fails a P-1 that appoints no AO for the system; R-4 records the authorization (AODM-001)."
+    status: "partial"
+    reason: "RAPT-001 fails a P-1 that appoints no AO for the system; 'authorize systems in accordance with this issuance' is R-4's, not cited here."
     evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.noao.yaml", "expect": "no AO is appointed for the system", "claim": "constraint", "asserts": "An AO is appointed for every system operating within the Component; Component roles with no AO appointed fail", "holds_when": "ART-ORG-CONTEXT is produced or seeded and P-1 is in scope"}]
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0053"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Only be government personnel. This role cannot be re-delegated to personnel who"}
     kind: "lettered"
     locator: "2.7.m.(1)"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads: Appoint an AO for every system operating within or on behalf of the Component in accordance with DoDI 8500.01 and Appendix D, Paragraph D.6 of"
     statement: "(1) Only be government personnel. This role cannot be re-delegated to personnel who do not meet this requirement."
-    status: "covered"
-    reason: "RAPT-001 fails an AODR, the AO's delegate, who is not government personnel; that the AO itself is government personnel is OCTX-001's clause (an inherent U.S. Government function), not cited here because OCTX-001 is at its fan-out cap."
+    status: "partial"
+    reason: "Sentence 2: RAPT-001 fails an AODR, the AO's delegate, who is not government personnel. Sentence 1, the AO itself only government personnel, is OCTX-001's clause (an inherent U.S. Government function), which cannot be cited while OCTX-001 is at its fan-out cap of 25."
     evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.aodrcontractor.yaml", "expect": "the AO role cannot be re-delegated to personnel who are not government personnel", "claim": "constraint", "asserts": "The AO role cannot be re-delegated to personnel who are not government personnel; a contractor AODR fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0054"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Possess relevant expertise with the leveraged technology as part of the system,"}
     kind: "lettered"
@@ -1180,9 +1183,10 @@ requirements:
     locator: "3.2.(1)"
     context: "Table 6. Authorization Tasks and Outcomes"
     statement: "(1) The security authorization documentation consists of all artifacts developed through RMF activity and is maintained throughout a system’s life-cycle. The security authorization documentation package is the minimum information necessary for the receiving organization to accept a system. The security authorization documentation package is made up of:"
-    status: "covered"
-    reason: "PKG-001 fails a package manifest missing a core artifact (SSP, SAR, POA&M, AODM); the Receiving side is RCP-001's, at its fan-out cap; M-4 keeps the artifacts current (MPLAN-001)."
+    status: "partial"
+    reason: "PKG-001 fails a package manifest missing a core artifact (SSP, SAR, POA&M, AODM); that the documentation is maintained throughout the life cycle and is the minimum for a Receiving organization (RCP-001, at its fan-out cap) is not cited."
     evidence: [{"kind": "rule", "target": "PKG-001", "fixture": "tests/fixtures/negative/PKG-001.poam.yaml", "expect": "is not in the manifest; run `rmf build`", "claim": "constraint", "asserts": "The security authorization documentation package is made up of the core artifacts developed through RMF activity: a package whose POA&M is not in the manifest fails", "holds_when": "R-1 is past"}]
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0133"
     citation: {"ref": "DODI8510.01", "page": 19, "anchor": "The security plan."}
     kind: "lettered"
@@ -1736,7 +1740,7 @@ requirements:
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: Each DoD Component CIO:"
     statement: "(3) Verifies an SO and/or PM is appointed in writing for each DoD Component system."
     status: "covered"
-    reason: "RAPT-001 fails a PM or SO record whose appointment instrument is not a written one (letter or memorandum)."
+    reason: "RAPT-001 fails a PM or SO record with no appointment instrument or an oral one; a letter, memorandum, charter or position description is written."
     evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.pmwriting.yaml", "expect": "the PM or SO is not appointed in writing", "claim": "constraint", "asserts": "An SO or PM is appointed in writing for the system; an oral appointment of the PM or SO fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0199"
     citation: {"ref": "DODI8510.01", "page": 26, "anchor": "Communicate organizational risk tolerance."}
@@ -1816,8 +1820,8 @@ requirements:
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: DoD Component CISOs:"
     statement: "(3) Perform as the SCA or formally delegate the security control assessment role for governed systems."
     status: "covered"
-    reason: "RAPT-001 fails a separate SCA record not delegated by the Component CISO."
-    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The CISO performs as the SCA or formally delegates the security control assessment role: an SCA appointed by the AO, not delegated by the CISO, fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; a PER-SCA record held by the CISO (same name or email) is the CISO performing as the SCA and keeps the CISO's appointer."
+    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The CISO performs as the SCA or formally delegates the security control assessment role: a delegated SCA appointed by the AO, not by the CISO, fails", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0208"
     citation: {"ref": "DODI8510.01", "page": 27, "anchor": "Track the assessment and authorization status of systems governed by the DoD"}
     kind: "lettered"
@@ -2016,8 +2020,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs: Verify that decisions:"
     statement: "(a) Incorporate the best cyber intelligence or commercial cyber threat information available."
     status: "covered"
-    reason: "AODM-004 fails an ATO decision whose threat assessment was not issued within 12 months or not reviewed, so the decision incorporates current threat information."
-    evidence: [{"kind": "rule", "target": "AODM-004", "fixture": "tests/fixtures/negative/AODM-004.reviewer.yaml", "expect": "the PM reviews the threat assessment", "claim": "constraint", "asserts": "Decisions incorporate the best cyber intelligence or threat information available: an ATO whose threat assessment the PM did not review fails", "holds_when": "the ledger records an ATO"}]
+    reason: "AODM-004 fails an ATO decision whose threat assessment was not issued within the 12 months before it, so the decision incorporates current threat information."
+    evidence: [{"kind": "rule", "target": "AODM-004", "fixture": "tests/fixtures/negative/AODM-004.yaml", "expect": "was not issued within the 12 months", "claim": "constraint", "asserts": "Decisions incorporate the best cyber intelligence or threat information available: a decision whose threat assessment was not issued within the 12 months fails", "holds_when": "the ledger records an ATO"}]
   - id: "REQ-DODI8510.01-0231"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Are recorded, tracked, and made available to all parties throughout the system’s"}
     kind: "lettered"
@@ -2177,8 +2181,10 @@ requirements:
     locator: "4.4.b.(5).(h)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: PMs (or SO, if no PM is assigned):"
     statement: "(h) Oversee periodic reviews, testing, and assessment of assigned systems, conducted at least annually."
-    status: "candidate"
-    work_item: "WI-440"
+    status: "partial"
+    reason: "SSPR-001 fails a Security Review Date not within a year on a system with an ATO, the annual review; periodic testing and assessment at least annually are not tested."
+    evidence: [{"kind": "rule", "target": "SSPR-001", "fixture": "tests/fixtures/negative/SSPR-001.review.yaml", "expect": "the Security Review Date", "claim": "constraint", "asserts": "Oversee periodic reviews of assigned systems, conducted at least annually: a Security Review Date not within a year fails", "holds_when": "authorizations.yaml records an ATO"}]
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0249"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Provide the system description."}
     kind: "lettered"
@@ -2197,7 +2203,7 @@ requirements:
     statement: "(j) Register the system in the DoD Component registry."
     status: "covered"
     reason: "UPD-001 fails a system reported in neither eMASS nor ERS, the DoD Component registries."
-    evidence: [{"kind": "rule", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.yaml", "expect": "but the registration information is not updated with it", "claim": "constraint", "asserts": "Register the system in the DoD Component registry and keep the registration information updated: C-3 work not updated in the registry fails", "holds_when": "ART-REG is produced or seeded"}]
+    evidence: [{"kind": "rule", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.reported.yaml", "expect": "the system is not reported in either eMASS or ERS", "claim": "constraint", "asserts": "Register the system in the DoD Component registry: a system not reported in either eMASS or ERS fails", "holds_when": "ART-REG is produced or seeded"}]
   - id: "REQ-DODI8510.01-0251"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Verify T&E of the assigned system includes planning, resourcing, and documentation in"}
     kind: "lettered"
@@ -2300,9 +2306,8 @@ requirements:
     locator: "4.5"
     context: "Table 8. Appointment of RMF Roles"
     statement: "DoD Component CISO | DoD Component CIO or, in organizations in which the position of DoD Component CIO does not exist, the DoD Component head."
-    status: "covered"
-    reason: "RAPT-001 fails a Component CISO appointed by anyone but the Component CIO, the Component head counting only where the roles hold no Component CIO."
-    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8ciso.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is appointed by the Component CIO, by the Component head only where the CIO position does not exist; the Component head appointing it beside a CIO fails its Table 8 appointing authority", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    status: "candidate"
+    work_item: "WI-441"
   - id: "REQ-DODI8510.01-0263"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "SCA | DoD Component CISO is the Component SCA but may formally"}
     kind: "table"
@@ -2310,8 +2315,8 @@ requirements:
     context: "Table 8. Appointment of RMF Roles"
     statement: "SCA | DoD Component CISO is the Component SCA but may formally delegate the SCA role as appropriate."
     status: "covered"
-    reason: "RAPT-001 fails a separate SCA record not delegated by the Component CISO; where the CISO acts as SCA no separate record is needed."
-    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is the Component SCA and may formally delegate the SCA role; an SCA appointed by the AO, not delegated by the CISO, fails its Table 8 appointing authority", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    reason: "RAPT-001 fails a delegated SCA, a PER-SCA record held by someone other than the CISO, not appointed by the Component CISO; the CISO performing as the SCA is recorded as a PER-SCA record with the CISO's own name and appointer, which passes."
+    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.t8sca.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "asserts": "The Component CISO is the Component SCA and may formally delegate the SCA role; a delegated SCA appointed by the AO, not by the CISO, fails its Table 8 appointing authority", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0264"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "PM | DoD Component Acquisition Executive"}
     kind: "table"

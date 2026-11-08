@@ -127,6 +127,25 @@ def _reviews_within_frequency(d):
                                  ["threats"], "strategy_adjusted": True})
 
 
+def _cio_not_recorded(d):
+    """DoDI 8510.01 Table 8: the Component CIO appoints the CISO; the CIO need not be a role of
+    the run for that to hold."""
+    d["roles"] = [r for r in d["roles"] if r["role"] != "PER-CIO"]
+
+
+def _pm_appointed_by_charter(d):
+    """DoDI 8510.01 4.3.c(3) asks for an appointment in writing; a program charter is one."""
+    _role(d, "RA-07")["appointment"] = {"instrument": "charter", "reference": "PGM-CHARTER-01"}
+
+
+def _ciso_performs_as_the_sca(d):
+    """DoDI 8510.01 Table 8: the Component CISO is the Component SCA; the SCA record held by the
+    CISO keeps the CISO's own appointer."""
+    ciso, sca = _role(d, "RA-02"), _role(d, "RA-10")
+    sca.update(name=ciso["name"], contact=dict(ciso["contact"]), appointed_by="PER-CIO")
+
+
+
 @pytest.mark.parametrize(("rule", "edit"), [
     ("OCTX-001", _cio_is_the_ao),
     ("OCTX-001", _military_ao),
@@ -147,11 +166,26 @@ def _reviews_within_frequency(d):
     ("OCTX-013", _contractor_program_manager),
     ("OCTX-013", _contractor_isso_opened_as_contractor_only),
     ("OCTX-012", _aodr_takes_part_in_the_allocation),
+    ("RAPT-001", _cio_not_recorded),
+    ("OCTX-001", _cio_not_recorded),
+    ("RAPT-001", _pm_appointed_by_charter),
+    ("RAPT-001", _ciso_performs_as_the_sca),
 ], ids=lambda v: v.__name__ if callable(v) else v)
 def test_a_permitted_case_is_not_refused(rule, edit, tmp_path):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     edit_yaml(run_dir / ORG, edit)
     assert _rule_errors(run_dir, rule) == []
+
+
+def test_the_template_roles_of_a_fresh_workspace_pass_the_appointment_rule(tmp_path):
+    """`rmf new` copies templates/data/org-context.yaml: its roles hold no CIO record and must
+    still pass RAPT-001 at P-1."""
+    import yaml
+
+    template = yaml.safe_load((REPO_ROOT / "templates/data/org-context.yaml").read_text())
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / ORG, lambda d: d.update(roles=template["roles"]))
+    assert _rule_errors(run_dir, "RAPT-001") == []
 
 
 def test_signed_components_alone_do_not_mean_certificates_are_issued(tmp_path):
