@@ -1,0 +1,13 @@
+rule: GEN-STALE-001
+bases: [example]
+description: the baseline leaves out si-7.15, the control S-2 supplemented the baseline with
+build: false
+mutations:
+- op: replace_text
+  file: baseline.json
+  old: "    {\n      \"control_id\": \"si-7.15\",\n      \"origin\": \"tailored-in\"\n    },\n"
+  new: ""
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+  - differs from a fresh `rmf baseline resolve`

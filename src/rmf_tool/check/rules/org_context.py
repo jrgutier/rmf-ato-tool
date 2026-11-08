@@ -78,8 +78,9 @@ SYSTEM_OWNER = "PER-PM"
 LEADERSHIP = ("PER-CIO", "PER-CISO", "PER-RE", "head-of-agency", "dod-component-head", "saorm")
 # SP 800-137 3.1 and CNSSP 22 Section IV.f: the ISCM strategy and program provide awareness of
 # threats and vulnerabilities, visibility into organizational assets and control effectiveness.
-MONITORED = ("control-effectiveness", "changes", "organizational-state",
-             "threat-and-vulnerability-awareness", "asset-visibility")
+# The last two are new at contract 0.3.0, so a 0.2.0 run is not held to them.
+MONITORED = ("control-effectiveness", "changes", "organizational-state")
+MONITORED_SINCE = {"threat-and-vulnerability-awareness": "0.3.0", "asset-visibility": "0.3.0"}
 OA_CONDITIONS = ("initial-authorization", "iscm-program")
 POSTURE_FACTORS = ("threats", "vulnerabilities", "technologies", "mission")
 # Calendar months the organization's stated review cycle allows between two program reviews.
@@ -577,7 +578,8 @@ def iscm_program(ctx: Context) -> list[RunFinding]:
     for a in _dicts(iscm.get("activities")):
         if not set(_list(a.get("objectives"))) & objectives:
             err(f"the ISCM activity {a.get('name')} maps to no ISCM strategic objective")
-    for item in MONITORED:
+    held = [*MONITORED, *(m for m, since in MONITORED_SINCE.items() if ctx.run.holds(since))]
+    for item in held:
         if item not in _list(iscm.get("monitors")):
             err(f"organization-wide continuous monitoring does not determine {item}")
     declared = {_key(n.get("element")) for n in _dicts(iscm.get("not_applicable"))}

@@ -1,0 +1,13 @@
+rule: GEN-STALE-001
+bases: [example]
+description: the baseline leaves out at-6, a control the NSS privacy control baseline selects for every NSS
+build: false
+mutations:
+- op: replace_text
+  file: baseline.json
+  old: "    {\n      \"control_id\": \"at-6\",\n      \"origin\": \"privacy-baseline\"\n    },\n"
+  new: ""
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+  - differs from a fresh `rmf baseline resolve`

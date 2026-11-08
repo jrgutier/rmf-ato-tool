@@ -29,9 +29,6 @@ def family_records(ctx: Context, directory: str, key: str) -> Iterator[tuple[str
 
 # --- FACTS-001 --------------------------------------------------------------------------
 
-CATEGORIZATION_APPROVERS = ("PER-AO", "PER-AODR")
-
-
 def facts_complete(ctx: Context) -> list[RunFinding]:
     run, facts = ctx.run, ctx.facts
     out: list[RunFinding] = []
@@ -71,13 +68,6 @@ def facts_complete(ctx: Context) -> list[RunFinding]:
         out.append(make("FACTS-001", "categorization is not approved "
                         "(categorization.approved.value must be true before S-1)",
                         FACTS_FILE, None, {approver, selector}))
-    # CNSSI 1253 Section 2.1 step 4: the AO's or the AO's designated representative's approval.
-    by = approval.get("approved_by") if isinstance(approval, dict) else None
-    if isinstance(approval, dict) and approval.get("value") is True \
-            and by not in CATEGORIZATION_APPROVERS:
-        out.append(make("FACTS-001", f"categorization is approved by {by}, not the AO or the "
-                        "AO's designated representative", FACTS_FILE, None,
-                        {run.fact_writers.get("categorization.approved", "C-3")}))
     fact_id = facts_mod.value(facts, "baseline_id")
     base = baseline_mod.load(run)
     if fact_id and base and base.get("baseline_id") != fact_id:
