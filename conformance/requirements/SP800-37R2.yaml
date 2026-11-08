@@ -2367,8 +2367,8 @@ requirements:
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-2 SECURITY CATEGORIZATION | TASK C-2 | • A security categorization of the system, including the information"
     status: "partial"
-    reason: "FACTS-001 fails a categorization fact written by any task but C-2, so the categorization is recorded where it belongs; whether it represents every organization-identified information type is CATG-001's, at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "A security categorization of the system is completed at C-2: a categorization set by another task, not C-2 which writes it, fails"}]
+    reason: "FACTS-001 fails a categorization fact written by any task but C-2, so the categorization is recorded where it belongs, and CATG-001 one below the high-water mark of the organization-identified information types; that every information type is represented is held only through the information types the run records."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "A security categorization of the system is completed at C-2: a categorization set by another task, not C-2 which writes it, fails"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "A security categorization of the system, including the information processed, is completed: a system availability below the high-water mark of the information types fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0270"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "SECURITY CATEGORIZATION | processed by the system represented by the organization- identified"}
@@ -2452,9 +2452,9 @@ requirements:
     locator: "TASK C-2"
     context: ""
     statement: "Categorize the system and document the security categorization results."
-    status: "partial"
-    reason: "FACTS-001 fails a categorization fact written by any task but C-2; that the categorization is right is CATG-001's, at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "Categorize the system and document the security categorization results: a categorization set by another task, not C-2 which writes it, fails"}]
+    status: "covered"
+    reason: "CATG-001 fails a categorization below the high-water mark of the information types and FACTS-001 a categorization fact written by any task but C-2, so the system is categorized; PKG-003 fails a security plan that does not carry the Security Categorization element, so the results are documented."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "Categorize the system and document the security categorization results: a categorization set by another task, not C-2 which writes it, fails"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Categorize the system and its security categorization results: a system availability below the high-water mark of the information types fails", "sentence": "Categorize the system and document the security categorization results."}, {"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.sspcat.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded", "asserts": "Document the security categorization results: a security plan that does not carry the CNSSI 1254 data element Security Categorization fails", "sentence": "Categorize the system and document the security categorization results."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0279"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "Security categorization determinations consider potential adverse impacts to organizational operations, organizational assets,"}
