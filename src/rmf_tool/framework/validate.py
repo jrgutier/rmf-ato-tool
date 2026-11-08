@@ -390,9 +390,11 @@ def rule_task_set(ctx: Context) -> list[Finding]:
             out.append(_err("FW-TASK-001", t, "not an SP 800-37r2 task"))
             continue
         if _norm(str(t.data.get("name", ""))) != _norm(canonical):
-            out.append(_err("FW-TASK-001", t, f"name must be {canonical!r}"))
+            out.append(_err("FW-TASK-001", t, f"name {t.data.get('name')!r} differs from its "
+                            f"SP 800-37r2 task name {canonical!r}"))
         if t.data.get("step") != t.id.split("-")[0]:
-            out.append(_err("FW-TASK-001", t, f"step must be {t.id.split('-')[0]}"))
+            out.append(_err("FW-TASK-001", t, f"step {t.data.get('step')} differs from its "
+                            f"SP 800-37r2 step {t.id.split('-')[0]}"))
         org_level = t.id in {f"P-{n}" for n in range(1, 8)}
         if t.data.get("level") != ("organization" if org_level else "system"):
             out.append(_err("FW-TASK-001", t, "level must be "

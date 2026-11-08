@@ -51,7 +51,7 @@ Recorded at p10 so p13 implements it without redesign; nothing in p10 prevents i
   document is `tier: 1` or whose kind states an obligation (`lettered`, `modal`, `indicative`,
   `imperative`, and every pin field), and on any open register work item. A `should` or
   `table` candidate in a document without `tier: 1` (most documents carry no tier) warns and
-  stays listed as untriaged. The split is `report.blocks_freeze` and
+  stays listed as untriaged. The split is `report.blocks_freeze` (now `rules.blocks_freeze`) and
   `rmf conformance report` prints the three counts now, so the p13 workload is visible from p10.
 - An entry of a reference imported after the freeze (a fork's import, or a T2 document that
   arrives later) is a warning through profile severity, like `agent_severity`: `E` under
@@ -169,13 +169,19 @@ an honest `partial` citing where it is built, and the freeze accepts that.
 ## The tier 1 freeze, decided with the user 2026-11-08
 
 The register outside tier 1 became advisory (the scope cut of the same day), so the freeze no
-longer asks every obligation to be triaged. This supersedes, for documents without `tier: 1`,
-the obligation split of 2026-10-31 and the non-tier-1 part of 2026-11-02 above.
+longer asks every obligation to be triaged. This supersedes the FW-REQ-002 readings of
+2026-10-31 and 2026-11-02 above at every tier: a tier 1 partial with a strong item now passes
+where `covered` or an approved deferral was required, open work items no longer block at any
+tier, and outside tier 1 nothing blocks.
 
 - FW-REQ-002 (AC-43, phase p13) errs on a live tier 1 entry still `candidate`, and on a tier 1
   `partial` none of whose evidence items judges strong (`evidence.judge`). A tier 1 partial
   passes with one strong item and a reason naming what is unheld; the unheld sentences stay
   `tier1_debt` in `rmf conformance report`, and their work items stay open as the backlog.
+- Debt is counted per sentence, so a single-sentence tier 1 partial whose one sentence a strong
+  item holds adds nothing to `tier1_debt`, though its reason names duty still unheld. The report
+  counts such entries apart: `summary.tier1_partial_entries` (every tier 1 partial) and
+  `summary.tier1_partial_by_reason` (those whose remainder lives only in `reason`).
 - Open work items no longer block the freeze, at any tier.
 - A `candidate` outside tier 1 warns, one finding per document with its count; `should` and
   `table` kinds are no longer told apart from obligations there.

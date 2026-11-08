@@ -457,12 +457,33 @@ def test_the_report_counts_what_fw_req_002_blocks_on(reg, index):
                                               if ref == DOC and e["status"] == "candidate")
 
 
-def test_fw_req_002_runs_under_profile_p13_only_until_p13_closes():
+def test_a_held_tier_1_partial_is_counted_as_debt_its_reason_names(reg, index):
+    """One sentence, held by a strong item, yet partial: no sentence is unresolved, so the
+    remainder its reason names is counted apart rather than lost (ADR-0005, 2026-11-08)."""
+    _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+    _complete(reg)
+    probe = _probe(REPO_ROOT, _framework(), (APPOINTING,))
+
+    state = report.evidence_state(reg, index, probe)
+
+    assert (state["tier1_debt"], state["tier1_partial_entries"],
+            state["tier1_partial_by_reason"]) == (0, 1, 1)
+    fx.entry(reg, 1, TIER1)["evidence"] = [{"kind": "citation", "target": "P-1"}]
+    state = report.evidence_state(reg, index, probe)
+    assert (state["tier1_debt"], state["tier1_partial_entries"],
+            state["tier1_partial_by_reason"]) == (1, 1, 0)
+
+
+def test_fw_req_002_runs_under_profile_p13_only_until_p13_closes(tmp_path):
     from rmf_tool.framework.validate import active_rules
 
-    assert "FW-REQ-002" in active_rules(resolve(REPO_ROOT, "p13"))
+    assert "FW-REQ-002" in active_rules(resolve(tmp_path, "p13"))
     for name in (None, "p11", "release", "fork"):
-        assert "FW-REQ-002" not in active_rules(resolve(REPO_ROOT, name))
+        assert "FW-REQ-002" not in active_rules(resolve(tmp_path, name))
+    (tmp_path / ".phases").mkdir()
+    (tmp_path / ".phases/p13.closed").write_text("closed p13\n")
+    for name in (None, "release", "fork"):
+        assert "FW-REQ-002" in active_rules(resolve(tmp_path, name))
     assert any(s.phase == "p13" and "FW-REQ-002" in s.rules for s in ci.STEPS)
 
 

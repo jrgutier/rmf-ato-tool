@@ -46,22 +46,30 @@ def evidence_state(reg: Register, index: Mapping[str, Any],
     """What ``covered`` rests on and what ``partial`` still owes: covered entries that hold only
     under a precondition, each partial entry's sentences with no strong item, and the sentences
     that wait on the user's ruling. Tier 1 owes full proof, so its unresolved sentences are the
-    debt the freeze reads; a sentence that can never fail is no debt, and waits apart."""
+    debt the freeze reads; a sentence that can never fail is no debt, and waits apart. A tier 1
+    partial whose every sentence a strong item holds still owes what its reason names: it is
+    counted apart (``tier1_partial_by_reason``), since no sentence of it is unresolved."""
     unresolved = []
     awaiting = []
-    conditional = debt = 0
+    conditional = debt = partial_1 = by_reason = 0
     for ref, entry in reg.live():
         if sentences := evidence.pending_rulings(entry):
             awaiting.append({"id": entry["id"], "tier": (index.get(ref) or {}).get("tier"),
                              "sentences": sentences})
+        tier = (index.get(ref) or {}).get("tier")
         if entry["status"] == "covered":
             conditional += any(i.get("holds_when") for i in entry.get("evidence") or ())
-        elif sentences := rules.unresolved_sentences(probe, entry):
-            tier = (index.get(ref) or {}).get("tier")
+            continue
+        sentences = rules.unresolved_sentences(probe, entry)
+        if entry["status"] == "partial" and tier == TIER_1:
+            partial_1 += 1
+            by_reason += not sentences and not evidence.pending_rulings(entry)
+        if sentences:
             debt += len(sentences) if tier == TIER_1 else 0
             unresolved.append({"id": entry["id"], "tier": tier, "sentences": sentences})
     return {"conditional": conditional, "tier1_debt": debt, "unresolved": unresolved,
-            "awaiting_ruling": awaiting}
+            "awaiting_ruling": awaiting, "tier1_partial_entries": partial_1,
+            "tier1_partial_by_reason": by_reason}
 
 
 def build(reg: Register, index: Mapping[str, Any], *,
@@ -106,7 +114,8 @@ def build(reg: Register, index: Mapping[str, Any], *,
     reviewed = live_total - total["candidate"]
     assessed = total["covered"] + total["partial"]
     state = evidence_state(reg, index, probe) if probe else {
-        "conditional": 0, "tier1_debt": 0, "unresolved": [], "awaiting_ruling": []}
+        "conditional": 0, "tier1_debt": 0, "unresolved": [], "awaiting_ruling": [],
+        "tier1_partial_entries": 0, "tier1_partial_by_reason": 0}
     closure = Counter(w["status"] for w in reg.work_items.values())
     summary = {
         "total": live_total,
@@ -117,6 +126,8 @@ def build(reg: Register, index: Mapping[str, Any], *,
         "closed_partial_items": closure["closed-partial"],
         "conditional": state["conditional"],
         "tier1_debt": state["tier1_debt"],
+        "tier1_partial_entries": state["tier1_partial_entries"],
+        "tier1_partial_by_reason": state["tier1_partial_by_reason"],
         "awaiting_ruling": sum(len(a["sentences"]) for a in state["awaiting_ruling"]),
         "unassessed": len(unassessed),
         "waivers": len(waivers or []),
@@ -167,6 +178,9 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"{s['conditional']} of {s['covered']} covered entries hold under a precondition "
                  f"(holds_when); tier 1 debt: {s['tier1_debt']} unresolved sentences in "
                  f"{sum(u['tier'] == TIER_1 for u in report['unresolved'])} partial entries")
+    lines.append(f"tier 1 partial entries: {s['tier1_partial_entries']}, of which "
+                 f"{s['tier1_partial_by_reason']} hold every sentence and owe only what their "
+                 "reason names")
     lines.append(f"awaiting the user's ruling: {s['awaiting_ruling']} sentences in "
                  f"{len(report['awaiting_ruling'])} entries")
     for a in report["awaiting_ruling"]:
