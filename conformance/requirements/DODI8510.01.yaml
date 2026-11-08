@@ -47,8 +47,8 @@ requirements:
     context: "POLICY"
     statement: "d. Cybersecurity requirements and cyberspace operational risk management functions will be established and applied to all programs, systems, and technologies in DoD, regardless of the acquisition or procurement method (referred to collectively in this issuance as “systems”)."
     status: "partial"
-    reason: "REQS-001 fails a run with no requirements traceability matrix, so cybersecurity requirements are established for the system whatever its pathway; that they are applied to all programs and technologies of the Component is above a run."
-    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.yaml", "expect": "the requirements traceability verification matrix", "asserts": "Cybersecurity requirements are established for the system: a run with no requirements traceability verification matrix fails", "holds_when": "ART-REQ is produced or seeded", "claim": "presence"}]
+    reason: "Tier 1, left partial: REQS-001 fails a run with no requirements traceability matrix and a requirement allocated to anything but a boundary component, so cybersecurity requirements are established and applied to the system whatever its pathway. Unheld: that they are applied to all programs and technologies of the Component is above a run."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.yaml", "expect": "the requirements traceability verification matrix", "asserts": "Cybersecurity requirements are established for the system: a run with no requirements traceability verification matrix fails", "holds_when": "ART-REQ is produced or seeded", "claim": "presence"}, {"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": "which is not a boundary component", "claim": "constraint", "asserts": "Cybersecurity requirements are established and applied to all systems: a requirement allocated to something that is not a boundary component of the system fails", "holds_when": "ART-REQ is produced or seeded"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0006"
     citation: {"ref": "DODI8510.01", "page": 4, "anchor": "Accountability for cybersecurity risk accepted within DoD must be enforced at all"}
@@ -145,8 +145,8 @@ requirements:
     context: "DOD CISO Under the authority, direction, and control of the DoD Chief Information Officer (CIO), the DoD CISO: Establishes the construct and program for AOs, including qualification and training requi"
     statement: "(2) Ensure data from those activities are captured in security authorization packages to inform risk-based authorization decisions."
     status: "partial"
-    reason: "PENT-002 fails an assessment report that records no results of a scheduled penetration test; developmental and operational test data reaching the package is not tested."
-    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.results.yaml", "expect": "the plan scheduled a penetration test and the SAR records no results", "asserts": "Data from testing activities are captured in security authorization packages: a scheduled penetration test whose results the SAR records no results fails", "holds_when": "ART-SAR is produced or seeded", "claim": "presence"}]
+    reason: "Tier 1, left partial: PENT-002 fails a SAR with no results of a scheduled penetration test and a penetration test that validates controls the SAR does not assess, so the test data reach the package. Unheld: developmental and operational test data other than the penetration test are not tested."
+    evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.results.yaml", "expect": "the plan scheduled a penetration test and the SAR records no results", "asserts": "Data from testing activities are captured in security authorization packages: a scheduled penetration test whose results the SAR records no results fails", "holds_when": "ART-SAR is produced or seeded", "claim": "presence"}, {"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.controls.yaml", "expect": ", controls the SAR does not assess", "claim": "constraint", "asserts": "Data from test activities are captured in the security authorization package: a penetration test that validates controls the SAR does not assess fails", "holds_when": "ART-SAR is produced or seeded"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0017"
     citation: {"ref": "DODI8510.01", "page": 6, "anchor": "Coordinates with the Under Secretary of Defense for Research and Engineering (USD(R&E))"}
@@ -535,8 +535,8 @@ requirements:
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "q. Operate only authorized DoD systems with a current authorization to operate (ATO), and maintain authorized DoD systems are maintained under their authority to comply with RMF."
     status: "partial"
-    reason: "GATE-001 fails a system fielded at a pathway decision point with no ATO or ATO with conditions standing on that date, a test the judge reads as presence; operation outside a fielding decision point is not tested. The second clause of the source is garbled."
-    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.expired.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "asserts": "Operate only authorized DoD systems with a current authorization to operate: a system fielded with no ATO standing on that date fails", "holds_when": "the acquisition record is in play"}]
+    reason: "Tier 1, left partial: AODM-006 fails a live test event under no IATT or authorization in force, and GATE-001 a system fielded at a pathway decision point with no ATO or ATO with conditions standing, an expired one included. Unheld: operation outside a test event or a fielding decision point is not recorded. The second clause of the source is garbled."
+    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.expired.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "constraint", "asserts": "Operate only authorized DoD systems with a current authorization to operate: a system fielded with no ATO standing on that date fails", "holds_when": "the acquisition record is in play"}, {"kind": "rule", "target": "AODM-006", "fixture": "tests/fixtures/negative/AODM-006.yaml", "expect": "falls under no IATT or authorization in force", "claim": "constraint", "asserts": "Operate only authorized DoD systems with a current authorization: a live test event that falls under no IATT or authorization in force fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0061"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Manage, maintain, and mitigate risks throughout the system lifecycle in accordance with"}
@@ -766,8 +766,8 @@ requirements:
     context: "Figure 1. RMF Process"
     statement: "(1) DoD systems (e.g., weapons systems, stand-alone systems, control systems, or any other type of systems with digital capabilities) must receive and maintain a valid authorization before beginning operations. Refer to the RMF KS for additional guidance on authorizations."
     status: "partial"
-    reason: "No run records the start of operations, so nothing can fail when a system operates without a valid authorization; AODM-006 covers live test events only"
-    evidence: [{"kind": "citation", "asserts": "AD-ATO states a fielded system receives a valid authorization before operations", "target": "AD-ATO", "claim": "presence"}]
+    reason: "Tier 1, left partial: GATE-001 fails a system fielded at a pathway release gate with no ATO or ATO with conditions standing on that date (an expired one included), and AODM-006 fails a live test event, an operation on live data, that falls under no IATT or authorization in force. Unheld: no run records the start of operations outside a test event or a fielding decision point, so a system that begins operations without a valid authorization otherwise passes."
+    evidence: [{"kind": "citation", "asserts": "AD-ATO states a fielded system receives a valid authorization before operations", "target": "AD-ATO", "claim": "presence"}, {"kind": "rule", "target": "AODM-006", "fixture": "tests/fixtures/negative/AODM-006.yaml", "expect": "falls under no IATT or authorization in force", "claim": "constraint", "asserts": "Systems must receive and maintain a valid authorization before beginning operations: a live test event that falls under no IATT or authorization in force fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.expired.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "constraint", "asserts": "Systems must receive and maintain a valid authorization before beginning operations: a system fielded at a release gate after its ATO with conditions expired, with no ATO standing on that date, fails"}]
   - id: "REQ-DODI8510.01-0086"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "Technologies below the system level (e.g., system components, hardware, software, external services)"}
     kind: "lettered"
@@ -775,8 +775,8 @@ requirements:
     context: "Figure 1. RMF Process"
     statement: "(2) Technologies below the system level (e.g., system components, hardware, software, external services) do not require an ATO. However, these technologies must still complete specific RMF assessment procedures under the “Assess Only” process. Refer to the KS for more information on these “Assess Only” processes."
     status: "partial"
-    reason: "Built: system_type pit, it-service and it-product take no ATO, AONLY-001 requires A-3 in scope and the Assess Only acceptance. The A-3 scope clause has no negative fixture, and which assessment procedures the KS's Assess Only process names is on the KS (INV-7)."
-    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Technologies below the system level do not require an ATO but complete the Assess Only process: one that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
+    reason: "Tier 1, left partial: system_type pit, it-service and it-product take no ATO, and AONLY-001 fails one accepted while its security configuration is not approved. Unheld: the A-3 scope clause has no negative fixture, and which assessment procedures the KS's Assess Only process names is on the KS (INV-7)."
+    evidence: [{"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.yaml", "expect": "records no acceptance", "claim": "presence", "asserts": "Technologies below the system level do not require an ATO but complete the Assess Only process: one that records no acceptance fails", "holds_when": "ART-AUTHREC is produced or seeded"}, {"kind": "rule", "target": "AONLY-001", "fixture": "tests/fixtures/negative/AONLY-001.configuration.yaml", "expect": "is accepted, and its security configuration is", "claim": "constraint", "asserts": "Technologies below the system level complete the Assess Only procedures: one accepted while its security configuration is not approved fails", "holds_when": "ART-AUTHREC is produced or seeded"}]
     work_item: "WI-28"
   - id: "REQ-DODI8510.01-0087"
     citation: {"ref": "DODI8510.01", "page": 13, "anchor": "Prepare to execute the RMF from an organizational and system-level perspective by"}
@@ -1060,8 +1060,9 @@ requirements:
     locator: "3.2.d"
     context: "Table 3. Select Tasks and Outcomes, Continued"
     statement: "Implement the controls and describe how the controls are employed within the system and its operating environment. See Table 4 for a list of tasks and outcomes."
-    status: "candidate"
-    reason: "No rule fails a control the SSP says is implemented but is not, or a description of how a control is employed in its environment: TLR-007's base and enhancement consistency (a T5 candidate item) breaks neither, and SSP-COV-001 is generic. A-3 assesses implementation; the employment description is prose (WI-441)."
+    status: "partial"
+    reason: "Tier 1, left partial: SSE-003 fails an assurance-related control the SSP records in place while the minimum assurance requirements it carries for the baseline are not satisfied. Unheld: no rule fails another control the SSP says is implemented but is not, and the description of how a control is employed in its environment is prose; A-3 assesses implementation."
+    evidence: [{"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "Implement the controls as employed within the system: an assurance control recorded in place whose minimum assurance requirements for the baseline are not satisfied fails"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0117"
     citation: {"ref": "DODI8510.01", "page": 16, "anchor": "Task I-1 Control Implementation | • Controls specified in the security and"}
@@ -1070,8 +1071,8 @@ requirements:
     context: "Table 4. Implement Tasks and Outcomes"
     statement: "Task I-1 Control Implementation | • Controls specified in the security and privacy plans are implemented. [CSF: PR.IP-1] • Systems security and privacy engineering methodologies are used to implement the controls in system security and privacy plans. [CSF: PR.IP-2] | • SO • Common Control Provider"
     status: "partial"
-    reason: "I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose."
-    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "I-1 implements the controls in the security and privacy plans", "claim": "presence"}]
+    reason: "Tier 1, left partial: SSE-003 fails sa-8 (security and privacy engineering principles) or another assurance control recorded in place while its minimum assurance requirements are not satisfied. Unheld: nothing checks every implementation against its statement, and the engineering methodologies used are prose."
+    evidence: [{"kind": "prose", "target": "playbooks/I/I-1.md", "asserts": "I-1 implements the controls in the security and privacy plans", "claim": "presence"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "Systems security and privacy engineering methodologies are used to implement the controls: sa-8 in place with its minimum assurance requirements not satisfied fails"}]
     work_item: "WI-142"
   - id: "REQ-DODI8510.01-0118"
     citation: {"ref": "DODI8510.01", "page": 16, "anchor": "Task I-2 Update Control Implementation Information | • Changes to the planned"}
@@ -1274,7 +1275,9 @@ requirements:
     locator: "3.2"
     context: "Table 7. Monitor Tasks and Outcomes"
     statement: "Task M-2 Ongoing Assessments | Ongoing testing and assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy. [CSF: ID.SC-4] | • Control Assessor"
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: ISCM-002 fails an automated tool that collects a control less often than the continuous monitoring strategy monitors it, so automated ongoing assessment follows the strategy. Unheld: manual ongoing assessments are not compared with the strategy's frequencies; their results are prose."
+    evidence: [{"kind": "rule", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.frequency.yaml", "expect": "but the strategy monitors it continuously", "claim": "constraint", "asserts": "Ongoing assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy: a tool collecting a control less often than the strategy monitors it fails", "holds_when": "ART-CONMON is produced or seeded"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0140"
     citation: {"ref": "DODI8510.01", "page": 19, "anchor": "Task M-3 Ongoing Risk Response | The output of continuous monitoring activities"}
@@ -1310,8 +1313,8 @@ requirements:
     context: "Table 7. Monitor Tasks and Outcomes"
     statement: "Task M-6 Ongoing Authorization | AOs conduct ongoing authorizations using the results of continuous monitoring activities and communicate changes in risk determination and acceptance decisions. | • AO"
     status: "partial"
-    reason: "That the review used monitoring results and that changes reached anyone is not tested"
-    evidence: [{"kind": "citation", "asserts": "AD-CONT records the AO's ongoing determination at M-6", "target": "AD-CONT", "claim": "presence"}]
+    reason: "Tier 1, left partial: OCTX-010 fails a system under ongoing authorization with no organizational continuous monitoring program in place, so ongoing authorization rests on monitoring. Unheld: that the AO's review used the monitoring results and that changes in the risk determination reached anyone is not tested."
+    evidence: [{"kind": "citation", "asserts": "AD-CONT records the AO's ongoing determination at M-6", "target": "AD-CONT", "claim": "presence"}, {"kind": "rule", "target": "OCTX-010", "fixture": "tests/fixtures/negative/OCTX-010.program.yaml", "expect": "no organizational continuous monitoring program is in place", "claim": "constraint", "asserts": "AOs conduct ongoing authorizations using the results of continuous monitoring: a system under ongoing authorization with no organizational continuous monitoring program in place fails", "holds_when": "ART-ORG-CONTEXT is in play and the system is under ongoing authorization"}]
     work_item: "WI-06"
   - id: "REQ-DODI8510.01-0144"
     citation: {"ref": "DODI8510.01", "page": 19, "anchor": "Task M-7 System Disposal | A system disposal strategy is developed and"}
@@ -1981,8 +1984,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(3) Monitor and track the overall execution of system-level POA&Ms."
     status: "partial"
-    reason: "POA&M execution is tracked at M-3 and M-6; AD-ATOC only ties conditions to it"
-    evidence: [{"kind": "citation", "asserts": "AD-ATOC conditions tie to POA&Ms whose execution the AO monitors", "target": "AD-ATOC", "claim": "presence"}]
+    reason: "Tier 1, left partial: ASMT-011 fails a POA&M item marked Completed while its weakness is open, so the tracked execution status is true to the findings. Unheld: that the AO monitors the overall execution is an act a run records nowhere; AD-ATOC only ties conditions to it."
+    evidence: [{"kind": "citation", "asserts": "AD-ATOC conditions tie to POA&Ms whose execution the AO monitors", "target": "AD-ATOC", "claim": "presence"}, {"kind": "rule", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.resolved.yaml", "expect": "the status is used only when the weakness has been fully resolved", "claim": "constraint", "asserts": "Monitor and track the execution of system-level POA&Ms: a POA&M status of Completed while its weakness is not fully resolved fails", "holds_when": "ART-POAM is produced or seeded"}]
   - id: "REQ-DODI8510.01-0221"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Promote reciprocity as much as possible."}
     kind: "lettered"
@@ -2017,8 +2020,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(7) Coordinate authorization activities and results with the system acquisition or procurement representatives."
     status: "partial"
-    reason: "Coordination with acquisition staff is a RACI line at R-4, not data a rule reads"
-    evidence: [{"kind": "citation", "asserts": "R-4 informs PER-MDA and PER-PM of authorization results", "target": "R-4", "claim": "presence"}]
+    reason: "Tier 1, left partial: AUTHRPT-001 fails a risk that affects an operational requirement whose coordination leaves out the acquisition or procurement representatives. Unheld: coordination of other authorization activities and results with them is a RACI line at R-4, not data a rule reads."
+    evidence: [{"kind": "citation", "asserts": "R-4 informs PER-MDA and PER-PM of authorization results", "target": "R-4", "claim": "presence"}, {"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.acquisition.yaml", "expect": "its coordination leaves out the acquisition or procurement", "claim": "constraint", "asserts": "Coordinate authorization activities and results with the system acquisition or procurement representatives: a coordination that leaves them out fails", "holds_when": "ART-AUTHRPT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0225"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Verify the system meets cyberspace operational commander requirements. When risks are not"}
     kind: "lettered"
@@ -2026,8 +2029,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(8) Verify the system meets cyberspace operational commander requirements. When risks are not fully mitigated, AOs inform operators of potential impacts."
     status: "partial"
-    reason: "No record holds the operational commander's requirements until PER-OPCDR exists"
-    evidence: [{"kind": "citation", "asserts": "R-4's exit criterion confirms the system meets cyberspace operational commander requirements", "target": "R-4", "claim": "presence"}]
+    reason: "Tier 1, left partial: AUTHRPT-001 fails a risk affecting an operational requirement whose coordination leaves out the cyberspace and functional operational commanders, so operators learn of the impact. Unheld: no record holds the operational commander's requirements, so verifying the system meets them is not tested."
+    evidence: [{"kind": "citation", "asserts": "R-4's exit criterion confirms the system meets cyberspace operational commander requirements", "target": "R-4", "claim": "presence"}, {"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.coordination.yaml", "expect": "its coordination leaves out the cyberspace and functional opera", "claim": "constraint", "asserts": "When risks are not fully mitigated, AOs inform operators of potential impacts: a coordination that leaves out the cyberspace and functional operational commanders fails", "holds_when": "ART-AUTHRPT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0226"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Verify the cyberspace and functional operational commanders have the necessary cyber risk"}
     kind: "lettered"
@@ -2078,8 +2081,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs: Verify that decisions:"
     statement: "(b) Are recorded, tracked, and made available to all parties throughout the system’s lifecycle."
     status: "partial"
-    reason: "The ledger records each decision and names who receives it; tracking through the lifecycle is M-6 work and nothing tests availability"
-    evidence: [{"kind": "citation", "asserts": "ART-AUTHREC records each decision and names the parties it is conveyed to", "target": "ART-AUTHREC", "claim": "presence"}]
+    reason: "Tier 1, left partial: the ledger records each decision, and AUTHRPT-001 fails authorization documents not available to a party that must have them. Unheld: tracking through the whole lifecycle is M-6 work no rule reads end to end."
+    evidence: [{"kind": "citation", "asserts": "ART-AUTHREC records each decision and names the parties it is conveyed to", "target": "ART-AUTHREC", "claim": "presence"}, {"kind": "rule", "target": "AUTHRPT-001", "fixture": "tests/fixtures/negative/AUTHRPT-001.available.yaml", "expect": "authorization documents are not available to", "claim": "constraint", "asserts": "Authorization decisions are recorded, tracked and made available to all parties: authorization documents not available to a required party fail", "holds_when": "ART-AUTHRPT is produced or seeded"}]
   - id: "REQ-DODI8510.01-0232"
     citation: {"ref": "DODI8510.01", "page": 28, "anchor": "Consists of the policies, procedures, and activities of the SO, PM, UR,"}
     kind: "lettered"
@@ -2105,8 +2108,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program:"
     statement: "(3) Is responsible for establishing and maintaining system security, including monitoring and reporting the system security status."
     status: "partial"
-    reason: "MRPT-001 fails a run with no posture report data, the security status reported; establishing and maintaining security is the whole run."
-    evidence: [{"kind": "rule", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.missing.yaml", "expect": "no posture report data", "asserts": "Monitoring and reporting the system security status: no posture report data fails", "holds_when": "ART-SECRPT is produced or seeded", "claim": "presence"}]
+    reason: "Tier 1, left partial: MRPT-001 fails a run with no posture report data and a report that misstates the mitigation or risk acceptance status, so the security status is monitored and reported. Unheld: establishing and maintaining security is the whole run."
+    evidence: [{"kind": "rule", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.missing.yaml", "expect": "no posture report data", "asserts": "Monitoring and reporting the system security status: no posture report data fails", "holds_when": "ART-SECRPT is produced or seeded", "claim": "presence"}, {"kind": "rule", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.status.yaml", "expect": "the mitigation or risk acceptance status of", "claim": "constraint", "asserts": "Monitoring and reporting the system security status: a posture report that misstates the mitigation or risk acceptance status fails", "holds_when": "ART-SECRPT is produced or seeded"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0235"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "In coordination with the IOs, data owners or stewards, categorize systems in"}
@@ -2142,7 +2145,9 @@ requirements:
     locator: "4.4.b.(4).(d)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: SOs:"
     statement: "(d) Oversee and manage the system's cybersecurity posture, operations, and sustainment activities (e.g., system patching, account management, updates, and required maintenance) in accordance with the AO directions and approvals outlined in formal ATO documentation."
-    status: "candidate"
+    status: "partial"
+    reason: "Tier 1, left partial: VULN-001 fails a directed action (a patch or update the system received) recorded implemented without a date on or after its receipt, or with no response. Unheld: that the ISSM oversees account management and maintenance in accordance with the AO directions in the ATO documentation is not tested."
+    evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Oversee and manage system patching and updates: a directed action recorded implemented without a date on or after its receipt fails", "holds_when": "conmon.yaml vulnerability_management is in play"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0239"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Document operations and sustainment activities delegated to external partners."}
@@ -2195,8 +2200,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: PMs (or SO, if no PM is assigned):"
     statement: "(d) Verify that the planning and execution of all RMF activities are aligned, integrated with, and supportive of the system acquisition process."
     status: "partial"
-    reason: "GATE-001 fails a system fielded at a pathway decision point with no ATO; other alignment of RMF activities with the acquisition process is held by aligned_with in framework/tasks, which no run rule reads."
-    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "asserts": "RMF activities are aligned with the system acquisition process: a system fielded at a decision point with no ATO standing on that date fails", "holds_when": "the acquisition record is in play", "claim": "presence"}]
+    reason: "Tier 1, left partial: CSSTRAT-002 fails a cybersecurity strategy not reviewed prior to an acquisition milestone decision, and GATE-001 a system fielded at a pathway decision point with no ATO or ATO with conditions standing, an expired one included. Unheld: other alignment of RMF activities with the acquisition process is held by aligned_with in framework/tasks, which no run rule reads."
+    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.expired.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "asserts": "RMF activities are aligned with the system acquisition process: a system fielded at a decision point with no ATO standing on that date fails", "holds_when": "the acquisition record is in play", "claim": "constraint"}, {"kind": "rule", "target": "CSSTRAT-002", "fixture": "tests/fixtures/negative/CSSTRAT-002.yaml", "expect": "the CSS is reviewed prior to acquisition milestone decision", "claim": "constraint", "asserts": "The planning of RMF activities is aligned with and supportive of the acquisition process: a cybersecurity strategy not reviewed prior to an acquisition milestone decision fails"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0245"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Enforce AO authorization decisions for hosted or interconnected systems."}

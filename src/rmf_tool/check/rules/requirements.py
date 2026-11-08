@@ -169,28 +169,15 @@ def _allocation(ctx: Context, requirements: list[dict[str, Any]]) -> list[RunFin
 
 def design_policy(ctx: Context) -> list[RunFinding]:
     """REQS-002: every design policy statement is addressed once, an unconditional one
-    applies, a DoWI 8430.01 one applies wherever the system has covered software (SWA-001's
-    reading of software.yaml and the product kind), and one that applies is carried by a
-    requirement the matrix holds."""
+    applies, and a DoWI 8430.01 one applies wherever the system has covered software (SWA-001's
+    reading of software.yaml and the product kind). REQS-005 judges what carries one."""
     data = _data(ctx, DEFINE)
     if data is None:
         return []
-    held = {_key(r.get("id")) for r in _records(data, "requirements")}
     software = has_covered_software(ctx)
     records = _records(data, "design_policy")
     addressed = {_key(r.get("statement")) for r in records}
-    traces = {(_key(r.get("id")), _key(k)) for r in _records(data, "requirements")
-              for k in _list(r.get("policy"))}
     out = []
-    for ident, key in sorted(traces, key=str):
-        if key not in DESIGN_POLICY:
-            out.append(_finding("REQS-002", f"{ident} traces to {key}, which is no design "
-                                "policy statement REQS-002 knows"))
-        elif (ident, key) not in {(_key(r), _key(c.get("statement"))) for c in records
-                                  if c.get("applies") is True
-                                  for r in _list(c.get("requirements"))}:
-            out.append(_finding("REQS-002", f"{ident} traces to {key}, but the {key} record "
-                                "does not list it as carrying the statement"))
     seen: set[str] = set()
     for key in DESIGN_POLICY:
         if key not in addressed:
@@ -214,13 +201,41 @@ def design_policy(ctx: Context) -> list[RunFinding]:
         elif record.get("applies") is not True and not record.get("reason"):
             out.append(_finding("REQS-002", f"{key} is marked not applicable without saying why "
                                 "its condition does not hold"))
+    return out
+
+
+def design_policy_carried(ctx: Context) -> list[RunFinding]:
+    """REQS-005 (split from REQS-002): a design policy statement that applies is carried by a
+    requirement the matrix holds, and the requirements' policy traces agree with the records
+    that list them."""
+    data = _data(ctx, DEFINE)
+    if data is None:
+        return []
+    held = {_key(r.get("id")) for r in _records(data, "requirements")}
+    records = _records(data, "design_policy")
+    traces = {(_key(r.get("id")), _key(k)) for r in _records(data, "requirements")
+              for k in _list(r.get("policy"))}
+    out = []
+    for ident, key in sorted(traces, key=str):
+        if key not in DESIGN_POLICY:
+            out.append(_finding("REQS-005", f"{ident} traces to {key}, which is no design "
+                                "policy statement REQS-002 knows"))
+        elif (ident, key) not in {(_key(r), _key(c.get("statement"))) for c in records
+                                  if c.get("applies") is True
+                                  for r in _list(c.get("requirements"))}:
+            out.append(_finding("REQS-005", f"{ident} traces to {key}, but the {key} record "
+                                "does not list it as carrying the statement"))
+    for record in records:
+        key = _key(record.get("statement"))
+        if key not in DESIGN_POLICY:
+            continue
         carried = [r for r in _list(record.get("requirements")) if _key(r) in held]
         for req in _list(record.get("requirements")):
             if (_key(req), key) not in traces:
-                out.append(_finding("REQS-002", f"the {key} record lists {req}, whose policy "
+                out.append(_finding("REQS-005", f"the {key} record lists {req}, whose policy "
                                     "trace does not name the statement"))
         if record.get("applies") is True and len(carried) == 0:
-            out.append(_finding("REQS-002", f"{key} applies but no requirement of the matrix "
+            out.append(_finding("REQS-005", f"{key} applies but no requirement of the matrix "
                                 "carries it"))
     return out
 

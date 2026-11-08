@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 381 rules, 38 repo-scope and 343 run-scope. Authoritative;
+# Rule registry (plan §6.5): 385 rules, 38 repo-scope and 347 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -426,6 +426,7 @@ rules:
       - REQ-SP800-37R2-0272
       - REQ-SP800-37R2-0278
       - REQ-SP800-37R2-0281
+      - REQ-FIPS200-0041
   - id: GEN-STALE-001
     scope: run
     severity: E
@@ -466,6 +467,8 @@ rules:
       - REQ-SP800-37R2-0211
       - REQ-SP800-37R2-0285
       - REQ-SP800-53AR5-0013
+      - REQ-DODI8500.01-0203
+      - REQ-CNSSI1253-0106
   - id: BSEL-002
     scope: run
     severity: E
@@ -853,6 +856,7 @@ rules:
       - REQ-DODI8530.01-0220
       - REQ-DODI8510.01-0200
       - REQ-DODI8510.01-0247
+      - REQ-DODI8510.01-0220
   - id: ASMT-012
     scope: run
     severity: E
@@ -1102,6 +1106,9 @@ rules:
     hint: A sap.yaml event marked live needs an AD-IATT or authorization in force on its date.
     enforces:
       - REQ-SP800-53AR5-0335
+      - REQ-DODI8500.01-0302
+      - REQ-DODI8510.01-0085
+      - REQ-DODI8510.01-0060
   - id: AODM-007
     scope: run
     severity: E
@@ -1206,6 +1213,7 @@ rules:
       - REQ-DODCIO-RECIPROCITY-0043
       - REQ-DODCIO-RECIPROCITY-0044
       - REQ-DODCIO-RECIPROCITY-0166
+      - REQ-CNSSI1254-0131
   - id: ENT-002
     scope: run
     severity: E
@@ -1432,6 +1440,7 @@ rules:
       - REQ-DODI8510.01-0234
       - REQ-DODI8510.01-0255
       - REQ-SP800-37R2-0447
+      - REQ-DODI8531.01-0071
   - id: MRPT-002
     scope: run
     severity: E
@@ -1542,6 +1551,9 @@ rules:
       - REQ-SP800-37R2-0422
       - REQ-DODI8510.01-0126
       - REQ-DODI8510.01-0131
+      - REQ-DODI8510.01-0231
+      - REQ-DODI8510.01-0224
+      - REQ-DODI8510.01-0225
   - id: RUN-VER-001
     scope: run
     severity: W
@@ -1678,6 +1690,7 @@ rules:
       - REQ-SP800-53AR5-0321
       - REQ-SP800-37R2-0425
       - REQ-SP800-37R2-0439
+      - REQ-DODI8510.01-0139
   - id: ISCM-003
     scope: run
     severity: E
@@ -1734,6 +1747,7 @@ rules:
       - REQ-SP800-37R2-0449
       - REQ-SP800-37R2-0450
       - REQ-SP800-37R2-0316
+      - REQ-CNSSP12-0029
   - id: ISCM-006
     scope: run
     severity: E
@@ -1983,6 +1997,8 @@ rules:
       - REQ-CNSSI1254-0096
       - REQ-CNSSI1254-0102
       - REQ-CNSSI1254-0110
+      - REQ-CNSSI1254-0006
+      - REQ-CNSSI1254-0012
   - id: TPL-001
     scope: run
     severity: E
@@ -2014,6 +2030,7 @@ rules:
       - REQ-SP800-53B-0079
       - REQ-SP800-53B-0081
       - REQ-SP800-53B-0075
+      - REQ-CNSSI1253-0075
   - id: TLR-002
     scope: run
     severity: E
@@ -2063,6 +2080,7 @@ rules:
       - REQ-SP800-37R2-0306
       - REQ-SP800-37R2-0257
       - REQ-CNSSI1253-0060
+      - REQ-CNSSI1253-0075
   - id: DPOL-001
     scope: run
     severity: E
@@ -2227,6 +2245,14 @@ rules:
       - REQ-DODI8531.01-0120
       - REQ-DODI8531.01-0122
       - REQ-DODI8531.01-0171
+      - REQ-DODI8531.01-0080
+      - REQ-DODI8531.01-0118
+      - REQ-DODI8531.01-0121
+      - REQ-DODI8531.01-0173
+      - REQ-DODI8531.01-0175
+      - REQ-DODI8531.01-0176
+      - REQ-DODI8531.01-0182
+      - REQ-DODI8531.01-0184
   - id: TLR-003
     scope: run
     severity: E
@@ -2354,6 +2380,7 @@ rules:
       - REQ-SP800-37R2-0309
       - REQ-SP800-37R2-0111
       - REQ-SP800-37R2-0311
+      - REQ-CNSSI1254-0054
   - id: TLR-010
     scope: run
     severity: E
@@ -2900,7 +2927,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-15
-    summary: a DoD design policy statement is not addressed, is wrongly marked not applicable, or is carried by no requirement
+    summary: a DoD design policy statement is not addressed or is wrongly marked not applicable
     fixture: tests/fixtures/negative/REQS-002.yaml
     hint: Address every design policy statement REQS-002 lists in design_policy. An unconditional statement applies; one that applies names the requirements that carry it.
     enforces:
@@ -2920,6 +2947,24 @@ rules:
       - REQ-DOWI8430.01-0178
       - REQ-DOWI8430.01-0181
       - REQ-DOWI8430.01-0182
+  - id: REQS-005
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: a design policy statement that applies is carried by no requirement of the matrix, or a requirement's policy trace and the record that lists it disagree (split from REQS-002)
+    fixture: tests/fixtures/negative/REQS-005.yaml
+    hint: Name in each design policy record that applies the requirements that carry it, and give each of those requirements a policy trace naming the statement.
+    enforces:
+      - REQ-DODI8500.01-0018
+      - REQ-DODI8500.01-0030
+      - REQ-DODI8500.01-0249
+      - REQ-DODI8500.01-0286
+      - REQ-DODI8500.01-0348
+      - REQ-DODI8500.01-0349
+      - REQ-DODI8500.01-0350
   - id: REQS-003
     scope: run
     severity: E
@@ -3049,6 +3094,8 @@ rules:
       - REQ-SP800-18R1-0135
       - REQ-SP800-18R1-0136
       - REQ-SP800-39-0308
+      - REQ-DODI8510.01-0116
+      - REQ-DODI8510.01-0117
   - id: SWA-001
     scope: run
     severity: E
@@ -3417,10 +3464,10 @@ rules:
     fixture: tests/fixtures/negative/SCRM-001.yaml
     hint: "Write artifacts/data/scrm.yaml from templates/data/scrm.yaml: one supplier per source of each inventory item, tied to its ra.yaml supply chain record, rated critical when it supplies an item of a mission-critical function, and an assessment for each critical supplier, prioritized ahead of the non-critical ones."
     enforces:
-      - REQ-SP800-161R1-1220
       - REQ-SP800-161R1-0112
       - REQ-SP800-161R1-0174
       - REQ-SP800-161R1-0203
+      - REQ-SP800-161R1-0218
       - REQ-SP800-161R1-0224
       - REQ-SP800-161R1-0226
       - REQ-SP800-161R1-0227
@@ -3432,6 +3479,7 @@ rules:
       - REQ-SP800-161R1-0904
       - REQ-SP800-161R1-0905
       - REQ-SP800-161R1-0910
+      - REQ-SP800-161R1-1220
       - REQ-SP800-161R1-1261
       - REQ-SP800-61R3-0111
       - REQ-SP800-61R3-0118
@@ -3507,6 +3555,7 @@ rules:
     fixture: tests/fixtures/negative/SCRM-004.yaml
     hint: "Name a supplier of scrm.yaml and only articles it provides; at SCRSS level 3 and above, have senior leadership and legal counsel clear the record."
     enforces:
+      - REQ-SP800-161R1-0978
       - REQ-SP800-161R1-0986
       - REQ-SP800-161R1-0991
       - REQ-SP800-161R1-0995
@@ -3522,6 +3571,9 @@ rules:
     fixture: tests/fixtures/negative/SCRM-005.yaml
     hint: "Map the assessment's own score to the Table 29 level that describes it: levels 3 to 5 for adversarial-related risk, level 2 for non-adversarial high risk of a critical supplier. At level 3 and above share with the FASC as mandatory, escalate to senior officials and legal counsel, and weigh law enforcement, counter-intelligence and legal equities first."
     enforces:
+      - REQ-SP800-161R1-0155
+      - REQ-SP800-161R1-0239
+      - REQ-SP800-161R1-0250
       - REQ-SP800-161R1-0969
       - REQ-SP800-161R1-0970
       - REQ-SP800-161R1-0971
@@ -3582,6 +3634,7 @@ rules:
     hint: "Give every supplier a selection record with due diligence and the prohibited supplier lists screened that apply (SP 800-161 pp. 254-255 are not inclusive); never select a listed supplier; take open source software from a vetted and approved library."
     enforces:
       - REQ-DODI5000.83-0197
+      - REQ-SP800-161R1-0079
       - REQ-SP800-161R1-0211
       - REQ-SP800-161R1-0212
       - REQ-SP800-161R1-0214
@@ -3594,15 +3647,18 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-4
-    summary: a moderate- or high-impact system without a C-SCRM plan, a low-impact one without the inheritance its SSP states, or a plan that misses a requirement, supplier, relationship, consideration or information type, or is approved without the PMO
+    summary: a moderate- or high-impact system without a C-SCRM plan, a low-impact one without the inheritance its SSP states, or a plan that misses a requirement, supplier, relationship or information type, is approved by no persona or without the PMO; its SP 800-18r2 considerations are SCRM-032
     fixture: tests/fixtures/negative/SCRM-009.yaml
     hint: "Write artifacts/data/scrm-plan.yaml from templates/data/scrm-plan.yaml: the contracts' C-SCRM requirements, every supplier with the criticality scrm.yaml gives it, a relationship for each critical supplier, each SP 800-18r2 consideration, every information type, and approval coordinated with the organization's PMO."
     enforces:
       - REQ-SP800-161R1-0178
       - REQ-SP800-161R1-0179
       - REQ-SP800-161R1-0182
+      - REQ-SP800-161R1-0676
       - REQ-SP800-161R1-0684
       - REQ-SP800-161R1-0927
+      - REQ-SP800-161R1-1314
+      - REQ-SP800-161R1-1323
       - REQ-SP800-161R1-1331
       - REQ-SP800-18R2-0012
       - REQ-SP800-18R2-0067
@@ -3613,7 +3669,6 @@ rules:
       - REQ-SP800-18R2-0302
       - REQ-SP800-18R2-0305
       - REQ-SP800-18R2-0307
-      - REQ-SP800-18R2-0437
       - REQ-SP800-61R3-0121
   - id: SCRM-010
     scope: run
@@ -3622,7 +3677,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-4
-    summary: a removed C-SCRM control accepted by anyone but the AO, a cloud service provider without FedRAMP first, a procurement selection without security personnel, or uncoordinated tailoring
+    summary: an implemented C-SCRM control with no owner or an owner who is no persona, a removed one accepted by anyone but the AO, a cloud service provider without FedRAMP first, a procurement selection without security personnel, or uncoordinated tailoring
     fixture: tests/fixtures/negative/SCRM-010.yaml
     hint: "Record in controls who accepts each removal (the AO), a FedRAMP record per cloud service provider, the information security personnel each procurement's selection consulted, and coordinated: true."
     enforces:
@@ -3662,11 +3717,13 @@ rules:
       - REQ-SP800-160V1R1-1191
       - REQ-SP800-160V1R1-1339
       - REQ-SP800-161R1-0114
+      - REQ-SP800-161R1-0178
       - REQ-SP800-161R1-0202
       - REQ-SP800-161R1-0226
       - REQ-SP800-161R1-0228
       - REQ-SP800-161R1-0291
       - REQ-SP800-161R1-1337
+      - REQ-SP800-161R1-1351
       - REQ-SP800-161R1-1394
       - REQ-SP800-161R1-1556
       - REQ-SP800-61R3-0118
@@ -3682,11 +3739,13 @@ rules:
     hint: "For each assessment that requires mitigation or sharing, record two or more alternatives with their acceptable level, decide one of them, and decide it at the level the impact reaches."
     enforces:
       - REQ-SP800-161R1-0113
+      - REQ-SP800-161R1-0153
       - REQ-SP800-161R1-0180
       - REQ-SP800-161R1-0350
       - REQ-SP800-161R1-0899
       - REQ-SP800-161R1-0946
       - REQ-SP800-161R1-1273
+      - REQ-SP800-161R1-1274
       - REQ-SP800-161R1-1300
       - REQ-SP800-161R1-1301
       - REQ-SP800-161R1-1303
@@ -3712,8 +3771,10 @@ rules:
       - REQ-SP800-161R1-0181
       - REQ-SP800-161R1-0294
       - REQ-SP800-161R1-0300
+      - REQ-SP800-161R1-0310
       - REQ-SP800-161R1-0321
       - REQ-SP800-161R1-1398
+      - REQ-SP800-161R1-1399
   - id: SCRM-020
     scope: run
     severity: E
@@ -3774,28 +3835,22 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-2
-    summary: no C-SCRM strategy, policy or implementation plan at Level 1 or Level 2, no C-SCRM plan at Level 3, or a level that does not inform those SP 800-161 says it informs
+    summary: no C-SCRM strategy, policy or implementation plan at Level 1 or Level 2, no C-SCRM plan at Level 3, or a level the record says nothing of; its information flows are SCRM-031
     fixture: tests/fixtures/negative/SCRM-022.yaml
     hint: "Record what each level delivers (the strategy, policy and implementation plan at Level 1 and/or Level 2, one document may hold several) and the levels each informs."
     enforces:
-      - REQ-SP800-161R1-0009
+      - REQ-SP800-161R1-0012
       - REQ-SP800-161R1-0137
       - REQ-SP800-161R1-0139
       - REQ-SP800-161R1-0140
       - REQ-SP800-161R1-0141
-      - REQ-SP800-161R1-0146
       - REQ-SP800-161R1-0148
       - REQ-SP800-161R1-0149
       - REQ-SP800-161R1-0163
-      - REQ-SP800-161R1-0167
-      - REQ-SP800-161R1-0169
       - REQ-SP800-161R1-0170
       - REQ-SP800-161R1-0172
       - REQ-SP800-161R1-0173
-      - REQ-SP800-161R1-0177
-      - REQ-SP800-161R1-0183
       - REQ-SP800-161R1-0538
-      - REQ-SP800-161R1-1040
   - id: SCRM-023
     scope: run
     severity: E
@@ -3930,6 +3985,8 @@ rules:
       - REQ-SP800-161R1-0110
       - REQ-SP800-161R1-0118
       - REQ-SP800-161R1-0200
+      - REQ-SP800-161R1-0270
+      - REQ-SP800-161R1-1386
       - REQ-SP800-61R3-0110
   - id: DEGRADED-001
     scope: run
@@ -4047,6 +4104,8 @@ rules:
       - REQ-DODI8530.01-0158
       - REQ-DODI8530.01-0162
       - REQ-DODI8530.01-0245
+      - REQ-DODI8500.01-0151
+      - REQ-DODI8500.01-0156
   - id: IRPT-002
     scope: run
     severity: E
@@ -4152,6 +4211,7 @@ rules:
       - REQ-DODI8500.01-0131
       - REQ-DODI8500.01-0280
       - REQ-DODI8500.01-0337
+      - REQ-DODI8500.01-0355
   - id: CRYP-002
     scope: run
     severity: E
@@ -4235,6 +4295,7 @@ rules:
       - REQ-DODI8530.01-0279
       - REQ-DODI8530.01-0310
       - REQ-DODI8510.01-0107
+      - REQ-DODI8530.01-0275
   - id: SYSD-003
     scope: run
     severity: E
@@ -4332,6 +4393,7 @@ rules:
       - REQ-DODI8530.01-0166
       - REQ-SP800-18R1-0104
       - REQ-SP800-18R2-0285
+      - REQ-DODI8530.01-0164
   - id: ASSET-001
     scope: run
     severity: E
@@ -4405,24 +4467,25 @@ rules:
     enforces:
       - REQ-CNSSI1253-0049
       - REQ-CNSSI1253-0050
-      - REQ-FIPS199-0010
-      - REQ-FIPS199-0018
-      - REQ-FIPS199-0020
-      - REQ-SP800-60V1R1-0095
-      - REQ-SP800-60V1R1-0130
       - REQ-CNSSP22-0040
       - REQ-DODI8500.01-0027
-      - REQ-FIPS199-0009
-      - REQ-FIPS200-0013
-      - REQ-SP800-37R2-0059
-      - REQ-SP800-37R2-0729
       - REQ-DODI8510.01-0106
       - REQ-DODI8510.01-0235
       - REQ-FIPS199-0008
+      - REQ-FIPS199-0009
+      - REQ-FIPS199-0010
+      - REQ-FIPS199-0018
+      - REQ-FIPS199-0020
+      - REQ-FIPS200-0013
+      - REQ-SP800-161R1-0686
+      - REQ-SP800-37R2-0059
       - REQ-SP800-37R2-0269
       - REQ-SP800-37R2-0278
+      - REQ-SP800-37R2-0729
       - REQ-SP800-60V1R1-0068
+      - REQ-SP800-60V1R1-0095
       - REQ-SP800-60V1R1-0096
+      - REQ-SP800-60V1R1-0130
       - REQ-SP800-60V1R1-0133
       - REQ-SP800-60V1R1-0201
   - id: CADJ-001
@@ -4597,6 +4660,9 @@ rules:
       - REQ-DODCIO-CSRMC-TENETS-0010
       - REQ-DODI8500.01-0167
       - REQ-DODI8531.01-0127
+      - REQ-DODI8531.01-0126
+      - REQ-DODI8530.01-0221
+      - REQ-DODCIO-CATO-EVAL-0123
       - REQ-SP800-53AR5-0273
   - id: PENT-002
     scope: run
@@ -4779,6 +4845,7 @@ rules:
       - REQ-SP800-39-0193
       - REQ-SP800-39-0211
       - REQ-SP800-37R2-0058
+      - REQ-CNSSP22-0025
   - id: OGOV-001
     scope: run
     severity: E
@@ -4798,6 +4865,7 @@ rules:
       - REQ-DODI8510.01-0042
       - REQ-DODI8510.01-0049
       - REQ-DODI8500.01-0023
+      - REQ-DODI8500.01-0417
   - id: OCTX-004
     scope: run
     severity: E
@@ -4821,6 +4889,7 @@ rules:
       - REQ-SP800-37R2-0185
       - REQ-SP800-37R2-0186
       - REQ-SP800-37R2-0499
+      - REQ-CNSSP22-0016
   - id: OCTX-005
     scope: run
     severity: E
@@ -4895,6 +4964,7 @@ rules:
       - REQ-SP800-37R2-0210
       - REQ-CNSSP22-0021
       - REQ-DODI8510.01-0094
+      - REQ-DODCIO-CSRMC-TENETS-0001
   - id: OCTX-008
     scope: run
     severity: E
@@ -4953,6 +5023,7 @@ rules:
       - REQ-SP800-37R2-0616
       - REQ-SP800-37R2-0430
       - REQ-SP800-37R2-0624
+      - REQ-DODI8510.01-0143
   - id: OCTX-011
     scope: run
     severity: E
@@ -5260,6 +5331,7 @@ rules:
       - REQ-DODI5000.82-0108
       - REQ-DODI5000.82-0110
       - REQ-DODI5000.90-0019
+      - REQ-DODI8510.01-0244
   - id: CSSTRAT-003
     scope: run
     severity: E
@@ -5423,6 +5495,7 @@ rules:
       - REQ-DODI8510.01-0060
       - REQ-DODI8510.01-0244
       - REQ-SP800-37R2-0142
+      - REQ-DODI8510.01-0085
   - id: ACQLC-001
     scope: run
     severity: E
@@ -5526,6 +5599,7 @@ rules:
       - REQ-DTM-24-001-0217
       - REQ-DODI8510.01-0026
       - REQ-DODI8510.01-0140
+      - REQ-DODI8510.01-0238
   - id: VULN-002
     scope: run
     severity: E
@@ -5652,6 +5726,8 @@ rules:
       - REQ-DTM-24-001-0127
       - REQ-DODI8510.01-0047
       - REQ-DODI8531.01-0170
+      - REQ-DODI8531.01-0069
+      - REQ-DODI8531.01-0070
   - id: PPSM-001
     scope: run
     severity: E
@@ -6751,6 +6827,60 @@ rules:
       - REQ-SP800-53B-0048
       - REQ-SP800-53B-0055
       - REQ-CNSSI1253-0072
+  - id: SCRM-030
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a C-SCRM plan that maps no C-SCRM activity to an SDLC phase SP 800-161 names, from research and development through disposal
+    fixture: tests/fixtures/negative/SCRM-030.yaml
+    hint: "List under scrm-plan.yaml plan.lifecycle the C-SCRM activities of each phase: research-and-development, design, manufacturing, acquisition, delivery, integration, operations-and-maintenance and disposal; a phase may hold several entries."
+    enforces:
+      - REQ-SP800-161R1-0056
+      - REQ-SP800-161R1-0088
+      - REQ-SP800-161R1-0296
+      - REQ-SP800-161R1-0676
+      - REQ-SP800-161R1-0681
+      - REQ-SP800-161R1-0697
+      - REQ-SP800-161R1-0730
+  - id: SCRM-031
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: a C-SCRM level whose outputs do not inform the levels SP 800-161 says it informs, down and up (split from SCRM-022)
+    fixture: tests/fixtures/negative/SCRM-031.yaml
+    hint: "List under each level of scrm-org.yaml levels the levels its outputs inform: level-1 informs level-2, level-2 informs level-1 and level-3, level-3 informs level-1 and level-2."
+    enforces:
+      - REQ-SP800-161R1-0009
+      - REQ-SP800-161R1-0089
+      - REQ-SP800-161R1-0146
+      - REQ-SP800-161R1-0148
+      - REQ-SP800-161R1-0167
+      - REQ-SP800-161R1-0169
+      - REQ-SP800-161R1-0177
+      - REQ-SP800-161R1-0183
+      - REQ-SP800-161R1-1040
+      - REQ-SP800-161R1-1051
+      - REQ-SP800-161R1-1318
+      - REQ-SP800-161R1-1324
+  - id: SCRM-032
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a C-SCRM plan that does not address a consideration of SP 800-18r2, or calls one inapplicable while scrm.yaml holds a supplier of that kind (split from SCRM-009)
+    fixture: tests/fixtures/negative/SCRM-032.yaml
+    hint: "Address each consideration of SP 800-18r2 in scrm-plan.yaml plan.considerations; mark one applies: false only when scrm.yaml holds no supplier of that kind."
+    enforces:
+      - REQ-SP800-161R1-0677
+      - REQ-SP800-18R2-0437
   - id: SCRMLC-001
     scope: run
     severity: E
@@ -6763,8 +6893,10 @@ rules:
     hint: "In scrm-acquisition.yaml procurement_steps, say how C-SCRM considerations enter each NISTIR 7622 step: plan-procurement, define-requirements, market-analysis, complete-procurement, ensure-compliance and monitor-performance; set charge_card_purchases and, when true, add the charge-card-purchases step."
     enforces:
       - REQ-SP800-161R1-0204
+      - REQ-SP800-161R1-0207
       - REQ-SP800-161R1-0222
       - REQ-SP800-161R1-0223
+      - REQ-SP800-161R1-0296
   - id: DISP-001
     scope: run
     severity: E
@@ -6964,6 +7096,7 @@ rules:
       - REQ-DODI8510.01-0195
       - REQ-DODI8510.01-0197
       - REQ-DODI8510.01-0250
+      - REQ-DODCIO-CATO-EVAL-0073
   - id: UPD-002
     scope: run
     severity: E
@@ -6995,3 +7128,4 @@ rules:
       - REQ-DODI8510.01-0110
       - REQ-DODI8510.01-0233
       - REQ-DODI8510.01-0304
+      - REQ-FIPS200-0041

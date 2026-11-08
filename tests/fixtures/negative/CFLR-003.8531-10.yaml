@@ -1,0 +1,24 @@
+rule: CFLR-003
+bases:
+- minimal
+description: ca-7 is tailored out of a networked system although it carries CF-8531-10, a duty DoDI 
+  8531.01 places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ca-7\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-003
+  also:
+  - CFLR-001
+  - CFLR-002
+  - DPOL-001
+  messages:
+  - 'CF-8531-10: DoDI 8531.01 requires that remediated or mitigated components are monitored for codependent vulnerabilities, and ca-7 is tailored out of the baseline'
