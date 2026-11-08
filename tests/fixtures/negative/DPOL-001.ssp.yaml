@@ -1,0 +1,21 @@
+rule: DPOL-001
+bases:
+- minimal
+description: ia-2 is recorded not-applicable in the SSP of a networked system, with no tailoring action
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/ia.yaml
+  path: controls.0.status
+  value: not-applicable
+- op: set_field
+  file: artifacts/ssp/controls/ia.yaml
+  path: controls.0.rationale
+  value: Said not to apply to the relay.
+expect:
+  errors:
+  - DPOL-001
+  messages:
+  - 'PC-DOD-1: DoDI 8500.01 requires that identity assurance ensures strong identification and authentication
+    and eliminates anonymity in DoD IS and PIT systems, and ia-2 is recorded not-applicable in the SSP'
+  also:
+  - RECIP-002

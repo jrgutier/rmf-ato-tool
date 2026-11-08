@@ -286,7 +286,7 @@ def positions(ctx: Context) -> list[RunFinding]:
         instrument = _sub(r, "appointment").get("instrument")
         if instrument in UNWRITTEN:
             err(f"{rid}: the cybersecurity position is not assigned in writing; the appointment "
-                f"instrument is {instrument}")
+                f"is {instrument or 'not recorded'}")
         if _sub(r, "duties_statement").get("form") != "written":
             err(f"{rid}: the appointee was given no written statement of cybersecurity "
                 "responsibilities")

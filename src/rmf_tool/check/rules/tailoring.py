@@ -248,34 +248,59 @@ def basis_applies(action: dict[str, Any]) -> bool:
 # --- DPOL-001, DPOL-002: controls that carry a DoDI 8500.01 duty -------------------------
 
 STAND_ALONE = "stand-alone"
-# PIT systems "require uniquely tailored security control sets" (DoDI 8500.01 p. 39, 1.e.(2).(d).3).
-PIT_TYPES = ("pit-system", "pit")
+NOT_APPLICABLE = "not-applicable"
+
+
+def _approvals(data: dict[str, Any], kind: str, key: str) -> dict[Any, Any]:
+    """Each control a ``kind`` action names under ``key``, with who approved the action."""
+    return {a.get(key): a.get("approved_by") for a in _actions(data) if a.get("action") == kind}
 
 
 def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     """A control framework/baselines/tailoring-inputs.yaml dod_policy_controls maps to a duty
-    DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline,
-    whatever law_policy says. The source permits two cases, which are left alone: a stand-alone
-    system's control set may be tailored as appropriate with the AO's approval (pages 38 and
-    39), and a PIT system's control set is uniquely tailored (page 39). Inheriting a control is
-    no removal, so a common or inherited control never fires."""
+    DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline
+    and in effect, whatever law_policy says: it is not removed, not recorded not-applicable in
+    the SSP, and not stood in for by a compensating control without the AO's or AODR's approval
+    (a lead default, for the user's ruling). A stand-alone system with no DODIN connection may
+    tailor its control set as appropriate with the approval of the AO (DoDI 8500.01 p. 38
+    1.e.(1).(c), p. 39 1.e.(2).(d).5), so its remove action names the approver. Inheriting a
+    control is no removal."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
     system_type = facts_mod.get(ctx.facts, "system_type")
-    if isinstance(system_type, dict) and (system_type.get("connectivity") == STAND_ALONE
-                                          or system_type.get("value") in PIT_TYPES):
-        return []
+    system_type = system_type if isinstance(system_type, dict) else {}
+    stand_alone = system_type.get("connectivity") == STAND_ALONE \
+        and system_type.get("dodin_connection") == "none"
     records = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
                if p["subject"] == subject]
-    removed = {a.get("control_id") for a in _actions(data) if a.get("action") == "remove"}
+    removed = _approvals(data, "remove", "control_id")
+    compensated = _approvals(data, "compensating", "compensating_for")
+    status = _ssp_status(ctx)
     out: list[RunFinding] = []
+
+    def err(policy: dict[str, Any], what: str) -> None:
+        out.append(make(rule, f"{policy['id']}: {policy['authority']} requires that "
+                        f"{policy['text']}, and {what}", TAILORING, None, {"S-2"}))
+
     for policy in records:
-        cut = [c for c in policy["controls"] if c in removed]
+        controls = policy["controls"]
+        cut = [c for c in controls if c in removed and not stand_alone]
+        unapproved = [c for c in controls if c in removed and stand_alone
+                      and removed[c] not in AUTHORIZING]
+        waived = [c for c in controls if status.get(c) == NOT_APPLICABLE]
+        stood_in = [c for c in controls if c in compensated
+                    and compensated[c] not in AUTHORIZING]
         if cut:
-            out.append(make(rule, f"{policy['id']}: {policy['authority']} requires that "
-                            f"{policy['text']}, and {', '.join(cut)} is tailored out of the "
-                            "baseline", TAILORING, None, {"S-2"}))
+            err(policy, f"{', '.join(cut)} is tailored out of the baseline")
+        if unapproved:
+            err(policy, f"{', '.join(unapproved)} is tailored out of a stand-alone system's "
+                "baseline without the approval of the AO or AODR")
+        if waived:
+            err(policy, f"{', '.join(waived)} is recorded not-applicable in the SSP")
+        if stood_in:
+            err(policy, f"a compensating control stands for {', '.join(stood_in)} without the "
+                "approval of the AO or AODR")
     return out
 
 

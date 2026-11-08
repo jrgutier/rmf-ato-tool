@@ -194,14 +194,22 @@ REMOVE_PL4 = {"control_id": "pl-4", "action": "remove", "basis": "scoping",
               "rationale": "Said to need no rules of behavior.", "sources": ["INT-028.A3"]}
 
 
-def test_a_stand_alone_system_may_tailor_a_dod_policy_control(tmp_path):
+def test_a_stand_alone_system_may_tailor_a_dod_policy_control_with_the_aos_approval(tmp_path):
     """DoDI 8500.01 pages 38 and 39: a stand-alone system's control set may be tailored as
-    appropriate with the AO's approval, so DPOL-001 and DPOL-002 leave it alone."""
+    appropriate with the approval of the AO, so a removal the AO or AODR approved passes."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    _add_action(run_dir, REMOVE_PL4)
+    _add_action(run_dir, {**REMOVE_PL4, "approved_by": "PER-AODR"})
     assert any("pl-4 is tailored out of the baseline" in m for m in _dpol(run_dir))
-    edit_yaml(run_dir / "facts.yaml",
-              lambda d: d["system_type"].update(connectivity="stand-alone"))
+    edit_yaml(run_dir / "facts.yaml", lambda d: d["system_type"].update(
+        connectivity="stand-alone", dodin_connection="none"))
+    assert _dpol(run_dir) == []
+
+
+def test_a_compensating_control_the_ao_approved_passes(tmp_path):
+    """A compensating control may stand for a listed control with the AO's or AODR's
+    approval (a lead default, for the user's ruling)."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    _add_action(run_dir, {**COMPENSATING, "compensating_for": "ia-2", "approved_by": "PER-AO"})
     assert _dpol(run_dir) == []
 
 
@@ -211,9 +219,10 @@ def test_a_parameter_or_specification_on_a_dod_policy_control_passes(tmp_path):
     assert _dpol(copy_run(VALID_MINIMAL, tmp_path / "run")) == []
 
 
-def test_a_pit_system_may_tailor_a_dod_policy_control(tmp_path):
-    """DoDI 8500.01 page 39: PIT systems require uniquely tailored security control sets."""
+def test_a_networked_pit_system_is_judged(tmp_path):
+    """DoDI 8500.01 page 39 item 5 permits tailoring only for a stand-alone PIT system, with the
+    AO's approval; a networked PIT system is judged like an IS."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     _add_action(run_dir, REMOVE_PL4)
     edit_yaml(run_dir / "facts.yaml", lambda d: d["system_type"].update(value="pit-system"))
-    assert _dpol(run_dir) == []
+    assert any("pl-4 is tailored out of the baseline" in m for m in _dpol(run_dir))

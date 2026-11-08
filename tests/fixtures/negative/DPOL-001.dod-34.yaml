@@ -1,0 +1,23 @@
+rule: DPOL-001
+bases:
+- minimal
+description: ps-3 is tailored out of a networked system although it carries PC-DOD-34, a duty DoDI 8500.01
+  places on every DoD IS
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ps-3\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:\
+    \ false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n\
+    \    sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - DPOL-001
+  messages:
+  - 'PC-DOD-34: DoDI 8500.01 requires that all personnel with access to DoD IT are appropriately cleared
+    and their access to DoD IT is authorized, and ps-3 is tailored out of the baseline'
+  also:
+  - DPOL-002

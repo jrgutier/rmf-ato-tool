@@ -194,3 +194,20 @@ def test_new_renders_every_real_template(tmp_path):
     monitoring = (tmp_path / "ws/product/monitoring/README.md").read_text()
     assert "{#anchor}" in monitoring and "{%" not in monitoring
     assert "{{" not in (tmp_path / "ws/product/README.md").read_text()
+
+
+def test_a_fresh_workspace_with_the_template_org_context_passes_written_assignment(tmp_path):
+    """OCTX-013: every cybersecurity position in templates/data/org-context.yaml carries a
+    written appointment, so a run P-1 starts from the template is not refused for it."""
+    import shutil
+
+    from rmf_tool.check import engine
+    from rmf_tool.run.model import open_run
+
+    run_dir = new_workspace(tmp_path / "ws", "demo", REPO_ROOT, as_of=AS_OF)
+    shutil.copy(REPO_ROOT / "templates/data/org-context.yaml",
+                run_dir / "artifacts/data/org-context.yaml")
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.message for f in engine.select(run, engine.evaluate(run), final=True)
+             if f.rule == "OCTX-013"]
+    assert not [m for m in found if "not assigned in writing" in m], found

@@ -1,0 +1,21 @@
+rule: DPOL-002
+bases:
+- minimal
+description: ac-2 is recorded not-applicable in the SSP of a networked system, with no tailoring action
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.status
+  value: not-applicable
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.rationale
+  value: Said not to apply to the relay.
+expect:
+  errors:
+  - DPOL-002
+  messages:
+  - 'PC-DOD-25: DoDI 8500.01 requires that authorized users inform the ISSO when access to a system is
+    no longer required, and ac-2 is recorded not-applicable in the SSP'
+  also:
+  - DPOL-001
