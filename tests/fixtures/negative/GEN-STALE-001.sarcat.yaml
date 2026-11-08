@@ -1,0 +1,13 @@
+rule: GEN-STALE-001
+bases: [minimal]
+description: the assessment report documents a categorization other than the one C-2 set
+build: false
+mutations:
+  - op: replace_text
+    file: artifacts/ART-SAR.md
+    old: "C/I/A MODERATE/MODERATE/LOW"
+    new: "C/I/A LOW/LOW/LOW"
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+    - marker block differs from a fresh assemble

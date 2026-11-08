@@ -1611,7 +1611,9 @@ requirements:
     locator: "2.3"
     context: "BUILDING AN EFFECTIVE ASSURANCE CASE"
     statement: "During the assessment process, assessors obtain the evidence needed to allow the appropriate organizational officials to make objective determinations about the effectiveness of the security and privacy controls and the overall security and privacy state of the system. The assessment evidence needed to make such determinations can be obtained from a variety of sources, including information technology product and system assessments and – in the case of privacy assessments – documentation such as privacy impact assessments and Privacy Act system of record notices. Product assessments (also known as product testing, evaluation, and validation) are typically conducted by independent, third-party testing organizations. Assessments examine the security and privacy functions of products and established configuration settings. Assessments can be conducted to demonstrate compliance with industry, national, or international information security and privacy standards and developer/vendor claims. Since many information technology products are assessed by commercial testing organizations and then subsequently deployed in millions of systems, product assessments can be carried out at a greater level of depth and provide deeper insights into the security and privacy capabilities of the particular products."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 1 is held in part: SAR-COV-001 fails a scoped control the report holds no determination for, so the assessment yields the determinations officials need; that the evidence supports objective determinations is the assessor's. Sentences 2 and 3 describe product assessments."
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.other.yaml", "expect": "has no assessment determination", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assessors obtain the evidence that lets officials make determinations about the effectiveness of the controls: a scoped control with no assessment determination fails", "sentence": "During the assessment process, assessors obtain the evidence needed to allow the appropriate organizational officials to make objective determinations about the effectiveness of the security and privacy controls and the overall security and privacy state of the system."}]
     work_item: "WI-463"
   - id: "REQ-SP800-53AR5-0049"
     citation: {"ref": "SP800-53AR5", "page": 20, "anchor": "System and common control assessments are typically conducted by system developers, system"}
@@ -1619,7 +1621,9 @@ requirements:
     locator: "2.3"
     context: "BUILDING AN EFFECTIVE ASSURANCE CASE"
     statement: "System and common control assessments are typically conducted by system developers, system integrators, system owners, common control providers, assessors, auditors, Inspectors General, and organizational information security and privacy personnel. The assessors or assessment teams bring together available information about the system or common control, such as the results from individual component product assessments, information in the system security and privacy plans, other system/common control documentation, or previous assessment results, and conduct additional system-level or common control assessments using a variety of methods and techniques. System and common control assessments are used to compile and evaluate the evidence needed by organizational officials to determine how effectively the security and privacy controls employed in systems mitigate risks to organizational operations and assets, individuals, other organizations, and the Nation. The results of assessments conducted using system-specific and organization-specific assessment procedures derived from the guidelines in this publication contribute to compiling the necessary evidence to determine security and privacy control effectiveness in accordance with the assurance requirements documented in security and privacy plans."
-    status: "candidate"
+    status: "partial"
+    reason: "Sentence 2 is held in part: APREP-001 fails documentation provided to the assessor that omits the security plan, so assessors bring together the information in the security plans; component product assessments and previous results are unheld. Sentences 1, 3 and 4 describe who conducts assessments and what they compile."
+    evidence: [{"kind": "rule", "target": "APREP-001", "fixture": "tests/fixtures/negative/APREP-001.documents.yaml", "expect": "the documentation provided to the assessor omits the security plan", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "The assessors bring together available information such as the security and privacy plans: documentation provided to the assessor that omits the security plan fails", "sentence": "The assessors or assessment teams bring together available information about the system or common control, such as the results from individual component product assessments, information in the system security and privacy plans, other system/common control documentation, or previous assessment results, and conduct additional system-level or common control assessments using a variety of methods and techniques."}]
     work_item: "WI-463"
   - id: "REQ-SP800-53AR5-0050"
     citation: {"ref": "SP800-53AR5", "page": 20, "anchor": "Organizations obtain security and privacy assurance by the actions taken by system"}
@@ -2329,7 +2333,9 @@ requirements:
     locator: "3.1.•"
     context: "TABLE 1. PREPARE FOR SECURITY AND PRIVACY CONTROL ASSESSMENTS SUMMARY From an organizational perspective, preparing for a security and privacy control assessment includes the following key activities:"
     statement: "• Ensuring that all steps in the RMF prior to the security or privacy control assessment step have been successfully completed and received appropriate management oversight;28"
-    status: "candidate"
+    status: "partial"
+    reason: "OMP-001 fails an existing system entering at assessment that has not completed the Prepare tasks, so the RMF steps before assessment are completed; for a run that starts at P-1 the order is the framework's DAG, and appropriate management oversight is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "OMP-001", "fixture": "tests/fixtures/negative/OMP-001.prepare.yaml", "expect": "has not completed the Prepare tasks", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "asserts": "Ensuring that all steps in the RMF prior to the control assessment step have been successfully completed: an existing system entering at assessment that has not completed the Prepare tasks fails"}]
     work_item: "WI-463"
   - id: "REQ-SP800-53AR5-0138"
     citation: {"ref": "SP800-53AR5", "page": 31, "anchor": "Establishing the objective and scope of assessments (i.e., the purpose of the"}
@@ -3813,8 +3819,8 @@ requirements:
     context: "DOCUMENTING THE FINDINGS FROM SECURITY AND PRIVACY CONTROL ASSESSMENTS"
     statement: "• Assessor comments (weaknesses or deficiencies noted)"
     status: "partial"
-    reason: "ASMT-005 fails a finding that does not describe how the actual state differs from the expected state, and findings[].description is required, both presence: nothing judges that the comments note the weakness."
-    evidence: [{"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.difference.yaml", "expect": "does not describe how the actual state differs from the expected state", "claim": "presence", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assessor comments note the weaknesses or deficiencies: a finding that does not describe how the actual state differs fails"}]
+    reason: "ASMT-005 fails a determination statement other than satisfied that no finding names, so the assessor notes each weakness or deficiency; a finding that does not describe how the actual state differs rests on a presence clause, and the assessor's comments beyond findings are unheld."
+    evidence: [{"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.difference.yaml", "expect": "does not describe how the actual state differs from the expected state", "claim": "presence", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assessor comments note the weaknesses or deficiencies: a finding that does not describe how the actual state differs fails"}, {"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.unnamed.yaml", "expect": "no finding names the other than satisfied statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assessor comments note weaknesses or deficiencies: an other than satisfied determination statement that no finding names fails"}]
     work_item: "WI-463"
   - id: "REQ-SP800-53AR5-0302"
     citation: {"ref": "SP800-53AR5", "page": 730, "anchor": "Assessor recommendations (priorities, remediation, corrective actions, or improvements) The Assessment Findings"}
@@ -4147,7 +4153,9 @@ requirements:
     locator: "ASSESSMENT REPORTS.•"
     context: ""
     statement: "• System name"
-    status: "candidate"
+    status: "covered"
+    reason: "The assessment report carries the system name in its generated facts block: GEN-STALE-001 fails a report whose block names a system other than the one C-1 recorded (and PKG-003 one that drops the block)."
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.sarname.yaml", "expect": "marker block differs from a fresh assemble", "claim": "constraint", "asserts": "The assessment report carries the system name: an assessment report naming a system other than the one C-1 recorded fails as a marker block that differs from a fresh assemble"}]
     work_item: "WI-461"
     promoted: {"reason": "A key element of the assessment report, rejected as a bare label; its siblings under the lead-in are entries and each element has its own home."}
   - id: "REQ-SP800-53AR5-0340"
@@ -4156,7 +4164,9 @@ requirements:
     locator: "ASSESSMENT REPORTS.•"
     context: ""
     statement: "• Security categorization"
-    status: "candidate"
+    status: "covered"
+    reason: "The assessment report carries the security categorization in its generated facts block: GEN-STALE-001 fails a report whose block documents a categorization other than the one C-2 set (and PKG-003 one that drops the block)."
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.sarcat.yaml", "expect": "marker block differs from a fresh assemble", "claim": "constraint", "asserts": "The assessment report carries the security categorization: a report documenting a categorization other than the one C-2 set fails as a marker block that differs from a fresh assemble"}]
     work_item: "WI-461"
     promoted: {"reason": "A key element of the assessment report, rejected as a bare label; its siblings under the lead-in are entries and each element has its own home."}
   - id: "REQ-SP800-53AR5-0341"
