@@ -217,11 +217,20 @@ def levels(ctx: Context) -> list[RunFinding]:
     for level in LEVELS:
         if level not in held:
             err(f"the C-SCRM record says nothing of what {level} holds and passes on")
-            continue
-        for other in INFORMS[level]:
-            if other not in _refs(held[level], "informs"):
-                err(f"{level} C-SCRM outputs do not inform {other}")
     return out
+
+
+# --- SCRM-031 (split from SCRM-022) -------------------------------------------------------
+def level_flows(ctx: Context) -> list[RunFinding]:
+    """P-2: each level the record holds informs the levels SP 800-161 says it informs, down
+    and up (pp. 40-47). A level the record leaves out is SCRM-022's."""
+    org = _org(ctx, FRAME)
+    if org is None:
+        return []
+    held = {_key(lv, "level"): lv for lv in _list(org, "levels")}
+    return [_finding("SCRM-031", f"{level} C-SCRM outputs do not inform {other}", FRAME)
+            for level in LEVELS if level in held
+            for other in INFORMS[level] if other not in _refs(held[level], "informs")]
 
 
 # --- SCRM-029 ----------------------------------------------------------------------------

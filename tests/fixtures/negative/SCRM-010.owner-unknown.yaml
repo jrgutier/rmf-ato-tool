@@ -1,0 +1,14 @@
+rule: SCRM-010
+bases:
+- minimal
+description: an implemented C-SCRM control whose owner is no persona of the framework
+mutations:
+- op: set_field
+  file: artifacts/data/scrm-plan.yaml
+  path: controls.decisions.0.owner
+  value: PER-NOBODY
+expect:
+  errors:
+  - SCRM-010
+  messages:
+  - sr-3 names owner PER-NOBODY, who is no framework persona responsible for its execution
