@@ -1,0 +1,12 @@
+rule: CONMON-001
+bases: [minimal]
+description: the ac frequency names the pe family instead, so the baseline family ac has none
+mutations:
+  - op: set_field
+    file: artifacts/data/conmon.yaml
+    path: frequencies.0.family
+    value: pe
+expect:
+  errors: [CONMON-001]
+  messages:
+    - baseline family ac has no monitoring frequency

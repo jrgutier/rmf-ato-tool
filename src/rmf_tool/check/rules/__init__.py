@@ -211,6 +211,7 @@ RULES: dict[str, Rule] = {
     "OCTX-012": org_context.policies_resources,
     "OCTX-013": org_context.positions,
     "RAPT-001": org_context.appointments,
+    "RMR-001": org_context.role_conflicts,
     "PKG-001": coverage.package_complete,
     "CONN-001": connections.approvals,
     "CONN-002": connections.cross_domain,
