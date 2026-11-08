@@ -136,7 +136,9 @@ requirements:
     locator: "INSTRUCTION.b.(1)"
     context: "Operational Resilience. DoD IT will be planned, developed, tested, implemented, evaluated, and operated to ensure that:"
     statement: "(1) Information and services are available to authorized users whenever and wherever required according to mission needs, priorities, and changing roles and responsibilities."
-    status: "candidate"
+    status: "partial"
+    reason: "Proxy: DPOL-003 (PC-DOD-38) keeps cp-2 and cp-10 in effect; availability according to changing roles and responsibilities across DoD IT is not checked."
+    evidence: [{"kind": "rule", "target": "DPOL-003", "fixture": "tests/fixtures/negative/DPOL-003.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Information and services are available to authorized users whenever and wherever required according to mission needs: cp-2 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0017"
     citation: {"ref": "DODI8500.01", "page": 3, "anchor": "Security posture, from individual device or software object to aggregated systems of"}
@@ -254,7 +256,9 @@ requirements:
     locator: "INSTRUCTION.g.(2)"
     context: "Identity Assurance"
     statement: "(2) DoD will public key-enable DoD ISs and implement a DoD-wide Public Key Infrastructure (PKI) solution that will be managed by the DoD PKI Program Management Office in accordance with DoDI 8520.02 (Reference (u))."
-    status: "candidate"
+    status: "partial"
+    reason: "Proxy: DPOL-003 (PC-DOD-39) keeps ia-2(12) and ia-5 in effect (ia-5(2) is selected only at moderate and high); the DoD-wide PKI managed by the DoD PKI Program Management Office is outside a run."
+    evidence: [{"kind": "rule", "target": "DPOL-003", "fixture": "tests/fixtures/negative/DPOL-003.dod-39.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "DoD public key-enables DoD ISs under a DoD-wide PKI: ia-2.12 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0030"
     citation: {"ref": "DODI8500.01", "page": 4, "anchor": "Biometrics used in support of identity assurance will be managed in accordance"}
@@ -1259,7 +1263,9 @@ requirements:
     locator: "ENCLOSURE 2.h.(2)"
     context: "RESPONSIBILITIES Provide for vulnerability mitigation and incident response and reporting capabilities in order to:"
     statement: "(2) Limit damage and restore effective service following an incident."
-    status: "candidate"
+    status: "partial"
+    reason: "Proxy: DPOL-003 (PC-DOD-40) keeps ir-4 and cp-10 in effect for the system; the DoD Component head's vulnerability mitigation and incident response capability is outside a run."
+    evidence: [{"kind": "rule", "target": "DPOL-003", "fixture": "tests/fixtures/negative/DPOL-003.dod-40.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Limit damage and restore effective service following an incident: ir-4 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0150"
     citation: {"ref": "DODI8500.01", "page": 22, "anchor": "Collect and keep audit data to support technical analysis relating to misuse,"}
@@ -2414,6 +2420,7 @@ requirements:
     context: "Figure 1. Three-Tiered Approach to Risk Management"
     statement: "n. DoD information proposed or projected for publication on public Internet media (e.g., website, blog, social media) must be reviewed and approved for public dissemination in accordance with Reference (ct), DoD Manual 5205.02 (Reference (cx)), and DoDI 8550.01 (Reference (cy))."
     status: "candidate"
+    reason: "Tier 1, left candidate: ac-22 (publicly accessible content) carries the duty, but it binds only DoD information proposed for public Internet media; a system that publishes nothing may record ac-22 not-applicable, and no run record says whether the system publishes, so a floor would refuse a permitted case. Review and approval under DoDI 5230.09, DoDM 5205.02 and DoDI 8550.01 is unheld."
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0282"
     citation: {"ref": "DODI8500.01", "page": 35, "anchor": "Cybersecurity scorecard reporting will be accomplished in accordance with Reference (y)."}
@@ -2684,7 +2691,9 @@ requirements:
     locator: "ENCLOSURE 3.e.(2).(d).4"
     context: "Figure 2. DoD Information Technology PIT"
     statement: "4. Interconnections between PIT systems and other PIT systems or DoD ISs must be protected either by implementation of security controls on the PIT system or the DoD IS."
-    status: "candidate"
+    status: "partial"
+    reason: "DPOL-003 (PC-DOD-42) keeps sc-7 in effect on a PIT system, which may inherit it from the DoD IS (ca-3 is left out: a PIT system with no information exchange scopes it out); that each interconnection is protected is not checked against the boundary's connections."
+    evidence: [{"kind": "rule", "target": "DPOL-003", "fixture": "tests/fixtures/negative/DPOL-003.dod-42.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Interconnections between PIT systems and other PIT systems or DoD ISs are protected by security controls: sc-7 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0312"
     citation: {"ref": "DODI8500.01", "page": 39, "anchor": "For PIT systems that are stand-alone, assigned security control sets may be"}
@@ -2879,6 +2888,7 @@ requirements:
     context: "Figure 2. DoD Information Technology"
     statement: "(5) Each mobile code technology used in DoD information systems must undergo a risk assessment, be assigned to a mobile code risk category, and have its use regulated based on its potential to cause damage to DoD operations and interests if used maliciously."
     status: "candidate"
+    reason: "Tier 1, left candidate: sc-18 (mobile code) carries the duty, but it binds only mobile code technology used in the system; a system that runs none may record sc-18 not-applicable, and no run record says whether mobile code is used, so a floor would refuse a permitted case. The risk assessment of each technology and its DoD mobile code risk category are unheld."
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0333"
     citation: {"ref": "DODI8500.01", "page": 41, "anchor": "Ports, protocols, and services will be managed in accordance with Reference (al)."}
@@ -2985,7 +2995,9 @@ requirements:
     locator: "ENCLOSURE 3.b.(17)"
     context: "Figure 2. DoD Information Technology"
     statement: "(17) All persons entrusted with the management of DoD IT will be responsible for proper use, care, physical protection, and disposal or disposition in accordance with DoDI 5000.64 (Reference (de)), DoDI 2030.02 (Reference (dg)) and, when appropriate, Reference (bj)."
-    status: "candidate"
+    status: "partial"
+    reason: "Proxy: DPOL-003 (PC-DOD-44) keeps pl-4 and mp-6 in effect; property accountability under DoDI 5000.64 and Reference (dg) is not checked."
+    evidence: [{"kind": "rule", "target": "DPOL-003", "fixture": "tests/fixtures/negative/DPOL-003.dod-44.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Persons entrusted with the management of DoD IT are responsible for proper use, care, physical protection and disposal: pl-4 tailored out of the baseline fails"}]
     work_item: "WI-420"
   - id: "REQ-DODI8500.01-0345"
     citation: {"ref": "DODI8500.01", "page": 42, "anchor": "In addition to complying with the provisions of DoDI 1035.01 (Reference (dh)):"}

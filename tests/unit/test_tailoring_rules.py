@@ -6,6 +6,7 @@ import copy
 
 import pytest
 from conftest import REPO_ROOT, VALID_MINIMAL, copy_run, edit_yaml
+from ruamel.yaml import YAML
 
 from rmf_tool import baseline, build, catalog
 from rmf_tool.check import engine
@@ -226,3 +227,90 @@ def test_a_networked_pit_system_is_judged(tmp_path):
     _add_action(run_dir, REMOVE_PL4)
     edit_yaml(run_dir / "facts.yaml", lambda d: d["system_type"].update(value="pit-system"))
     assert any("pl-4 is tailored out of the baseline" in m for m in _dpol(run_dir))
+
+
+def _floors(run_dir):
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    return [f.message for f in engine.select(run, engine.evaluate(run), final=True)
+            if f.rule.startswith(("DPOL-", "CFLR-"))]
+
+
+REMOVE_SI3 = {**REMOVE_PL4, "control_id": "si-3", "rationale": "Said to need no malware scan."}
+
+
+def test_a_stand_alone_system_may_tailor_a_floor_control_with_the_aos_approval(tmp_path):
+    """The stand-alone permission of DoDI 8500.01 pages 38 and 39 holds for every floor: si-3
+    carries FIPS 200 SI and DoDI 8530.01 malware duties, and a removal the AO approved passes
+    on a stand-alone system with no DODIN connection, while one nobody approved fails."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "facts.yaml", lambda d: d["system_type"].update(
+        connectivity="stand-alone", dodin_connection="none"))
+    _add_action(run_dir, REMOVE_SI3)
+    assert any("si-3 is tailored out of a stand-alone system's baseline without the approval"
+               in m for m in _floors(run_dir))
+    edit_yaml(run_dir / TAILORING, lambda d: d["actions"][-1].update(approved_by="PER-AO"))
+    assert _floors(run_dir) == []
+
+
+def test_a_compensating_control_the_aodr_accepted_passes_a_floor(tmp_path):
+    """A compensating control may stand for a floor control when the AO or AODR accepted its
+    risk; FIPS 200 allows the SP 800-53 tailoring guidance (p. 10)."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    risk = {**COMPENSATING["risk"], "accepted_by": "PER-AODR"}
+    _add_action(run_dir, {**COMPENSATING, "compensating_for": "sc-8", "risk": risk})
+    assert _floors(run_dir) == []
+
+
+def test_an_inherited_floor_control_passes(tmp_path):
+    """Inheriting a control is no removal: ac-2 carries FIPS 200 AC and DoDI 8500.01 duties."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/ssp/controls/ac.yaml", lambda d: d["controls"][0].update(
+        status="inherited", inherited_from="Enterprise identity service"))
+    assert _floors(run_dir) == []
+
+
+def test_a_pit_interconnection_floor_binds_only_a_pit_system(tmp_path):
+    """DoDI 8500.01 p. 39 item 4 binds interconnections of PIT systems: sc-7 removed from a
+    major application is no PC-DOD-42 finding (the FIPS 200 and DoDI 5000.83 floors judge it)."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    _add_action(run_dir, {**REMOVE_PL4, "control_id": "sc-7"})
+    found = _floors(run_dir)
+    assert found and not any(m.startswith("PC-DOD-42:") for m in found)
+
+
+def test_a_cato_floor_binds_only_while_a_cato_is_sought(tmp_path):
+    """The cATO evaluation criteria judge a cATO package: with no cATO record and no AD-CATO
+    record, ac-5 removed is no CF-CATO-5 finding; an AD-CATO record makes it one."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    (run_dir / "artifacts/data/cato.yaml").unlink()
+    _add_action(run_dir, {**REMOVE_PL4, "control_id": "ac-5"})
+    assert not any(m.startswith("CF-CATO-5:") for m in _floors(run_dir))
+    edit_yaml(run_dir / "artifacts/data/authorizations.yaml",
+              lambda d: d["records"][-1].update(decision="AD-CATO"))
+    assert any(m.startswith("CF-CATO-5:") for m in _floors(run_dir))
+
+
+def test_an_entry_resting_on_a_proxy_floor_record_is_not_covered():
+    """A proxy record (the source names no control and several could meet the duty), in
+    control_floors or dod_policy_controls, cannot carry covered: a covered entry may cite no
+    fixture whose declared message is a proxy record's."""
+    load = YAML(typ="safe").load
+    inputs = baseline.load_inputs(REPO_ROOT)
+    records = [*inputs["control_floors"], *inputs["dod_policy_controls"]]
+    proxies = {r["id"] for r in records if r.get("mapping") == "proxy"}
+    assert {"PC-DOD-38", "PC-DOD-44"} <= proxies
+    assert proxies
+    leaning = []
+    for path in sorted((REPO_ROOT / "conformance/requirements").glob("*.yaml")):
+        for entry in load(path.read_text(encoding="utf-8"))["requirements"]:
+            if entry.get("status") != "covered":
+                continue
+            for item in entry.get("evidence") or ():
+                fixture = REPO_ROOT / str(item.get("fixture") or "")
+                if fixture.suffix != ".yaml" or not fixture.is_file():
+                    continue
+                messages = load(fixture.read_text(encoding="utf-8"))["expect"].get("messages")
+                if any(m.partition(":")[0] in proxies for m in messages or ()):
+                    leaning.append(entry["id"])
+    assert leaning == []
