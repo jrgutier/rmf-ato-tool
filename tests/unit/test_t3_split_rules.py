@@ -1,8 +1,8 @@
 """Cases the sources permit that the rules split from capped rules, and the T3 rule clauses, must
 not refuse: CADJ-001 a raise above the high-water mark that records its adjustment, BSEL-001 and
 BSEL-002 a baseline resolved again after the categorization changes, SSPI-001 a hybrid control
-the plan does not record as inherited, and INFL-001 a life cycle that starts at creation, or a run
-whose scope leaves out P-13."""
+the plan does not record as inherited, and INFL-001 a type the system only transmits, or a
+run whose scope leaves out P-13."""
 
 from __future__ import annotations
 
@@ -55,11 +55,13 @@ def test_a_hybrid_control_need_not_be_recorded_inherited(tmp_path):
     assert _errors(run_dir, "SSPI-001") == []
 
 
-def test_a_life_cycle_that_starts_at_creation_passes(tmp_path):
+def test_a_type_the_system_only_transmits_needs_no_disposition_stage(tmp_path):
+    """SP 800-37r2 Task P-13 names the stages only as typical: a relay that collects and
+    forwards a type keeps nothing to dispose of."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     edit_yaml(run_dir / INFOTYPES, lambda d: d["information_types"][0].update(life_cycle=[
         {"stage": "creation", "description": "Field units create the reports."},
-        {"stage": "disposition", "description": "The relay keeps no report once forwarded."}]))
+        {"stage": "dissemination", "description": "The relay forwards each report."}]))
     assert _errors(run_dir, "INFL-001") == []
 
 

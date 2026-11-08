@@ -274,25 +274,29 @@ def privacy_approval(ctx: Context) -> list[RunFinding]:
     return out
 
 
-# SP 800-37r2 Task P-13: the life cycle runs from creation or collection to disposition.
+# SP 800-37r2 Task P-13: information enters a system by creation or collection; a stage the
+# system stores it in ends in disposition (OMB A-130 ties disposition to retention). A system
+# that only transmits a type keeps no copy to dispose of.
 LIFE_CYCLE_START = ("creation", "collection")
-LIFE_CYCLE_END = "disposition"
+LIFE_CYCLE_STORED, LIFE_CYCLE_END = "storage", "disposition"
 
 
 def life_cycle(ctx: Context) -> list[RunFinding]:
-    """INFL-001: P-13 identifies the stages of the information life cycle of each information
-    type, from its creation or collection to its disposition (SP 800-37r2 Task P-13)."""
+    """INFL-001: P-13 identifies how each information type enters the system (creation or
+    collection) and, for one the system stores, its disposition (SP 800-37r2 Task P-13)."""
     if P13 not in scope.active_tasks(ctx.run):
         return []
     out: list[RunFinding] = []
     for info in _types(ctx):
         stages = {s.get("stage") for s in _dicts(info.get("life_cycle"))}
-        missing = ([] if stages & set(LIFE_CYCLE_START) else ["creation or collection"]) + (
-            [] if LIFE_CYCLE_END in stages else [LIFE_CYCLE_END])
-        if missing:
+        if not stages & set(LIFE_CYCLE_START):
             out.append(make("INFL-001", f"{info.get('id')}: the information life cycle "
-                            f"identifies no {' and no '.join(missing)} stage", INFOTYPES_FILE,
+                            "identifies no creation or collection stage", INFOTYPES_FILE,
                             None, {P13}))
+        if LIFE_CYCLE_STORED in stages and LIFE_CYCLE_END not in stages:
+            out.append(make("INFL-001", f"{info.get('id')}: the information life cycle stores "
+                            "the information and identifies no disposition stage",
+                            INFOTYPES_FILE, None, {P13}))
     return out
 
 

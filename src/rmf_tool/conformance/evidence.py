@@ -48,8 +48,9 @@ from rmf_tool.run.model import YamlError, read_yaml
 
 STRONG, WEAK, DENIED, UNRESOLVED = "strong", "weak", "denied", "unresolved"
 EXAMPLES = "examples/"
-# They hold for any content, so a pass says nothing about one requirement.
-GENERIC_RULES = ("FW-SCHEMA-001", "FW-CITE-", "TRACE-", "RUN-FM-001", "FW-REQ-")
+# They hold for any content, so a pass says nothing about one requirement. GEN-STALE-001 fails any
+# edit to any generated file, so its message never names the element a requirement asks for.
+GENERIC_RULES = ("FW-SCHEMA-001", "FW-CITE-", "TRACE-", "RUN-FM-001", "FW-REQ-", "GEN-STALE-001")
 # Fields a pin may assert: each holds a value a wrong framework could get wrong. Identity and
 # prose fields are not here, so `id: AD-ATO` proves nothing (see test_conformance_rules).
 PINNED_FIELDS = frozenset({

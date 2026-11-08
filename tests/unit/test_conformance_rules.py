@@ -590,7 +590,7 @@ def test_evidence_that_does_not_resolve_fails_at_any_status(reg, framework, item
 
 
 @pytest.mark.parametrize("target", ["FW-SCHEMA-001", "FW-CITE-002", "TRACE-001", "RUN-FM-001",
-                                    "FW-REQ-003"])
+                                    "FW-REQ-003", "GEN-STALE-001"])
 def test_generic_rules_are_denied(reg, framework, target):
     covered(reg, {"kind": "rule", "target": target, "asserts": ASSERTS})
 

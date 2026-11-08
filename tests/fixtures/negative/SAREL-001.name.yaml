@@ -1,0 +1,14 @@
+rule: SAREL-001
+bases: [minimal]
+description: the ART-SAR facts block relabels the System name row, so the document no longer carries it as the CNSSI 1254 element System Name
+build: false
+mutations:
+  - op: replace_text
+    file: artifacts/ART-SAR.md
+    old: "| System name | Field Data Relay |"
+    new: "| Recorded value | Field Data Relay |"
+expect:
+  errors: [SAREL-001]
+  also: [GEN-STALE-001]
+  messages:
+    - "ART-SAR does not carry the CNSSI 1254 data element System Name"
