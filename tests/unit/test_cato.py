@@ -109,3 +109,35 @@ def test_only_a_conditional_record_is_an_optional_data_file():
     assert optional == {("ART-AODM", "artifacts/data/cato.yaml")}
     assert all(d.get("since") for e in framework.index("artifacts").values()
                for d in e.data.get("data") or () if d.get("optional"))
+
+
+def test_a_practice_whose_row_is_not_owed_is_not_judged(tmp_path):
+    """CATT-001 judges a threshold row's practice unless it is not-applicable, and an objective
+    row's only once it is scored met (IG p. 19)."""
+    run_dir = _run(tmp_path)
+    _score(run_dir, "PP06", result="not-applicable",
+           reason="The DSOP shares no controls with this application.")
+    _score(run_dir, "CM01", result="partially-met")
+
+    def edit(d):
+        d["practices"]["inheritance"] = {"identified_by": "nobody", "model": "none"}
+        d["practices"]["behavior_monitoring"] = "per-release"
+        d["practices"]["proactive_capabilities"] = []
+    edit_yaml(run_dir / CATO, edit)
+    assert _messages(run_dir, "CATT-001") == []
+
+
+def test_cm05_accepts_an_on_change_monitor_and_cm01_either_capability(tmp_path):
+    """CM05 asks only that secure configurations are monitored for change, so an on-change
+    monitor holds it (PP07's periodic checks are owed separately); CM01 reads "preventive /
+    resiliency" as either."""
+    run_dir = _run(tmp_path)
+    _score(run_dir, "PP07", result="not-applicable",
+           reason="The application runs outside the DSOP production system.")
+
+    def edit(d):
+        d["practices"]["configuration_checks"] = "on-change"
+        d["practices"]["proactive_capabilities"] = ["resiliency"]
+        d["practices"]["baseline_posture_evidence"] = ["penetration-test-report"]
+    edit_yaml(run_dir / CATO, edit)
+    assert _messages(run_dir, "CATT-001") == []

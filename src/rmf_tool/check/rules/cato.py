@@ -831,6 +831,99 @@ def tolerances(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- CATT-001: the Table 2 practices no other rule holds --------------------------------------
+
+THREAT_TARGETS = ("network-data-architecture", "mission-assets",
+                  "cybersecurity-architecture")  # IG IC03
+RISK_ASSESSMENTS = ("mission-based", "threat-based", "resiliency-survivability-based")  # SA06
+CYBER_AREAS = ("cybersecurity", "cyber-resiliency", "cyber-survivability")  # IG SA07, RM02
+CONFIGURATIONS = ("system", "control")  # IG SA08
+PRIORITIZATION = ("vulnerability-identification", "impact-analysis")  # IG RM03
+PROACTIVE = ("preventive", "resiliency")  # IG CM01: "preventive / resiliency", either
+VALIDATED = ("secure-configurations", "control-compliance")  # IG p. 13
+CHECKS = ("periodic", "continuous")  # IG p. 12: periodic checks of secure configurations
+CHANGE_MONITORS = (*CHECKS, "on-change")  # IG CM05: monitor for change, by any method
+
+
+def owed(ctx: Context, data: dict[str, Any], row: str) -> bool:
+    """Whether the practice of a Table 2 row is owed (IG p. 19): an objective row only once it is
+    scored met; a threshold row unless it is scored not-applicable, and, while it is not met,
+    only once a cATO is recommended or decided, since a threshold row must be met by then."""
+    a = _mapping(data.get("assessment"))
+    result = next((s.get("result") for s in _dicts(a.get("scores"))
+                   if str(s.get("requirement")) == row), None)
+    if TABLE_2[row] == "O":
+        return result == MET
+    if result == "not-applicable":
+        return False
+    recommended = _mapping(a.get("recommendation")).get("recommend") == "authorize"
+    return result == MET or recommended or bool(_sought(ctx))
+
+
+def practices(ctx: Context) -> list[RunFinding]:
+    """CATT-001: the Table 2 practices and DSOP key practices the record shows performed (IG
+    pp. 11-13, 19-21: IC03, IC04, SA06-SA08, CM01, CM05, CM06, RM02, RM03, PP06, PP07), each
+    judged only while owed() says it is owed."""
+    data, out, err = _record(ctx, "CATT-001")
+    if data is None:
+        return out
+    p = _mapping(data.get("practices"))
+    if owed(ctx, data, "IC03") and (gaps := lacks(p.get("threats_identified_to"),
+                                                  THREAT_TARGETS)):
+        err(f"cyber threats are not identified to the {', '.join(gaps)}")
+    # IC04 names no kind of evidence, so any collected evidence holds it.
+    if owed(ctx, data, "IC04") and not _strs(p.get("baseline_posture_evidence")):
+        err("no evidence is collected for establishing a baseline risk posture")
+    if owed(ctx, data, "SA06") and (gaps := lacks(p.get("risk_assessments"), RISK_ASSESSMENTS)):
+        err(f"the risk assessments performed leave out the {', '.join(gaps)} one")
+    if owed(ctx, data, "SA07") and (gaps := lacks(p.get("verification_validation"),
+                                                  CYBER_AREAS)):
+        err(f"verification and validation testing leaves out the {', '.join(gaps)} "
+            "requirements")
+    if owed(ctx, data, "SA08") and (gaps := lacks(p.get("configuration_management"),
+                                                  CONFIGURATIONS)):
+        err(f"configuration management leaves out the {', '.join(gaps)} configurations")
+    aggregation = _mapping(p.get("posture_aggregation"))
+    if owed(ctx, data, "RM02"):
+        if not str(aggregation.get("method") or "").strip():
+            err("no method is established for aggregating findings into a risk posture")
+        if gaps := lacks(aggregation.get("covers"), CYBER_AREAS):
+            err(f"the method aggregating findings into a risk posture leaves out "
+                f"{', '.join(gaps)}")
+    if owed(ctx, data, "RM03") and (gaps := lacks(p.get("risk_prioritization"),
+                                                  PRIORITIZATION)):
+        err(f"risk prioritization is not established on {', '.join(gaps)}")
+    if owed(ctx, data, "CM01"):
+        if p.get("behavior_monitoring") != "continuous":
+            err(f"behavior is monitored {p.get('behavior_monitoring')}, not continuously")
+        if not set(PROACTIVE) & set(_strs(p.get("proactive_capabilities"))):
+            err("no proactive preventive or resiliency capability is implemented or improved")
+    if owed(ctx, data, "CM05") and p.get("configuration_checks") not in CHANGE_MONITORS:
+        err(f"secure configurations are not monitored for change: "
+            f"{p.get('configuration_checks')}")
+    if owed(ctx, data, "PP07") and p.get("configuration_checks") not in CHECKS:
+        err(f"the automation provides no periodic checks of secure configurations: "
+            f"{p.get('configuration_checks')}")
+    if owed(ctx, data, "PP07") and p.get("posture_monitoring") != "automated":
+        err(f"the application security posture is not monitored using security automation, but "
+            f"{p.get('posture_monitoring')}")
+    # The p. 13 practice belongs to the threshold rows CM05 (secure configurations) and CM06
+    # (control compliance), so an objective SA03 left unscored cannot excuse it.
+    if (owed(ctx, data, "CM05") or owed(ctx, data, "CM06")) \
+            and (gaps := lacks(p.get("continuous_validation"), VALIDATED)):
+        err(f"the DevSecOps team does not continuously validate {', '.join(gaps)} using "
+            "security automation")
+    inheritance = _mapping(p.get("inheritance"))
+    if owed(ctx, data, "PP06"):
+        if inheritance.get("identified_by") != "dsop-security-team":
+            err(f"DSOP control inheritance by the application is identified by the DSOP "
+                f"security team, not {inheritance.get('identified_by')}")
+        if inheritance.get("model") != "shared-security":
+            err(f"application control inheritance from the DSOP is identified using a shared "
+                f"security model, not {inheritance.get('model')}")
+    return out
+
+
 # --- SWLC-001: the risk-based lifecycle management approach -----------------------------------
 
 CONMON_FILE = "artifacts/data/conmon.yaml"
@@ -871,4 +964,4 @@ def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
                 ("CATO-007", strategy), ("CATO-008", people), ("CATO-009", training),
                 ("CATO-010", process), ("CATO-011", tolerances), ("CATO-012", recommendation),
                 ("CATO-013", method_training), ("CATO-014", sbom), ("CATO-015", scoring),
-                ("SWLC-001", lifecycle))
+                ("CATT-001", practices), ("SWLC-001", lifecycle))

@@ -1,0 +1,15 @@
+rule: CATT-001
+bases:
+- minimal
+description: secure configurations checked only on request
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: practices.configuration_checks
+  value: on-request
+expect:
+  errors:
+  - CATT-001
+  messages:
+  - 'the automation provides no periodic checks of secure configurations: on-request'
+  - 'secure configurations are not monitored for change: on-request'
