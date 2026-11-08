@@ -102,24 +102,25 @@ def _day(value: Any) -> dt.date | None:
         return None
 
 
-def _criticality_iterations(crit: dict[str, Any], ctx: Context) -> list[str]:
+def _criticality_iterations(crit: dict[str, Any], ctx: Context) -> list[tuple[str, set[str]]]:
     """Frame, then Assess once the categorization is set, Monitor for each significant change,
     and no gap of more than a year."""
     iterations = _dicts(crit.get("iterations"))
     steps = {}
     for it in iterations:
         steps.setdefault(str(it.get("step")), []).append(_day(it.get("date")))
-    out = []
+    out: list[tuple[str, set[str]]] = []
     frame = [d for d in steps.get("frame", ()) if d]
     if not frame:
-        out.append("has no Frame iteration (P-8)")
+        out.append(("has no Frame iteration (P-8)", {"P-8"}))
     categorized = isinstance(ctx.facts, dict) and isinstance(ctx.facts.get("categorization"), dict)
     assess = [d for d in steps.get("assess", ()) if d]
     if categorized and not assess:
-        out.append("has no Assess iteration updating the Frame one, though the categorization is "
-                   "set (SP 800-161 Task 2-0, C-2)")
+        out.append(("has no Assess iteration updating the Frame one, though the categorization "
+                    "is set (SP 800-161 Task 2-0, C-2)", {"C-2"}))
     elif frame and assess and max(assess) < min(frame):
-        out.append("has its Assess iteration dated before the Frame iteration it updates")
+        out.append(("has its Assess iteration dated before the Frame iteration it updates",
+                    {"C-2"}))
     changes = ctx.data(CHANGES)
     named = {str(it.get("change")): _day(it.get("date")) for it in iterations
              if it.get("step") == "monitor"}
@@ -130,15 +131,15 @@ def _criticality_iterations(crit: dict[str, Any], ctx: Context) -> list[str]:
         cid, when = str(chg.get("id")), _day(chg.get("date"))
         done = named.get(cid)
         if cid not in named:
-            out.append(f"has no Monitor iteration for {cid}, a change with a significant security "
-                       "impact")
+            out.append((f"has no Monitor iteration for {cid}, a change with a significant "
+                        "security impact", {"M-1"}))
         elif when and done and done < when:
-            out.append(f"has its Monitor iteration for {cid} dated before the change")
+            out.append((f"has its Monitor iteration for {cid} dated before the change", {"M-1"}))
     dates = sorted(d for ds in steps.values() for d in ds if d)
     for before, after in zip(dates, dates[1:], strict=False):
         if (after - before).days > YEAR_DAYS:
-            out.append(f"went unreviewed from {before} to {after}; SP 800-161 asks for a review "
-                       "and update annually at minimum")
+            out.append((f"went unreviewed from {before} to {after}; SP 800-161 asks for a review "
+                        "and update annually at minimum", {"M-1"}))
     return out
 
 
@@ -187,5 +188,7 @@ def criticality_analysis(ctx: Context) -> list[RunFinding]:
     crit = bia.get("criticality") if bia else None
     if not isinstance(crit, dict):
         return []
-    out = _criticality_iterations(crit, ctx) + _criticality_items(crit, bia, ctx)
-    return [make("BIA-003", f"the criticality analysis {m}", BIA, None, {"P-8"}) for m in out]
+    found = _criticality_iterations(crit, ctx)
+    found += [(m, {"P-8", "C-2"}) for m in _criticality_items(crit, bia, ctx)]
+    return [make("BIA-003", f"the criticality analysis {m}", BIA, None, tasks)
+            for m, tasks in found]

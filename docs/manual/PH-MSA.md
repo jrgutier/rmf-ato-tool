@@ -738,7 +738,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - ART-INFOTYPES and infotypes.yaml list each information type with its SP 800-60 identifier and provisional impact levels.
 - The determination of whether the system processes PII is recorded for approval by the SAOP or designee.
 - For a system processing PII, each PII information type records whom the PII is about and whether it holds PHI or SSNs, and infotypes.yaml privacy records the issuances its handling complies with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN, the SSN justification, records coordination and the PIA determination with its DoDI 5400.16 basis and due date (PRIV-001).
-- infotypes.yaml information_owners identifies the owner or steward of every information type, each interviewed at P-12 or C-2, and each type's impact levels cite its owner's answer (CATG-005).
+- infotypes.yaml information_owners identifies the owner or steward of every information type with the sources of its input, and each type's impact levels cite that input or an answer the owner gave (CATG-005).
 
 **Alignment**
 

@@ -5186,7 +5186,6 @@ rules:
       - REQ-SP800-18R2-0198
       - REQ-DODI8510.01-0048
       - REQ-DODI8510.01-0140
-      - REQ-DODI8531.01-0173
   - id: VULN-006
     scope: run
     severity: E
@@ -6307,9 +6306,9 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-12
-    summary: "an information type has no identified information owner, an owner gave no P-12 or C-2 interview, or a type's impact levels trace to no answer of its owner"
+    summary: "an information type has no identified information owner, or a type's impact levels trace to no input of its owner"
     fixture: tests/fixtures/negative/CATG-005.yaml
-    hint: "In infotypes.yaml information_owners, name each owner or steward (the persona interviewed, its organization and the types whose impact levels it sets) so every type has one; interview each at P-12 or C-2 and cite the owner's answer in each type's sources."
+    hint: "In infotypes.yaml information_owners, name each owner or steward (its persona, organization, the types whose impact levels it sets, and the sources of its input) so every type has one; each type's sources cite one of its owner's sources or an interview answer the owner gave."
     enforces:
       - REQ-CNSSI1253-0047
       - REQ-DODI8500.01-0418
@@ -6320,9 +6319,9 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-2
-    summary: "S-2 records no trade-offs weighed in tailoring, leaves out cost, schedule or performance, or names a removal no remove action makes"
+    summary: "S-2 records no trade-off weighed in tailoring, or a trade-off names a removal no remove action makes"
     fixture: tests/fixtures/negative/TRADE-001.yaml
-    hint: "In tailoring.yaml trade_offs, record each risk-related issue weighed in deciding which controls to employ and how (cost, schedule and performance at least once each; complexity, maintenance and assessment cost, supply chain or trustworthiness where weighed), with the controls, what was weighed and the outcome; a trade-off that removes a control matches a remove action whose basis is risk-based (TLR-002)."
+    hint: "In tailoring.yaml trade_offs, record each risk-related issue weighed in deciding which controls to employ and how (at least one: cost, schedule, performance, complexity, maintenance or assessment cost, supply chain or trustworthiness, whichever were weighed), with the controls, what was weighed and the outcome; a trade-off that removes a control matches a remove action whose basis is risk-based (TLR-002)."
     enforces:
       - REQ-SP800-53B-0048
       - REQ-SP800-53B-0055
@@ -6348,9 +6347,9 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: M-7
-    summary: "disposal records no class of media disposed of, classified media without DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media without NIST SP 800-88, or a destruction outside CNSSI 4004.1"
+    summary: "disposal records no class of media disposed of, classified media without DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media without NIST SP 800-88, or a destruction outside CNSSI 4004.1 (SP 800-88 for unclassified media)"
     fixture: tests/fixtures/negative/DISP-001.yaml
-    hint: "In disposal.yaml media, record each class of media and equipment disposed of, the action (sanitize or destroy) and the issuances applied: DODM5200.01-V3 and CNSSI4004.1 for classified, SP800-88 for unclassified, and CNSSI4004.1 for any destruction."
+    hint: "In disposal.yaml media, record each class of media and equipment disposed of, the action (sanitize or destroy) and the issuances applied: DODM5200.01-V3 and CNSSI4004.1 for classified, SP800-88 for unclassified, and CNSSI4004.1 for a destruction (SP800-88 for unclassified media)."
     enforces:
       - REQ-DODI8500.01-0335
       - REQ-DODI8500.01-0336
@@ -6484,8 +6483,6 @@ rules:
     summary: an event-driven review names no trigger, a trigger after the review, or a trigger raised by others that is no defined trigger event
     fixture: tests/fixtures/negative/OAUTH-001.yaml
     hint: Record trigger on an event-driven record (event, raised_by, date); an event someone other than the deciding AO raises is one of the review events defined earlier on the authorization.
-    enforces:
-      - REQ-SP800-37R2-0657
   - id: OMP-001
     scope: run
     severity: E

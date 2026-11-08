@@ -498,7 +498,15 @@ def posture_changes(ctx: Context) -> list[RunFinding]:
 # --- DISP-001: media disposed of under the issuances DoDI 8500.01 and 8531.01 name ----------
 
 DISPOSAL_FILE = "artifacts/data/disposal.yaml"
-# DoDI 8500.01 Encl 3.18.a(8) and (9); DoDI 8531.01 3.5.j: destruction under CNSSI 4004.1.
+# DoDI 8500.01 Encl 3.18.a(8): "Disposal and destruction of classified hard drives, electronic
+# media, processing equipment components, and the like will be accomplished in accordance with
+# Reference (bj), CNSSI 4004.1 (Reference (dc)), and applicable security controls."; (9):
+# "Disposal of unclassified electronic media will be accomplished in accordance with the
+# guidelines provided in NIST SP 800-88 (Reference (dd))". DoDI 8531.01 3.5.j, "Destroy devices or
+# media in accordance with CNSSI 4004.1.", sits under Step 4 (remediation and mitigation: "To
+# assess remediation and mitigation techniques, the DoD Components will:"), so it does not govern
+# every destruction at disposal: unclassified media destroyed under SP 800-88, whose destroy is a
+# sanitization method, pass.
 MEDIA_ISSUANCES = {"classified": ("DODM5200.01-V3", "CNSSI4004.1"), "unclassified": ("SP800-88",)}
 DESTRUCTION = "CNSSI4004.1"
 
@@ -506,7 +514,8 @@ DESTRUCTION = "CNSSI4004.1"
 def disposal_media(ctx: Context) -> list[RunFinding]:
     """DISP-001: M-7 records each class of media and equipment disposed of with the issuances
     applied: classified media under DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media
-    under NIST SP 800-88, and any destruction under CNSSI 4004.1."""
+    under NIST SP 800-88, and a destruction under CNSSI 4004.1 unless the media are unclassified
+    and destroyed under SP 800-88."""
     data = ctx.data(DISPOSAL_FILE)
     if not _in_play(ctx, "ART-DISP") or not isinstance(data, dict):
         return []
@@ -521,7 +530,8 @@ def disposal_media(ctx: Context) -> list[RunFinding]:
             if issuance not in applied:
                 err(f"{item.get('class')} media ({item.get('items')}) are disposed of without "
                     f"{issuance}, which DoDI 8500.01 names for them")
-        if item.get("action") == "destroy" and DESTRUCTION not in applied:
+        if item.get("action") == "destroy" and DESTRUCTION not in applied and (
+                item.get("class") != "unclassified" or "SP800-88" not in applied):
             err(f"{item.get('items')} are destroyed, not in accordance with CNSSI 4004.1")
     return out
 

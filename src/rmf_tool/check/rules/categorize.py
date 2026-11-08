@@ -273,10 +273,12 @@ def cnssi_method(ctx: Context) -> list[RunFinding]:
 
 
 def information_owners(ctx: Context) -> list[RunFinding]:
-    """CATG-005: every information type has an identified information owner, each owner gave a
-    P-12 or C-2 interview, and each type's impact levels trace to an answer of its owner
-    (CNSSI 1253 3.1: all information owners are identified to provide inputs, and each sets the
-    impact level for their information type; DoDI 8500.01 Encl 3.18.b)."""
+    """CATG-005: every information type has an identified information owner, and each type's
+    impact levels trace to that owner's input: a token the owner record itself cites (an
+    interview answer at any task, or a product file a real owner supplied), or an answer the
+    owner gave in any interview (CNSSI 1253 3.1: all information owners are identified to
+    provide inputs, and each sets the impact level for their information type; DoDI 8500.01
+    Encl 3.18.b)."""
     data = ctx.data(INFOTYPES_FILE)
     if P12 not in scope.active_tasks(ctx.run) or not isinstance(data, dict):
         return []
@@ -290,30 +292,30 @@ def information_owners(ctx: Context) -> list[RunFinding]:
     owners = _dicts(data.get("information_owners"))
     if not owners:
         return [err("infotypes.yaml identifies no information owners of its information types")]
-    personas: dict[str, str] = {}
+    answered_by: dict[str, str] = {}
     for i in ctx.interviews:
-        if i.task in (P12, C2) and i.front:
+        if i.front:
             for a in i.answers:
-                personas[a.id] = str(i.front.get("persona"))
-    interviewed = set(personas.values())
+                answered_by[a.id] = str(i.front.get("persona"))
     owned_by: dict[str, set[str]] = {}
-    out = []
+    inputs: dict[str, set[str]] = {}
     for owner in owners:
         who = str(owner.get("persona"))
-        if who not in interviewed:
-            out.append(err(f"information owner {who} gave no P-12 or C-2 interview, so its "
-                           "input to the impact levels is not on record"))
+        cited = {str(s) for s in _list(owner.get("sources"))}
         for tid in _list(owner.get("types")):
             owned_by.setdefault(str(tid), set()).add(who)
+            inputs.setdefault(str(tid), set()).update(cited)
+    out = []
     for info in types:
         tid = str(info.get("id"))
         mine = owned_by.get(tid, set())
         if not mine:
             out.append(err(f"{tid} has no information owner identified"))
             continue
-        answered = {personas.get(str(s)) for s in _list(info.get("sources"))}
-        if not answered & mine:
-            out.append(err(f"the impact levels of {tid} trace to no answer of its information "
+        traced = {str(s) for s in _list(info.get("sources"))}
+        if traced.isdisjoint(inputs.get(tid, set())) \
+                and all(answered_by.get(s) not in mine for s in traced):
+            out.append(err(f"the impact levels of {tid} trace to no input of its information "
                            f"owner ({', '.join(sorted(mine))})"))
     return out
 

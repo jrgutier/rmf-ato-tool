@@ -327,7 +327,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
 - Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
-- tailoring.yaml trade_offs records the cost, schedule and performance trade-offs (and any complexity, maintenance, assessment cost, supply chain or trustworthiness ones) weighed in deciding which controls to employ, a removal matching a remove action (TRADE-001).
+- tailoring.yaml trade_offs records the risk-related trade-offs (cost, schedule, performance, complexity, maintenance or assessment cost, supply chain, trustworthiness) weighed in deciding which controls to employ, a removal matching a remove action (TRADE-001).
 - tailoring.yaml overlay_conflicts records each conflict between overlays resolved by the AO or AODR and the SAOP, in coordination with the information owner, the system owner and the risk executive (function) (OVC-001).
 
 **Alignment**

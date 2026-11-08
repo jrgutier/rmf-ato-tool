@@ -617,14 +617,12 @@ def inheritance(ctx: Context) -> list[RunFinding]:
 
 # --- TRADE-001: cost, schedule and performance weighed in tailoring -------------------------
 
-TRADE_FACTORS = ("cost", "schedule", "performance")  # SP 800-53B 2.4
-
-
 def trade_offs(ctx: Context) -> list[RunFinding]:
     """TRADE-001: S-2 records the risk-related issues weighed in deciding which controls to
-    employ, cost, schedule and performance each at least once (SP 800-53B 2.4), and a trade-off
-    that removed a control matches a remove action of tailoring.yaml, whose basis TLR-002
-    holds to a risk-based determination (CNSSI 1253 3.2.2 3.f.4)."""
+    employ, at least one trade-off of whatever factor applies (SP 800-53B 2.4: risk-related issues
+    *such as* cost, schedule and performance, an open list), and a trade-off that removed a control
+    matches a remove action of tailoring.yaml, whose basis TLR-002 holds to a risk-based
+    determination (CNSSI 1253 3.2.2 3.f.4)."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
@@ -633,15 +631,11 @@ def trade_offs(ctx: Context) -> list[RunFinding]:
     def err(message: str) -> None:
         out.append(make("TRADE-001", message, TAILORING, None, {"S-2"}))
 
-    if "trade_offs" not in data:
-        err("tailoring.yaml records no trade-offs of cost, schedule and performance weighed in "
-            "deciding which controls to employ")
-        return out
     records = [r for r in data.get("trade_offs") or [] if isinstance(r, dict)]
-    weighed = {r.get("factor") for r in records}
-    for factor in TRADE_FACTORS:
-        if factor not in weighed:
-            err(f"tailoring weighs no {factor} trade-off in deciding which controls to employ")
+    if not records:
+        err("tailoring.yaml records no trade-off of the risk-related issues weighed in deciding "
+            "which controls to employ")
+        return out
     removed = {a.get("control_id") for a in _actions(data) if a.get("action") == "remove"}
     for r in records:
         if r.get("outcome") != "removed":

@@ -111,3 +111,45 @@ def test_classified_media_destroyed_under_dodm_and_cnssi_passes(tmp_path):
         " issuances: [SP800-88], sources: [INT-030.A1]}\n"
         "sources: [INT-030.A1]\n", encoding="utf-8")
     assert _messages(run_dir, "DISP-001") == []
+
+
+def test_procurement_steps_without_a_charge_card_answer_fail_the_schema(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "artifacts/data/scrm-acquisition.yaml",
+              lambda d: d.pop("charge_card_purchases"))
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert any(f.rule == "RUN-FM-001" and "charge_card_purchases" in f.message for f in found)
+
+
+def test_unclassified_media_destroyed_under_sp800_88_passes(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "run.yaml", lambda d: d["seeded"].append(
+        {"artifact": "ART-DISP", "from_task": "M-7", "path": "artifacts/data/disposal.yaml"}))
+    (run_dir / "artifacts/data/disposal.yaml").write_text(
+        "end_state: No data recoverable.\nenvironment: {restored_to: original}\n"
+        "residual_check: {date: '2027-03-01', no_detrimental_factors: true}\n"
+        "storage: {stored: false}\n"
+        "supply_chain: {non_reuse_elements: [Drives], prevention: Shredded on site.}\n"
+        "media:\n- {class: unclassified, items: Console disks, action: destroy,"
+        " issuances: [SP800-88], sources: [INT-030.A1]}\n"
+        "sources: [INT-030.A1]\n", encoding="utf-8")
+    assert _messages(run_dir, "DISP-001") == []
+
+
+def test_a_bypass_coordinated_with_the_isso_and_approved_in_writing_passes(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "artifacts/data/cm-plan.yaml", lambda d: d.update(bypasses=[
+        {"id": "BYP-01", "mechanism": "Firewall rule", "procedure": "A two-hour exception.",
+         "coordinated_with": ["PER-ISSO"],
+         "approval": {"by": "PER-ISSM", "form": "written", "date": "2026-10-25"},
+         "sources": ["INT-007.A1"]}]))
+    assert _messages(run_dir, "BYP-001") == []
+
+
+def test_levels_traced_to_an_owner_answer_at_another_task_pass(tmp_path):
+    run_dir = _run(tmp_path)
+    edit_yaml(run_dir / "artifacts/data/infotypes.yaml",
+              lambda d: d["information_types"][0].update(sources=["INT-022.A1"]))
+    assert _messages(run_dir, "CATG-005") == []

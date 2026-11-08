@@ -1484,9 +1484,8 @@ requirements:
     locator: "3.5.f"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "f. Recommend configuration changes to ensure the correct application of remediation or mitigation actions."
-    status: "partial"
-    reason: "VULN-005 fails a remediation or mitigation method that was not among the options weighed case by case, so the chosen fix is the one recommended for the vulnerability. Unheld: the configuration changes recommended to apply the fix correctly, which the vulnerability record does not carry."
-    evidence: [{"kind": "rule", "target": "VULN-005", "fixture": "tests/fixtures/negative/VULN-005.method.yaml", "expect": "is not among the remediation and mitigation options weighed case by case", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "Recommend changes to ensure the correct application of remediation or mitigation actions: a method not among the remediation and mitigation options weighed fails"}]
+    status: "candidate"
+    reason: "No rule holds the configuration changes recommended to apply a remediation or mitigation correctly: the vulnerability record carries the chosen fix (VULN-005), not the configuration changes it needs. A recommended_configuration_changes field on the remediation record and a rule reading it would hold it (WI-153)."
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0174"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Use a vulnerability scan to identify physical or virtual devices that require"}
@@ -1525,7 +1524,7 @@ requirements:
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "j. Destroy devices or media in accordance with CNSSI 4004.1."
     status: "partial"
-    reason: "DISP-001 fails devices or media destroyed at M-7 not in accordance with CNSSI 4004.1. Unheld: destruction as a remediation or mitigation action at M-3, before disposal, and that CNSSI 4004.1 is not in the library (WI-506)."
+    reason: "DISP-001 fails classified devices or media destroyed at M-7 not in accordance with CNSSI 4004.1. Unheld: destruction as a remediation or mitigation action at M-3, where 3.5.j sits, and CNSSI 4004.1 itself, which is not in the library (WI-506); unclassified media destroyed at disposal under NIST SP 800-88 pass, per DoDI 8500.01 Encl 3.18.a(9)."
     evidence: [{"kind": "rule", "target": "DISP-001", "fixture": "tests/fixtures/negative/DISP-001.destroy.yaml", "expect": "are destroyed, not in accordance with CNSSI 4004.1", "claim": "constraint", "holds_when": "ART-DISP is produced or seeded", "asserts": "Destroy devices or media in accordance with CNSSI 4004.1: media destroyed not in accordance with CNSSI 4004.1 fail"}]
     work_item: "WI-506"
   - id: "REQ-DODI8531.01-0178"
