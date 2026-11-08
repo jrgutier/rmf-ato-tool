@@ -245,6 +245,51 @@ def basis_applies(action: dict[str, Any]) -> bool:
     return action.get("basis") in ("scoping", "no-risk")
 
 
+# --- DPOL-001, DPOL-002: controls that carry a DoDI 8500.01 duty -------------------------
+
+STAND_ALONE = "stand-alone"
+# PIT systems "require uniquely tailored security control sets" (DoDI 8500.01 p. 39, 1.e.(2).(d).3).
+PIT_TYPES = ("pit-system", "pit")
+
+
+def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
+    """A control framework/baselines/tailoring-inputs.yaml dod_policy_controls maps to a duty
+    DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline,
+    whatever law_policy says. The source permits two cases, which are left alone: a stand-alone
+    system's control set may be tailored as appropriate with the AO's approval (pages 38 and
+    39), and a PIT system's control set is uniquely tailored (page 39). Inheriting a control is
+    no removal, so a common or inherited control never fires."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    system_type = facts_mod.get(ctx.facts, "system_type")
+    if isinstance(system_type, dict) and (system_type.get("connectivity") == STAND_ALONE
+                                          or system_type.get("value") in PIT_TYPES):
+        return []
+    records = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
+               if p["subject"] == subject]
+    removed = {a.get("control_id") for a in _actions(data) if a.get("action") == "remove"}
+    out: list[RunFinding] = []
+    for policy in records:
+        cut = [c for c in policy["controls"] if c in removed]
+        if cut:
+            out.append(make(rule, f"{policy['id']}: {policy['authority']} requires that "
+                            f"{policy['text']}, and {', '.join(cut)} is tailored out of the "
+                            "baseline", TAILORING, None, {"S-2"}))
+    return out
+
+
+def dod_system_controls(ctx: Context) -> list[RunFinding]:
+    """DPOL-001: the controls that carry DoDI 8500.01's duties on the system."""
+    return _dod_policy(ctx, "DPOL-001", "system")
+
+
+def dod_user_controls(ctx: Context) -> list[RunFinding]:
+    """DPOL-002: the controls that carry DoDI 8500.01's duties on the ISSO, privileged users and
+    authorized users."""
+    return _dod_policy(ctx, "DPOL-002", "users")
+
+
 # --- TLR-003: baseline and overlay assumptions -----------------------------------------
 
 def assumptions(ctx: Context) -> list[RunFinding]:

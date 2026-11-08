@@ -1,0 +1,23 @@
+rule: DPOL-002
+bases:
+- minimal
+description: ia-5 is tailored out of a networked system although it carries PC-DOD-23, a duty DoDI 8500.01
+  places on its users
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ia-5\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:\
+    \ false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n\
+    \    sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - DPOL-002
+  messages:
+  - 'PC-DOD-23: DoDI 8500.01 requires that authorized users protect their authenticators and report any
+    compromise of one to the ISSO, and ia-5 is tailored out of the baseline'
+  also:
+  - DPOL-001

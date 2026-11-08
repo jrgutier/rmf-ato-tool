@@ -121,7 +121,7 @@ def test_every_block_cites_a_page_that_resolves(tables):
     assert overlay_pages == 5 + 55 + 9
     inputs = baseline.load_inputs(REPO_ROOT)  # tailoring-inputs.yaml: one block per entry
     blocks = len(inputs["assumptions"]) + len(inputs["overlay_conditions"]) \
-        + len(inputs["policy_controls"])
+        + len(inputs["policy_controls"]) + len(inputs["dod_policy_controls"])
     specs = sum(len(controls) for controls in overlay_specs.load(REPO_ROOT).values())
     assert specs == 108 + 315  # overlay-specs.yaml: one block per Section 6 control
     pic = YAML(typ="safe").load((REPO_ROOT / cnssi1253.PIC_PATH).read_text(encoding="utf-8"))

@@ -1,0 +1,22 @@
+rule: DPOL-001
+bases:
+- minimal
+description: ac-3 is tailored out of a networked system although it carries PC-DOD-8, a duty DoDI 8500.01
+  places on every DoD IS
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: ac-3\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:\
+    \ false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n\
+    \    sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - DPOL-001
+  messages:
+  - 'PC-DOD-8: DoDI 8500.01 requires that the system protects classified information and CUI from unauthorized
+    access by requiring authentication prior to making an access decision, and ac-3 is tailored out of
+    the baseline'
