@@ -20,6 +20,8 @@ requirements:
     context: "THE NEED TO MANAGE SECURITY AND PRIVACY RISK"
     statement: "In addition to the responsibility to protect organizational assets from the threats that exist in today’s environment, organizations have a responsibility to consider and manage the risks to individuals when information systems process personally identifiable information (PII).6 7 The information security and privacy programs implemented by organizations have complementary objectives with respect to managing the confidentiality, integrity, and availability of PII. While many privacy risks arise from unauthorized activities that lead to the loss of confidentiality, integrity, or availability of PII, other privacy risks result from authorized activities involving the creation, collection, use, processing, storage, maintenance, dissemination, disclosure, or disposal of PII that enables an organization to meet its mission or business objectives. For example, organizations could fail to provide appropriate notice of PII processing depriving an individual of knowledge of such processing or an individual could be embarrassed or stigmatized by the authorized disclosure of PII. While managing privacy risk requires close coordination between information security and privacy programs due to the complementary nature of the programs’ objectives around the confidentiality, integrity, and availability of PII, privacy risks also raise distinct concerns that require specialized expertise and approaches. Therefore, it is critical that organizations also establish and maintain robust privacy programs to ensure compliance with applicable privacy requirements and to manage the risk to individuals associated with the processing of PII."
     status: "candidate"
+    reason: "ART-RA '## Privacy risk' holds risk to individuals in prose at P-14; the privacy program is organization-level and no rule reads either."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0003"
     citation: {"ref": "SP800-37R2", "page": 20, "anchor": "Organizations may also choose to consider risks to individuals that may arise"}
     kind: "modal"
@@ -471,6 +473,8 @@ requirements:
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE The steps are:"
     statement: "• Prepare to execute the RMF from an organization- and a system-level perspective by establishing a context and priorities for managing security and privacy risk."
     status: "candidate"
+    reason: "Overview of the Prepare step; its tasks are judged one by one, and nothing fails on the overview."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0059"
     citation: {"ref": "SP800-37R2", "page": 27, "anchor": "Categorize the system and the information processed, stored, and transmitted by the"}
     kind: "lettered"
@@ -478,6 +482,8 @@ requirements:
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE The steps are:"
     statement: "• Categorize the system and the information processed, stored, and transmitted by the system based on an analysis of the impact of loss.26"
     status: "candidate"
+    reason: "Overview of the Categorize step; C-2's categorization is judged by CATG-001, at its fan-out cap, and FACTS-001."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0060"
     citation: {"ref": "SP800-37R2", "page": 27, "anchor": "Controls can be allocated at all three levels in the risk management"}
     kind: "should"
@@ -501,35 +507,50 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Select an initial set of controls for the system and tailor the controls as needed to reduce risk to an acceptable level based on an assessment of risk."
-    status: "candidate"
+    status: "partial"
+    reason: "tailoring.yaml records each tailoring action; that the selection and tailoring reduce risk to an acceptable level is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/tailoring.schema.json#/properties/actions/items/properties/action", "claim": "constraint", "asserts": "Select an initial set of controls and tailor the controls as needed: each tailoring action applied to the baseline is recorded"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0063"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Implement the controls and describe how the controls are employed within the"}
     kind: "lettered"
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Implement the controls and describe how the controls are employed within the system and its environment of operation."
-    status: "candidate"
+    status: "partial"
+    reason: "SSP-COV-001 fails a baseline control the plan does not describe; implementation itself is unheld."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacy.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "presence", "asserts": "Describe how the controls are employed within the system: a baseline control that has no SSP statement in the plan fails"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0064"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Assess the controls to determine if the controls are implemented correctly, operating"}
     kind: "lettered"
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Assess the controls to determine if the controls are implemented correctly, operating as intended, and producing the desired outcomes with respect to satisfying the security and privacy requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "SAR-COV-001 fails a scoped control with no determination; that the determinations judge correctness, operation and outcomes is unheld."
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.determination.yaml", "expect": " has no assessment determination", "claim": "presence", "holds_when": "A-3 is active and ART-SAR is produced or seeded", "asserts": "Assess the controls to determine if they are implemented correctly: a scoped control that has no assessment determination fails"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0065"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Authorize the system or common controls based on a determination that the"}
     kind: "lettered"
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Authorize the system or common controls based on a determination that the risk to organizational operations and assets, individuals, other organizations, and the Nation is acceptable."
-    status: "candidate"
+    status: "partial"
+    reason: "RAR-002 fails a missing determination of risk; that the authorization rests on the risk being acceptable is AODM-001's, at its fan-out cap."
+    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.missing.yaml", "expect": "rar.yaml records no determination of risk", "claim": "presence", "holds_when": "R-2 is active and ART-RAR is produced or seeded", "asserts": "Authorize the system based on a determination that the risk is acceptable: rar.yaml records no determination of risk fails"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0066"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Monitor the system and the associated controls on an ongoing basis to"}
     kind: "lettered"
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Monitor the system and the associated controls on an ongoing basis to include assessing control effectiveness, documenting changes to the system and environment of operation, conducting risk assessments and impact analyses, and reporting the security and privacy posture of the system."
-    status: "candidate"
+    status: "partial"
+    reason: "CONMON-001 fails a baseline family with no monitoring frequency, so controls are monitored on an ongoing basis; documenting changes, risk assessments and posture reporting are the M tasks' rules."
+    evidence: [{"kind": "rule", "target": "CONMON-001", "fixture": "tests/fixtures/negative/CONMON-001.family.yaml", "expect": " has no monitoring frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Monitor the system and the associated controls on an ongoing basis: a baseline family that has no monitoring frequency fails"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0067"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "While the RMF steps are listed in sequential order above and in"}
     kind: "modal"
@@ -545,6 +566,8 @@ requirements:
     context: "FLEXIBILITY IN RMF IMPLEMENTATION"
     statement: "Organizations are expected to execute all steps and tasks in the RMF (apart from tasks labeled as optional). However, organizations have significant flexibility in how each of the RMF steps and tasks are carried out, as long as organizations are meeting all applicable requirements and effectively managing security and privacy risk. The intent is to allow organizations to implement the RMF in the most efficient, effective, and cost-effective manner to support mission and business needs in a way that promotes effective security and privacy. Flexible implementation may include executing tasks in a different (potentially nonsequential) order, emphasizing certain tasks over other tasks, or combining certain tasks where appropriate. It can also include the use of the Cybersecurity Framework to enhance RMF task execution."
     status: "candidate"
+    reason: "FW-TASK-001 fixes the 47 tasks and their optional flags as a repo rule the judge does not read (WI-480), and TASK-DEF-001's fixture declares no message; the flexibility sentences permit."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0069"
     citation: {"ref": "SP800-37R2", "page": 29, "anchor": "Note: Since the RMF is an SDLC process that emphasizes ongoing authorization,"}
     kind: "modal"
@@ -764,6 +787,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF In establishing requirements for information security programs and privacy programs, the circular emphasizes the need for both programs to collaborate on sh"
     statement: "While security and privacy are independent and separate disciplines, they are closely related, and it is essential for agencies to take a coordinated approach to identifying and managing security and privacy risks and complying with applicable requirements."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0096"
     citation: {"ref": "SP800-37R2", "page": 32, "anchor": "The RMF provides a disciplined and structured process that integrates information security,"}
     kind: "modal"
@@ -771,6 +796,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF With the 2016 revision to the circular, OMB also requires organizations to integrate privacy into the RMF process:"
     statement: "The RMF provides a disciplined and structured process that integrates information security, privacy, and risk management activities into the SDLC. This Circular requires organizations to use the RMF to manage privacy risks beyond those that are typically included under the “confidentiality” objective of the term “information security.” While many privacy risks relate to the unauthorized access or disclosure of PII, privacy risks may also result from other activities, including the creation, collection, use, and retention of PII; the inadequate quality or integrity of PII; and the lack of appropriate notice, transparency, or participation."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0097"
     citation: {"ref": "SP800-37R2", "page": 32, "anchor": "This section of the guideline describes the relationship between information security programs"}
     kind: "indicative"
@@ -786,6 +813,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "Executing the RMF requires close collaboration between information security programs and privacy programs. While information security programs and privacy programs have different objectives, those objectives are overlapping and complementary. Information security programs are responsible for protecting information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction (i.e., unauthorized system activity or behavior) in order to provide confidentiality, integrity, and availability. Privacy programs are responsible for ensuring compliance with applicable privacy requirements and for managing the risks to individuals associated with the creation, collection, use, processing, dissemination, storage, maintenance, disclosure, or disposal (collectively referred to as “processing”) of PII.30 When preparing to execute the steps of the RMF, organizations consider how to best promote and institutionalize collaboration between the two programs to ensure that the objectives of both disciplines are met at every step of the process."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0099"
     citation: {"ref": "SP800-37R2", "page": 32, "anchor": "Privacy programs may also choose to consider the risks to individuals that"}
     kind: "modal"
@@ -801,6 +830,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "When an information system processes PII, the organization’s information security program and privacy program have a shared responsibility for managing the risks to individuals that may arise from unauthorized system activity or behavior. This requires the two programs to collaborate when selecting, implementing, assessing, and monitoring security controls.31 However, while information security programs and privacy programs have complementary objectives with respect to managing the confidentiality, integrity, and availability of PII, protecting individuals’ privacy cannot be achieved solely by securing PII."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0101"
     citation: {"ref": "SP800-37R2", "page": 33, "anchor": "Not all privacy risks arise from unauthorized system activity or behavior, such"}
     kind: "modal"
@@ -808,6 +839,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "Not all privacy risks arise from unauthorized system activity or behavior, such as unauthorized access or disclosure of PII. Some privacy risks may result from authorized activity that is beyond the scope of information security. For example, privacy programs are responsible for managing the risks to individuals that may result from the creation, collection, use, and retention of PII; the inadequate quality or integrity of PII; and the lack of appropriate notice, transparency, or participation. Therefore, to help ensure compliance with applicable privacy requirements and to manage privacy risks from authorized and unauthorized processing of PII, organizations’ privacy programs also select, implement, assess, and monitor privacy controls.32 [OMB A-130] defines a privacy control as an administrative, technical, or physical safeguard employed within an agency to ensure compliance with applicable privacy requirements and to manage privacy risks. A privacy control is different from a security control, which the Circular defines as a safeguard or countermeasure prescribed for an information system or an organization to protect the confidentiality, integrity, and availability of the system and its information. Due to the shared responsibility that organizations’ information security programs and privacy programs have to manage the risks to individuals arising from unauthorized system activity or behavior, controls that achieve both security and privacy objectives are both privacy and security controls. This guideline refers to such controls that achieve both sets of objectives simply as “controls.” When this guideline uses the descriptors “privacy” and “security” with the term control, it is referring to those controls in circumstances where the controls are selected, implemented, and assessed for particular objectives."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0102"
     citation: {"ref": "SP800-37R2", "page": 33, "anchor": "The risk management processes described in this publication are equally applicable to"}
     kind: "modal"
@@ -815,6 +848,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "The risk management processes described in this publication are equally applicable to security and privacy programs. However, the risks that security and privacy programs are required to manage are overlapping in some areas, but not in others. Consequently, it is important that organizations understand the interplay between privacy and security to promote effective collaboration between privacy and security officials at every level of the organization."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0103"
     citation: {"ref": "SP800-37R2", "page": 33, "anchor": "Different controls may need to be selected to mitigate the privacy risks"}
     kind: "modal"
@@ -888,6 +923,8 @@ requirements:
     context: "FIGURE 5: CONCEPTUAL VIEW OF THE SYSTEM"
     statement: "Common controls are referenced in the security and privacy plans for the system inheriting the controls."
     status: "candidate"
+    reason: "ART-SSP '## Inheritance and shared responsibility' and SSP-STAT-001 hold the provider of inherited controls; SSP-STAT-001's fixture declares no message, so nothing ties a failing clause to this sentence."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0112"
     citation: {"ref": "SP800-37R2", "page": 35, "anchor": "For connections and information exchange between the system and the enabling or"}
     kind: "indicative"
@@ -1020,13 +1057,18 @@ requirements:
     context: "CONTEXT-DEPENDENT REQUIREMENTS"
     statement: "Security and privacy requirements and risks identified by the organization, lead to the need for security and privacy controls to respond to the risk. The controls selected by the organization subsequently lead to both specification requirements and statement of work requirements in the systems engineering context. This is an important aspect of how systems engineers develop, derive, and decompose requirements as part of the SDLC process. Thus, organizations manage security and privacy requirements at various levels of granularity and specificity during the life cycle of the system. Controls play an important part in the life cycle by providing high-level statements of protection capability that can be refined and expanded upon by the organization."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0128"
     citation: {"ref": "SP800-37R2", "page": 38, "anchor": "The security and privacy posture of information systems and organizations is determined"}
     kind: "indicative"
     locator: "2.7"
     context: "SECURITY AND PRIVACY POSTURE"
     statement: "The security and privacy posture of information systems and organizations is determined on an ongoing basis by assessing and continuously monitoring system-specific, hybrid, and common controls.44 The control assessments and monitoring activities provide evidence that the controls selected by the organization are implemented correctly, operating as intended, and satisfying the security and privacy requirements in response to laws, executive orders, regulations, directives, policies, standards, or mission and business requirements. Authorizing officials use the security and privacy posture to determine if the risk to organizational operations and assets, individuals, other organizations, or the Nation are acceptable based on the organization’s risk management strategy and organizational risk tolerance.45"
-    status: "candidate"
+    status: "partial"
+    reason: "CONMON-001 fails a baseline family with no monitoring frequency; the AO's use of the posture to judge acceptability is M-6 prose."
+    evidence: [{"kind": "rule", "target": "CONMON-001", "fixture": "tests/fixtures/negative/CONMON-001.family.yaml", "expect": " has no monitoring frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "The posture is determined on an ongoing basis by continuously monitoring controls: a baseline family that has no monitoring frequency fails", "sentence": "The security and privacy posture of information systems and organizations is determined on an ongoing basis by assessing and continuously monitoring system-specific, hybrid, and common controls.44"}]
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0129"
     citation: {"ref": "SP800-37R2", "page": 38, "anchor": "Monitoring of controls is part of an organization-wide risk management approach defined"}
     kind: "indicative"
@@ -1042,6 +1084,8 @@ requirements:
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "Organizations are becoming increasingly reliant on products, systems, and services provided by external providers to carry out missions and business functions. Organizations are responsible and accountable for the risk incurred when using such component products, systems, and services.46 Relationships with external providers can be established in a variety of ways, for example, through joint ventures, business partnerships, various types of formal agreements (e.g., contracts, interagency agreements, lines of business arrangements, licensing agreements), or outsourcing arrangements."
     status: "candidate"
+    reason: "R-4 has the AO accept the risk of external components through ART-BND and leveraged authorizations; no rule fails a run that does not account for it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0131"
     citation: {"ref": "SP800-37R2", "page": 39, "anchor": "Supply chain risks can be endemic or systemic within a system element,"}
     kind: "indicative"
@@ -1131,6 +1175,8 @@ requirements:
     context: "EXECUTING THE RISK MANAGEMENT FRAMEWORK TASKS"
     statement: "his chapter describes the steps and associated tasks that comprise the RMF and the selected individuals or groups (defined organizational roles) that carry out such tasks.51 Organizations align their risk management roles with complementary or similar roles defined for the SDLC whenever possible, and consistent with missions and business functions. RMF tasks are executed concurrently with, or as part of, the SDLC processes in the organization. Executing RMF tasks concurrently with SDLC processes helps to ensure that organizations are effectively integrating the process of managing information security and privacy risks into SDLC processes. Moreover, the expected outputs required by the RMF (e.g., security and privacy plans, assessment reports, plans of action and milestones), can be routinely obtained from the SDLC processes in place within organizations and may not need to be developed solely for RMF implementation."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0141"
     citation: {"ref": "SP800-37R2", "page": 42, "anchor": "The process of implementing RMF tasks may vary from organization to organization."}
     kind: "modal"
@@ -1273,6 +1319,8 @@ requirements:
     context: "DEVELOPING WELL-DEFINED SECURITY AND PRIVACY REQUIREMENTS"
     statement: "The RMF is an SDLC-based process that can be effectively used to help ensure that security and privacy requirements are satisfied for information systems or organizations. Defining clear, consistent, and unambiguous security and privacy requirements is an important element in the successful execution of the RMF. The requirements are defined early in the SDLC in collaboration with the senior leaders and are integrated into the acquisition and procurement processes. For example, organizations can use the [SP 800-160 v1] life cycle-based systems engineering process to define an initial set of security and privacy requirements, which in turn, can be used to select a set of controls* to satisfy the requirements. The requirements or the controls can be stated in the Request for Proposal or other contractual agreement when organizations acquire systems, system components, or services. Requirements can also be added throughout the life cycle, such as with the agile development methodology where new features are continuously deployed."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0158"
     citation: {"ref": "SP800-37R2", "page": 45, "anchor": "The NIST Cybersecurity Framework [NIST CSF] (i.e., Core, Profiles) can also be"}
     kind: "indicative"
@@ -4105,6 +4153,8 @@ requirements:
     context: "KEY PARTICIPANTS IN THE RISK MANAGEMENT PROCESS"
     statement: "he following sections describe the roles and responsibilities of key participants involved in an organization’s risk management process.112 Recognizing that organizations have varying missions, business functions, and organizational structures, there may be differences in naming conventions for risk management roles and how risk management responsibilities are allocated among organizational personnel (e.g., multiple individuals filling a single role or one individual filling multiple roles).113 However, the basic functions remain the same. The application of the RMF described in this publication is flexible, allowing organizations to effectively accomplish the intent of the specific tasks within their respective organizational structures to best manage security and privacy risks. Many risk management roles defined in this publication have counterpart roles in the SDLC processes carried out by organizations. Organizations align their risk management roles with similar (or complementary) roles defined for the SDLC whenever possible.114"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0459"
     citation: {"ref": "SP800-37R2", "page": 133, "anchor": "The authorizing official is a senior official or executive with the authority"}
     kind: "modal"
@@ -4157,6 +4207,8 @@ requirements:
     context: "AUTHORIZING OFFICIAL DESIGNATED REPRESENTATIVE"
     statement: "The authorizing official designated representative is an organizational official designated by the authorizing official who is empowered to act on behalf of the authorizing official to coordinate and conduct the day-to-day activities associated with managing risk to information systems and organizations. This includes carrying out many of the activities related to the execution of the RMF. The only activity that cannot be delegated by the authorizing official to the designated representative is the authorization decision and signing of the associated authorization decision document (i.e., the acceptance of risk)."
     status: "candidate"
+    reason: "AODM-009 fails a decision by anyone but the AO, but its only fragments ('is decided by') carry one content word; the AODR's other activities are the RACI's."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0465"
     citation: {"ref": "SP800-37R2", "page": 134, "anchor": "The chief acquisition officer is an organizational official designated by the head"}
     kind: "modal"
@@ -4164,6 +4216,8 @@ requirements:
     context: "CHIEF ACQUISITION OFFICER"
     statement: "The chief acquisition officer is an organizational official designated by the head of an agency to advise and assist the head of agency and other agency officials to ensure that the mission of the agency is achieved through the management of the agency’s acquisition activities. The chief acquisition officer monitors the performance of acquisition activities and programs; establishes clear lines of authority, accountability, and responsibility for acquisition decision making within the agency; manages the direction and implementation of acquisition policy for the agency; and establishes policies, procedures, and practices that promote full and open competition from responsible sources to fulfill best value requirements considering the nature of the property or service procured. The Chief Acquisition Officer coordinates with mission or business owners, authorizing officials, senior accountable official for risk management, system owners, common control providers, senior agency information security officer, senior agency official for privacy, and risk executive (function) to ensure that security and privacy requirements are defined in organizational procurements and acquisitions."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0466"
     citation: {"ref": "SP800-37R2", "page": 134, "anchor": "The chief information officer117 is an organizational official responsible for designating a"}
     kind: "modal"
@@ -4208,7 +4262,10 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "CHIEF INFORMATION OFFICER"
     statement: "• Organizational systems and common controls are covered by approved system security plans and possess current authorizations;"
-    status: "candidate"
+    status: "partial"
+    reason: "PRIV-012 fails S-6 plans with no AO or AODR approval; that systems and common controls possess current authorizations is AODM-005's and MLEV-001's."
+    evidence: [{"kind": "rule", "target": "PRIV-012", "fixture": "tests/fixtures/negative/PRIV-012.ao.yaml", "expect": "S-6 wrote ART-SSP, and no approval of the security and privacy plans by the authorizing official or designated representative is on record", "claim": "constraint", "asserts": "Organizational systems are covered by approved system security plans: no approval of the security and privacy plans by the authorizing official fails"}]
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0471"
     citation: {"ref": "SP800-37R2", "page": 135, "anchor": "Security activities required across the organization are accomplished in an efficient, cost-effective,"}
     kind: "lettered"
@@ -4257,6 +4314,7 @@ requirements:
     context: "COMMON CONTROL PROVIDER"
     statement: "The senior agency official for privacy is responsible for designating which privacy controls may be treated as common controls. Privacy controls that are designated as common controls are documented in the organization’s privacy program plan.119 The senior agency official for privacy has oversight responsibility for common controls in place or planned for meeting applicable privacy requirements and managing privacy risks and is responsible for assessing those controls. At the discretion of the organization, privacy controls that are designated as common controls may be assessed by an independent assessor. In all cases, however, the senior agency official for privacy retains responsibility and accountability for the organization’s privacy program, including any privacy functions performed by independent assessors. Privacy plans and privacy control assessment reports are made available to systems owners whose systems inherit privacy controls that are designated as common controls."
     status: "candidate"
+    reason: "PER-PRIV is R on P-5 and S-3; the assessment of privacy common controls is WI-03 and the privacy program plan WI-05."
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0476"
     citation: {"ref": "SP800-37R2", "page": 135, "anchor": "Organizations can have multiple common control providers depending on how security and"}
@@ -4283,7 +4341,10 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "CONTROL ASSESSOR"
     statement: "The required level of assessor independence is determined by the authorizing official based on laws, executive orders, directives, regulations, policies, standards, or guidelines. When a control assessment is conducted in support of an authorization decision or ongoing authorization, the authorizing official makes an explicit determination of the degree of independence required. Assessor independence is a factor in preserving an impartial and unbiased assessment process; determining the credibility of the assessment results; and ensuring that the authorizing official receives objective information to make an informed, risk-based authorization decision."
-    status: "candidate"
+    status: "partial"
+    reason: "ASMT-007 fails an independence determined by anyone but the AO or AODR; that it rests on laws and policies, and independence as a factor of credibility, are unheld."
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.determiner.yaml", "expect": "determines the required degree of assessor independence, not", "claim": "constraint", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "The authorizing official makes an explicit determination of the degree of independence required: anyone else who determines the required degree of assessor independence fails", "sentence": "When a control assessment is conducted in support of an authorization decision or ongoing authorization, the authorizing official makes an explicit determination of the degree of independence required."}]
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0479"
     citation: {"ref": "SP800-37R2", "page": 136, "anchor": "The senior agency official for privacy is responsible for assessing privacy controls and for providing privacy"}
     kind: "modal"
@@ -4318,6 +4379,8 @@ requirements:
     context: "ENTERPRISE ARCHITECT With respect to information security and privacy, enterprise architects:"
     statement: "• Coordinate with security and privacy architects to determine the optimal placement of systems/system elements within the enterprise architecture and to address security and privacy issues between systems and the enterprise architecture;"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0483"
     citation: {"ref": "SP800-37R2", "page": 137, "anchor": "Assist in reducing complexity within the IT infrastructure to facilitate security;"}
     kind: "lettered"
@@ -4333,6 +4396,8 @@ requirements:
     context: "ENTERPRISE ARCHITECT With respect to information security and privacy, enterprise architects:"
     statement: "• Assist with determining appropriate control implementations and initial configuration baselines as they relate to the enterprise architecture;"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0485"
     citation: {"ref": "SP800-37R2", "page": 137, "anchor": "Collaborate with system owners and authorizing officials to facilitate authorization boundary determinations"}
     kind: "lettered"
@@ -4340,6 +4405,8 @@ requirements:
     context: "ENTERPRISE ARCHITECT With respect to information security and privacy, enterprise architects:"
     statement: "• Collaborate with system owners and authorizing officials to facilitate authorization boundary determinations and allocation of controls to system elements;"
     status: "candidate"
+    reason: "PER-LSE is C on P-11 for the boundary; it is not in the S-3 raci for the allocation of controls (WI-413)."
+    work_item: "WI-413"
   - id: "REQ-SP800-37R2-0486"
     citation: {"ref": "SP800-37R2", "page": 137, "anchor": "Serve as part of the Risk Executive (function); and"}
     kind: "lettered"
@@ -4423,6 +4490,8 @@ requirements:
     context: "INFORMATION OWNER OR STEWARD"
     statement: "The information owner or steward is an organizational official with statutory, management, or operational authority for specified information and the responsibility for establishing the policies and procedures governing its generation, collection, processing, dissemination, and disposal. In information-sharing environments, the information owner/steward is responsible for establishing the rules for appropriate use and protection of the information and retains that responsibility even when the information is shared with or provided to other organizations. The owner/steward of the information processed, stored, or transmitted by a system may or may not be the same individual as the system owner. An individual system may contain information from multiple information owners/stewards. Information owners/stewards provide input to system owners regarding the security and privacy requirements and controls for the systems where the information is processed, stored, or transmitted."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0495"
     citation: {"ref": "SP800-37R2", "page": 138, "anchor": "The mission or business owner is the senior official or executive within"}
     kind: "modal"
@@ -4430,6 +4499,8 @@ requirements:
     context: "MISSION OR BUSINESS OWNER"
     statement: "The mission or business owner is the senior official or executive within an organization with specific mission or line of business responsibilities and that has a security or privacy interest in the organizational systems supporting those missions or lines of business. Mission or business owners are key stakeholders that have a significant role in establishing organizational mission and business processes and the protection needs and security and privacy requirements that ensure the successful conduct of the organization’s missions and business operations. Mission and business owners provide essential inputs to the risk management strategy, play an active part in the SDLC, and may also serve in the role of authorizing official."
     status: "candidate"
+    reason: "PER-SPONSOR is R on P-8, P-15 and P-16; the inputs to the risk management strategy are unheld, PER-SPONSOR is not in the P-2 raci (WI-414)."
+    work_item: "WI-414"
   - id: "REQ-SP800-37R2-0496"
     citation: {"ref": "SP800-37R2", "page": 138, "anchor": "The risk executive (function) is an individual or group within an organization"}
     kind: "indicative"
@@ -4446,6 +4517,8 @@ requirements:
     context: "RISK EXECUTIVE (FUNCTION)"
     statement: "The risk executive (function) ensures that risk considerations for systems (including authorization decisions for those systems and the common controls inherited by those systems), are viewed from an organization-wide perspective regarding the organization’s strategic goals and objectives in carrying out its core missions and business functions. The risk executive (function) ensures that managing risk is consistent throughout the organization, reflects organizational risk tolerance, and is considered along with other types of risk to ensure mission/business success. The risk executive (function) coordinates with senior leaders and executives to:"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0498"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Establish risk management roles and responsibilities;"}
     kind: "lettered"
@@ -4566,6 +4639,8 @@ requirements:
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Ensure that authorization decisions consider all factors necessary for mission and business success; and"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0511"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "Ensure shared responsibility for supporting organizational missions and business functions using external"}
     kind: "lettered"
@@ -4573,6 +4648,8 @@ requirements:
     context: "RISK EXECUTIVE (FUNCTION) The risk executive (function) coordinates with senior leaders and executives to:"
     statement: "• Ensure shared responsibility for supporting organizational missions and business functions using external providers receives the needed visibility and is elevated to appropriate decision-making authorities."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0512"
     citation: {"ref": "SP800-37R2", "page": 139, "anchor": "The risk executive (function) presumes neither a specific organizational structure nor formal"}
     kind: "modal"
@@ -4596,6 +4673,8 @@ requirements:
     context: "SECURITY OR PRIVACY ARCHITECT"
     statement: "The security or privacy architect is an individual, group, or organization responsible for ensuring that stakeholder protection needs and the corresponding system requirements necessary to protect organizational missions and business functions and individuals’ privacy are adequately addressed in the enterprise architecture including reference models, segment architectures, and solution architectures (systems supporting mission and business processes). The security or privacy architect serves as the primary liaison between the enterprise architect and the systems security or privacy engineer and coordinates with system owners, common control providers, and system security or privacy officers on the allocation of controls."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0515"
     citation: {"ref": "SP800-37R2", "page": 140, "anchor": "When the security architect and privacy architect are separate roles, the security"}
     kind: "modal"
@@ -4603,6 +4682,8 @@ requirements:
     context: "SECURITY OR PRIVACY ARCHITECT"
     statement: "When the security architect and privacy architect are separate roles, the security architect is generally responsible for aspects of the enterprise architecture that protect information and information systems from unauthorized system activity or behavior to provide confidentiality, integrity, and availability. The privacy architect is responsible for aspects of the enterprise architecture that ensure compliance with privacy requirements and manage the privacy risks to individuals associated with the processing of PII. Security and privacy architect responsibilities overlap regarding aspects of the enterprise architecture that protect the security of PII."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0516"
     citation: {"ref": "SP800-37R2", "page": 140, "anchor": "The senior accountable official for risk management is the individual that leads"}
     kind: "modal"
@@ -4638,6 +4719,8 @@ requirements:
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Coordinating with the senior agency information security officer to ensure coordination of privacy and information security activities;"
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0520"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Reviewing and approving the categorization of information systems that create, collect, use,"}
     kind: "lettered"
@@ -4654,6 +4737,8 @@ requirements:
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Designating which privacy controls will be treated as program management, common, system-specific, and hybrid privacy controls;"
     status: "candidate"
+    reason: "PER-PRIV is R on S-3 and allocation.yaml types controls; program management privacy controls are not a type (WI-415)."
+    work_item: "WI-415"
   - id: "REQ-SP800-37R2-0522"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Identifying assessment methodologies and metrics to determine whether privacy controls are implemented"}
     kind: "lettered"
@@ -4661,6 +4746,7 @@ requirements:
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Identifying assessment methodologies and metrics to determine whether privacy controls are implemented correctly, operating as intended, and sufficient to ensure compliance with applicable privacy requirements and manage privacy risks;"
     status: "candidate"
+    reason: "Privacy assessment methodologies and metrics are the privacy assessment plan of WI-03."
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0523"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Reviewing and approving privacy plans for information systems prior to authorization, reauthorization,"}
@@ -4709,6 +4795,8 @@ requirements:
     context: "SYSTEM ADMINISTRATOR"
     statement: "The system administrator is an individual, group, or organization responsible for setting up and maintaining a system or specific system elements. System administrator responsibilities include, for example, installing, configuring, and updating hardware and software; establishing and managing user accounts; overseeing or conducting backup, recovery, and reconstitution activities; implementing controls; and adhering to and enforcing organizational security and privacy policies and procedures. The system administrator role includes other types of system administrators (e.g., database administrators, network administrators, web administrators, and application administrators)."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0528"
     citation: {"ref": "SP800-37R2", "page": 142, "anchor": "The system owner is an organizational official responsible for the procurement, development,"}
     kind: "modal"
@@ -4777,6 +4865,8 @@ requirements:
     context: "SYSTEM SECURITY OR PRIVACY OFFICER"
     statement: "When the system security officer and system privacy officer are separate roles, the system security officer is generally responsible for aspects of the system that protect information and information systems from unauthorized system activity or behavior to provide confidentiality, integrity, and availability. The system privacy officer is responsible for aspects of the system that ensure compliance with privacy requirements and manage the privacy risks to individuals associated with the processing of PII. The responsibilities of system security officers and system privacy officers overlap regarding aspects of the system that protect the security of PII."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0536"
     citation: {"ref": "SP800-37R2", "page": 143, "anchor": "The system user is an individual or (system) process acting on behalf"}
     kind: "modal"
@@ -4792,6 +4882,8 @@ requirements:
     context: "SYSTEMS SECURITY OR PRIVACY ENGINEER"
     statement: "The systems security or privacy engineer is an individual, group, or organization responsible for conducting systems security or privacy engineering activities as part of the SDLC. Systems security and privacy engineering is a process that captures and refines security and privacy requirements for systems and ensures that the requirements are effectively integrated into systems and system elements through security or privacy architecting, design, development, and configuration. Systems security or privacy engineers are part of the development team— designing and developing organizational systems or upgrading existing systems along with ensuring continuous monitoring requirements are addressed at the system level. Systems security or privacy engineers employ best practices when implementing controls including software engineering methodologies; system and security or privacy engineering principles; secure or privacy-enhancing design, secure or privacy-enhancing architecture, and secure or privacy-enhancing coding techniques. Systems security or privacy engineers coordinate security and privacy activities with senior agency information security officers, senior agency officials for privacy, security and privacy architects, system owners, common control providers, and system security or privacy officers."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0538"
     citation: {"ref": "SP800-37R2", "page": 143, "anchor": "Organizations may define a system security manager or security manager role with"}
     kind: "modal"
@@ -4807,6 +4899,8 @@ requirements:
     context: "SYSTEMS SECURITY OR PRIVACY ENGINEER"
     statement: "When the systems security engineer and privacy engineer are separate roles, the systems security engineer is generally responsible for those activities associated with protecting information and information systems from unauthorized system activity or behavior to provide confidentiality, integrity, and availability. The privacy engineer is responsible for those activities associated with ensuring compliance with privacy requirements and managing the privacy risks to individuals associated with the processing of PII. The responsibilities of systems security engineers and privacy engineers overlap regarding activities associated with protecting the security of PII."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0540"
     citation: {"ref": "SP800-37R2", "page": 158, "anchor": "his appendix provides information on the system and common control authorization processes"}
     kind: "indicative"
@@ -6112,6 +6206,8 @@ requirements:
     context: "OTHER FACTORS EFFECTING THE EXECUTION OF THE RMF"
     statement: "Security and privacy requirements are part of the functional and nonfunctional168 requirements allocated to a system. The security and privacy requirements are incorporated into the SDLC simultaneously with the other requirements. Without the early integration of security and privacy requirements, significant expense may be incurred by the organization later in the life cycle to address security and privacy concerns that could have been included in the initial design. When security and privacy requirements are defined early in the SDLC and integrated with other system requirements, the resulting system has fewer deficiencies, and therefore, fewer privacy risks or security vulnerabilities that can be exploited in the future."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0685"
     citation: {"ref": "SP800-37R2", "page": 181, "anchor": "Integrating security and privacy requirements into the SDLC is the most effective,"}
     kind: "indicative"
@@ -6128,6 +6224,8 @@ requirements:
     context: "RISK MANAGEMENT IN THE SYSTEM DEVELOPMENT LIFE CYCLE"
     statement: "Risk management activities begin early in the SDLC and continue throughout the life cycle. These activities are important in helping to shape the security and privacy capabilities of the system; ensuring that the necessary controls are implemented and that the security and privacy risks are being adequately addressed on an ongoing basis; and ensuring that the authorizing officials understand the current security and privacy posture of the system in order to accept the risk to organizational operations and assets, individuals, other organizations, and the Nation."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0687"
     citation: {"ref": "SP800-37R2", "page": 181, "anchor": "Ensuring that security and privacy requirements are integrated into the SDLC helps"}
     kind: "modal"
@@ -6135,6 +6233,8 @@ requirements:
     context: "RISK MANAGEMENT IN THE SYSTEM DEVELOPMENT LIFE CYCLE"
     statement: "Ensuring that security and privacy requirements are integrated into the SDLC helps facilitate the development and implementation of more resilient systems to reduce the security and privacy risks (including supply chain risks) to organizational operations and assets, individuals, other organizations, and the Nation. This can be accomplished by using the concept of integrated project teams.169 Organizational officials ensure that security and privacy professionals are part of the SDLC activities. Such team integration fosters an increased level of cooperation among personnel responsible for the design, development, implementation, assessment, operation, maintenance, and disposition of systems and the security and privacy professionals advising the senior leadership on the controls needed to adequately mitigate security and privacy risks and protect organizational missions and business functions."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0688"
     citation: {"ref": "SP800-37R2", "page": 181, "anchor": "Organizations may employ a variety of development processes (e.g., waterfall, spiral, or"}
     kind: "should"
@@ -6161,6 +6261,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING"
     statement: "Security architects, privacy architects, systems security engineers, and privacy engineers can play an essential role in the SDLC and in the successful execution of the RMF. Security and privacy architects and engineers provide system owners and authorizing officials with technical advice on the selection and implementation of controls in information systems—guiding and informing risk-based decisions across the enterprise."
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0691"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Ensure that security and privacy requirements necessary to protect mission and business"}
     kind: "lettered"
@@ -6168,6 +6270,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Architects:"
     statement: "• Ensure that security and privacy requirements necessary to protect mission and business processes are adequately addressed in all aspects of enterprise architecture including reference models, segment and solution architectures, and the systems supporting those missions and business processes."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0692"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Serve as the primary liaison between the enterprise architect and the systems"}
     kind: "lettered"
@@ -6175,6 +6279,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Architects:"
     statement: "• Serve as the primary liaison between the enterprise architect and the systems security and privacy engineers."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0693"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Coordinate with system owners, common control providers, and system security and privacy"}
     kind: "lettered"
@@ -6182,6 +6288,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Architects:"
     statement: "• Coordinate with system owners, common control providers, and system security and privacy officers on the allocation of controls."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0694"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Advise authorizing officials, chief information officers, senior accountable officials for risk management/risk"}
     kind: "lettered"
@@ -6189,6 +6297,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Architects:"
     statement: "• Advise authorizing officials, chief information officers, senior accountable officials for risk management/risk executive (function), senior agency information security officers, and senior agency officials for privacy on a range of security and privacy issues."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0695"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Ensure that security and privacy requirements are integrated into systems and system"}
     kind: "lettered"
@@ -6196,6 +6306,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Engineers:"
     statement: "• Ensure that security and privacy requirements are integrated into systems and system elements through purposeful security or privacy architecting, design, development, and configuration."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0696"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Employ best practices when implementing controls within a system, including the use"}
     kind: "lettered"
@@ -6203,6 +6315,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Engineers:"
     statement: "• Employ best practices when implementing controls within a system, including the use of software engineering methodologies; systems security or privacy engineering principles; secure or privacy-enhancing design, secure or privacy-enhancing architecture, and secure or privacy-enhancing coding techniques."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0697"
     citation: {"ref": "SP800-37R2", "page": 183, "anchor": "Coordinate security and privacy activities with senior agency information security officers, senior"}
     kind: "lettered"
@@ -6210,6 +6324,8 @@ requirements:
     context: "THE IMPORTANCE OF ARCHITECTURE AND ENGINEERING Security and Privacy Engineers:"
     statement: "• Coordinate security and privacy activities with senior agency information security officers, senior agency officials for privacy, system owners, common control providers, security and privacy architects, and system security or privacy officers."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0698"
     citation: {"ref": "SP800-37R2", "page": 24, "anchor": "References;"}
     kind: "lettered"
@@ -6408,6 +6524,8 @@ requirements:
     context: "SECURITY OR PRIVACY ARCHITECT"
     statement: "Security or privacy architects, in coordination with system security or privacy officers, advise authorizing officials, chief information officers, senior accountable officials for risk management or risk executive (function), senior agency information security officers, and senior agency officials for privacy on a range of security and privacy issues. Examples include establishing authorization boundaries; establishing security or privacy alerts; assessing the severity of deficiencies in the system or controls; developing plans of action and milestones; creating risk mitigation approaches; and potential adverse effects of identified vulnerabilities or privacy risks."
     status: "candidate"
+    reason: "An Appendix D responsibility held by the persona card and the RACI; no rule fails a run whose role does not carry it."
+    work_item: "WI-406"
   - id: "REQ-SP800-37R2-0721"
     citation: {"ref": "SP800-37R2", "page": 159, "anchor": "Executive summary;"}
     kind: "lettered"
@@ -6457,6 +6575,8 @@ requirements:
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "[OMB A-130] requires organizations to implement the RMF that is described in this guideline. With the 2016 revision to the circular, OMB also requires organizations to integrate privacy into the RMF process:"
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
   - id: "REQ-SP800-37R2-0727"
     citation: {"ref": "SP800-37R2", "page": 167, "anchor": "The authorization to use is a streamlined version of the authorization to"}
     kind: "indicative"
@@ -6474,6 +6594,8 @@ requirements:
     context: ""
     statement: "Therefore, organizations executing the RMF take a broad view of the life cycle of information system development to provide a contextual relationship and linkage to architectural and engineering concepts that allow security and privacy risks (including supply chain risks) to be addressed throughout the life cycle and at the appropriate level of detail to help ensure that such capabilities are achieved. [ISO 15288] provides an engineering view of an information system and the entities with which the system interacts in its environment of operation.33"
     status: "candidate"
+    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    work_item: "WI-400"
     promoted: {"reason": "Rejected paragraph holds an indicative duty on organizations executing the RMF: take a broad view of the system life cycle so risks are addressed throughout it."}
   - id: "REQ-SP800-37R2-0729"
     citation: {"ref": "SP800-37R2", "page": 36, "anchor": "If a system contains information at multiple impact levels, the system is"}
