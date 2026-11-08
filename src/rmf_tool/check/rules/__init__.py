@@ -133,8 +133,6 @@ RULES: dict[str, Rule] = {
     "PVAL-002": nss_params.unstated_amounts,
     "TLR-001": tailoring.compensating,
     "TLR-002": tailoring.removal,
-    "DPOL-001": tailoring.dod_system_controls,
-    "DPOL-002": tailoring.dod_user_controls,
     "TLR-003": tailoring.assumptions,
     "TLR-004": tailoring.assurance,
     "TLR-005": tailoring.overlay_conditions,

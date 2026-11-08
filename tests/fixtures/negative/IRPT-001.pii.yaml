@@ -1,0 +1,12 @@
+rule: IRPT-001
+bases: [minimal]
+description: a loss of PII reported under the CUI issuance instead of DoD 5400.11-R
+mutations:
+- op: set_field
+  file: artifacts/data/incident-response.yaml
+  path: reporting_paths.3.reference
+  value: DoDM 5200.01 Volume 4
+expect:
+  errors: [IRPT-001]
+  messages:
+  - a loss or unauthorized disclosure of PII or other Privacy Act information is reported under DoD 5400.11-R, not DoDM 5200.01 Volume 4

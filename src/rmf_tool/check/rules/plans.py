@@ -58,6 +58,7 @@ CATO_EFFECT = "continuous"
 VOL_3, VOL_4 = "DoDM 5200.01 Volume 3", "DoDM 5200.01 Volume 4"
 NISP_MANUAL = "DoD 5220.22-M"
 CNSSI_1010 = "CNSSI 1010"
+PRIVACY_REG = "DoD 5400.11-R"  # loss or unauthorized disclosure of PII (DoDI 8500.01 p. 22)
 Check = Callable[[str], None]
 
 
@@ -245,6 +246,9 @@ def reporting_paths(ctx: Context) -> list[RunFinding]:
     if reference.get("cui-disclosure") != VOL_4:
         err("an unauthorized disclosure of CUI is reported under "
             f"{VOL_4}, not {reference.get('cui-disclosure')}")
+    if reference.get("pii-loss") != PRIVACY_REG:
+        err("a loss or unauthorized disclosure of PII or other Privacy Act information is "
+            f"reported under {PRIVACY_REG}, not {reference.get('pii-loss')}")
     if reference.get("cnssi-1010") != CNSSI_1010:
         err("cyber incident response and reporting complies with "
             f"{CNSSI_1010}, not {reference.get('cnssi-1010')}")

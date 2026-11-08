@@ -64,6 +64,8 @@ ISSM_GRANTS = ("support", "authority", "resources")
 # and a provider organization hold no such position as such.
 CYBER_POSITIONS = ("PER-AO", "PER-AODR", "PER-CISO", "PER-ISSM", "PER-ISSO", "PER-SCA",
                    "PER-ISSE", *CITIZEN_ONLY_ROLES[2:], *SUPERVISED_POSITIONS)
+# Personnel in cybersecurity positions are assigned in writing (DoDI 8500.01 p. 23).
+UNWRITTEN = ("oral", None)
 CNSSP_22, ANNEX_A = "CNSSP 22", "CNSSP 22 Annex A"
 RISK_STEPS = ("frame", "assess", "respond", "monitor")
 MISSION_RISK = "mission-business-risk-management"
@@ -281,6 +283,10 @@ def positions(ctx: Context) -> list[RunFinding]:
         if elsewhere is None and _key(position.get("manpower_id")) not in manpower:
             err(f"{rid}: the position {position.get('manpower_id')} is not identified in the "
                 "organization's manpower structure")
+        instrument = _sub(r, "appointment").get("instrument")
+        if instrument in UNWRITTEN:
+            err(f"{rid}: the cybersecurity position is not assigned in writing; the appointment "
+                f"instrument is {instrument}")
         if _sub(r, "duties_statement").get("form") != "written":
             err(f"{rid}: the appointee was given no written statement of cybersecurity "
                 "responsibilities")
