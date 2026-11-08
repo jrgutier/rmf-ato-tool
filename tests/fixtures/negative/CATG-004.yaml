@@ -1,0 +1,13 @@
+rule: CATG-004
+bases:
+- minimal
+description: a system categorized by the FIPS 200 high-water mark while CNSSI 1253 is held whole
+mutations:
+- {op: set_field, file: facts.yaml, path: categorization.method, value: high-water-mark}
+expect:
+  errors:
+  - CATG-004
+  also:
+  - BSEL-001
+  messages:
+  - 'the system is categorized by high-water-mark, not in accordance with CNSSI 1253, which DoDI 8500.01 requires of every DoD IS and PIT system'

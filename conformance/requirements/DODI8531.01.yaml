@@ -1028,9 +1028,9 @@ requirements:
     locator: "3.2.a.(3)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(3) Identify software requiring patches or updates."
-    status: "candidate"
-    reason: "Tier 1, left candidate: held by controls si-2 a and si-2(2) (security-relevant software and firmware updates installed); SSP-COV-001 forces their statements, and nothing judges what they say. No rule breaks this duty itself (a generic SSP-COV-001 item would not), so it waits on WI-500."
-    work_item: "WI-500"
+    status: "covered"
+    reason: "CFLR-003 (CF-8531-1) keeps si-2, whose part a identifies the flaws and the software needing security-relevant updates, in the baseline and the SSP; si-2(2) automated status is left out because a scoping consideration may remove it."
+    evidence: [{"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-1.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Identify software requiring patches or updates: si-2 tailored out of the baseline fails"}]
   - id: "REQ-DODI8531.01-0121"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Identify unpatched vulnerabilities using automated services wherever possible and use manual processes"}
     kind: "lettered"
@@ -1047,8 +1047,9 @@ requirements:
     locator: "3.2.a.(5)"
     context: "STEP 1: VULNERABILITY IDENTIFICATION There are six prime methods for vulnerability identification: The DoD Components will:"
     statement: "(5) Identify and maintain oversight of acquired, created, and discovered software; track software deployed on systems, subsystems, and system components."
-    status: "candidate"
-    reason: "Tier 1, left candidate: held by controls cm-8 and cm-8(3) (unauthorized software detected), with software, operating-system and firmware items in inventory.yaml; SSP-COV-001 forces their statements, and nothing judges oversight of acquired, created and discovered software. No rule breaks this duty itself (a generic SSP-COV-001 item would not), so it waits on WI-500."
+    status: "partial"
+    reason: "Proxy: CFLR-003 (CF-8531-2) keeps cm-8, cm-10 and cm-11 in effect; oversight of created and discovered software beyond the inventory is not checked."
+    evidence: [{"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-2.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Identify and maintain oversight of acquired, created and discovered software and track software deployed on systems: cm-8 tailored out of the baseline fails"}]
     work_item: "WI-500"
   - id: "REQ-DODI8531.01-0123"
     citation: {"ref": "DODI8531.01", "page": 15, "anchor": "Implement scanning programs to identify gaps and deficiencies in the function and"}
@@ -1464,7 +1465,9 @@ requirements:
     locator: "3.5.c"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "c. Compute and maintain metrics (mean time to patch, average patch deployment success rate, average vulnerability exposure, and others over time), to evaluate the effectiveness of patching processes."
-    status: "candidate"
+    status: "partial"
+    reason: "VULN-007 fails a patching metric of conmon.yaml vulnerability_management that is not a metric the strategy computes and maintains; the schema asks for at least one, measuring mean time to patch, patch deployment success rate, vulnerability exposure or another. Unheld: that the metrics are computed from patch data and kept over time, and that they are used to evaluate the patching process."
+    evidence: [{"kind": "rule", "target": "VULN-007", "fixture": "tests/fixtures/negative/VULN-007.metric.yaml", "expect": "named as a metric of patching effectiveness, is not a metric the strategy computes and maintains", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "asserts": "Compute and maintain metrics to evaluate the effectiveness of patching: a patching metric that is not a metric the strategy computes and maintains fails"}]
     work_item: "WI-15"
   - id: "REQ-DODI8531.01-0171"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Monitor compliance, remediation, mitigation, and document deviations from established configuration procedures and"}
@@ -1472,8 +1475,9 @@ requirements:
     locator: "3.5.d"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "d. Monitor compliance, remediation, mitigation, and document deviations from established configuration procedures and settings."
-    status: "candidate"
-    reason: "Tier 1, left candidate: held by control cm-6 c and d (deviations from configuration settings documented and monitored) and ART-STIG '## Accepted deviations'; SSP-COV-001 forces the statement, and nothing judges that deviations are documented. No rule breaks this duty itself (a generic SSP-COV-001 item would not), so it waits on WI-500."
+    status: "partial"
+    reason: "Proxy: CFLR-003 (CF-8531-3) keeps cm-6 and ca-7 in effect; the record of each deviation (ART-STIG accepted deviations) is not judged."
+    evidence: [{"kind": "rule", "target": "CFLR-003", "fixture": "tests/fixtures/negative/CFLR-003.8531-3.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Monitor compliance, remediation and mitigation and document deviations from established configuration settings: ca-7 tailored out of the baseline fails"}]
     work_item: "WI-500"
   - id: "REQ-DODI8531.01-0172"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Use standardized change management processes to implement and track configuration changes, patches,"}
@@ -1490,6 +1494,7 @@ requirements:
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "f. Recommend configuration changes to ensure the correct application of remediation or mitigation actions."
     status: "candidate"
+    reason: "No rule holds the configuration changes recommended to apply a remediation or mitigation correctly: the vulnerability record carries the chosen fix (VULN-005), not the configuration changes it needs. A recommended_configuration_changes field on the remediation record and a rule reading it would hold it (WI-153)."
     work_item: "WI-153"
   - id: "REQ-DODI8531.01-0174"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Use a vulnerability scan to identify physical or virtual devices that require"}
@@ -1527,7 +1532,9 @@ requirements:
     locator: "3.5.j"
     context: "STEP 4: REMEDIATION AND MITIGATION To assess remediation and mitigation techniques, the DoD Components will:"
     statement: "j. Destroy devices or media in accordance with CNSSI 4004.1."
-    status: "candidate"
+    status: "partial"
+    reason: "DISP-001 fails classified devices or media destroyed at M-7 not in accordance with CNSSI 4004.1. Unheld: destruction as a remediation or mitigation action at M-3, where 3.5.j sits, and CNSSI 4004.1 itself, which is not in the library (WI-506); unclassified media destroyed at disposal under NIST SP 800-88 pass, per DoDI 8500.01 Encl 3.18.a(9)."
+    evidence: [{"kind": "rule", "target": "DISP-001", "fixture": "tests/fixtures/negative/DISP-001.destroy.yaml", "expect": "are destroyed, not in accordance with CNSSI 4004.1", "claim": "constraint", "holds_when": "ART-DISP is produced or seeded", "asserts": "Destroy devices or media in accordance with CNSSI 4004.1: media destroyed not in accordance with CNSSI 4004.1 fail"}]
     work_item: "WI-506"
   - id: "REQ-DODI8531.01-0178"
     citation: {"ref": "DODI8531.01", "page": 19, "anchor": "Implement secure configurations for software, firmware, and hardware in accordance with applicable"}
@@ -1600,7 +1607,9 @@ requirements:
     locator: "3.6.f"
     context: "STEP 5: VERIFICATION AND MONITORING This verification includes actions to:"
     statement: "f. Comply with the DoD Information Security Continuous Monitoring program to meet Federal Information Security Modernization Act continuous monitoring requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-009 fails a system monitoring frequency less frequent than the organization's minimum, so the system's monitoring follows the organizational ISCM program; the DoD program's other requirements are unheld."
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "asserts": "Comply with the DoD Information Security Continuous Monitoring program: a system monitoring frequency less frequent than the organization's minimum fails", "sentence": "Comply with the DoD Information Security Continuous Monitoring program to meet Federal Information Security Modernization Act continuous monitoring requirements.", "holds_when": "ART-ORG-CONTEXT records minimum frequencies and ART-CONMON is in play"}]
     work_item: "WI-486"
   - id: "REQ-DODI8531.01-0186"
     citation: {"ref": "DODI8531.01", "page": 17, "anchor": "Vulnerability analysis evaluates vulnerabilities through impact assessment and analysis prioritization to assign"}

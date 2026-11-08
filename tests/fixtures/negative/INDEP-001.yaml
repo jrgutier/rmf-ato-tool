@@ -1,0 +1,11 @@
+rule: INDEP-001
+bases:
+- minimal
+description: the AO decides assessor independence without consulting the senior agency official for privacy
+mutations:
+- {op: set_field, file: artifacts/data/sap.yaml, path: assessor_independence.consulted, value: [PER-CIO, PER-CISO]}
+expect:
+  errors:
+  - INDEP-001
+  messages:
+  - 'the decision on assessor independence is not informed by consulting the senior agency official for privacy (PER-PRIV)'

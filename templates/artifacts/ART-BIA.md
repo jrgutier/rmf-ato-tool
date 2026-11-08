@@ -14,7 +14,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
      prose; each ## section needs at least one [[TOKEN]] (playbooks/_shared/tagging-and-traceability.md).
      Never write between the rmf:facts markers and never restate system facts. Delete this comment.
      The record is artifacts/data/bia.yaml; this document explains it. C-2 adds the reevaluations
-     and then lists itself in touched_by. -->
+     and the Assess iteration, M-1 a Monitor iteration, and each then lists itself in touched_by. -->
 
 ## Mission critical functions
 
@@ -31,3 +31,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 ## Reevaluations
 
 <<FILL: at C-2, each process whose disruption impact exceeds the availability impact of the categorization, reevaluated by the mission owner and the data owner, and the outcome; or a sentence saying none conflicts, with tokens>>
+
+## Criticality analysis
+
+<<FILL: the iterations of the criticality analysis (Frame at P-8, Assess at C-2, Monitor at M-1 for each change of significant security impact) and the prioritized critical processes, systems and components with the processes each underpins, with tokens>>

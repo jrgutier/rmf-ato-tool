@@ -1,6 +1,6 @@
-"""Cases the sources permit that CATG-001 and PIIC-001 must not refuse: not applicable on the
-confidentiality of an information type (FIPS 199, SP 800-60 v1r1 4.2), and the approval of the
-PII determination by a designee of the SAOP (CNSSI 1253 2.3)."""
+"""Cases the sources permit that CATG-001, CADJ-001 and PIIC-001 must not refuse: not
+applicable on the confidentiality of an information type (FIPS 199, SP 800-60 v1r1 4.2), and the
+approval of the PII determination by a designee of the SAOP (CNSSI 1253 2.3)."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def test_not_applicable_confidentiality_leaves_the_system_at_low(tmp_path):
     run_dir = base_copy("minimal", tmp_path / "run")
     edit_yaml(run_dir / INFOTYPES, _all_types("not-applicable"))
     edit_yaml(run_dir / "facts.yaml", lambda d: d["categorization"].__setitem__("c", "low"))
-    assert _found(run_dir, "CATG-001") == []
+    assert _found(run_dir, "CATG-001") + _found(run_dir, "CADJ-001") == []
 
 
 def test_not_applicable_confidentiality_does_not_lower_a_typed_mark(tmp_path):
@@ -40,7 +40,7 @@ def test_not_applicable_confidentiality_does_not_lower_a_typed_mark(tmp_path):
     def edit(data):
         data["information_types"][0]["confidentiality"] = {"base": "not-applicable"}
     edit_yaml(run_dir / INFOTYPES, edit)
-    assert _found(run_dir, "CATG-001") == []
+    assert _found(run_dir, "CATG-001") + _found(run_dir, "CADJ-001") == []
 
 
 @pytest.mark.parametrize("objective", ["integrity", "availability"])

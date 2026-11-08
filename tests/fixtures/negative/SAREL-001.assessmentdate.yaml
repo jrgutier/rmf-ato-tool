@@ -1,0 +1,19 @@
+rule: SAREL-001
+bases:
+- minimal
+description: no assessment dates
+mutations:
+- op: set_field
+  file: artifacts/data/sar-summary.yaml
+  path: sites
+  value:
+  - site: Program office test lab
+    dates: []
+expect:
+  errors:
+  - SAREL-001
+  also:
+  - DEL-001
+  - RUN-FM-001
+  messages:
+  - does not carry the CNSSI 1254 data element Assessment Date

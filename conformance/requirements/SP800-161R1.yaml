@@ -1797,7 +1797,9 @@ requirements:
     locator: "3.1"
     context: "C-SCRM in Acquisition"
     statement: "In addition to addressing cybersecurity risks throughout the supply chain and performing C- SCRM activities during each phase of the acquisition process, enterprises should develop and execute an acquisition strategy that drives reductions in their overall risk exposure. By applying such strategies, enterprises can reduce cybersecurity risks throughout the supply chain, within specific procurement processes, and for the overall enterprise. Enterprises will aid, direct, and inform efforts to realize targeted risk-reducing outcomes by adopting acquisition policies and processes that integrate C-SCRM into acquisition activities."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRMLC-001 fails a procurement life-cycle step into which C-SCRM considerations are not incorporated, the acquisition processes integrating C-SCRM; CSSTRAT-003 fails a cybersecurity strategy not developed as part of the documentation behind the acquisition strategy. Unheld: that the enterprise acquisition strategy drives reductions in overall risk exposure, which sits above a run."
+    evidence: [{"kind": "rule", "target": "SCRMLC-001", "fixture": "tests/fixtures/negative/SCRMLC-001.yaml", "expect": "step of the procurement and contract management life cycle", "claim": "constraint", "sentence": "Enterprises will aid, direct, and inform efforts to realize targeted risk-reducing outcomes by adopting acquisition policies and processes that integrate C-SCRM into acquisition activities.", "asserts": "Acquisition processes integrate C-SCRM into acquisition activities: a step of the procurement life cycle with no C-SCRM considerations fails"}, {"kind": "rule", "target": "CSSTRAT-003", "fixture": "tests/fixtures/negative/CSSTRAT-003.acqstrategy.yaml", "expect": "the CSS is developed as part of the documentation that results in the acquisition strategy", "claim": "constraint", "sentence": "In addition to addressing cybersecurity risks throughout the supply chain and performing C- SCRM activities during each phase of the acquisition process, enterprises should develop and execute an acquisition strategy that drives reductions in their overall risk exposure.", "asserts": "Enterprises develop an acquisition strategy addressing cybersecurity risks: a cybersecurity strategy not developed as part of the documentation that results in the acquisition strategy fails"}]
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0205"
     citation: {"ref": "SP800-161R1", "page": 51, "anchor": "Departments and agencies should refer to Appendix F to implement this guidance"}
@@ -1968,7 +1970,9 @@ requirements:
     locator: "3.1.2"
     context: "The Role of C-SCRM in the Acquisition Process"
     statement: "Acquisition policies and processes need to incorporate C-SCRM considerations into each step of the procurement and contract management life cycle management process (i.e., plan procurement, define and develop requirements, perform market analysis, complete procurement, ensure compliance, and monitor performance for changes that affect C-SCRM risk status) as described in [IR7622]."
-    status: "candidate"
+    status: "covered"
+    reason: "SCRMLC-001 fails a step of the NISTIR 7622 procurement and contract management life cycle (plan procurement, define requirements, market analysis, complete procurement, ensure compliance, monitor performance) into which scrm-acquisition.yaml records no C-SCRM considerations."
+    evidence: [{"kind": "rule", "target": "SCRMLC-001", "fixture": "tests/fixtures/negative/SCRMLC-001.yaml", "expect": "step of the procurement and contract management life cycle", "claim": "constraint", "asserts": "Acquisition processes incorporate C-SCRM considerations into each step of the procurement and contract management life cycle: the market analysis step with none fails"}]
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0223"
     citation: {"ref": "SP800-161R1", "page": 54, "anchor": "This includes ensuring that cybersecurity risks throughout the supply chain are addressed"}
@@ -1976,7 +1980,9 @@ requirements:
     locator: "3.1.2"
     context: "The Role of C-SCRM in the Acquisition Process"
     statement: "This includes ensuring that cybersecurity risks throughout the supply chain are addressed when making ICT/OT-related charge card purchases."
-    status: "candidate"
+    status: "partial"
+    reason: "SCRMLC-001 fails a program that makes ICT/OT charge card purchases with no C-SCRM considerations recorded for them; the schema requires the charge_card_purchases answer whenever procurement steps are recorded. Unheld: whether a run that answers it makes no charge card purchases does; the answer is the run's own."
+    evidence: [{"kind": "rule", "target": "SCRMLC-001", "fixture": "tests/fixtures/negative/SCRMLC-001.card.yaml", "expect": "charge card purchases and records no C-SCRM considerations", "claim": "constraint", "asserts": "Cybersecurity risks throughout the supply chain are addressed when making ICT/OT charge card purchases: charge card purchases with no C-SCRM considerations fail"}]
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0224"
     citation: {"ref": "SP800-161R1", "page": 54, "anchor": "During the ‘plan procurement’ step, the need for and the criticality of"}
@@ -2476,7 +2482,9 @@ requirements:
     locator: "3.4.1.•"
     context: "Foundational Practices"
     statement: "• Establish consistent, well-documented, repeatable processes for determining FIPS 199 impact levels."
-    status: "candidate"
+    status: "partial"
+    reason: "CADJ-001 fails provisional impact levels not reviewed against every SP 800-60 Step 3 and FIPS 199 factor, so each run determines its FIPS 199 impact levels by the same documented process; that the process is consistent and repeatable across the enterprise is the organization's, unheld by a run."
+    evidence: [{"kind": "rule", "target": "CADJ-001", "fixture": "tests/fixtures/negative/CADJ-001.factors.yaml", "expect": "the provisional impact levels are not reviewed against", "claim": "constraint", "asserts": "Establish consistent, well-documented processes for determining FIPS 199 impact levels: provisional impact levels not reviewed against the national-interest factor fail"}]
     work_item: "WI-482"
   - id: "REQ-SP800-161R1-0277"
     citation: {"ref": "SP800-161R1", "page": 61, "anchor": "Establish and begin using supplier risk-assessment processes on a prioritized basis (inclusive"}
@@ -2539,7 +2547,7 @@ requirements:
     statement: "• Establish internal checks and balances to ensure compliance with security and quality requirements."
     status: "partial"
     reason: "Tier 1, left partial: ASMT-007 fails an assessor lacking the independence the AO determined, an internal check on compliance with security requirements; checks and balances on quality requirements are not held."
-    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.independence.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "constraint", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessor lacking the required independence fails"}]
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "constraint", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessor lacking the required independence fails"}]
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0284"
     citation: {"ref": "SP800-161R1", "page": 61, "anchor": "Establish a supplier management program that includes, for example, guidelines for purchasing"}
@@ -9290,7 +9298,9 @@ requirements:
     locator: "G.2.1. Frame"
     context: "RISK ASSUMPTIONS"
     statement: "Critical processes are those that — if disrupted, corrupted, or disabled — are likely to result in mission degradation or failure. Mission-critical processes are dependent on their supporting systems that, in turn, depend on critical components in those systems (e.g., hardware, software, and firmware). Mission-critical processes also depend on information and processes (performed by technology or people, to include support service contractors in some instances) that are used to execute the critical processes. Those components and processes that underpin and enable mission-critical processes or deliver defensive – and commonly shared – processes (e.g., access control, identity management, and crypto) and unmediated access (e.g., power supply) should also be considered critical. A criticality analysis is the primary method by which mission-critical processes, associated systems/components, and enabling infrastructure and support services are identified and prioritized. The criticality analysis also involves analyzing critical suppliers that may not be captured by internal criticality analysis (e.g., supply chain interdependencies including fourth- and fifth-party suppliers)."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a criticality analysis whose critical items are not a prioritized list, that leaves a mission critical process underpinned by no critical item, or that names no defensive, commonly shared component as critical when mission critical functions are present. Unheld: the processes performed by people and support service contractors that critical processes depend on, and the analysis of critical suppliers outside the internal analysis (fourth- and fifth-party suppliers)."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.mission.yaml", "expect": "underpinned by no critical item", "claim": "constraint", "sentence": "Those components and processes that underpin and enable mission-critical processes or deliver defensive – and commonly shared – processes (e.g., access control, identity management, and crypto) and unmediated access (e.g., power supply) should also be considered critical.", "asserts": "Components and processes that underpin mission-critical processes are considered critical: a mission critical process underpinned by no critical item fails"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "sentence": "A criticality analysis is the primary method by which mission-critical processes, associated systems/components, and enabling infrastructure and support services are identified and prioritized.", "asserts": "The criticality analysis identifies and prioritizes mission-critical processes and components: critical items whose ranks are not a prioritized list fail"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1087"
     citation: {"ref": "SP800-161R1", "page": 269, "anchor": "Enterprises will make criticality determinations as part of enterprise risk management activities"}
@@ -9298,7 +9308,9 @@ requirements:
     locator: "G.2.1. Frame"
     context: "RISK ASSUMPTIONS"
     statement: "Enterprises will make criticality determinations as part of enterprise risk management activities based on the process outlined in 57"
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a criticality analysis with no Frame iteration and critical items that are not a prioritized list of determinations. Unheld: that the determinations are part of the enterprise risk management activities, which sit above a run."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "asserts": "Enterprises make criticality determinations in a prioritized list: critical items whose ranks are not a prioritized list fail"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.yaml", "expect": "has no Frame iteration (P-8)", "claim": "presence", "asserts": "Criticality determinations are made in the Frame step of risk management: an analysis with no Frame iteration fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1088"
     citation: {"ref": "SP800-161R1", "page": 269, "anchor": "Where possible, C-SCRM should inherit those assumptions and tailor/refine them to include"}
@@ -9335,7 +9347,9 @@ requirements:
     locator: "G.2.1. Frame"
     context: "RISK ASSUMPTIONS"
     statement: "Determining criticality is an iterative process performed at all levels during both Frame and Assess. In Frame, criticality determination is expected to be performed at a high level using the available information with further detail incorporated through additional iterations or at the Assess step. Determining criticality may include the following:"
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a criticality analysis with no Frame iteration, with no Assess iteration once the system is categorized, or with the Assess iteration dated before the Frame one it details. Unheld: that the Frame determination is high level and that each level of the enterprise performs one."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "asserts": "Criticality determination in Frame is detailed further at the Assess step: an Assess iteration dated before the Frame iteration fails"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.assess.yaml", "expect": "has no Assess iteration updating the Frame one", "claim": "presence", "asserts": "Criticality determination performed in Frame gets further detail at the Assess step: no Assess iteration updating the Frame one fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1092"
     citation: {"ref": "SP800-161R1", "page": 270, "anchor": "Define criticality analysis procedures to ensure that there is a set of"}
@@ -9391,7 +9405,9 @@ requirements:
     locator: "G.2.1. Frame"
     context: "RISK ASSUMPTIONS"
     statement: "Criticality can be determined for existing systems or for future system investments, development, or integration efforts based on system architecture and design. It is an iterative activity that should be performed when a change warranting iteration is identified in the Monitor step."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a change of significant security impact in changes.yaml with no Monitor iteration of the criticality analysis naming it, or one dated before the change. Unheld: a change warranting iteration other than one of significant security impact; the source does not say which change warrants it."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.monitor.yaml", "expect": "a change with a significant security impact", "claim": "constraint", "asserts": "The iterative criticality activity is performed when a change warranting iteration is identified in Monitor: a significant change with no Monitor iteration fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1099"
     citation: {"ref": "SP800-161R1", "page": 271, "anchor": "For C-SCRM, threat sources include 1) adversarial threats, such as cyber/physical attacks"}
@@ -10426,7 +10442,9 @@ requirements:
     locator: "G.2.2. Assess"
     context: "CRITICALITY ANALYSIS"
     statement: "Enterprises should update and tailor criticality established during the Frame step of the risk management process, including the [FIPS199] system. For low-impact systems, enterprises should minimally assess criticality regarding interdependencies that systems may have with moderate or high-impact systems. If systems are used extensively throughout the enterprise, enterprises should determine the holistic impact of component failure or compromise in the low-impact system."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a categorized system whose criticality analysis has no Assess iteration updating the Frame one, or one dated before it. Unheld: for a low-impact system, the interdependencies with moderate- or high-impact systems, and the holistic impact of component failure in a low-impact system used across the enterprise."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "sentence": "Enterprises should update and tailor criticality established during the Frame step of the risk management process, including the [FIPS199] system.", "asserts": "Enterprises update criticality established during the Frame step: an Assess update dated before the Frame iteration it updates fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1222"
     citation: {"ref": "SP800-161R1", "page": 288, "anchor": "Refining the dependency analysis and assessment to understand which components may require"}
@@ -10458,8 +10476,11 @@ requirements:
     locator: "G.2.2. Assess"
     context: "CRITICALITY ANALYSIS"
     statement: "The outcome of the updated criticality analysis is a narrowed, prioritized list of the enterprise’s critical processes, systems, and system components, as well as a refined understanding of corresponding dependencies within the supply chain. Enterprises can use the criticality process in Task 1-1 to update their criticality analysis."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails critical items that are not a prioritized list (ranks 1 to n), the outcome this entry names. The marked sentence is a permission (enterprises can use the Task 1-1 process), sought for a ruling; the refined understanding of supply chain dependencies is unheld."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "asserts": "The updated criticality analysis is a narrowed, prioritized list: critical items whose ranks are not a prioritized list fail"}]
     work_item: "WI-09"
+    ruling_sought: [{"sentence": "Enterprises can use the criticality process in Task 1-1 to update their criticality analysis.", "reason": "A permission: enterprises can use the Task 1-1 process to update the analysis; any process that updates it meets the sentence."}]
   - id: "REQ-SP800-161R1-1226"
     citation: {"ref": "SP800-161R1", "page": 289, "anchor": "Because more information will be available in the Assess step, enterprises can"}
     kind: "modal"
@@ -10530,7 +10551,9 @@ requirements:
     locator: "G.2.2. Assess"
     context: "CRITICALITY ANALYSIS"
     statement: "Criticality analysis is performed iteratively and may be performed at any point in the SDLC and concurrently by level. The first iteration is likely to identify critical processes and systems or components that have a direct impact on mission and business processes. Successive iterations will include information from the criticality analysis, threat analysis, vulnerability analysis, and mitigation strategies defined at each of the other levels. Each iteration will refine the criticality analysis outcomes and result in the addition of defensive functions. Several iterations will likely be required to establish and maintain criticality analysis results. Enterprises should document or record the results of their criticality analysis and review and update this assessment on an annual basis, at minimum."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails two iterations of the criticality analysis more than a year apart, an Assess iteration dated before the Frame one, and, with mission critical functions present, no defensive component among the critical items. Unheld: that successive iterations take in the threat analysis, vulnerability analysis and mitigation strategies of the other levels, and a review against the current date when no later iteration is recorded."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.annual.yaml", "expect": "SP 800-161 asks for a review and update annually at minimum", "claim": "constraint", "sentence": "Enterprises should document or record the results of their criticality analysis and review and update this assessment on an annual basis, at minimum.", "asserts": "Enterprises record the criticality analysis results and review and update the assessment annually at minimum: iterations more than a year apart fail"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "sentence": "Criticality analysis is performed iteratively and may be performed at any point in the SDLC and concurrently by level.", "asserts": "Criticality analysis is performed iteratively, Frame then Assess: an Assess iteration dated before the Frame iteration it updates fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1235"
     citation: {"ref": "SP800-161R1", "page": 289, "anchor": "TASK 2-1: Identify threats to and vulnerabilities in enterprise information systems and"}
@@ -13200,7 +13223,7 @@ requirements:
     statement: "List any information exchange agreements (e.g., Interconnection Security Agreements [ISA], Memoranda of Understanding [MOU], Memoranda of Agreement [MOA]) between the system and another system, the date of the agreement, the security authorization status of the other systems, the name of the authorizing official, a description of the connection, and diagrams that show the flow of any information exchange."
     status: "partial"
     reason: "Each interconnection lists its agreement, date, the other system's authorization status and authorizing official; diagrams of the exchange are not tied to the record."
-    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.record.yaml", "expect": "has no interconnection record", "asserts": "Each interconnection record lists the information exchange agreement between the system and another system, the date of the agreement and the authorizing official", "claim": "constraint"}]
+    evidence: [{"kind": "rule", "target": "SYSD-003", "fixture": "tests/fixtures/negative/SYSD-003.yaml", "expect": "has no interconnection record", "asserts": "Each interconnection record lists the information exchange agreement between the system and another system, the date of the agreement and the authorizing official", "claim": "constraint"}]
     work_item: "WI-190"
     promoted: {"reason": "Template instruction of D.3.1.6: the C-SCRM plan lists each information exchange agreement with its date, the other system's authorization status, authorizing official, connection and flow diagrams; the extractor found no marker."}
   - id: "REQ-SP800-161R1-1544"
@@ -13259,7 +13282,9 @@ requirements:
     locator: "G.2.2. Assess"
     context: ""
     statement: "TASK 2-0: Update the criticality analysis of mission and business processes, systems, and system components to narrow the scope (and resource needs) for C-SCRM activities to those most important to mission success."
-    status: "candidate"
+    status: "partial"
+    reason: "BIA-003 fails a categorized system with no Assess iteration of the criticality analysis (Task 2-0, at C-2), one dated before the Frame iteration, and critical processes, systems and components that are not a prioritized list. Unheld: that the narrowed list scopes the C-SCRM activities and their resource needs."
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "asserts": "Update the criticality analysis of processes, systems and components to narrow the scope to those most important: critical items that are not a prioritized list fail"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "asserts": "Update the criticality analysis at Task 2-0 after the Frame one: an update dated before the Frame iteration it updates fails"}]
     work_item: "WI-09"
     promoted: {"reason": "Task 2-0 of the Assess step: update the criticality analysis of processes, systems and components; rejected though Task 2-1, REQ-SP800-161R1-1235, was kept."}
   - id: "REQ-SP800-161R1-1550"

@@ -159,6 +159,24 @@ def cm_tools(ctx: Context) -> list[RunFinding]:
 
 # --- contingency plan -------------------------------------------------------------------
 
+def bypasses(ctx: Context) -> list[RunFinding]:
+    """BYP-001: a cybersecurity mechanism is bypassed only on a procedure coordinated with the
+    ISSO and approved in writing by the ISSM (DoDI 8500.01 Encl 3.21.g); cm-plan.yaml bypasses
+    records each one, and none is the user's own unilateral act."""
+    data, out, err = _in_play(ctx, "BYP-001", "ART-CMP", CM_FILE)
+    if data is None:
+        return out
+    for item in _dicts(data.get("bypasses")):
+        bid = item.get("id")
+        if "PER-ISSO" not in (item.get("coordinated_with") or []):
+            err(f"{bid}: the bypass procedure is not coordinated with the ISSO")
+        approval = item.get("approval") if isinstance(item.get("approval"), dict) else {}
+        if approval.get("by") != "PER-ISSM" or approval.get("form") != "written":
+            err(f"{bid}: the bypass has no written approval from the ISSM (approved by "
+                f"{approval.get('by')}, {approval.get('form')})")
+    return out
+
+
 def bia_times(ctx: Context) -> list[RunFinding]:
     data, out, err = _in_play(ctx, "CPLAN-001", "ART-CP", CP_FILE)
     if data is None:
@@ -615,4 +633,4 @@ def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
                 ("SVCA-001", service_agreements), ("SVCA-002", service_effectiveness),
                 ("SSPR-001", plan_elements), ("FUND-001", funding), ("CRYP-001", cryptography),
                 ("CRYP-002", space_cryptography), ("CRYP-003", crypto_vulnerabilities),
-                ("TELE-001", telework))
+                ("TELE-001", telework), ("BYP-001", bypasses))

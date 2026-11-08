@@ -314,6 +314,21 @@
         "REQ-SP800-37R2-0245"
       ]
     },
+    "information_owners": {
+      "title": "The information owners or stewards of the information types, the types whose impact levels each sets, and the sources of its input (CATG-005)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["persona", "organization", "types", "sources"],
+        "properties": {
+          "persona": {"title": "The persona of the owner", "type": "string", "pattern": "^PER-[A-Z]+$"},
+          "organization": {"title": "The owner's organization, which may be outside the one that owns or operates the system", "type": "string", "minLength": 1},
+          "types": {"title": "Information types the owner sets the impact levels of", "type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^INF-\\d{2,3}$"}},
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
     "cti": {
       "title": "How controlled technical information is protected where it leaves the system (DoDI 5000.83): the exposure on unclassified networks, the DFARS clause, the DoDI 8582.01 terms in agreements and losses from reported incidents",
       "type": "object",

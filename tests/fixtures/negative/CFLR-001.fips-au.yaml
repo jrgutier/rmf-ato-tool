@@ -1,0 +1,24 @@
+rule: CFLR-001
+bases:
+- minimal
+description: au-3 is tailored out of a networked system although it carries CF-FIPS-AU, a duty FIPS 
+  200 places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: au-3\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-001
+  also:
+  - DPOL-001
+  messages:
+  - "CF-FIPS-AU: FIPS 200 requires that audit records are created, protected and retained for monitoring,
+    analysis, investigation and reporting, and each user's actions can be uniquely traced to the user,
+    and au-3 is tailored out of the baseline"

@@ -1,0 +1,14 @@
+rule: BSEL-002
+bases: [example]
+description: the baseline leaves out ac-1, a control the CNSSI 1253 baseline selects
+build: false
+mutations:
+  - op: replace_text
+    file: baseline.json
+    old: "    {\n      \"control_id\": \"ac-1\",\n      \"origin\": \"baseline\"\n    },\n"
+    new: ""
+expect:
+  errors: [BSEL-002]
+  also: [GEN-STALE-001]
+  messages:
+    - "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it leaves out ac-1 (baseline)"

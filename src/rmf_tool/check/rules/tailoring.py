@@ -172,9 +172,9 @@ def _downgrade_problem(ctx: Context, cid: str, objectives: list[str]) -> str | N
 
 
 def removal(ctx: Context) -> list[RunFinding]:
-    """A remove action rests on a scoping consideration, the absence of risk, or a legal or
-    policy requirement whose circumstances do not apply; a downgrade states its three
-    conditions; and every remove and compensating action is tested against the laws,
+    """TLR-002: a remove action rests on a scoping consideration, the absence of risk, or a legal
+    or policy requirement whose circumstances do not apply (a downgrade's conditions are
+    TLRB-001); and every remove and compensating action is tested against the laws,
     regulations and policies that carry the control (CNSSI 1253 2.6, SP 800-53B 2.4)."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
@@ -198,21 +198,6 @@ def removal(ctx: Context) -> list[RunFinding]:
                     "circumstances do not apply")
             elif basis == "scoping" and consideration is None:
                 err(f"{cid} is removed by scoping and names no scoping consideration")
-            downgrade = a.get("downgrade") or {}
-            objectives = list(downgrade.get("objectives") or [])
-            if consideration == "security-objective" and not objectives:
-                err(f"{cid} is downgraded under the security objective consideration and "
-                    "names no security objective it supports")
-            problem = _downgrade_problem(ctx, cid, objectives) if objectives else None
-            if problem:
-                err(f"{cid}: the downgrade does not reflect the FIPS 199 security category of "
-                    f"the security objectives it supports; {problem}")
-            if objectives and RISK_ASSESSMENT not in (downgrade.get("sources") or []):
-                err(f"{cid}: the downgrade is not supported by the organizational assessment "
-                    "of risk ART-RA")
-            if objectives and downgrade.get("security_relevant_unaffected") is not True:
-                err(f"{cid}: the downgrade affects the protection of the security-relevant "
-                    "information within the system")
         law = a.get("law_policy")
         if not isinstance(law, dict):
             err(f"{cid}: the {kind} action records no test against the laws, regulations and "
@@ -239,16 +224,54 @@ def removal(ctx: Context) -> list[RunFinding]:
     return out
 
 
+def downgrade(ctx: Context) -> list[RunFinding]:
+    """TLRB-001, split from TLR-002: a removal under the security objective consideration names
+    the objectives it supports, reflects their FIPS 199 category, rests on the organizational
+    assessment of risk and leaves the security-relevant information protected (CNSSI 1253
+    2.6)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("TLRB-001", message, TAILORING, None, {"S-2"}))
+
+    for a in _actions(data):
+        if a.get("action") != "remove":
+            continue
+        cid = a.get("control_id")
+        consideration = (a.get("scoping") or {}).get("consideration")
+        down = a.get("downgrade") or {}
+        objectives = list(down.get("objectives") or [])
+        if consideration == "security-objective" and not objectives:
+            err(f"{cid} is downgraded under the security objective consideration and names no "
+                "security objective it supports")
+        problem = _downgrade_problem(ctx, cid, objectives) if objectives else None
+        if problem:
+            err(f"{cid}: the downgrade does not reflect the FIPS 199 security category of the "
+                f"security objectives it supports; {problem}")
+        if objectives and RISK_ASSESSMENT not in (down.get("sources") or []):
+            err(f"{cid}: the downgrade is not supported by the organizational assessment of risk "
+                "ART-RA")
+        if objectives and down.get("security_relevant_unaffected") is not True:
+            err(f"{cid}: the downgrade affects the protection of the security-relevant "
+                "information within the system")
+    return out
+
+
 def basis_applies(action: dict[str, Any]) -> bool:
     """Whether a removal's requirement test binds: not for a requirement whose circumstances
     do not apply to the system, which names its authority instead."""
     return action.get("basis") in ("scoping", "no-risk")
 
 
-# --- DPOL-001, DPOL-002: controls that carry a DoDI 8500.01 duty -------------------------
+# --- DPOL-001 to DPOL-003, CFLR-001 to CFLR-003: control floors --------------------------
 
 STAND_ALONE = "stand-alone"
 NOT_APPLICABLE = "not-applicable"
+CATO_FILE = "artifacts/data/cato.yaml"
+CATO = "AD-CATO"
 
 
 def _approvals(data: dict[str, Any], kind: str, key: str) -> dict[Any, Any]:
@@ -256,16 +279,30 @@ def _approvals(data: dict[str, Any], kind: str, key: str) -> dict[Any, Any]:
     return {a.get(key): a.get("approved_by") for a in _actions(data) if a.get("action") == kind}
 
 
-def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
-    """A control framework/baselines/tailoring-inputs.yaml dod_policy_controls maps to a duty
-    DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline
-    and in effect, whatever law_policy says: it is not removed, not recorded not-applicable in
-    the SSP, and not stood in for by a compensating control whose risk the AO or AODR did not
-    accept (risk.accepted_by, as TLR-001 reads it; a lead default, for the user's ruling). A
+def _binds(ctx: Context, record: dict[str, Any], system_type: dict[str, Any]) -> bool:
+    """Whether a floor record's duty binds this system: its ``applies_to`` system types, and
+    ``applies_when: cato`` while a cATO is sought (an AD-CATO record or the cATO record)."""
+    kinds = record.get("applies_to")
+    if kinds and system_type.get("value") not in kinds:
+        return False
+    if record.get("applies_when") == "cato":
+        ledger = ctx.ledger if isinstance(ctx.ledger, list) else []
+        return ctx.run.path(CATO_FILE).is_file() or any(
+            isinstance(r, dict) and r.get("decision") == CATO for r in ledger)
+    return True
+
+
+def _floor(ctx: Context, rule: str, records: list[dict[str, Any]]) -> list[RunFinding]:
+    """A control a floor record of framework/baselines/tailoring-inputs.yaml maps to a duty its
+    source places on the system, its users or its program stays in the baseline and in effect,
+    whatever law_policy says: it is not removed, not recorded not-applicable in the SSP, and
+    not stood in for by a compensating control whose risk the AO or AODR did not accept
+    (risk.accepted_by, as TLR-001 reads it; a lead default, for the user's ruling). A
     stand-alone system with no DODIN connection may tailor its control set as appropriate with
-    the approval of the AO (DoDI 8500.01 p. 38 1.e.(1).(c), p. 39 1.e.(2).(d).5); that
-    permission is exercised by a remove action, which records the approver in approved_by.
-    Inheriting a control is no removal."""
+    the approval of the AO (DoDI 8500.01 p. 38 1.e.(1).(c), p. 39 1.e.(2).(d).5, which governs
+    every DoD IS); that permission is exercised by a remove action, which records the approver
+    in approved_by. Inheriting a control is no removal. A record binds only the system types it
+    names in applies_to, and under its applies_when condition."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
@@ -273,8 +310,6 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     system_type = system_type if isinstance(system_type, dict) else {}
     stand_alone = system_type.get("connectivity") == STAND_ALONE \
         and system_type.get("dodin_connection") == "none"
-    records = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
-               if p["subject"] == subject]
     removed = _approvals(data, "remove", "control_id")
     compensated = {a.get("compensating_for"): (a.get("risk") or {}).get("accepted_by")
                    for a in _actions(data) if a.get("action") == "compensating"}
@@ -286,6 +321,8 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
                         f"{policy['text']}, and {what}", TAILORING, None, {"S-2"}))
 
     for policy in records:
+        if not _binds(ctx, policy, system_type):
+            continue
         controls = policy["controls"]
         cut = [c for c in controls if c in removed and not stand_alone]
         unapproved = [c for c in controls if c in removed and stand_alone
@@ -306,6 +343,18 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     return out
 
 
+def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
+    """The dod_policy_controls records of one subject: DoDI 8500.01's duties."""
+    records = baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
+    return _floor(ctx, rule, [p for p in records if p["subject"] == subject])
+
+
+def _control_floor(ctx: Context, rule: str) -> list[RunFinding]:
+    """The control_floors records one rule judges, one source family each."""
+    records = baseline_mod.load_inputs(ctx.run.repo).get("control_floors") or []
+    return _floor(ctx, rule, [p for p in records if p["rule"] == rule])
+
+
 def dod_system_controls(ctx: Context) -> list[RunFinding]:
     """DPOL-001: the controls that carry DoDI 8500.01's duties on the system."""
     return _dod_policy(ctx, "DPOL-001", "system")
@@ -315,6 +364,31 @@ def dod_user_controls(ctx: Context) -> list[RunFinding]:
     """DPOL-002: the controls that carry DoDI 8500.01's duties on the ISSO, privileged users and
     authorized users."""
     return _dod_policy(ctx, "DPOL-002", "users")
+
+
+def dod_program_controls(ctx: Context) -> list[RunFinding]:
+    """DPOL-003: the controls that carry DoDI 8500.01's duties on DoD IT through the DoD
+    Component's cybersecurity program."""
+    return _dod_policy(ctx, "DPOL-003", "program")
+
+
+def nist_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-001: the controls that carry FIPS 200's minimum security requirements and the SP
+    800-53A assessment policy. The stand-alone permission _floor allows is DoDI 8500.01's
+    (pp. 38-39), which governs every DoD IS, FIPS 200 floors included; FIPS 200 itself allows
+    no waiver (p. 5). A lead default, for the user's ruling."""
+    return _control_floor(ctx, "CFLR-001")
+
+
+def dodin_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-002: the controls that carry DoDI 8530.01's DODIN protection duties."""
+    return _control_floor(ctx, "CFLR-002")
+
+
+def dod_acquisition_floor(ctx: Context) -> list[RunFinding]:
+    """CFLR-003: the controls that carry the duties of DoDI 5000.83, DoDI 8531.01 and the DoD
+    CIO cATO evaluation criteria."""
+    return _control_floor(ctx, "CFLR-003")
 
 
 # --- TLR-003: baseline and overlay assumptions -----------------------------------------
@@ -573,6 +647,24 @@ def requirement_trace(ctx: Context) -> list[RunFinding]:
 
 # --- TLR-010: common control inheritance -----------------------------------------------
 
+def referenced(ctx: Context) -> list[RunFinding]:
+    """SSPI-001: a control S-3 allocates as a common control is referenced in the inheriting
+    system's security plan as inherited, from a named provider (SP 800-37r2 2.4, Task S-4)."""
+    data = ctx.data(ALLOCATION_FILE)
+    if not isinstance(data, dict) or not (_active(ctx, "S-3") and _active(ctx, "S-4")):
+        return []
+    common = {str(a.get("control_id")): a.get("provider") for a in data.get("allocations") or []
+              if isinstance(a, dict) and a.get("type") == "common"}
+    out: list[RunFinding] = []
+    for rel, item in family_records(ctx, SSP_DIR, "controls"):
+        cid = str(item.get("control_id"))
+        if cid in common and item.get("status") != "inherited":
+            out.append(make("SSPI-001", f"{cid} is allocated as a common control of "
+                            f"{common[cid]}, and the security plan does not reference it as "
+                            f"inherited (status {item.get('status')})", rel, None, {"S-4"}))
+    return out
+
+
 def inheritance(ctx: Context) -> list[RunFinding]:
     """The system owner and the AO determine, for each provider, that the common controls on
     offer protect the inheriting system commensurate with risk, having examined their
@@ -612,4 +704,69 @@ def inheritance(ctx: Context) -> list[RunFinding]:
             err(f"the determination for {name} does not examine the control parameters "
                 "when determining if the common control is adequate to mitigate "
                 "system-specific risks")
+    return out
+
+
+# --- TRADE-001: cost, schedule and performance weighed in tailoring -------------------------
+
+def trade_offs(ctx: Context) -> list[RunFinding]:
+    """TRADE-001: S-2 records the risk-related issues weighed in deciding which controls to
+    employ, at least one trade-off of whatever factor applies (SP 800-53B 2.4: risk-related issues
+    *such as* cost, schedule and performance, an open list), and a trade-off that removed a control
+    matches a remove action of tailoring.yaml, whose basis TLR-002 holds to a risk-based
+    determination (CNSSI 1253 3.2.2 3.f.4)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("TRADE-001", message, TAILORING, None, {"S-2"}))
+
+    records = [r for r in data.get("trade_offs") or [] if isinstance(r, dict)]
+    if not records:
+        err("tailoring.yaml records no trade-off of the risk-related issues weighed in deciding "
+            "which controls to employ")
+        return out
+    removed = {a.get("control_id") for a in _actions(data) if a.get("action") == "remove"}
+    for r in records:
+        if r.get("outcome") != "removed":
+            continue
+        for cid in r.get("controls") or []:
+            if cid not in removed:
+                err(f"a {r.get('factor')} trade-off removes {cid}, which no remove action of "
+                    "tailoring.yaml removes")
+    return out
+
+
+# --- OVC-001: conflicts between overlays, and who resolves them -----------------------------
+
+CONFLICT_DECIDERS = (("PER-AO", "PER-AODR"), ("PER-PRIV",))
+CONFLICT_PARTIES = {"PER-IO": "the information owner", "PER-PM": "the information system owner",
+                    "PER-RE": "the risk executive (function)"}
+
+
+def overlay_conflicts(ctx: Context) -> list[RunFinding]:
+    """OVC-001: a conflict between overlays over applying or removing a control is resolved by
+    the AO or its designee (PER-AODR) and the SAOP, in coordination with the information owner,
+    the system owner and the risk executive (function) (CNSSI 1253 3.2.2.2)."""
+    data = _tailoring(ctx)
+    if data is None or not _active(ctx, "S-2"):
+        return []
+    out: list[RunFinding] = []
+    for c in data.get("overlay_conflicts") or []:
+        if not isinstance(c, dict):
+            continue
+        what = ", ".join(str(x) for x in c.get("controls") or [])
+        deciders = set(c.get("resolved_by") or [])
+        if not all(deciders & set(group) for group in CONFLICT_DECIDERS):
+            out.append(make("OVC-001", f"the overlay conflict over {what} is not resolved by the "
+                            "AO (or designee) and the SAOP (or designee)", TAILORING, None,
+                            {"S-2"}))
+        parties = set(c.get("coordinated_with") or [])
+        for persona, name in CONFLICT_PARTIES.items():
+            if persona not in parties:
+                out.append(make("OVC-001", f"the overlay conflict over {what} is resolved without "
+                                f"coordination with {name} ({persona})", TAILORING, None,
+                                {"S-2"}))
     return out

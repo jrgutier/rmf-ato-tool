@@ -1229,16 +1229,17 @@ requirements:
     context: "THE NEED TO PROTECT INFORMATION, SYSTEMS, ORGANIZATIONS, AND INDIVIDUALS Organizations should answer several key questions when addressing information security and privacy controls:"
     statement: "• What security and privacy controls are needed to satisfy security and privacy requirements and to adequately manage mission/business risks or risks to individuals?"
     status: "covered"
-    reason: "S-1 answers which controls are needed: rmf baseline resolve selects them for the categorization, and a baseline for another one fails GEN-STALE-001"
-    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.selection.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "The controls needed to satisfy requirements and manage risks start from the baseline selected for the system: a baseline for another impact differs from a fresh baseline resolve"}]
+    reason: "S-1 answers which controls are needed: rmf baseline resolve selects them for the categorization, and a baseline for another one fails BSEL-001"
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "The controls needed to satisfy requirements and manage risks start from the baseline selected for the system: a baseline for another impact differs from a fresh baseline resolve"}]
   - id: "REQ-SP800-53R5-0005"
     citation: {"ref": "SP800-53R5", "page": 28, "anchor": "Have the selected controls been implemented or is there a plan in"}
     kind: "lettered"
     locator: "INTRODUCTION.•"
     context: "THE NEED TO PROTECT INFORMATION, SYSTEMS, ORGANIZATIONS, AND INDIVIDUALS Organizations should answer several key questions when addressing information security and privacy controls:"
     statement: "• Have the selected controls been implemented or is there a plan in place to do so?"
-    status: "candidate"
-    reason: "Control-held: implementation status is required on every SSP statement (PL-2, SSP-COV-001, SSP-STAT-001) and a control not yet in place reaches the POA&M under CA-5; only the generic coverage rules fail a selected control that is neither implemented nor planned"
+    status: "partial"
+    reason: "Proxy: a floor control of CFLR-001 recorded not-applicable in the SSP, neither implemented nor planned, fails; for the other selected controls the question is answered only by the status SSP-STAT-001 reads and the generic coverage rules."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.ssp.yaml", "expect": "is recorded not-applicable in the SSP", "claim": "constraint", "asserts": "Have the selected controls been implemented or is there a plan: a selected control recorded not-applicable in the SSP fails"}]
     work_item: "WI-488"
   - id: "REQ-SP800-53R5-0006"
     citation: {"ref": "SP800-53R5", "page": 28, "anchor": "What is the required level of assurance (i.e., grounds for confidence) that"}
@@ -1298,8 +1299,8 @@ requirements:
     context: "PURPOSE AND APPLICABILITY"
     statement: "This publication establishes controls for systems and organizations. The controls can be implemented within any organization or system that processes, stores, or transmits information. The use of these controls is mandatory for federal information systems10 in accordance with Office of Management and Budget (OMB) Circular A-130 [OMB A-130] and the provisions of the Federal Information Security Modernization Act11 [FISMA], which requires the implementation of minimum controls to protect federal information and information systems.12 This publication, along with other supporting NIST publications, is designed to help organizations identify the security and privacy controls needed to manage risk and to satisfy the security and privacy requirements in FISMA, the Privacy Act of 1974 [PRIVACT], OMB policies (e.g., [OMB A-130]), and designated Federal Information Processing Standards (FIPS), among others. It accomplishes this objective by providing a comprehensive and flexible catalog of security and privacy controls to meet current and future protection needs based on changing threats, vulnerabilities, requirements, and technologies. The publication also improves communication among organizations by providing a common lexicon that supports the discussion of security, privacy, and risk management concepts."
     status: "partial"
-    reason: "Control-held: the mandatory controls are the baseline.json controls (GEN-STALE-001 holds the selection), each stated under PL-2 (SSP-COV-001) and assessed under CA-2 (SAR-COV-001); the first sentence is descriptive"
-    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.selection.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "The use of these controls is mandatory for federal information systems: a baseline for another impact differs from a fresh baseline resolve", "sentence": "The use of these controls is mandatory for federal information systems10 in accordance with Office of Management and Budget (OMB) Circular A-130 [OMB A-130] and the provisions of the Federal Information Security Modernization Act11 [FISMA], which requires the implementation of minimum controls to protect federal information and information systems.12"}]
+    reason: "Control-held: the mandatory controls are the baseline.json controls (BSEL-001 holds the selection), each stated under PL-2 (SSP-COV-001) and assessed under CA-2 (SAR-COV-001); the first sentence is descriptive"
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "The use of these controls is mandatory for federal information systems: a baseline for another impact differs from a fresh baseline resolve", "sentence": "The use of these controls is mandatory for federal information systems10 in accordance with Office of Management and Budget (OMB) Circular A-130 [OMB A-130] and the provisions of the Federal Information Security Modernization Act11 [FISMA], which requires the implementation of minimum controls to protect federal information and information systems.12"}]
     work_item: "WI-488"
   - id: "REQ-SP800-53R5-0013"
     citation: {"ref": "SP800-53R5", "page": 29, "anchor": "Information systems that have been designated as national security systems, as defined"}
@@ -1398,8 +1399,9 @@ requirements:
     locator: "1.3"
     context: "ORGANIZATIONAL RESPONSIBILITIES"
     statement: "[OMB A-130] requires federal agencies to implement the NIST Risk Management Framework for the selection of controls for federal information systems. [EO 13800] requires federal agencies to implement the NIST Framework for Improving Critical Infrastructure Cybersecurity to manage cybersecurity risk. The NIST frameworks are also available to nonfederal organizations as optional resources."
-    status: "candidate"
-    reason: "A run executes the NIST RMF, its 47 tasks pinned by FW-TASK-001, a repo-scope rule FW-REQ-003 cannot cite; the EO 13800 framework is the agency's own program"
+    status: "partial"
+    reason: "FW-TASK-001 fails a task outside its SP 800-37r2 step and pins every task's name and the 47-task set, so the run implements the NIST RMF; the selection of controls the sentence names is unheld here (the overlay misplaces a Categorize task, and the Select step's selection is the baseline code's, rmf baseline resolve, which no rule cited reads), and the EO 13800 Cybersecurity Framework is the agency's own program, which a run does not implement."
+    evidence: [{"kind": "rule", "target": "FW-TASK-001", "fixture": "tests/fixtures/framework_neg/FW-TASK-001.step/", "expect": "differs from its SP 800-37r2 step", "claim": "constraint", "asserts": "The run implements the NIST Risk Management Framework: each task sits in the RMF step NIST gives it."}]
     work_item: "WI-480"
   - id: "REQ-SP800-53R5-0025"
     citation: {"ref": "SP800-53R5", "page": 31, "anchor": "Rigorous security and privacy planning and system development life cycle management;"}
@@ -1457,7 +1459,7 @@ requirements:
     context: "ORGANIZATIONAL RESPONSIBILITIES"
     statement: "To address the organization’s concerns about assessment and determination of risk, security and privacy requirements are satisfied with the knowledge and understanding of the organizational risk management strategy.17 The risk management strategy considers the cost, schedule, performance, and supply chain issues associated with the design, development, acquisition, deployment, operation, sustainment, and disposal of organizational systems. A risk management process is then applied to manage risk on an ongoing basis.18"
     status: "candidate"
-    reason: "P-2 records the strategy and tolerance R-2 and S-5 read; the cost, schedule, performance and supply chain issues the strategy considers are unheld"
+    reason: "The marked sentence, a risk management process applied to manage risk on an ongoing basis, is not broken by ISCM-004's AO approval of the continuous monitoring strategy (a T5 candidate item). The cost, schedule, performance and supply chain issues the P-2 strategy considers are unheld (WI-485)."
     work_item: "WI-485"
   - id: "REQ-SP800-53R5-0031"
     citation: {"ref": "SP800-53R5", "page": 31, "anchor": "The catalog of security and privacy controls can be effectively used to"}
@@ -1465,7 +1467,9 @@ requirements:
     locator: "1.3"
     context: "ORGANIZATIONAL RESPONSIBILITIES"
     statement: "The catalog of security and privacy controls can be effectively used to protect organizations, individuals, and information systems from traditional and advanced persistent threats and privacy risks arising from the processing of personally identifiable information (PII) in varied operational, environmental, and technical scenarios. The controls can be used to demonstrate compliance with a variety of governmental, organizational, or institutional security and privacy requirements. Organizations have the responsibility to select the appropriate security and privacy controls, to implement the controls correctly, and to demonstrate the effectiveness of the controls in satisfying security and privacy requirements.19 Security and privacy controls can also be used in developing specialized baselines or overlays for unique or specialized missions or business applications, information systems, threat concerns, operational environments, technologies, or communities of interest.20"
-    status: "candidate"
+    status: "partial"
+    reason: "ASMT-005 fails a control determined satisfied while one of its determination statements is not, so the effectiveness of the controls is demonstrated statement by statement. Unheld: the selection of the appropriate controls (TLR-009 and the S-2 rules hold the baseline) and their correct implementation beyond the assessment; the other sentences describe what the catalog can be used for."
+    evidence: [{"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.satisfied.yaml", "expect": "is satisfied, yet the determination statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "Organizations have the responsibility to select the appropriate security and privacy controls, to implement the controls correctly, and to demonstrate the effectiveness of the controls in satisfying security and privacy requirements.19", "asserts": "Organizations demonstrate the effectiveness of the controls in satisfying requirements: a control determined satisfied while a determination statement is not fails"}]
     work_item: "WI-03"
   - id: "REQ-SP800-53R5-0032"
     citation: {"ref": "SP800-53R5", "page": 32, "anchor": "This publication defines controls to satisfy a diverse set of security and"}
@@ -1651,8 +1655,9 @@ requirements:
     locator: "2.2"
     context: "FIGURE 1: CONTROL STRUCTURE"
     statement: "The control section prescribes a security or privacy capability to be implemented. Security and privacy capabilities are achieved by the activities or actions, automated or nonautomated, carried out by information systems and organizations. Organizations designate the responsibility for control development, implementation, assessment, and monitoring. Organizations have the flexibility to implement the controls selected in whatever manner that satisfies organizational mission or business needs consistent with law, regulation, and policy."
-    status: "candidate"
-    reason: "Control-held: responsibility for development and implementation is responsible_roles on every SSP statement (PL-2, SSP-COV-001), assessment the SAP team (CA-2) and monitoring the conmon frequencies (CA-7); 'Organizations have the flexibility' is a permission and the rest describes the control section"
+    status: "partial"
+    reason: "Every SSP statement names the roles responsible for developing and implementing the control (ssp-controls responsible_roles, required, at least one persona); responsibility for assessment (the SAP team) and monitoring (the conmon frequencies) is held by other records no item here cites. 'Organizations have the flexibility' is a permission and the opening sentences describe the control section."
+    evidence: [{"kind": "schema", "target": "framework/schema/ssp-controls.schema.json#/properties/controls/items/properties/responsible_roles", "claim": "constraint", "asserts": "Organizations designate the responsibility for control development and implementation: every SSP statement names the roles responsible for developing and implementing the control"}]
     work_item: "WI-488"
   - id: "REQ-SP800-53R5-0055"
     citation: {"ref": "SP800-53R5", "page": 37, "anchor": "The discussion section provides additional information about a control. Organizations can use"}

@@ -1,0 +1,30 @@
+rule: DISP-001
+bases:
+- minimal
+description: classified media destroyed under DoDM 5200.01 Volume 3 alone, not CNSSI 4004.1
+mutations:
+- op: set_field
+  file: run.yaml
+  path: seeded
+  value:
+  - {artifact: ART-CHG, from_task: M-1, path: artifacts/data/changes.yaml}
+  - {artifact: ART-SECRPT, from_task: M-5, path: artifacts/data/posture-reports.yaml}
+  - {artifact: ART-DISP, from_task: M-7, path: artifacts/data/disposal.yaml}
+- op: write_file
+  file: artifacts/data/disposal.yaml
+  content: |
+    end_state: The relay appliance and console leave service with no CUI recoverable from them.
+    environment: {restored_to: original}
+    residual_check: {date: '2027-03-01', no_detrimental_factors: true}
+    storage: {stored: false}
+    supply_chain: {non_reuse_elements: [Report store drives], prevention: Drives are shredded on site.}
+    media:
+    - {class: classified, items: Report store drives, action: destroy, issuances: [DODM5200.01-V3], sources: [INT-030.A1]}
+    sources: [INT-030.A1]
+expect:
+  errors:
+  - DISP-001
+  also:
+  - RCP-002
+  messages:
+  - 'Report store drives are destroyed, not in accordance with CNSSI 4004.1'

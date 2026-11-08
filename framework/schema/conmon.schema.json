@@ -1461,7 +1461,8 @@
           "required": [
             "patch_sources",
             "coverage_scan",
-            "noncompliant_devices"
+            "noncompliant_devices",
+            "metrics"
           ],
           "properties": {
             "patch_sources": {
@@ -1511,6 +1512,34 @@
               "title": "How non-compliant devices are found and brought into compliance",
               "type": "string",
               "minLength": 1
+            },
+            "metrics": {
+              "title": "Metrics computed and maintained over time to evaluate the effectiveness of patching, each a metric of the strategy",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "metric",
+                  "measure"
+                ],
+                "properties": {
+                  "metric": {
+                    "type": "string",
+                    "pattern": "^MET-\\d{2}$"
+                  },
+                  "measure": {
+                    "title": "What the metric measures of patching (DoDI 8531.01 3.5.c names these and others)",
+                    "enum": [
+                      "mean-time-to-patch",
+                      "patch-deployment-success-rate",
+                      "vulnerability-exposure",
+                      "other"
+                    ]
+                  }
+                }
+              }
             }
           }
         },

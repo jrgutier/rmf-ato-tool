@@ -1,0 +1,23 @@
+rule: CFLR-002
+bases:
+- minimal
+description: si-5 is tailored out of a networked system although it carries CF-8530-19, a duty DoDI 
+  8530.01 places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: si-5\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-002
+  also:
+  - CFLR-001
+  messages:
+  - 'CF-8530-19: DoDI 8530.01 requires that notice of attack sensing and warning and of warning intelligence
+    is received, and si-5 is tailored out of the baseline'

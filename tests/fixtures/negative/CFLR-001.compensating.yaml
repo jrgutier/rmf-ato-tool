@@ -1,0 +1,26 @@
+rule: CFLR-001
+bases:
+- minimal
+description: a compensating control stands for ac-3, which carries CF-FIPS-AC, with its risk 
+  accepted by the ISSM, not the AO or AODR
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: si-4\n    action: compensating\n    compensating_for: ac-3\n    source: catalog\n\
+    \    cannot_implement: Said not to be implementable on the relay.\n    equivalence: Monitoring stands
+    in.\n    risk: {assessment: Low residual risk., accepted_by: PER-ISSM, sources: [ART-RA]}\n    law_policy:\n\
+    \      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control: false\n  \
+    \    sources: [INT-028.A3]\n    rationale: Monitoring stands in.\n    sources: [INT-028.A3]\n  - control_id:
+    cp-3.1"
+expect:
+  errors:
+  - CFLR-001
+  also:
+  - CFLR-003
+  - DPOL-001
+  - TLR-001
+  messages:
+  - 'CF-FIPS-AC: FIPS 200 requires that system access is limited to authorized users, processes acting
+    for them and devices, and to the transactions and functions authorized users may exercise, and a compensating
+    control stands for ac-3 without its risk accepted by the AO or AODR'

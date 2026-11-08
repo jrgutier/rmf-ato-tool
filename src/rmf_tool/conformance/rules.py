@@ -220,6 +220,53 @@ def shape(reg: Register, resolver: Resolver, repo: Path,
     return out + _source_problems(reg, index, repo) + _entry_problems(reg, resolver, repo, index)
 
 
+# --- FW-REQ-002 --------------------------------------------------------------------------
+
+FREEZE_CANDIDATE = "candidate"
+FREEZE_NO_STRONG = "partial with no strong item"
+
+
+def blocks_freeze(probe: evidence.Probe | None, entry: Mapping[str, Any],
+                  tier: int | None) -> str | None:
+    """FW-REQ-002 at p13 (ADR-0005, 2026-11-08): what keeps an entry from the freeze, or None.
+    Only tier 1 blocks: a candidate, or a partial no evidence item of which judges strong.
+    Without a probe the second cannot be judged, so only a candidate is named."""
+    if tier != TIER_1:
+        return None
+    if entry["status"] == "candidate":
+        return FREEZE_CANDIDATE
+    if entry["status"] == "partial" and probe is not None and not any(
+            evidence.judge(probe, item, entry).strength == evidence.STRONG
+            for item in entry.get("evidence") or ()):
+        return FREEZE_NO_STRONG
+    return None
+
+
+def freeze(reg: Register, index: Mapping[str, Any], probe: evidence.Probe) -> list[Finding]:
+    """FW-REQ-002: the freeze fails on a tier 1 candidate and on a tier 1 partial with no strong
+    item. Open work items are the backlog and do not block; a candidate outside tier 1 warns,
+    once per document."""
+    out = []
+    advisory: Counter[str] = Counter()
+    for ref, entry in reg.live():
+        path = register.requirements_path(ref)
+        tier = _tier(index, ref)
+        blocker = blocks_freeze(probe, entry, tier)
+        if blocker == FREEZE_CANDIDATE:
+            out.append(_err("FW-REQ-002", f"{entry['id']}: a tier 1 entry is still a candidate; "
+                            "triage it before the freeze", path))
+        elif blocker == FREEZE_NO_STRONG:
+            out.append(_err("FW-REQ-002", f"{entry['id']}: a tier 1 partial with no strong "
+                            "evidence item; give it one that fails when part of its duty is "
+                            "broken", path))
+        elif tier != TIER_1 and entry["status"] == "candidate":
+            advisory[ref] += 1
+    for ref, count in sorted(advisory.items()):
+        out.append(Finding("FW-REQ-002", "W", f"{ref}: {count} candidate(s) outside tier 1, "
+                           "advisory at the freeze", register.requirements_path(ref)))
+    return out
+
+
 # --- FW-REQ-003 --------------------------------------------------------------------------
 
 

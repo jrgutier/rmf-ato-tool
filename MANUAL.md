@@ -394,6 +394,7 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 - ART-ORG-CONTEXT "## Software program" states the Component's direction under DoWI 8430.01 for the software it develops or deploys.
 - ART-ORG-CONTEXT records the Component CIO's process for designated approval authorities to make certification determinations and issue an IATT or ATO expeditiously for a capability fielded under urgent capability acquisition.
 - artifacts/data/scrm-org.yaml states the C-SCRM frame of SP 800-161 Tasks 1-1 to 1-4 (OT suppliers in scope, each assumption refined at P-14, threat sources addressed, appetite at Level 1, tolerance at Levels 2 and 3, priorities and the nine framing outputs), the C-SCRM policy and strategy, what each level holds and informs, the process steps and the maturity of the key practices (SCRM-020, SCRM-022, SCRM-024, SCRM-027 to SCRM-029).
+- org-context.yaml reference_currency records the check of CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 for a later edition, and adopts a later edition of the first three and of SP 800-53 within a year of its final publication (RCUR-001).
 
 **Alignment**
 
@@ -727,6 +728,7 @@ Writes to `facts.yaml`: `missions`.
 - Interviews record the supported missions and mission/business processes, citable by P-9, P-10 and C-1.
 - facts.yaml `missions` (from framework 0.2.0) lists each mission, business function and mission/business process with its kind and whether it is mission essential, identified by the mission or business owner; an essential function names its supporting assets and data once P-11 and P-12 put them on record (MSN-001).
 - artifacts/data/bia.yaml records whether mission critical functions are present and which, and each supported process with the impact of its disruption, the users' recovery time requirement and its interdependencies (BIA-001).
+- bia.yaml criticality records the Frame iteration of the SP 800-161 criticality analysis and a prioritized list of the critical processes, systems and components, each underpinning processes the analysis lists (BIA-003).
 
 **Alignment**
 
@@ -896,6 +898,7 @@ Writes to `facts.yaml`: `boundary_id`.
 
 - The authorization boundary (that is, the system) is determined (DoDI 8510.01 Table 1 outcome).
 - ART-BND and boundary.yaml describe the boundary, network architecture, data flows and components; facts.boundary_id set_by P-11.
+- For a system processing PII, boundary.yaml data_flow says the flows carry PII and names each information type of PII they carry (PIIF-001).
 
 **Alignment**
 
@@ -952,6 +955,7 @@ Writes to `facts.yaml`: `boundary_id`.
 - ART-INFOTYPES and infotypes.yaml list each information type with its SP 800-60 identifier and provisional impact levels.
 - The determination of whether the system processes PII is recorded for approval by the SAOP or designee.
 - For a system processing PII, each PII information type records whom the PII is about and whether it holds PHI or SSNs, and infotypes.yaml privacy records the issuances its handling complies with (DoD 5400.11-R, DoDI 5400.16, DoD 8580.02-R for PHI), the SORN, the SSN justification, records coordination and the PIA determination with its DoDI 5400.16 basis and due date (PRIV-001).
+- infotypes.yaml information_owners identifies the owner or steward of every information type with the sources of its input, and each type's impact levels cite that input or an answer the owner gave (CATG-005).
 
 **Alignment**
 
@@ -1351,6 +1355,7 @@ Writes to `facts.yaml`: `categorization`.
 - ART-CAT records the impact per information type and security objective and the basis for each value.
 - The categorization is not adjusted to reflect management decisions about control stringency; those go through tailoring (S-2).
 - A supported process in bia.yaml whose disruption impact exceeds the availability impact is reevaluated by the mission owner and the data owner, recorded in bia.yaml reevaluations (BIA-002).
+- bia.yaml criticality records an Assess iteration, not dated before the Frame one, that updates the criticality analysis with the categorization and narrows the prioritized critical items, a component item naming a boundary component (BIA-003).
 
 **Alignment**
 
@@ -1617,6 +1622,7 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 - Each solicitation in protection-requirements.yaml carries the PPP countermeasures, the cyber resilient engineering requirements and the software and hardware assurance remediation strategies, and the mitigations of each reassessment reach the solicitations and contracts (PPROT-004).
 - The ISSO, a primary role (DoDI 8510.01 Table 1), gives a P-17 interview (WFQ-002).
 - artifacts/data/scrm-acquisition.yaml lists the C-SCRM requirements the contract carries, each allocated to the contract in requirements.yaml, every contract term of SP 800-161, revalidation, and a selection record per supplier screened against every prohibited supplier list (SCRM-007, SCRM-008, SCRM-015).
+- scrm-acquisition.yaml procurement_steps incorporates C-SCRM considerations into each step of the procurement and contract management life cycle, and into charge card purchases when the program makes them (SCRMLC-001).
 
 **Alignment**
 
@@ -1752,6 +1758,8 @@ Writes to `facts.yaml`: `baseline_id`.
 - Every remove action rests on a basis and, for a downgrade, its three conditions; every remove and compensating action is tested against law, regulation, policy and OMB policy (TLR-002); every compensating control carries its source, reason and the risk acceptance of the AO or its designated representative (TLR-001); specification information names selected controls (TLR-006).
 - Each selected control with a Privacy Implementation Considerations checkmark (CNSSI 1253 Appendix D, or Table 1 of an applied overlay) has a tailoring.yaml privacy_implementation record of the coordination with the SAOP or designee, before it is implemented, addressing each implication of its checkmark (PIC-001).
 - The C-SCRM control decisions (selected, tailored or removed, with cost and the AO's acceptance of a removal) are recorded in scrm-plan.yaml controls at S-4 (SCRM-010).
+- tailoring.yaml trade_offs records the risk-related trade-offs (cost, schedule, performance, complexity, maintenance or assessment cost, supply chain, trustworthiness) weighed in deciding which controls to employ, a removal matching a remove action (TRADE-001).
+- tailoring.yaml overlay_conflicts records each conflict between overlays resolved by the AO or AODR and the SAOP, in coordination with the information owner, the system owner and the risk executive (function) (OVC-001).
 
 **Alignment**
 
@@ -1891,6 +1899,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - The statement of each baseline control the catalog marks as contributing to assurance (`rmf catalog show --fields assurance`) says how its assurance requirements are addressed, and they are satisfied once it is in place (SSE-003; FIPS 200 Section 4).
 - artifacts/data/software.yaml records, for covered software, the CI/CD pipeline and build with signed provenance, AI used in development, the SBOM and other machine-readable evidence, integrated test and evaluation and the software program (SWA-001; DoWI 8430.01).
 - artifacts/data/scrm-plan.yaml holds the system C-SCRM plan of SP 800-18r2, the C-SCRM control decisions, critical suppliers in contingency and incident planning, supplier monitoring after award, training content and the supply chain reporting M-5 follows (SCRM-009 to SCRM-012, SCRM-014).
+- cm-plan.yaml bypasses records each bypass of a cybersecurity mechanism on a procedure coordinated with the ISSO and approved in writing by the ISSM (BYP-001).
 
 **Alignment**
 
@@ -1960,7 +1969,7 @@ Writes to `facts.yaml`: `baseline_id`.
 - conmon.yaml has room for the AO's or AODR's approval of the strategy and the minimum frequency of each control; it can come with the plan approval at S-6 (ISCM-004 holds S-6).
 - Where AD-CATO is a goal, automated monitoring is as near real time as feasible and manual controls have defined timelines.
 - For a system processing PII, conmon.yaml privacy is the privacy continuous monitoring strategy, with the SAOP's guidance, each privacy control of the baseline with its assessment frequency, and the SAOP consulted on each control added to it (PRIV-006).
-- conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, and the central log repository (VULN-007).
+- conmon.yaml vulnerability_management lays the five steps of the DoD vulnerability management process across the system, the records that support it, how vulnerabilities are identified, the analysis tools from development to retirement, monthly authenticated and non-authenticated scans, the patch sources and the reach of automated patching, the metrics of the strategy that evaluate patching effectiveness over time, and the central log repository (VULN-007).
 - The supplier monitoring of scrm-plan.yaml is integrated into the continuous monitoring strategy.
 - With a Receiving organization, reciprocity.yaml names a JFHQ-DODIN accredited CSSP maintaining every service the DoD CIO reciprocity playbook names, and each implemented directed action as a patch provided in time and communicated to every Receiving organization (RCP-003).
 
@@ -2286,7 +2295,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
-- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ASMT-007).
+- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ATEAM-001, ASMT-007).
+- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001).
 
 **Alignment**
 
@@ -2347,7 +2357,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Exit criteria**
 
-- For a system processing PII, sap.yaml privacy scopes every privacy control of the baseline, assessed by the senior agency official for privacy or an independent assessor on the team (PASM-001).
+- For a system processing PII, sap.yaml privacy scopes every privacy control of the baseline, assessed by the senior agency official for privacy or an independent assessor on the team, with the assessment methodologies and metrics the senior agency official for privacy identifies (PASM-001).
 - Assessment plans document the test events and resources that support the assessments, coordinated with developers and developmental and operational testers, and the AO approves them after SCA review (DoDI 8510.01 Table 5 outcome).
 - sap.yaml scopes the whole baseline (or excludes controls with rationale), names the team and schedule, and the AO approves the plan (SAP-COV-001, ASMT-001).
 - Preparation is done before the assessment starts - officials notified, resources allocated, assessors given access, channels, points of contact and the ambiguity mechanism set (APREP-001).
@@ -2656,7 +2666,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 **Exit criteria**
 
 - An authorization package is developed for submission to the AO (DoDI 8510.01 Table 6 outcome).
-- package/manifest.yaml generated by rmf package lists every core artifact (PKG-001), and each core document carries the Annex C data elements mapped to it (PKG-003 for the SSP and SAR, DEL-001 for the RAR, POA&M and decision document).
+- package/manifest.yaml generated by rmf package lists every core artifact (PKG-001), and each core document carries the Annex C data elements mapped to it (PKG-003 for the SSP, SAREL-001 for the SAR, DEL-001 for the RAR, POA&M and decision document).
 - ART-DIAS states the assurance levels chosen with the ia family at S-4 (DIAS-001).
 - artifacts/data/package-summary.yaml (template templates/data/package-summary.yaml) holds the package executive summary, a consolidated view of its security and, for a system processing PII, privacy information, with the risk management issues it highlights, and the submission of the package by the system owner or common control provider to the AO or AODR before the decision (XSUM-001).
 - For a system processing PII, PER-PRIV reviews the authorization package for compliance with privacy requirements and for privacy risk before the AO decides, recorded as the decision's privacy_coordination dated on or before it (AODM-010); an approved PIA goes into the package before the decision (PRIV-003).
@@ -2847,7 +2857,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - The authorization for the system or the common controls is approved or denied (DoDI 8510.01 Table 6 outcome).
 - authorizations.yaml restates `system_status` with the new record (SSPR-001).
-- authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
+- authorizations.yaml gains a record naming an AD-* decision with its termination date and conditions as required, resting on the RAR (AODM-001, AOREC-001, AODM-002); at High or Very High risk the Component CIO's position is recorded first (AODM-003), and an ATO records the threat assessment the PM reviewed (AODM-004).
 - For a risk level of Very High or High, the Component CIO has documented concurrence or non-concurrence before the ATO is issued.
 - The decision confirms that the system meets cyberspace operational commander requirements.
 - The AO consulted the risk executive before deciding, and the record carries its input, or says the input was not relevant (AODM-010). The Enterprise deployment rests on an ISRMC approval (ENT-001), and issues went to their forum (AODM-011).
@@ -3039,7 +3049,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](#per-pm) | [ART-CHG](#art-chg) | [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-POAM](#art-poam), [ART-SAR](#art-sar), [ART-SSP](#art-ssp), [ART-CP](#art-cp) | [IOC](#ms-ioc), [PCA](#rv-pca) |
+| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](#per-pm) | [ART-CHG](#art-chg) | [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-POAM](#art-poam), [ART-SAR](#art-sar), [ART-SSP](#art-ssp), [ART-CP](#art-cp), [ART-BIA](#art-bia) | [IOC](#ms-ioc), [PCA](#rv-pca) |
 | [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](#per-sca) | — | [ART-SAR](#art-sar), [ART-CONMON](#art-conmon), [ART-SVCA](#art-svca), [ART-SAP](#art-sap) | — |
 | [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](#per-ao) | — | [ART-RA](#art-ra), [ART-POAM](#art-poam), [ART-RAR](#art-rar), [ART-SAR](#art-sar) | — |
 | [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra), [ART-IRP](#art-irp) | — |
@@ -3095,6 +3105,7 @@ Also active in this phase (described in their primary phase): [P-3](#task-p-3).
 | [ART-SAR](#art-sar) | Security assessment report | updates | core |
 | [ART-SSP](#art-ssp) | System Security Plan | updates | core |
 | [ART-CP](#art-cp) | Contingency plan | updates | core |
+| [ART-BIA](#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 **Entry criteria**
 
@@ -3111,6 +3122,7 @@ Also active in this phase (described in their primary phase): [P-3](#task-p-3).
 - A significant system modification re-enters the RMF at the affected task (feeds back to P-11 and C-1).
 - For a system processing PII, each change states whether it creates new privacy risk (privacy_impact), and each that does is followed by a PIA review in pia.yaml updates (PRIV-005).
 - An implemented change of significant security impact has a system plan change in plan-reviews.yaml that references it (change_ref, UPD-002).
+- Each change of significant security impact has a Monitor iteration of the criticality analysis in bia.yaml criticality naming it, dated on or after the change, and no more than a year passes between iterations (BIA-003).
 
 **Alignment**
 
@@ -3397,6 +3409,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 - posture-reports.yaml carries each report's marking and deliveries, and the status the system's GENSER or SE designation sends to DoD bodies (MRPT-001).
 - POA&M updates and vulnerability coordination are owed as required, to each body conmon.yaml names in reporting.dodin.required_by with who required them.
 - The risk executive (function) and the CISO review the status reports at the organization tier, and that review feeds P-7 (MRPT-002).
+- Each posture report lists in plan_changes every change of the security and privacy plans made since the last report (MRPT-003).
 - For a system processing PII, ART-SECRPT names the Component privacy report path (the PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and any system of records with PII that cannot be appropriately protected.
 - The compliance status of each directed action and the VRMN reports of each VDP report in poam/items.yaml reach the bodies that oversee them (VULN-002, VULN-003).
 - The posture reports carry the supply chain reporting scrm-plan.yaml sets.
@@ -3546,6 +3559,7 @@ Writes to `facts.yaml`: `acquisition`.
 - A system disposal strategy is developed and implemented, as needed (DoDI 8510.01 Table 7 outcome).
 - ART-DISP records the disposal strategy, media sanitization and registry and inventory updates.
 - The inventory of information systems shows the removal; ART-INV and ART-SSP list M-7 in touched_by, and registration.yaml updates holds the disposal update by M-7 (UPD-001).
+- disposal.yaml media records each class of media and equipment disposed of under the issuances that govern it, DoDM 5200.01 Volume 3 and CNSSI 4004.1 for classified media, NIST SP 800-88 for unclassified, CNSSI 4004.1 for a destruction unless the media are unclassified and destroyed under SP 800-88 (DISP-001).
 
 **Alignment**
 
@@ -3822,7 +3836,7 @@ listed data files; OSCAL documents are built from that data.
 |---|---|---|---|---|
 | [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [A-1](#task-a-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
 | [ART-STAKE](#art-stake) Stakeholder register | supporting | [P-9](#task-p-9) | — | [P-10](#task-p-10), [P-11](#task-p-11), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15) |
-| [ART-BIA](#art-bia) Business impact and criticality analysis | supporting | [P-8](#task-p-8) | [C-2](#task-c-2) | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
+| [ART-BIA](#art-bia) Business impact and criticality analysis | supporting | [P-8](#task-p-8) | [C-2](#task-c-2), [M-1](#task-m-1) | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
 | [ART-INV](#art-inv) Hardware and software inventory | core | [P-10](#task-p-10) | [I-2](#task-i-2), [M-1](#task-m-1), [M-7](#task-m-7) | [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1), [M-1](#task-m-1), [M-7](#task-m-7) |
 | [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-3](#task-s-3), [S-4](#task-s-4) |
 | [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-1](#task-c-1), [C-2](#task-c-2) |
@@ -3901,7 +3915,7 @@ Whether mission critical functions are present within the system and which, the 
 | Data files | `artifacts/data/bia.yaml` (schema `bia`) |
 | OSCAL | — |
 | Produced by | [P-8](#task-p-8) |
-| Updated by | [C-2](#task-c-2) |
+| Updated by | [C-2](#task-c-2), [M-1](#task-m-1) |
 | Used by | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
 
 Citations:

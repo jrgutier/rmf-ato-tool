@@ -24,7 +24,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Data flows
 
-<<FILL: each flow across or inside the boundary and its protection, with tokens>>
+<<FILL: each flow across or inside the boundary and its protection, and which flows carry PII and of which information types (boundary.yaml data_flow carries_pii and pii_types), with tokens>>
 
 ## External components
 

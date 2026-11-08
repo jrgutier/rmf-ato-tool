@@ -19,8 +19,9 @@ requirements:
     locator: "INTRODUCTION"
     context: "THE NEED TO MANAGE SECURITY AND PRIVACY RISK"
     statement: "In addition to the responsibility to protect organizational assets from the threats that exist in today’s environment, organizations have a responsibility to consider and manage the risks to individuals when information systems process personally identifiable information (PII).6 7 The information security and privacy programs implemented by organizations have complementary objectives with respect to managing the confidentiality, integrity, and availability of PII. While many privacy risks arise from unauthorized activities that lead to the loss of confidentiality, integrity, or availability of PII, other privacy risks result from authorized activities involving the creation, collection, use, processing, storage, maintenance, dissemination, disclosure, or disposal of PII that enables an organization to meet its mission or business objectives. For example, organizations could fail to provide appropriate notice of PII processing depriving an individual of knowledge of such processing or an individual could be embarrassed or stigmatized by the authorized disclosure of PII. While managing privacy risk requires close coordination between information security and privacy programs due to the complementary nature of the programs’ objectives around the confidentiality, integrity, and availability of PII, privacy risks also raise distinct concerns that require specialized expertise and approaches. Therefore, it is critical that organizations also establish and maintain robust privacy programs to ensure compliance with applicable privacy requirements and to manage the risk to individuals associated with the processing of PII."
-    status: "candidate"
-    reason: "ART-RA '## Privacy risk' holds risk to individuals in prose at P-14; the privacy program is organization-level and no rule reads either."
+    status: "partial"
+    reason: "Sentence 3 is held in part: PRIV-007 fails an applicable privacy requirement no ART-REQ requirement carries, so compliance with applicable privacy requirements is managed. Considering risks to individuals (sentence 1) rests on PRIV-007's presence clause; sentence 2 describes the programs."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.carried.yaml", "expect": "is carried by no requirement of ART-REQ", "claim": "constraint", "asserts": "Organizations maintain privacy programs to ensure compliance with applicable privacy requirements: an applicable privacy requirement carried by no requirement of ART-REQ fails", "sentence": "Therefore, it is critical that organizations also establish and maintain robust privacy programs to ensure compliance with applicable privacy requirements and to manage the risk to individuals associated with the processing of PII."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0003"
     citation: {"ref": "SP800-37R2", "page": 20, "anchor": "Organizations may also choose to consider risks to individuals that may arise"}
@@ -472,8 +473,9 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE The steps are:"
     statement: "• Prepare to execute the RMF from an organization- and a system-level perspective by establishing a context and priorities for managing security and privacy risk."
-    status: "candidate"
-    reason: "Overview of the Prepare step; its tasks are judged one by one, and nothing fails on the overview."
+    status: "partial"
+    reason: "OCTX-003 fails a Cybersecurity Risk Management Program that does not frame, assess, respond to and monitor risk, part of the context P-1 to P-7 establish for managing risk; the priorities and the rest of the context are the Prepare tasks' rules one by one."
+    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.steps.yaml", "expect": "risk: risk management frames, assesses, responds to and monitors risk", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Prepare to execute the RMF by establishing a context for managing security and privacy risk: a program that does not frame, assess, respond to and monitor risk fails"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0059"
     citation: {"ref": "SP800-37R2", "page": 27, "anchor": "Categorize the system and the information processed, stored, and transmitted by the"}
@@ -481,8 +483,9 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE The steps are:"
     statement: "• Categorize the system and the information processed, stored, and transmitted by the system based on an analysis of the impact of loss.26"
-    status: "candidate"
-    reason: "Overview of the Categorize step; C-2's categorization is judged by CATG-001, at its fan-out cap, and FACTS-001."
+    status: "partial"
+    reason: "CATG-001 fails a system categorized below the impact of loss of its information types; that each information type's own impact is analyzed (CATG-003 holds its basis and handling) is not judged on its analysis."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Categorize the system based on the impact of loss of its information: a system availability below the high-water mark of the information types fails"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0060"
     citation: {"ref": "SP800-37R2", "page": 27, "anchor": "Controls can be allocated at all three levels in the risk management"}
@@ -498,8 +501,9 @@ requirements:
     locator: "2.2"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "Impact of loss is one of four risk factors considered during risk assessment activities—the other three factors being threats, vulnerabilities, and likelihood of occurrence [SP 800-30]. Organizations leverage risk assessment results when categorizing information and systems. For national security systems, it may be important to consider specific issues affecting risk factors as part of categorization, such as, whether the system processes, stores, or transmits classified or intelligence information; whether the system will be accessed directly or indirectly by non-U.S. personnel; and whether the information processed, stored, or transmitted by the system will cross security domains. [CNSSI 1253] provides additional information on categorizing national security systems."
-    status: "candidate"
-    reason: "C-2 reads ART-RA and its playbook asks about classified information; no rule fails a categorization that does not leverage the risk assessment or the NSS factors."
+    status: "partial"
+    reason: "Sentence 2 is held in part: SYSD-001 fails a system processing classified information to which the Classified System Overlay is not applied, so classified information is considered as part of the NSS categorization. Leveraging the risk assessment results (sentence 1, C-2 reads ART-RA), access by non-U.S. personnel and crossing security domains are unheld by a rule."
+    evidence: [{"kind": "rule", "target": "SYSD-001", "fixture": "tests/fixtures/negative/SYSD-001.yaml", "expect": "the Classified System Overlay is not applied", "claim": "constraint", "asserts": "For national security systems, categorization considers whether the system processes classified information: a system processing classified information with the Classified System Overlay not applied fails", "sentence": "For national security systems, it may be important to consider specific issues affecting risk factors as part of categorization, such as, whether the system processes, stores, or transmits classified or intelligence information; whether the system will be accessed directly or indirectly by non-U.S. personnel; and whether the information processed, stored, or transmitted by the system will cross security domains. [CNSSI 1253] provides additional information on categorizing national security systems."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0062"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Select an initial set of controls for the system and tailor the"}
@@ -517,8 +521,9 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Implement the controls and describe how the controls are employed within the system and its environment of operation."
-    status: "candidate"
-    reason: "SSP-COV-001 fails a baseline control the plan does not describe and is at its fan-out cap; implementation itself is unheld."
+    status: "partial"
+    reason: "SSP-COV-001 fails a baseline control the security plan names no statement for, so how each control is employed is described; that the controls are implemented (I-1) is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Describe how the controls are employed within the system: a baseline control with no statement in the security plan fails", "sentence": "• Implement the controls and describe how the controls are employed within the system and its environment of operation."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0064"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Assess the controls to determine if the controls are implemented correctly, operating"}
@@ -526,8 +531,9 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Assess the controls to determine if the controls are implemented correctly, operating as intended, and producing the desired outcomes with respect to satisfying the security and privacy requirements."
-    status: "candidate"
-    reason: "SAR-COV-001 fails a scoped control with no determination and is at its fan-out cap; that determinations judge correctness, operation and outcomes is unheld."
+    status: "partial"
+    reason: "SAR-COV-001 fails a scoped control with no assessment determination, so every control is assessed; that the determination judges correct implementation, intended operation and desired outcomes is the assessor's, unheld by a rule."
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.other.yaml", "expect": "has no assessment determination", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assess the controls to determine if they are implemented correctly: a scoped control with no assessment determination fails", "sentence": "• Assess the controls to determine if the controls are implemented correctly, operating as intended, and producing the desired outcomes with respect to satisfying the security and privacy requirements."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0065"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Authorize the system or common controls based on a determination that the"}
@@ -536,8 +542,8 @@ requirements:
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Authorize the system or common controls based on a determination that the risk to organizational operations and assets, individuals, other organizations, and the Nation is acceptable."
     status: "partial"
-    reason: "RAR-002 fails a missing determination of risk; that the authorization rests on the risk being acceptable is AODM-001's, at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.missing.yaml", "expect": "rar.yaml records no determination of risk", "claim": "presence", "holds_when": "R-2 is active and ART-RAR is produced or seeded", "asserts": "Authorize the system based on a determination that the risk is acceptable: rar.yaml records no determination of risk fails"}]
+    reason: "AODM-001 fails a decision resting on something other than the risk assessment report, and RAR-002 a missing determination of risk; that the AO finds the risk acceptable is the AO's judgment, recorded in the decision but not failed by a rule."
+    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.missing.yaml", "expect": "rar.yaml records no determination of risk", "claim": "presence", "holds_when": "R-2 is active and ART-RAR is produced or seeded", "asserts": "Authorize the system based on a determination that the risk is acceptable: rar.yaml records no determination of risk fails"}, {"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.rarother.yaml", "expect": "the decision must rest on the risk assessment report", "claim": "constraint", "holds_when": "the authorization ledger ART-AUTHREC is in play once its producer is active or it is seeded", "asserts": "Authorize the system based on a determination of the risk: a decision that rests on something other than the risk assessment report fails"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0066"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "Monitor the system and the associated controls on an ongoing basis to"}
@@ -545,8 +551,9 @@ requirements:
     locator: "2.2.•"
     context: "RISK MANAGEMENT FRAMEWORK STEPS AND STRUCTURE"
     statement: "• Monitor the system and the associated controls on an ongoing basis to include assessing control effectiveness, documenting changes to the system and environment of operation, conducting risk assessments and impact analyses, and reporting the security and privacy posture of the system."
-    status: "candidate"
-    reason: "Overview of the Monitor step; its parts are the M tasks' rules, and no fixture breaks the overview itself (CONMON-001 alone would be a generic item)."
+    status: "partial"
+    reason: "Documenting changes and their impact analyses is held in part by MCHG-001 (a controlled change never tested for security and functional impacts fails); assessing control effectiveness, risk assessments and reporting the posture are the M tasks' rules one by one."
+    evidence: [{"kind": "rule", "target": "MCHG-001", "fixture": "tests/fixtures/negative/MCHG-001.yaml", "expect": "the proposed change is not tested for security and functional impacts", "claim": "constraint", "holds_when": "changes.yaml is in play once M-1 is reached", "asserts": "Monitor the system to include documenting changes to the system and conducting impact analyses: a proposed change not tested for security and functional impacts fails"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0067"
     citation: {"ref": "SP800-37R2", "page": 28, "anchor": "While the RMF steps are listed in sequential order above and in"}
@@ -562,8 +569,9 @@ requirements:
     locator: "2.2"
     context: "FLEXIBILITY IN RMF IMPLEMENTATION"
     statement: "Organizations are expected to execute all steps and tasks in the RMF (apart from tasks labeled as optional). However, organizations have significant flexibility in how each of the RMF steps and tasks are carried out, as long as organizations are meeting all applicable requirements and effectively managing security and privacy risk. The intent is to allow organizations to implement the RMF in the most efficient, effective, and cost-effective manner to support mission and business needs in a way that promotes effective security and privacy. Flexible implementation may include executing tasks in a different (potentially nonsequential) order, emphasizing certain tasks over other tasks, or combining certain tasks where appropriate. It can also include the use of the Cybersecurity Framework to enhance RMF task execution."
-    status: "candidate"
-    reason: "FW-TASK-001 fixes the 47 tasks and their optional flags as a repo rule the judge does not read (WI-480), and TASK-DEF-001's fixture declares no message; the flexibility sentences permit."
+    status: "partial"
+    reason: "TASK-DEF-001 fails the deferral of an in-scope task that produces a core artifact; a non-core task deferred with a rationale passes, which the flexibility the passage grants permits, so not every task is held."
+    evidence: [{"kind": "rule", "target": "TASK-DEF-001", "fixture": "tests/fixtures/negative/TASK-DEF-001.core.yaml", "expect": "produces core artifact", "claim": "constraint", "asserts": "Organizations are expected to execute all steps and tasks in the RMF: an in-scope task that produces a core artifact and is deferred fails", "sentence": "Organizations are expected to execute all steps and tasks in the RMF (apart from tasks labeled as optional)."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0069"
     citation: {"ref": "SP800-37R2", "page": 29, "anchor": "Note: Since the RMF is an SDLC process that emphasizes ongoing authorization,"}
@@ -792,8 +800,9 @@ requirements:
     locator: "2.3"
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF With the 2016 revision to the circular, OMB also requires organizations to integrate privacy into the RMF process:"
     statement: "The RMF provides a disciplined and structured process that integrates information security, privacy, and risk management activities into the SDLC. This Circular requires organizations to use the RMF to manage privacy risks beyond those that are typically included under the “confidentiality” objective of the term “information security.” While many privacy risks relate to the unauthorized access or disclosure of PII, privacy risks may also result from other activities, including the creation, collection, use, and retention of PII; the inadequate quality or integrity of PII; and the lack of appropriate notice, transparency, or participation."
-    status: "candidate"
-    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    status: "partial"
+    reason: "Sentence 2 is held in part: PRIV-007 fails a privacy risk assessment that does not consider the Fair Information Practice Principles, risks beyond confidentiality. Sentence 1 describes the RMF."
+    evidence: [{"kind": "rule", "target": "PRIV-007", "fixture": "tests/fixtures/negative/PRIV-007.fipps.yaml", "expect": "does not consider the Fair Information Practice Principles", "claim": "constraint", "asserts": "Organizations use the RMF to manage privacy risks beyond confidentiality: a privacy risk assessment that does not consider the Fair Information Practice Principles fails", "sentence": "This Circular requires organizations to use the RMF to manage privacy risks beyond those that are typically included under the “confidentiality” objective of the term “information security.” While many privacy risks relate to the unauthorized access or disclosure of PII, privacy risks may also result from other activities, including the creation, collection, use, and retention of PII; the inadequate quality or integrity of PII; and the lack of appropriate notice, transparency, or participation."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0097"
     citation: {"ref": "SP800-37R2", "page": 32, "anchor": "This section of the guideline describes the relationship between information security programs"}
@@ -809,8 +818,9 @@ requirements:
     locator: "2.3"
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "Executing the RMF requires close collaboration between information security programs and privacy programs. While information security programs and privacy programs have different objectives, those objectives are overlapping and complementary. Information security programs are responsible for protecting information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction (i.e., unauthorized system activity or behavior) in order to provide confidentiality, integrity, and availability. Privacy programs are responsible for ensuring compliance with applicable privacy requirements and for managing the risks to individuals associated with the creation, collection, use, processing, dissemination, storage, maintenance, disclosure, or disposal (collectively referred to as “processing”) of PII.30 When preparing to execute the steps of the RMF, organizations consider how to best promote and institutionalize collaboration between the two programs to ensure that the objectives of both disciplines are met at every step of the process."
-    status: "candidate"
-    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    status: "partial"
+    reason: "Sentence 1 is held in part: OCTX-001 fails a CISO who does not coordinate with the senior agency official for privacy. Sentences 2 and 3 describe the two programs."
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.privacyother.yaml", "expect": ": the senior agency information security officer coordinates with the senior agency official for privacy", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "Executing the RMF requires close collaboration between information security programs and privacy programs: a CISO who does not coordinate with the senior agency official for privacy fails", "sentence": "Executing the RMF requires close collaboration between information security programs and privacy programs."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0099"
     citation: {"ref": "SP800-37R2", "page": 32, "anchor": "Privacy programs may also choose to consider the risks to individuals that"}
@@ -826,8 +836,9 @@ requirements:
     locator: "2.3"
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "When an information system processes PII, the organization’s information security program and privacy program have a shared responsibility for managing the risks to individuals that may arise from unauthorized system activity or behavior. This requires the two programs to collaborate when selecting, implementing, assessing, and monitoring security controls.31 However, while information security programs and privacy programs have complementary objectives with respect to managing the confidentiality, integrity, and availability of PII, protecting individuals’ privacy cannot be achieved solely by securing PII."
-    status: "candidate"
-    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    status: "partial"
+    reason: "Sentence 2 is held for monitoring: PRIV-006 fails a privacy control added to the continuous monitoring strategy without consulting the senior agency official for privacy; collaboration on selecting, implementing and assessing is unheld by a rule. Sentences 1 and 3 describe the shared responsibility."
+    evidence: [{"kind": "rule", "target": "PRIV-006", "fixture": "tests/fixtures/negative/PRIV-006.consulted.yaml", "expect": "is added to the PCM strategy without consulting the senior agency official for privacy", "claim": "constraint", "asserts": "The two programs collaborate when monitoring security controls: a control added to the monitoring strategy without consulting the senior agency official for privacy fails", "sentence": "This requires the two programs to collaborate when selecting, implementing, assessing, and monitoring security controls.31"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0101"
     citation: {"ref": "SP800-37R2", "page": 33, "anchor": "Not all privacy risks arise from unauthorized system activity or behavior, such"}
@@ -835,8 +846,9 @@ requirements:
     locator: "2.3"
     context: "INFORMATION SECURITY AND PRIVACY IN THE RMF"
     statement: "Not all privacy risks arise from unauthorized system activity or behavior, such as unauthorized access or disclosure of PII. Some privacy risks may result from authorized activity that is beyond the scope of information security. For example, privacy programs are responsible for managing the risks to individuals that may result from the creation, collection, use, and retention of PII; the inadequate quality or integrity of PII; and the lack of appropriate notice, transparency, or participation. Therefore, to help ensure compliance with applicable privacy requirements and to manage privacy risks from authorized and unauthorized processing of PII, organizations’ privacy programs also select, implement, assess, and monitor privacy controls.32 [OMB A-130] defines a privacy control as an administrative, technical, or physical safeguard employed within an agency to ensure compliance with applicable privacy requirements and to manage privacy risks. A privacy control is different from a security control, which the Circular defines as a safeguard or countermeasure prescribed for an information system or an organization to protect the confidentiality, integrity, and availability of the system and its information. Due to the shared responsibility that organizations’ information security programs and privacy programs have to manage the risks to individuals arising from unauthorized system activity or behavior, controls that achieve both security and privacy objectives are both privacy and security controls. This guideline refers to such controls that achieve both sets of objectives simply as “controls.” When this guideline uses the descriptors “privacy” and “security” with the term control, it is referring to those controls in circumstances where the controls are selected, implemented, and assessed for particular objectives."
-    status: "candidate"
-    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    status: "partial"
+    reason: "Sentence 1 is held for selection: BSEL-002 fails a baseline that leaves out at-6, a control the NSS privacy control baseline selects. Implementing, assessing and monitoring privacy controls rest on the SSP, SAR and PCM rules; the other sentences define terms."
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.privacy.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Privacy programs select privacy controls: a baseline whose controls leave out at-6, which the privacy baseline selects, fails", "sentence": "Therefore, to help ensure compliance with applicable privacy requirements and to manage privacy risks from authorized and unauthorized processing of PII, organizations’ privacy programs also select, implement, assess, and monitor privacy controls.32 [OMB A-130] defines a privacy control as an administrative, technical, or physical safeguard employed within an agency to ensure compliance with applicable privacy requirements and to manage privacy risks."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0102"
     citation: {"ref": "SP800-37R2", "page": 33, "anchor": "The risk management processes described in this publication are equally applicable to"}
@@ -919,8 +931,9 @@ requirements:
     locator: "2.4"
     context: "FIGURE 5: CONCEPTUAL VIEW OF THE SYSTEM"
     statement: "Common controls are referenced in the security and privacy plans for the system inheriting the controls."
-    status: "candidate"
-    reason: "ART-SSP '## Inheritance and shared responsibility' and SSP-STAT-001 hold the provider of inherited controls; SSP-STAT-001's fixture declares no message, so nothing ties a failing clause to this sentence."
+    status: "covered"
+    reason: "SSPI-001 fails a control S-3 allocates as a common control that the inheriting system's security plan does not reference as inherited."
+    evidence: [{"kind": "rule", "target": "SSPI-001", "fixture": "tests/fixtures/negative/SSPI-001.yaml", "expect": "and the security plan does not reference it as inherited", "claim": "constraint", "asserts": "Common controls are referenced in the security plans for the system inheriting the controls: a common control the plan does not reference as inherited fails", "sentence": "Common controls are referenced in the security and privacy plans for the system inheriting the controls."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0112"
     citation: {"ref": "SP800-37R2", "page": 35, "anchor": "For connections and information exchange between the system and the enabling or"}
@@ -1079,8 +1092,9 @@ requirements:
     locator: "2.8"
     context: "SUPPLY CHAIN RISK MANAGEMENT"
     statement: "Organizations are becoming increasingly reliant on products, systems, and services provided by external providers to carry out missions and business functions. Organizations are responsible and accountable for the risk incurred when using such component products, systems, and services.46 Relationships with external providers can be established in a variety of ways, for example, through joint ventures, business partnerships, various types of formal agreements (e.g., contracts, interagency agreements, lines of business arrangements, licensing agreements), or outsourcing arrangements."
-    status: "candidate"
-    reason: "R-4 has the AO accept the risk of external components through ART-BND and leveraged authorizations; no rule fails a run that does not account for it."
+    status: "partial"
+    reason: "MLEV-001 fails inherited controls from a system holding no valid authorization to operate, so the risk of the external systems the system uses is carried by an authorization; accountability for the other component products and services is unheld."
+    evidence: [{"kind": "rule", "target": "MLEV-001", "fixture": "tests/fixtures/negative/MLEV-001.yaml", "expect": "the system providing inherited controls holds a valid authorization to operate", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and a leveraged record has arrangement organizational-system", "asserts": "Organizations are accountable for the risk incurred when using external systems: inherited controls from a system that holds no valid authorization to operate fail", "sentence": "Organizations are responsible and accountable for the risk incurred when using such component products, systems, and services.46"}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0131"
     citation: {"ref": "SP800-37R2", "page": 39, "anchor": "Supply chain risks can be endemic or systemic within a system element,"}
@@ -1187,9 +1201,11 @@ requirements:
     locator: "THE PROCESS"
     context: "RMF ALIGNMENT WITH THE SDLC"
     statement: "There may be other opportunities to diverge from the sequential nature of the tasks when it is more effective, efficient, or cost-effective to do so. For example, while the control assessment tasks are listed after the control implementation tasks, organizations may begin the assessment of controls as soon as they are implemented but prior to the complete implementation of all controls described in the system security plans and privacy plans. Assessing controls as soon as they are implemented may result in organizations assessing the physical and environmental protection controls within a facility prior to assessing the controls implemented in the hardware, firmware, or software components of the system (which may be implemented later). Regardless of the task ordering, the final action before a system is placed into operation is the explicit acceptance of risk by the authorizing official."
-    status: "candidate"
-    reason: "A permission to depart from the task order; the run derives order from disk and no rule refuses an early assessment."
+    status: "partial"
+    reason: "The marked sentence permits assessing controls as soon as they are implemented. The last sentence, explicit acceptance of risk by the AO as the final action before operation, is held in part: AODM-009 fails an authorization decision made by anyone but the AO, and GATE-001 (a presence clause) a fielding with no ATO in force."
+    evidence: [{"kind": "rule", "target": "GATE-001", "fixture": "tests/fixtures/negative/GATE-001.yaml", "expect": "no ATO or ATO with conditions of the system stands on that date", "claim": "presence", "holds_when": "protection.yaml records the pathway decision points passed, and the program is on a pathway with an authorization gate", "asserts": "The final action before a system is placed into operation is the explicit acceptance of risk by the authorizing official: fielding with no ATO or ATO with conditions standing on that date fails"}, {"kind": "rule", "target": "AODM-009", "fixture": "tests/fixtures/negative/AODM-009.decider.yaml", "expect": "is decided by", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "asserts": "The final action before a system is placed into operation is the explicit acceptance of risk by the authorizing official: an authorization decision decided by anyone but the authorizing official fails"}]
     work_item: "WI-400"
+    ruling_sought: [{"sentence": "Assessing controls as soon as they are implemented may result in organizations assessing the physical and environmental protection controls within a facility prior to assessing the controls implemented in the hardware, firmware, or software components of the system (which may be implemented later).", "reason": "A permission: assessing controls as soon as they are implemented 'may result' in an earlier assessment of some controls."}]
   - id: "REQ-SP800-37R2-0143"
     citation: {"ref": "SP800-37R2", "page": 42, "anchor": "Appendix D describes the roles and responsibilities of key participants involved in"}
     kind: "modal"
@@ -1225,8 +1241,9 @@ requirements:
     locator: "THE PROCESS"
     context: "TASK DELEGATION"
     statement: "The roles specified in the Primary Responsibility section for each RMF task are responsible for ensuring that the task is completed. The roles with primary responsibility may complete a task or may delegate completion of a task to one or more supporting roles except where delegation is specifically prohibited or disallowed in the task Discussion section or Appendix D. If completion of a task is delegated, the role with primary responsibility for that task remains accountable for task completion."
-    status: "candidate"
-    reason: "Primary roles are R and A in the RACI, which FW-RACI-001 and FW-TASK-002 judge as repo rules the evidence judge does not read (WI-480); no run rule fails a task delegated without the primary role accountable."
+    status: "partial"
+    reason: "Sentence 2's exception is held: AODM-009 fails an authorization decision made by anyone but the AO, a task whose delegation Appendix D disallows. Primary roles being responsible and remaining accountable (sentences 1 and 3) are the RACI, judged by the repository rules FW-RACI-001 and FW-TASK-002 (WI-480), not by a run rule."
+    evidence: [{"kind": "rule", "target": "AODM-009", "fixture": "tests/fixtures/negative/AODM-009.decider.yaml", "expect": "is decided by", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "asserts": "Roles with primary responsibility may delegate a task except where delegation is disallowed: an authorization decision decided by anyone but the authorizing official fails", "sentence": "The roles with primary responsibility may complete a task or may delegate completion of a task to one or more supporting roles except where delegation is specifically prohibited or disallowed in the task Discussion section or Appendix D."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0147"
     citation: {"ref": "SP800-37R2", "page": 44, "anchor": "Use the tasks and outputs of the Organization-Level and System-Level Prepare Step"}
@@ -1680,8 +1697,8 @@ requirements:
     context: ""
     statement: "Identify, document, and publish organization-wide common controls that are available for inheritance by organizational systems."
     status: "partial"
-    reason: "OCTX-005 fails a P-5 that records no common controls, so their identification and documentation is present; that they are published to the systems that inherit them is unheld."
-    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.missing.yaml", "expect": "org-context.yaml has no common_controls, which P-5 records", "claim": "presence", "holds_when": "P-5 is active and org-context.yaml is produced or seeded", "asserts": "Identify and document organization-wide common controls available for inheritance: org-context.yaml has no common_controls fails at P-5"}]
+    reason: "OCTX-005 fails a common control plan that is not made available to the system owner of the inheriting system, so the common controls are published to those who inherit them; P-5 recording none rests on OCTX-005's presence clause, and publication organization-wide is unheld."
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.missing.yaml", "expect": "org-context.yaml has no common_controls, which P-5 records", "claim": "presence", "holds_when": "P-5 is active and org-context.yaml is produced or seeded", "asserts": "Identify and document organization-wide common controls available for inheritance: org-context.yaml has no common_controls fails at P-5"}, {"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.owner.yaml", "expect": "is not made available to the system owner of the inheriting system", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "Document and publish organization-wide common controls available for inheritance: a common control plan that is not made available to the system owner of the inheriting system fails", "sentence": "Identify, document, and publish organization-wide common controls that are available for inheritance by organizational systems."}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0199"
     citation: {"ref": "SP800-37R2", "page": 51, "anchor": "Common controls are controls that can be inherited by one or more"}
@@ -1689,9 +1706,11 @@ requirements:
     locator: "TASK P-5"
     context: ""
     statement: "Common controls are controls that can be inherited by one or more information systems.60 Common controls can include controls from any [SP 800-53] control family, for example, physical and environmental protection controls, system boundary and monitoring controls, personnel security controls, policies and procedures, acquisition controls, account and identity management controls, audit log and accountability controls, or complaint management controls for receiving privacy inquiries from the public. Organizations identify and select the set of common controls and allocate those controls to the organizational entities designated as common control providers. Common controls may differ based upon a variety of factors, such as hosting location, system architecture, and the structure of the organization. The organization-wide list of common controls takes these factors into account. Common controls can also be identified at different levels of the organization (e.g., corporate, department, or agency level; bureau or subcomponent level; or individual program level). Organizations may establish one or more lists of common controls that can be inherited by information systems. A requirement may not be fully met by a common control. In such cases, the control is considered a hybrid control and is noted as such by the organization, including specifying which parts of the control requirement are provided for inheritance by the common control and which parts are to be provided at the system level."
-    status: "candidate"
-    reason: "Hybrid controls name their provider and the system's part in allocation.yaml and the S-3 playbook, and OCTX-005 fails a common control package without its authorization; the identification and allocation of common controls to providers, and the noting of hybrid parts, are unheld by a rule. The rest describes common controls."
+    status: "partial"
+    reason: "Sentence 3 is held: OCTX-005 fails a common control provider that holds no role in the organization, so common controls are allocated to designated providers. Hybrid controls are noted as such in allocation.yaml (sentence 8) by type, with no rule on which parts are provided; the other sentences describe common controls or permit."
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.persona.yaml", "expect": "holds no role in roles", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "asserts": "Organizations allocate the common controls to the organizational entities designated as common control providers: a provider persona that holds no role fails", "sentence": "Organizations identify and select the set of common controls and allocate those controls to the organizational entities designated as common control providers."}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "Organizations may establish one or more lists of common controls that can be inherited by information systems.", "reason": "A permission: organizations 'may establish' lists of common controls."}]
   - id: "REQ-SP800-37R2-0200"
     citation: {"ref": "SP800-37R2", "page": 51, "anchor": "Common controls are authorized by designated authorizing officials before the controls are"}
     kind: "indicative"
@@ -1707,18 +1726,22 @@ requirements:
     locator: "TASK P-5"
     context: ""
     statement: "When there are multiple sources of common controls, organizations specify the common control provider (i.e., who is providing the controls and through what venue, for example, shared services, specific systems, or within a specific type of architecture) and which systems or types of systems can inherit the controls. Common control listings are communicated to system owners, so they are aware of the security and privacy capabilities that are available from the organization through inheritance. System owners are not required to assess common controls that are inherited by their systems or document common control implementation details; that is the responsibility of the common control providers. Likewise, common control providers are not required to have visibility into the system-level details of those systems that are inheriting the common controls they are providing."
-    status: "candidate"
-    reason: "SSP-STAT-001 fails an inherited control with no provider, so the provider is specified; which systems may inherit and the communication of listings to system owners are unheld. The last two sentences relieve system owners and providers of duties."
+    status: "partial"
+    reason: "Sentence 1 is held in part: OCTX-005 fails a common control provider that holds no role in the organization, so the provider is specified; which systems may inherit is unheld. Sentences 2 and 3 relieve system owners and providers of duties."
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.persona.yaml", "expect": "holds no role in roles", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "asserts": "Organizations specify the common control provider when there are multiple sources of common controls: a provider persona that holds no role fails", "sentence": "When there are multiple sources of common controls, organizations specify the common control provider (i.e., who is providing the controls and through what venue, for example, shared services, specific systems, or within a specific type of architecture) and which systems or types of systems can inherit the controls."}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "System owners are not required to assess common controls that are inherited by their systems or document common control implementation details; that is the responsibility of the common control providers.", "reason": "A relief: system owners 'are not required' to assess inherited common controls."}, {"sentence": "Likewise, common control providers are not required to have visibility into the system-level details of those systems that are inheriting the common controls they are providing.", "reason": "A relief: providers 'are not required' to have visibility into inheriting systems."}]
   - id: "REQ-SP800-37R2-0202"
     citation: {"ref": "SP800-37R2", "page": 52, "anchor": "Risk assessment results can be used when identifying common controls to determine"}
     kind: "indicative"
     locator: "TASK P-5"
     context: ""
     statement: "Risk assessment results can be used when identifying common controls to determine if the controls available for inheritance satisfy the security and privacy requirements for organizational systems and the environments in which those systems operate (including the identification of potential single points of failure). When the common controls provided by the organization are determined to be insufficient for the information systems inheriting those controls, system owners can supplement the common controls with system-specific or hybrid controls to achieve the required protection for their systems or accept greater risk with the acknowledgement and approval of the organization."
-    status: "candidate"
-    reason: "Both sentences permit: risk assessment results can be used, and system owners can supplement or accept risk; the S-3 playbook makes an insufficient offer hybrid. No rule reads either choice."
+    status: "partial"
+    reason: "Both sentences permit: risk assessment results 'can be used' when identifying common controls, and system owners 'can supplement' insufficient common controls or accept greater risk. The S-3 playbook records an insufficient offer as hybrid; nothing can fail on a permission."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-3.md", "claim": "presence", "asserts": "When the common controls are insufficient, system owners supplement them with system-specific or hybrid controls (S-3 playbook)"}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "Risk assessment results can be used when identifying common controls to determine if the controls available for inheritance satisfy the security and privacy requirements for organizational systems and the environments in which those systems operate (including the identification of potential single points of failure).", "reason": "A permission: risk assessment results 'can be used' when identifying common controls."}, {"sentence": "When the common controls provided by the organization are determined to be insufficient for the information systems inheriting those controls, system owners can supplement the common controls with system-specific or hybrid controls to achieve the required protection for their systems or accept greater risk with the acknowledgement and approval of the organization.", "reason": "A permission: system owners 'can supplement' the common controls or accept greater risk."}]
   - id: "REQ-SP800-37R2-0203"
     citation: {"ref": "SP800-37R2", "page": 52, "anchor": "Common control providers execute the RMF steps to implement, assess, and monitor"}
     kind: "modal"
@@ -1798,8 +1821,9 @@ requirements:
     locator: "TASK P-7"
     context: ""
     statement: "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253] which does not apply the high-water mark concept."
-    status: "candidate"
-    reason: "The run records one value per objective and resolves CNSSI 1253 baselines; CATG-001, which fails a categorization below the information types per objective, is at its fan-out cap."
+    status: "covered"
+    reason: "BSEL-001 fails a baseline selected by the FIPS 200 high-water-mark method for a national security system, which CNSSI 1253 categorizes per security objective."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.method.yaml", "expect": "method the categorization calls for", "claim": "constraint", "asserts": "Organizations operating National Security Systems follow the CNSSI 1253 categorization guidance, which does not apply the high-water mark concept: a baseline selected by the high-water-mark method fails", "sentence": "Organizations operating National Security Systems follow the categorization guidance in [CNSSI 1253] which does not apply the high-water mark concept."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0212"
     citation: {"ref": "SP800-37R2", "page": 53, "anchor": "Organizations can also elect to use an alternative, organization-defined categorization approach to"}
@@ -1823,9 +1847,11 @@ requirements:
     locator: "TASK P-7"
     context: ""
     statement: "The organizational continuous monitoring strategy addresses monitoring requirements at the organization, mission/business process, and information system levels. The continuous monitoring strategy identifies the minimum monitoring frequency for implemented controls across the organization; defines the ongoing control assessment approach; and describes how ongoing assessments are to be conducted (e.g., addressing the use and management of automated tools, and instructions for ongoing assessment of controls for which monitoring cannot be automated). The continuous monitoring strategy may also define security and privacy reporting requirements including recipients of the reports. The criteria for determining the minimum frequency for control monitoring is established in collaboration with organizational officials (e.g., senior accountable official for risk management or risk executive [function)]; senior agency information security officer; senior agency official for privacy; chief information officer; system owners; common control providers; and authorizing officials or their designated representatives). An organizational risk assessment can be used to guide and inform the frequency of monitoring."
-    status: "candidate"
-    reason: "OCTX-009 and ISCM-003 hold the minimum monitoring frequency the system must meet; the levels the strategy addresses, its assessment approach and the collaboration on frequency criteria are unheld by a rule. Two sentences permit."
+    status: "partial"
+    reason: "Sentence 2 is held in part by OCTX-009 (a system monitoring frequency less frequent than the organization's minimum fails). Sentence 4 rests on ISCM-003 (a frequency criterion that names no other official it was established with fails), a presence clause that caps at partial. The levels the strategy addresses (sentence 1) and its assessment approach are unheld; sentences 3 and 5 permit."
+    evidence: [{"kind": "rule", "target": "OCTX-009", "fixture": "tests/fixtures/negative/OCTX-009.yaml", "expect": "is less frequent than the organization's minimum", "claim": "constraint", "asserts": "The continuous monitoring strategy identifies the minimum monitoring frequency for implemented controls: a system frequency less frequent than the organization's minimum fails", "sentence": "The continuous monitoring strategy identifies the minimum monitoring frequency for implemented controls across the organization; defines the ongoing control assessment approach; and describes how ongoing assessments are to be conducted (e.g., addressing the use and management of automated tools, and instructions for ongoing assessment of controls for which monitoring cannot be automated).", "holds_when": "ART-ORG-CONTEXT records minimum frequencies and ART-CONMON is in play"}, {"kind": "rule", "target": "ISCM-003", "fixture": "tests/fixtures/negative/ISCM-003.consulted.yaml", "expect": "names no other official it was established with", "claim": "presence", "holds_when": "ART-CONMON is produced or seeded", "asserts": "The criteria for the minimum frequency of control monitoring are established in collaboration with organizational officials: a frequency criterion that names no other official it was established with fails", "sentence": "The criteria for determining the minimum frequency for control monitoring is established in collaboration with organizational officials (e.g., senior accountable official for risk management or risk executive [function)]; senior agency information security officer; senior agency official for privacy; chief information officer; system owners; common control providers; and authorizing officials or their designated representatives)."}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "The continuous monitoring strategy may also define security and privacy reporting requirements including recipients of the reports.", "reason": "A permission: the strategy 'may also define' reporting requirements."}, {"sentence": "An organizational risk assessment can be used to guide and inform the frequency of monitoring.", "reason": "A permission: a risk assessment 'can be used' to guide the frequency."}]
   - id: "REQ-SP800-37R2-0215"
     citation: {"ref": "SP800-37R2", "page": 54, "anchor": "The use of automation facilitates a greater frequency and volume of control"}
     kind: "indicative"
@@ -1869,8 +1895,9 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-9 | • The stakeholders having an interest in the system are identified."
-    status: "candidate"
-    reason: "ART-STAKE lists the stakeholders in prose; no data file or rule refuses a run that identifies none."
+    status: "covered"
+    reason: "ART-STAKE requires its section 'Stakeholders and interview roster', and TPL-001 fails a produced stakeholder register that drops it or leaves it unwritten."
+    evidence: [{"claim": "presence", "kind": "template", "target": "ART-STAKE", "heading": "Stakeholders and interview roster", "asserts": "The stakeholders having an interest in the system are identified in the stakeholder register's required section 'Stakeholders and interview roster'"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0220"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "SYSTEM STAKEHOLDERS | [Cybersecurity Framework: ID.AM; ID.BE]"}
@@ -1934,8 +1961,9 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-13 INFORMATION LIFE CYCLE | • All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [Cybersecurity Framework: ID.AM-3; ID.AM-4]"
-    status: "candidate"
-    reason: "infotypes.yaml life_cycle is optional per information type and no rule reads it, so a run that identifies no life cycle stage passes."
+    status: "partial"
+    reason: "INFL-001 fails an information type whose life cycle names no creation or collection stage, and one the system stores whose life cycle names no disposition stage; that every stage the information passes through is identified and understood is unheld."
+    evidence: [{"kind": "rule", "target": "INFL-001", "fixture": "tests/fixtures/negative/INFL-001.yaml", "expect": "the information life cycle stores the information and identifies no disposition stage", "claim": "constraint", "asserts": "All stages of the information life cycle are identified for each information type: a type whose life cycle identifies no disposition stage fails"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0227"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-14 RISK ASSESSMENT—SYSTEM | • A system-level risk assessment is completed"}
@@ -2039,7 +2067,7 @@ requirements:
     context: ""
     statement: "Identify stakeholders who have an interest in the design, development, implementation, assessment, operation, maintenance, or disposal of the system."
     status: "candidate"
-    reason: "ART-STAKE lists stakeholders in prose; no rule refuses a run that identifies none or leaves out a life cycle interest."
+    reason: "ART-STAKE requires its section 'Stakeholders and interview roster' (TPL-001), a presence item that caps at partial on an imperative; no record of a stakeholder's interest across design, development, implementation, assessment, operation, maintenance or disposal exists for a rule to fail, so no strong item can be given."
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0238"
     citation: {"ref": "SP800-37R2", "page": 56, "anchor": "Stakeholders include individuals, organizations, or representatives that have an interest in the"}
@@ -2140,8 +2168,9 @@ requirements:
     locator: "TASK P-13"
     context: ""
     statement: "Identify and understand all stages of the information life cycle for each information type processed, stored, or transmitted by the system."
-    status: "candidate"
-    reason: "infotypes.yaml life_cycle is optional per information type and no rule reads it, so a run that identifies no stage passes."
+    status: "partial"
+    reason: "INFL-001 fails an information type whose life cycle names no creation or collection stage, and one the system stores whose life cycle names no disposition stage; that every stage the information passes through is identified and understood is unheld."
+    evidence: [{"kind": "rule", "target": "INFL-001", "fixture": "tests/fixtures/negative/INFL-001.yaml", "expect": "the information life cycle stores the information and identifies no disposition stage", "claim": "constraint", "asserts": "Identify all stages of the information life cycle for each information type: a type whose life cycle identifies no disposition stage fails", "sentence": "Identify and understand all stages of the information life cycle for each information type processed, stored, or transmitted by the system."}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0249"
     citation: {"ref": "SP800-37R2", "page": 59, "anchor": "The information life cycle describes the stages through which information passes, typically"}
@@ -2222,9 +2251,11 @@ requirements:
     locator: "TASK P-14"
     context: ""
     statement: "Risk assessments are conducted throughout the SDLC and support various RMF steps and tasks. Risk assessment results are used to inform security and privacy requirements definition; categorization decisions; the selection, tailoring, implementation, and assessment of controls; authorization decisions; potential courses of action and prioritization for risk responses; and continuous monitoring strategy. Organizations determine the form of risk assessment conducted (including the scope, rigor, and formality of such assessments) and method of reporting results."
-    status: "candidate"
-    reason: "ART-RA is an input of the later tasks by the framework's structure; no rule fails a run whose decisions do not use it, and the form of the assessment is the organization's choice."
+    status: "partial"
+    reason: "Sentence 2 is held in part: TLRB-001 fails a downgrade not supported by the organizational assessment of risk (tailoring) and ASMT-006 initial remediation actions not determined from the updated risk assessment (risk response). Its other uses (requirements, categorization, authorization, ISCM strategy) and sentence 1 are unheld by a rule; sentence 3 leaves the form of the assessment to the organization."
+    evidence: [{"kind": "rule", "target": "TLRB-001", "fixture": "tests/fixtures/negative/TLRB-001.risk.yaml", "expect": "not supported by the organizational assessment of risk ART-RA", "claim": "constraint", "holds_when": "S-2 is active", "asserts": "Risk assessment results are used to inform the tailoring of controls: a downgrade not supported by the organizational assessment of risk fails", "sentence": "Risk assessment results are used to inform security and privacy requirements definition; categorization decisions; the selection, tailoring, implementation, and assessment of controls; authorization decisions; potential courses of action and prioritization for risk responses; and continuous monitoring strategy."}, {"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.risk.yaml", "expect": "the initial remediation actions are determined from the updated risk assessment", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded and the finding carries a triage, which A-5 demands when active", "asserts": "Risk assessment results inform potential courses of action for risk responses: initial remediation actions not determined from the updated risk assessment fail"}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "Organizations determine the form of risk assessment conducted (including the scope, rigor, and formality of such assessments) and method of reporting results.", "reason": "A permission: organizations determine the form, scope, rigor and formality of the risk assessment."}]
   - id: "REQ-SP800-37R2-0258"
     citation: {"ref": "SP800-37R2", "page": 61, "anchor": "Define the security and privacy requirements for the system and the environment"}
     kind: "imperative"
@@ -2260,8 +2291,8 @@ requirements:
     context: ""
     statement: "Determine the placement of the system within the enterprise architecture."
     status: "partial"
-    reason: "HOST-001 fails a boundary.yaml that records no hosting, where the system sits and why; that placement within the enterprise architecture is determined beyond hosting is P-16 prose."
-    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.yaml", "expect": "boundary.yaml records no hosting: where the system is hosted and why", "claim": "presence", "asserts": "Determine the placement of the system within the enterprise architecture: boundary.yaml records no hosting fails"}]
+    reason: "HOST-001 fails a capability that could be an application hosted in an existing authorized enclave and is instead designated a major application, part of placing the system within the enterprise architecture; P-16 recording no hosting rests on HOST-001's presence clause, and placement beyond hosting is unheld."
+    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.yaml", "expect": "boundary.yaml records no hosting: where the system is hosted and why", "claim": "presence", "asserts": "Determine the placement of the system within the enterprise architecture: boundary.yaml records no hosting fails"}, {"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.enclave.yaml", "expect": "is designated a major application requiring a new and separate authorization", "claim": "constraint", "holds_when": "the hosting record is in play once P-16 is in scope; the designation is judged while the system is under development or major modification", "asserts": "Determine the placement of the system within the enterprise architecture: a capability that can be developed as an application hosted in an existing authorized enclave and is designated a major application fails", "sentence": "Determine the placement of the system within the enterprise architecture."}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0262"
     citation: {"ref": "SP800-37R2", "page": 63, "anchor": "Enterprise architecture is a management practice used to maximize the effectiveness of"}
@@ -2336,8 +2367,8 @@ requirements:
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-2 SECURITY CATEGORIZATION | TASK C-2 | • A security categorization of the system, including the information"
     status: "partial"
-    reason: "FACTS-001 fails a categorization fact written by any task but C-2, so the categorization is recorded where it belongs; whether it represents every organization-identified information type is CATG-001's, at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "A security categorization of the system is completed at C-2: a categorization set by another task, not C-2 which writes it, fails"}]
+    reason: "FACTS-001 fails a categorization fact written by any task but C-2, so the categorization is recorded where it belongs, and CATG-001 one below the high-water mark of the organization-identified information types; that every information type is represented is held only through the information types the run records."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "A security categorization of the system is completed at C-2: a categorization set by another task, not C-2 which writes it, fails"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "A security categorization of the system, including the information processed, is completed: a system availability below the high-water mark of the information types fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0270"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "SECURITY CATEGORIZATION | processed by the system represented by the organization- identified"}
@@ -2345,8 +2376,9 @@ requirements:
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "SECURITY CATEGORIZATION | processed by the system represented by the organization- identified information types, is completed. [Cybersecurity Framework: ID.AM-1; ID.AM-2; ID.AM-3; ID.AM-4; ID.AM-5] • Security categorization results are documented in the security, privacy, and SCRM plans. [Cybersecurity Framework: Profile] • Security categorization results are consistent with the enterprise architecture and commitment to protecting organizational missions, business functions, and mission/business processes. [Cybersecurity Framework: Profile] • Security categorization results reflect the organization’s risk management strategy."
-    status: "candidate"
-    reason: "That categorization results are documented in the security, privacy and SCRM plans and are consistent with the enterprise architecture is held by C-2 exit criteria only; CATG-001 holds the high-water mark and is at its fan-out cap."
+    status: "partial"
+    reason: "PKG-003 fails a security plan that does not carry the CNSSI 1254 data element Security Categorization, so the results are documented in the security plan; the privacy and SCRM plans, consistency with the enterprise architecture and with the risk management strategy are unheld."
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.sspcat.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded", "asserts": "Security categorization results are documented in the security plan: a security plan that does not carry the CNSSI 1254 data element Security Categorization fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0271"
     citation: {"ref": "SP800-37R2", "page": 65, "anchor": "TASK C-3 | • The security categorization results are reviewed and the"}
@@ -2420,9 +2452,9 @@ requirements:
     locator: "TASK C-2"
     context: ""
     statement: "Categorize the system and document the security categorization results."
-    status: "partial"
-    reason: "FACTS-001 fails a categorization fact written by any task but C-2; that the categorization is right is CATG-001's, at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "Categorize the system and document the security categorization results: a categorization set by another task, not C-2 which writes it, fails"}]
+    status: "covered"
+    reason: "CATG-001 fails a categorization below the high-water mark of the information types and FACTS-001 a categorization fact written by any task but C-2, so the system is categorized; PKG-003 fails a security plan that does not carry the Security Categorization element, so the results are documented."
+    evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": " writes it, not another task", "claim": "constraint", "asserts": "Categorize the system and document the security categorization results: a categorization set by another task, not C-2 which writes it, fails"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Categorize the system and its security categorization results: a system availability below the high-water mark of the information types fails", "sentence": "Categorize the system and document the security categorization results."}, {"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.sspcat.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded", "asserts": "Document the security categorization results: a security plan that does not carry the CNSSI 1254 data element Security Categorization fails", "sentence": "Categorize the system and document the security categorization results."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0279"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "Security categorization determinations consider potential adverse impacts to organizational operations, organizational assets,"}
@@ -2430,8 +2462,9 @@ requirements:
     locator: "TASK C-2"
     context: ""
     statement: "Security categorization determinations consider potential adverse impacts to organizational operations, organizational assets, individuals, other organizations, and the Nation resulting from the loss of confidentiality, integrity, or availability of information. Organizations have flexibility in conducting a security categorization using either [FIPS 200] to establish a single impact level for a system based on the high-water mark concept (for other than national security systems), or [CNSSI 1253] to establish three impact values that may vary for each of the security objectives of confidentiality, integrity, and availability (for national security systems). The security categorization process is carried out by the system owner and the information owner or steward in cooperation and collaboration with senior leaders and executives with mission, business function, or risk management responsibilities. Cooperation and collaboration helps to ensure that individual systems are categorized based on the mission and business objectives of the organization. The system owner and information owner or steward consider the results from the security risk assessment (and the privacy risk assessment when the system processes PII) as a part of the security categorization decision. The decision is consistent with the risk management strategy. The results of the categorization process influence the selection of security controls for the system. Security categorization information is documented in the system security plan or included as an attachment to the plan and can be cross-referenced in a privacy plan when the system processes PII."
-    status: "candidate"
-    reason: "C-2 reads ART-RA and records one value per objective; the impacts considered and the choice of method are playbook prose, and the high-water mark is CATG-001's, at its fan-out cap."
+    status: "partial"
+    reason: "Sentence 4 is held: PKG-003 fails a security plan that does not carry the CNSSI 1254 data element Security Categorization. Who carries out the categorization in collaboration with senior leaders (sentence 1, task RACI), the use of the security and privacy risk assessments (sentence 2, C-2 reads ART-RA) and consistency with the risk management strategy (sentence 3) are unheld by a rule."
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.sspcat.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "ART-SSP is produced or seeded", "asserts": "Security categorization information is documented in the system security plan: a security plan that does not carry the CNSSI 1254 data element Security Categorization fails", "sentence": "Security categorization information is documented in the system security plan or included as an attachment to the plan and can be cross-referenced in a privacy plan when the system processes PII."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0280"
     citation: {"ref": "SP800-37R2", "page": 67, "anchor": "The security categorization results for the system can be further refined by"}
@@ -2485,8 +2518,9 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-1 CONTROL SELECTION | TASK S-1 | • Control baselines necessary to protect the system commensurate"
-    status: "candidate"
-    reason: "rmf baseline resolve writes baseline.json from the approved categorization and GEN-STALE-001 fails a stale one; GEN-STALE-001 is at its fan-out cap of 25."
+    status: "covered"
+    reason: "BSEL-001 fails a baseline selected for impact values other than the approved categorization, so the baselines selected are those commensurate with the system's risk."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Control baselines necessary to protect the system commensurate with risk are selected: a baseline selected for impact values other than the approved categorization fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0286"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"}
@@ -2494,8 +2528,9 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"
-    status: "candidate"
-    reason: "rmf baseline resolve writes baseline.json from the approved categorization and GEN-STALE-001 fails a stale one; GEN-STALE-001 is at its fan-out cap of 25."
+    status: "covered"
+    reason: "BSEL-002 fails a baseline whose controls differ from those rmf baseline resolve selects from the categorization, overlays, privacy baseline and tailoring."
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.privacy.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Control baselines commensurate with risk are selected: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0287"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "TASK S-2 | • Controls are tailored producing tailored control baselines."}
@@ -2541,8 +2576,9 @@ requirements:
     locator: "3.3"
     context: "TABLE 4: SELECT TASKS AND OUTCOMES"
     statement: "TASK S-4 | • Controls and associated tailoring actions are documented in"
-    status: "candidate"
-    reason: "SSP-COV-001 fails a baseline control with no statement in the security and privacy plan; it is at its fan-out cap across clusters, so it is not cited here."
+    status: "partial"
+    reason: "SSP-COV-001 fails a baseline control with no statement in the security and privacy plan; that the tailoring actions themselves are documented in the plans is unheld (tailoring.yaml holds them)."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "Controls and their associated tailoring actions are documented in the security plan: a baseline control with no statement documented in the plan fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0292"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "DOCUMENTATION OF PLANNED CONTROL | security and privacy plans or equivalent documents."}
@@ -2625,8 +2661,9 @@ requirements:
     locator: "TASK S-1"
     context: ""
     statement: "Select the controls for the system and the environment of operation."
-    status: "candidate"
-    reason: "Selection is rmf baseline resolve from the approved categorization; GEN-STALE-001, which fails a stale baseline, is at its fan-out cap of 25."
+    status: "covered"
+    reason: "BSEL-002 fails a baseline that leaves out a control rmf baseline resolve selects for the system, and BSEL-001 one selected for other impact values than the approved categorization."
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.privacy.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Select the controls for the system and its environment of operation: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "Select the controls for the system and the environment of operation."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0301"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "There are two approaches that can be used for the initial selection"}
@@ -2634,8 +2671,9 @@ requirements:
     locator: "TASK S-1"
     context: ""
     statement: "There are two approaches that can be used for the initial selection of controls: a baseline control selection approach, or an organization-generated control selection approach. The baseline control selection approach uses control baselines, which are pre-defined sets of controls specifically assembled to address the protection needs of a group, organization, or community of interest. Control baselines serve as a starting point for the protection of individuals’ privacy, information, and information systems. Federal control baselines are provided in [SP 800-53B]. The system security categorization (see Task C-2) and the security requirements derived from stakeholder protection needs, laws, executive orders, regulations, policies, directives, instructions, and standards (see Task P-15) can help inform the selection of security control baselines. A privacy risk assessment (see Task P-14) and privacy requirements derived from stakeholder protection needs, laws, executive orders, regulations, policies, directives, instructions, and standards (see Task P-15) can help inform the selection of privacy control baselines. Privacy programs use security and privacy control baselines to manage the privacy risks arising from both unauthorized system activity or behavior, as well as from authorized activities. After the pre-defined control baseline is selected, organizations tailor the baseline in accordance with the guidance provided (see Task S-2). The baseline control selection approach can provide consistency across a broad community of interest."
-    status: "candidate"
-    reason: "Describes the two selection approaches; the run uses CNSSI 1253 baselines through rmf baseline resolve, which no rule fails beyond GEN-STALE-001, at its cap."
+    status: "partial"
+    reason: "Sentence 4 is held: BSEL-002 fails a baseline that leaves out a control S-2 tailored in, so the selected baseline carries its tailoring. Sentences 1, 2, 3 and 5 describe baselines and the baseline selection approach; the run selects CNSSI 1253 baselines through rmf baseline resolve."
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.tailoredin.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "After the control baseline is selected, organizations tailor the baseline: a baseline that leaves out the control S-2 tailored in fails", "sentence": "After the pre-defined control baseline is selected, organizations tailor the baseline in accordance with the guidance provided (see Task S-2)."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0302"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "The organization-generated control selection approach differs from the baseline selection approach because"}
@@ -2651,9 +2689,11 @@ requirements:
     locator: "TASK S-1"
     context: ""
     statement: "In both the baseline control selection approach and organization-generated control selection approach, organizations develop a well-defined set of security and privacy requirements using a life cycle-based systems engineering process (e.g., [ISO 15288] and [SP 800-160 v1] as described in the RMF Prepare- System Level step, Task P-15. This process generates a set of requirements that can be used to guide and inform the selection of a set of controls to satisfy the requirements (whether the organization starts with a control baseline or generates the set of controls from its own selection process). Similarly, organizations can use the [NIST CSF] to develop Cybersecurity Framework Profiles representing a set of organization-specific security and privacy requirements—and thus, guiding and informing control selection from [SP 800-53]. Tailoring may also be required in the organization-generated control selection approach (see Task S-2). Organizations do not need to choose one approach for the selection of controls for each of their systems, but instead, may use different approaches as circumstances dictate."
-    status: "candidate"
-    reason: "The requirements of P-15 feed selection by S-1's inputs; no rule fails a selection that does not read them."
+    status: "partial"
+    reason: "Sentence 1 is held in part: REQS-001 fails a requirement in the traceability matrix that traces to a protection need the requirements do not record, so the requirements are a well-defined, traced set; that a life cycle-based systems engineering process develops them is P-15's playbook. Sentences 2 and 4 permit; sentence 3 points to S-2."
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.need.yaml", "expect": "traces to protection need", "claim": "constraint", "asserts": "Organizations develop a well-defined set of security and privacy requirements: a requirement that traces to a protection need the requirements do not record fails", "sentence": "In both the baseline control selection approach and organization-generated control selection approach, organizations develop a well-defined set of security and privacy requirements using a life cycle-based systems engineering process (e.g., [ISO 15288] and [SP 800-160 v1] as described in the RMF Prepare- System Level step, Task P-15."}]
     work_item: "WI-402"
+    ruling_sought: [{"sentence": "Similarly, organizations can use the [NIST CSF] to develop Cybersecurity Framework Profiles representing a set of organization-specific security and privacy requirements—and thus, guiding and informing control selection from [SP 800-53].", "reason": "A permission: organizations 'can use' the NIST CSF to develop profiles."}, {"sentence": "Organizations do not need to choose one approach for the selection of controls for each of their systems, but instead, may use different approaches as circumstances dictate.", "reason": "A permission: organizations 'may use' different selection approaches."}]
   - id: "REQ-SP800-37R2-0304"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "Tailor the controls selected for the system and the environment of operation."}
     kind: "imperative"
@@ -2681,9 +2721,11 @@ requirements:
     locator: "TASK S-2"
     context: ""
     statement: "Organizations use risk assessments to inform and guide the tailoring process. Threat information from security risk assessments provides information on adversary capabilities, intent, and targeting that may affect organizational decisions regarding the selection of security controls, including the associated costs and benefits. Privacy risk assessments, including the contextual factors therein, will also influence tailoring when an information system processes PII.80 Risk assessment results are also leveraged when identifying common controls to determine if the controls available for inheritance meet the security and privacy requirements for the system and its environment of operation. When common controls provided by the organization do not provide adequate protection for the systems inheriting the controls, system owners can either supplement the common controls with system-specific or hybrid controls to achieve the required level of protection or recommend a greater acceptance of risk to the authorizing official. Organizations may also consider federally or organizationally directed or approved overlays, tailored baselines, or Cybersecurity Framework Profiles when tailoring controls (see Task P-4)."
-    status: "candidate"
-    reason: "S-2 reads ART-RA by its inputs; no rule fails a tailoring decision that is not informed by the risk assessment."
+    status: "partial"
+    reason: "Sentence 1 is held: TLRB-001 fails a downgrade not supported by the organizational assessment of risk. Threat information (sentence 2) and privacy risk assessments (sentence 3) informing tailoring are unheld by a rule; sentences 4 and 5 permit."
+    evidence: [{"kind": "rule", "target": "TLRB-001", "fixture": "tests/fixtures/negative/TLRB-001.risk.yaml", "expect": "not supported by the organizational assessment of risk ART-RA", "claim": "constraint", "holds_when": "S-2 is active", "asserts": "Organizations use risk assessments to inform and guide the tailoring process: a downgrade not supported by the organizational assessment of risk fails", "sentence": "Organizations use risk assessments to inform and guide the tailoring process."}]
     work_item: "WI-402"
+    ruling_sought: [{"sentence": "When common controls provided by the organization do not provide adequate protection for the systems inheriting the controls, system owners can either supplement the common controls with system-specific or hybrid controls to achieve the required level of protection or recommend a greater acceptance of risk to the authorizing official.", "reason": "A permission: system owners 'can either supplement' common controls or recommend accepting risk."}, {"sentence": "Organizations may also consider federally or organizationally directed or approved overlays, tailored baselines, or Cybersecurity Framework Profiles when tailoring controls (see Task P-4).", "reason": "A permission: organizations 'may also consider' overlays, tailored baselines or profiles."}]
   - id: "REQ-SP800-37R2-0307"
     citation: {"ref": "SP800-37R2", "page": 72, "anchor": "Allocate security and privacy controls to the system and to the environment"}
     kind: "imperative"
@@ -2729,8 +2771,9 @@ requirements:
     locator: "TASK S-4"
     context: ""
     statement: "Security and privacy plans contain an overview of the security and privacy requirements for the system and the controls selected to satisfy the requirements. The plans describe the intended application of each selected control in the context of the system with a sufficient level of detail to correctly implement the control and to subsequently assess the effectiveness of the control. The control documentation describes how system-specific and hybrid controls are implemented and the plans and expectations regarding the functionality of the system. The description includes planned inputs, expected behavior, and expected outputs where appropriate, typically for those controls implemented in the hardware, software, or firmware components of the system. Common controls are also identified in the plans. There is no requirement to provide implementation details for inherited common controls. Rather, those details are provided in the plans for common control providers and are made available to system owners. For hybrid controls, the organization specifies in the system-level plans the parts of the control that are provided by the common control provider and the parts of the control that are implemented at the system level."
-    status: "candidate"
-    reason: "SSP-COV-001 fails a baseline control with no plan statement and is at its fan-out cap; the overview of requirements and the planned inputs, behavior and outputs are unheld (WI-411)."
+    status: "partial"
+    reason: "'The control documentation describes how system-specific and hybrid controls are implemented' is held by SSP-COV-001 (a baseline control with no statement in the plan fails), and 'Common controls are also identified in the plans' by SSPI-001 (a control allocated as common that the plan does not reference as inherited fails). The overview of the requirements, the providers' plans and the hybrid split are unheld (WI-411)."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "The control documentation describes how system-specific and hybrid controls are implemented: a baseline control with no statement in the plan fails", "sentence": "The control documentation describes how system-specific and hybrid controls are implemented and the plans and expectations regarding the functionality of the system."}, {"kind": "rule", "target": "SSPI-001", "fixture": "tests/fixtures/negative/SSPI-001.yaml", "expect": "and the security plan does not reference it as inherited", "claim": "constraint", "asserts": "Common controls are also identified in the plans: a control allocated as a common control that the security plan does not reference as inherited fails", "sentence": "Common controls are also identified in the plans."}]
     work_item: "WI-411"
   - id: "REQ-SP800-37R2-0312"
     citation: {"ref": "SP800-37R2", "page": 73, "anchor": "Organizations may develop a consolidated plan that incorporates security and privacy plans"}
@@ -2778,8 +2821,9 @@ requirements:
     locator: "TASK S-5"
     context: ""
     statement: "An important aspect of risk management is the ongoing monitoring of controls implemented within or inherited by an information system. An effective continuous monitoring strategy at the system level is developed and implemented in coordination with the organizational continuous monitoring strategy early in the SDLC (i.e., during initial system design or procurement decision). The system-level continuous monitoring strategy is consistent with and supplements the continuous monitoring strategy for the organization. The system-level strategy addresses monitoring those controls for which monitoring is not provided as part of the continuous monitoring strategy and implementation for the organization. The system-level strategy identifies the frequency of monitoring for controls not addressed by the organization-level strategy and defines the approach to be used for assessing those controls. The system-level continuous monitoring strategy, consistent with the organizational monitoring strategy, defines how changes to the system and the environment of operation81 are to be monitored; how risk assessments are to be conducted; and the security and privacy posture reporting requirements including recipients of the reports. The system-level continuous monitoring strategy can be included in security and privacy plans.82"
-    status: "candidate"
-    reason: "conmon.yaml holds frequencies and recipients; how changes are monitored and how risk assessments are conducted are unheld (WI-410), and no rule reads the strategy's timing in the SDLC."
+    status: "partial"
+    reason: "ISCM-005 fails posture reports that skip the AO, a recipient the strategy's reporting requirements name. Unheld: how changes to the system and environment are monitored and how risk assessments are conducted (WI-410), the strategy's timing early in the SDLC, and its consistency with the organizational strategy."
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "ART-CONMON is produced or seeded", "sentence": "The system-level continuous monitoring strategy, consistent with the organizational monitoring strategy, defines how changes to the system and the environment of operation81 are to be monitored; how risk assessments are to be conducted; and the security and privacy posture reporting requirements including recipients of the reports.", "asserts": "The system-level strategy defines the posture reporting requirements including recipients of the reports: monitoring results that do not reach the authorizing official fail"}]
     work_item: "WI-410"
   - id: "REQ-SP800-37R2-0317"
     citation: {"ref": "SP800-37R2", "page": 75, "anchor": "For controls that are not addressed by the organizational continuous monitoring strategy,"}
@@ -2964,8 +3008,8 @@ requirements:
     context: ""
     statement: "Document changes to planned control implementations based on the “as-implemented” state of controls."
     status: "partial"
-    reason: "PRIV-010 fails an I-2 that wrote ART-SSP with no update in the plan change log; whether the changes reflect the as-implemented state is unheld."
-    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Document changes to planned control implementations at I-2: I-2 wrote ART-SSP and the plan change log records no update fails"}]
+    reason: "PRIV-010 fails an I-2 update of the plans that leaves out the privacy plan of a system processing PII, and an I-2 that records no update of the plans (a presence clause); that the update follows the as-implemented state of each control is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.yaml", "expect": "wrote ART-SSP, and the plan change log records no update of the plans by", "claim": "presence", "asserts": "Document changes to planned control implementations at I-2: I-2 wrote ART-SSP and the plan change log records no update fails"}, {"kind": "rule", "target": "PRIV-010", "fixture": "tests/fixtures/negative/PRIV-010.privacy.yaml", "expect": "update of the plans leaves out the privacy plan of a system processing PII", "claim": "constraint", "asserts": "Document changes to planned control implementations in the plans: an I-2 update of the plans that leaves out the privacy plan of a system processing PII fails", "sentence": "Document changes to planned control implementations based on the “as-implemented” state of controls."}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0336"
     citation: {"ref": "SP800-37R2", "page": 79, "anchor": "Despite the control implementation details in the security and privacy plans and"}
@@ -2984,8 +3028,8 @@ requirements:
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "TASK A-1 ASSESSOR SELECTION | TASK A-1 | • An assessor or assessment team is selected to conduct the"
     status: "covered"
-    reason: "ASMT-007 fails an assessment plan that records no assessor selection"
-    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "An assessor or assessment team is selected to conduct the control assessments: no assessor selection is recorded fails"}]
+    reason: "ATEAM-001 fails an assessment plan that records no assessor selection"
+    evidence: [{"kind": "rule", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "An assessor or assessment team is selected to conduct the control assessments: no assessor selection is recorded fails"}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0338"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "ASSESSOR SELECTION | control assessments. • The appropriate level of independence is"}
@@ -2995,7 +3039,7 @@ requirements:
     statement: "ASSESSOR SELECTION | control assessments. • The appropriate level of independence is achieved for the assessor or assessment team selected."
     status: "covered"
     reason: "ASMT-007 fails an assessor who lacks the degree of independence the AO determined"
-    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.independence.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "The appropriate level of independence is achieved for the assessor selected: an assessor that lacks the required degree of independence fails"}]
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "presence", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "The appropriate level of independence is achieved for the assessor selected: an assessor that lacks the required degree of independence fails"}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0339"
     citation: {"ref": "SP800-37R2", "page": 80, "anchor": "TASK A-2 ASSESSMENT PLAN | • Documentation needed to conduct the assessments"}
@@ -3082,7 +3126,7 @@ requirements:
     context: ""
     statement: "Select the appropriate assessor or assessment team for the type of control assessment to be conducted."
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "Select the appropriate assessor or assessment team: the AO or AODR (Task A-1 primary responsibility), not another persona", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Selected for the type of control assessment to be conducted: a PII system whose assessor was selected for a security assessment only fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.privacytype.yaml", "expect": "the assessor was selected for a security assessment only", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected before the assessment to be conducted starts", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selectlate.yaml", "expect": "the assessment team was selected on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "Select the appropriate assessor or assessment team: the AO or AODR (Task A-1 primary responsibility), not another persona", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "Selected for the type of control assessment to be conducted: a PII system whose assessor was selected for a security assessment only fails", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.privacytype.yaml", "expect": "the assessor was selected for a security assessment only", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected before the assessment to be conducted starts", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.selectlate.yaml", "expect": "the assessment team was selected on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-19"
   - id: "REQ-SP800-37R2-0348"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "Organizations consider both the technical expertise and level of independence87 required in"}
@@ -3090,8 +3134,9 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "Organizations consider both the technical expertise and level of independence87 required in selecting control assessors.88 Organizations ensure that control assessors possess the required skills and technical expertise to develop effective assessment plans and to conduct assessments of program management, system-specific, hybrid, and common controls, as appropriate. This includes general knowledge of risk management concepts and approaches as well as comprehensive knowledge of and experience with the hardware, software, and firmware components implemented. In organizations where the assessment capability is centrally managed, the senior agency information security officer may have the responsibility of selecting and managing the security control assessors or assessment teams for organizational systems. As controls may be implemented to achieve security and privacy objectives, organizations consider the degree of collaboration between security control and privacy control assessors that is necessary."
-    status: "candidate"
-    reason: "ASMT-007 holds qualification and independence; the skills and expertise for each kind of control and the collaboration of security and privacy assessors are unheld (WI-408, WI-03)."
+    status: "partial"
+    reason: "PASM-001 fails a privacy assessor who is not on the assessment team of the plan, where the security and privacy control assessors collaborate. Unheld: the technical expertise and independence considered in selecting assessors beyond what ASMT-007 records, the skills and expertise for each kind of control (program management, system-specific, hybrid, common) and knowledge of the components implemented (WI-408), and the SISO's selection of assessors where assessment is centrally managed (a permission)."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.team.yaml", "expect": "is not on the assessment team of the plan", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "sentence": "As controls may be implemented to achieve security and privacy objectives, organizations consider the degree of collaboration between security control and privacy control assessors that is necessary.", "asserts": "Organizations consider the collaboration between security control and privacy control assessors: a privacy assessor who is not on the assessment team of the plan fails"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0349"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "Organizations can conduct self-assessments of controls or obtain the services of an"}
@@ -3099,8 +3144,9 @@ requirements:
     locator: "TASK A-1"
     context: ""
     statement: "Organizations can conduct self-assessments of controls or obtain the services of an independent control assessor. An independent assessor is an individual or group that can conduct an impartial assessment. Impartiality means that assessors are free from perceived or actual conflicts of interest with respect to the determination of control effectiveness or the development, operation, or management of the system, common controls, or program management controls. The authorizing official determines the level of assessor independence based on applicable laws, executive orders, directives, regulations, policies, or standards. The authorizing official consults with the Office of the Inspector General, chief information officer, senior agency official for privacy, and senior agency information security officer to help guide and inform decisions regarding assessor independence."
-    status: "candidate"
-    reason: "Describes self-assessment and independence; the AO's consultation with the Office of the Inspector General is unheld (WI-408)."
+    status: "partial"
+    reason: "INDEP-001 fails a decision on assessor independence not informed by consulting the CIO, the SAOP and the SISO; ASMT-007 holds the AO's determination of the level of independence and its basis. Unheld: the consultation of the Office of the Inspector General, which a run records by name only, and the first sentence is a permission (self-assessment or an independent assessor)."
+    evidence: [{"kind": "rule", "target": "INDEP-001", "fixture": "tests/fixtures/negative/INDEP-001.yaml", "expect": "the decision on assessor independence is not informed by consulting the", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "The authorizing official consults with the Office of the Inspector General, chief information officer, senior agency official for privacy, and senior agency information security officer to help guide and inform decisions regarding assessor independence.", "asserts": "The authorizing official consults the senior agency official for privacy to guide and inform decisions regarding assessor independence: a decision not informed by consulting the senior agency official for privacy fails"}]
     work_item: "WI-408"
   - id: "REQ-SP800-37R2-0350"
     citation: {"ref": "SP800-37R2", "page": 81, "anchor": "The system privacy officer is responsible for identifying assessment methodologies and metrics"}
@@ -3135,8 +3181,9 @@ requirements:
     locator: "TASK A-2"
     context: ""
     statement: "Develop, review, and approve plans to assess implemented controls."
-    status: "candidate"
-    reason: "ASMT-001 holds the review and approval of the security assessment plan and is at its fan-out cap; the privacy assessment plan is WI-03."
+    status: "covered"
+    reason: "ASMT-001 fails an assessment plan not reviewed by the SCA or not approved by the AO or AODR before the assessment starts; for a system processing PII, PASM-001 fails a plan whose privacy scope leaves out a privacy control of the baseline, so the privacy assessment plan is developed with the security one."
+    evidence: [{"kind": "rule", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.approver.yaml", "expect": "assessment plans are approved by the authorizing official or designated representative", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Approve plans to assess implemented controls: assessment plans approved by anyone but the authorizing official or designated representative fail"}, {"kind": "rule", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.reviewer.yaml", "expect": "the assessment plan is reviewed by the security control assessor, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Review plans to assess implemented controls: an assessment plan reviewed by someone other than the security control assessor fails"}, {"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.scopeother.yaml", "expect": "of the baseline is outside the privacy scope of the assessment plan", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "asserts": "Develop plans to assess implemented privacy controls: a privacy control of the baseline outside the scope of the assessment plan fails"}, {"kind": "rule", "target": "ASMT-001", "fixture": "tests/fixtures/negative/ASMT-001.approver.yaml", "expect": "assessment plans are approved by the authorizing official or designated representative, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "asserts": "Develop, review and approve plans to assess implemented controls: an assessment plan approved by the ISSM, not the authorizing official or designated representative, fails", "sentence": "Develop, review, and approve plans to assess implemented controls."}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0354"
     citation: {"ref": "SP800-37R2", "page": 82, "anchor": "Security and privacy assessment plans are developed by control assessors based on"}
@@ -3166,8 +3213,9 @@ requirements:
     locator: "TASK A-3"
     context: ""
     statement: "Assess the controls in accordance with the assessment procedures described in assessment plans."
-    status: "candidate"
-    reason: "SAR-COV-001 fails a scoped control with no determination and is at its fan-out cap; ASMT-002, for the procedures applied, is near its own."
+    status: "partial"
+    reason: "SAR-COV-001 fails a control the plan scopes and the report holds no determination for, so the controls the plan scopes are assessed; that the procedures applied are those the plan describes is held on the plan side by ASMT-002, and unheld on the report side."
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.other.yaml", "expect": "has no assessment determination", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "Assess the controls in accordance with the assessment plans: a control the plan scopes with no assessment determination fails", "sentence": "Assess the controls in accordance with the assessment procedures described in assessment plans."}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0357"
     citation: {"ref": "SP800-37R2", "page": 83, "anchor": "Control assessments determine the extent to which the selected controls are implemented"}
@@ -3290,8 +3338,8 @@ requirements:
     context: ""
     statement: "Conduct initial remediation actions on the controls and reassess remediated controls."
     status: "partial"
-    reason: "ASMT-006 fails an assessor finding with no triage, from which remediation follows; that remediation is conducted and remediated controls are reassessed is unheld."
-    evidence: [{"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.yaml", "expect": "has no triage: organizations review assessor findings to determine their significance", "claim": "presence", "holds_when": "A-5 is active and ART-SAR is produced or seeded", "asserts": "Conduct initial remediation actions on the controls once assessor findings are reviewed: a finding that has no triage fails"}]
+    reason: "ASMT-006 fails a triage whose initial remediation actions are not determined from the updated risk assessment, and a finding with no triage (a presence clause); conducting the remediation and reassessing the remediated controls are unheld by a rule."
+    evidence: [{"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.yaml", "expect": "has no triage: organizations review assessor findings to determine their significance", "claim": "presence", "holds_when": "A-5 is active and ART-SAR is produced or seeded", "asserts": "Conduct initial remediation actions on the controls once assessor findings are reviewed: a finding that has no triage fails"}, {"kind": "rule", "target": "ASMT-006", "fixture": "tests/fixtures/negative/ASMT-006.risk.yaml", "expect": "the initial remediation actions are determined from the updated risk assessment", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded and the finding carries a triage, which A-5 demands when active", "asserts": "Conduct initial remediation actions on the controls: a triage whose initial remediation actions are not determined from the updated risk assessment fails", "sentence": "Conduct initial remediation actions on the controls and reassess remediated controls."}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0370"
     citation: {"ref": "SP800-37R2", "page": 85, "anchor": "The security and privacy assessment reports describe deficiencies in the controls that"}
@@ -3463,8 +3511,9 @@ requirements:
     locator: "3.6"
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "AUTHORIZATION DECISION | approved or denied."
-    status: "candidate"
-    reason: "AODM-001 fails an R-4 that records no decision and is at its fan-out cap."
+    status: "covered"
+    reason: "AODM-001 fails an R-4 that touched the ledger and recorded no decision, so the authorization is approved or denied."
+    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.norecord.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by", "asserts": "The authorization is approved or denied: an R-4 that touched the ledger and recorded no decision fails"}]
     work_item: "WI-404"
   - id: "REQ-SP800-37R2-0388"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "TASK R-5 | • Authorization decisions, significant vulnerabilities, and risks are"}
@@ -3509,9 +3558,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "Authorization packages96 include security and privacy plans, security and privacy assessment reports, plans of action and milestones, and an executive summary. Additional information can be included in the authorization package at the request of the authorizing official. Organizations maintain version and change control as the information in the authorization package is updated. Providing timely updates to the plans, assessment reports, and plans of action and milestones on an ongoing basis supports the concept of near real-time risk management and ongoing authorization, and can be used for reauthorization actions, if required."
-    status: "covered"
-    reason: "XSUM-001 fails a package with no executive summary and PKG-001 one that leaves a core plan, report or POA&M out; the manifest hashes the summary, so GEN-STALE-001 fails a summary changed without rebuilding the package."
-    evidence: [{"kind": "rule", "target": "PKG-001", "fixture": "tests/fixtures/negative/PKG-001.poam.yaml", "expect": "is not in the manifest; run `rmf build`", "claim": "constraint", "holds_when": "ART-PKG is produced or seeded", "asserts": "Authorization packages include the plans of action and milestones with the plans and reports, and a manifest that leaves one out is not in the manifest and fails", "sentence": "Authorization packages96 include security and privacy plans, security and privacy assessment reports, plans of action and milestones, and an executive summary."}, {"kind": "rule", "target": "XSUM-001", "fixture": "tests/fixtures/negative/XSUM-001.yaml", "expect": "the authorization package has no executive summary", "claim": "presence", "holds_when": "ART-PKG is produced or seeded", "asserts": "Authorization packages include an executive summary, and a package with no executive summary fails", "sentence": "Authorization packages96 include security and privacy plans, security and privacy assessment reports, plans of action and milestones, and an executive summary."}, {"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.summary.yaml", "expect": "differs from a fresh `rmf package`", "claim": "constraint", "asserts": "Organizations maintain version and change control as the package information is updated: an executive summary changed after the package was generated differs from a fresh package and fails", "sentence": "Organizations maintain version and change control as the information in the authorization package is updated."}]
+    status: "partial"
+    reason: "Sentence 1 is held: XSUM-001 fails a package with no executive summary and PKG-001 one that leaves a core plan, report or POA&M out. Version and change control of the package (sentence 3) rests on the manifest hashes that GEN-STALE-001 compares with a fresh rmf package, a generic rule the judge no longer accepts, so it is unheld here; sentence 2 permits."
+    evidence: [{"kind": "rule", "target": "PKG-001", "fixture": "tests/fixtures/negative/PKG-001.poam.yaml", "expect": "is not in the manifest; run `rmf build`", "claim": "constraint", "holds_when": "ART-PKG is produced or seeded", "asserts": "Authorization packages include the plans of action and milestones with the plans and reports, and a manifest that leaves one out is not in the manifest and fails", "sentence": "Authorization packages96 include security and privacy plans, security and privacy assessment reports, plans of action and milestones, and an executive summary."}, {"kind": "rule", "target": "XSUM-001", "fixture": "tests/fixtures/negative/XSUM-001.yaml", "expect": "the authorization package has no executive summary", "claim": "presence", "holds_when": "ART-PKG is produced or seeded", "asserts": "Authorization packages include an executive summary, and a package with no executive summary fails", "sentence": "Authorization packages96 include security and privacy plans, security and privacy assessment reports, plans of action and milestones, and an executive summary."}]
     work_item: "WI-11"
   - id: "REQ-SP800-37R2-0393"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "The senior agency official for privacy reviews the authorization package for systems"}
@@ -3548,8 +3597,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "When an information system is under ongoing authorization, the authorization package is presented to the authorizing official via automated reports to provide information in the most efficient and timely manner possible.97 Information to be presented to the authorizing official in assessment reports is generated in the format and with the frequency determined by the organization using information from the information security and privacy continuous monitoring programs."
-    status: "candidate"
-    reason: "Under ongoing authorization the package reaches the AO through automated reports; no field names the tool or the format (WI-409)."
+    status: "partial"
+    reason: "For a cATO, the DoD form of ongoing authorization, DASH-001 fails a dashboard that gives the AO no real-time access to scan results, so the package does not reach the AO by automated report. Unheld: ongoing authorization outside a cATO, and the format and frequency of the assessment information the organization sets."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.feeds.yaml", "expect": "the AO has no real-time access to the results of", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "When an information system is under ongoing authorization, the authorization package is presented to the authorizing official via automated reports to provide information in the most efficient and timely manner possible.97", "asserts": "Under ongoing authorization the authorizing official receives the package via automated reports: a dashboard where the AO has no real-time access to the results of scanning fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0397"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "The assessment reports presented to the authorizing official include information about deficiencies"}
@@ -3557,8 +3607,9 @@ requirements:
     locator: "TASK R-1"
     context: ""
     statement: "The assessment reports presented to the authorizing official include information about deficiencies in system-specific, hybrid, and common controls (i.e., other than satisfied findings determined by assessors). The authorizing official uses automated security/privacy management and reporting tools or other automated methods, whenever practicable, to access the security and privacy plans and the plans of action and milestones. The authorization documents are updated at an organization-defined frequency using automated or manual processes in accordance with the risk management objectives of the organization.98"
-    status: "candidate"
-    reason: "Deficiencies reach the AO in ART-SAR; the AO's automated access to plans and POA&Ms and the update frequency of the documents are unheld (WI-409)."
+    status: "partial"
+    reason: "ASMT-005 fails an other than satisfied determination statement no finding names, so deficiencies reach the AO in the assessment report; for a cATO, DASH-001 fails a dashboard that does not visualize residual risk, findings or the POA&M for the AO. Unheld: the AO's automated access to the plans outside a cATO, and the organization-defined frequency of updates to the authorization documents."
+    evidence: [{"kind": "rule", "target": "ASMT-005", "fixture": "tests/fixtures/negative/ASMT-005.unnamed.yaml", "expect": "no finding names the other than satisfied statement", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "sentence": "The assessment reports presented to the authorizing official include information about deficiencies in system-specific, hybrid, and common controls (i.e., other than satisfied findings determined by assessors).", "asserts": "Assessment reports include information about deficiencies, the other than satisfied findings: an other than satisfied statement no finding names fails"}, {"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.shows.yaml", "expect": "the dashboard does not visualize", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "The authorizing official uses automated security/privacy management and reporting tools or other automated methods, whenever practicable, to access the security and privacy plans and the plans of action and milestones.", "asserts": "The authorizing official uses automated reporting tools to access the plans and plans of action: a dashboard that does not visualize what the AO needs fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0398"
     citation: {"ref": "SP800-37R2", "page": 89, "anchor": "While the objective is to fully automate all components of the authorization"}
@@ -3625,8 +3676,9 @@ requirements:
     locator: "TASK R-2"
     context: ""
     statement: "When the system is operating under an ongoing authorization, the risk determination task is effectively unchanged. The authorizing official analyzes the relevant security and privacy information provided by the automated security/privacy management and reporting tool to determine the current security and privacy posture of the system."
-    status: "candidate"
-    reason: "M-6 feeds back to R-2 with ART-SECRPT; the automated reporting tool is unheld (WI-409)."
+    status: "partial"
+    reason: "For a cATO, DASH-001 fails a dashboard, the automated management and reporting tool, that gives the AO no real-time access to scan results to determine the current posture. Unheld: ongoing authorization outside a cATO, where the AO reads ART-SECRPT at M-6."
+    evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.feeds.yaml", "expect": "the AO has no real-time access to the results of", "claim": "constraint", "holds_when": "a cATO is sought (cato.yaml exists)", "asserts": "The authorizing official analyzes the information provided by the automated reporting tool: a dashboard where the AO has no real-time access to the results of scanning fails"}]
     work_item: "WI-409"
   - id: "REQ-SP800-37R2-0405"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "Identify and implement a preferred course of action in response to the"}
@@ -3635,8 +3687,8 @@ requirements:
     context: ""
     statement: "Identify and implement a preferred course of action in response to the risk determined."
     status: "partial"
-    reason: "RAR-003 fails a risk that selects no single course of action; that the course is implemented is unheld."
-    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.selected.yaml", "expect": "courses of action", "claim": "presence", "holds_when": "R-3 is active and ART-RAR is produced or seeded", "asserts": "Identify and implement a preferred course of action in response to the risk: a risk that selects other than one of its courses of action fails"}]
+    reason: "RAR-003 fails a risk whose selected course of action does not match its response, and one selecting no course (a presence clause); implementing the preferred course of action is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.selected.yaml", "expect": "courses of action", "claim": "presence", "holds_when": "R-3 is active and ART-RAR is produced or seeded", "asserts": "Identify and implement a preferred course of action in response to the risk: a risk that selects other than one of its courses of action fails"}, {"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.response.yaml", "expect": "but the selected course of action is", "claim": "constraint", "holds_when": "ART-RAR is produced or seeded", "asserts": "Identify a preferred course of action in response to the risk determined: a risk whose selected course of action differs from its response fails", "sentence": "Identify and implement a preferred course of action in response to the risk determined."}]
     work_item: "WI-404"
   - id: "REQ-SP800-37R2-0406"
     citation: {"ref": "SP800-37R2", "page": 91, "anchor": "After risk is analyzed and determined, organizations can respond to risk in"}
@@ -3767,8 +3819,9 @@ requirements:
     locator: "TASK R-4"
     context: ""
     statement: "If control assessments are conducted by qualified assessors with the level of independence104 required, the assessment results support ongoing authorization and may be applied to a reauthorization. Organizational policies regarding ongoing authorization and reauthorization are consistent with laws, executive orders, directives, regulations, and policies."
-    status: "candidate"
-    reason: "Reuse of assessment results for reauthorization is the existing O&M path of WI-08."
+    status: "partial"
+    reason: "ASMT-003 fails a reused self-assessment where independence is required, so only results of assessors with the required independence are applied again. Unheld: reauthorization on the existing O&M path (WI-08), and the consistency of organizational policy with law."
+    evidence: [{"kind": "rule", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "cannot be reused", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "If control assessments are conducted by qualified assessors with the level of independence104 required, the assessment results support ongoing authorization and may be applied to a reauthorization.", "asserts": "Assessment results by assessors with the level of independence required may be applied again: a previous assessment reused when the current assessment requires more independence fails"}]
     work_item: "WI-08"
   - id: "REQ-SP800-37R2-0420"
     citation: {"ref": "SP800-37R2", "page": 93, "anchor": "In accordance with [OMB A-130], an independent evaluation of privacy program and"}
@@ -3835,8 +3888,9 @@ requirements:
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-3 ONGOING RISK RESPONSE | • The output of continuous monitoring activities is analyzed and responded to appropriately. [Cybersecurity Framework: RS.AN]"
-    status: "candidate"
-    reason: "M-3 analyzes and responds to monitoring output by its exit criteria; MCHG-002 and MPOA-001 hold single responses, and no rule fails unanalyzed monitoring output as such."
+    status: "partial"
+    reason: "MCHG-002 fails an unauthorized change found by monitoring whose root cause is answered by nothing, part of analyzing and responding to monitoring output; other monitoring output (assessment results, threat information) reaching no response is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.response.yaml", "expect": "the response to the root cause names", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "asserts": "The output of continuous monitoring activities is analyzed and responded to: an unauthorized change whose root cause response names nothing fails"}]
     work_item: "WI-405"
   - id: "REQ-SP800-37R2-0427"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-4 AUTHORIZATION PACKAGE UPDATES | • Risk management documents are updated"}
@@ -3884,8 +3938,9 @@ requirements:
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "ONGOING AUTHORIZATION | results of continuous monitoring activities and communicate changes in risk determination and acceptance decisions."
-    status: "candidate"
-    reason: "M-6 communicates changes in risk determination and acceptance by its exit criteria; no rule fails a change that is not communicated."
+    status: "partial"
+    reason: "AODM-009 fails an authorization decision that is not conveyed to those it must reach, part of communicating changes in risk determination and acceptance decisions; that M-6 reviews the results of continuous monitoring before deciding is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "AODM-009", "fixture": "tests/fixtures/negative/AODM-009.conveyed.yaml", "expect": "the decision is not conveyed to", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "asserts": "Communicate changes in risk determination and acceptance decisions: a decision that is not conveyed to the system owner fails"}]
     work_item: "WI-405"
   - id: "REQ-SP800-37R2-0432"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-7 | • A system disposal strategy is developed and implemented,"}
@@ -3982,9 +4037,11 @@ requirements:
     locator: "TASK M-2"
     context: ""
     statement: "For ongoing control assessments, assessors have the required degree of independence as determined by the authorizing official.107 Assessor independence during continuous monitoring introduces efficiencies into the process and may allow for reuse of assessment results in support of ongoing authorization and when reauthorization is required."
-    status: "candidate"
-    reason: "Its marked sentence says independence introduces efficiencies and may allow reuse: a benefit and a permission, which nothing can fail on; the degree of independence is ASMT-007's at A-1."
+    status: "partial"
+    reason: "The marked sentence states a benefit and a permission (independence 'may allow' reuse), which nothing can fail. That ongoing assessors have the degree of independence the AO determines is held in part by ASMT-007, which fails a required degree of independence determined by anyone but the AO or AODR; that the assessors hold it rests on ASMT-007's presence clause."
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence", "claim": "presence", "holds_when": "ART-SAP is produced or seeded", "asserts": "For ongoing control assessments, assessors have the required degree of independence as determined by the authorizing official: an assessor lacking the required degree of independence the authorizing official determined fails"}, {"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.determiner.yaml", "expect": "determines the required degree of assessor independence, not", "claim": "constraint", "holds_when": "A-1 is active and sap.yaml is produced or seeded", "asserts": "For ongoing control assessments, assessors have the required degree of independence as determined by the authorizing official: a degree of assessor independence determined by anyone but the authorizing official or designated representative fails"}]
     work_item: "WI-405"
+    ruling_sought: [{"sentence": "Assessor independence during continuous monitoring introduces efficiencies into the process and may allow for reuse of assessment results in support of ongoing authorization and when reauthorization is required.", "reason": "A benefit and a permission: independence 'introduces efficiencies' and 'may allow' reuse of results."}]
   - id: "REQ-SP800-37R2-0442"
     citation: {"ref": "SP800-37R2", "page": 97, "anchor": "To satisfy the annual FISMA security assessment requirement, organizations can use assessment"}
     kind: "should"
@@ -4008,9 +4065,11 @@ requirements:
     locator: "TASK M-3"
     context: ""
     statement: "Assessment information produced by an assessor during continuous monitoring is provided to the system owner and the common control provider in updated assessment reports or via reports from automated security/privacy management and reporting tools. The authorizing official determines the appropriate risk response to the assessment findings or approves responses proposed by the system owner and common control provider. The system owner and common control provider subsequently implement the appropriate risk response. When the risk response is acceptance, the findings remain documented in the security and privacy assessment reports and are monitored for changes to risk factors. When the risk response is mitigation, the planned mitigation actions are included in and tracked using the plans of action and milestones. If requested by the authorizing official, control assessors may provide recommendations for remediation actions. Recommendations for remediation actions may also be provided by an automated security/privacy management and reporting tool. An organizational assessment of risk (Task P-3) and system-level risk assessment results (Task P-14) guide and inform the decisions regarding ongoing risk response. Controls that are modified, enhanced, or added as part of ongoing risk response are reassessed by assessors to ensure that the new, modified, or enhanced controls have been implemented correctly, are operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements of the system."
-    status: "candidate"
-    reason: "M-3's exit criteria give each risk a mitigation or an AO acceptance; no rule fails an assessor's information not provided to the owner, or an accepted finding not monitored."
+    status: "partial"
+    reason: "Sentence 4 is held by MPOA-001 (a finding not leveraged in a POA&M item or an accepted risk fails) and sentence 2 by MPOA-001's review clause (a POA&M item not reviewed by the authorizing official fails). That assessment information reaches the system owner and provider (sentence 1) and that accepted findings stay monitored (sentence 3) are unheld; sentence 5 permits."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.yaml", "expect": "is not leveraged in a POA&M item or an accepted risk", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "When the risk response is mitigation, the planned mitigation actions are tracked using the plans of action and milestones: a finding not leveraged in a POA&M item or an accepted risk fails", "sentence": "When the risk response is mitigation, the planned mitigation actions are included in and tracked using the plans of action and milestones."}, {"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.review.yaml", "expect": "is not reviewed by the authorizing official", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "The authorizing official determines the risk response to the assessment findings: a POA&M item not reviewed by the authorizing official fails", "sentence": "The authorizing official determines the appropriate risk response to the assessment findings or approves responses proposed by the system owner and common control provider."}]
     work_item: "WI-405"
+    ruling_sought: [{"sentence": "If requested by the authorizing official, control assessors may provide recommendations for remediation actions.", "reason": "A permission: control assessors 'may provide' recommendations if the AO requests them."}]
   - id: "REQ-SP800-37R2-0445"
     citation: {"ref": "SP800-37R2", "page": 98, "anchor": "Update plans, assessment reports, and plans of action and milestones based on"}
     kind: "imperative"
@@ -4037,9 +4096,11 @@ requirements:
     locator: "TASK M-4"
     context: ""
     statement: "The frequency of updates to risk management information is at the discretion of the system owner, common control provider, and authorizing officials in accordance with federal and organizational policies and is consistent with the organizational and system-level continuous monitoring strategies. The updates to information regarding the security and privacy posture of the system and the common controls inherited by the system are accurate and timely since the information provided influences ongoing actions and decisions by authorizing officials and other senior leaders within the organization. The use of automated support tools and organization-wide security and privacy program management practices ensure that authorizing officials can readily access the current security and privacy posture of the system. Ready access to the current security and privacy posture supports continuous monitoring and ongoing authorization and promotes the near real-time management of risk to organizational operations and assets, individuals, other organizations, and the Nation."
-    status: "candidate"
-    reason: "The frequency of updates is at the owners' and AO's discretion, and readily accessible posture is unheld (WI-409)."
+    status: "partial"
+    reason: "Sentence 2 is held in part: MRPT-001 fails cybersecurity status data that is not displayed by automated capabilities, so the AO can readily access the current posture; organization-wide program management practices are unheld. Sentence 1 leaves the frequency of updates to the owners' and AO's discretion."
+    evidence: [{"kind": "rule", "target": "MRPT-001", "fixture": "tests/fixtures/negative/MRPT-001.display.yaml", "expect": "are not displayed by automated capabilities", "claim": "constraint", "holds_when": "ART-SECRPT is produced or seeded and conmon.yaml names a GENSER or SE designation", "asserts": "The use of automated support tools ensures that authorizing officials can readily access the current security posture: status data that is not displayed by automated capabilities fails", "sentence": "The use of automated support tools and organization-wide security and privacy program management practices ensure that authorizing officials can readily access the current security and privacy posture of the system."}]
     work_item: "WI-405"
+    ruling_sought: [{"sentence": "The frequency of updates to risk management information is at the discretion of the system owner, common control provider, and authorizing officials in accordance with federal and organizational policies and is consistent with the organizational and system-level continuous monitoring strategies.", "reason": "A permission: the frequency of updates is 'at the discretion of' the system owner, provider and AO."}]
   - id: "REQ-SP800-37R2-0448"
     citation: {"ref": "SP800-37R2", "page": 99, "anchor": "Organizations ensure that information needed for oversight, management, and auditing purposes is"}
     kind: "modal"
@@ -4222,7 +4283,7 @@ requirements:
     statement: "The chief information officer117 is an organizational official responsible for designating a senior agency information security officer; developing and maintaining security policies, procedures, and control techniques to address security requirements; overseeing personnel with significant responsibilities for security and ensuring that the personnel are adequately trained; assisting senior organizational officials concerning their security responsibilities; and reporting to the head of the agency on the effectiveness of the organization’s security program, including progress of remedial actions. The chief information officer, with the support of the senior accountable official for risk management, the risk executive (function), and the senior agency information security officer, works closely with authorizing officials and their designated representatives to help ensure that:"
     status: "partial"
     reason: "only the designation of the senior agency information security officer is checked; developing policies, overseeing training, assisting officials and reporting to the head of agency are conduct, and the second sentence introduces the bullets"
-    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.ciso.yaml", "expect": ": the senior agency information security officer is designated by", "asserts": "The chief information officer is responsible for designating a senior agency information security officer", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "The chief information officer117 is an organizational official responsible for designating a senior agency information security officer; developing and maintaining security policies, procedures, and control techniques to address security requirements; overseeing personnel with significant responsibilities for security and ensuring that the personnel are adequately trained; assisting senior organizational officials concerning their security responsibilities; and reporting to the head of the agency on the effectiveness of the organization’s security program, including progress of remedial actions."}]
+    evidence: [{"kind": "rule", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.ciso.yaml", "expect": ": the senior agency information security officer is designated by", "asserts": "The chief information officer is responsible for designating a senior agency information security officer", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "The chief information officer117 is an organizational official responsible for designating a senior agency information security officer; developing and maintaining security policies, procedures, and control techniques to address security requirements; overseeing personnel with significant responsibilities for security and ensuring that the personnel are adequately trained; assisting senior organizational officials concerning their security responsibilities; and reporting to the head of the agency on the effectiveness of the organization’s security program, including progress of remedial actions."}]
     work_item: "WI-165"
   - id: "REQ-SP800-37R2-0467"
     citation: {"ref": "SP800-37R2", "page": 134, "anchor": "When an organization has not designated a formal chief information officer position,"}
@@ -4309,8 +4370,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "COMMON CONTROL PROVIDER"
     statement: "The senior agency official for privacy is responsible for designating which privacy controls may be treated as common controls. Privacy controls that are designated as common controls are documented in the organization’s privacy program plan.119 The senior agency official for privacy has oversight responsibility for common controls in place or planned for meeting applicable privacy requirements and managing privacy risks and is responsible for assessing those controls. At the discretion of the organization, privacy controls that are designated as common controls may be assessed by an independent assessor. In all cases, however, the senior agency official for privacy retains responsibility and accountability for the organization’s privacy program, including any privacy functions performed by independent assessors. Privacy plans and privacy control assessment reports are made available to systems owners whose systems inherit privacy controls that are designated as common controls."
-    status: "candidate"
-    reason: "PER-PRIV is R on P-5 and S-3; the assessment of privacy common controls is WI-03 and the privacy program plan WI-05."
+    status: "partial"
+    reason: "PASM-001 fails, for a system processing PII, privacy controls assessed by anyone but the senior agency official for privacy or an independent assessor. Unheld: the SAOP's designation of privacy common controls and their place in the privacy program plan (WI-05), and that privacy plans and privacy assessment reports reach the owners of systems inheriting them."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.independent.yaml", "expect": "official for privacy or an independent assessor, not", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "sentence": "The senior agency official for privacy has oversight responsibility for common controls in place or planned for meeting applicable privacy requirements and managing privacy risks and is responsible for assessing those controls.", "asserts": "The senior agency official for privacy is responsible for assessing privacy controls: privacy controls assessed by the ISSM, neither the senior agency official for privacy nor an independent assessor, fail"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0476"
     citation: {"ref": "SP800-37R2", "page": 135, "anchor": "Organizations can have multiple common control providers depending on how security and"}
@@ -4743,8 +4805,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Identifying assessment methodologies and metrics to determine whether privacy controls are implemented correctly, operating as intended, and sufficient to ensure compliance with applicable privacy requirements and manage privacy risks;"
-    status: "candidate"
-    reason: "Privacy assessment methodologies and metrics are the privacy assessment plan of WI-03."
+    status: "partial"
+    reason: "PASM-001 fails, for a system processing PII, privacy assessment methodologies and metrics in sap.yaml privacy identified by anyone but the senior agency official for privacy; the schema requires the methods and the metrics. Unheld: that the metrics determine the privacy controls correct, operating as intended and sufficient, which a run states in prose."
+    evidence: [{"kind": "rule", "target": "PASM-001", "fixture": "tests/fixtures/negative/PASM-001.methodology.yaml", "expect": "the privacy assessment methodologies and metrics are identified by", "claim": "constraint", "holds_when": "the system processes PII and ART-SAP is produced or seeded", "asserts": "The senior agency official for privacy identifies assessment methodologies and metrics for privacy controls: methodologies and metrics identified by the ISSM fail"}]
     work_item: "WI-03"
   - id: "REQ-SP800-37R2-0523"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Reviewing and approving privacy plans for information systems prior to authorization, reauthorization,"}
@@ -5192,8 +5255,9 @@ requirements:
     locator: "SYSTEM AND COMMON CONTROL AUTHORIZATIONS"
     context: "AUTHORIZATION DECISIONS There are four types of authorization decisions that can be rendered by authorizing officials:"
     statement: "If changes are made as a result of mitigation actions from plans of actions and milestones, system security plans are updated accordingly."
-    status: "candidate"
-    reason: "M-4 outputs ART-SSP; no rule fails a POA&M mitigation that changes the system without a plan update."
+    status: "partial"
+    reason: "UPD-002 fails a significant change implemented with no system plan change referencing it, so a change from a POA&M mitigation that is significant updates the security plan; a mitigation change below significance is unheld."
+    evidence: [{"kind": "rule", "target": "UPD-002", "fixture": "tests/fixtures/negative/UPD-002.yaml", "expect": "a significant change was implemented but the system security plan was not updated for it", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "asserts": "If changes are made as a result of mitigation actions, system security plans are updated accordingly: a significant change implemented without the system security plan updated for it fails", "sentence": "If changes are made as a result of mitigation actions from plans of actions and milestones, system security plans are updated accordingly."}]
     work_item: "WI-405"
   - id: "REQ-SP800-37R2-0573"
     citation: {"ref": "SP800-37R2", "page": 162, "anchor": "Common control authorization;"}
@@ -5228,7 +5292,7 @@ requirements:
     statement: "If the authorizing official, after reviewing the authorization package, determines that the risk to organizational operations, organizational assets, individuals, other organizations, and the Nation is acceptable, an authorization to operate is issued for the information system. The system is authorized to operate for a specified period in accordance with the terms and conditions established by the authorizing official. An authorization termination date is established by the authorizing official as a condition of the authorization. The authorization termination date can be adjusted at any time by the authorizing official to reflect an increased level of concern regarding the security and privacy posture of the system. For example, the authorizing official may choose to authorize the system to operate only for a short period of time if it is necessary to test a system in the operational environment before all controls are fully in place, (i.e., the authorization to operate is limited to the time needed to complete the testing objectives).137 The authorizing official may choose to include operating restrictions such as limiting logical and physical access to a minimum number of users; restricting system use time periods; employing enhanced or increased audit logging, scanning, and monitoring; or restricting the system functionality to include only the functions that require live testing. The authorizing official considers results from the assessment of controls that are fully or partially implemented since if the system is ready to be tested in a live environment, many of the controls should already be in place. If the system is under ongoing authorization, a time-driven authorization frequency is specified. Additionally, an adverse event could occur that triggers the need to review the authorization to operate.138"
     status: "partial"
     reason: "Operating restrictions and assessment results are terms the record states as prose"
-    evidence: [{"kind": "schema", "asserts": "The authorization decision type records that the system is authorized to operate", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/decision", "claim": "constraint", "sentence": "If the authorizing official, after reviewing the authorization package, determines that the risk to organizational operations, organizational assets, individuals, other organizations, and the Nation is acceptable, an authorization to operate is issued for the information system."}, {"kind": "rule", "asserts": "The authorized period is refused when its days exceeds the type's limit", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.term.yaml", "expect": "days exceeds", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The system is authorized to operate for a specified period in accordance with the terms and conditions established by the authorizing official."}, {"kind": "rule", "asserts": "An authorization_termination_date is required by the type as a condition of the authorization", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization termination date is established by the authorizing official as a condition of the authorization."}]
+    evidence: [{"kind": "schema", "asserts": "The authorization decision type records that the system is authorized to operate", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/decision", "claim": "constraint", "sentence": "If the authorizing official, after reviewing the authorization package, determines that the risk to organizational operations, organizational assets, individuals, other organizations, and the Nation is acceptable, an authorization to operate is issued for the information system."}, {"kind": "rule", "asserts": "The authorized period is refused when its days exceeds the type's limit", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.term.yaml", "expect": "days exceeds", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The system is authorized to operate for a specified period in accordance with the terms and conditions established by the authorizing official."}, {"kind": "rule", "asserts": "An authorization_termination_date is required by the type as a condition of the authorization", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization termination date is established by the authorizing official as a condition of the authorization."}]
     work_item: "WI-06"
   - id: "REQ-SP800-37R2-0577"
     citation: {"ref": "SP800-37R2", "page": 162, "anchor": "A common control authorization is similar to an authorization to operate for"}
@@ -5249,7 +5313,7 @@ requirements:
     statement: "Common controls are authorized for a specific time period in accordance with the terms and conditions established by the authorizing official and the organization. An authorization termination date is established by the authorizing official as a condition of the initial common control authorization. The termination date can be adjusted at any time to reflect the level of concern by the authorizing official regarding the security and privacy posture of the common controls that are available for inheritance. If the controls are under ongoing authorization, a time-driven authorization frequency is specified. Within any authorization type, an adverse event could trigger the need to review the common control authorization. Common controls that are implemented in a system do not require a separate common control authorization because the controls receive an authorization to operate as part of the system authorization to operate.139"
     status: "partial"
     reason: "The time period's terms, adverse events and the scoping of inherited controls are not tested"
-    evidence: [{"kind": "rule", "asserts": "An authorization_termination_date is required on the common control authorization", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization termination date is established by the authorizing official as a condition of the initial common control authorization."}, {"kind": "rule", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.review.yaml", "expect": "needs review", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}, {"kind": "pinned", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "AD-CONT", "field": "requires", "value": ["underlying", "review", "ongoing_acknowledgment"], "claim": "constraint", "read_by": "AODM-002", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}, {"kind": "schema", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/review/properties/frequency_days", "claim": "constraint", "read_by": "AODM-002", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}]
+    evidence: [{"kind": "rule", "asserts": "An authorization_termination_date is required on the common control authorization", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization termination date is established by the authorizing official as a condition of the initial common control authorization."}, {"kind": "rule", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.review.yaml", "expect": "needs review", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}, {"kind": "pinned", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "AD-CONT", "field": "requires", "value": ["underlying", "review", "ongoing_acknowledgment"], "claim": "constraint", "read_by": "AODM-002", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}, {"kind": "schema", "asserts": "If under ongoing authorization the record needs review at an authorization frequency", "target": "framework/schema/authorizations.schema.json#/$defs/record/properties/review/properties/frequency_days", "claim": "constraint", "read_by": "AODM-002", "sentence": "If the controls are under ongoing authorization, a time-driven authorization frequency is specified."}]
     work_item: "WI-01"
     ruling_sought: [{"sentence": "Within any authorization type, an adverse event could trigger the need to review the common control authorization.", "reason": "'an adverse event could trigger the need to review': a possibility, not a duty"}, {"sentence": "Common controls that are implemented in a system do not require a separate common control authorization because the controls receive an authorization to operate as part of the system authorization to operate.139", "reason": "states that system-resident common controls do not require a separate authorization: an exemption, which no record can break"}]
   - id: "REQ-SP800-37R2-0579"
@@ -5464,7 +5528,7 @@ requirements:
     statement: "The authorization decision indicates if the system is authorized to operate or authorized to be used; or if the common controls are authorized to be provided to system owners and inherited by organizational systems. The terms and conditions for the authorization provide any limitations or restrictions placed on the operation of the system that must be followed by the system owner or alternatively, limitations or restrictions placed on the implementation of common controls that must be followed by the common control provider. If the system or common controls are not under ongoing authorization, the termination date for the authorization established by the authorizing official indicates when the authorization expires and reauthorization is required. The authorization decision document is transmitted with the original authorization package to the system owner or common control provider.146"
     status: "partial"
     reason: "The package travelling with the decision is not recorded"
-    evidence: [{"kind": "rule", "asserts": "The authorization decision indicates authorized to operate or used by an AD type; any other is not one", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.type.yaml", "expect": "not one of the decision types", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The authorization decision indicates if the system is authorized to operate or authorized to be used; or if the common controls are authorized to be provided to system owners and inherited by organizational systems."}, {"kind": "rule", "asserts": "An authorization with conditions needs conditions, the restrictions on operation of the system", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "needs conditions", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The terms and conditions for the authorization provide any limitations or restrictions placed on the operation of the system that must be followed by the system owner or alternatively, limitations or restrictions placed on the implementation of common controls that must be followed by the common control provider."}, {"kind": "rule", "asserts": "The termination date for the authorization, which says when it expires, must follow the decision date", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.yaml", "expect": "is not after the decision date", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If the system or common controls are not under ongoing authorization, the termination date for the authorization established by the authorizing official indicates when the authorization expires and reauthorization is required."}]
+    evidence: [{"kind": "rule", "asserts": "The authorization decision indicates authorized to operate or used by an AD type; any other is not one", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.type.yaml", "expect": "not one of the decision types", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The authorization decision indicates if the system is authorized to operate or authorized to be used; or if the common controls are authorized to be provided to system owners and inherited by organizational systems."}, {"kind": "rule", "asserts": "An authorization with conditions needs conditions, the restrictions on operation of the system", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.yaml", "expect": "needs conditions", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "The terms and conditions for the authorization provide any limitations or restrictions placed on the operation of the system that must be followed by the system owner or alternatively, limitations or restrictions placed on the implementation of common controls that must be followed by the common control provider."}, {"kind": "rule", "asserts": "The termination date for the authorization, which says when it expires, must follow the decision date", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.yaml", "expect": "is not after the decision date", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "If the system or common controls are not under ongoing authorization, the termination date for the authorization established by the authorizing official indicates when the authorization expires and reauthorization is required."}]
     work_item: "WI-01"
   - id: "REQ-SP800-37R2-0602"
     citation: {"ref": "SP800-37R2", "page": 166, "anchor": "Upon receipt of the authorization decision and authorization package, the system owner"}
@@ -5638,7 +5702,7 @@ requirements:
     statement: "Prior to transitioning to ongoing authorization, organizations have authorization decision documents that include an authorization termination date. By requiring a new authorization decision document, it is made clear that the system or the common controls are no longer bound to the termination date specified in the initial authorization document because the system and the common controls are now under ongoing authorization."
     status: "partial"
     reason: "That a decision document before ongoing authorization includes a termination date is a presence clause; only the no-termination-date side fails on a wrong value"
-    evidence: [{"kind": "rule", "asserts": "Authorization decision documents before ongoing authorization need an authorization_termination_date", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "Prior to transitioning to ongoing authorization, organizations have authorization decision documents that include an authorization termination date."}, {"kind": "rule", "asserts": "The new authorization decision under ongoing authorization carries no authorization_termination_date, no longer bound to it", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.forbidden.yaml", "expect": "carries no authorization_termination_date", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "By requiring a new authorization decision document, it is made clear that the system or the common controls are no longer bound to the termination date specified in the initial authorization document because the system and the common controls are now under ongoing authorization."}, {"kind": "pinned", "asserts": "The new authorization decision document frees the system from the termination date under ongoing authorization", "target": "AD-CONT", "field": "atd_forbidden", "value": true, "claim": "constraint", "read_by": "AODM-002", "sentence": "By requiring a new authorization decision document, it is made clear that the system or the common controls are no longer bound to the termination date specified in the initial authorization document because the system and the common controls are now under ongoing authorization."}]
+    evidence: [{"kind": "rule", "asserts": "Authorization decision documents before ongoing authorization need an authorization_termination_date", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "Prior to transitioning to ongoing authorization, organizations have authorization decision documents that include an authorization termination date."}, {"kind": "rule", "asserts": "The new authorization decision under ongoing authorization carries no authorization_termination_date, no longer bound to it", "target": "AODM-002", "fixture": "tests/fixtures/negative/AODM-002.forbidden.yaml", "expect": "carries no authorization_termination_date", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "By requiring a new authorization decision document, it is made clear that the system or the common controls are no longer bound to the termination date specified in the initial authorization document because the system and the common controls are now under ongoing authorization."}, {"kind": "pinned", "asserts": "The new authorization decision document frees the system from the termination date under ongoing authorization", "target": "AD-CONT", "field": "atd_forbidden", "value": true, "claim": "constraint", "read_by": "AODM-002", "sentence": "By requiring a new authorization decision document, it is made clear that the system or the common controls are no longer bound to the termination date specified in the initial authorization document because the system and the common controls are now under ongoing authorization."}]
     work_item: "WI-06"
   - id: "REQ-SP800-37R2-0621"
     citation: {"ref": "SP800-37R2", "page": 169, "anchor": "To support ongoing authorizations for moderate- and high-impact systems, the security and"}
@@ -5742,9 +5806,11 @@ requirements:
     locator: "Denial of Authorization"
     context: "REAUTHORIZATION"
     statement: "For security and privacy assessments associated with reauthorization, organizations leverage security and privacy information generated by the continuous monitoring program and fill in gaps with manual assessments. Organizations may supplement automatically-generated assessment information with manually-generated information in situations where an increased level of assurance is needed. If the security control assessments are conducted by qualified assessors with the necessary independence, use appropriate security standards and guidelines, and are based on the needs of the authorizing official, the assessment results can be applied to the reauthorization.158"
-    status: "candidate"
-    reason: "Reauthorization reuse of continuous monitoring information is the existing O&M path of WI-08."
+    status: "partial"
+    reason: "ASMT-003 fails a reused self-assessment where independence is required, so results applied again come from assessors with the necessary independence. Unheld: reauthorization on the existing O&M path (WI-08), filling the gaps of continuous monitoring with manual assessments; the second sentence is a permission."
+    evidence: [{"kind": "rule", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.independence.yaml", "expect": "cannot be reused", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded and the plan reuses a result", "sentence": "If the security control assessments are conducted by qualified assessors with the necessary independence, use appropriate security standards and guidelines, and are based on the needs of the authorizing official, the assessment results can be applied to the reauthorization.158", "asserts": "Assessment results by assessors with the necessary independence can be applied: a previous assessment reused when the current assessment requires more independence fails"}]
     work_item: "WI-08"
+    ruling_sought: [{"sentence": "Organizations may supplement automatically-generated assessment information with manually-generated information in situations where an increased level of assurance is needed.", "reason": "A permission: organizations may supplement automated information with manual information."}]
   - id: "REQ-SP800-37R2-0632"
     citation: {"ref": "SP800-37R2", "page": 171, "anchor": "The senior agency official for privacy is responsible for assessing privacy controls and those assessment results"}
     kind: "modal"
@@ -5964,8 +6030,9 @@ requirements:
     context: "EVENT-DRIVEN TRIGGERS AND SIGNIFICANT CHANGES"
     statement: "Risk assessment results or the results from an impact analysis may be used to determine if changes to systems or common controls are significant and trigger an authorization action. If an authorization action is initiated, the organization targets only the specific controls affected by the changes and reuses previous assessment results wherever possible. An effective monitoring program can significantly reduce the overall cost and level of effort of authorization actions. Most changes to a system or its environment of operation can be handled through the continuous monitoring program and ongoing authorization."
     status: "candidate"
-    reason: "Significant change and targeted reauthorization are the existing O&M path of WI-08."
+    reason: "The marked sentence is a permission (risk assessment or impact analysis results may be used), sought for a ruling. The duty that follows, that an authorization action targets only the controls the change affects and reuses previous results, is unheld: no record names the controls an authorization action targets (WI-08)."
     work_item: "WI-08"
+    ruling_sought: [{"sentence": "Risk assessment results or the results from an impact analysis may be used to determine if changes to systems or common controls are significant and trigger an authorization action.", "reason": "A permission: the results may be used to determine significance; any sound basis meets the sentence."}]
   - id: "REQ-SP800-37R2-0658"
     citation: {"ref": "SP800-37R2", "page": 173, "anchor": "A type authorization159 is an official authorization decision that allows for a"}
     kind: "modal"
@@ -6230,8 +6297,9 @@ requirements:
     locator: "SYSTEM LIFE CYCLE CONSIDERATIONS"
     context: "RISK MANAGEMENT IN THE SYSTEM DEVELOPMENT LIFE CYCLE"
     statement: "Ensuring that security and privacy requirements are integrated into the SDLC helps facilitate the development and implementation of more resilient systems to reduce the security and privacy risks (including supply chain risks) to organizational operations and assets, individuals, other organizations, and the Nation. This can be accomplished by using the concept of integrated project teams.169 Organizational officials ensure that security and privacy professionals are part of the SDLC activities. Such team integration fosters an increased level of cooperation among personnel responsible for the design, development, implementation, assessment, operation, maintenance, and disposition of systems and the security and privacy professionals advising the senior leadership on the controls needed to adequately mitigate security and privacy risks and protect organizational missions and business functions."
-    status: "candidate"
-    reason: "A Chapter 2 concept held by the framework's structure (tasks, phases, RACI); no rule fails a run that departs from it."
+    status: "partial"
+    reason: "Sentence 1 is held in part: OCTX-001 fails a system with no ISSM appointed; the systems security engineer and privacy professionals in the SDLC are unheld by a rule. Sentence 2 describes the benefit."
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.issm.yaml", "expect": "no ISSM is appointed for the system", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "Organizational officials ensure that security professionals are part of the SDLC activities: no ISSM appointed for the system fails", "sentence": "Organizational officials ensure that security and privacy professionals are part of the SDLC activities."}]
     work_item: "WI-400"
   - id: "REQ-SP800-37R2-0688"
     citation: {"ref": "SP800-37R2", "page": 181, "anchor": "Organizations may employ a variety of development processes (e.g., waterfall, spiral, or"}
@@ -6601,8 +6669,9 @@ requirements:
     locator: "2.5"
     context: ""
     statement: "If a system contains information at multiple impact levels, the system is categorized at the highest impact level."
-    status: "candidate"
-    reason: "C-2 applies the highest impact per objective; CATG-001, which fails a categorization below the high-water mark of the information types, is at its fan-out cap."
+    status: "covered"
+    reason: "CATG-001 fails a system whose impact level for an objective is below the highest level among its information types (CNSSI 1253 applies the high-water mark per objective)."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "A system containing information at multiple impact levels is categorized at the highest impact level: an availability below the high-water mark of the information types fails"}]
     work_item: "WI-402"
     promoted: {"reason": "Footnote 43 states the categorization rule: a system with information at several impact levels is categorized at the highest of them."}
   - id: "REQ-SP800-37R2-0730"
@@ -6688,8 +6757,9 @@ requirements:
     locator: "TASK M-3"
     context: ""
     statement: "Respond to risk based on the results of ongoing monitoring activities, risk assessments, and outstanding items in plans of action and milestones."
-    status: "candidate"
-    reason: "M-3 responds to risk by its exit criteria; no rule fails a response that does not rest on the monitoring results, the risk assessment and the open POA&M items."
+    status: "partial"
+    reason: "MCHG-002 fails a root cause of an unauthorized change found by ongoing monitoring that no response answers, and MPOA-001 a finding of an outside assessment that reaches no POA&M item or accepted risk; that the response also rests on the risk assessment and the open POA&M items is unheld."
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.response.yaml", "expect": "the response to the root cause names", "claim": "constraint", "holds_when": "ART-CHG is produced or seeded", "asserts": "Respond to risk based on the results of ongoing monitoring activities: an unauthorized change whose root cause response names nothing fails"}, {"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.yaml", "expect": "is not leveraged in a POA&M item or an accepted risk", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "Respond to risk based on outstanding items in plans of action and milestones: an inspection finding not leveraged in a POA&M item or an accepted risk fails"}]
     work_item: "WI-405"
     promoted: {"reason": "Task M-3 statement; rejected for no marker. It is the duty of the task."}
   - id: "REQ-SP800-37R2-0738"
@@ -6698,8 +6768,9 @@ requirements:
     locator: "TASK M-5"
     context: ""
     statement: "At a minimum, security and privacy posture reports summarize changes to the security and privacy plans, security and privacy assessment reports, and plans of action and milestones that have occurred since the last report."
-    status: "candidate"
-    reason: "ART-SECRPT '## Changes since the last report' summarizes changes in prose; no rule reads it, and privacy plans and assessment reports are WI-02 and WI-03."
+    status: "partial"
+    reason: "MRPT-003 fails a posture report that does not list a change of the security and privacy plans (plan-reviews.yaml changes) made since the last report. Unheld: the changes to the security and privacy assessment reports and to the POA&M, whose records carry no change dates a rule can window."
+    evidence: [{"kind": "rule", "target": "MRPT-003", "fixture": "tests/fixtures/negative/MRPT-003.yaml", "expect": "made since the last report", "claim": "constraint", "holds_when": "ART-SECRPT is produced or seeded", "asserts": "Posture reports summarize changes to the security and privacy plans that have occurred since the last report: a plan change made since the last report and not summarized fails"}]
     work_item: "WI-03"
     promoted: {"reason": "'At a minimum' sets required report content inside a paragraph otherwise about flexibility; rejected for no marker."}
   - id: "REQ-SP800-37R2-0739"

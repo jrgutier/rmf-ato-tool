@@ -1,0 +1,16 @@
+rule: AOREC-001
+bases: [minimal, example]
+description: an ATO with conditions (AD-ATOC) that lists no conditions
+mutations:
+  - op: delete_field
+    file: artifacts/data/authorizations.yaml
+    path: records.1.conditions
+    only: [minimal]
+  - op: delete_field
+    file: artifacts/data/decision.yaml
+    path: conditions
+    only: [example]
+expect:
+  errors: [AOREC-001]
+  messages:
+    - needs conditions

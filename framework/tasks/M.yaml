@@ -15,8 +15,8 @@ tasks:
     raci: {R: [PER-PM, PER-CCP, PER-CISO, PER-PRIV, PER-ISSO], A: PER-PM, C: [PER-RE, PER-AODR, PER-IO, PER-ISSM, PER-CCB], I: [PER-AO], when: {PER-PRIV: processes-pii}}
     inputs: [ART-CONMON, ART-CMP, ART-SSP, ART-INV, ART-SD, ART-POAM, ART-RAR, EXT-CHANGE-REQUESTS, EXT-THREAT, ART-ORG-CONTEXT, ART-SAR, EXT-MONITORING, EXT-ORG-POLICY, EXT-PRODUCT]
     inputs_since: {ART-ORG-CONTEXT: 0.2.0, ART-SAR: 0.2.0, EXT-MONITORING: 0.2.0, EXT-ORG-POLICY: 0.2.0, EXT-PRODUCT: 0.2.0}
-    outputs: [ART-CHG, ART-INV, ART-CMP, ART-POAM, ART-SAR, ART-SSP, ART-CP]
-    outputs_since: {ART-POAM: 0.2.0, ART-SAR: 0.2.0, ART-SSP: 0.2.0, ART-CP: 0.2.0}
+    outputs: [ART-CHG, ART-INV, ART-CMP, ART-POAM, ART-SAR, ART-SSP, ART-CP, ART-BIA]
+    outputs_since: {ART-POAM: 0.2.0, ART-SAR: 0.2.0, ART-SSP: 0.2.0, ART-CP: 0.2.0, ART-BIA: 0.2.0}
     writes_facts: []
     depends_on: [R-4]
     feeds_back_to: [P-11, C-1]
@@ -42,6 +42,9 @@ tasks:
         (PRIV-005).
       - An implemented change of significant security impact has a system plan change in
         plan-reviews.yaml that references it (change_ref, UPD-002).
+      - Each change of significant security impact has a Monitor iteration of the criticality
+        analysis in bia.yaml criticality naming it, dated on or after the change, and no more
+        than a year passes between iterations (BIA-003).
     citations:
       - {ref: SP800-37R2, section: "TASK M-1", note: "SDLC phase: New – Operations/Maintenance; Existing – Operations/Maintenance."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-1 System and Environment Changes"}
@@ -242,6 +245,8 @@ tasks:
         conmon.yaml names in reporting.dodin.required_by with who required them.
       - The risk executive (function) and the CISO review the status reports at the organization
         tier, and that review feeds P-7 (MRPT-002).
+      - Each posture report lists in plan_changes every change of the security and privacy plans
+        made since the last report (MRPT-003).
       - For a system processing PII, ART-SECRPT names the Component privacy report path (the
         PCLO through the SCOP to the Chief, DPCLTD, the semiannual and FISMA privacy inputs) and
         any system of records with PII that cannot be appropriately protected.
@@ -363,6 +368,10 @@ tasks:
         updates.
       - The inventory of information systems shows the removal; ART-INV and ART-SSP list M-7 in
         touched_by, and registration.yaml updates holds the disposal update by M-7 (UPD-001).
+      - disposal.yaml media records each class of media and equipment disposed of under the
+        issuances that govern it, DoDM 5200.01 Volume 3 and CNSSI 4004.1 for classified media,
+        NIST SP 800-88 for unclassified, CNSSI 4004.1 for a destruction unless the media are
+        unclassified and destroyed under SP 800-88 (DISP-001).
     citations:
       - {ref: SP800-37R2, section: "TASK M-7", note: "SDLC phase: New – Not Applicable; Existing – Disposal."}
       - {ref: DODI8510.01, page: 19, anchor: "Task M-7 System Disposal"}

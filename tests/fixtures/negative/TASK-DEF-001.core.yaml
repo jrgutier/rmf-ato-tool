@@ -1,0 +1,13 @@
+rule: TASK-DEF-001
+bases: [minimal]
+description: S-5, in scope and the producer of the core artifact ART-CONMON, deferred to a later cycle
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: deferred.S-5
+    value: {kind: later-cycle, rationale: Monitoring strategy next cycle.}
+expect:
+  errors: [TASK-DEF-001]
+  also: [RUN-CFG-001]
+  messages:
+    - "S-5 produces core artifact ART-CONMON and is in scope, so it cannot be deferred"

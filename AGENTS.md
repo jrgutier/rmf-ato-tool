@@ -107,11 +107,11 @@ error. Commands that report support `--format json`.
 | `rmf conformance sample --seed N [-n 30] [--kind prose\|lettered\|table\|promoted\|all] [--rejected] [--status S] [--id REF]` | a seeded sample of entries (noise) or of the rejected in-scope paragraphs and rows (false rejects) to read against the source; `--status not-a-requirement` draws noise marks with their reasons, the audit FW-REQ-004 cannot do; the same seed on the same register gives the same sample |
 | `rmf conformance page REF N` | every entry and every rejection on one page of a document, to read against `rmf refs show REF --page N --anchor A` before promoting or marking |
 | `rmf conformance promote REF --page N --anchor WORDS --reason TEXT [--sentence] [--replace REQ-ID]` | extraction is a first pass: turn the rejection on page N holding the words, else the paragraph of the text that does, into a live candidate with the next ID, kind `promoted` and `promoted: {reason}`; `--sentence` takes only the sentence holding the words and exits 2 when they are in no sentence or several; it survives `rmf conformance extract`, is flagged `needs_review` when its passage no longer resolves (`--replace REQ-ID` then rebases it onto the moved passage, keeping its ID, status, evidence and reason), is counted by `report`, and FW-REQ-001 checks its citation |
-| `rmf conformance report [--format json]` | status distribution per document and in total (`summary.candidate`, `summary.work_items`, `summary.partial_share`, `summary.kinds`, `summary.promoted`, `summary.freeze` with its `deferred` and `partial_without_evidence` counts, `summary.rejected_by_reason`), each document's `retired_share` of real requirements (not-applicable, deferred or partial on evidence that cannot fail over 25% needs a `retirements` record with `approved_by: user` in `conformance/policy.yaml`, FW-REQ-004; noise marked `not-a-requirement` does not count) and its `noise_share` of live entries (over 50% needs a `noise` record there), open work items, unassessed documents, `summary.conditional` (covered under a `holds_when`), `summary.tier1_debt` and `unresolved` (each partial entry's sentences with no strong item, computed), `summary.awaiting_ruling` and `awaiting_ruling` (sentences pending the user's ruling, outside the debt), `summary.closed_items`, `summary.closed_partial_items` |
+| `rmf conformance report [--format json]` | status distribution per document and in total (`summary.candidate`, `summary.work_items`, `summary.partial_share`, `summary.kinds`, `summary.promoted`, `summary.freeze` with its `deferred` and `partial_without_evidence` counts, `summary.rejected_by_reason`), each document's `retired_share` of real requirements (not-applicable, deferred or partial on evidence that cannot fail over 25% needs a `retirements` record with `approved_by: user` in `conformance/policy.yaml`, FW-REQ-004; noise marked `not-a-requirement` does not count) and its `noise_share` of live entries (over 50% needs a `noise` record there), open work items, unassessed documents, `summary.conditional` (covered under a `holds_when`), `summary.tier1_debt` and `unresolved` (each partial entry's sentences with no strong item, computed), `summary.tier1_partial_entries` and `summary.tier1_partial_by_reason` (tier 1 partials, and those whose every sentence is held, owing only what `reason` names), `summary.awaiting_ruling` and `awaiting_ruling` (sentences pending the user's ruling, outside the debt), `summary.closed_items`, `summary.closed_partial_items` |
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 p11 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 p11 p13 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -120,8 +120,8 @@ checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
 reference and FW-CITE-002 strict; p3a `rmf validate` (FW-SCHEMA-001, FW-ID-001/002,
 FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001, FW-DAG-001, FW-CITE-001/002,
 FW-TASK-001); p35 `rmf check --final` on `tests/fixtures/runs/valid_minimal` (RUN-CFG-001,
-RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, SSP-COV-001, SAR-POAM-001, TRACE-001/002,
-HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
+RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, BSEL-001/002, SSP-COV-001, SAR-POAM-001,
+TRACE-001/002, HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
 p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 to
 `rmf validate`; p6 `rmf check --final` with every run rule on `valid_minimal` (scope all)
 and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL;
@@ -153,6 +153,9 @@ promotes what the extractor missed. p11 Monitor records: `changes.yaml`, `postur
 and `plan-reviews.yaml`, judged by MCHG, MCON, MRPT and MPLAN once their artifact is in play.
 p11 run contracts: the fixtures on the current
 `framework_version`, and at `--release` the example too (RUN-VER-001 as an error).
+p13 FW-REQ-002, run by `rmf validate`: no tier 1 `candidate`, and every tier 1 `partial` with a
+strong item; outside tier 1 a candidate warns. Built ahead of p12, p13 joins `release` and `fork`
+only once `.phases/p13.closed` exists.
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 

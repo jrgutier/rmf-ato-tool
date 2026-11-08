@@ -468,6 +468,75 @@ def organization_tier(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- MRPT-003: a posture report summarizes the plan changes since the last one ---------------
+
+def posture_changes(ctx: Context) -> list[RunFinding]:
+    """MRPT-003: each posture report lists in plan_changes every change of the security and
+    privacy plans (plan-reviews.yaml changes) made since the report before it, or since the
+    start of its period for the first, up to its issue (SP 800-37r2 M-5: at a minimum, posture
+    reports summarize the changes since the last report)."""
+    data = ctx.data(REPORTS_FILE)
+    if not _in_play(ctx, "ART-SECRPT") or not isinstance(data, dict):
+        return []
+    out, err = _collector("MRPT-003", REPORTS_FILE, "M-5")
+    changes = [(c, _day(c.get("date"))) for c in _items(ctx.data(PLAN_REVIEWS_FILE), "changes")]
+    reports = sorted(((r, _day(r.get("issued"))) for r in _items(data, "reports")
+                      if _day(r.get("issued"))), key=lambda pair: pair[1])
+    since = None
+    for report, issued in reports:
+        start = since or _day(_block(report, "period").get("from"))
+        listed = _strings(report, "plan_changes")
+        for change, day in changes:
+            if day and start and start < day <= issued \
+                    and str(change.get("version")) not in listed:
+                err(f"{report.get('id')} does not summarize the plan change "
+                    f"{change.get('version')} of {day}, made since the last report")
+        since = issued
+    return out
+
+
+# --- DISP-001: media disposed of under the issuances DoDI 8500.01 and 8531.01 name ----------
+
+DISPOSAL_FILE = "artifacts/data/disposal.yaml"
+# DoDI 8500.01 Encl 3.18.a(8): "Disposal and destruction of classified hard drives, electronic
+# media, processing equipment components, and the like will be accomplished in accordance with
+# Reference (bj), CNSSI 4004.1 (Reference (dc)), and applicable security controls."; (9):
+# "Disposal of unclassified electronic media will be accomplished in accordance with the
+# guidelines provided in NIST SP 800-88 (Reference (dd))". DoDI 8531.01 3.5.j, "Destroy devices or
+# media in accordance with CNSSI 4004.1.", sits under Step 4 (remediation and mitigation: "To
+# assess remediation and mitigation techniques, the DoD Components will:"), so it does not govern
+# every destruction at disposal: unclassified media destroyed under SP 800-88, whose destroy is a
+# sanitization method, pass.
+MEDIA_ISSUANCES = {"classified": ("DODM5200.01-V3", "CNSSI4004.1"), "unclassified": ("SP800-88",)}
+DESTRUCTION = "CNSSI4004.1"
+
+
+def disposal_media(ctx: Context) -> list[RunFinding]:
+    """DISP-001: M-7 records each class of media and equipment disposed of with the issuances
+    applied: classified media under DoDM 5200.01 Volume 3 and CNSSI 4004.1, unclassified media
+    under NIST SP 800-88, and a destruction under CNSSI 4004.1 unless the media are unclassified
+    and destroyed under SP 800-88. A disposal with no physical media (a SaaS system) records
+    media: []."""
+    data = ctx.data(DISPOSAL_FILE)
+    if not _in_play(ctx, "ART-DISP") or not isinstance(data, dict):
+        return []
+    out, err = _collector("DISP-001", DISPOSAL_FILE, "M-7")
+    media = _items(data, "media")
+    if "media" not in data:
+        err("disposal.yaml records no class of media or equipment disposed of with the issuances "
+            "applied, nor media: [] for a disposal with none")
+    for item in media:
+        applied = _strings(item, "issuances")
+        for issuance in MEDIA_ISSUANCES.get(str(item.get("class")), ()):
+            if issuance not in applied:
+                err(f"{item.get('class')} media ({item.get('items')}) are disposed of without "
+                    f"{issuance}, which DoDI 8500.01 names for them")
+        if item.get("action") == "destroy" and DESTRUCTION not in applied and (
+                item.get("class") != "unclassified" or "SP800-88" not in applied):
+            err(f"{item.get('items')} are destroyed, not in accordance with CNSSI 4004.1")
+    return out
+
+
 # --- MISCM-001: the ISCM program assessment a decision reads --------------------------------
 
 def _iscm_report(a: Record, err: Err) -> None:

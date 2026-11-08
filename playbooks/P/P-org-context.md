@@ -109,10 +109,12 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    by non-government personnel; an AO who is not a U.S. citizen and DoD official; a non-U.S.
    citizen as ISSM, ISSO, supervisor or PKI issuer, or as an administrator without a U.S.
    citizen supervising and the investigation met; an ISSM without support, authority and
-   resources or DoDM 5200.02 met; a CISO the CIO did not designate, without security as the
-   primary duty, an office, or coordination with the privacy official; and no UR appointed
-   by the system owner (OCTX-001 lets the Component head designate the CISO only where no
-   Component CIO record exists). RAPT-001 refuses an appointer DoDI 8510.01 Table 8 does not
+   resources or DoDM 5200.02 met; a CISO without security as the primary duty, an office, or
+   coordination with the privacy official; and no UR appointed. OAPP-001 refuses a UR the
+   system owner did not appoint, a PAO its mission area's DoD MA owner did not appoint, a DoD
+   CISO the DoD CIO did not appoint, a TAG Representative the Component CISO did not appoint,
+   and a CISO the CIO did not designate (the Component head may designate the CISO only where
+   no Component CIO record exists). RAPT-001 refuses an appointer DoDI 8510.01 Table 8 does not
    name: the Component head for the CIO and the AO (the PAO for an MA-managed system, recorded
    as a PER-PAO role), the AO for the AODR, the CISO for a delegated SCA, the Acquisition
    Executive or Component head for the PM or SO, the PM or SO for the ISSM and ISSO; no AO, PM
@@ -229,7 +231,7 @@ Purpose: Establish the organization's risk management strategy, including how it
    Record also the Component CIO's process for designated approval authorities to make
    certification determinations and issue an IATT or ATO expeditiously for a capability fielded
    under urgent capability acquisition (DoDI 5000.81), so a UCA program knows whom to ask.
-5. **Add the strategy to `org-context.yaml`**, rewriting it whole (OCTX-003, OCTX-004):
+5. **Add the strategy to `org-context.yaml`**, rewriting it whole (OCTX-003, OGOV-001, OCTX-004):
    - `program`: the Cybersecurity Risk Management Program, its owner, organization-wide
      scope, the issuances it implements (CNSSP 22 and its Annex A issuances, DoDI 8500.01),
      its integration with mission and business risk management, the risk steps it carries

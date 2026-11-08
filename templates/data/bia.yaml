@@ -1,6 +1,7 @@
-# Template: artifacts/data/bia.yaml (P-8; schema bia; C-2 adds reevaluations). The business
+# Template: artifacts/data/bia.yaml (P-8; schema bia; C-2 adds reevaluations and the Assess
+# iteration of the criticality analysis, M-1 a Monitor iteration per significant change). The business
 # impact and criticality analysis the tasks from P-10 to I-1 read (playbooks/P/P-8.md;
-# BIA-001, BIA-002). The S-4 contingency BIA refines these processes under the same BP- IDs.
+# BIA-001 to BIA-003). The S-4 contingency BIA refines these processes under the same BP- IDs.
 mission_critical: true  # are mission critical functions present within the system?
 functions:  # none when mission_critical is false
   - id: MCF-01
@@ -16,4 +17,18 @@ processes:
     sources: [ART-ORG-CONTEXT]  # <<FILL: trace tokens>>
 external_dependents: []  # {stakeholder, depends_on: [MCF-nn|BP-nn], communicated, sources}
 reevaluations: []  # C-2: {process, date, by: [PER-SPONSOR, PER-IO], outcome, rationale, sources}
+criticality:  # the SP 800-161 Appendix G criticality analysis (BIA-003)
+  iterations:  # frame at P-8; assess at C-2, not before frame; monitor at M-1 per significant change
+    - step: frame  # frame | assess | monitor
+      date: "2026-01-15"  # <<FILL: date>>; at most a year between iterations
+      # change: CHG-001  # monitor only: the change of significant security impact
+      summary: "<<FILL: what the iteration identified or refined>>"
+      sources: [ART-ORG-CONTEXT]  # <<FILL: trace tokens>>
+  critical_items:  # the narrowed, prioritized list; ranks run 1 to n
+    - rank: 1
+      kind: process  # process | system | component (a boundary component ID, once P-11 lists it)
+      item: BP-01
+      role: mission  # mission | defensive (access control, identity, crypto) | infrastructure
+      processes: [BP-01]  # the processes it underpins; every mission critical process needs one
+      sources: [ART-ORG-CONTEXT]  # <<FILL: trace tokens>>
 sources: [ART-ORG-CONTEXT]  # <<FILL: trace tokens>>

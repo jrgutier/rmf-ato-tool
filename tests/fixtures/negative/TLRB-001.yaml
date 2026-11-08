@@ -1,0 +1,19 @@
+rule: TLRB-001
+bases:
+- minimal
+description: a downgrade of a control the availability column selects at low
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: actions.2.control_id
+  value: cp-2
+expect:
+  errors:
+  - TLRB-001
+  also:
+  - CFLR-001
+  - CFLR-003
+  - DPOL-003
+  - TRADE-001
+  messages:
+  - the downgrade does not reflect the FIPS 199 security category

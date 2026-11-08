@@ -148,6 +148,39 @@
         }
       }
     },
+    "overlay_conflicts": {
+      "title": "Conflicts between overlays over applying or removing a control, and who resolved each (OVC-001): the AO (or designee) and the SAOP (or designee), in coordination with the information owner, the system owner and the risk executive (function)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["overlays", "controls", "resolution", "resolved_by", "coordinated_with", "sources"],
+        "properties": {
+          "overlays": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "controls": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "resolution": {"type": "string", "minLength": 1},
+          "resolved_by": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^PER-[A-Z]+$"}},
+          "coordinated_with": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^PER-[A-Z]+$"}},
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
+    "trade_offs": {
+      "title": "The risk-related issues weighed in deciding which controls to employ and how (an open list: cost, schedule, performance, complexity, long-term maintenance and assessment cost, supply chain, trustworthiness; at least one), each with the controls it touched and the outcome (TRADE-001)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["factor", "controls", "weighed", "outcome", "sources"],
+        "properties": {
+          "factor": {"enum": ["cost", "schedule", "performance", "complexity", "maintenance-cost", "assessment-cost", "supply-chain", "trustworthiness"]},
+          "controls": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"}},
+          "weighed": {"title": "What was weighed against the protection the controls give", "type": "string", "minLength": 1},
+          "outcome": {"title": "What tailoring did with the controls", "enum": ["retained", "removed", "supplemented", "implementation-chosen"]},
+          "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        }
+      }
+    },
     "actions": {
       "type": "array",
       "items": {

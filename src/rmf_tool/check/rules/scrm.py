@@ -410,6 +410,29 @@ def terms(ctx: Context) -> list[RunFinding]:
                  ACQUISITION_FILE, None, {ALLOCATE})
             for term in owed if term not in kinds]
 
+# --- SCRMLC-001: C-SCRM in each step of the procurement life cycle -------------------------
+
+PROCUREMENT_STEPS = ("plan-procurement", "define-requirements", "market-analysis",
+                     "complete-procurement", "ensure-compliance", "monitor-performance")
+
+
+def procurement_steps(ctx: Context) -> list[RunFinding]:
+    """SCRMLC-001: P-17 records how C-SCRM considerations enter each step of the procurement and
+    contract management life cycle SP 800-161 3.1.2 names from NISTIR 7622, and charge card
+    purchases of ICT/OT when the program makes them."""
+    acq = _doc(ctx, ACQUISITION_FILE)
+    if acq is None or not _active(ctx, ALLOCATE):
+        return []
+    covered = {_key(s, "step") for s in _list(acq, "procurement_steps")}
+    out = [make("SCRMLC-001", f"C-SCRM considerations are not incorporated into the {step} step "
+                "of the procurement and contract management life cycle", ACQUISITION_FILE, None,
+                {ALLOCATE}) for step in PROCUREMENT_STEPS if step not in covered]
+    if acq.get("charge_card_purchases") is True and "charge-card-purchases" not in covered:
+        out.append(make("SCRMLC-001", "the program makes ICT/OT charge card purchases and records "
+                        "no C-SCRM considerations for them", ACQUISITION_FILE, None, {ALLOCATE}))
+    return out
+
+
 # --- SCRM-008 ----------------------------------------------------------------------------
 def selection(ctx: Context) -> list[RunFinding]:
     """P-17: each supplier has a selection record with the prohibited supplier lists screened

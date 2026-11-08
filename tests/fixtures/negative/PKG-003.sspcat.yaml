@@ -1,0 +1,14 @@
+rule: PKG-003
+bases: [minimal]
+description: the ART-SSP facts block relabels the Security categorization row, so the document no longer carries it as the CNSSI 1254 element Security Categorization
+build: false
+mutations:
+  - op: replace_text
+    file: artifacts/ART-SSP.md
+    old: "| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none |"
+    new: "| Recorded value | C/I/A MODERATE/MODERATE/LOW; overlays: none |"
+expect:
+  errors: [PKG-003]
+  also: [GEN-STALE-001]
+  messages:
+    - "ART-SSP does not carry the CNSSI 1254 data element Security Categorization"

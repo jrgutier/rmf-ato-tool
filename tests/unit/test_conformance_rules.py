@@ -86,7 +86,8 @@ FAKE_FIXTURE = "tests/fixtures/negative/{}.yaml"
 CLAUSES = {"REG-001": "the system is not registered in the component registry",
            "RET-001": "the system is not retired when its authorization ends",
            "WARN-001": "the system is not registered in the component registry",
-           "NOFIXTURE-001": "the system is not registered in the component registry"}
+           "NOFIXTURE-001": "the system is not registered in the component registry",
+           "APPT-001": "the head of the agency appoints no authorizing official"}
 
 
 def source_of(message):
@@ -376,6 +377,116 @@ def test_an_unreadable_file_is_one_finding_and_stops_only_that_file(tmp_path, in
     assert any("triage.yaml" in (f.path or "") for f in found)
 
 
+# --- FW-REQ-002: the tier 1 freeze (ADR-0005, 2026-11-08) ------------------------------------
+
+APPOINTING = Rule(id="APPT-001", scope="run", severity="E", ac=("AC-1",), phase="p11",
+                  applies_after=None, summary="the head of the agency appoints no authorizing "
+                  "official", hint="appoint one", fixture="tests/unit/test_conformance_rules.py",
+                  enforces=(f"REQ-{TIER1}-0001",))
+APPOINTS = "The head of the agency appoints an authorizing official for each system."
+
+
+def freeze(reg, index):
+    _complete(reg)
+    return rules.freeze(reg, index, _probe(REPO_ROOT, _framework(), (APPOINTING,)))
+
+
+def _errors(findings):
+    return [f.message for f in findings if f.severity == "E"]
+
+
+def _tier_1_partial(reg, *evidence_items):
+    entry = fx.entry(reg, 1, TIER1)
+    entry.update(status="partial", reason="the appointment record is not read",
+                 evidence=[dict(i) for i in evidence_items])
+    return entry
+
+
+def test_fw_req_002_fires_on_a_tier_1_candidate(reg, index):
+    entry = fx.entry(reg, 1, TIER1)
+
+    assert _errors(freeze(reg, index)) == [f"{entry['id']}: a tier 1 entry is still a "
+                                           "candidate; triage it before the freeze"]
+
+
+def test_fw_req_002_fires_on_a_tier_1_partial_with_no_strong_item(reg, index):
+    entry = _tier_1_partial(reg, {"kind": "citation", "target": "P-1"},
+                            {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS,
+                             "claim": "presence"})
+
+    assert _errors(freeze(reg, index)) == [f"{entry['id']}: a tier 1 partial with no strong "
+                                           "evidence item; give it one that fails when part of "
+                                           "its duty is broken"]
+
+
+def test_a_tier_1_partial_with_one_strong_item_passes_the_freeze(reg, index):
+    _tier_1_partial(reg, {"kind": "citation", "target": "P-1"},
+                    {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+
+    assert _errors(freeze(reg, index)) == []
+
+
+def test_candidates_outside_tier_1_warn_once_per_document(reg, index):
+    _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+    count = sum(1 for ref, e in reg.live() if ref == DOC and e["status"] == "candidate")
+
+    found = freeze(reg, index)
+
+    assert [(f.severity, f.message) for f in found] == [
+        ("W", f"{DOC}: {count} candidate(s) outside tier 1, advisory at the freeze")]
+
+
+def test_open_work_items_do_not_block_the_freeze(reg, index):
+    _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+    fx.entry(reg, 1, TIER1)["work_item"] = "WI-01"
+
+    assert reg.work_items["WI-01"]["status"] == "open"
+    assert _errors(freeze(reg, index)) == []
+
+
+def test_the_report_counts_what_fw_req_002_blocks_on(reg, index):
+    _tier_1_partial(reg, {"kind": "citation", "target": "P-1"})
+    probe = _probe(REPO_ROOT, _framework(), (APPOINTING,))
+
+    split = report.build(reg, index, probe=probe)["summary"]["freeze"]
+    blocking = _errors(rules.freeze(reg, index, probe))
+
+    assert (split["tier_1"], split["tier_1_partial_without_strong"]) == (0, 1) == (
+        0, len(blocking))
+    assert split["advisory_elsewhere"] == sum(1 for ref, e in reg.live()
+                                              if ref == DOC and e["status"] == "candidate")
+
+
+def test_a_held_tier_1_partial_is_counted_as_debt_its_reason_names(reg, index):
+    """One sentence, held by a strong item, yet partial: no sentence is unresolved, so the
+    remainder its reason names is counted apart rather than lost (ADR-0005, 2026-11-08)."""
+    _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+    _complete(reg)
+    probe = _probe(REPO_ROOT, _framework(), (APPOINTING,))
+
+    state = report.evidence_state(reg, index, probe)
+
+    assert (state["tier1_debt"], state["tier1_partial_entries"],
+            state["tier1_partial_by_reason"]) == (0, 1, 1)
+    fx.entry(reg, 1, TIER1)["evidence"] = [{"kind": "citation", "target": "P-1"}]
+    state = report.evidence_state(reg, index, probe)
+    assert (state["tier1_debt"], state["tier1_partial_entries"],
+            state["tier1_partial_by_reason"]) == (1, 1, 0)
+
+
+def test_fw_req_002_runs_under_profile_p13_only_until_p13_closes(tmp_path):
+    from rmf_tool.framework.validate import active_rules
+
+    assert "FW-REQ-002" in active_rules(resolve(tmp_path, "p13"))
+    for name in (None, "p11", "release", "fork"):
+        assert "FW-REQ-002" not in active_rules(resolve(tmp_path, name))
+    (tmp_path / ".phases").mkdir()
+    (tmp_path / ".phases/p13.closed").write_text("closed p13\n")
+    for name in (None, "release", "fork"):
+        assert "FW-REQ-002" in active_rules(resolve(tmp_path, name))
+    assert any(s.phase == "p13" and "FW-REQ-002" in s.rules for s in ci.STEPS)
+
+
 # --- FW-REQ-003: the ladder --------------------------------------------------------------
 
 STATEMENT = ("a. Will register the system with the component registry before use.")
@@ -590,7 +701,7 @@ def test_evidence_that_does_not_resolve_fails_at_any_status(reg, framework, item
 
 
 @pytest.mark.parametrize("target", ["FW-SCHEMA-001", "FW-CITE-002", "TRACE-001", "RUN-FM-001",
-                                    "FW-REQ-003"])
+                                    "FW-REQ-003", "GEN-STALE-001"])
 def test_generic_rules_are_denied(reg, framework, target):
     covered(reg, {"kind": "rule", "target": target, "asserts": ASSERTS})
 
@@ -763,6 +874,85 @@ def test_the_fake_fan_out_is_an_error_for_every_evidence_kind(reg, framework, cl
 
     exception["approved_by"] = "user"
     assert not any("over its limit" in m or "approved_by" in m for m in ladder(reg, framework))
+
+
+# --- FW-REQ-003: repo-scope rules on framework overlays (ADR-0005, 2026-11-08) ---------------
+
+RACI_FIXTURE = "tests/fixtures/framework_neg/FW-RACI-001/"
+RACI_EXPECT = "raci.A must name exactly one persona"
+RACI_ASSERTS = ("Exactly one persona is accountable to register the system with the component "
+                "registry.")
+
+
+def _repo_rule(rule_id="FW-RACI-001"):
+    """The real repo-scope rule, listing the synthetic entry in enforces."""
+    from rmf_tool.check import rules_by_id
+
+    return Rule(**{**rules_by_id()[rule_id].__dict__, "enforces": (f"REQ-{DOC}-0001",)})
+
+
+def _raci_item(**change):
+    return {"kind": "rule", "target": "FW-RACI-001", "fixture": RACI_FIXTURE,
+            "expect": RACI_EXPECT, "claim": "constraint", "asserts": RACI_ASSERTS, **change}
+
+
+def test_a_repo_scope_rule_on_its_framework_overlay_is_strong(reg, framework):
+    covered(reg, _raci_item())
+
+    assert ladder(reg, framework, (_repo_rule(),)) == []
+
+
+def test_the_framework_overlay_is_read_like_a_negative_fixture():
+    spec = evidence.fixture_spec(REPO_ROOT, RACI_FIXTURE)
+
+    assert spec == {"rule": "FW-RACI-001", "expect": {"errors": ["FW-RACI-001"],
+                                                      "messages": [RACI_EXPECT]}}
+    assert evidence.fixture_spec(REPO_ROOT, RACI_FIXTURE.rstrip("/")) == spec
+    assert evidence.fixture_spec(REPO_ROOT, "tests/fixtures/framework_neg/NOPE/") is None
+    assert RACI_EXPECT in evidence.rule_sources()["FW-RACI-001"]
+
+
+def test_a_repo_scope_rule_reads_the_clauses_of_the_module_it_calls():
+    """FW-TASK-002 is one call into conformance/rules.py, where its messages are."""
+    source = evidence.rule_sources()["FW-TASK-002"]
+
+    assert "now exists; drop it from planned" in source
+    assert "def contract(" in source
+
+
+def test_a_repo_scope_rule_with_no_fixture_named_caps_at_partial(reg, framework):
+    entry = fx.entry(reg)
+    entry.update(status="partial", reason="the rest is prose",
+                 evidence=[_raci_item(fixture=None, expect=None)])
+    probe = _probe(REPO_ROOT, framework, (_repo_rule(),))
+
+    verdict = evidence.judge(probe, entry["evidence"][0], entry)
+
+    assert verdict.strength == evidence.WEAK
+    assert "names no fixture and expected message" in verdict.message
+
+
+@pytest.mark.parametrize("change, needle", [
+    ({"fixture": "tests/fixtures/framework_neg/FW-TASK-001/"},
+     "does not expect FW-RACI-001 as its rule"),
+    ({"fixture": "tests/fixtures/framework_neg/FW-RACI-001.when/"},
+     "does not declare the message"),
+    ({"expect": "raci.R must name at least one persona"}, "does not declare the message"),
+    ({"claim": "presence"}, "is constraint by its fixture and clause"),
+    ({"fixture": "tests/fixtures/repo_neg/FW-PER-001/"}, "is no negative fixture"),
+])
+def test_a_repo_scope_rule_item_is_denied_as_a_run_rule_item_is(reg, framework, change, needle):
+    covered(reg, _raci_item(**change))
+
+    assert any(needle in m for m in ladder(reg, framework, (_repo_rule(),))), \
+        ladder(reg, framework, (_repo_rule(),))
+
+
+@pytest.mark.parametrize("rule_id", ["FW-ID-001", "FW-SCHEMA-001", "FW-REQ-003"])
+def test_generic_repo_scope_rules_stay_denied(reg, framework, rule_id):
+    covered(reg, _raci_item(target=rule_id, fixture=f"tests/fixtures/framework_neg/{rule_id}/"))
+
+    assert any("is generic" in m for m in ladder(reg, framework, (_repo_rule(rule_id),)))
 
 
 # --- FW-REQ-004 --------------------------------------------------------------------------
@@ -1480,7 +1670,7 @@ def test_a_fork_without_examples_or_readme_keeps_a_valid_register(tmp_path):
     for path in REPO_ROOT.iterdir():
         if path.name not in ("examples", "README.md", ".git", ".venv"):
             (tmp_path / path.name).symlink_to(path)
-    fork = Profile("fork", frozenset(PHASES), examples=False, agent_severity=None)
+    fork = resolve(REPO_ROOT, "fork")
 
     result = validate(tmp_path / "framework", tmp_path, fork)
 
@@ -2209,8 +2399,8 @@ NEGATIVE = "tests/fixtures/negative/"
 
 
 @pytest.mark.parametrize(("rule", "fixture", "expect", "claim"), [
-    ("AODM-001", "AODM-001.atd", "needs an authorization_termination_date", "presence"),  # deletes
-    ("AODM-001", "AODM-001.rar", "must rest on the risk assessment report", "presence"),  # deletes
+    ("AOREC-001", "AOREC-001.atd", "needs an authorization_termination_date", "presence"),
+    ("AODM-001", "AODM-001", "must rest on the risk assessment report", "presence"),  # deletes
     ("AODM-001", "AODM-001.rarother", "must rest on the risk assessment report", "constraint"),
     ("AODM-001", "AODM-001.type", "not one of the decision types", "constraint"),
     ("AODM-001", "AODM-001.progress", "have not written their outputs", "constraint"),
@@ -2314,8 +2504,8 @@ def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     sources = evidence.rule_sources()
     absent = {
         "AODM-001": ("recorded no decision", "is not an active task of this run",
-                     "needs an authorization_termination_date", "needs conditions",
                      "the run depends on degraded reference(s)"),
+        "AOREC-001": ("needs an authorization_termination_date", "needs conditions"),
         "AODM-002": ("records the review that triggered it", "needs ongoing_acknowledgment",
                      "needs review"),
         "AODM-003": ("a non-concurrence records", "risk needs cio_concurrence"),
@@ -2354,7 +2544,7 @@ def _live(framework, ident):
 def test_a_declared_claim_that_disagrees_with_the_fixture_is_denied(framework):
     """Probe H2: 0620 reached covered on a deleted field by writing `claim: constraint`."""
     entry, probe = _live(framework, "REQ-SP800-37R2-0620")
-    item = next(i for i in entry["evidence"] if i["fixture"].endswith("AODM-001.atd.yaml"))
+    item = next(i for i in entry["evidence"] if i["fixture"].endswith("AOREC-001.atd.yaml"))
     assert evidence.judge(probe, item, entry).strength == evidence.WEAK
     found = evidence.judge(probe, {**item, "claim": "constraint"}, entry)
     assert found.strength == evidence.DENIED and "is presence by its fixture" in found.message

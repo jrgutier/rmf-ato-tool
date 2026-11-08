@@ -1,0 +1,25 @@
+rule: CFLR-001
+bases:
+- minimal
+description: ac-2 is recorded not-applicable in the SSP of a networked system, with no tailoring 
+  action, although it carries CF-FIPS-AC
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.status
+  value: not-applicable
+- op: set_field
+  file: artifacts/ssp/controls/ac.yaml
+  path: controls.0.rationale
+  value: Said not to apply to the relay.
+expect:
+  errors:
+  - CFLR-001
+  also:
+  - CFLR-003
+  - DPOL-001
+  - DPOL-002
+  messages:
+  - 'CF-FIPS-AC: FIPS 200 requires that system access is limited to authorized users, processes acting
+    for them and devices, and to the transactions and functions authorized users may exercise, and ac-2
+    is recorded not-applicable in the SSP'

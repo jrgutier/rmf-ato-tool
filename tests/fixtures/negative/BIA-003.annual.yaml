@@ -1,0 +1,11 @@
+rule: BIA-003
+bases:
+- minimal
+description: more than a year between two iterations of the criticality analysis
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: criticality.iterations.1.date, value: '2027-06-01'}
+expect:
+  errors:
+  - BIA-003
+  messages:
+  - 'the criticality analysis went unreviewed from 2026-03-02 to 2027-06-01; SP 800-161 asks for a review and update annually at minimum'

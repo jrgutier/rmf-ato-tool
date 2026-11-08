@@ -1,0 +1,11 @@
+rule: BIA-003
+bases:
+- minimal
+description: a categorized system whose criticality analysis was never updated in Assess
+mutations:
+- {op: set_field, file: artifacts/data/bia.yaml, path: criticality.iterations.1.step, value: frame}
+expect:
+  errors:
+  - BIA-003
+  messages:
+  - 'the criticality analysis has no Assess iteration updating the Frame one, though the categorization is set (SP 800-161 Task 2-0, C-2)'

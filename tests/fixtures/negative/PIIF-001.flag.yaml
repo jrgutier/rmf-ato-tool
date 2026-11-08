@@ -1,0 +1,11 @@
+rule: PIIF-001
+bases:
+- pii
+description: a system processing PII whose data flows say they carry no PII
+mutations:
+- {op: set_field, file: artifacts/data/boundary.yaml, path: data_flow.carries_pii, value: false}
+expect:
+  errors:
+  - PIIF-001
+  messages:
+  - 'the system processes PII and its data flows do not say they carry PII'

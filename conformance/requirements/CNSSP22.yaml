@@ -148,8 +148,9 @@ requirements:
     locator: "b"
     context: "SECTION IV—POLICY"
     statement: "b. Conduct risk assessments and identify cybersecurity risks from an organization-wide perspective consistent with NIST SP 800-30, Guide for Conducting Risk Assessments (Reference 4); determine which risks are acceptable consistent with the organizations defined risk tolerance."
-    status: "candidate"
-    reason: "P-3 performs the organization-wide assessment citing SP 800-30 and P-2 records a tolerance; no rule tests that the organization determined acceptable risks against that tolerance"
+    status: "partial"
+    reason: "RAR-002 fails a determination of risk the risk assessments do not inform, part of determining which risks are acceptable; the organization-wide perspective and the tolerance are P-2 and P-3 records no rule reads against the determination."
+    evidence: [{"kind": "rule", "target": "RAR-002", "fixture": "tests/fixtures/negative/RAR-002.assessment.yaml", "expect": "risk assessments provide the information for the risk determination", "claim": "constraint", "holds_when": "ART-RAR is produced or seeded", "asserts": "Conduct risk assessments and determine which risks are acceptable: a determination of risk the risk assessments do not provide the information for fails", "sentence": "Conduct risk assessments and identify cybersecurity risks from an organization-wide perspective consistent with NIST SP 800-30, Guide for Conducting Risk Assessments (Reference 4); determine which risks are acceptable consistent with the organizations defined risk tolerance."}]
     work_item: "WI-487"
   - id: "REQ-CNSSP22-0018"
     citation: {"ref": "CNSSP22", "page": 5, "anchor": "Use the common control concept, as described in NIST SP 800-53, Security"}
@@ -157,8 +158,9 @@ requirements:
     locator: "c"
     context: "SECTION IV—POLICY"
     statement: "c. Use the common control concept, as described in NIST SP 800-53, Security and Privacy Controls for Federal Information Systems and Organizations (Reference 5), throughout the organization consistent with its enterprise architecture, to select, implement, assess, and continuously monitor security controls within the organization."
-    status: "candidate"
-    reason: "Common controls are published at P-5, judged by OCTX-005 and TLR-010 and allocated at S-3; their continuous monitoring as common controls and the enterprise architecture are unheld"
+    status: "partial"
+    reason: "TLR-010 fails a determination, not made by the system owner and the AO or AODR, that a provider's common controls protect the system commensurate with risk, part of using the common control concept; use throughout the organization and its enterprise architecture is unheld."
+    evidence: [{"kind": "rule", "target": "TLR-010", "fixture": "tests/fixtures/negative/TLR-010.by.yaml", "expect": "system owners and authorizing officials determine if the common controls provide protection commensurate with risk", "claim": "constraint", "holds_when": "S-3 is active", "asserts": "Use the common control concept to select controls: a determination not made by system owners and authorizing officials that the common controls provide protection commensurate with risk fails", "sentence": "Use the common control concept, as described in NIST SP 800-53, Security and Privacy Controls for Federal Information Systems and Organizations (Reference 5), throughout the organization consistent with its enterprise architecture, to select, implement, assess, and continuously monitor security controls within the organization."}]
     work_item: "WI-487"
   - id: "REQ-CNSSP22-0019"
     citation: {"ref": "CNSSP22", "page": 5, "anchor": "Develop new and maintain existing organizational policies and procedures to integrate cybersecurity"}
@@ -266,7 +268,9 @@ requirements:
     locator: "9"
     context: "SECTION VIII - REFERENCES"
     statement: "9. Annex B lists referenced documents. Future updates to referenced documents shall be considered applicable to this policy."
-    status: "candidate"
+    status: "partial"
+    reason: "RCUR-001 fails a later edition of CNSSI 1254, a document Annex B lists, recorded by the P-2 check and not adopted. Unheld: the other documents of Annex B, and whether the check found what was published (the run records it)."
+    evidence: [{"kind": "rule", "target": "RCUR-001", "fixture": "tests/fixtures/negative/RCUR-001.yaml", "expect": "which applies to this policy, and the run does not adopt it", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "Future updates to referenced documents such as CNSSI 1254 are considered applicable to this policy: a later CNSSI 1254 edition the run does not adopt fails"}]
     work_item: "WI-326"
   - id: "REQ-CNSSP22-0031"
     citation: {"ref": "CNSSP22", "page": 7, "anchor": "The following CNSS issuances are specific to establishing organization-wide Cybersecurity Risk Management"}
@@ -351,8 +355,9 @@ requirements:
     locator: "f"
     context: "CYBERSECURITY RISK MANAGEMENT ISSUANCES"
     statement: "f. Federal Information Processing Standard (FIPS) Publication (PUB) 199, Standards for Security Categorization of Federal Information and Information Systems (Reference 11), provides standards for categorizing information and information systems. The security categories are based on the potential impact on an organization should certain events occur which jeopardize the information and information systems needed by the organization to accomplish its assigned mission, protect its assets, fulfill its legal responsibilities, maintain its day-to-day functions, and protect individuals. Security categories are to be used in conjunction with vulnerability and threat information in assessing the risk to an organization. This document, as written, is applicable to organizations that employ NSS."
-    status: "not-a-requirement"
-    reason: "Applicability of a reference: 'FIPS 199 ... provides standards for categorizing', how categories rest on impact should events occur, and that it is applicable as written; the responsibilities it mentions are agencies' under FIPS 199 itself. 'Security categories are to be used in conjunction with vulnerability and threat information in assessing the risk' restates FIPS 199's own use of its categories, which a run performs where its risk assessment reads the categorization (C-2 takes ART-RA, P-14 and R-2 read the categorization), held on those tasks' entries. It says which standard applies and how it is used, so the sentence binds no act of its own and the should is part of a definition."
+    status: "partial"
+    reason: "Sentence 1 is held: CATG-001 fails a system categorized below the potential impact of its information types. Sentence 2 states the document's applicability to organizations that employ NSS, which no run record can break; the use of categories with threat and vulnerability information is C-2's input ART-RA, unheld by a rule."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "The security categories are based on the potential impact on the organization: a system availability below the high-water mark of the information types' impact fails", "sentence": "The security categories are based on the potential impact on an organization should certain events occur which jeopardize the information and information systems needed by the organization to accomplish its assigned mission, protect its assets, fulfill its legal responsibilities, maintain its day-to-day functions, and protect individuals."}]
     work_item: "WI-481"
   - id: "REQ-CNSSP22-0041"
     citation: {"ref": "CNSSP22", "page": 8, "anchor": "The following documents may be leveraged by the national security community to"}

@@ -42,8 +42,9 @@ requirements:
     locator: "8"
     context: "AUTHORITY"
     statement: "This standard specifies minimum security requirements for federal information and information systems in seventeen security-related areas. Federal agencies must meet the minimum security requirements as defined herein through the use of the security controls in accordance with NIST Special Publication 800-53, Recommended Security Controls for Federal Information Systems, as amended."
-    status: "candidate"
-    reason: "Control-held umbrella: the minimum requirements are met through the SP 800-53 controls of the baseline rmf baseline resolve selects; SSP-COV-001 fails a baseline control with no statement and SAR-COV-001 one with no determination. GEN-STALE-001, which fails a baseline differing from the resolved one, is at the fan-out cap."
+    status: "partial"
+    reason: "Proxy: CFLR-001 keeps the controls of each of the seventeen areas in effect (framework/baselines/tailoring-inputs.yaml control_floors CF-FIPS-*); that every other baseline control of SP 800-53 is used is held only by the generic coverage rules and by GEN-STALE-001, which is at its fan-out cap."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ac.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Federal agencies meet the minimum security requirements through the use of the security controls: ac-3 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0006"
     citation: {"ref": "FIPS200", "page": 5, "anchor": "This standard is effective immediately. Federal agencies must be in compliance with"}
@@ -59,7 +60,9 @@ requirements:
     locator: "10"
     context: "AUTHORITY"
     statement: "The application of the security controls defined in NIST Special Publication 800-53 required by this standard represents the current state-of-the-practice safeguards and countermeasures for information systems. The security controls will be reviewed by NIST at least annually and, if necessary, revised and extended to reflect: (i) the experience gained from using the controls; (ii) the changing security requirements within federal agencies; and (iii) the new security technologies that may be available. The minimum security controls defined in the low, moderate, and high security control baselines are also expected to change over time as well, as the level of security and due diligence for mitigating risks within federal agencies increases. The proposed additions, deletions, or modifications to the catalog of security controls and the proposed changes to the security control baselines in NIST Special Publication 800-53 will go through a rigorous, public review process to obtain government and private sector feedback and to build consensus for the changes. Federal agencies will have up to one year from the date of final publication to fully comply with the changes but are encouraged to initiate compliance activities immediately."
-    status: "candidate"
+    status: "partial"
+    reason: "RCUR-001 fails a later SP 800-53 edition published more than a year before the P-2 check and not adopted. Unheld: NIST's annual review, the evolving baselines and the public review process, which are NIST's, not a run's."
+    evidence: [{"kind": "rule", "target": "RCUR-001", "fixture": "tests/fixtures/negative/RCUR-001.year.yaml", "expect": "more than a year before the check, and the run does not adopt it", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "sentence": "Federal agencies will have up to one year from the date of final publication to fully comply with the changes but are encouraged to initiate compliance activities immediately.", "asserts": "Agencies have up to one year from final publication to comply with the changes: a later edition published more than a year before the check and not adopted fails"}]
     work_item: "WI-326"
   - id: "REQ-FIPS200-0008"
     citation: {"ref": "FIPS200", "page": 5, "anchor": "No provision is provided under FISMA for waivers to FIPS made mandatory"}
@@ -109,7 +112,9 @@ requirements:
     locator: "2 INFORMATION SYSTEM IMPACT LEVELS"
     context: ""
     statement: "FIPS Publication 199 requires agencies to categorize their information systems as low-impact, moderate-impact, or high-impact for the security objectives of confidentiality, integrity, and availability. The potential impact values assigned to the respective security objectives are the highest values (i.e., high water mark3) from among the security categories that have been determined for each type of information resident on those information systems.4 The generalized format for expressing the security category (SC) of an information system is:"
-    status: "candidate"
+    status: "covered"
+    reason: "CATG-001 fails a system impact of not applicable, so each objective takes low, moderate or high. The high-water mark across the information types is held both ways: CATG-001 fails a system value below the mark and CADJ-001 one raised above it with no recorded adjustment. The generalized SC format sentence is descriptive and unmarked."
+    evidence: [{"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.na.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Agencies categorize their systems as low, moderate or high impact for confidentiality, integrity and availability: a system confidentiality of not-applicable, below the high-water mark, fails", "sentence": "FIPS Publication 199 requires agencies to categorize their information systems as low-impact, moderate-impact, or high-impact for the security objectives of confidentiality, integrity, and availability."}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "The potential impact values assigned to the security objectives are the highest values of the information types: a system availability below the high-water mark fails"}, {"kind": "rule", "target": "CADJ-001", "fixture": "tests/fixtures/negative/CADJ-001.yaml", "expect": "with no recorded adjustment", "claim": "constraint", "asserts": "The potential impact values assigned to the security objectives are the highest values of the information types: an availability raised above the high-water mark with no recorded adjustment fails"}]
     work_item: "WI-461"
   - id: "REQ-FIPS200-0014"
     citation: {"ref": "FIPS200", "page": 7, "anchor": "SC information system = {(confidentiality, impact), (integrity, impact), (availability, impact)}, where the"}
@@ -143,8 +148,9 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Policies and procedures play an important role in the effective implementation of enterprise-wide information security programs within the federal government and the success of the resulting security measures employed to protect federal information and information systems. Thus, organizations must develop and promulgate formal, documented policies and procedures governing the minimum security requirements set forth in this standard and must ensure their effective implementation."
-    status: "candidate"
-    reason: "Control-held: met through the first control of each family, ac-1 through si-1, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-POL) keeps the policy and procedures control of each of the seventeen areas, ac-1 through si-1, in the baseline and the SSP, so the policies and procedures are developed and promulgated; 'must ensure their effective implementation' is held by nothing a floor can fail on."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations develop and promulgate formal documented policies and procedures governing the minimum security requirements: ac-1 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0018"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Access Control (AC): Organizations must limit information system access to authorized users,"}
@@ -152,35 +158,36 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Access Control (AC): Organizations must limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems) and to the types of transactions and functions that authorized users are permitted to exercise."
-    status: "candidate"
-    reason: "Control-held: met through ac-2, ac-3, ac-6 and ca-3, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-AC) keeps ac-2, ac-3 and ac-6 in the baseline and the SSP; ac-3 and ia-3 limit access by devices and other systems, and ca-3 is left out of the floor because a system with no information exchange scopes it out."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ac.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations limit information system access to authorized users, processes and devices, and to permitted transactions and functions: ac-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0019"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Awareness and Training (AT): Organizations must: (i) ensure that managers and users"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Awareness and Training (AT): Organizations must: (i) ensure that managers and users of organizational information systems are made aware of the security risks associated with their activities and of the applicable laws, Executive Orders, directives, policies, standards, instructions, regulations, or procedures related to the security of organizational information systems; and (ii) ensure that organizational personnel are adequately trained to carry out their assigned information security-related duties and responsibilities."
-    status: "candidate"
-    reason: "Control-held: met through at-2, at-3 and pl-4, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-AT) keeps at-2 (awareness, clause i) and at-3 (role-based training, clause ii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-at.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Managers and users are made aware of security risks and personnel are adequately trained for their security duties: at-2 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0020"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Audit and Accountability (AU): Organizations must: (i) create, protect, and retain information"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Audit and Accountability (AU): Organizations must: (i) create, protect, and retain information system audit records to the extent needed to enable the monitoring, analysis, investigation, and reporting of unlawful, unauthorized, or inappropriate information system activity; and (ii) ensure that the actions of individual information system users can be uniquely traced to those users so they can be held accountable for their actions."
-    status: "candidate"
-    reason: "Control-held: met through au-2, au-3, au-6, au-9, au-11, au-12 and ia-2, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-AU) keeps au-2, au-3, au-6, au-9, au-11, au-12 (clause i) and ia-2 with au-3 (clause ii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-au.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations create, protect and retain audit records and ensure user actions can be uniquely traced: au-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0021"
     citation: {"ref": "FIPS200", "page": 8, "anchor": "Certification, Accreditation, and Security Assessments (CA): Organizations must: (i) periodically assess the"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Certification, Accreditation, and Security Assessments (CA): Organizations must: (i) periodically assess the security controls in organizational information systems to determine if the controls are effective in their application; (ii) develop and implement plans of action designed to correct deficiencies and reduce or eliminate vulnerabilities in organizational information systems; (iii) authorize the operation of organizational information systems and any associated information system connections; and (iv) monitor information system security controls on an ongoing basis to ensure the continued effectiveness of the controls."
-    status: "candidate"
-    reason: "Control-held: met through ca-2, ca-3, ca-5, ca-6 and ca-7, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-CA) keeps ca-2 (i), ca-5 (ii), ca-6 (iii, the authorization) and ca-7 (iv) in the baseline and the SSP; authorizing 'any associated information system connections' rests on ca-3, which a system with no information exchange scopes out, so the floor leaves it out and that part is unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ca.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations periodically assess the security controls, develop plans of action, authorize operation and monitor the controls: ca-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0022"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Configuration Management (CM): Organizations must: (i) establish and maintain baseline configurations and"}
@@ -188,44 +195,45 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Configuration Management (CM): Organizations must: (i) establish and maintain baseline configurations and inventories of organizational information systems (including hardware, software, firmware, and documentation) throughout the respective system development life cycles; and (ii) establish and enforce security configuration settings for information technology products employed in organizational information systems."
-    status: "candidate"
-    reason: "Control-held: met through cm-2, cm-6 and cm-8, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-CM) keeps cm-2 and cm-8 (clause i) and cm-6 (clause ii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-cm.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations establish and maintain baseline configurations and inventories and enforce security configuration settings: cm-2 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0023"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Contingency Planning (CP): Organizations must establish, maintain, and effectively implement plans for"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Contingency Planning (CP): Organizations must establish, maintain, and effectively implement plans for emergency response, backup operations, and post-disaster recovery for organizational information systems to ensure the availability of critical information resources and continuity of operations in emergency situations."
-    status: "candidate"
-    reason: "Control-held: met through cp-2, cp-9 and cp-10, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-CP) keeps cp-2, cp-9 and cp-10 in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-cp.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations establish and implement plans for emergency response, backup operations and post-disaster recovery: cp-2 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0024"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Identification and Authentication (IA): Organizations must identify information system users, processes acting"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Identification and Authentication (IA): Organizations must identify information system users, processes acting on behalf of users, or devices and authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems."
-    status: "candidate"
-    reason: "Control-held: met through ia-2, ia-3, ia-8 and ia-9, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-IA) keeps ia-2 (users and processes acting for them) and ia-3 (devices) in the baseline and the SSP; ia-8 and ia-9 apply only to non-organizational users and to services, so they are left out of the floor."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ia.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations identify and authenticate users, processes and devices as a prerequisite to allowing access: ia-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0025"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Incident Response (IR): Organizations must: (i) establish an operational incident handling capability"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Incident Response (IR): Organizations must: (i) establish an operational incident handling capability for organizational information systems that includes adequate preparation, detection, analysis, containment, recovery, and user response activities; and (ii) track, document, and report incidents to appropriate organizational officials and/or authorities."
-    status: "candidate"
-    reason: "Control-held: met through ir-4, ir-5 and ir-6, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SSP-COV-001 fails a baseline control with no statement in the security and privacy plan. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-IR) keeps ir-4 and ir-7 (clause i) and ir-5 and ir-6 (clause ii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ir.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations establish an operational incident handling capability and track, document and report incidents: ir-4 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0026"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Maintenance (MA): Organizations must: (i) perform periodic and timely maintenance on organizational"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Maintenance (MA): Organizations must: (i) perform periodic and timely maintenance on organizational information systems; and (ii) provide effective controls on the tools, techniques, mechanisms, and personnel used to conduct information system maintenance."
-    status: "candidate"
-    reason: "Control-held: met through ma-2, ma-3 and ma-5, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-MA) keeps ma-2, ma-3 and ma-5 in the baseline and the SSP; 'timely' maintenance is ma-6, which CNSSI 1253 selects only for moderate and high availability, and nonlocal maintenance (ma-4) applies only where it is done, so both are unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ma.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations perform periodic maintenance and control the maintenance tools, techniques and personnel: ma-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0027"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Media Protection (MP): Organizations must: (i) protect information system media, both paper"}
@@ -233,17 +241,18 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Media Protection (MP): Organizations must: (i) protect information system media, both paper and digital; (ii) limit access to information on information system media to authorized users; and (iii) sanitize or destroy information system media before disposal or release for reuse."
-    status: "candidate"
-    reason: "Control-held: met through mp-2, mp-4, mp-5 and mp-6, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-MP) keeps mp-4 (clause i), mp-2 (clause ii) and mp-6 (clause iii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-mp.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations protect paper and digital media, limit access to media information and sanitize media before disposal: mp-2 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0028"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Physical and Environmental Protection (PE): Organizations must: (i) limit physical access to"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Physical and Environmental Protection (PE): Organizations must: (i) limit physical access to information systems, equipment, and the respective operating environments to authorized individuals; (ii) protect the physical plant and support infrastructure for information systems; (iii) provide supporting utilities for information systems; (iv) protect information systems against environmental hazards; and (v) provide appropriate environmental controls in facilities containing information systems."
-    status: "candidate"
-    reason: "Control-held: met through pe-2, pe-3, pe-9, pe-10, pe-11, pe-12, pe-13, pe-14 and pe-15, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "Proxy for clauses ii and iii: CFLR-001 (CF-FIPS-PE) keeps pe-2 and pe-3 (clause i) and pe-12 to pe-14 (clauses iv and v) in effect; the physical plant and supporting utilities rest on pe-9 to pe-11, which CNSSI 1253 selects only for moderate and high availability, and water damage protection (pe-15) applies only where water lines exist, so they are unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-pe.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations limit physical access to authorized individuals and protect systems against environmental hazards: pe-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0029"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Planning (PL): Organizations must develop, document, periodically update, and implement security plans"}
@@ -251,17 +260,18 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Planning (PL): Organizations must develop, document, periodically update, and implement security plans for organizational information systems that describe the security controls in place or planned for the information systems and the rules of behavior for individuals accessing the information systems."
-    status: "candidate"
-    reason: "Control-held: met through pl-2 and pl-4 (and ART-SSP itself), selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-PL) keeps pl-2 (the security plan) and pl-4 (rules of behavior) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-pl.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations develop and implement security plans describing the controls and the rules of behavior: pl-2 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0030"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Personnel Security (PS): Organizations must: (i) ensure that individuals occupying positions of"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Personnel Security (PS): Organizations must: (i) ensure that individuals occupying positions of responsibility within organizations (including third-party service providers) are trustworthy and meet established security criteria for those positions; (ii) ensure that organizational information and information systems are protected during and after personnel actions such as terminations and transfers; and (iii) employ formal sanctions for personnel failing to comply with organizational security policies and procedures."
-    status: "candidate"
-    reason: "Control-held: met through ps-2, ps-3, ps-4, ps-5, ps-7 and ps-8, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-PS) keeps ps-2 and ps-3 (clause i), ps-4 and ps-5 (clause ii) and ps-8 (clause iii) in the baseline and the SSP; the trustworthiness of third-party service providers rests on ps-7, which a system with no external personnel scopes out, so that part is unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ps.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Individuals occupying positions of responsibility are trustworthy, systems are protected during terminations and transfers, and formal sanctions are employed: ps-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0031"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "Risk Assessment (RA): Organizations must periodically assess the risk to organizational operations"}
@@ -269,17 +279,18 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "Risk Assessment (RA): Organizations must periodically assess the risk to organizational operations (including mission, functions, image, or reputation), organizational assets, and individuals, resulting from the operation of organizational information systems and the associated processing, storage, or transmission of organizational information."
-    status: "candidate"
-    reason: "Control-held: met through ra-3 (with ART-RA at P-14), selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-RA) keeps ra-3 in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-ra.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations periodically assess the risk resulting from the operation of organizational information systems: ra-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0032"
     citation: {"ref": "FIPS200", "page": 9, "anchor": "System and Services Acquisition (SA): Organizations must: (i) allocate sufficient resources to"}
     kind: "modal"
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "System and Services Acquisition (SA): Organizations must: (i) allocate sufficient resources to adequately protect organizational information systems; (ii) employ system development life cycle processes that incorporate information security considerations; (iii) employ software usage and installation restrictions; and (iv) ensure that third-party providers employ adequate security measures to protect information, applications, and/or services outsourced from the organization."
-    status: "candidate"
-    reason: "Control-held: met through sa-2, sa-3, sa-9, cm-10 and cm-11, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-SA) keeps sa-2 (i), sa-3 (ii), cm-10 and cm-11 (iii) in the baseline and the SSP; clause iv, third-party providers employing adequate security, rests on sa-9, which a system with no external services scopes out, so it is unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-sa.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations allocate resources, employ life cycle processes with security, restrict software usage and installation, and ensure third-party providers employ security measures: sa-2 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0033"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "System and Communications Protection (SC): Organizations must: (i) monitor, control, and protect"}
@@ -287,8 +298,9 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "System and Communications Protection (SC): Organizations must: (i) monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems; and (ii) employ architectural designs, software development techniques, and systems engineering principles that promote effective information security within organizational information systems."
-    status: "candidate"
-    reason: "Control-held: met through sc-7, pl-8, sa-8 and sa-15, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
+    status: "partial"
+    reason: "CFLR-001 (CF-FIPS-SC) keeps sc-7 (clause i) and pl-8 and sa-8 (clause ii, architectural designs and engineering principles) in the baseline and the SSP; software development techniques rest on sa-15, which a system with no development (COTS only) scopes out, so that part is unheld."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-sc.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations monitor, control and protect communications at the boundaries and employ architectural designs and engineering principles: pl-8 tailored out of the baseline fails"}]
     work_item: "WI-462"
   - id: "REQ-FIPS200-0034"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "System and Information Integrity (SI): Organizations must: (i) identify, report, and correct"}
@@ -296,9 +308,9 @@ requirements:
     locator: "3 MINIMUM SECURITY REQUIREMENTS"
     context: ""
     statement: "System and Information Integrity (SI): Organizations must: (i) identify, report, and correct information and information system flaws in a timely manner; (ii) provide protection from malicious code at appropriate locations within organizational information systems; and (iii) monitor information system security alerts and advisories and take appropriate actions in response."
-    status: "candidate"
-    reason: "Control-held: met through si-2, si-3 and si-5, selected by framework/baselines/cnssi-1253.yaml (the triage note gives each cell), stated at S-4 and assessed at A-3; SAR-COV-001 fails a scoped baseline control with no assessment determination. No rule singles out the duty itself beyond that generic coverage."
-    work_item: "WI-462"
+    status: "covered"
+    reason: "CFLR-001 (CF-FIPS-SI) keeps si-2 (i), si-3 (ii) and si-5 (iii) in the baseline and the SSP."
+    evidence: [{"kind": "rule", "target": "CFLR-001", "fixture": "tests/fixtures/negative/CFLR-001.fips-si.yaml", "expect": "is tailored out of the baseline", "claim": "constraint", "asserts": "Organizations identify, report and correct flaws, provide malicious code protection and monitor security alerts and advisories: si-3 tailored out of the baseline fails"}]
   - id: "REQ-FIPS200-0035"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "Organizations must meet the minimum security requirements in this standard by selecting"}
     kind: "modal"
@@ -306,8 +318,8 @@ requirements:
     context: ""
     statement: "Organizations must meet the minimum security requirements in this standard by selecting the appropriate security controls and assurance requirements as described in NIST Special Publication 800-53, Recommended Security Controls for Federal Information Systems.5 The process of selecting the appropriate security controls and assurance requirements for organizational information systems to achieve adequate security6 is a multifaceted, risk-based activity involving management and operational personnel within the organization. Security categorization of federal information and information systems, as required by FIPS Publication 199, is the first step in the risk management process.7 Subsequent to the security categorization process, organizations must select an appropriate set of security controls for their information systems that satisfy the minimum security requirements set forth in this standard. The selected set of security controls must include one of three, appropriately tailored8 security control baselines from NIST Special Publication 800-53 that are associated with the designated impact levels of the organizational information systems as determined during the security categorization process."
     status: "partial"
-    reason: "Two of three sentences are held. Selection: GEN-STALE-001 fails a selected baseline that differs from the one resolved from the approved categorization, and SSE-003 fails an assurance-related baseline control whose assurance requirements are unsatisfied once in place. The third sentence is a source conflict (triage): a default run selects the per-objective union of CNSSI 1253 Appendix D, not one of the three SP 800-53 baselines; only the degraded fallback takes one literally (baseline_id SP800-53B-<level>). The user rules on that reading."
-    evidence: [{"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "Organizations meet the minimum security requirements by selecting assurance requirements as described in SP 800-53: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope", "sentence": "Organizations must meet the minimum security requirements in this standard by selecting the appropriate security controls and assurance requirements as described in NIST Special Publication 800-53, Recommended Security Controls for Federal Information Systems.5"}, {"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.categorization.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Subsequent to the security categorization, organizations select the set of security controls: a selected baseline that differs from a fresh baseline resolve of the categorization fails", "sentence": "Subsequent to the security categorization process, organizations must select an appropriate set of security controls for their information systems that satisfy the minimum security requirements set forth in this standard."}]
+    reason: "Two of three sentences are held. Selection: BSEL-001 fails a selected baseline that differs from the one resolved from the approved categorization, and SSE-003 fails an assurance-related baseline control whose assurance requirements are unsatisfied once in place. The third sentence is a source conflict (triage): a default run selects the per-objective union of CNSSI 1253 Appendix D, not one of the three SP 800-53 baselines; only the degraded fallback takes one literally (baseline_id SP800-53B-<level>). The user rules on that reading."
+    evidence: [{"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "Organizations meet the minimum security requirements by selecting assurance requirements as described in SP 800-53: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope", "sentence": "Organizations must meet the minimum security requirements in this standard by selecting the appropriate security controls and assurance requirements as described in NIST Special Publication 800-53, Recommended Security Controls for Federal Information Systems.5"}, {"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.categorization.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Subsequent to the security categorization, organizations select the set of security controls: a selected baseline that differs from a fresh baseline resolve of the categorization fails", "sentence": "Subsequent to the security categorization process, organizations must select an appropriate set of security controls for their information systems that satisfy the minimum security requirements set forth in this standard."}]
     work_item: "WI-95"
   - id: "REQ-FIPS200-0036"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "For low-impact information systems, organizations must, as a minimum, employ appropriately tailored"}
@@ -316,8 +328,8 @@ requirements:
     context: ""
     statement: "- For low-impact information systems, organizations must, as a minimum, employ appropriately tailored security controls from the low baseline of security controls defined in NIST Special Publication 800-53 and must ensure that the minimum assurance requirements associated with the low baseline are satisfied."
     status: "covered"
-    reason: "GEN-STALE-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at low selects the low letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B LOW baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
-    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.categorization.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Organizations employ the security controls of the low baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the low baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the low baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
+    reason: "BSEL-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at low selects the low letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B LOW baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.categorization.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Organizations employ the security controls of the low baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the low baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the low baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
     work_item: "WI-95"
   - id: "REQ-FIPS200-0037"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "For moderate-impact information systems, organizations must, as a minimum, employ appropriately tailored"}
@@ -326,8 +338,8 @@ requirements:
     context: ""
     statement: "- For moderate-impact information systems, organizations must, as a minimum, employ appropriately tailored security controls from the moderate baseline of security controls defined in NIST Special Publication 800-53 and must ensure that the minimum assurance requirements associated with the moderate baseline are satisfied."
     status: "covered"
-    reason: "GEN-STALE-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at moderate selects the moderate letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B MODERATE baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
-    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.categorization.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Organizations employ the security controls of the moderate baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the moderate baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the moderate baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
+    reason: "BSEL-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at moderate selects the moderate letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B MODERATE baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.categorization.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Organizations employ the security controls of the moderate baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the moderate baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the moderate baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
     work_item: "WI-95"
   - id: "REQ-FIPS200-0038"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "For high-impact information systems, organizations must, as a minimum, employ appropriately tailored"}
@@ -336,8 +348,8 @@ requirements:
     context: ""
     statement: "- For high-impact information systems, organizations must, as a minimum, employ appropriately tailored security controls from the high baseline of security controls defined in NIST Special Publication 800-53 and must ensure that the minimum assurance requirements associated with the high baseline are satisfied."
     status: "covered"
-    reason: "GEN-STALE-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at high selects the high letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B HIGH baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
-    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.categorization.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Organizations employ the security controls of the high baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the high baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the high baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
+    reason: "BSEL-001 fails a selected baseline that differs from the one `rmf baseline resolve` takes from the approved categorization, where an objective at high selects the high letter of the CNSSI 1253 Appendix D cell (or the SP 800-53B HIGH baseline under the degraded fallback) and S-2 tailors it. SSE-003 fails an assurance-related baseline control the system implements (an inherited one's provider addresses its assurance), the catalog's contributes-to-assurance mark (SP 800-53r5 Appendix C), whose SSP statement does not address its assurance requirements or leaves them unsatisfied once in place: the pinned SP 800-53 holds no other list of minimum assurance requirements per baseline (triage note)."
+    evidence: [{"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.categorization.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Organizations employ the security controls of the high baseline the categorization selects: a selected baseline that differs from a fresh baseline resolve fails"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.satisfied.yaml", "expect": "is in place, and the minimum assurance requirements it carries for the baseline are not satisfied", "claim": "constraint", "asserts": "The minimum assurance requirements associated with the high baseline are satisfied: an assurance-related control in place whose minimum assurance requirements are not satisfied fails", "holds_when": "S-4 is in the run's scope"}, {"kind": "rule", "target": "SSE-003", "fixture": "tests/fixtures/negative/SSE-003.yaml", "expect": "contributes to assurance, and its SSP statement does not say how its assurance requirements are addressed", "claim": "presence", "asserts": "The assurance requirements of each assurance-related control of the high baseline are addressed in its SSP statement", "holds_when": "S-4 is in the run's scope"}]
     work_item: "WI-95"
   - id: "REQ-FIPS200-0039"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "Organizations must employ all security controls in the respective security control baselines"}
@@ -354,7 +366,9 @@ requirements:
     locator: "4 SECURITY CONTROL SELECTION"
     context: ""
     statement: "Organizations must use the most current version of NIST Special Publication 800-53, as amended, for the security control selection process."
-    status: "candidate"
+    status: "partial"
+    reason: "RCUR-001 fails a later SP 800-53 edition recorded at P-2, published more than a year before the check, that the run does not adopt, and a check that leaves SP 800-53 out. Unheld: that the baseline resolver reads the edition recorded as used; a version FIPS 200 calls most current but published within the year may still wait."
+    evidence: [{"kind": "rule", "target": "RCUR-001", "fixture": "tests/fixtures/negative/RCUR-001.year.yaml", "expect": "more than a year before the check, and the run does not adopt it", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "Organizations use the most current version of SP 800-53 for control selection: a later version published more than a year before the check and not adopted fails"}]
     work_item: "WI-326"
   - id: "REQ-FIPS200-0041"
     citation: {"ref": "FIPS200", "page": 10, "anchor": "Security categorization must be accomplished as an enterprise-wide activity with the involvement"}

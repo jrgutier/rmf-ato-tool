@@ -1,6 +1,7 @@
 """Coverage rules: SSP-COV-002, SSP-DUP-001, SSP-STAT-001, SAP-COV-001, SAR-COV-001,
-CONMON-001, PKG-001 and PKG-003. Like SSP-COV-001 they are scope-aware: an artifact whose producer
-is out of scope and that is not seeded is never demanded (plan §7.3 ``--final``)."""
+CONMON-001, PKG-001, PKG-003, SAREL-001 and DEL-001. Like SSP-COV-001 they are scope-aware:
+an artifact whose producer is out of scope and that is not seeded is never demanded (plan §7.3
+``--final``)."""
 
 from __future__ import annotations
 
@@ -20,7 +21,8 @@ CONMON_FILE = "artifacts/data/conmon.yaml"
 # CNSSI 1254 Section IV: the RMF core documents.
 CORE_DOCUMENTS = {"ART-SSP": "SSP", "ART-SAR": "SAR", "ART-RAR": "RAR", "ART-POAM": "POA&M",
                   "ART-AODM": "Authorization Decision Document"}
-PLAN_DOCUMENTS = ("ART-SSP", "ART-SAR")
+PLAN_DOCUMENTS = ("ART-SSP",)
+REPORT_DOCUMENTS = ("ART-SAR",)
 DECISION_DOCUMENTS = ("ART-RAR", "ART-POAM", "ART-AODM")
 PLACEHOLDER = "<<FILL"
 FACTS_BLOCK = "<!-- BEGIN rmf:facts -->"
@@ -215,8 +217,14 @@ def _data_elements(ctx: Context, rule: str, documents: tuple[str, ...]) -> list[
 
 
 def data_elements(ctx: Context) -> list[RunFinding]:
-    """PKG-003: the elements of the SSP and the SAR."""
+    """PKG-003: the elements of the SSP; the SAR's are SAREL-001."""
     return _data_elements(ctx, "PKG-003", PLAN_DOCUMENTS)
+
+
+def report_elements(ctx: Context) -> list[RunFinding]:
+    """SAREL-001: the elements of the SAR, split from PKG-003 so each rule stays under the
+    evidence fan-out cap."""
+    return _data_elements(ctx, "SAREL-001", REPORT_DOCUMENTS)
 
 
 def decision_elements(ctx: Context) -> list[RunFinding]:

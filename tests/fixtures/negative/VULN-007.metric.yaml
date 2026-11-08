@@ -1,0 +1,11 @@
+rule: VULN-007
+bases:
+- minimal
+description: a patching effectiveness metric that is not a metric of the strategy
+mutations:
+- {op: set_field, file: artifacts/data/conmon.yaml, path: vulnerability_management.patching.metrics.0.metric, value: MET-09}
+expect:
+  errors:
+  - VULN-007
+  messages:
+  - 'MET-09, named as a metric of patching effectiveness, is not a metric the strategy computes and maintains'

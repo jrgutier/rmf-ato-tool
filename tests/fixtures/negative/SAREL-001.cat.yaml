@@ -1,0 +1,14 @@
+rule: SAREL-001
+bases: [minimal]
+description: the ART-SAR facts block relabels the Security categorization row, so the document no longer carries it as the CNSSI 1254 element Security Categorization
+build: false
+mutations:
+  - op: replace_text
+    file: artifacts/ART-SAR.md
+    old: "| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: none |"
+    new: "| Recorded value | C/I/A MODERATE/MODERATE/LOW; overlays: none |"
+expect:
+  errors: [SAREL-001]
+  also: [GEN-STALE-001]
+  messages:
+    - "ART-SAR does not carry the CNSSI 1254 data element Security Categorization"

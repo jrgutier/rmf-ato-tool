@@ -168,6 +168,8 @@ def _ciso_performs_as_the_sca(d):
     ("OCTX-012", _aodr_takes_part_in_the_allocation),
     ("RAPT-001", _cio_not_recorded),
     ("OCTX-001", _cio_not_recorded),
+    ("OAPP-001", _cio_not_recorded),
+    ("OAPP-001", _ciso_serves_as_aodr),
     ("RAPT-001", _pm_appointed_by_charter),
     ("RAPT-001", _ciso_performs_as_the_sca),
 ], ids=lambda v: v.__name__ if callable(v) else v)

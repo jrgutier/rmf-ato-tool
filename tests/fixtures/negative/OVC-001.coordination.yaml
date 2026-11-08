@@ -1,0 +1,15 @@
+rule: OVC-001
+bases:
+- minimal
+description: an overlay conflict resolved without the risk executive (function)
+mutations:
+- op: set_field
+  file: artifacts/data/tailoring.yaml
+  path: overlay_conflicts
+  value:
+  - {overlays: [CNSSI1253F-ATT6-PRIVACY-ACCT, CNSSI1253F-ATT5-CLASSIFIED], controls: [au-11], resolution: The longer retention applies., resolved_by: [PER-AODR, PER-PRIV], coordinated_with: [PER-IO, PER-PM], sources: [INT-028.A3]}
+expect:
+  errors:
+  - OVC-001
+  messages:
+  - 'the overlay conflict over au-11 is resolved without coordination with the risk executive (function) (PER-RE)'

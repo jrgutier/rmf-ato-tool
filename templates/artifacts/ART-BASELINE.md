@@ -24,7 +24,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Tailoring and allocation
 
-<<FILL: summary of artifacts/data/tailoring.yaml (assumptions tested, the assurance determination, overlay conditions, and each remove and compensating action with its law and policy test) and allocation.yaml (the requirements each control satisfies), any capabilities.yaml mapping, and who produced them, with tokens>>
+<<FILL: summary of artifacts/data/tailoring.yaml (assumptions tested, the assurance determination, overlay conditions, the cost, schedule, performance and other trade-offs weighed, and each remove and compensating action with its law and policy test) and allocation.yaml (the requirements each control satisfies), any capabilities.yaml mapping, and who produced them, with tokens>>
 
 ## Privacy tailoring
 

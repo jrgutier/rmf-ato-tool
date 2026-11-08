@@ -67,8 +67,9 @@ requirements:
     locator: "7"
     context: "SECTION IV - POLICY"
     statement: "7. There may be artifacts or information gathered during systems engineering processes that could inform the content of the RMF core documents. While the RMF artifacts are beneficial for providing a comprehensive security authorization package, the focus of the information should be on mission and providing that information necessary to enable decision makers to make risk-informed decisions based upon that information. This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."
-    status: "candidate"
-    reason: "The listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, which PKG-003 and DEL-001 hold element by element; 'the focus of the information should be on mission' is guidance on emphasis no run record can break"
+    status: "partial"
+    reason: "Sentence 2 is held for interfaces: PKG-003 fails a security plan that does not carry the internal and external system interfaces; operational context, architecture, data flow, hardware, software, services and known risks rest on PKG-003's presence clauses. Sentence 1 states where the focus should be."
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.interfaces.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is in play once its producer is active or it is seeded", "asserts": "The information should include interfaces: a security plan that does not carry the internal and external system interfaces data element fails", "sentence": "This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."}]
     work_item: "WI-481"
   - id: "REQ-CNSSI1254-0008"
     citation: {"ref": "CNSSI1254", "page": 5, "anchor": "This Instruction does not dictate the format/templates of the documentation listed below."}
@@ -144,7 +145,9 @@ requirements:
     locator: "10"
     context: "SECTION VI - REFERENCES"
     statement: "10. References are listed in Annex A. Future updates to referenced documents shall be applicable to this policy."
-    status: "candidate"
+    status: "partial"
+    reason: "RCUR-001 fails a later edition of CNSSP 22, a document CNSSI 1254 Annex A lists, recorded by the P-2 check and not adopted, and a later SP 800-53 not adopted a year after its publication. Unheld: the other Annex A documents (SP 800-30, -37, -39, -53A, -60, CNSSI 4009), which the check does not list, and whether the check found what was published (the run records it)."
+    evidence: [{"kind": "rule", "target": "RCUR-001", "fixture": "tests/fixtures/negative/RCUR-001.cnssp22.yaml", "expect": "which applies to this policy, and the run does not adopt it", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "Future updates to referenced documents such as CNSSP 22 are applicable to this policy: a later edition of CNSSP 22 the run does not adopt fails"}]
     work_item: "WI-326"
   - id: "REQ-CNSSI1254-0017"
     citation: {"ref": "CNSSI1254", "page": 6, "anchor": "All terms used in this Instruction are defined in CNSSI 4009."}
@@ -168,8 +171,9 @@ requirements:
     locator: "REFERENCES.2"
     context: "ESSENTIAL DATA ELEMENTS"
     statement: "2. While the data elements below provide guidance on documenting RMF artifacts, the focus of the information should be on mission and providing that information necessary to enable decision makers to make risk-informed decisions based upon that information. This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."
-    status: "candidate"
-    reason: "As REQ-CNSSI1254-0007: the listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, held element by element by PKG-003 and DEL-001; the focus on mission is guidance no run record can break"
+    status: "partial"
+    reason: "Sentence 2 is held for interfaces: PKG-003 fails a security plan that does not carry the internal and external system interfaces; the other elements rest on presence clauses. Sentence 1 states where the focus should be."
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.interfaces.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is in play once its producer is active or it is seeded", "asserts": "The information should include interfaces: a security plan that does not carry the internal and external system interfaces data element fails", "sentence": "This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."}]
     work_item: "WI-481"
   - id: "REQ-CNSSI1254-0020"
     citation: {"ref": "CNSSI1254", "page": 11, "anchor": "The following data elements are listed in alphabetical order. Columns from left"}
@@ -242,7 +246,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | SSP SAR POA&M RAR Authorization Decision Document | Data Classification Level and Handling Markings | Unclassified, Confidential, Secret, Top Secret, Secret/Sensitive Compartmented Information (S/SCI), Top Secret/Sensitive Compartmented Information (TS/SCI), SAP (Special Access Programs), Atomic Energy Act (AEA) markings, dissemination controls and other handling markings | NIST SP 800- 37, 32 CFR Parts 2001 and 2003"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the data classification level and handling markings in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the data classification level and handling markings in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-174"
   - id: "REQ-CNSSI1254-0029"
     citation: {"ref": "CNSSI1254", "page": 12, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | Department/Agency /Organization Name"}
@@ -251,7 +255,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. | SSP SAR POA&M RAR Authorization Decision Document | Department/Agency /Organization Name | Parent or governing department/agency/organization that manages, owns, and/or controls the system | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the department, agency or organization name that owns the system in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the department, agency or organization name that owns the system in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-177"
   - id: "REQ-CNSSI1254-0030"
     citation: {"ref": "CNSSI1254", "page": 12, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | Information Technology (IT)"}
@@ -260,7 +264,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | SSP SAR POA&M RAR Authorization Decision Document | Information Technology (IT) Type | IT Type (e.g., information system: enclave, major application, platform IT system, general support systems). Indicate whether the system stand-alone or networked | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the IT type, enclave, major application or platform IT system in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the IT type, enclave, major application or platform IT system in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-196"
   - id: "REQ-CNSSI1254-0031"
     citation: {"ref": "CNSSI1254", "page": 12, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | Security Categorization |"}
@@ -305,7 +309,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. SSP and SAR Data Elements | SSP SAR POA&M RAR Authorization Decision Document | System Version or Release Number | Version number and release date of system | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the system version number and release date in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the system version number and release date in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-177"
   - id: "REQ-CNSSI1254-0036"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "SAR, RAR, and POA&M Data Elements |"}
@@ -314,7 +318,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. SAR, RAR, and POA&M Data Elements | SSP SAR | Operational Environment | Production, test, research and development, tactical, deployed, or other (list type of operational environment) | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the operational environment in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, POA&M and RAR show the operational environment in their facts block, a CNSSI 1254 data element each must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-177"
   - id: "REQ-CNSSI1254-0037"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "| SAR RAR POA&M | Assessment Date | Dates of all current"}
@@ -323,7 +327,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | SAR RAR POA&M | Assessment Date | Dates of all current security control assessments for the system | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.assessmentdate.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, RAR and POA&M carry the dates of all current security control assessments, a CNSSI 1254 data element it must carry", "claim": "constraint", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.assessmentdate.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR, RAR and POA&M carry the dates of all current security control assessments, a CNSSI 1254 data element it must carry", "claim": "constraint", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-177"
   - id: "REQ-CNSSI1254-0038"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "SSP Data Elements |"}
@@ -549,7 +553,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "1. | SAR | Assessment Environment | Description of the environment where the most recent testing took place, including information on the site location and security system. Identify any supporting equipment (i.e. emulators, sniffers, analyzers, traffic generators, satellite simulators) that were used to support the assessment event, and list any external interfaces active during the test event. Explain any constraints imposed by the environment on the assessment event which impacted on the quality or quantity of testing able to be performed. Identify all personnel present for the assessment, their organizations, and their role in the assessment event. Resource: test results report | NIST SP 800- 53A"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.assessmentenv.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the description of the environment where the most recent testing took place, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}, {"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/environment/properties/supporting_equipment", "claim": "presence", "asserts": "Identify supporting equipment such as emulators, sniffers and analyzers used to support the assessment event", "sentence": "Identify any supporting equipment (i.e. emulators, sniffers, analyzers, traffic generators, satellite simulators) that were used to support the assessment event, and list any external interfaces active during the test event."}, {"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/environment/properties/personnel", "claim": "constraint", "asserts": "Identify all personnel present for the assessment, their organizations and their role in the assessment event", "sentence": "Identify all personnel present for the assessment, their organizations, and their role in the assessment event."}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.assessmentenv.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the description of the environment where the most recent testing took place, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}, {"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/environment/properties/supporting_equipment", "claim": "presence", "asserts": "Identify supporting equipment such as emulators, sniffers and analyzers used to support the assessment event", "sentence": "Identify any supporting equipment (i.e. emulators, sniffers, analyzers, traffic generators, satellite simulators) that were used to support the assessment event, and list any external interfaces active during the test event."}, {"kind": "schema", "target": "framework/schema/sar-summary.schema.json#/properties/environment/properties/personnel", "claim": "constraint", "asserts": "Identify all personnel present for the assessment, their organizations and their role in the assessment event", "sentence": "Identify all personnel present for the assessment, their organizations, and their role in the assessment event."}]
     work_item: "WI-193"
   - id: "REQ-CNSSI1254-0063"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | Assumptions, Limitations/ Constraints, Issues | Identifies: Assumptions Limitations/Constraints (e.g.,"}
@@ -567,8 +571,8 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | SAR | SCA Executive Summary | Executive summary from the detailed findings that are generated during a security control assessment. An executive summary provides an AO with an abbreviated version of the assessment report focusing on the highlights of the assessment, synopsis of key findings, and/or recommendations for addressing weaknesses and deficiencies in the security controls | NIST SP 800- 37"
     status: "covered"
-    reason: "ART-SAR '## Assessment summary' is the SCA executive summary; left unwritten it fails PKG-003"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.summary.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The SAR carries the SCA executive summary of the assessment for the AO, a CNSSI 1254 data element"}]
+    reason: "ART-SAR '## Assessment summary' is the SCA executive summary; left unwritten it fails SAREL-001"
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.summary.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The SAR carries the SCA executive summary of the assessment for the AO, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0065"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | SCA and Organization | Name of the SCA's organization"}
     kind: "table"
@@ -576,7 +580,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | SAR | SCA and Organization | Name of the SCA's organization and the SCA's contact information (name, role/title, email, phone number) | NIST SP 800- 53A"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.sca.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the name of the SCA's organization and the SCA's contact information, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.sca.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the name of the SCA's organization and the SCA's contact information, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-193"
   - id: "REQ-CNSSI1254-0066"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | Type of Assessment/ Objective | Identifies developmental testing and"}
@@ -585,7 +589,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "5. | SAR | Type of Assessment/ Objective | Identifies developmental testing and evaluation, independent verification and validation, assessments supporting security authorizations or reauthorizations, audits, ongoing monitoring, assessments subsequent to remediation actions, etc. | NIST SP 800-53A"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.assessmenttype.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the type of assessment: developmental test and evaluation, IV&V, authorization, audit or ongoing monitoring, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
+    evidence: [{"kind": "rule", "target": "SAREL-001", "fixture": "tests/fixtures/negative/SAREL-001.assessmenttype.yaml", "expect": "does not carry the CNSSI 1254 data element", "asserts": "The SAR carries the type of assessment: developmental test and evaluation, IV&V, authorization, audit or ongoing monitoring, a CNSSI 1254 data element it must carry", "claim": "presence", "holds_when": "the core document is in play once its producer is active or it is seeded"}]
     work_item: "WI-193"
   - id: "REQ-CNSSI1254-0067"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | Security Control Assessment Methodology/ Procedure | Identifies methodology and"}
@@ -705,7 +709,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. | RAR | Threat Source Capability | Indicates the adversarial threat source's capability to initiate a threat event | NIST SP 800- 30"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source capability to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed capability to initiate a threat event", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.capability.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
+    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source capability to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/capability", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed capability to initiate a threat event", "target": "SRAT-001", "fixture": "tests/fixtures/negative/SRAT-001.yaml", "expect": "is an adversarial threat source with no assessed capability", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0080"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Source Intent | Indicates the adversarial threat source's"}
@@ -714,7 +718,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "9. | RAR | Threat Source Intent | Indicates the adversarial threat source's intent to initiate a threat event | NIST SP 800- 30"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source intent to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/intent", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed intent to initiate a threat event", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.intent.yaml", "expect": "is an adversarial threat source with no assessed intent", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
+    evidence: [{"kind": "schema", "asserts": "Each threat source records the adversarial threat source intent to initiate a threat event", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/intent", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed intent to initiate a threat event", "target": "SRAT-001", "fixture": "tests/fixtures/negative/SRAT-001.intent.yaml", "expect": "is an adversarial threat source with no assessed intent", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0081"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Source Targeting | Indicates if the adversarial threat"}
@@ -723,7 +727,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "10. | RAR | Threat Source Targeting | Indicates if the adversarial threat source has historically targeted or is actively targeting the system | NIST SP 800- 30"
     status: "covered"
-    evidence: [{"kind": "schema", "asserts": "Each threat source records whether the adversarial threat source has targeted or is actively targeting the system", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/targeting", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed targeting of the system", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.targeting.yaml", "expect": "is an adversarial threat source with no assessed targeting", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
+    evidence: [{"kind": "schema", "asserts": "Each threat source records whether the adversarial threat source has targeted or is actively targeting the system", "target": "framework/schema/ra.schema.json#/properties/threat_sources/items/properties/targeting", "claim": "constraint"}, {"kind": "rule", "asserts": "An adversarial threat source must indicate its assessed targeting of the system", "target": "SRAT-001", "fixture": "tests/fixtures/negative/SRAT-001.targeting.yaml", "expect": "is an adversarial threat source with no assessed targeting", "holds_when": "ART-RA is produced or seeded on a 0.2.0 contract", "claim": "constraint"}]
     work_item: "WI-206"
   - id: "REQ-CNSSI1254-0082"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Threat Event | Identifies the potential threat event |"}
@@ -955,7 +959,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | Authorization Decision Document | Authorization Termination Date | Identify the date the authorization expires | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "A record of an ATO type needs an authorization_termination_date, the date the authorization expires", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "A record of an ATO type needs an authorization_termination_date, the date the authorization expires", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.atd.yaml", "expect": "needs an authorization_termination_date", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-CNSSI1254-0108"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "| Authorization Decision Document | Overall Residual Risk | Includes the overall"}
     kind: "table"
@@ -990,7 +994,7 @@ requirements:
     context: "Table C-1: RMF Essential Data Elements"
     statement: "8. | Authorization Decision Document | Terms/ Conditions for Authorization Note: This information can only be provided, if a system is given Authorization to Operate. | Provides a description of any specific limitations or restrictions placed on the operation of the system Example terms/conditions for authorization: (i) the required security status reports for the system are submitted to this office every year; (ii) the vulnerabilities reported during the continuous monitoring process do not result in additional agency-level risk which is deemed unacceptable; and (iii) the system has not exceeded the maximum allowable time period between security authorizations in accordance with federal and agency policy | NIST SP 800- 37"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "AD-ATOC needs conditions, the terms stating restrictions on the authorization", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "needs conditions", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "AD-ATOC needs conditions, the terms stating restrictions on the authorization", "target": "AOREC-001", "fixture": "tests/fixtures/negative/AOREC-001.yaml", "expect": "needs conditions", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded"}]
   - id: "REQ-CNSSI1254-0112"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "Reciprocity helps ensure IT capabilities are developed and fielded rapidly and efficiently"}
     kind: "lettered"
@@ -1036,7 +1040,7 @@ requirements:
     statement: "c. An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR). Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."
     status: "partial"
     reason: "That an authorization decision rests on completed assessments is held only through AODM-001's progress and rar_ref clauses, which do not read the assessment results themselves; the delivery sentence is held by RCP-001."
-    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.progress.yaml", "expect": "have not written their outputs", "asserts": "An authorization decision is refused while the assessment tasks before it have not written their outputs", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.rar.yaml", "expect": "the decision must rest on the risk assessment report", "asserts": "The authorization decision must rest on the risk assessment report recorded in the package", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The complete security authorization package is delivered to the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.evidence.yaml", "expect": "the body of evidence behind the package is not shared with the receiving organization", "asserts": "The supporting artifacts, the body of evidence behind the package, are shared with the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}]
+    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.progress.yaml", "expect": "have not written their outputs", "asserts": "An authorization decision is refused while the assessment tasks before it have not written their outputs", "claim": "constraint", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "the decision must rest on the risk assessment report", "asserts": "The authorization decision must rest on the risk assessment report recorded in the package", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded", "sentence": "An authorization decision for a system cannot be made without completing the required assessments and analysis, as recorded in the security authorization package (e.g., in the SAR or RAR)."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.yaml", "expect": "is not delivered to the receiving organization", "asserts": "The complete security authorization package is delivered to the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}, {"kind": "rule", "target": "RCP-001", "fixture": "tests/fixtures/negative/RCP-001.evidence.yaml", "expect": "the body of evidence behind the package is not shared with the receiving organization", "asserts": "The supporting artifacts, the body of evidence behind the package, are shared with the receiving organizations", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Deploying organizations must provide the complete security authorization package (to include supporting artifacts) to receiving organizations."}]
     work_item: "WI-311"
   - id: "REQ-CNSSI1254-0117"
     citation: {"ref": "CNSSI1254", "page": 24, "anchor": "The AO for a receiving system does not issue a new/additional ATO"}

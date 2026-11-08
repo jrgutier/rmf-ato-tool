@@ -24,7 +24,7 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Information owners
 
-<<FILL: the owner or steward of each information type, named by INF-## ID and persona, with tokens>>
+<<FILL: the owner or steward of each information type, named by INF-## ID, persona and organization as in infotypes.yaml information_owners, and the input (an answer or a product file the owner supplied) in which each sets its types' impact levels, with tokens>>
 
 <!-- P-13 appends "## Information life cycle" here (for each information type, the stages it
      passes through from creation to disposition and the components at each stage; the
