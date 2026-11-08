@@ -1,0 +1,24 @@
+rule: DEL-001
+bases:
+- minimal
+description: an authorization decision document without its facts block
+mutations:
+- op: replace_text
+  file: artifacts/ART-AODM.md
+  old: '<!-- BEGIN rmf:facts -->
+
+    '
+  new: ''
+- op: replace_text
+  file: artifacts/ART-AODM.md
+  old: '<!-- END rmf:facts -->
+
+    '
+  new: ''
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-AODM does not carry the CNSSI 1254 data element System Name/Acronym
+  also:
+  - TRACE-001
