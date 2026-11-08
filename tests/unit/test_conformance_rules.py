@@ -227,7 +227,8 @@ def test_every_audit_finding_has_a_work_item():
 
     assert len(findings) == 47
     assert findings | added <= linked
-    assert linked - findings - added <= set(routed)
+    # EVID: work items the p11 evidence sub-step opens for proof it could not give; no audit row.
+    assert linked - findings - added - {"EVID"} <= set(routed)
     assert set(re.findall(r"^\| (I-\d+) \|", conflicts, re.M)) == set(routed)
     assert set(routed.values()) <= set(register.load(REPO_ROOT).work_items)
 

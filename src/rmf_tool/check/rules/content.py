@@ -42,7 +42,7 @@ def facts_complete(ctx: Context) -> list[RunFinding]:
                             FACTS_FILE, None, {writer}))
         elif node.get("set_by_task") != writer:
             out.append(make("FACTS-001", f"fact {fact} set_by_task is "
-                            f"{node.get('set_by_task')!r}; {writer} writes it",
+                            f"{node.get('set_by_task')!r}; {writer} writes it, not another task",
                             FACTS_FILE, None, {writer}))
     # An overlay S-1 cannot apply is C-2's error. FACTS-001 applies from C-3, so the approval
     # reopens there instead of S-1 failing after it (L-0035).
