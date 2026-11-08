@@ -66,14 +66,21 @@ requirements:
     locator: "2 APPLICABILITY"
     context: ""
     statement: "These standards shall apply to: (i) all information within the federal government other than that information that has been determined pursuant to Executive Order 12958, as amended by Executive Order 13292, or any predecessor order, or by the Atomic Energy Act of 1954, as amended, to require protection against unauthorized disclosure and is marked to indicate its classified status; and (ii) all federal information systems other than those information systems designated as national security systems as defined in 44 United States Code Section 3542(b)(2). Agency officials shall use the security categorizations described in FIPS Publication 199 whenever there is a federal requirement to provide such a categorization of information or information systems. Additional security designators may be developed and used at agency discretion. State, local, and tribal governments as well as private sector organizations comprising the critical infrastructure of the United States may consider the use of these standards as appropriate. These standards are effective upon approval by the Secretary of Commerce."
-    status: "candidate"
+    status: "partial"
+    reason: "Its first sentence says what FIPS 199 applies to, all federal information and systems other than classified information and NSS, which no run record can break; a run categorizes under CNSSI 1253 in the same form. The second is held by the impact enum on categorization.c (weak alone, CATG-001 being at its fan-out cap), the third is a permission awaiting the ruling"
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "asserts": "Agency officials use the security categorizations FIPS 199 describes: confidentiality takes one of its three levels of potential impact", "sentence": "Agency officials shall use the security categorizations described in FIPS Publication 199 whenever there is a federal requirement to provide such a categorization of information or information systems."}, {"kind": "citation", "target": "C-2", "claim": "presence", "asserts": "C-2 categorizes the system with the FIPS 199 security categorizations, a value per security objective", "sentence": "Agency officials shall use the security categorizations described in FIPS Publication 199 whenever there is a federal requirement to provide such a categorization of information or information systems."}]
+    work_item: "WI-5502"
+    ruling_sought: [{"sentence": "Additional security designators may be developed and used at agency discretion.", "reason": "A permission: additional designators may be developed and used at agency discretion"}]
   - id: "REQ-FIPS199-0009"
     citation: {"ref": "FIPS199", "page": 5, "anchor": "This publication establishes security categories for both information1 and information systems. The"}
     kind: "modal"
     locator: "3 CATEGORIZATION OF INFORMATION AND INFORMATION SYSTEMS"
     context: ""
     statement: "This publication establishes security categories for both information1 and information systems. The security categories are based on the potential impact on an organization should certain events occur which jeopardize the information and information systems needed by the organization to accomplish its assigned mission, protect its assets, fulfill its legal responsibilities, maintain its day-to-day functions, and protect individuals. Security categories are to be used in conjunction with vulnerability and threat information in assessing the risk to an organization."
-    status: "candidate"
+    status: "partial"
+    reason: "Held by CATG-001's high-water mark clause (a system level below the information types' impact fails), which is at its fan-out cap; the last sentence, categories used with threat and vulnerability information, is P-14's input of ART-INFOTYPES beside EXT-THREAT"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The security categories are based on the potential impact recorded for each information type, a provisional confidentiality impact", "sentence": "The security categories are based on the potential impact on an organization should certain events occur which jeopardize the information and information systems needed by the organization to accomplish its assigned mission, protect its assets, fulfill its legal responsibilities, maintain its day-to-day functions, and protect individuals."}]
+    work_item: "WI-5503"
   - id: "REQ-FIPS199-0010"
     citation: {"ref": "FIPS199", "page": 6, "anchor": "FIPS Publication 199 defines three levels of potential impact on organizations or"}
     kind: "modal"
@@ -113,14 +120,20 @@ requirements:
     locator: "3 CATEGORIZATION OF INFORMATION AND INFORMATION SYSTEMS"
     context: "AVAILABILITY"
     statement: "The security category of an information type can be associated with both user information and system information3 and can be applicable to information in either electronic or non-electronic form. It can also be used as input in considering the appropriate security category of an information system (see description of security categories for information systems below). Establishing an appropriate security category of an information type essentially requires determining the potential impact for each security objective associated with the particular information type."
-    status: "candidate"
+    status: "partial"
+    reason: "The impact per security objective of each information type is required with an enum on its base level; the first sentence, what a category can be associated with, is a permission awaiting the ruling"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "Establishing the security category of an information type determines its potential impact for the confidentiality objective, a provisional level of low, moderate, high or not applicable", "sentence": "Establishing an appropriate security category of an information type essentially requires determining the potential impact for each security objective associated with the particular information type."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity/properties/base", "claim": "constraint", "asserts": "Establishing the security category of an information type determines its potential impact for the integrity objective, a provisional level", "sentence": "Establishing an appropriate security category of an information type essentially requires determining the potential impact for each security objective associated with the particular information type."}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability/properties/base", "claim": "constraint", "asserts": "Establishing the security category of an information type determines its potential impact for the availability objective, a provisional level", "sentence": "Establishing an appropriate security category of an information type essentially requires determining the potential impact for each security objective associated with the particular information type."}]
+    work_item: "WI-5502"
+    ruling_sought: [{"sentence": "The security category of an information type can be associated with both user information and system information3 and can be applicable to information in either electronic or non-electronic form.", "reason": "A permission: a category can be associated with user or system information and can be applicable to either form"}]
   - id: "REQ-FIPS199-0015"
     citation: {"ref": "FIPS199", "page": 7, "anchor": "SC information type = {(confidentiality, impact), (integrity, impact), (availability, impact)},"}
     kind: "indicative"
     locator: "3 CATEGORIZATION OF INFORMATION AND INFORMATION SYSTEMS"
     context: "AVAILABILITY The generalized format for expressing the security category, SC, of an information type is:"
     statement: "SC information type = {(confidentiality, impact), (integrity, impact), (availability, impact)},"
-    status: "candidate"
+    status: "covered"
+    reason: "Each information type holds a required provisional impact for confidentiality, integrity and availability, each refused outside its enum"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "The security category of an information type pairs confidentiality with its impact, a provisional level"}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity/properties/base", "claim": "constraint", "asserts": "The security category of an information type pairs integrity with its impact, a provisional level"}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability/properties/base", "claim": "constraint", "asserts": "The security category of an information type pairs availability with its impact, a provisional level"}]
   - id: "REQ-FIPS199-0016"
     citation: {"ref": "FIPS199", "page": 7, "anchor": "System information (e.g., network routing tables, password files, and cryptographic key management"}
     kind: "modal"
@@ -154,7 +167,9 @@ requirements:
     locator: "3 CATEGORIZATION OF INFORMATION AND INFORMATION SYSTEMS"
     context: "AVAILABILITY The generalized format for expressing the security category, SC, of an information system is:"
     statement: "SC information system = {(confidentiality, impact), (integrity, impact), (availability, impact)}, where the acceptable values for potential impact are LOW, MODERATE, or HIGH."
-    status: "candidate"
+    status: "covered"
+    reason: "The system's categorization holds c, i and a, each from the impact enum low, moderate, high; FACTS-001 makes the categorization present and C-2's"
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "read_by": "FACTS-001", "asserts": "The security category of an information system pairs confidentiality with an impact whose acceptable values are low, moderate or high"}, {"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": "writes it, not another task", "claim": "constraint", "asserts": "The security category of the information system is the categorization fact C-2 sets with its impact values; set_by_task of another task fails"}]
   - id: "REQ-FIPS199-0020"
     citation: {"ref": "FIPS199", "page": 8, "anchor": "Note that the value of not applicable cannot be assigned to any"}
     kind: "modal"
@@ -260,7 +275,9 @@ requirements:
     locator: "3 CATEGORIZATION OF INFORMATION AND INFORMATION SYSTEMS"
     context: ""
     statement: "Information is categorized according to its information type."
-    status: "candidate"
+    status: "covered"
+    reason: "Each INF-* record in infotypes.yaml carries its own required impact per objective, so information is categorized by its type"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "Information is categorized according to its information type: each type holds its own provisional confidentiality impact"}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/integrity/properties/base", "claim": "constraint", "asserts": "Information is categorized according to its information type: each type holds its own provisional integrity impact"}, {"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/availability/properties/base", "claim": "constraint", "asserts": "Information is categorized according to its information type: each type holds its own provisional availability impact"}]
     promoted: {"reason": "Footnote 1 sets the unit of categorization, which the rest of Section 3 builds on; the rejected paragraph holds this rule ahead of a definition."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);
 # sample them with `rmf conformance sample --rejected`.

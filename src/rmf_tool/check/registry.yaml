@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 343 rules, 37 repo-scope and 306 run-scope. Authoritative;
+# Rule registry (plan §6.5): 344 rules, 37 repo-scope and 307 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -398,6 +398,11 @@ rules:
     summary: facts incomplete, missing set_by_task, or categorization unapproved before S-1
     fixture: tests/fixtures/negative/FACTS-001.yaml
     hint: Each fact carries set_by_task; C-3 must approve the categorization before S-1.
+    enforces:
+      - REQ-FIPS199-0019
+      - REQ-CNSSI1253-0046
+      - REQ-CNSSI1253-0045
+      - REQ-CNSSI1253-0054
   - id: GEN-STALE-001
     scope: run
     severity: E
@@ -417,6 +422,20 @@ rules:
       - REQ-SP800-18R1-0136
       - REQ-SP800-18R1-0197
       - REQ-SP800-37R2-0392
+      - REQ-CNSSI1253-0052
+      - REQ-CNSSI1253-0057
+      - REQ-CNSSI1253-0008
+      - REQ-CNSSI1253-0017
+      - REQ-CNSSI1253-0038
+      - REQ-CNSSI1253-0058
+      - REQ-CNSSI1253-0080
+      - REQ-SP800-53B-0012
+      - REQ-SP800-53B-0025
+      - REQ-SP800-53B-0026
+      - REQ-SP800-53B-0029
+      - REQ-SP800-53R5-0004
+      - REQ-SP800-53R5-0012
+      - REQ-CNSSP22-0037
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -432,6 +451,8 @@ rules:
       - REQ-SP800-37R2-0310
       - REQ-SP800-37R2-0556
       - REQ-SP800-53B-0056
+      - REQ-SP800-53B-0003
+      - REQ-SP800-53R5-0054
   - id: SSP-COV-002
     scope: run
     severity: W
@@ -459,6 +480,10 @@ rules:
     summary: bad implementation status, or not-applicable / inherited without rationale / provider
     fixture: tests/fixtures/negative/SSP-STAT-001.yaml
     hint: not-applicable needs a rationale; inherited needs inherited_from.
+    enforces:
+      - REQ-SP800-53R5-0005
+      - REQ-CNSSP12-0053
+      - REQ-SP800-53R5-0078
   - id: SAP-COV-001
     scope: run
     severity: E
@@ -468,6 +493,8 @@ rules:
     summary: baseline control not in the SAP scope (no SAP data, scope not the baseline, or an exclusion outside the baseline or without a rationale)
     fixture: tests/fixtures/negative/SAP-COV-001.yaml
     hint: Scope covers the whole baseline unless a control is excluded with a rationale.
+    enforces:
+      - REQ-CNSSP22-0038
   - id: SAR-COV-001
     scope: run
     severity: E
@@ -1598,6 +1625,7 @@ rules:
       - REQ-SP800-37R2-0547
       - REQ-SP800-37R2-0555
       - REQ-SP800-37R2-0735
+      - REQ-SP800-53R5-0011
   - id: PKG-003
     scope: run
     severity: E
@@ -1630,6 +1658,41 @@ rules:
       - REQ-CNSSI1254-0065
       - REQ-CNSSI1254-0066
       - REQ-CNSSI1254-0037
+      - REQ-CNSSI1254-0047
+      - REQ-CNSSI1254-0048
+      - REQ-CNSSI1254-0049
+      - REQ-CNSSI1254-0064
+  - id: DEL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: the RAR, the POA&M or the authorization decision document does not carry a CNSSI 1254 Annex C data element mapped to it (split from PKG-003)
+    fixture: tests/fixtures/negative/DEL-001.yaml
+    hint: Fill the heading or field that `data_elements` in framework/artifacts.yaml names.
+    enforces:
+      - REQ-CNSSI1254-0031
+      - REQ-CNSSI1254-0032
+      - REQ-CNSSI1254-0033
+      - REQ-CNSSI1254-0034
+      - REQ-CNSSI1254-0038
+      - REQ-CNSSI1254-0074
+      - REQ-CNSSI1254-0075
+      - REQ-CNSSI1254-0078
+      - REQ-CNSSI1254-0082
+      - REQ-CNSSI1254-0083
+      - REQ-CNSSI1254-0087
+      - REQ-CNSSI1254-0088
+      - REQ-CNSSI1254-0091
+      - REQ-CNSSI1254-0094
+      - REQ-CNSSI1254-0096
+      - REQ-CNSSI1254-0102
+      - REQ-CNSSI1254-0110
+      - REQ-CNSSI1254-0007
+      - REQ-CNSSI1254-0019
+      - REQ-CNSSP12-0051
   - id: TPL-001
     scope: run
     severity: E
@@ -1659,6 +1722,9 @@ rules:
       - REQ-SP800-53B-0077
       - REQ-SP800-53B-0079
       - REQ-SP800-53B-0081
+      - REQ-SP800-53B-0073
+      - REQ-SP800-53B-0065
+      - REQ-SP800-53B-0075
   - id: TLR-002
     scope: run
     severity: E
@@ -1711,6 +1777,9 @@ rules:
       - REQ-CNSSI1253F-ATT6-PRIVACY-0045
       - REQ-SP800-53B-0041
       - REQ-SP800-53B-0130
+      - REQ-SP800-53B-0064
+      - REQ-SP800-53B-0093
+      - REQ-CNSSI1253-0060
   - id: TLR-004
     scope: run
     severity: E
@@ -1743,6 +1812,7 @@ rules:
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0036
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0037
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0038
+      - REQ-CNSSI1253-0062
   - id: TLR-006
     scope: run
     severity: E
@@ -1772,6 +1842,9 @@ rules:
       - REQ-SP800-53B-0034
       - REQ-SP800-53R5-0052
       - REQ-SP800-53R5-0057
+      - REQ-SP800-53B-0084
+      - REQ-SP800-53B-0136
+      - REQ-CNSSI1253-0070
   - id: TLR-008
     scope: run
     severity: E
@@ -1800,6 +1873,9 @@ rules:
       - REQ-SP800-18R2-0048
       - REQ-SP800-18R2-0075
       - REQ-SP800-37R2-0056
+      - REQ-SP800-53B-0013
+      - REQ-SP800-53R5-0022
+      - REQ-SP800-53B-0062
   - id: TLR-010
     scope: run
     severity: E
@@ -1896,6 +1972,8 @@ rules:
       - REQ-CNSSI1253-0089
       - REQ-CNSSI1253-0100
       - REQ-CNSSI1253-0007
+      - REQ-SP800-53B-0082
+      - REQ-SP800-53R5-0060
   - id: DASH-001
     scope: run
     severity: E
@@ -2296,6 +2374,8 @@ rules:
       - REQ-DODI5000.90-0052
       - REQ-SP800-160V1R1-0049
       - REQ-SP800-160V1R1-0247
+      - REQ-CNSSP12-0027
+      - REQ-CNSSP12-0061
   - id: REQS-002
     scope: run
     severity: E
@@ -2697,6 +2777,7 @@ rules:
       - REQ-DODI5400.11-0180
       - REQ-SP800-53B-0031
       - REQ-SP800-53B-0033
+      - REQ-CNSSI1253-0015
   - id: PRIV-008
     scope: run
     severity: E
@@ -2724,6 +2805,10 @@ rules:
       - REQ-SP800-37R2-0732
       - REQ-SP800-37R2-0733
       - REQ-SP800-37R2-0736
+      - REQ-CNSSI1253-0016
+      - REQ-SP800-53R5-0069
+      - REQ-SP800-53R5-0073
+      - REQ-CNSSI1253-0044
   - id: PRIV-010
     scope: run
     severity: E
@@ -3771,6 +3856,7 @@ rules:
       - REQ-SP800-60V1R1-0058
       - REQ-SP800-60V1R1-0131
       - REQ-DODI8530.01-0161
+      - REQ-CNSSP22-0040
   - id: CATG-003
     scope: run
     severity: E
@@ -3793,6 +3879,7 @@ rules:
       - REQ-SP800-60V1R1-0076
       - REQ-SP800-60V1R1-0088
       - REQ-CNSSI1253-0048
+      - REQ-CNSSI1253-0047
   - id: PIIC-001
     scope: run
     severity: E
@@ -3982,6 +4069,7 @@ rules:
       - REQ-DODI8510.01-0258
       - REQ-DODI8510.01-0259
       - REQ-DODI8510.01-0266
+      - REQ-CNSSP12-0022
   - id: OCTX-002
     scope: run
     severity: E
@@ -4041,6 +4129,10 @@ rules:
       - REQ-SP800-39-0107
       - REQ-SP800-39-0108
       - REQ-SP800-39-0112
+      - REQ-CNSSP22-0017
+      - REQ-SP800-53R5-0030
+      - REQ-CNSSP22-0035
+      - REQ-CNSSP22-0039
   - id: OCTX-005
     scope: run
     severity: E
@@ -4059,6 +4151,8 @@ rules:
       - REQ-SP800-53AR5-0144
       - REQ-SP800-53AR5-0190
       - REQ-SP800-53AR5-0194
+      - REQ-CNSSI1253-0064
+      - REQ-CNSSP22-0018
   - id: OCTX-006
     scope: run
     severity: E
@@ -4099,6 +4193,7 @@ rules:
       - REQ-SP800-39-0187
       - REQ-SP800-39-0190
       - REQ-SP800-53R5-0028
+      - REQ-CNSSP22-0021
   - id: OCTX-008
     scope: run
     severity: E
@@ -4182,6 +4277,9 @@ rules:
       - REQ-SP800-37R2-0685
       - REQ-SP800-39-0216
       - REQ-SP800-61R3-0094
+      - REQ-CNSSP22-0004
+      - REQ-CNSSP12-0063
+      - REQ-CNSSP22-0022
   - id: OCTX-013
     scope: run
     severity: E
@@ -4201,6 +4299,7 @@ rules:
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
       - REQ-DODI8530.01-0260
+      - REQ-CNSSP12-0050
   - id: PPROT-001
     scope: run
     severity: E
@@ -5882,3 +5981,10 @@ rules:
     hint: "Read ART-ORG-CONTEXT (and ART-INFOTYPES at C-2) and list it in the sources of ART-CAT and ART-BASELINE; both are inputs of C-2 and S-1."
     enforces:
       - REQ-CNSSI1253-0014
+      - REQ-SP800-53B-0048
+      - REQ-SP800-53B-0055
+      - REQ-CNSSI1253-0072
+      - REQ-SP800-53R5-0079
+      - REQ-CNSSI1253-0043
+      - REQ-SP800-53R5-0024
+      - REQ-CNSSP22-0036

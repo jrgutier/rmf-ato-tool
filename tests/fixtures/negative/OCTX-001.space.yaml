@@ -1,0 +1,16 @@
+rule: OCTX-001
+bases: [minimal]
+description: a space NSS whose ISSO appointment is recorded as an ISSE, so it has no formally designated ISSO
+mutations:
+  - op: set_field
+    file: artifacts/data/ssp-records.yaml
+    path: space_nss
+    value: true
+  - op: set_field
+    file: artifacts/data/org-context.yaml
+    path: roles.8.role
+    value: PER-ISSE
+expect:
+  errors: [OCTX-001]
+  messages:
+    - a space NSS has no formally designated ISSO

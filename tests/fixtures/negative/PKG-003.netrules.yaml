@@ -1,0 +1,13 @@
+rule: PKG-003
+bases:
+- minimal
+description: the network architecture states no connection rules
+mutations:
+- {op: set_field, file: artifacts/data/boundary.yaml, path: network_architecture.description, value: ''}
+expect:
+  errors:
+  - PKG-003
+  messages:
+  - ART-SSP does not carry the CNSSI 1254 data element Network Connection Rules
+  also:
+  - RUN-FM-001

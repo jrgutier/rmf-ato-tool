@@ -20,6 +20,8 @@ CONMON_FILE = "artifacts/data/conmon.yaml"
 # CNSSI 1254 Section IV: the RMF core documents.
 CORE_DOCUMENTS = {"ART-SSP": "SSP", "ART-SAR": "SAR", "ART-RAR": "RAR", "ART-POAM": "POA&M",
                   "ART-AODM": "Authorization Decision Document"}
+PLAN_DOCUMENTS = ("ART-SSP", "ART-SAR")
+DECISION_DOCUMENTS = ("ART-RAR", "ART-POAM", "ART-AODM")
 PLACEHOLDER = "<<FILL"
 FACTS_BLOCK = "<!-- BEGIN rmf:facts -->"
 UNREAD_HOMES = {"pending", "rule"}  # not built yet, or a rule already holds the element
@@ -197,19 +199,30 @@ def _carried(ctx: Context, aid: str, element: dict[str, Any]) -> bool:
     return any(v not in (None, "", [], {}) for v in values)
 
 
-def data_elements(ctx: Context) -> list[RunFinding]:
+def _data_elements(ctx: Context, rule: str, documents: tuple[str, ...]) -> list[RunFinding]:
     """Each CNSSI 1254 Annex C element a core document has a home for is in that document."""
     run, out = ctx.run, []
-    for aid in CORE_DOCUMENTS:
+    for aid in documents:
         if aid not in run.artifacts or not scope.produced_or_seeded(run, aid):
             continue
         art = run.artifacts[aid]
         for element in art.get("data_elements") or ():
             if not element.keys() & UNREAD_HOMES and not _carried(ctx, aid, element):
-                out.append(make("PKG-003", f"{aid} does not carry the CNSSI 1254 data element "
+                out.append(make(rule, f"{aid} does not carry the CNSSI 1254 data element "
                                 f"{element['element']}", run.rel(run.artifact_md(aid)), None,
                                 {art.get("producer")}))
     return out
+
+
+def data_elements(ctx: Context) -> list[RunFinding]:
+    """PKG-003: the elements of the SSP and the SAR."""
+    return _data_elements(ctx, "PKG-003", PLAN_DOCUMENTS)
+
+
+def decision_elements(ctx: Context) -> list[RunFinding]:
+    """DEL-001: the elements of the RAR, the POA&M and the authorization decision document,
+    split from PKG-003 so each rule stays under the evidence fan-out cap."""
+    return _data_elements(ctx, "DEL-001", DECISION_DOCUMENTS)
 
 
 # --- TPL-001: the sections a template names stay in the run's document ----------------------

@@ -67,7 +67,10 @@ requirements:
     locator: "7"
     context: "SECTION IV - POLICY"
     statement: "7. There may be artifacts or information gathered during systems engineering processes that could inform the content of the RMF core documents. While the RMF artifacts are beneficial for providing a comprehensive security authorization package, the focus of the information should be on mission and providing that information necessary to enable decision makers to make risk-informed decisions based upon that information. This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."
-    status: "candidate"
+    status: "partial"
+    reason: "The listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, which PKG-003 and DEL-001 hold element by element; 'the focus of the information should be on mission' is guidance on emphasis no run record can break"
+    evidence: [{"kind": "rule", "target": "DEL-001", "claim": "presence", "asserts": "DEL-001 judges part of what this requires; it names no clause here, so it cannot prove it"}, {"kind": "citation", "target": "R-1", "claim": "presence", "asserts": "R-1 is where the framework holds this: The listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, which PKG-003 and DEL-001 hold element by element; '"}]
+    work_item: "WI-5502"
   - id: "REQ-CNSSI1254-0008"
     citation: {"ref": "CNSSI1254", "page": 5, "anchor": "This Instruction does not dictate the format/templates of the documentation listed below."}
     kind: "lettered"
@@ -166,7 +169,10 @@ requirements:
     locator: "REFERENCES.2"
     context: "ESSENTIAL DATA ELEMENTS"
     statement: "2. While the data elements below provide guidance on documenting RMF artifacts, the focus of the information should be on mission and providing that information necessary to enable decision makers to make risk-informed decisions based upon that information. This information should include operational context, architecture, data flow, interfaces, hardware, software, services, and any known risks associated with the system."
-    status: "candidate"
+    status: "partial"
+    reason: "As REQ-CNSSI1254-0007: the listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, held element by element by PKG-003 and DEL-001; the focus on mission is guidance no run record can break"
+    evidence: [{"kind": "rule", "target": "DEL-001", "claim": "presence", "asserts": "DEL-001 judges part of what this requires; it names no clause here, so it cannot prove it"}, {"kind": "citation", "target": "R-1", "claim": "presence", "asserts": "R-1 is where the framework holds this: As REQ-CNSSI1254-0007: the listed information sits in ART-SD, ART-BND, ART-INV and ART-RA, held element by element by PK"}]
+    work_item: "WI-5502"
   - id: "REQ-CNSSI1254-0020"
     citation: {"ref": "CNSSI1254", "page": 11, "anchor": "The following data elements are listed in alphabetical order. Columns from left"}
     kind: "lettered"
@@ -264,28 +270,36 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | SSP SAR POA&M RAR Authorization Decision Document | Security Categorization | Categorization impact values (low, moderate, high) for security objectives (confidentiality, integrity, availability) | NIST SP 800- 37, CNSSI 1253"
-    status: "candidate"
+    status: "covered"
+    reason: "The POA&M, as each core document, shows the security categorization in its facts block from facts.yaml; leaving it out fails DEL-001 (PKG-003 for the SSP and SAR)"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the security categorization, the impact values for confidentiality, integrity and availability, as a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0032"
     citation: {"ref": "CNSSI1254", "page": 12, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | Short Title for"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "5. | SSP SAR POA&M RAR Authorization Decision Document | Short Title for the System (e.g., System Acronym) | Provide a shortened or commonly used name or abbreviation (e.g., acronym) for the system name | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "The core documents show the acronym in their facts block; the POA&M without it fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the short title for the system, its acronym, as a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0033"
     citation: {"ref": "CNSSI1254", "page": 12, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | System Name |"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "6. | SSP SAR POA&M RAR Authorization Decision Document | System Name | Full name of the system | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "The core documents show the system name in their facts block; the POA&M without it fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the full system name as a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0034"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "| SSP SAR POA&M RAR Authorization Decision Document | System Unique Identifier"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "7. | SSP SAR POA&M RAR Authorization Decision Document | System Unique Identifier | Unique system identifier (typically a number or code, such as an IT Portfolio Management registration number). The numbering schema for the system unique identifier is organizationally defined | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "The core documents show the system ID in their facts block; the POA&M without it fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.factsblock.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the unique system identifier as a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0035"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "SSP and SAR Data Elements |"}
     kind: "table"
@@ -319,7 +333,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. SSP Data Elements | SAR RAR POA&M | Vulnerability Identifier | A number used to track and correlate vulnerabilities that are ongoing within the organization. The numbering schema for the vulnerability identifier is organizationally defined and is organizationally derived | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "RAR risks carry finding_refs, the FND-### identifiers that track a vulnerability across SAR, RAR and POA&M; a RAR with none fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rarrisks.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The RAR carries the vulnerability identifier used to track and correlate vulnerabilities, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0039"
     citation: {"ref": "CNSSI1254", "page": 13, "anchor": "| SSP | Authorization Boundary Diagram | Diagram depicting all components of"}
     kind: "table"
@@ -399,21 +415,27 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "9. | SSP | Network Connection Rules | Network connection rules for communicating with internal and external systems Information from the Interconnection Agreements can be used for the description. | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "boundary.yaml network_architecture.description holds the connection rules shown in the SSP; an empty one fails PKG-003"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.netrules.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The SSP carries the network connection rules for communicating with internal and external systems, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0048"
     citation: {"ref": "CNSSI1254", "page": 15, "anchor": "| SSP | Information Type | Lists types of information processed, stored,"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "10. | SSP | Information Type | Lists types of information processed, stored, and transmitted by the system. | NIST SP 800- 60"
-    status: "candidate"
+    status: "covered"
+    reason: "The SSP draws its information types from infotypes.yaml; types without titles fail PKG-003"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.infotype.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The SSP carries the information type element, the types of information processed, stored and transmitted, as a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0049"
     citation: {"ref": "CNSSI1254", "page": 15, "anchor": "| SSP | Information Flows/Paths | Identifies the information flows and paths"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "11. | SSP | Information Flows/Paths | Identifies the information flows and paths to/from the system (including inputs and outputs) | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "boundary.yaml data_flow.description holds the information flows shown in the SSP; an empty one fails PKG-003"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.flows.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The SSP carries the information flows and paths to and from the system, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0050"
     citation: {"ref": "CNSSI1254", "page": 15, "anchor": "| SSP | Mission Criticality and Mission Critical Functions | Identify if"}
     kind: "table"
@@ -546,7 +568,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | SAR | SCA Executive Summary | Executive summary from the detailed findings that are generated during a security control assessment. An executive summary provides an AO with an abbreviated version of the assessment report focusing on the highlights of the assessment, synopsis of key findings, and/or recommendations for addressing weaknesses and deficiencies in the security controls | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-SAR '## Assessment summary' is the SCA executive summary; left unwritten it fails PKG-003"
+    evidence: [{"kind": "rule", "target": "PKG-003", "fixture": "tests/fixtures/negative/PKG-003.summary.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The SAR carries the SCA executive summary of the assessment for the AO, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0065"
     citation: {"ref": "CNSSI1254", "page": 18, "anchor": "| SAR | SCA and Organization | Name of the SCA's organization"}
     kind: "table"
@@ -599,7 +623,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "9. | SAR | Systems and/or Components Assessed | List systems (if enclave) and/or components assessed within authorization boundary | NIST SP 800- 53A"
-    status: "candidate"
+    status: "covered"
+    reason: "sap.yaml requires assessment_subjects, at least one, each by type, and the OSCAL plan and SAR carry them"
+    evidence: [{"kind": "schema", "target": "framework/schema/sap.schema.json#/properties/assessment_subjects", "claim": "constraint", "asserts": "The systems and components assessed within the authorization boundary are listed by type"}]
   - id: "REQ-CNSSI1254-0071"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "RAR Data Elements |"}
     kind: "table"
@@ -633,14 +659,20 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "3. | RAR | Scope | The scope of the risk assessment can be at any of the three tiers in the risk management hierarchy (i.e., organization, mission/business process, or system), or the scope can be limited to certain portions of the system. Identify scope of assessment including boundaries and intended mission(s) the system is designed to support | NIST SP 800- 30"
-    status: "candidate"
+    status: "partial"
+    reason: "The scope of the assessment, read with ART-BND and ART-SD, is the ART-RA section DEL-001 holds; the first sentence, at which tier the scope can be, is a permission awaiting the ruling"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rasections.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The RAR identifies the scope of the assessment, a CNSSI 1254 data element it must carry", "sentence": "Identify scope of assessment including boundaries and intended mission(s) the system is designed to support | NIST SP 800- 30"}]
+    work_item: "WI-5502"
+    ruling_sought: [{"sentence": "3. | RAR | Scope | The scope of the risk assessment can be at any of the three tiers in the risk management hierarchy (i.e., organization, mission/business process, or system), or the scope can be limited to certain portions of the system.", "reason": "A permission: the scope can be at any of the three tiers, or can be limited to portions of the system"}]
   - id: "REQ-CNSSI1254-0075"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Risk Assessment Approach | Identifies the type of risk"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | RAR | Risk Assessment Approach | Identifies the type of risk assessment methodology used (qualitative, semi-quantitative, or quantitative) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-RA '## Method and scope' names the SP 800-30 approach; left unwritten the RAR fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rasections.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The RAR identifies the risk assessment approach, the type of methodology used, a CNSSI 1254 data element it must carry"}]
   - id: "REQ-CNSSI1254-0076"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Risk Analysis Approach | Threat-based, Vulnerability Based, or Asset"}
     kind: "table"
@@ -665,7 +697,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "7. | RAR | Threat Sources | Identifies threat sources that could initiate the threat event | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-RA '## Threat sources and events' names the threat sources; left unwritten the RAR fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rasections.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The RAR identifies the threat sources that could initiate the threat event, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0079"
     citation: {"ref": "CNSSI1254", "page": 19, "anchor": "| RAR | Threat Source Capability | Indicates the adversarial threat source's"}
     kind: "table"
@@ -699,14 +733,18 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "11. | RAR | Threat Event | Identifies the potential threat event | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-RA '## Threat sources and events' names each threat event; left unwritten the RAR fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rasections.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The RAR identifies the potential threat event, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0083"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Vulnerability or Predisposing Condition | Identifies vulnerabilities which could"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "12. | RAR | Vulnerability or Predisposing Condition | Identifies vulnerabilities which could be exploited by threat sources and the predisposing conditions which could increase the likelihood of undesirable consequences and/or adverse impacts | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-RA '## Vulnerabilities and predisposing conditions' names them; left unwritten the RAR fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rasections.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "constraint", "holds_when": "the core document is produced or seeded", "asserts": "The RAR identifies the vulnerabilities and predisposing conditions, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0084"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Vulnerability Severity or Pervasiveness of Predisposing Condition | Identifies"}
     kind: "table"
@@ -740,14 +778,18 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "16. | RAR | Overall Likelihood | Indicates the likelihood the threat event will be initiated or occur and result in adverse impact (i.e., combination of likelihood of threat event initiation/occurrence and likelihood the initiated event succeeds) | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "rar.yaml risks carry likelihood; a RAR with none fails DEL-001 and RUN-FM-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rarrisks.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The RAR indicates the overall likelihood of each threat event, a CNSSI 1254 data element", "sentence": "16. | RAR | Overall Likelihood | Indicates the likelihood the threat event will be initiated or occur and result in adverse impact (i.e., combination of likelihood of threat event initiation/occurrence and likelihood the initiated event succeeds) | NIST SP 800- 30"}]
   - id: "REQ-CNSSI1254-0088"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Level of Impact | Determine the level of impact"}
     kind: "table"
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "17. | RAR | Level of Impact | Determine the level of impact associated with the undesirable consequences of the threat event. Determine the undesirable consequences (i.e., potential harm to organizational operations, organizational assets, individuals, other organizations, or the Nation) of the threat event | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "rar.yaml risks carry impact with the description of the harm; a RAR with no impact fails DEL-001 and RUN-FM-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rarrisks.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The RAR determines the level of impact of the undesirable consequences of each threat event, a CNSSI 1254 data element", "sentence": "Determine the undesirable consequences (i.e., potential harm to organizational operations, organizational assets, individuals, other organizations, or the Nation) of the threat event | NIST SP 800- 30"}]
   - id: "REQ-CNSSI1254-0089"
     citation: {"ref": "CNSSI1254", "page": 20, "anchor": "| RAR | Residual Risk Level | For individual entries in the"}
     kind: "table"
@@ -772,7 +814,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "20. | RAR | Overall Risk Posture | Describe the overall level of risk (e.g., very low, low, moderate, high, or very high) to the system, considering all individual risks, mitigating factors, environment, architecture, system's security categorization, historical evidence, etc. | NIST SP 800- 30"
-    status: "candidate"
+    status: "covered"
+    reason: "rar.yaml overall_risk is required; a RAR without it fails DEL-001 and RUN-FM-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.rarrisks.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The RAR describes the overall risk posture, the overall level of risk to the system, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0092"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "POA&M Data Elements |"}
     kind: "table"
@@ -797,7 +841,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "2. | POA&M | Short Description of Weakness or Deficiency | Sufficient detail must be provided to permit oversight and tracking | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "poam items.yaml weakness is required and non-empty; POA&M items with no weakness fail DEL-001 and RUN-FM-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.poamitems.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries a short description of each weakness or deficiency for oversight and tracking, a CNSSI 1254 data element", "sentence": "2. | POA&M | Short Description of Weakness or Deficiency | Sufficient detail must be provided to permit oversight and tracking | NIST SP 800- 37"}]
   - id: "REQ-CNSSI1254-0095"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| POA&M | Event that Identified Weakness or Deficiency | Includes the"}
     kind: "table"
@@ -813,7 +859,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "4. | POA&M | Security Control Identifier | NIST SP 800-53 security control identifier that was found to be deficient. For a security vulnerability (weakness) found by means other than a security controls assessment (e.g., vulnerability test), map the deficient function to the applicable security control | NIST SP 800- 53"
-    status: "candidate"
+    status: "covered"
+    reason: "poam items.yaml control_id is required and judged against the baseline by POAM-CTL-001; items with none fail DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.poamitems.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the security control identifier found deficient, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0097"
     citation: {"ref": "CNSSI1254", "page": 21, "anchor": "| POA&M | Comments | Used for additional detail or clarifications; must"}
     kind: "table"
@@ -865,7 +913,11 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "10. | POA&M | POC | Organization or title of the position within the organization who is responsible for the mitigation of the weakness. Assigned responsible individuals may be included in the POA&M as well | NIST SP 800- 37"
-    status: "candidate"
+    status: "partial"
+    reason: "Each POA&M item names its point of contact, a PER-* title; the second sentence, responsible individuals may be included, is a permission awaiting the ruling"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The POA&M carries the POC, the title of the position responsible for the mitigation of the weakness, a CNSSI 1254 data element", "sentence": "10. | POA&M | POC | Organization or title of the position within the organization who is responsible for the mitigation of the weakness."}]
+    work_item: "WI-5502"
+    ruling_sought: [{"sentence": "Assigned responsible individuals may be included in the POA&M as well | NIST SP 800- 37", "reason": "A permission: assigned responsible individuals may be included"}]
   - id: "REQ-CNSSI1254-0103"
     citation: {"ref": "CNSSI1254", "page": 22, "anchor": "Authorization Decision Document Data Elements"}
     kind: "table"
@@ -930,7 +982,9 @@ requirements:
     locator: "REFERENCES"
     context: "Table C-1: RMF Essential Data Elements"
     statement: "7. | Authorization Decision Document | System Name/Acronym | Full descriptive name of the system and acronym | NIST SP 800- 37"
-    status: "candidate"
+    status: "covered"
+    reason: "The authorization decision document shows the system name and acronym in its facts block; without it it fails DEL-001"
+    evidence: [{"kind": "rule", "target": "DEL-001", "fixture": "tests/fixtures/negative/DEL-001.aodmfacts.yaml", "expect": "does not carry the CNSSI 1254 data element", "claim": "presence", "holds_when": "the core document is produced or seeded", "asserts": "The authorization decision document carries the full descriptive system name and acronym, a CNSSI 1254 data element"}]
   - id: "REQ-CNSSI1254-0111"
     citation: {"ref": "CNSSI1254", "page": 23, "anchor": "| Authorization Decision Document | Terms/ Conditions for Authorization Note: This information"}
     kind: "table"

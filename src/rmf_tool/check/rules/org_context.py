@@ -76,7 +76,10 @@ AUTHORIZED = ("AD-ATO", "AD-ATOC")
 DOC_APPROVERS = ("PER-AO", "PER-AODR")
 SYSTEM_OWNER = "PER-PM"
 LEADERSHIP = ("PER-CIO", "PER-CISO", "PER-RE", "head-of-agency", "dod-component-head", "saorm")
-MONITORED = ("control-effectiveness", "changes", "organizational-state")
+# SP 800-137 3.1 and CNSSP 22 Section IV.f: the ISCM strategy and program provide awareness of
+# threats and vulnerabilities, visibility into organizational assets and control effectiveness.
+MONITORED = ("control-effectiveness", "changes", "organizational-state",
+             "threat-and-vulnerability-awareness", "asset-visibility")
 OA_CONDITIONS = ("initial-authorization", "iscm-program")
 POSTURE_FACTORS = ("threats", "vulnerabilities", "technologies", "mission")
 # Calendar months the organization's stated review cycle allows between two program reviews.
@@ -84,6 +87,11 @@ REVIEW_MONTHS = {"monthly": 1, "quarterly": 3, "semi-annually": 6, "annually": 1
 # Periodic frequencies, most frequent first; an event-driven frequency is no period to compare.
 RANK = {f: n for n, f in enumerate(("continuous", "daily", "weekly", "monthly", "quarterly",
                                     "semi-annually", "annually"))}
+
+# CNSSP 12 Section IV.b: at a minimum, a space NSS has a formally designated AO, ISSO and SCA.
+SPACE_DESIGNATED = {"PER-AO": "AO", "PER-ISSO": "ISSO", "PER-SCA": "SCA"}
+SPACE_OVERLAY = "CNSSI1253F-ATT2-SPACE"
+SSP_RECORDS_FILE = "artifacts/data/ssp-records.yaml"
 
 Check = Callable[..., None]
 
@@ -141,6 +149,15 @@ def _absent(data: dict[str, Any], active: set[str], keys: tuple[str, ...], err: 
             err(f"org-context.yaml has no {key}, which {task} records", task)
 
 
+def _space_nss(ctx: Context) -> bool:
+    """A space NSS: declared in ssp-records.yaml, or applying the Space Platform Overlay."""
+    records = ctx.data(SSP_RECORDS_FILE)
+    cat = facts_mod.get(ctx.facts, "categorization")
+    overlays = cat.get("overlays") if isinstance(cat, dict) else None
+    return (isinstance(records, dict) and records.get("space_nss") is True) or \
+        (isinstance(overlays, list) and SPACE_OVERLAY in overlays)
+
+
 def _roles(data: dict[str, Any]) -> list[dict[str, Any]]:
     return _dicts(data.get("roles"))
 
@@ -168,6 +185,10 @@ def roles(ctx: Context) -> list[RunFinding]:
         err("no user representative is appointed for the system")
     if "P-1" in active and "PER-ISSM" not in _holders(data):
         err("no ISSM is appointed for the system")
+    if "P-1" in active and _space_nss(ctx):
+        for role, title in SPACE_DESIGNATED.items():
+            if role not in _holders(data):
+                err(f"a space NSS has no formally designated {title}")
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
         if role == "PER-UR" and r.get("appointed_by") != SYSTEM_OWNER:
