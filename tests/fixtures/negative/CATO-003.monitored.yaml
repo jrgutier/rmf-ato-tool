@@ -1,0 +1,14 @@
+rule: CATO-003
+bases:
+- minimal
+description: an authorized platform not in a state of continuous monitoring
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: platform.authorization.continuous_monitoring
+  value: false
+expect:
+  errors:
+  - CATO-003
+  messages:
+  - the DevSecOps platform is not already authorized to operate and in a state of continuous monitoring

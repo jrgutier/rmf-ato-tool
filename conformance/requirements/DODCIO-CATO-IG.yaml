@@ -76,7 +76,8 @@ requirements:
     locator: "The cATO Competencies"
     context: ""
     statement: "The Continuous Authorization To Operate (cATO) Memo [1] states: “In order to achieve cATO, the Authorizing Official (AO) must be able to demonstrate three main competencies: On-going visibility of key cybersecurity activities inside of the system boundary with a robust continuous monitoring of RMF controls; the ability to conduct active cyber defense in order to respond to cyber threats in real time; and the adoption and use of an approved DevSecOps reference design.” To summarize, the three competencies are:"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-002", "fixture": "tests/fixtures/negative/CATO-002.competency.yaml", "expect": "the cATO evidence has not demonstrated the", "claim": "constraint", "asserts": "The AO demonstrates the competencies of continuous monitoring and active cyber defense: cATO evidence that has not demonstrated active cyber defense fails"}, {"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.yaml", "expect": "the DSOP implements an approved DevSecOps Reference Design", "claim": "constraint", "asserts": "The adoption and use of an approved DevSecOps reference design: a DSOP on a reference design that is not approved fails"}]
   - id: "REQ-DODCIO-CATO-IG-0010"
     citation: {"ref": "DODCIO-CATO-IG", "page": 6, "anchor": "Continuous Monitoring (CONMON) of RMF controls"}
     kind: "lettered"
@@ -423,7 +424,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• The DSOP has developed and instituted a continuous monitoring strategy."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-003", "fixture": "tests/fixtures/negative/CATO-003.monitored.yaml", "expect": "the DevSecOps platform is not already authorized to operate and in a state of continuous monitoring", "claim": "constraint", "asserts": "The DSOP has instituted continuous monitoring: a platform not in a state of continuous monitoring fails"}]
   - id: "REQ-DODCIO-CATO-IG-0049"
     citation: {"ref": "DODCIO-CATO-IG", "page": 11, "anchor": "The DSOP uses an established Cybersecurity Service Provider (CSSP) for monitoring the"}
     kind: "lettered"
@@ -466,14 +468,16 @@ requirements:
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• DSOP control inheritance by an application is identified by the DSOP security team."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.identified.yaml", "expect": "DSOP control inheritance by the application is identified by the DSOP security team, not", "claim": "constraint", "holds_when": "PP06 is not scored not-applicable", "asserts": "DSOP control inheritance by an application is identified by the DSOP security team, and inheritance identified by another team fails"}]
   - id: "REQ-DODCIO-CATO-IG-0054"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "Security automation is used for monitoring the application security posture within the"}
     kind: "lettered"
     locator: "Key Practices.•"
     context: "Relative to the DSOP, the following cATO practices apply:"
     statement: "• Security automation is used for monitoring the application security posture within the production system. In addition, the automation provides for periodic checks of secure configurations."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.posturemon.yaml", "expect": "the application security posture is not monitored using security automation, but", "claim": "constraint", "holds_when": "PP07 is not scored not-applicable", "asserts": "Security automation is used for monitoring the application security posture; a posture monitored by hand fails"}, {"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.checks.yaml", "expect": "the automation provides no periodic checks of secure configurations", "claim": "constraint", "holds_when": "CM05 or PP07 is not scored not-applicable", "asserts": "The automation provides periodic checks of secure configurations; checks only on request fail"}]
   - id: "REQ-DODCIO-CATO-IG-0055"
     citation: {"ref": "DODCIO-CATO-IG", "page": 12, "anchor": "Operational risk tolerances are agreed to and implemented in the pipeline control"}
     kind: "lettered"
@@ -543,7 +547,8 @@ requirements:
     locator: "Key Practices.•"
     context: "Figure 2. Cybersecurity Risk Governance Group"
     statement: "• The DevSecOps team continuously validates sub-system secure configurations and security control compliance using security automation."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.validation.yaml", "expect": "the DevSecOps team does not continuously validate", "claim": "constraint", "holds_when": "CM05 or CM06, threshold rows, is not scored not-applicable", "asserts": "The DevSecOps team continuously validates secure configurations and security control compliance using security automation; leaving control compliance out fails"}]
   - id: "REQ-DODCIO-CATO-IG-0063"
     citation: {"ref": "DODCIO-CATO-IG", "page": 13, "anchor": "The DevSecOps team leverages ongoing CSSP monitoring of the production system for"}
     kind: "lettered"
@@ -910,7 +915,8 @@ requirements:
     locator: "Practical Implementation Advice.o"
     context: ""
     statement: "o There must be a detailed incident response plan in place with personnel trained on it."
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-008", "fixture": "tests/fixtures/negative/CATO-008.irplan.yaml", "expect": "the evidence of the incident response program includes no", "claim": "constraint", "asserts": "A detailed incident response plan is in place with personnel trained on it: incident response evidence with no plans and no training fails"}]
   - id: "REQ-DODCIO-CATO-IG-0106"
     citation: {"ref": "DODCIO-CATO-IG", "page": 16, "anchor": "Create SBOMs for the DSOP and applications passing through it."}
     kind: "lettered"
@@ -1100,14 +1106,16 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "IC03 | Identify cyber threats to network and data architecture, assets supporting essential mission functions and cybersecurity architecture. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.yaml", "expect": "cyber threats are not identified to the", "claim": "constraint", "holds_when": "IC03 is not scored not-applicable", "asserts": "Identify cyber threats to network and data architecture, mission assets and cybersecurity architecture; threats not identified to each fail"}]
   - id: "REQ-DODCIO-CATO-IG-0129"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "IC04 | Collect evidence for establishing a baseline risk posture. | T"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "IC04 | Collect evidence for establishing a baseline risk posture. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.posture.yaml", "expect": "no evidence is collected for establishing a baseline risk posture", "claim": "presence", "holds_when": "IC04 is not scored not-applicable", "asserts": "Collect evidence for establishing a baseline risk posture: a record with no evidence collected for it fails"}]
   - id: "REQ-DODCIO-CATO-IG-0130"
     citation: {"ref": "DODCIO-CATO-IG", "page": 19, "anchor": "RA | Reduce the Attack Surface"}
     kind: "table"
@@ -1193,28 +1201,32 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA06 | Perform risk assessments: mission based, threat based, resiliency / survivability based. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.assessments.yaml", "expect": "the risk assessments performed leave out the", "claim": "constraint", "holds_when": "SA06 is not scored not-applicable", "asserts": "Perform risk assessments mission based, threat based and resiliency / survivability based; risk assessments that leave one out fail"}]
   - id: "REQ-DODCIO-CATO-IG-0140"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA07 | Perform verification and validation testing of cybersecurity, cyber resiliency, cyber"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA07 | Perform verification and validation testing of cybersecurity, cyber resiliency, cyber survivability requirements. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.vv.yaml", "expect": "verification and validation testing leaves out the", "claim": "constraint", "holds_when": "SA07 is not scored not-applicable", "asserts": "Perform verification and validation testing of cybersecurity, cyber resiliency and cyber survivability requirements; testing that leaves one out fails"}]
   - id: "REQ-DODCIO-CATO-IG-0141"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA08 | Perform configuration management of system and control"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA08 | Perform configuration management of system and control configurations. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.cm.yaml", "expect": "configuration management leaves out the", "claim": "constraint", "holds_when": "SA08 is not scored not-applicable", "asserts": "Perform configuration management of system and control configurations; management that leaves out control configurations fails"}]
   - id: "REQ-DODCIO-CATO-IG-0142"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA09 | Perform Security control mitigation effectiveness testing and analysis. | T"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "SA09 | Perform Security control mitigation effectiveness testing and analysis. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.effectiveness.yaml", "expect": "security control effectiveness is not determined with", "claim": "constraint", "asserts": "Security control mitigation effectiveness testing and analysis with dynamic tools, threat actor emulation, pen-testing and operations analysis; effectiveness not determined with each fails"}]
   - id: "REQ-DODCIO-CATO-IG-0143"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "SA10 | Capture, visualize, and provide feedback on security findings"}
     kind: "table"
@@ -1238,7 +1250,8 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM01 | Continuously monitor behavior and implement / improve proactive preventive / resiliency capabilities. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.behavior.yaml", "expect": "behavior is monitored", "claim": "constraint", "holds_when": "CM01, an objective row, is scored met", "asserts": "Continuously monitor behavior: behavior monitored per release, not continuously, fails"}, {"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.proactive.yaml", "expect": "no proactive preventive or resiliency capability is implemented or improved", "claim": "constraint", "holds_when": "CM01, an objective row, is scored met", "asserts": "Implement or improve proactive preventive or resiliency capabilities; a record with neither fails"}]
     work_item: "WI-24"
   - id: "REQ-DODCIO-CATO-IG-0146"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM02 | Establish event triggers: on findings / risk tolerances / change"}
@@ -1264,14 +1277,16 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM04 | Monitor for change in the threat landscape. | O"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.threat.yaml", "expect": "the DevSecOps team does not leverage CSSP monitoring for", "claim": "constraint", "asserts": "Monitor for change in the threat landscape through CSSP monitoring; a team not leveraging CSSP monitoring for the threat landscape fails"}]
   - id: "REQ-DODCIO-CATO-IG-0149"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM05 | Monitor for change in secure configurations. | T"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "CM05 | Monitor for change in secure configurations. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.change.yaml", "expect": "secure configurations are not monitored for change", "claim": "constraint", "holds_when": "CM05 is not scored not-applicable", "asserts": "Monitor for change in secure configurations: secure configurations never monitored for change fail"}]
   - id: "REQ-DODCIO-CATO-IG-0150"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "CM06 | Monitor control compliance and continued effectiveness of controls against the"}
     kind: "table"
@@ -1313,14 +1328,16 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RM02 | Establish a method for aggregating findings into a risk posture on cybersecurity, cyber resiliency, and cyber survivability | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.aggregation.yaml", "expect": "the method aggregating findings into a risk posture leaves out", "claim": "constraint", "holds_when": "RM02 is not scored not-applicable", "asserts": "Establish a method for aggregating findings into a risk posture on cybersecurity, cyber resiliency and cyber survivability; a method leaving one out fails"}]
   - id: "REQ-DODCIO-CATO-IG-0155"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "RM03 | Identify vulnerabilities and perform impact analysis for"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "RM03 | Identify vulnerabilities and perform impact analysis for establishing risk prioritization. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.prioritization.yaml", "expect": "risk prioritization is not established on", "claim": "constraint", "holds_when": "RM03 is not scored not-applicable", "asserts": "Identify vulnerabilities and perform impact analysis for establishing risk prioritization; prioritization without impact analysis fails"}]
   - id: "REQ-DODCIO-CATO-IG-0156"
     citation: {"ref": "DODCIO-CATO-IG", "page": 20, "anchor": "RM04 | Establish a dashboard visualization of risk information for continuous review."}
     kind: "table"
@@ -1407,14 +1424,16 @@ requirements:
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP06 | Identify application control inheritance from the DSOP using a shared security model. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.model.yaml", "expect": "application control inheritance from the DSOP is identified using a shared security model, not", "claim": "constraint", "holds_when": "PP06 is not scored not-applicable", "asserts": "Identify application control inheritance from the DSOP using a shared security model; inheritance identified case by case fails"}]
   - id: "REQ-DODCIO-CATO-IG-0166"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP07 | Establish the use of security automation for monitoring the application"}
     kind: "table"
     locator: "Appendix B. Requirements"
     context: "Table 2: cATO Requirements"
     statement: "PP07 | Establish the use of security automation for monitoring the application security posture hosted on the DSOP. | T"
-    status: "candidate"
+    status: "covered"
+    evidence: [{"kind": "rule", "target": "CATT-001", "fixture": "tests/fixtures/negative/CATT-001.posturemon.yaml", "expect": "the application security posture is not monitored using security automation, but", "claim": "constraint", "holds_when": "PP07 is not scored not-applicable", "asserts": "Establish the use of security automation for monitoring the application security posture; a posture monitored by hand fails"}]
   - id: "REQ-DODCIO-CATO-IG-0167"
     citation: {"ref": "DODCIO-CATO-IG", "page": 21, "anchor": "PP08 | Implement agreed-to risk tolerances in the pipeline guardrails"}
     kind: "table"
