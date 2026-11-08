@@ -10,7 +10,7 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.rules import RULES
 from rmf_tool.run.model import open_run
 
-OURS = ("SSE-001", "SSE-002", "SSE-003", "SWA-001", "SWA-002")
+OURS = ("SSE-001", "SSE-002", "SSE-003", "SSEP-001", "SWA-001", "SWA-002")
 JUNK = [{"x": 1}]  # a list of mappings where a string is expected
 
 

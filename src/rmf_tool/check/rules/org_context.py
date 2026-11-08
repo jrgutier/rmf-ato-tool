@@ -518,6 +518,25 @@ def policies_resources(ctx: Context) -> list[RunFinding]:
 
 # --- OCTX-004: the risk management strategy (P-2) -------------------------------------------
 
+TOLERANCE_LEVELS = ("very-low", "low", "moderate", "high", "very-high")
+
+
+def _tolerance(frame: dict[str, Any], required: bool, err: Check) -> None:
+    """SP 800-37r2 Task P-2: the strategy includes a determination of risk tolerance. A
+    recorded tolerance names a loss type and one of the five levels; a risk frame P-2 is
+    writing must determine at least one. A frame seeded without P-2 in scope is not judged
+    for silence, only for a wrong level."""
+    entries = _dicts(frame.get("tolerance"))
+    if required and not entries:
+        err("the risk frame determines no risk tolerance, which P-2 includes in the risk "
+            "management strategy", "P-2")
+    for entry in entries:
+        if entry.get("level") not in TOLERANCE_LEVELS:
+            err(f"the risk tolerance for {entry.get('loss_type')} is {entry.get('level')}, not "
+                "one of the risk tolerance levels very-low, low, moderate, high or very-high",
+                "P-2")
+
+
 def strategy(ctx: Context) -> list[RunFinding]:
     data, out, err = _record(ctx, "OCTX-004", "P-2")
     if data is None:
@@ -525,6 +544,8 @@ def strategy(ctx: Context) -> list[RunFinding]:
     active = set(scope.active_tasks(ctx.run))
     _absent(data, active, ("risk_frame", "governance", "risk_assessment_guidance",
                            "risk_response", "external_entities"), err)
+    if "risk_frame" in data:
+        _tolerance(_section(data, "risk_frame"), "P-2" in active, err)
     if "governance" in data:
         executive = _sub(_section(data, "governance"), "risk_executive")
         delegate = _key(executive.get("delegated_to"))

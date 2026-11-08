@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 380 rules, 38 repo-scope and 342 run-scope. Authoritative;
+# Rule registry (plan §6.5): 381 rules, 38 repo-scope and 343 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -2993,7 +2993,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-15
-    summary: system security engineering practices that miss an area, a life cycle activity, program protection, privacy, a design principle or the assurance level
+    summary: system security engineering practices that miss an area, a life cycle activity, program protection or the assurance level (privacy engineering and design principles are SSEP-001)
     fixture: tests/fixtures/negative/SSE-002.yaml
     hint: At P-15 record requirements.yaml engineering (DoDI 5000.83 1.2.c); name principles of SP 800-160v1r1 Appendix E.
     enforces:
@@ -3006,15 +3006,28 @@ rules:
       - REQ-DODI8500.01-0414
       - REQ-SP800-160V1R1-0050
       - REQ-SP800-160V1R1-0246
-      - REQ-SP800-160V1R1-0263
       - REQ-SP800-160V1R1-0473
       - REQ-SP800-160V1R1-0493
+      - REQ-SP800-53R5-0006
+      - REQ-DODI8510.01-0040
+  - id: SSEP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-15
+    summary: the engineering practices of a system processing PII employ no privacy engineering, or apply no principle, or a principle that is not one, for trustworthy secure design of SP 800-160v1r1 Appendix E
+    fixture: tests/fixtures/negative/SSEP-001.yaml
+    hint: At P-15 give requirements.yaml engineering a privacy-engineering practice when the system processes PII, and name principles of SP 800-160v1r1 Appendix E.
+    enforces:
+      - REQ-SP800-160V1R1-0263
       - REQ-SP800-18R2-0042
       - REQ-SP800-37R2-0330
+      - REQ-SP800-37R2-0695
+      - REQ-SP800-37R2-0696
       - REQ-SP800-39-0080
-      - REQ-SP800-53R5-0006
       - REQ-SP800-53R5-0026
-      - REQ-DODI8510.01-0040
   - id: SSE-003
     scope: run
     severity: E

@@ -264,6 +264,7 @@ RULES: dict[str, Rule] = {
     "PRIV-011": privacy.privacy_program,
     "SSE-001": engineering.derivation,
     "SSE-002": engineering.practices,
+    "SSEP-001": engineering.design_practices,
     "SSE-003": engineering.control_assurance,
     "SWA-001": software.software,
     "SWA-002": software.components,

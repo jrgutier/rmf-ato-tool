@@ -1,9 +1,11 @@
-"""System security engineering rules, SSE-001 to SSE-003 (Tasks P-15 and S-4).
+"""System security engineering rules, SSE-001 to SSE-003 and SSEP-001 (Tasks P-15 and S-4).
 
 SSE-001 and SSE-002 read the ``derivation`` and ``engineering`` sections of
 artifacts/data/requirements.yaml (ART-REQ) while P-15 is in the run's scope: how the lead
 systems engineer derived the security requirements (DoDI 5000.83 3.3.c.(1)), and the system
-security engineering practices and assurance level the program employs (DoDI 5000.83 1.2.c).
+security engineering practices and assurance level the program employs (DoDI 5000.83 1.2.c);
+SSEP-001, split from SSE-002, reads the same section for privacy engineering and the design
+principles.
 SSE-003 reads the SSP statements of the baseline controls the SP 800-53r5 catalog marks as
 contributing to assurance (FIPS 200 Section 4, SP 800-37r2 Task I-1). Each stays quiet about a
 file that is missing or unreadable (RUN-ART-001 and RUN-FM-001 report those) and reports
@@ -215,8 +217,24 @@ def practices(ctx: Context) -> list[RunFinding]:
     if PROGRAM_PROTECTION not in areas:
         out.append(_finding("SSE-002", "the program employs no system security engineering "
                             "practice for program protection"))
+    out += _assurance_level(record.get("assurance"), {
+        _key(r.get("id")): r for r in _records(data, "requirements")})
+    return out
+
+
+# --- SSEP-001 (split from SSE-002) --------------------------------------------------------
+def design_practices(ctx: Context) -> list[RunFinding]:
+    """SSEP-001: the engineering practices employ privacy engineering where the system holds
+    PII, and apply named principles for trustworthy secure design of SP 800-160v1r1 Appendix E
+    (DoDI 5000.83 3.2.a). SSE-002 asks the areas, stages, program protection and assurance."""
+    _, record = _section(ctx, "engineering")
+    if not isinstance(record, dict):
+        return []  # SSE-002 reports the missing engineering record
+    entries = _records(record, "practices")
+    areas = {_key(p.get("area")) for p in entries}
+    out = []
     if ctx.processes_pii and PRIVACY_ENGINEERING not in areas:
-        out.append(_finding("SSE-002", "the system processes PII and employs no privacy "
+        out.append(_finding("SSEP-001", "the system processes PII and employs no privacy "
                             "engineering practice"))
     applied: set[str] = set()
     for practice in entries:
@@ -224,13 +242,11 @@ def practices(ctx: Context) -> list[RunFinding]:
             if principle in PRINCIPLES:
                 applied.add(principle)
             else:
-                out.append(_finding("SSE-002", f"{principle} is not a principle for "
+                out.append(_finding("SSEP-001", f"{principle} is not a principle for "
                                     "trustworthy secure design of SP 800-160v1r1 Appendix E"))
     if len(applied) == 0:
-        out.append(_finding("SSE-002", "no practice applies a principle for trustworthy secure "
-                            "design to develop and integrate the system components"))
-    out += _assurance_level(record.get("assurance"), {
-        _key(r.get("id")): r for r in _records(data, "requirements")})
+        out.append(_finding("SSEP-001", "no practice applies a principle for trustworthy "
+                            "secure design to develop and integrate the system components"))
     return out
 
 
