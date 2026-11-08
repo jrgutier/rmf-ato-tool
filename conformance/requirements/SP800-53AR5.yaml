@@ -1303,7 +1303,10 @@ requirements:
     locator: "1.1"
     context: "PURPOSE AND APPLICABILITY"
     statement: "For national security systems, security categorization is accomplished in accordance with CNSS Instruction 1253 [CNSSI 1253]. For other than national security systems, security categorization is accomplished in accordance with Federal Information Processing Standard (FIPS) 199 [FIPS 199], NIST [SP 800-37], NIST [SP 800-60 Vol 1], NIST [SP 800-"
-    status: "candidate"
+    status: "partial"
+    reason: "Held but uncited: CATG-001 fails an objective categorized below the high-water mark of its information types (CATG-001.below), the CNSSI 1253 method every DoD system takes under DoDI 8510.01, and provisional levels not reviewed against the FIPS 199 and SP 800-60 factors (CATG-001.factors); CATG-001 is at the evidence fan-out cap, so the entry waits on a user-approved exception (WI-441)."
+    evidence: [{"kind": "prose", "target": "playbooks/C/C-2.md", "claim": "presence", "asserts": "Security categorization is accomplished in accordance with CNSSI 1253 at C-2, each objective at the high-water mark of the information types"}]
+    work_item: "WI-441"
   - id: "REQ-SP800-53AR5-0014"
     citation: {"ref": "SP800-53AR5", "page": 14, "anchor": "The security and privacy controls from [SP 800-53] as identified in the"}
     kind: "lettered"
@@ -1407,7 +1410,10 @@ requirements:
     locator: "1.1"
     context: "PURPOSE AND APPLICABILITY"
     statement: "The security and privacy controls for the system and organization are documented in the system security plans and privacy plans after the initial selection and tailoring of the controls, as described in [SP 800-53] and [CNSSI 1253]. The Program Management controls are documented in information security program plans and privacy program plans, as described in SP 800-53."
-    status: "candidate"
+    status: "partial"
+    reason: "The first sentence is held: SSP-COV-001 fails a baseline control after selection and tailoring with no statement in the security and privacy plan. Unheld: the Program Management controls documented in information security and privacy program plans sit above a system run; no artifact of the run holds a program plan."
+    evidence: [{"kind": "rule", "target": "SSP-COV-001", "fixture": "tests/fixtures/negative/SSP-COV-001.privacyother.yaml", "expect": "has no SSP statement in the security and privacy plan", "claim": "constraint", "asserts": "The controls for the system are documented in the security and privacy plans after selection and tailoring: a baseline control with no statement fails", "sentence": "The security and privacy controls for the system and organization are documented in the system security plans and privacy plans after the initial selection and tailoring of the controls, as described in [SP 800-53] and [CNSSI 1253]."}]
+    work_item: "WI-440"
   - id: "REQ-SP800-53AR5-0026"
     citation: {"ref": "SP800-53AR5", "page": 14, "anchor": "In this publication, the term risk is used to mean risk to"}
     kind: "indicative"
@@ -1454,7 +1460,11 @@ requirements:
     locator: "1.3"
     context: "RELATED PUBLICATIONS AND ASSESSMENT PROCESSES"
     statement: "Organizations are encouraged to take advantage of the control assessment results and associated assessment documentation, artifacts, and evidence available for system components from previous assessments, including independent third-party testing, evaluation, and validation.12 Product testing, evaluation, and validation may be conducted on cryptographic modules and general-purpose information technology products, such as operating systems, database systems, firewalls, intrusion detection systems, web browsers, web applications, smart cards, biometrics devices, personal identity verification devices, network devices, and hardware platforms using national and international standards. If a system component product is identified as providing support for the implementation of a particular control in [SP 800-53], then evidence produced during the product testing, evaluation, and validation processes (e.g., security or privacy specifications, analyses and test results, validation reports, and validation certificates)13 is used to the extent that it is applicable. The applicable product testing evidence can be combined with the assessment-related evidence obtained from the application of the assessment procedures in this publication to cost-effectively produce the information necessary to determine whether the security and privacy controls are effective in their application."
-    status: "candidate"
+    status: "partial"
+    reason: "The third sentence is held: ASMT-003 fails reused component product evidence whose checks do not show it applicable (controls implemented, requirements met, configuration consistent). The first, second and fourth sentences are permissions ('are encouraged', 'may be conducted', 'can be combined') awaiting the user's ruling."
+    evidence: [{"kind": "rule", "target": "ASMT-003", "fixture": "tests/fixtures/negative/ASMT-003.product.yaml", "expect": "the component product checks do not show", "claim": "constraint", "asserts": "Evidence produced during product testing, evaluation and validation is used only to the extent that it is applicable: component product checks that do not show it applicable fail", "sentence": "If a system component product is identified as providing support for the implementation of a particular control in [SP 800-53], then evidence produced during the product testing, evaluation, and validation processes (e.g., security or privacy specifications, analyses and test results, validation reports, and validation certificates)13 is used to the extent that it is applicable."}]
+    work_item: "WI-264"
+    ruling_sought: [{"sentence": "Organizations are encouraged to take advantage of the control assessment results and associated assessment documentation, artifacts, and evidence available for system components from previous assessments, including independent third-party testing, evaluation, and validation.12", "reason": "A permission: organizations 'are encouraged to take advantage of' previous results."}, {"sentence": "Product testing, evaluation, and validation may be conducted on cryptographic modules and general-purpose information technology products, such as operating systems, database systems, firewalls, intrusion detection systems, web browsers, web applications, smart cards, biometrics devices, personal identity verification devices, network devices, and hardware platforms using national and international standards.", "reason": "A permission with an open list of examples: product testing 'may be conducted' on products 'such as' those named."}, {"sentence": "The applicable product testing evidence can be combined with the assessment-related evidence obtained from the application of the assessment procedures in this publication to cost-effectively produce the information necessary to determine whether the security and privacy controls are effective in their application.", "reason": "A permission: product testing evidence 'can be combined' with assessment evidence."}]
   - id: "REQ-SP800-53AR5-0032"
     citation: {"ref": "SP800-53AR5", "page": 15, "anchor": "At the federal agency level, the role is known as the Senior"}
     kind: "should"
@@ -1501,7 +1511,11 @@ requirements:
     locator: "1.4"
     context: "ORGANIZATION OF THIS PUBLICATION The remainder of this publication is organized as follows:"
     statement: "during system upgrades or system integration activities. Organizations can take advantage of previous assessment results whenever possible, to reduce the overall cost of assessments and to make the assessment process more efficient."
-    status: "candidate"
+    status: "partial"
+    reason: "A permission: 'Organizations can take advantage of previous assessment results whenever possible'; the assessment batching playbook reuses current results first, and ASMT-003 checks what is reused. Awaits the user's ruling."
+    evidence: [{"kind": "prose", "target": "playbooks/_shared/assessment-batching.md", "claim": "presence", "asserts": "Organizations take advantage of previous assessment results: the batching playbook collects evidence and reuses current results first"}]
+    work_item: "WI-264"
+    ruling_sought: [{"sentence": "Organizations can take advantage of previous assessment results whenever possible, to reduce the overall cost of assessments and to make the assessment process more efficient.", "reason": "A permission: organizations 'can take advantage of' previous assessment results."}]
   - id: "REQ-SP800-53AR5-0038"
     citation: {"ref": "SP800-53AR5", "page": 16, "anchor": "Organizations review the available information from component information technology products to determine"}
     kind: "indicative"
