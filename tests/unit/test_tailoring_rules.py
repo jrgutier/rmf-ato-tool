@@ -206,10 +206,10 @@ def test_a_stand_alone_system_may_tailor_a_dod_policy_control_with_the_aos_appro
 
 
 def test_a_compensating_control_the_ao_approved_passes(tmp_path):
-    """A compensating control may stand for a listed control with the AO's or AODR's
-    approval (a lead default, for the user's ruling)."""
+    """A compensating control may stand for a listed control when the AO or AODR accepted its
+    risk, as TLR-001 records it (a lead default, for the user's ruling)."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    _add_action(run_dir, {**COMPENSATING, "compensating_for": "ia-2", "approved_by": "PER-AO"})
+    _add_action(run_dir, {**COMPENSATING, "compensating_for": "ia-2"})
     assert _dpol(run_dir) == []
 
 

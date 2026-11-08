@@ -260,11 +260,12 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     """A control framework/baselines/tailoring-inputs.yaml dod_policy_controls maps to a duty
     DoDI 8500.01 places on every DoD IS and PIT system, or on its users, stays in the baseline
     and in effect, whatever law_policy says: it is not removed, not recorded not-applicable in
-    the SSP, and not stood in for by a compensating control without the AO's or AODR's approval
-    (a lead default, for the user's ruling). A stand-alone system with no DODIN connection may
-    tailor its control set as appropriate with the approval of the AO (DoDI 8500.01 p. 38
-    1.e.(1).(c), p. 39 1.e.(2).(d).5), so its remove action names the approver. Inheriting a
-    control is no removal."""
+    the SSP, and not stood in for by a compensating control whose risk the AO or AODR did not
+    accept (risk.accepted_by, as TLR-001 reads it; a lead default, for the user's ruling). A
+    stand-alone system with no DODIN connection may tailor its control set as appropriate with
+    the approval of the AO (DoDI 8500.01 p. 38 1.e.(1).(c), p. 39 1.e.(2).(d).5); that
+    permission is exercised by a remove action, which records the approver in approved_by.
+    Inheriting a control is no removal."""
     data = _tailoring(ctx)
     if data is None or not _active(ctx, "S-2"):
         return []
@@ -275,7 +276,8 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
     records = [p for p in baseline_mod.load_inputs(ctx.run.repo).get("dod_policy_controls") or []
                if p["subject"] == subject]
     removed = _approvals(data, "remove", "control_id")
-    compensated = _approvals(data, "compensating", "compensating_for")
+    compensated = {a.get("compensating_for"): (a.get("risk") or {}).get("accepted_by")
+                   for a in _actions(data) if a.get("action") == "compensating"}
     status = _ssp_status(ctx)
     out: list[RunFinding] = []
 
@@ -299,8 +301,8 @@ def _dod_policy(ctx: Context, rule: str, subject: str) -> list[RunFinding]:
         if waived:
             err(policy, f"{', '.join(waived)} is recorded not-applicable in the SSP")
         if stood_in:
-            err(policy, f"a compensating control stands for {', '.join(stood_in)} without the "
-                "approval of the AO or AODR")
+            err(policy, f"a compensating control stands for {', '.join(stood_in)} without its "
+                "risk accepted by the AO or AODR")
     return out
 
 
