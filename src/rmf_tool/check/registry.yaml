@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 380 rules, 38 repo-scope and 342 run-scope. Authoritative;
+# Rule registry (plan §6.5): 382 rules, 38 repo-scope and 344 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -3378,10 +3378,10 @@ rules:
     fixture: tests/fixtures/negative/SCRM-001.yaml
     hint: "Write artifacts/data/scrm.yaml from templates/data/scrm.yaml: one supplier per source of each inventory item, tied to its ra.yaml supply chain record, rated critical when it supplies an item of a mission-critical function, and an assessment for each critical supplier, prioritized ahead of the non-critical ones."
     enforces:
-      - REQ-SP800-161R1-1220
       - REQ-SP800-161R1-0112
       - REQ-SP800-161R1-0174
       - REQ-SP800-161R1-0203
+      - REQ-SP800-161R1-0218
       - REQ-SP800-161R1-0224
       - REQ-SP800-161R1-0226
       - REQ-SP800-161R1-0227
@@ -3393,6 +3393,7 @@ rules:
       - REQ-SP800-161R1-0904
       - REQ-SP800-161R1-0905
       - REQ-SP800-161R1-0910
+      - REQ-SP800-161R1-1220
       - REQ-SP800-161R1-1261
       - REQ-SP800-61R3-0111
       - REQ-SP800-61R3-0118
@@ -3483,6 +3484,9 @@ rules:
     fixture: tests/fixtures/negative/SCRM-005.yaml
     hint: "Map the assessment's own score to the Table 29 level that describes it: levels 3 to 5 for adversarial-related risk, level 2 for non-adversarial high risk of a critical supplier. At level 3 and above share with the FASC as mandatory, escalate to senior officials and legal counsel, and weigh law enforcement, counter-intelligence and legal equities first."
     enforces:
+      - REQ-SP800-161R1-0155
+      - REQ-SP800-161R1-0239
+      - REQ-SP800-161R1-0250
       - REQ-SP800-161R1-0969
       - REQ-SP800-161R1-0970
       - REQ-SP800-161R1-0971
@@ -3542,6 +3546,7 @@ rules:
     hint: "Give every supplier a selection record with due diligence and the prohibited supplier lists screened that apply (SP 800-161 pp. 254-255 are not inclusive); never select a listed supplier; take open source software from a vetted and approved library."
     enforces:
       - REQ-DODI5000.83-0197
+      - REQ-SP800-161R1-0079
       - REQ-SP800-161R1-0211
       - REQ-SP800-161R1-0212
       - REQ-SP800-161R1-0214
@@ -3554,15 +3559,18 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-4
-    summary: a moderate- or high-impact system without a C-SCRM plan, a low-impact one without the inheritance its SSP states, or a plan that misses a requirement, supplier, relationship, consideration or information type, or is approved without the PMO
+    summary: a moderate- or high-impact system without a C-SCRM plan, a low-impact one without the inheritance its SSP states, or a plan that misses a requirement, supplier, relationship or information type, or is approved without the PMO; its SP 800-18r2 considerations are SCRM-032
     fixture: tests/fixtures/negative/SCRM-009.yaml
     hint: "Write artifacts/data/scrm-plan.yaml from templates/data/scrm-plan.yaml: the contracts' C-SCRM requirements, every supplier with the criticality scrm.yaml gives it, a relationship for each critical supplier, each SP 800-18r2 consideration, every information type, and approval coordinated with the organization's PMO."
     enforces:
       - REQ-SP800-161R1-0178
       - REQ-SP800-161R1-0179
       - REQ-SP800-161R1-0182
+      - REQ-SP800-161R1-0676
       - REQ-SP800-161R1-0684
+      - REQ-SP800-161R1-0709
       - REQ-SP800-161R1-0927
+      - REQ-SP800-161R1-1323
       - REQ-SP800-161R1-1331
       - REQ-SP800-18R2-0012
       - REQ-SP800-18R2-0067
@@ -3573,7 +3581,6 @@ rules:
       - REQ-SP800-18R2-0302
       - REQ-SP800-18R2-0305
       - REQ-SP800-18R2-0307
-      - REQ-SP800-18R2-0437
       - REQ-SP800-61R3-0121
   - id: SCRM-010
     scope: run
@@ -3622,11 +3629,13 @@ rules:
       - REQ-SP800-160V1R1-1191
       - REQ-SP800-160V1R1-1339
       - REQ-SP800-161R1-0114
+      - REQ-SP800-161R1-0178
       - REQ-SP800-161R1-0202
       - REQ-SP800-161R1-0226
       - REQ-SP800-161R1-0228
       - REQ-SP800-161R1-0291
       - REQ-SP800-161R1-1337
+      - REQ-SP800-161R1-1351
       - REQ-SP800-161R1-1394
       - REQ-SP800-161R1-1556
       - REQ-SP800-61R3-0118
@@ -3642,11 +3651,13 @@ rules:
     hint: "For each assessment that requires mitigation or sharing, record two or more alternatives with their acceptable level, decide one of them, and decide it at the level the impact reaches."
     enforces:
       - REQ-SP800-161R1-0113
+      - REQ-SP800-161R1-0153
       - REQ-SP800-161R1-0180
       - REQ-SP800-161R1-0350
       - REQ-SP800-161R1-0899
       - REQ-SP800-161R1-0946
       - REQ-SP800-161R1-1273
+      - REQ-SP800-161R1-1274
       - REQ-SP800-161R1-1300
       - REQ-SP800-161R1-1301
       - REQ-SP800-161R1-1303
@@ -3672,6 +3683,7 @@ rules:
       - REQ-SP800-161R1-0181
       - REQ-SP800-161R1-0294
       - REQ-SP800-161R1-0300
+      - REQ-SP800-161R1-0310
       - REQ-SP800-161R1-0321
       - REQ-SP800-161R1-1398
   - id: SCRM-020
@@ -3734,28 +3746,22 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-2
-    summary: no C-SCRM strategy, policy or implementation plan at Level 1 or Level 2, no C-SCRM plan at Level 3, or a level that does not inform those SP 800-161 says it informs
+    summary: no C-SCRM strategy, policy or implementation plan at Level 1 or Level 2, no C-SCRM plan at Level 3, or a level the record says nothing of; its information flows are SCRM-031
     fixture: tests/fixtures/negative/SCRM-022.yaml
     hint: "Record what each level delivers (the strategy, policy and implementation plan at Level 1 and/or Level 2, one document may hold several) and the levels each informs."
     enforces:
-      - REQ-SP800-161R1-0009
+      - REQ-SP800-161R1-0012
       - REQ-SP800-161R1-0137
       - REQ-SP800-161R1-0139
       - REQ-SP800-161R1-0140
       - REQ-SP800-161R1-0141
-      - REQ-SP800-161R1-0146
       - REQ-SP800-161R1-0148
       - REQ-SP800-161R1-0149
       - REQ-SP800-161R1-0163
-      - REQ-SP800-161R1-0167
-      - REQ-SP800-161R1-0169
       - REQ-SP800-161R1-0170
       - REQ-SP800-161R1-0172
       - REQ-SP800-161R1-0173
-      - REQ-SP800-161R1-0177
-      - REQ-SP800-161R1-0183
       - REQ-SP800-161R1-0538
-      - REQ-SP800-161R1-1040
   - id: SCRM-023
     scope: run
     severity: E
@@ -3890,6 +3896,8 @@ rules:
       - REQ-SP800-161R1-0110
       - REQ-SP800-161R1-0118
       - REQ-SP800-161R1-0200
+      - REQ-SP800-161R1-0270
+      - REQ-SP800-161R1-1386
       - REQ-SP800-61R3-0110
   - id: DEGRADED-001
     scope: run
@@ -4365,24 +4373,25 @@ rules:
     enforces:
       - REQ-CNSSI1253-0049
       - REQ-CNSSI1253-0050
-      - REQ-FIPS199-0010
-      - REQ-FIPS199-0018
-      - REQ-FIPS199-0020
-      - REQ-SP800-60V1R1-0095
-      - REQ-SP800-60V1R1-0130
       - REQ-CNSSP22-0040
       - REQ-DODI8500.01-0027
-      - REQ-FIPS199-0009
-      - REQ-FIPS200-0013
-      - REQ-SP800-37R2-0059
-      - REQ-SP800-37R2-0729
       - REQ-DODI8510.01-0106
       - REQ-DODI8510.01-0235
       - REQ-FIPS199-0008
+      - REQ-FIPS199-0009
+      - REQ-FIPS199-0010
+      - REQ-FIPS199-0018
+      - REQ-FIPS199-0020
+      - REQ-FIPS200-0013
+      - REQ-SP800-161R1-0686
+      - REQ-SP800-37R2-0059
       - REQ-SP800-37R2-0269
       - REQ-SP800-37R2-0278
+      - REQ-SP800-37R2-0729
       - REQ-SP800-60V1R1-0068
+      - REQ-SP800-60V1R1-0095
       - REQ-SP800-60V1R1-0096
+      - REQ-SP800-60V1R1-0130
       - REQ-SP800-60V1R1-0133
       - REQ-SP800-60V1R1-0201
   - id: CADJ-001
@@ -6699,6 +6708,42 @@ rules:
       - REQ-SP800-53B-0048
       - REQ-SP800-53B-0055
       - REQ-CNSSI1253-0072
+  - id: SCRM-031
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: a C-SCRM level whose outputs do not inform the levels SP 800-161 says it informs, down and up (split from SCRM-022)
+    fixture: tests/fixtures/negative/SCRM-031.yaml
+    hint: "List under each level of scrm-org.yaml levels the levels its outputs inform: level-1 informs level-2, level-2 informs level-1 and level-3, level-3 informs level-1 and level-2."
+    enforces:
+      - REQ-SP800-161R1-0009
+      - REQ-SP800-161R1-0089
+      - REQ-SP800-161R1-0146
+      - REQ-SP800-161R1-0148
+      - REQ-SP800-161R1-0167
+      - REQ-SP800-161R1-0169
+      - REQ-SP800-161R1-0177
+      - REQ-SP800-161R1-0183
+      - REQ-SP800-161R1-1040
+      - REQ-SP800-161R1-1051
+      - REQ-SP800-161R1-1318
+      - REQ-SP800-161R1-1324
+  - id: SCRM-032
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a C-SCRM plan that does not address a consideration of SP 800-18r2, or calls one inapplicable while scrm.yaml holds a supplier of that kind (split from SCRM-009)
+    fixture: tests/fixtures/negative/SCRM-032.yaml
+    hint: "Address each consideration of SP 800-18r2 in scrm-plan.yaml plan.considerations; mark one applies: false only when scrm.yaml holds no supplier of that kind."
+    enforces:
+      - REQ-SP800-161R1-0677
+      - REQ-SP800-18R2-0437
   - id: SCRMLC-001
     scope: run
     severity: E
@@ -6711,8 +6756,10 @@ rules:
     hint: "In scrm-acquisition.yaml procurement_steps, say how C-SCRM considerations enter each NISTIR 7622 step: plan-procurement, define-requirements, market-analysis, complete-procurement, ensure-compliance and monitor-performance; set charge_card_purchases and, when true, add the charge-card-purchases step."
     enforces:
       - REQ-SP800-161R1-0204
+      - REQ-SP800-161R1-0207
       - REQ-SP800-161R1-0222
       - REQ-SP800-161R1-0223
+      - REQ-SP800-161R1-0296
   - id: DISP-001
     scope: run
     severity: E

@@ -529,15 +529,6 @@ def plan_content(ctx: Context) -> list[RunFinding]:
         if sid not in related:
             err(f"the plan defines no relationship between critical supplier {sid} and the "
                 "system owner")
-    considered = {_key(c, "kind"): c for c in _list(plan, "considerations")}
-    for kind in PLAN_CONSIDERATIONS:
-        if kind not in considered:
-            err(f"the C-SCRM plan does not address consideration {kind}")
-    for sup in _list(scrm, "suppliers"):
-        kind = CONSIDERATION_OF_KIND.get(str(sup.get("kind")))
-        if kind and considered.get(kind, {}).get("applies") is False:
-            err(f"the plan says {kind} does not apply, yet {_id(sup)} is a supplier of that "
-                "kind")
     held = _ids(_list(ctx.data(INFOTYPES_FILE), "information_types"))
     named = set(_refs(plan, "information_types"))
     for inf in sorted(held - named):
@@ -548,6 +539,35 @@ def plan_content(ctx: Context) -> list[RunFinding]:
     if pmo in ("dedicated", "matrixed") and _obj(plan, "approval").get("pmo") != "coordinated":
         err("the plan's approval was not coordinated with the C-SCRM PMO the organization "
             "has")
+    return out
+
+
+# --- SCRM-032 (split from SCRM-009) -------------------------------------------------------
+def plan_considerations(ctx: Context) -> list[RunFinding]:
+    """S-4: the system C-SCRM plan addresses each consideration of SP 800-18r2 and does not
+    call one inapplicable while scrm.yaml holds a supplier of that kind. SCRM-009 asks the
+    plan itself."""
+    doc = _doc(ctx, PLAN_FILE)
+    if doc is None or not _active(ctx, PLAN):
+        return []
+    plan = _obj(doc, "plan")
+    if not plan:
+        return []
+    out: list[RunFinding] = []
+
+    def err(message: str) -> None:
+        out.append(make("SCRM-032", message, PLAN_FILE, None, {PLAN}))
+
+    scrm = _doc(ctx, SCRM_FILE) or {}
+    considered = {_key(c, "kind"): c for c in _list(plan, "considerations")}
+    for kind in PLAN_CONSIDERATIONS:
+        if kind not in considered:
+            err(f"the C-SCRM plan does not address consideration {kind}")
+    for sup in _list(scrm, "suppliers"):
+        kind = CONSIDERATION_OF_KIND.get(str(sup.get("kind")))
+        if kind and considered.get(kind, {}).get("applies") is False:
+            err(f"the plan says {kind} does not apply, yet {_id(sup)} is a supplier of that "
+                "kind")
     return out
 
 

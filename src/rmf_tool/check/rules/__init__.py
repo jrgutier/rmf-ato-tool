@@ -286,6 +286,8 @@ RULES: dict[str, Rule] = {
     "SCRM-020": scrm_org.frame,
     "SCRM-021": scrm_org.governance,
     "SCRM-022": scrm_org.levels,
+    "SCRM-031": scrm_org.level_flows,
+    "SCRM-032": scrm.plan_considerations,
     "SCRM-023": scrm_org.sharing,
     "SCRM-024": scrm_org.maturity,
     "SCRM-025": scrm_org.measures,
