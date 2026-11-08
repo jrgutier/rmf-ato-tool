@@ -1,0 +1,16 @@
+rule: PENT-001
+bases:
+- minimal
+description: a penetration test of a component outside the system's boundary
+mutations:
+- op: set_field
+  file: artifacts/data/sap.yaml
+  path: penetration_test.components
+  value:
+  - CMP-RELAY
+  - CMP-GATEWAY
+expect:
+  errors:
+  - PENT-001
+  messages:
+  - the penetration test names CMP-GATEWAY, no component within the system's boundary
