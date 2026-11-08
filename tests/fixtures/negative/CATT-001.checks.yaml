@@ -1,0 +1,14 @@
+rule: CATT-001
+bases:
+- minimal
+description: secure configurations checked only at deployment
+mutations:
+- op: set_field
+  file: artifacts/data/cato.yaml
+  path: practices.configuration_checks
+  value: at-deployment
+expect:
+  errors:
+  - CATT-001
+  messages:
+  - 'the automation provides no periodic checks of secure configurations: at-deployment'
