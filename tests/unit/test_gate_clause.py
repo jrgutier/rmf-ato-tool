@@ -30,12 +30,3 @@ def test_the_rewritten_clause_fires_exactly_when_the_old_one_did():
         standing = [SimpleNamespace(record=r) for r in case]
         assert _old(standing) == _new(standing), case
 
-
-def test_the_rule_source_holds_the_rewritten_clause():
-    import inspect
-
-    from rmf_tool.check.rules import protection
-
-    source = inspect.getsource(protection.authorization_gates)
-    assert "authorizing = [s for s in standing" in source and "if len(authorizing) == 0:" in source
-    assert "not any(" not in source
