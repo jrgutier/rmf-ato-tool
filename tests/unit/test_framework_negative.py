@@ -21,6 +21,10 @@ def test_negative_fixture_fires_exactly_its_rules(overlay, tmp_path):
     fired = {f.rule for f in result.findings if f.severity == "E"}
     assert fired == {expect["rule"], *expect["also"]}, [f.render() for f in result.findings]
     assert not result.ok
+    # The messages evidence may name as `expect` (FW-REQ-003): each is the rule's own.
+    own = [f.message for f in result.findings if f.rule == expect["rule"]]
+    for message in expect.get("messages") or ():
+        assert any(message in m for m in own), (message, own)
 
 
 def test_every_p3a_framework_rule_has_a_fixture():

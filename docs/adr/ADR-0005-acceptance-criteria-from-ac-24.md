@@ -34,6 +34,7 @@ later phases by appending below. A rule that cites an AC points here.
 | AC-40 | p11 | A cATO rests on an ATO, records the Component CISO notice and the DoD CISO approval before the decision, and is on an allowed pathway and product kind | AODM-007 |
 | AC-41 | p11 | A run is held to the framework contract it was created under, an older run gets one warning naming the difference, and `--release` fails unless the example is on the current contract | RUN-VER-001 |
 | AC-42 | p11 | Each record is decided by the official of its type, on a subject the type applies to, and conveyed to the system owner or common control provider | AODM-009 |
+| AC-43 | p13 | At the freeze no tier 1 entry is a candidate and every tier 1 partial carries an evidence item that judges strong; candidates outside tier 1 warn, and open work items do not block | FW-REQ-002 |
 
 ## Consequences
 
@@ -164,3 +165,32 @@ an honest `partial` citing where it is built, and the freeze accepts that.
   refuses it as `covered`. Never for a duty that is merely hard to test.
 - AODM-009 split the deciding official, subject and recipients out of AODM-001, which had reached 34
   evidence items against the fan-out cap of 25 once each clause was cited alone.
+
+## The tier 1 freeze, decided with the user 2026-11-08
+
+The register outside tier 1 became advisory (the scope cut of the same day), so the freeze no
+longer asks every obligation to be triaged. This supersedes, for documents without `tier: 1`,
+the obligation split of 2026-10-31 and the non-tier-1 part of 2026-11-02 above.
+
+- FW-REQ-002 (AC-43, phase p13) errs on a live tier 1 entry still `candidate`, and on a tier 1
+  `partial` none of whose evidence items judges strong (`evidence.judge`). A tier 1 partial
+  passes with one strong item and a reason naming what is unheld; the unheld sentences stay
+  `tier1_debt` in `rmf conformance report`, and their work items stay open as the backlog.
+- Open work items no longer block the freeze, at any tier.
+- A `candidate` outside tier 1 warns, one finding per document with its count; `should` and
+  `table` kinds are no longer told apart from obligations there.
+- `rules.blocks_freeze` is the one reading: FW-REQ-002 and `summary.freeze` of the report
+  (`tier_1`, `tier_1_partial_without_strong`, `advisory_elsewhere`) both call it.
+- The rule is registered at p13, which stays open and is built ahead of p12
+  (`profiles.AHEAD`): `rmf validate --profile p13` runs it, and it joins `release` and `fork`
+  only once `.phases/p13.closed` exists, so the gate stays honest about what is enforced today.
+- The frozen reference list and the warning for a reference imported after the freeze, recorded
+  at p10, are still to be built at p13.
+- The judge reads repo-scope rules (FW-*) too: a rule item may cite one whose negative fixture is
+  a framework overlay under `tests/fixtures/framework_neg/`, whose `expect.yaml` declares its
+  `messages`, which `test_framework_negative` proves the rule emits. The claim and `expect` checks
+  are those of run rules; an overlay has no mutations, so its claim comes from the clause alone.
+  A repo-scope rule's source includes the functions it calls in other `rmf_tool` modules, since
+  most are one call into the module holding their clauses. FW-ID-* join the generic rules that
+  are denied as evidence: a unique, well-formed ID holds for any content.
+

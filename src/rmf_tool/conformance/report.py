@@ -13,37 +13,30 @@ from rmf_tool.conformance.register import STATUSES, Register
 # `partial` caps what evidence can prove, so a register resting on it must stay visible.
 PARTIAL_WARNING_SHARE = 0.5
 TIER_1 = 1
-# Kinds that state an obligation; `should` and `table` are advisory outside tier 1.
-OBLIGATION_KINDS = frozenset({"lettered", "modal", "indicative", "imperative",
-                              register.PROMOTED_KIND})
 
 
-def blocks_freeze(kind: str, tier: int | None) -> bool:
-    """FW-REQ-002 at p13 (ADR-0005): a candidate blocks the freeze when its document is tier 1
-    or its kind states an obligation; a should or table candidate elsewhere only warns."""
-    return tier == TIER_1 or kind in OBLIGATION_KINDS
-
-
-def freeze_split(reg: Register, index: Mapping[str, Any]) -> dict[str, int]:
-    """Live candidates by what they will mean at p13, and the entries set aside without proof
+def freeze_split(reg: Register, index: Mapping[str, Any],
+                 probe: evidence.Probe | None = None) -> dict[str, int]:
+    """What FW-REQ-002 at p13 reads (ADR-0005, 2026-11-08): the tier 1 candidates and the tier 1
+    partials with no strong item, which block the freeze (the second judged only with a probe);
+    the candidates outside tier 1, which are advisory; and the entries set aside without proof
     (deferred, partial on evidence that cannot fail) that the sign-off at p13 reads, so a
     scripted loop of `mark --status deferred` is as visible as a loop of `not-applicable`
     (FW-REQ-004)."""
-    out = {"tier_1": 0, "obligations_elsewhere": 0, "advisory_elsewhere": 0, "deferred": 0,
-           "partial_on_weak_evidence": 0}
+    out = {"tier_1": 0, "tier_1_partial_without_strong": 0, "advisory_elsewhere": 0,
+           "deferred": 0, "partial_on_weak_evidence": 0}
     for ref, entry in reg.live():
         if entry["status"] == "deferred":
             out["deferred"] += 1
         elif entry["status"] == "partial" and rules.retired(entry):
             out["partial_on_weak_evidence"] += 1
-        if entry["status"] != "candidate":
-            continue
         tier = (index.get(ref) or {}).get("tier")
-        if tier == TIER_1:
+        blocker = rules.blocks_freeze(probe, entry, tier)
+        if blocker == rules.FREEZE_CANDIDATE:
             out["tier_1"] += 1
-        elif blocks_freeze(entry["kind"], tier):
-            out["obligations_elsewhere"] += 1
-        else:
+        elif blocker == rules.FREEZE_NO_STRONG:
+            out["tier_1_partial_without_strong"] += 1
+        elif entry["status"] == "candidate":
             out["advisory_elsewhere"] += 1
     return out
 
@@ -131,7 +124,7 @@ def build(reg: Register, index: Mapping[str, Any], *,
         "partial_share": round(total["partial"] / assessed, 3) if assessed else 0.0,
         "kinds": dict(sorted(kinds.items())),
         "promoted": promoted,
-        "freeze": freeze_split(reg, index),
+        "freeze": freeze_split(reg, index, probe),
         "rejected": sum(rejected_by_reason.values()),
         "rejected_by_reason": dict(sorted(rejected_by_reason.items())),
     }
@@ -181,9 +174,9 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"work items closed {s['closed_items']}, closed-partial "
                  f"{s['closed_partial_items']}, open {s['work_items']}")
     freeze = s["freeze"]
-    lines.append(f"candidates at the p13 freeze: {freeze['tier_1']} in tier 1 documents and "
-                 f"{freeze['obligations_elsewhere']} obligations elsewhere block it; "
-                 f"{freeze['advisory_elsewhere']} should or table entries elsewhere warn")
+    lines.append(f"blocking the p13 freeze (FW-REQ-002): {freeze['tier_1']} tier 1 candidates and "
+                 f"{freeze['tier_1_partial_without_strong']} tier 1 partials with no strong item; "
+                 f"{freeze['advisory_elsewhere']} candidates outside tier 1 are advisory")
     lines.append(f"set aside without proof, for the p13 sign-off: {freeze['deferred']} deferred, "
                  f"{freeze['partial_on_weak_evidence']} partial on evidence that cannot fail "
                  "(FW-REQ-004)")

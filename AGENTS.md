@@ -111,7 +111,7 @@ error. Commands that report support `--format json`.
 
 RUN defaults to the cwd when it holds run.yaml, else the newest `runs/*/`.
 
-Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 p11 release fork`. A phase
+Profiles (`--profile`): `p1 p2 p2x p3a p35 p3b p4 p5 p6 p7 p8 p9 p10 p11 p13 release fork`. A phase
 profile evaluates the closed phases (`.phases/*.closed`) plus that phase; no profile
 evaluates the closed phases only. `rmf ci` exits 2 if the profile includes a phase whose
 checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
@@ -153,6 +153,9 @@ promotes what the extractor missed. p11 Monitor records: `changes.yaml`, `postur
 and `plan-reviews.yaml`, judged by MCHG, MCON, MRPT and MPLAN once their artifact is in play.
 p11 run contracts: the fixtures on the current
 `framework_version`, and at `--release` the example too (RUN-VER-001 as an error).
+p13 FW-REQ-002, run by `rmf validate`: no tier 1 `candidate`, and every tier 1 `partial` with a
+strong item; outside tier 1 a candidate warns. Built ahead of p12, p13 joins `release` and `fork`
+only once `.phases/p13.closed` exists.
 Rules, phases and fixtures are listed in `src/rmf_tool/check/registry.yaml` and rendered
 into `docs/CHECKS.md`.
 
