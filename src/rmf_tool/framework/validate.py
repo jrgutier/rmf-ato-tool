@@ -574,7 +574,8 @@ def baseline_tables(fw_root: Path, repo: Path) -> tuple[list[Finding], list[Enti
                                            "citations": [i["citation"]]},
                              Location(shown, i.lc.line + 1))
                       for i in [*data["assumptions"], *data["overlay_conditions"],
-                                *data.get("policy_controls", [])]]
+                                *data.get("policy_controls", []),
+                                *data.get("dod_policy_controls", [])]]
             continue
         cited.append(Entity("baselines", {"id": data["baseline"],
                                           "citations": data["citations"]},

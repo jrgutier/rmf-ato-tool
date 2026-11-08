@@ -180,3 +180,32 @@ def test_capability_gap_is_a_warning_not_an_error(tmp_path):
     run = open_run(run_dir, REPO_ROOT)
     found = engine.select(run, engine.evaluate(run), final=True)
     assert {(f.rule, f.severity) for f in found if f.rule.startswith("TLR-")} == {("TLR-011", "W")}
+
+
+def _dpol(run_dir):
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    return [f.message for f in engine.select(run, engine.evaluate(run), final=True)
+            if f.rule.startswith("DPOL-")]
+
+
+REMOVE_PL4 = {"control_id": "pl-4", "action": "remove", "basis": "scoping",
+              "scoping": {"consideration": "technology"}, "law_policy": LAW,
+              "rationale": "Said to need no rules of behavior.", "sources": ["INT-028.A3"]}
+
+
+def test_a_stand_alone_system_may_tailor_a_dod_policy_control(tmp_path):
+    """DoDI 8500.01 pages 38 and 39: a stand-alone system's control set may be tailored as
+    appropriate with the AO's approval, so DPOL-001 and DPOL-002 leave it alone."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    _add_action(run_dir, REMOVE_PL4)
+    assert any("pl-4 is tailored out of the baseline" in m for m in _dpol(run_dir))
+    edit_yaml(run_dir / "facts.yaml",
+              lambda d: d["system_type"].update(connectivity="stand-alone"))
+    assert _dpol(run_dir) == []
+
+
+def test_a_parameter_or_specification_on_a_dod_policy_control_passes(tmp_path):
+    """Only a remove action tailors a control out; the minimal run sets an ac-2 parameter and
+    specification, which DPOL-002 reads as kept."""
+    assert _dpol(copy_run(VALID_MINIMAL, tmp_path / "run")) == []
