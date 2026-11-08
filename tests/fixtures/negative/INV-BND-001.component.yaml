@@ -1,0 +1,14 @@
+rule: INV-BND-001
+bases:
+- minimal
+description: an inventory item names a component the authorization boundary does not hold
+mutations:
+- op: set_field
+  file: artifacts/data/inventory.yaml
+  path: items.0.component
+  value: CMP-NOPE
+expect:
+  errors:
+  - INV-BND-001
+  messages:
+  - INV-001 names component CMP-NOPE, which is not a boundary component

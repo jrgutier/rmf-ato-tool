@@ -872,7 +872,10 @@ requirements:
     locator: "2.4"
     context: "FIGURE 5: CONCEPTUAL VIEW OF THE SYSTEM"
     statement: "The system may also communicate or have other interactions with enabling systems and other systems that are part of the extended environment of operation but are outside of the scope of authorization for the system.40 Organizations determine which parts of the environment of operation are within the authorization boundary. These determinations are typically specific to the system and are context-driven."
-    status: "candidate"
+    status: "covered"
+    reason: "INV-BND-001 fails an inventory item that names a component outside the authorization boundary, so which elements are within it is determined"
+    evidence: [{"kind": "rule", "target": "INV-BND-001", "fixture": "tests/fixtures/negative/INV-BND-001.component.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Organizations determine which parts are within the authorization boundary: an item that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0111"
     citation: {"ref": "SP800-37R2", "page": 35, "anchor": "Common controls are referenced in the security and privacy plans for the"}
     kind: "indicative"
@@ -903,7 +906,10 @@ requirements:
     locator: "2.5"
     context: "AUTHORIZATION BOUNDARIES"
     statement: "The authorization boundary for a system is established during the RMF Prepare Task – System level, Task P-11. Organizations have flexibility in determining what constitutes the authorization boundary for a system. The set of system elements included within an authorization boundary defines the system (i.e., the scope of the authorization). When a set of system elements is identified as an authorization boundary for a system, the elements are generally under the same direct management.42 Other considerations for determining the authorization boundary include identifying system elements that:"
-    status: "candidate"
+    status: "partial"
+    reason: "boundary.yaml lists the elements within the boundary, which define the system; that they are under the same direct management, and the considerations for drawing it, are P-11 prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/components", "claim": "constraint", "asserts": "The set of system elements included within an authorization boundary defines the system: boundary.yaml lists them", "sentence": "The set of system elements included within an authorization boundary defines the system (i.e., the scope of the authorization)."}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0115"
     citation: {"ref": "SP800-37R2", "page": 36, "anchor": "Support the same mission or business functions;"}
     kind: "lettered"
@@ -952,6 +958,8 @@ requirements:
     context: "AUTHORIZATION BOUNDARIES"
     statement: "The process of establishing authorization boundaries carries significant risk management implications and is therefore an organization-wide activity that requires coordination among key participants. The process considers mission and business requirements, security and privacy requirements, and the costs to the organization. Appendix G provides additional information and considerations for determining authorization boundaries, including boundaries for complex systems and software applications."
     status: "candidate"
+    reason: "P-11 has PER-CIO, PER-SPONSOR, PER-CISO, PER-PRIV and others consulted; no record of the coordination exists for a rule to fail."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0121"
     citation: {"ref": "SP800-37R2", "page": 36, "anchor": "Information systems are discrete sets of information resources organized for the collection,"}
     kind: "modal"
@@ -1784,14 +1792,20 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-8 MISSION OR BUSINESS FOCUS | TASK P-8 | • Missions, business functions, and mission/business processes that"
-    status: "candidate"
+    status: "covered"
+    reason: "MSN-001 fails a P-8 that identifies no mission, business function or mission/business process the system supports; cut pair with 0218"
+    evidence: [{"kind": "rule", "target": "MSN-001", "holds_when": "P-8 is active and its records are produced or seeded", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "asserts": "Missions, business functions and mission/business processes the system supports are identified: P-8 identifies no mission fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0218"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "MISSION OR BUSINESS FOCUS | the system is intended to support are"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "MISSION OR BUSINESS FOCUS | the system is intended to support are identified. [Cybersecurity Framework: Profile; Implementation Tiers; ID.BE]"
-    status: "candidate"
+    status: "covered"
+    reason: "MSN-001 fails a P-8 that identifies no mission, business function or mission/business process the system supports; cut pair with 0217"
+    evidence: [{"kind": "rule", "target": "MSN-001", "holds_when": "P-8 is active and its records are produced or seeded", "fixture": "tests/fixtures/negative/MSN-001.yaml", "expect": "P-8 identifies no mission, business function or mission/business process", "claim": "presence", "asserts": "The mission and business functions the system is intended to support are identified: P-8 identifies no mission fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0219"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-9 | • The stakeholders having an interest in the system"}
     kind: "table"
@@ -1799,6 +1813,8 @@ requirements:
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-9 | • The stakeholders having an interest in the system are identified."
     status: "candidate"
+    reason: "ART-STAKE lists the stakeholders in prose; no data file or rule refuses a run that identifies none."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0220"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "SYSTEM STAKEHOLDERS | [Cybersecurity Framework: ID.AM; ID.BE]"}
     kind: "table"
@@ -1813,7 +1829,10 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-10 | • Stakeholder assets are identified and prioritized."
-    status: "candidate"
+    status: "partial"
+    reason: "ASSET-001 fails an asset scope that leaves out a class of P-10 assets, so identification is held; the prioritization of assets is ART-INV prose that no rule reads."
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "claim": "constraint", "asserts": "Stakeholder assets are identified: an asset scope that does not consider a class of assets fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0222"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "ASSET IDENTIFICATION | [Cybersecurity Framework: ID.AM]"}
     kind: "table"
@@ -1828,21 +1847,30 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-11 AUTHORIZATION BOUNDARY | • The authorization boundary (i.e., system) is determined. | • The authorization boundary (i.e., system) is determined."
-    status: "candidate"
+    status: "covered"
+    reason: "boundary.yaml must list the components within the authorization boundary (required, minItems 1)"
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/components", "claim": "constraint", "asserts": "The authorization boundary of the system is determined: boundary.yaml lists the system elements within the boundary"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0224"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-12 INFORMATION TYPES | TASK P-12 | • The types of"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-12 INFORMATION TYPES | TASK P-12 | • The types of information processed, stored, and transmitted by"
-    status: "candidate"
+    status: "covered"
+    reason: "infotypes.yaml must list the information types of the system (required, minItems 1); cut pair with 0225"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types", "claim": "constraint", "asserts": "The types of information processed, stored and transmitted by the system are identified in infotypes.yaml"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0225"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "INFORMATION TYPES | the system are identified. [Cybersecurity Framework: ID.AM-5]"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "INFORMATION TYPES | the system are identified. [Cybersecurity Framework: ID.AM-5]"
-    status: "candidate"
+    status: "covered"
+    reason: "infotypes.yaml must list the information types of the system (required, minItems 1); cut pair with 0224"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types", "claim": "constraint", "asserts": "The information types of the system are identified: infotypes.yaml lists the types of information"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0226"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-13 INFORMATION LIFE CYCLE | • All stages of the information"}
     kind: "table"
@@ -1850,20 +1878,28 @@ requirements:
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-13 INFORMATION LIFE CYCLE | • All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [Cybersecurity Framework: ID.AM-3; ID.AM-4]"
     status: "candidate"
+    reason: "infotypes.yaml life_cycle is optional per information type and no rule reads it, so a run that identifies no life cycle stage passes."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0227"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-14 RISK ASSESSMENT—SYSTEM | • A system-level risk assessment is completed"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-14 RISK ASSESSMENT—SYSTEM | • A system-level risk assessment is completed or an existing risk assessment is updated. [Cybersecurity Framework: ID.RA; ID.SC-2]"
-    status: "candidate"
+    status: "covered"
+    reason: "SRA-001 fails a run whose ART-RA has no ra.yaml, the system risk assessment record"
+    evidence: [{"kind": "rule", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.yaml", "expect": "ART-RA has no artifacts/data/ra.yaml", "claim": "presence", "holds_when": "P-14 is active and ART-RA is produced or seeded", "asserts": "A system-level risk assessment is completed: ART-RA has no artifacts/data/ra.yaml fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0228"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-15 | • Security and privacy requirements are defined and prioritized."}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-15 | • Security and privacy requirements are defined and prioritized."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a run whose ART-REQ has no requirements matrix; each protection need carries a priority in requirements.yaml"
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.yaml", "expect": "ART-REQ has no artifacts/data/requirements.yaml, the requirements traceability verification matrix", "claim": "presence", "asserts": "Security and privacy requirements are defined: ART-REQ has no requirements traceability verification matrix fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0229"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "REQUIREMENTS DEFINITION | [Cybersecurity Framework: ID.GV; PR.IP]"}
     kind: "table"
@@ -1878,7 +1914,10 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-16 | • The placement of the system within the enterprise architecture is"
-    status: "candidate"
+    status: "covered"
+    reason: "HOST-001 fails a boundary.yaml that records no hosting, where the system sits in the enterprise and why (P-16)"
+    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.yaml", "expect": "boundary.yaml records no hosting: where the system is hosted and why", "claim": "presence", "asserts": "The placement of the system within the enterprise architecture is recorded: boundary.yaml records no hosting fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0231"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "ENTERPRISE ARCHITECTURE | determined."}
     kind: "table"
@@ -1893,21 +1932,30 @@ requirements:
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-17 REQUIREMENTS ALLOCATION | TASK P-17 | • Security and privacy requirements are allocated to the system and"
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a requirement allocated to a component the boundary lacks; cut pair with 0233"
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Security and privacy requirements are allocated to the system: an allocation to a component that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0233"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "REQUIREMENTS ALLOCATION | to the environment in which the system operates. [Cybersecurity"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "REQUIREMENTS ALLOCATION | to the environment in which the system operates. [Cybersecurity Framework: ID.GV]"
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a requirement allocated to a component the boundary lacks; cut pair with 0232"
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Requirements allocation to the system and environment: an allocation to a component that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0234"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "TASK P-18 SYSTEM REGISTRATION | • The system is registered for purposes"}
     kind: "table"
     locator: "TASK P-7"
     context: "TABLE 2: PREPARE TASKS AND OUTCOMES—SYSTEM LEVEL"
     statement: "TASK P-18 SYSTEM REGISTRATION | • The system is registered for purposes of management, accountability, coordination, and oversight. [Cybersecurity Framework: ID.GV]"
-    status: "candidate"
+    status: "covered"
+    reason: "UPD-001 fails a system not reported in eMASS or ERS, the DoD registry"
+    evidence: [{"kind": "rule", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.reported.yaml", "expect": "the system is not reported in either eMASS or ERS (reported_in is", "claim": "constraint", "holds_when": "P-18 is active and ART-REG is produced or seeded", "asserts": "The system is registered for management and oversight: the system is not reported in either eMASS or ERS fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0235"
     citation: {"ref": "SP800-37R2", "page": 55, "anchor": "Quick link to summary table for RMF tasks, responsibilities, and supporting roles."}
     kind: "modal"
@@ -1934,6 +1982,8 @@ requirements:
     context: ""
     statement: "Identify stakeholders who have an interest in the design, development, implementation, assessment, operation, maintenance, or disposal of the system."
     status: "candidate"
+    reason: "ART-STAKE lists stakeholders in prose; no rule refuses a run that identifies none or leaves out a life cycle interest."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0238"
     citation: {"ref": "SP800-37R2", "page": 56, "anchor": "Stakeholders include individuals, organizations, or representatives that have an interest in the"}
     kind: "indicative"
@@ -1941,13 +1991,18 @@ requirements:
     context: ""
     statement: "Stakeholders include individuals, organizations, or representatives that have an interest in the system throughout the system life cycle—for design, development, implementation, delivery, operation, and sustainment of the system. It also includes all aspects of the supply chain. Stakeholders may reside in the same organization or they may reside in different organizations in situations when there is a common interest by those organizations in the information system. For example, this may occur during the development, operation, and maintenance of cloud-based systems, shared service systems, or any system where organizations may be adversely impacted by a breach or a compromise to the system or for a variety of considerations related to the supply chain. Communication among stakeholders is important during every step in the RMF and throughout the SDLC to ensure that security and privacy requirements are satisfied, concerns and issues are addressed expeditiously, and risk management processes are carried out effectively."
     status: "candidate"
+    reason: "Describes who stakeholders are, supply chain included; ART-STAKE is prose and no rule reads it."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0239"
     citation: {"ref": "SP800-37R2", "page": 57, "anchor": "Identify assets that require protection."}
     kind: "modal"
     locator: "TASK P-10"
     context: ""
     statement: "Identify assets that require protection."
-    status: "candidate"
+    status: "covered"
+    reason: "ASSET-001 fails an asset scope that does not consider a class of asset P-10 names"
+    evidence: [{"kind": "rule", "target": "ASSET-001", "fixture": "tests/fixtures/negative/ASSET-001.yaml", "expect": "the organization's asset scope does not consider", "claim": "constraint", "asserts": "Identify assets that require protection: an asset scope that does not consider an asset class fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0240"
     citation: {"ref": "SP800-37R2", "page": 57, "anchor": "Assets are tangible and intangible items that are of value to achievement"}
     kind: "modal"
@@ -1964,7 +2019,10 @@ requirements:
     locator: "TASK P-11"
     context: ""
     statement: "Determine the authorization boundary of the system."
-    status: "candidate"
+    status: "covered"
+    reason: "boundary.yaml must list the components within the boundary, and INV-BND-001 fails an inventory item outside them"
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/components", "claim": "constraint", "asserts": "Determine the authorization boundary of the system: boundary.yaml lists the system elements within the boundary"}, {"kind": "rule", "target": "INV-BND-001", "fixture": "tests/fixtures/negative/INV-BND-001.component.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "The authorization boundary is determined: an inventory item that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0242"
     citation: {"ref": "SP800-37R2", "page": 57, "anchor": "Authorization boundaries establish the scope of protection for information systems (i.e., what"}
     kind: "modal"
@@ -1972,6 +2030,8 @@ requirements:
     context: ""
     statement: "Authorization boundaries establish the scope of protection for information systems (i.e., what the organization agrees to protect under its management control or within the scope of its responsibilities). Authorization boundaries are determined by authorizing officials with input from the system owner based on mission, management, or budgetary responsibility (see Appendix F). A clear delineation of authorization boundaries is important for accountability and for security categorization, especially in situations where lower-impact systems are connected to higher-impact systems, or when external providers are responsible for the operation or maintenance of a system. Each system includes a set of elements (i.e., information resources)65 organized to achieve one or more purposes and to support the organization’s missions and business processes. Each system element is implemented in a way that allows the organization to satisfy specified security and privacy requirements. System elements include human elements, technology/machine elements, and physical/environmental elements."
     status: "candidate"
+    reason: "P-11 has PER-AO accountable and the playbook journals the AO's confirmation; no field records who determined the boundary, so no rule fails one set without the AO or the system owner's input."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0243"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "The term system is used to define the set of system elements,"}
     kind: "modal"
@@ -1979,6 +2039,8 @@ requirements:
     context: ""
     statement: "The term system is used to define the set of system elements, system element interconnections, and the environment that is the focus of the RMF implementation (see Figure 5). The system is included in a single authorization boundary to ensure accountability. For systems processing PII, the privacy and security programs collaborate to develop a common understanding of authorization boundaries. To conduct effective risk assessments and select appropriate controls, privacy and security programs provide a clear and consistent understanding of what constitutes the authorization boundary. Understanding the authorization boundary and what will occur beyond it may influence controls selected and how they are implemented. For example, if a function of the system includes sharing PII externally, robust encryption controls may be selected for PII transmitted from the system."
     status: "candidate"
+    reason: "facts.boundary_id holds one boundary, and PER-PRIV is C on P-11; no rule refuses a system across boundaries or a boundary set without the privacy program."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0244"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "Similarly, for systems either partially or wholly managed, maintained, or operated by"}
     kind: "modal"
@@ -1986,13 +2048,18 @@ requirements:
     context: ""
     statement: "Similarly, for systems either partially or wholly managed, maintained, or operated by external providers, an agreement clearly describing authorization boundaries ensures accountability. Privacy and security programs collaborate with providers to develop a common understanding of authorization boundaries. Formal agreements with external providers (e.g. contracts) may be used to delineate what constitutes authorization boundaries. Understanding such boundaries facilitates the selection of appropriate controls to manage supply chain risk."
     status: "candidate"
+    reason: "Agreements with external providers are listed in ART-SD; no rule reads whether an agreement describes the authorization boundary."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0245"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "Identify the types of information to be processed, stored, and transmitted by"}
     kind: "imperative"
     locator: "TASK P-12"
     context: ""
     statement: "Identify the types of information to be processed, stored, and transmitted by the system."
-    status: "candidate"
+    status: "covered"
+    reason: "infotypes.yaml must list the information types of the system (required, minItems 1)"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types", "claim": "constraint", "asserts": "Identify the types of information to be processed, stored and transmitted by the system in infotypes.yaml"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0246"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "Identifying the types of information needed to support organizational missions, business functions,"}
     kind: "modal"
@@ -2000,6 +2067,8 @@ requirements:
     context: ""
     statement: "Identifying the types of information needed to support organizational missions, business functions, and mission/business processes is an important step in developing security and privacy plans for the system and a precondition for determining the security categorization. [NARA CUI] defines the information types that require protection as part of its Controlled Unclassified Information (CUI) program, in accordance with laws, regulations, or governmentwide policies. Organizations may define additional information types needed to support organizational missions, business functions, and mission/business processes that are not defined in the CUI Registry or in [SP 800-60 v2]. Identified information types are confirmed by the information owners or stewards and documented in the system security and privacy plans."
     status: "candidate"
+    reason: "Information types carry SP 800-60 identifiers and owners in prose; no rule refuses a type not confirmed by its owner, and the other sentence permits added types."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0247"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "System elements are implemented via hardware, software, or firmware; physical structures or"}
     kind: "indicative"
@@ -2015,6 +2084,8 @@ requirements:
     context: ""
     statement: "Identify and understand all stages of the information life cycle for each information type processed, stored, or transmitted by the system."
     status: "candidate"
+    reason: "infotypes.yaml life_cycle is optional per information type and no rule reads it, so a run that identifies no stage passes."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0249"
     citation: {"ref": "SP800-37R2", "page": 59, "anchor": "The information life cycle describes the stages through which information passes, typically"}
     kind: "modal"
@@ -2030,6 +2101,8 @@ requirements:
     context: ""
     statement: "Using tools such as a data map enables organizations to understand how information is being processed so that organizations can better assess where security and privacy risks could arise and where controls could be applied most effectively. It is important for organizations to consider the appropriate delineation of the authorization boundary and the information system’s interaction with other systems because the way information enters and leaves the system can affect the security and privacy risk assessments. The elements of the system are identified with sufficient granularity to support such risk assessments."
     status: "candidate"
+    reason: "A data map enables understanding, and system elements are identified with sufficient granularity; no rule judges granularity."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0251"
     citation: {"ref": "SP800-37R2", "page": 59, "anchor": "Identifying and understanding the information life cycle is particularly relevant for the"}
     kind: "should"
@@ -2044,14 +2117,20 @@ requirements:
     locator: "TASK P-14"
     context: ""
     statement: "Conduct a system-level risk assessment and update the risk assessment results on an ongoing basis."
-    status: "candidate"
+    status: "partial"
+    reason: "SRA-001 fails a system risk assessment without its sources of threat information; RARC-001 fails a subsequent assessment that names no previous report. That the results are updated on an ongoing basis is unheld."
+    evidence: [{"kind": "rule", "target": "SRA-001", "fixture": "tests/fixtures/negative/SRA-001.information.yaml", "expect": "information; the sources of threat, vulnerability and impact information are identified", "claim": "constraint", "holds_when": "P-14 is active and ART-RA is produced or seeded", "asserts": "Conduct a system-level risk assessment: the sources of threat, vulnerability and impact information are identified"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0253"
     citation: {"ref": "SP800-37R2", "page": 60, "anchor": "This task may require that organizations conduct security and privacy risk assessments"}
     kind: "modal"
     locator: "TASK P-14"
     context: ""
     statement: "This task may require that organizations conduct security and privacy risk assessments to ensure that each type of risk is fully assessed. Assessment of security risk includes identification of threat sources67 and threat events affecting assets, whether and how the assets are vulnerable to the threats, the likelihood that an asset vulnerability will be exploited by a threat, and the impact (or consequence) of loss of the assets. As a key part of the risk assessment, assets are prioritized based on the adverse impact or consequence of asset loss. The meaning of loss is defined for each asset type to enable a determination of the loss consequence (i.e., the adverse impact of the loss). Loss consequences may be tangible (e.g., monetary, industrial casualties) or intangible (e.g., reputation) and constitute a continuum that spans from partial loss to total loss relative to the asset. Interpretations of information loss may include, for example, loss of possession, destruction, or loss of precision or accuracy. The loss of a function or service may be interpreted as a loss of control, loss of accessibility, loss of the ability to deliver normal function, performance, or behavior, or a limited loss of capability resulting in a level of degradation of function, performance, or behavior. Physical consequences of compromise can include unscheduled production downtime, industrial equipment damage, casualties at the site, environmental disasters and public safety threats. Prioritization of assets is based on asset value, physical consequences, cost of replacement, criticality, impact on image or reputation, or trust by users, by collaborating organizations, or by mission or business partners. The asset priority translates to precedence in allocating resources, determining strength of mechanisms, and defining levels of assurance."
-    status: "candidate"
+    status: "partial"
+    reason: "RARC-001 fails a risk model that leaves out an SP 800-30 risk factor, so threat sources, vulnerabilities, likelihood and impact are assessed; loss per asset and the prioritization of assets are unheld, and the first sentence permits."
+    evidence: [{"kind": "rule", "target": "RARC-001", "fixture": "tests/fixtures/negative/RARC-001.yaml", "expect": "all of the risk factors of SP 800-30 are used across the DoD", "claim": "constraint", "holds_when": "P-14 is active and ART-RA is produced or seeded", "asserts": "Assessment of security risk includes threat sources, vulnerabilities, likelihood and impact: a risk model that leaves out a risk factor of SP 800-30 fails", "sentence": "Assessment of security risk includes identification of threat sources67 and threat events affecting assets, whether and how the assets are vulnerable to the threats, the likelihood that an asset vulnerability will be exploited by a threat, and the impact (or consequence) of loss of the assets."}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0254"
     citation: {"ref": "SP800-37R2", "page": 60, "anchor": "Privacy risk assessments are conducted to determine the likelihood that a given"}
     kind: "indicative"
@@ -2059,6 +2138,8 @@ requirements:
     context: ""
     statement: "Privacy risk assessments are conducted to determine the likelihood that a given operation the system is taking when processing PII could create an adverse effect on individuals—and the potential impact on individuals.68 These adverse effects can arise from unauthorized activities that lead to the loss of confidentiality, integrity, or availability in information systems processing PII, or may arise as a byproduct of authorized activities. Privacy risk assessments are influenced by contextual factors. Contextual factors can include, but are not limited to, the sensitivity level of the PII, including specific elements or in aggregate; the types of organizations using or interacting with the system and individuals’ perceptions about the organizations with respect to privacy; individuals’ understanding about the nature and purpose of the processing; and the privacy interests of individuals, technological expertise or demographic characteristics that influence their understanding or behavior. The privacy risks to individuals may affect individuals’ decisions to engage with the system thereby impacting mission or business objectives, or create legal liability, reputational risks, or other types of risks for the organization. Impacts to the organization are not privacy risks. However, these impacts can guide and inform organizational decision-making and influence prioritization and resource allocation for risk response."
     status: "candidate"
+    reason: "ART-RA '## Privacy risk' holds the privacy risk assessment in prose; no rule reads likelihood and impact on individuals or contextual factors."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0255"
     citation: {"ref": "SP800-37R2", "page": 60, "anchor": "In addition, the use of threat intelligence, threat analysis, and threat modelling"}
     kind: "indicative"
@@ -2085,20 +2166,28 @@ requirements:
     context: ""
     statement: "Risk assessments are conducted throughout the SDLC and support various RMF steps and tasks. Risk assessment results are used to inform security and privacy requirements definition; categorization decisions; the selection, tailoring, implementation, and assessment of controls; authorization decisions; potential courses of action and prioritization for risk responses; and continuous monitoring strategy. Organizations determine the form of risk assessment conducted (including the scope, rigor, and formality of such assessments) and method of reporting results."
     status: "candidate"
+    reason: "ART-RA is an input of the later tasks by the framework's structure; no rule fails a run whose decisions do not use it, and the form of the assessment is the organization's choice."
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0258"
     citation: {"ref": "SP800-37R2", "page": 61, "anchor": "Define the security and privacy requirements for the system and the environment"}
     kind: "imperative"
     locator: "TASK P-15"
     context: ""
     statement: "Define the security and privacy requirements for the system and the environment of operation."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a protection need that no requirement traces, so the requirements are defined from the needs"
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Define the security and privacy requirements for the system: a protection need traced by no requirement fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0259"
     citation: {"ref": "SP800-37R2", "page": 62, "anchor": "Protection needs are an expression of the protection capability required for the"}
     kind: "indicative"
     locator: "TASK P-15"
     context: ""
     statement: "Protection needs are an expression of the protection capability required for the system in order to reduce security and privacy risk to an acceptable level while supporting mission or business needs. Protection needs include the security characteristics70 of the system and the security behavior of the system in its intended operational environment and across all system life cycle phases. The protection needs reflect the priorities of stakeholders, results of negotiations among stakeholders in response to conflicts, opposing priorities, contradictions, and stated objectives, and thus, are inherently subjective. The protection needs are documented to help ensure that the reasoning, assumptions, and constraints associated with those needs are available for future reference and to provide traceability to the security and privacy requirements. Security and privacy requirements71 constitute a formal, more granular expression of protection needs across all SDLC phases, the associated life cycle processes, and protections for the assets associated with the system. Security and privacy requirements are obtained from many sources (e.g., laws, executive orders, directives, regulations, policies, standards, mission and business needs, or risk assessments). Security and privacy requirements are an important part of the formal expression of the required characteristics of the system.72 The security and privacy requirements guide and inform the selection of controls for a system and the tailoring activities associated with those controls."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-003 fails a protection need that no requirement traces, so the needs documented give traceability to the requirements"
+    evidence: [{"kind": "rule", "target": "REQS-003", "fixture": "tests/fixtures/negative/REQS-003.traced.yaml", "expect": "is traced by no requirement", "claim": "constraint", "asserts": "Protection needs are documented to provide traceability to the security and privacy requirements: a need traced by no requirement fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0260"
     citation: {"ref": "SP800-37R2", "page": 62, "anchor": "Organizations can use the Cybersecurity Framework to manage security and privacy requirements"}
     kind: "indicative"
@@ -2113,7 +2202,10 @@ requirements:
     locator: "TASK P-16"
     context: ""
     statement: "Determine the placement of the system within the enterprise architecture."
-    status: "candidate"
+    status: "covered"
+    reason: "HOST-001 fails a new major application not placed in a Defense Enterprise Computing Center where feasible, and one that ignores an existing authorized enclave"
+    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.decc.yaml", "expect": "a new major application is hosted in a Defense Enterprise Computing Center when operationally feasible", "claim": "constraint", "asserts": "Determine the placement of the system within the enterprise architecture: a new major application is hosted in a Defense Enterprise Computing Center"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0262"
     citation: {"ref": "SP800-37R2", "page": 63, "anchor": "Enterprise architecture is a management practice used to maximize the effectiveness of"}
     kind: "should"
@@ -2128,21 +2220,30 @@ requirements:
     locator: "TASK P-17"
     context: ""
     statement: "Allocate security and privacy requirements to the system and to the environment of operation."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a requirement allocated to a component the boundary lacks"
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Allocate security and privacy requirements to the system: an allocation to a component that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0264"
     citation: {"ref": "SP800-37R2", "page": 64, "anchor": "Security and privacy requirements are allocated to guide and inform control selection"}
     kind: "modal"
     locator: "TASK P-17"
     context: ""
     statement: "Security and privacy requirements are allocated to guide and inform control selection and implementation for the organization, system, system elements, and/or environment of operation.73 Requirements allocation identifies where controls will be implemented. The allocation of requirements conserves resources and helps to streamline the risk management process by ensuring that requirements are not implemented on multiple systems or system elements when implementation of a common control or a system-level control on a specific system element provides the needed protection capability."
-    status: "candidate"
+    status: "covered"
+    reason: "REQS-001 fails a requirement allocated to a component the boundary lacks, so allocation identifies where controls are implemented"
+    evidence: [{"kind": "rule", "target": "REQS-001", "fixture": "tests/fixtures/negative/REQS-001.allocation.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Requirements allocation identifies where controls will be implemented: an allocation to a component that is not a boundary component fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0265"
     citation: {"ref": "SP800-37R2", "page": 64, "anchor": "Register the system with organizational program or management offices."}
     kind: "imperative"
     locator: "TASK P-18"
     context: ""
     statement: "Register the system with organizational program or management offices."
-    status: "candidate"
+    status: "covered"
+    reason: "UPD-001 fails a system not reported in eMASS or ERS"
+    evidence: [{"kind": "rule", "target": "UPD-001", "fixture": "tests/fixtures/negative/UPD-001.reported.yaml", "expect": "the system is not reported in either eMASS or ERS (reported_in is", "claim": "constraint", "holds_when": "P-18 is active and ART-REG is produced or seeded", "asserts": "Register the system with organizational program or management offices: the system is not reported in either eMASS or ERS fails"}]
+    work_item: "WI-401"
   - id: "REQ-SP800-37R2-0266"
     citation: {"ref": "SP800-37R2", "page": 64, "anchor": "System registration, in accordance with organizational policy, serves to inform the governing"}
     kind: "modal"
@@ -5667,7 +5768,10 @@ requirements:
     locator: "AUTHORIZATION BOUNDARY CONSIDERATIONS"
     context: "AUTHORIZATION BOUNDARIES FOR SOFTWARE APPLICATIONS"
     statement: "Authorization boundaries include all system elements, including hardware, firmware, and software. Software elements include applications (e.g., database applications, customized business applications, and web applications), middleware, and operating systems. The software elements are included in authorization boundaries, either as part of the information system on which the software is hosted or as a part of an application-only system or subsystem that inherits controls from the hosting system. Software applications may depend on the resources provided by the hosting system and as such, can leverage the controls provided by the hosting system to help provide a foundational level of protection for the hosted applications. Additional application-level controls are provided by the respective software applications, as needed. Application owners coordinate with system owners to help ensure that security and privacy requirements are satisfied among applications and hosting systems. Coordination between system owners and application owners includes, for example, consideration for the selection, implementation, assessment, and monitoring of controls for the applications; the effects of changes to the applications on the security and privacy posture of the system and the organization; and the effects of changes to the system on the hosted applications. AUTHORIZATION BOUNDARIES AND EXTERNAL PROVIDERS"
-    status: "candidate"
+    status: "partial"
+    reason: "boundary.yaml components are typed hardware, software, firmware and the rest; application-level controls and the coordination of application and system owners are unheld (WI-412)."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/components", "claim": "constraint", "asserts": "Authorization boundaries include all system elements, including hardware, firmware and software, listed in boundary.yaml", "sentence": "Authorization boundaries include all system elements, including hardware, firmware, and software."}]
+    work_item: "WI-412"
   - id: "REQ-SP800-37R2-0673"
     citation: {"ref": "SP800-37R2", "page": 178, "anchor": "While the concepts of external systems and external service providers are not"}
     kind: "should"
@@ -6156,7 +6260,10 @@ requirements:
     locator: "TASK P-8"
     context: ""
     statement: "Information is elicited from stakeholders to acquire a more thorough understanding of the missions, business functions, and mission/business processes of the organization from a system security and privacy perspective."
-    status: "candidate"
+    status: "covered"
+    reason: "MSN-001 fails missions identified by anyone but the mission or business owner, the stakeholder they are elicited from"
+    evidence: [{"kind": "rule", "target": "MSN-001", "holds_when": "P-8 is active and its records are produced or seeded", "fixture": "tests/fixtures/negative/MSN-001.owner.yaml", "expect": "the mission or business owner identifies the missions the system supports, not", "claim": "constraint", "asserts": "Information on the missions and business functions is elicited from stakeholders: the mission or business owner identifies the missions the system supports"}]
+    work_item: "WI-401"
     promoted: {"reason": "Task P-8 discussion states how the task is done: information is elicited from stakeholders to understand the missions."}
   - id: "REQ-SP800-37R2-0732"
     citation: {"ref": "SP800-37R2", "page": 58, "anchor": "System Privacy Officer is only a primary role when the information system"}
