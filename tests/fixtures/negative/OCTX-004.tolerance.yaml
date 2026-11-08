@@ -1,0 +1,17 @@
+rule: OCTX-004
+bases:
+- minimal
+description: a risk tolerance recorded at a level that is not one of the five risk tolerance levels
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: risk_frame.tolerance.0.level
+  value: acceptable
+expect:
+  errors:
+  - OCTX-004
+  also:
+  - RUN-FM-001
+  messages:
+  - 'the risk tolerance for mission degradation is acceptable, not one of the risk tolerance levels very-low,
+    low, moderate, high or very-high'
