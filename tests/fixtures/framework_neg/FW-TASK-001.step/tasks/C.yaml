@@ -1,0 +1,65 @@
+tasks:
+  - id: C-1
+    name: System Description
+    step: C
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Document the characteristics of the system.
+    raci: {R: [PER-PM, PER-ISSM], A: PER-PM, C: [PER-IO], I: [PER-AO]}
+    inputs: [ART-BND, EXT-PRODUCT]
+    outputs: [ART-SD, ART-BND]
+    writes_facts: [system_id, system_name]
+    depends_on: [P-11]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria: [ART-BND exists.]
+    exit_criteria: [ART-SD written.]
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-1"}
+    playbook: playbooks/C/C-1.md
+  - id: C-2
+    name: Security Categorization
+    step: R
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Categorize the system per CNSSI 1253.
+    raci: {R: [PER-ISSM, PER-IO], A: PER-PM, C: [], I: [PER-AO]}
+    inputs: [ART-SD]
+    outputs: [ART-CAT]
+    writes_facts: [categorization]
+    depends_on: [C-1]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria: [ART-SD exists.]
+    exit_criteria: [facts.categorization set_by C-2.]
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-2"}
+      - {ref: CNSSI1253, section: "3.1.2"}
+    playbook: playbooks/C/C-2.md
+  - id: C-3
+    name: Security Categorization Review and Approval
+    step: C
+    level: system
+    optional: false
+    primary_phase: PH-MSA
+    phases: [PH-MSA]
+    aligned_with: {milestones: [MS-A], reviews: [], decisions: []}
+    purpose: Have the AO approve the categorization.
+    raci: {R: [PER-ISSM], A: PER-AO, C: [PER-IO], I: [PER-PM]}
+    inputs: [ART-CAT]
+    outputs: [ART-CAT]
+    writes_facts: [categorization.approved]
+    depends_on: [C-2]
+    feeds_back_to: []
+    min_interviews: 1
+    entry_criteria: [facts.categorization set_by C-2.]
+    exit_criteria: [facts.categorization.approved set_by C-3.]
+    citations:
+      - {ref: SP800-37R2, section: "TASK C-3"}
+    playbook: playbooks/C/C-3.md

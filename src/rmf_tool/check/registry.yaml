@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 363 rules, 37 repo-scope and 326 run-scope. Authoritative;
+# Rule registry (plan §6.5): 364 rules, 38 repo-scope and 326 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -86,6 +86,8 @@ rules:
     summary: RACI does not have exactly one Accountable persona and at least one Responsible
     fixture: tests/fixtures/framework_neg/FW-RACI-001/
     hint: Exactly one persona is accountable (raci.A); move the others to R or C.
+    enforces:
+      - REQ-CNSSP12-0050
   - id: FW-DAG-001
     scope: repo
     severity: E
@@ -131,6 +133,12 @@ rules:
     summary: the NIST SP 800-37r2 task set is not exact (IDs, names, steps, levels, optional flags, TASK citation)
     fixture: tests/fixtures/framework_neg/FW-TASK-001/
     hint: Task IDs and names are pinned in rmf_tool.framework.model.TASKS_80037; each task cites SP800-37R2 "TASK X-n".
+    enforces:
+      - REQ-CNSSI1253-0043
+      - REQ-DODI8500.01-0202
+      - REQ-DODI8500.01-0219
+      - REQ-DODI8510.01-0003
+      - REQ-SP800-53R5-0024
   - id: FW-PB-001
     scope: repo
     severity: E
@@ -167,6 +175,15 @@ rules:
     summary: requirements register shape, IDs or sources wrong; a page of an imported document is in no scope and no exclusion, or in two; a citation does not resolve, or its statement is not in the cited passage
     fixture: tests/unit/test_conformance_rules.py::test_fw_req_001_fires_when_a_statement_is_not_in_its_passage
     hint: Regenerate with rmf conformance extract. Every PDF and web reference in references/index.yaml needs an entry in conformance/sources.yaml whose scopes and exclusions cover every page with a reason; a pending document has no requirements file.
+  - id: FW-REQ-002
+    scope: repo
+    severity: E
+    ac: [AC-43]
+    phase: p13
+    applies_after: null
+    summary: at the freeze, a tier 1 entry is still a candidate, or a tier 1 partial has no evidence item that judges strong; a candidate outside tier 1 warns, once per document, and open work items do not block
+    fixture: tests/unit/test_conformance_rules.py::test_fw_req_002_fires_on_a_tier_1_candidate
+    hint: Triage the tier 1 candidate (rmf conformance mark), and give a tier 1 partial at least one rule, schema, pinned or template item that fails when part of its duty is broken, with a reason naming the rest. Outside tier 1 the register is advisory.
   - id: FW-REQ-003
     scope: repo
     severity: E

@@ -26,6 +26,10 @@ copied from the statement cannot ride on an unrelated schema field or entity.
 - ``claim: presence`` caps at partial on prose; the judge classifies schema and rule items
   itself. A fixture that only deletes, or a clause that only tests absence, is presence;
 - a rule that stays quiet unless an artifact is in play carries ``holds_when``.
+
+A repo-scope rule (FW-*) is judged the same way, on a framework overlay under
+``tests/fixtures/framework_neg/`` whose ``expect.yaml`` declares its messages (ADR-0005,
+2026-11-08); an overlay has no mutations, so its claim comes from the clause alone.
 """
 
 from __future__ import annotations
@@ -50,7 +54,8 @@ STRONG, WEAK, DENIED, UNRESOLVED = "strong", "weak", "denied", "unresolved"
 EXAMPLES = "examples/"
 # They hold for any content, so a pass says nothing about one requirement. GEN-STALE-001 fails any
 # edit to any generated file, so its message never names the element a requirement asks for.
-GENERIC_RULES = ("FW-SCHEMA-001", "FW-CITE-", "TRACE-", "RUN-FM-001", "FW-REQ-", "GEN-STALE-001")
+GENERIC_RULES = ("FW-SCHEMA-001", "FW-CITE-", "TRACE-", "RUN-FM-001", "FW-REQ-", "FW-ID-",
+                 "GEN-STALE-001")
 # Fields a pin may assert: each holds a value a wrong framework could get wrong. Identity and
 # prose fields are not here, so `id: AD-ATO` proves nothing (see test_conformance_rules).
 PINNED_FIELDS = frozenset({
@@ -79,6 +84,10 @@ DELETE_FIELD, SET_FIELD = "delete_field", "set_field"
 DELETE_FILE, REPLACE_TEXT = "delete_file", "replace_text"
 MIN_EXPECT_WORDS = 2
 NEGATIVE_FIXTURES = "tests/fixtures/negative/"
+# A repo-scope rule's negative fixture: an overlay on tests/fixtures/framework_mini that
+# test_framework_negative composes and validates, proving each message its expect.yaml declares.
+FRAMEWORK_FIXTURES = "tests/fixtures/framework_neg/"
+FRAMEWORK_EXPECT = "expect.yaml"
 QUIET_UNLESS_IN_PLAY = "produced_or_seeded"  # a rule calling it returns [] for an absent artifact
 SCHEMA_LINK = "x-enforces"
 ENTITY_LINK = "enforces"
@@ -92,6 +101,7 @@ organization organizations system systems information security privacy control c
 _WORD = re.compile(r"[a-z][a-z-]{3,}")
 _CAMEL = re.compile(r"(?<=[a-z])(?=[A-Z])")
 _CALL = re.compile(r"\b(_?[a-z]\w*)\(")
+_QUALIFIED_CALL = re.compile(r"\b([a-z_]\w*)\.(_?[a-z]\w*)\(")
 _ADJACENT = re.compile(r"\"\s*\n\s*f?\"")
 
 
@@ -125,7 +135,11 @@ def fixture_exists(repo: Path, fixture: str) -> bool:
 
 
 def fixture_spec(repo: Path, fixture: str) -> Mapping[str, Any] | None:
-    """A negative fixture's spec, or None when ``fixture`` is not one."""
+    """A negative fixture's spec, or None when ``fixture`` is not one. A framework overlay's
+    ``expect.yaml`` is read as one: every rule it fires (``rule`` and ``also``) is an error, and
+    it has no mutations."""
+    if fixture.startswith(FRAMEWORK_FIXTURES):
+        return _framework_spec(repo, fixture.rstrip("/"))
     if not fixture.startswith(NEGATIVE_FIXTURES):
         return None
     try:
@@ -133,6 +147,18 @@ def fixture_spec(repo: Path, fixture: str) -> Mapping[str, Any] | None:
     except YamlError:
         return None
     return spec if isinstance(spec, Mapping) else None
+
+
+def _framework_spec(repo: Path, overlay: str) -> Mapping[str, Any] | None:
+    try:
+        spec = read_yaml(repo / overlay / FRAMEWORK_EXPECT)
+    except (YamlError, OSError):
+        return None
+    if not isinstance(spec, Mapping):
+        return None
+    return {"rule": spec.get("rule"),
+            "expect": {"errors": [spec.get("rule"), *(spec.get("also") or ())],
+                       "messages": list(spec.get("messages") or ())}}
 
 
 def content_words(text: str) -> set[str]:
@@ -189,7 +215,7 @@ def _spec_problem(repo: Path, rule: str, item: Mapping[str, Any]) -> Verdict | N
     spec = fixture_spec(repo, fixture)
     if spec is None:
         return Verdict(UNRESOLVED, f"{rule}: {fixture} is no negative fixture under "
-                       f"{NEGATIVE_FIXTURES}")
+                       f"{NEGATIVE_FIXTURES} or {FRAMEWORK_FIXTURES}")
     outcome = spec.get("expect") or {}
     if spec.get("rule") != rule or rule not in (outcome.get("errors") or ()):
         return Verdict(DENIED, f"{fixture} does not expect {rule} as its rule, in expect.errors")
@@ -693,26 +719,40 @@ def _schema_links(path: str, node: Any, pointer: str) -> Iterator[tuple[str, str
             yield from _schema_links(path, child, f"{pointer}/{n}")
 
 
-def rule_sources() -> dict[str, str]:
-    """Each run rule's source with the same-module helpers it calls, and adjacent string
-    literals joined, so a message can be found whole."""
-    from rmf_tool.check.rules import RULES
+def _source(function: Callable[..., Any], *, across: bool = False) -> str:
+    """A rule's source with the helpers it calls in its own module, adjacent string literals
+    joined. ``across`` also follows ``module.helper(`` into another rmf_tool module: a repo-scope
+    rule is often a one-line call into the module that holds its clauses."""
+    seen: dict[str, str] = {}
+    todo = [function]
+    while todo:
+        current = todo.pop()
+        key = f"{current.__module__}.{current.__name__}"
+        if key in seen:
+            continue
+        module = sys.modules[current.__module__]
+        seen[key] = inspect.getsource(current)
+        for name in _CALL.findall(seen[key]):
+            helper = getattr(module, name, None)
+            if inspect.isfunction(helper) and helper.__module__ == module.__name__:
+                todo.append(helper)
+        for alias, name in _QUALIFIED_CALL.findall(seen[key]) if across else ():
+            other = getattr(module, alias, None)
+            helper = getattr(other, name, None) if inspect.ismodule(other) else None
+            if inspect.isfunction(helper) and helper.__module__.startswith("rmf_tool."):
+                todo.append(helper)
+    return _ADJACENT.sub("", "\n".join(seen.values()))
 
-    out = {}
-    for ident, function in RULES.items():
-        module = sys.modules[function.__module__]
-        seen: dict[str, str] = {}
-        todo = [function]
-        while todo:
-            current = todo.pop()
-            if current.__name__ in seen:
-                continue
-            seen[current.__name__] = inspect.getsource(current)
-            for name in _CALL.findall(seen[current.__name__]):
-                helper = getattr(module, name, None)
-                if inspect.isfunction(helper) and helper.__module__ == module.__name__:
-                    todo.append(helper)
-        out[ident] = _ADJACENT.sub("", "\n".join(seen.values()))
+
+def rule_sources() -> dict[str, str]:
+    """Each rule's source, run rules and the repo-scope rules of `rmf validate`, so a message
+    can be found whole."""
+    from rmf_tool.check.rules import RULES
+    from rmf_tool.framework.validate import RULES as FRAMEWORK_RULES
+
+    out = {ident: _source(function) for ident, function in RULES.items()}
+    out.update({ident: _source(function, across=True)
+                for ident, function in FRAMEWORK_RULES.items()})
     return out
 
 
