@@ -909,9 +909,9 @@ requirements:
     locator: "2.4"
     context: "FIGURE 5: CONCEPTUAL VIEW OF THE SYSTEM"
     statement: "The system may also communicate or have other interactions with enabling systems and other systems that are part of the extended environment of operation but are outside of the scope of authorization for the system.40 Organizations determine which parts of the environment of operation are within the authorization boundary. These determinations are typically specific to the system and are context-driven."
-    status: "covered"
-    reason: "INV-BND-001 fails an inventory item that names a component outside the authorization boundary, so which elements are within it is determined"
-    evidence: [{"kind": "rule", "target": "INV-BND-001", "fixture": "tests/fixtures/negative/INV-BND-001.component.yaml", "expect": ", which is not a boundary component", "claim": "constraint", "asserts": "Organizations determine which parts are within the authorization boundary: an item that is not a boundary component fails"}]
+    status: "partial"
+    reason: "boundary.yaml must list the components within the authorization boundary; no record shows which parts of the environment of operation were weighed and judged outside it, so the determination itself is P-11 prose."
+    evidence: [{"kind": "schema", "target": "framework/schema/boundary.schema.json#/properties/components", "claim": "constraint", "asserts": "Organizations determine which parts are within the authorization boundary: boundary.yaml lists the system elements within it"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0111"
     citation: {"ref": "SP800-37R2", "page": 35, "anchor": "Common controls are referenced in the security and privacy plans for the"}
@@ -2259,9 +2259,9 @@ requirements:
     locator: "TASK P-16"
     context: ""
     statement: "Determine the placement of the system within the enterprise architecture."
-    status: "covered"
-    reason: "HOST-001 fails a new major application not placed in a Defense Enterprise Computing Center where feasible, and one that ignores an existing authorized enclave"
-    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.decc.yaml", "expect": "a new major application is hosted in a Defense Enterprise Computing Center when operationally feasible", "claim": "constraint", "asserts": "Determine the placement of the system within the enterprise architecture: a new major application is hosted in a Defense Enterprise Computing Center"}]
+    status: "partial"
+    reason: "HOST-001 fails a boundary.yaml that records no hosting, where the system sits and why; that placement within the enterprise architecture is determined beyond hosting is P-16 prose."
+    evidence: [{"kind": "rule", "target": "HOST-001", "fixture": "tests/fixtures/negative/HOST-001.yaml", "expect": "boundary.yaml records no hosting: where the system is hosted and why", "claim": "presence", "asserts": "Determine the placement of the system within the enterprise architecture: boundary.yaml records no hosting fails"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0262"
     citation: {"ref": "SP800-37R2", "page": 63, "anchor": "Enterprise architecture is a management practice used to maximize the effectiveness of"}
@@ -3032,8 +3032,8 @@ requirements:
     locator: "3.5"
     context: "TABLE 6: ASSESS TASKS AND OUTCOMES"
     statement: "ASSESSMENT REPORTS | and recommendations are completed."
-    status: "covered"
-    reason: "ASMT-008 fails an assessment report that states another methodology with no rationale, and one without the CISO's quality review"
+    status: "partial"
+    reason: "ASMT-008 fails an assessment report without the CISO's quality review; that the report's findings and recommendations are completed is unheld (SAR-COV-001, which would hold it, is at its fan-out cap)."
     evidence: [{"kind": "rule", "target": "ASMT-008", "fixture": "tests/fixtures/negative/ASMT-008.noreview.yaml", "expect": "no quality_review: the CISO is responsible for assessing security control assessments", "claim": "presence", "holds_when": "A-4 is active and ART-SAR is produced or seeded", "asserts": "Assessment reports with findings and recommendations are completed: a report with no quality_review of the security control assessments fails"}]
     work_item: "WI-403"
   - id: "REQ-SP800-37R2-0343"
@@ -4185,7 +4185,7 @@ requirements:
     context: "AUTHORIZING OFFICIAL"
     statement: "Organizations ensure that there are no conflicts of interest when assigning the same individual to multiple risk management roles. See RMF Prepare-Organization Level step, Task P-1."
     status: "covered"
-    reason: "RMR-001 fails one individual appointed both authorizing official and system owner, the conflict of interest P-1 names"
+    reason: "RMR-001 fails one individual appointed both authorizing official and system owner, the conflict of interest the source gives as its example; the common control provider half is not checked because org-context.yaml cannot show whether this AO authorizes the provider's controls."
     evidence: [{"kind": "rule", "target": "RMR-001", "fixture": "tests/fixtures/negative/RMR-001.yaml", "expect": "holds both the authorizing official and the system owner role: an authorizing official cannot occupy the role of system owner for a system it authorizes", "claim": "constraint", "holds_when": "P-1 is active and org-context.yaml is produced or seeded", "asserts": "No conflicts of interest when assigning the same individual to multiple roles: one who holds both the authorizing official and the system owner role fails"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0463"
@@ -4733,8 +4733,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "SENIOR AGENCY OFFICIAL FOR PRIVACY Among other things, the senior agency official for privacy is responsible for:"
     statement: "• Designating which privacy controls will be treated as program management, common, system-specific, and hybrid privacy controls;"
-    status: "candidate"
-    reason: "PER-PRIV is R on S-3 and allocation.yaml types controls; program management privacy controls are not a type (WI-415)."
+    status: "partial"
+    reason: "allocation.yaml designates each control program-management, common, system-specific or hybrid from a fixed set; that the privacy official is the one who designates them is unheld (WI-415)."
+    evidence: [{"kind": "schema", "target": "framework/schema/allocation.schema.json#/properties/allocations/items/properties/type", "claim": "constraint", "asserts": "Designating which privacy controls are program management, common, system-specific and hybrid: allocation.yaml records the designation of each control"}]
     work_item: "WI-415"
   - id: "REQ-SP800-37R2-0522"
     citation: {"ref": "SP800-37R2", "page": 141, "anchor": "Identifying assessment methodologies and metrics to determine whether privacy controls are implemented"}
@@ -6621,8 +6622,8 @@ requirements:
     locator: "TASK P-8"
     context: ""
     statement: "Information is elicited from stakeholders to acquire a more thorough understanding of the missions, business functions, and mission/business processes of the organization from a system security and privacy perspective."
-    status: "covered"
-    reason: "MSN-001 fails missions identified by anyone but the mission or business owner, the stakeholder they are elicited from"
+    status: "partial"
+    reason: "MSN-001 fails missions identified by anyone but the mission or business owner; that the information is elicited from the stakeholders, not only from the owner, is P-8 interview prose."
     evidence: [{"kind": "rule", "target": "MSN-001", "holds_when": "P-8 is active and its records are produced or seeded", "fixture": "tests/fixtures/negative/MSN-001.owner.yaml", "expect": "the mission or business owner identifies the missions the system supports, not", "claim": "constraint", "asserts": "Information on the missions and business functions is elicited from stakeholders: the mission or business owner identifies the missions the system supports"}]
     work_item: "WI-401"
     promoted: {"reason": "Task P-8 discussion states how the task is done: information is elicited from stakeholders to understand the missions."}

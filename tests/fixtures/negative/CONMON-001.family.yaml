@@ -1,15 +1,12 @@
 rule: CONMON-001
-bases:
-- minimal
-description: the continuous monitoring strategy specifies no monitoring frequency for a baseline family (si)
+bases: [minimal]
+description: the ac frequency names the pe family instead, so the baseline family ac has none
 mutations:
-- op: delete_list_item
-  file: artifacts/data/conmon.yaml
-  path: frequencies
-  where:
-    family: si
+  - op: set_field
+    file: artifacts/data/conmon.yaml
+    path: frequencies.0.family
+    value: pe
 expect:
-  errors:
-  - CONMON-001
+  errors: [CONMON-001]
   messages:
-  - baseline family si has no monitoring frequency
+    - baseline family ac has no monitoring frequency

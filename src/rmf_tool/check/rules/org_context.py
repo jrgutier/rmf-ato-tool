@@ -741,7 +741,9 @@ def role_conflicts(ctx: Context) -> list[RunFinding]:
     """RMR-001 (SP 800-37r2 Task P-1 and Appendix D): one individual in several roles holds no
     conflict of interest, so the authorizing official is not also the system owner of what it
     authorizes; and P-1 designates a senior agency official for privacy. Individuals are
-    compared by name, the field that identifies the appointee."""
+    compared by name, the field that identifies the appointee. The common control provider half
+    of the source's example is not checked: org-context.yaml cannot tell whether this run's AO
+    authorizes the provider's common controls, which their own AO may do."""
     data, out, err = _record(ctx, "RMR-001", "P-1")
     if data is None:
         return out
