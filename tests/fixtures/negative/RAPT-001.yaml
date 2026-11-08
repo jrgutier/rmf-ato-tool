@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the AO is appointed by the Component CIO, not the Component head (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.2.appointed_by
+  value: PER-CIO
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-03: PER-AO is appointed by PER-CIO, which DoDI 8510.01 Table 8 does not name as its appointing authority (dod-component-head)'

@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the PM or SO is appointed by the Component CIO (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.6.appointed_by
+  value: PER-CIO
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-07: PER-PM is appointed by PER-CIO, which DoDI 8510.01 Table 8 does not name as its appointing authority (component-acquisition-executive or dod-component-head)'

@@ -1,0 +1,14 @@
+rule: OCTX-001
+bases:
+- minimal
+description: the Component CISO is appointed by the Component head although a Component CIO exists (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.1.appointed_by
+  value: dod-component-head
+expect:
+  errors:
+  - OCTX-001
+  messages:
+  - 'RA-02: the senior agency information security officer is designated by dod-component-head, not the chief information officer'

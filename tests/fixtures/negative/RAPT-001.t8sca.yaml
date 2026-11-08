@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the SCA is appointed by the AO, not delegated by the Component CISO (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.9.appointed_by
+  value: PER-AO
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-10: PER-SCA is appointed by PER-AO, which DoDI 8510.01 Table 8 does not name as its appointing authority (PER-CISO)'

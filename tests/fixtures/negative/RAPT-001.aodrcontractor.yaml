@@ -1,0 +1,16 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the AO role is re-delegated to an AODR who is contractor personnel (DoDI 8510.01 2.7.m(1))
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.3.affiliation
+  value: contractor
+expect:
+  errors:
+  - RAPT-001
+  also:
+  - OCTX-013
+  messages:
+  - 'RA-04: the AO role cannot be re-delegated to personnel who are not government personnel, and the AODR is contractor'
