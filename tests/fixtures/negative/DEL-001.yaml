@@ -1,0 +1,17 @@
+rule: DEL-001
+bases:
+- minimal
+description: POA&M items with no point of contact
+mutations:
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.0.point_of_contact, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.1.point_of_contact, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.2.point_of_contact, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.3.point_of_contact, value: ''}
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-POAM does not carry the CNSSI 1254 data element POC
+  also:
+  - POAM-FLD-001
+  - RUN-FM-001

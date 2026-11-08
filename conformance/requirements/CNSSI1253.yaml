@@ -68,7 +68,9 @@ requirements:
     locator: "1.2.•"
     context: "Differences Between CNSSI No. 1253 and NIST Publications The major differences between this Instruction and the NIST publications relevant to the RMF Steps Categorize and Select are:"
     statement: "• This Instruction does not adopt the high-water mark (HWM) concept from FIPS 200, Minimum Security Requirements for Federal Information and Information Systems, for categorizing NSS (see Section 2.1)."
-    status: "candidate"
+    status: "covered"
+    reason: "rmf baseline resolve selects each objective at its own level (cnssi_origins); a baseline.json recording a high-water-mark selection differs from a fresh resolve and fails GEN-STALE-001"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.method.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "CNSSI 1253 does not adopt the high-water mark concept for categorizing NSS: a baseline recording a high-water-mark selection differs from a fresh baseline resolve"}]
   - id: "REQ-CNSSI1253-0009"
     citation: {"ref": "CNSSI1253", "page": 6, "anchor": "The associations of confidentiality, integrity, and/or availability to controls in NSS baselines"}
     kind: "lettered"
@@ -129,6 +131,8 @@ requirements:
     context: "Privacy Risk in NSS"
     statement: "Personally identifiable information (PII) processed in systems (such as in mission or administrative systems or resident in audit logs) creates privacy risk. All organizations have some systems that create, collect, use, process, store, maintain, disseminate, disclose, or dispose of (collectively referred to as “process”) PII; therefore, privacy risk must be addressed at both the organizational and system levels. Failure to address privacy risk can cause individuals and organizations to experience other types of risk (e.g., psychological, reputational, financial, legal, compliance, operational security, and mission) as well as loss of trust and impact to information sharing and missions. Increasingly, failure to properly protect or manage PII may result in misuse of PII data sets (e.g., leveraging credentials of a legitimate user for adversarial purposes causing harm to national security interests, the organization, or individuals)."
     status: "candidate"
+    reason: "Privacy risk is addressed at the organization level at P-3 and at the system level in ART-RA '## Privacy risk' at P-14 with PER-PRIV responsible, in prose and RACI; no rule fails a run that leaves either level out"
+    work_item: "WI-140"
   - id: "REQ-CNSSI1253-0016"
     citation: {"ref": "CNSSI1253", "page": 8, "anchor": "While security and privacy are independent and separate disciplines, they are closely"}
     kind: "indicative"
@@ -136,13 +140,18 @@ requirements:
     context: "Privacy Risk in NSS"
     statement: "While security and privacy are independent and separate disciplines, they are closely related. It is essential for organizations to take a coordinated approach to identifying and managing security and privacy risks and complying with applicable requirements. Security controls are the safeguards or countermeasures employed within a system or an organization to protect the confidentiality, integrity, and availability of the system and its information and to manage information security risk. Privacy controls are the administrative, technical, and physical safeguards employed within a system or an organization to manage privacy risks and to ensure compliance with applicable privacy requirements."
     status: "candidate"
+    reason: "The coordinated approach is the RACI that puts PER-PRIV beside the security roles on 46 tasks; the other two marked sentences define security and privacy controls, which no run record can break"
+    work_item: "WI-481"
   - id: "REQ-CNSSI1253-0017"
     citation: {"ref": "CNSSI1253", "page": 8, "anchor": "For organizations to effectively manage security and privacy risks, the security and"}
     kind: "modal"
     locator: "2.3"
     context: "Relationship Between Security and Privacy Control Baselines"
     statement: "For organizations to effectively manage security and privacy risks, the security and privacy control baselines are implemented together. Security and privacy programs must collaborate throughout the organization’s RMF implementation, especially where their objectives overlap. This collaboration will help ensure organizations have the information they need to make informed security and privacy decisions. The security and privacy control baselines, documented in Appendix D Tables D-1 through D- 20, include controls and control enhancements that address risks that arise from the loss of confidentiality, integrity, and availability for systems and information (including PII) as well as controls and control enhancements that manage privacy responsibilities under Federal Information Security Modernization Act (FISMA), Office of Management and Budget (OMB) Circular A-130, and designated Federal Information Processing Standards (FIPS) as well as privacy risks to individuals. The security and privacy control baselines are not mutually exclusive. Some controls address both privacy risks and security risks. Similarly, within the security control baselines, a control may address a confidentiality risk, an integrity risk, an availability risk, or any combination of the three."
-    status: "candidate"
+    status: "partial"
+    reason: "A baseline leaving out a privacy-baseline control differs from a fresh resolve (GEN-STALE-001; the break itself is an erasure); the collaboration sentences are held by the RACI of every step and the rest describe the baselines"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.privacy.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "The security and privacy control baselines are implemented together: a baseline leaving out a privacy baseline control differs from a fresh baseline resolve", "sentence": "For organizations to effectively manage security and privacy risks, the security and privacy control baselines are implemented together."}]
+    work_item: "WI-489"
   - id: "REQ-CNSSI1253-0018"
     citation: {"ref": "CNSSI1253", "page": 8, "anchor": "It is possible for organizations to introduce unintended privacy risk when implementing"}
     kind: "modal"
@@ -322,7 +331,10 @@ requirements:
     locator: "2.5.1.•"
     context: "Relationship between Privacy Control Baseline and Privacy Overlays"
     statement: "• All systems will implement the NSS privacy control baseline to manage organizational PII risks."
-    status: "candidate"
+    status: "partial"
+    reason: "rmf baseline resolve selects every privacy-baseline row for every NSS; a baseline leaving one out fails GEN-STALE-001, the break itself an erasure of the control"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.privacy.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "All systems implement the NSS privacy control baseline: a baseline leaving out a privacy baseline control differs from a fresh baseline resolve"}]
+    work_item: "WI-489"
   - id: "REQ-CNSSI1253-0039"
     citation: {"ref": "CNSSI1253", "page": 11, "anchor": "Systems that process17 PII will implement both the NSS Privacy Control Baseline"}
     kind: "lettered"
@@ -369,6 +381,8 @@ requirements:
     context: "Tailoring Guidance"
     statement: "This chapter describes the processes of categorization and security control selection. Except where the guidance in this document differs from that in NIST SP 800-37, the national security community will implement the RMF Categorize and Select steps consistent with NIST SP 800-"
     status: "candidate"
+    reason: "C-1 to C-3 and S-1 to S-6 are the SP 800-37 tasks, pinned by the repo-scope rules FW-TASK-001 and FW-TASK-002, which FW-REQ-003 cannot cite"
+    work_item: "WI-480"
   - id: "REQ-CNSSI1253-0044"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "It is advantageous to include individuals with risk decision making responsibilities, such"}
     kind: "lettered"
@@ -376,20 +390,26 @@ requirements:
     context: "Tailoring Guidance"
     statement: "37. It is advantageous to include individuals with risk decision making responsibilities, such as an AO (or AO’s designee) and the SAOP (or designee), in Categorize and Select decisions to ensure the appropriate set of controls are identified and applied to a system, and are consistent with the results of risk assessments, risk management strategies, and organizational mission and business objectives."
     status: "candidate"
+    reason: "PER-AO and PER-PRIV are consulted on C-2, S-1 and S-2 and decide at C-3; 'it is advantageous to include' is soft guidance no run record can break"
+    work_item: "WI-481"
   - id: "REQ-CNSSI1253-0045"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "Determine security impact levels: (i) for the information type(s)21 processed, stored, transmitted,"}
     kind: "lettered"
     locator: "3.1.1"
     context: "RMF Step: Categorize For NSS, the Security Categorization task (Task C-2) is to:"
     statement: "1. Determine security impact levels: (i) for the information type(s)21 processed, stored, transmitted, or protected by the system; and (ii) for the system."
-    status: "candidate"
+    status: "covered"
+    reason: "C-2 records a provisional impact per objective for each information type (infotypes.yaml) and the system's impact levels (facts.yaml categorization), which FACTS-001 holds to C-2"
+    evidence: [{"kind": "schema", "target": "framework/schema/infotypes.schema.json#/properties/information_types/items/properties/confidentiality/properties/base", "claim": "constraint", "asserts": "Security impact levels are determined for each information type processed by the system, a provisional confidentiality impact"}, {"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "read_by": "FACTS-001", "asserts": "Security impact levels are determined for the system, its confidentiality impact level"}, {"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": "writes it, not another task", "claim": "constraint", "asserts": "The task that determines the security impact levels for the system is C-2, which writes the categorization; FACTS-001 keeps it present and C-2's"}]
   - id: "REQ-CNSSI1253-0046"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "Retain the three impact levels of Low, Moderate, or High for each"}
     kind: "lettered"
     locator: "3.1.2"
     context: "RMF Step: Categorize For NSS, the Security Categorization task (Task C-2) is to:"
     statement: "2. Retain the three impact levels of Low, Moderate, or High for each security objective (i.e., confidentiality, integrity, and availability)."
-    status: "candidate"
+    status: "covered"
+    reason: "categorization.c, i and a each take low, moderate or high, the impact enum, and FACTS-001 makes the categorization C-2's"
+    evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/categorization/properties/c", "claim": "constraint", "read_by": "FACTS-001", "asserts": "C-2 retains the three impact levels of low, moderate or high for the confidentiality security objective"}, {"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.setby.yaml", "expect": "writes it, not another task", "claim": "constraint", "asserts": "The categorization C-2 writes retains an impact level for each security objective; FACTS-001 keeps it present, so the three-level impact enum applies"}]
   - id: "REQ-CNSSI1253-0047"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "When determining impact levels, each organization must be consistent with the impact"}
     kind: "modal"
@@ -397,6 +417,8 @@ requirements:
     context: "RMF Step: Categorize For NSS, the Security Categorization task (Task C-2) is to:"
     statement: "When determining impact levels, each organization must be consistent with the impact levels established by the information owner. Information owners may not reside in the organization that owns and/or operates the system, and there may be multiple information owners associated with a system. All information owners must be identified to provide inputs to this activity. Each information owner sets the impact level for their information type. See Section 2.2 for a discussion about privacy risk in NSS. Sections 3.1.1 and 3.1.2 provide the activities to complete system categorization."
     status: "candidate"
+    reason: "C-2 interviews each information owner and ART-INFOTYPES has an '## Information owners' heading, prose only: no field names the owner of a type and no rule ties a level to its owner's answer"
+    work_item: "WI-483"
   - id: "REQ-CNSSI1253-0048"
     citation: {"ref": "CNSSI1253", "page": 13, "anchor": "Identify all types of information processed, stored, or transmitted by the system,"}
     kind: "lettered"
@@ -443,7 +465,9 @@ requirements:
     locator: "3.1.2.2"
     context: "Determine Impact Levels for the System To do this:"
     statement: "2. Document the security categorization results in the security plan."
-    status: "candidate"
+    status: "covered"
+    reason: "rmf assemble writes the categorization into ART-SSP's rmf:facts block from facts.yaml; a plan showing another fails GEN-STALE-001, and the OSCAL SSP carries security-impact-level"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.sspcat.yaml", "expect": "marker block differs from a fresh assemble", "claim": "constraint", "asserts": "The security plan documents the security categorization results in its facts marker block; a plan showing another categorization differs from a fresh assemble"}]
   - id: "REQ-CNSSI1253-0053"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "Obtain the SAOP’s, or designee’s, approval of the security categorization for systems"}
     kind: "lettered"
@@ -459,7 +483,9 @@ requirements:
     locator: "3.1.2.4"
     context: "Determine Impact Levels for the System To do this:"
     statement: "4. Obtain AO’s or AO’s designated representative’s approval of the security categorization."
-    status: "candidate"
+    status: "covered"
+    reason: "PIIC-001 refuses a categorization reviewed by anyone but the AO or designated representative, and FACTS-001 an unapproved one before S-1"
+    evidence: [{"kind": "rule", "target": "PIIC-001", "fixture": "tests/fixtures/negative/PIIC-001.reviewer.yaml", "expect": "the security categorization is reviewed by the authorizing official or designated representative", "claim": "constraint", "asserts": "Approval of the security categorization is obtained from the AO or the AO's designated representative; the categorization reviewed by another official fails"}]
   - id: "REQ-CNSSI1253-0055"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "The RMF Select step is consistent with the guidance in NIST SP"}
     kind: "indicative"
@@ -482,14 +508,19 @@ requirements:
     locator: "3.2.1.1"
     context: "Task S-1, Control Selection To select an NSS baseline, the following activities are completed:"
     statement: "1. Select the NSS security control baseline contained in Appendix D Tables D-1 through D- 20 corresponding to the security categorization of the system (i.e., the impact levels determined for each security objective [confidentiality, integrity, and availability])."
-    status: "candidate"
+    status: "covered"
+    reason: "rmf baseline resolve selects the Appendix D rows at each objective's level; a baseline not resolved again after the categorization changes fails GEN-STALE-001"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.categorization.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "The NSS security control baseline selected corresponds to the security categorization of the system; one that does not differs from a fresh baseline resolve"}]
   - id: "REQ-CNSSI1253-0058"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "Include the NSS privacy control baseline contained in Appendix D Tables D-1"}
     kind: "lettered"
     locator: "3.2.1.2"
     context: "Task S-1, Control Selection To select an NSS baseline, the following activities are completed:"
     statement: "2. Include the NSS privacy control baseline contained in Appendix D Tables D-1 through D-20, which is a default for all NSS."
-    status: "candidate"
+    status: "partial"
+    reason: "rmf baseline resolve includes the NSS privacy control baseline for every NSS; a baseline leaving a control of it out fails GEN-STALE-001, the break itself an erasure"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.privacy.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Include the NSS privacy control baseline, a default for all NSS: a baseline leaving out a privacy baseline control differs from a fresh baseline resolve"}]
+    work_item: "WI-489"
   - id: "REQ-CNSSI1253-0059"
     citation: {"ref": "CNSSI1253", "page": 14, "anchor": "As appropriate, coordinate with privacy program officials or representatives to ensure privacy"}
     kind: "lettered"
@@ -507,6 +538,8 @@ requirements:
     context: "Task S-2, Control Tailoring"
     statement: "The tailoring process is used to modify and align an NSS baseline to account for conditions affecting the specific system (e.g., conditions related to organizational missions/business functions, systems, types of technology, or environments of operation). During the tailoring process, a risk assessment – either informal or formal – should be conducted. The results from a risk assessment provide information about the necessity and sufficiency of controls and enhancements during the tailoring process. To tailor a selected NSS baseline, the following activities must be completed:"
     status: "candidate"
+    reason: "S-2 takes ART-RA as an input and its entry criterion asks for it; the first and third marked sentences describe tailoring and what a risk assessment provides and the last is a lead-in, which no run record can break"
+    work_item: "WI-481"
   - id: "REQ-CNSSI1253-0061"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Apply any applicable overlay(s). To determine applicability of an overlay, refer to"}
     kind: "lettered"
@@ -524,6 +557,8 @@ requirements:
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "2. If the use of multiple overlays results in conflicts between the application or removal of security or privacy controls, the AO (or designee) and SAOP (or designee), in coordination with the information owner/steward, information system owner, and risk executive (function) resolve the conflict."
     status: "candidate"
+    reason: "S-2 exit criterion 4 and step 3 have the AO and the SAOP resolve an overlay conflict; the coordination with the information owner, system owner and risk executive (function) is unheld"
+    work_item: "WI-484"
   - id: "REQ-CNSSI1253-0063"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Use tailoring guidance from Section 2.6 and NIST SP 800-53B, Section 2.4"}
     kind: "lettered"
@@ -538,7 +573,9 @@ requirements:
     locator: "3.2.2.a"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "a. Identify and designate common controls, and the common control provider(s)"
-    status: "candidate"
+    status: "covered"
+    reason: "ART-ORG-CONTEXT common_controls name each common control set with its provider, who holds a role; S-3 allocation marks controls common; a provider holding no role fails OCTX-005"
+    evidence: [{"kind": "rule", "target": "OCTX-005", "fixture": "tests/fixtures/negative/OCTX-005.persona.yaml", "expect": "holds no role in roles", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-5 adds the section", "asserts": "Common controls are identified and designated with their common control provider, who must hold a role in roles"}]
   - id: "REQ-CNSSI1253-0065"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Control implementation, applicability, and placement considerations"}
     kind: "lettered"
@@ -588,7 +625,10 @@ requirements:
     locator: "3.2.2.e"
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "e. Supplement baselines with additional controls and control enhancements"
-    status: "candidate"
+    status: "partial"
+    reason: "tailoring.yaml add actions reach baseline.json as origin tailored-in; a baseline leaving a supplemented control out fails GEN-STALE-001, the break itself an erasure"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.tailoredin.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Supplement baselines with additional controls: a baseline leaving out a control tailored in differs from a fresh baseline resolve"}]
+    work_item: "WI-489"
   - id: "REQ-CNSSI1253-0071"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Provide specification information for control implementation24"}
     kind: "lettered"
@@ -606,6 +646,8 @@ requirements:
     context: "Task S-2, Control Tailoring To tailor a selected NSS baseline, the following activities must be completed:"
     statement: "4. Use risk assessments, established risk tolerances, or other risk information (e.g., privacy risk assessments if appropriate) to inform tailoring. Evaluate the baseline controls to determine if there are any controls that do not address risks faced by the system; controls that may unnecessarily increase complexity, long term maintenance and assessment costs; or controls that may result in decreased trustworthiness and assurance. Controls should be removed only because of risk-based determinations and not because of an inability to implement a control."
     status: "candidate"
+    reason: "S-2 reads ART-RA and TLR-002 refuses a removal or downgrade with no basis or not supported by ART-RA (at its fan-out cap); the evaluation for complexity and long-term maintenance and assessment cost is unheld"
+    work_item: "WI-485"
   - id: "REQ-CNSSI1253-0073"
     citation: {"ref": "CNSSI1253", "page": 15, "anchor": "Since controls and control enhancements are statements of security or privacy functions"}
     kind: "indicative"
@@ -676,7 +718,10 @@ requirements:
     locator: "Appendix D NSS Control Baselines and Supporting.•"
     context: "The tables contain the following columns:"
     statement: "• Privacy Control Baseline – Controls indicated with an \"X\" or a \"+\" in this column are required for all NSS."
-    status: "candidate"
+    status: "partial"
+    reason: "Rows marked X or + in the privacy column are selected for every NSS by rmf baseline resolve; a baseline leaving one out fails GEN-STALE-001, the break itself an erasure"
+    evidence: [{"kind": "rule", "target": "GEN-STALE-001", "fixture": "tests/fixtures/negative/GEN-STALE-001.privacy.yaml", "expect": "differs from a fresh `rmf baseline resolve`", "claim": "constraint", "asserts": "Controls marked in the privacy control baseline column are required for all NSS: a baseline leaving one out differs from a fresh baseline resolve"}]
+    work_item: "WI-489"
   - id: "REQ-CNSSI1253-0081"
     citation: {"ref": "CNSSI1253", "page": 22, "anchor": "Privacy Implementation Considerations – Controls that if selected to meet a security"}
     kind: "lettered"

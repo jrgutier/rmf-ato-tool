@@ -1,0 +1,12 @@
+rule: FACTS-001
+bases: [minimal]
+description: the security categorization is set by C-1, not by the categorization task C-2
+mutations:
+  - op: set_field
+    file: facts.yaml
+    path: categorization.set_by_task
+    value: C-1
+expect:
+  errors: [FACTS-001]
+  messages:
+    - "fact categorization set_by_task is 'C-1'; C-2 writes it, not another task"

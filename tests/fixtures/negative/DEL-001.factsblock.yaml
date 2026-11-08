@@ -1,0 +1,27 @@
+rule: DEL-001
+bases:
+- minimal
+description: a POA&M without its facts block
+mutations:
+- op: replace_text
+  file: artifacts/ART-POAM.md
+  old: '<!-- BEGIN rmf:facts -->
+
+    '
+  new: ''
+- op: replace_text
+  file: artifacts/ART-POAM.md
+  old: '<!-- END rmf:facts -->
+
+    '
+  new: ''
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-POAM does not carry the CNSSI 1254 data element Security Categorization
+  - ART-POAM does not carry the CNSSI 1254 data element Short Title for the System (e.g., System Acronym)
+  - ART-POAM does not carry the CNSSI 1254 data element System Name
+  - ART-POAM does not carry the CNSSI 1254 data element System Unique Identifier
+  also:
+  - TRACE-001

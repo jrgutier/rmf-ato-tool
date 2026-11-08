@@ -1,0 +1,22 @@
+rule: DEL-001
+bases:
+- minimal
+description: POA&M items with no weakness description or control identifier
+mutations:
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.0.weakness, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.1.weakness, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.2.weakness, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.3.weakness, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.0.control_id, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.1.control_id, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.2.control_id, value: ''}
+- {op: set_field, file: artifacts/poam/items.yaml, path: items.3.control_id, value: ''}
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-POAM does not carry the CNSSI 1254 data element Short Description of Weakness or Deficiency
+  - ART-POAM does not carry the CNSSI 1254 data element Security Control Identifier
+  also:
+  - POAM-CTL-001
+  - RUN-FM-001

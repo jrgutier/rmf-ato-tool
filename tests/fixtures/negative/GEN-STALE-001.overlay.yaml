@@ -1,0 +1,16 @@
+rule: GEN-STALE-001
+bases: [minimal]
+description: the categorization names an overlay no CNSSI 1253 table lists, a system's own overlay
+build: false
+mutations:
+- op: set_field
+  file: facts.yaml
+  path: categorization.overlays
+  value: [FDR-OWN-OVERLAY]
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+  - exists but `rmf baseline resolve` fails
+  also:
+  - FACTS-001
+  - RECIP-001
