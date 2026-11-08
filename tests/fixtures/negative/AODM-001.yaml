@@ -1,12 +1,16 @@
 rule: AODM-001
-bases: [minimal]
-description: R-4 touched the ledger and recorded no decision
+bases: [minimal, example]
+description: a decision that does not rest on the RAR
 mutations:
   - op: delete_field
     file: artifacts/data/authorizations.yaml
-    path: records.1
+    path: records.1.rar_ref
+    only: [minimal]
+  - op: delete_field
+    file: artifacts/data/decision.yaml
+    path: rar_ref
+    only: [example]
 expect:
   errors: [AODM-001]
-  also: [AUTHRPT-001, CATO-002, SSPR-001]
   messages:
-    - recorded no decision
+    - the decision must rest on the risk assessment report

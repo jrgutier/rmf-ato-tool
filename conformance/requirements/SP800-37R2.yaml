@@ -1730,9 +1730,11 @@ requirements:
     locator: "TASK P-5"
     context: ""
     statement: "Risk assessment results can be used when identifying common controls to determine if the controls available for inheritance satisfy the security and privacy requirements for organizational systems and the environments in which those systems operate (including the identification of potential single points of failure). When the common controls provided by the organization are determined to be insufficient for the information systems inheriting those controls, system owners can supplement the common controls with system-specific or hybrid controls to achieve the required protection for their systems or accept greater risk with the acknowledgement and approval of the organization."
-    status: "candidate"
-    reason: "Both sentences permit: risk assessment results can be used, and system owners can supplement or accept risk; the S-3 playbook makes an insufficient offer hybrid. No rule reads either choice."
+    status: "partial"
+    reason: "Both sentences permit: risk assessment results 'can be used' when identifying common controls, and system owners 'can supplement' insufficient common controls or accept greater risk. The S-3 playbook records an insufficient offer as hybrid; nothing can fail on a permission."
+    evidence: [{"kind": "prose", "target": "playbooks/S/S-3.md", "claim": "presence", "asserts": "When the common controls are insufficient, system owners supplement them with system-specific or hybrid controls (S-3 playbook)"}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "Risk assessment results can be used when identifying common controls to determine if the controls available for inheritance satisfy the security and privacy requirements for organizational systems and the environments in which those systems operate (including the identification of potential single points of failure).", "reason": "A permission: risk assessment results 'can be used' when identifying common controls."}, {"sentence": "When the common controls provided by the organization are determined to be insufficient for the information systems inheriting those controls, system owners can supplement the common controls with system-specific or hybrid controls to achieve the required protection for their systems or accept greater risk with the acknowledgement and approval of the organization.", "reason": "A permission: system owners 'can supplement' the common controls or accept greater risk."}]
   - id: "REQ-SP800-37R2-0203"
     citation: {"ref": "SP800-37R2", "page": 52, "anchor": "Common control providers execute the RMF steps to implement, assess, and monitor"}
     kind: "modal"
@@ -2522,7 +2524,7 @@ requirements:
     statement: "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"
     status: "covered"
     reason: "BSEL-002 fails a baseline whose controls differ from those rmf baseline resolve selects from the categorization, overlays, privacy baseline and tailoring."
-    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Control baselines commensurate with risk are selected: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"}]
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.privacy.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Control baselines commensurate with risk are selected: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "CONTROL SELECTION | with risk are selected. [Cybersecurity Framework: Profile]"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0287"
     citation: {"ref": "SP800-37R2", "page": 69, "anchor": "TASK S-2 | • Controls are tailored producing tailored control baselines."}
@@ -2655,7 +2657,7 @@ requirements:
     statement: "Select the controls for the system and the environment of operation."
     status: "covered"
     reason: "BSEL-002 fails a baseline that leaves out a control rmf baseline resolve selects for the system, and BSEL-001 one selected for other impact values than the approved categorization."
-    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Select the controls for the system and its environment of operation: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "Select the controls for the system and the environment of operation."}]
+    evidence: [{"kind": "rule", "target": "BSEL-002", "fixture": "tests/fixtures/negative/BSEL-002.privacy.yaml", "expect": "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it", "claim": "constraint", "asserts": "Select the controls for the system and its environment of operation: a baseline whose controls leave out one a fresh baseline resolve selects fails", "sentence": "Select the controls for the system and the environment of operation."}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0301"
     citation: {"ref": "SP800-37R2", "page": 70, "anchor": "There are two approaches that can be used for the initial selection"}
@@ -3492,7 +3494,7 @@ requirements:
     context: "TABLE 7: AUTHORIZE TASKS AND OUTCOMES"
     statement: "TASK R-4 | • The authorization for the system or the common controls is"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "R-4 recorded the authorization for the system or the common controls, no decision being a failure", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by"}]
+    evidence: [{"kind": "rule", "asserts": "R-4 recorded the authorization for the system or the common controls, no decision being a failure", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.norecord.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by"}]
     work_item: "WI-01"
   - id: "REQ-SP800-37R2-0387"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "AUTHORIZATION DECISION | approved or denied."}
@@ -3502,7 +3504,7 @@ requirements:
     statement: "AUTHORIZATION DECISION | approved or denied."
     status: "covered"
     reason: "AODM-001 fails an R-4 that touched the ledger and recorded no decision, so the authorization is approved or denied."
-    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by", "asserts": "The authorization is approved or denied: an R-4 that touched the ledger and recorded no decision fails"}]
+    evidence: [{"kind": "rule", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.norecord.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by", "asserts": "The authorization is approved or denied: an R-4 that touched the ledger and recorded no decision fails"}]
     work_item: "WI-404"
   - id: "REQ-SP800-37R2-0388"
     citation: {"ref": "SP800-37R2", "page": 88, "anchor": "TASK R-5 | • Authorization decisions, significant vulnerabilities, and risks are"}
@@ -3704,7 +3706,7 @@ requirements:
     statement: "Determine if the risk from the operation or use of the information system or the provision or use of common controls is acceptable."
     status: "partial"
     reason: "A record must exist, but no test can fail when the AO did not determine whether the risk is acceptable"
-    evidence: [{"kind": "rule", "asserts": "R-4 touching the ledger must record a decision on whether the risk of operation or use is acceptable", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by"}]
+    evidence: [{"kind": "rule", "asserts": "R-4 touching the ledger must record a decision on whether the risk of operation or use is acceptable", "target": "AODM-001", "fixture": "tests/fixtures/negative/AODM-001.norecord.yaml", "expect": "recorded no decision", "claim": "presence", "holds_when": "ART-AUTHREC is produced or seeded, and R-4 or M-6 is active in the run and in the artifact's touched_by"}]
     work_item: "WI-01"
   - id: "REQ-SP800-37R2-0409"
     citation: {"ref": "SP800-37R2", "page": 92, "anchor": "The explicit acceptance of risk is the responsibility of the authorizing official"}

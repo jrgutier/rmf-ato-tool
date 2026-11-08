@@ -1,5 +1,5 @@
 rule: BSEL-001
-bases: [minimal]
+bases: [minimal, example]
 description: the baseline is selected for an availability impact the categorization does not have
 build: false
 mutations:
@@ -7,8 +7,14 @@ mutations:
   file: baseline.json
   old: '"a": "low"'
   new: '"a": "moderate"'
+  only: [minimal]
+- op: replace_text
+  file: baseline.json
+  old: '"a": "moderate"'
+  new: '"a": "low"'
+  only: [example]
 expect:
   errors: [BSEL-001]
   also: [GEN-STALE-001]
   messages:
-    - "the baseline is selected for impact values {'c': 'moderate', 'i': 'moderate', 'a': 'moderate'}, not the approved categorization"
+    - "the baseline is selected for impact values"

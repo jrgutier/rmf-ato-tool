@@ -2210,7 +2210,7 @@ NEGATIVE = "tests/fixtures/negative/"
 
 @pytest.mark.parametrize(("rule", "fixture", "expect", "claim"), [
     ("AOREC-001", "AOREC-001.atd", "needs an authorization_termination_date", "presence"),
-    ("AODM-001", "AODM-001.rar", "must rest on the risk assessment report", "presence"),  # deletes
+    ("AODM-001", "AODM-001", "must rest on the risk assessment report", "presence"),  # deletes
     ("AODM-001", "AODM-001.rarother", "must rest on the risk assessment report", "constraint"),
     ("AODM-001", "AODM-001.type", "not one of the decision types", "constraint"),
     ("AODM-001", "AODM-001.progress", "have not written their outputs", "constraint"),
