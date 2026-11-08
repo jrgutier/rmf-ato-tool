@@ -681,7 +681,9 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
    place, its governance, the organization-wide policies by subject (security status
    monitoring and making results available to risk assessment among them), the manual and
    automated processes with how manual ones are verified as repeatable, the strategic
-   objectives and the activities mapped to them, what monitoring determines, the assessment
+   objectives and the activities mapped to them, what monitoring determines (control
+   effectiveness, changes, the organizational state, awareness of threats and vulnerabilities
+   and visibility into organizational assets, CNSSP 22 IV.f), the assessment
    elements the strategy declares not applicable, the minimum frequency per family across
    systems and common controls (S-5 is held to it, OCTX-009), when the program was
    `established`, its `review_cycle` (monthly to annually) and each review (threats considered

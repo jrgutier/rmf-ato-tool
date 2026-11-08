@@ -1,0 +1,31 @@
+rule: DEL-001
+bases:
+- minimal
+description: the risk assessment the RAR draws on leaves its scope, threat and vulnerability sections unwritten
+mutations:
+- op: replace_text
+  file: artifacts/ART-RA.md
+  old: 'The assessment covers the relay appliance and uses the SP 800-30 qualitative scales
+
+    [[product/architecture.md#network]].'
+  new: '<<FILL: scope and approach>>'
+- op: replace_text
+  file: artifacts/ART-RA.md
+  old: An outsider who steals an administrator password logs in to the appliance (TE-1) [[product/architecture.md#network]].
+  new: '<<FILL: threat sources and events>>'
+- op: replace_text
+  file: artifacts/ART-RA.md
+  old: Direct root SSH login and stale accounts make that event more likely [[product/architecture.md#network]].
+  new: '<<FILL: vulnerabilities>>'
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-RAR does not carry the CNSSI 1254 data element Scope
+  - ART-RAR does not carry the CNSSI 1254 data element Risk Assessment Approach
+  - ART-RAR does not carry the CNSSI 1254 data element Threat Sources
+  - ART-RAR does not carry the CNSSI 1254 data element Threat Event
+  - ART-RAR does not carry the CNSSI 1254 data element Vulnerability or Predisposing Condition
+  also:
+  - RUN-PH-001
+  - TRACE-001

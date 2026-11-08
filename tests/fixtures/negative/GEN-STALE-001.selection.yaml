@@ -1,0 +1,13 @@
+rule: GEN-STALE-001
+bases: [minimal]
+description: the baseline is selected for an availability impact the categorization does not have
+build: false
+mutations:
+- op: replace_text
+  file: baseline.json
+  old: '"a": "low"'
+  new: '"a": "moderate"'
+expect:
+  errors: [GEN-STALE-001]
+  messages:
+  - differs from a fresh `rmf baseline resolve`

@@ -1,0 +1,24 @@
+rule: DEL-001
+bases:
+- minimal
+description: RAR risks with no likelihood, impact or findings, and no overall risk posture
+mutations:
+- {op: delete_field, file: artifacts/data/rar.yaml, path: risks.0.likelihood}
+- {op: delete_field, file: artifacts/data/rar.yaml, path: risks.1.likelihood}
+- {op: delete_field, file: artifacts/data/rar.yaml, path: risks.0.impact}
+- {op: delete_field, file: artifacts/data/rar.yaml, path: risks.1.impact}
+- {op: set_field, file: artifacts/data/rar.yaml, path: risks.0.finding_refs, value: []}
+- {op: set_field, file: artifacts/data/rar.yaml, path: risks.1.finding_refs, value: []}
+- {op: delete_field, file: artifacts/data/rar.yaml, path: overall_risk}
+expect:
+  errors:
+  - DEL-001
+  messages:
+  - ART-RAR does not carry the CNSSI 1254 data element Overall Likelihood
+  - ART-RAR does not carry the CNSSI 1254 data element Level of Impact
+  - ART-RAR does not carry the CNSSI 1254 data element Vulnerability Identifier
+  - ART-RAR does not carry the CNSSI 1254 data element Overall Risk Posture
+  also:
+  - RAR-001
+  - RUN-FM-001
+  - SRA-004
