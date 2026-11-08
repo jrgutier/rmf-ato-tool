@@ -78,9 +78,10 @@ SYSTEM_OWNER = "PER-PM"
 LEADERSHIP = ("PER-CIO", "PER-CISO", "PER-RE", "head-of-agency", "dod-component-head", "saorm")
 # SP 800-137 3.1 and CNSSP 22 Section IV.f: the ISCM strategy and program provide awareness of
 # threats and vulnerabilities, visibility into organizational assets and control effectiveness.
-# The last two are new at contract 0.3.0, so a 0.2.0 run is not held to them.
+# The last two (CNSSP 22 IV.f) hold from contract 0.2.0, as DEVICES_SINCE does in consistency.py;
+# a 0.1.0 run is not held to them.
 MONITORED = ("control-effectiveness", "changes", "organizational-state")
-MONITORED_SINCE = {"threat-and-vulnerability-awareness": "0.3.0", "asset-visibility": "0.3.0"}
+MONITORED_SINCE = {"threat-and-vulnerability-awareness": "0.2.0", "asset-visibility": "0.2.0"}
 OA_CONDITIONS = ("initial-authorization", "iscm-program")
 POSTURE_FACTORS = ("threats", "vulnerabilities", "technologies", "mission")
 # Calendar months the organization's stated review cycle allows between two program reviews.
