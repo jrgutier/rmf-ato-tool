@@ -3762,21 +3762,30 @@ requirements:
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-1 SYSTEM AND ENVIRONMENT CHANGES | TASK M-1 | • The information system and environment of operation are"
-    status: "candidate"
+    status: "covered"
+    reason: "MCHG-002 fails monitoring for changes that starts only after the authorization; cut pair with 0424"
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.yaml", "expect": "monitoring for unauthorized changes starts at", "claim": "constraint", "holds_when": "M-1 is active and ART-CHG is produced or seeded", "asserts": "The information system and environment of operation are monitored: monitoring for unauthorized changes that starts at the wrong time fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0424"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "SYSTEM AND ENVIRONMENT CHANGES | monitored in accordance with the continuous monitoring"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "SYSTEM AND ENVIRONMENT CHANGES | monitored in accordance with the continuous monitoring strategy. [Cybersecurity Framework: DE.CM; ID.GV]"
-    status: "candidate"
+    status: "covered"
+    reason: "MCHG-002 fails monitoring for changes that starts only after the authorization; cut pair with 0423"
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.yaml", "expect": "monitoring for unauthorized changes starts at", "claim": "constraint", "holds_when": "M-1 is active and ART-CHG is produced or seeded", "asserts": "System and environment changes are monitored in accordance with the strategy: monitoring for unauthorized changes that starts late fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0425"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-2 ONGOING ASSESSMENTS | • Ongoing assessments of control effectiveness are"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-2 ONGOING ASSESSMENTS | • Ongoing assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy. [Cybersecurity Framework: ID.SC-4]"
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-002 fails an automated tool that collects less often than the continuous monitoring strategy specifies"
+    evidence: [{"kind": "rule", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.frequency.yaml", "expect": ", but the strategy monitors it continuously: a tool behind a continuous frequency collects at that frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Ongoing assessments of control effectiveness are conducted in accordance with the continuous monitoring strategy frequency"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0426"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-3 ONGOING RISK RESPONSE | • The output of continuous monitoring"}
     kind: "table"
@@ -3784,34 +3793,48 @@ requirements:
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-3 ONGOING RISK RESPONSE | • The output of continuous monitoring activities is analyzed and responded to appropriately. [Cybersecurity Framework: RS.AN]"
     status: "candidate"
+    reason: "M-3 analyzes and responds to monitoring output by its exit criteria; MCHG-002 and MPOA-001 hold single responses, and no rule fails unanalyzed monitoring output as such."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0427"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-4 AUTHORIZATION PACKAGE UPDATES | • Risk management documents are updated"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-4 AUTHORIZATION PACKAGE UPDATES | • Risk management documents are updated based on continuous monitoring activities. [Cybersecurity Framework: RS.IM]"
-    status: "candidate"
+    status: "covered"
+    reason: "MPLAN-001 fails a system plan not reviewed and updated on the organization-defined schedule"
+    evidence: [{"kind": "rule", "target": "MPLAN-001", "fixture": "tests/fixtures/negative/MPLAN-001.overdue.yaml", "expect": "past the organization-defined schedule", "claim": "constraint", "holds_when": "M-4 is active and plan-reviews.yaml is produced or seeded", "asserts": "Risk management documents are updated based on continuous monitoring: a plan review past the organization-defined schedule fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0428"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-5 | • A process is in place to report the"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-5 | • A process is in place to report the security and privacy posture to"
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-005 fails monitoring reports that do not reach the AO; cut pair with 0429"
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "A process is in place to report the security posture: monitoring results that do not reach the authorizing official fail"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0429"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "SECURITY AND PRIVACY REPORTING | the authorizing official and other senior leaders"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "SECURITY AND PRIVACY REPORTING | the authorizing official and other senior leaders and executives."
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-005 fails monitoring reports that do not reach the AO, and MRPT-001 a report that misses a recipient; cut pair with 0428"
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Security and privacy reporting to the authorizing official: monitoring results that do not reach the authorizing official fail"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0430"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-6 ONGOING AUTHORIZATION | TASK M-6 | • Authorizing officials conduct"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-6 ONGOING AUTHORIZATION | TASK M-6 | • Authorizing officials conduct ongoing authorizations using the"
-    status: "candidate"
+    status: "covered"
+    reason: "OCTX-010 fails a system under ongoing authorization with no organizational continuous monitoring program in place"
+    evidence: [{"kind": "rule", "target": "OCTX-010", "fixture": "tests/fixtures/negative/OCTX-010.program.yaml", "expect": "the system is under ongoing authorization and no organizational continuous monitoring program is in place", "claim": "constraint", "holds_when": "M-6 is active and org-context.yaml is produced or seeded", "asserts": "Authorizing officials conduct ongoing authorizations using continuous monitoring: ongoing authorization with no continuous monitoring program in place fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0431"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "ONGOING AUTHORIZATION | results of continuous monitoring activities and communicate changes in"}
     kind: "table"
@@ -3819,13 +3842,18 @@ requirements:
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "ONGOING AUTHORIZATION | results of continuous monitoring activities and communicate changes in risk determination and acceptance decisions."
     status: "candidate"
+    reason: "M-6 communicates changes in risk determination and acceptance by its exit criteria; no rule fails a change that is not communicated."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0432"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "TASK M-7 | • A system disposal strategy is developed and implemented,"}
     kind: "table"
     locator: "3.7"
     context: "TABLE 8: MONITOR TASKS AND OUTCOMES"
     statement: "TASK M-7 | • A system disposal strategy is developed and implemented, as"
-    status: "candidate"
+    status: "covered"
+    reason: "disposal.yaml must state the secure end state disposal reaches (required)"
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/end_state", "claim": "presence", "asserts": "A system disposal strategy is developed: disposal.yaml states the secure end state the disposal reaches"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0433"
     citation: {"ref": "SP800-37R2", "page": 95, "anchor": "SYSTEM DISPOSAL | needed."}
     kind: "table"
@@ -3849,14 +3877,20 @@ requirements:
     locator: "TASK M-1"
     context: ""
     statement: "Monitor the information system and its environment of operation for changes that impact the security and privacy posture of the system."
-    status: "candidate"
+    status: "covered"
+    reason: "MCHG-002 fails monitoring for changes that does not start when the system is authorized"
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.yaml", "expect": "monitoring for unauthorized changes starts at", "claim": "constraint", "holds_when": "M-1 is active and ART-CHG is produced or seeded", "asserts": "Monitor the information system and its environment for changes: monitoring for unauthorized changes that starts late fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0436"
     citation: {"ref": "SP800-37R2", "page": 96, "anchor": "Systems and environments of operation are in a constant state of change"}
     kind: "indicative"
     locator: "TASK M-1"
     context: ""
     statement: "Systems and environments of operation are in a constant state of change with changes occurring in the technology or machine elements, human elements, and physical or environmental elements. Changes to the technology or machine elements include for example, upgrades to hardware, software, or firmware; changes to the human elements include for example, staff turnover or a reduction in force; and modifications to the surrounding physical and environmental elements include for example, changes in the location of the facility or the physical access controls protecting the facility. Changes made by external providers can be difficult to detect. A disciplined and structured approach to managing, controlling, and documenting changes to systems and environments of operation, and adherence with terms and conditions of the authorization, is an essential element of security and privacy programs. Organizations establish configuration management and control processes to support configuration and change management.105"
-    status: "candidate"
+    status: "covered"
+    reason: "MCHG-002 fails changes detected by monitoring that are not reconciled with the change control records"
+    evidence: [{"kind": "rule", "target": "MCHG-002", "fixture": "tests/fixtures/negative/MCHG-002.reconcile.yaml", "expect": "changes detected by monitoring are not reconciled with", "claim": "constraint", "holds_when": "M-1 is active and ART-CHG is produced or seeded", "asserts": "Organizations establish configuration management and change control processes: changes detected by monitoring not reconciled with change control fail"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0437"
     citation: {"ref": "SP800-37R2", "page": 96, "anchor": "Common activities within organizations can cause changes to systems or the environments"}
     kind: "indicative"
@@ -3885,14 +3919,20 @@ requirements:
     locator: "TASK M-2"
     context: ""
     statement: "Assess the controls implemented within and inherited by the system in accordance with the continuous monitoring strategy."
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-002 fails an automated tool that collects less often than the continuous monitoring strategy specifies"
+    evidence: [{"kind": "rule", "target": "ISCM-002", "fixture": "tests/fixtures/negative/ISCM-002.frequency.yaml", "expect": ", but the strategy monitors it continuously: a tool behind a continuous frequency collects at that frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Assess the controls in accordance with the continuous monitoring strategy: a tool collecting less often than the strategy frequency fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0440"
     citation: {"ref": "SP800-37R2", "page": 97, "anchor": "After an initial system or common control authorization, the organization assesses all"}
     kind: "indicative"
     locator: "TASK M-2"
     context: ""
     statement: "After an initial system or common control authorization, the organization assesses all controls on an ongoing basis. Ongoing assessment of the control effectiveness is part of the continuous monitoring activities of the organization. The monitoring frequency for each control is based on the organizational continuous monitoring strategy (see Task P-7) and can be supplemented by the system-level continuous monitoring strategy (see Task S-5). Adherence to the terms and conditions specified by the authorizing official as part of the authorization decision are also monitored (see Task M-1). Ongoing control assessment continues as the information generated as part of continuous monitoring is correlated, analyzed, and reported to senior leaders."
-    status: "candidate"
+    status: "partial"
+    reason: "CONMON-001 fails a baseline family with no monitoring frequency, so all controls are assessed on an ongoing basis; the supplement of the organizational frequency and the monitoring of terms and conditions are unheld (WI-407)."
+    evidence: [{"kind": "rule", "target": "CONMON-001", "fixture": "tests/fixtures/negative/CONMON-001.family.yaml", "expect": " has no monitoring frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "The organization assesses all controls on an ongoing basis: a baseline family that has no monitoring frequency fails", "sentence": "After an initial system or common control authorization, the organization assesses all controls on an ongoing basis."}]
+    work_item: "WI-407"
   - id: "REQ-SP800-37R2-0441"
     citation: {"ref": "SP800-37R2", "page": 97, "anchor": "For ongoing control assessments, assessors have the required degree of independence as"}
     kind: "modal"
@@ -3900,6 +3940,8 @@ requirements:
     context: ""
     statement: "For ongoing control assessments, assessors have the required degree of independence as determined by the authorizing official.107 Assessor independence during continuous monitoring introduces efficiencies into the process and may allow for reuse of assessment results in support of ongoing authorization and when reauthorization is required."
     status: "candidate"
+    reason: "Its marked sentence says independence introduces efficiencies and may allow reuse: a benefit and a permission, which nothing can fail on; the degree of independence is ASMT-007's at A-1."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0442"
     citation: {"ref": "SP800-37R2", "page": 97, "anchor": "To satisfy the annual FISMA security assessment requirement, organizations can use assessment"}
     kind: "should"
@@ -3924,6 +3966,8 @@ requirements:
     context: ""
     statement: "Assessment information produced by an assessor during continuous monitoring is provided to the system owner and the common control provider in updated assessment reports or via reports from automated security/privacy management and reporting tools. The authorizing official determines the appropriate risk response to the assessment findings or approves responses proposed by the system owner and common control provider. The system owner and common control provider subsequently implement the appropriate risk response. When the risk response is acceptance, the findings remain documented in the security and privacy assessment reports and are monitored for changes to risk factors. When the risk response is mitigation, the planned mitigation actions are included in and tracked using the plans of action and milestones. If requested by the authorizing official, control assessors may provide recommendations for remediation actions. Recommendations for remediation actions may also be provided by an automated security/privacy management and reporting tool. An organizational assessment of risk (Task P-3) and system-level risk assessment results (Task P-14) guide and inform the decisions regarding ongoing risk response. Controls that are modified, enhanced, or added as part of ongoing risk response are reassessed by assessors to ensure that the new, modified, or enhanced controls have been implemented correctly, are operating as intended, and producing the desired outcome with respect to meeting the security and privacy requirements of the system."
     status: "candidate"
+    reason: "M-3's exit criteria give each risk a mitigation or an AO acceptance; no rule fails an assessor's information not provided to the owner, or an accepted finding not monitored."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0445"
     citation: {"ref": "SP800-37R2", "page": 98, "anchor": "Update plans, assessment reports, and plans of action and milestones based on"}
     kind: "imperative"
@@ -3951,27 +3995,38 @@ requirements:
     context: ""
     statement: "The frequency of updates to risk management information is at the discretion of the system owner, common control provider, and authorizing officials in accordance with federal and organizational policies and is consistent with the organizational and system-level continuous monitoring strategies. The updates to information regarding the security and privacy posture of the system and the common controls inherited by the system are accurate and timely since the information provided influences ongoing actions and decisions by authorizing officials and other senior leaders within the organization. The use of automated support tools and organization-wide security and privacy program management practices ensure that authorizing officials can readily access the current security and privacy posture of the system. Ready access to the current security and privacy posture supports continuous monitoring and ongoing authorization and promotes the near real-time management of risk to organizational operations and assets, individuals, other organizations, and the Nation."
     status: "candidate"
+    reason: "The frequency of updates is at the owners' and AO's discretion, and readily accessible posture is unheld (WI-409)."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0448"
     citation: {"ref": "SP800-37R2", "page": 99, "anchor": "Organizations ensure that information needed for oversight, management, and auditing purposes is"}
     kind: "modal"
     locator: "TASK M-4"
     context: ""
     statement: "Organizations ensure that information needed for oversight, management, and auditing purposes is not modified or destroyed when updating security and privacy plans, assessment reports, and plans of action and milestones. Providing an effective method to track changes to systems through configuration management procedures is necessary to achieve transparency and traceability in the security and privacy activities of the organization; to obtain individual accountability for any security or privacy actions; and to understand emerging trends in the security and privacy programs of the organization."
-    status: "candidate"
+    status: "partial"
+    reason: "ASMT-010 fails a POA&M original scheduled completion date that is changed rather than recorded as a change; that plans and assessment reports keep their earlier information is M-4 prose."
+    evidence: [{"kind": "rule", "target": "ASMT-010", "fixture": "tests/fixtures/negative/ASMT-010.yaml", "expect": ": the scheduled completion date should not be changed, from", "claim": "constraint", "holds_when": "A-6 is active and ART-POAM is produced or seeded", "asserts": "Information needed for oversight and auditing is not modified when updating plans of action and milestones: the scheduled completion date should not be changed", "sentence": "Organizations ensure that information needed for oversight, management, and auditing purposes is not modified or destroyed when updating security and privacy plans, assessment reports, and plans of action and milestones."}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0449"
     citation: {"ref": "SP800-37R2", "page": 99, "anchor": "Report the security and privacy posture of the system to the authorizing"}
     kind: "modal"
     locator: "TASK M-5"
     context: ""
     statement: "Report the security and privacy posture of the system to the authorizing official and other organizational officials on an ongoing basis in accordance with the organizational continuous monitoring strategy."
-    status: "candidate"
+    status: "covered"
+    reason: "ISCM-005 fails monitoring reports that do not reach the AO"
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "Report the security posture to the authorizing official on an ongoing basis: monitoring results that do not reach the authorizing official fail"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0450"
     citation: {"ref": "SP800-37R2", "page": 100, "anchor": "The results of monitoring activities are documented and reported to the authorizing"}
     kind: "modal"
     locator: "TASK M-5"
     context: ""
     statement: "The results of monitoring activities are documented and reported to the authorizing official and other selected organizational officials on an ongoing basis in accordance with the organizational continuous monitoring strategy. Other organizational officials who may receive security and privacy posture reports include, for example, chief information officer, senior agency information security officer, senior agency official for privacy, senior accountable official for risk management or risk executive (function), information owner or steward, incident response roles, and contingency planning roles. Security and privacy posture reporting can be event-driven, time-driven, or event- and time-driven.110 The reports provide the authorizing official and other organizational officials with information regarding the security and privacy posture of the systems including the effectiveness of implemented controls. Security and privacy posture reports describe the ongoing monitoring activities employed by system owners or common control providers. The reports also include information about security and privacy risks in the systems and environments of operation discovered during control assessments, auditing, and continuous monitoring and how system owners or common control providers plan to address those risks."
-    status: "candidate"
+    status: "partial"
+    reason: "ISCM-005 fails monitoring results that do not reach the AO; the content of the reports, risks discovered and how they are handled, is ART-SECRPT prose, and the other recipients are examples."
+    evidence: [{"kind": "rule", "target": "ISCM-005", "fixture": "tests/fixtures/negative/ISCM-005.yaml", "expect": "monitoring results do not reach the authorizing official", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "The results of monitoring activities are reported to the authorizing official: monitoring results that do not reach the authorizing official fail", "sentence": "The results of monitoring activities are documented and reported to the authorizing official and other selected organizational officials on an ongoing basis in accordance with the organizational continuous monitoring strategy."}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0451"
     citation: {"ref": "SP800-37R2", "page": 100, "anchor": "The frequency of security and privacy posture reports is at the discretion"}
     kind: "indicative"
@@ -4001,6 +4056,8 @@ requirements:
     context: ""
     statement: "Review the security and privacy posture of the system on an ongoing basis to determine whether the risk remains acceptable."
     status: "candidate"
+    reason: "M-6 reviews the posture by its inputs and exit criteria; no rule fails a review that does not determine whether risk remains acceptable."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0454"
     citation: {"ref": "SP800-37R2", "page": 101, "anchor": "To employ an ongoing authorization approach, organizations have in place an organization-level"}
     kind: "modal"
@@ -4027,7 +4084,10 @@ requirements:
     locator: "TASK M-7"
     context: ""
     statement: "Implement a system disposal strategy and execute required actions when a system is removed from operation."
-    status: "candidate"
+    status: "partial"
+    reason: "disposal.yaml must state the secure end state; that the required actions are executed when the system is removed is unheld."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/end_state", "claim": "presence", "asserts": "Implement a system disposal strategy: disposal.yaml states the secure end state the disposal reaches"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0457"
     citation: {"ref": "SP800-37R2", "page": 102, "anchor": "When a system is removed from operation, several risk management actions are"}
     kind: "modal"
@@ -4921,6 +4981,8 @@ requirements:
     context: "AUTHORIZATION PACKAGE"
     statement: "Supporting the near real-time risk management objectives of the authorization process, the assessment reports are updated on an ongoing basis whenever changes are made to the controls implemented within or inherited by the system.134 Updates to the assessment reports ensure that system owners, common control providers, and authorizing officials maintain an awareness of control effectiveness. The effectiveness of the controls directly affects the security and privacy posture of the system and decisions regarding explicit acceptance of risk."
     status: "candidate"
+    reason: "M-4 outputs ART-SAR and M-2 updates it; no rule fails an assessment report left unchanged after a control change."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0559"
     citation: {"ref": "SP800-37R2", "page": 160, "anchor": "[SP 800-53A] provides guidance on security assessment reports. Guidance on privacy assessment"}
     kind: "modal"
@@ -5039,6 +5101,8 @@ requirements:
     context: "AUTHORIZATION DECISIONS There are four types of authorization decisions that can be rendered by authorizing officials:"
     statement: "If changes are made as a result of mitigation actions from plans of actions and milestones, system security plans are updated accordingly."
     status: "candidate"
+    reason: "M-4 outputs ART-SSP; no rule fails a POA&M mitigation that changes the system without a plan update."
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0573"
     citation: {"ref": "SP800-37R2", "page": 162, "anchor": "Common control authorization;"}
     kind: "lettered"
@@ -5521,7 +5585,10 @@ requirements:
     locator: "Denial of Authorization"
     context: "ONGOING AUTHORIZATION"
     statement: "Ongoing authorization and ongoing assessment are different concepts but closely related. To employ an ongoing authorization approach (which implies an ongoing understanding and acceptance of risk), organizations must have in place, an organization-level and system-level continuous monitoring process to assess implemented controls on an ongoing basis. The findings or results from the continuous monitoring process provides information to authorizing officials to support near-real time risk-based decision making."
-    status: "candidate"
+    status: "covered"
+    reason: "OCTX-010 fails a system under ongoing authorization with no organizational continuous monitoring program in place"
+    evidence: [{"kind": "rule", "target": "OCTX-010", "fixture": "tests/fixtures/negative/OCTX-010.program.yaml", "expect": "the system is under ongoing authorization and no organizational continuous monitoring program is in place", "claim": "constraint", "holds_when": "M-6 is active and org-context.yaml is produced or seeded", "asserts": "To employ an ongoing authorization approach organizations must have a continuous monitoring process in place: no continuous monitoring program in place fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0625"
     citation: {"ref": "SP800-37R2", "page": 170, "anchor": "In contrast to time-driven authorization triggers, event-driven triggers necessitate an immediate review"}
     kind: "modal"
@@ -5584,6 +5651,7 @@ requirements:
     context: "REAUTHORIZATION"
     statement: "For security and privacy assessments associated with reauthorization, organizations leverage security and privacy information generated by the continuous monitoring program and fill in gaps with manual assessments. Organizations may supplement automatically-generated assessment information with manually-generated information in situations where an increased level of assurance is needed. If the security control assessments are conducted by qualified assessors with the necessary independence, use appropriate security standards and guidelines, and are based on the needs of the authorizing official, the assessment results can be applied to the reauthorization.158"
     status: "candidate"
+    reason: "Reauthorization reuse of continuous monitoring information is the existing O&M path of WI-08."
     work_item: "WI-08"
   - id: "REQ-SP800-37R2-0632"
     citation: {"ref": "SP800-37R2", "page": 171, "anchor": "The senior agency official for privacy is responsible for assessing privacy controls and those assessment results"}
@@ -5602,7 +5670,10 @@ requirements:
     locator: "Denial of Authorization"
     context: "REAUTHORIZATION"
     statement: "An ongoing authorization approach requires that a continuous monitoring program is in place to monitor all implemented security controls with a frequency specified in the continuous monitoring strategy."
-    status: "candidate"
+    status: "covered"
+    reason: "CONMON-001 fails a baseline family with no monitoring frequency in the strategy"
+    evidence: [{"kind": "rule", "target": "CONMON-001", "fixture": "tests/fixtures/negative/CONMON-001.family.yaml", "expect": " has no monitoring frequency", "claim": "constraint", "holds_when": "S-5 is active and conmon.yaml is produced or seeded", "asserts": "A continuous monitoring program monitors all implemented controls with a frequency specified in the strategy: a baseline family that has no monitoring frequency fails"}]
+    work_item: "WI-405"
   - id: "REQ-SP800-37R2-0634"
     citation: {"ref": "SP800-37R2", "page": 172, "anchor": "The authorizing official signs an updated authorization decision document based on the"}
     kind: "indicative"
@@ -5801,6 +5872,7 @@ requirements:
     context: "EVENT-DRIVEN TRIGGERS AND SIGNIFICANT CHANGES"
     statement: "Risk assessment results or the results from an impact analysis may be used to determine if changes to systems or common controls are significant and trigger an authorization action. If an authorization action is initiated, the organization targets only the specific controls affected by the changes and reuses previous assessment results wherever possible. An effective monitoring program can significantly reduce the overall cost and level of effort of authorization actions. Most changes to a system or its environment of operation can be handled through the continuous monitoring program and ongoing authorization."
     status: "candidate"
+    reason: "Significant change and targeted reauthorization are the existing O&M path of WI-08."
     work_item: "WI-08"
   - id: "REQ-SP800-37R2-0658"
     citation: {"ref": "SP800-37R2", "page": 173, "anchor": "A type authorization159 is an official authorization decision that allows for a"}
@@ -6497,6 +6569,8 @@ requirements:
     context: ""
     statement: "Respond to risk based on the results of ongoing monitoring activities, risk assessments, and outstanding items in plans of action and milestones."
     status: "candidate"
+    reason: "M-3 responds to risk by its exit criteria; no rule fails a response that does not rest on the monitoring results, the risk assessment and the open POA&M items."
+    work_item: "WI-405"
     promoted: {"reason": "Task M-3 statement; rejected for no marker. It is the duty of the task."}
   - id: "REQ-SP800-37R2-0738"
     citation: {"ref": "SP800-37R2", "page": 100, "anchor": "At a minimum, security and privacy posture reports summarize changes to the"}
@@ -6505,6 +6579,7 @@ requirements:
     context: ""
     statement: "At a minimum, security and privacy posture reports summarize changes to the security and privacy plans, security and privacy assessment reports, and plans of action and milestones that have occurred since the last report."
     status: "candidate"
+    reason: "ART-SECRPT '## Changes since the last report' summarizes changes in prose; no rule reads it, and privacy plans and assessment reports are WI-02 and WI-03."
     work_item: "WI-03"
     promoted: {"reason": "'At a minimum' sets required report content inside a paragraph otherwise about flexibility; rejected for no marker."}
   - id: "REQ-SP800-37R2-0739"
