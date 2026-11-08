@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 347 rules, 37 repo-scope and 310 run-scope. Authoritative;
+# Rule registry (plan §6.5): 348 rules, 37 repo-scope and 311 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -402,6 +402,7 @@ rules:
       - REQ-FIPS199-0019
       - REQ-CNSSI1253-0046
       - REQ-CNSSI1253-0045
+      - REQ-FIPS200-0015
       - REQ-SP800-37R2-0275
       - REQ-SP800-37R2-0269
       - REQ-SP800-37R2-0271
@@ -459,6 +460,10 @@ rules:
       - REQ-SP800-37R2-0310
       - REQ-SP800-37R2-0556
       - REQ-SP800-53B-0056
+      - REQ-SP800-53AR5-0025
+      - REQ-SP800-53AR5-0177
+      - REQ-FIPS200-0039
+      - REQ-FIPS200-0043
   - id: SSP-COV-002
     scope: run
     severity: W
@@ -504,6 +509,11 @@ rules:
     summary: scoped control without an assessment determination
     fixture: tests/fixtures/negative/SAR-COV-001.yaml
     hint: Write a determination for every control in the SAP scope.
+    enforces:
+      - REQ-SP800-53AR5-0039
+      - REQ-SP800-53AR5-0210
+      - REQ-FIPS200-0039
+      - REQ-DODI8530.01-0220
   - id: SAR-POAM-001
     scope: run
     severity: E
@@ -524,12 +534,30 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: "the assessment plan is not prepared, reviewed or approved: officials, resources, access, channels, points of contact, the ambiguity mechanism or the understanding of the organization"
+    summary: "the assessment plan states no objective or level of effort, or is not reviewed by the SCA and approved by the AO or AODR before the assessment starts"
     fixture: tests/fixtures/negative/ASMT-001.yaml
-    hint: "sap.yaml records approval, objectives, level_of_effort and preparation; the system owner informs and resources, and each is dated before the assessment starts."
+    hint: "sap.yaml records objectives, level_of_effort and approval, reviewed by the SCA and approved by the AO or AODR before schedule.start; the preparation around the plan is APREP-001."
     enforces:
       - REQ-SP800-37R2-0339
       - REQ-SP800-37R2-0355
+      - REQ-SP800-53AR5-0134
+      - REQ-SP800-53AR5-0167
+      - REQ-SP800-53AR5-0138
+      - REQ-SP800-53AR5-0176
+      - REQ-SP800-53AR5-0212
+      - REQ-SP800-53AR5-0205
+  - id: APREP-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "the assessment is not prepared: officials not informed or notified in time, resources or access not provided by the system owner, documentation without the security plan, channels, points of contact or elements outside the organization, no ambiguity mechanism, or an understanding not resting on the organizational context"
+    fixture: tests/fixtures/negative/APREP-001.yaml
+    hint: "sap.yaml preparation: the system owner informs, allocates resources and provides access and the security plan, each dated before schedule.start; channels name notified officials; split from ASMT-001."
+    enforces:
+      - REQ-SP800-37R2-0339
       - REQ-SP800-37R2-0363
       - REQ-SP800-37R2-0529
       - REQ-SP800-53AR5-0134
@@ -538,8 +566,11 @@ rules:
       - REQ-SP800-53AR5-0146
       - REQ-SP800-53AR5-0147
       - REQ-SP800-53AR5-0152
-      - REQ-SP800-53AR5-0167
       - REQ-SP800-53AR5-0332
+      - REQ-SP800-53AR5-0145
+      - REQ-SP800-53AR5-0151
+      - REQ-SP800-53AR5-0156
+      - REQ-SP800-53AR5-0045
   - id: ASMT-002
     scope: run
     severity: E
@@ -568,6 +599,9 @@ rules:
       - REQ-SP800-53AR5-0344
       - REQ-SP800-53AR5-0346
       - REQ-SP800-53AR5-0347
+      - REQ-SP800-53AR5-0169
+      - REQ-SP800-53AR5-0170
+      - REQ-SP800-53AR5-0179
   - id: ASMT-003
     scope: run
     severity: E
@@ -588,6 +622,7 @@ rules:
       - REQ-SP800-53AR5-0198
       - REQ-SP800-53AR5-0199
       - REQ-SP800-53AR5-0200
+      - REQ-SP800-53AR5-0031
   - id: ASMT-004
     scope: run
     severity: E
@@ -627,6 +662,11 @@ rules:
       - REQ-SP800-53AR5-0298
       - REQ-SP800-53AR5-0333
       - REQ-SP800-53AR5-0342
+      - REQ-SP800-53AR5-0153
+      - REQ-SP800-53AR5-0211
+      - REQ-SP800-53AR5-0215
+      - REQ-SP800-53AR5-0301
+      - REQ-SP800-53AR5-0295
   - id: ASMT-006
     scope: run
     severity: E
@@ -643,6 +683,8 @@ rules:
       - REQ-SP800-37R2-0372
       - REQ-SP800-37R2-0373
       - REQ-SP800-37R2-0374
+      - REQ-SP800-53AR5-0225
+      - REQ-SP800-53AR5-0224
       - REQ-SP800-37R2-0343
       - REQ-SP800-37R2-0369
   - id: ASMT-007
@@ -683,6 +725,8 @@ rules:
       - REQ-CNSSI1254-0067
       - REQ-DODI8510.01-0211
       - REQ-SP800-37R2-0529
+      - REQ-SP800-53AR5-0219
+      - REQ-SP800-53AR5-0218
       - REQ-SP800-37R2-0342
       - REQ-DODI8510.01-0123
       - REQ-DODI8510.01-0205
@@ -731,6 +775,7 @@ rules:
       - REQ-CNSSI1254-0097
       - REQ-CNSSI1254-0098
       - REQ-CNSSI1254-0101
+      - REQ-DODI8530.01-0220
       - REQ-DODI8510.01-0200
       - REQ-DODI8510.01-0247
   - id: ASMT-012
@@ -807,6 +852,7 @@ rules:
       - REQ-DODI8500.01-0425
       - REQ-SP800-37R2-0401
       - REQ-SP800-37R2-0402
+      - REQ-SP800-53AR5-0218
       - REQ-SP800-37R2-0382
       - REQ-SP800-37R2-0383
       - REQ-SP800-37R2-0065
@@ -829,6 +875,8 @@ rules:
       - REQ-SP800-39-0177
       - REQ-SP800-39-0291
       - REQ-SP800-39-0298
+      - REQ-DODI8530.01-0226
+      - REQ-SP800-53AR5-0224
       - REQ-SP800-37R2-0384
       - REQ-SP800-37R2-0405
       - REQ-DODI8510.01-0129
@@ -953,6 +1001,8 @@ rules:
     summary: a live test event falls under no IATT or authorization in force
     fixture: tests/fixtures/negative/AODM-006.yaml
     hint: A sap.yaml event marked live needs an AD-IATT or authorization in force on its date.
+    enforces:
+      - REQ-SP800-53AR5-0335
   - id: AODM-007
     scope: run
     severity: E
@@ -1338,6 +1388,7 @@ rules:
       - REQ-SP800-18R2-0251
       - REQ-SP800-18R2-0342
       - REQ-SP800-18R2-0436
+      - REQ-SP800-53AR5-0291
       - REQ-SP800-37R2-0427
       - REQ-DODI8510.01-0141
       - REQ-DODI8510.01-0237
@@ -1412,6 +1463,7 @@ rules:
       - REQ-DODI8500.01-0173
       - REQ-DODI8531.01-0178
       - REQ-DODCIO-RECIPROCITY-0150
+      - REQ-DODI8530.01-0227
   - id: STIG-002
     scope: run
     severity: E
@@ -1431,6 +1483,7 @@ rules:
     fixture: tests/fixtures/negative/CONMON-001.yaml
     hint: conmon.yaml lists a frequency for every family in the baseline.
     enforces:
+      - REQ-SP800-53AR5-0039
       - REQ-SP800-37R2-0440
       - REQ-SP800-37R2-0633
       - REQ-SP800-137A-0076
@@ -1512,6 +1565,7 @@ rules:
     hint: Each frequency cites FC-nn criteria or ART-ORG-CONTEXT; criteria are established by PER-PM or PER-CCP, consulting other officials.
     enforces:
       - REQ-SP800-37R2-0317
+      - REQ-SP800-53AR5-0039
   - id: ISCM-004
     scope: run
     severity: E
@@ -1524,6 +1578,7 @@ rules:
     hint: Record the approval in conmon.yaml, approved_by PER-AO or PER-AODR.
     enforces:
       - REQ-SP800-37R2-0318
+      - REQ-SP800-53AR5-0039
   - id: ISCM-005
     scope: run
     severity: E
@@ -1541,6 +1596,7 @@ rules:
       - REQ-SP800-37R2-0617
       - REQ-SP800-53AR5-0315
       - REQ-SP800-61R3-0131
+      - REQ-DODI8530.01-0240
       - REQ-SP800-37R2-0428
       - REQ-SP800-37R2-0429
       - REQ-SP800-37R2-0449
@@ -1944,6 +2000,7 @@ rules:
       - REQ-SP800-18R2-0048
       - REQ-SP800-18R2-0075
       - REQ-SP800-37R2-0056
+      - REQ-DODI8530.01-0170
   - id: TLR-010
     scope: run
     severity: E
@@ -2240,6 +2297,7 @@ rules:
       - REQ-SP800-53AR5-0246
       - REQ-SP800-53AR5-0257
       - REQ-SP800-53AR5-0269
+      - REQ-SP800-53AR5-0150
   - id: MSN-001
     scope: run
     severity: E
@@ -3620,6 +3678,7 @@ rules:
       - REQ-DODI8530.01-0154
       - REQ-DODI8530.01-0264
       - REQ-DODI8530.01-0315
+      - REQ-DODI8530.01-0269
   - id: SVCA-002
     scope: run
     severity: E
@@ -4075,6 +4134,7 @@ rules:
       - REQ-DODCIO-CATO-EVAL-0126
       - REQ-SP800-53AR5-0287
       - REQ-SP800-53AR5-0289
+      - REQ-DODI8530.01-0221
       - REQ-DODI8510.01-0016
       - REQ-DODI8510.01-0066
       - REQ-DODI8510.01-0067
@@ -4260,6 +4320,7 @@ rules:
       - REQ-SP800-37R2-0176
       - REQ-SP800-37R2-0198
       - REQ-CNSSI1253-0064
+      - REQ-SP800-53AR5-0139
       - REQ-DODI8510.01-0092
   - id: OCTX-006
     scope: run
@@ -4279,6 +4340,7 @@ rules:
       - REQ-SP800-53AR5-0193
       - REQ-SP800-53AR5-0194
       - REQ-DODCIO-CSRMC-TENETS-0008
+      - REQ-SP800-53AR5-0149
   - id: OCTX-007
     scope: run
     severity: E

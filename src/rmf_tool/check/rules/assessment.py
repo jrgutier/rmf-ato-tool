@@ -1,7 +1,7 @@
-"""Assessment rules ASMT-001 to ASMT-012: what the plan prepares, selects, reuses and brings in
-from external providers (A-1, A-2), what each determination statement found (A-3), how findings
-are triaged (A-5) and how the POA&M records and ranks them (A-6, M-3). Each stays quiet about an
-artifact not in play; RUN-ART-001 reports a missing file."""
+"""Assessment rules ASMT-001 to ASMT-012 and APREP-001: what the plan prepares, selects, reuses
+and brings in from external providers (A-1, A-2), what each determination statement found
+(A-3), how findings are triaged (A-5) and how the POA&M records and ranks them (A-6, M-3). Each
+stays quiet about an artifact not in play; RUN-ART-001 reports a missing file."""
 
 from __future__ import annotations
 
@@ -197,6 +197,8 @@ def _organization_side(ctx: Context, sap: dict[str, Any], prep: dict[str, Any], 
 
 
 def preparation(ctx: Context) -> list[RunFinding]:
+    """ASMT-001: the plan states its objective and level of effort, and is reviewed and approved
+    before the assessment starts. What is prepared around it is APREP-001."""
     sap = _sap(ctx)
     if sap is None:
         return []
@@ -206,6 +208,17 @@ def preparation(ctx: Context) -> list[RunFinding]:
         err("the assessment plan states no objective for the control assessments")
     if not str(sap.get("level_of_effort") or "").strip():
         err("the assessment plan states no level of effort for the control assessments")
+    return out
+
+
+def prepared(ctx: Context) -> list[RunFinding]:
+    """APREP-001, split from ASMT-001: officials informed and notified, resources allocated,
+    access and documentation provided by the system owner, channels, points of contact, the
+    ambiguity mechanism and the assessors' understanding, each before the assessment starts."""
+    sap = _sap(ctx)
+    if sap is None:
+        return []
+    out, err = _reporter("APREP-001", SAP_FILE)
     prep = _block(sap, "preparation")
     if not prep:
         err("no preparation: organizational officials, resources and assessor access are "

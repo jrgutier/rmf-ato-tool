@@ -1,0 +1,13 @@
+rule: SAR-COV-001
+bases: [minimal]
+description: the si determination names si-3 instead of the scoped control si-2
+mutations:
+  - op: set_field
+    file: artifacts/sar/results/si.yaml
+    path: determinations.0.control_id
+    value: si-3
+expect:
+  errors: [SAR-COV-001]
+  also: [ASMT-005]
+  messages:
+    - scoped control si-2 has no assessment determination
