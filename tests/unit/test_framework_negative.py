@@ -2,10 +2,12 @@
 fixture declares (``rule`` plus ``also``) fire."""
 
 import pytest
-from _framework_fixtures import NEG, P3A, compose, expectation
+from _framework_fixtures import MINI, NEG, P3A, compose, expectation
 from conftest import REPO_ROOT
+from ruamel.yaml import YAML
 
 from rmf_tool.check import load_registry
+from rmf_tool.conformance.evidence import MIN_EXPECT_WORDS, content_words
 from rmf_tool.framework.validate import IMPLEMENTED, validate
 
 FIXTURE_DIRS = sorted(p for p in NEG.iterdir() if p.is_dir())
@@ -21,6 +23,31 @@ def test_negative_fixture_fires_exactly_its_rules(overlay, tmp_path):
     fired = {f.rule for f in result.findings if f.severity == "E"}
     assert fired == {expect["rule"], *expect["also"]}, [f.render() for f in result.findings]
     assert not result.ok
+    # The messages evidence may name as `expect` (FW-REQ-003): each is the rule's own.
+    own = [f.message for f in result.findings if f.rule == expect["rule"]]
+    for message in expect.get("messages") or ():
+        assert any(message in m for m in own), (message, own)
+        # Under two content words a message stands as evidence only whole, so it is declared
+        # as fired (after the "<entity>: " prefix), not as a fragment.
+        if len(content_words(message)) < MIN_EXPECT_WORDS:
+            assert any(m == message or m.endswith(f": {message}") for m in own), (message, own)
+
+
+def _ids(path):
+    data = YAML(typ="safe").load(path.read_text(encoding="utf-8")) or {}
+    return {str(item["id"]).casefold() for items in data.values() if isinstance(items, list)
+            for item in items if isinstance(item, dict) and "id" in item}
+
+
+@pytest.mark.parametrize("overlay", FIXTURE_DIRS, ids=lambda p: p.name)
+def test_an_overlay_keeps_every_entity_of_the_file_it_replaces(overlay):
+    """The judge reads an overlay as having no mutations (evidence.fixture_spec), so it may
+    change or add an entity but never drop one: a deletion would pass as a constraint. IDs
+    compare up to case, since FW-ID-002 misspells one to fail."""
+    for src in overlay.rglob("*.yaml"):
+        base = MINI / src.relative_to(overlay)
+        if src.name != "expect.yaml" and base.is_file():
+            assert _ids(base) <= _ids(src), (src, sorted(_ids(base) - _ids(src)))
 
 
 def test_every_p3a_framework_rule_has_a_fixture():

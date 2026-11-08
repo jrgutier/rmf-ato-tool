@@ -2,7 +2,9 @@
 
 Closed phases are marker files ``.phases/<p>.closed``. ``--profile pX`` evaluates
 ``closed ∪ {pX}``; no profile evaluates ``closed``; ``release`` is every phase and
-``fork`` is release without the example checks and AGENT-001.
+``fork`` is release without the example checks and AGENT-001. A phase in ``AHEAD`` has its
+checks written before it opens: ``--profile`` runs them, and they join ``release`` and ``fork``
+once its marker closes.
 """
 
 from __future__ import annotations
@@ -11,8 +13,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 PHASES = ("p1", "p2", "p2x", "p3a", "p35", "p3b", "p4", "p5", "p6", "p7", "p8", "p9",
-          "p10", "p11")
+          "p10", "p11", "p13")
 PROFILES = (*PHASES, "release", "fork")
+# p13 (the register freeze, FW-REQ-002) is built ahead of p12, while tier 1 is still triaged.
+AHEAD = frozenset({"p13"})
 # A profile including the key phase may only run once the value phases are closed.
 REQUIRES_CLOSED = {"p3b": frozenset({"p2x"})}
 PHASES_DIR = ".phases"
@@ -49,10 +53,11 @@ def resolve(root: Path, name: str | None) -> Profile:
     closed = closed_phases(root)
     if name is None:
         return Profile("closed", closed)
+    every = frozenset(PHASES) - (AHEAD - closed)
     if name == "release":
-        return Profile(name, frozenset(PHASES), agent_severity="E")
+        return Profile(name, every, agent_severity="E")
     if name == "fork":
-        return Profile(name, frozenset(PHASES), examples=False, agent_severity=None)
+        return Profile(name, every, examples=False, agent_severity=None)
     if name not in PHASES:
         raise ProfileError(f"unknown profile {name!r}; expected one of {', '.join(PROFILES)}")
     profile = Profile(name, closed | {name})
