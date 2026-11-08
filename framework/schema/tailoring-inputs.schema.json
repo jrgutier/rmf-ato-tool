@@ -144,7 +144,7 @@
       }
     },
     "dod_policy_controls": {
-      "description": "Controls that carry a duty DoDI 8500.01 places on every networked DoD IS and PIT system, or on its ISSO, privileged and authorized users, so S-2 may not tailor them out (DPOL-001, DPOL-002).",
+      "description": "Controls that carry a duty DoDI 8500.01 places on every networked DoD IS and PIT system, on its ISSO, privileged and authorized users, or through the DoD Component's cybersecurity program, so S-2 may not tailor them out (DPOL-001, DPOL-002, DPOL-003).",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -164,10 +164,11 @@
             "pattern": "^PC-DOD-\\d+$"
           },
           "subject": {
-            "title": "Who the duty binds: the system, or its ISSO, privileged users and authorized users",
+            "title": "Who the duty binds: the system; its ISSO, privileged users and authorized users; or the DoD Component's cybersecurity program, carried by the system's controls",
             "enum": [
               "system",
-              "users"
+              "users",
+              "program"
             ]
           },
           "authority": {
@@ -186,6 +187,114 @@
               "type": "string",
               "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
             }
+          },
+          "citation": {
+            "$ref": "#/$defs/citation"
+          },
+          "applies_to": {
+            "title": "The system types the duty binds (facts.yaml system_type.value); absent, every system",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "enclave",
+                "major-application",
+                "pit-system",
+                "general-support-system",
+                "pit",
+                "it-service",
+                "it-product"
+              ]
+            }
+          },
+          "mapping": {
+            "title": "How the controls carry the duty: the source names them (named), they alone meet it (sole), or the source names none and several could meet it (proxy, which caps the entry at partial)",
+            "enum": [
+              "named",
+              "sole",
+              "proxy"
+            ]
+          }
+        }
+      }
+    },
+    "control_floors": {
+      "description": "Controls a source document names, or that alone carry one of its duties, so S-2 may not tailor them out, the SSP may not record them not-applicable, and a compensating control stands for one only with its risk accepted by the AO or AODR (CFLR-001 to CFLR-003).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "rule",
+          "authority",
+          "text",
+          "controls",
+          "mapping",
+          "citation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CF-[A-Z0-9]+-[A-Z0-9]+$"
+          },
+          "rule": {
+            "title": "The rule that judges the record, one per source family",
+            "enum": [
+              "CFLR-001",
+              "CFLR-002",
+              "CFLR-003"
+            ]
+          },
+          "authority": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-\\d{1,2}(?:\\.\\d{1,2})?$"
+            }
+          },
+          "mapping": {
+            "title": "How the controls carry the duty: the source names them (named), they alone meet it (sole), or the source names none and several could meet it (proxy, which caps the entry at partial)",
+            "enum": [
+              "named",
+              "sole",
+              "proxy"
+            ]
+          },
+          "applies_to": {
+            "title": "The system types the duty binds (facts.yaml system_type.value); absent, every system",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "enclave",
+                "major-application",
+                "pit-system",
+                "general-support-system",
+                "pit",
+                "it-service",
+                "it-product"
+              ]
+            }
+          },
+          "applies_when": {
+            "title": "A condition the duty binds under: cato, a cATO is sought (an AD-CATO record in the ledger, or artifacts/data/cato.yaml)",
+            "enum": [
+              "cato"
+            ]
           },
           "citation": {
             "$ref": "#/$defs/citation"

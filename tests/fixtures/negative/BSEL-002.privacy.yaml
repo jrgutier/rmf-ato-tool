@@ -1,0 +1,24 @@
+rule: BSEL-002
+bases: [minimal]
+description: the baseline leaves out at-6, a control the NSS privacy control baseline selects for every NSS
+build: false
+mutations:
+  - op: set_field
+    file: run.yaml
+    path: control_subset
+    value: [ac-2, au-2, cm-6, ia-2, sc-7, sc-15, si-2, at-6]
+  - op: set_field
+    file: facts.yaml
+    path: baseline_id.value
+    value: CNSSI1253-M-M-L-SUBSET-8
+  - op: resolve_baseline
+    file: baseline.json
+  - op: replace_text
+    file: baseline.json
+    old: "    {\n      \"control_id\": \"at-6\",\n      \"origin\": \"privacy-baseline\"\n    },\n"
+    new: ""
+expect:
+  errors: [BSEL-002]
+  also: [GEN-STALE-001]
+  messages:
+    - "the baseline's controls differ from those a fresh `rmf baseline resolve` selects: it leaves out at-6 (privacy-baseline)"

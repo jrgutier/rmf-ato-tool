@@ -76,6 +76,7 @@ def test_aodm_decision_checks(minimal_run):
         del r["rar_ref"]
     edit_yaml(minimal_run / LEDGER, edit)
     found = " | ".join(messages(minimal_run, authorization.records_valid)
+                       + messages(minimal_run, authorization.record_terms)
                        + messages(minimal_run, authorization.parties_valid))
     assert "decided by PER-AO, not PER-AODR" in found
     assert "authorization_termination_date" in found and "no rar_ref" in found

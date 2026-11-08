@@ -211,21 +211,6 @@ def roles(ctx: Context) -> list[RunFinding]:
                 err(f"a space NSS has no formally designated {title}")
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
-        by = r.get("appointed_by")
-        if role == "PER-UR" and r.get("appointed_by") != SYSTEM_OWNER:
-            err(f"{rid}: the user representative is appointed by {r.get('appointed_by')}, not "
-                "the information system owner")
-        if role == "PER-PAO" and _key(r.get("mission_area")) not in PAO_APPOINTERS:
-            err(f"{rid}: the PAO names no mission_area ({', '.join(PAO_APPOINTERS)}), so whether "
-                "its DoD MA owner appointed it cannot be read")
-        elif role == "PER-PAO" and by != PAO_APPOINTERS.get(_key(r.get("mission_area"))):
-            err(f"{rid}: the PAO for mission area {r.get('mission_area')} is appointed by {by}, "
-                "not the DoD MA owner of that mission area")
-        if role == "PER-DODCISO" and by != "dod-cio":
-            err(f"{rid}: the DoD CISO is appointed by {by}, not the DoD CIO")
-        if role == "PER-TAG" and by != "PER-CISO":
-            err(f"{rid}: the RMF TAG Representative is appointed by {by}, not the DoD Component "
-                "CISO")
         if role in INHERENTLY_GOVERNMENTAL and held not in GOVERNMENT:
             err(f"{rid}: {INHERENTLY_GOVERNMENTAL[role]} is an inherent U.S. Government "
                 f"function and is assigned to government personnel only, not {held}")
@@ -239,10 +224,6 @@ def roles(ctx: Context) -> list[RunFinding]:
                 "satisfy the responsibilities")
         if role != "PER-CISO":
             continue
-        # DoDI 8510.01 Table 8: the Component head appoints where no Component CIO exists.
-        if by != "PER-CIO" and (by != "dod-component-head" or "PER-CIO" in holders):
-            err(f"{rid}: the senior agency information security officer is designated by "
-                f"{r.get('appointed_by')}, not the chief information officer")
         if r.get("primary_duty") != "security":
             err(f"{rid}: the senior agency information security officer maintains security "
                 f"duties as a primary responsibility, not {r.get('primary_duty')}")
@@ -252,6 +233,41 @@ def roles(ctx: Context) -> list[RunFinding]:
         if "PER-PRIV" not in _list(r.get("coordinates_with")):
             err(f"{rid}: the senior agency information security officer coordinates with the "
                 "senior agency official for privacy")
+    return out
+
+
+# --- OAPP-001: who appoints the UR, PAO, DoD CISO, TAG Representative and CISO (P-1) --------
+
+def appointers(ctx: Context) -> list[RunFinding]:
+    """OAPP-001, split from OCTX-001: the user representative is appointed by the system owner,
+    a PAO by the DoD MA owner of its mission area, the DoD CISO by the DoD CIO, the RMF TAG
+    Representative by the Component CISO, and the CISO designated by the CIO (or the Component
+    head where no Component CIO exists)."""
+    data, out, err = _record(ctx, "OAPP-001", "P-1")
+    if data is None:
+        return out
+    holders = _holders(data)
+    for r in _roles(data):
+        rid, role, by = r.get("id"), _key(r.get("role")), r.get("appointed_by")
+        if role == "PER-UR" and by != SYSTEM_OWNER:
+            err(f"{rid}: the user representative is appointed by {by}, not the information "
+                "system owner")
+        if role == "PER-PAO" and _key(r.get("mission_area")) not in PAO_APPOINTERS:
+            err(f"{rid}: the PAO names no mission_area ({', '.join(PAO_APPOINTERS)}), so whether "
+                "its DoD MA owner appointed it cannot be read")
+        elif role == "PER-PAO" and by != PAO_APPOINTERS.get(_key(r.get("mission_area"))):
+            err(f"{rid}: the PAO for mission area {r.get('mission_area')} is appointed by {by}, "
+                "not the DoD MA owner of that mission area")
+        if role == "PER-DODCISO" and by != "dod-cio":
+            err(f"{rid}: the DoD CISO is appointed by {by}, not the DoD CIO")
+        if role == "PER-TAG" and by != "PER-CISO":
+            err(f"{rid}: the RMF TAG Representative is appointed by {by}, not the DoD Component "
+                "CISO")
+        # DoDI 8510.01 Table 8: the Component head appoints where no Component CIO exists.
+        if role == "PER-CISO" and by != "PER-CIO" and (
+                by != "dod-component-head" or "PER-CIO" in holders):
+            err(f"{rid}: the senior agency information security officer is designated by "
+                f"{by}, not the chief information officer")
     return out
 
 
@@ -424,18 +440,28 @@ def program(ctx: Context) -> list[RunFinding]:
         if missing:
             err(f"the program does not {', '.join(missing)} risk: risk management frames, "
                 "assesses, responds to and monitors risk")
-        system = _system_id(ctx)
-        if system and system not in _list(prog.get("systems")):
-            err(f"{system} is not assigned to and governed by the Component cybersecurity "
-                "program")
-        if DOD_STRATEGY not in _list(prog.get("consistent_with")):
-            err("the Component cybersecurity program is not consistent with the strategy and "
-                "direction of the DoD SISO")
-        integrated = {g for b in _dicts(prog.get("governance_bodies"))
-                      for g in _list(b.get("integrates_with"))}
-        if ENTERPRISE_GOVERNANCE not in integrated:
-            err("no cybersecurity governance body integrates with the DoD enterprise "
-                "governance processes")
+    return out
+
+
+def governance(ctx: Context) -> list[RunFinding]:
+    """OGOV-001, split from OCTX-003: the system is assigned to and governed by the Component
+    cybersecurity program, the program is consistent with the DoD SISO's strategy, and a
+    governance body integrates with the DoD enterprise governance processes."""
+    data, out, err = _record(ctx, "OGOV-001", "P-2")
+    if data is None or "program" not in data:
+        return out
+    prog = _section(data, "program")
+    system = _system_id(ctx)
+    if system and system not in _list(prog.get("systems")):
+        err(f"{system} is not assigned to and governed by the Component cybersecurity program")
+    if DOD_STRATEGY not in _list(prog.get("consistent_with")):
+        err("the Component cybersecurity program is not consistent with the strategy and "
+            "direction of the DoD SISO")
+    integrated = {g for b in _dicts(prog.get("governance_bodies"))
+                  for g in _list(b.get("integrates_with"))}
+    if ENTERPRISE_GOVERNANCE not in integrated:
+        err("no cybersecurity governance body integrates with the DoD enterprise governance "
+            "processes")
     return out
 
 

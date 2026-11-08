@@ -1,0 +1,20 @@
+rule: BSEL-001
+bases: [minimal, example]
+description: the baseline is selected for an availability impact the categorization does not have
+build: false
+mutations:
+- op: replace_text
+  file: baseline.json
+  old: '"a": "low"'
+  new: '"a": "moderate"'
+  only: [minimal]
+- op: replace_text
+  file: baseline.json
+  old: '"a": "moderate"'
+  new: '"a": "low"'
+  only: [example]
+expect:
+  errors: [BSEL-001]
+  also: [GEN-STALE-001]
+  messages:
+    - "the baseline is selected for impact values"

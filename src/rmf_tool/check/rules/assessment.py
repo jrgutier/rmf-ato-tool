@@ -1,7 +1,7 @@
-"""Assessment rules ASMT-001 to ASMT-012 and APREP-001: what the plan prepares, selects, reuses
-and brings in from external providers (A-1, A-2), what each determination statement found
-(A-3), how findings are triaged (A-5) and how the POA&M records and ranks them (A-6, M-3). Each
-stays quiet about an artifact not in play; RUN-ART-001 reports a missing file."""
+"""Assessment rules ASMT-001 to ASMT-012, APREP-001 and ATEAM-001: what the plan prepares,
+selects, reuses and brings in from external providers (A-1, A-2), what each determination
+statement found (A-3), how findings are triaged (A-5) and how the POA&M records and ranks them
+(A-6, M-3). Each stays quiet about an artifact not in play; RUN-ART-001 reports a missing file."""
 
 from __future__ import annotations
 
@@ -575,11 +575,14 @@ def independence_consultation(ctx: Context) -> list[RunFinding]:
 
 # --- ASMT-007: the assessment team --------------------------------------------------------------
 
-def team(ctx: Context) -> list[RunFinding]:
+def team_selection(ctx: Context) -> list[RunFinding]:
+    """ATEAM-001, split from ASMT-007: each member's qualification is verified by the CISO
+    before the assessment starts, and the AO or AODR selects the team in time, for the type of
+    assessment, weighing the expertise it requires."""
     sap = _sap(ctx)
     if sap is None:
         return []
-    out, err = _reporter("ASMT-007", SAP_FILE)
+    out, err = _reporter("ATEAM-001", SAP_FILE)
     start = _start(sap)
     for member in _records(sap, "team"):
         persona = member.get("persona")
@@ -595,6 +598,17 @@ def team(ctx: Context) -> list[RunFinding]:
             err(f"{persona} was verified as a qualified assessor on {found.get('verified')}, "
                 "after the assessment starts")
     _selection(ctx, sap, start, err)
+    return out
+
+
+def team(ctx: Context) -> list[RunFinding]:
+    """ASMT-007: the AO or AODR determines the required degree of assessor independence on the
+    categorization and the risk, and its sufficiency, and the team holds it; who is on the team
+    and who selects it is ATEAM-001."""
+    sap = _sap(ctx)
+    if sap is None:
+        return []
+    out, err = _reporter("ASMT-007", SAP_FILE)
     independence = _block(sap, "assessor_independence")
     if independence.get("determined_by") not in (AO, AODR):
         err("the authorizing official or designated representative determines the required "

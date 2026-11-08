@@ -129,7 +129,9 @@ requirements:
     locator: "2.1.c.(1)"
     context: "DOD CISO Under the authority, direction, and control of the DoD Chief Information Officer (CIO), the DoD CISO: Establishes the construct and program for AOs, including qualification and training requi"
     statement: "(1) Oversee cybersecurity activities, findings, and remediation actions from developmental, operational, and cybersecurity testing or assessment activities throughout the system lifecycle."
-    status: "candidate"
+    status: "partial"
+    reason: "MPOA-001 fails a POA&M item not reviewed by the authorizing official, so the AO oversees findings and remediation actions; oversight of the developmental and operational test activities themselves is unheld."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.review.yaml", "expect": "is not reviewed by the authorizing official", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "The AO oversees cybersecurity findings and remediation actions from testing and assessment: a POA&M item not reviewed by the authorizing official fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0016"
     citation: {"ref": "DODI8510.01", "page": 6, "anchor": "Ensure data from those activities are captured in security authorization packages to"}
@@ -346,7 +348,9 @@ requirements:
     locator: "2.7.b"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "b. Manage Component cybersecurity risks to respective systems in accordance with the principles and processes contained in this issuance."
-    status: "candidate"
+    status: "partial"
+    reason: "For the run's system, managing its cybersecurity risk is held in part by RAR-003 (a risk whose selected course of action does not match its response fails); the Component's management of its other systems is outside the run."
+    evidence: [{"kind": "rule", "target": "RAR-003", "fixture": "tests/fixtures/negative/RAR-003.response.yaml", "expect": "but the selected course of action is", "claim": "constraint", "holds_when": "ART-RAR is produced or seeded", "asserts": "Manage cybersecurity risks to the respective systems: a risk whose selected course of action differs from its response fails", "sentence": "Manage Component cybersecurity risks to respective systems in accordance with the principles and processes contained in this issuance."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0042"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Establish and maintain cybersecurity governance bodies and methods to monitor and manage"}
@@ -355,7 +359,7 @@ requirements:
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "c. Establish and maintain cybersecurity governance bodies and methods to monitor and manage system cybersecurity risks and integrate their Component governance processes with the DoD enterprise governance processes in this issuance."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.governance.yaml", "expect": "no cybersecurity governance body integrates with the DoD enterprise governance processes", "asserts": "Component cybersecurity governance bodies integrate their Component governance processes with the DoD enterprise governance processes", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Establish and maintain cybersecurity governance bodies and methods to monitor and manage system cybersecurity risks and integrate their Component governance processes with the DoD enterprise governance processes in this issuance."}]
+    evidence: [{"kind": "rule", "target": "OGOV-001", "fixture": "tests/fixtures/negative/OGOV-001.governance.yaml", "expect": "no cybersecurity governance body integrates with the DoD enterprise governance processes", "asserts": "Component cybersecurity governance bodies integrate their Component governance processes with the DoD enterprise governance processes", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Establish and maintain cybersecurity governance bodies and methods to monitor and manage system cybersecurity risks and integrate their Component governance processes with the DoD enterprise governance processes in this issuance."}]
     work_item: "WI-163"
   - id: "REQ-DODI8510.01-0043"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Develop and maintain Component level guidance required by the “Prepare” step of"}
@@ -420,7 +424,7 @@ requirements:
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "j. Adhere to a Component cybersecurity program in accordance with DoDI 8500.01."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "OCTX-003", "fixture": "tests/fixtures/negative/OCTX-003.assigned.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "The system adheres to a Component cybersecurity program in accordance with DoDI 8500.01", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Adhere to a Component cybersecurity program in accordance with DoDI 8500.01."}]
+    evidence: [{"kind": "rule", "target": "OGOV-001", "fixture": "tests/fixtures/negative/OGOV-001.yaml", "expect": "is not assigned to and governed by the Component cybersecurity program", "asserts": "The system adheres to a Component cybersecurity program in accordance with DoDI 8500.01", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "sentence": "Adhere to a Component cybersecurity program in accordance with DoDI 8500.01."}]
     work_item: "WI-163"
   - id: "REQ-DODI8510.01-0050"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Conduct RMF activities in all phases of the DoD acquisition process (i.e.,"}
@@ -428,7 +432,9 @@ requirements:
     locator: "2.7.k"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "k. Conduct RMF activities in all phases of the DoD acquisition process (i.e., requirements development, procurement, DT&E, OT&E, and sustainment) to increase security and decrease cost."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that do not carry risk management into every phase of the acquisition life cycle; that the RMF activities are in fact conducted in each phase is the run's tasks per phase, unheld by one rule."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.yaml", "expect": "policies carry it throughout the system life cycle", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Conduct RMF activities in all phases of the DoD acquisition process: policies that do not carry risk management throughout the system life cycle phases fail", "sentence": "Conduct RMF activities in all phases of the DoD acquisition process (i.e., requirements development, procurement, DT&E, OT&E, and sustainment) to increase security and decrease cost."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0051"
     citation: {"ref": "DODI8510.01", "page": 9, "anchor": "Verify the appointment of a PM or SO for all Component systems."}
@@ -526,7 +532,9 @@ requirements:
     locator: "2.7.r"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "r. Manage, maintain, and mitigate risks throughout the system lifecycle in accordance with cybersecurity operational requirements."
-    status: "candidate"
+    status: "partial"
+    reason: "MPOA-001 fails an inspection finding not leveraged in a POA&M item or an accepted risk, so risks are mitigated or accepted throughout the life cycle; maintenance per operational requirements is unheld."
+    evidence: [{"kind": "rule", "target": "MPOA-001", "fixture": "tests/fixtures/negative/MPOA-001.yaml", "expect": "is not leveraged in a POA&M item or an accepted risk", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "Manage and mitigate risks throughout the system lifecycle: a finding not leveraged in a POA&M item or an accepted risk fails", "sentence": "Manage, maintain, and mitigate risks throughout the system lifecycle in accordance with cybersecurity operational requirements."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0062"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Oversee and verify that personnel engaged in, or supporting, the RMF are"}
@@ -545,7 +553,7 @@ requirements:
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "t. Ensure Component information SOs appoint user representatives (URs) for DoD systems under their purview."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.urappoint.yaml", "expect": ": the user representative is appointed by", "asserts": "The information system owner appoints the user representative for the system, not another official", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Ensure Component information SOs appoint user representatives (URs) for DoD systems under their purview."}]
+    evidence: [{"kind": "rule", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.yaml", "expect": ": the user representative is appointed by", "asserts": "The information system owner appoints the user representative for the system, not another official", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "sentence": "Ensure Component information SOs appoint user representatives (URs) for DoD systems under their purview."}]
     work_item: "WI-170"
   - id: "REQ-DODI8510.01-0064"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Coordinate Component’s participation in the RMF TAG."}
@@ -591,9 +599,8 @@ requirements:
     locator: "2.7.y"
     context: "OSD AND DOD COMPONENT HEADS OSD and DoD Component heads:"
     statement: "y. Ensure acquisition programs develop evaluation metrics for DT&E and OT&E, and continuous monitoring, at the beginning of the development process."
-    status: "partial"
-    reason: "TSTRAT-002 fails a test strategy whose DT events have no developmental evaluation framework or whose OT events have no operational evaluation framework or OT concept, the frameworks that carry the evaluation metrics of DT&E and OT&E. Unheld: that OSD and the Component heads ensure it of every program, and that the continuous monitoring metrics (METR-001) are set at the beginning of development."
-    evidence: [{"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.def.yaml", "expect": "the test strategy includes a developmental evaluation framework for its DT events", "claim": "constraint", "asserts": "Acquisition programs develop evaluation metrics for DT&E: DT events with no developmental evaluation framework fail"}, {"kind": "rule", "target": "TSTRAT-002", "fixture": "tests/fixtures/negative/TSTRAT-002.oef.yaml", "expect": "the test strategy includes an OT concept or an operational evaluation framework", "claim": "constraint", "asserts": "Acquisition programs develop evaluation metrics for OT&E: OT events with no operational evaluation framework fail"}]
+    status: "candidate"
+    reason: "TSTRAT-002 fails a test strategy whose DT or OT events have no developmental or operational evaluation framework, the frameworks that carry the DT&E and OT&E evaluation metrics (TSTRAT-002.def, TSTRAT-002.oef), but TSTRAT-002 is at its fan-out cap of 25 after T2/T3's 0168 and 0232; ready to cite once a split or exception frees it. Continuous monitoring metrics at the beginning of development are unheld (WI-15)."
     work_item: "WI-15"
   - id: "REQ-DODI8510.01-0069"
     citation: {"ref": "DODI8510.01", "page": 10, "anchor": "Requires the Joint Capabilities Integration and Development System process to support and"}
@@ -883,7 +890,9 @@ requirements:
     locator: "3.2"
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Task P-13 Information Life Cycle | All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [CSF: ID.AM-3; ID.AM-4] | • Senior Agency Official for Privacy • SO • IO or Steward"
-    status: "candidate"
+    status: "partial"
+    reason: "INFL-001 fails an information type whose life cycle names no creation or collection stage, and one the system stores whose life cycle names no disposition stage; that every stage the information passes through is identified and understood is unheld."
+    evidence: [{"kind": "rule", "target": "INFL-001", "fixture": "tests/fixtures/negative/INFL-001.yaml", "expect": "the information life cycle stores the information and identifies no disposition stage", "claim": "constraint", "asserts": "All stages of the information life cycle are identified for each information type: a type whose life cycle identifies no disposition stage fails", "sentence": "Task P-13 Information Life Cycle | All stages of the information life cycle are identified and understood for each information type processed, stored, or transmitted by the system. [CSF: ID.AM-3; ID.AM-4] | • Senior Agency Official for Privacy • SO • IO or Steward"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0101"
     citation: {"ref": "DODI8510.01", "page": 14, "anchor": "Task P-14 Mission-Based Cyber Risk Assessment | A system-level risk assessment is"}
@@ -941,8 +950,8 @@ requirements:
     context: "Table 1. Organization Prepare Step Tasks, Continued"
     statement: "Categorize the system in accordance with CNSSI No. 1253 based on the information analyzed, stored, and relayed by the system and an analysis of the impact of potential loss of confidentiality, integrity, and availability to organizational operations and assets, individuals, other organizations, and the Nation with respect to the loss of confidentiality, integrity, and availability of organizational systems. See Table 2 for a list of tasks and outcomes."
     status: "covered"
-    reason: "CATG-002 fails CUI or system information categorized below the CNSSI 1253 floors; CATG-001 (at its fan-out cap) fails a categorization below the high-water mark of the information analyzed, stored and relayed."
-    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.yaml", "expect": "the system processes controlled unclassified information", "claim": "constraint", "asserts": "Categorize the system in accordance with CNSSI No. 1253 based on the information processed: controlled unclassified information at confidentiality below moderate fails", "holds_when": "ART-CAT is produced or seeded"}]
+    reason: "CATG-002 fails CUI or system information categorized below the CNSSI 1253 floors, and CATG-001 a categorization below the high-water mark of the information analyzed, stored and relayed."
+    evidence: [{"kind": "rule", "target": "CATG-002", "fixture": "tests/fixtures/negative/CATG-002.yaml", "expect": "the system processes controlled unclassified information", "claim": "constraint", "asserts": "Categorize the system in accordance with CNSSI No. 1253 based on the information processed: controlled unclassified information at confidentiality below moderate fails", "holds_when": "ART-CAT is produced or seeded"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Categorize the system in accordance with CNSSI 1253 based on the information it stores and relays: a system availability below the high-water mark of the information types fails", "sentence": "Categorize the system in accordance with CNSSI No. 1253 based on the information analyzed, stored, and relayed by the system and an analysis of the impact of potential loss of confidentiality, integrity, and availability to organizational operations and assets, individuals, other organizations, and the Nation with respect to the loss of confidentiality, integrity, and availability of organizational systems."}]
   - id: "REQ-DODI8510.01-0107"
     citation: {"ref": "DODI8510.01", "page": 15, "anchor": "Task C-1 System Description | The characteristics of the system are described"}
     kind: "table"
@@ -978,8 +987,8 @@ requirements:
     context: "Table 3. Select Tasks and Outcomes"
     statement: "Task S-1 Control Selection | Control baselines necessary to protect the system commensurate with risk are selected. [CSF: Profile] | • SO • Common Control Provider"
     status: "partial"
-    reason: "TIN-001 fails a control selection that does not incorporate the Prepare decisions; the baseline itself is resolved by rmf baseline resolve and held by GEN-STALE-001 at its fan-out cap."
-    evidence: [{"kind": "rule", "target": "TIN-001", "fixture": "tests/fixtures/negative/TIN-001.selection.yaml", "expect": "does not incorporate the decisions made during the Prepare step", "asserts": "Control baselines commensurate with risk are selected: a control selection that does not incorporate the Prepare decisions fails", "holds_when": "ART-BASELINE is produced or seeded", "claim": "constraint"}]
+    reason: "TIN-001 fails a control selection that does not incorporate the Prepare decisions, and BSEL-001 a baseline selected for impact values other than the approved categorization. That the SO and common control providers select it (the RACI) is unheld by a rule."
+    evidence: [{"kind": "rule", "target": "TIN-001", "fixture": "tests/fixtures/negative/TIN-001.selection.yaml", "expect": "does not incorporate the decisions made during the Prepare step", "asserts": "Control baselines commensurate with risk are selected: a control selection that does not incorporate the Prepare decisions fails", "holds_when": "ART-BASELINE is produced or seeded", "claim": "constraint"}, {"kind": "rule", "target": "BSEL-001", "fixture": "tests/fixtures/negative/BSEL-001.yaml", "expect": "the baseline is selected for impact values", "claim": "constraint", "asserts": "Control baselines necessary to protect the system commensurate with risk are selected: a baseline selected for impact values other than the approved categorization fails", "sentence": "Task S-1 Control Selection | Control baselines necessary to protect the system commensurate with risk are selected. [CSF: Profile] | • SO • Common Control Provider"}]
     work_item: "WI-441"
   - id: "REQ-DODI8510.01-0111"
     citation: {"ref": "DODI8510.01", "page": 15, "anchor": "Task S-2 Control Tailoring | Controls are tailored, producing tailored control baselines."}
@@ -1075,7 +1084,7 @@ requirements:
     context: "Table 5. Assessment Tasks and Outcomes"
     statement: "Task A-1 Assessor Selection | • An assessor or assessment team is selected to conduct the control assessments. • The appropriate level of independence is achieved for the assessor or assessment team selected. | • AO or AODR"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "Task A-1 Assessor Selection: an assessor or assessment team is selected; no selection recorded fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected by the AO or AODR, not another persona", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The appropriate level of independence is achieved: the AO found the level insufficient fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.insufficient.yaml", "expect": "insufficient to provide confidence that the assessment results are sound", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The level of independence achieved for the assessment team selected: a member lacking the required degree fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.independence.yaml", "expect": "lacks the required degree of independence", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "Task A-1 Assessor Selection: an assessor or assessment team is selected; no selection recorded fails", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.selection.yaml", "expect": "no assessor selection is recorded", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The assessment team selected by the AO or AODR, not another persona", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.selector.yaml", "expect": "the authorizing official or designated representative selects the assessor or assessment team, not", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The appropriate level of independence is achieved: the AO found the level insufficient fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.insufficient.yaml", "expect": "insufficient to provide confidence that the assessment results are sound", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "asserts": "The level of independence achieved for the assessment team selected: a member lacking the required degree fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence", "claim": "presence", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-19"
   - id: "REQ-DODI8510.01-0121"
     citation: {"ref": "DODI8510.01", "page": 17, "anchor": "Task A-2 Assessment Plan | • Documentation needed to conduct the assessments"}
@@ -1294,7 +1303,9 @@ requirements:
     locator: "3.2"
     context: "Table 7. Monitor Tasks and Outcomes"
     statement: "Task M-7 System Disposal | A system disposal strategy is developed and implemented, as needed. | • PM or SO"
-    status: "candidate"
+    status: "partial"
+    reason: "The disposal record requires the secure end state disposal reaches, once M-7 is in play, so a disposal strategy is developed; that it is implemented as needed is unheld by a rule."
+    evidence: [{"kind": "schema", "target": "framework/schema/disposal.schema.json#/properties/end_state", "claim": "presence", "asserts": "A system disposal strategy is developed: the disposal record requires the secure end state disposal reaches"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0145"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "RMF activities must be initiated as early as possible in the DoD"}
@@ -1302,7 +1313,9 @@ requirements:
     locator: "3.3.a.(1)"
     context: "INTEGRATING THE RMF INTO THE DEFENSE ACQUISITION MANAGEMENT SYSTEM"
     statement: "(1) RMF activities must be initiated as early as possible in the DoD acquisition process to increase security and decrease cost."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that leave a life-cycle phase, the earliest included, without risk management; that the run starts its RMF activities as early as possible is unheld."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.yaml", "expect": "policies carry it throughout the system life cycle", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "RMF activities must be initiated as early as possible in the DoD acquisition process: policies that do not carry risk management throughout the system life cycle phases, the earliest included, fail", "sentence": "(1) RMF activities must be initiated as early as possible in the DoD acquisition process to increase security and decrease cost."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0146"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "Requirements, development, procurement, and T&E processes must apply the RMF in the"}
@@ -1310,7 +1323,9 @@ requirements:
     locator: "3.3.a.(2)"
     context: "INTEGRATING THE RMF INTO THE DEFENSE ACQUISITION MANAGEMENT SYSTEM"
     statement: "(2) Requirements, development, procurement, and T&E processes must apply the RMF in the acquisition of DoD information technology."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-012 fails organizational policies that leave a life-cycle phase without risk management, and one with no policy integrating systems security engineering within systems engineering; the requirements, procurement and T&E processes applying the RMF are unheld beyond that."
+    evidence: [{"kind": "rule", "target": "OCTX-012", "fixture": "tests/fixtures/negative/OCTX-012.sse.yaml", "expect": "no organizational policy integrates systems security engineering within systems engineering", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-2 adds the section", "asserts": "Development processes must apply the RMF in the acquisition of DoD IT: no organizational policy that integrates systems security engineering within systems engineering fails", "sentence": "(2) Requirements, development, procurement, and T&E processes must apply the RMF in the acquisition of DoD information technology."}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0147"
     citation: {"ref": "DODI8510.01", "page": 20, "anchor": "Risks to systems must be designated consistent with the most severe threat"}
@@ -1436,7 +1451,9 @@ requirements:
     locator: "4.2.b.(1).(c)"
     context: "LEVEL 1 – ORGANIZATION The key governance elements and resources in Level 1 are: DoD ISRMC:"
     statement: "(c) Identifies and manages enterprise level cybersecurity risks."
-    status: "candidate"
+    status: "partial"
+    reason: "RISKX-001 fails a risk executive function with no organization-wide forum for all and aggregated risk, part of the ISRMC (PER-RE) identifying and managing enterprise-level risks; the DoD ISRMC's own enterprise management is outside a run."
+    evidence: [{"kind": "rule", "target": "RISKX-001", "fixture": "tests/fixtures/negative/RISKX-001.yaml", "expect": "no organization-wide forum considers", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "The risk executive identifies and manages enterprise level cybersecurity risks: no organization-wide forum that considers all and aggregated risk fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0162"
     citation: {"ref": "DODI8510.01", "page": 23, "anchor": "Oversees cybersecurity risk guidance development for DoD business and mission functions."}
@@ -1676,7 +1693,9 @@ requirements:
     locator: "4.3.b.(3)"
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: PAOs:"
     statement: "(3) Designate AOs for MA systems supporting MAs communities of interest specified in DoDI 8320.07 in coordination with appropriate DoD Component heads, if required."
-    status: "candidate"
+    status: "partial"
+    reason: "RAPT-001 fails an AO appointed by an official DoDI 8510.01 Table 8 does not name (the Component head, or a recorded PER-PAO for an MA system); it does not demand that an MA system's AO come from the PAO rather than the Component head, and coordination with the Component heads is unheld."
+    evidence: [{"kind": "rule", "target": "RAPT-001", "fixture": "tests/fixtures/negative/RAPT-001.yaml", "expect": "which DoDI 8510.01 Table 8 does not name as its appointing authority", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded", "asserts": "PAOs designate AOs for MA systems: an AO appointed by the Component CIO, which Table 8 does not name as its appointing authority, fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0191"
     citation: {"ref": "DODI8510.01", "page": 25, "anchor": "Designate information security architects or systems security engineers for MA segments or"}
@@ -1844,7 +1863,7 @@ requirements:
     context: "LEVEL 2 – MISSION OR BUSINESS PROCESSES The key governance elements and resources in Level 2 are: DoD Component CISOs:"
     statement: "(5) Establish and oversee a team of qualified cybersecurity professionals responsible for conducting security assessments."
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The CISO establishes the team of qualified cybersecurity professionals; verified by anyone else fails", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.verifier.yaml", "expect": "the CISO establishes the team of qualified assessors;", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "(5) Establish and oversee a team of qualified cybersecurity professionals responsible for conducting security assessments."}, {"kind": "rule", "asserts": "Qualified professionals conducting security assessments are verified before the assessment starts", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.late.yaml", "expect": "was verified as a qualified assessor on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "(5) Establish and oversee a team of qualified cybersecurity professionals responsible for conducting security assessments."}]
+    evidence: [{"kind": "rule", "asserts": "The CISO establishes the team of qualified cybersecurity professionals; verified by anyone else fails", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.verifier.yaml", "expect": "the CISO establishes the team of qualified assessors;", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "(5) Establish and oversee a team of qualified cybersecurity professionals responsible for conducting security assessments."}, {"kind": "rule", "asserts": "Qualified professionals conducting security assessments are verified before the assessment starts", "target": "ATEAM-001", "fixture": "tests/fixtures/negative/ATEAM-001.late.yaml", "expect": "was verified as a qualified assessor on", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded", "sentence": "(5) Establish and oversee a team of qualified cybersecurity professionals responsible for conducting security assessments."}]
     work_item: "WI-270"
   - id: "REQ-DODI8510.01-0210"
     citation: {"ref": "DODI8510.01", "page": 27, "anchor": "CISOs may task, organize, staff, and centralize or direct assessment activities to"}
@@ -1930,7 +1949,9 @@ requirements:
     locator: "4.4.a.(2)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: In addition to the responsibilities established in DoDI 8500.01, AOs:"
     statement: "(2) Initiate and complete all appropriate RMF tasks, with appropriate documentation, for assigned systems."
-    status: "candidate"
+    status: "partial"
+    reason: "TASK-DEF-001 fails the deferral of an in-scope task that produces a core artifact, so the tasks of the authorization package are completed; their appropriate documentation is each task's own rules."
+    evidence: [{"kind": "rule", "target": "TASK-DEF-001", "fixture": "tests/fixtures/negative/TASK-DEF-001.core.yaml", "expect": "produces core artifact", "claim": "constraint", "asserts": "Initiate and complete all appropriate RMF tasks for assigned systems: an in-scope task that produces a core artifact and is deferred fails"}]
     work_item: "WI-440"
   - id: "REQ-DODI8510.01-0220"
     citation: {"ref": "DODI8510.01", "page": 27, "anchor": "Monitor and track the overall execution of system-level POA&Ms."}
@@ -2073,8 +2094,8 @@ requirements:
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: SOs:"
     statement: "(a) In coordination with the IOs, data owners or stewards, categorize systems in accordance with CNSSI 1253 and document the categorization in the appropriate Joint Capabilities Integration and Development System capabilities document (e.g., capabilities development document)."
     status: "covered"
-    reason: "C-2 categorizes per CNSSI 1253 with the IOs (CATG-001 to CATG-003); ACQLC-005 holds that the categorization is documented in the program's capability document and ACQLC-004 that the document is the kind the pathway uses (the CDD or, after JCIDS, its equivalent)."
-    evidence: [{"kind": "rule", "target": "ACQLC-005", "fixture": "tests/fixtures/negative/ACQLC-005.yaml", "expect": "not in the capability document", "claim": "constraint", "asserts": "The categorization is documented in the capabilities document of the program, and another document fails"}, {"kind": "rule", "target": "ACQLC-004", "fixture": "tests/fixtures/negative/ACQLC-004.kind.yaml", "expect": "document is not the capability document of the", "claim": "constraint", "asserts": "The appropriate capabilities document is the kind the pathway uses; a capabilities document of another kind fails"}]
+    reason: "CATG-001 fails a system categorized below the high-water mark of the information types the IOs and data owners identify (C-2 categorizes per CNSSI 1253 with them); ACQLC-005 holds that the categorization is documented in the program's capability document and ACQLC-004 that the document is the kind the pathway uses (the CDD or, after JCIDS, its equivalent)."
+    evidence: [{"kind": "rule", "target": "ACQLC-005", "fixture": "tests/fixtures/negative/ACQLC-005.yaml", "expect": "not in the capability document", "claim": "constraint", "asserts": "The categorization is documented in the capabilities document of the program, and another document fails"}, {"kind": "rule", "target": "ACQLC-004", "fixture": "tests/fixtures/negative/ACQLC-004.kind.yaml", "expect": "document is not the capability document of the", "claim": "constraint", "asserts": "The appropriate capabilities document is the kind the pathway uses; a capabilities document of another kind fails"}, {"kind": "rule", "target": "CATG-001", "fixture": "tests/fixtures/negative/CATG-001.yaml", "expect": "below the high-water mark", "claim": "constraint", "asserts": "Categorize systems in accordance with CNSSI 1253 with the information owners: a system availability below the high-water mark of the information types fails", "sentence": "(a) In coordination with the IOs, data owners or stewards, categorize systems in accordance with CNSSI 1253 and document the categorization in the appropriate Joint Capabilities Integration and Development System capabilities document (e.g., capabilities development document)."}]
     work_item: "WI-33"
   - id: "REQ-DODI8510.01-0236"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Appoint a UR for assigned systems."}
@@ -2142,7 +2163,9 @@ requirements:
     locator: "4.4.b.(5).(c)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: PMs (or SO, if no PM is assigned):"
     statement: "(c) Implement the RMF for assigned systems."
-    status: "candidate"
+    status: "partial"
+    reason: "TASK-DEF-001 fails the deferral of an in-scope task that produces a core artifact, part of implementing the RMF for the system; the rest is each task's own rules."
+    evidence: [{"kind": "rule", "target": "TASK-DEF-001", "fixture": "tests/fixtures/negative/TASK-DEF-001.core.yaml", "expect": "produces core artifact", "claim": "constraint", "asserts": "Implement the RMF for assigned systems: an in-scope task that produces a core artifact and is deferred fails"}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0244"
     citation: {"ref": "DODI8510.01", "page": 29, "anchor": "Verify that the planning and execution of all RMF activities are aligned,"}
@@ -2243,7 +2266,9 @@ requirements:
     locator: "4.4.b.(7).(a)"
     context: "LEVEL 3 – SYSTEMS The key governance elements and resources in Level 3 are: The system cybersecurity program: ISSMs, in addition to the responsibilities established in DoDI 8500.01:"
     statement: "(a) Support implementing the RMF."
-    status: "candidate"
+    status: "partial"
+    reason: "OCTX-001 fails a system with no ISSM appointed, so an ISSM supports the RMF; the support itself is the ISSM's tasks one by one."
+    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.issm.yaml", "expect": "no ISSM is appointed for the system", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it", "asserts": "The ISSM supports implementing the RMF: no ISSM appointed for the system fails"}]
     work_item: "WI-481"
   - id: "REQ-DODI8510.01-0255"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "Maintain and report systems assessment and authorization status and issues in accordance"}
@@ -2278,7 +2303,7 @@ requirements:
     context: "Table 8. Appointment of RMF Roles"
     statement: "PAO | DoD MA owner"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The PAO is appointed by the DoD MA owner of its mission area, and a PAO record naming another appointer is refused", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.pao.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "The PAO is appointed by the DoD MA owner of its mission area, and a PAO record naming another appointer is refused", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.pao.yaml", "expect": "not the DoD MA owner of that mission area", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0259"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "DoD CISO | DoD CIO"}
@@ -2287,7 +2312,7 @@ requirements:
     context: "Table 8. Appointment of RMF Roles"
     statement: "DoD CISO | DoD CIO"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The DoD CISO is appointed by the DoD CIO", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.dodciso.yaml", "expect": "the DoD CISO is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "The DoD CISO is appointed by the DoD CIO", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.dodciso.yaml", "expect": "the DoD CISO is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0260"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "DoD Component CIO | DoD Component head"}
@@ -2351,7 +2376,7 @@ requirements:
     context: "Table 8. Appointment of RMF Roles"
     statement: "RMF TAG Representative | DoD Component CISO"
     status: "covered"
-    evidence: [{"kind": "rule", "asserts": "The RMF TAG Representative is appointed by the DoD Component CISO", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.tag.yaml", "expect": "the RMF TAG Representative is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
+    evidence: [{"kind": "rule", "asserts": "The RMF TAG Representative is appointed by the DoD Component CISO", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.tag.yaml", "expect": "the RMF TAG Representative is appointed by", "claim": "constraint", "holds_when": "ART-ORG-CONTEXT is produced or seeded"}]
     work_item: "WI-27"
   - id: "REQ-DODI8510.01-0267"
     citation: {"ref": "DODI8510.01", "page": 30, "anchor": "SO | DoD Component head"}
@@ -2683,7 +2708,7 @@ requirements:
     context: ""
     statement: "UR | ISO"
     status: "covered"
-    evidence: [{"kind": "rule", "target": "OCTX-001", "fixture": "tests/fixtures/negative/OCTX-001.urappoint.yaml", "expect": ": the user representative is appointed by", "asserts": "The UR is appointed by the ISO, the information system owner", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}]
+    evidence: [{"kind": "rule", "target": "OAPP-001", "fixture": "tests/fixtures/negative/OAPP-001.yaml", "expect": ": the user representative is appointed by", "asserts": "The UR is appointed by the ISO, the information system owner", "claim": "constraint", "holds_when": "the record is in play once ART-ORG-CONTEXT is produced or seeded; P-1 writes it"}]
     work_item: "WI-170"
     promoted: {"reason": "Row of Table 8, Appointment of RMF Roles: names who appoints the user representative. A two-word row was read as a fragment; its siblings are entries."}
 # In-scope paragraphs and rows that are not candidates, each with its reason (rmf_tool.conformance.extract.REJECT_REASONS);

@@ -1,0 +1,15 @@
+rule: OGOV-001
+bases:
+- minimal
+description: no body integrates with DoD enterprise governance
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: program.governance_bodies.0.integrates_with
+  value:
+  - component-governance
+expect:
+  errors:
+  - OGOV-001
+  messages:
+  - no cybersecurity governance body integrates with the DoD enterprise governance processes

@@ -132,10 +132,6 @@ def records_valid(ctx: Context) -> list[RunFinding]:
         elif not status.reached(run, task):
             err(r, f"{r['decision']} is recorded at {task}, but the tasks before {task} have not "
                 "written their outputs")
-        if kind.get("atd_required") and not r.get("authorization_termination_date"):
-            err(r, f"{r['decision']} needs an authorization_termination_date")
-        if kind.get("conditions_required") and not r.get("conditions"):
-            err(r, f"{r['decision']} needs conditions")
         if kind.get("effect") in RAR_EFFECTS and r.get("rar_ref") != "ART-RAR":
             err(r, "no rar_ref: ART-RAR (the decision must rest on the risk assessment report)")
         if (ctx.degraded_refs and kind.get("effect") in RAR_EFFECTS
@@ -148,6 +144,20 @@ def records_valid(ctx: Context) -> list[RunFinding]:
         if task in touched and task in active and not any(r.get("task") == task for r in records):
             out.append(make("AODM-001", f"{task} touched {ledger.LEDGER_ARTIFACT} but recorded no "
                             "decision", ledger.file_of(run), None, {task}))
+    return out
+
+
+# --- AOREC-001: what a decision's type requires it to carry (split from AODM-001) -----------
+
+def record_terms(ctx: Context) -> list[RunFinding]:
+    """AOREC-001: a decision whose type requires an authorization termination date or
+    conditions carries them."""
+    out, err = _rule(ctx, "AOREC-001")
+    for r, kind in _typed(ctx):
+        if kind.get("atd_required") and not r.get("authorization_termination_date"):
+            err(r, f"{r['decision']} needs an authorization_termination_date")
+        if kind.get("conditions_required") and not r.get("conditions"):
+            err(r, f"{r['decision']} needs conditions")
     return out
 
 

@@ -1,0 +1,23 @@
+rule: CFLR-002
+bases:
+- minimal
+description: si-2 is recorded not-applicable in the SSP of a networked system, with no tailoring 
+  action, although it carries CF-8530-2
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/si.yaml
+  path: controls.0.status
+  value: not-applicable
+- op: set_field
+  file: artifacts/ssp/controls/si.yaml
+  path: controls.0.rationale
+  value: Said not to apply to the relay.
+expect:
+  errors:
+  - CFLR-002
+  also:
+  - CFLR-001
+  - CFLR-003
+  messages:
+  - 'CF-8530-2: DoDI 8530.01 requires that vulnerability assessment and management, malware protection
+    and continuous monitoring support DODIN operations, and si-2 is recorded not-applicable in the SSP'

@@ -1,0 +1,13 @@
+rule: INFL-001
+bases: [minimal]
+description: the sensor reports' life cycle names no stage by which they enter the system
+mutations:
+  - op: set_field
+    file: artifacts/data/infotypes.yaml
+    path: information_types.0.life_cycle
+    value:
+      - {stage: dissemination, description: The relay forwards each report to the analysis enclave.}
+expect:
+  errors: [INFL-001]
+  messages:
+    - "INF-01: the information life cycle identifies no creation or collection stage"

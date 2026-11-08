@@ -18,7 +18,7 @@ from rmf_tool.run.authorization import parse_date as ledger_day
 from rmf_tool.run.model import FACTS_FILE
 
 INFOTYPES_FILE = "artifacts/data/infotypes.yaml"
-C2, P12 = "C-2", "P-12"
+C2, P12, P13 = "C-2", "P-12", "P-13"
 LEVELS = ("low", "moderate", "high")
 # FIPS 199 and SP 800-60: not applicable is a value for the confidentiality of an information
 # type only, never for a system, whose floor is low.
@@ -85,8 +85,26 @@ def _categorization(ctx: Context) -> dict[str, Any] | None:
 
 
 def high_water(ctx: Context) -> list[RunFinding]:
-    """CATG-001: the system against the high-water mark of its information types, each
-    adjustment recorded, and the review factors weighed."""
+    """CATG-001: the system is not below the high-water mark of its information types. An
+    adjustment above it and the review of the factors are CADJ-001."""
+    cat = _categorization(ctx)
+    types = _types(ctx)
+    if cat is None or not types:
+        return []
+    out: list[RunFinding] = []
+    for key, name in OBJECTIVES.items():
+        mark = _system_mark(_level(t, key) for t in types)
+        value = cat.get(key)
+        if _rank(value) < _rank(mark):
+            out.append(make("CATG-001", f"{name} is {value}, below the high-water mark {mark} "
+                            "of the information types", FACTS_FILE, None, {C2}))
+    return out
+
+
+def adjustments(ctx: Context) -> list[RunFinding]:
+    """CADJ-001, split from CATG-001: each objective raised above the high-water mark has its
+    adjustment recorded, and the provisional levels are reviewed against the SP 800-60 Step 3
+    and FIPS 199 factors."""
     cat = _categorization(ctx)
     types = _types(ctx)
     if cat is None or not types:
@@ -94,15 +112,13 @@ def high_water(ctx: Context) -> list[RunFinding]:
     out: list[RunFinding] = []
 
     def err(message: str) -> None:
-        out.append(make("CATG-001", message, FACTS_FILE, None, {C2}))
+        out.append(make("CADJ-001", message, FACTS_FILE, None, {C2}))
 
     adjusted = {(_key(a.get("objective")), _key(a.get("to")))
                 for a in _dicts(cat.get("adjustments"))}
     for key, name in OBJECTIVES.items():
         mark = _system_mark(_level(t, key) for t in types)
         value = cat.get(key)
-        if _rank(value) < _rank(mark):
-            err(f"{name} is {value}, below the high-water mark {mark} of the information types")
         if _rank(value) > _rank(mark) and (key, _key(value)) not in adjusted:
             err(f"{name} is raised to {value} above the high-water mark {mark} of the "
                 "information types with no recorded adjustment")
@@ -320,7 +336,35 @@ def information_owners(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# SP 800-37r2 Task P-13: information enters a system by creation or collection; a stage the
+# system stores it in ends in disposition (OMB A-130 ties disposition to retention). A system
+# that only transmits a type keeps no copy to dispose of.
+LIFE_CYCLE_START = ("creation", "collection")
+LIFE_CYCLE_STORED, LIFE_CYCLE_END = "storage", "disposition"
+
+
+def life_cycle(ctx: Context) -> list[RunFinding]:
+    """INFL-001: P-13 identifies how each information type enters the system (creation or
+    collection) and, for one the system stores, its disposition (SP 800-37r2 Task P-13)."""
+    if P13 not in scope.active_tasks(ctx.run):
+        return []
+    out: list[RunFinding] = []
+    for info in _types(ctx):
+        stages = {s.get("stage") for s in _dicts(info.get("life_cycle"))}
+        if not stages & set(LIFE_CYCLE_START):
+            out.append(make("INFL-001", f"{info.get('id')}: the information life cycle "
+                            "identifies no creation or collection stage", INFOTYPES_FILE,
+                            None, {P13}))
+        if LIFE_CYCLE_STORED in stages and LIFE_CYCLE_END not in stages:
+            out.append(make("INFL-001", f"{info.get('id')}: the information life cycle stores "
+                            "the information and identifies no disposition stage",
+                            INFOTYPES_FILE, None, {P13}))
+    return out
+
+
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
-    yield from (("CATG-001", high_water), ("CATG-002", handling_floors),
+    yield from (("CATG-001", high_water), ("CADJ-001", adjustments),
+                ("CATG-002", handling_floors),
                 ("CATG-003", information_types), ("PIIC-001", privacy_approval),
-                ("CATG-004", cnssi_method), ("CATG-005", information_owners))
+                ("INFL-001", life_cycle), ("CATG-004", cnssi_method),
+                ("CATG-005", information_owners))

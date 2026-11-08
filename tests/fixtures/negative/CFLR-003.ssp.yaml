@@ -1,0 +1,23 @@
+rule: CFLR-003
+bases:
+- minimal
+description: si-2 is recorded not-applicable in the SSP of a networked system, with no tailoring 
+  action, although it carries CF-8531-1
+mutations:
+- op: set_field
+  file: artifacts/ssp/controls/si.yaml
+  path: controls.0.status
+  value: not-applicable
+- op: set_field
+  file: artifacts/ssp/controls/si.yaml
+  path: controls.0.rationale
+  value: Said not to apply to the relay.
+expect:
+  errors:
+  - CFLR-003
+  also:
+  - CFLR-001
+  - CFLR-002
+  messages:
+  - 'CF-8531-1: DoDI 8531.01 requires that software requiring patches or updates is identified, and si-2
+    is recorded not-applicable in the SSP'

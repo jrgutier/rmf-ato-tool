@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 363 rules, 38 repo-scope and 325 run-scope. Authoritative;
+# Rule registry (plan §6.5): 380 rules, 38 repo-scope and 342 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -435,7 +435,18 @@ rules:
     summary: generated output differs from a fresh rmf build, baseline resolve or package
     fixture: tests/fixtures/negative/GEN-STALE-001.yaml
     hint: Run `rmf build <run>` and never hand-edit generated files (INV-2).
+  - id: BSEL-001
+    scope: run
+    severity: E
+    ac: [AC-17, AC-18]
+    phase: p35
+    applies_after: null
+    summary: "the baseline is not selected for the approved categorization: its method, impact values or overlays differ from a fresh rmf baseline resolve, or resolve fails"
+    fixture: tests/fixtures/negative/BSEL-001.yaml
+    hint: "Run `rmf baseline resolve` after C-2 approves the categorization and after any change to it or to its overlays; never hand-edit baseline.json (INV-2). Split from GEN-STALE-001."
     enforces:
+      - REQ-CNSSI1253-0008
+      - REQ-CNSSI1253-0057
       - REQ-FIPS200-0035
       - REQ-FIPS200-0036
       - REQ-FIPS200-0037
@@ -444,23 +455,38 @@ rules:
       - REQ-SP800-18R1-0135
       - REQ-SP800-18R1-0136
       - REQ-SP800-18R1-0197
-      - REQ-SP800-37R2-0392
-      - REQ-CNSSI1253-0052
-      - REQ-CNSSI1253-0057
-      - REQ-CNSSI1253-0008
-      - REQ-CNSSI1253-0017
-      - REQ-CNSSI1253-0038
-      - REQ-CNSSI1253-0058
-      - REQ-CNSSI1253-0080
-      - REQ-CNSSI1253-0070
-      - REQ-SP800-53B-0084
-      - REQ-SP800-53B-0136
-      - REQ-SP800-53B-0093
       - REQ-SP800-53B-0025
       - REQ-SP800-53B-0026
       - REQ-SP800-53B-0029
+      - REQ-SP800-53B-0093
       - REQ-SP800-53R5-0004
       - REQ-SP800-53R5-0012
+      - REQ-DODI8500.01-0309
+      - REQ-DODI8510.01-0110
+      - REQ-SP800-37R2-0211
+      - REQ-SP800-37R2-0285
+      - REQ-SP800-53AR5-0013
+  - id: BSEL-002
+    scope: run
+    severity: E
+    ac: [AC-17, AC-18]
+    phase: p35
+    applies_after: null
+    summary: "the baseline's controls differ from those a fresh rmf baseline resolve selects from the categorization, overlays, privacy baseline and tailoring"
+    fixture: tests/fixtures/negative/BSEL-002.yaml
+    hint: "Run `rmf baseline resolve` (or `rmf build`) after any change to the categorization, overlays, control_subset or tailoring.yaml; never hand-edit baseline.json (INV-2). Split from GEN-STALE-001."
+    enforces:
+      - REQ-CNSSI1253-0017
+      - REQ-CNSSI1253-0038
+      - REQ-CNSSI1253-0058
+      - REQ-CNSSI1253-0070
+      - REQ-CNSSI1253-0080
+      - REQ-SP800-53B-0084
+      - REQ-SP800-53B-0136
+      - REQ-SP800-37R2-0286
+      - REQ-SP800-37R2-0300
+      - REQ-SP800-37R2-0301
+      - REQ-SP800-37R2-0101
   - id: SSP-COV-001
     scope: run
     severity: E
@@ -481,6 +507,9 @@ rules:
       - REQ-SP800-53AR5-0177
       - REQ-FIPS200-0039
       - REQ-FIPS200-0043
+      - REQ-SP800-37R2-0063
+      - REQ-SP800-37R2-0291
+      - REQ-SP800-37R2-0311
   - id: SSP-COV-002
     scope: run
     severity: W
@@ -531,6 +560,9 @@ rules:
       - REQ-SP800-53AR5-0210
       - REQ-FIPS200-0039
       - REQ-DODI8530.01-0220
+      - REQ-SP800-37R2-0064
+      - REQ-SP800-37R2-0356
+      - REQ-SP800-53AR5-0048
   - id: SAR-POAM-001
     scope: run
     severity: E
@@ -590,6 +622,7 @@ rules:
       - REQ-SP800-53AR5-0156
       - REQ-SP800-53AR5-0045
       - REQ-DODI8500.01-0422
+      - REQ-SP800-53AR5-0049
   - id: ASMT-002
     scope: run
     severity: E
@@ -710,6 +743,7 @@ rules:
       - REQ-SP800-53AR5-0224
       - REQ-SP800-37R2-0343
       - REQ-SP800-37R2-0369
+      - REQ-SP800-37R2-0257
   - id: ASMT-007
     scope: run
     severity: E
@@ -717,23 +751,39 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: "an assessor is not shown qualified or selected by the AO for the type of assessment, or independence is not determined, grounded and found sufficient by the AO"
+    summary: "the assessor independence is not determined by the AO or AODR on the categorization and the risk, not found sufficient, or not held by the team; qualification and selection are ATEAM-001"
     fixture: tests/fixtures/negative/ASMT-007.yaml
     hint: "Each team member has a qualification the CISO verified; the AO or AODR records the selection (type, expertise) and determines assessor_independence on ART-CAT and ART-RA with its sufficiency; a contracted member the owner can influence is not independent; an independent review may stand in for independence."
     enforces:
       - REQ-SP800-161R1-0283
-      - REQ-DODI8500.01-0310
       - REQ-DODI8510.01-0120
-      - REQ-DODI8510.01-0209
-      - REQ-SP800-37R2-0347
-      - REQ-SP800-53AR5-0134
       - REQ-SP800-53AR5-0159
       - REQ-SP800-53AR5-0160
       - REQ-SP800-53AR5-0163
-      - REQ-DODCIO-CSRMC-TENETS-0003
-      - REQ-SP800-37R2-0337
       - REQ-SP800-37R2-0338
       - REQ-SP800-37R2-0478
+      - REQ-SP800-53AR5-0143
+      - REQ-SP800-37R2-0441
+  - id: ATEAM-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: "an assessment team member has no qualification verified by the CISO before the assessment starts, or the team is not selected by the AO or AODR in time, for the type of assessment, with the expertise it requires"
+    fixture: tests/fixtures/negative/ATEAM-001.yaml
+    hint: "sap.yaml team[].qualification verified_by PER-CISO before schedule.start; selection by PER-AO or PER-AODR, dated before the start, for the assessment type and with expertise; split from ASMT-007."
+    enforces:
+      - REQ-DODCIO-CSRMC-TENETS-0003
+      - REQ-DODI8500.01-0310
+      - REQ-DODI8510.01-0120
+      - REQ-DODI8510.01-0209
+      - REQ-SP800-37R2-0337
+      - REQ-SP800-37R2-0347
+      - REQ-SP800-53AR5-0134
+      - REQ-SP800-53AR5-0159
+      - REQ-SP800-53AR5-0143
   - id: ASMT-008
     scope: run
     severity: E
@@ -882,6 +932,7 @@ rules:
       - REQ-DODI8510.01-0126
       - REQ-DODI8510.01-0128
       - REQ-DODI8510.01-0213
+      - REQ-CNSSP22-0017
   - id: RAR-003
     scope: run
     severity: E
@@ -903,18 +954,17 @@ rules:
       - REQ-SP800-37R2-0384
       - REQ-SP800-37R2-0405
       - REQ-DODI8510.01-0129
+      - REQ-DODI8510.01-0041
   - id: AODM-001
     scope: run
     severity: E
     ac: [AC-18]
     phase: p6
     applies_after: A-2
-    summary: a record's decision type, task, progress, ATD, conditions, RAR reference or degraded disclosure is wrong
+    summary: a record's decision type, task, progress, RAR reference or degraded disclosure is wrong, or R-4 or M-6 records no decision; the ATD and conditions are AOREC-001
     fixture: tests/fixtures/negative/AODM-001.yaml
-    hint: Each record names an AD-* decision at a task that may decide it and that the run has reached; ATO types carry an ATD, AD-ATOC carries conditions.
+    hint: Each record names an AD-* decision at a task that may decide it and that the run has reached.
     enforces:
-      - REQ-CNSSI1254-0107
-      - REQ-CNSSI1254-0111
       - REQ-DODCIO-CATO-EVAL-0193
       - REQ-DODCIO-CATO-IG-0007
       - REQ-DODI5000.90-0087
@@ -928,12 +978,27 @@ rules:
       - REQ-SP800-37R2-0412
       - REQ-SP800-37R2-0454
       - REQ-SP800-37R2-0570
+      - REQ-SP800-37R2-0601
+      - REQ-CNSSP12-0024
+      - REQ-CNSSI1254-0116
+      - REQ-SP800-37R2-0065
+      - REQ-SP800-37R2-0387
+  - id: AOREC-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p6
+    applies_after: A-2
+    summary: "a decision whose type requires an authorization termination date or conditions does not carry them"
+    fixture: tests/fixtures/negative/AOREC-001.yaml
+    hint: "authorizations.yaml: an ATO, ATOC or IATT record carries authorization_termination_date, an ATOC its conditions; split from AODM-001."
+    enforces:
+      - REQ-CNSSI1254-0107
+      - REQ-CNSSI1254-0111
       - REQ-SP800-37R2-0576
       - REQ-SP800-37R2-0578
       - REQ-SP800-37R2-0601
       - REQ-SP800-37R2-0620
-      - REQ-CNSSP12-0024
-      - REQ-CNSSI1254-0116
   - id: AODM-002
     scope: run
     severity: E
@@ -1064,6 +1129,9 @@ rules:
       - REQ-SP800-37R2-0596
       - REQ-SP800-37R2-0607
       - REQ-SP800-37R2-0629
+      - REQ-SP800-37R2-0431
+      - REQ-SP800-37R2-0146
+      - REQ-SP800-37R2-0142
   - id: AODM-010
     scope: run
     severity: E
@@ -1173,6 +1241,7 @@ rules:
       - REQ-SP800-128-0342
       - REQ-SP800-137-0194
       - REQ-DODI8510.01-0137
+      - REQ-SP800-37R2-0066
   - id: MCHG-002
     scope: run
     severity: E
@@ -1196,6 +1265,8 @@ rules:
       - REQ-SP800-37R2-0435
       - REQ-SP800-37R2-0436
       - REQ-DODI8510.01-0138
+      - REQ-SP800-37R2-0426
+      - REQ-SP800-37R2-0737
   - id: MCHG-003
     scope: run
     severity: E
@@ -1232,6 +1303,7 @@ rules:
     hint: Each leveraged record names its arrangement; an organizational system holds a valid authorization and the inheriting AO is aware; a common control provider is the provider of a common allocation.
     enforces:
       - REQ-SP800-37R2-0583
+      - REQ-SP800-37R2-0130
   - id: RECIP-001
     scope: run
     severity: E
@@ -1310,6 +1382,10 @@ rules:
       - REQ-SP800-37R2-0377
       - REQ-SP800-37R2-0345
       - REQ-SP800-37R2-0375
+      - REQ-SP800-37R2-0444
+      - REQ-SP800-37R2-0737
+      - REQ-DODI8510.01-0015
+      - REQ-DODI8510.01-0061
   - id: MRPT-001
     scope: run
     severity: E
@@ -1340,6 +1416,7 @@ rules:
       - REQ-DTM-24-001-0165
       - REQ-DODI8510.01-0234
       - REQ-DODI8510.01-0255
+      - REQ-SP800-37R2-0447
   - id: MRPT-002
     scope: run
     severity: E
@@ -1598,6 +1675,7 @@ rules:
     enforces:
       - REQ-SP800-37R2-0317
       - REQ-SP800-53AR5-0039
+      - REQ-SP800-37R2-0214
   - id: ISCM-004
     scope: run
     severity: E
@@ -1811,7 +1889,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: R-1
-    summary: a core document does not carry a CNSSI 1254 Annex C data element mapped to it
+    summary: the security plan does not carry a CNSSI 1254 Annex C data element mapped to it; the SAR's are SAREL-001
     fixture: tests/fixtures/negative/PKG-003.yaml
     hint: Fill the heading or field that `data_elements` in framework/artifacts.yaml names.
     enforces:
@@ -1819,12 +1897,7 @@ rules:
       - REQ-CNSSI1254-0012
       - REQ-CNSSI1254-0039
       - REQ-CNSSI1254-0043
-      - REQ-CNSSI1254-0028
-      - REQ-CNSSI1254-0029
-      - REQ-CNSSI1254-0035
-      - REQ-CNSSI1254-0036
       - REQ-CNSSI1254-0058
-      - REQ-CNSSI1254-0030
       - REQ-CNSSI1254-0057
       - REQ-CNSSI1254-0050
       - REQ-CNSSI1254-0051
@@ -1832,14 +1905,38 @@ rules:
       - REQ-CNSSI1254-0060
       - REQ-CNSSI1254-0061
       - REQ-CNSSI1254-0046
-      - REQ-CNSSI1254-0062
-      - REQ-CNSSI1254-0065
-      - REQ-CNSSI1254-0066
-      - REQ-CNSSI1254-0037
       - REQ-CNSSI1254-0047
       - REQ-CNSSI1254-0048
       - REQ-CNSSI1254-0049
+      - REQ-CNSSI1254-0007
+      - REQ-CNSSI1254-0019
+      - REQ-CNSSI1253-0052
+      - REQ-SP800-37R2-0270
+      - REQ-SP800-37R2-0279
+      - REQ-SP800-37R2-0278
+  - id: SAREL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: R-1
+    summary: "the security assessment report does not carry a CNSSI 1254 Annex C data element mapped to it"
+    fixture: tests/fixtures/negative/SAREL-001.yaml
+    hint: "Fill the heading or field that data_elements in framework/artifacts.yaml names for ART-SAR; split from PKG-003, which keeps the SSP's elements."
+    enforces:
+      - REQ-CNSSI1254-0028
+      - REQ-CNSSI1254-0029
+      - REQ-CNSSI1254-0030
+      - REQ-CNSSI1254-0035
+      - REQ-CNSSI1254-0036
+      - REQ-CNSSI1254-0037
+      - REQ-CNSSI1254-0062
       - REQ-CNSSI1254-0064
+      - REQ-CNSSI1254-0065
+      - REQ-CNSSI1254-0066
+      - REQ-SP800-53AR5-0339
+      - REQ-SP800-53AR5-0340
   - id: DEL-001
     scope: run
     severity: E
@@ -1905,7 +2002,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: S-2
-    summary: a remove action lacks its basis or scoping consideration, a downgrade its three conditions, or a remove or compensating action the law and policy test (a requirement whose circumstances do not apply names its authority)
+    summary: a remove action lacks its basis or scoping consideration, or a remove or compensating action the law and policy test (a requirement whose circumstances do not apply names its authority)
     fixture: tests/fixtures/negative/TLR-002.yaml
     hint: "A remove names its basis and scoping consideration; a security-objective downgrade names its objectives, rests on ART-RA and leaves security-relevant information protected; remove and compensating actions record law_policy against legislation, regulation, policy and OMB policy, and a required control stays."
     enforces:
@@ -1915,19 +2012,38 @@ rules:
       - REQ-CNSSI1253E-ATT5-CLASSIFIED-0001
       - REQ-DODI8510.01-0113
       - REQ-FIPS200-0008
-      - REQ-SP800-18R1-0091
-      - REQ-SP800-18R1-0092
-      - REQ-SP800-18R1-0094
-      - REQ-SP800-18R1-0095
       - REQ-SP800-37R2-0305
       - REQ-SP800-53B-0056
       - REQ-SP800-53B-0057
       - REQ-SP800-53B-0066
-      - REQ-SP800-53B-0067
       - REQ-SP800-53B-0072
       - REQ-SP800-53B-0079
       - REQ-SP800-53B-0131
+      - REQ-CNSSI1253-0072
+      - REQ-SP800-53B-0055
+  - id: TLRB-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: "a downgrade under the security objective consideration names no objective, does not reflect the FIPS 199 category of its objectives, is not supported by the organizational assessment of risk, or affects the security-relevant information"
+    fixture: tests/fixtures/negative/TLRB-001.yaml
+    hint: "tailoring.yaml: a remove action with scoping.consideration security-objective records downgrade.objectives, downgrade.sources with ART-RA and security_relevant_unaffected: true; split from TLR-002."
+    enforces:
+      - REQ-CNSSI1253-0109
+      - REQ-SP800-18R1-0091
+      - REQ-SP800-18R1-0092
+      - REQ-SP800-18R1-0094
+      - REQ-SP800-18R1-0095
+      - REQ-SP800-53B-0067
       - REQ-SP800-53B-0132
+      - REQ-CNSSI1253-0072
+      - REQ-SP800-53B-0055
+      - REQ-SP800-37R2-0306
+      - REQ-SP800-37R2-0257
+      - REQ-CNSSI1253-0060
   - id: DPOL-001
     scope: run
     severity: E
@@ -1962,6 +2078,7 @@ rules:
       - REQ-DODI8500.01-0358
       - REQ-DODI8500.01-0415
       - REQ-DODI8500.01-0421
+      - REQ-DODI8500.01-0312
   - id: DPOL-002
     scope: run
     severity: E
@@ -1986,6 +2103,111 @@ rules:
       - REQ-DODI8500.01-0444
       - REQ-DODI8500.01-0445
       - REQ-DODI8500.01-0446
+  - id: DPOL-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a duty DoDI 8500.01 places on DoD IT through the DoD Component's cybersecurity program is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/DPOL-003.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml dod_policy_controls lists with subject program in the baseline and the SSP, for the system types its applies_to names; a compensating action or a stand-alone system's remove action records PER-AO or PER-AODR."
+    enforces:
+      - REQ-DODI8500.01-0016
+      - REQ-DODI8500.01-0029
+      - REQ-DODI8500.01-0149
+      - REQ-DODI8500.01-0311
+      - REQ-DODI8500.01-0344
+  - id: CFLR-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a FIPS 200 minimum security requirement or the SP 800-53A assessment policy is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-001.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-001 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-FIPS200-0005
+      - REQ-FIPS200-0017
+      - REQ-FIPS200-0018
+      - REQ-FIPS200-0019
+      - REQ-FIPS200-0020
+      - REQ-FIPS200-0021
+      - REQ-FIPS200-0022
+      - REQ-FIPS200-0023
+      - REQ-FIPS200-0024
+      - REQ-FIPS200-0025
+      - REQ-FIPS200-0026
+      - REQ-FIPS200-0027
+      - REQ-FIPS200-0028
+      - REQ-FIPS200-0029
+      - REQ-FIPS200-0030
+      - REQ-FIPS200-0031
+      - REQ-FIPS200-0032
+      - REQ-FIPS200-0033
+      - REQ-FIPS200-0034
+      - REQ-SP800-53AR5-0136
+      - REQ-SP800-53B-0003
+      - REQ-SP800-53R5-0005
+  - id: CFLR-002
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a DoDI 8530.01 duty to protect the DODIN is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-002.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-002 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-DODI8530.01-0014
+      - REQ-DODI8530.01-0016
+      - REQ-DODI8530.01-0159
+      - REQ-DODI8530.01-0163
+      - REQ-DODI8530.01-0167
+      - REQ-DODI8530.01-0169
+      - REQ-DODI8530.01-0222
+      - REQ-DODI8530.01-0228
+      - REQ-DODI8530.01-0232
+      - REQ-DODI8530.01-0233
+      - REQ-DODI8530.01-0234
+      - REQ-DODI8530.01-0235
+      - REQ-DODI8530.01-0237
+      - REQ-DODI8530.01-0243
+      - REQ-DODI8530.01-0244
+      - REQ-DODI8530.01-0246
+      - REQ-DODI8530.01-0247
+      - REQ-DODI8530.01-0248
+      - REQ-DODI8530.01-0252
+      - REQ-DODI8530.01-0272
+  - id: CFLR-003
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-2
+    summary: a control that carries a duty of DoDI 5000.83, DoDI 8531.01 or, while a cATO is sought, the DoD CIO cATO evaluation criteria is tailored out, recorded not-applicable in the SSP, or stood in for by a compensating control without the AO's or AODR's approval; only a stand-alone system with no DODIN connection removes one, with that approval
+    fixture: tests/fixtures/negative/CFLR-003.yaml
+    hint: "Keep every control framework/baselines/tailoring-inputs.yaml control_floors lists under rule CFLR-003 in the baseline and the SSP; a compensating action records risk.accepted_by PER-AO or PER-AODR, and a stand-alone system's remove action approved_by."
+    enforces:
+      - REQ-DODCIO-CATO-EVAL-0070
+      - REQ-DODCIO-CATO-EVAL-0093
+      - REQ-DODCIO-CATO-EVAL-0094
+      - REQ-DODCIO-CATO-EVAL-0103
+      - REQ-DODCIO-CATO-EVAL-0163
+      - REQ-DODI5000.83-0181
+      - REQ-DODI5000.83-0182
+      - REQ-DODI5000.83-0183
+      - REQ-DODI5000.83-0184
+      - REQ-DODI5000.83-0187
+      - REQ-DODI5000.83-0188
+      - REQ-DODI8531.01-0120
+      - REQ-DODI8531.01-0122
+      - REQ-DODI8531.01-0171
   - id: TLR-003
     scope: run
     severity: E
@@ -2099,6 +2321,19 @@ rules:
       - REQ-SP800-18R2-0075
       - REQ-SP800-37R2-0056
       - REQ-DODI8530.01-0170
+  - id: SSPI-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: a control S-3 allocates as a common control is not referenced in the security plan as inherited
+    fixture: tests/fixtures/negative/SSPI-001.yaml
+    hint: "Each control allocation.yaml types common has its SSP statement at status inherited, with inherited_from naming the provider (SSP-STAT-001)."
+    enforces:
+      - REQ-SP800-37R2-0111
+      - REQ-SP800-37R2-0311
   - id: TLR-010
     scope: run
     severity: E
@@ -2114,6 +2349,7 @@ rules:
       - REQ-DODI8500.01-0298
       - REQ-SP800-53B-0058
       - REQ-SP800-53R5-0068
+      - REQ-CNSSP22-0018
   - id: TLR-011
     scope: run
     severity: W
@@ -2283,6 +2519,7 @@ rules:
       - REQ-CNSSP12-0031
       - REQ-CNSSP12-0032
       - REQ-CNSSP12-0036
+      - REQ-CNSSP12-0053
   - id: SPCOV-001
     scope: run
     severity: E
@@ -2428,30 +2665,42 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-14
-    summary: the system risk assessment data is missing, or its threat sources, events and information sources do not hold together
+    summary: the system risk assessment data is missing, or its threat events, scenarios and information sources do not hold together
     fixture: tests/fixtures/negative/SRA-001.yaml
     hint: Write artifacts/data/ra.yaml from templates/data/ra.yaml; rate capability, intent and targeting of each adversarial source and range of effects of each other one, name only listed sources, vulnerabilities and conditions, and cite threat, vulnerability and impact information.
     enforces:
-      - REQ-CNSSI1254-0079
-      - REQ-CNSSI1254-0080
-      - REQ-CNSSI1254-0081
       - REQ-SP800-30R1-0106
       - REQ-SP800-30R1-0130
       - REQ-SP800-30R1-0149
-      - REQ-SP800-30R1-0150
-      - REQ-SP800-30R1-0151
-      - REQ-SP800-30R1-0152
-      - REQ-SP800-30R1-0153
-      - REQ-SP800-30R1-0154
       - REQ-SP800-30R1-0174
       - REQ-SP800-30R1-0191
       - REQ-SP800-30R1-0201
       - REQ-SP800-30R1-0279
       - REQ-SP800-30R1-0287
-      - REQ-SP800-30R1-0289
       - REQ-SP800-30R1-0290
       - REQ-SP800-37R2-0227
       - REQ-SP800-37R2-0252
+  - id: SRAT-001
+    scope: run
+    severity: E
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-14
+    summary: "an adversarial threat source has no assessed capability, intent or targeting, or a non-adversarial one no assessed range of effects"
+    fixture: tests/fixtures/negative/SRAT-001.yaml
+    hint: "ra.yaml threat_sources: capability, intent and targeting for an adversarial source, range_of_effects for a non-adversarial one (SP 800-30 Task 2-1); split from SRA-001."
+    enforces:
+      - REQ-CNSSI1254-0079
+      - REQ-CNSSI1254-0080
+      - REQ-CNSSI1254-0081
+      - REQ-SP800-30R1-0150
+      - REQ-SP800-30R1-0151
+      - REQ-SP800-30R1-0152
+      - REQ-SP800-30R1-0153
+      - REQ-SP800-30R1-0154
+      - REQ-SP800-30R1-0289
+      - REQ-DODI8500.01-0220
   - id: RARC-001
     scope: run
     severity: E
@@ -2620,6 +2869,7 @@ rules:
       - REQ-SP800-37R2-0264
       - REQ-DODI8510.01-0005
       - REQ-DODI8510.01-0102
+      - REQ-SP800-37R2-0303
   - id: REQS-002
     scope: run
     severity: E
@@ -3005,6 +3255,7 @@ rules:
       - REQ-SP800-37R2-0526
       - REQ-SP800-53AR5-0334
       - REQ-SP800-53AR5-0343
+      - REQ-SP800-37R2-0100
   - id: PRIV-007
     scope: run
     severity: E
@@ -3030,6 +3281,8 @@ rules:
       - REQ-SP800-53B-0031
       - REQ-SP800-53B-0033
       - REQ-CNSSI1253-0015
+      - REQ-SP800-37R2-0002
+      - REQ-SP800-37R2-0096
   - id: PRIV-008
     scope: run
     severity: E
@@ -3655,6 +3908,10 @@ rules:
     summary: deferral without rationale, or deferral of an in-scope task that produces a core artifact
     fixture: tests/fixtures/negative/TASK-DEF-001.yaml
     hint: Give run.yaml deferred entries a rationale; core-producing in-scope tasks cannot be deferred.
+    enforces:
+      - REQ-DODI8510.01-0219
+      - REQ-DODI8510.01-0243
+      - REQ-SP800-37R2-0068
   - id: CMPL-001
     scope: run
     severity: E
@@ -3914,6 +4171,7 @@ rules:
       - REQ-DODI8500.01-0313
       - REQ-SP800-18R1-0012
       - REQ-SP800-18R2-0084
+      - REQ-SP800-37R2-0061
   - id: SYSD-002
     scope: run
     severity: E
@@ -3943,13 +4201,35 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: C-1
-    summary: an interconnection has no record, or a mission partner agreement lacks what DoDI 8530.01 has it state
+    summary: an interconnection has no record or no boundary component, or a mission partner agreement is not based on what DoDI 8530.01 names or is concluded by the wrong instrument; the terms it states are MPAG-001
     fixture: tests/fixtures/negative/SYSD-003.yaml
     hint: "One interconnections record per boundary component of type interconnection."
     enforces:
+      - REQ-DODI8500.01-0366
+      - REQ-DODI8530.01-0052
+      - REQ-DODI8530.01-0286
+      - REQ-DODI8530.01-0287
+      - REQ-DODI8530.01-0288
+      - REQ-DODI8530.01-0289
+      - REQ-DODI8530.01-0296
+      - REQ-DODI8530.01-0297
+      - REQ-DODI8530.01-0299
+      - REQ-SP800-161R1-1543
+      - REQ-SP800-18R1-0125
+      - REQ-SP800-18R1-0177
+  - id: MPAG-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-1
+    summary: "a mission partner agreement governing a DODIN connection does not state the cybersecurity and data protection requirements, the DODIN operations responsibilities or the incident reporting contacts"
+    fixture: tests/fixtures/negative/MPAG-001.yaml
+    hint: "system-description.yaml interconnections[].terms lists each term of DoDI 8530.01 Encl 4 for a non-DoD partner on a DODIN connection; split from SYSD-003."
+    enforces:
       - REQ-CNSSP12-0019
       - REQ-CNSSP12-0059
-      - REQ-DODI8500.01-0366
       - REQ-DODI8530.01-0029
       - REQ-DODI8530.01-0030
       - REQ-DODI8530.01-0031
@@ -3957,18 +4237,9 @@ rules:
       - REQ-DODI8530.01-0052
       - REQ-DODI8530.01-0171
       - REQ-DODI8530.01-0285
-      - REQ-DODI8530.01-0286
-      - REQ-DODI8530.01-0287
-      - REQ-DODI8530.01-0288
-      - REQ-DODI8530.01-0289
       - REQ-DODI8530.01-0295
-      - REQ-DODI8530.01-0296
-      - REQ-DODI8530.01-0297
-      - REQ-DODI8530.01-0299
-      - REQ-SP800-161R1-1543
-      - REQ-SP800-18R1-0125
-      - REQ-SP800-18R1-0177
       - REQ-SP800-61R3-0109
+      - REQ-DODI8500.01-0037
   - id: SYSD-004
     scope: run
     severity: E
@@ -4087,24 +4358,52 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: C-2
-    summary: the categorization is below the high-water mark of the information types, raised above it with no recorded adjustment, or not reviewed against the SP 800-60 and FIPS 199 factors
+    summary: the categorization is below the high-water mark of the information types, per objective
     fixture: tests/fixtures/negative/CATG-001.yaml
-    hint: "Record categorization.factors_reviewed and one adjustments record per raised objective in facts.yaml."
+    hint: "Set each objective in facts.yaml categorization at or above the highest value of the information types; a raise above it is CADJ-001."
     enforces:
       - REQ-CNSSI1253-0049
       - REQ-CNSSI1253-0050
-      - REQ-CNSSI1253-0051
       - REQ-FIPS199-0010
       - REQ-FIPS199-0018
       - REQ-FIPS199-0020
+      - REQ-SP800-60V1R1-0095
+      - REQ-SP800-60V1R1-0130
+      - REQ-CNSSP22-0040
+      - REQ-DODI8500.01-0027
+      - REQ-FIPS199-0009
+      - REQ-FIPS200-0013
+      - REQ-SP800-37R2-0059
+      - REQ-SP800-37R2-0729
+      - REQ-DODI8510.01-0106
+      - REQ-DODI8510.01-0235
+      - REQ-FIPS199-0008
+      - REQ-SP800-37R2-0269
+      - REQ-SP800-37R2-0278
+      - REQ-SP800-60V1R1-0068
+      - REQ-SP800-60V1R1-0096
+      - REQ-SP800-60V1R1-0133
+      - REQ-SP800-60V1R1-0201
+  - id: CADJ-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: C-2
+    summary: "a provisional impact level is raised above the high-water mark of the information types with no recorded adjustment, or the provisional levels are not reviewed against the SP 800-60 and FIPS 199 factors"
+    fixture: tests/fixtures/negative/CADJ-001.yaml
+    hint: "Record categorization.factors_reviewed and one adjustments record per raised objective in facts.yaml; split from CATG-001, which keeps the high-water mark."
+    enforces:
+      - REQ-CNSSI1253-0051
+      - REQ-FIPS199-0010
+      - REQ-FIPS199-0018
       - REQ-SP800-60V1R1-0053
       - REQ-SP800-60V1R1-0067
-      - REQ-SP800-60V1R1-0095
       - REQ-SP800-60V1R1-0101
       - REQ-SP800-60V1R1-0125
       - REQ-SP800-60V1R1-0127
       - REQ-SP800-60V1R1-0128
-      - REQ-SP800-60V1R1-0130
       - REQ-SP800-60V1R1-0147
       - REQ-SP800-60V1R1-0150
       - REQ-SP800-60V1R1-0153
@@ -4113,6 +4412,22 @@ rules:
       - REQ-SP800-60V1R1-0156
       - REQ-SP800-60V1R1-0157
       - REQ-SP800-60V1R1-0160
+      - REQ-SP800-161R1-0276
+      - REQ-FIPS200-0013
+  - id: INFL-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-13
+    summary: an information type's life cycle identifies no creation or collection stage, or stores the information and identifies no disposition stage
+    fixture: tests/fixtures/negative/INFL-001.yaml
+    hint: "infotypes.yaml life_cycle lists the stages of each information type at P-13: how it enters the system and, for a type the system stores, its disposition."
+    enforces:
+      - REQ-SP800-37R2-0226
+      - REQ-SP800-37R2-0248
+      - REQ-DODI8510.01-0100
   - id: CATG-002
     scope: run
     severity: E
@@ -4292,6 +4607,7 @@ rules:
       - REQ-SP800-37R2-0507
       - REQ-SP800-37R2-0509
       - REQ-SP800-37R2-0503
+      - REQ-DODI8510.01-0161
   - id: ENTRY-001
     scope: run
     severity: E
@@ -4335,30 +4651,46 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-1
-    summary: a role is not appointed, or is appointed by the wrong official, to someone outside government, or without the AO's basis, the ISSM's means or the CISO's terms
+    summary: a role is not appointed, is assigned to someone outside government, or lacks the AO's qualifications and basis, the ISSM's means or the CISO's terms; who appoints is OAPP-001
     fixture: tests/fixtures/negative/OCTX-001.yaml
     hint: "artifacts/data/org-context.yaml roles holds one record per appointee (P-1)."
     enforces:
       - REQ-CNSSP12-0022
+      - REQ-DODI8500.01-0411
+      - REQ-DODI8510.01-0236
+      - REQ-DODI8510.01-0241
+      - REQ-SP800-18R1-0112
+      - REQ-SP800-37R2-0517
+      - REQ-SP800-37R2-0739
+      - REQ-SP800-39-0220
+      - REQ-DODI8500.01-0035
+      - REQ-DODI8510.01-0254
+      - REQ-SP800-37R2-0098
+      - REQ-SP800-37R2-0687
+  - id: OAPP-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: "a role is appointed by an official other than the one the source names: the user representative by the system owner, a PAO by the DoD MA owner of its mission area, the DoD CISO by the DoD CIO, the RMF TAG Representative by the Component CISO, the CISO by the CIO"
+    fixture: tests/fixtures/negative/OAPP-001.yaml
+    hint: "org-context.yaml roles[].appointed_by names the appointing official DoDI 8510.01 Table 8 and SP 800-37 Appendix D name; split from OCTX-001."
+    enforces:
       - REQ-DODI8500.01-0048
       - REQ-DODI8500.01-0059
       - REQ-DODI8500.01-0115
       - REQ-DODI8500.01-0138
       - REQ-DODI8500.01-0186
-      - REQ-DODI8500.01-0411
       - REQ-DODI8510.01-0063
-      - REQ-DODI8510.01-0236
-      - REQ-DODI8510.01-0241
       - REQ-DODI8510.01-0258
       - REQ-DODI8510.01-0259
       - REQ-DODI8510.01-0266
       - REQ-DODI8510.01-0306
-      - REQ-SP800-18R1-0112
       - REQ-SP800-37R2-0466
-      - REQ-SP800-37R2-0517
-      - REQ-SP800-37R2-0739
       - REQ-SP800-39-0210
-      - REQ-SP800-39-0220
+      - REQ-DODI8500.01-0397
   - id: OCTX-002
     scope: run
     severity: E
@@ -4378,7 +4710,7 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: P-2
-    summary: the Cybersecurity Risk Management Program falls short of CNSSP 22, DoDI 8500.01 or DoDI 8510.01 on scope, issuances, integration, steps, assignment or governance
+    summary: the Cybersecurity Risk Management Program falls short of CNSSP 22, DoDI 8500.01 or DoDI 8510.01 on scope, issuances, integration or steps; assignment and governance are OGOV-001
     fixture: tests/fixtures/negative/OCTX-003.yaml
     hint: "P-2 records program, policies and resources in org-context.yaml."
     enforces:
@@ -4389,12 +4721,6 @@ rules:
       - REQ-CNSSP22-0014
       - REQ-CNSSP22-0023
       - REQ-DODI8500.01-0010
-      - REQ-DODI8500.01-0012
-      - REQ-DODI8500.01-0140
-      - REQ-DODI8500.01-0339
-      - REQ-DODI8500.01-0396
-      - REQ-DODI8510.01-0042
-      - REQ-DODI8510.01-0049
       - REQ-SP800-161R1-1002
       - REQ-SP800-18R1-0003
       - REQ-SP800-37R2-0070
@@ -4403,6 +4729,26 @@ rules:
       - REQ-SP800-37R2-0489
       - REQ-SP800-39-0193
       - REQ-SP800-39-0211
+      - REQ-SP800-37R2-0058
+  - id: OGOV-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: "the system is not assigned to and governed by the Component cybersecurity program, the program is not consistent with the DoD SISO's strategy, or no governance body integrates with the DoD enterprise governance processes"
+    fixture: tests/fixtures/negative/OGOV-001.yaml
+    hint: "org-context.yaml program: systems lists the system, consistent_with names the DoD SISO strategy, and a governance_bodies record integrates_with the DoD enterprise governance; split from OCTX-003."
+    enforces:
+      - REQ-CNSSP12-0048
+      - REQ-DODI8500.01-0012
+      - REQ-DODI8500.01-0140
+      - REQ-DODI8500.01-0339
+      - REQ-DODI8500.01-0396
+      - REQ-DODI8510.01-0042
+      - REQ-DODI8510.01-0049
+      - REQ-DODI8500.01-0023
   - id: OCTX-004
     scope: run
     severity: E
@@ -4448,6 +4794,8 @@ rules:
       - REQ-CNSSI1253-0064
       - REQ-SP800-53AR5-0139
       - REQ-DODI8510.01-0092
+      - REQ-SP800-37R2-0199
+      - REQ-SP800-37R2-0201
   - id: OCTX-006
     scope: run
     severity: E
@@ -4534,6 +4882,8 @@ rules:
       - REQ-SP800-37R2-0295
       - REQ-SP800-37R2-0315
       - REQ-DODI8510.01-0114
+      - REQ-SP800-37R2-0214
+      - REQ-DODI8531.01-0185
   - id: OCTX-010
     scope: run
     severity: E
@@ -4592,6 +4942,9 @@ rules:
       - REQ-SP800-39-0216
       - REQ-SP800-61R3-0094
       - REQ-CNSSP22-0004
+      - REQ-DODI8510.01-0050
+      - REQ-DODI8510.01-0145
+      - REQ-DODI8510.01-0146
   - id: OCTX-013
     scope: run
     severity: E
@@ -4641,6 +4994,8 @@ rules:
       - REQ-DODI8510.01-0267
       - REQ-DODI8510.01-0268
       - REQ-DODI8510.01-0305
+      - REQ-DODI8500.01-0142
+      - REQ-DODI8510.01-0190
   - id: RMR-001
     scope: run
     severity: E
@@ -4981,7 +5336,8 @@ rules:
       - REQ-DODI5000.89-0182
       - REQ-DODI5000.89-0210
       - REQ-DODI8500.01-0256
-      - REQ-DODI8510.01-0068
+      - REQ-DODI8500.01-0168
+      - REQ-DODI8500.01-0232
   - id: TSTRAT-003
     scope: run
     severity: E
@@ -5014,6 +5370,7 @@ rules:
       - REQ-DODI8500.01-0309
       - REQ-DODI8510.01-0060
       - REQ-DODI8510.01-0244
+      - REQ-SP800-37R2-0142
   - id: ACQLC-001
     scope: run
     severity: E
@@ -6513,6 +6870,7 @@ rules:
       - REQ-DODI8510.01-0083
       - REQ-SP800-37R2-0144
       - REQ-SP800-37R2-0145
+      - REQ-SP800-53AR5-0137
   - id: OMP-002
     scope: run
     severity: E
@@ -6560,6 +6918,7 @@ rules:
     enforces:
       - REQ-SP800-18R1-0029
       - REQ-DODI8510.01-0082
+      - REQ-SP800-37R2-0572
   - id: TIN-001
     scope: run
     severity: E

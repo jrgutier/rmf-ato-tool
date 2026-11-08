@@ -193,10 +193,6 @@ def interconnections(ctx: Context) -> list[RunFinding]:
             err(f"{ident}: {r.get('component')} is no boundary component")
         if partner == DOD_PARTY or not dodin:
             continue
-        unstated = [t for t in PARTNER_TERMS if t not in _list(r.get("terms"))]
-        if unstated:
-            err(f"{ident}: the mission partner agreement does not state "
-                f"{', '.join(unstated)}")
         unbased = [b for b in PARTNER_BASIS if b not in _list(r.get("based_on"))]
         if unbased:
             err(f"{ident}: the mission partner agreement is not based on "
@@ -211,6 +207,28 @@ def interconnections(ctx: Context) -> list[RunFinding]:
                 "dod-cssp-subscription", "equivalent-capability-assessed"):
             err(f"{ident}: a federal mission partner subscribes to a DoD CSSP or holds an "
                 "equivalent capability the DoD CIO and DISA assessed")
+    return out
+
+
+# --- MPAG-001: what a mission partner agreement states (split from SYSD-003) ---------------
+
+def partner_terms(ctx: Context) -> list[RunFinding]:
+    """MPAG-001: each mission partner agreement governing a DODIN connection states the terms
+    DoDI 8530.01 Encl 4 names: cybersecurity and data protection requirements, DODIN operations
+    responsibilities and incident reporting contacts."""
+    out: list[RunFinding] = []
+    if not _c1_active(ctx) or not ctx.run.path(SD_FILE).is_file():
+        return out
+    connection = _mapping(facts_mod.get(ctx.facts, "system_type")).get("dodin_connection")
+    if connection not in ("direct", "indirect"):
+        return out
+    for r in _dicts(_mapping(ctx.data(SD_FILE)).get("interconnections")):
+        if r.get("partner") == DOD_PARTY:
+            continue
+        unstated = [t for t in PARTNER_TERMS if t not in _list(r.get("terms"))]
+        if unstated:
+            out.append(make("MPAG-001", f"{r.get('id')}: the mission partner agreement does "
+                            f"not state {', '.join(unstated)}", SD_FILE, None, {WRITER}))
     return out
 
 
@@ -286,7 +304,8 @@ def consumed_services(ctx: Context) -> list[RunFinding]:
 
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("SYSD-001", system_facts), ("SYSD-002", system_description),
-                ("SYSD-003", interconnections), ("SYSD-004", user_groups),
+                ("SYSD-003", interconnections), ("MPAG-001", partner_terms),
+                ("SYSD-004", user_groups),
                 ("SYSD-005", consumed_services), ("SYSD-006", handling_markings))
 
 

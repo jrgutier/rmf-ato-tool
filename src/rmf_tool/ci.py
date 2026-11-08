@@ -184,6 +184,7 @@ def _agent_lane(ctx: Context) -> tuple[bool, list[Finding], str]:
 
 
 SKELETON_RULES = ("RUN-CFG-001", "RUN-FM-001", "RUN-ART-001", "FACTS-001", "GEN-STALE-001",
+                  "BSEL-001", "BSEL-002",
                   "SSP-COV-001", "SAR-POAM-001", "TRACE-001", "TRACE-002", "HYB-001", "HYB-002",
                   "OSCAL-001", "OSCAL-002", "JOURNAL-001")
 

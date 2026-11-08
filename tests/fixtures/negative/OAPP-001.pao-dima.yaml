@@ -1,0 +1,22 @@
+rule: OAPP-001
+bases:
+- minimal
+description: the PAO for the DoD portion of the intelligence mission area is appointed by the DoD CIO,
+  not the USD(I)
+mutations:
+- op: replace_text
+  file: artifacts/data/org-context.yaml
+  old: 'manpower_structure:'
+  new: '  - {id: RA-14, role: PER-PAO, name: X (fixture), title: T, organization: DoD, contact: {email:
+    x@example.mil}, appointed_by: dod-cio, citizenship: us, affiliation: dod-civilian, mission_area: dima,
+    sources: [INT-013.A1]}
+
+    manpower_structure:'
+expect:
+  errors:
+  - OAPP-001
+  messages:
+  - 'RA-14: the PAO for mission area dima is appointed by dod-cio, not the DoD MA owner of that mission
+    area'
+  also:
+  - WFQ-001

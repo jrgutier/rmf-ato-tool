@@ -1,0 +1,22 @@
+rule: CFLR-001
+bases:
+- minimal
+description: mp-2 is tailored out of a networked system although it carries CF-FIPS-MP, a duty FIPS 
+  200 places on the system
+mutations:
+- op: replace_text
+  file: artifacts/data/tailoring.yaml
+  old: '  - control_id: cp-3.1'
+  new: "  - control_id: mp-2\n    action: remove\n    basis: scoping\n    scoping: {consideration: technology}\n\
+    \    law_policy:\n      reviewed: [legislation, regulation, policy, omb-policy]\n      requires_control:
+    false\n      sources: [INT-028.A3]\n    rationale: The relay is said to need no such control.\n  \
+    \  sources: [INT-028.A3]\n  - control_id: cp-3.1"
+- op: resolve_baseline
+  file: baseline.json
+expect:
+  errors:
+  - CFLR-001
+  messages:
+  - 'CF-FIPS-MP: FIPS 200 requires that paper and digital media are protected, access to their information
+    is limited to authorized users, and they are sanitized or destroyed before disposal or reuse, and
+    mp-2 is tailored out of the baseline'

@@ -120,8 +120,8 @@ checks are not implemented yet. Phase checks: p1 LES-002, LES-003, DOC-001; p2
 reference and FW-CITE-002 strict; p3a `rmf validate` (FW-SCHEMA-001, FW-ID-001/002,
 FW-REF-001, FW-ART-001, FW-ORD-001, FW-IO-001, FW-RACI-001, FW-DAG-001, FW-CITE-001/002,
 FW-TASK-001); p35 `rmf check --final` on `tests/fixtures/runs/valid_minimal` (RUN-CFG-001,
-RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, SSP-COV-001, SAR-POAM-001, TRACE-001/002,
-HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
+RUN-FM-001, RUN-ART-001, FACTS-001, GEN-STALE-001, BSEL-001/002, SSP-COV-001, SAR-POAM-001,
+TRACE-001/002, HYB-001/002, OSCAL-001/002, JOURNAL-001), `rmf playbooks sync --check`, AGENT-001 (W);
 p4 `rmf render --check` (FW-MAN-001); p5 adds FW-PB-001/002 and FW-PER-001/002 to
 `rmf validate`; p6 `rmf check --final` with every run rule on `valid_minimal` (scope all)
 and `hybrid_minimal` (hybrid, skeleton scope), `rmf checks-doc --check`, golden OSCAL;
