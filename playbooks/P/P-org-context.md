@@ -111,7 +111,15 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    citizen supervising and the investigation met; an ISSM without support, authority and
    resources or DoDM 5200.02 met; a CISO the CIO did not designate, without security as the
    primary duty, an office, or coordination with the privacy official; and no UR appointed
-   by the system owner. The CIO may also be the AO and the CISO may serve as AODR or SCA:
+   by the system owner (OCTX-001 lets the Component head designate the CISO only where no
+   Component CIO record exists). RAPT-001 refuses an appointer DoDI 8510.01 Table 8 does not
+   name: the Component head for the CIO and the AO (the PAO for an MA-managed system, recorded
+   as a PER-PAO role), the AO for the AODR, the CISO for a delegated SCA, the Acquisition
+   Executive or Component head for the PM or SO, the PM or SO for the ISSM and ISSO; no AO, PM
+   or SO, or Component CISO appointed; a PM or SO record with no `appointment`, or an oral one
+   (a letter, memorandum, charter or position description is written); and an AODR who is not
+   government personnel. A CISO who performs as the SCA gets a PER-SCA record with the CISO's
+   own name, contact and appointer; a delegated SCA is appointed by the CISO. The CIO may also be the AO and the CISO may serve as AODR or SCA:
    record each role held. In `code_signing` say whether code-signing certificates are used
    by the organization (cm-14 met by vendor signatures alone does not count), the designation
    process, `operational_need` and each holder, no more than that need (OCTX-002).

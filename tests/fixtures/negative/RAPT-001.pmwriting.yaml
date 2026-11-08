@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the PM or SO is appointed orally, not in writing (DoDI 8510.01 4.3.c(3))
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.6.appointment.instrument
+  value: oral
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-07: the PM or SO is not appointed in writing'

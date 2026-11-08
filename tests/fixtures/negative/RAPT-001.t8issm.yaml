@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the ISSM is appointed by the Component CIO, not the PM or SO (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.7.appointed_by
+  value: PER-CIO
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-08: PER-ISSM is appointed by PER-CIO, which DoDI 8510.01 Table 8 does not name as its appointing authority (PER-PM)'

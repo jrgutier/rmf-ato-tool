@@ -1,0 +1,16 @@
+rule: RAPT-001
+bases:
+- minimal
+description: no PM or SO is appointed, the PM record holds another role
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.6.role
+  value: PER-CCP
+expect:
+  errors:
+  - RAPT-001
+  also:
+  - OCTX-012
+  messages:
+  - 'no PM or SO is appointed for the system'

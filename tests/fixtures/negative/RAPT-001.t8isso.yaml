@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: the ISSO is appointed by the ISSM, not the PM or SO (DoDI 8510.01 Table 8)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.8.appointed_by
+  value: PER-ISSM
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-09: PER-ISSO is appointed by PER-ISSM, which DoDI 8510.01 Table 8 does not name as its appointing authority (PER-PM)'

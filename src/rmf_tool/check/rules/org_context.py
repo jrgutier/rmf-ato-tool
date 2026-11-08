@@ -60,6 +60,20 @@ OPEN_TO = {"non-us-citizen": lambda r: r.get("citizenship") == "non-us",
            "non-us-provider": lambda r: r.get("affiliation") == "non-us-provider",
            "non-dod": lambda r: r.get("affiliation") == "other-government"}
 ISSM_GRANTS = ("support", "authority", "resources")
+# DoDI 8510.01 Table 8: who appoints each RMF role. PER-PM holds both the PM (appointed by the
+# Component Acquisition Executive) and the SO (by the Component head). The PAO appoints the AO of
+# an MA-managed system, so it counts only where the roles hold a PAO. The CISO is the Component
+# SCA and may formally delegate the role: an SCA record held by someone else is the CISO's
+# delegate. The CISO's own appointer is OCTX-001's.
+TABLE_8 = {
+    "PER-CIO": ("dod-component-head",),
+    "PER-AO": ("dod-component-head", "PER-PAO"),
+    "PER-AODR": ("PER-AO",),
+    "PER-SCA": ("PER-CISO",),
+    "PER-PM": ("component-acquisition-executive", "dod-component-head"),
+    "PER-ISSM": ("PER-PM",),
+    "PER-ISSO": ("PER-PM",),
+}
 # The cybersecurity-related positions among the roles; the program manager, user representative
 # and a provider organization hold no such position as such.
 CYBER_POSITIONS = ("PER-AO", "PER-AODR", "PER-CISO", "PER-ISSM", "PER-ISSO", "PER-SCA",
@@ -185,9 +199,10 @@ def roles(ctx: Context) -> list[RunFinding]:
     _absent(data, active, ("roles", "manpower_structure", "open_functions"), err)
     # The appointments are P-1's to make; a context seeded from outside the run is judged on
     # the records it holds, not on the ones it leaves out.
-    if "P-1" in active and "PER-UR" not in _holders(data):
+    holders = _holders(data)
+    if "P-1" in active and "PER-UR" not in holders:
         err("no user representative is appointed for the system")
-    if "P-1" in active and "PER-ISSM" not in _holders(data):
+    if "P-1" in active and "PER-ISSM" not in holders:
         err("no ISSM is appointed for the system")
     if "P-1" in active and _space_nss(ctx):
         for role, title in SPACE_DESIGNATED.items():
@@ -195,10 +210,10 @@ def roles(ctx: Context) -> list[RunFinding]:
                 err(f"a space NSS has no formally designated {title}")
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
+        by = r.get("appointed_by")
         if role == "PER-UR" and r.get("appointed_by") != SYSTEM_OWNER:
             err(f"{rid}: the user representative is appointed by {r.get('appointed_by')}, not "
                 "the information system owner")
-        by = r.get("appointed_by")
         if role == "PER-PAO" and _key(r.get("mission_area")) not in PAO_APPOINTERS:
             err(f"{rid}: the PAO names no mission_area ({', '.join(PAO_APPOINTERS)}), so whether "
                 "its DoD MA owner appointed it cannot be read")
@@ -223,7 +238,8 @@ def roles(ctx: Context) -> list[RunFinding]:
                 "satisfy the responsibilities")
         if role != "PER-CISO":
             continue
-        if r.get("appointed_by") != "PER-CIO":
+        # DoDI 8510.01 Table 8: the Component head appoints where no Component CIO exists.
+        if by != "PER-CIO" and (by != "dod-component-head" or "PER-CIO" in holders):
             err(f"{rid}: the senior agency information security officer is designated by "
                 f"{r.get('appointed_by')}, not the chief information officer")
         if r.get("primary_duty") != "security":
@@ -236,6 +252,55 @@ def roles(ctx: Context) -> list[RunFinding]:
             err(f"{rid}: the senior agency information security officer coordinates with the "
                 "senior agency official for privacy")
     return out
+
+
+# --- RAPT-001: the appointing authorities of DoDI 8510.01 Table 8 (P-1) ----------------------
+
+def appointments(ctx: Context) -> list[RunFinding]:
+    """RAPT-001: each Table 8 role is appointed by the official Table 8 names, an AO and a PM or
+    SO are appointed for the system, as is the Component CISO (4.3.c(6)), the PM or SO in
+    writing (4.3.c(3)), and the AO role is re-delegated only to government personnel
+    (2.7.m(1)). The Component CISO's own appointer is OCTX-001's clause, not restated here. A
+    PER-SCA record held by the CISO (same name and email) is the CISO performing as the SCA and
+    is judged by the CISO's appointer; only a delegate must be appointed by the CISO. A context
+    seeded from outside the run is judged on the records it holds."""
+    data, out, err = _record(ctx, "RAPT-001", "P-1")
+    if data is None:
+        return out
+    holders = _holders(data)
+    if "P-1" in scope.active_tasks(ctx.run):
+        if "PER-AO" not in holders:
+            err("no AO is appointed for the system")
+        if "PER-PM" not in holders:
+            err("no PM or SO is appointed for the system")
+        if "PER-CISO" not in holders:
+            err("no DoD Component CISO is appointed to direct the Component cybersecurity program")
+    cisos = [r for r in _roles(data) if r.get("role") == "PER-CISO"]
+    for r in _roles(data):
+        rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
+        by = r.get("appointed_by")
+        allowed = [a for a in TABLE_8.get(role or "", ()) if a != "PER-PAO" or a in holders]
+        if role == "PER-SCA" and any(_same_holder(r, c) for c in cisos):
+            allowed = sorted({_key(c.get("appointed_by")) for c in cisos
+                              if _same_holder(r, c)} - {None})
+        if allowed and by not in allowed:
+            err(f"{rid}: {role} is appointed by {by}, which DoDI 8510.01 Table 8 does not name "
+                f"as its appointing authority ({' or '.join(allowed)})")
+        instrument = _key(_sub(r, "appointment").get("instrument"))
+        if role == "PER-PM" and instrument in (None, "oral"):
+            err(f"{rid}: the PM or SO is not appointed in writing")
+        if role == "PER-AODR" and held not in GOVERNMENT:
+            err(f"{rid}: the AO role cannot be re-delegated to personnel who are not government "
+                f"personnel, and the AODR is {held}")
+    return out
+
+
+def _same_holder(one: dict[str, Any], other: dict[str, Any]) -> bool:
+    """Whether two role records name the same person: the same name and business email. A
+    delegate who uses the office's mailbox is still another person."""
+    name, email = _key(one.get("name")), _key(_sub(one, "contact").get("email"))
+    return name is not None and email is not None and name == _key(other.get("name")) \
+        and email == _key(_sub(other, "contact").get("email"))
 
 
 # --- OCTX-013: who may hold a cybersecurity position, and on what terms (P-1) ---------------
