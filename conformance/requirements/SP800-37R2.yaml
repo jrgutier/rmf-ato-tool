@@ -1561,9 +1561,11 @@ requirements:
     locator: "TASK P-1"
     context: ""
     statement: "The roles and responsibilities of key participants in risk management processes are described in Appendix D. The roles and responsibilities may include personnel that are internal or external to the organization, as appropriate. Since organizations have different missions, functions, and organizational structures, there may be differences in naming conventions for risk management roles and how specific responsibilities are allocated among organizational personnel (e.g., multiple individuals filling a single role or one individual filling multiple roles). In either situation, the basic risk management functions remain the same. Organizations ensure that there are no conflicts of interest when assigning the same individual to multiple risk management roles. For example, authorizing officials cannot occupy the role of system owner or common control provider for systems or common controls they are authorizing. In addition, combining multiple roles for security and privacy requires care because the two disciplines may require different expertise, and in some circumstances, the priorities may be competing. Some roles may be allocated to a group or an office rather than to an individual, for example, control assessor, risk executive (function), or system administrator."
-    status: "candidate"
-    reason: "Conflicts of interest between roles, the AO as system owner or common control provider among them, are checked in the P-1 playbook only; the other sentences describe roles or permit their allocation."
+    status: "partial"
+    reason: "RMR-001 fails the AO appointed system owner of the system it authorizes; the care in combining security and privacy roles has no record to test, and three sentences permit or describe (ruling sought)."
+    evidence: [{"kind": "rule", "target": "RMR-001", "fixture": "tests/fixtures/negative/RMR-001.yaml", "expect": "holds both the authorizing official and the system owner role: an authorizing official cannot occupy the role of system owner for a system it authorizes", "claim": "constraint", "holds_when": "P-1 is active and org-context.yaml is produced or seeded", "sentence": "Organizations ensure that there are no conflicts of interest when assigning the same individual to multiple risk management roles.", "asserts": "Organizations ensure no conflicts of interest when assigning the same individual to multiple roles: one who holds both the authorizing official and the system owner role fails"}]
     work_item: "WI-401"
+    ruling_sought: [{"sentence": "The roles and responsibilities may include personnel that are internal or external to the organization, as appropriate.", "reason": "A permission: roles may include personnel internal or external to the organization."}, {"sentence": "Since organizations have different missions, functions, and organizational structures, there may be differences in naming conventions for risk management roles and how specific responsibilities are allocated among organizational personnel (e.g., multiple individuals filling a single role or one individual filling multiple roles).", "reason": "Describes that naming conventions and allocations may differ, with examples; nothing is required."}, {"sentence": "Some roles may be allocated to a group or an office rather than to an individual, for example, control assessor, risk executive (function), or system administrator.", "reason": "A permission with an open list of examples: some roles may be allocated to a group or office."}]
   - id: "REQ-SP800-37R2-0185"
     citation: {"ref": "SP800-37R2", "page": 48, "anchor": "Establish a risk management strategy for the organization that includes a determination"}
     kind: "imperative"
@@ -4189,8 +4191,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES"
     context: "AUTHORIZING OFFICIAL"
     statement: "Organizations ensure that there are no conflicts of interest when assigning the same individual to multiple risk management roles. See RMF Prepare-Organization Level step, Task P-1."
-    status: "candidate"
-    reason: "The P-1 playbook checks separation of roles in interview; no rule refuses one individual holding conflicting roles, such as the AO as system owner."
+    status: "covered"
+    reason: "RMR-001 fails one individual appointed both authorizing official and system owner, the conflict of interest P-1 names"
+    evidence: [{"kind": "rule", "target": "RMR-001", "fixture": "tests/fixtures/negative/RMR-001.yaml", "expect": "holds both the authorizing official and the system owner role: an authorizing official cannot occupy the role of system owner for a system it authorizes", "claim": "constraint", "holds_when": "P-1 is active and org-context.yaml is produced or seeded", "asserts": "No conflicts of interest when assigning the same individual to multiple roles: one who holds both the authorizing official and the system owner role fails"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0463"
     citation: {"ref": "SP800-37R2", "page": 133, "anchor": "The responsibility and accountability of authorizing officials described in [FIPS 200] was"}
@@ -4460,8 +4463,9 @@ requirements:
     locator: "ROLES AND RESPONSIBILITIES.•"
     context: "HEAD OF AGENCY The heads of agencies ensure that:"
     statement: "• Senior agency officials for privacy are designated who are responsible and accountable for ensuring compliance with applicable privacy requirements, managing privacy risk, and the organization’s privacy program; and"
-    status: "candidate"
-    reason: "PER-PRIV is R on P-1 and OCTX-001 holds that the privacy official is government personnel; no rule fails a run that designates no senior official for privacy."
+    status: "covered"
+    reason: "RMR-001 fails a P-1 that designates no senior agency official for privacy"
+    evidence: [{"kind": "rule", "target": "RMR-001", "fixture": "tests/fixtures/negative/RMR-001.privacy.yaml", "expect": "no senior agency official for privacy is designated for the organization", "claim": "constraint", "holds_when": "P-1 is active and org-context.yaml is produced or seeded", "asserts": "Senior agency officials for privacy are designated: no senior agency official for privacy is designated fails"}]
     work_item: "WI-406"
   - id: "REQ-SP800-37R2-0492"
     citation: {"ref": "SP800-37R2", "page": 137, "anchor": "The organization has adequately trained personnel to assist in complying with security"}

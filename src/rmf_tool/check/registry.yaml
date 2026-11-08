@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 344 rules, 37 repo-scope and 307 run-scope. Authoritative;
+# Rule registry (plan §6.5): 345 rules, 37 repo-scope and 308 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -4344,6 +4344,20 @@ rules:
       - REQ-DODI8500.01-0407
       - REQ-DODI8500.01-0408
       - REQ-DODI8530.01-0260
+  - id: RMR-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: the authorizing official is also the system owner, or no senior agency official for privacy is designated
+    fixture: tests/fixtures/negative/RMR-001.yaml
+    hint: "In artifacts/data/org-context.yaml roles, give PER-AO and PER-PM different appointees, and designate a PER-PRIV holder at P-1."
+    enforces:
+      - REQ-SP800-37R2-0462
+      - REQ-SP800-37R2-0184
+      - REQ-SP800-37R2-0491
   - id: PPROT-001
     scope: run
     severity: E
