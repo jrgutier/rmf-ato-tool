@@ -2317,8 +2317,8 @@ requirements:
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "TASK C-1 | • The characteristics of the system are described and documented."
-    status: "covered"
-    reason: "system-description.yaml must hold the system's function and its ownership (required properties), so the characteristics are described"
+    status: "partial"
+    reason: "system-description.yaml must state the system's ownership from a fixed set and its function; the other characteristics described and documented at C-1 are prose no rule reads."
     evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/ownership", "claim": "constraint", "asserts": "The characteristics of the system are described and documented, its ownership and operation among them"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0268"
@@ -2364,8 +2364,8 @@ requirements:
     locator: "3.2"
     context: "TABLE 3: CATEGORIZE TASKS AND OUTCOMES"
     statement: "SECURITY CATEGORIZATION REVIEW AND | categorization decision is approved by senior leaders in the"
-    status: "covered"
-    reason: "FACTS-001 fails a categorization not approved before S-1; cut pair with 0271"
+    status: "partial"
+    reason: "FACTS-001 fails a categorization not approved before S-1; that the approval is given by senior leaders is not what this fixture breaks (the approver is PIIC-001's for PII systems)."
     evidence: [{"kind": "rule", "target": "FACTS-001", "fixture": "tests/fixtures/negative/FACTS-001.approved.yaml", "expect": "categorization is not approved (categorization.approved.value must be true before S-1)", "claim": "constraint", "asserts": "The categorization decision is approved by senior leaders: categorization is not approved before S-1 fails"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0273"
@@ -2383,8 +2383,8 @@ requirements:
     locator: "TASK C-1"
     context: ""
     statement: "Document the characteristics of the system."
-    status: "covered"
-    reason: "system-description.yaml must state the ownership and operation of the system from a fixed set, and its function"
+    status: "partial"
+    reason: "system-description.yaml must state the system's ownership from a fixed set and its function; the rest of the characteristics documented at C-1 are prose no rule reads."
     evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/ownership", "claim": "constraint", "asserts": "Document the characteristics of the system: the ownership and operation of the system are documented"}]
     work_item: "WI-402"
   - id: "REQ-SP800-37R2-0275"
@@ -4185,7 +4185,7 @@ requirements:
     context: "AUTHORIZING OFFICIAL"
     statement: "Organizations ensure that there are no conflicts of interest when assigning the same individual to multiple risk management roles. See RMF Prepare-Organization Level step, Task P-1."
     status: "covered"
-    reason: "RMR-001 fails one individual appointed both authorizing official and system owner, the conflict of interest the source gives as its example; the common control provider half is not checked because org-context.yaml cannot show whether this AO authorizes the provider's controls."
+    reason: "RMR-001 fails one individual appointed both authorizing official and system owner, the conflict of interest the source gives as its example. The common control provider half is omitted on purpose: the provider's controls are authorized by their own AO, which org-context.yaml cannot tie to this run's AO."
     evidence: [{"kind": "rule", "target": "RMR-001", "fixture": "tests/fixtures/negative/RMR-001.yaml", "expect": "holds both the authorizing official and the system owner role: an authorizing official cannot occupy the role of system owner for a system it authorizes", "claim": "constraint", "holds_when": "P-1 is active and org-context.yaml is produced or seeded", "asserts": "No conflicts of interest when assigning the same individual to multiple roles: one who holds both the authorizing official and the system owner role fails"}]
     work_item: "WI-401"
   - id: "REQ-SP800-37R2-0463"
