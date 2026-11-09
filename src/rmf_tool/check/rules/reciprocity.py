@@ -1,7 +1,8 @@
 """Reciprocity in a run (DoD CIO reciprocity playbook, CNSSI 1254 Annex D, DoDI 8500.01, DoDI
 8510.01): RCP-001 on what the Granting side gives each Receiving organization, RCP-002 on how it
 coordinates with them and tells them of changes, RCP-003 on the patches and the CSSP it keeps for
-them, RCP-004 on what this organization does before it uses a system it receives, RCP-005 on the
+them, RCP-004 on what this organization does before it uses a system it receives, RCP-010 on how it
+tests that system by control origin, RCP-005 on the
 authorization to use, RCP-009 on what this organization keeps up after it, RCP-006 on the
 agreement between the two sides, RCP-007 on the body of evidence a Receiving AO weighs and on a
 refusal and its escalation, and RCP-008 on the registry record.
@@ -477,9 +478,8 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
     system's assessment through a tool, requests the package, deployment instructions and a
     current POA&M, makes its own package available, reviews the Granting AO's decision and the
     deployment guide, determines the impact of connecting it (through its DSAWG representative
-    for an Enterprise system) and implements augmenting controls before it decides, and tests
-    by origin: built-in controls not re-tested, controls configured at deployment tested by the
-    receiving side, inherited controls validated by the receiving ISO with evidence."""
+    for an Enterprise system) and implements augmenting controls before it decides. How each
+    control is tested by its origin is RCP-010."""
     data = _data(ctx)
     if data is None:
         return []
@@ -500,7 +500,6 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
         if _key(system.get("leveraged")) in links and system.get("enterprise") is not True:
             err(f"{sid}: the received system links an Enterprise system in "
                 "leveraged-authorizations.yaml but is not recorded as one")
-        _tests(sid, system, err)
         if outcome == "pending":
             continue
         decided = _decided(system)
@@ -542,6 +541,24 @@ def receiving_review(ctx: Context) -> list[RunFinding]:
             if done is None or (deployed is not None and done > deployed):
                 err(f"{sid}: the augmenting control {aug.get('control')} required to deploy "
                     "the system is not implemented by the time it is deployed")
+    return out
+
+
+# --- RCP-010 (split from RCP-004): a received system's controls tested by origin ------------
+
+def received_tests(ctx: Context) -> list[RunFinding]:
+    """RCP-010: each received system, pending or decided, is tested by control origin: built-in
+    controls not re-tested, controls configured at deployment tested by the receiving side once
+    deployed, inherited controls validated by the receiving ISO with evidence, hybrid ones
+    established by the receiving organization with evidence. RCP-004 reports an outcome that is
+    not pending, accepted or refused, and skips such a system here too."""
+    data = _data(ctx)
+    if data is None:
+        return []
+    out, err = _collector("RCP-010", "A-2")
+    for system in _items(data, "received_systems"):
+        if system.get("outcome") in OUTCOMES:
+            _tests(system.get("id"), system, err)
     return out
 
 
@@ -940,6 +957,7 @@ RULES = {
     "RCP-002": coordination,
     "RCP-003": sustainment,
     "RCP-004": receiving_review,
+    "RCP-010": received_tests,
     "RCP-005": authorization_to_use,
     "RCP-006": agreements,
     "RCP-007": evidence_and_refusal,

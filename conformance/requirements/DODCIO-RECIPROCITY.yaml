@@ -434,7 +434,7 @@ requirements:
     context: "ENTERPRISE – ISRMC"
     statement: "d. Test security controls, as appropriate."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.configured.yaml", "expect": "configured at deployment is not tested by the receiving system owner", "asserts": "Test security controls as appropriate: the receiving owner tests each control configured at deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}, {"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.testdate.yaml", "expect": "configured at deployment is not tested once it is configured on deployment", "asserts": "Test security controls as appropriate: each control configured at deployment is tested once it is configured", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}]
+    evidence: [{"kind": "rule", "target": "RCP-010", "fixture": "tests/fixtures/negative/RCP-010.configured.yaml", "expect": "configured at deployment is not tested by the receiving system owner", "asserts": "Test security controls as appropriate: the receiving owner tests each control configured at deployment", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}, {"kind": "rule", "target": "RCP-010", "fixture": "tests/fixtures/negative/RCP-010.testdate.yaml", "expect": "configured at deployment is not tested once it is configured on deployment", "asserts": "Test security controls as appropriate: each control configured at deployment is tested once it is configured", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "Test security controls, as appropriate."}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0049"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "The Receiving organization must review the controls and the deployment guide to"}
@@ -452,8 +452,8 @@ requirements:
     context: "ENTERPRISE – ISRMC"
     statement: "(2) Security controls that are built into the system must not change when the system is deployed and do not need to be re-tested."
     status: "partial"
-    reason: "RCP-004 refuses a re-test of a built-in control; that built-in controls do not change when the system is deployed is not held, since the run records no before-and-after of a built-in control."
-    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.builtin.yaml", "expect": "is re-tested though it does not change when the system is deployed", "asserts": "Security controls built into the system are not re-tested when the system is deployed", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
+    reason: "RCP-010 refuses a re-test of a built-in control; that built-in controls do not change when the system is deployed is not held, since the run records no before-and-after of a built-in control."
+    evidence: [{"kind": "rule", "target": "RCP-010", "fixture": "tests/fixtures/negative/RCP-010.builtin.yaml", "expect": "is re-tested though it does not change when the system is deployed", "asserts": "Security controls built into the system are not re-tested when the system is deployed", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship"}]
     work_item: "WI-314"
   - id: "REQ-DODCIO-RECIPROCITY-0051"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "The Receiving organization must establish inheritance for the hybrid controls, providing supporting"}
@@ -462,7 +462,7 @@ requirements:
     context: "ENTERPRISE – ISRMC"
     statement: "(3) The Receiving organization must establish inheritance for the hybrid controls, providing supporting evidence to support implementation within the Receiving system."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "RCP-004", "fixture": "tests/fixtures/negative/RCP-004.hybrid.yaml", "expect": "is not established by the receiving organization, but", "claim": "constraint", "asserts": "The Receiving organization must establish inheritance for the hybrid controls; hybrid inheritance established by the Granting side fails", "holds_when": "reciprocity.yaml names a received system"}]
+    evidence: [{"kind": "rule", "target": "RCP-010", "fixture": "tests/fixtures/negative/RCP-010.hybrid.yaml", "expect": "is not established by the receiving organization, but", "claim": "constraint", "asserts": "The Receiving organization must establish inheritance for the hybrid controls; hybrid inheritance established by the Granting side fails", "holds_when": "reciprocity.yaml names a received system"}]
   - id: "REQ-DODCIO-RECIPROCITY-0052"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 11, "anchor": "Augment any security controls required for deploying the Enterprise system to a"}
     kind: "lettered"
@@ -1150,8 +1150,9 @@ requirements:
     locator: "4.5.c"
     context: "DOD AND INTELLIGENCE COMMUNITY DoDI 8510.01, the RMF KS, and ICD 503 align to assert the following regarding reciprocity:"
     statement: "c. DoD and IC Components will accept the security assessment of a system by another Component without requiring or requesting any additional validation or verification testing of the system with the following caveats."
-    status: "candidate"
-    reason: "RCP-004 fails a received system whose unchanged built-in control is re-tested (tests/fixtures/negative/RCP-004.builtin.yaml), the additional testing this forbids, but RCP-004 is at its fan-out cap of 25; ready to cite once a split or a fan-out exception frees it (WI-29)."
+    status: "partial"
+    reason: "Held in part: RCP-010 fails a received system whose unchanged built-in control is re-tested (RCP-010.builtin), the additional testing this forbids. Unheld: a request for additional testing that is never performed, and testing of the system as a whole rather than control by control, which no record holds (WI-29)."
+    evidence: [{"kind": "rule", "target": "RCP-010", "fixture": "tests/fixtures/negative/RCP-010.builtin.yaml", "expect": "is re-tested though it does not change when the system is deployed", "asserts": "The Receiving Component accepts the security assessment without additional validation or verification testing: a built-in control of a received system that is re-tested fails", "claim": "constraint", "holds_when": "ART-SD is produced or seeded and reciprocity.yaml records the relationship", "sentence": "DoD and IC Components will accept the security assessment of a system by another Component without requiring or requesting any additional validation or verification testing of the system with the following caveats."}]
     work_item: "WI-29"
   - id: "REQ-DODCIO-RECIPROCITY-0129"
     citation: {"ref": "DODCIO-RECIPROCITY", "page": 18, "anchor": "Components of the DoD and the IC will test only the configuration"}

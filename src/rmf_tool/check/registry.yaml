@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 385 rules, 38 repo-scope and 347 run-scope. Authoritative;
+# Rule registry (plan §6.5): 387 rules, 38 repo-scope and 349 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -4806,6 +4806,7 @@ rules:
       - REQ-SP800-37R2-0466
       - REQ-SP800-39-0210
       - REQ-DODI8500.01-0397
+      - REQ-DODI8510.01-0262
   - id: OCTX-002
     scope: run
     severity: E
@@ -5435,13 +5436,12 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: the test strategy omits a cybersecurity test event, framework or penetration test the source requires
+    summary: the test strategy omits a cybersecurity test event or evaluation framework the source requires (penetration and exploitation testing is TSTRAT-004)
     fixture: tests/fixtures/negative/TSTRAT-002.yaml
-    hint: "Plan DT and OT cybersecurity events, a CVPA and AA, DCO evaluation and independent penetration and exploitation testing."
+    hint: "Plan DT and OT cybersecurity events with their evaluation frameworks, a CVPA and AA, DCO evaluation and CVI."
     enforces:
       - REQ-DODI5000.75-0190
       - REQ-DODI5000.75-0191
-      - REQ-DODI5000.89-0029
       - REQ-DODI5000.89-0052
       - REQ-DODI5000.89-0053
       - REQ-DODI5000.89-0094
@@ -5453,15 +5453,13 @@ rules:
       - REQ-DODI5000.89-0116
       - REQ-DODI5000.89-0118
       - REQ-DODI5000.89-0120
-      - REQ-DODI5000.89-0122
       - REQ-DODI5000.89-0125
       - REQ-DODI5000.89-0160
       - REQ-DODI5000.89-0181
       - REQ-DODI5000.89-0182
       - REQ-DODI5000.89-0210
-      - REQ-DODI8500.01-0256
-      - REQ-DODI8500.01-0168
       - REQ-DODI8500.01-0232
+      - REQ-DODI8510.01-0068
   - id: TSTRAT-003
     scope: run
     severity: E
@@ -5476,6 +5474,21 @@ rules:
       - REQ-DODI5000.89-0119
       - REQ-DODI5000.89-0124
       - REQ-DODI5000.89-0149
+  - id: TSTRAT-004
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: the test strategy plans no penetration and exploitation testing, or testing that is not independent and threat representative, leaves out the CSSP, or misses DT&E or OT&E
+    fixture: tests/fixtures/negative/TSTRAT-004.yaml
+    hint: "Plan independent, threat-representative penetration and exploitation testing of the complete system with its CSSP, in both DT&E and OT&E."
+    enforces:
+      - REQ-DODI5000.89-0029
+      - REQ-DODI5000.89-0122
+      - REQ-DODI8500.01-0168
+      - REQ-DODI8500.01-0256
   - id: GATE-001
     scope: run
     severity: E
@@ -6515,31 +6528,43 @@ rules:
     phase: p11
     since: 0.2.0
     applies_after: A-2
-    summary: a received system is not tracked, requested, reviewed, assessed for impact or tested by control origin before the Receiving AO decides
+    summary: a received system is not tracked, requested, reviewed or assessed for impact before the Receiving AO decides (testing by control origin is RCP-010)
     fixture: tests/fixtures/negative/RCP-004.yaml
-    hint: "artifacts/data/reciprocity.yaml received_systems: outcome is pending, accepted or refused, and a pending system is judged only on its recorded tests; awareness via emass, other-tool or manual-inheritance; requested_documents hold the package and deployment instructions; review by PER-AO or PER-AODR before the decision; unless refused, own_package_shared, guide_reviewed, impact (via dsawg for an Enterprise system, derived from an enterprise leveraged authorization too) before the decision, augmenting controls by deployment; built-in controls not retested, deployment-configured ones tested_by receiving on or after deployment, inherited ones validated_by PER-PM; hybrid ones established_by receiving with evidence; an Enterprise system in leveraged-authorizations.yaml has a record."
+    hint: "artifacts/data/reciprocity.yaml received_systems: outcome is pending, accepted or refused; awareness via emass, other-tool or manual-inheritance; requested_documents hold the package and deployment instructions; review by PER-AO or PER-AODR before the decision; unless refused, own_package_shared, guide_reviewed, impact (via dsawg for an Enterprise system, derived from an enterprise leveraged authorization too) before the decision, augmenting controls by deployment; an Enterprise system in leveraged-authorizations.yaml has a record."
     enforces:
-      - REQ-DODCIO-RECIPROCITY-0051
       - REQ-SP800-37R2-0585
       - REQ-CNSSI1254-0121
       - REQ-CNSSI1254-0133
       - REQ-CNSSI1254-0134
       - REQ-CNSSI1254-0135
-      - REQ-CNSSI1254-0136
-      - REQ-CNSSI1254-0137
-      - REQ-CNSSI1254-0138
-      - REQ-CNSSI1254-0139
       - REQ-DODCIO-RECIPROCITY-0045
       - REQ-DODCIO-RECIPROCITY-0046
       - REQ-DODCIO-RECIPROCITY-0047
-      - REQ-DODCIO-RECIPROCITY-0048
       - REQ-DODCIO-RECIPROCITY-0049
-      - REQ-DODCIO-RECIPROCITY-0050
       - REQ-DODCIO-RECIPROCITY-0052
       - REQ-DODCIO-RECIPROCITY-0103
       - REQ-DODCIO-RECIPROCITY-0104
       - REQ-DODCIO-RECIPROCITY-0167
       - REQ-DODCIO-RECIPROCITY-0157
+  - id: RCP-010
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-2
+    summary: a received system's controls are not tested by origin (a built-in control re-tested, a deployment-configured one not tested by the receiving side once deployed, an inherited or hybrid one without its validation, establishment or evidence)
+    fixture: tests/fixtures/negative/RCP-010.yaml
+    hint: "artifacts/data/reciprocity.yaml received_systems controls, pending systems too: built-in controls not retested, deployment-configured ones tested_by receiving on or after deployment, inherited ones validated_by PER-PM with evidence; hybrid ones established_by receiving with evidence."
+    enforces:
+      - REQ-CNSSI1254-0136
+      - REQ-CNSSI1254-0137
+      - REQ-CNSSI1254-0138
+      - REQ-CNSSI1254-0139
+      - REQ-DODCIO-RECIPROCITY-0048
+      - REQ-DODCIO-RECIPROCITY-0050
+      - REQ-DODCIO-RECIPROCITY-0051
+      - REQ-DODCIO-RECIPROCITY-0128
   - id: RCP-005
     scope: run
     severity: E

@@ -1,4 +1,4 @@
-"""The test strategy record A-2 writes beside the assessment plan: TSTRAT-001 to TSTRAT-003
+"""The test strategy record A-2 writes beside the assessment plan: TSTRAT-001 to TSTRAT-004
 (DoDI 5000.89, the pathway instructions, DoDI 8500.01, DoDI 8510.01). test-strategy.yaml holds
 the TEMP or other test planning document the pathway calls for, its approvals, its cybersecurity
 test objectives and events, and the conditions under which each event's data was obtained.
@@ -135,7 +135,32 @@ def cyber_events(ctx: Context) -> list[RunFinding]:
         err("the test strategy includes a developmental evaluation framework for its DT events")
     if operational and not frameworks & {"oef", "ot-concept"}:
         err("the test strategy includes an OT concept or an operational evaluation framework")
-    pens = [e for e in events if e.get("kind") == PEN_TEST]
+    if operational:
+        for kind in sorted(set(OT_ASSESSMENTS) - kinds):
+            err(f"OT&E evaluates cybersecurity through a CVPA and an adversarial assessment, and "
+                f"the test strategy plans no {kind}")
+        if DCO not in kinds:
+            err("cybersecurity testing includes evaluating defensive cyberspace operations")
+        if data.get("financial_functions") is True and CEVA not in kinds:
+            err("cybersecurity OT&E of a system with financial or fiscal/business functions "
+                "includes a cyber economic vulnerability analysis")
+    if developmental and CVI not in kinds:
+        err("the test strategy plans no cooperative vulnerability identification to find "
+            "vulnerabilities and plan their mitigation")
+    return out
+
+
+# --- TSTRAT-004 (split from TSTRAT-002): penetration and exploitation testing ---------------
+
+def penetration_tests(ctx: Context) -> list[RunFinding]:
+    """TSTRAT-004: the test strategy plans penetration and exploitation testing that is
+    independent, threat representative and evaluates the complete system with its CSSP, in both
+    the DT&E and the OT&E (DoDI 5000.89, DoDI 8500.01). TSTRAT-002 asks the other events and the
+    evaluation frameworks, and reports a missing record."""
+    data, out, err = _strategy(ctx, "TSTRAT-004")
+    if data is None:
+        return []  # TSTRAT-002 reports the missing test strategy
+    pens = [e for e in _dicts(data.get("events")) if e.get("kind") == PEN_TEST]
     if not pens:
         err("cybersecurity evaluation in acquisition T&E includes penetration and exploitation "
             "testing, and the test strategy plans none")
@@ -151,18 +176,6 @@ def cyber_events(ctx: Context) -> list[RunFinding]:
     if pens and (not phases & {"dt", "integrated"} or not phases & {"ot", "integrated"}):
         err("penetration and exploitation testing is planned and resourced as part of both the "
             "DT&E and the OT&E")
-    if operational:
-        for kind in sorted(set(OT_ASSESSMENTS) - kinds):
-            err(f"OT&E evaluates cybersecurity through a CVPA and an adversarial assessment, and "
-                f"the test strategy plans no {kind}")
-        if DCO not in kinds:
-            err("cybersecurity testing includes evaluating defensive cyberspace operations")
-        if data.get("financial_functions") is True and CEVA not in kinds:
-            err("cybersecurity OT&E of a system with financial or fiscal/business functions "
-                "includes a cyber economic vulnerability analysis")
-    if developmental and CVI not in kinds:
-        err("the test strategy plans no cooperative vulnerability identification to find "
-            "vulnerabilities and plan their mitigation")
     return out
 
 
@@ -190,4 +203,4 @@ def test_provenance(ctx: Context) -> list[RunFinding]:
 
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("TSTRAT-001", approvals), ("TSTRAT-002", cyber_events),
-                ("TSTRAT-003", test_provenance))
+                ("TSTRAT-003", test_provenance), ("TSTRAT-004", penetration_tests))

@@ -133,6 +133,13 @@ def _cio_not_recorded(d):
     d["roles"] = [r for r in d["roles"] if r["role"] != "PER-CIO"]
 
 
+def _component_head_appoints_the_ciso(d):
+    """DoDI 8510.01 Table 8: where no Component CIO exists, the Component head appoints the
+    CISO."""
+    _cio_not_recorded(d)
+    _role(d, "RA-02")["appointed_by"] = "dod-component-head"
+
+
 def _pm_appointed_by_charter(d):
     """DoDI 8510.01 4.3.c(3) asks for an appointment in writing; a program charter is one."""
     _role(d, "RA-07")["appointment"] = {"instrument": "charter", "reference": "PGM-CHARTER-01"}
@@ -170,6 +177,7 @@ def _ciso_performs_as_the_sca(d):
     ("OCTX-001", _cio_not_recorded),
     ("OAPP-001", _cio_not_recorded),
     ("OAPP-001", _ciso_serves_as_aodr),
+    ("OAPP-001", _component_head_appoints_the_ciso),
     ("RAPT-001", _pm_appointed_by_charter),
     ("RAPT-001", _ciso_performs_as_the_sca),
 ], ids=lambda v: v.__name__ if callable(v) else v)
