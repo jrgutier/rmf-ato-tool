@@ -470,8 +470,9 @@ def test_well_formed_freeze_debt_is_not_a_fw_req_004_finding(reg, index):
 
 def test_freeze_debt_off_a_tier_1_partial_is_a_fw_req_004_finding(reg, index):
     outside = fx.entry(reg, 2)
-    outside.update(status="partial", reason="read", evidence=[{"kind": "citation", "target": "P-1"}],
-                   freeze_debt=dict(DEBT_C), work_item="WI-01")
+    outside.update(status="partial", reason="read",
+                   evidence=[{"kind": "citation", "target": "P-1"}], freeze_debt=dict(DEBT_C),
+                   work_item="WI-01")
     covered = _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
     covered.update(status="covered", freeze_debt=dict(DEBT_C), work_item="WI-01")
 

@@ -193,8 +193,9 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"blocking the p13 freeze (FW-REQ-002): {freeze['tier_1']} tier 1 candidates and "
                  f"{freeze['tier_1_partial_without_strong']} tier 1 partials with no strong item; "
                  f"{freeze['advisory_elsewhere']} candidates outside tier 1 are advisory")
-    lines.append(f"tier 1 debt the user let pass the freeze (freeze_debt): {freeze['freeze_debt_B']} "
-                 f"presence-only (B), {freeze['freeze_debt_C']} with no record to fail (C)")
+    lines.append(f"tier 1 debt the user let pass the freeze (freeze_debt): "
+                 f"{freeze['freeze_debt_B']} presence-only (B), "
+                 f"{freeze['freeze_debt_C']} with no record to fail (C)")
     lines.append(f"set aside without proof, for the p13 sign-off: {freeze['deferred']} deferred, "
                  f"{freeze['partial_on_weak_evidence']} partial on evidence that cannot fail "
                  "(FW-REQ-004)")
