@@ -221,3 +221,11 @@ tier, and outside tier 1 nothing blocks.
   counts `freeze_debt_B` and `freeze_debt_C`, which `rmf conformance report` prints; no separate file reports them. A C partial
   on prose counts as retired, so the per-document retired shares move; a document passing 25% is
   shown to the user before any retirements record is written.
+- Judge, 2026-11-09 (Fable's review of the leftover groups, M4): a negated bare name counts as
+  absence only when it is a plain read of a field (`x = r.get("x")`); a loop or computed name
+  such as SCRM-001's `driver` or AODM-001's `is_seeded` is not, so their clauses refuse a wrong
+  value (constraint). The proposed second test, that an `And` clause is absence only when its
+  absence conjunct reads the field the fixture mutates, was not adopted: AODM-002.review and
+  AODM-005 set another field to bring a record into scope and then refuse its missing field,
+  which is silence, and they rightly stay presence. 59 rule items changed verdict to strong and
+  their claims now match the judge.
