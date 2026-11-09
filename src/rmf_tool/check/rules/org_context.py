@@ -66,6 +66,8 @@ ISSM_GRANTS = ("support", "authority", "resources")
 # an MA-managed system, so it counts only where the roles hold a PAO. The CISO is the Component
 # SCA and may formally delegate the role: an SCA record held by someone else is the CISO's
 # delegate. The CISO's own appointer is OCTX-001's.
+# DoDI 8510.01 2.10.a: the Commander, USSPACECOM assigns AOs for space systems.
+USSPACECOM, USSPACECOM_SINCE = "usspacecom", "0.2.0"
 TABLE_8 = {
     "PER-CIO": ("dod-component-head",),
     "PER-AO": ("dod-component-head", "PER-PAO"),
@@ -280,7 +282,9 @@ def appointments(ctx: Context) -> list[RunFinding]:
     (2.7.m(1)). The Component CISO's own appointer is OCTX-001's clause, not restated here. A
     PER-SCA record held by the CISO (same name and email) is the CISO performing as the SCA and
     is judged by the CISO's appointer; only a delegate must be appointed by the CISO. A context
-    seeded from outside the run is judged on the records it holds."""
+    seeded from outside the run is judged on the records it holds. The Commander, USSPACECOM
+    assigns the AOs of space systems (2.10.a), so for a system whose categorization names its
+    space segments the AO may be appointed by usspacecom (from contract 0.2.0)."""
     data, out, err = _record(ctx, "RAPT-001", "P-1")
     if data is None:
         return out
@@ -293,10 +297,13 @@ def appointments(ctx: Context) -> list[RunFinding]:
         if "PER-CISO" not in holders:
             err("no DoD Component CISO is appointed to direct the Component cybersecurity program")
     cisos = [r for r in _roles(data) if r.get("role") == "PER-CISO"]
+    space = ctx.run.holds(USSPACECOM_SINCE) and _space_system(ctx)
     for r in _roles(data):
         rid, role, held = r.get("id"), _key(r.get("role")), _key(r.get("affiliation"))
         by = r.get("appointed_by")
         allowed = [a for a in TABLE_8.get(role or "", ()) if a != "PER-PAO" or a in holders]
+        if role == "PER-AO" and space:
+            allowed.append(USSPACECOM)
         if role == "PER-SCA" and any(_same_holder(r, c) for c in cisos):
             allowed = sorted({_key(c.get("appointed_by")) for c in cisos
                               if _same_holder(r, c)} - {None})
@@ -310,6 +317,12 @@ def appointments(ctx: Context) -> list[RunFinding]:
             err(f"{rid}: the AO role cannot be re-delegated to personnel who are not government "
                 f"personnel, and the AODR is {held}")
     return out
+
+
+def _space_system(ctx: Context) -> bool:
+    """Whether the system is a space system: its categorization names its space segments."""
+    cat = facts_mod.get(ctx.facts, "categorization")
+    return isinstance(cat, dict) and bool(cat.get("space_segments"))
 
 
 def _same_holder(one: dict[str, Any], other: dict[str, Any]) -> bool:

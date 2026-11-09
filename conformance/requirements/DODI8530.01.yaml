@@ -1184,10 +1184,11 @@ requirements:
     locator: "ENCLOSURE 2.e"
     context: "RESPONSIBILITIES"
     statement: "e. Ensure DoD Component systems are aligned to a joint or DoD Component NOSC to receive and comply with orders or directives from USSTRATCOM and their DoD Component."
-    status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the DoD Component heads's, an office no run performs, so no run record can hold or fail it. Alignment to a NOSC is required of a DODIN-connected system and names it; receiving and complying with orders is outside the run."
+    status: "partial"
+    reason: "Held in part: SYSD-002 asks a DODIN-connected system's alignment to a joint or DoD Component NOSC, a presence clause. Unheld: the office's half, receiving and complying with USSTRATCOM and Component orders, which the DoD Component heads ensure outside the run."
     evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.align.yaml", "expect": "the system connects to the DODIN and is aligned to no NOSC and CSSP", "asserts": "Component systems are aligned to a joint or DoD Component NOSC", "claim": "presence", "sentence": "Ensure DoD Component systems are aligned to a joint or DoD Component NOSC to receive and comply with orders or directives from USSTRATCOM and their DoD Component."}]
     work_item: "WI-178"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the NOSC alignment SYSD-002 reads; the DoD Component heads ensure the orders are received and complied with"}
   - id: "REQ-DODI8530.01-0144"
     citation: {"ref": "DODI8530.01", "page": 21, "anchor": "Oversee the implementation of all directed actions required by USSTRATCOM or its"}
     kind: "lettered"
@@ -1195,7 +1196,7 @@ requirements:
     context: "RESPONSIBILITIES"
     statement: "f. Oversee the implementation of all directed actions required by USSTRATCOM or its Component for their respective owned or operated portion of the DODIN."
     status: "partial"
-    reason: "Tier 1, left partial: the duty is DoD Component heads's, which no record of a run can fail on. Oversight of the implementation is theirs; the run's part is that each directed action it receives has a response, implemented, tracked or withheld (VULN-001)."
+    reason: "Tier 1, left partial: the duty belongs to DoD Component heads, which no record of a run can fail on. Oversight of the implementation is theirs; the run's part is that each directed action it receives has a response, implemented, tracked or withheld (VULN-001)."
     evidence: [{"kind": "rule", "target": "VULN-001", "fixture": "tests/fixtures/negative/VULN-001.date.yaml", "expect": "is recorded implemented without a date on or after its receipt", "claim": "constraint", "asserts": "Directed actions required by USSTRATCOM are implemented, and an implementation dated before the order was received fails", "holds_when": "ART-POAM is produced or seeded"}]
     work_item: "WI-148"
   - id: "REQ-DODI8530.01-0145"
@@ -1737,8 +1738,7 @@ requirements:
     context: "RESPONSIBILITIES"
     statement: "t. Conducts joint compliance inspections of DoD Component cybersecurity activities in accordance with Reference (bp)-assigned cyberspace operations responsibilities."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the command that conducts joint compliance inspections's, an office no run performs, so no run record can hold or fail it. The inspecting command conducts the inspection, not a run; a run records its findings, which MPOA-001 holds, and no rule can fail on the inspection itself"
-    evidence: [{"kind": "schema", "asserts": "Joint compliance inspections of cybersecurity activities are a named event of an outside finding", "target": "framework/schema/poam-items.schema.json#/properties/external_findings/items/properties/event", "claim": "constraint"}]
+    reason: "Not applicable to a run: the duty belongs to the command that conducts joint compliance inspections, an office no run performs, so no run record can hold or fail it. The inspecting command conducts the inspection, not a run; a run records its findings, which MPOA-001 holds, and no rule can fail on the inspection itself"
     work_item: "WI-280"
   - id: "REQ-DODI8530.01-0209"
     citation: {"ref": "DODI8530.01", "page": 27, "anchor": "This enclosure identifies a set of cybersecurity activities that are required for"}
@@ -1836,7 +1836,7 @@ requirements:
     statement: "a. Provide the capability to determine systematically the current adequacy of cybersecurity measures for the DoD Component portion of the DODIN; identify deficiencies; provide data from which to predict the effectiveness of proposed cybersecurity measures; and confirm the adequacy of such measures after implementation. Guidance on information security testing and assessment can be found in NIST SP 800-115 (Reference (bq))."
     status: "partial"
     reason: "Held at system level: SAR-COV-001 fails a scoped control with no determination of its adequacy, and ASMT-011 a POA&M item marked Completed whose corrective action was not tested, so adequacy is confirmed after implementation. Unheld: the Component-wide capability over its portion of the DODIN, and predicting the effectiveness of proposed measures."
-    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.other.yaml", "expect": "has no assessment determination", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "The capability to determine systematically the current adequacy of cybersecurity measures and identify deficiencies: a scoped control with no assessment determination fails"}, {"kind": "rule", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.tested.yaml", "expect": "but the corrective action has not been tested", "claim": "presence", "holds_when": "ART-POAM is produced or seeded", "asserts": "Confirm the adequacy of cybersecurity measures after implementation: a completed item whose corrective action has not been tested fails"}]
+    evidence: [{"kind": "rule", "target": "SAR-COV-001", "fixture": "tests/fixtures/negative/SAR-COV-001.other.yaml", "expect": "has no assessment determination", "claim": "constraint", "holds_when": "ART-SAR is produced or seeded", "asserts": "The capability to determine systematically the current adequacy of cybersecurity measures and identify deficiencies: a scoped control with no assessment determination fails"}, {"kind": "rule", "target": "ASMT-011", "fixture": "tests/fixtures/negative/ASMT-011.tested.yaml", "expect": "but the corrective action has not been tested", "claim": "constraint", "holds_when": "ART-POAM is produced or seeded", "asserts": "Confirm the adequacy of cybersecurity measures after implementation: a completed item whose corrective action has not been tested fails"}]
     work_item: "WI-463"
   - id: "REQ-DODI8530.01-0221"
     citation: {"ref": "DODI8530.01", "page": 28, "anchor": "Employ organic and external capabilities to conduct vulnerability assessments, intrusion assessments, insider"}
@@ -2362,7 +2362,7 @@ requirements:
     reason: "The register is named as free text; accountability is outside the run."
     evidence: [{"kind": "schema", "target": "framework/schema/system-description.schema.json#/properties/service_alignment/properties/registered_in", "claim": "presence", "asserts": "Systems are registered in the DoD Component register of the alignment", "sentence": "(3) Must register these systems in accordance with their DoD Component guidance and will be held accountable if found not aligned with a DoD Component or external NOSCs and supporting cybersecurity service provider(s)."}]
     work_item: "WI-178"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: The register is named as free text; accountability is outside the run"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: service_alignment.registered_in is optional (its parent service_alignment does not require it), so nothing fails when it is absent"}
   - id: "REQ-DODI8530.01-0277"
     citation: {"ref": "DODI8530.01", "page": 36, "anchor": "Will monitor the effectiveness of cybersecurity services provided by either a DoD"}
     kind: "lettered"
@@ -2388,7 +2388,7 @@ requirements:
     context: "Figure 2. Notional View of Current and Future Integration of Cybersecurity Activities DoD Component organizations that own or operate or have operated on their behalf systems have ultimate responsibil"
     statement: "(6) Will report cybersecurity service provider changes through their DoD Component head to CDRUSSTRATCOM and Director, DISA, for GENSER systems or to Director, DIA, for SE systems."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.change.yaml", "expect": "on a GENSER system is reported to CDRUSSTRATCOM and the Director, DISA", "asserts": "Cybersecurity service provider changes are reported to CDRUSSTRATCOM and Director, DISA, for GENSER systems", "claim": "presence", "sentence": "(6) Will report cybersecurity service provider changes through their DoD Component head to CDRUSSTRATCOM and Director, DISA, for GENSER systems or to Director, DIA, for SE systems."}, {"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.sechange.yaml", "expect": "on an SE system is reported to the Director, DIA", "asserts": "Cybersecurity service provider changes are reported to Director, DIA, for SE systems", "claim": "constraint"}]
+    evidence: [{"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.change.yaml", "expect": "on a GENSER system is reported to CDRUSSTRATCOM and the Director, DISA", "asserts": "Cybersecurity service provider changes are reported to CDRUSSTRATCOM and Director, DISA, for GENSER systems", "claim": "constraint", "sentence": "(6) Will report cybersecurity service provider changes through their DoD Component head to CDRUSSTRATCOM and Director, DISA, for GENSER systems or to Director, DIA, for SE systems."}, {"kind": "rule", "target": "SYSD-002", "fixture": "tests/fixtures/negative/SYSD-002.sechange.yaml", "expect": "on an SE system is reported to the Director, DIA", "asserts": "Cybersecurity service provider changes are reported to Director, DIA, for SE systems", "claim": "constraint"}]
     work_item: "WI-178"
   - id: "REQ-DODI8530.01-0280"
     citation: {"ref": "DODI8530.01", "page": 37, "anchor": "Will forward issues between DoD Components that cannot be resolved on the"}

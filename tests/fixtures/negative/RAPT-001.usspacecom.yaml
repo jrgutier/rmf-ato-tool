@@ -1,0 +1,14 @@
+rule: RAPT-001
+bases:
+- minimal
+description: USSPACECOM appoints the AO of a system that is no space system (DoDI 8510.01 2.10.a)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: roles.2.appointed_by
+  value: usspacecom
+expect:
+  errors:
+  - RAPT-001
+  messages:
+  - 'RA-03: PER-AO is appointed by usspacecom, which DoDI 8510.01 Table 8 does not name as its appointing authority (dod-component-head)'

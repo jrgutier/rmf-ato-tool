@@ -140,6 +140,11 @@ def _component_head_appoints_the_ciso(d):
     _role(d, "RA-02")["appointed_by"] = "dod-component-head"
 
 
+def _usspacecom_appoints_the_ao_of_a_space_system(d):
+    """DoDI 8510.01 2.10.a: the Commander, USSPACECOM assigns AOs for space systems."""
+    _role(d, "RA-03")["appointed_by"] = "usspacecom"
+
+
 def _pm_appointed_by_charter(d):
     """DoDI 8510.01 4.3.c(3) asks for an appointment in writing; a program charter is one."""
     _role(d, "RA-07")["appointment"] = {"instrument": "charter", "reference": "PGM-CHARTER-01"}
@@ -185,6 +190,15 @@ def test_a_permitted_case_is_not_refused(rule, edit, tmp_path):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     edit_yaml(run_dir / ORG, edit)
     assert _rule_errors(run_dir, rule) == []
+
+
+def test_usspacecom_appoints_the_ao_of_a_space_system(tmp_path):
+    """The negative fixture RAPT-001.usspacecom refuses it on a system with no space segments."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "facts.yaml",
+              lambda d: d["categorization"].update(space_segments=["ground"]))
+    edit_yaml(run_dir / ORG, _usspacecom_appoints_the_ao_of_a_space_system)
+    assert _rule_errors(run_dir, "RAPT-001") == []
 
 
 def test_the_template_roles_of_a_fresh_workspace_pass_the_appointment_rule(tmp_path):

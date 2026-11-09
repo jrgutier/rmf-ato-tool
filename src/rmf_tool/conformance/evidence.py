@@ -314,7 +314,10 @@ def _compares_empty(test: ast.Compare, plain: frozenset[str], negated: bool) -> 
 
 
 def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False) -> bool:
-    """Whether a failing path through ``test`` means the value is absent, however it is spelt."""
+    """Whether a failing path through ``test`` means the value is absent, however it is spelt.
+    A negated bare name is absence only when the name is a plain read of a field: in
+    ``critical and p > q and not driver`` the loop's ``driver`` is no field read, so the clause
+    refuses a wrong ``p``."""
     if isinstance(test, ast.UnaryOp) and isinstance(test.op, ast.Not):
         return _tests_absence(test.operand, plain, not negated)
     if isinstance(test, ast.BoolOp):
@@ -332,7 +335,7 @@ def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False)
             # iterable asks whether a member matches, a comparison, as len() is in _reads_field.
             return bool(test.args) and _reads_field(test.args[0], plain)
         return name in ABSENCE_READS
-    return isinstance(test, ast.Name)
+    return isinstance(test, ast.Name) and test.id in plain
 
 
 def _deletes(mutation: Mapping[str, Any]) -> bool:
@@ -654,6 +657,9 @@ def citable(statement: str) -> list[str]:
     return marked_sentences(statement) or [statement]
 
 
+PRESENCE_CAP = " holds presence, which caps at partial on prose"
+
+
 def _verdict(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> Verdict:
     """An item's verdict on its own, before the triple asks for its fellow legs."""
     if any(isinstance(v, str) and v.startswith(EXAMPLES) for v in item.values()):
@@ -667,8 +673,15 @@ def _verdict(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) ->
     verdict = JUDGES[item["kind"]](probe, item, entry)
     if verdict.strength == STRONG and item.get("claim") == PRESENCE \
             and entry.get("kind") != TABLE_KIND:
-        return Verdict(WEAK, f"{item['target']} holds presence, which caps at partial on prose")
+        return Verdict(WEAK, f"{item['target']}{PRESENCE_CAP}")
     return verdict
+
+
+def presence_capped(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> bool:
+    """Whether an item would judge strong but for its presence claim: the cap group B of
+    ``freeze_debt`` rests on. An optional parent, a pin or a bare rule item is weak for another
+    reason, so it is not."""
+    return judge(probe, item, entry).message.endswith(PRESENCE_CAP)
 
 
 def judge(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> Verdict:

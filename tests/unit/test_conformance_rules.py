@@ -492,6 +492,32 @@ def test_freeze_debt_needs_its_backlog_work_item_and_b_needs_a_run_item(reg, ind
     assert any("group B is a presence-only item" in m for m in found)
 
 
+def _b_findings(reg, index, item):
+    entry = _tier_1_partial(reg, item)
+    entry.update(freeze_debt=dict(DEBT_B), work_item="WI-01")
+    _complete(reg)
+    probe = _probe(REPO_ROOT, _framework(), (APPOINTING,))
+    return [m for m in rules.freeze_debt_problems(probe, entry, 1) if "group B" in m]
+
+
+def test_freeze_debt_b_rests_on_an_item_at_the_presence_cap(reg, index, monkeypatch):
+    """The judge's presence cap is the B seam: an item strong but for its presence claim."""
+    monkeypatch.setattr(evidence, "judge", lambda probe, item, entry: evidence.Verdict(
+        evidence.WEAK, f"{item['target']}{evidence.PRESENCE_CAP}"))
+
+    assert _b_findings(reg, index, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS,
+                                    "claim": "presence"}) == []
+
+
+def test_an_optional_schema_path_is_no_group_b_item(reg, index):
+    """Weak for its optional parent, not for presence: the duty has no required field."""
+    optional = {"kind": "schema", "claim": "presence", "asserts": APPOINTS,
+                "target": "framework/schema/org-context.schema.json"
+                          "#/properties/program/properties/integrated_with"}
+
+    assert len(_b_findings(reg, index, optional)) == 1
+
+
 def test_candidates_outside_tier_1_warn_once_per_document(reg, index):
     _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
     count = sum(1 for ref, e in reg.live() if ref == DOC and e["status"] == "candidate")
@@ -2566,6 +2592,31 @@ def test_a_fixture_that_sets_a_wrong_value_stays_constraint(value):
     assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
 
 
+def test_scrm_001_priority_judges_constraint():
+    """A wrong priority, refused by a conjunction whose absence conjunct (no recorded driver)
+    reads another field: the fixture writes a wrong value, not silence."""
+    spec = evidence.fixture_spec(REPO_ROOT, "tests/fixtures/negative/SCRM-001.priority.yaml")
+    source = evidence.rule_sources()["SCRM-001"]
+    assert evidence.rule_claim(spec, source, "is critical yet its assessment priority") \
+        == "constraint"
+
+
+@pytest.mark.parametrize("source", [
+    'x = r.get("x")\nif ready and not x:\n    err(r, "x is bad")',
+    'if ready and not r.get("x"):\n    err(r, "x is bad")',
+    'x = r.get("x")\nif not x:\n    err(r, "x is bad")',
+])
+def test_a_clause_refusing_only_absence_of_the_mutated_field_stays_presence(source):
+    spec = {"mutations": [{"op": "set_field", "file": "f.yaml", "path": "a.x", "value": "PER-AO"}]}
+    assert evidence.rule_claim(spec, source, "x is bad") == "presence"
+
+
+def test_a_negated_name_that_is_no_plain_read_is_not_absence():
+    source = 'for x, y in pairs:\n    if not x:\n        err(r, "x is bad")'
+    spec = {"mutations": [{"op": "set_field", "file": "f.yaml", "path": "a.x", "value": "PER-AO"}]}
+    assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
+
+
 CLAUSE = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
 
 
@@ -2618,8 +2669,7 @@ def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     still presence by its mutation)."""
     sources = evidence.rule_sources()
     absent = {
-        "AODM-001": ("is not an active task of this run",
-                     "the run depends on degraded reference(s)"),
+        "AODM-001": ("the run depends on degraded reference(s)",),
         "AOREC-001": ("needs an authorization_termination_date", "needs conditions"),
         "AODM-002": ("records the review that triggered it", "needs ongoing_acknowledgment",
                      "needs review"),
@@ -2634,7 +2684,9 @@ def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     for rule, fragments in absent.items():
         for expect in fragments:
             assert evidence.rule_claim({}, sources[rule], expect) == "presence", expect
-    for rule, expect in (("AODM-001", "recorded no decision"),
+    # `not is_seeded` is no field read: an inactive task in a run not seeded is a wrong task
+    for rule, expect in (("AODM-001", "is not an active task of this run"),
+                         ("AODM-001", "recorded no decision"),
                          ("AODM-001", "is not one of the decision types"),
                          ("AODM-001", "have not written their outputs"),
                          ("AODM-001", "is used twice"),

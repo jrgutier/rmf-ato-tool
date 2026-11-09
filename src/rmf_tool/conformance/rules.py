@@ -488,22 +488,25 @@ def noise_share(doc: Mapping[str, Any]) -> tuple[int, int]:
 RETIRED = "not-applicable, deferred, or partial on evidence that cannot fail"
 
 
-def freeze_debt_problems(entry: Mapping[str, Any], tier: int | None) -> list[str]:
+def freeze_debt_problems(probe: evidence.Probe, entry: Mapping[str, Any],
+                         tier: int | None) -> list[str]:
     """FW-REQ-004 on ``freeze_debt`` (ADR-0005, 2026-11-08, the user's Nov 9 decision): it lets
     a tier 1 partial pass the freeze as named debt, so it sits only on a tier 1 partial bound to
     the work item that keeps the debt on the backlog. Group B is a duty held by a presence-only
     item on a required field, so it needs an item that reads the run (not prose or a citation);
-    group C is a duty no run record can fail yet, and rests on what builds it."""
+    group C is a duty no run record can fail yet, and rests on what builds it. B is judged by
+    the verdict: an item that would be strong but for its presence claim."""
     out = []
     if tier != TIER_1 or entry["status"] != "partial":
         out.append(f"freeze_debt passes only a tier 1 partial at the freeze, not a "
                    f"{entry['status']} entry of a tier {tier} document")
     if not entry.get("work_item"):
         out.append("freeze_debt needs the work_item that keeps the debt on the backlog")
-    if entry["freeze_debt"].get("group") == "B" and all(
-            item["kind"] in ("citation", "prose") for item in entry.get("evidence") or ()):
-        out.append("freeze_debt group B is a presence-only item on a required field; with only "
-                   "prose or citation evidence it is group C")
+    if entry["freeze_debt"].get("group") == "B" and not any(
+            evidence.presence_capped(probe, item, entry) for item in entry.get("evidence") or ()):
+        out.append("freeze_debt group B is a presence-only item on a required field, and no "
+                   "item here judges at the presence cap (an optional parent, a pin or a bare "
+                   "rule item is weak for another reason); it is group C")
     return out
 
 
@@ -687,7 +690,7 @@ def reasons(reg: Register, index: Mapping[str, Any], probe: evidence.Probe) -> l
                             "approved_by: user", path))
         if entry.get("freeze_debt"):
             out += [_err("FW-REQ-004", f"{ident}: {problem}", path)
-                    for problem in freeze_debt_problems(entry, _tier(index, ref))]
+                    for problem in freeze_debt_problems(probe, entry, _tier(index, ref))]
     return out + _pattern_problems(reg, index) \
         + _record_problems(reg, "retirements", reg.retirements, _over_retired) \
         + _record_problems(reg, "noise", reg.noise, _over_noise) \

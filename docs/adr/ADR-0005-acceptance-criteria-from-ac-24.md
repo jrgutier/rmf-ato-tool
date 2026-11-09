@@ -217,7 +217,7 @@ tier, and outside tier 1 nothing blocks.
   named. `rules.blocks_freeze` passes a tier 1 partial carrying it with no strong item; a
   candidate still blocks. FW-REQ-004 checks its shape: only on a tier 1 `partial`, bound to the
   work item that keeps the debt on the backlog (the C records are WI-790 to WI-79x, left open),
-  and group B with an item that reads the run, not prose or a citation alone. `summary.freeze`
-  counts `freeze_debt_B` and `freeze_debt_C`, and docs/CONFORMANCE.md reports them. A C partial
+  and group B with an item the judge holds at the presence cap (an optional parent, a pin or a bare rule item does not count). `summary.freeze`
+  counts `freeze_debt_B` and `freeze_debt_C`, which `rmf conformance report` prints; no separate file reports them. A C partial
   on prose counts as retired, so the per-document retired shares move; a document passing 25% is
   shown to the user before any retirements record is written.

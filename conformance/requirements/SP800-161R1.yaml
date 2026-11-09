@@ -69,8 +69,7 @@ requirements:
     context: ""
     statement: "When engaging with suppliers, developers, system integrators, external system service providers, and other ICT/OT-related service providers, agencies should carefully consider the breadth of the Federal Government’s footprint and the high likelihood that individual agencies may enforce varying and conflicting C-SCRM requirements. Overcoming this complexity requires interagency coordination and partnerships. The passage of the Federal Acquisition Supply Chain Security Act (FASCSA) of 2018 aimed to address this concern by creating a government-wide approach to the problem of supply chain security in federal acquisitions by establishing the Federal Acquisition Security Council (FASC). The FASC serves as a focal point of coordination and information sharing and a harmonized approach to acquisition security that addresses C-SCRM in acquisition processes and procurements across the federal enterprise. In addition, the law incorporated SCRM into FISMA by requiring reports on the progress and effectiveness of the agency’s supply chain risk management, consistent with guidance issued by the Office of Management and Budget (OMB) and the Council."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the agency's C-SCRM office in its coordination with other agencies's, an office no run performs, so no run record can hold or fail it. Each selection record states the C-SCRM requirements the supplier already carries for other agencies (free text); interagency coordination is outside a run."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm-acquisition.schema.json#/properties/selection/items/properties/other_agency_requirements", "asserts": "Agencies consider that individual agencies may enforce varying and conflicting C-SCRM requirements on a supplier", "sentence": "When engaging with suppliers, developers, system integrators, external system service providers, and other ICT/OT-related service providers, agencies should carefully consider the breadth of the Federal Government’s footprint and the high likelihood that individual agencies may enforce varying and conflicting C-SCRM requirements.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the agency's C-SCRM office in its coordination with other agencies, an office no run performs, so no run record can hold or fail it. Each selection record states the C-SCRM requirements the supplier already carries for other agencies (free text); interagency coordination is outside a run."
     work_item: "WI-105"
   - id: "REQ-SP800-161R1-0009"
     citation: {"ref": "SP800-161R1", "page": 17, "anchor": "Note that this publication uses the term “enterprise” to describe Level 1"}
@@ -661,7 +660,7 @@ requirements:
     reason: "SCRM-007 asks the contract's C-SCRM terms; weighing what integrators and providers implement against cost and risk is a judgment the record does not hold, and the other sentences describe."
     evidence: [{"kind": "rule", "target": "SCRM-007", "fixture": "tests/fixtures/negative/SCRM-007.yaml", "expect": "the C-SCRM terms of the system's contracts", "asserts": "Agreements with system integrators establish detailed security requirements as the C-SCRM terms of contracts", "sentence": "These relationships are usually guided by an agreement (e.g., contract) that establishes detailed functional, technical, and security requirements and may provide for the custom development or significant customization of products and services.", "claim": "presence"}]
     work_item: "WI-105"
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: weighing what integrators and providers implement against cost and risk is a judgment the record does not hold, and the other sentences describe"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: weighing what integrators and providers implement against cost and risk is a judgment the record does not hold, and the other sentences describe"}
   - id: "REQ-SP800-161R1-0079"
     citation: {"ref": "SP800-161R1", "page": 25, "anchor": "Procuring ICT/OT products from suppliers establishes a direct relationship between those suppliers"}
     kind: "modal"
@@ -1041,9 +1040,9 @@ requirements:
     locator: "1.7.2.•"
     context: "Relationship to Other Publications and Publication Summary Organizations should ensure that tailored C-SCRM plans are designed to:"
     statement: "• Be responsive to changes within their own organization, programs, and the supporting information systems; and"
-    status: "not-a-requirement"
-    reason: "Not a requirement: the passage states a design principle of a C-SCRM plan, a quality the plan aims at. It sets no duty a run or an office performs."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/review_interval", "asserts": "Tailored C-SCRM plans are responsive to changes within the organization and systems, reviewed at an interval", "claim": "constraint"}]
+    status: "partial"
+    reason: "Plan design principles (lead-in REQ-SP800-161R1-1522); the strategy's objectives record what the plans aim at, free text."
+    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/strategy/properties/objectives", "asserts": "Tailored C-SCRM plans are designed to be responsive to changes within the organization, programs and systems, a strategic objective", "claim": "constraint"}]
     work_item: "WI-114"
   - id: "REQ-SP800-161R1-0122"
     citation: {"ref": "SP800-161R1", "page": 33, "anchor": "Adjust to the rapidly evolving practices of the private sector’s global ICT"}
@@ -1061,10 +1060,11 @@ requirements:
     locator: "2.1"
     context: "The Business Case for C-SCRM"
     statement: "Today, every enterprise heavily relies on digital technology to fulfill its business and mission. Digital technology is comprised of ICT/OT products and is delivered through and supported by services. C-SCRM is a critical capability that every enterprise needs to have to address cybersecurity risks throughout the supply chain that arise from the use of digital technology. The depth, extent, and maturity of a C-SCRM capability for each enterprise should be based on the uniqueness of its business or mission, enterprise-specific compliance requirements, operational environment, risk appetite, and risk tolerance."
-    status: "not-a-requirement"
-    reason: "Not a requirement: the passage describes what a C-SCRM capability is and rests on. Its 'needs to', 'should' binds no one: it sets no duty a run or an office performs."
+    status: "partial"
+    reason: "The last sentence is a duty: the depth, extent and maturity of the C-SCRM capability are based on the enterprise's mission, compliance requirements, environment, risk appetite and tolerance, which process.adopted records as presence. The third sentence asks every enterprise to have a C-SCRM capability, recorded by scrm-org.yaml; the first two describe digital technology."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/process/properties/adopted", "asserts": "The depth of a C-SCRM capability, the practices adopted and tailored, is based on the enterprise's mission and risk", "sentence": "The depth, extent, and maturity of a C-SCRM capability for each enterprise should be based on the uniqueness of its business or mission, enterprise-specific compliance requirements, operational environment, risk appetite, and risk tolerance.", "claim": "presence"}]
     work_item: "WI-119"
+    freeze_debt: {"group": "B", "unheld": "a constraint tying the practices adopted (process.adopted) to the mission, risk appetite and risk tolerance they rest on"}
   - id: "REQ-SP800-161R1-0124"
     citation: {"ref": "SP800-161R1", "page": 33, "anchor": "An established C-SCRM program will enable enterprises to understand which critical assets"}
     kind: "lettered"
@@ -1338,8 +1338,7 @@ requirements:
     context: "Level 1 — Enterprise"
     statement: "Ownership and accountability for cybersecurity risks in the supply chain ultimately lie with the head of the organization."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the head of the organization's, an office no run performs, so no run record can hold or fail it. governance.head names the head of the organization with whom accountability lies, free text; the Component head is no persona of the framework."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/governance/properties/head", "asserts": "Ownership and accountability for supply chain risks lie with the head of the organization", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the head of the organization, an office no run performs, so no run record can hold or fail it. The record field governance.head names the head of the organization with whom accountability lies, free text; the Component head is no persona of the framework."
     work_item: "WI-108"
   - id: "REQ-SP800-161R1-0155"
     citation: {"ref": "SP800-161R1", "page": 41, "anchor": "Decision-makers are informed by an organization’s risk profile, risk appetite, and risk"}
@@ -2111,7 +2110,7 @@ requirements:
     context: "The Role of C-SCRM in the Acquisition Process"
     statement: "Additional guidance for integrating C-SCRM into the acquisition process is provided in Appendix C, which demonstrates the enhanced overlay of C-SCRM into the [SP80039] Risk Management Process. In addition, enterprises should refer to and follow the acquisition and procurement policies, regulations, and best practices that are specific to their domain (e.g., critical infrastructure sector, state government)."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the enterprise's acquisition and procurement office's, an office no run performs, so no run record can hold or fail it."
+    reason: "Not applicable to a run: the duty belongs to the enterprise's acquisition and procurement office, an office no run performs, so no run record can hold or fail it."
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0237"
     citation: {"ref": "SP800-161R1", "page": 56, "anchor": "Enterprises are continuously exposed to risk originating from their supply chains. An"}
@@ -2430,7 +2429,7 @@ requirements:
     reason: "An executive-level lead (SCRM-021) shows leadership's role, not that its support was obtained; support is not something a record can show."
     evidence: [{"kind": "rule", "target": "SCRM-021", "fixture": "tests/fixtures/negative/SCRM-021.yaml", "expect": "is not an executive-level official", "asserts": "Senior leadership support for C-SCRM: an executive-level official leads it", "claim": "presence"}]
     work_item: "WI-108"
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: support is not something a record can show"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: support is not something a record can show"}
   - id: "REQ-SP800-161R1-0270"
     citation: {"ref": "SP800-161R1", "page": 60, "anchor": "Implement a risk management hierarchy and risk management process (in accordance with"}
     kind: "lettered"
@@ -2507,7 +2506,7 @@ requirements:
     context: "Foundational Practices"
     statement: "• Establish and begin using supplier risk-assessment processes on a prioritized basis (inclusive of criticality analysis, threat analysis, and vulnerability analysis) after the [FIPS199] impact level has been defined."
     status: "covered"
-    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Supplier risk-assessment processes run on a prioritized basis, critical suppliers first, inclusive of criticality analysis", "claim": "presence"}, {"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.assessment.yaml", "expect": "has no supply chain risk assessment", "asserts": "Supplier risk assessments are established and used for each critical supplier", "claim": "constraint"}]
+    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Supplier risk-assessment processes run on a prioritized basis, critical suppliers first, inclusive of criticality analysis", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.assessment.yaml", "expect": "has no supply chain risk assessment", "asserts": "Supplier risk assessments are established and used for each critical supplier", "claim": "constraint"}]
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0278"
     citation: {"ref": "SP800-161R1", "page": 61, "anchor": "Implement a quality and reliability program that includes quality assurance and quality"}
@@ -2562,7 +2561,7 @@ requirements:
     statement: "• Establish internal checks and balances to ensure compliance with security and quality requirements."
     status: "partial"
     reason: "Tier 1, partial: ASMT-007 fails an assessor lacking the independence the AO determined, and an assessment team member the system owner contracted and can influence: internal checks on compliance with security requirements. Checks and balances on quality requirements are not held."
-    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "presence", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessor lacking the required independence fails", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.contract.yaml", "expect": "so the member is not independent", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessment team member the system owner contracted and can influence, so the member is not independent, fails", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
+    evidence: [{"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.yaml", "expect": "lacks the required degree of independence the authorizing official determined", "claim": "constraint", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessor lacking the required independence fails", "holds_when": "ART-SAP is produced or seeded"}, {"kind": "rule", "target": "ASMT-007", "fixture": "tests/fixtures/negative/ASMT-007.contract.yaml", "expect": "so the member is not independent", "asserts": "Internal checks and balances ensure compliance with security requirements: an assessment team member the system owner contracted and can influence, so the member is not independent, fails", "claim": "constraint", "holds_when": "ART-SAP is produced or seeded"}]
     work_item: "WI-505"
   - id: "REQ-SP800-161R1-0284"
     citation: {"ref": "SP800-161R1", "page": 61, "anchor": "Establish a supplier management program that includes, for example, guidelines for purchasing"}
@@ -5862,7 +5861,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/system_id", "asserts": "The system's unique identifier is the system_id fact, which the C-SCRM plan reads rather than restates", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: system_id is optional (its parent system_id does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0680"
     citation: {"ref": "SP800-161R1", "page": 223, "anchor": "This C-SCRM plan provides an overview of the security requirements for the"}
     kind: "indicative"
@@ -5891,7 +5890,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/risk_tolerance", "asserts": "The C-SCRM plan describes the system in the context of the enterprise supply chain risk tolerance", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.risk_tolerance is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0683"
     citation: {"ref": "SP800-161R1", "page": 224, "anchor": "The DMS is a Category 1 system that mandates a recovery time"}
     kind: "indicative"
@@ -5970,7 +5969,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/facts.schema.json#/properties/lifecycle_phase", "asserts": "The operational status of the system is its lifecycle_phase fact, which the plan reads", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: lifecycle_phase is optional (its parent lifecycle_phase does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0692"
     citation: {"ref": "SP800-161R1", "page": 225, "anchor": "Operational | The system is currently operating and is in production."}
     kind: "table"
@@ -6082,7 +6081,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/control_considerations", "asserts": "The C-SCRM plan documents control implementation specific to supply chain considerations of the system components", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.control_considerations is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0705"
     citation: {"ref": "SP800-161R1", "page": 227, "anchor": "For each control, provide a thorough description of how the security controls"}
     kind: "indicative"
@@ -6162,7 +6161,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/requirements", "asserts": "The C-SCRM plan lists the C-SCRM requirements, laws and policies applicable to the system", "claim": "constraint"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.requirements is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0714"
     citation: {"ref": "SP800-161R1", "page": 229, "anchor": "The enterprise shall ensure that C-SCRM plan controls are consistent with applicable"}
     kind: "modal"
@@ -6229,7 +6228,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/review_interval", "asserts": "The C-SCRM plan sets the interval at which it is reviewed and updated", "claim": "constraint"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.review_interval is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0722"
     citation: {"ref": "SP800-161R1", "page": 229, "anchor": "Number | Change/Revision | Affected | Name/Title/Enterprise"}
     kind: "table"
@@ -6249,7 +6248,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/approval", "asserts": "The C-SCRM plan records its approval, by whom and on what date it was reviewed and approved", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.approval is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-0724"
     citation: {"ref": "SP800-161R1", "page": 230, "anchor": "Name Date | Name Date"}
     kind: "table"
@@ -6316,9 +6315,8 @@ requirements:
     statement: "that could present a cybersecurity risk to a procurer. The objective of the C-SCRA template is to provide a toolbox of questions that an acquirer can choose to use or not use depending on the controls selected. Typically executed by C-SCRM PMOs at the operational level (Level 3), the C-SCRA considers available public and private information to perform a holistic assessment, including known cybersecurity risks throughout the supply chain, the likelihoods of their occurrence, and their potential impacts on an enterprise and its information and systems. As enterprises may be inundated with C-SCRAs and suppliers inundated with C-SCRA requests, the enterprise should evaluate the relative priority of its C-SCRAs as an influencing factor on the rigor of the C-SCRA."
     status: "partial"
     reason: "SCRM-001 refuses a critical supplier ranked below a non-critical one. SCRM-001 now lets a recorded externally driven priority (p. 247) rank a non-critical source first, so the clause rests on the absence of a driver and the judge holds it as presence."
-    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "The enterprise evaluates the relative priority of its C-SCRAs, critical suppliers ahead of non-critical ones", "claim": "presence"}]
+    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "The enterprise evaluates the relative priority of its C-SCRAs, critical suppliers ahead of non-critical ones", "claim": "constraint"}]
     work_item: "WI-118"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: SCRM-001 refuses a critical supplier ranked below a non-critical one. SCRM-001 now lets a recorded externally driven priority (p. 247) rank a non-critical source first, so the clause rests on the absence of a driver and the judge holds it as presence"}
   - id: "REQ-SP800-161R1-0732"
     citation: {"ref": "SP800-161R1", "page": 231, "anchor": "As with the other featured templates, the below C-SCRA is provided only"}
     kind: "modal"
@@ -6326,8 +6324,7 @@ requirements:
     context: ""
     statement: "As with the other featured templates, the below C-SCRA is provided only as an example. Enterprises must tailor the below content to align with their Level 1 and Level 2 risk postures."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "prose", "target": "playbooks/P/P-14.md", "asserts": "Enterprises tailor the C-SCRA content to align with their Level 1 and Level 2 risk postures", "sentence": "Enterprises must tailor the below content to align with their Level 1 and Level 2 risk postures.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0733"
     citation: {"ref": "SP800-161R1", "page": 231, "anchor": "For the purposes of this document, the expression “cybersecurity supply chain risk"}
@@ -6409,8 +6406,7 @@ requirements:
     context: ""
     statement: "Define the purpose and objectives for the requested C-SCRA, and outline the key information required to appropriately define the system, operations, supporting architecture, and boundaries. Provide key questions to requestors to facilitate the collection and analysis of this information. The C-SCRM PMO will then use this information as a baseline for subsequent analyses and data requests."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/assessments/items/properties/purpose", "asserts": "Define the purpose and objectives for the requested C-SCRA", "sentence": "Define the purpose and objectives for the requested C-SCRA, and outline the key information required to appropriately define the system, operations, supporting architecture, and boundaries.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0743"
     citation: {"ref": "SP800-161R1", "page": 233, "anchor": "Section 1: Request Overview | Provide Response: | Response Provided by:"}
@@ -7290,8 +7286,7 @@ requirements:
     context: ""
     statement: "Define vulnerability analysis and the criteria that will be utilized to assess the vulnerability of the product, service, or supplier being assessed. Include a rubric with categorical definitions to encourage transparency behind assessment results."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/threat_analysis/properties/vulnerability_approach", "asserts": "Define vulnerability analysis and the criteria to assess the vulnerability of the supplier", "sentence": "Define vulnerability analysis and the criteria that will be utilized to assess the vulnerability of the product, service, or supplier being assessed.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0852"
     citation: {"ref": "SP800-161R1", "page": 239, "anchor": "The C-SCRA vulnerability analysis evaluates and then characterizes the vulnerability of the"}
@@ -7348,8 +7343,7 @@ requirements:
     context: ""
     statement: "Define impact analysis and the criteria that will be utilized to assess the criticality of the product, service, or supplier being assessed. Include a rubric with categorical definitions to encourage the transparency of assessment results."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/criticality/properties/method", "asserts": "Define impact analysis and the criteria to assess the criticality of the supplier being assessed", "sentence": "Define impact analysis and the criteria that will be utilized to assess the criticality of the product, service, or supplier being assessed.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0859"
     citation: {"ref": "SP800-161R1", "page": 240, "anchor": "Critical: The product, service, or supplier’s failure to perform as designed would"}
@@ -7398,8 +7392,7 @@ requirements:
     context: ""
     statement: "Define risk analysis and the criteria that will be utilized to assess the scoring of the product or service being assessed. Include a rubric with categorical definitions to encourage the transparency of assessment results."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/assessments/items/properties/methodology", "asserts": "Define risk analysis and the criteria utilized to assess the scoring of the product or service in the assessment methodology", "sentence": "Define risk analysis and the criteria that will be utilized to assess the scoring of the product or service being assessed.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0865"
     citation: {"ref": "SP800-161R1", "page": 241, "anchor": "Low | Moderate | High | Critical"}
@@ -7579,8 +7572,7 @@ requirements:
     context: ""
     statement: "Define the required frequency for updating the C-SCRA template. Maintain a table of revisions to enforce version control. C-SCRA templates are living documents that must be updated and communicated to all appropriate individuals (e.g., staff, contractors, and suppliers)."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the organization's C-SCRM PMO, author of the C-SCRA template's, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
-    evidence: [{"kind": "prose", "target": "playbooks/P/P-14.md", "asserts": "Define the required frequency for updating the C-SCRA template", "sentence": "Define the required frequency for updating the C-SCRA template.", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the organization's C-SCRM PMO, author of the C-SCRA template, an office no run performs, so no run record can hold or fail it. The C-SCRA template is the organization's C-SCRM PMO instrument at Level 3; a run records the assessment it produced (scrm.yaml assessments), not the template's own sections, so this instruction to the template's author is held only as prose in the P-14 playbook."
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0887"
     citation: {"ref": "SP800-161R1", "page": 242, "anchor": "Sample Text The"}
@@ -7685,7 +7677,7 @@ requirements:
     statement: "The law also mandates that agencies conduct and prioritize supply chain risk assessments (SCRAs). The guidance in this appendix is specific to this FASCSA requirement, as described below, and addresses the need for a baseline level of consistency and alignment between agency-level C-SCRM risk assessment and response functions and those SCRM functions that occur at the government-wide level by authorized bodies such as the FASC."
     status: "partial"
     reason: "Held in part by SCRM-001: a critical supplier with no supply chain risk assessment fails, so agencies conduct SCRAs. Prioritization lets a recorded externally driven priority rank a non-critical source first, so that clause rests on the absence of a driver and the judge holds it as presence."
-    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Agencies conduct and prioritize supply chain risk assessments, critical suppliers first", "claim": "presence"}, {"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.assessment.yaml", "expect": "has no supply chain risk assessment", "asserts": "Agencies conduct supply chain risk assessments: a critical supplier with no supply chain risk assessment fails", "claim": "constraint"}]
+    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Agencies conduct and prioritize supply chain risk assessments, critical suppliers first", "claim": "constraint"}, {"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.assessment.yaml", "expect": "has no supply chain risk assessment", "asserts": "Agencies conduct supply chain risk assessments: a critical supplier with no supply chain risk assessment fails", "claim": "constraint"}]
     work_item: "WI-118"
   - id: "REQ-SP800-161R1-0899"
     citation: {"ref": "SP800-161R1", "page": 244, "anchor": "which requires executive agencies to assess the supply chain risk posed by"}
@@ -7793,9 +7785,8 @@ requirements:
     statement: "Prioritization is not meant to be understood as only a subset of sources or covered articles that should be assessed. Rather, agencies should establish a tiered set of priority levels commensurate with the criticality and potential for risk impact. This tiering can then be used to guide or compel the timing of, order, scope, and frequency of SCRAs."
     status: "partial"
     reason: "The second sentence is held by SCRM-001: a critical supplier never ranks below a non-critical one. The first explains what prioritization means and asks no act."
-    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Agencies establish a tiered set of priority levels commensurate with criticality and potential for risk impact", "sentence": "Rather, agencies should establish a tiered set of priority levels commensurate with the criticality and potential for risk impact.", "claim": "presence"}]
+    evidence: [{"kind": "rule", "target": "SCRM-001", "fixture": "tests/fixtures/negative/SCRM-001.priority.yaml", "expect": "is critical yet its assessment priority", "asserts": "Agencies establish a tiered set of priority levels commensurate with criticality and potential for risk impact", "sentence": "Rather, agencies should establish a tiered set of priority levels commensurate with the criticality and potential for risk impact.", "claim": "constraint"}]
     work_item: "WI-118"
-    freeze_debt: {"group": "B", "unheld": "a constraint reading of the tiered priority levels: SCRM-001.priority writes a critical supplier ranked below a non-critical one, but the judge reads the clause as presence; the first sentence explains what prioritization means"}
   - id: "REQ-SP800-161R1-0911"
     citation: {"ref": "SP800-161R1", "page": 247, "anchor": "In addition to externally driven priorities (e.g., government-wide policy direction, regulatory requirement)"}
     kind: "modal"
@@ -7828,7 +7819,7 @@ requirements:
     reason: "Acting prudently and objectively, with reasonable care, is a duty of conduct on the people who assess; the record shows its trace (methodology, sources, confidence, review and clearance), but no rule can tell care from its absence."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/assessments/items/properties/review", "asserts": "Personnel who support an assessment act prudently and objectively, and the record shows its review", "claim": "presence"}]
     work_item: "WI-127"
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: the record shows its trace (methodology, sources, confidence, review and clearance), but no rule can tell care from its absence"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: the record shows its trace (methodology, sources, confidence, review and clearance), but no rule can tell care from its absence"}
   - id: "REQ-SP800-161R1-0914"
     citation: {"ref": "SP800-161R1", "page": 248, "anchor": "This section describes the baseline (common, non-exclusive) supply chain risk factors and"}
     kind: "should"
@@ -8134,7 +8125,7 @@ requirements:
     evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/assessments/items/properties/findings/properties/analysis", "asserts": "Care is taken to analyze what combination of factors and findings gives rise to risk", "sentence": "Care should also be taken to analyze what combination of factors and findings may give rise to risk or, conversely, mitigate risk concerns.", "claim": "presence"}]
     work_item: "WI-128"
     ruling_sought: [{"sentence": "Uncertainty about a risk determination may prompt the need to conduct additional due diligence research and analysis, escalate internally or externally, or seek advice as to whether the risk is such that mitigation is not possible.", "reason": "A permission: uncertainty 'may prompt' further research, escalation or advice.", "approved_by": "user"}]
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: Analyzing what combination of factors gives rise to risk is analysis no rule can check"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: Analyzing what combination of factors gives rise to risk is analysis no rule can check"}
   - id: "REQ-SP800-161R1-0948"
     citation: {"ref": "SP800-161R1", "page": 254, "anchor": "Separate from or as part of the assessment, agencies should examine whether"}
     kind: "should"
@@ -8389,8 +8380,7 @@ requirements:
     context: ""
     statement: "Note: The FASC may issue updated or additional guidance concerning the circumstances and criteria for mandatory and voluntary information sharing. Agencies should refer to and follow the most current FASC guidance."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the agency's C-SCRM PMO, which follows the FASC's guidance's, an office no run performs, so no run record can hold or fail it. Following the most current FASC guidance is conduct no record shows; sharing.handling records the rules followed."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm-org.schema.json#/properties/sharing/properties/handling", "asserts": "Agencies follow the most current FASC guidance on mandatory and voluntary sharing", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the agency's C-SCRM PMO, which follows the FASC's guidance, an office no run performs, so no run record can hold or fail it. Following the most current FASC guidance is conduct no record shows; sharing.handling records the rules followed."
     work_item: "WI-109"
   - id: "REQ-SP800-161R1-0976"
     citation: {"ref": "SP800-161R1", "page": 257, "anchor": "Agencies are reminded of the importance of integrating SCRM into enterprise risk"}
@@ -8458,8 +8448,7 @@ requirements:
     context: ""
     statement: "Documentation requirements should be incorporated into existing, relevant supply chain risk assessment policies, processes, and procedures. These requirements should be informed by consultation with and direction from officials within the agency, to include legal counsel and personnel with responsibilities for records management, CUI and classified information management, and privacy."
     status: "not-applicable"
-    reason: "Not applicable to a run: the duty is the agency's C-SCRM PMO, owner of its supply chain risk assessment policies's, an office no run performs, so no run record can hold or fail it. Incorporating documentation requirements into the agency's SCRA policies, informed by legal counsel, records, CUI, classified and privacy officials, is organization policy outside a run; the record carries only the marking, retention and dissemination that result."
-    evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/assessments/items/properties/handling", "asserts": "Documentation requirements for safeguarding and records are incorporated into supply chain risk assessment procedures", "claim": "presence"}]
+    reason: "Not applicable to a run: the duty belongs to the agency's C-SCRM PMO, owner of its supply chain risk assessment policies, an office no run performs, so no run record can hold or fail it. Incorporating documentation requirements into the agency's SCRA policies, informed by legal counsel, records, CUI, classified and privacy officials, is organization policy outside a run; the record carries only the marking, retention and dissemination that result."
     work_item: "WI-127"
   - id: "REQ-SP800-161R1-0983"
     citation: {"ref": "SP800-161R1", "page": 259, "anchor": "Agency responsible for the assessment | Agencies should be able to identify"}
@@ -9255,7 +9244,7 @@ requirements:
     statement: "• Identify which mission and business processes and related components are critical to the enterprise to determine the criticality."
     status: "partial"
     reason: "Tier 1, partial: BIA-001 fails a mission critical function naming a process the analysis does not list, so the critical processes are identified. Which related components are critical is WI-09's criticality analysis; BIA-001's base clause (functions present, none identified) is presence."
-    evidence: [{"kind": "rule", "target": "BIA-001", "fixture": "tests/fixtures/negative/BIA-001.yaml", "expect": "says mission critical functions are present but identifies none", "claim": "presence", "asserts": "Identify which mission and business processes are critical: an analysis that says mission critical functions are present but identifies none fails"}, {"kind": "rule", "target": "BIA-001", "fixture": "tests/fixtures/negative/BIA-001.process.yaml", "expect": ", which the analysis does not list", "asserts": "Identify which mission and business processes are critical: a mission critical function naming a process which the analysis does not list fails", "claim": "constraint"}]
+    evidence: [{"kind": "rule", "target": "BIA-001", "fixture": "tests/fixtures/negative/BIA-001.yaml", "expect": "says mission critical functions are present but identifies none", "claim": "constraint", "asserts": "Identify which mission and business processes are critical: an analysis that says mission critical functions are present but identifies none fails"}, {"kind": "rule", "target": "BIA-001", "fixture": "tests/fixtures/negative/BIA-001.process.yaml", "expect": ", which the analysis does not list", "asserts": "Identify which mission and business processes are critical: a mission critical function naming a process which the analysis does not list fails", "claim": "constraint"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1078"
     citation: {"ref": "SP800-161R1", "page": 268, "anchor": "Define which mission and business processes and information systems compose the supply"}
@@ -9352,7 +9341,7 @@ requirements:
     statement: "Enterprises will make criticality determinations as part of enterprise risk management activities based on the process outlined in 57"
     status: "partial"
     reason: "BIA-003 fails a criticality analysis with no Frame iteration and critical items that are not a prioritized list of determinations. Unheld: that the determinations are part of the enterprise risk management activities, which sit above a run."
-    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "asserts": "Enterprises make criticality determinations in a prioritized list: critical items whose ranks are not a prioritized list fail"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.yaml", "expect": "has no Frame iteration (P-8)", "claim": "presence", "asserts": "Criticality determinations are made in the Frame step of risk management: an analysis with no Frame iteration fails"}]
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.rank.yaml", "expect": "is not a prioritized list", "claim": "constraint", "asserts": "Enterprises make criticality determinations in a prioritized list: critical items whose ranks are not a prioritized list fail"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.yaml", "expect": "has no Frame iteration (P-8)", "claim": "constraint", "asserts": "Criticality determinations are made in the Frame step of risk management: an analysis with no Frame iteration fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1088"
     citation: {"ref": "SP800-161R1", "page": 269, "anchor": "Where possible, C-SCRM should inherit those assumptions and tailor/refine them to include"}
@@ -9392,7 +9381,7 @@ requirements:
     statement: "Determining criticality is an iterative process performed at all levels during both Frame and Assess. In Frame, criticality determination is expected to be performed at a high level using the available information with further detail incorporated through additional iterations or at the Assess step. Determining criticality may include the following:"
     status: "partial"
     reason: "BIA-003 fails a criticality analysis with no Frame iteration, with no Assess iteration once the system is categorized, or with the Assess iteration dated before the Frame one it details. Unheld: that the Frame determination is high level and that each level of the enterprise performs one."
-    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "asserts": "Criticality determination in Frame is detailed further at the Assess step: an Assess iteration dated before the Frame iteration fails"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.assess.yaml", "expect": "has no Assess iteration updating the Frame one", "claim": "presence", "asserts": "Criticality determination performed in Frame gets further detail at the Assess step: no Assess iteration updating the Frame one fails"}]
+    evidence: [{"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.order.yaml", "expect": "dated before the Frame iteration it updates", "claim": "constraint", "asserts": "Criticality determination in Frame is detailed further at the Assess step: an Assess iteration dated before the Frame iteration fails"}, {"kind": "rule", "target": "BIA-003", "fixture": "tests/fixtures/negative/BIA-003.assess.yaml", "expect": "has no Assess iteration updating the Frame one", "claim": "constraint", "asserts": "Criticality determination performed in Frame gets further detail at the Assess step: no Assess iteration updating the Frame one fails"}]
     work_item: "WI-09"
   - id: "REQ-SP800-161R1-1092"
     citation: {"ref": "SP800-161R1", "page": 270, "anchor": "Define criticality analysis procedures to ensure that there is a set of"}
@@ -10867,7 +10856,7 @@ requirements:
     evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/aggregation/properties/method", "asserts": "Enterprises maximize inheritance of common frameworks and lexicons from enterprise risk management to aggregate risk", "sentence": "To ease this process, enterprises should maximize inheritance of common frameworks and lexicons from higher-order risk processes (e.g., enterprise risk management).", "claim": "presence"}]
     work_item: "WI-104"
     ruling_sought: [{"sentence": "Enterprises may use risk aggregation to combine several discrete or lower-level risks into a more general or higher-level risk Risk aggregation is especially important for C- SCRM as enterprises strive to understand their risk exposure to the supply chain in contrast to assets at different levels of the organization.", "reason": "A permission: enterprises 'may use' risk aggregation.", "approved_by": "user"}, {"sentence": "Ultimately, enterprises may wish to aggregate and normalize their C-SCRM risk assessment results with other enterprise risk assessments to develop an understanding of their total risk exposure across risk types (e.g., financial, operational, legal/regulatory).", "reason": "A permission: enterprises 'may wish' to aggregate and normalize results.", "approved_by": "user"}, {"sentence": "This aggregation may occur at an enterprise level in cases where the enterprise consists of multiple subordinate enterprises.", "reason": "A permission: aggregation 'may occur' at an enterprise level.", "approved_by": "user"}]
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: the inheritance of common frameworks and lexicons from enterprise risk management, as such"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: the inheritance of common frameworks and lexicons from enterprise risk management, as such"}
   - id: "REQ-SP800-161R1-1265"
     citation: {"ref": "SP800-161R1", "page": 294, "anchor": "When dealing with discrete risks (i.e., non-overlapping), enterprises can more easily develop"}
     kind: "modal"
@@ -10879,7 +10868,7 @@ requirements:
     evidence: [{"kind": "schema", "target": "framework/schema/scrm.schema.json#/properties/aggregation/properties/method", "asserts": "When presenting aggregate risk, assessments of risk produce discrete outputs", "sentence": "When presenting aggregate risk as a number, enterprises should ensure that assessments of risk produce discrete outputs by adopting mutually exclusive and collectively exhaustive (MECE) frameworks.", "claim": "presence"}]
     work_item: "WI-104"
     ruling_sought: [{"sentence": "To overcome these challenges, enterprises can employ a variety of techniques.", "reason": "A permission: enterprises 'can employ' a variety of techniques.", "approved_by": "user"}, {"sentence": "Enterprises may elect to use visualizations or heat maps to demonstrate the likelihood and impact of risks relative to one another.", "reason": "A permission: enterprises 'may elect' to use visualizations or heat maps.", "approved_by": "user"}, {"sentence": "Instead of summing risks from lower levels together, enterprises may elect to perform a new holistic assessment at an upper level that leverages the combined assessment results from lower levels.", "reason": "A permission: enterprises 'may elect' to perform a new holistic assessment at an upper level.", "approved_by": "user"}]
-    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: The record states how results are aggregated (aggregation.method), but MECE outputs and discretion in aggregating are judgments"}
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content the presence item reads: The record states how results are aggregated (aggregation.method), but MECE outputs and discretion in aggregating are judgments"}
   - id: "REQ-SP800-161R1-1266"
     citation: {"ref": "SP800-161R1", "page": 294, "anchor": "Quantitative methods offer distinct advantages for risk aggregation. Through the use of"}
     kind: "should"
@@ -11293,7 +11282,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/policy_implementations", "asserts": "The C-SCRM plan summarizes the applicable policies, processes and requirements of the environment", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.policy_implementations is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-1314"
     citation: {"ref": "SP800-161R1", "page": 299, "anchor": "State the role responsible for the plan, such as Risk Executive, Chief"}
     kind: "lettered"
@@ -11314,7 +11303,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/approval", "asserts": "The C-SCRM plan approval records the coordination with the C-SCRM PMO, a key contributor", "claim": "presence"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.approval is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-1316"
     citation: {"ref": "SP800-161R1", "page": 299, "anchor": "Provide the applicable (per level) set of risk mitigation measures and controls"}
     kind: "lettered"
@@ -11376,7 +11365,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/review_interval", "asserts": "The C-SCRM plan defines the interval for reviewing and revising the plan", "claim": "constraint"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.review_interval is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-1322"
     citation: {"ref": "SP800-161R1", "page": 299, "anchor": "Include criteria that would trigger revision, such as life cycle milestones, gate"}
     kind: "lettered"
@@ -11387,7 +11376,7 @@ requirements:
     reason: "Held by the system C-SCRM plan record artifacts/data/scrm-plan.yaml of cluster I-14 (ART-SSP, S-4; SCRM-009 to SCRM-012, SCRM-014), or a system fact the plan reads: presence of the field only. No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong."
     evidence: [{"kind": "schema", "target": "framework/schema/scrm-plan.schema.json#/properties/plan/properties/review_interval", "asserts": "The C-SCRM plan sets when the plan is reviewed and revised", "claim": "constraint"}]
     work_item: "WI-04"
-    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: No rule of this item judges the content the statement asks for, and the plan block is optional beside the low-impact inheritance record, so the evidence cannot fail when the content is wrong"}
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: plan.review_interval is optional (its parent plan does not require it), so nothing fails when it is absent"}
   - id: "REQ-SP800-161R1-1323"
     citation: {"ref": "SP800-161R1", "page": 299, "anchor": "Include suppliers, developers, system integrators, external system service providers, and other ICT/OT-related"}
     kind: "lettered"
