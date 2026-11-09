@@ -230,12 +230,14 @@ def blocks_freeze(probe: evidence.Probe | None, entry: Mapping[str, Any],
                   tier: int | None) -> str | None:
     """FW-REQ-002 at p13 (ADR-0005, 2026-11-08): what keeps an entry from the freeze, or None.
     Only tier 1 blocks: a candidate, or a partial no evidence item of which judges strong.
-    Without a probe the second cannot be judged, so only a candidate is named."""
+    A partial whose every marked sentence the user ruled out has nothing left to prove, as
+    FW-REQ-003 reads it, so it passes. Without a probe the second cannot be judged, so only a
+    candidate is named."""
     if tier != TIER_1:
         return None
     if entry["status"] == "candidate":
         return FREEZE_CANDIDATE
-    if entry["status"] == "partial" and probe is not None and not any(
+    if entry["status"] == "partial" and probe is not None and needs_item(entry) and not any(
             evidence.judge(probe, item, entry).strength == evidence.STRONG
             for item in entry.get("evidence") or ()):
         return FREEZE_NO_STRONG

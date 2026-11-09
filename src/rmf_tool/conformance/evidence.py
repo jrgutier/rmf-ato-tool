@@ -48,6 +48,7 @@ from typing import Any
 from rmf_tool.check import Rule, rules_by_id
 from rmf_tool.framework.model import SCHEMA_DIR, Framework
 from rmf_tool.refs.toc import compact
+from rmf_tool.run.authorization import LEDGER_FILE
 from rmf_tool.run.model import YamlError, read_yaml
 
 STRONG, WEAK, DENIED, UNRESOLVED = "strong", "weak", "denied", "unresolved"
@@ -326,6 +327,10 @@ def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False)
     if isinstance(test, ast.Call):
         callee = test.func
         name = callee.attr if isinstance(callee, ast.Attribute) else getattr(callee, "id", "")
+        if name == "any" and isinstance(callee, ast.Name):
+            # `not any(r.get("x") or [])` reads silence; `not any(... for ...)` over a computed
+            # iterable asks whether a member matches, a comparison, as len() is in _reads_field.
+            return bool(test.args) and _reads_field(test.args[0], plain)
         return name in ABSENCE_READS
     return isinstance(test, ast.Name)
 
@@ -334,7 +339,9 @@ def _deletes(mutation: Mapping[str, Any]) -> bool:
     """A mutation that removes a value: a deleted field or file, a set to an empty value
     (``[]``, ``{}``, ``""`` or null), or a text replacement that only erases lines (a key with
     its value), which a rule refuses for the same silence. A list item deleted is not seen here:
-    the fixture that empties a list writes it as ``set_field: []`` (test_negative holds that)."""
+    it leaves a set without that member, the list ``set_field`` to the remainder writes, a wrong
+    value; the fixture that empties a list writes it as ``set_field: []`` (test_negative holds
+    that)."""
     op = mutation["op"]
     if op in (DELETE_FIELD, DELETE_FILE):
         return True
@@ -363,14 +370,19 @@ def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
 def _rule_fields(probe: Probe, item: Mapping[str, Any]) -> frozenset[str]:
     """The ``requires`` fields a rule item's fixture breaks: a mutated path, a declared message
     naming one, or a field the clause's own tests read. Never the fragment the author chose,
-    which can leave the name out."""
+    which can leave the name out. A ``requires`` field lives on a ledger record, so a fixture
+    that leaves the ledger alone breaks none, whatever its fields are called (a SAP's
+    ``assessor_independence.review`` is not the cATO ``review``)."""
     expect = item.get("expect")
     spec = fixture_spec(probe.repo, item.get("fixture") or "")
     if spec is None or not expect:
         return frozenset()
+    on_ledger = [m for m in spec.get("mutations") or () if m.get("file") == LEDGER_FILE]
+    if not on_ledger:
+        return frozenset()
     fields = probe.requires_fields
     source = probe.sources.get(item["target"], "")
-    named = {m["path"].rpartition(".")[2] for m in spec.get("mutations") or ()
+    named = {m["path"].rpartition(".")[2] for m in on_ledger
              if m["op"] in (DELETE_FIELD, SET_FIELD)}
     named |= {n.value for tests in failing_clauses(source, expect)
               for test in tests for n in ast.walk(test)

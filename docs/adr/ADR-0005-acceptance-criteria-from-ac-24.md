@@ -182,6 +182,11 @@ tier, and outside tier 1 nothing blocks.
   item holds adds nothing to `tier1_debt`, though its reason names duty still unheld. The report
   counts such entries apart: `summary.tier1_partial_entries` (every tier 1 partial) and
   `summary.tier1_partial_by_reason` (those whose remainder lives only in `reason`).
+- A tier 1 `partial` whose every marked sentence the user ruled out (`ruling_sought` with
+  `approved_by: user`) passes FW-REQ-002 with no strong item: it has nothing left to prove, the
+  reading FW-REQ-003 gives it when it refuses such an entry as `covered`. It stays `partial`
+  rather than `not-a-requirement`: the ruling says the sentence needs no evidence, not that it
+  is extraction noise, and a re-mark would move noise shares the user approved records for.
 - Open work items no longer block the freeze, at any tier.
 - A `candidate` outside tier 1 warns, one finding per document with its count; `should` and
   `table` kinds are no longer told apart from obligations there.

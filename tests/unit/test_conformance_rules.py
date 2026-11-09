@@ -426,6 +426,16 @@ def test_a_tier_1_partial_with_one_strong_item_passes_the_freeze(reg, index):
     assert _errors(freeze(reg, index)) == []
 
 
+@pytest.mark.parametrize("approved", [True, False])
+def test_a_tier_1_partial_with_every_sentence_ruled_out_passes_the_freeze(reg, index, approved):
+    entry = _tier_1_partial(reg, {"kind": "citation", "target": "P-1"})
+    entry["ruling_sought"] = [
+        {"sentence": s, "reason": "a permission", **({"approved_by": "user"} if approved else {})}
+        for s in evidence.citable(entry["statement"])]
+
+    assert bool(_errors(freeze(reg, index))) is not approved
+
+
 def test_candidates_outside_tier_1_warn_once_per_document(reg, index):
     _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
     count = sum(1 for ref, e in reg.live() if ref == DOC and e["status"] == "candidate")
@@ -2195,6 +2205,9 @@ TRIPLE_SOURCE = ('err(r, "needs review")\nkind.get("requires"), r.get("review"),
 TERM_SOURCE = f'{TRIPLE_SOURCE}err(r, "days exceeds the limit")\n'
 
 
+LEDGER = "artifacts/data/authorizations.yaml"
+
+
 def _triple(reg, framework, tmp_path, messages=("needs review",), source=TRIPLE_SOURCE, **rule):
     """A pin, rule clause and schema shape on `review`, each linked to its entry."""
     prop = "review/properties/frequency_days"
@@ -2210,7 +2223,9 @@ def _triple(reg, framework, tmp_path, messages=("needs review",), source=TRIPLE_
     entry = _fake_entry(reg, item, pin, shape)
     base = _probe(REPO_ROOT, framework, EXTRA_RULES)
     probe = evidence.Probe(repo, framework, base.rules, {"REG-001": source})
-    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": list(messages)}}
+    spec = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": list(messages)},
+            "mutations": [{"op": "set_field", "file": LEDGER,
+                           "path": "records.0.review.frequency_days", "value": 9999}]}
     return entry, probe, spec
 
 
@@ -2264,6 +2279,28 @@ def test_a_message_word_is_no_requires_field(reg, framework, tmp_path, triple_co
     assert evidence._rule_fields(probe, entry["evidence"][0]) == frozenset({"review"})
 
 
+def test_a_requires_field_lives_on_a_ledger_record(reg, framework, tmp_path, triple_context):
+    """A SAP's `assessor_independence.review` read by its rule is not the cATO `review`: a
+    fixture that leaves the ledger alone breaks no `requires` field (F3, 53AR5-0160)."""
+    entry, probe, spec = _triple(reg, framework, tmp_path)
+    spec["mutations"] = [{"op": "set_field", "file": "artifacts/data/sap.yaml",
+                          "path": "assessor_independence.review", "value": "self"}]
+    triple_context.setattr(evidence, "fixture_spec", lambda repo, f: spec)
+    rule, pin, shape = entry["evidence"]
+    entry["evidence"].remove(pin)
+
+    assert evidence._rule_fields(probe, rule) == frozenset()
+    assert evidence.judge(probe, rule, entry).strength == evidence.STRONG
+
+
+def test_0160_reviewer_item_is_not_asked_the_cato_triple(framework):
+    entry, probe = _live(framework, "REQ-SP800-53AR5-0160")
+    item = entry["evidence"][1]
+    assert item["fixture"].endswith("ASMT-007.reviewer.yaml")
+    assert evidence._rule_fields(probe, item) == frozenset()
+    assert evidence.judge(probe, item, entry).strength == evidence.STRONG
+
+
 def test_a_leg_of_the_triple_must_judge_strong(reg, framework, tmp_path, triple_context):
     """Probe M3: a leg that only exists held the field."""
     entry, probe, spec = _triple(reg, framework, tmp_path)
@@ -2300,12 +2337,13 @@ def test_the_field_comes_from_the_fixture_not_the_fragment(reg, framework, tmp_p
     rule = entry["evidence"][0]
     entry["evidence"][1:] = []
 
-    named = {"rule": "REG-001",
+    dated = [{"op": "set_field", "file": LEDGER, "path": "records.1.date", "value": "2026-01-01"}]
+    named = {"rule": "REG-001", "mutations": dated,
              "expect": {"errors": ["REG-001"], "messages": ["record short: review"]}}
     deleted = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
-               "mutations": [{"op": "delete_field", "path": "records.1.review"}]}
+               "mutations": [{"op": "delete_field", "file": LEDGER, "path": "records.1.review"}]}
     changed = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]},
-               "mutations": [{"op": "set_field", "path": "records.1.review",
+               "mutations": [{"op": "set_field", "file": LEDGER, "path": "records.1.review",
                               "value": {"by": "PER-ISSM"}}]}
     for fixture, claim in ((named, "constraint"), (deleted, "presence"), (changed, "constraint")):
         rule["claim"] = claim
@@ -2316,7 +2354,8 @@ def test_the_field_comes_from_the_fixture_not_the_fragment(reg, framework, tmp_p
 
     gate = evidence.Probe(probe.repo, framework, probe.rules, {
         "REG-001": 'if "review" in requires:\n    err(r, "record short")\n'})
-    plain = {"rule": "REG-001", "expect": {"errors": ["REG-001"], "messages": ["record short"]}}
+    plain = {"rule": "REG-001", "mutations": dated,
+             "expect": {"errors": ["REG-001"], "messages": ["record short"]}}
     rule["claim"] = "constraint"
     triple_context.setattr(evidence, "fixture_spec", lambda repo, f: plain)
     found = evidence.judge(gate, rule, entry)
@@ -2443,6 +2482,11 @@ NEGATIVE = "tests/fixtures/negative/"
     ('if r.get("x") == "PER-AO":\n    err(r, "x is bad")', None, "x is bad", "constraint"),
     ('if r.get("x") in ("a", ""):\n    err(r, "x is bad")', None, "x is bad", "constraint"),
     ('if r.get("x") > 0:\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if not any(r.get("x") or []):\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    ('if not any(p == "PER-CISO" for p in r.get("x") or []):\n    err(r, "x is bad")', None,
+     "x is bad", "constraint"),  # a member compared, as len() of a computed value is (fable-f4)
+    ('if not any(i.get("role") == "defensive" for i in items):\n    err(r, "x is bad")', None,
+     "x is bad", "constraint"),
 ])
 def test_the_judge_classifies_rule_items(rule, fixture, expect, claim):
     spec = evidence.fixture_spec(REPO_ROOT, f"{NEGATIVE}{fixture}.yaml") if fixture else {}
@@ -2485,6 +2529,19 @@ def test_a_fixture_that_only_removes_is_presence_whatever_its_op(mutation, claim
     assert evidence.rule_claim({"mutations": [mutation]}, CLAUSE, "x is bad") == claim
 
 
+def test_one_list_member_removed_is_a_wrong_value_as_the_same_list_set_is():
+    """A set without a required member is a wrong value: removing one member leaves the list
+    that `set_field` to the remainder writes, and the two must judge alike. Emptying the list
+    is presence either way (test_negative refuses a delete_list_item that empties it)."""
+    source = 'if "PER-CISO" not in (r.get("x") or []):\n    err(r, "x is bad")'
+    removed = {"op": "delete_list_item", "file": "f.yaml", "path": "x",
+               "where": {"id": "PER-CISO"}}
+    remainder = {"op": "set_field", "file": "f.yaml", "path": "x", "value": ["PER-ISSM"]}
+    claims = {evidence.rule_claim({"mutations": [m]}, source, "x is bad")
+              for m in (removed, remainder)}
+    assert claims == {"constraint"}
+
+
 def test_a_fixture_that_empties_one_field_and_sets_another_wrong_stays_constraint():
     source = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
     spec = {"mutations": [
@@ -2500,10 +2557,12 @@ def test_a_rule_item_with_no_clause_to_read_is_presence():
 
 def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     """A comparison in these rules is a constraint: `kind is None` is a lookup, `atd is not None`
-    refuses a value, and the `else` of a test on a value adds no absence."""
+    refuses a value, the `else` of a test on a value adds no absence, and `not any(r.get("task")
+    == task for r in records)` asks whether a record matches (a fixture deleting the record is
+    still presence by its mutation)."""
     sources = evidence.rule_sources()
     absent = {
-        "AODM-001": ("recorded no decision", "is not an active task of this run",
+        "AODM-001": ("is not an active task of this run",
                      "the run depends on degraded reference(s)"),
         "AOREC-001": ("needs an authorization_termination_date", "needs conditions"),
         "AODM-002": ("records the review that triggered it", "needs ongoing_acknowledgment",
@@ -2519,7 +2578,8 @@ def test_every_ledger_message_that_tests_absence_is_presence_and_no_other():
     for rule, fragments in absent.items():
         for expect in fragments:
             assert evidence.rule_claim({}, sources[rule], expect) == "presence", expect
-    for rule, expect in (("AODM-001", "is not one of the decision types"),
+    for rule, expect in (("AODM-001", "recorded no decision"),
+                         ("AODM-001", "is not one of the decision types"),
                          ("AODM-001", "have not written their outputs"),
                          ("AODM-001", "is used twice"),
                          ("AODM-002", "carries no authorization_termination_date"),
