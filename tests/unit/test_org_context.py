@@ -199,6 +199,7 @@ def test_usspacecom_appoints_the_ao_of_a_space_system(tmp_path):
               lambda d: d["categorization"].update(space_segments=["ground"]))
     edit_yaml(run_dir / ORG, _usspacecom_appoints_the_ao_of_a_space_system)
     assert _rule_errors(run_dir, "RAPT-001") == []
+    assert _rule_errors(run_dir, "RUN-FM-001") == []  # the schema accepts usspacecom
 
 
 def test_the_template_roles_of_a_fresh_workspace_pass_the_appointment_rule(tmp_path):

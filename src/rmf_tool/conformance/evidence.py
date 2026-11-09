@@ -82,7 +82,7 @@ CONSTRAINT_KEYWORDS = ("enum", "const", "pattern", "format", "minimum", "maximum
 # read, it refuses a state of the run.
 ABSENCE_READS = ("get", "strip", "isinstance", "any")
 DELETE_FIELD, SET_FIELD = "delete_field", "set_field"
-DELETE_FILE, REPLACE_TEXT = "delete_file", "replace_text"
+DELETE_FILE, REPLACE_TEXT, APPEND_TEXT = "delete_file", "replace_text", "append_text"
 MIN_EXPECT_WORDS = 2
 NEGATIVE_FIXTURES = "tests/fixtures/negative/"
 # A repo-scope rule's negative fixture: an overlay on tests/fixtures/framework_mini that
@@ -353,15 +353,25 @@ def _deletes(mutation: Mapping[str, Any]) -> bool:
     if op == REPLACE_TEXT:
         old = str(mutation.get("old") or "").splitlines()
         new = [line for line in str(mutation.get("new") or "").splitlines() if line.strip()]
+        # A heading removed or renamed erases the section a template rule reads.
+        if any(line.lstrip().startswith("#") and line not in new for line in old):
+            return True
         return all(line in old for line in new) and len(new) < len([o for o in old if o.strip()])
     return False
+
+
+def _scaffolding(mutation: Mapping[str, Any]) -> bool:
+    """A mutation that only brings a rule into scope: the run's task list in run.yaml, or a
+    whole record appended (a ledger row) so the rule has something to read. What it refuses is
+    read from the other mutations, the ones that touch the record the rule judges."""
+    return mutation.get("file") == "run.yaml" or mutation["op"] == APPEND_TEXT
 
 
 def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
     """What a rule item can refuse, read from its fixture and clause: a fixture that only deletes
     and a clause that only tests absence refuse silence, not a wrong value. With no clause to
     read, nothing shows a wrong value is refused."""
-    mutations = spec.get("mutations") or ()
+    mutations = [m for m in spec.get("mutations") or () if not _scaffolding(m)]
     if mutations and all(_deletes(m) for m in mutations):
         return PRESENCE
     clauses = failing_clauses(source, expect)

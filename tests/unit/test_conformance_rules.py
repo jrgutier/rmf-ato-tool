@@ -2592,6 +2592,33 @@ def test_a_fixture_that_sets_a_wrong_value_stays_constraint(value):
     assert evidence.rule_claim(spec, source, "x is bad") == "constraint"
 
 
+SCAFFOLD = [{"op": "set_field", "file": "run.yaml", "path": "include_after_stop",
+             "value": ["M-6"]},
+            {"op": "append_text", "file": "artifacts/data/authorizations.yaml",
+             "text": "- id: AUTH-003\n  decision: AD-CONT\n"}]
+WRONG_VALUE_CLAUSE = 'if r.get("x") == "PER-AO":\n    err(r, "x is bad")'
+
+
+def test_a_deletion_beside_scaffolding_judges_presence():
+    """run.yaml and an appended ledger row only bring the rule into scope; the record the rule
+    reads is only emptied."""
+    spec = {"mutations": [*SCAFFOLD, {"op": "set_field", "file": "artifacts/data/o.yaml",
+                                      "path": "x", "value": []}]}
+    assert evidence.rule_claim(spec, WRONG_VALUE_CLAUSE, "x is bad") == "presence"
+
+
+def test_a_wrong_value_beside_scaffolding_stays_constraint():
+    spec = {"mutations": [*SCAFFOLD, {"op": "set_field", "file": "artifacts/data/o.yaml",
+                                      "path": "x", "value": "PER-AO"}]}
+    assert evidence.rule_claim(spec, WRONG_VALUE_CLAUSE, "x is bad") == "constraint"
+
+
+def test_a_renamed_heading_is_an_erasure():
+    spec = {"mutations": [{"op": "replace_text", "file": "artifacts/ART-X.md",
+                           "old": "## Privacy program", "new": "## Privacy notes"}]}
+    assert evidence.rule_claim(spec, WRONG_VALUE_CLAUSE, "x is bad") == "presence"
+
+
 def test_scrm_001_priority_judges_constraint():
     """A wrong priority, refused by a conjunction whose absence conjunct (no recorded driver)
     reads another field: the fixture writes a wrong value, not silence."""
