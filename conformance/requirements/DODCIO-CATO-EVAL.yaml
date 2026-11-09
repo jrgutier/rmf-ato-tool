@@ -38,6 +38,7 @@ requirements:
     reason: "Tier 1, left partial: AODM-007 refuses a cATO with no recorded DoD CISO approval, a presence clause on a decision's required field; sending the package to DCIO(CS) itself is not recorded. The second and third sentences describe the document and how the DoD CIO tells communities of updates: unevidenced, listed for the user as descriptive."
     evidence: [{"kind": "rule", "target": "AODM-007", "fixture": "tests/fixtures/negative/AODM-007.yaml", "expect": "a cATO needs a recorded dod_ciso_approval", "claim": "presence", "sentence": "Additionally, it provides the recommended processes and information required for software factories to generate a cATO package and send to DCIO(CS) for review and approval.", "asserts": "The cATO package goes to DCIO(CS) for review and approval: a cATO with no recorded DoD CISO approval fails"}]
     work_item: "WI-24"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: Tier 1, left partial: AODM-007 refuses a cATO with no recorded DoD CISO approval, a presence clause on a decision's required field; sending the package to DCIO(CS) itself is not recorded"}
   - id: "REQ-DODCIO-CATO-EVAL-0005"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 3, "anchor": "Continuous Authorization to Operate (cATO) – Evaluation Criteria Page 3"}
     kind: "modal"
@@ -183,7 +184,8 @@ requirements:
     status: "partial"
     reason: "Built: the PER-DODCISO persona (consulted at M-6) and AODM-007, which refuses a cATO without dod_ciso_approval (a presence clause, which caps at partial). Unheld: who issues the cATO; AD-CATO keeps decided_by PER-AO and the approval records no approver, which is cluster I-9's cATO decision logic."
     evidence: [{"kind": "prose", "target": "personas/PER-DODCISO.md", "asserts": "The DoD CISO issues the cATO authorization as a recorded dod_ciso_approval on the AD-CATO record", "claim": "presence"}]
-    work_item: "WI-27"
+    work_item: "WI-794"
+    freeze_debt: {"group": "C", "unheld": "who issues the cATO; AD-CATO keeps decided_by PER-AO and the approval records no approver, which is cluster I-9's cATO decision logic."}
   - id: "REQ-DODCIO-CATO-EVAL-0022"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 7, "anchor": "Alert/Action triggered if issue found"}
     kind: "lettered"
@@ -350,6 +352,7 @@ requirements:
     reason: "Presence of the dashboard and its demonstration; 'partly determined' is how assessors judge, which a run cannot fail."
     evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.yaml", "expect": "the cATO package demonstrates no system-level dashboard (cato.yaml dashboard)", "claim": "presence", "asserts": "The presence of these activities is determined through demonstrated use of system-level dashboards: a package that demonstrates no system-level dashboard fails", "holds_when": "a cATO is sought (cato.yaml exists)", "sentence": "The presence of these activities will be partly determined through demonstrated use of system-level dashboards, which are a culmination of information received from logging, testing, and the following activities to provide a real-time view of the environment."}]
     work_item: "WI-24"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: 'partly determined' is how assessors judge, which a run cannot fail"}
   - id: "REQ-DODCIO-CATO-EVAL-0041"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 10, "anchor": "Items in bold in this section indicate documents or artifacts that must"}
     kind: "modal"
@@ -493,6 +496,7 @@ requirements:
     reason: "CATO-010 requires the system to establish business rules; the source's list is examples, so the rules' content is free and only their presence is held."
     evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.rules.yaml", "expect": "the system establishes no business rules", "asserts": "Business rules are established by the system", "claim": "presence"}]
     work_item: "WI-294"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: CATO-010 requires the system to establish business rules; the source's list is examples, so the rules' content is free and only their presence is held"}
   - id: "REQ-DODCIO-CATO-EVAL-0057"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Closely involve DoDM 8140.03certified cybersecurity experts throughout the life of the program"}
     kind: "lettered"
@@ -568,6 +572,7 @@ requirements:
     reason: "Presence: the package records the dashboard and its demonstration (date and audience, required by the schema); what the demonstration showed cannot fail."
     evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.yaml", "expect": "the cATO package demonstrates no system-level dashboard (cato.yaml dashboard)", "claim": "presence", "asserts": "The status of dashboarding activities includes a demonstration of the dashboard in operation: a cATO package that demonstrates no system-level dashboard fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: what the demonstration showed cannot fail"}
   - id: "REQ-DODCIO-CATO-EVAL-0066"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Must be readily available and as near real time as feasible"}
     kind: "lettered"
@@ -578,6 +583,7 @@ requirements:
     reason: "DASH-001 fails a dashboard that is not near real time and records no feasibility_limit; 'as near real time as feasible' lets a recorded limit pass, so the clause tests that a reason is present, not that it is true. 'Readily available' is not tested."
     evidence: [{"kind": "rule", "target": "DASH-001", "fixture": "tests/fixtures/negative/DASH-001.refresh.yaml", "expect": "not near real time, and records no", "claim": "presence", "asserts": "Must be readily available and as near real time as feasible: a dashboard not near real time that records no feasibility limit fails", "holds_when": "a cATO is sought (cato.yaml exists)"}]
     work_item: "WI-24"
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: DASH-001 fails a dashboard that is not near real time and records no feasibility_limit; 'Readily available' is not tested"}
   - id: "REQ-DODCIO-CATO-EVAL-0067"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 11, "anchor": "Includes a dashboard with relevant current information and requirements that helps security"}
     kind: "lettered"
@@ -928,6 +934,7 @@ requirements:
     reason: "The assessment template submitted with the package is WI-24"
     evidence: [{"kind": "citation", "asserts": "AD-CATO states the DoD CISO approves the cATO", "target": "AD-CATO", "claim": "presence"}]
     work_item: "WI-24"
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: The assessment template submitted with the package is WI-24"}
   - id: "REQ-DODCIO-CATO-EVAL-0107"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 13, "anchor": "Certified Cybersecurity Service Provider (CSSP)"}
     kind: "lettered"
@@ -1086,6 +1093,7 @@ requirements:
     reason: "The date the AO was given the results is required on a cATO path; presence only."
     evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.ao.yaml", "expect": "the AO is not provided the penetration test results with findings and", "asserts": "The AO is provided results with findings and planned mitigations", "claim": "presence", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}]
     work_item: "WI-191"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: The date the AO was given the results is required on a cATO path; presence only"}
   - id: "REQ-DODCIO-CATO-EVAL-0125"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "Updated document POA&Ms where appropriate"}
     kind: "lettered"
@@ -1105,6 +1113,7 @@ requirements:
     reason: "Lessons learned are required on a cATO path; presence only."
     evidence: [{"kind": "rule", "target": "PENT-002", "fixture": "tests/fixtures/negative/PENT-002.lessons.yaml", "expect": "the cATO penetration test tracks no lessons learned", "asserts": "Lessons learned tracking for the cATO penetration test", "claim": "presence", "holds_when": "ART-SAR is in play once A-3 is active or it is seeded"}]
     work_item: "WI-191"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: Lessons learned are required on a cATO path; presence only"}
   - id: "REQ-DODCIO-CATO-EVAL-0127"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "Security testing should be conducted on an ongoing basis and test against"}
     kind: "lettered"
@@ -1124,6 +1133,7 @@ requirements:
     reason: "The strategy and budget for automated testing are free text CATO-010 only requires present; a budget line has no value a rule can refuse."
     evidence: [{"kind": "rule", "target": "CATO-010", "fixture": "tests/fixtures/negative/CATO-010.budget.yaml", "expect": "no strategy and budget for automated cybersecurity testing", "asserts": "Strategy and budget for automated cybersecurity testing resources", "claim": "presence"}]
     work_item: "WI-294"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: The strategy and budget for automated testing are free text CATO-010 only requires present; a budget line has no value a rule can refuse"}
   - id: "REQ-DODCIO-CATO-EVAL-0129"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "Documentation of the ongoing iterations of cybersecurity analysis and penetration testing"}
     kind: "lettered"
@@ -1205,6 +1215,7 @@ requirements:
     reason: "The format is held by CATO-014 against SPDX, SWID and CycloneDX; how often the SBOM is generated is free text the rule only requires present, and the source sets no cadence to judge it by."
     evidence: [{"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.format.yaml", "expect": "in one of the common formats SPDX, SWID or CycloneDX", "asserts": "The SBOM format is specified", "claim": "presence"}, {"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.frequency.yaml", "expect": "not how often it is generated", "asserts": "Specify how often the SBOM is generated", "claim": "presence"}]
     work_item: "WI-297"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: The format is held by CATO-014 against SPDX, SWID and CycloneDX; how often the SBOM is generated is free text the rule only requires present, and the source sets no cadence to judge it by"}
   - id: "REQ-DODCIO-CATO-EVAL-0138"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "SBOM should be in one of the common formats:"}
     kind: "lettered"
@@ -1215,6 +1226,7 @@ requirements:
     reason: "The source does not mandate a format: CATO-014 accepts SPDX, SWID or CycloneDX, or another format with a stated reason, so only that reason's presence is held."
     evidence: [{"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.format.yaml", "expect": "in one of the common formats SPDX, SWID or CycloneDX", "asserts": "The SBOM is in one of the common formats SPDX, SWID or CycloneDX", "claim": "presence", "sentence": "▪ SBOM should be in one of the common formats:"}]
     work_item: "WI-297"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: The source does not mandate a format: CATO-014 accepts SPDX, SWID or CycloneDX, or another format with a stated reason, so only that reason's presence is held"}
   - id: "REQ-DODCIO-CATO-EVAL-0139"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 14, "anchor": "Software Package Data Exchange (SPDX)"}
     kind: "lettered"
@@ -1250,6 +1262,7 @@ requirements:
     reason: "How SBOMs are analyzed and how a new CVE is applied are free text CATO-014 only requires present; no wrong value can be refused."
     evidence: [{"kind": "rule", "target": "CATO-014", "fixture": "tests/fixtures/negative/CATO-014.analysis.yaml", "expect": "how SBOMs are analyzed and how a new CVE is applied", "asserts": "Explain how SBOMs are analyzed and how a new CVE vulnerability is applied to them", "claim": "presence", "sentence": "If a new cybersecurity vulnerability appears in the Common Vulnerabilities and Exposures (CVE®) system, explain how the organization applies it to the SBOMs"}]
     work_item: "WI-297"
+    freeze_debt: {"group": "B", "unheld": "a constraint on the content of the required field the presence item reads: How SBOMs are analyzed and how a new CVE is applied are free text CATO-014 only requires present; no wrong value can be refused"}
   - id: "REQ-DODCIO-CATO-EVAL-0143"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 15, "anchor": "Based on the DevSecOps Activities and Tools Guidebook, provide the mapping of"}
     kind: "lettered"
@@ -1269,6 +1282,7 @@ requirements:
     reason: "CATO-010 requires the additional documentation to be listed; which documents the guidebook lists is not knowable, as the Activities and Tools Guidebook is not in references/."
     evidence: [{"kind": "rule", "target": "CATO-011", "fixture": "tests/fixtures/negative/CATO-011.docs.yaml", "expect": "the additional documentation listed with the mapped activities is not", "asserts": "Include the additional documentation listed with the mapped activities", "claim": "presence"}]
     work_item: "WI-295"
+    freeze_debt: {"group": "C", "unheld": "no run record a rule can fail yet: which documents the guidebook lists is not knowable, as the Activities and Tools Guidebook is not in references/"}
   - id: "REQ-DODCIO-CATO-EVAL-0145"
     citation: {"ref": "DODCIO-CATO-EVAL", "page": 15, "anchor": "Provide Activities and Tools Mapping POA&Ms/Roadmap to show continuous improvement"}
     kind: "lettered"

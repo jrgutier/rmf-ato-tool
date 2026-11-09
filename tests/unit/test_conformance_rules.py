@@ -436,6 +436,61 @@ def test_a_tier_1_partial_with_every_sentence_ruled_out_passes_the_freeze(reg, i
     assert bool(_errors(freeze(reg, index))) is not approved
 
 
+DEBT_B = {"group": "B", "unheld": "a constraint on the appointment record's content"}
+DEBT_C = {"group": "C", "unheld": "a record of who appointed the official"}
+
+
+@pytest.mark.parametrize("debt", [DEBT_B, DEBT_C])
+def test_a_tier_1_partial_carrying_freeze_debt_passes_the_freeze(reg, index, debt):
+    """The user's Nov 9 decision (ADR-0005, 2026-11-08): groups B and C pass as named debt."""
+    items = [{"kind": "citation", "target": "P-1"}]
+    if debt["group"] == "B":
+        items.append({"kind": "rule", "target": "APPT-001", "asserts": APPOINTS,
+                      "claim": "presence"})
+    entry = _tier_1_partial(reg, *items)
+    assert _errors(freeze(reg, index))  # without the debt it blocks
+    entry.update(freeze_debt=dict(debt), work_item="WI-01")
+
+    assert _errors(freeze(reg, index)) == []
+    assert report.build(reg, index)["summary"]["freeze"][f"freeze_debt_{debt['group']}"] == 1
+
+
+def test_freeze_debt_never_passes_a_tier_1_candidate(reg, index):
+    fx.entry(reg, 1, TIER1).update(freeze_debt=dict(DEBT_C), work_item="WI-01")
+
+    assert len(_errors(freeze(reg, index))) == 1
+
+
+def test_well_formed_freeze_debt_is_not_a_fw_req_004_finding(reg, index):
+    entry = _tier_1_partial(reg, {"kind": "citation", "target": "P-1"})
+    entry.update(freeze_debt=dict(DEBT_C), work_item="WI-01")
+
+    assert not [m for m in reasons(reg, index) if "freeze_debt" in m]
+
+
+def test_freeze_debt_off_a_tier_1_partial_is_a_fw_req_004_finding(reg, index):
+    outside = fx.entry(reg, 2)
+    outside.update(status="partial", reason="read", evidence=[{"kind": "citation", "target": "P-1"}],
+                   freeze_debt=dict(DEBT_C), work_item="WI-01")
+    covered = _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
+    covered.update(status="covered", freeze_debt=dict(DEBT_C), work_item="WI-01")
+
+    found = [m for m in reasons(reg, index) if "freeze_debt passes only" in m]
+
+    assert sorted(m.split(":")[0] for m in found) == sorted([outside["id"], covered["id"]])
+
+
+def test_freeze_debt_needs_its_backlog_work_item_and_b_needs_a_run_item(reg, index):
+    entry = _tier_1_partial(reg, {"kind": "citation", "target": "P-1"})
+    entry.update(freeze_debt=dict(DEBT_B))
+    entry.pop("work_item", None)
+
+    found = [m for m in reasons(reg, index) if entry["id"] in m and "freeze_debt" in m]
+
+    assert any("needs the work_item" in m for m in found)
+    assert any("group B is a presence-only item" in m for m in found)
+
+
 def test_candidates_outside_tier_1_warn_once_per_document(reg, index):
     _tier_1_partial(reg, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS})
     count = sum(1 for ref, e in reg.live() if ref == DOC and e["status"] == "candidate")

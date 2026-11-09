@@ -46,7 +46,7 @@ NOT_A_REQUIREMENT = "not-a-requirement"
 STATUSES = ("candidate", "covered", "partial", "deferred", "not-applicable", NOT_A_REQUIREMENT)
 REVIEWED_STATUSES = ("covered", "partial", "deferred")
 REVIEWED = ("status", "reason", "evidence", "work_item", "approved_by", "triaged_by",
-            "needs_review", "removal_reason", "promoted", "ruling_sought")
+            "needs_review", "removal_reason", "promoted", "ruling_sought", "freeze_debt")
 # The kind of an entry a reviewer promoted from the rejected set or from a passage the
 # extractor read as context (`rmf conformance promote`); it states an obligation.
 PROMOTED_KIND = "promoted"

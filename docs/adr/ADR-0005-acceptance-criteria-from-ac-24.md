@@ -209,3 +209,15 @@ tier, and outside tier 1 nothing blocks.
   most are one call into the module holding their clauses. FW-ID-* join the generic rules that
   are denied as evidence: a unique, well-formed ID holds for any content.
 
+- The user's decision of 2026-11-09 on the tier 1 leftovers (docs/audits/2026-11-08-tier1-leftovers.md)
+  lets two groups pass the freeze as named tier 1 debt through a reviewed field,
+  `freeze_debt: {group, unheld}`, set by `rmf conformance mark --freeze-debt`. Group B is a duty
+  held only by a presence-only item on a required field; group C is a duty no run record can fail
+  yet, whose candidates become `partial` on their prose or citation item with the missing record
+  named. `rules.blocks_freeze` passes a tier 1 partial carrying it with no strong item; a
+  candidate still blocks. FW-REQ-004 checks its shape: only on a tier 1 `partial`, bound to the
+  work item that keeps the debt on the backlog (the C records are WI-790 to WI-79x, left open),
+  and group B with an item that reads the run, not prose or a citation alone. `summary.freeze`
+  counts `freeze_debt_B` and `freeze_debt_C`, and docs/CONFORMANCE.md reports them. A C partial
+  on prose counts as retired, so the per-document retired shares move; a document passing 25% is
+  shown to the user before any retirements record is written.

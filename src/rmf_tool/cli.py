@@ -1005,6 +1005,10 @@ def conformance_mark(
         "--ruling-sought", help="JSON list of {sentence, reason}: whole marked sentences that are "
         "a permission or an open list of examples. approved_by: user is the user's alone.",
     )] = None,
+    freeze_debt: Annotated[str | None, typer.Option(
+        "--freeze-debt", help="JSON {group: B|C, unheld}: tier 1 debt the user let pass the p13 "
+        "freeze, on a tier 1 partial only (ADR-0005).",
+    )] = None,
     reviewed: Annotated[bool, typer.Option("--reviewed", help="Clear needs_review.")] = False,
     clear: Annotated[list[str] | None, typer.Option(
         "--clear", help="Delete a reviewed field (repeatable).")] = None,
@@ -1022,7 +1026,8 @@ def conformance_mark(
         if value is not None:
             fields[key] = value
     for key, value, flag in (("evidence", evidence, "--evidence"),
-                             ("ruling_sought", ruling_sought, "--ruling-sought")):
+                             ("ruling_sought", ruling_sought, "--ruling-sought"),
+                             ("freeze_debt", freeze_debt, "--freeze-debt")):
         if value is not None:
             try:
                 fields[key] = json.loads(value)

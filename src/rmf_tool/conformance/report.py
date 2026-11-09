@@ -24,8 +24,10 @@ def freeze_split(reg: Register, index: Mapping[str, Any],
     scripted loop of `mark --status deferred` is as visible as a loop of `not-applicable`
     (FW-REQ-004)."""
     out = {"tier_1": 0, "tier_1_partial_without_strong": 0, "advisory_elsewhere": 0,
-           "deferred": 0, "partial_on_weak_evidence": 0}
+           "deferred": 0, "partial_on_weak_evidence": 0, "freeze_debt_B": 0, "freeze_debt_C": 0}
     for ref, entry in reg.live():
+        if (debt := entry.get("freeze_debt")) and debt.get("group") in ("B", "C"):
+            out[f"freeze_debt_{debt['group']}"] += 1
         if entry["status"] == "deferred":
             out["deferred"] += 1
         elif entry["status"] == "partial" and rules.retired(entry):
@@ -191,6 +193,8 @@ def render(report: Mapping[str, Any]) -> list[str]:
     lines.append(f"blocking the p13 freeze (FW-REQ-002): {freeze['tier_1']} tier 1 candidates and "
                  f"{freeze['tier_1_partial_without_strong']} tier 1 partials with no strong item; "
                  f"{freeze['advisory_elsewhere']} candidates outside tier 1 are advisory")
+    lines.append(f"tier 1 debt the user let pass the freeze (freeze_debt): {freeze['freeze_debt_B']} "
+                 f"presence-only (B), {freeze['freeze_debt_C']} with no record to fail (C)")
     lines.append(f"set aside without proof, for the p13 sign-off: {freeze['deferred']} deferred, "
                  f"{freeze['partial_on_weak_evidence']} partial on evidence that cannot fail "
                  "(FW-REQ-004)")
