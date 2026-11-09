@@ -172,7 +172,7 @@ def test_the_report_splits_candidates_by_what_blocks_the_freeze():
 
     assert report.build(reg, index)["summary"]["freeze"] == {
         "tier_1": 1, "tier_1_partial_without_strong": 0, "advisory_elsewhere": 11,
-        "deferred": 0, "partial_on_weak_evidence": 1}
+        "deferred": 0, "partial_on_weak_evidence": 1, "freeze_debt_B": 0, "freeze_debt_C": 0}
     assert ("1 tier 1 candidates and 0 tier 1 partials with no strong item; 11 candidates "
             "outside tier 1 are advisory") in text
     assert "0 deferred, 1 partial on evidence that cannot fail" in text
