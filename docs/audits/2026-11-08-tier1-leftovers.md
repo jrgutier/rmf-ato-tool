@@ -4,17 +4,17 @@ Date: 2026-11-08.
 
 What was read: every error that FW-REQ-002 reports from `uv run rmf validate --profile p13 --format json` on branch `wip/central`. The branch is feat/rmf-complete 576565f0 plus the central judge fixes C1 to C4, listed at the end. There are 249 errors: 59 tier 1 candidates and 190 tier 1 partials with no strong evidence item. Open work items and candidates outside tier 1 are only warnings at p13, so they are not listed here.
 
-Method: each entry was grouped by the `reason` its stream wrote in `conformance/requirements/<REF>.yaml`. That reason is the stream's own classification. Keywords set the group first, and every group was then read through. When the keywords picked a weaker fit, the entry was moved by hand (26 entries; for example, free-text fields from "describes" to B, and the duties of DoD Component heads from C to D). An entry whose reason names several causes goes into the group of the cause that blocks it first. The order is A, F, E, D, B, then C.
+Method: each entry was grouped by the `reason` its stream wrote in `conformance/requirements/<REF>.yaml`. That reason is the stream's own classification. Keywords set the group first, and every group was then read through. When the keywords picked a weaker fit, the entry was moved by hand (31 entries, five of them on review; for example, free-text fields from "describes" to B, and the duties of DoD Component heads from C to D). An entry whose reason names several causes goes into the group of the cause that blocks it first. The order is A, F, E, D, B, then C.
 
 ## Summary
 
 | Group | What blocks the entry | Count | Candidates | Partials without a strong item |
 |---|---|---|---|---|
 | A | Rule at its fan-out cap, fixture ready | 3 | 3 | 0 |
-| B | Presence-only duty on a prose kind | 88 | 0 | 88 |
-| C | No run record can fail it | 82 | 37 | 45 |
+| B | Presence-only duty on a prose kind | 87 | 0 | 87 |
+| C | No run record can fail it | 84 | 38 | 46 |
 | D | Duty of an office a run never performs | 39 | 0 | 39 |
-| E | Permission, applicability or descriptive | 13 | 4 | 9 |
+| E | Permission, applicability or descriptive | 12 | 3 | 9 |
 | F | A rule build or mark that waits on the user's ruling | 9 | 0 | 9 |
 | U | Not yet triaged (no reason recorded) | 15 | 15 | 0 |
 | | Total | 249 | 59 | 190 |
@@ -36,40 +36,42 @@ What each entry's reason names (the rule and fixture for A; the record that is m
 | REQ-DODI8510.01-0068 | candidate | TSTRAT-002 fails a test strategy whose DT or OT events have no developmental or operational evaluation framework, the frameworks that carry the DT&E and OT&E evaluation metrics (TSTRAT-002.def, TSTRAT-002.oef), but TSTRAT-002 is at its fan-out cap of 25 after T2/T3's 0168 and 0232; ready to cite once a split or exception frees it. Continuous monitoring metrics at the beginning of development are unheld (WI-15). |
 | REQ-DODI8510.01-0262 | candidate | OCTX-001 fails a Component CISO designated by anyone but the Component CIO, or the Component head where no CIO exists (tests/fixtures/negative/OCTX-001.ciso.yaml), but OCTX-001 is at its fan-out cap of 25; ready to cite once a split or a fan-out exception frees it (WI-441). |
 
-## B. Presence-only duty on a prose kind (88)
+## B. Presence-only duty on a prose kind (87)
 
 **Your decision for the whole group:** Decide whether a presence-only item counts toward the freeze for a tier 1 duty whose held part is a required field. Yes: FW-REQ-002 passes such a partial, the content remains tier 1 debt, and the gap is reported. No: each entry waits for a constraint rule (an enum, a reference to a record, or a cross-check) on its field.
 
+One entry here is weak for another reason as well. SP800-53AR5-0274 sits under the optional `penetration_test` parent of `sap.yaml`, which is required only where ca-8 is in the baseline. So its item is weak because of that optional parent, not only because it is presence. The 53AR5-0278 to 0289 pen-test entries share that parent.
+
 Entries per document:
 
-- DODCIO-CATO-EVAL (11): 0021, 0040, 0065, 0124, 0126, 0128, 0137, 0138, 0142, 0004, 0056
+- DODCIO-CATO-EVAL (10): 0040, 0065, 0124, 0126, 0128, 0137, 0138, 0142, 0004, 0056
 - DODCIO-RECIPROCITY (2): 0022, 0098
 - DODI5000.83 (4): 0133, 0134, 0154, 0196
 - DODI8500.01 (2): 0313, 0365
-- DODI8510.01 (1): 0249
+- DODI8510.01 (2): 0249, 0056
 - DODI8530.01 (1): 0276
 - SP800-137A (1): 0052
 - SP800-161R1 (46): 0011, 0081, 0082, 0210, 0262, 0264, 0273, 0285, 0286, 0287, 0325, 0569, 0679, 0682, 0691, 0696, 0704, 0713, 0721, 0723, 0731, 0903, 0980, 0996, 0997, 1082, 1083, 1090, 1123, 1163, 1238, 1298, 1313, 1315, 1320, 1321, 1322, 1330, 1544, 1554, 0107, 0151, 0199, 0261, 0333, 1393
-- SP800-37R2 (4): 0313, 0504, 0505, 0533
+- SP800-37R2 (3): 0504, 0505, 0533
 - SP800-53AR5 (16): 0184, 0274, 0276, 0278, 0279, 0280, 0281, 0282, 0283, 0284, 0285, 0286, 0288, 0289, 0320, 0341
 
-## C. No run record can fail it (82)
+## C. No run record can fail it (84)
 
 **Your decision for the whole group:** Decide whether a tier 1 partial whose reason names the missing run record may pass the freeze as tier 1 debt. Yes: the record stays on the backlog. No: approve building the records the reasons name (examples: a per-role responsibility record for the Appendix D duties, P-4/P-6 fields in org-context.yaml instead of prose, an implementation record checked against its SSP statement).
 
 Entries per document:
 
 - CNSSI1253 (1): 0076
-- DODCIO-CATO-EVAL (3): 0066, 0106, 0144
+- DODCIO-CATO-EVAL (4): 0021, 0066, 0106, 0144
 - DODCIO-CSRMC-TENETS (1): 0003
 - DODCIO-RECIPROCITY (1): 0035
-- DODI8500.01 (3): 0296, 0322, 0333
-- DODI8510.01 (4): 0056, 0066, 0067, 0223
+- DODI8500.01 (4): 0296, 0322, 0333, 0281
+- DODI8510.01 (3): 0066, 0067, 0223
 - DODI8530.01 (1): 0302
 - DODI8531.01 (1): 0140
 - SP800-137A (2): 0075, 0354
 - SP800-161R1 (9): 0078, 0269, 0281, 0624, 0709, 0913, 0914, 1265, 0947
-- SP800-37R2 (43): 0326, 0329, 0120, 0172, 0177, 0178, 0190, 0205, 0207, 0215, 0242, 0250, 0254, 0314, 0325, 0371, 0376, 0406, 0458, 0465, 0471, 0482, 0484, 0485, 0487, 0499, 0514, 0515, 0527, 0535, 0537, 0539, 0550, 0558, 0656, 0691, 0692, 0693, 0694, 0697, 0720, 0244, 0730
+- SP800-37R2 (44): 0313, 0326, 0329, 0120, 0172, 0177, 0178, 0190, 0205, 0207, 0215, 0242, 0250, 0254, 0314, 0325, 0371, 0376, 0406, 0458, 0465, 0471, 0482, 0484, 0485, 0487, 0499, 0514, 0515, 0527, 0535, 0537, 0539, 0550, 0558, 0656, 0691, 0692, 0693, 0694, 0697, 0720, 0244, 0730
 - SP800-53AR5 (3): 0191, 0217, 0277
 - SP800-53B (5): 0012, 0083, 0085, 0082, 0106
 - SP800-53R5 (5): 0023, 0025, 0030, 0060, 0065
@@ -78,6 +80,8 @@ What each entry's reason names (the rule and fixture for A; the record that is m
 
 | Entry | Status | Reason (shortened) |
 |---|---|---|
+| REQ-DODCIO-CATO-EVAL-0021 | nostrong | Built: the PER-DODCISO persona (consulted at M-6) and AODM-007, which refuses a cATO without dod_ciso_approval (a presence clause, which caps at partial). Unheld: who issues the cATO; AD-CATO keeps decided_by PER-AO and ... |
+| REQ-SP800-37R2-0313 | nostrong | S-4 documents the implementations in ART-SSP with the privacy plan (PRIV-008); best practice and the privacy risks of security controls are prose. |
 | REQ-SP800-37R2-0326 | nostrong | I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose. |
 | REQ-SP800-37R2-0329 | nostrong | I-1 implements the controls of ART-SSP; nothing checks an implementation against its statement, and the engineering methodologies are prose. |
 | REQ-CNSSI1253-0076 | nostrong | A removed control needs its basis in tailoring.yaml (TLR-002) and SSP-COV-001 asks a statement for each baseline control; nothing ties a control that will not be implemented to a POA&M item. |
@@ -89,7 +93,6 @@ What each entry's reason names (the rule and fixture for A; the record that is m
 | REQ-DODI8500.01-0296 | nostrong | Whether an application warrants special management oversight is judgment; the IT type fact records the result and its rationale. |
 | REQ-DODI8500.01-0322 | nostrong | Whether an enterprise-level agreement is recorded per service; whether one was possible is judgment no rule can test. |
 | REQ-DODI8500.01-0333 | nostrong | Tier 1, left partial: an Enterprise system registers its ports, protocols and services (PPSM-001); management under DoDI 8551.01 for every other system is not held, because DoDI 8551.01 is not in the library. |
-| REQ-DODI8510.01-0056 | nostrong | WFQ-001 fails an appointee, the AO among them, whose qualification record lists no completed training; that the course is AO training or a NIST RMF course is not tested. |
 | REQ-DODI8510.01-0066 | nostrong | PENT-002 fails an AO not provided the penetration test results; developmental, operational and sustainment T&E results reaching the AO are not tested. |
 | REQ-DODI8510.01-0067 | nostrong | PENT-002 fails an AO not provided the penetration test results; other cybersecurity T&E results submitted by the program are not tested. |
 | REQ-DODI8510.01-0223 | nostrong | The AO's course of action to the CIO or CISO for FISMA reporting is not recorded; downgrade and revocation are types with no test of the review |
@@ -155,6 +158,7 @@ What each entry's reason names (the rule and fixture for A; the record that is m
 | REQ-SP800-53R5-0030 | candidate | The marked sentence, a risk management process applied to manage risk on an ongoing basis, is not broken by ISCM-004's AO approval of the continuous monitoring strategy (a T5 candidate item). The cost, schedule, ... |
 | REQ-SP800-53R5-0060 | candidate | Parameter values become part of the control in the OSCAL SSP (rmf build set-parameters) and A-3 assesses against the SSP as stated; tool code and prose FW-REQ-003 cannot cite |
 | REQ-SP800-53R5-0065 | nostrong | how hybrid controls divide between provider and system is not recorded here; the provider's controls are |
+| REQ-DODI8500.01-0281 | candidate | Tier 1, left candidate: ac-22 (publicly accessible content) carries the duty, but it binds only DoD information proposed for public Internet media; a system that publishes nothing may record ac-22 not-applicable, and no ... |
 | REQ-SP800-161R1-0947 | nostrong | Analyzing what combination of factors gives rise to risk is analysis no rule can check; the second sentence is a permission. |
 | REQ-SP800-37R2-0244 | candidate | Agreements with external providers are listed in ART-SD; no rule reads whether an agreement describes the authorization boundary. |
 | REQ-SP800-37R2-0730 | nostrong | Privacy is among the C-SCRM policy's purpose and roles (PER-PRIV may hold one), but nothing ties SCRM practices to privacy risk when elements process PII. |
@@ -177,14 +181,14 @@ Entries per document:
 - SP800-161R1 (10): 0008, 0154, 0732, 0742, 0851, 0858, 0864, 0886, 0975, 0982
 - SP800-37R2 (2): 0488, 0493
 
-## E. Permission, applicability or descriptive (13)
+## E. Permission, applicability or descriptive (12)
 
 **Your decision for the whole group:** Apply decision (3) of 2026-11-08: not-a-requirement with a reason that answers the duty words. A permission sentence gets ruling_sought, which you then approve. Approve noise records for every document that passes 50%.
 
 Entries per document:
 
 - CNSSI1254 (1): 0003
-- DODI8500.01 (2): 0281, 0332
+- DODI8500.01 (1): 0332
 - DODI8510.01 (1): 0084
 - SP800-161R1 (4): 0123, 0121, 0910, 1264
 - SP800-37R2 (1): 0657
@@ -219,9 +223,9 @@ Entries per document:
 
 ## The central fixes behind these counts
 
-- **C1 (FW-REQ-002).** A tier 1 partial passes the freeze when the user has ruled out every one of its marked sentences (`ruling_sought` with `approved_by: user`). This follows FW-REQ-003, which already treats such an entry as having nothing left to prove and refuses it only as `covered`. The entries were not re-marked as `not-a-requirement`. A re-mark would change noise shares that you have already approved records for, and it would leave strong evidence on noise entries. It would also undo your rulings, which say "needs no evidence", not "is noise". The fix clears 14 tier 1 partials: DODI5000.83-0203, 0208; DODI8530.01-0267; SP800-161R1-0157, 0973, 0994; SP800-37R2-0202; SP800-53AR5-0024, 0037, 0195, 0220, 0226, 0270, 0328. One fully ruled entry is still a candidate and still blocks: SP800-37R2-0657 (group E). It has no evidence item, so it cannot be marked partial, and the duty in its unmarked sentence remains unheld (WI-08).
+- **C1 (FW-REQ-002).** A tier 1 partial passes the freeze when the user has ruled out every one of its marked sentences (`ruling_sought` with `approved_by: user`). This follows FW-REQ-003, which already treats such an entry as having nothing left to prove and refuses it only as `covered`. The entries were not re-marked as `not-a-requirement`. This status choice is the lead's default, and it waits for your confirmation (ADR-0005, 2026-11-08 note). A re-mark would change noise shares that you have already approved records for, and it would leave strong evidence on noise entries. It would also undo your rulings, which say "needs no evidence", not "is noise". The fix clears 14 tier 1 partials: DODI5000.83-0203, 0208; DODI8530.01-0267; SP800-161R1-0157, 0973, 0994; SP800-37R2-0202; SP800-53AR5-0024, 0037, 0195, 0220, 0226, 0270, 0328. One fully ruled entry is still a candidate and still blocks: SP800-37R2-0657 (group E). It has no evidence item, so it cannot be marked partial, and the duty in its unmarked sentence remains unheld (WI-08).
 - **C2 (judge).** A decision type's `requires` field counts only when the rule item's fixture mutates the authorization ledger (`artifacts/data/authorizations.yaml`). Before the fix, a SAP's `assessor_independence.review` was asked for the cATO pin, rule and schema triple. Eight items became strong: DODCIO-CATO-EVAL-0030#1, 0101#1; DODCIO-CSRMC-TENETS-0005#0; DODCIO-RECIPROCITY-0091#1; DTM-24-001-0127#0; SP800-37R2-0583#2; SP800-53AR5-0160#1; SP800-53R5-0068#0. Five METR-001 items lost a `review` field that they never broke, and their verdict did not change. SP800-53AR5-0160 stays partial, and its reason now names what is unheld.
-- **C3 (judge).** `not any(...)` over a computed iterable is now read as a comparison. Only `not any(<plain field read>)` is still read as absence. Ten items changed from presence to constraint and now judge strong: CNSSP12-0054, 0058; DODI5000.02-0050#2; DODI5000.89-0099, 0100, 0112; DODI5400.11-0141; DODI5400.16-0051, 0058, 0059. Their `claim` was updated to match. GATE-001, DISP-001 and CATG-005 judge exactly as before. AODM-001's "recorded no decision" clause now reads as a constraint, and its unit test moved.
+- **C3 (judge).** `not any(...)` over a computed iterable is now read as a comparison. Only `not any(<plain field read>)` is still read as absence. Ten items changed from presence to constraint and now judge strong. Two fixtures had emptied a value and were rewritten to write a wrong value: ACQLC-001.coordinated now names a non-framework persona, and PRIV-001.nss now sets only the Classified overlay. The ten items are CNSSP12-0054, 0058; DODI5000.02-0050#2; DODI5000.89-0099, 0100, 0112; DODI5400.11-0141; DODI5400.16-0051, 0058, 0059. Their `claim` was updated to match. GATE-001, DISP-001 and CATG-005 judge exactly as before. AODM-001's "recorded no decision" clause now reads as a constraint, and its unit test moved.
 - **C4 (judge, for your p13 question).** Removing one member of a list (`delete_list_item`) is kept as a wrong value, that is, a constraint. The test is that it leaves the same list as `set_field` to the remainder does, and the two must judge alike. Emptying a list is still presence. 74 evidence items rest on a `delete_list_item` fixture (71 constraint, 3 presence). If you rule that removing a member is presence, the 71 become presence. Most of them are on lettered, modal, table or promoted entries, so they would cap at partial on prose kinds. The items are listed below.
 
 | Entry#item | Status | Kind | Rule | Fixture | Claim | Verdict |

@@ -161,8 +161,10 @@ an honest `partial` citing where it is built, and the freeze accepts that.
   names it, whole, by the same check as evidence. Without `approved_by: user` the entry stays
   `partial`, its work item cannot close, and the sentence leaves `unresolved` for
   `summary.awaiting_ruling`, outside `tier1_debt`. With it, `covered` needs no item on that
-  sentence, but an entry with every marked sentence ruled out is `not-a-requirement`, and FW-REQ-003
-  refuses it as `covered`. Never for a duty that is merely hard to test.
+  sentence, and FW-REQ-003 refuses an entry with every marked sentence ruled out as `covered`
+  (this text first called such an entry `not-a-requirement`; the 2026-11-08 freeze note below
+  supersedes that: it stays `partial` and passes FW-REQ-002). Never for a duty that is merely
+  hard to test.
 - AODM-009 split the deciding official, subject and recipients out of AODM-001, which had reached 34
   evidence items against the fan-out cap of 25 once each clause was cited alone.
 
@@ -187,6 +189,8 @@ tier, and outside tier 1 nothing blocks.
   reading FW-REQ-003 gives it when it refuses such an entry as `covered`. It stays `partial`
   rather than `not-a-requirement`: the ruling says the sentence needs no evidence, not that it
   is extraction noise, and a re-mark would move noise shares the user approved records for.
+  This status is the lead's default (central fix C1), pending the user's confirmation; it
+  supersedes the 2026-11-02 reading above.
 - Open work items no longer block the freeze, at any tier.
 - A `candidate` outside tier 1 warns, one finding per document with its count; `should` and
   `table` kinds are no longer told apart from obligations there.
