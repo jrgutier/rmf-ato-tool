@@ -2544,7 +2544,9 @@ NEGATIVE = "tests/fixtures/negative/"
     ('x = r.get("x")\nif x is None:\n    err(r, "x is bad")', None, "x is bad", "presence"),
     ('a, b = r.get("a"), r.get("b")\nif b == []:\n    err(r, "b is bad")', None, "b is bad",
      "presence"),
-    ('if 0 == r.get("x"):\n    err(r, "x is bad")', None, "x is bad", "presence"),
+    # 0 is an absence only as a count: refusing a value of 0 constrains the value
+    ('if 0 == r.get("x"):\n    err(r, "x is bad")', None, "x is bad", "constraint"),
+    ('if 0 == len(r.get("x") or []):\n    err(r, "x is bad")', None, "x is bad", "presence"),
     ('if r.get("x") not in (None, ""):\n    pass\nelse:\n    err(r, "x is bad")', None,
      "x is bad", "presence"),
     ('if not (r.get("a") and r.get("b")):\n    err(r, "x is bad")', None, "x is bad", "presence"),
