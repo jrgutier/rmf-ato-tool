@@ -33,7 +33,7 @@ Mode: synthetic. Human respondents: none.
 | ASM-023 | A-3 | PER-DEV | The REQ-11 standards registry review (APR-001) and the REQ-12 Section 508 test (APR-002) of 2026-12-03 have no result the run can ground: the product holds no list of the protocols and standards checked against the DoD IT Standards Registry and no accessibility test. Both requirements are recorded as not demonstrated; no conformance or failure of a particular standard or workflow is asserted. | product/test-results.md has no standards or accessibility result, and S-3 recorded that no developer test verified REQ-11 or REQ-12; a pass or a specific failure would be invented. |
 | ASM-024 | A-3 | PER-SCA | Release 1.5.2 (planned 2026-12-10) is treated as not deployed to the assessed environment before the out-brief of 2026-12-11: the fixes it carries (the two high vulnerabilities in CMP-REPORT, STG-001, STG-002) are not verified, and the SCA's scan of 2026-11-23 is the latest result the run records. | The product gives 1.5.2 only as planned (product/conops.md#limitations item 2) and the plan verifies its fixes only if they land before the out-brief; asserting that they did would be invented. |
 
-## Interview answers (432; SIMULATED 432)
+## Interview answers (463; SIMULATED 463)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -69,3 +69,6 @@ Mode: synthetic. Human respondents: none.
 | A-1 | 5 | 9 | 0 |
 | A-2 | 5 | 12 | 0 |
 | A-3 | 21 | 53 | 0 |
+| A-4 | 4 | 14 | 0 |
+| A-5 | 3 | 7 | 0 |
+| A-6 | 3 | 10 | 0 |

@@ -46,6 +46,12 @@ findings:
     state_difference: "Expected: every organizational user authenticates with CAC. Actual: two emergency accounts authenticate with FIDO2 keys, attributed through a seal log."
     potential_compromise: [confidentiality, integrity, availability]
     sources: [INT-164.A1, product/conops.md#limitations]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A3]
+      rationale: "VUL-04 of the risk assessment. No fix is planned: the provider console cannot federate when the identity broker is down. The item puts the deviation and its compensating measures to the AO for risk acceptance; until then the weakness is open."
   - id: FND-013
     control_id: ia-5
     title: "The local break-glass database role's password complexity falls short of the PostgreSQL STIG (STG-002, CAT II)"
@@ -57,3 +63,9 @@ findings:
     state_difference: "Expected: the break-glass database password meets the STIG complexity rule. Actual: a weaker password protects the database's most privileged local role."
     potential_compromise: [confidentiality, integrity, privacy]
     sources: [INT-164.A2, INT-160.A2, product/test-results.md#stig-scan, ART-STIG]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: moderate
+      risk_basis: [ART-RA, INT-177.A1, INT-178.A1]
+      rationale: "VUL-09 of the risk assessment (STG-002); the fix is in release 1.5.2, which waits on the factory's base image. No new scan exists, so nothing can be reassessed; it goes to the POA&M."

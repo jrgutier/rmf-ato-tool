@@ -80,6 +80,12 @@ findings:
     state_difference: "Expected: the database logs connections at the STIG verbosity. Actual: a lower verbosity, so connection details an investigation needs are not recorded."
     potential_compromise: [confidentiality, integrity]
     sources: [INT-160.A2, INT-161.A1, product/test-results.md#stig-scan, ART-STIG]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: moderate
+      risk_basis: [ART-RA, INT-177.A1, INT-178.A1]
+      rationale: "VUL-09 of the risk assessment (STG-001); the fix is in release 1.5.2, which ships as one with the rebuilt report container and waits on the factory's base image. No new scan exists, so nothing can be reassessed; it goes to the POA&M."
   - id: FND-008
     control_id: cm-6
     title: "No secure configuration is established for the five application containers (Application Security and Development STIG not applied)"
@@ -91,6 +97,12 @@ findings:
     state_difference: "Expected: documented STIG-based settings for every component. Actual: documented for the nodes and the database only; none for the application containers."
     potential_compromise: [confidentiality, integrity, availability, privacy]
     sources: [INT-161.A1, INT-160.A2, ASM-019, ASM-021]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: moderate
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "Not in the risk assessment before A-3; five containers need a checklist review and a documented baseline, more than existing resources do in days. Undocumented settings on every container that handles CUI and PII are substantive, so it goes to the POA&M and the risk assessment takes it at R-2."
   - id: FND-009
     control_id: cm-8
     title: "The inventory was not reviewed or updated at release 1.5.1"
@@ -102,3 +114,9 @@ findings:
     state_difference: "Expected: inventory reviewed and updated at every release. Actual: monthly review only; release 1.5.1 not reflected."
     potential_compromise: [integrity]
     sources: [INT-160.A3, product/hw-sw-inventory.md#items, ART-INV]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "The inventory is otherwise accurate, but the update at each release is a procedure the program must show working at its next release; the system owner does not call it inconsequential, since the CM process rests on the inventory."

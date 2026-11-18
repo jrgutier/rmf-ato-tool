@@ -2,8 +2,8 @@
 artifact_id: ART-SSP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4, S-6, I-2]
-sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged, ART-STIG, INT-138.A1, INT-138.A2, INT-139.A1, INT-140.A1, INT-141.A1]
+touched_by: [S-4, S-6, I-2, A-5]
+sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged, ART-STIG, INT-138.A1, INT-138.A2, INT-139.A1, INT-140.A1, INT-141.A1, INT-177.A4, INT-179.A1]
 ---
 # System security plan
 
@@ -103,7 +103,9 @@ items.
 - **au-11** (partial): the log store keeps 90 days, short of the one-year Component value; the
   CSSP's one-year copy is not the program's. Archive tier in release 1.6 [[INT-090.A3]]
   [[product/conops.md#limitations]].
-- **ca-2** (planned): no assessor and no assessment yet; A-1 and A-2 follow [[INT-092.A1]].
+- **ca-2** (partial since A-5): the first assessment is done and its report delivered; the
+  annual assessment of a third of the controls is not yet scheduled [[INT-177.A4]]
+  [[INT-179.A1]].
 - **ca-3** (partial): the EMIS memorandum of agreement is under legal review and the connection
   runs on an interim e-mail approval; signature targeted 2026-12-31 [[INT-092.A2]].
 - **ca-5** (planned): no POA&M yet; A-6 writes it [[INT-092.A3]].
@@ -211,3 +213,20 @@ inherited) [[INT-138.A1]].
   reciprocity records (no received system) [[INT-138.A3]].
 - **For the requirements.** Implementation raised no new security-relevant constraint on the
   requirements; nothing goes back to P-15 [[INT-138.A1]] [[INT-136.A1]].
+
+## Changes from remediation (A-5)
+
+No control was remediated during the assessment: none of the 24 findings has a fix with evidence
+the assessor could reassess, so every finding goes to the POA&M at A-6 [[INT-177.A1]]
+[[INT-178.A1]]. One statement changed, approved by the configuration control board as version 1.2
+of 2026-12-14 and logged in `artifacts/data/plan-reviews.yaml` for the security and the privacy
+plan [[INT-179.A1]]:
+
+- **ca-2** moves from planned to partial. The statement predated A-1 and A-2 and still said no
+  assessor was selected. It now records the AODR's selection of the independent team and approval
+  of the plan on 2026-11-18, the assessment from 2026-11-19 to 2026-12-11 and the report's delivery
+  on 2026-12-11; the annual assessment of a third of the controls stays open (FND-003)
+  [[INT-177.A4]] [[ART-SAR]].
+
+The control counts are now 30 implemented, 15 partial, 3 planned and 2 inherited. The privacy
+plan's content is unchanged [[INT-179.A1]].

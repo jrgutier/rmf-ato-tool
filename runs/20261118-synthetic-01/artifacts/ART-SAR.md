@@ -2,8 +2,8 @@
 artifact_id: ART-SAR
 run_id: 20261118-synthetic-01
 produced_by_task: A-3
-touched_by: [A-3]
-sources: [ART-SAP, ART-SSP, ART-STIG, product/test-results.md#top, INT-152.A3, INT-160.A2, INT-162.A2, INT-165.A1, INT-167.A2, INT-169.A2, INT-171.A2, INT-172.A1, INT-172.A2, ASM-020, ASM-021, ASM-022, ASM-023, ASM-024]
+touched_by: [A-3, A-4, A-5]
+sources: [ART-SAP, ART-SSP, ART-STIG, product/test-results.md#top, INT-152.A3, INT-160.A2, INT-162.A2, INT-165.A1, INT-167.A2, INT-169.A2, INT-171.A2, INT-172.A1, INT-172.A2, INT-173.A1, INT-174.A1, INT-175.A1, INT-176.A2, INT-177.A1, INT-177.A2, INT-178.A1, ASM-020, ASM-021, ASM-022, ASM-023, ASM-024]
 handling: CUI
 ---
 # Security assessment report
@@ -132,3 +132,93 @@ verification still owed (FND-014, FND-021, FND-022, FND-023) [[INT-165.A1]] [[IN
   [[INT-167.A2]].
 - Retest the sandbox egress and verify REQ-11 and REQ-12 in the next DT event before the
   authorization decision (FND-021, FND-022, FND-023) [[INT-169.A2]] [[INT-172.A2]].
+
+## Executive summary (A-4)
+
+For the AO: the independent assessment of all 50 controls ended at the out-brief on 2026-12-11
+with 28 controls satisfied and 22 other-than-satisfied, and 24 open findings, 9 moderate and 15
+low, none high [[ART-SAP]] [[INT-174.A1]]. The program manager and the ISSM accept every finding
+as written [[INT-173.A1]] [[INT-174.A1]].
+
+The findings that matter most, each moderate:
+
+- **FND-018** (pt-3): exports and the training extract are re-identifiable; the fix is release 1.6
+  (2027-01-15), and no real maintainer PII flows before it and the PIA approval
+  [[INT-173.A2]] [[INT-176.A2]].
+- **FND-019** and **FND-024** (ra-5, si-2), **FND-007** (cm-6) and **FND-013** (ia-5): release
+  1.5.2 (planned 2026-12-10) carries the fixes and waits on the software factory's base image;
+  it did not reach the assessed environment, so none is verified [[INT-173.A3]] [[ASM-024]].
+- **FND-001** and **FND-017** (ac-2, ps-4): no leaver notification reaches the account manager
+  [[INT-174.A3]] [[ASM-020]].
+- **FND-008** (cm-6): no documented configuration for the five application containers
+  [[ASM-021]].
+- **FND-011** (cp-4): the regional failover is untested; the tabletop and the failover test are
+  planned for 2027-02 [[INT-173.A4]].
+
+The recommendations that matter most: ship release 1.6 and retest re-identification before
+production data; deploy release 1.5.2 and rescan; put a timestamped leaver step on the squadrons'
+out-processing; document and review the container configuration; and approve the three plans by
+2026-12-15 [[INT-173.A2]] [[INT-173.A3]] [[INT-173.A4]] [[INT-174.A3]].
+
+System owner's perspective: the PM puts the break-glass deviation (FND-012) to the AO for
+acceptance rather than fixing it, since the provider console cannot federate when the identity
+broker is down [[INT-173.A5]]; the ISSM reports that only the PT-3 allow-list change was made
+during the window, and it awaits a retest [[INT-174.A2]].
+
+Privacy: the privacy results are integrated in this report. The SCA team's privacy-trained
+assessor documented them, completed on 2026-12-07, and the privacy officer, for the senior agency
+official for privacy, provided them to the AO on 2026-12-14 (`artifacts/data/sar-report.yaml`)
+[[INT-176.A1]] [[INT-176.A2]].
+
+The Component CISO reviewed the assessment on 2026-12-14 and rated its quality, capacity,
+visibility and effectiveness adequate, noting for the AO that everything was assessed in
+pre-production [[INT-175.A1]] [[INT-175.A3]].
+
+## Assessment report elements (A-4)
+
+The system name and categorization are in the facts block. The other elements of SP 800-53A
+Appendix E that the sections above do not give [[ART-SAP]]:
+
+- **Sites and dates assessed:** the EFRAS pre-production account in the Example GovCloud IL4
+  region (2026-11-23 to 2026-12-07) and the ARSPO program office (2026-11-19, 2026-11-20 and the
+  out-brief on 2026-12-11) (`artifacts/data/sar-summary.yaml` `sites`) [[INT-174.A1]].
+- **Assessor:** the business systems SCA team of the Component's independent assessment
+  activity, under the CISO's delegation; independence required by the AO and found sufficient
+  at A-1, qualifications verified by the CISO [[ART-SAP]] [[INT-175.A2]].
+- **Previous results reused:** RR-001 and RR-002, with the external providers' assessments
+  EXT-001 to EXT-007, as listed under "Test results reused" [[ART-SAP]].
+- **Methods, objects, depth and coverage:** per control in `artifacts/sar/results/<family>.yaml`,
+  at no less than the depth and coverage of the plan's procedures in `artifacts/data/sap.yaml`
+  [[ART-SAP]].
+- **Test results used:** the developer's pipeline security gates of release 1.5.0, the
+  developmental test event DT-2, the SCA-witnessed STIG scan and the red team's penetration
+  test, all in pre-production; no operational test has run yet
+  [[product/test-results.md#top]].
+- **Delivery:** to the PM (system owner), the ISSM, the AODR and the AO on 2026-12-11
+  (`artifacts/data/sar-report.yaml` `delivered`) [[INT-173.A1]].
+
+## Remediation and reassessment (A-5)
+
+No finding was remediated during the assessment. The PM reports no fix with a new scan, test or
+signed document behind it: release 1.5.2 still waits on the software factory's hardened base image,
+the EMIS agreement is with legal review, release 1.6 is due 2027-01-15 and the three plans are
+approved on 2026-12-15 [[INT-177.A1]]. The developer confirms that no change reached pre-production
+after the out-brief, and that the sandbox allow-list change of 2026-11-03 has only the developer's
+own check, which is no retest the assessor can re-perform, so FND-023 is not reassessed
+[[INT-178.A1]] [[INT-178.A2]].
+
+The assessor reassessed one finding on new evidence:
+
+- **FND-003** (ca-2, low): other-than-satisfied at A-3. The assessment report is now produced and
+  was delivered on 2026-12-11, which meets the report and delivery parts for this assessment; the
+  annual assessment of a third of the controls is still not scheduled, so the finding stays open,
+  with the reassessment recorded in its description [[INT-177.A4]].
+
+Triage: the PM, as system owner, sent all 24 findings to the POA&M on the risk assessment
+(ART-RA), with the significance at the assessor's severity. None is a false positive and none is
+inconsequential; none needs an immediate remediation order, since no real maintainer PII flows
+before release 1.6 and the PIA approval. FND-012 goes to the POA&M as a deviation for the AO to
+accept, not a fix [[INT-177.A2]] [[INT-177.A3]].
+
+Open for A-6: FND-001 to FND-024, 9 moderate and 15 low. The SSP's ca-2 statement was brought up
+to date (ART-SSP, "Changes from remediation (A-5)") [[INT-179.A1]].
