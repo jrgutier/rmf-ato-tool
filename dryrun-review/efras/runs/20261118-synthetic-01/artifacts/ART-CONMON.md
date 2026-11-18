@@ -2,7 +2,7 @@
 artifact_id: ART-CONMON
 run_id: 20261118-synthetic-01
 produced_by_task: S-5
-touched_by: [S-5, M-2]
+touched_by: [S-5, S-6, M-2]
 sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, ART-ORG-CONTEXT, ART-SSP, INT-208.A1, INT-208.A2]
 ---
 # Continuous monitoring strategy

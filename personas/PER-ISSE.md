@@ -44,6 +44,8 @@ Designs the security architecture, and allocates and builds controls into the de
   nonlocal maintenance authenticated, logged and ended (MA-4)?
 - **S (S-3):** Which components provide each security capability? Which controls need no
   allocation to some components, and why?
+- **I (I-1, I-2):** Where does the built system deviate from the planned design? Which
+  checklist covers the program-built application software, and was it reviewed?
 
 ## Artifacts owned-approved
 

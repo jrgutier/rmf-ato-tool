@@ -11,9 +11,10 @@ failures and open items.
 
 ## Configuration compliance
 
-For each STIG or SRG checked: the benchmark and its version, the date, the tool, the number
-of open findings by category (CAT I, II, III), and the rule IDs of any open finding with its
-planned fix or accepted deviation.
+For each STIG or SRG checked: the benchmark title and release, the date, the scan tool, the
+compliance score, the number of open findings by category (CAT I, II, III), and for each
+open or inherited rule its V-/SV- ID, its CAT and its planned fix, accepted deviation or the
+provider that manages the setting.
 
 ## Account review
 

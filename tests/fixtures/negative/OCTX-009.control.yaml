@@ -1,0 +1,15 @@
+rule: OCTX-009
+bases:
+- minimal
+description: an organizational minimum meant for one control is not met by it (F-09-6)
+mutations:
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: iscm.minimum_frequencies
+  value:
+  - {family: si, controls: [si-2], frequency: daily, applies_to: [systems], basis: Patch status is checked daily.}
+expect:
+  errors:
+  - OCTX-009
+  messages:
+  - the si-2 monitoring frequency

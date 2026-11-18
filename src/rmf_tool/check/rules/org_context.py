@@ -808,21 +808,39 @@ def minimum_frequencies(ctx: Context) -> list[RunFinding]:
     data, out, err = _record(ctx, "OCTX-009", "S-5")
     if data is None or not scope.produced_or_seeded(ctx.run, "ART-CONMON"):
         return out
-    minimums = {_key(m.get("family")): _key(m.get("frequency"))
-                for m in _dicts(_section(data, "iscm").get("minimum_frequencies"))}
+    records = _dicts(_section(data, "iscm").get("minimum_frequencies"))
+    minimums = {_key(m.get("family")): _key(m.get("frequency")) for m in records
+                if not m.get("controls")}
+    # a minimum meant for some controls of a family (ra-5 scanning, not ra-3) binds only those
+    # controls, at their override or their family's frequency (F-09-6)
+    per_control = {str(c): _key(m.get("frequency")) for m in records
+                   for c in m.get("controls") or ()}
     conmon = _section_of(ctx, CONMON_FILE)
-    if not minimums or not conmon:
+    if not (minimums or per_control) or not conmon:
         return out
     families = {f.split("-")[0] for f in baseline_mod.control_ids(ctx.run)} \
         if baseline_mod.load(ctx.run) else set()
+    effective: dict[str, str] = {}
     for record in _dicts(conmon.get("frequencies")):
         fam, freq = _key(record.get("family")), _key(record.get("frequency"))
         floor = minimums.get(fam)
         if floor in RANK and freq in RANK and RANK[freq] > RANK[floor]:
             err(f"the {fam} monitoring frequency {freq} is less frequent than the "
                 f"organization's minimum {floor}")
+        for cid in per_control:
+            if cid.split("-")[0] == fam:
+                effective[cid] = freq
+        for o in _dicts(record.get("overrides")):
+            if str(o.get("control")) in per_control:
+                effective[str(o.get("control"))] = _key(o.get("frequency"))
+    for cid, floor in sorted(per_control.items()):
+        freq = effective.get(cid)
+        if floor in RANK and freq in RANK and RANK[freq] > RANK[floor]:
+            err(f"the {cid} monitoring frequency {freq} is less frequent than the "
+                f"organization's minimum {floor}")
     review = _section(conmon, "minimum_review")
-    if set(minimums) & families and review.get("by") != SYSTEM_OWNER:
+    if (set(minimums) | {c.split("-")[0] for c in per_control}) & families \
+            and review.get("by") != SYSTEM_OWNER:
         err(f"the system owner does not review whether the organization's minimum monitoring "
             f"frequencies suffice for the system (reviewed by {review.get('by')})")
     return out

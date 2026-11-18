@@ -401,6 +401,10 @@ def privacy_monitoring(ctx: Context) -> list[RunFinding]:
             f"privacy controls, not {found.get('guidance_by')}")
     entries = _dicts(found.get("controls"))
     held = _strings([c.get("control") for c in entries])
+    if found.get("follows_frequencies") is True:
+        # the strategy takes the family frequencies for the controls it does not list (F-09-4)
+        families = {str(f.get("family")) for f in _dicts(data.get("frequencies"))}
+        held |= {c for c in _privacy_controls(ctx) if c.split("-")[0] in families}
     for control in sorted(_privacy_controls(ctx) - held):
         err(f"privacy control {control} has no assessment frequency in the privacy continuous "
             "monitoring strategy")

@@ -424,3 +424,34 @@ def test_a_narrower_scoping_value_warns(tmp_path):
     run = open_run(run_dir, REPO_ROOT)
     found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PVAL-002"]
     assert any("differs from the NSS value" in m for m in found)
+
+
+def test_privacy_strategy_may_follow_the_family_frequencies(tmp_path):
+    """F-09-4: with follows_frequencies, a privacy control left out of the PCM strategy takes
+    its family's frequency instead of failing PRIV-006."""
+    run_dir = base_copy("pii", tmp_path / "pii")
+
+    def follow(d):
+        d["privacy"]["controls"][0]["control"] = "ac-2"
+        d["privacy"]["follows_frequencies"] = True
+        d.setdefault("frequencies", []).append(
+            {"family": "au", "frequency": "monthly", "method": "ISSO log review",
+             "responsible": "PER-ISSO", "criteria": ["ART-ORG-CONTEXT"]})
+
+    edit_yaml(run_dir / "artifacts/data/conmon.yaml", follow)
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PRIV-006"]
+    assert not any("au-2 has no assessment frequency" in m for m in found)
+
+
+def test_an_unproven_rto_needs_a_poam_item_from_a6(tmp_path):
+    """F-09-5: an RTO not yet proven names its exercise until A-6, then a POA&M item."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/data/contingency.yaml",
+              lambda d: d["strategy"].update(
+                  {"rto_gaps": [{"process": "BP-01", "unproven": True, "exercise": "EX-001"}]}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings
+             if f.rule in ("CPLAN-001", "RUN-FM-001")]
+    assert any("BP-01: the recovery time objective is not yet proven" in m for m in found)
+    assert not any("RUN-FM" in m or "schema" in m for m in found)

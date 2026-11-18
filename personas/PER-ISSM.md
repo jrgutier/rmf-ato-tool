@@ -59,6 +59,8 @@ representative. Appointed by the PM or SO.
 - **S (S-3):** Is each control common, hybrid, system-specific or program management?
 - **S (S-4):** Who approves the incident response plan, how often is it reviewed, and to whom
   is it distributed (IR-8)? How is the security plan reviewed and distributed (PL-2)?
+- **I (I-2):** Which plan statements did later records make stale (ca-7, pl-2, cm-6)? Who
+  approves the plan update under change management (PER-AO, PER-AODR or PER-CCB)?
 
 ## Artifacts owned-approved
 

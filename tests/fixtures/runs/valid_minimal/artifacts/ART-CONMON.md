@@ -2,7 +2,7 @@
 artifact_id: ART-CONMON
 run_id: valid-minimal
 produced_by_task: S-5
-touched_by: [S-5]
+touched_by: [S-5, S-6]
 sources: [INT-030.A1, ART-ORG-CONTEXT]
 ---
 # Continuous monitoring strategy

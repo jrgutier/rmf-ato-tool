@@ -1514,7 +1514,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [Select 3: Control Allocation (S-3)](#task-s-3) | Select | [PM/SO](#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | [PDR](#rv-pdr) |
 | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | Select | [PM/SO](#per-pm) | [System Security Plan (ART-SSP)](#art-ssp), [Configuration management plan (ART-CMP)](#art-cmp), [Contingency plan (ART-CP)](#art-cp), [Incident response plan (ART-IRP)](#art-irp), [Cybersecurity service agreements (ART-SVCA)](#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | Select | [PM/SO](#per-pm) | [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](#per-ao) | — | [System Security Plan (ART-SSP)](#art-ssp) | [MS B](#ms-b) |
+| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](#per-ao) | — | [System Security Plan (ART-SSP)](#art-ssp), [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | [MS B](#ms-b) |
 
 Also active in this phase (described in their primary phase): [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
@@ -2026,6 +2026,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | updates | core |
 
 **Entry criteria**
 
@@ -2242,7 +2243,8 @@ Also active in this phase (described in their primary phase): [Select 4: Documen
 - Changes to the planned implementation of controls are documented, and the security and privacy plans are updated from what was learned during implementation (DoDI 8510.01 Table 4 outcome).
 - Every SSP statement describes the as-implemented control in enough detail for assessors; inventory and plans reflect the built system.
 - A security-relevant constraint that implementation or integration raises on the requirements is reported to PER-ISSE for the next revisit of P-15, which records it in requirements.yaml with its origin.
-- plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010).
+- plan-reviews.yaml changes logs the I-2 update of the plans with the as-implemented details, covering the privacy plan for a system processing PII (PRIV-010), with the entry's task set to I-2, approved under change management by PER-AO, PER-AODR or PER-CCB (MPLAN-001).
+- Each SSP statement a later record made stale is corrected, keeping its status (ca-7 against conmon.yaml reporting, pl-2 against the S-6 approvals, cm-6 against stig-summary.yaml).
 - Each received system accepted in reciprocity.yaml has the Receiving AO's authorization to use on an acceptable risk, its copy to the Granting AO, notice to subordinate sites, this system's authorization documentation updated through the change log, the installation implemented and the inherited controls provided (RCP-005).
 
 **Alignment**
@@ -3851,7 +3853,7 @@ listed data files; OSCAL documents are built from that data.
 | [Security categorization (ART-CAT)](#art-cat) | core | [Categorize 2: Security Categorization (C-2)](#task-c-2) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 1: Control Selection (S-1)](#task-s-1), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
 | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | supporting | [Select 1: Control Selection (S-1)](#task-s-1) | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3) | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
 | [System Security Plan (ART-SSP)](#art-ssp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 7: System Disposal (M-7)](#task-m-7) | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
-| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | core | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | core | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 | [Configuration management plan (ART-CMP)](#art-cmp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 | [Contingency plan (ART-CP)](#art-cp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | — |
 | [Incident response plan (ART-IRP)](#art-irp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | — |
@@ -4150,7 +4152,7 @@ The system-level strategy for monitoring control effectiveness, including the ti
 | Data files | `artifacts/data/conmon.yaml` (schema `conmon`) |
 | OSCAL | — |
 | Produced by | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) |
-| Updated by | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| Updated by | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
 | Used by | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 
 Citations:

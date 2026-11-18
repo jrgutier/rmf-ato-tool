@@ -185,6 +185,11 @@ def bia_times(ctx: Context) -> list[RunFinding]:
     bia = data.get("bia") if isinstance(data.get("bia"), dict) else {}
     strategy = data.get("strategy") if isinstance(data.get("strategy"), dict) else {}
     gaps = {g.get("process"): g.get("poam_item") for g in _dicts(strategy.get("rto_gaps"))}
+    # an RTO not yet proven names the exercise that will prove it until A-6 writes the
+    # POA&M, and a POA&M item from then on (F-09-5)
+    unproven = {g.get("process") for g in _dicts(strategy.get("rto_gaps"))
+                if g.get("unproven") is True}
+    posted = "A-6" in scope.active_tasks(ctx.run)
     poam = _poam_ids(ctx)
     for process in _dicts(bia.get("processes")):
         ident, mtd = process.get("id"), _hours(process.get("mtd_hours"))
@@ -193,7 +198,11 @@ def bia_times(ctx: Context) -> list[RunFinding]:
             err(f"{ident} supports an essential function, and its maximum tolerable downtime of "
                 f"{mtd:g} hours is over 12 hours")
         total = _hours(process.get("rto_hours")) + _hours(process.get("reprocessing_hours"))
-        if total > mtd and gaps.get(ident) not in poam:
+        if ident in unproven and posted and gaps.get(ident) not in poam:
+            err(f"{ident}: the recovery time objective is not yet proven, and from A-6 a Plan "
+                "of Action and Milestone item documents the gap")
+        if total > mtd and gaps.get(ident) not in poam and not (ident in unproven
+                                                                 and not posted):
             err(f"{ident}: the recovery time objective plus reprocessing time is {total:g} hours, "
                 f"over the maximum tolerable downtime of {mtd:g}, and no Plan of Action and "
                 "Milestone item documents the gap")
@@ -240,6 +249,11 @@ def operational_resilience(ctx: Context) -> list[RunFinding]:
     if proved_by not in [e.get("id") for e in exercises]:
         err(f"allocating information resources dynamically rests on {proved_by}, which is no "
             "exercise of this plan")
+    elif "A-3" in scope.active_tasks(ctx.run) and not any(
+            e.get("id") == proved_by and e.get("held_on") for e in exercises):
+        # a planned exercise proves nothing; by the assessment it has been held (F-09-5)
+        err(f"allocating information resources dynamically rests on {proved_by}, which has "
+            "not been held (no held_on)")
     return out
 
 

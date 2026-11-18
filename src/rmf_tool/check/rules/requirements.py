@@ -15,7 +15,7 @@ from typing import Any
 from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
-from rmf_tool.check.rules.software import has_covered_software
+from rmf_tool.check.rules.software import SOFTWARE_KINDS, has_covered_software, product_kind
 from rmf_tool.run import scope
 
 REQUIREMENTS_FILE = "artifacts/data/requirements.yaml"
@@ -207,8 +207,17 @@ def design_policy(ctx: Context) -> list[RunFinding]:
             out.append(_finding("REQS-002", f"{key} binds every system, so it cannot be "
                                 "marked not applicable"))
         elif record.get("applies") is not True and software and key.startswith(SOFTWARE_DP):
+            # covered software declared only by S-4's software.yaml is charged to S-4 too, so
+            # its own check shows the decision P-15 must now revisit (F-09-1)
+            by_record = product_kind(ctx) not in SOFTWARE_KINDS
             out.append(_finding("REQS-002", f"{key} binds a system with covered software, so it "
-                                "cannot be marked not applicable"))
+                                "cannot be marked not applicable"
+                                + ("; software.yaml declares covered software" if by_record
+                                   else "")))
+            if by_record:
+                out.append(_finding("REQS-002", f"{key} binds the covered software S-4 "
+                                    "declares in software.yaml; revisit P-15's design policy "
+                                    "decision", "S-4"))
         elif record.get("applies") is not True and not record.get("reason"):
             out.append(_finding("REQS-002", f"{key} is marked not applicable without saying why "
                                 "its condition does not hold"))

@@ -658,14 +658,26 @@
           ]
         },
         "rto_gaps": {
-          "title": "Plan of Action and Milestone item for each process whose RTO cannot be met",
+          "title": "Plan of Action and Milestone item for each process whose RTO cannot be met, or is not yet proven",
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
             "required": [
-              "process",
-              "poam_item"
+              "process"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "poam_item"
+                ]
+              },
+              {
+                "required": [
+                  "unproven",
+                  "exercise"
+                ]
+              }
             ],
             "properties": {
               "process": {
@@ -673,6 +685,15 @@
                 "minLength": 1
               },
               "poam_item": {
+                "type": "string",
+                "minLength": 1
+              },
+              "unproven": {
+                "title": "true: the RTO is estimated but no exercise has shown it yet; until A-6 writes the POA&M the gap names the exercise that will prove it, from A-6 a POA&M item",
+                "const": true
+              },
+              "exercise": {
+                "title": "The exercise of this plan that will prove the RTO",
                 "type": "string",
                 "minLength": 1
               }
@@ -1556,6 +1577,10 @@
           },
           "failover": {
             "type": "boolean"
+          },
+          "held_on": {
+            "title": "The date the exercise was held; one not yet held proves no dynamic allocation (CPLAN-003)",
+            "$ref": "#/$defs/date"
           },
           "evaluation_kind": {
             "enum": [

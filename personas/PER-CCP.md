@@ -46,6 +46,8 @@ say which provider an answer is for.
   with which values?
 - **S (S-3):** Which controls do you implement for this system, fully or in part? Which
   parameters did you examine, and is the authorization current?
+- **I (I-1, I-2):** Which configuration settings do you manage for this tenant, and what
+  evidence (scan, attestation) shows them in place?
 
 ## Artifacts owned-approved
 

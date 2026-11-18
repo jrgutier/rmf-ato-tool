@@ -698,6 +698,10 @@ def plan_reviews(ctx: Context) -> list[RunFinding]:
             err(f"{c.get('version')}: the system plan update is not tracked by change "
                 f"management: {c.get('change_ref')} is not in the change log")
         if c.get("approved_by") not in PLAN_APPROVERS:
-            err(f"{c.get('version')}: the update to the system plan is approved under change "
-                f"management, by {' or '.join(PLAN_APPROVERS)}, not {c.get('approved_by')}")
+            # charged to the task that logged the update, so its own check shows it (F-10-2)
+            task = c.get("task") if isinstance(c.get("task"), str) else "M-4"
+            out.append(make("MPLAN-001", f"{c.get('version')}: the update to the system plan "
+                            "is approved under change management, by "
+                            f"{' or '.join(PLAN_APPROVERS)}, not {c.get('approved_by')}",
+                            PLAN_REVIEWS_FILE, None, {task}))
     return out

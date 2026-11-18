@@ -22,7 +22,7 @@ directory, for example `runs/20261105-synthetic-01`.
    `## Interviews` section names. Why: the header is synced from `framework/tasks/*.yaml`, so it
    is the authoritative contract; the body tells you how to meet it.
 4. **Read only the listed inputs.** Open the files the playbook's `## Inputs` section names
-   and nothing else from the run. Read reference passages with
+   and the `## Outputs` files you will rewrite, and nothing else from the run. Read reference passages with
    `uv run rmf refs show <REF> --section "<S>"` and control text with
    `uv run rmf catalog show ...`. Why: every extra file costs context you need for the
    writing steps, and unlisted inputs produce untraceable claims.
@@ -125,7 +125,9 @@ The product material lives in the directory `run.yaml:product` names; cite it as
 
 ## Artifact front-matter
 
-Every `artifacts/ART-*.md` starts with exactly these 5 keys (RUN-FM-001):
+Every `artifacts/ART-*.md` starts with these 5 keys (RUN-FM-001), plus `handling` (CUI or
+the classification level) where its template carries it (ART-CMP, ART-POAM, ART-SAR,
+ART-STIG):
 
 ```yaml
 ---

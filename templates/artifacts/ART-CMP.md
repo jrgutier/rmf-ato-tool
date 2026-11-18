@@ -59,6 +59,7 @@ handling: CUI  # at a minimum CUI, or the classification level of the system (Do
 
 <<FILL: who maintains the plan, how often it is reviewed, and how exceptions to it are handled, with tokens>>
 
-<!-- I-2 appends "## Implementation updates" and M-1 appends "## Change updates" (dated:
+<!-- I-2 appends "## Update Control Implementation Information (I-2)" and M-1 appends
+     "## System and Environment Changes (M-1)" (dated:
      what changed in the plan, baselines or board, and why), each adding itself to
      touched_by. -->

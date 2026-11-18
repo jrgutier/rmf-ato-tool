@@ -50,5 +50,5 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: training for the people named in the plan, how often the plan is tested, the performance measures used, and who maintains it, with tokens>>
 
-<!-- I-2 appends "## Implementation updates" (dated: what changed during implementation and
+<!-- I-2 appends "## Update Control Implementation Information (I-2)" (dated: what changed during implementation and
      why) and adds I-2 to touched_by. -->

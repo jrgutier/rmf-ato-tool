@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterator
 from typing import Any
 
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.run import scope
@@ -16,6 +17,9 @@ from rmf_tool.run import scope
 STIG_FILE = "artifacts/data/stig-summary.yaml"
 APPROVERS = ("PER-AO", "PER-AODR")
 EXCEPTION = "exception"
+INHERITED = "inherited"
+LEVERAGED_FILE = "artifacts/data/leveraged-authorizations.yaml"
+ALLOCATION_FILE = "artifacts/data/allocation.yaml"
 
 
 def exceptions(ctx: Context) -> list[RunFinding]:
@@ -25,7 +29,26 @@ def exceptions(ctx: Context) -> list[RunFinding]:
     findings = data.get("findings") if isinstance(data, dict) else None
     out: list[RunFinding] = []
     owner = {ctx.run.artifacts["ART-STIG"].get("producer")}
+    leveraged = ctx.data(LEVERAGED_FILE)
+    known = {str(r.get("id")) for r in (leveraged or {}).get("leveraged_authorizations") or ()
+             if isinstance(r, dict)} if isinstance(leveraged, dict) else set()
+    pk = providers.keyer(ctx)
+    allocation = ctx.data(ALLOCATION_FILE)
+    cm6 = {str(pk(p)) for a in (allocation or {}).get("allocations") or ()
+           if isinstance(a, dict) and a.get("control_id") == "cm-6"
+           and a.get("type") in ("common", "hybrid")
+           for p in providers.of_allocation(a)} if isinstance(allocation, dict) else set()
     for f in (f for f in findings or () if isinstance(f, dict)):
+        if f.get("status") == INHERITED:
+            # a provider-managed setting is inherited only from a provider the system
+            # leverages or that carries cm-6 for it (F-10-3)
+            provider = f.get("provider")
+            if provider is None or (str(provider) not in known
+                                    and str(pk(provider)) not in cm6):
+                out.append(make("SCFG-001", f"{f.get('id')}: an inherited setting names "
+                                f"{provider}, which is no leveraged provider and carries no "
+                                "cm-6 for the system", STIG_FILE, None, owner))
+            continue
         if f.get("status") != EXCEPTION:
             continue
         record: Any = f.get("exception")
