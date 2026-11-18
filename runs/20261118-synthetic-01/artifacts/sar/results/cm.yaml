@@ -1,0 +1,104 @@
+# artifacts/sar/results/cm.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. RR-001 (SCA-witnessed STIG scan, 2026-10-22) is reused for cm-2 and cm-6 and
+# supplemented by the SCA's own scan of release 1.5.1 on 2026-11-23, in pre-production.
+family: cm
+determinations:
+  - control_id: cm-2
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the version-controlled templates and the 1.5.0 and 1.5.1 manifests of image digests (both releases updated them) and 90 days of hourly drift reports (one manual node label change, reverted the same day); compared 20 deployed resources on CMP-K8S and CMP-DB with the baseline (all matched); reused RR-001 for the node and database settings; interviewed the ISSE. The deployed state assessed is pre-production, built from the same templates as production (F-11-9)."
+    statements:
+      - {id: "CM-02a.[01]", result: satisfied}
+      - {id: "CM-02a.[02]", result: satisfied}
+      - {id: "CM-02b.01", result: satisfied}
+      - {id: "CM-02b.02", result: satisfied}
+      - {id: "CM-02b.03", result: satisfied}
+    reused: [RR-001]
+    sources: [INT-160.A1, product/architecture.md#configuration, product/test-results.md#stig-scan]
+  - control_id: cm-3
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined a random sample of 8 of the 23 pull requests merged between releases 1.5.0 and 1.5.1 (each with a second reviewer, a security and privacy impact note, green gates and an ISSE or ISSO sign-off; no emergency change), the CCB minutes of 2026-09 to 2026-11, and the retention of repository and pipeline records; tested that a direct change to the cluster outside the pipeline is reported by the drift scan within the hour; interviewed the ISSE."
+    statements:
+      - {id: "CM-03a.", result: satisfied}
+      - {id: "CM-03b.[01]", result: satisfied}
+      - {id: "CM-03b.[02]", result: satisfied}
+      - {id: "CM-03c.", result: satisfied}
+      - {id: "CM-03d.", result: satisfied}
+      - {id: "CM-03e.", result: satisfied}
+      - {id: "CM-03f.[01]", result: satisfied}
+      - {id: "CM-03f.[02]", result: satisfied}
+      - {id: "CM-03g.[01]", result: satisfied}
+      - {id: "CM-03g.[02]", result: satisfied}
+    reused: []
+    sources: [INT-160.A1, product/architecture.md#configuration]
+  - control_id: cm-6
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Reused RR-001 and ran the SCA's authenticated scan of release 1.5.1 on 2026-11-23 over the nodes, the images and the database instance: same result as 2026-10-22, nodes 94% with only provider-managed control plane checks open, database with STG-001 and STG-002 open (program-fixable, release 1.5.2 not yet in pre-production) and STG-003 to STG-006 recorded as the provider's settings under LA-01; no CAT I. Examined ART-STIG and stig-summary.yaml, the drift reports and the change records. The Application Security and Development STIG review of INV-002 to INV-006 (BM-04, 2026-11-24) found no documented secure configuration for the five containers to review against (ASM-021). Interviewed the ISSE and the developer."
+    finding_refs: [FND-007, FND-008]
+    statements:
+      - {id: "CM-06a.", result: other-than-satisfied}
+      - {id: "CM-06b.", result: other-than-satisfied}
+      - {id: "CM-06c.[01]", result: satisfied}
+      - {id: "CM-06c.[02]", result: satisfied}
+      - {id: "CM-06d.[01]", result: satisfied}
+      - {id: "CM-06d.[02]", result: satisfied}
+    reused: [RR-001]
+    sources: [INT-160.A2, INT-161.A1, ASM-021, ART-STIG, product/test-results.md#stig-scan]
+  - control_id: cm-8
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Compared 20 deployed resources (nodes, images, database, buckets, keys) with the INV list: every one is listed, none twice, none belonging to another system, with the fields the SSP names. The inventory still records the five containers at 1.5.0 while release 1.5.1 has run in the assessed environment since 2026-11-07, and no review at that release is recorded, although the SSP sets review at every release. Interviewed the ISSE."
+    finding_refs: [FND-009]
+    statements:
+      - {id: "CM-08a.01", result: satisfied}
+      - {id: "CM-08a.02", result: satisfied}
+      - {id: "CM-08a.03", result: satisfied}
+      - {id: "CM-08a.04", result: satisfied}
+      - {id: "CM-08a.05", result: satisfied}
+      - {id: "CM-08b.", result: other-than-satisfied}
+    reused: []
+    sources: [INT-160.A3, product/hw-sw-inventory.md#items, ART-INV]
+findings:
+  - id: FND-007
+    control_id: cm-6
+    title: "Database connection logging verbosity is below the PostgreSQL STIG value (STG-001, CAT II)"
+    description: "CM-6 requires the established configuration settings to be implemented. The SCA-witnessed scan of 2026-10-22 and the SCA's scan of release 1.5.1 on 2026-11-23 both show the connection logging verbosity on INV-010 below the PostgreSQL STIG value (STG-001, CAT II). The fix is in release 1.5.2 (2026-12-10), which had not reached pre-production by the scan. Evidence: RR-001, the 2026-11-23 scan, stig-summary.yaml, the ISSE and developer interviews."
+    status: open
+    severity: moderate
+    recommendation: "Deploy release 1.5.2 with the corrected setting, rescan the database and close STG-001 on the scan result."
+    affected_statements: ["CM-06b."]
+    state_difference: "Expected: the database logs connections at the STIG verbosity. Actual: a lower verbosity, so connection details an investigation needs are not recorded."
+    potential_compromise: [confidentiality, integrity]
+    sources: [INT-160.A2, INT-161.A1, product/test-results.md#stig-scan, ART-STIG]
+  - id: FND-008
+    control_id: cm-6
+    title: "No secure configuration is established for the five application containers (Application Security and Development STIG not applied)"
+    description: "CM-6 requires configuration settings reflecting the most restrictive mode consistent with operations to be established and documented for the components, using the common secure configurations the SSP names. The five application containers (INV-002 to INV-006), which hold and serve the PII and CUI, have no documented settings against the Application Security and Development STIG; the program never completed the checklist (ASM-019), and the assessor's review on 2026-11-24 had nothing to compare the containers against (ASM-021). The pipeline scans and the factory base image cover vulnerabilities and the base layer, not the application settings. Evidence: stig-summary.yaml BM-04, the developer and ISSE interviews."
+    status: open
+    severity: moderate
+    recommendation: "Complete the Application Security and Development STIG checklist for each of the five containers, document the resulting settings in the baseline, record open items in stig-summary.yaml, and add a pipeline check for the settings that can be automated."
+    affected_statements: ["CM-06a."]
+    state_difference: "Expected: documented STIG-based settings for every component. Actual: documented for the nodes and the database only; none for the application containers."
+    potential_compromise: [confidentiality, integrity, availability, privacy]
+    sources: [INT-161.A1, INT-160.A2, ASM-019, ASM-021]
+  - id: FND-009
+    control_id: cm-8
+    title: "The inventory was not reviewed or updated at release 1.5.1"
+    description: "CM-8 as tailored requires the inventory to be reviewed and updated monthly and at every release. Release 1.5.1 reached the assessed environment on 2026-11-07; the inventory still lists the five containers at 1.5.0 and no review at that release is recorded. The monthly review of 2026-11-02 is on file and the inventory is otherwise complete and accurate. Evidence: the INV list, the review records, the ISSE interview."
+    status: open
+    severity: low
+    recommendation: "Review and update the inventory at each release as the SSP states, and record which release each environment runs, so the inventory matches the release deployed to production."
+    affected_statements: ["CM-08b."]
+    state_difference: "Expected: inventory reviewed and updated at every release. Actual: monthly review only; release 1.5.1 not reflected."
+    potential_compromise: [integrity]
+    sources: [INT-160.A3, product/hw-sw-inventory.md#items, ART-INV]

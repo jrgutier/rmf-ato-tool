@@ -1,0 +1,59 @@
+# artifacts/sar/results/ia.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. Tests ran in pre-production (PRC-005); the identity broker is not assessed (EXT-005).
+family: ia
+determinations:
+  - control_id: ia-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Tested CAC sign-in through the broker for all five roles and the six console roles (re-performing DT-2), and traced the DoD ID number from the assertion to the session and to every audit event of the test (uniquely tied); refused a sign-in without an approved group. Examined the two break-glass console accounts: they authenticate with FIDO2 keys, not CAC, and a use is tied to a person only by the two-person seal log and the alert; neither has been used. The deviation from the DoD CAC requirement has not been put to the AO. Interviewed the ISSO. The SSP records ia-2 as partial for this reason."
+    finding_refs: [FND-012]
+    statements:
+      - {id: "IA-02[01]", result: other-than-satisfied}
+      - {id: "IA-02[02]", result: satisfied}
+    reused: []
+    sources: [INT-164.A1, product/test-results.md#dt-2, product/conops.md#limitations, product/architecture.md#identity]
+  - control_id: ia-5
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the FIDO2 key issue record (in person against ID, defaults changed at issue), the key service inventory (no long-lived access keys; program keys rotated 2026-03-02), the break-glass database password change record (2026-07-01, inside 180 days) and the seal log; tested that a workload token expires with its session. The local break-glass database role's password complexity falls short of the PostgreSQL STIG rule on both the 2026-10-22 scan and the SCA's 2026-11-23 scan (STG-002, CAT II, fix in release 1.5.2). Interviewed the ISSO."
+    finding_refs: [FND-013]
+    statements:
+      - {id: "IA-05a.", result: satisfied}
+      - {id: "IA-05b.", result: satisfied}
+      - {id: "IA-05c.", result: other-than-satisfied}
+      - {id: "IA-05d.", result: satisfied}
+      - {id: "IA-05e.", result: satisfied}
+      - {id: "IA-05f.", result: satisfied}
+      - {id: "IA-05g.", result: satisfied}
+      - {id: "IA-05h.[01]", result: satisfied}
+      - {id: "IA-05h.[02]", result: satisfied}
+      - {id: "IA-05i.", result: satisfied}
+    reused: []
+    sources: [INT-164.A2, INT-160.A2, product/test-results.md#stig-scan, ART-STIG]
+findings:
+  - id: FND-012
+    control_id: ia-2
+    title: "Two break-glass console accounts authenticate with FIDO2 keys instead of CAC, and the deviation is not accepted"
+    description: "IA-2 requires organizational users to be uniquely identified and authenticated, which DoD meets with CAC (PKI). The two break-glass cloud console accounts use FIDO2 hardware keys because the console cannot federate when the identity broker is down; each use is tied to a person only through the two-person seal log and the alert, not by the credential. The keys are sealed and unused; the deviation has not been recorded or accepted by the AO. Evidence: the account list, the seal log, the ISSO interview, conops limitation 5."
+    status: open
+    severity: low
+    recommendation: "Record the deviation with its compensating measures (sealed keys, two-person opening, alerting, post-use review) for the AO's acceptance, and review each break-glass use against the seal log within one working day."
+    affected_statements: ["IA-02[01]"]
+    state_difference: "Expected: every organizational user authenticates with CAC. Actual: two emergency accounts authenticate with FIDO2 keys, attributed through a seal log."
+    potential_compromise: [confidentiality, integrity, availability]
+    sources: [INT-164.A1, product/conops.md#limitations]
+  - id: FND-013
+    control_id: ia-5
+    title: "The local break-glass database role's password complexity falls short of the PostgreSQL STIG (STG-002, CAT II)"
+    description: "IA-5 requires authenticators to have sufficient strength of mechanism for their intended use. The password of the local break-glass database role on INV-010 does not meet the PostgreSQL STIG complexity rule (STG-002, CAT II) on the 2026-10-22 scan and on the SCA's scan of release 1.5.1 on 2026-11-23. The password is sealed, changed within 180 days and its role unused. The fix is in release 1.5.2 (2026-12-10), not yet in pre-production. Evidence: both scans, stig-summary.yaml, the ISSO and ISSE interviews."
+    status: open
+    severity: moderate
+    recommendation: "Deploy release 1.5.2 with the database password policy the STIG requires, reset the break-glass password under it, rescan and close STG-002."
+    affected_statements: ["IA-05c."]
+    state_difference: "Expected: the break-glass database password meets the STIG complexity rule. Actual: a weaker password protects the database's most privileged local role."
+    potential_compromise: [confidentiality, integrity, privacy]
+    sources: [INT-164.A2, INT-160.A2, product/test-results.md#stig-scan, ART-STIG]

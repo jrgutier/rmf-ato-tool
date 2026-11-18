@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (19)
+## Assumptions (21)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -27,8 +27,10 @@ Mode: synthetic. Human respondents: none.
 | ASM-017 | S-3 | PER-ISSM | The ATO of the Example Enterprise Cloud Access Point ends on 2028-01-10 and the ATO of the Example Software Factory ends on 2028-10-01, three years after each authorization date, as the ISSM states in INT-084.A3; both dates are fictional and to be confirmed in eMASS. | MLEV-001 needs the authorization termination date of each organizational system EFRAS inherits from; product/architecture.md#leveraged gives only the dates authorized. |
 | ASM-018 | I-1 | PER-DEV | The STIG release numbers and DISA rule IDs of the 2026-10-22 scan are not known to the run: stig-summary.yaml records each benchmark's version as the release current at the scan date and gives the six PostgreSQL items fictional placeholder rule IDs (SV-9002xx) standing for the IDs in the scan export; their CAT II category is as the developer states it in INT-135.A2. | product/test-results.md#stig-scan gives the benchmarks, compliance percentages and the six open PostgreSQL items by subject only, while stig-summary.schema.json requires a version for every benchmark and a V-/SV- rule ID and category for every finding; inventing real DISA IDs would mislead. |
 | ASM-019 | I-1 | PER-ISSE | The Application Security and Development STIG applies to the five EFRAS application containers (INV-002 to INV-006), and its checklist review has not been done for release 1.5.0; the ISSE asks the assessor to perform it at A-3. | The product names no benchmark for the application containers and no checklist review of them (product/test-results.md shows only pipeline gates and DT-2), while STIG-001 needs every software item mapped; the ISSE names the applicable checklist in INT-136.A2. |
+| ASM-020 | A-3 | PER-ISSO | The leaver-timing test (PRC-004, 2026-12-01) found no record that any of the ten sampled leavers reached the EFRAS account manager within 24 hours: the two leavers of the 2026-10-06 review were removed only at that review, and the other eight checklists carry a departure date but no notification time. The assessor treats the 24-hour notification as not demonstrated; no disable delay in days is asserted beyond what the product shows. | product/test-results.md#account-review shows only that two leavers' accounts were still present and removed at the quarterly review; the product holds no out-processing records or disable times, so a pass cannot be grounded and exact delays would be invented. |
+| ASM-021 | A-3 | PER-DEV | The assessor's Application Security and Development STIG checklist review of INV-002 to INV-006 (scheduled 2026-11-24) has no result the run can ground: the product holds no checklist, rule results or compliance figure for the containers. The review is recorded as not producing an established, documented secure configuration for the containers; no individual rule result, pass or fail, is asserted. | product/test-results.md covers the containers only through pipeline scans and DT-2; ASM-019 records that no program review exists. A pass would be invented and so would specific failures; the run records the absence of an established configuration, which the product supports. |
 
-## Interview answers (379; SIMULATED 379)
+## Interview answers (406; SIMULATED 406)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -63,3 +65,4 @@ Mode: synthetic. Human respondents: none.
 | I-2 | 4 | 7 | 0 |
 | A-1 | 5 | 9 | 0 |
 | A-2 | 5 | 12 | 0 |
+| A-3 | 13 | 27 | 0 |
