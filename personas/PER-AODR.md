@@ -42,6 +42,8 @@ approvals of plans and categorizations, and the risk analysis behind the AO's de
 - **R (R-2):** Which findings share a threat event? What is the likelihood given the
   mitigations in place? What overall risk do you determine, and how does it compare to the
   tolerance? What response do you recommend per risk?
+- **S (S-3):** For each provider, do you agree the common controls protect the system
+  commensurate with risk? Were the parameters examined?
 
 ## Artifacts owned-approved
 

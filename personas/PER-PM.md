@@ -65,10 +65,15 @@ act when no PM is assigned.
   do you confirm the provisional C, I and A values? What would disclosure, tampering or loss
   cause?
 - **S (S-4), accountable:** Which budget lines fund control implementation, assessment and
-  sustainment through operations? What is unfunded, and which POA&M item tracks it?
+  sustainment through operations? What is unfunded, and which POA&M item tracks it? Where
+  is the system recorded in the Component's system inventory, and who keeps it (PM-5)?
 - **S (S-1), optional:** Do you accept the selected baseline and its resource demands?
 - **A (A-6):** For each weakness: what is the fix, in which release, by when, with which
   resources? What interim mitigation is in place?
+- **S (S-2):** Which cost, schedule, performance or supply chain trade-offs did you weigh
+  in choosing controls, and what was the outcome?
+- **S (S-3):** Do you, as system owner, determine that each provider's common controls
+  protect the system commensurate with risk, having examined their parameters?
 
 ## Artifacts owned-approved
 

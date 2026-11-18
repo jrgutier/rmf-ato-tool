@@ -412,8 +412,10 @@ def provider_ids(ctx: Context) -> list[RunFinding]:
         seen.add(pid)
     known = providers.registry(ctx)
     for rel, field, item in providers.references(ctx):
-        value = item.get(field)
-        if isinstance(value, str) and providers.PROVIDER_ID.match(value) and value not in known:
-            out.append(make("PRV-001", f"{field} names {value}, which org-context.yaml providers "
-                            "does not register", rel))
+        values = item.get(field)
+        for value in values if isinstance(values, list) else [values]:
+            if isinstance(value, str) and providers.PROVIDER_ID.match(value) \
+                    and value not in known:
+                out.append(make("PRV-001", f"{field} names {value}, which org-context.yaml "
+                                "providers does not register", rel))
     return out

@@ -1,6 +1,11 @@
 # Template: artifacts/data/service-agreements.yaml (S-4; M-2 adds effectiveness; schema
 # service-agreements). Written whole (INV-8). One agreement per provider, the CSSP first; a
 # provider named in `inherited_from` in the family files uses the same `provider` string.
+# Roles: cssp (the CSSP, first); cloud-service-provider (a cloud offering, with cloud.yaml);
+# common-control-provider (a P-5 provider or an organizational system C-1 leverages, under an
+# SLA, MOA or support agreement); other (a Component office under an issuance, such as the
+# privacy office, instrument dod-component-issuance, integration internal). A provider that
+# supplies no inherited or hybrid control needs no record; name it in ART-SVCA only.
 dodin_connected: true
 system_environments: [on-premises]
 agreements:
@@ -28,5 +33,28 @@ agreements:
           - {party: subscriber, duty: "<<FILL: what the system does>>"}
         controls: [si-2]  # baseline controls the service aligns with
     # effectiveness: [{date, service, measured_by, measure, rating, issue: {status}}]  # M-2
+    sources: [INT-001.A1]
+  - id: SVA-002
+    provider: PRV-02  # <<FILL: a P-5 common control provider>>
+    role: common-control-provider
+    integration: inherited
+    instrument: sla
+    reference: "<<FILL: the SLA's identifier>>"
+    environments: [on-premises]
+    scope: "<<FILL: the controls and components the provider covers>>"
+    parameters: "<<FILL: service levels and reporting>>"
+    approved_by: PER-AO
+    validation:
+      by: PER-ISSM
+      date: "2026-01-01"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-02
+        name: "<<FILL: service, for example physical protection of the data center>>"
+        kind: physical-protection  # physical-protection | media-protection | supply-chain | identity | monitoring | other
+        responsibilities:
+          - {party: service-provider, duty: "<<FILL: what the provider does>>"}
+          - {party: subscriber, duty: "<<FILL: what the system does>>"}
+        controls: [pe-3]  # every control the family files inherit from this provider
     sources: [INT-001.A1]
 sources: [INT-001.A1]

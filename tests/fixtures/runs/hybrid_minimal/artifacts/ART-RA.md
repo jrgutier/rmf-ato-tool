@@ -2,7 +2,7 @@
 artifact_id: ART-RA
 run_id: hybrid-minimal
 produced_by_task: P-14
-touched_by: [P-14, R-2]
+touched_by: [P-14, C-3, R-2]
 sources: [product/architecture.md]
 ---
 # System risk assessment
@@ -29,3 +29,7 @@ radio-side network [[product/architecture.md#network]].
 
 The open account-review weakness (FND-001) raises the likelihood of misuse of stale
 accounts until the POA&M closes it [[INT-011.A1]].
+
+## Categorize 3: Categorization Review and Approval (C-3)
+
+With the categorization approved, the supplier risks keep the order already recorded; no risk level changed [[INT-005.A1]].

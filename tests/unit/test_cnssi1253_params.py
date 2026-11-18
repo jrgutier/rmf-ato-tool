@@ -113,3 +113,25 @@ def test_every_row_with_a_value_in_the_text_is_transcribed(values):
 def test_stricter_words_are_read_not_refused(run, nss, loose):
     """Fable F3: a stricter value in words PVAL-001 once could not read was an error."""
     assert params.looser(run, {"value": nss, "bound": "max"}) is loose
+
+
+def test_a_per_type_value_is_compared_clause_by_type():
+    """F-06-5: the NSS password bound reads the password clause, not the first amount."""
+    nss = {"value": "not to exceed 180 days for passwords", "bound": "max"}
+    assert params.looser("tokens per session; keys annually; passwords every 90 days",
+                                   nss) is False
+    assert params.looser("keys every 90 days; passwords annually", nss) is True
+    assert params.looser("keys annually; FIDO2 keys on change of custodian",
+                                   nss) is None
+    assert params.looser("annually", nss) is True
+
+
+def test_each_condition_is_compared_with_its_own_bound():
+    """F-07-6: ps-4 gives one bound if voluntary and another if involuntary."""
+    nss = {"value": "if voluntary, as soon as possible, not to exceed 5 working days; if "
+           "involuntary, within same day as termination", "bound": "max"}
+    ok = "if voluntary, within 1 working day; if involuntary, the same day as termination"
+    assert params.looser(ok, nss) is False
+    assert params.looser("if voluntary, within 1 working day; if involuntary, within 3 days",
+                         nss) is True
+    assert params.looser("if voluntary, within 1 working day", nss) is None

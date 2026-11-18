@@ -49,6 +49,9 @@ decision (`AD-*`).
   services are authorized separately, and by whom? Any condition on the boundary?
 - **C (C-3):** Do you approve the categorization as shown? Is any information owner's input
   missing?
+- **S (S-4), a cloud-hosted system:** Which mission impact level do the kinds of data set
+  (CLOUD-002)? Do you validate the activity tracking checklist and accept any activity no one
+  performs?
 - **A (A-2):** Do you approve the assessment plan, its scope exclusions and schedule? May
   assessors test on live networks?
 - **R (R-2, R-4):** Is the overall risk acceptable for the mission? Which decision, with

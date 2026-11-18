@@ -47,10 +47,18 @@ representative. Appointed by the PM or SO.
 - **C (C-1), optional:** Which providers' authorizations does the system leverage, and
   when were they granted? Which roles are privileged?
 - **C (C-2):** Which CNSSI 1253 overlays apply, and why do the others not? Is any
-  information type missing? Is the result consistent with the risk assessment?
+  information type missing? Is the result consistent with the risk assessment? Which
+  boundary components underpin the mission-critical processes, and which defensive
+  functions (access control, identity, crypto) protect them (the criticality analysis's
+  Assess iteration)?
 - **S (S-1):** Does the baseline follow from the approved categorization? Which
   organizational additions apply? Which requirements does it not cover?
 - **A (A-6):** Who owns each POA&M item? What milestones and reporting cadence apply?
+- **S (S-2):** Which tailoring actions does the ISSM propose, on which risk? Which
+  parameters take organization-defined values, and from where?
+- **S (S-3):** Is each control common, hybrid, system-specific or program management?
+- **S (S-4):** Who approves the incident response plan, how often is it reviewed, and to whom
+  is it distributed (IR-8)? How is the security plan reviewed and distributed (PL-2)?
 
 ## Artifacts owned-approved
 

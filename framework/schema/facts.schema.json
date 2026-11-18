@@ -60,6 +60,7 @@
         "i": {"$ref": "#/$defs/impact", "title": "System integrity impact level: one of the three levels of potential impact, low, moderate or high"},
         "a": {"$ref": "#/$defs/impact", "title": "System availability impact level: one of the three levels of potential impact, low, moderate or high"},
         "overlays": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "privacy_baseline": {"title": "Whether the NSS privacy control baseline applies, and why: CNSSI 1253 makes it a default for every NSS, and a DoD system that is not an NSS may keep it because DoDI 8510.01 directs CNSSI 1253 selection, or leave it out with a basis (dry-run finding F-05-10). Absent, the resolver applies it.", "type": "object", "additionalProperties": false, "required": ["applies", "basis"], "properties": {"applies": {"type": "boolean"}, "basis": {"type": "string", "minLength": 1}, "sources": {"$ref": "#/$defs/sources"}}},
         "space_segments": {"title": "The segments of a space NSS the system is part of (Space Platform Overlay Figure 1); the overlay's scope is the space platform and the link segment interfacing with it", "type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["space-platform", "link", "ground", "user"]}},
         "factors_reviewed": {
           "title": "The factors the provisional impact levels were reviewed against: organization, environment, mission, use, data sharing and national interest, and any other factor weighed",
@@ -243,6 +244,10 @@
           "title": "Production, test, research and development, tactical, deployed or other",
           "enum": ["production", "test", "research-and-development", "tactical", "deployed", "other"]
         },
+        "current": {
+          "title": "Where the system runs today, when it differs from the environment being authorized (value), for example a pre-production account before release (dry-run finding F-04-11)",
+          "enum": ["production", "test", "research-and-development", "tactical", "deployed", "other"]
+        },
         "description": {"type": "string", "minLength": 1},
         "set_by_task": {"$ref": "#/$defs/task_id"},
         "sources": {"$ref": "#/$defs/sources"}
@@ -257,6 +262,7 @@
       "required": ["value", "set_by_task"],
       "properties": {
         "value": {"enum": ["PH-MSA", "PH-TMRR", "PH-EMD", "PH-PD", "PH-OS"]},
+        "pathway_phase": {"title": "The pathway's own phase when it has its own, such as the software acquisition pathway's planning or execution phase, which value maps to the MCA spine (dry-run findings F-00-4, F-04-11)", "type": "string", "minLength": 1},
         "set_by_task": {"$ref": "#/$defs/task_id"},
         "sources": {"$ref": "#/$defs/sources"}
       }

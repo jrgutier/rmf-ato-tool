@@ -23,4 +23,12 @@ technical implementation guides or requirements guides that apply.
 ## Cybersecurity service provider
 
 Who provides monitoring and incident response, the agreement and its date, and the
-evaluation of the provider, if one is on record.
+evaluation of the provider, if one is on record. The CSSP alignment C-1 records:
+
+| Field | Value |
+|---|---|
+| CSSP and its NOSC | name of each |
+| Designation | GENSER, SE or both |
+| Entry in the CSSP register | identifier, date |
+| Agreement | reference and date |
+| Address ranges reported | at the level this repository may hold |

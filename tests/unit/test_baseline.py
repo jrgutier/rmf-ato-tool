@@ -184,3 +184,18 @@ def test_space_overlay_removes_then_adds(minimal_run):
     assert origins["sa-8.1"] == origins["ac-3"] == "baseline"  # unlisted, and kept in Table 3
     assert origins["at-2"] == "privacy-baseline"  # removed, but in the privacy column
 
+
+
+def test_privacy_baseline_left_out_only_when_recorded_not_applying(minimal_run):
+    def origins():
+        return {c["control_id"]: c.get("origin")
+                for c in baseline.resolve(open_run(minimal_run, REPO_ROOT))["controls"]}
+
+    edit_yaml(minimal_run / "run.yaml", lambda d: d.pop("control_subset", None))
+    before = origins()
+    assert "privacy-baseline" in before.values()
+    edit_yaml(minimal_run / "facts.yaml", lambda d: d["categorization"].update(
+        privacy_baseline={"applies": False, "basis": "Not an NSS; the AO left it out."}))
+    after = origins()
+    assert "privacy-baseline" not in after.values()
+    assert {c for c, o in before.items() if o != "privacy-baseline"} <= set(after)

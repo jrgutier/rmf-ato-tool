@@ -19,6 +19,7 @@ has cited them. Replace the guidance in each file with your system's material.
 | `stakeholders.md` | who fills each RMF role (AO, PM, ISSM, ISSO, SCA, CSSP, privacy) and the governance boards |
 | `organization.md` | policy and risk strategy, common controls, threat information, capability and acquisition documents (PPP, SEP, cybersecurity strategy), release history |
 | `services.md` | leveraged services: cloud offerings, enterprise services, the CSSP, software factories, with their authorizations and agreements |
+| `cloud.md` | a cloud-hosted system only: per offering, the PA, customer responsibility matrix, contract clauses, activity checklist, CSSP evaluation and external assessments |
 | `privacy.md` | PII handled, authority and SORN, PIA status, minimization and retention (one line if no PII) |
 | `diagrams/` | the authorization boundary, network architecture and data-flow diagrams (image, PDF, or text/Mermaid), if the program has them |
 | `capability-document.md` | the capability document or user agreement: kind, version, approval date, KPPs, OMS/MP, protection content |

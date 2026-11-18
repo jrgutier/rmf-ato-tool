@@ -412,3 +412,15 @@ def test_dodin_awareness_from_a_leveraged_provider(tmp_path, provider, flagged):
     run = open_run(run_dir, REPO_ROOT)
     found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MRPT-001"]
     assert any("bandwidth" in m for m in found) is flagged, found
+
+
+def test_a_narrower_scoping_value_warns(tmp_path):
+    """F-08-6: a value the NSS column gives without an amount ("all configurable system
+    components") is compared word by word; a narrower one is a warning for a person."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/ssp/controls/cm.yaml",
+              lambda d: d["controls"][0]["parameters"].update(
+                  {"cm-06_odp.02": "the relay only"}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PVAL-002"]
+    assert any("differs from the NSS value" in m for m in found)

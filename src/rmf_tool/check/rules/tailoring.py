@@ -547,6 +547,22 @@ def specification(ctx: Context) -> list[RunFinding]:
         if cid not in selected:
             out.append(make("TLR-006", f"{cid}: specification information is provided for a "
                             "control the baseline does not select", TAILORING, None, {"S-2"}))
+    if not _active(ctx, "S-4"):
+        return out
+    # the specification reaches the security plan: an addendum in the record's `addendum`
+    # field (F-08-7)
+    addenda = {str(c.get("control_id")): rel for rel, c in family_records(ctx, SSP_DIR,
+                                                                           "controls")
+               if c.get("addendum")}
+    written = {str(c.get("control_id")) for _, c in family_records(ctx, SSP_DIR, "controls")}
+    for a in _actions(data):
+        spec = a.get("specification") or {}
+        cid = str(a.get("control_id"))
+        if a.get("action") == "specification" and spec.get("placement") == "addendum" \
+                and cid in written and cid not in addenda:
+            out.append(make("TLR-006", f"{cid}: the specification S-2 places as a control "
+                            "addendum is not in the security plan record's addendum",
+                            TAILORING, None, {"S-4"}))
     return out
 
 
@@ -630,7 +646,12 @@ def requirement_trace(ctx: Context) -> list[RunFinding]:
     def err(message: str) -> None:
         out.append(make("TLR-009", message, ALLOCATION_FILE, None, {"S-3"}))
 
-    defined = set(_REQ_ROW.findall(path.read_text(encoding="utf-8")))
+    # requirements.yaml (P-15) is the structured home; the ART-REQ table is read only for a
+    # run on the older contract that has none (F-05-4)
+    reqs = ctx.data(REQS_DATA_FILE) if ctx.run.path(REQS_DATA_FILE).is_file() else None
+    records = (reqs or {}).get("requirements") if isinstance(reqs, dict) else None
+    defined = {str(r.get("id")) for r in records or [] if isinstance(r, dict) and r.get("id")} \
+        or set(_REQ_ROW.findall(path.read_text(encoding="utf-8")))
     traced: dict[str, list[str]] = {}
     for a in data.get("allocations") or []:
         if isinstance(a, dict):
@@ -697,8 +718,8 @@ def inheritance(ctx: Context) -> list[RunFinding]:
     pk, show = providers.keyer(ctx), providers.shown(ctx)
     records = {pk(p.get("provider")): p for p in data.get("providers") or []
                if isinstance(p, dict)}
-    named = sorted({str(pk(a["provider"])) for a in allocations
-                    if a.get("type") in ("common", "hybrid") and a.get("provider")})
+    named = sorted({str(pk(name)) for a in allocations if a.get("type") in ("common", "hybrid")
+                    for name in providers.of_allocation(a)})
     for key in named:
         name = show(key)
         record = records.get(key)

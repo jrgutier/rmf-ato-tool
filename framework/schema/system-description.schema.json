@@ -42,9 +42,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "building",
-        "walls_and_ceilings",
-        "physical_security",
         "validation"
       ],
       "properties": {
@@ -70,8 +67,27 @@
             "tempest-accreditation",
             "scif-assessment"
           ]
+        },
+        "inherited_from": {
+          "title": "A leveraged authorization (LA-##) whose provider supplies the building and physical security, as for a cloud tenant, in place of the building fields",
+          "type": "string",
+          "pattern": "^LA-\\d{2,3}$"
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "building",
+            "walls_and_ceilings",
+            "physical_security"
+          ]
+        },
+        {
+          "required": [
+            "inherited_from"
+          ]
+        }
+      ]
     },
     "service_alignment": {
       "title": "Alignment of the system to a NOSC and its supporting cybersecurity service provider",
@@ -289,8 +305,7 @@
             "required": [
               "instrument",
               "reference",
-              "date",
-              "signed_by"
+              "date"
             ],
             "properties": {
               "instrument": {
@@ -321,7 +336,33 @@
                   "type": "string",
                   "minLength": 1
                 }
+              },
+              "status": {
+                "title": "Whether the agreement is signed, or only drafted or interim-approved (an unsigned one is a weakness to carry in the risk assessment and POA&M; dry-run finding F-04-7). Default signed.",
+                "enum": [
+                  "signed",
+                  "draft",
+                  "interim-approval"
+                ]
               }
+            },
+            "if": {
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "draft",
+                    "interim-approval"
+                  ]
+                }
+              }
+            },
+            "else": {
+              "required": [
+                "signed_by"
+              ]
             }
           },
           "authorization": {

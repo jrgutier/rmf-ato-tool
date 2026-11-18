@@ -146,13 +146,15 @@ def system_description(ctx: Context) -> list[RunFinding]:
             "(USCYBERCOM)")
     if designation in ("se", "both") and SE_AUTHORITY not in authorities:
         err("a CSSP offers SE cybersecurity services as authorized by the Director, DIA")
+    # S-4 writes the agreements; C-1 names the one it will hold. Until S-4 records any, the
+    # cross-file match waits, and a mismatch is charged to S-4, the later writer (F-04-2).
     agreements = _dicts(_mapping(ctx.data(SVC_FILE)).get("agreements")) \
-        if ctx.run.path(SVC_FILE).is_file() else None
-    if agreements is not None:
+        if ctx.run.path(SVC_FILE).is_file() else []
+    if agreements:
         cssps = {_key(a.get("id")) for a in agreements if a.get("role") == "cssp"}
         if _key(alignment.get("cssp_agreement")) not in cssps:
-            err(f"the aligned CSSP {alignment.get('cssp_agreement')} is no CSSP agreement in "
-                f"{SVC_FILE}")
+            out.append(make("SYSD-002", f"the aligned CSSP {alignment.get('cssp_agreement')} "
+                            f"is no CSSP agreement in {SVC_FILE}", SVC_FILE, None, {"S-4"}))
     for change in _dicts(alignment.get("changes")):
         told = {a for a in _list(change.get("reported_to")) if _key(a)}
         genser_told = told & GENSER_RECIPIENTS[0] and GENSER_RECIPIENTS[1] in told
@@ -246,7 +248,8 @@ def user_groups(ctx: Context) -> list[RunFinding]:
         ident = group.get("id")
         if not group.get("category"):
             err(f"{ident}: the user category is not described")
-        if not group.get("access_requirements"):
+        if not group.get("access_requirements") \
+                and group.get("privilege_level") != "no-logical-access":
             err(f"{ident}: the user access requirements, restrictions and constraints are not "
                 "described")
         if group.get("privilege_level") == "privileged":

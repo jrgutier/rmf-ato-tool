@@ -2,7 +2,7 @@
 artifact_id: ART-RA
 run_id: 20261118-synthetic-01
 produced_by_task: P-14
-touched_by: [P-14, R-2, M-3]
+touched_by: [P-14, C-3, R-2, M-3]
 sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-034.A6, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-037.A3, INT-037.A4, INT-037.A5, INT-038.A1, INT-038.A2, INT-039.A1, INT-039.A2, INT-040.A1, INT-040.A2, ASM-010, ASM-012, ART-ORG-CONTEXT, ART-BIA, ART-INFOTYPES, ART-BND, ART-INV]
 ---
 # System risk assessment
@@ -217,3 +217,7 @@ The CSSP's alert on the managed Kubernetes version was patched by the provider o
 names no IAVM number or issuing authority, so it is treated as a provider advisory, not a directed
 action. No readiness inspection, outside evaluation or VDP report reached the program in the cycle
 [[INT-207.A1]] [[product/monitoring/cycle-2026-11.md#threat]].
+
+## Categorize 3: Categorization Review and Approval (C-3)
+
+With the categorization approved, the supplier risks keep the order already recorded; no risk level changed [[INT-068.A1]].

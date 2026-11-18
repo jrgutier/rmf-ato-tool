@@ -5,7 +5,8 @@ task: "<<FILL: task ID, e.g. C-2>>"
 persona: "<<FILL: respondent persona ID, e.g. PER-IO>>"
 # holder: "maintenance data steward"  # only when several people hold this persona's role
 date: "<<FILL: YYYY-MM-DD>>"
-topics: ["<<FILL: topic>>"]
+topics:
+  - "<<FILL: topic; quote it, since `: ` inside a flow list splits it into a key>>"
 ---
 # <<FILL: INT-###>> — <<FILL: task>> — <<FILL: persona>>
 

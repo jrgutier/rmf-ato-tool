@@ -56,6 +56,8 @@ control provider for the controls it operates; say which service an answer is ab
 - **M (M-3), consulted:** Which new vulnerabilities or incidents need a risk response or a
   POA&M item?
 - **M (M-5), consulted:** What posture metrics can you supply, and how often?
+- **S (S-1):** Which cybersecurity services and controls does the CSSP provide, and which
+  stay with the system?
 
 ## Artifacts owned-approved
 

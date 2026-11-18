@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.software import has_covered_software
@@ -19,6 +20,7 @@ from rmf_tool.run import scope
 
 REQUIREMENTS_FILE = "artifacts/data/requirements.yaml"
 BOUNDARY_FILE = "artifacts/data/boundary.yaml"
+ORG_CONTEXT_FILE = "artifacts/data/org-context.yaml"
 DEFINE, ALLOCATE = "P-15", "P-17"
 SOFTWARE_DP = "DP-SW-"  # DoWI 8430.01: conditional on covered software, and only on that
 # key: (register entry and gist, conditional). Conditional statements hold only where their own
@@ -155,6 +157,11 @@ def _allocation(ctx: Context, requirements: list[dict[str, Any]]) -> list[RunFin
     boundary = ctx.data(BOUNDARY_FILE)
     components = {_key(c.get("id")) for c in _records(boundary, "components")} \
         if isinstance(boundary, dict) else set()
+    # a provider a requirement is allocated to offers common controls (P-5; F-05-12)
+    org = ctx.data(ORG_CONTEXT_FILE)
+    pk = providers.keyer(ctx)
+    offering = {pk(c.get("provided_by")) for c in _records(org, "common_controls")} \
+        if isinstance(org, dict) else set()
     for req in requirements:
         allocated = _list(req.get("allocated_to"))
         if not allocated:
@@ -164,6 +171,10 @@ def _allocation(ctx: Context, requirements: list[dict[str, Any]]) -> list[RunFin
             if str(target).startswith("CMP-") and _key(target) not in components:
                 out.append(_finding("REQS-001", f"{req.get('id')} is allocated to {target}, "
                                     "which is not a boundary component", ALLOCATE))
+            if str(target).startswith("PRV-") and target not in offering:
+                out.append(_finding("REQS-001", f"{req.get('id')} is allocated to provider "
+                                    f"{target}, which offers no common controls in "
+                                    "org-context.yaml common_controls", ALLOCATE))
     return out
 
 

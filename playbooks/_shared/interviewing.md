@@ -40,7 +40,9 @@ run_id: 20261105-synthetic-01
 task: S-4
 persona: PER-ISSO
 date: 2026-11-05
-topics: [account management, audit logging]
+topics:
+  - "account management"
+  - "audit logging"
 ---
 # INT-007 — S-4 — PER-ISSO
 

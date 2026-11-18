@@ -44,6 +44,10 @@ directory, for example `runs/20261105-synthetic-01`.
      there;
    - facts: rewrite `facts.yaml` whole when the playbook says so, keeping every field other
      tasks wrote.
+   - a data file an earlier task wrote (S-3 changing C-1's `leveraged-authorizations.yaml`):
+     write it whole, add your answers to the changed records' `sources`, and journal a NOTE
+     naming the file and the records. Data files carry no `touched_by`, and `rmf status`
+     charges their findings to the task that owns the file.
 
    Tag and trace every claim per
    `_shared/tagging-and-traceability.md`. Why: the CLI derives OSCAL and status from these

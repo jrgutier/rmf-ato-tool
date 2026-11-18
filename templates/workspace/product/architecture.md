@@ -21,6 +21,10 @@ Interfaces, networks, permitted traffic (ports, protocols, directions) and segme
 
 Each connected system: direction, agreement and its own authorization.
 
+| Connection | Other system | Its AO | Direction | Agreement (ISA, MOA, MOU, SLA) | Reference | Status (signed, draft, interim approval) | Date | Signatories |
+|---|---|---|---|---|---|---|---|---|
+| CONN-01 | example system | title of its AO | in, out or both | ISA | ISA-0001 | signed | 2026-01-01 | both AOs |
+
 ## Leveraged authorizations
 
 Each separately authorized provider whose controls the system inherits, what it covers, the

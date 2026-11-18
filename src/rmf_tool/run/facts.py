@@ -92,6 +92,11 @@ def display(facts: dict[str, Any], dotted: str) -> str | None:
         return f"{val}; markings: {', '.join(map(str, marks)) or 'none'}"
     if dotted == "system_type" and val is not None:
         return f"{val}, {node.get('connectivity')}"
+    if dotted == "lifecycle_phase" and val is not None and node.get("pathway_phase"):
+        return f"{val} ({node['pathway_phase']})"
+    if dotted == "operational_environment" and val is not None and node.get("current") \
+            and node.get("current") != val:
+        return f"{val} (runs in {node['current']} today)"
     if dotted == "system_version" and val is not None and node.get("release_date"):
         return f"{val} (released {node['release_date']})"
     if isinstance(val, bool):

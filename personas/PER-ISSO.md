@@ -41,11 +41,14 @@ by the PM or SO.
 - **P (P-17), a primary role:** Which security requirements fall to the system and which to the
   environment it runs in, as operated today?
 - **S (S-3), a primary role (DoDI 8510.01 Table 3):** Which controls does the system run itself,
-  which does a provider supply, and on which elements does each run?
+  which does a provider supply, and on which elements does each run? Which do you operate
+  day to day (accounts, logging, patching), and on which components?
 - **S (S-4):** How are accounts requested, approved, created, reviewed and removed? How often
   are they reviewed, and when was the last review? Which events are logged, where do they
   go, and who reviews them how often? How are updates installed, and how current is each
-  unit? What evidence do you keep?
+  unit? What evidence do you keep? How are people screened before access, and how fast are
+  a leaver's accounts disabled and property recovered (PS-3, PS-4: date left against date
+  disabled)?
 - **A (A-3), as asked by the assessor:** Show the last account review record. Which units are
   behind on updates, and since when? Who uses the shared account, and how is it controlled?
 

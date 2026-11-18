@@ -7,6 +7,7 @@ kind, it is no looser."""
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from rmf_tool import cnssi1253_params
@@ -42,6 +43,16 @@ def _findings(ctx: Context) -> list[RunFinding]:
                 err(f"{cid} records no value for {', '.join(unset)}; CNSSI 1253 sets the NSS "
                     f"value {nss['value']!r}")
             if nss["bound"] not in COMPARED:
+                # a short scoping value no amount orders ("all information"): a recorded
+                # value that leaves out its words is a warning for a person to judge that it
+                # meets or exceeds it (F-08-6); longer guidance prose is not compared
+                words = _words(nss["value"])
+                for pid in nss["params"] if 0 < len(words) <= SHORT else ():
+                    value = recorded.get(pid)
+                    if isinstance(value, str) and value and not words <= _words(value):
+                        out.append(make("PVAL-002", f"{cid} {pid}: {value!r} differs from the "
+                                        f"NSS value {nss['value']!r}; record why it meets or "
+                                        "exceeds it", rel, None, {"S-4"}))
                 continue
             for pid in nss["params"]:
                 value = recorded.get(pid)
@@ -58,6 +69,14 @@ def _findings(ctx: Context) -> list[RunFinding]:
                                     f"compare with the NSS minimum {nss['value']!r}", rel, None,
                                     {"S-4"}))
     return out
+
+
+SHORT = 5  # words: a scoping value, not guidance prose
+_STOP = {"and", "or", "the", "a", "an", "of"}
+
+
+def _words(text: str) -> set[str]:
+    return {w for w in re.findall(r"[a-z0-9]+", text.lower()) if w not in _STOP}
 
 
 def nss_values(ctx: Context) -> list[RunFinding]:

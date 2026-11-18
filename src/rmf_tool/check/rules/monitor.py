@@ -20,6 +20,8 @@ from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
 from rmf_tool.run import authorization as ledger
 from rmf_tool.run import clock, scope
 
+ORG_CONTEXT_FILE = "artifacts/data/org-context.yaml"
+
 CHANGES_FILE = "artifacts/data/changes.yaml"
 REPORTS_FILE = "artifacts/data/posture-reports.yaml"
 CONMON_FILE = "artifacts/data/conmon.yaml"
@@ -253,9 +255,24 @@ def inheritance(ctx: Context) -> list[RunFinding]:
     allocation = ctx.data(ALLOCATION_FILE)  # S-3 writes it after C-1
     # a provider of hybrid controls supplies the common part of them (F-05-1)
     pk = providers.keyer(ctx)
-    offering = {pk(a.get("provider")) for a in _items(allocation, "allocations")
-                if a.get("type") in ("common", "hybrid")}
-    for r in _items(data, "leveraged_authorizations"):
+    offering = {pk(name) for a in _items(allocation, "allocations")
+                if a.get("type") in ("common", "hybrid")
+                for name in providers.of_allocation(a)}
+    records = _items(data, "leveraged_authorizations")
+    # the reverse direction (F-08-1): the provider of a control S-3 allocates as wholly
+    # common is either a P-5 common control provider or one whose authorization C-1 leverages
+    org = ctx.data(ORG_CONTEXT_FILE)
+    known = {pk(c.get("provided_by")) for c in _items(org, "common_controls")}
+    known |= {pk(r.get("provider")) for r in records}
+    common = {pk(a.get("provider")) for a in _items(allocation, "allocations")
+              if a.get("type") == "common"}
+    checked = isinstance(org, dict) and "common_controls" in org
+    for name in sorted(str(p) for p in common if checked and p and p not in known):
+        out.append(make("MLEV-001", f"{providers.shown(ctx)(name)} provides common "
+                        "controls in allocation.yaml, and neither org-context.yaml "
+                        "common_controls nor leveraged-authorizations.yaml names it, so it is no "
+                        "approved common control provider", ALLOCATION_FILE, None, {"S-3"}))
+    for r in records:
         lid, arrangement = r.get("id"), r.get("arrangement")
         if ENTERPRISE in r:
             continue
