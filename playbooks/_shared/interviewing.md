@@ -6,7 +6,7 @@ behind most run claims: artifacts cite their answers as `INT-###.A#`.
 ## Steps
 
 1. **Pick the respondents.** Use the personas in the playbook's `## Interviews` section.
-   Look up each one's stakeholder in `artifacts/ART-STAKE.md`. Why: the RACI in the header
+   Look up each one's stakeholder in `artifacts/ART-STAKE.md` (from P-9 on; before P-9 writes it, use the product's `stakeholders.md` and ART-ORG-CONTEXT). Why: the RACI in the header
    says who is responsible or consulted; the register says who speaks for them in this run.
 2. **Number the interview.** Find the highest `INT-###` under `interviews/` and add 1
    (start at `INT-001`). Numbers are global to the run, never per task, and never reused.

@@ -582,12 +582,26 @@ def run_init(
         Path | None, typer.Option(help="Agent-lane scenario (tests/agent/scenarios/<s>.yaml): "
                                        "product, scope, seeds, control subset.", dir_okay=False)
     ] = None,
+    controls: Annotated[
+        Path | None, typer.Option(help="Rehearsal run: a file of control IDs (one per line or "
+                                       "whitespace separated, # comments) the baseline is "
+                                       "limited to; the baseline ID gets -SUBSET-<n>.",
+                                  dir_okay=False, exists=True)
+    ] = None,
 ) -> None:
     """Start a run in ./runs/<run-id>/ and stamp run.yaml (upstream_hash, versions)."""
+    import re as _re
+
     from rmf_tool.workspace import WorkspaceError, init_run
 
+    subset = None
+    if controls is not None:
+        text = _re.sub(r"#[^\n]*", "", controls.read_text(encoding="utf-8"))
+        subset = text.replace(",", " ").split()
+        if not subset:
+            raise _usage_error(f"{controls} lists no control IDs")
     try:
-        run_dir = init_run(Path.cwd(), repo_root(), mode, run_id, scenario)
+        run_dir = init_run(Path.cwd(), repo_root(), mode, run_id, scenario, controls=subset)
     except WorkspaceError as exc:
         raise _usage_error(str(exc)) from exc
     typer.echo(f"created {run_dir}\nnext: uv run rmf status {run_dir}")

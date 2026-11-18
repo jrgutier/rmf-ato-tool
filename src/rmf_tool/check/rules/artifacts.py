@@ -71,7 +71,8 @@ def front_matter(ctx: Context) -> list[RunFinding]:
                 out.append(make(FM, "unreadable or empty data file", rel, None, owners))
                 continue
             for e in run.schema_errors(schema, data):
-                out.append(make(FM, f"{schema}.schema.json: {e}", rel, None, owners))
+                out.append(make(FM, f"{schema}.schema.json: {e}", rel, None,
+                                _key_owner(schema, str(e), owners)))
             fam = rel.rsplit("/", 1)[-1].split(".")[0]
             if any(FAMILY_TOKEN in d["path"] and d.get("schema") == schema
                    for d in run.artifacts[aid].get("data") or []) \
@@ -150,3 +151,20 @@ def placeholders(ctx: Context) -> list[RunFinding]:
                 out.append(make(PH, f"unresolved placeholder: {line.strip()[:120]}",
                                 run.rel(path), lineno))
     return out
+
+
+# A shared record written section by section: a schema error in one section is charged to
+# the task that writes it, so `rmf status` does not send the run back to the first writer
+# (dry-run finding F-01-9).
+_SECTION_KEYS = {"org-context": {"reference_currency": "P-2", "providers": "P-2",
+                                 "posture_reviews": "P-3", "developed_overlays": "P-4"}}
+
+
+def _key_owner(schema: str, message: str, owners: set[str]) -> set[str]:
+    sections = dict(_SECTION_KEYS.get(schema) or {})
+    if schema == "org-context":
+        from rmf_tool.check.rules.org_context import SECTIONS
+        sections.update(SECTIONS)
+    key = message.split(":", 1)[0].split("/", 1)[0].split(".", 1)[0].strip()
+    task = sections.get(key)
+    return {task} if task and task in owners else owners

@@ -25,6 +25,7 @@ sources: [INT-004.A1, ART-INFOTYPES, ART-ORG-CONTEXT]
 | System version | 1.0 (released 2026-09-01) | C-1 |
 | Operational environment | test | C-1 |
 | Life-cycle phase | PH-EMD | C-1 |
+| National security system | no | C-1 |
 <!-- END rmf:facts -->
 
 ## Basis

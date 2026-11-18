@@ -1731,6 +1731,14 @@
             "type": "string",
             "minLength": 1
           },
+          "kind": {
+            "enum": [
+              "system",
+              "program"
+            ],
+            "title": "system: controls a provider's system offers; program: organization-level program management controls (the PM family, a privacy office's program controls), which hold no system authorization",
+            "description": "Default system."
+          },
           "persona": {
             "title": "The common control provider's persona",
             "type": "string",
@@ -1766,12 +1774,22 @@
                   "AD-ATOC",
                   "AD-IATT",
                   "AD-DATO",
-                  "none"
-                ]
+                  "none",
+                  "dod-pa"
+                ],
+                "description": "dod-pa: a DoD provisional authorization of a cloud offering, which the system's AO leverages (dry-run finding F-01-7)."
               },
               "by": {
-                "type": "string",
-                "pattern": "^PER-[A-Z]+$"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "const": "provider-ao"
+                  }
+                ],
+                "description": "PER-AO or PER-AODR, or provider-ao: the provider's own authorizing official, who is not this system's AO"
               },
               "date": {
                 "$ref": "#/$defs/date"
@@ -1869,9 +1887,17 @@
                 "minLength": 1
               },
               "approved_by": {
-                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
-                "type": "string",
-                "pattern": "^PER-[A-Z]+$"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "const": "provider-ao"
+                  }
+                ],
+                "description": "PER-AO or PER-AODR, or provider-ao: the provider's own authorizing official, who is not this system's AO",
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document"
               },
               "approved_on": {
                 "$ref": "#/$defs/date"
@@ -1910,9 +1936,17 @@
                 "minLength": 1
               },
               "approved_by": {
-                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
-                "type": "string",
-                "pattern": "^PER-[A-Z]+$"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "const": "provider-ao"
+                  }
+                ],
+                "description": "PER-AO or PER-AODR, or provider-ao: the provider's own authorizing official, who is not this system's AO",
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document"
               },
               "approved_on": {
                 "$ref": "#/$defs/date"
@@ -1949,9 +1983,17 @@
                 "minLength": 1
               },
               "approved_by": {
-                "title": "The authorizing official accountable for the common controls who reviewed and approved the document",
-                "type": "string",
-                "pattern": "^PER-[A-Z]+$"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "const": "provider-ao"
+                  }
+                ],
+                "description": "PER-AO or PER-AODR, or provider-ao: the provider's own authorizing official, who is not this system's AO",
+                "title": "The authorizing official accountable for the common controls who reviewed and approved the document"
               },
               "approved_on": {
                 "$ref": "#/$defs/date"
@@ -2552,7 +2594,6 @@
         "processes",
         "objectives",
         "activities",
-        "not_applicable",
         "minimum_frequencies",
         "review_cycle",
         "sources"

@@ -130,7 +130,8 @@ def _copy_base_run(base_run: Path, run_dir: Path, run_id: str, remove: list[str]
 
 
 def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str | None = None,
-             scenario_path: Path | None = None, as_of: str | None = None) -> Path:
+             scenario_path: Path | None = None, as_of: str | None = None,
+             controls: list[str] | None = None) -> Path:
     """Create ``<workspace>/runs/<run-id>/``; returns the run directory."""
     if not (repo / FRAMEWORK_DIR / META_FILE).is_file():
         raise WorkspaceError(f"{repo} is not an rmf repository ({FRAMEWORK_DIR}/ not found); "
@@ -181,6 +182,10 @@ def init_run(workspace: Path, repo: Path, mode: str = "synthetic", run_id: str |
         "upstream_hash_basis": basis,
         "oscal_version": OSCAL_VERSION,
     })
+    if controls:
+        # a rehearsal run (F-00-2): the baseline ID gets -SUBSET-<n>, so the package shows it
+        config["control_subset"] = sorted(dict.fromkeys(c.strip().lower() for c in controls
+                                                        if c.strip()))
     seeds: list[tuple[Path, str]] = []
     if scenario:
         config["scope"] = scenario["scope"]

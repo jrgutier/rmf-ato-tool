@@ -25,6 +25,8 @@ sources: [INT-001.A1, INT-001.A2, INT-002.A1, INT-003.A1, INT-004.A2, INT-005.A1
 | System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
 | Operational environment | production | C-1 |
 | Life-cycle phase | PH-PD | C-1 |
+| National security system | no | C-1 |
+| Missions and business functions | MSN-01 Naval aviation readiness: keeping aircraft mission-capable; MSN-02 Aircraft maintenance and readiness management; MSN-03 Daily readiness reporting for squadron, air wing and fleet (BP-01); MSN-04 Part failure forecasting for early part orders (BP-02); MSN-05 Fleet readiness analysis and de-identified data set export (BP-03) | P-8 |
 <!-- END rmf:facts -->
 
 ## RMF role assignments

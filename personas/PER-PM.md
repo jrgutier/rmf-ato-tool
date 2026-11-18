@@ -39,6 +39,12 @@ act when no PM is assigned.
 
 ## Question bank by step
 
+- **P (P-8), accountable:** Which missions and business functions does the system
+  support? Which are critical, and what does an outage of each cost and after how long?
+  What are the recovery objectives the mission can live with?
+- **P (P-9):** Who are the stakeholders: who uses, funds, depends on, connects to or
+  oversees the system? What does each need from the security and privacy work, and how
+  should each hear about decisions?
 - **P (P-10):** Which assets matter most to the mission, and why? Is anything planned but
   not yet fielded?
 - **P (P-11), optional:** What does the program control and fund? Which sites and units are

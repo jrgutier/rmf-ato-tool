@@ -34,7 +34,7 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
    | Task | Section |
    |---|---|
    | P-1 | `## RMF role assignments` |
-   | P-2 | `## Risk management strategy and risk tolerance`, then `## Privacy program` |
+   | P-2 | `## Risk management strategy and risk tolerance`, then `## Privacy program` and, when the organization develops or deploys software, `## Software program` |
    | P-3 | `## Organization-level risk assessment` |
    | P-4 | `## Organizationally tailored baselines and profiles` |
    | P-5 | `## Common controls available for inheritance` |
@@ -43,8 +43,8 @@ section (`playbooks/P/P-org-context.md#task-p-1`).
 
    P-1 writes the file from the template, filling only `## RMF role assignments`, and keeps
    the template's HTML comment that lists what each later section holds. Each later task
-   rewrites the whole file with its own section appended at the end, after the sections
-   already there, and itself appended to `touched_by`. A task that is not performed in
+   rewrites the whole file with its own section appended after the sections already there
+   and before that comment, and itself appended to `touched_by`; P-7 deletes the comment. A task that is not performed in
    the organization (optional P-4, P-6) still appends its heading with one traced sentence
    saying the organization has none. Why: RUN-PH-001 forbids a placeholder left for a later
    task, TRACE-001 needs a token in every section, and the file is written whole (INV-8).
@@ -92,7 +92,9 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
 3. **Interview** PER-CIO, then PER-PRIV (`### Interviews`): who fills each RMF role for the
    organization and for this system's portfolio (AO, AODR, CISO and SCA, risk executive,
    privacy officer, common control providers), who appointed them, and any role one person
-   holds together with another.
+   holds together with another. A common control provider that is an organization (an
+   enclave, a cloud provider, a CSSP) is not appointed: P-2 registers it in `providers`
+   instead of `roles`.
 4. **Check separation.** No AO is also the system owner or common control provider of what
    it authorizes, and the SCA has the independence the AO requires. A conflict is a
    finding to record, not to resolve here. Why: the exit criterion and SP 800-37r2 Task P-1
@@ -125,6 +127,9 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    record each role held. In `code_signing` say whether code-signing certificates are used
    by the organization (cm-14 met by vendor signatures alone does not count), the designation
    process, `operational_need` and each holder, no more than that need (OCTX-002).
+   Give every role record, cyber or not (PER-PM and PER-UR too), a `qualification`: its
+   status, the standard, the training taken and `verified_by` someone other than the
+   appointee (WFQ-001). When nothing evidences it, say so in an assumption.
 6. **Write `artifacts/ART-ORG-CONTEXT.md`** from `templates/artifacts/ART-ORG-CONTEXT.md`
    with `produced_by_task: P-1` and `touched_by: [P-1]`. Fill `## RMF role assignments` with
    a table of role, persona ID, holder's title (not a personal name unless the fork gives
@@ -135,7 +140,11 @@ Purpose: Identify and assign the individuals who fill the security and privacy r
    leads C-SCRM, `pmo` is dedicated, matrixed or a team, PER-AO is among `owners` (an AO may delegate
    day-to-day risk to `delegates` such as PER-AODR), the council and its charter, and a C-SCRM
    duty for PER-PM, PER-DEV, PER-LSE or PER-ISSE, PER-CIO, PER-CISO and PER-RE (SCRM-021).
-   Leave the other sections as the template's placeholders until their task.
+   The schema needs every section, and RUN-PH-001 refuses a placeholder, so write the whole
+   file now: interview PER-CISO (the C-SCRM lead) on the frame, policy, strategy, levels,
+   process, sharing and measures as they stand today, and record "none yet" answers as
+   traced empty lists where the schema allows them. P-2 to P-7 then rewrite their own
+   sections. Never leave a `<<FILL>>` in the file.
 8. **Build and check.** `uv run rmf build <run>`, then `uv run rmf check <run> --task P-1`,
    until 0 errors. **Journal** a CHECKPOINT.
 
@@ -159,7 +168,7 @@ At least 1 interview with `task: P-1`.
 | File | Front-matter | Notes |
 |---|---|---|
 | `artifacts/ART-ORG-CONTEXT.md` | `artifact_id: ART-ORG-CONTEXT`, `produced_by_task: P-1`, `touched_by: [P-1]` | the role assignments section only |
-| `artifacts/data/scrm-org.yaml` | none (data) | C-SCRM governance; the other sections are filled by P-2 to P-7 |
+| `artifacts/data/scrm-org.yaml` | none (data) | the whole C-SCRM record, governance first; P-2 to P-7 rewrite their sections |
 
 ### Facts
 
@@ -269,6 +278,15 @@ Purpose: Establish the organization's risk management strategy, including how it
      leveraged authorizations, S-3 allocation, S-4 service agreements and `inherited_from`)
      names the provider by this ID, never by a name typed again (PRV-001). A later task that
      finds a new provider adds it here with the next number.
+   - `reference_currency` (RCUR-001): the date the governing references were checked for a
+     later edition and, for each of CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 that the
+     library holds, the edition the run uses and any later edition with its publication date
+     and whether the run adopts it. Ask PER-CIO. A later edition is a new issuance or
+     revision, not an update release of the same revision (name the release, such as SP
+     800-53 Rev. 5 release 5.2.0, in `edition_used`). Working offline (INV-7) you cannot
+     check a publisher's site: record the persona's statement and an ASSUMPTION.
+   - `## Software program` in ART-ORG-CONTEXT (DoWI 8430.01) when the organization develops
+     or acquires software, as the template comment says.
 6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
    to 1-4 (OT suppliers in scope; threat, vulnerability, impact and likelihood assumptions
    each refined at P-14; which threat source kinds are addressed; appetite set at level-1 and
@@ -536,12 +554,19 @@ Purpose: Identify, document and publish the common controls available for inheri
    `## Common controls available for inheritance` with a table per provider: control IDs
    (OSCAL form, `ac-2`), full or partial, the provider's authorization status, traced.
    S-1, S-3 and P-17 read this table.
-5. **Add `common_controls` to `org-context.yaml`**: per provider (`provided_by`, the string the
-   SSP's `inherited_from` uses), its persona, the controls, the separate authorization of the
-   common controls, the assessor (chosen by the provider or the organization, qualified), and
-   the plan, assessment report and, for deficiencies, POA&M, each approved by the AO or AODR
-   accountable for the common controls before it is made available to the system owner
-   (OCTX-005). A-3 rests each inherited control's determination on this package (OCTX-006).
+5. **Add `common_controls` to `org-context.yaml`**: per provider (`provided_by`, its PRV-##
+   ID from `providers`, which the SSP's `inherited_from` uses too), its persona, the controls,
+   the separate authorization of the common controls, the assessor (chosen by the provider or
+   the organization, qualified), and the plan, assessment report and, for deficiencies,
+   POA&M, each approved by the AO or AODR accountable for the common controls before it is
+   made available to the system owner (OCTX-005). A-3 rests each inherited control's
+   determination on this package (OCTX-006). A provider is an organization: registered in
+   `providers`, it needs no `roles` record. The provider's own AO is not this system's: write
+   `provider-ao` in `authorization.by` and `approved_by` when the provider's AO approved it,
+   and `decision: dod-pa` for a cloud offering's DoD provisional authorization. Program
+   management controls the organization runs for every system (the PM family, a privacy
+   office's program controls) go in an entry with `kind: program`, which needs no system
+   authorization.
 6. **Build and check** with `--task P-5`, then **journal** a CHECKPOINT.
 
 ### Interviews
@@ -692,8 +717,10 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
    frequencies or the rules for setting them, the metrics and automation used, who
    receives monitoring reports and how often, and the triggers for ongoing authorization.
 4. **Rewrite `artifacts/ART-ORG-CONTEXT.md`** whole: append `P-7` to `touched_by` and append
-   `## Organizational continuous monitoring strategy`, traced. S-5 builds the system
-   strategy (`conmon.yaml`) to be consistent with this section.
+   `## Organizational continuous monitoring strategy`, traced, with the Component's
+   vulnerability management program (DoDI 8531.01 2.10) as the template comment lists it
+   (S-5 and M-3 read it). S-5 builds the system strategy (`conmon.yaml`) to be consistent
+   with this section. P-7 is the last section: delete the template's HTML comment now.
 5. **Add `iscm` to `org-context.yaml`** (OCTX-007, OCTX-008): whether the program is in
    place, its governance, the organization-wide policies by subject (security status
    monitoring and making results available to risk assessment among them), the manual and
@@ -701,7 +728,7 @@ Purpose: Develop and implement the organization-wide strategy for continuously m
    objectives and the activities mapped to them, what monitoring determines (control
    effectiveness, changes, the organizational state, awareness of threats and vulnerabilities
    and visibility into organizational assets, CNSSP 22 IV.f), the assessment
-   elements the strategy declares not applicable, the minimum frequency per family across
+   elements the strategy declares not applicable (leave `not_applicable` out, or empty, when none), the minimum frequency per family across
    systems and common controls (S-5 is held to it, OCTX-009), when the program was
    `established`, its `review_cycle` (monthly to annually) and each review (threats considered
    across them); the first review and assessment are due one cycle after `established`, each formal program assessment with who received it

@@ -66,7 +66,8 @@ def run_checks(root: Path) -> list[Check]:
         _tool("git", True, "install git", ("--version",)),
         _tool("git-lfs", True, "make bootstrap", ("version",)),
         _tool("jq", True, "make bootstrap", ("--version",)),
-        _tool("qpdf", True, "make bootstrap; needed only by `rmf refs fetch`, not by runs",
+        _tool("qpdf", False, "optional for runs; make bootstrap; `rmf refs fetch` and "
+              "`rmf refs import` need it",
               ("--version",)),
     ]
     if shutil.which("git") and (root / ".git").exists():

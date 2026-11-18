@@ -92,8 +92,10 @@ ENTERPRISE_GOVERNANCE = "dod-enterprise-governance"
 SENIOR = ("PER-RE", "PER-CIO", "PER-CISO", "PER-AO", "head-of-agency", "dod-component-head",
           "saorm")
 SAORM = "saorm"
-AUTHORIZED = ("AD-ATO", "AD-ATOC")
+AUTHORIZED = ("AD-ATO", "AD-ATOC", "dod-pa")  # dod-pa: a DoD provisional authorization
 DOC_APPROVERS = ("PER-AO", "PER-AODR")
+# A provider's documents may be approved by its own AO, who is not this system's (F-01-7).
+PROVIDER_DOC_APPROVERS = (*DOC_APPROVERS, "provider-ao")
 SYSTEM_OWNER = "PER-PM"
 LEADERSHIP = ("PER-CIO", "PER-CISO", "PER-RE", "head-of-agency", "dod-component-head", "saorm")
 # SP 800-137 3.1 and CNSSP 22 Section IV.f: the ISCM strategy and program provide awareness of
@@ -422,7 +424,11 @@ def code_signing(ctx: Context) -> list[RunFinding]:
 # --- OCTX-003: program, policies and resources (P-2) ----------------------------------------
 
 def _system_id(ctx: Context) -> Any:
-    node = facts_mod.get(ctx.facts, "system_id")
+    return _fact(ctx, "system_id")
+
+
+def _fact(ctx: Context, path: str) -> Any:
+    node = facts_mod.get(ctx.facts, path)
     return node.get("value") if isinstance(node, dict) else node
 
 
@@ -466,7 +472,10 @@ def governance(ctx: Context) -> list[RunFinding]:
         return out
     prog = _section(data, "program")
     system = _system_id(ctx)
-    if system and system not in _list(prog.get("systems")):
+    # P-2 runs before C-1 sets system_id: the acronym or an alias names the system too (F-01-10)
+    names = {str(system)} | {str(_fact(ctx, "acronym") or "")} | {
+        str(a) for a in _list(_fact(ctx, "aliases"))}
+    if system and not (names - {""}) & {str(s) for s in _list(prog.get("systems"))}:
         err(f"{system} is not assigned to and governed by the Component cybersecurity program")
     if DOD_STRATEGY not in _list(prog.get("consistent_with")):
         err("the Component cybersecurity program is not consistent with the strategy and "
@@ -608,13 +617,17 @@ def common_controls(ctx: Context) -> list[RunFinding]:
     if "P-5" in scope.active_tasks(ctx.run) and "common_controls" not in data:
         err("org-context.yaml has no common_controls, which P-5 records")
     holders = _holders(data)
-    show = providers.shown(ctx)
+    show, pk, registered = providers.shown(ctx), providers.keyer(ctx), providers.registry(ctx)
     for cc in _dicts(data.get("common_controls")):
         provider = show(cc.get("provided_by"))
-        if _key(cc.get("persona")) not in holders:
+        # A provider is an organization: registered in providers, it needs no roles record,
+        # whose appointer, citizenship and affiliation fit a person (F-01-6).
+        if _key(cc.get("persona")) not in holders and pk(cc.get("provided_by")) not in registered:
             err(f"{provider}: the common control provider {cc.get('persona')} holds no role in "
                 "roles")
-        if _sub(cc, "authorization").get("decision") not in AUTHORIZED:
+        # Program management controls (kind program) hold no system authorization (F-01-7).
+        if cc.get("kind") != "program" \
+                and _sub(cc, "authorization").get("decision") not in AUTHORIZED:
             err(f"{provider}: the common controls hold no authorization from their authorizing "
                 f"official ({_sub(cc, 'authorization').get('decision')})")
         assessed = _sub(cc, "assessed_by")
@@ -631,7 +644,7 @@ def common_controls(ctx: Context) -> list[RunFinding]:
             doc = _sub(cc, name)
             if not doc:
                 continue
-            if doc.get("approved_by") not in DOC_APPROVERS:
+            if doc.get("approved_by") not in PROVIDER_DOC_APPROVERS:
                 err(f"{provider}: the {name} is approved by {doc.get('approved_by')}, not the "
                     "authorizing official accountable for the common controls")
             if SYSTEM_OWNER not in _list(doc.get("available_to")):
@@ -947,4 +960,45 @@ def reference_currency(ctx: Context) -> list[RunFinding]:
                 and (checked - published).days > YEAR_DAYS:
             err(f"{ref} has a later edition, {later.get('edition')}, published on {published}, "
                 "more than a year before the check, and the run does not adopt it")
+    return out
+
+
+# --- OCTX-014: each task's section of ART-ORG-CONTEXT is there and holds text --------------
+
+# A heading word each task's section carries (the template's headings and shorter forms).
+SECTION_WORDS = {
+    "P-1": ("role",), "P-2": ("risk management strategy", "risk tolerance"),
+    "P-3": ("risk assessment",), "P-4": ("tailored baseline",), "P-5": ("common control",),
+    "P-6": ("prioritization",), "P-7": ("continuous monitoring",),
+}
+
+
+def _sections(body: str) -> list[tuple[str, str]]:
+    """(heading, text) for each H2 of `body`, the text without HTML comments."""
+    import re
+
+    parts = re.split(r"(?m)^## (.+)$", re.sub(r"<!--.*?-->", "", body, flags=re.S))
+    return [(parts[i].strip().lower(), parts[i + 1].strip()) for i in range(1, len(parts), 2)]
+
+
+def section_presence(ctx: Context) -> list[RunFinding]:
+    """OCTX-014: each of P-1 to P-7 that touched ART-ORG-CONTEXT wrote its section, and the
+    section says something (dry-run finding F-01-14)."""
+    doc = ctx.docs.get(f"artifacts/{ARTIFACT}.md")
+    if doc is None or not isinstance(doc.data, dict):
+        return []
+    touched = doc.data.get("touched_by")
+    active = set(scope.active_tasks(ctx.run))
+    sections = _sections(doc.body or "")
+    out: list[RunFinding] = []
+    for task, words in SECTION_WORDS.items():
+        if task not in active or task not in (touched if isinstance(touched, list) else []):
+            continue
+        found = [text for head, text in sections if any(w in head for w in words)]
+        if not found:
+            out.append(make("OCTX-014", f"{task} touched ART-ORG-CONTEXT without writing its "
+                            "section", f"artifacts/{ARTIFACT}.md", None, {task}))
+        elif not any(found):
+            out.append(make("OCTX-014", f"the {task} section of ART-ORG-CONTEXT is empty",
+                            f"artifacts/{ARTIFACT}.md", None, {task}))
     return out

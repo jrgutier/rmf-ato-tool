@@ -28,6 +28,8 @@ analysis enclave [[INT-003.A1]] [[product/architecture.md#overview]].
 | System version | 1.0 (released 2026-09-01) | C-1 |
 | Operational environment | test | C-1 |
 | Life-cycle phase | PH-EMD | C-1 |
+| National security system | yes | C-1 |
+| Missions and business functions | MSN-01 Field reporting; MSN-02 Report analysis support | P-8 |
 <!-- END rmf:facts -->
 
 ## Users

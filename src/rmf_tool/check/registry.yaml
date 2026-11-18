@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 392 rules, 38 repo-scope and 354 run-scope. Authoritative;
+# Rule registry (plan §6.5): 393 rules, 38 repo-scope and 355 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -4866,7 +4866,7 @@ rules:
     applies_after: P-2
     summary: "the system is not assigned to and governed by the Component cybersecurity program, the program is not consistent with the DoD SISO's strategy, or no governance body integrates with the DoD enterprise governance processes"
     fixture: tests/fixtures/negative/OGOV-001.yaml
-    hint: "org-context.yaml program: systems lists the system, consistent_with names the DoD SISO strategy, and a governance_bodies record integrates_with the DoD enterprise governance; split from OCTX-003."
+    hint: "org-context.yaml program: systems lists the system (its system_id, acronym or an alias), consistent_with names the DoD SISO strategy, and a governance_bodies record integrates_with the DoD enterprise governance; split from OCTX-003."
     enforces:
       - REQ-CNSSP12-0048
       - REQ-DODI8500.01-0012
@@ -6804,7 +6804,7 @@ rules:
     applies_after: P-2
     summary: "P-2 records no check of the governing references for a later edition, leaves one out, or leaves a later edition of a CNSS issuance or DoDI 8510.01, or of SP 800-53 a year after its publication, unadopted"
     fixture: tests/fixtures/negative/RCUR-001.yaml
-    hint: "In org-context.yaml reference_currency, record the date of the check and, for CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 (those the library holds), the edition the run uses and any later edition found, with its publication date and whether the run adopts it. A later CNSS issuance or DoDI 8510.01 is adopted; a later SP 800-53 within a year of its final publication."
+    hint: "In org-context.yaml reference_currency, record the date of the check and, for CNSSI 1254, CNSSP 22, DoDI 8510.01 and SP 800-53 (those the library holds), the edition the run uses and any later edition found, with its publication date and whether the run adopts it. A later CNSS issuance or DoDI 8510.01 is adopted; a later SP 800-53 within a year of its final publication. A later edition is a new issuance or revision (SP 800-53 Rev. 6), not an update release of the same revision (Rev. 5 release 5.2.0): name the release in edition_used. Offline, record the persona's statement of the check with an ASSUMPTION."
     enforces:
       - REQ-CNSSI1254-0016
       - REQ-CNSSP22-0030
@@ -7205,3 +7205,13 @@ rules:
     summary: "a provider ID (PRV-##) is registered twice, or a record names one org-context.yaml providers does not register"
     fixture: tests/fixtures/negative/PRV-001.yaml
     hint: "Register each provider once in org-context.yaml providers (id PRV-##, name) and name it by that ID in external_entities, common_controls, leveraged authorizations, allocation, service agreements and the SSP's inherited_from."
+  - id: OCTX-014
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-1
+    summary: "a task from P-1 to P-7 touched ART-ORG-CONTEXT without writing its section, or left it empty"
+    fixture: tests/fixtures/negative/OCTX-014.yaml
+    hint: "Each of P-1 to P-7 appends its own H2 section to ART-ORG-CONTEXT (playbooks/P/P-org-context.md step 4) with traced text; an optional task the organization does not perform still writes one sentence saying so."
