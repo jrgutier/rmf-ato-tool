@@ -3,7 +3,7 @@ artifact_id: ART-BASELINE
 run_id: 20261118-synthetic-01
 produced_by_task: S-1
 touched_by: [S-1, S-2, S-3]
-sources: [INT-070.A1, INT-070.A2, INT-070.A3, INT-070.A4, INT-070.A5, INT-071.A1, INT-071.A2, INT-071.A3, INT-071.A4, INT-072.A1, INT-072.A2, INT-073.A1, INT-073.A2, INT-074.A1, INT-074.A2, INT-074.A3, INT-074.A4, INT-074.A5, INT-074.A6, INT-075.A1, INT-075.A2, INT-075.A3, INT-075.A4, INT-076.A1, INT-076.A2, INT-077.A1, INT-077.A2, INT-078.A1, INT-078.A2, INT-078.A3, INT-078.A4, INT-079.A1, INT-079.A2, INT-079.A3, INT-080.A1, INT-080.A2, INT-081.A1, INT-082.A1, INT-083.A1, INT-083.A2, ART-CAT, ART-ORG-CONTEXT, ART-REQ, ART-RA]
+sources: [INT-070.A1, INT-070.A2, INT-070.A3, INT-070.A4, INT-070.A5, INT-071.A1, INT-071.A2, INT-071.A3, INT-071.A4, INT-072.A1, INT-072.A2, INT-073.A1, INT-073.A2, INT-074.A1, INT-074.A2, INT-074.A3, INT-074.A4, INT-074.A5, INT-074.A6, INT-075.A1, INT-075.A2, INT-075.A3, INT-075.A4, INT-076.A1, INT-076.A2, INT-077.A1, INT-077.A2, INT-078.A1, INT-078.A2, INT-078.A3, INT-078.A4, INT-079.A1, INT-079.A2, INT-079.A3, INT-080.A1, INT-080.A2, INT-081.A1, INT-082.A1, INT-083.A1, INT-083.A2, INT-084.A1, INT-084.A2, INT-084.A4, INT-085.A1, ASM-017, ART-CAT, ART-ORG-CONTEXT, ART-REQ, ART-RA]
 ---
 # Control baseline, tailoring and allocation
 
@@ -163,8 +163,18 @@ The ISSO cannot yet carry AU-11's one-year retention or show a CP-4 failover res
 of ART-REQ's allocation against the controls on each element found these gaps
 [[INT-079.A3]] [[ART-REQ]]:
 
-- REQ-11 (standards registry) and REQ-12 (Section 508) are satisfied by no control in the set.
-  REQ-12 has no control in the SP 800-53 catalog. Both are verified by analysis and test.
+- REQ-11 (standards registry) and REQ-12 (Section 508) are implemented by no control in the set,
+  and REQ-12 has no control in the SP 800-53 catalog. Both are verified, not implemented: the
+  developer checks interface conformance against the registry by analysis and tests the web
+  pages for accessibility. `allocation.yaml` therefore traces both to sa-11 (developer testing
+  and evaluation). That trace stands for "verified outside the control set through the
+  developer's test and evaluation"; it does not claim that SA-11 satisfies either requirement.
+  The product material holds no test result for either yet [[INT-084.A4]].
+- The access point and the software factory are recorded in `leveraged-authorizations.yaml` as
+  separately authorized organizational systems (LA-02, LA-03, each with a valid ATO, ends per
+  ASM-017, the AO made aware through the AODR) and the CSSP as a service under agreement
+  (LA-04). Each provides only part of its controls, so the allocations stay hybrid; only the
+  cloud region supplies whole common controls [[INT-084.A1]] [[INT-084.A2]] [[INT-085.A1]].
 - REQ-09 (CUI marking) is only partly carried, by SI-12 on CMP-INGEST and CMP-REPORT. Nothing on
   CMP-WEB marks pages.
 - ART-REQ allocates part of REQ-01 to the identity broker as a common control provider. The

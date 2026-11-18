@@ -1,0 +1,43 @@
+# artifacts/ssp/controls/cp.yaml (S-4; schema ssp-controls). Written whole.
+family: cp
+controls:
+  - control_id: cp-2
+    status: partial
+    statement: "Partial. A contingency plan is drafted. It identifies the essential function (daily readiness reporting, tolerating an outage of 72 hours), the recovery time and recovery point objectives of 24 hours, the restoration order (database, then ingest, API and web), the contingency roles (ERST on-call engineers, ISSO, PM), continued reporting from EMIS's own reports during an outage, and restoration from the same templates so the planned controls return unchanged. It is coordinated with incident handling through the CSSP ticket path and kept in the program repository with access limited to the program. Missing: approval and distribution. Plan: the PM approves it with the S-4 plan set; it then goes to the on-call engineers, the ISSO, the ISSM and the EMIS and CSSP points of contact, is reviewed annually, and is updated after each test or real event with the lessons learned."
+    responsible_roles: [PER-ISSE, PER-PM]
+    components: [this-system]
+    parameters:
+      cp-02_odp.01: "the PM (system owner)"
+      cp-02_odp.02: "the PM (system owner)"
+      cp-02_odp.03: "the ERST on-call engineers, the ISSO and the ISSM"
+      cp-02_odp.04: "the EMIS program and the CSSP"
+      cp-02_odp.05: "annually"
+      cp-02_odp.06: "the ERST on-call engineers, the ISSO and the ISSM"
+      cp-02_odp.07: "the EMIS program and the CSSP"
+    sources: [INT-095.A1, product/conops.md#availability, product/conops.md#limitations, ART-BIA]
+  - control_id: cp-4
+    status: partial
+    statement: "Partial. Database point-in-time restore to a new instance (CMP-DB) was tested once in pre-production during DT-2 and took 3 h 10 min, inside the 24-hour objective. A regional failover of the cluster (CMP-K8S) has never been tested, and the plan has had no tabletop. Plan: a tabletop and a failover test in 2027-02, then annually; the ISSE reviews the results and the PM starts corrective actions."
+    responsible_roles: [PER-ISSE, PER-PM]
+    components: [CMP-DB, CMP-K8S]
+    parameters:
+      cp-04_odp.01: "annually"
+      cp-04_odp.02: "tabletop exercise, database restore test and regional failover test"
+      cp-04_odp.03: "tabletop exercise, database restore test and regional failover test"
+    assurance:
+      addressed: "Test reports and the after-action review will be the evidence; today only the DT-2 restore result exists."
+      status: planned
+    sources: [INT-095.A2, product/test-results.md#dt-2, product/conops.md#limitations]
+  - control_id: cp-9
+    status: implemented
+    statement: "Hybrid. The Example GovCloud IL4 region provides the snapshot, point-in-time recovery and storage durability machinery across its availability zones. The system's part: point-in-time recovery is on with daily snapshots of CMP-DB, encrypted with program-owned keys; CMP-OBJ buckets are versioned; system-level information and documentation (templates, image manifests, documents) live in version control, so each merge is a backup. The program tests its own restores (see cp-4)."
+    responsible_roles: [PER-ISSE, PER-CCP]
+    components: [CMP-DB, CMP-OBJ]
+    inherited_from: "Example GovCloud IL4 region"
+    parameters:
+      cp-09_odp.01: "CMP-DB and CMP-OBJ"
+      cp-09_odp.02: "continuously (point-in-time recovery) with daily snapshots"
+      cp-09_odp.03: "daily"
+      cp-09_odp.04: "on every merge to version control"
+    inherited_risks: "Restore depends on the region's snapshot service; a regional outage is not covered until failover is tested (cp-4)."
+    sources: [INT-095.A2, INT-096.A1, product/architecture.md#components]

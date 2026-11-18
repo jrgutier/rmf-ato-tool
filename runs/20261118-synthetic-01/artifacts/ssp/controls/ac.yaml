@@ -1,0 +1,63 @@
+# artifacts/ssp/controls/ac.yaml (S-4; schema ssp-controls). Written whole.
+family: ac
+controls:
+  - control_id: ac-1
+    status: implemented
+    statement: "The Component's access control policy applies at organization level. The ISSM owns the EFRAS access control procedures in the EFRAS security operations runbook and gives them to the ERST engineers, the application administrators and the ISSO. The ISSM reviews and updates the procedures annually and after a significant change or an incident; the Component reviews its policy annually."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    parameters:
+      ac-01_odp.01: "the ERST cloud operations engineers, the EFRAS application administrators and the ISSO"
+      ac-01_odp.02: "the ERST cloud operations engineers, the EFRAS application administrators and the ISSO"
+      ac-01_odp.03: "organization-level; system-level"
+      ac-01_odp.04: "the EFRAS ISSM"
+      ac-01_odp.05: "annually"
+      ac-01_odp.06: "a significant change or an incident"
+      ac-01_odp.07: "annually"
+      ac-01_odp.08: "a significant change or an incident"
+    artifact_locations:
+      - "EFRAS security operations runbook, program document repository"
+    assurance:
+      addressed: "The ISSM keeps the procedures under document control with their review dates; the assessor examines the runbook and its review record."
+      status: satisfied
+    sources: [INT-086.A2, ART-ORG-CONTEXT]
+  - control_id: ac-2
+    status: implemented
+    statement: "Allowed account types are the five application roles (viewer, officer, analyst, app-admin, auditor), named cloud console roles, two sealed break-glass console accounts and workload service identities; shared, guest and temporary accounts are prohibited, as the Privacy Overlay requires for PII. The ISSO is the account manager. A user requests a role in the Component access request system; the supervisor approves and the information owner also approves analyst. The ISSO provisions the group the identity broker asserts, and CMP-API maps it to the role and the squadron or air-wing scope. Access is granted on a valid authorization, intended use and a demonstrated need for the PII of the role. Accounts unused for 35 days are disabled automatically. Accounts whose holders let annual privacy training lapse are disabled from the Component training system's monthly list. Departures, transfers and need-to-know changes reach the account managers and the ISSO within 24 hours through the out-processing checklist. Sign-in and role-change events in CMP-LOGS monitor account use, and on CMP-K8S workload identities and named console roles are managed the same way. The ISSO reviews all role assignments quarterly (last review 2026-10-06, 141 accounts, two removed)."
+    responsible_roles: [PER-ISSO, PER-ISSM]
+    components: [CMP-API, CMP-K8S]
+    parameters:
+      ac-02_odp.01: "supervisor approval, and the information owner's approval for analyst"
+      ac-02_odp.02: "squadron or air-wing scope from the identity broker assertion"
+      ac-02_odp.03: "the user's supervisor, and the information owner for analyst"
+      ac-02_odp.04: "Component account policy, with each user's annual privacy training current; an account whose holder lets privacy training lapse is disabled"
+      ac-02_odp.05: "the EFRAS ISSO"
+      ac-02_odp.06: "24 hours"
+      ac-02_odp.07: "24 hours"
+      ac-02_odp.08: "24 hours"
+      ac-02_odp.09: "demonstrated need for the PII of the role, granting only the minimum PII necessary"
+      ac-02_odp.10: "quarterly"
+    automation: "Inactive accounts are disabled automatically after 35 days; DT-2 tested it."
+    information_sources:
+      - "Component access request system"
+      - "Component training system lapsed privacy training list"
+      - "CMP-LOGS sign-in and role-change events"
+    sources: [INT-086.A1, product/architecture.md#identity, product/test-results.md#account-review, product/test-results.md#dt-2, INT-074.A3]
+  - control_id: ac-3
+    status: implemented
+    statement: "CMP-API enforces the role and the squadron or air-wing scope on every request, and users reach PII only through the API, never the database directly. CMP-REPORT repeats the API's scope check since release 1.5.1 (penetration test finding PT-1, retested pass 2026-11-10). CMP-SANDBOX reads only the training extract and has no access to production tables. DT-2 passed the scoping test in the UI and on 212 crafted API requests."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-API, CMP-REPORT, CMP-SANDBOX]
+    sources: [INT-087.A1, product/test-results.md#dt-2, product/test-results.md#pentest]
+  - control_id: ac-6
+    status: implemented
+    statement: "Users hold only the role their duty needs, and users without analyst see only their own squadron or air wing (CMP-API). Only the four app-admins can change roles, and only the six ERST engineers hold privileges on CMP-K8S, through named console roles. Workloads run under separate workload identities with namespace-scoped permissions. Data scientists have no production privilege and work only in CMP-SANDBOX on the training extract. The analyst export's re-identification flaw is a de-identification weakness tracked under PT-3 and RA-8, not a privilege grant."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-API, CMP-K8S, CMP-SANDBOX]
+    sources: [INT-087.A1, INT-087.A2, product/architecture.md#identity]
+  - control_id: ac-17
+    status: implemented
+    statement: "Two types of remote access are allowed, each documented with its connection requirements in the runbook and authorized by the ISSM before use. Users reach CMP-EDGE over NIPRNet through the access point on 443 only, TLS 1.2 or 1.3, after CAC sign-in at the identity broker; no node has a public address. Cloud operations engineers reach the private cluster API on CMP-K8S and the console only from ERST privileged access workstations through the provider's privileged access path after CAC sign-in. Both factors are on a separate device (CAC) as the Privacy Overlay asks; the two break-glass accounts use a FIDO2 key, also two-factor (see ia-2)."
+    responsible_roles: [PER-ISSM, PER-ISSE]
+    components: [CMP-EDGE, CMP-K8S]
+    sources: [INT-086.A3, product/architecture.md#network, product/architecture.md#identity]

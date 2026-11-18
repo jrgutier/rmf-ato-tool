@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (16)
+## Assumptions (17)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -24,8 +24,9 @@ Mode: synthetic. Human respondents: none.
 | ASM-014 | P-18 | PER-ISSM | EFRAS is registered in the Component's eMASS instance as record EFRAS-0001 since 2025-10-01, and port 443 through the access point is registered in the DoD PPSM Registry as PPSM-EFRAS-0443 since 2026-10-15, as the ISSM states in INT-056; both identifiers are fictional. | P-18 reads EXT-REGISTRY, which the product directory does not hold; the product names no registry, record or PPSM registration. |
 | ASM-015 | C-1 | PER-PM | Release 1.5 (MVCR) was cut and deployed to pre-production on 2026-10-27, as the PM states in INT-058.A3; this date is the system_version release date. | C-1 must record a release date with the version (SYSD, CNSSI 1254); the product says release 1.5 is ready and running for pilot squadrons but gives no release date. |
 | ASM-016 | C-1 | PER-ISSM | The interconnected systems' authorizing officials are known only by fictional role labels (maintenance and supply systems AO for EMIS and the supply status service, Component enterprise services AO for the identity broker); the EMIS ISSM's interim e-mail approval is dated 2026-09-15; the CSSP alignment (GENSER, Component NOSC, USCYBERCOM-authorized ECSSP, mission support, private range 10.44.0.0/16) and the agreement reference ECSSP-SA-ARSPO-01 are as the ISSM states in INT-060; all are fictional. | The product gives the interconnections, their agreements and ATO dates, and the CSSP service agreement date, but no authorizing officials, interim approval date, NOSC, designation, register entry, address range or agreement identifier, which system-description.yaml and service-agreements.yaml require. |
+| ASM-017 | S-3 | PER-ISSM | The ATO of the Example Enterprise Cloud Access Point ends on 2028-01-10 and the ATO of the Example Software Factory ends on 2028-10-01, three years after each authorization date, as the ISSM states in INT-084.A3; both dates are fictional and to be confirmed in eMASS. | MLEV-001 needs the authorization termination date of each organizational system EFRAS inherits from; product/architecture.md#leveraged gives only the dates authorized. |
 
-## Interview answers (245; SIMULATED 245)
+## Interview answers (273; SIMULATED 273)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -52,4 +53,5 @@ Mode: synthetic. Human respondents: none.
 | C-3 | 3 | 9 | 0 |
 | S-1 | 4 | 13 | 0 |
 | S-2 | 4 | 14 | 0 |
-| S-3 | 6 | 13 | 0 |
+| S-3 | 8 | 18 | 0 |
+| S-4 | 12 | 23 | 0 |

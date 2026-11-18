@@ -149,3 +149,39 @@ Stop condition: S-3 cannot reach 0 errors without recording false data, after 3 
 
 ## 2026-11-18T03:54Z · NOTE · run
 Session unit "Select: S-1, S-2, S-3" ends on the S-3 stop condition. S-1 and S-2 complete. rmf status names C-1 next because of MLEV-001; the next session should not redo C-1 but wait for a ruling on MLEV-001 (hybrid providers) and TLR-009 (requirements no control can satisfy), then write the S-3 CHECKPOINT. S-4 owes, from this session: SSP statements for the 50 controls with the tailoring.yaml parameter values (AC-2, CM-2, CM-3, SC-8, SC-12, SC-28, AU-11 one year) and the SI-12 addendum; PE-3 and MP-6 inherited from Example GovCloud IL4 region (SSPI-001); AU-11, CP-4 and RA-8 partial; the C-SCRM decisions on SR-3 and SR-11 in scrm-plan.yaml. Findings in dryrun-review/findings/05-select.md.
+
+## 2026-11-18T04:00Z · NOTE · run
+Dry-run session unit "finish S-3, then S-4 first batch (AC, AT, AU, CA, CM, CP, IA)" started. Findings go to dryrun-review/findings/06-s3-s4a.md; docs/LESSONS.md is not edited by instruction. Deviation: with 2-5 controls per family this session covers 7 S-4 families instead of the session-units limit of 3, on the orchestrator's instruction.
+
+## 2026-11-18T04:00Z · NOTE · task S-3
+Orchestrator rulings on the 03:54Z stop, applied inside the run. (1) TLR-009: REQ-11 and REQ-12 are traced to sa-11 in allocation.yaml; ART-BASELINE says the trace stands for "verified outside the control set through the developer's test and evaluation", not that SA-11 satisfies them, and that no test result exists yet (INT-084.A4). (2) MLEV-001: leveraged-authorizations.yaml (C-1's file) LA-02 (access point) and LA-03 (software factory) re-recorded as arrangement organizational-system, with ATO end dates (ASM-017), AO awareness through the AODR (INT-085.A1) and the package review RECIP-001 then requires (INT-084.A2); LA-04 (CSSP) as external-service with its package review. Allocations stay hybrid. The arrangement change is forced by MLEV-001 counting only common allocations (F-05-1); evidence in findings 06. ART-SD's sentence "each an approved common control provider of P-5" stays true of P-5's list and was not rewritten.
+
+## 2026-11-18T04:00Z · CHECKPOINT · task S-3
+allocation.yaml: 50 records; common 2 (pe-3, mp-6: Example GovCloud IL4 region), hybrid 14 (cloud region si-2, cp-9; access point sc-7; software factory sa-11, sr-3, sr-11; CSSP au-6, ir-4, ir-6, ra-5, si-4; Component privacy office at-2, pt-2, pt-3), program-management 1 (pm-5), system-specific 33. Five provider determinations by PER-PM and PER-AODR (commensurate). Requirements: every ART-REQ row traced; REQ-11 and REQ-12 to sa-11 as verification, REQ-17..REQ-19 in prose only (F-05-4). ART-BASELINE touched_by S-3. Interviews INT-078..INT-085; assumption ASM-017. rmf build + rmf check --task S-3, C-1, S-1, S-2, P-2, P-5: 0 errors on the first cycle after the rulings.
+
+## 2026-11-18T04:11Z · RETRY · task S-4 · lesson: none — docs/LESSONS.md frozen for the dry run; recorded in dryrun-review/findings/06-s3-s4a.md
+Every per-family check (rmf check --family ac/at/au/ca/cm/cp/ia) reported 0 errors on its first cycle, but rmf check --task S-4 then showed 12 INT-001 errors (interview front-matter topics written as "S-4 family ac: ...", which YAML parses as a mapping, my error against run-protocol step 6) and PVAL-001 on ia.yaml (ia-05_odp.01 began with "per session ... annually", looser than the CNSSI 1253 NSS value of 180 days for passwords). Neither appears under --family. Fixed: topics rewritten as plain strings; ia-5 records the break-glass database password interval of at most 180 days (INT-097.A2). Second cycle: --task S-4 shows only task-level plan records.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: ac
+ac.yaml: ac-1, ac-2, ac-3, ac-6, ac-17 all implemented; ac-2 carries the six tailored values plus ac-02_odp.09 from the Privacy Overlay (need for PII). Interviews INT-086 (ISSO), INT-087 (ISSE). rmf build + rmf check --family ac: 0 errors.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: at
+at.yaml: at-2 implemented (hybrid, inherited_from Component privacy office), at-3 implemented. Interviews INT-088 (ISSM), INT-089 (PRIV). rmf build + rmf check --family at: 0 errors.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: au
+au.yaml: au-2, au-6 (hybrid, Example Cybersecurity Service Provider), au-9 implemented; au-11 partial (90-day store against the one-year tailored value; the CSSP's one-year copy does not meet the program's duty; archive tier in release 1.6). Interviews INT-090 (ISSO), INT-091 (CSSP). rmf build + rmf check --family au: 0 errors.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: ca
+ca.yaml: ca-2, ca-5, ca-7 planned (no assessor, no POA&M, no system ConMon strategy yet: A-1/A-2, A-6, S-5); ca-3 partial (EMIS MOA unsigned, target 2026-12-31). Interview INT-092 (ISSM). rmf build + rmf check --family ca: 0 errors.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: cm
+cm.yaml: cm-2, cm-3, cm-8 implemented with the tailored values; cm-6 partial (STIG scan 2026-10-22: nodes 94%, database 88%, two program-fixable items fixed in 1.5.2, 2026-12-10). Interviews INT-093 (ISSE), INT-094 (DEV). rmf build + rmf check --family cm: 0 errors. ART-CMP and cm-plan.yaml not written yet (task-level plan, later session).
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: cp
+cp.yaml: cp-2 partial (plan drafted, not approved), cp-4 partial (restore tested once, failover never), cp-9 implemented (hybrid, Example GovCloud IL4 region). Interviews INT-095 (ISSE), INT-096 (CCP). rmf build + rmf check --family cp: 0 errors. ART-CP and contingency.yaml not written yet.
+
+## 2026-11-18T04:11Z · CHECKPOINT · task S-4 · family: ia
+ia.yaml: ia-2 partial (break-glass console accounts on FIDO2, not CAC; deviation to the AO), ia-5 partial (break-glass database role password complexity, fix 1.5.2). Interview INT-097 (ISSO). rmf build + rmf check --family ia: 0 errors after the RETRY above.
+
+## 2026-11-18T04:13Z · NOTE · run
+Session unit "finish S-3, then S-4 first batch" complete; the session ends here as the unit requires. S-3 done (CHECKPOINT 04:00Z); S-4 families ac, at, au, ca, cm, cp, ia written (24 statements: implemented 14, partial 7, planned 3, none inherited or not-applicable). Seven families in one session is a dry-run deviation on the orchestrator's instruction. Final rmf build + plain rmf check: 0 errors; --task C-1 and S-3: 0; --task S-4: 41 (26 SSP-COV-001 for the families ir, ma, mp, pe, pl, pm, ps, pt, ra, sa, sc, si, sr, and the task-level plan records). Next session owes: the remaining 13 families; then ART-SSP, plan-reviews.yaml, scrm-plan.yaml (SCRM-009), ssp-records.yaml (FUND/CRYP/TELE), ART-CMP + cm-plan.yaml (BYP/CMPL), ART-CP + contingency.yaml (CPLAN), ART-IRP + incident-response.yaml (IRPT), ART-SVCA + a whole rewrite of service-agreements.yaml keeping SVA-001 (SVCA-001 asks for the CSSP's O-8530.01-M evaluation), software.yaml and cloud.yaml. CLOUD-001 wants the cloud offering's leveraged authorization recorded as external-service, but LA-01 (Example GovCloud IL4 region) is the common-control-provider of pe-3 and mp-6; S-4 must settle that (see findings 06). Findings in dryrun-review/findings/06-s3-s4a.md.

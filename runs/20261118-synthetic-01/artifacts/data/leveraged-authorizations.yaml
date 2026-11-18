@@ -1,6 +1,10 @@
 # artifacts/data/leveraged-authorizations.yaml (C-1; schema leveraged-authorizations).
 # The provider strings equal org-context.yaml common_controls provided_by (P-5), which
-# allocation.yaml (S-3) names for MLEV-001.
+# allocation.yaml (S-3) names. S-3 revisit (INT-084.A1): LA-02 and LA-03 are separately
+# authorized organizational systems EFRAS partly inherits from, and LA-04 is a service under
+# agreement (external-service); none of the three offers a control EFRAS inherits whole, and
+# MLEV-001 accepts a common-control-provider only when it supplies a `common` allocation
+# (dryrun-review/findings/06-s3-s4a.md). LA-01 provides the two common controls pe-3 and mp-6.
 leveraged_authorizations:
   - id: LA-01
     title: "Example GovCloud IL4 region DoD provisional authorization"
@@ -21,7 +25,11 @@ leveraged_authorizations:
     provider: "Example Enterprise Cloud Access Point"
     date_authorized: "2025-01-10"
     decision: AD-ATO
-    arrangement: common-control-provider
+    arrangement: organizational-system
+    authorization_termination_date: "2028-01-10"
+    ao_aware:
+      official: PER-AODR
+      date: "2026-11-18"
     service:
       kind: internal
       agreement:
@@ -29,13 +37,36 @@ leveraged_authorizations:
         reference: "Component enterprise cloud access point service-level agreement (fictional)"
         enterprise: true
         security_requirements: true
-    sources: [INT-060.A1, product/architecture.md#leveraged, ART-ORG-CONTEXT]
+    package_review:
+      date: "2026-11-18"
+      factors:
+        - factor: time-elapsed
+          finding: "ATO of 2025-01-10, under two years old at review."
+        - factor: environment
+          finding: "The same NIPRNet-to-cloud path EFRAS uses."
+        - factor: impact-level
+          finding: "Authorized at moderate, matching EFRAS's confidentiality and integrity impact."
+        - factor: risk-tolerance
+          finding: "Within the AO's tolerance; the inherited SC-7 part is partial, so EFRAS keeps its own edge controls."
+      integration:
+        - component: CMP-ECAP
+          risk: "Every inbound session crosses the access point's inspection path; a misrule would block or expose the EFRAS edge."
+      overlays:
+        - overlay: CNSSI1253F-ATT6-PRIVACY-MODERATE
+          consideration: "The access point sees maintainer identifiers in traffic and protects them under its own privacy controls."
+        - overlay: CNSSI1253F-ATT6-PRIVACY-ACCT
+          consideration: "No accounting of disclosures falls to the access point; it discloses no PII from EFRAS."
+    sources: [INT-060.A1, INT-084.A1, INT-084.A2, INT-085.A1, ASM-017, product/architecture.md#leveraged, ART-ORG-CONTEXT]
   - id: LA-03
     title: "Example Software Factory ATO"
     provider: "Example Software Factory"
     date_authorized: "2025-10-01"
     decision: AD-ATO
-    arrangement: common-control-provider
+    arrangement: organizational-system
+    authorization_termination_date: "2028-10-01"
+    ao_aware:
+      official: PER-AODR
+      date: "2026-11-18"
     service:
       kind: internal
       agreement:
@@ -43,13 +74,32 @@ leveraged_authorizations:
         reference: "Example Software Factory tenant service-level agreement (fictional)"
         enterprise: false
         security_requirements: true
-    sources: [INT-060.A1, product/architecture.md#leveraged, ART-ORG-CONTEXT]
+    package_review:
+      date: "2026-11-18"
+      factors:
+        - factor: time-elapsed
+          finding: "ATO of 2025-10-01, current."
+        - factor: environment
+          finding: "A DevSecOps environment outside the EFRAS boundary that builds and signs every image EFRAS runs."
+        - factor: impact-level
+          finding: "Authorized at moderate."
+        - factor: risk-tolerance
+          finding: "A compromised pipeline is the main supply chain risk; SR-3 and SR-11, partly inherited from the factory, cover it in part."
+      integration:
+        - component: CMP-SWF
+          risk: "CMP-SWF delivers every container image deployed to the cluster; a tampered image would run inside the boundary."
+      overlays:
+        - overlay: CNSSI1253F-ATT6-PRIVACY-MODERATE
+          consideration: "The factory handles source code and images only and sees no maintainer PII."
+        - overlay: CNSSI1253F-ATT6-PRIVACY-ACCT
+          consideration: "No disclosure of PII passes through the factory."
+    sources: [INT-060.A1, INT-084.A1, INT-084.A2, INT-085.A1, ASM-017, product/architecture.md#leveraged, ART-ORG-CONTEXT]
   - id: LA-04
     title: "Example Cybersecurity Service Provider service under the CSSP's authorization"
     provider: "Example Cybersecurity Service Provider"
     date_authorized: "2026-04-01"
     decision: AD-ATO
-    arrangement: common-control-provider
+    arrangement: external-service
     service:
       kind: internal
       agreement:
@@ -57,4 +107,23 @@ leveraged_authorizations:
         reference: "ECSSP-SA-ARSPO-01, ECSSP-ARSPO service agreement (fictional)"
         enterprise: true
         security_requirements: true
-    sources: [INT-060.A1, INT-060.A3, ASM-016, product/architecture.md#leveraged, ART-ORG-CONTEXT]
+    package_review:
+      date: "2026-11-18"
+      factors:
+        - factor: time-elapsed
+          finding: "Service agreement of 2026-04-01 under the CSSP's own ATO."
+        - factor: environment
+          finding: "The Component's security operations center, outside the EFRAS boundary."
+        - factor: impact-level
+          finding: "Moderate."
+        - factor: risk-tolerance
+          finding: "Within tolerance; EFRAS keeps its own weekly review of the logs (AU-6)."
+      integration:
+        - component: CMP-ECSSP
+          risk: "CMP-ECSSP only receives forwarded logs; a broken forwarder would leave EFRAS unmonitored until noticed."
+      overlays:
+        - overlay: CNSSI1253F-ATT6-PRIVACY-MODERATE
+          consideration: "Forwarded logs carry maintainer identifiers; the CSSP protects them under its own privacy controls and the service agreement."
+        - overlay: CNSSI1253F-ATT6-PRIVACY-ACCT
+          consideration: "A disclosure to the CSSP for incident handling is a routine use the SORN covers."
+    sources: [INT-060.A1, INT-060.A3, INT-084.A1, INT-084.A2, ASM-016, product/architecture.md#leveraged, ART-ORG-CONTEXT]
