@@ -1,6 +1,7 @@
 """`rmf oscal validate`: OSCAL-001 (NIST v1.2.1 schema, regex engine + FormatChecker) and
 OSCAL-002 (compliance-trestle 5.2.0 model load) over a run's ``oscal/*.json``, or over the
-``*.json`` of any directory (``tests/golden/oscal``)."""
+``*.json`` of any directory (``tests/golden/oscal``), and OSCAL-003 (NIST oscal-cli constraint
+validation, optional; see ``oscal.oscal_cli``)."""
 
 from __future__ import annotations
 
@@ -8,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from rmf_tool.oscal import schema_validate
+from rmf_tool.oscal import oscal_cli, schema_validate
 from rmf_tool.run.model import OSCAL_DIR, Run
 
 
@@ -59,9 +60,29 @@ def trestle_problems_in(base: Path, paths: list[Path]) -> list[tuple[str, str]]:
     return out
 
 
+def oscal_cli_problems_in(exe: str, base: Path, paths: list[Path]) -> list[tuple[str, str]]:
+    """OSCAL-003: (path relative to ``base``, message) per oscal-cli rule a file breaks. A file
+    that is not OSCAL JSON is left to OSCAL-001, and a profile is skipped (``oscal_cli``)."""
+    out = []
+    for path in paths:
+        try:
+            model = schema_validate.model_of(json.loads(path.read_text(encoding="utf-8")))
+        except (ValueError, KeyError):
+            continue
+        if model in oscal_cli.SKIPPED_MODELS:
+            continue
+        rel = path.relative_to(base).as_posix()
+        out += [(rel, msg) for msg in oscal_cli.problems(exe, path)]
+    return out
+
+
 def schema_problems(run: Run) -> list[tuple[str, str]]:
     return schema_problems_in(run.repo, run.dir, files(run))
 
 
 def trestle_problems(run: Run) -> list[tuple[str, str]]:
     return trestle_problems_in(run.dir, files(run))
+
+
+def oscal_cli_problems(exe: str, run: Run) -> list[tuple[str, str]]:
+    return oscal_cli_problems_in(exe, run.dir, files(run))

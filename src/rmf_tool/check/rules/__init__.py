@@ -83,6 +83,7 @@ RULES: dict[str, Rule] = {
     "OSCAL-002": generated.oscal_trestle,
     # Phase 6
     "RUN-PH-001": artifacts.placeholders,
+    "OSCAL-003": generated.oscal_cli_constraints,
     "RUN-STALE-001": config.stale_upstream,
     "SSP-COV-002": coverage.ssp_outside,
     "SSP-DUP-001": coverage.ssp_duplicates,

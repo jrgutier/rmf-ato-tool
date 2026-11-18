@@ -73,7 +73,7 @@ error. Commands that report support `--format json`.
 | Command | What it does |
 |---|---|
 | `rmf --version` | print the tool version |
-| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, qpdf, LFS hooks); report optional extract/OCR tools |
+| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, qpdf, LFS hooks); report optional extract/OCR tools and oscal-cli |
 | `rmf ci [--profile P] [--slow] [--release] [--no-tests]` | fast lane (ruff, pytest with coverage >= 85%) plus every check of the profile's phases; `--no-tests` leaves out pytest; only `--release` repeats the suite in a fork clone (marker `release`) |
 | `rmf lessons check` | LES-002 (LESSONS.md format, IDs, dates, append-only vs `resolve_base()`), LES-003 (no `pending`) |
 | `rmf refs fetch [--id ID] [--accept-new --note TEXT]` | download `acquisition: auto` references (ranged-GET probe, allowed domains on every redirect hop, `%PDF-` + `qpdf --check`), pin SHA-256; a changed upstream is reported and kept unless `--accept-new` |
@@ -93,7 +93,7 @@ error. Commands that report support `--format json`.
 | `rmf catalog show [--family F] [--control C] [--run RUN [--missing]] [--fields F,..] [--chunk i/n]` | compact SP 800-53r5 control text, per family or the run's baseline; `--fields overlay` (with `--run`) adds the Section 6 specification of each overlay the run applies |
 | `rmf assemble [RUN] [--check]` | fill the `rmf:facts` marker blocks in artifact Markdown from facts.yaml |
 | `rmf oscal build [RUN] [--check]` | `oscal/` profile, SSP, assessment plan, assessment results and POA&M (trestle models, uuid5, OSCAL 1.2.1); each is built once its inputs exist |
-| `rmf oscal validate [RUN\|DIR]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on the run's `oscal/*.json`, or on a directory of OSCAL JSON |
+| `rmf oscal validate [RUN\|DIR] [--no-oscal-cli]` | OSCAL-001 (NIST v1.2.1 schema) and OSCAL-002 (trestle load) on the run's `oscal/*.json`, or on a directory of OSCAL JSON; OSCAL-003 (NIST oscal-cli constraints, warnings) when oscal-cli is installed (`RMF_OSCAL_CLI`, PATH or `.tools/`); `rmf check` runs OSCAL-003 only when `RMF_OSCAL_CLI` is set |
 | `rmf build [RUN]` | assemble + oscal build + `reports/assumptions.md` (+ refresh `package/manifest.yaml`, and freeze new POA&M dates in `artifacts/poam/original-dates.yaml` after A-6, ASMT-010); always before `rmf check` |
 | `rmf package [RUN]` | `package/manifest.yaml` (ART-PKG): the DoDI 8510.01 authorization package, every artifact (class, status, files with SHA-256, OSCAL), OSCAL documents, reports, degraded references |
 | `rmf check [RUN] [--task T] [--family F] [--rules R,..] [--final] [--errors-only]` | run rules; no option: what applies up to and including the next task, `--task T` only what applies at T, `--family F` the family's files and their interviews, `--final` everything (scope-aware); counts the errors a selection hides; writes `reports/check.{json,md}`; DEGRADED-001 is never filtered out |
@@ -164,7 +164,8 @@ into `docs/CHECKS.md`.
 ## Fork workflow
 
 1. Create a repository from this template and clone it (README.md has the LFS note).
-2. `make bootstrap` (add `EXTRACT=1` for the AGPL PDF extractor, `OCR=1` for OCR tools).
+2. `make bootstrap` (add `EXTRACT=1` for the AGPL PDF extractor, `OCR=1` for OCR tools,
+   `OSCAL_CLI=1` for NIST oscal-cli, which needs Java 11+).
 3. `uv run rmf new <slug> --dir .` scaffolds `product/` and `runs/` and starts the first
    run (`--mode synthetic|hybrid`). Use `rmf run init` only for a further run.
 4. Fill in `product/` with your system's material (mind the CUI rule, INV-7).
@@ -204,6 +205,8 @@ Of the seed lessons, L-0003 is promoted to INV-7 and L-0007 is `none`
 - Input catalogs and profiles (NIST oscal-content) may be any `1.2.x`; they are read as
   raw JSON, never through trestle models (L-0004).
 - OSCAL schema validation uses the `regex`-backed validator plus `FormatChecker` (L-0005).
+- NIST oscal-cli (OSCAL-003, optional) is pinned by version and SHA-256 in
+  `scripts/bootstrap.sh`; it is not tied to the 1.2.1 pin, and its findings stay warnings.
 - Pins live in `rmf_tool.oscal.version` and `references/oscal/VERSIONS.yaml`; REF-005
   fails when they, trestle, the index URLs or the fetched files disagree.
 - Reference PDFs: add or update the entry in `references/index.yaml`, run

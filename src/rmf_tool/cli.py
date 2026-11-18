@@ -817,10 +817,31 @@ def oscal_validate(
                        "directory of OSCAL *.json such as tests/golden/oscal (default: as for "
                        "RUN).", show_default=False),
     ] = None,
+    no_oscal_cli: Annotated[
+        bool, typer.Option("--no-oscal-cli", help="Skip OSCAL-003 even when oscal-cli is "
+                           "installed.")
+    ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
-    """OSCAL-001 (NIST v1.2.1 schema, regex + FormatChecker) and OSCAL-002 (trestle load)."""
+    """OSCAL-001 (NIST v1.2.1 schema, regex + FormatChecker), OSCAL-002 (trestle load) and,
+    when NIST oscal-cli is installed (RMF_OSCAL_CLI or PATH), OSCAL-003 (its Metaschema
+    constraints, as warnings)."""
+    from rmf_tool.oscal import oscal_cli
     from rmf_tool.oscal import validate as validate_oscal
+
+    def with_oscal_cli(base: Path, paths: list[Path],
+                       findings: list[Finding]) -> tuple[list[Finding], list[str]]:
+        rules = ["OSCAL-001", "OSCAL-002"]
+        if no_oscal_cli:
+            return findings, rules
+        found = oscal_cli.locate(root=repo_root())
+        if found.path is None:
+            if fmt is OutputFormat.text:
+                typer.echo(found.note)
+            return findings, rules
+        findings += [Finding("OSCAL-003", "W", m, rel) for rel, m in
+                     validate_oscal.oscal_cli_problems_in(found.path, base, paths)]
+        return findings, [*rules, "OSCAL-003"]
 
     if run is not None and run.is_dir() and not (run / "run.yaml").is_file():
         paths = sorted(run.glob("*.json"))
@@ -830,14 +851,14 @@ def oscal_validate(
                     validate_oscal.schema_problems_in(repo_root(), run, paths)]
         findings += [Finding("OSCAL-002", "E", m, rel)
                      for rel, m in validate_oscal.trestle_problems_in(run, paths)]
-        _exit_findings(findings, ["OSCAL-001", "OSCAL-002"], fmt)
+        _exit_findings(*with_oscal_cli(run, paths, findings), fmt)
     r = _open(run)
     findings = [Finding("OSCAL-001", "E", m, rel) for rel, m in validate_oscal.schema_problems(r)]
     findings += [Finding("OSCAL-002", "E", m, rel)
                  for rel, m in validate_oscal.trestle_problems(r)]
     if not validate_oscal.files(r):
         typer.echo("no oscal/*.json yet (rmf build)")
-    _exit_findings(findings, ["OSCAL-001", "OSCAL-002"], fmt)
+    _exit_findings(*with_oscal_cli(r.dir, validate_oscal.files(r), findings), fmt)
 
 
 @app.command()
