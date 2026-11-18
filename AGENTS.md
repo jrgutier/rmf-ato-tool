@@ -82,7 +82,7 @@ error. Commands that report support `--format json`.
 | `rmf refs extract [--id ID] [--extractor E] [--ocr] [--check] [--full]` | PDF to `references/text/<ID>.md` + `.toc.yaml`, recorded in index.yaml; `--check` is REF-003 (needs `EXTRACT=1` only to extract) |
 | `rmf refs index [--check]` | render `references/INDEX.md` from index.yaml; `--check` is REF-004 |
 | `rmf refs sync` | fetch missing, extract stale, render INDEX.md, verify |
-| `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
+| `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction; `--section "Table 29"` also finds a table or figure by its caption |
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 | `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
 | `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE] [--controls FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset; `--controls` limits a rehearsal run to listed controls (`-SUBSET-<n>`) |

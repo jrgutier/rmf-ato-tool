@@ -168,13 +168,23 @@ def current_data(art: dict[str, Any]) -> list[dict[str, Any]]:
     return [d for d in art.get("data") or [] if "until" not in d]
 
 
-def _data_files(root: Path, art: dict[str, Any]) -> list[dict[str, Any]]:
+def _later(fw: Framework, writer: Any, task_id: str) -> bool:
+    """True when `writer` is a task that comes after `task_id` in the framework order."""
+    order = [str(t.id) for t in fw.of("tasks")]
+    return writer in order and task_id in order and order.index(writer) > order.index(task_id)
+
+
+def _data_files(root: Path, art: dict[str, Any], fw: Framework | None = None,
+                task_id: str = "") -> list[dict[str, Any]]:
     out = []
     for d in current_data(art):
+        if fw is not None and _later(fw, d.get("written_by"), task_id):
+            continue
         schema = d.get("schema")
         template = f"templates/data/{schema}.yaml" if schema else None
         out.append({"path": d["path"], "schema": schema,
-                    "template": template if template and (root / template).is_file() else None})
+                    "template": template if template and (root / template).is_file() else None,
+                    "when": d.get("when"), "written_by": d.get("written_by")})
     return out
 
 
@@ -209,7 +219,8 @@ def context(fw: Framework, task: dict[str, Any], root: Path) -> dict[str, Any]:
         if name in artifacts:
             art = artifacts[name].data
             files = [] if art.get("generated") else [f"artifacts/{name}.md"]
-            files += [d["path"] for d in current_data(art)]
+            files += [d["path"] for d in current_data(art)
+                      if not _later(fw, d.get("written_by"), task["id"])]
             inputs.append({"id": name, "name": art.get("name", ""), "kind": "artifact",
                            "files": files})
         elif name in externals:
@@ -226,7 +237,7 @@ def context(fw: Framework, task: dict[str, Any], root: Path) -> dict[str, Any]:
             "description": " ".join(str(art.get("description", "")).split()),
             "produces": art.get("producer") == task["id"], "generated": generated,
             "generator": GENERATORS.get(name), "md": None if generated else f"artifacts/{name}.md",
-            "template": art.get("template"), "data": _data_files(root, art)})
+            "template": art.get("template"), "data": _data_files(root, art, fw, task["id"])})
     aligned = task.get("aligned_with") or {}
     alignment = [{**item, "kind": kind}
                  for kind, coll, key in (("milestone", "milestones", "milestones"),

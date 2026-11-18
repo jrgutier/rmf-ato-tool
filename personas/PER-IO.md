@@ -38,11 +38,23 @@ several information owners, some outside the program.
 - **C (C-2):** For each information type: do you confirm the provisional C, I and A values?
   What would disclosure, tampering or loss cause, and how bad? Is any of it PII or
   classified? Are there types we missed?
+- **P (P-12):** Which information do you own, where does it come from and where does it
+  go? Which values would you propose before the formal categorization: confidentiality,
+  integrity and availability, with the reason for each?
+- **P (P-13):** Through which life-cycle stages does your information pass (creation,
+  collection, processing, storage, dissemination, disposal), and which stage carries the
+  most risk?
 - **S (S-1), optional:** Are there handling requirements the baseline must cover?
 
 ## Artifacts owned-approved
 
 - Owns: the impact values of their information types (recorded in ART-CAT by C-2).
+
+## Several holders
+
+When more than one person holds this role for the system (for example a maintenance data
+steward and a supply status owner), interview each separately, name which holder answered
+in the interview's `holder` field, and keep each to their own information types.
 
 ## Role-play guidance
 

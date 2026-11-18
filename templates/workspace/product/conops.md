@@ -14,6 +14,10 @@ The owning program office, acquisition pathway and phase, developer or integrato
 of units or sites now and planned, and the current lifecycle state (operational, under
 development, under major modification).
 
+## Operational mode summary and mission profile
+
+How the system is used over time: its operating modes, the tasks done in each, and how long and how often (OMS/MP), when the capability document gives none.
+
 ## Users
 
 A table of user groups: count, kind of access (none, non-privileged, privileged; remote or

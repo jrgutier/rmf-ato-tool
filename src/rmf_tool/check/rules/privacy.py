@@ -453,9 +453,14 @@ def legal_basis(ctx: Context) -> list[RunFinding]:
     if reqs is None or "P-15" not in scope.active_tasks(ctx.run):
         return out
     known = _strings([r.get("id") for r in _dicts(reqs.get("requirements"))])
+    # P-14 may name the requirement IDs, or P-15 may link each requirement back to the
+    # authority it carries (privacy_authorities), so P-14 makes no promise of IDs (F-02-13).
+    linked = {a for r in _dicts(reqs.get("requirements"))
+              for a in _strings(r.get("privacy_authorities"))}
     for item in legal:
         carried = _strings(item.get("requirements"))
-        if item.get("applies") is True and not carried & known:
+        if item.get("applies") is True and not carried & known \
+                and item.get("authority") not in linked:
             err(f"the applicable privacy requirement {item.get('authority')} is carried by no "
                 "requirement of ART-REQ", REQUIREMENTS, "P-15")
     sorn = _dict(_dict(_privacy(ctx)).get("sorn"))

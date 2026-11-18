@@ -37,6 +37,7 @@ LEVELS = tuple(TABLE_1)
 
 FLAG_ALWAYS = ("critical", "high")  # "select medium" is the PM's choice
 MISSION_ITEMS = ("critical-function", "critical-component")
+NOT_MISSION_CRITICAL = ("III", "IV")  # PPP criticality levels below mission critical
 MITIGATION_KINDS = ("acquisition", "engineering")  # CNSSP 12 3.e
 
 
@@ -105,7 +106,8 @@ def protections(ctx: Context) -> list[RunFinding]:
     covered = {str(m.get("item")) for m in _dicts(data.get("mission_critical"))}
     items = _dicts(_dict(_protection(ctx).get("ppp")).get("critical_items"))
     for item in items:
-        if item.get("kind") in MISSION_ITEMS and str(item.get("id")) not in covered:
+        if item.get("kind") in MISSION_ITEMS and str(item.get("id")) not in covered \
+                and item.get("criticality_level") not in NOT_MISSION_CRITICAL:
             err(f"{item.get('id')} performs a mission-critical function with neither an assured "
                 "supplier nor an SCRM countermeasure")
     inventory = ctx.data(INV_FILE) if ctx.run.path(INV_FILE).is_file() else None

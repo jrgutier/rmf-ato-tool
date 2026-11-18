@@ -52,6 +52,12 @@ act when no PM is assigned.
 - **P (P-14):** What is the risk assessment for, which decisions will it support, and for how
   long? Which assumptions and constraints hold? Who receives the results, by what method, and
   what may be shared? Which risks of similar level come first for the mission, and why?
+- **P (P-14), program protection:** Is there a program protection plan (PPP)? What are its
+  critical program information and critical components, at which criticality level, and
+  which countermeasures does it name? Is there an approved cybersecurity strategy, and at
+  which decision points was it reviewed? Which supply chain risk management actions does
+  the program take in acquisition (contract clauses, supplier assessments, mission-critical
+  item measures)?
 - **C (C-1):** Confirm the official name, acronym and identifier. What is the lifecycle
   state? What does the system do, for whom, where? What does it connect to, under which
   agreements?

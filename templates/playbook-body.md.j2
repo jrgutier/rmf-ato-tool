@@ -51,14 +51,14 @@
      comment, and write `{{ o.md }}` with `produced_by_task: {{ t.id }}` and
      `touched_by: [{{ t.id }}]`.
 {% for d in o.data %}
-     Write `{{ d.path }}` whole{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`{% if d.template %}, template `{{ d.template }}`{% endif %}){% endif %}; summarize its records in the Markdown by ID instead of copying them.
+     {{ ('Only ' ~ d.when[5:] ~ ': write') if d.get('when') else 'Write' }} `{{ d.path }}` whole{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`{% if d.template %}, template `{{ d.template }}`{% endif %}){% endif %}; summarize its records in the Markdown by ID instead of copying them.
 {% endfor %}
 {% else %}
    - **{{ o.id }}** ({{ o.name }}, updated): Read `{{ o.md }}`, append `{{ t.id }}` to
      `touched_by`, add a `## {{ t.name }} ({{ t.id }})` section with what this task
      established, and write the whole file back. Keep every earlier section.
 {% for d in o.data %}
-     Rewrite `{{ d.path }}` whole{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`){% endif %} when this task changes its records; keep the records other tasks wrote.
+     {{ ('This task writes `' ~ d.path ~ '` first: write it whole') if d.get('written_by') == t.id else ('Rewrite `' ~ d.path ~ '` whole') }}{% if d.schema %} (schema `framework/schema/{{ d.schema }}.schema.json`{% if d.template and d.get('written_by') == t.id %}, template `{{ d.template }}`{% endif %}){% endif %}{{ '.' if d.get('written_by') == t.id else ' when this task changes its records; keep the records other tasks wrote.' }}
 {% endfor %}
 {% endif %}
 {% endfor %}
@@ -111,7 +111,10 @@ No interview is required.
 
 {% elif i.kind == "product" %}
 - {{ i.id }} ({{ i.name }}): files in the run's product directory, cited as
-  `product/<path>#<anchor>`.
+  `product/<path>#<anchor>`. Before writing a claim about a component, connection, data
+  flow or PII, read the file that describes it (`architecture.md`, `data-flows.md`,
+  `privacy.md`, `hw-sw-inventory.md`); a simulated answer never contradicts a product
+  passage, and the checks cannot catch one that does.
 {% else %}
 - {{ i.id }} ({{ i.name }}): the product directory, when the fork supplies it there;
   otherwise ask the responsible persona, and record an assumption for what nobody can

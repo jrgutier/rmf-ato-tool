@@ -42,10 +42,11 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: how the requirement set was analyzed against the protection needs, the feedback the stakeholders got, the issues raised and how each was resolved, and each stakeholder's explicit agreement with the key decisions and their rationale, with tokens>>
 
-<!-- P-17 adds an "Allocated to" column (component IDs from artifacts/data/boundary.yaml, the
-     environment of operation, a common control provider or the contract) to the requirements
-     table, appends "## Allocation" (how each requirement is split between the system, its
+<!-- P-17 appends "## Requirements Allocation (P-17)" (the heading its playbook names) with
+     an allocation table (requirement ID and where it is allocated: component IDs from
+     artifacts/data/boundary.yaml, the environment of operation, a common control provider or
+     the contract), "### Allocation" (how each requirement is split between the system, its
      elements and providers, and why, keeping the trace from need to verification both ways)
-     and "## Contract requirements" (the cybersecurity requirements the RFP carries, the
+     and "### Contract requirements" (the cybersecurity requirements the RFP carries, the
      cyberspace work roles contractors perform, their qualification requirements, DFARS Subpart
      239.71 and how their qualifications are documented), and adds P-17 to touched_by. -->

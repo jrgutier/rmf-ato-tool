@@ -15,11 +15,14 @@ has cited them. Replace the guidance in each file with your system's material.
 | `conops.md` | mission, program and lifecycle, users, operating environment, information handled, availability need, known limitations |
 | `architecture.md` | components with stable `CMP-*` IDs, boundary, network, interconnections, leveraged authorizations, identity, logging, configuration, updates, physical protection |
 | `data-flows.md` | data flows (`DF-*`) with source, destination, path, information and protection |
-| `hw-sw-inventory.md` | hardware, software and firmware items with stable `INV-###` IDs and their components |
+| `hw-sw-inventory.md` | hardware, software and firmware items with stable `INV-###` IDs, their components, their OSCAL type (`hardware`, `software`, `service`, `operating-system`, ...) and, for virtual or cloud items, a quantity |
 | `stakeholders.md` | who fills each RMF role (AO, PM, ISSM, ISSO, SCA, CSSP, privacy) and the governance boards |
 | `organization.md` | policy and risk strategy, common controls, threat information, capability and acquisition documents (PPP, SEP, cybersecurity strategy), release history |
 | `services.md` | leveraged services: cloud offerings, enterprise services, the CSSP, software factories, with their authorizations and agreements |
 | `privacy.md` | PII handled, authority and SORN, PIA status, minimization and retention (one line if no PII) |
+| `diagrams/` | the authorization boundary, network architecture and data-flow diagrams (image, PDF, or text/Mermaid), if the program has them |
+| `capability-document.md` | the capability document or user agreement: kind, version, approval date, KPPs, OMS/MP, protection content |
+| `registry.md` | IT registry (DITPR, eMASS) and PPSM registration records |
 | `test-results.md` | developer and developmental test results, scans and records the assessor may reuse |
 | `monitoring/` | continuous monitoring data for M-2 (EXT-MONITORING): see `monitoring/README.md`; needed only when the run includes M-2 |
 
