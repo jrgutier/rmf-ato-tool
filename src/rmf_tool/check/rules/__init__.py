@@ -92,6 +92,7 @@ RULES: dict[str, Rule] = {
     "POAM-CTL-001": consistency.poam_controls,
     "XCON-001": consistency.ssp_sar_agree,
     "XCON-002": consistency.stig_ssp_agree,
+    "NSS-001": consistency.nss_agrees,
     "POAM-FLD-001": consistency.poam_fields,
     "RAR-001": consistency.rar_links,
     "AODM-001": authorization.records_valid,

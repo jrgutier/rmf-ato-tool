@@ -1276,7 +1276,7 @@ Writes to `facts.yaml`: `boundary_id`.
 | [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 | [System registration (ART-REG)](#art-reg) | System registration | updates | supporting |
 
-Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
+Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`, `nss`.
 
 **Entry criteria**
 

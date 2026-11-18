@@ -501,7 +501,8 @@ def issues(ctx: Context) -> list[RunFinding]:
     out, err = _rule(ctx, "AODM-011")
     items = ledger.section(ctx.run, "issues")
     designation = ctx.data(NSS_DESIGNATION_FILE)
-    nss = isinstance(designation, dict) and designation.get("nss") is True
+    nss = facts_mod.nss(ctx.facts, designation.get("nss") if isinstance(designation, dict)
+                        else None) is True
     for issue in items:
         kind, forum = issue.get("kind"), issue.get("forum")
         if kind == "mission-area" and forum != "PAO":

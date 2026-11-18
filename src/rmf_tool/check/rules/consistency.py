@@ -18,6 +18,7 @@ from rmf_tool.check.rules.content import (
     family_records,
     inconsequential,
 )
+from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
 from rmf_tool.run.model import RUN_FILE
 
@@ -358,4 +359,32 @@ def stig_ssp_agree(ctx: Context) -> list[RunFinding]:
             out.append(make("XCON-002", f"{fid} is open on {cid}, which the SSP records as "
                             f"{control.get('status')} without naming {fid}", STIG_FILE, None,
                             {"I-1"}))
+    return out
+
+
+# --- NSS-001: one answer to "is this a national security system?" (F-03-4, F-04-5) ---------
+
+NSS_FILE = "artifacts/data/nss-assessments.yaml"
+PIA_FILE = "artifacts/data/pia.yaml"
+FACTS_FILE = "facts.yaml"
+
+
+def nss_agrees(ctx: Context) -> list[RunFinding]:
+    """NSS-001: the `nss` fact is the run's one answer; P-16's nss-assessments.yaml and the PIA's
+    NSS exclusion agree with it."""
+    node = facts_mod.get(ctx.facts, "nss")
+    if not isinstance(node, dict) or not isinstance(node.get("value"), bool):
+        return []
+    value = node["value"]
+    out: list[RunFinding] = []
+    record = ctx.data(NSS_FILE)
+    if isinstance(record, dict) and isinstance(record.get("nss"), bool) \
+            and record["nss"] is not value:
+        out.append(make("NSS-001", f"facts.yaml records nss {str(value).lower()}, and "
+                        f"nss-assessments.yaml records nss {str(record['nss']).lower()}",
+                        FACTS_FILE, None, {"C-1"}))
+    pia = ctx.data(PIA_FILE)
+    if isinstance(pia, dict) and pia.get("basis") == "nss" and not value:
+        out.append(make("NSS-001", "the PIA is excluded as an NSS, and facts.yaml records the "
+                        "system is no NSS", PIA_FILE, None, {"P-14"}))
     return out
