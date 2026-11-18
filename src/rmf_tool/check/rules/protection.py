@@ -492,10 +492,11 @@ def nss_assessment(ctx: Context) -> list[RunFinding]:
     if data is None:
         return out
     space = _space(ctx)
-    if space and data.get("nss") is not True:
+    nss = facts_mod.nss(ctx.facts, data.get("nss"))
+    if space and (nss is not True or data.get("nss") is not True):
         err("a space NSS is a National Security System, and nss-assessments.yaml records nss "
             f"{data.get('nss')}")
-    if data.get("nss") is not True and not space:
+    if nss is not True and not space:
         return out
     passed = _passed(_dict(_protection(ctx).get("program")))
     milestones = decision_points(ctx, _pathway(ctx), MILESTONES)

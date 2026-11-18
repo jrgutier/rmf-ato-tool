@@ -1,0 +1,14 @@
+rule: NSS-001
+bases:
+- minimal
+description: P-16's record says the system is no NSS while the fact says it is
+mutations:
+- op: set_field
+  file: artifacts/data/nss-assessments.yaml
+  path: nss
+  value: false
+expect:
+  errors:
+  - NSS-001
+  messages:
+  - facts.yaml records nss true, and nss-assessments.yaml records nss false

@@ -1,0 +1,76 @@
+# artifacts/data/system-description.yaml (C-1; M-1 updates it; schema system-description).
+ownership: government-owned-contractor-operated
+function: "Cloud-hosted, decision-support web application for naval aviation readiness. Every night it pulls maintenance actions, part removals and aircraft status from EMIS and supply status from the supply status service, loads them into its database, shows squadron, air wing and fleet readiness dashboards, and scores a part-failure forecast for the next 30 days so maintenance officers can order parts early. Officers export PDF and slide reports; fleet analysts export de-identified data sets; data scientists retrain the model in an isolated sandbox. It never writes back to EMIS, orders parts or changes aircraft status. It is networked, not stand-alone: users reach it over NIPRNet only, through the enterprise cloud access point, so it connects to the DODIN directly through that one DISN attachment."
+physical_environment:
+  building: "No program-owned building houses the system: every component runs in the Example GovCloud IL4 region's data centers (provider-designated sites, inherited from the provider's DoD provisional authorization). The only program-held equipment, the ERST privileged access workstations, are government-furnished and kept in the program's controlled office space."
+  walls_and_ceilings: "Data center construction is the cloud provider's and is documented in its provisional authorization package (inherited PE controls); the program office space is ordinary government office construction, not a vault or secure room."
+  physical_security: "Data center guards, cameras, badge and access controls are the cloud provider's, inherited from its IL4 provisional authorization; the program office space is in a badge-controlled government building."
+  validation: none
+service_alignment:
+  nosc: "Component network operations and security center (fictional)"
+  designation: genser
+  cssp_agreement: SVA-001
+  authorized_by: [USCYBERCOM]
+  registered_in: "Component CSSP alignment register (CSSP section of the eMASS record EFRAS-0001, fictional)"
+  mission_criticality: "Mission support (not mission critical)"
+  ip_ranges: ["10.44.0.0/16 (fictional private range of the production account; no public addresses)"]
+  locations: ["Example GovCloud IL4 region, provider data centers (fictional)", "ARSPO controlled office space, ERST privileged access workstations (fictional)"]
+interconnections:
+  - id: ICX-01
+    component: CMP-EMIS
+    system: "Example Maintenance Information System (EMIS)"
+    organization: "EMIS program office (fictional)"
+    partner: dod-component
+    interface:
+      kind: "Nightly system-to-system extract pull (IC-1, CONN-04)"
+      ports_protocols_services: "HTTPS on 443 with mutual TLS; signed, checksummed extract file"
+      provider: "Example GovCloud IL4 region network and the egress allow-list (NAT gateway)"
+      boundaries_crossed: "EFRAS authorization boundary to the EMIS boundary; no security domain crossed"
+    agreement:
+      instrument: moa
+      reference: "EFRAS-EMIS memorandum of agreement, DRAFT under legal review (target 2026-12-31); connection operates on the EMIS ISSM's interim e-mail approval of 2026-09-15, which is not a signed agreement"
+      date: "2026-09-15"
+      signed_by: ["Not signed: interim e-mail approval only, from the EMIS ISSM (fictional)"]
+    authorization:
+      status: "ATO 2025-04-22, valid to 2028-04-22 (fictional)"
+      authorizing_official: "Maintenance and supply systems AO (fictional role label)"
+    sources: [INT-058.A6, INT-060.A6, ASM-016, product/architecture.md#interconnections, product/conops.md#limitations]
+  - id: ICX-02
+    component: CMP-SUPPLY
+    system: "Example Supply Status Service"
+    organization: "Supply status service program office (fictional)"
+    partner: dod-component
+    interface:
+      kind: "Nightly API pull (IC-2, CONN-05)"
+      ports_protocols_services: "HTTPS on 443 with an API token from the secrets store"
+      provider: "Example GovCloud IL4 region network and the egress allow-list (NAT gateway)"
+      boundaries_crossed: "EFRAS authorization boundary to the supply status service boundary; no security domain crossed"
+    agreement:
+      instrument: sla
+      reference: "EFRAS-Supply Status service-level agreement (fictional)"
+      date: "2026-06-30"
+      signed_by: ["Product Manager, ARSPO (fictional)", "Supply status service program manager (fictional)"]
+    authorization:
+      status: "ATO 2024-11-05 (fictional)"
+      authorizing_official: "Maintenance and supply systems AO (fictional role label)"
+    sources: [INT-058.A6, INT-060.A6, ASM-016, product/architecture.md#interconnections]
+  - id: ICX-03
+    component: CMP-IDB
+    system: "Enterprise identity broker"
+    organization: "Component enterprise services (fictional)"
+    partner: dod-component
+    interface:
+      kind: "SAML/OIDC federation for CAC sign-in, both directions (IC-3, CONN-03)"
+      ports_protocols_services: "HTTPS on 443 through the egress allow-list"
+      provider: "Example GovCloud IL4 region network and the egress allow-list (NAT gateway)"
+      boundaries_crossed: "EFRAS authorization boundary to the identity broker boundary; no security domain crossed"
+    agreement:
+      instrument: support-agreement
+      reference: "Identity broker enterprise onboarding approval (fictional)"
+      date: "2026-05-12"
+      signed_by: ["Identity broker service owner (fictional)"]
+    authorization:
+      status: "Enterprise service ATO (fictional)"
+      authorizing_official: "Component enterprise services AO (fictional role label)"
+    sources: [INT-058.A6, INT-060.A6, ASM-016, product/architecture.md#interconnections]
+sources: [INT-058.A4, INT-058.A5, INT-058.A6, INT-060.A2, INT-060.A6, ASM-016, product/conops.md#mission, product/architecture.md#physical]

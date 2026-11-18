@@ -1,0 +1,118 @@
+# artifacts/sar/results/ac.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. All tests ran in the pre-production account built from the production templates
+# (sap.yaml rules_of_engagement); production holds no release yet.
+family: ac
+determinations:
+  - control_id: ac-1
+    result: satisfied
+    methods: [examine, interview]
+    depth: focused
+    coverage: focused
+    summary: "Examined the access control chapter of the EFRAS security operations runbook (version 2.1, re-issued by the ISSM 2026-06-15, previous annual review 2025-10-20), its repository access list (the six engineers, four app-admins and the ISSO) and its reference to the Component access control policy; interviewed the ISSO. The organization-level policy is the Component's (ART-ORG-CONTEXT); its own annual review is the Component's and is accepted on its issue date."
+    statements:
+      - {id: "AC-01a.[01]", result: satisfied}
+      - {id: "AC-01a.[02]", result: satisfied}
+      - {id: "AC-01a.[03]", result: satisfied}
+      - {id: "AC-01a.[04]", result: satisfied}
+      - {id: "AC-01a.01(a)[01]", result: satisfied}
+      - {id: "AC-01a.01(a)[02]", result: satisfied}
+      - {id: "AC-01a.01(a)[03]", result: satisfied}
+      - {id: "AC-01a.01(a)[04]", result: satisfied}
+      - {id: "AC-01a.01(a)[05]", result: satisfied}
+      - {id: "AC-01a.01(a)[06]", result: satisfied}
+      - {id: "AC-01a.01(a)[07]", result: satisfied}
+      - {id: "AC-01a.01(b)", result: satisfied}
+      - {id: "AC-01b.", result: satisfied}
+      - {id: "AC-01c.01[01]", result: satisfied}
+      - {id: "AC-01c.01[02]", result: satisfied}
+      - {id: "AC-01c.02[01]", result: satisfied}
+      - {id: "AC-01c.02[02]", result: satisfied}
+    reused: []
+    sources: [INT-152.A1, ART-ORG-CONTEXT, ART-SSP]
+  - control_id: ac-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined access requests and approvals for a random sample across the five roles, the 2026-10-06 quarterly review record, the 35-day inactivity setting and the role-change events; re-ran six DT-2 sign-in and inactivity cases (pass); interviewed the ISSO. Account types, approvals, provisioning through broker groups, monitoring and the quarterly review are in place. The leaver-timing test (PRC-004, 2026-12-01) of ten leavers found no evidence that any departure reached the account manager within the 24 hours the SSP sets: the two known leavers were removed only at the quarterly review, and the other eight checklists record no notification time (ASM-020). Account management is not aligned with the termination and transfer processes. Pre-production accounts only."
+    finding_refs: [FND-001]
+    statements:
+      - {id: "AC-02a.[01]", result: satisfied}
+      - {id: "AC-02a.[02]", result: satisfied}
+      - {id: "AC-02b.", result: satisfied}
+      - {id: "AC-02c.", result: satisfied}
+      - {id: "AC-02d.01", result: satisfied}
+      - {id: "AC-02d.02", result: satisfied}
+      - {id: "AC-02d.03[01]", result: satisfied}
+      - {id: "AC-02d.03[02]", result: satisfied}
+      - {id: "AC-02e.", result: satisfied}
+      - {id: "AC-02f.[01]", result: satisfied}
+      - {id: "AC-02f.[02]", result: satisfied}
+      - {id: "AC-02f.[03]", result: satisfied}
+      - {id: "AC-02f.[04]", result: other-than-satisfied}
+      - {id: "AC-02f.[05]", result: satisfied}
+      - {id: "AC-02g.", result: satisfied}
+      - {id: "AC-02h.01", result: satisfied}
+      - {id: "AC-02h.02", result: other-than-satisfied}
+      - {id: "AC-02h.03", result: satisfied}
+      - {id: "AC-02i.01", result: satisfied}
+      - {id: "AC-02i.02", result: satisfied}
+      - {id: "AC-02i.03", result: satisfied}
+      - {id: "AC-02j.", result: satisfied}
+      - {id: "AC-02k.[01]", result: not-applicable, reason: "Shared and group accounts are prohibited; the two sealed break-glass accounts are individual accounts whose FIDO2 keys are re-issued on a change of custodian (ia-5)."}
+      - {id: "AC-02k.[02]", result: not-applicable, reason: "Shared and group accounts are prohibited, so no shared or group authenticator is deployed."}
+      - {id: "AC-02l.[01]", result: other-than-satisfied}
+      - {id: "AC-02l.[02]", result: other-than-satisfied}
+    reused: []
+    sources: [INT-152.A2, INT-152.A3, ASM-020, product/test-results.md#account-review, product/test-results.md#dt-2]
+  - control_id: ac-3
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the API authorization middleware, the report service's scope check added in release 1.5.1 and the sandbox workload's grants; tested 100 crafted cross-squadron and cross-air-wing requests across the five roles through the UI, the API and the PT-1 export path (all refused) and reused the red team result (RR-002) with the PT-1 retest pass of 2026-11-10; interviewed the developer. Approved authorizations are enforced on every path tested, in pre-production."
+    statements:
+      - {id: "AC-03", result: satisfied}
+    reused: [RR-002]
+    sources: [INT-153.A1, product/test-results.md#dt-2, product/test-results.md#pentest]
+  - control_id: ac-6
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined every privileged role (4 app-admins, 6 named console roles, the break-glass console and database accounts) against the 2026-10-06 review and the duty lists, and the nine workload identities' namespace bindings; tested the four privileged roles and confirmed a viewer and an analyst cannot change roles or reach the sandbox; interviewed the developer. Privileges match the duties; no cluster-wide workload grant was found."
+    statements:
+      - {id: "AC-06", result: satisfied}
+    reused: []
+    sources: [INT-153.A2, product/test-results.md#account-review, product/architecture.md#identity]
+  - control_id: ac-17
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the runbook's remote access section (two access types with usage restrictions, connection requirements and guidance) and the ISSM's authorization memo of 2026-03-10; tested that the edge accepts only 443 with TLS 1.2 or 1.3 after CAC sign-in and that the cluster API has no public endpoint; interviewed the ISSO."
+    statements:
+      - {id: "AC-17a.[01]", result: satisfied}
+      - {id: "AC-17a.[02]", result: satisfied}
+      - {id: "AC-17a.[03]", result: satisfied}
+      - {id: "AC-17b.", result: satisfied}
+    reused: []
+    sources: [INT-152.A4, product/architecture.md#network, product/architecture.md#identity]
+findings:
+  - id: FND-001
+    control_id: ac-2
+    title: "Departures do not reach the account manager within 24 hours; leaver accounts stay active until the quarterly review"
+    description: "AC-2 as tailored requires account managers to be notified within 24 hours when users are terminated or transferred, accounts to be disabled per that policy, and account management aligned with termination and transfer. The 2026-10-06 review found two accounts of users who had left a pilot squadron still active; they were removed at the review, not on departure. The leaver-timing test of ten leavers (2026-12-01) found no notification time for any of them: the out-processing step relies on an e-mail from the squadron office that was not sent for the two known leavers and is not recorded for the others. Evidence: the account review record, the ISSO interview, the out-processing checklists (ASM-020)."
+    status: open
+    severity: moderate
+    recommendation: "Feed departures and transfers from the squadrons' out-processing into the account manager's queue automatically (or a recorded hand-off with a timestamp), disable the EFRAS account and remove the broker group within 24 hours, and check leaver timing in each quarterly review until production."
+    affected_statements: ["AC-02f.[04]", "AC-02h.02", "AC-02l.[01]", "AC-02l.[02]"]
+    state_difference: "Expected: a leaver's account is disabled within 24 hours of departure. Actual: leavers keep access until the 35-day inactivity disable or the next quarterly review, whichever comes first."
+    potential_compromise: [confidentiality, privacy]
+    sources: [INT-152.A3, ASM-020, product/test-results.md#account-review]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: moderate
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "Not fixed during the assessment; the leaver step needs the squadrons' agreement, which existing resources cannot settle in days. Leavers keep access to maintainer PII, the confidentiality and privacy harm the risk assessment weighs first, so it is substantive and goes to the POA&M."

@@ -210,6 +210,9 @@ def trusted_systems(ctx: Context) -> list[RunFinding]:
             if item not in inventory:
                 err(f"{_id(f)} names {item}, which is no inventory item")
     if not functions:
+        if not str(analysis.get("none_rationale") or "").strip():
+            err("criticality.functions is empty but criticality.none_rationale does not say why "
+                "the system has no mission-critical function")
         return out
     practices = set(_refs(analysis, "tsn"))
     for practice in TSN_FOR_CRITICAL:

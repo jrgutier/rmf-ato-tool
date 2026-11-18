@@ -1,0 +1,144 @@
+# artifacts/data/users.yaml (C-1; schema users). One record per user group.
+users:
+  - id: USR-MAINTAINERS
+    title: "Squadron maintenance personnel"
+    description: "About 2,400 squadron maintainers who view their own squadron's readiness and part forecasts over the web."
+    type: internal
+    category: organization-personnel
+    privilege_level: non-privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC (favorable background investigation)"
+    roles: [viewer]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training before an account is provisioned"}
+    authorized_privileges:
+      - title: "viewer"
+        functions_performed: ["View own squadron readiness dashboards", "View own squadron part-failure forecasts"]
+    sources: [INT-059.A1, INT-060.A5, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-OFFICERS
+    title: "Maintenance officers and chiefs"
+    description: "About 600 maintenance officers and chiefs who view air wing readiness, acknowledge forecasts and export reports."
+    type: internal
+    category: organization-personnel
+    privilege_level: non-privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC (favorable background investigation)"
+    roles: [officer]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training before an account is provisioned"}
+    authorized_privileges:
+      - title: "officer"
+        functions_performed: ["View air wing readiness", "Acknowledge forecasts", "Export PDF and slide reports marked CUI"]
+    sources: [INT-059.A1, INT-059.A2, INT-060.A5, product/conops.md#users]
+  - id: USR-ANALYSTS
+    title: "Fleet readiness analysts"
+    description: "About 40 analysts with fleet-wide views, ad hoc queries and de-identified data set exports; the analyst role needs the information owner's approval."
+    type: internal
+    category: organization-personnel
+    privilege_level: non-privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC (favorable background investigation)"
+    roles: [analyst]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training; handling of exports that may contain PII until release 1.6"}
+    authorized_privileges:
+      - title: "analyst"
+        functions_performed: ["View fleet-wide readiness", "Run ad hoc queries", "Export de-identified data sets (re-identifiable until release 1.6)"]
+    sources: [INT-059.A1, INT-059.A2, INT-060.A5, product/conops.md#users, product/conops.md#limitations]
+  - id: USR-APP-ADMINS
+    title: "EFRAS application administrators"
+    description: "Four administrators privileged in the application who manage roles, reference data and feature flags."
+    type: internal
+    category: organization-personnel
+    privilege_level: privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC and the investigation required for a privileged IT position"
+    privileged_access:
+      qualified: true
+      qualification: "DoD 8140 qualification for the system administrator work role"
+      statement_signed: true
+    roles: [app-admin]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training plus privileged user training"}
+    authorized_privileges:
+      - title: "app-admin"
+        functions_performed: ["Manage application role assignments", "Manage reference data", "Manage feature flags"]
+    sources: [INT-060.A4, INT-060.A5, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-CLOUD-OPS
+    title: "Cloud operations engineers (ERST)"
+    description: "Six contractor engineers privileged in the cloud account who operate the cluster, database and pipelines through named console roles from privileged access workstations; they also hold the two sealed break-glass console accounts."
+    type: internal
+    category: contractor
+    privilege_level: privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC and the investigation required for a privileged IT position"
+    privileged_access:
+      qualified: true
+      qualification: "DoD 8140 qualification for the cloud operations work role (contract requirement REQ-19)"
+      statement_signed: true
+    roles: [cloud console operator, break-glass custodian]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training plus privileged user and break-glass procedure training"}
+    authorized_privileges:
+      - title: "cloud console operator"
+        functions_performed: ["Operate the managed Kubernetes worker node groups", "Administer the managed database", "Operate the deployment pipelines and log pipeline"]
+      - title: "break-glass custodian"
+        functions_performed: ["Use a sealed FIDO2 console account when the identity broker is down (alerted)"]
+    sources: [INT-059.A3, INT-060.A4, INT-060.A5, product/conops.md#users, product/conops.md#limitations]
+  - id: USR-DATA-SCI
+    title: "Data scientists (ERST)"
+    description: "Three contractor data scientists who build and retrain the forecast model in the analytics sandbox; no access to production views, privileged only inside the sandbox, which reads the training extract."
+    type: internal
+    category: contractor
+    privilege_level: privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC and the investigation required for a privileged IT position"
+    privileged_access:
+      qualified: true
+      qualification: "DoD 8140 qualification for the data science work role"
+      statement_signed: true
+    roles: [sandbox data scientist]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training; handling of the training extract as PII until release 1.6"}
+    authorized_privileges:
+      - title: "sandbox data scientist"
+        functions_performed: ["Administer notebooks in the analytics sandbox", "Read the pseudonymized training extract", "Build and retrain the forecast model"]
+    sources: [INT-059.A3, INT-060.A4, product/conops.md#users, product/architecture.md#identity]
+  - id: USR-AUDITORS
+    title: "Security staff (ISSO and ISSM)"
+    description: "The ISSO and ISSM hold the auditor role to review audit records, privileged actions and exports, and the ISSO provisions roles."
+    type: internal
+    category: organization-personnel
+    privilege_level: privileged
+    access_requirements:
+      clearance: none
+      citizenship: "U.S. citizen with a CAC and the investigation required for a privileged IT position"
+    privileged_access:
+      qualified: true
+      qualification: "DoD 8140 qualification for the ISSO and ISSM work roles"
+      statement_signed: true
+    roles: [auditor]
+    access_decision: {decided_by: PER-PM, coordinated_with: PER-IO}
+    training: {ensured_by: PER-PM, requirement: "Annual DoD cyber awareness, CUI and privacy training plus privileged user training"}
+    authorized_privileges:
+      - title: "auditor"
+        functions_performed: ["Review audit records and the weekly privileged action and export report", "Provision application roles approved in the access request system"]
+    sources: [INT-060.A4, product/architecture.md#identity, product/architecture.md#logging]
+  - id: USR-LEADERS
+    title: "Senior leaders"
+    description: "Leaders who receive exported briefing slides by e-mail and never log in."
+    type: internal
+    category: organization-personnel
+    privilege_level: no-logical-access
+    access_requirements:
+      clearance: none
+      citizenship: "Not applicable: no logical access; receive CUI-marked slides through DoD e-mail"
+    training: {ensured_by: PER-PM, requirement: "None from the system; CUI handling training through their own organizations"}
+    authorized_privileges: []
+    sources: [INT-059.A1, INT-059.A2, product/conops.md#users]

@@ -1,0 +1,38 @@
+# artifacts/ssp/controls/si.yaml (S-4; schema ssp-controls). Written whole.
+family: si
+controls:
+  - control_id: si-2
+    status: partial
+    statement: "Partial. Hybrid with the Example GovCloud IL4 region, which patches the hypervisor, the managed Kubernetes control plane and the database engine in announced windows and publishes the hardened node image monthly. EFRAS's part, in place: (a) flaws reach the ISSO from the pipeline scans, the weekly scan (ra-5), CSSP alerts and the software factory, and each is a tracked ticket; (b) fixes are tested in pre-production through the pipeline's security gates before release; (c) CMP-K8S worker nodes roll monthly to the provider's latest hardened image, application fixes ship in the three-weekly release, and an emergency patch can be deployed within 48 hours; (d) every fix is a change under the configuration change process (cm-3) with ISSO sign-off. Missing: (c) the two high vulnerabilities in the third-party image-processing library in CMP-REPORT are not installed within 30 days, because the software factory's hardened base image carrying the released fix is late. Plan: release 1.5.2 on 2026-12-10."
+    responsible_roles: [PER-ISSO, PER-DEV, PER-CCP]
+    components: [CMP-K8S, CMP-REPORT]
+    inherited_from: PRV-01
+    inherited_risks: "Managed service patches arrive in the provider's windows; a late provider patch is visible only in its monthly deliverables."
+    parameters:
+      si-02_odp: "30 days of the release of the update; critical updates by emergency patch within 48 hours"
+    sources: [INT-114.A1, INT-113.A2, INT-071.A1, product/architecture.md#updates, product/conops.md#limitations, product/test-results.md#pipeline-1-5]
+  - control_id: si-4
+    status: implemented
+    statement: "Hybrid with the CSSP. (a, b) CMP-LOGS forwards in near real time the CMP-EDGE load balancer and WAF logs, the application's sign-in, role change, export, admin and denied events, the cluster audit log, the database audit and the cloud account activity log; the CSSP correlates them 24x7 against its objectives (attacks on the edge, account compromise, privilege misuse, data exfiltration, unauthorized local, network and remote connections) with use-case correlation, behavioral baselines for exports and sign-ins and threat intelligence matching. (c) The collection points are the edge and the log pipeline; alerts on break-glass use and export volume spikes page the on-call engineer. (d) The CSSP analyzes detected events and the ISSO reviews the weekly report of privileged actions, exports and denied requests (au-6). (e) The CSSP raises the monitoring level on a CPCON change or the AO's direction. (f) The Component's counsel reviewed the monitoring; users receive the monitoring notice in the sign-in banner, and monitoring data, which holds maintainer identifiers, is encrypted and access-limited under the CSSP's agreement (Privacy Overlay guidance). (g) Alerts go to the ISSO and the on-call engineer as needed, and a monthly summary to the ISSO and the ISSM. DT-2 showed export events reach the CSSP within 5 minutes."
+    responsible_roles: [PER-CSSP, PER-ISSO, PER-ISSE]
+    components: [CMP-LOGS, CMP-EDGE]
+    inherited_from: PRV-04
+    inherited_risks: "The CSSP sees only what EFRAS forwards; a broken forwarder leaves EFRAS unmonitored until the missing-feed alert fires."
+    parameters:
+      si-04_odp.01: "detect attacks on the edge, account compromise, privilege misuse and data exfiltration"
+      si-04_odp.02: "use-case correlation of forwarded logs, behavioral baselines for exports and sign-ins, and threat intelligence matching by the CSSP; weekly ISSO review of privileged actions, exports and denied requests"
+      si-04_odp.03: "security alerts and a summary of detected events and anomalies"
+      si-04_odp.04: "the EFRAS ISSO, the on-call engineer and the ISSM"
+      si-04_odp.05: "as needed; monthly"
+      si-04_odp.06: "monthly"
+    planned_io: "Inputs: edge, application, cluster, database and cloud account logs. Outputs: CSSP alerts and tickets, monthly summary."
+    assurance:
+      addressed: "The forwarding configuration, the DT-2 export audit result, CSSP alert tickets and the monthly summaries are the evidence; the assessor tests a sample event end to end."
+      status: satisfied
+    sources: [INT-115.A1, INT-072.A1, INT-091.A1, INT-075.A2, product/architecture.md#logging, product/test-results.md#dt-2]
+  - control_id: si-12
+    status: implemented
+    statement: "Information in EFRAS and its outputs is managed and retained under the Privacy Act, the Component SORN and the Component records schedule. Addendum (S-2 specification): maintainer PII is kept only while the linked maintenance action is inside the 5-year analysis window; CMP-INGEST purges older records monthly, and the ISSO checks the purge log each month. Readiness data follows the same window. The report cache of CMP-REPORT in object storage expires after 30 days by a lifecycle rule. Exports carry the CUI marking and handling notice, and recipients keep them under their own records rules. Audit log retention is au-11's."
+    responsible_roles: [PER-ISSO, PER-PRIV]
+    components: [CMP-INGEST, CMP-REPORT]
+    sources: [INT-114.A2, INT-075.A1, product/privacy.md#minimization]

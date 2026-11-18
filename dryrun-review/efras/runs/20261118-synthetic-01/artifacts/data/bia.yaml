@@ -1,0 +1,94 @@
+# artifacts/data/bia.yaml (P-8; schema bia). Written whole (INV-8). C-2 adds reevaluations and the
+# Assess iteration of the criticality analysis; M-1 a Monitor iteration per significant change.
+mission_critical: false
+functions: []
+processes:
+  - id: BP-01
+    name: "Daily readiness reporting for squadron, air wing and fleet"
+    disruption_impact: low
+    recovery_time_hours: 72
+    interdependencies: ["Example Maintenance Information System nightly extract", "Example Supply Status Service nightly pull", "Enterprise identity broker sign-in", "Example GovCloud IL4 region"]
+    sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1]
+  - id: BP-02
+    name: "Part failure forecasting for early part orders"
+    disruption_impact: low
+    recovery_time_hours: 168
+    interdependencies: ["BP-01 data load", "Example Maintenance Information System nightly extract", "Example GovCloud IL4 region"]
+    sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-019.A1]
+  - id: BP-03
+    name: "Fleet readiness analysis and de-identified data set export"
+    disruption_impact: low
+    recovery_time_hours: 168
+    interdependencies: ["BP-01 data load", "Enterprise identity broker sign-in", "Example GovCloud IL4 region"]
+    sources: [INT-018.A1, INT-018.A2, INT-018.A3]
+external_dependents:
+  - stakeholder: "Senior leaders receiving readiness briefing slides by e-mail"
+    depends_on: [BP-01]
+    communicated: "The fleet readiness directorate's daily readiness brief notes when readiness data is late"
+    sources: [INT-018.A3]
+reevaluations: []
+criticality:
+  iterations:
+    - step: frame
+      date: "2026-11-18"
+      summary: "Frame iteration with the capability sponsor: no mission critical function in the system; readiness reporting ranked first, forecasting second, fleet analysis third; the maintenance data feed and the identity broker underpin all three"
+      sources: [INT-018.A2, INT-018.A4]
+    - step: assess
+      date: "2026-11-18"
+      summary: "Assess iteration at C-2 once the system was categorized (availability low): BP-01 (low, 72 h), BP-02 (low, 168 h) and BP-03 (low, 168 h) were compared with the availability impact and none exceeds it, so no reevaluation is owed and the sponsor confirmed the ranking; the boundary components underpinning all three processes were added: the ingest worker CMP-INGEST, the database CMP-DB and, as a defensive item, the key management service CMP-KMS"
+      sources: [INT-066.A1, INT-066.A2, INT-065.A4]
+    - step: monitor
+      date: "2027-02-01"
+      change: CHG-003
+      summary: "Monitor iteration at M-1 for release 1.6 (significant change): the pseudonyms, the log archive tier and the configuration settings change no process, recovery time or interdependency; the archive tier is a setting of the existing log service (CMP-LOGS), not a new component, and underpins no mission process; the ranking of BP-01 to BP-03 and of the critical items holds"
+      sources: [INT-204.A1, INT-202.A4]
+  critical_items:
+    - rank: 1
+      kind: process
+      item: BP-01
+      role: mission
+      processes: [BP-01]
+      sources: [INT-018.A4]
+    - rank: 2
+      kind: process
+      item: BP-02
+      role: mission
+      processes: [BP-02]
+      sources: [INT-018.A4]
+    - rank: 3
+      kind: process
+      item: BP-03
+      role: mission
+      processes: [BP-03]
+      sources: [INT-018.A4]
+    - rank: 4
+      kind: system
+      item: "Example Maintenance Information System (EMIS)"
+      role: mission
+      processes: [BP-01, BP-02, BP-03]
+      sources: [INT-018.A4]
+    - rank: 5
+      kind: system
+      item: "Enterprise identity broker"
+      role: defensive
+      processes: [BP-01, BP-02, BP-03]
+      sources: [INT-018.A4]
+    - rank: 6
+      kind: component
+      item: CMP-INGEST
+      role: mission
+      processes: [BP-01, BP-02, BP-03]
+      sources: [INT-065.A4, INT-066.A2]
+    - rank: 7
+      kind: component
+      item: CMP-DB
+      role: mission
+      processes: [BP-01, BP-02, BP-03]
+      sources: [INT-065.A4, INT-066.A2]
+    - rank: 8
+      kind: component
+      item: CMP-KMS
+      role: defensive
+      processes: [BP-01, BP-02, BP-03]
+      sources: [INT-065.A4]
+sources: [INT-018.A1, INT-018.A2, INT-019.A1, INT-066.A1]

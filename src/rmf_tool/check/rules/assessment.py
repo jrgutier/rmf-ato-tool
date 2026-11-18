@@ -16,7 +16,7 @@ from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.consistency import BOUNDARY_FILE, RAR_FILE
 from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
 from rmf_tool.run import authorization as ledger
-from rmf_tool.run import poam_dates, scope
+from rmf_tool.run import clock, poam_dates, scope
 
 SAP_FILE = "artifacts/data/sap.yaml"
 REPORT_FILE = "artifacts/data/sar-report.yaml"
@@ -765,7 +765,7 @@ def _items(ctx: Context) -> list[dict[str, Any]] | None:
 def _latest(ctx: Context) -> dt.date | None:
     """The latest date the run vouches for: its start or its newest authorization record. A
     simulated run has no today."""
-    dates = [_day(str(ctx.run.config.get("as_of"))[:10]),
+    dates = [clock.today(ctx.run.config),
              *(_day(r.get("date")) for r in ctx.ledger or ())]
     return max((d for d in dates if d), default=None)
 
@@ -792,8 +792,11 @@ def poam_record(ctx: Context) -> list[RunFinding]:
         if not i.get("mitigation_approach"):
             err(f"{iid} lacks the proposed risk mitigation approach")
         if iid in levels and i.get("risk_level") != levels[iid]:
-            err(f"{iid}: the risk assessment level is {i.get('risk_level')}, but the RAR says "
-                f"{levels[iid]}")
+            # R-2 writes the RAR after A-6, and R-3 brings the POA&M in line with it (F-15-5)
+            owners = {"R-3"} if "R-3" in scope.active_tasks(ctx.run) else None
+            out.append(make("ASMT-009", f"{iid}: the risk assessment level is "
+                            f"{i.get('risk_level')}, but the RAR says {levels[iid]}",
+                            POAM_FILE, None, owners))
         identified = _block(i, "identified")
         if not identified:
             err(f"{iid} does not include the event that identified the weakness")

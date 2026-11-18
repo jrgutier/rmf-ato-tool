@@ -1,0 +1,31 @@
+# Executive summary of the authorization package (R-1; schema package-summary). Written whole (INV-8).
+subject: system
+security: "The security plan covers 50 selected controls (ART-SSP). The independent assessment (ART-SAR, delivered 2026-12-11, quality reviewed by the CISO 2026-12-14) found 28 controls satisfied and 22 other than satisfied, with 24 open findings: 9 moderate, 15 low, none high; no open CAT I STIG finding, two open CAT II (STG-001, STG-002). The POA&M (ART-POAM) holds 24 items, 17 recommended for completion before authorization and dated by 2027-01-25, 7 after; five items are delayed on the software factory's late hardened base image."
+privacy: "The system processes maintainer PII from EMIS. The privacy assessment found the de-identified exports and the training extract re-identifiable through an unsalted DoD ID hash (FND-018), which exceeds the low tolerance for harm to individuals; only synthetic data is loaded today. The PIA is a 0.9 draft under privacy office review and cannot be approved until the export fix is retested; the EMIS exchange runs without a signed agreement or breach terms. The Component privacy officer's position: no production PII before the fix is retested and the PIA approved."
+issues:
+  - id: XS-01
+    issue: "Re-identifiable exports and an unapproved PIA: no production maintainer data until the pseudonym fix is retested and the PIA approved."
+    poam_items: [POAM-001, POAM-010]
+  - id: XS-02
+    issue: "Two high vulnerabilities in the report container and two PostgreSQL STIG settings wait on the software factory's late hardened base image."
+    poam_items: [POAM-002, POAM-003, POAM-006, POAM-007, POAM-017]
+  - id: XS-03
+    issue: "Leavers keep access because no leaver notification reaches the account manager."
+    poam_items: [POAM-004, POAM-005]
+  - id: XS-04
+    issue: "The EMIS exchange, which carries maintainer PII, runs on an interim e-mail approval without a signed agreement."
+    poam_items: [POAM-011]
+  - id: XS-05
+    issue: "Recovery from a regional outage is unproven: no failover test or contingency tabletop until 2027-02."
+    poam_items: [POAM-009, POAM-015]
+  - id: XS-06
+    issue: "The break-glass FIDO2 deviation from CAC has no fix and needs the AO's acceptance."
+    poam_items: [POAM-020]
+  - id: XS-07
+    issue: "The container configuration is undocumented and the supporting plans are not yet approved."
+    poam_items: [POAM-008, POAM-012, POAM-013, POAM-014]
+submission:
+  by: PER-PM
+  to: PER-AO
+  date: "2026-12-14"
+sources: [INT-183.A1, INT-183.A2, INT-185.A1, ART-SAR, ART-POAM, ART-SSP]

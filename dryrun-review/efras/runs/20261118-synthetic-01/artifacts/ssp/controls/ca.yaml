@@ -1,0 +1,56 @@
+# artifacts/ssp/controls/ca.yaml (S-4; schema ssp-controls). Written whole.
+family: ca
+controls:
+  - control_id: ca-2
+    status: partial
+    statement: "Partial. The AODR, for the AO, selected the business systems SCA team of the Component's independent assessment activity on 2026-11-18 and approved its assessment plan the same day, before the assessment; the plan names the 50 controls, the procedures, the pre-production environment, the team and its roles (ART-SAP). The team assessed every control from 2026-11-19 to 2026-12-11, reusing the SCA-witnessed STIG scan and the red team's penetration test and examining the developer and developmental test results, and its report was delivered to the PM, the ISSM, the AODR and the AO on 2026-12-11 (ART-SAR). Missing: the recurring annual assessment of a third of the controls is not yet chosen or scheduled. Plan: the ISSM chooses and schedules the first annual third in the first monitoring cycle after the authorization decision; all controls are assessed within the authorization period, with results to the AO, the PM and the ISSM."
+    responsible_roles: [PER-ISSM, PER-PM]
+    components: [this-system]
+    parameters:
+      ca-02_odp.01: "annually, a third of the controls each year and all within the authorization period"
+      ca-02_odp.02: "the AO, the PM and the ISSM"
+    assurance:
+      addressed: "The approved assessment plan and the delivered assessment report are the evidence for this assessment; the annual assessment schedule will be the evidence for the recurring assessments."
+      status: planned
+    sources: [INT-092.A1, product/test-results.md#top, ART-ORG-CONTEXT, ART-SAP, ART-SAR, INT-177.A4, INT-179.A1]
+  - control_id: ca-3
+    status: partial
+    statement: "Partial. Three exchanges: EMIS to CMP-INGEST (nightly extract over mutual TLS), the supply status service to CMP-INGEST (nightly API pull) and the identity broker with CMP-API. The supply status service agreement was signed 2026-06-30 and the broker's enterprise onboarding approval dates from 2026-05-12, each documenting the interface, the security requirements and the impact level of the data. Missing: the EFRAS-EMIS memorandum of agreement is drafted and under legal review; the connection runs on an interim e-mail approval from the EMIS ISSM. Plan: signature by 2026-12-31. Agreements are reviewed annually and on any interface change."
+    responsible_roles: [PER-ISSM, PER-PM]
+    components: [CMP-INGEST, CMP-API]
+    parameters:
+      ca-03_odp.01: "memoranda of understanding or agreement; service level agreements; organization-defined type of agreement"
+      ca-03_odp.02: "enterprise service onboarding approval"
+      ca-03_odp.03: "annually and on any interface change"
+    assurance:
+      addressed: "The signed agreements and the interim approval are the evidence; the assessor examines each against the interface it governs."
+      status: planned
+    sources: [INT-092.A2, product/architecture.md#interconnections, product/conops.md#limitations]
+  - control_id: ca-5
+    status: planned
+    statement: "Planned. The seven known limitations are tracked with their fix releases in the program backlog, but no POA&M exists yet. Plan: the ISSM creates the POA&M in eMASS at A-6 from the assessment findings and the known limitations, and updates it monthly from assessments, audits and continuous monitoring."
+    responsible_roles: [PER-ISSM]
+    components: [this-system]
+    parameters:
+      ca-05_odp: "monthly"
+    assurance:
+      addressed: "The eMASS POA&M and its monthly update history will be the evidence."
+      status: planned
+    sources: [INT-092.A3, product/conops.md#limitations]
+  - control_id: ca-7
+    status: planned
+    statement: "Planned. The system-level continuous monitoring strategy (ART-CONMON) was written at S-5 under the Component strategy and approved by the AODR, for the AO, on 2026-11-18. Its content: weekly vulnerability scanning and audit log review, monthly configuration baseline checks (the SCAP STIG scan and the drift reports), quarterly account reviews, annual assessment of a third of the controls, continuous correlation of the forwarded logs by the CSSP, response through the POA&M, a monthly roll-up to the PM, the ISSM and the AODR, and a quarterly security and privacy posture report to the AO through the AODR. Missing: monitoring has not yet run under the approved strategy. Plan: the first monitoring cycle runs after the authorization decision; ca-7 becomes implemented when it has."
+    responsible_roles: [PER-ISSM, PER-ISSO]
+    components: [this-system]
+    parameters:
+      ca-07_odp.01: "open vulnerabilities by severity, configuration drift findings, account review exceptions, open POA&M items"
+      ca-07_odp.02: "weekly for vulnerabilities and logs, monthly for configuration, quarterly for accounts"
+      ca-07_odp.03: "annually, a third of the controls"
+      ca-07_odp.04: "the AO through the AODR, the PM and the ISSM"
+      ca-07_odp.05: "monthly roll-up to the PM, the ISSM and the AODR; quarterly posture report to the AO"
+      ca-07_odp.06: "the AO through the AODR, the PM and the ISSM"
+      ca-07_odp.07: "monthly roll-up to the PM, the ISSM and the AODR; quarterly posture report to the AO"
+    assurance:
+      addressed: "The approved system-level strategy (S-5) and the monitoring reports will be the evidence."
+      status: planned
+    sources: [INT-092.A3, ART-ORG-CONTEXT, ART-CONMON, INT-134.A2, INT-138.A1]

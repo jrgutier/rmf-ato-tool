@@ -1,0 +1,39 @@
+mode: synthetic
+run_id: 20261118-synthetic-01
+product: ../../product
+as_of: '2026-11-18T02:13:06Z'
+framework_version: 0.2.0
+git_sha: 53fc0f02b570
+upstream_hash: c84b321274edf1f1cd97ad9033bbd9f7c351a0fadde24a236c4f3c601c330e50
+upstream_hash_basis:
+  variant: union
+oscal_version: 1.2.1
+humans: {}            # hybrid mode: PER-ID: person's name (playbooks/_shared/hybrid-mode.md)
+scope:
+  tasks: all          # or a list of task IDs
+seeded: []            # {artifact, from_task, path} for inputs whose producers are out of scope
+lifecycle_stop: R-5
+include_after_stop: [M-1, M-2, M-3, M-5]   # a simulated first CONMON cycle
+lifecycle_stop_rationale: "Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data."
+deferred: {}          # TASK: {kind: not-applicable|performed-externally|later-cycle, rationale}
+# A run entering past P-1 records its entry determination before the first task
+# (playbooks/00-run-protocol.md "Entering past P-1"; ENTRY-001, OMP-001):
+# entry:
+#   step: <<FILL: P|C|S|I|A|R|M>>
+#   task: <<FILL: the task entered, e.g. C-1>>
+#   current_state: <<FILL: assessment of the system's current state>>
+#   completed: []       # tasks before the entry task whose activities are done
+#   gaps: <<FILL: what the gap analysis found missing or out of date>>
+#   decision: <<FILL: the entry decision and its rationale>>
+#   notified: [PER-ISSM, PER-PM]
+#   approved_by: PER-AO  # or PER-AODR on the AO's behalf
+#   date: <<FILL: YYYY-MM-DD the run enters>>  # required at an entry to step M
+#   deficiencies: []    # control deficiencies the gap analysis found; required at step M
+# and seeds each completed task's outputs (seeded): ART-BIA from P-8 is
+# templates/artifacts/ART-BIA.md with templates/data/bia.yaml.
+# Dry-run scoping (deviation, recorded in journal and review): the schema marks control_subset
+# as test-scenario only; this fork run uses it to keep S-4 and A-3 tractable.
+control_subset: [ac-1, ac-2, ac-3, ac-6, ac-17, at-2, at-3, au-2, au-6, au-9, au-11, ca-2, ca-3,
+                 ca-5, ca-7, cm-2, cm-3, cm-6, cm-8, cp-2, cp-4, cp-9, ia-2, ia-5, ir-4, ir-6,
+                 ir-8, ma-4, mp-6, pe-3, pl-2, pm-5, ps-3, ps-4, pt-2, pt-3, ra-3, ra-5, ra-8,
+                 sa-9, sa-11, sc-7, sc-8, sc-12, sc-28, si-2, si-4, si-12, sr-3, sr-11]

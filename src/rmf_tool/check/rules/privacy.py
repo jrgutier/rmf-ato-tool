@@ -217,6 +217,10 @@ def _pia(ctx: Context, task: str) -> tuple[dict[str, Any] | None, bool]:
     return _record(ctx, PIA), True
 
 
+def _unapproved(data: dict[str, Any]) -> bool:
+    return data.get("status") in ("draft", "in-review")
+
+
 def pia_form(ctx: Context) -> list[RunFinding]:
     """PRIV-002: a required or adapted PIA exists, prepared on its DoD form."""
     _, needed = _pia(ctx, "P-14")
@@ -243,6 +247,17 @@ def pia_approval(ctx: Context) -> list[RunFinding]:
     def err(message: str) -> None:
         out.append(_finding("PRIV-003", message, PIA, "P-14"))
 
+    if _unapproved(data):
+        # a draft PIA is coordinated, not yet reviewed or approved (F-02-9); no authorization
+        # decision may take it
+        for c in _dicts(data.get("coordination")):
+            if c.get("party") == "issm" and c.get("by") != "PER-ISSM":
+                err(f"the PIA is coordinated through the ISSM, not {c.get('by')}")
+        for record in ctx.ledger or ():
+            if _str(record.get("decision")) in _authorizing(ctx):
+                err(f"the PIA is still {data.get('status')}, so it was not approved for the "
+                    f"authorization decision {record.get('id')}")
+        return out
     approval = _dict(data.get("approval"))
     approved = _day(approval.get("date"))
     coordination = _dicts(data.get("coordination"))
@@ -296,6 +311,8 @@ def pia_distribution(ctx: Context) -> list[RunFinding]:
     def err(message: str) -> None:
         out.append(_finding("PRIV-004", message, PIA, "P-14"))
 
+    if _unapproved(data):
+        return out  # distribution follows approval
     approved = _day(_dict(data.get("approval")).get("date"))
     submission = data.get("submission")
     if not isinstance(submission, dict):
@@ -641,8 +658,9 @@ def pii_flows(ctx: Context) -> list[RunFinding]:
     pii = {str(i.get("id")) for i in _types(ctx) if i.get("privacy") is True}
     named = _strings(flow.get("pii_types"))
     for tid in sorted(pii - named):
+        # P-12 writes the information types after P-11 drew the flows (F-02-3)
         out.append(_finding("PIIF-001", f"the data flows do not name {tid}, an information type "
-                            "of PII", BOUNDARY, "P-11"))
+                            "of PII", BOUNDARY, "P-12"))
     return out
 
 

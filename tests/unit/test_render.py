@@ -107,7 +107,7 @@ def test_manual_task_sections_complete():
             for pid in [*raci["R"], raci["A"], *raci.get("C", []), *raci.get("I", [])]:
                 assert f"{pid}.md" in body, (e.id, pid)
             for ident in [*t["inputs"], *t["outputs"]]:
-                assert f"[{ident}](" in body, (e.id, ident)
+                assert f"({ident})](" in body, (e.id, ident)
             for c in [*t["entry_criteria"], *t["exit_criteria"]]:
                 assert manual.text(c) in body, e.id
             for ident in [*t["aligned_with"]["milestones"], *t["aligned_with"]["reviews"],

@@ -60,7 +60,8 @@ def test_status_writes_status_and_metrics(minimal_run, monkeypatch):
     assert metrics["journal"]["retries"] == 1
     status = (minimal_run / reports.STATUS_MD).read_text()
     assert "Next: none, every active task is done" in status
-    assert "| P-6 | Impact-Level Prioritization | deferred | no | not-applicable:" in status
+    assert ("| Prepare 6: Impact-Level Prioritization (P-6) | deferred | no | not-applicable:"
+            in status)
 
 
 def test_hybrid_metrics_and_next_action(hybrid_run):
@@ -73,7 +74,8 @@ def test_hybrid_metrics_and_next_action(hybrid_run):
     assert metrics["answers"]["human"] == 4 and metrics["assumptions"] == 2
     assert 0 < metrics["answers"]["simulated_pct"] < 100
     assert metrics["tasks"]["out_of_scope"] == 35
-    assert "Next: R-4 Authorization Decision." in (hybrid_run / reports.STATUS_MD).read_text()
+    status = (hybrid_run / reports.STATUS_MD).read_text()
+    assert "Next: Authorize 4: Authorization Decision (R-4)." in status
 
 
 def test_report_assumptions_command(hybrid_run, monkeypatch):

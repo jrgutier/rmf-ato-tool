@@ -1,0 +1,318 @@
+asset_management_system:
+  name: "Component IT asset management repository (fictional)"
+  record: "EFRAS-PROD, updated by the pipeline from the infrastructure templates at each release"
+hva:
+  designated: false
+  basis: "Decision support only: an outage grounds no aircraft, squadrons fall back to EMIS reports within the 72-hour tolerance, and the Component has not listed EFRAS as a high-value asset (INT-024.A4)."
+asset_scope:
+  - class: physical-environmental
+    considered: true
+    rationale: "No program-owned hardware; data center protection is inherited from the cloud provider's IL4 provisional authorization, and the privileged access workstations sit in ARSPO controlled space on the Component workstation inventory (INT-023.A3)."
+  - class: human
+    considered: true
+    rationale: "Application administrators, cloud operations engineers and data scientists hold privileged or sandbox access whose loss or misuse affects the service (INT-024.A4)."
+  - class: technology
+    considered: true
+    rationale: "The cloud services, cluster and database the program configures are the technology base of the service (INT-023.A1)."
+  - class: mission-business-processes
+    considered: true
+    rationale: "Daily readiness reporting, part failure forecasting and fleet analysis (BP-01 to BP-03) are the processes the system supports (INT-024.A4)."
+  - class: information-data
+    considered: true
+    rationale: "Maintenance and readiness data, supply status, maintainer PII, forecasts and audit records are the information the system holds (INT-024.A1)."
+  - class: firmware
+    considered: false
+    rationale: "The program owns no hardware and so no firmware; server and storage firmware are the provider's and inherited from its IL4 provisional authorization (INT-023.A3)."
+  - class: software
+    considered: true
+    rationale: "Five program-built containers, the factory base image and two tracked open-source libraries (INT-023.A1, INT-023.A2)."
+  - class: services
+    considered: true
+    rationale: "Managed load balancer, Kubernetes, database, storage, keys, logging and notebook services configured by the program (INT-023.A1)."
+  - class: reputation
+    considered: true
+    rationale: "Commanders' trust in the readiness figures and the program's standing with the fleet (INT-024.A4)."
+  - class: privacy-interests
+    considered: true
+    rationale: "About 30,000 maintainers whose records arrive in the EMIS extract (INT-024.A4)."
+assets:
+  - id: AST-001
+    class: mission-business-processes
+    description: "Daily readiness reporting for squadron, air wing and fleet (BP-01)"
+    priority: high
+    basis: "Primary mission use; a 72-hour outage tolerance before fleet reporting falls back to manual EMIS reports; CUI."
+    sources: [INT-024.A1, INT-024.A4, ART-BIA]
+  - id: AST-002
+    class: mission-business-processes
+    description: "Part failure forecasting and fleet readiness analysis (BP-02, BP-03)"
+    priority: moderate
+    basis: "Supports early part orders and analysis; losing it delays decisions but grounds no aircraft."
+    sources: [INT-024.A1, ART-BIA]
+  - id: AST-003
+    class: information-data
+    description: "Maintenance and readiness data, supply status, forecasts and reports (CUI)"
+    priority: high
+    basis: "CUI whose aggregation reveals fleet readiness trends and whose tampering misleads the fleet; integrity first."
+    sources: [INT-024.A1, product/conops.md#information]
+  - id: AST-004
+    class: privacy-interests
+    description: "Maintainer PII (name, DoD ID number, rate or rank, qualifications, work center) for about 30,000 people"
+    priority: high
+    basis: "Disclosure enables phishing and identity misuse; the de-identified exports are re-identifiable until release 1.6."
+    sources: [INT-024.A4, product/privacy.md#pii, product/conops.md#limitations]
+  - id: AST-005
+    class: information-data
+    description: "Audit records of users and administrators"
+    priority: moderate
+    basis: "Needed for accountability and incident response; held 90 days in the log store and one year at ECSSP."
+    sources: [INT-024.A1, product/architecture.md#logging]
+  - id: AST-006
+    class: human
+    description: "Privileged staff: application administrators (4), cloud operations engineers (6), data scientists (3)"
+    priority: moderate
+    basis: "Few people with broad access; misuse or loss of their credentials reaches the data path."
+    sources: [INT-024.A4, product/conops.md#users]
+  - id: AST-007
+    class: reputation
+    description: "Commanders' trust in the readiness figures and the program's standing with the fleet"
+    priority: moderate
+    basis: "A privacy breach or wrong readiness figures would cost more standing than an outage."
+    sources: [INT-024.A4]
+items:
+  - id: INV-001
+    description: "Managed application load balancer and web application firewall; TLS termination and WAF rules, the only ingress"
+    kind: service
+    component: CMP-EDGE
+    vendor: "Example GovCloud (fictional)"
+    product: "managed application load balancer + WAF"
+    version: "provider-managed"
+    hostname: "efras.example.mil"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-001"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "Example GovCloud IL4 region, EFRAS production account, edge subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5]
+  - id: INV-002
+    description: "Web front end container (single-page application); release 1.6.0 runs in pre-production since 2027-01-15, no production deployment recorded"
+    kind: software
+    component: CMP-WEB
+    vendor: "Example Readiness Software Team (fictional)"
+    product: "efras-web"
+    version: "1.6.0"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-002"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "ERST secure software development attestation signed at release 1.6.0"
+    location:
+      logical: "EFRAS production cluster, application subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-202.A2]
+  - id: INV-003
+    description: "Readiness API container (REST API, role checks, business logic); release 1.6.0 runs in pre-production since 2027-01-15, no production deployment recorded"
+    kind: software
+    component: CMP-API
+    vendor: "Example Readiness Software Team (fictional)"
+    product: "efras-api"
+    version: "1.6.0"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-003"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "ERST secure software development attestation signed at release 1.6.0"
+    location:
+      logical: "EFRAS production cluster, application subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-202.A2]
+  - id: INV-004
+    description: "Nightly ingest worker container; pulls EMIS and supply extracts, validates and loads the database; release 1.6.0 runs in pre-production since 2027-01-15, no production deployment recorded"
+    kind: software
+    component: CMP-INGEST
+    vendor: "Example Readiness Software Team (fictional)"
+    product: "efras-ingest"
+    version: "1.6.0"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-004"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "ERST secure software development attestation signed at release 1.6.0"
+    location:
+      logical: "EFRAS production cluster, application subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-202.A2]
+  - id: INV-005
+    description: "Forecast batch job container (part-failure model v3); release 1.6.0 runs in pre-production since 2027-01-15, no production deployment recorded"
+    kind: software
+    component: CMP-FORECAST
+    vendor: "Example Readiness Software Team (fictional)"
+    product: "efras-forecast (model v3)"
+    version: "1.6.0"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-005"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "ERST secure software development attestation signed at release 1.6.0"
+    location:
+      logical: "EFRAS production cluster, application subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-202.A2]
+  - id: INV-006
+    description: "Report rendering container; renders PDF and slide exports; image 1.5.1 runs in pre-production, not rebuilt for release 1.6 (waits on the factory's hardened base image), no production deployment recorded"
+    kind: software
+    component: CMP-REPORT
+    vendor: "Example Readiness Software Team (fictional)"
+    product: "efras-report"
+    version: "1.5.1"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-006"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "ERST secure software development attestation signed at release 1.5.1; not rebuilt for release 1.6"
+    location:
+      logical: "EFRAS production cluster, application subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-202.A2]
+  - id: INV-007
+    description: "Hardened container base image under every EFRAS container"
+    kind: operating-system
+    component: CMP-K8S
+    vendor: "Example Software Factory (fictional)"
+    product: "sf-base-minimal"
+    version: "2026.09"
+    software_category: gots
+    virtual: true
+    uii: "EFRAS-CI-INV-007"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    attestation: "Example Software Factory pipeline secure development attestation"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A5, INT-024.A3]
+  - id: INV-008
+    description: "Managed Kubernetes service; provider-managed control plane, program-managed worker node groups"
+    kind: service
+    component: CMP-K8S
+    vendor: "Example GovCloud (fictional)"
+    product: "managed Kubernetes"
+    version: "1.33"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-008"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "Example GovCloud IL4 region, EFRAS production account, private cluster API"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: INV-009
+    description: "Worker node image; nodes are created from it and replaced on each monthly roll"
+    kind: virtual-machine
+    component: CMP-K8S
+    vendor: "Example GovCloud (fictional)"
+    product: "hardened node image"
+    version: "2026.10"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-009"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "EFRAS production account, application subnet, private addresses only"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A4]
+  - id: INV-010
+    description: "Managed PostgreSQL database (primary and provider-managed standby); encrypted at rest with program keys"
+    kind: database
+    component: CMP-DB
+    vendor: "Example GovCloud (fictional)"
+    product: "managed PostgreSQL"
+    version: "16.4"
+    software_category: cots
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-010"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "EFRAS production account, data subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-023.A4]
+  - id: INV-011
+    description: "Object storage buckets (extract landing zone, report cache, de-identified exports)"
+    kind: service
+    component: CMP-OBJ
+    vendor: "Example GovCloud (fictional)"
+    product: "object storage"
+    version: "provider-managed"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-011"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "EFRAS production account, private endpoint in the data subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: INV-012
+    description: "Key management service and secrets store with program-owned keys"
+    kind: service
+    component: CMP-KMS
+    vendor: "Example GovCloud (fictional)"
+    product: "key service + secrets manager"
+    version: "provider-managed"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-012"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    location:
+      logical: "EFRAS production account, private endpoint in the data subnet"
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: INV-013
+    description: "Log pipeline and log store; forwards to ECSSP"
+    kind: service
+    component: CMP-LOGS
+    vendor: "Example GovCloud (fictional)"
+    product: "log service"
+    version: "provider-managed"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-013"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: INV-014
+    description: "Managed notebook environment for the analytics sandbox (3 seats); reads the training extract only"
+    kind: service
+    component: CMP-SANDBOX
+    vendor: "Example GovCloud (fictional)"
+    product: "managed notebooks"
+    version: "provider-managed"
+    virtual: true
+    public: false
+    uii: "EFRAS-CI-INV-014"
+    owner: "ARSPO product manager"
+    primary_user: "ERST data scientists"
+    operational_status: under-development
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: INV-015
+    description: "Open-source image-processing library inside efras-report; carries two open high-severity vulnerabilities"
+    kind: software
+    component: CMP-REPORT
+    vendor: "open source"
+    product: "example-imagelib"
+    version: "2.9.1"
+    software_category: oss
+    uii: "EFRAS-CI-INV-015"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    sources: [product/hw-sw-inventory.md#items, INT-023.A2, product/conops.md#limitations]
+  - id: INV-016
+    description: "Open-source web framework runtime inside efras-api"
+    kind: software
+    component: CMP-API
+    vendor: "open source"
+    product: "example web framework"
+    version: "4.2"
+    software_category: oss
+    uii: "EFRAS-CI-INV-016"
+    owner: "ARSPO product manager"
+    operational_status: under-development
+    sources: [product/hw-sw-inventory.md#items, INT-023.A2]

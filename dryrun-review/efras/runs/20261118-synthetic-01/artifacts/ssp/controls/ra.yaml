@@ -1,0 +1,47 @@
+# artifacts/ssp/controls/ra.yaml (S-4; schema ssp-controls). Written whole.
+family: ra
+controls:
+  - control_id: ra-3
+    status: implemented
+    statement: "(a) The ISSM assessed risk at P-14 in the system risk assessment report (ART-RA): threat sources and events, vulnerabilities and predisposing conditions, likelihood and magnitude of harm to the system and its information, and the likelihood and impact of adverse effects on maintainers from the processing of their PII. (b) It takes the Component's risk frame and the organizational risk assessment of ART-ORG-CONTEXT as inputs. (c) Results are documented in the risk assessment report. (d) The ISSM reviews the results at least annually and at each major release. (e) They go to the AO, the AODR, the product manager and the privacy representative under CUI rules. (f) The ISSM updates the report at R-2 with the assessment findings, at least annually, and after a significant change to the system, its environment or the threat."
+    responsible_roles: [PER-ISSM, PER-PRIV]
+    components: [this-system]
+    parameters:
+      ra-03_odp.01: "risk assessment report"
+      ra-03_odp.03: "at least annually, and at each major release"
+      ra-03_odp.04: "the AO, the AODR, the product manager and the privacy representative"
+      ra-03_odp.05: "at least annually, at R-2 with the assessment findings, and after a significant change in the system, its environment or the threat"
+    artifact_locations:
+      - "ART-RA and artifacts/data/ra.yaml"
+    assurance:
+      addressed: "The risk assessment report, its maintenance section and the review record kept by the ISSM are the evidence; the assessor examines the report against the organizational risk frame."
+      status: satisfied
+    sources: [INT-107.A1, INT-037.A1, ART-RA, ART-ORG-CONTEXT]
+  - control_id: ra-5
+    status: partial
+    statement: "Partial. Hybrid with the CSSP. In place: (a) the ERST engineers run a weekly authenticated scan of the CMP-K8S worker nodes and the CMP-DB database against the STIGs and the vulnerability feeds, every pipeline build runs the dependency and image scans, and a CSSP or software factory alert triggers a rescan; the CSSP adds a monthly external scan of the CMP-EDGE edge and vulnerability alerts with directed actions; (b) the scanners use SCAP content, CVE and CVSS; (c) the ISSM and the ERST engineers analyze the results; (e) results go to the ISSO, the CSSP and the software factory; (f) the scanners update their signatures daily. Missing: (d) the two high-severity findings in the CMP-REPORT image, found on 2026-10-20, exceed the 30-day remediation time because the fix waits on the software factory's hardened base image. Plan: release 1.5.2 on 2026-12-10 (see si-2). The program acknowledges a CSSP alert within one working day and reports its remediation status on the ticket."
+    responsible_roles: [PER-ISSM, PER-ISSO, PER-CSSP, PER-DEV]
+    components: [CMP-K8S, CMP-DB, CMP-EDGE]
+    inherited_from: PRV-04
+    inherited_risks: "The CSSP cannot scan inside the cloud account; its external scan sees only the edge, so internal coverage rests on the program's weekly scan."
+    parameters:
+      ra-05_odp.01: "weekly authenticated scans of worker nodes and database, every pipeline build for images and dependencies, and monthly CSSP external scans of the edge"
+      ra-05_odp.02: "weekly authenticated scans of worker nodes and database, every pipeline build for images and dependencies, and monthly CSSP external scans of the edge"
+      ra-05_odp.03: "critical and high within 30 days, moderate within 90 days, low within 180 days of discovery"
+      ra-05_odp.04: "the ISSO, the Example Cybersecurity Service Provider and the Example Software Factory"
+    automation: "Pipeline gates block a build with a new high or critical finding unless the ISSE accepts it; scanner signatures update daily."
+    assurance:
+      addressed: "Scan reports, pipeline gate records and CSSP alert tickets are the evidence; the assessor examines a quarter of weekly scans and the remediation dates."
+      status: planned
+    sources: [INT-107.A2, INT-108.A1, INT-072.A1, product/test-results.md#pipeline-1-5, product/test-results.md#stig-scan, product/conops.md#limitations]
+  - control_id: ra-8
+    status: partial
+    statement: "Partial. A privacy impact assessment exists in draft (PIA 0.9 of 2026-09-30, ART-PIA), with the Component privacy office; development of EFRAS began before it was drafted, and the pre-production pilot uses synthetic data, so no real maintainer PII has been processed. EFRAS starts no new collection from individuals (b does not arise): all PII arrives in the EMIS extract. Missing: an approved PIA before production processing; the office's open item is the protection of the de-identified exports (see pt-3). Plan: reviews 2027-01-20 and approval by the CIO 2027-01-25, before production data flows; the PIA is updated whenever a change alters the privacy risk, and access to it is limited to those with a need to know (Privacy Overlay guidance)."
+    responsible_roles: [PER-PRIV, PER-ISSM]
+    components: [this-system]
+    artifact_locations:
+      - "ART-PIA and artifacts/data/pia.yaml"
+    assurance:
+      addressed: "The draft PIA, its coordination record and the approval once given are the evidence; the assessor examines them against the system's PII inventory."
+      status: planned
+    sources: [INT-109.A1, product/privacy.md#pia, product/conops.md#limitations, ART-PIA, ASM-011]

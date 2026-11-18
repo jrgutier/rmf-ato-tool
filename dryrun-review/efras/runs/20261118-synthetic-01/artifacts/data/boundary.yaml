@@ -1,0 +1,239 @@
+authorization_boundary:
+  description: "The boundary is the program-owned production cloud account and the twelve components the program configures in it: CMP-EDGE, CMP-WEB, CMP-API, CMP-INGEST, CMP-FORECAST, CMP-REPORT, CMP-K8S, CMP-DB, CMP-OBJ, CMP-KMS, CMP-LOGS and CMP-SANDBOX. The edge is the account itself: ingress only through CMP-EDGE from the access point, egress only through the NAT allow-list. Outside and separately authorized: the cloud provider's infrastructure and managed-service internals (CMP-CSP), the access point (CMP-ECAP), the identity broker (CMP-IDB), the software factory (CMP-SWF), the CSSP (CMP-ECSSP) and the two source systems (CMP-EMIS, CMP-SUPPLY). The pre-production account holds synthetic data and is not part of this authorization."
+  diagrams:
+    - path: artifacts/diagrams/boundary.md
+      caption: "Authorization boundary: the production account, its subnet tiers and components, the isolated sandbox, and the separately authorized services outside it"
+      shows: [components, internal-boundaries, third-party-services, physical-protections, isolated-components, logical-locations]
+  sources: [INT-025.A1, INT-026.A1, INT-026.A2, product/architecture.md#boundary, ASM-008]
+network_architecture:
+  description: "One virtual private network with three subnet tiers: edge (load balancer only), application (cluster worker nodes) and data (database endpoint, private endpoints to object storage and the key service). Security groups allow edge to application on 443 and application to data on the database port and storage endpoints only. Ingress only from the ECAP (NIPRNet) to the load balancer on 443 with TLS 1.2 or 1.3 and DoD-approved cipher suites; no public IP address on any node. Egress from the application tier through a managed NAT gateway to an allow-list (EMIS and supply endpoints, identity broker, ECSSP collector, software factory registry); all else denied and logged. The cluster API is private and reached through the provider's privileged access path from ERST privileged access workstations after CAC sign-in."
+  diagrams:
+    - path: artifacts/diagrams/network.md
+      caption: "Network architecture: subnet tiers, security group rules, ingress through the ECAP, the egress allow-list and the management path"
+      shows: [components, external-connections, routing-controls, data-stores]
+  sources: [INT-025.A2, product/architecture.md#network, ASM-008]
+data_flow:
+  description: "Ten flows. Inbound across the boundary: DF-1 users through the ECAP and edge to the web front end and API (TLS 1.2+, CAC session); DF-2 identity assertions (signed SAML/OIDC over TLS); DF-3 the EMIS extract of maintenance actions and maintainer PII (mutual TLS, signed and checksummed); DF-4 supply status (TLS, API token from the secrets store); DF-10 signed images and templates from the software factory (signature verified at admission). Outbound: DF-9 audit records through the log pipeline to ECSSP (TLS). Inside: DF-5 ingest to database, DF-6 database and forecast job, DF-7 API to report service and object storage (signed short-lived links), DF-8 pseudonymized training extract to the sandbox (read-only role). PII rides DF-3, DF-5 and DF-6, and in pseudonymized form DF-7 exports and DF-8."
+  carries_pii: true
+  pii_types: [INF-03, INF-05]
+  diagrams:
+    - path: artifacts/diagrams/data-flows.md
+      caption: "Data flows DF-1 to DF-10 with the information each carries and its direction"
+      shows: [data-types, data-direction, external-flows, data-stores, components]
+  sources: [INT-025.A3, product/data-flows.md#top, product/data-flows.md#main, ASM-008]
+components:
+  - id: CMP-EDGE
+    title: "Application load balancer and web application firewall"
+    type: service
+    description: "Managed provider service configured by the program; TLS termination and WAF rules; the only ingress."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-WEB
+    title: "Web front end"
+    type: software
+    description: "Single-page application served from containers."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-API
+    title: "Readiness API service"
+    type: software
+    description: "REST API with role checks and business logic."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-INGEST
+    title: "Nightly ingest worker"
+    type: software
+    description: "Pulls the EMIS and supply extracts, validates them and loads the database."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-FORECAST
+    title: "Forecast batch job"
+    type: software
+    description: "Nightly part-failure model scoring."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-REPORT
+    title: "Report rendering service"
+    type: software
+    description: "Renders PDF and slide exports."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-K8S
+    title: "Managed Kubernetes cluster"
+    type: service
+    description: "Provider-managed control plane with program-managed worker node groups that run every EFRAS container."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-DB
+    title: "Managed PostgreSQL database"
+    type: service
+    description: "Encrypted at rest with program keys; point-in-time recovery."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-OBJ
+    title: "Object storage buckets"
+    type: service
+    description: "Landing zone for extracts, report cache and de-identified exports."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-KMS
+    title: "Key management and secrets"
+    type: service
+    description: "Provider key service and secrets store with program-owned keys."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-LOGS
+    title: "Log pipeline and log store"
+    type: service
+    description: "Cluster, application and cloud audit logs; forwards to ECSSP."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-SANDBOX
+    title: "Analytics sandbox"
+    type: service
+    description: "Notebook environment for data scientists; reads the training extract only."
+    status: under-development
+    sources: [product/architecture.md#components, INT-025.A1]
+  - id: CMP-CSP
+    title: "Example GovCloud IL4 region"
+    type: service
+    description: "Separately authorized cloud service offering (DoD provisional authorization IL4); provides the infrastructure, physical protection and managed-service internals EFRAS inherits."
+    status: operational
+    external: true
+    leveraged_authorization: LA-01
+    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-026.A2]
+  - id: CMP-ECAP
+    title: "Example Enterprise Cloud Access Point"
+    type: service
+    description: "DoD boundary protection and inspection between NIPRNet and the cloud; separately authorized (ATO)."
+    status: operational
+    external: true
+    leveraged_authorization: LA-02
+    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-026.A2]
+  - id: CMP-IDB
+    title: "Enterprise identity broker"
+    type: service
+    description: "CAC authentication and SAML/OIDC federation; enterprise service with its own ATO (IC-3)."
+    status: operational
+    external: true
+    sources: [product/architecture.md#components, product/architecture.md#interconnections, INT-026.A2]
+  - id: CMP-EMIS
+    title: "Example Maintenance Information System"
+    type: interconnection
+    description: "Source of maintenance data and maintainer PII (IC-1); separately authorized; agreement drafted, interim e-mail approval."
+    status: operational
+    external: true
+    sources: [product/architecture.md#components, product/architecture.md#interconnections, INT-026.A2]
+  - id: CMP-SUPPLY
+    title: "Example Supply Status Service"
+    type: interconnection
+    description: "Source of supply status (IC-2); separately authorized; service-level agreement signed."
+    status: operational
+    external: true
+    sources: [product/architecture.md#components, product/architecture.md#interconnections, INT-026.A2]
+  - id: CMP-SWF
+    title: "Example Software Factory"
+    type: service
+    description: "DevSecOps platform and pipeline that builds, scans, signs and deploys EFRAS; separately authorized (ATO)."
+    status: operational
+    external: true
+    leveraged_authorization: LA-03
+    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-026.A2]
+  - id: CMP-ECSSP
+    title: "Example Cybersecurity Service Provider"
+    type: service
+    description: "Boundary monitoring of forwarded logs, incident response support and vulnerability alerts under a service agreement."
+    status: operational
+    external: true
+    leveraged_authorization: LA-04
+    sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-026.A2]
+dodin:
+  position: inside
+  sources: [INT-047.A1]
+connections:
+  - id: CONN-01
+    component: CMP-ECAP
+    network: disn
+    cross_domain: false
+    detail:
+      ports_protocols: "HTTPS on 443, TLS 1.2 or 1.3 with DoD-approved cipher suites, NIPRNet to the load balancer"
+      data: "Readiness views, queries and exports; CUI"
+      direction: bidirectional
+    approvals:
+      - {authority: DISA, status: requested, date: "2026-10-15", reference: "CCP-EFRAS-PROD (fictional cloud connection request)", sources: [INT-047.A1]}
+    sources: [INT-047.A1, product/architecture.md#network]
+  - id: CONN-02
+    component: CMP-CSP
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Provider service APIs over private endpoints, HTTPS on 443"
+      data: "All EFRAS data at rest and in processing; CUI including PII"
+      direction: bidirectional
+    approvals: []
+    sources: [INT-047.A2]
+  - id: CONN-03
+    component: CMP-IDB
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "SAML/OIDC over HTTPS on 443 through the egress allow-list"
+      data: "Signed authentication assertions with DoD ID number, organization and groups; CUI with PII"
+      direction: bidirectional
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections]
+  - id: CONN-04
+    component: CMP-EMIS
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Nightly pull over mutual TLS on 443 through the egress allow-list"
+      data: "Signed, checksummed extract of maintenance actions and maintainer PII; CUI"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections, product/data-flows.md#top]
+  - id: CONN-05
+    component: CMP-SUPPLY
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Nightly API pull over TLS on 443 with an API token"
+      data: "Supply status (part numbers, requisitions, expected delivery); CUI"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections]
+  - id: CONN-06
+    component: CMP-SWF
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Registry pulls and pipeline deploy role over HTTPS on 443"
+      data: "Signed container images and infrastructure templates"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/data-flows.md#top]
+  - id: CONN-07
+    component: CMP-ECSSP
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Log forwarding over TLS on 443 through the egress allow-list"
+      data: "Audit records with user identifiers; CUI"
+      direction: outbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#logging]
+hosting:
+  environment: cloud
+  decc:
+    status: cloud
+    reason: "Cloud first for a new start (DoDI 5000.82); the managed Kubernetes, database and pipeline model needs cloud services, and the IL4 region is authorized for CUI."
+  enclave_application:
+    status: not-possible
+    reason: "No authorized Component enclave offers a managed Kubernetes and database platform for business applications at IL4, and the data steward requires a program-controlled account; EFRAS is a major application under development with its own authorization."
+  cloud:
+    assessment: cloud-hosted
+    reason: "The cloud hosting assessment in the acquisition strategy (2026-02-16) found EFRAS can be cloud-hosted without compromising security or integrity in the IL4 region; it is now hosted there."
+  enterprise_services:
+    considered: ["Example GovCloud IL4 region", "Example Enterprise Cloud Access Point", "Enterprise identity broker", "Example Software Factory", "Example Cybersecurity Service Provider"]
+    outcome: "All five reused instead of building a unique hosting platform, boundary, sign-in, pipeline or monitoring."
+  sources: [INT-048.A1, INT-048.A2, product/architecture.md#leveraged]

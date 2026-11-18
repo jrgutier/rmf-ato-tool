@@ -1,0 +1,572 @@
+# artifacts/data/conmon.yaml (S-5; updated by M-2; schema conmon). Written whole (INV-8).
+# ART-CONMON says why. S-6 adds the AO's or AODR's approval. M-2 (2027-02-01): measurement results
+# MRS-01 and MRS-02 appended; no frequency or trigger changed (INT-208.A1, INT-208.A2).
+# M-5 (2027-02-01): reporting.dodin.awareness records the three areas the strategy gives DODIN
+# awareness of; faults, performance, bandwidth, routes and network management are not claimed
+# (INT-213.A2) and go to P-7 through the organization tier review (INT-215.A1).
+frequencies:
+  - family: ac
+    frequency: quarterly
+    method: "ISSO review of every role assignment and of the 35-day disable job; sign-in and denied-request report reviewed weekly"
+    responsible: PER-ISSO
+    criteria: [ART-ORG-CONTEXT]
+  - family: at
+    frequency: annually
+    method: "ISSM checks training completion records of all users and role holders"
+    responsible: PER-ISSM
+    criteria: [FC-04]
+  - family: au
+    frequency: weekly
+    method: "ISSO reviews the weekly privileged-action, export and denied-request report; the CSSP correlates the forwarded logs continuously"
+    responsible: PER-ISSO
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: au-6
+        frequency: continuous
+        reason: "The CSSP's SIEM correlates the forwarded logs continuously (TOOL-05)"
+  - family: ca
+    frequency: annually
+    method: "Assessment of at least a third of the controls each year, all within the authorization period, by the SCA"
+    responsible: PER-ISSM
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: ca-5
+        frequency: monthly
+        reason: "POA&M milestones are reviewed monthly with the posture report"
+      - control: ca-7
+        frequency: monthly
+        reason: "The monitoring results themselves are rolled up and reviewed monthly"
+  - family: cm
+    frequency: monthly
+    method: "SCAP STIG scan of nodes and database (TOOL-01) and review of drift reports and board records"
+    responsible: PER-ISSE
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: cm-2
+        frequency: daily
+        reason: "The drift scan compares the account with the baseline hourly (TOOL-02); its results are reviewed daily"
+  - family: cp
+    frequency: annually
+    method: "Contingency plan exercises EX-01 to EX-03 and the plan review"
+    responsible: PER-ISSE
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: cp-9
+        frequency: monthly
+        reason: "Snapshot success and cross-region copies are checked monthly; restore depends on them"
+  - family: ia
+    frequency: quarterly
+    method: "ISSO review of identity federation settings, break-glass key seals and use, and the database role settings"
+    responsible: PER-ISSO
+    criteria: [FC-01]
+  - family: ir
+    frequency: annually
+    method: "Incident response plan tabletop and review, with the CSSP"
+    responsible: PER-ISSM
+    criteria: [ART-ORG-CONTEXT]
+  - family: ma
+    frequency: quarterly
+    method: "ISSO review of nonlocal maintenance session logs and console session expiry"
+    responsible: PER-ISSO
+    criteria: [FC-02]
+  - family: mp
+    frequency: annually
+    method: "Review of the provider's sanitization attestations in its monthly deliverables and annual package review"
+    responsible: PER-CCP
+    criteria: [FC-04]
+  - family: pe
+    frequency: annually
+    method: "Review of the provider's physical protection results in its package and monthly deliverables"
+    responsible: PER-CCP
+    criteria: [FC-04]
+  - family: pl
+    frequency: annually
+    method: "Plan review with the major release (plan-reviews.yaml)"
+    responsible: PER-ISSM
+    criteria: [FC-04]
+  - family: pm
+    frequency: annually
+    method: "Check of the system's inventory record in the Component eMASS inventory"
+    responsible: PER-ISSM
+    criteria: [FC-04]
+  - family: ps
+    frequency: quarterly
+    method: "ISSO compares leaver and transfer notices with account and key revocations"
+    responsible: PER-ISSO
+    criteria: [FC-02]
+  - family: pt
+    frequency: quarterly
+    method: "Privacy office review of collected data elements against the SORN and of the export pseudonyms"
+    responsible: PER-ISSM
+    criteria: [FC-05]
+  - family: ra
+    frequency: weekly
+    method: "Authenticated vulnerability scan (TOOL-03), factory scans (TOOL-04) and the CSSP's monthly external scan (TOOL-06)"
+    responsible: PER-ISSO
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: ra-3
+        frequency: annually
+        reason: "The Component's weekly ra minimum is for vulnerability scanning (ra-5); the risk assessment is updated annually and on the risk_assessment triggers"
+  - family: sa
+    frequency: monthly
+    method: "Review of factory gate results, provider deliverables and agreement obligations"
+    responsible: PER-ISSM
+    criteria: [FC-01, FC-02]
+  - family: sc
+    frequency: monthly
+    method: "Review of edge, subnet, TLS and key settings against the templates and the drift reports"
+    responsible: PER-ISSE
+    criteria: [FC-03]
+  - family: si
+    frequency: monthly
+    method: "Flaw remediation status against the remediation times; CSSP monitoring continuous"
+    responsible: PER-ISSO
+    criteria: [ART-ORG-CONTEXT]
+    overrides:
+      - control: si-4
+        frequency: continuous
+        reason: "The CSSP monitors the forwarded logs continuously (TOOL-05)"
+  - family: sr
+    frequency: monthly
+    method: "Review of signature verification at admission, SBOM scans and supplier monitoring"
+    responsible: PER-ISSE
+    criteria: [FC-02]
+organizational_frequencies:
+  families: [ac, au, ca, cm, cp, ir, ra, si]
+  sources: [ART-ORG-CONTEXT, INT-129.A1]
+frequency_criteria:
+  - id: FC-01
+    criterion: known-weakness
+    description: "A family holding a partial control (ia-2 and ia-5 break-glass, sa-11 open findings) is monitored at least quarterly until the weakness is closed"
+    established_by: PER-PM
+    consulted: [PER-ISSM, PER-AODR]
+    sources: [INT-130.A1]
+  - id: FC-02
+    criterion: volatility
+    description: "A family whose implementation changes with each three-week release, or with staff turnover, is monitored at least monthly or quarterly"
+    established_by: PER-PM
+    consulted: [PER-ISSM, PER-AODR]
+    sources: [INT-130.A1]
+  - id: FC-03
+    criterion: impact-level
+    description: "The moderate confidentiality of the CUI and PII sets monthly monitoring for system and communications protection"
+    established_by: PER-PM
+    consulted: [PER-ISSM, PER-AODR]
+    sources: [INT-130.A1]
+  - id: FC-04
+    criterion: other
+    description: "Controls that change rarely or that a provider implements whole are monitored through the provider's monthly deliverables and reviewed annually"
+    established_by: PER-PM
+    consulted: [PER-ISSM, PER-AODR, PER-CCP]
+    sources: [INT-130.A1]
+  - id: FC-05
+    criterion: reporting-requirement
+    description: "The privacy office's continuous monitoring strategy sets quarterly assessment of PII processing controls"
+    established_by: PER-PM
+    consulted: [PER-PRIV, PER-ISSM]
+    sources: [INT-130.A1, INT-131.A1]
+tools:
+  - id: TOOL-01
+    name: "Component enterprise SCAP STIG scanner"
+    assesses: [cm-6]
+    method: test
+    frequency: monthly
+    analysis: "The ISSE compares results with the STIG summary's approved deviations; a new open item becomes an issue"
+    reporting: "Results to the ISSO and the ISSE; compliance percentage in the monthly posture roll-up"
+    selection: "The Component's SCAP-validated scanner, approved for its systems and able to reach the nodes and the database"
+    upkeep: "Scan profiles updated with each STIG release; coverage checked against the inventory at each release"
+    responsible: PER-ISSE
+    strategy: other
+  - id: TOOL-02
+    name: "Hourly drift scan"
+    assesses: [cm-2, cm-3]
+    method: test
+    frequency: daily
+    analysis: "Any difference from the templates is an unauthorized change until the ISSO matches it to an approved change"
+    reporting: "Drift alerts to the ISSO at once; daily summary in CMP-LOGS; count in the monthly roll-up"
+    selection: "Compares the whole account with the version-controlled baseline, which no SCAP tool does"
+    upkeep: "Its allow-list is reviewed by the ISSE at each release; the job is code in CI-SECCM"
+    responsible: PER-ISSO
+    strategy: other
+  - id: TOOL-03
+    name: "Component authenticated vulnerability scanner"
+    assesses: [ra-5, si-2]
+    method: test
+    frequency: weekly
+    analysis: "The ISSO triages findings within two working days against the remediation times (30 days for high)"
+    reporting: "Findings to the ISSO and ERST as issues; counts and ages in the monthly roll-up"
+    selection: "The Component's enterprise scanner with credentials for the worker nodes and database"
+    upkeep: "Plugins update daily; credentials and targets checked at each release"
+    responsible: PER-ISSO
+    strategy: other
+  - id: TOOL-04
+    name: "Software factory image and dependency scanners"
+    assesses: [ra-5, sa-11, sr-3, sr-11]
+    method: test
+    frequency: daily
+    analysis: "A new high or critical finding against a deployed SBOM opens an issue; false positives need an ISSO-approved justification"
+    reporting: "Gate results with each build; daily SBOM rescan alerts to the ISSO"
+    selection: "The factory's tools, part of its ATO, covering every image and dependency EFRAS deploys"
+    upkeep: "Kept by the factory under its ATO; EFRAS checks every image has an SBOM at each release"
+    responsible: PER-DEV
+    strategy: other
+  - id: TOOL-05
+    name: "CSSP SIEM correlation of forwarded logs"
+    assesses: [au-6, si-4]
+    method: test
+    frequency: continuous
+    analysis: "The CSSP analysts triage alerts against their use cases and declare incidents"
+    reporting: "Alerts at once to the ISSO; monthly service report to the ISSM"
+    selection: "The CSSP's evaluated service under SVA-001"
+    upkeep: "Use cases tuned quarterly and after each incident with the ISSO; log forwarding health checked daily"
+    responsible: PER-CSSP
+    strategy: other
+  - id: TOOL-06
+    name: "CSSP non-authenticated external scan"
+    assesses: [ra-5]
+    method: test
+    frequency: monthly
+    analysis: "Exposed services and vulnerabilities seen from NIPRNet are compared with the expected ingress"
+    reporting: "Monthly report to the ISSM and the ISSO"
+    selection: "Gives the outside view through the access point that the internal scanners lack"
+    upkeep: "Targets updated by the CSSP when the edge changes"
+    responsible: PER-CSSP
+    strategy: other
+architecture:
+  collection: "Scanners, the drift scan and the factory write results to CMP-LOGS and the Component continuous monitoring dashboard; the CSSP collects the forwarded logs into its SIEM; manual reviews are recorded in the issue tracker."
+  storage: "CMP-LOGS (90 days, archive tier from release 1.6), the Component dashboard, the CSSP's SIEM (one year) and the program repository for manual review records."
+  analysis: "The ISSO triages tool results; the CSSP analyzes alerts; the ISSM analyzes the monthly roll-up against the metrics."
+  retrieval: "The ISSO pulls a monthly roll-up from the dashboard and the tracker; the AO's office reads the dashboard directly."
+  delivery: "Monthly roll-up to the PM, the ISSM and the AODR; quarterly posture report to the AO through the AODR; Component-level data through the dashboard to the CISO's working group."
+  automated: "Configuration, drift, vulnerability, image and dependency scanning, and log correlation."
+  manual: "Account and role reviews, plan reviews, provider deliverable reviews, privacy reviews, and the sandbox and WAF settings, which no tool reaches."
+monitoring:
+  compliance:
+    method: "Each planned response (POA&M milestone, remediation time, plan approval date) is tracked monthly against its date"
+    responsible: PER-ISSM
+  effectiveness:
+    method: "Tool results and the annual third of control assessments show whether controls keep working; the metrics show the trend"
+    responsible: PER-ISSO
+  change:
+    method: "The board's change records, the drift scan and the boundary review catch changes to the system; threat monitoring and provider notices catch changes to its environment"
+    responsible: PER-ISSE
+events:
+  - id: EV-01
+    event: incident
+    description: "A confirmed incident involving PII or a privileged identity"
+    threshold: "Any confirmed incident of that kind"
+    triggers: assessment
+  - id: EV-02
+    event: significant-change
+    description: "A change the board rates significant: new interconnection, new data type, boundary or identity-path change, or privacy safeguards"
+    threshold: "The security impact analysis rates the change significant"
+    triggers: assessment-and-reauthorization
+  - id: EV-03
+    event: threat-information
+    description: "Threat information the CSSP or the Component rates high for the system's components"
+    threshold: "A high-rated threat to a component in the inventory"
+    triggers: assessment
+  - id: EV-04
+    event: mission-change
+    description: "A change of mission or of the information types the system holds"
+    threshold: "Any new mission use or information type"
+    triggers: reauthorization
+  - id: EV-05
+    event: risk-assessment
+    description: "A risk assessment update that raises residual risk above the Component tolerance"
+    threshold: "Residual risk above moderate"
+    triggers: assessment-and-reauthorization
+boundary_review:
+  frequency: quarterly
+  responsible: PER-ISSM
+threat_monitoring:
+  responsible: PER-CSSP
+  frequency: daily
+  feeds: ["JFHQ-DODIN advisories", "Component threat assessment (TA-001)", "Cloud provider security bulletins", "CSSP threat intelligence feeds", "Software factory advisories"]
+  watches: [threat-actors, protective-techniques, deployed-environment]
+metrics:
+  - id: MET-01
+    name: "Mean time to remediate high and critical vulnerabilities"
+    measures: "Average days from detection to verified fix of high and critical findings closed in the month"
+    frequency: monthly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-2, M-5]
+    objective: "Keep threat and vulnerability exposure short (OBJ-03)"
+    controls: [ra-5, si-2]
+    baseline: "Remediation times of the ra-5 and si-2 statements: 30 days for high"
+    threshold: "Average above 30 days"
+    review:
+      by: [PER-ISSM, PER-AODR]
+      procedure: "Reviewed monthly; a breach is raised at the next board meeting and with the AODR within a week"
+  - id: MET-02
+    name: "High findings past their remediation date"
+    measures: "Count of open high or critical findings older than their remediation time"
+    frequency: monthly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-2, M-3, M-5]
+    objective: "No high finding past its remediation date, a Component condition for staying under ongoing authorization (OBJ-03)"
+    controls: [ra-5, si-2, ca-5]
+    baseline: "Zero"
+    threshold: "One or more"
+    review:
+      by: [PER-ISSM, PER-AODR]
+      procedure: "Reviewed monthly; each one gets a POA&M item and a dated fix, raised with the AODR within a week"
+  - id: MET-03
+    name: "STIG compliance of nodes and database"
+    measures: "Percentage of applicable STIG checks passed, excluding approved inherited deviations"
+    frequency: monthly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-2, M-5]
+    objective: "Keep configurations at their approved baseline (OBJ-02)"
+    controls: [cm-6]
+    baseline: "95% for each of nodes and database"
+    threshold: "Below 95% (2026-10-22: nodes 94%, database 88%)"
+    review:
+      by: [PER-ISSM]
+      procedure: "Reviewed monthly by the ISSM with the ISSE; open items go to the board"
+  - id: MET-04
+    name: "Unauthorized drift not reverted in time"
+    measures: "Drift events not matched to an approved change and not reverted within one working day"
+    frequency: monthly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-1, M-2, M-5]
+    objective: "Detect and undo unauthorized change (OBJ-02)"
+    controls: [cm-2, cm-3]
+    baseline: "Zero"
+    threshold: "One or more"
+    review:
+      by: [PER-ISSM]
+      procedure: "Each event is reviewed by the ISSM; a repeated one is treated as a possible incident"
+  - id: MET-05
+    name: "Account reviews on time"
+    measures: "Quarterly role reviews completed within their quarter, and leavers disabled within one working day"
+    frequency: quarterly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-2, M-5]
+    objective: "Keep control effectiveness known (OBJ-01)"
+    controls: [ac-2, ps-4]
+    baseline: "Every review on time, every leaver disabled within one working day"
+    threshold: "A missed review or a late disable"
+    review:
+      by: [PER-ISSM]
+      procedure: "Reviewed quarterly by the ISSM; a miss is a finding for M-2"
+  - id: MET-06
+    name: "POA&M items past due"
+    measures: "Open POA&M milestones past their scheduled date"
+    frequency: monthly
+    reported_to: [PER-PM, PER-ISSM, PER-AODR]
+    used_by: [M-3, M-5]
+    objective: "Keep planned risk responses on schedule"
+    controls: [ca-5]
+    baseline: "Zero"
+    threshold: "One or more"
+    review:
+      by: [PER-PM, PER-AODR]
+      procedure: "Reviewed monthly; the PM resets resources or the AODR is asked to accept a new date"
+  - id: MET-07
+    name: "Re-identifiable records in sampled exports"
+    measures: "Records in a quarterly sample of exports that can be re-identified with a DoD ID list"
+    frequency: quarterly
+    reported_to: [PER-PRIV, PER-ISSM, PER-AODR]
+    used_by: [M-2, M-5]
+    objective: "Keep PII processing within the SORN purposes"
+    controls: [pt-3, pt-2]
+    baseline: "Zero after release 1.6"
+    threshold: "Any re-identifiable record after release 1.6"
+    review:
+      by: [PER-PRIV, PER-ISSM]
+      procedure: "Reviewed quarterly by the privacy office; a breach of the threshold is handled as a possible PII breach"
+delegations:
+  - activity: "Continuous log correlation, incident detection and the monthly external scan"
+    partner: PER-CSSP
+    agreement: "SVA-001 support agreement"
+  - activity: "Monitoring of the platform's physical, media and infrastructure controls, reported in monthly deliverables"
+    partner: LA-01
+    agreement: "SVA-002 Component enterprise cloud contract and EFRAS task order"
+risk_assessment:
+  frequency: annually
+  triggers: ["Each major release", "A significant change (EV-02)", "High-rated threat information (EV-03)", "An incident involving PII or a privileged identity (EV-01)", "A change in a critical supplier"]
+  updates: "Threat sources and events, vulnerabilities from monitoring, likelihood and impact, and the residual risk of each open weakness"
+  communicated_to: [PER-PM, PER-AODR, PER-AO]
+measurement:
+  information_needs:
+    - id: NEED-01
+      need: "Whether known vulnerabilities are fixed within their remediation times"
+      priority: high
+    - id: NEED-02
+      need: "Whether configurations stay at their approved baseline"
+      priority: moderate
+  measures:
+    - id: MSR-01
+      need: NEED-01
+      description: "Mean days to remediate high and critical findings (MET-01)"
+      acceptable: {max: 30}
+      users: [PER-ISSM, PER-AODR]
+    - id: MSR-02
+      need: NEED-02
+      description: "STIG compliance percentage (MET-03)"
+      acceptable: {min: 95}
+      users: [PER-ISSM, PER-ISSE]
+  procedures:
+    collection: "Automated from the tools into the Component dashboard; manual records from the tracker"
+    analysis: "The ISSO computes the monthly values; the ISSM compares them with the acceptable parameters"
+    access: "The program, the AO's office and the Component CISO working group"
+    reporting: "Monthly roll-up and quarterly posture report"
+  results:
+    - id: MRS-01
+      measure: MSR-01
+      date: "2027-02-01"
+      value: 104
+      within_parameters: false
+      analysis: "No high or critical finding was closed in the cycle, so the mean time to remediate has no value; the value recorded is the age on 2027-02-01 of the two open highs in efras-report (found 2026-10-20), which is the floor of the mean once they close and far above the 30-day limit (POAM-002, POAM-003, COND-02)."
+      informed: [PER-ISSM, PER-AODR]
+    - id: MRS-02
+      measure: MSR-02
+      date: "2027-02-01"
+      value: 88
+      within_parameters: false
+      analysis: "No STIG scan reached the cycle's records; the latest, the SCA's scan of 2026-11-23, left the database at 88% and the nodes at 94%, both below the 95% minimum. Release 1.6 is said to carry the STG-001 and STG-002 fixes, unverified until a rescan (COND-05)."
+      informed: [PER-ISSM, PER-ISSE]
+minimum_review:
+  by: PER-PM
+  sufficient: true
+  date: "2026-11-18"
+  notes: "The Component minimums suffice; the strategy goes faster for au-6, si-4 (continuous), cm-2 (daily), ca-5, ca-7 and cp-9 (monthly)."
+detection_coverage:
+  - asset_class: networks
+    means: "The CSSP correlates the access point's traffic logs and the edge and WAF logs continuously"
+  - asset_class: physical-environment
+    means: "The cloud provider monitors its data centers at all times under its provisional authorization; the program reviews its reports"
+  - asset_class: personnel-activity
+    means: "Application, console and break-glass activity is logged to CMP-LOGS and correlated by the CSSP; break-glass use pages the ISSO"
+  - asset_class: external-providers
+    means: "The cloud account activity log and the provider's and factory's notices reach the CSSP and the ISSO"
+  - asset_class: computing
+    means: "Cluster audit logs, node endpoint telemetry and database audit logs are forwarded to the CSSP; the drift scan watches the account hourly"
+tuning: "The CSSP tunes its use cases quarterly and after each incident with the ISSO; scanner false positives go through the ISSE's allow-list or an ISSO-approved justification; each tuning change is recorded."
+vulnerability_management:
+  process: [identification, analysis, analysis-reporting, remediation-mitigation, verification-monitoring]
+  supported_by:
+    configuration: ART-CMP
+    asset: ART-INV
+    remediation: ART-POAM
+    mitigation: ART-POAM
+  identification:
+    scanning_reference: SP800-115
+    identified_from: [cve, vendor-bulletins, scans, directed-actions, incident-history, risk-assessment, assessments]
+    cross_reference: [cve, risk-assessment, vendor-bulletins]
+    manual:
+      - activity: "Review of the sandbox notebook service and the WAF rule set"
+        reason: "The managed notebook service exposes no scan interface, and WAF rule logic is not scannable"
+  tools:
+    - tool: TOOL-04
+      phases: [development, operational-test, operations-sustainment, retirement]
+    - tool: TOOL-03
+      phases: [operational-test, operations-sustainment]
+    - tool: TOOL-01
+      phases: [operational-test, operations-sustainment]
+  scans:
+    - kind: authenticated
+      frequency: weekly
+    - kind: non-authenticated
+      frequency: monthly
+  patching:
+    patch_sources:
+      - covers: "Managed services (database engine, Kubernetes control plane, storage, keys)"
+        source: vendor
+      - covers: "Worker node images"
+        source: vendor
+      - covers: "Container base images"
+        source: dod-enterprise
+      - covers: "EFRAS code and its dependencies"
+        source: program
+    coverage_scan:
+      tool: TOOL-03
+      frequency: weekly
+    noncompliant_devices: "A node or image the weekly scan finds unpatched is replaced through the pipeline at the next release, or within 48 hours for a critical finding; a managed service behind on provider patching is raised with the provider under SVA-002."
+    metrics:
+      - metric: MET-01
+        measure: mean-time-to-patch
+      - metric: MET-02
+        measure: vulnerability-exposure
+  log_repository: "CMP-LOGS, forwarded to the CSSP's SIEM"
+  sources: [INT-129.A2, INT-130.A2, INT-132.A1, INT-108.A1, INT-114.A1]
+privacy:
+  guidance_by: PER-PRIV
+  guidance: "Under the Component privacy continuous monitoring strategy: PII processing controls quarterly while exports remain re-identifiable, the PIA annually and quarterly until approved, retention and disposal monthly, privacy training annually, and every other Privacy Overlay control at its family's frequency in this strategy."
+  controls:
+    - control: pt-2
+      frequency: quarterly
+      origin: strategy
+    - control: pt-3
+      frequency: quarterly
+      origin: strategy
+    - control: ra-8
+      frequency: quarterly
+      origin: strategy
+    - control: si-12
+      frequency: monthly
+      origin: strategy
+    - control: at-2
+      frequency: annually
+      origin: strategy
+    # The other privacy-selected controls (NSS privacy baseline and Privacy Overlay), each at the
+    # frequency this strategy gives its family or override, as the privacy office's guidance says.
+    - {control: ac-1, frequency: quarterly, origin: strategy}
+    - {control: ac-2, frequency: quarterly, origin: strategy}
+    - {control: ac-3, frequency: quarterly, origin: strategy}
+    - {control: ac-6, frequency: quarterly, origin: strategy}
+    - {control: ac-17, frequency: quarterly, origin: strategy}
+    - {control: at-3, frequency: annually, origin: strategy}
+    - {control: au-2, frequency: weekly, origin: strategy}
+    - {control: au-6, frequency: continuous, origin: strategy}
+    - {control: au-9, frequency: weekly, origin: strategy}
+    - {control: au-11, frequency: weekly, origin: strategy}
+    - {control: ca-2, frequency: annually, origin: strategy}
+    - {control: ca-3, frequency: annually, origin: strategy}
+    - {control: ca-5, frequency: monthly, origin: strategy}
+    - {control: ca-7, frequency: monthly, origin: strategy}
+    - {control: cm-2, frequency: daily, origin: strategy}
+    - {control: cm-3, frequency: monthly, origin: strategy}
+    - {control: cp-2, frequency: annually, origin: strategy}
+    - {control: cp-9, frequency: monthly, origin: strategy}
+    - {control: ia-2, frequency: quarterly, origin: strategy}
+    - {control: ia-5, frequency: quarterly, origin: strategy}
+    - {control: ir-4, frequency: annually, origin: strategy}
+    - {control: ir-6, frequency: annually, origin: strategy}
+    - {control: ir-8, frequency: annually, origin: strategy}
+    - {control: mp-6, frequency: annually, origin: strategy}
+    - {control: pe-3, frequency: annually, origin: strategy}
+    - {control: pl-2, frequency: annually, origin: strategy}
+    - {control: pm-5, frequency: annually, origin: strategy}
+    - {control: ps-3, frequency: quarterly, origin: strategy}
+    - {control: ps-4, frequency: quarterly, origin: strategy}
+    - {control: ra-3, frequency: annually, origin: strategy}
+    - {control: sa-9, frequency: monthly, origin: strategy}
+    - {control: sa-11, frequency: monthly, origin: strategy}
+    - {control: sc-7, frequency: monthly, origin: strategy}
+    - {control: sc-8, frequency: monthly, origin: strategy}
+    - {control: sc-12, frequency: monthly, origin: strategy}
+    - {control: sc-28, frequency: monthly, origin: strategy}
+    - {control: si-4, frequency: continuous, origin: strategy}
+  sources: [INT-131.A1]
+lifecycle_approach:
+  addresses: [software-vulnerabilities, supply-chain, development-environment, intelligence-threats]
+  backlog_captures: [issues, errors, threats, defects, supplier-updates]
+  out_of_cycle: "A fix for a critical vulnerability, or a high one that is exploited or reachable from the access point, ships as an emergency patch within 48 hours outside the three-week release cycle."
+  sources: [INT-130.A3]
+ongoing_authorization:
+  time_trigger_days: 1095
+  event_triggers: ["EV-02 significant change", "EV-04 mission change", "EV-05 residual risk above tolerance", "Loss of the cloud provider's provisional authorization or of the CSSP agreement"]
+reporting:
+  recipients: [PER-AO, PER-AODR, PER-PM, PER-ISSM]
+  frequency: quarterly
+  dodin:
+    designation: GENSER
+    awareness: [threats, traffic, employee-use]
+approval:
+  approved_by: PER-AODR
+  date: "2026-11-18"
+  sources: [INT-134.A2]
+sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, INT-134.A2, ART-ORG-CONTEXT, ART-SSP, INT-208.A1, INT-208.A2, INT-213.A2]

@@ -69,16 +69,36 @@ def select(run: Run, ev: Evaluation, task: str | None = None, family: str | None
             keep = status_mod.gate_open(run, f.rule, pos[task]) and (
                 not f.owners or (task in f.owners and f.rule != JOURNAL_RULE))
         else:
-            limit = pos[ev.status.next] - 1 if ev.status.next else len(pos)
+            # the next task is the one being worked or the one a regression sent the run back
+            # to, so its findings show (F-02-3, F-05-3)
+            limit = pos[ev.status.next] if ev.status.next else len(pos)
             keep = status_mod.gate_open(run, f.rule, limit) and (
                 not f.owners or any(pos.get(o, len(pos)) <= limit for o in f.owners))
         if keep and family is not None:
-            keep = f.family == family
+            # the family file, and the interviews of the task that writes it (F-06-4)
+            keep = f.family == family or (
+                f.family is None and (f.finding.path or "").startswith(f"{INTERVIEWS_DIR}/")
+                and bool(f.owners & _family_writers(run, family)))
         if keep and rules:
             keep = f.rule in rules
         if keep or f.rule in UNFILTERED:
             chosen.append(f)
     return [f.finding for f in chosen]
+
+
+def _family_writers(run: Run, family: str) -> frozenset[str]:
+    """Tasks that write the family's SSP or SAR file."""
+    owners: set[str] = set()
+    for path in (f"artifacts/ssp/controls/{family}.yaml", f"artifacts/sar/results/{family}.yaml"):
+        artifact = run.owner_artifact(path)
+        owners |= set(run.writers(artifact)) if artifact else set()
+    return frozenset(owners)
+
+
+def hidden_errors(run: Run, ev: Evaluation, shown: list[Finding]) -> int:
+    """Errors a progress-gated or task selection leaves out, so the reader knows they exist."""
+    seen = {id(f) for f in shown}
+    return sum(1 for f in ev.findings if f.error and id(f.finding) not in seen)
 
 
 def rules_run(rules: list[str] | None = None) -> list[str]:

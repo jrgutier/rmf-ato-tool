@@ -1,0 +1,739 @@
+# artifacts/data/sap.yaml (A-2; schema sap). Written whole. The selection, independence and
+# consulted officials record A-1 (INT-142 to INT-146); everything else is A-2 (INT-147 to INT-151).
+scope:
+  include: baseline
+  excluded_controls: []
+assessment_subjects:
+  - type: component
+    include: all
+  - type: inventory-item
+    include: [INV-002, INV-003, INV-004, INV-005, INV-006, INV-008, INV-009, INV-010]
+team:
+  - persona: PER-SCA
+    role: "Lead assessor of the business systems SCA team (Component independent assessment activity), with a cloud and container assessor and a privacy-trained assessor"
+    independent: true
+    qualification:
+      basis: "Delegated SCA for business systems by the Component CISO; DoDM 8140.03 security control assessor qualification met (course completed 2025-08-22, RA-07); team members qualified for IL4 cloud tenants and Privacy Overlay controls"
+      verified_by: PER-CISO
+      verified: "2026-11-18"
+selection:
+  selected_by: PER-AODR
+  date: "2026-11-18"
+  assessment_type: security-and-privacy
+  expertise: "Kubernetes on a DoD IL4 cloud region and its inheritance; the managed PostgreSQL service and its STIG; CI/CD in an authorized software factory with signed images and dependency scanning; CAC sign-in through a SAML identity broker; web and API testing of per-squadron data scoping; the Privacy Act, the PIA and the Privacy Overlay"
+assessor_independence:
+  consulted: [PER-CIO, PER-PRIV, PER-CISO, "Component Office of the Inspector General (audit liaison)"]
+  required: independent
+  determined_by: PER-AO
+  rationale: "A moderate system with both Privacy Overlay variants, about 3,000 maintainers' PII and moderate risks of exfiltration and re-identification (one already demonstrated) must be assessed by people with no stake in the program; the CIO, the privacy officer for the SAOP and the CISO all advised an independent team."
+  basis: [ART-CAT, ART-RA]
+  sufficiency:
+    determined_by: PER-AO
+    sufficient: true
+    date: "2026-11-18"
+    rationale: "The team reports to the Component CISO outside the PEO and ARSPO, is neither funded nor rated by the program, has not designed, built or operated any EFRAS component, and its qualifications are verified."
+  achieved_by: assessor
+objectives: "Determine whether each of the 50 controls of the tailored baseline, including the privacy controls, is implemented correctly, operating as intended and producing the desired outcome, so that the AO can decide on authorization before the 2027-02-01 MVCR deployment, and give the program the findings it needs for the POA&M."
+level_of_effort: "Three assessors over 17 working days (2026-11-19 to 2026-12-11), with ERST support hours and a five-day red team penetration test with two testers, funded from the FY27 assessment line ($180K)."
+approval:
+  reviewed_by: PER-SCA
+  approved_by: PER-AODR
+  date: "2026-11-18"
+preparation:
+  informed_by: PER-PM
+  officials_notified:
+    - {persona: PER-AO, date: "2026-11-18"}
+    - {persona: PER-AODR, date: "2026-11-18"}
+    - {persona: PER-ISSM, date: "2026-11-18"}
+    - {persona: PER-IO, date: "2026-11-18"}
+    - {persona: PER-PRIV, date: "2026-11-18"}
+    - {persona: PER-CSSP, date: "2026-11-18"}
+  resources:
+    allocated_by: PER-PM
+    allocated: "2026-11-18"
+    description: "FY27 assessment line ($180K): ERST support hours, the red team week, test accounts for the five roles in pre-production"
+  access:
+    - {to: system, provided_by: PER-PM, provided: "2026-11-18"}
+    - {to: environment, provided_by: PER-PM, provided: "2026-11-18"}
+    - {to: documentation, provided_by: PER-PM, provided: "2026-11-18"}
+    - {to: records, provided_by: PER-PM, provided: "2026-11-18"}
+    - {to: artifacts, provided_by: PER-PM, provided: "2026-11-18"}
+    - {to: test-results, provided_by: PER-PM, provided: "2026-11-18"}
+  documentation_provided: [ART-SSP, ART-CAT, ART-RA, ART-BND, ART-INV, ART-REQ, ART-CMP, ART-CP, ART-IRP, ART-CONMON, ART-STIG, ART-PIA, ART-SVCA]
+  elements:
+    - {responsible_for: "The security plan, the plan set and the eMASS record", persona: PER-ISSM}
+    - {responsible_for: "Account, log and incident records and the scan schedule", persona: PER-ISSO}
+    - {responsible_for: "Security architecture, configuration baselines and pipeline gates", persona: PER-ISSE}
+    - {responsible_for: "Source code, images, the pipeline records and the DT support", persona: PER-DEV}
+    - {responsible_for: "The SORN, the PIA and the privacy plan", persona: PER-PRIV}
+    - {responsible_for: "The providers' plans, assessment reports and responsibility matrices", persona: PER-CCP}
+  channels:
+    - {among: [PER-AO, PER-AODR, PER-ISSM], means: "Weekly ISSM brief to the AODR during the assessment, on top of the monthly brief; the AODR informs the AO"}
+    - {among: [PER-ISSM, PER-CSSP], means: "Test window notices with source addresses and times before every scan and the penetration test"}
+  points_of_contact:
+    - {persona: PER-ISSM, for: "Access, accounts and scheduling"}
+    - {persona: PER-ISSO, for: "Scans, test windows and log views"}
+    - {persona: PER-DEV, for: "Developer interviews, the container checklist review and the DT-2 re-performance"}
+    - {persona: PER-CSSP, for: "The CSSP side of the penetration test and the monitoring evidence"}
+  ambiguity_mechanism:
+    between: [PER-SCA, PER-ISSM]
+    means: "Daily stand-up and a shared question log; what they cannot settle goes to the PM and the AODR the same week"
+  understanding:
+    summary: "The naval aviation PEO's readiness mission depends on EFRAS analytics of maintenance and supply data for about 3,000 users in three pilot squadrons and later the fleet; the Component frames risk through its risk executive, inherits enterprise cloud, boundary, identity, pipeline and CSSP services, and expects the SCA to work under POL-02."
+    sources: [ART-ORG-CONTEXT, product/conops.md#mission]
+rigor:
+  categorization: ART-CAT
+  privacy_risk_assessment: ART-RA
+  plans: [ART-SSP, ART-CMP, ART-CP, ART-IRP, ART-CONMON]
+  assurance_requirements:
+    - id: AR-001
+      requirement: "Every control is shown implemented correctly and operating as intended."
+      specified_by: PER-AODR
+      depth: focused
+      coverage: focused
+    - id: AR-002
+      requirement: "The controls behind the moderate exfiltration and re-identification risks and every control the program records as partial are assessed in full, so the POA&M rests on what the assessors saw."
+      specified_by: PER-AODR
+      depth: comprehensive
+      coverage: comprehensive
+    - id: AR-003
+      requirement: "Inherited controls are confirmed against the provider's authorization package."
+      specified_by: PER-AODR
+      depth: basic
+      coverage: basic
+  direction:
+    by: PER-AODR
+    conferred_with: [PER-SCA]
+    factors:
+      - "the three-week window before the report is due"
+      - "the funded ERST support hours"
+      - "first assessment of the system, before the MVCR deployment"
+      - "each role interviewed at least once; at least two components per tier and every component holding PII"
+procedures:
+  - id: PRC-001
+    controls: [ac-1, ac-2, ac-3, ac-6, ac-17, at-2, at-3, au-2, au-6, au-9, au-11, ca-2, ca-3, ca-5, ca-7, cm-2, cm-3, cm-6, cm-8, cp-2, cp-4, cp-9, ia-2, ia-5, ir-4, ir-6, ir-8, ma-4, mp-6, pe-3, pl-2, pm-5, ps-3, ps-4, pt-2, pt-3, ra-3, ra-5, ra-8, sa-9, sa-11, sc-7, sc-8, sc-12, sc-28, si-2, si-4, si-12, sr-3, sr-11]
+    methods: [interview]
+    objects: [individuals]
+    depth: focused
+    coverage: focused
+    rationale: "One interview round per role covers every control at once: the people who write, run and provide the controls say how they work, and the answers steer the examination and the tests."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 2
+    assurance_requirement: AR-001
+    sampling:
+      - method: interview
+        types:
+          - {type: PER-ISSM, number: 1}
+          - {type: PER-ISSO, number: 1}
+          - {type: PER-ISSE, number: 1}
+          - {type: PER-PM, number: 1}
+          - {type: PER-DEV, number: 1}
+          - {type: PER-CSSP, number: 1}
+          - {type: PER-PRIV, number: 1}
+          - {type: PER-CCP, number: 1}
+        specific: ["ARSPO ISSM", "EFRAS ISSO", "ERST security engineer", "ECSSP liaison", "Component privacy officer"]
+        selection: targeted
+        bias_control: "Every role that owns or provides a control is interviewed; answers are corroborated by examination or test, never taken alone"
+  - id: PRC-002
+    controls: [ac-1, at-2, at-3, ca-2, ca-5, ca-7, ir-8, pm-5, ps-3, ra-3, sa-9]
+    methods: [examine]
+    objects: [specifications, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Policy, plan and program controls with no mechanism to test: the policies, plans and agreements are examined with the records that show the activity happened (training records, screening records, the risk assessment, the eMASS inventory, provider deliverables)."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 1
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 11}, {type: activities, number: 11}]
+        specific: [ART-SSP, ART-CONMON, ART-SVCA, ART-RA]
+        selection: random-and-targeted
+        bias_control: "Records drawn at random from the full period, plus every record the SSP names"
+  - id: PRC-003
+    controls: [cp-2, pl-2, ra-8]
+    methods: [examine]
+    objects: [specifications, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial plan controls: the contingency plan and its approval, the plan set and its approvals, and the draft PIA are examined in full against the control text, with the approval and distribution records."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 1
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 3}, {type: activities, number: 3}]
+        specific: [ART-CP, ART-SSP, ART-PIA]
+        selection: targeted
+        bias_control: "The whole population of the three documents is examined; no sampling within them"
+  - id: PRC-004
+    controls: [ac-2, ac-17, ps-4]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Account management, remote access and leavers: the DT-2 sign-in, timeout and 35-day disable results are examined and re-performed, and the leaver timing the 2026-10-06 account review leaves open is tested against out-processing records."
+    risk_results: [ART-RA]
+    adaptation: system-specific
+    adaptation_note: "Adds a leaver-timing test: out-processing dates of departed squadron users against their disable times in the identity broker and EFRAS."
+    sequence: 3
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 3}, {type: mechanisms, number: 2}, {type: activities, number: 3}]
+        specific: ["product/test-results.md#account-review", "product/test-results.md#dt-2"]
+        selection: random-and-targeted
+        bias_control: "Account records drawn at random across the five roles; the two leavers of the 2026-10-06 review are always included"
+      - method: test
+        types: [{type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-API, CMP-IDB]
+        selection: random-and-targeted
+        bias_control: "Leavers drawn at random from three months of out-processing records, plus the two known ones"
+        extent: [{measure: "leaver records checked", count: 10}, {measure: "DT-2 sign-in and timeout cases re-run", count: 6}]
+  - id: PRC-005
+    controls: [ac-3, ac-6, ia-2, ia-5]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Access enforcement behind TE-01 and the break-glass deviation: the API and report scoping checks, privileged roles, and the break-glass console and database accounts are examined and tested in full."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 3
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 4}, {type: mechanisms, number: 4}, {type: activities, number: 2}]
+        specific: [CMP-API, CMP-REPORT, "break-glass console accounts", "break-glass database role"]
+        selection: targeted
+        bias_control: "Every privileged role and every break-glass credential is examined; no sampling"
+      - method: test
+        types: [{type: mechanisms, number: 4}, {type: activities, number: 1}]
+        specific: [CMP-API, CMP-REPORT, CMP-WEB]
+        selection: random-and-targeted
+        bias_control: "Crafted cross-squadron requests across all five roles, plus the PT-1 export path"
+        extent: [{measure: "crafted cross-squadron and cross-air-wing requests", count: 100}, {measure: "privileged roles checked", count: 4}]
+  - id: PRC-006
+    controls: [au-2, au-6, au-9, si-4, ir-6]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Logging, review, protection, monitoring and reporting: event configuration and forwarding to the CSSP are examined and the five-minute delivery of export events re-performed; the CSSP's correlation and reporting are watched during the penetration test."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 4
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 3}, {type: mechanisms, number: 3}, {type: activities, number: 3}]
+        specific: [CMP-LOGS, CMP-ECSSP]
+        selection: random-and-targeted
+        bias_control: "Review records drawn at random from the last three months, plus the CSSP's records of the penetration test window"
+      - method: test
+        types: [{type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-LOGS, CMP-API]
+        selection: targeted
+        bias_control: "Test events cover every auditable event type the SSP lists"
+        extent: [{measure: "auditable event types triggered and traced to the CSSP", count: 8}]
+  - id: PRC-007
+    controls: [au-11, ir-4]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial: the 90-day log retention against the one-year value and incident handling not yet tied to an approved plan; retention settings and the oldest retrievable record are examined and tested, and the handling steps are walked through with the ISSO and the CSSP."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 4
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}, {type: mechanisms, number: 2}, {type: activities, number: 2}]
+        specific: [CMP-LOGS, ART-IRP]
+        selection: targeted
+        bias_control: "Every log store and the whole incident response plan are examined"
+      - method: test
+        types: [{type: mechanisms, number: 1}, {type: activities, number: 1}]
+        specific: [CMP-LOGS]
+        selection: targeted
+        bias_control: "Retrieval is tried for the oldest day each store should hold"
+        extent: [{measure: "log stores queried for their oldest record", count: 3}]
+  - id: PRC-008
+    controls: [cm-2, cm-3, cm-8, ma-4]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Baselines, change control, inventory and nonlocal maintenance: templates and CCB records are examined and the deployed state compared with the baseline and the inventory."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 3
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 4}, {type: mechanisms, number: 2}, {type: activities, number: 4}]
+        specific: [ART-CMP, ART-INV]
+        selection: random-and-targeted
+        bias_control: "Change records drawn at random from release 1.5.0 to 1.5.1, plus every emergency change"
+      - method: test
+        types: [{type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-K8S, CMP-DB]
+        selection: random
+        extent: [{measure: "deployed resources compared with the baseline and the inventory", count: 20}]
+  - id: PRC-009
+    controls: [cm-6, ra-5, si-2]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial: the open STIG items, the two high vulnerabilities in CMP-REPORT and the missed 30-day install time; reuses the SCA-witnessed STIG scan (RR-001), adds the SCA's own scan of release 1.5.1 and the Application Security and Development STIG checklist review of the five containers (BM-04) the program never did."
+    risk_results: [ART-RA]
+    adaptation: system-specific
+    adaptation_note: "Adds the ASD STIG checklist review of INV-002 to INV-006 with the developer, and verifies release 1.5.2 fixes only if they land before the out-brief."
+    sequence: 4
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 3}, {type: mechanisms, number: 5}, {type: activities, number: 3}]
+        specific: [ART-STIG, INV-002, INV-003, INV-004, INV-005, INV-006]
+        selection: targeted
+        bias_control: "Every open finding, every container and every remediation ticket since 2026-10-20 is examined"
+      - method: test
+        types: [{type: mechanisms, number: 8}, {type: activities, number: 1}]
+        specific: [INV-008, INV-009, INV-010, INV-006]
+        selection: targeted
+        bias_control: "The scan covers every node, image and the database instance; no sampling"
+        extent: [{measure: "hosts, images and database instances scanned", count: 12}]
+  - id: PRC-010
+    controls: [cp-4]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial: only the database restore was tested; the restore record is examined and the restore re-performed, and the absence of a failover test and of an exercise is recorded as observed."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 5
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 1}, {type: mechanisms, number: 1}, {type: activities, number: 2}]
+        specific: [ART-CP, "product/test-results.md#dt-2"]
+        selection: targeted
+        bias_control: "The whole plan and every test record are examined"
+      - method: test
+        types: [{type: mechanisms, number: 1}, {type: activities, number: 1}]
+        specific: [CMP-DB]
+        selection: targeted
+        bias_control: "The restore that DT-2 ran is the one re-performed, timed against the recovery objective"
+        extent: [{measure: "point-in-time restores re-performed", count: 1}]
+  - id: PRC-011
+    controls: [cp-9, sc-8, sc-12, sc-28]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Backups and cryptographic protection: backup and key settings are examined and the TLS configuration, encryption at rest and key ownership tested."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 3
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 4}, {type: mechanisms, number: 4}, {type: activities, number: 2}]
+        specific: [CMP-KMS, CMP-DB, CMP-OBJ]
+        selection: random-and-targeted
+        bias_control: "Every store holding PII is included; other stores drawn at random"
+      - method: test
+        types: [{type: mechanisms, number: 4}, {type: activities, number: 1}]
+        specific: [CMP-EDGE, CMP-DB, CMP-OBJ, CMP-KMS]
+        selection: targeted
+        bias_control: "Every external endpoint and every PII store is tested"
+        extent: [{measure: "endpoints and stores tested", count: 8}]
+  - id: PRC-012
+    controls: [sc-7, ca-3]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Boundary and connections: the subnet tiers, the egress allow-list (PT-3) and the three exchanges are examined in full; the EFRAS end of each connection and the narrowed allow-list are tested in the penetration test (RR-002 supplemented)."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 5
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 4}, {type: mechanisms, number: 3}, {type: activities, number: 2}]
+        specific: [CMP-EDGE, CMP-SANDBOX, CMP-INGEST, "EMIS interim approval", "supply status service agreement"]
+        selection: targeted
+        bias_control: "Every connection and every egress rule is examined"
+      - method: test
+        types: [{type: mechanisms, number: 3}, {type: activities, number: 1}]
+        specific: [CMP-SANDBOX, CMP-EDGE, CMP-INGEST]
+        selection: targeted
+        bias_control: "Every egress path and every inbound connection is tried"
+        extent: [{measure: "egress destinations and connection endpoints tried", count: 25}]
+  - id: PRC-013
+    controls: [pt-2, si-12]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Privacy authority and retention: the SORN and the data map are examined; the ingest field filter and the monthly purge are tested under the privacy office's methodology."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 6
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}, {type: mechanisms, number: 2}, {type: activities, number: 2}]
+        specific: [ART-PIA, CMP-INGEST]
+        selection: targeted
+        bias_control: "The SORN elements are compared one by one with every ingested field"
+      - method: test
+        types: [{type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-INGEST, CMP-DB]
+        selection: targeted
+        bias_control: "The test extract carries every field outside the SORN"
+        extent: [{measure: "extract fields and purge cases tested", count: 10}]
+  - id: PRC-014
+    controls: [pt-3]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial: exports keep an unsalted DoD ID hash (PT-2); the export pipeline is examined and the re-identification of a sample export re-performed against the privacy office's metric (zero re-identifiable exports)."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 6
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}, {type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-REPORT, CMP-FORECAST, "training extract"]
+        selection: targeted
+        bias_control: "Every export path and the training extract are examined"
+      - method: test
+        types: [{type: mechanisms, number: 2}, {type: activities, number: 1}]
+        specific: [CMP-REPORT, CMP-FORECAST]
+        selection: random-and-targeted
+        bias_control: "DoD ID numbers for the re-identification test drawn at random from the synthetic population"
+        extent: [{measure: "DoD ID numbers tried against a sample export", count: 50}]
+  - id: PRC-015
+    controls: [sa-11]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: comprehensive
+    coverage: comprehensive
+    rationale: "Partial: developer testing leaves the CMP-REPORT highs and the PT-3 retest open and verifies neither REQ-11 nor REQ-12; the pipeline gates and DT-2 records are examined (not reused as results, POL-02), a sample re-performed, and APR-001 and APR-002 verify the two requirements."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 5
+    assurance_requirement: AR-002
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}, {type: mechanisms, number: 1}, {type: activities, number: 3}]
+        specific: ["product/test-results.md#pipeline-1-5", "product/test-results.md#dt-2", ART-REQ]
+        selection: targeted
+        bias_control: "Every gate and every DT-2 test card is examined"
+      - method: test
+        types: [{type: mechanisms, number: 3}, {type: activities, number: 1}]
+        specific: [CMP-API, CMP-INGEST, CMP-WEB]
+        selection: random-and-targeted
+        bias_control: "DT-2 cases re-performed drawn at random, plus the tampered extract and the API scoping cases"
+        extent: [{measure: "DT-2 test cases re-performed", count: 12}]
+  - id: PRC-016
+    controls: [sr-3, sr-11]
+    methods: [examine, test]
+    objects: [specifications, mechanisms, activities]
+    depth: focused
+    coverage: focused
+    rationale: "Supply chain controls and component authenticity: the factory's base image vetting and the hash-pinned dependencies are examined and the admission controller's refusal of an unsigned image tested; the factory's open POA&M item is taken into account."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 5
+    assurance_requirement: AR-001
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}, {type: mechanisms, number: 2}, {type: activities, number: 2}]
+        specific: [CMP-SWF, ART-SVCA]
+        selection: random-and-targeted
+        bias_control: "Dependency manifests drawn at random across the five services, plus the report service"
+      - method: test
+        types: [{type: mechanisms, number: 1}, {type: activities, number: 1}]
+        specific: [CMP-K8S]
+        selection: targeted
+        bias_control: "Both an unsigned and a re-tagged image are tried"
+        extent: [{measure: "admission attempts with unsigned or altered images", count: 2}]
+  - id: PRC-017
+    controls: [pe-3, mp-6]
+    methods: [examine]
+    objects: [specifications]
+    depth: basic
+    coverage: basic
+    rationale: "Inherited whole from the IL4 cloud region (LA-01): the provider's authorization, customer responsibility matrix and assessment report are examined to confirm the controls are offered and in force."
+    risk_results: [ART-RA]
+    adaptation: none
+    sequence: 1
+    assurance_requirement: AR-003
+    sampling:
+      - method: examine
+        types: [{type: specifications, number: 2}]
+        selection: targeted
+        bias_control: "The provider's own package is the only object; nothing is sampled"
+optimization:
+  reviewed_by: PER-SCA
+  tailoring_guidance: "The Component's POL-02 asks for SP 800-53A procedures, reuse of results no older than 365 days at the required independence, and examination with re-performance of program self-tests; it adds no further tailoring."
+  notes: "One interview round per role (PRC-001) serves all controls. Document examination runs first (sequence 1), interviews second, then technical tests grouped by component so each test account and scan window serves several controls (sequences 3 to 5), with the penetration test week (PRC-012, PRC-015) and the privacy tests last (sequence 6)."
+additional_procedures:
+  - id: APR-001
+    requirement: "REQ-11: the protocols and standards EFRAS uses are selected from the DoD IT Standards Registry and suffice for its interfaces."
+    statements:
+      - "Each protocol and standard used on the ECAP, identity broker, EMIS and CSSP interfaces is listed in the DoD IT Standards Registry."
+      - "The selected standards suffice for each interface's data exchange."
+    methods: [examine, interview]
+    objects: [specifications, individuals]
+    rationale: "No SP 800-53 control states this requirement; S-3 traced it to sa-11, which no developer test verified."
+  - id: APR-002
+    requirement: "REQ-12: the web interface meets Section 508 accessibility standards and does not block assistive technology."
+    statements:
+      - "The web interface passes a Section 508 conformance check."
+      - "Assistive technology can operate the five role workflows."
+    methods: [examine, test]
+    objects: [specifications, mechanisms]
+    rationale: "Section 508 is outside SP 800-53; S-3 traced it to sa-11, which no developer test verified."
+reuse_policy:
+  max_age_days: 365
+  source: ART-ORG-CONTEXT
+reused_results:
+  - id: RR-001
+    source: "STIG and SRG compliance scan of the pre-production cluster and database, 2026-10-22, witnessed by the SCA team"
+    type: developmental-test
+    assessed: "2026-10-22"
+    criteria: "DISA Kubernetes STIG on the worker nodes and PostgreSQL STIG on the database, through the DoD SCAP content"
+    controls: [cm-6, cm-2]
+    independence: independent
+    approved_by: PER-AODR
+    coordinated_with: [PER-PM, PER-AODR]
+    determined_by: PER-SCA
+    credibility: {verdict: acceptable, basis: "The SCA team witnessed the scan and holds the raw results"}
+    appropriateness: {verdict: acceptable, basis: "Authenticated SCAP scanning is the method SP 800-53A gives for configuration settings"}
+    applicability: {verdict: acceptable, basis: "Pre-production is built from the production templates, so the configuration scanned is the one to be authorized"}
+    currency: {verdict: acceptable, basis: "28 days before the assessment starts, within the 365 days POL-02 allows"}
+    relevance: {verdict: acceptable, basis: "Covers the node and database settings cm-6 and cm-2 govern; the application containers are not covered (BM-04)"}
+    changes_since: "Release 1.5.1 (2026-11-07) changed the images for the export scoping fix and the server header; no node or database setting changed."
+    supplement: "The SCA's own authenticated scan of release 1.5.1 on 2026-11-23 and the ASD STIG checklist review of the five containers (PRC-009)."
+    sources: [product/test-results.md#stig-scan, INT-147.A2, INT-151.A2]
+  - id: RR-002
+    source: "Component red team penetration test of pre-production from NIPRNet through the access point, 2026-10-27 to 2026-10-31, with the PT-1 retest of 2026-11-10"
+    type: developmental-test
+    assessed: "2026-10-31"
+    criteria: "Unauthenticated and authenticated attacks on the web, API, report and sandbox paths; injection, cross-site scripting, authorization bypass, egress"
+    controls: [ac-3, sc-7, pt-3]
+    independence: independent
+    approved_by: PER-AODR
+    coordinated_with: [PER-PM, PER-AODR]
+    determined_by: PER-SCA
+    credibility: {verdict: acceptable, basis: "The red team is independent of ARSPO and its report states methods, scope and evidence for each finding"}
+    appropriateness: {verdict: acceptable, basis: "Penetration testing is the test method for access enforcement and boundary protection"}
+    applicability: {verdict: acceptable, basis: "Run through the access point path users take, on the production templates"}
+    currency: {verdict: acceptable, basis: "19 days before the assessment starts; PT-1 retested 2026-11-10"}
+    relevance: {verdict: acceptable, basis: "PT-1 bears on ac-3, PT-2 on pt-3, PT-3 on sc-7; it did not evaluate the CSSP"}
+    changes_since: "Release 1.5.1 fixed PT-1 (retest pass 2026-11-10); the sandbox allow-list was narrowed 2026-11-03 (PT-3, not retested); PT-2 is unchanged until release 1.6."
+    supplement: "The second penetration test from 2026-11-30 with the CSSP monitoring, which retests PT-3 and re-checks PT-1 (penetration_test below)."
+    sources: [product/test-results.md#pentest, INT-147.A2, INT-151.A2]
+external_providers:
+  - id: EXT-001
+    provider: "Example GovCloud IL4 region"
+    kind: commercial
+    under_usg_authority: false
+    third_party:
+      organization: "Accredited third-party assessment organization behind the DoD provisional authorization (fictional)"
+      accepted_by: PER-AODR
+      accepted: "2026-11-18"
+    arrangement:
+      type: contract
+      reference: "Cloud service contract and customer responsibility matrix under LA-01 (SVA-002)"
+    covers: [CMP-CSP, LA-01]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The contract and the responsibility matrix assign pe-3 and mp-6 whole, and the snapshot and managed-service patching parts of cp-9 and si-2, to the provider, with monthly continuous monitoring deliverables."
+    procedure_adjustment: "The provider's side is not re-tested: pe-3 and mp-6 are examined against its package (PRC-017); for cp-9 and si-2 only the EFRAS side is tested."
+    provider_assessment:
+      scope: "Full assessment for the DoD provisional authorization at IL4 and the AO's authorization of 2024-09-18, with monthly continuous monitoring"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "Annual assessment of a third of its controls under its continuous monitoring; none in progress for EFRAS"
+    sources: [ART-ORG-CONTEXT, ART-SVCA, INT-147.A3, INT-151.A2]
+  - id: EXT-002
+    provider: "Example Enterprise Cloud Access Point"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: line-of-business
+      reference: "Enterprise access point service agreement under LA-02 (SVA-003)"
+    covers: [CMP-ECAP, LA-02]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The agreement assigns the NIPRNet boundary protection and inspection parts of sc-7 to the access point, with monthly compliance status."
+    procedure_adjustment: "Only the EFRAS subnet tiers, WAF and egress allow-list are tested under sc-7; the access point is not tested."
+    provider_assessment:
+      scope: "Component assessment for the AO's authorization of 2025-01-10"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "Ongoing monthly compliance monitoring through the Component inheritance portal"
+    sources: [ART-ORG-CONTEXT, ART-SVCA, INT-147.A3]
+  - id: EXT-003
+    provider: "Example Software Factory"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: line-of-business
+      reference: "Software factory onboarding and service agreement under LA-03 (SVA-004)"
+    covers: [CMP-SWF, LA-03]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The agreement assigns pipeline scanning, image signing and base image vetting (sa-11, sr-3, sr-11) to the factory, with monthly compliance status and its POA&M."
+    procedure_adjustment: "The factory's pipeline is not re-assessed; its outputs for EFRAS builds are examined and the admission check tested (PRC-015, PRC-016), weighing the factory's open POA&M item on the hardened base image."
+    provider_assessment:
+      scope: "Independent assessment for the AO's authorization of 2025-10-01; one open POA&M item (delayed hardened base image release)"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "Monthly compliance status; the POA&M item is tracked by the factory"
+    sources: [ART-ORG-CONTEXT, ART-SVCA, INT-147.A3]
+  - id: EXT-004
+    provider: "Example Cybersecurity Service Provider"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: line-of-business
+      reference: "CSSP service agreement under LA-04 (SVA-001)"
+    covers: [CMP-ECSSP, LA-04]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The agreement assigns 24x7 monitoring, incident declaration, JFHQ-DODIN reporting and the monthly external scan (au-6, si-4, ir-4, ir-6, ra-5) to the CSSP."
+    procedure_adjustment: "The CSSP's operations are not re-assessed; log delivery is tested and the CSSP's detection and response are observed during the penetration test."
+    provider_assessment:
+      scope: "Component assessment for the CSSP's authorization by the AO, with its DoD O-8530.01-M evaluation"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "Monthly CSSP service reports"
+    sources: [ART-ORG-CONTEXT, ART-SVCA, INT-147.A3]
+  - id: EXT-005
+    provider: "Enterprise identity broker"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: line-of-business
+      reference: "Enterprise onboarding approval of 2026-05-12"
+    covers: [CMP-IDB]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The onboarding approval documents the SAML interface, the attributes released and the impact level of the data."
+    procedure_adjustment: "The broker is not assessed; the EFRAS side of federated CAC sign-in and group mapping is tested (PRC-004)."
+    provider_assessment:
+      scope: "The broker's own authorization by its AO; EFRAS relies on it only for CAC-based assertions it validates"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "None known to the program"
+    sources: [INT-147.A3, product/architecture.md#interconnections]
+  - id: EXT-006
+    provider: "EMIS fleet maintenance information system"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: interagency-agreement
+      reference: "Draft EFRAS-EMIS memorandum of agreement under legal review, with the EMIS ISSM's interim e-mail approval"
+    covers: [CMP-EMIS]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The interim approval names the nightly signed extract over mutual TLS; the memorandum is not signed (ca-3 partial)."
+    procedure_adjustment: "EMIS is not assessed; the EFRAS end of the exchange (signature check, mutual TLS) is tested and the unsigned agreement examined under ca-3 (PRC-012)."
+    provider_assessment:
+      scope: "EMIS's own authorization by its AO, on the authorization letter the PM obtained"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "None known to the program"
+    sources: [INT-147.A3, product/architecture.md#interconnections, product/conops.md#limitations]
+  - id: EXT-007
+    provider: "Supply status service"
+    kind: usg
+    under_usg_authority: true
+    arrangement:
+      type: interagency-agreement
+      reference: "Supply status service agreement signed 2026-06-30"
+    covers: [CMP-SUPPLY]
+    agreement_review:
+      by: PER-SCA
+      date: "2026-11-18"
+      assurances: "The agreement documents the read-only API, its security requirements and the impact level of the data."
+    procedure_adjustment: "The service is not assessed; the EFRAS pull over the API is examined under ca-3 (PRC-012)."
+    provider_assessment:
+      scope: "The service's own authorization by its AO, on the authorization letter the PM obtained"
+      independence: independent
+      procedures_reviewed_by: PER-SCA
+      evidence: received
+      meets_protection_needs: true
+      other_assessments: "None known to the program"
+    sources: [INT-147.A3, product/architecture.md#interconnections]
+schedule:
+  start: "2026-11-19"
+  end: "2026-12-11"
+  events:
+    - {date: "2026-11-19", description: "Kickoff with the PM, the ISSM, the ISSO and the CSSP; document examination starts", kind: kickoff, live: false}
+    - {date: "2026-11-20", description: "Interview round with the ISSM, ISSO, ISSE, PM, developer lead, CSSP liaison, privacy officer and providers", kind: interview, live: false}
+    - {date: "2026-11-23", description: "SCA authenticated vulnerability and STIG scan of release 1.5.1 in pre-production (supplements RR-001)", kind: scan, live: false}
+    - {date: "2026-11-24", description: "Application Security and Development STIG checklist review of INV-002 to INV-006 with the developer (BM-04)", kind: other, live: false}
+    - {date: "2026-11-30", description: "Penetration test with the CSSP monitoring, 2026-11-30 to 2026-12-04: PT-3 retest, PT-1 re-check, NIPRNet and insider paths", kind: penetration-test, live: false}
+    - {date: "2026-12-01", description: "Leaver-timing test for ps-4 and ac-2 against out-processing records", kind: other, live: false}
+    - {date: "2026-12-02", description: "Re-performance of a sample of DT-2 test cases with the chief developmental tester", kind: dt-e, live: false}
+    - {date: "2026-12-03", description: "REQ-11 standards registry review and REQ-12 Section 508 accessibility test (APR-001, APR-002)", kind: other, live: false}
+    - {date: "2026-12-07", description: "Privacy tests: ingest field filter, purge, re-identification of a sample export", kind: other, live: false}
+    - {date: "2026-12-11", description: "Out-brief to the PM, the ISSM and the AODR", kind: out-brief, live: false}
+penetration_test:
+  scope:
+    environment: ["EFRAS pre-production account built from the production templates, with synthetic data", "pilot squadron test accounts for the five roles", "ARSPO operators and the CSSP as defenders"]
+    attack_surface: ["web interface and API behind the access point", "report export service", "ingest endpoint for EMIS extracts", "sandbox notebook environment and its NAT egress"]
+    threat_sources: ["nation-state actor on NIPRNet (TS-01)", "authorized officer misusing access (TS-03)"]
+    objectives: ["read another squadron's or air wing's data", "export maintainer PII outside the system", "reach a public mirror or other destination from the sandbox"]
+    level_of_effort: "Two red team testers for five working days, the SCA observing, the CSSP defending"
+    rules_of_engagement: "Pre-production only; no denial of service or social engineering; the ISSO and the CSSP get source addresses and times beforehand; the ISSM may stop the test; critical findings reported within one working day"
+  components: [CMP-EDGE, CMP-WEB, CMP-API, CMP-REPORT, CMP-INGEST, CMP-SANDBOX]
+  assessor:
+    party: internal
+    qualified: true
+    name: "Component red team (fictional), independent of ARSPO"
+  guidance: NIST SP 800-115
+  environments: [test]
+privacy:
+  assessors: [PER-SCA]
+  controls: [pt-2, pt-3, ra-8, si-12, at-2, ac-1, ac-2, ac-3, ac-6, ac-17, at-3, au-2, au-6, au-9, au-11, ca-2, ca-3, ca-5, ca-7, cm-2, cm-3, cp-2, cp-9, ia-2, ia-5, ir-4, ir-6, ir-8, mp-6, pe-3, pl-2, pm-5, ps-3, ps-4, ra-3, sa-9, sa-11, sc-7, sc-8, sc-12, sc-28, si-4]
+  methodology:
+    identified_by: PER-PRIV
+    methods: [examine, interview, test]
+    metrics: "PII outside the SORN elements (zero); purges on time (every month); re-identifiable exports (zero after release 1.6); breach reports within one hour"
+  sources: [INT-146.A1, INT-127.A1, INT-142.A2]
+rules_of_engagement: "All testing in the pre-production account with synthetic data, built from the production templates; nothing against production, live data or networks beyond the access point path. Scans are authenticated with accounts the PM issues for the window. The ISSO and the CSSP are told source addresses and times before every scan and test; the ISSM can stop any test; a critical finding goes to the ISSM and the AODR within one working day. No denial of service, no social engineering, no data leaves the account."
+sources: [INT-147.A1, INT-147.A2, INT-147.A3, INT-147.A4, INT-147.A5, INT-148.A1, INT-151.A1, INT-151.A2, INT-151.A3, INT-142.A1, INT-143.A1, INT-143.A2, INT-144.A1, INT-144.A3, ART-SSP, product/test-results.md#top]

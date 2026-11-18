@@ -18,6 +18,7 @@ from rmf_tool.check.rules.content import (
     family_records,
     inconsequential,
 )
+from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
 from rmf_tool.run.model import RUN_FILE
 
@@ -301,4 +302,118 @@ def rar_courses(ctx: Context) -> list[RunFinding]:
         if not isinstance(r.get("selected_response"), dict):
             err(f"{r.get('id')} has no selected_response stating who is responsible and how "
                 "effectiveness is judged")
+    return out
+
+
+# --- XCON-001 and XCON-002: the SSP, the STIG results and the SAR agree ---------------------
+
+GAP_STATUSES = ("partial", "planned")
+CLEAN_STATUSES = ("implemented", "inherited")
+
+
+def _ssp_controls(ctx: Context) -> dict[str, dict[str, Any]]:
+    return {str(c.get("control_id")): c for _, c in family_records(ctx, SSP_DIR, "controls")}
+
+
+def ssp_sar_agree(ctx: Context) -> list[RunFinding]:
+    """XCON-001 (F-12-1): a control the SSP records as partial or planned, or with an open STIG
+    finding, is determined satisfied only with a `gap_closed` note saying what closed the gap."""
+    if not scope.produced_or_seeded(ctx.run, "ART-SAR"):
+        return []
+    ssp = _ssp_controls(ctx)
+    stig_open = {str(f.get("control_id")) for f in _items(ctx, STIG_FILE, "findings") or []
+                 if f.get("status") == "open" and f.get("control_id")}
+    out: list[RunFinding] = []
+    for rel, d in family_records(ctx, SAR_DIR, "determinations"):
+        cid = str(d.get("control_id"))
+        if d.get("result") != "satisfied" or str(d.get("gap_closed") or "").strip():
+            continue
+        status = (ssp.get(cid) or {}).get("status")
+        if status in GAP_STATUSES:
+            why = f"the SSP records it as {status}"
+        elif cid in stig_open:
+            why = "stig-summary.yaml has an open finding on it"
+        else:
+            continue
+        out.append(make("XCON-001", f"{cid} is determined satisfied, but {why}; say in "
+                        "gap_closed what closed the gap, or determine it other than satisfied",
+                        rel, None, {"A-3"}))
+    return out
+
+
+def stig_ssp_agree(ctx: Context) -> list[RunFinding]:
+    """XCON-002 (F-10-7): an open STIG finding mapped to a control the SSP calls implemented
+    or inherited is named in that control's statement, so the two records do not contradict
+    each other silently."""
+    findings = _items(ctx, STIG_FILE, "findings")
+    if not findings:
+        return []
+    ssp = _ssp_controls(ctx)
+    out: list[RunFinding] = []
+    for f in findings:
+        cid, fid = str(f.get("control_id") or ""), str(f.get("id"))
+        control = ssp.get(cid)
+        if f.get("status") != "open" or control is None:
+            continue
+        if control.get("status") in CLEAN_STATUSES and fid not in str(control.get("statement")):
+            out.append(make("XCON-002", f"{fid} is open on {cid}, which the SSP records as "
+                            f"{control.get('status')} without naming {fid}", STIG_FILE, None,
+                            {"I-1"}))
+    return out
+
+
+# --- NSS-001: one answer to "is this a national security system?" (F-03-4, F-04-5) ---------
+
+NSS_FILE = "artifacts/data/nss-assessments.yaml"
+PIA_FILE = "artifacts/data/pia.yaml"
+FACTS_FILE = "facts.yaml"
+
+
+def nss_agrees(ctx: Context) -> list[RunFinding]:
+    """NSS-001: the `nss` fact is the run's one answer; P-16's nss-assessments.yaml and the PIA's
+    NSS exclusion agree with it."""
+    node = facts_mod.get(ctx.facts, "nss")
+    if not isinstance(node, dict) or not isinstance(node.get("value"), bool):
+        return []
+    value = node["value"]
+    out: list[RunFinding] = []
+    record = ctx.data(NSS_FILE)
+    if isinstance(record, dict) and isinstance(record.get("nss"), bool) \
+            and record["nss"] is not value:
+        out.append(make("NSS-001", f"facts.yaml records nss {str(value).lower()}, and "
+                        f"nss-assessments.yaml records nss {str(record['nss']).lower()}",
+                        FACTS_FILE, None, {"C-1"}))
+    pia = ctx.data(PIA_FILE)
+    if isinstance(pia, dict) and pia.get("basis") == "nss" and not value:
+        out.append(make("NSS-001", "the PIA is excluded as an NSS, and facts.yaml records the "
+                        "system is no NSS", PIA_FILE, None, {"P-14"}))
+    return out
+
+
+# --- PRV-001: provider IDs resolve (F-04-1) -------------------------------------------------
+
+def provider_ids(ctx: Context) -> list[RunFinding]:
+    """PRV-001: each provider is registered once in org-context.yaml providers, and every
+    PRV-## a record names is registered."""
+    from rmf_tool.check import providers
+
+    data = ctx.data(providers.ORG_CONTEXT_FILE)
+    if not isinstance(data, dict):
+        return []  # no org context yet: OCTX-001 reports it
+    items = [p for p in (data.get("providers") or [])
+             if isinstance(p, dict)]
+    out: list[RunFinding] = []
+    seen: set[str] = set()
+    for p in items:
+        pid = str(p.get("id"))
+        if pid in seen:
+            out.append(make("PRV-001", f"{pid} is registered twice in providers",
+                            providers.ORG_CONTEXT_FILE))
+        seen.add(pid)
+    known = providers.registry(ctx)
+    for rel, field, item in providers.references(ctx):
+        value = item.get(field)
+        if isinstance(value, str) and providers.PROVIDER_ID.match(value) and value not in known:
+            out.append(make("PRV-001", f"{field} names {value}, which org-context.yaml providers "
+                            "does not register", rel))
     return out

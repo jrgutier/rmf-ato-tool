@@ -1038,17 +1038,13 @@
                 "type": "boolean"
               },
               "introduces": {
-                "title": "Vulnerabilities and predisposing conditions the connected or supporting system introduces",
+                "title": "Vulnerabilities and predisposing conditions the connected or supporting system introduces; empty only when the risk is very low or low and none_rationale says why",
                 "type": "array",
                 "items": {
                   "type": "string",
                   "pattern": "^(VUL|PC)-\\d{2,3}$"
                 },
-                "minItems": 1,
-                "uniqueItems": true,
-                "x-enforces": [
-                  "REQ-DODI5000.83-0212"
-                ]
+                "uniqueItems": true
               },
               "risk": {
                 "title": "Level of risk introduced by the connection",
@@ -1064,8 +1060,40 @@
               },
               "sources": {
                 "$ref": "#/$defs/sources"
+              },
+              "none_rationale": {
+                "title": "Why the entry introduces no vulnerability or predisposing condition; required when the list is empty",
+                "type": "string",
+                "minLength": 1
               }
-            }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "introduces": {
+                      "maxItems": 0
+                    }
+                  },
+                  "required": [
+                    "introduces"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "none_rationale"
+                  ],
+                  "properties": {
+                    "risk": {
+                      "enum": [
+                        "very-low",
+                        "low"
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
           }
         },
         "end_to_end_analysis": {
@@ -1276,17 +1304,13 @@
                 "uniqueItems": true
               },
               "vulnerabilities": {
-                "title": "Supply chain vulnerabilities and predisposing conditions, including those from disposition and from use of external providers",
+                "title": "Supply chain vulnerabilities and predisposing conditions, including those from disposition and from use of external providers; empty only when the risk is very low or low and none_rationale says why",
                 "type": "array",
                 "items": {
                   "type": "string",
                   "pattern": "^(VUL|PC)-\\d{2,3}$"
                 },
-                "minItems": 1,
-                "uniqueItems": true,
-                "x-enforces": [
-                  "REQ-SP800-37R2-0256"
-                ]
+                "uniqueItems": true
               },
               "risk": {
                 "title": "Level of supply chain risk",
@@ -1294,8 +1318,40 @@
               },
               "sources": {
                 "$ref": "#/$defs/sources"
+              },
+              "none_rationale": {
+                "title": "Why the entry introduces no vulnerability or predisposing condition; required when the list is empty",
+                "type": "string",
+                "minLength": 1
               }
-            }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "vulnerabilities": {
+                      "maxItems": 0
+                    }
+                  },
+                  "required": [
+                    "vulnerabilities"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "none_rationale"
+                  ],
+                  "properties": {
+                    "risk": {
+                      "enum": [
+                        "very-low",
+                        "low"
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
           }
         },
         "nonconforming": {
@@ -1827,16 +1883,26 @@
       "title": "The risk designated for the system, consistent with the most severe threat to any individual component or subcomponent, for consideration of requirements, acquisition and T&E (DoDI 8510.01 3.3.a(3), THREAT-001)",
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "sources"],
+      "required": [
+        "level",
+        "sources"
+      ],
       "properties": {
-        "level": {"$ref": "#/$defs/level"},
+        "level": {
+          "$ref": "#/$defs/level"
+        },
         "set_by": {
           "title": "The most severe threat to a component: a threat event, an external connection's component or a supply chain risk; required unless the level is designated above every rated threat, where the rationale states why",
           "type": "string",
           "minLength": 1
         },
-        "rationale": {"type": "string", "minLength": 1},
-        "sources": {"$ref": "#/$defs/sources"}
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        }
       }
     },
     "privacy": {

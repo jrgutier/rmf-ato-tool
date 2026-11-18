@@ -1,0 +1,18 @@
+rule: RUN-FM-001
+bases:
+- minimal
+description: a connection introduces nothing, yet its risk is moderate and no rationale says why
+mutations:
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: external.connections.0.introduces
+  value: []
+- op: set_field
+  file: artifacts/data/ra.yaml
+  path: external.connections.0.risk
+  value: moderate
+expect:
+  errors:
+  - RUN-FM-001
+  messages:
+  - none_rationale
