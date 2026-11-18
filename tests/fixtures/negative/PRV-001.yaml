@@ -1,0 +1,16 @@
+rule: PRV-001
+bases:
+- minimal
+description: a leveraged authorization names a provider ID that is not registered
+mutations:
+- op: set_field
+  file: artifacts/data/leveraged-authorizations.yaml
+  path: leveraged_authorizations.0.provider
+  value: PRV-99
+expect:
+  errors:
+  - PRV-001
+  also:
+  - OCTX-004
+  messages:
+  - provider names PRV-99, which org-context.yaml providers does not register

@@ -388,3 +388,32 @@ def nss_agrees(ctx: Context) -> list[RunFinding]:
         out.append(make("NSS-001", "the PIA is excluded as an NSS, and facts.yaml records the "
                         "system is no NSS", PIA_FILE, None, {"P-14"}))
     return out
+
+
+# --- PRV-001: provider IDs resolve (F-04-1) -------------------------------------------------
+
+def provider_ids(ctx: Context) -> list[RunFinding]:
+    """PRV-001: each provider is registered once in org-context.yaml providers, and every
+    PRV-## a record names is registered."""
+    from rmf_tool.check import providers
+
+    data = ctx.data(providers.ORG_CONTEXT_FILE)
+    if not isinstance(data, dict):
+        return []  # no org context yet: OCTX-001 reports it
+    items = [p for p in (data.get("providers") or [])
+             if isinstance(p, dict)]
+    out: list[RunFinding] = []
+    seen: set[str] = set()
+    for p in items:
+        pid = str(p.get("id"))
+        if pid in seen:
+            out.append(make("PRV-001", f"{pid} is registered twice in providers",
+                            providers.ORG_CONTEXT_FILE))
+        seen.add(pid)
+    known = providers.registry(ctx)
+    for rel, field, item in providers.references(ctx):
+        value = item.get(field)
+        if isinstance(value, str) and providers.PROVIDER_ID.match(value) and value not in known:
+            out.append(make("PRV-001", f"{field} names {value}, which org-context.yaml providers "
+                            "does not register", rel))
+    return out

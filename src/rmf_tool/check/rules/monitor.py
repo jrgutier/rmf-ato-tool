@@ -13,6 +13,7 @@ import datetime as dt
 from collections.abc import Callable
 from typing import Any
 
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
@@ -251,8 +252,9 @@ def inheritance(ctx: Context) -> list[RunFinding]:
     effect_of, today = ledger.effects(ctx.run), _as_of(ctx)
     allocation = ctx.data(ALLOCATION_FILE)  # S-3 writes it after C-1
     # a provider of hybrid controls supplies the common part of them (F-05-1)
-    providers = {a.get("provider") for a in _items(allocation, "allocations")
-                 if a.get("type") in ("common", "hybrid")}
+    pk = providers.keyer(ctx)
+    offering = {pk(a.get("provider")) for a in _items(allocation, "allocations")
+                if a.get("type") in ("common", "hybrid")}
     for r in _items(data, "leveraged_authorizations"):
         lid, arrangement = r.get("id"), r.get("arrangement")
         if ENTERPRISE in r:
@@ -261,9 +263,10 @@ def inheritance(ctx: Context) -> list[RunFinding]:
             err(f"{lid}: the record names no arrangement of the inheritance: "
                 f"{', '.join(ARRANGEMENTS)}")
         if arrangement == "common-control-provider" and allocation is not None \
-                and r.get("provider") not in providers:
+                and pk(r.get("provider")) not in offering:
             # S-3 wrote allocation.yaml after C-1, so the mismatch is charged to S-3
-            out.append(make("MLEV-001", f"{lid}: {r.get('provider')} provides no common or "
+            out.append(make("MLEV-001", f"{lid}: {providers.shown(ctx)(r.get('provider'))} "
+                            "provides no common or "
                             "hybrid control in allocation.yaml, so it is no approved common "
                             "control provider", ALLOCATION_FILE, None, {"S-3"}))
         if arrangement != "organizational-system":

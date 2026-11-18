@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 390 rules, 38 repo-scope and 352 run-scope. Authoritative;
+# Rule registry (plan §6.5): 391 rules, 38 repo-scope and 353 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -7186,3 +7186,13 @@ rules:
     summary: "nss-assessments.yaml or the PIA's NSS exclusion disagrees with the nss fact in facts.yaml"
     fixture: tests/fixtures/negative/NSS-001.yaml
     hint: "facts.yaml nss is the run's one answer (C-1, from P-16's determination); make nss-assessments.yaml and the PIA basis agree with it, or correct the fact with its statutory basis."
+  - id: PRV-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: P-2
+    summary: "a provider ID (PRV-##) is registered twice, or a record names one org-context.yaml providers does not register"
+    fixture: tests/fixtures/negative/PRV-001.yaml
+    hint: "Register each provider once in org-context.yaml providers (id PRV-##, name) and name it by that ID in external_entities, common_controls, leveraged authorizations, allocation, service agreements and the SSP's inherited_from."

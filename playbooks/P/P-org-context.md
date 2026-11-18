@@ -262,6 +262,13 @@ Purpose: Establish the organization's risk management strategy, including how it
      the evidence of trustworthiness and, for an actual one, that a senior leader accepted
      the ongoing risk, or the `response` when it is not acceptable. C-1 adds the provider of
      each leveraged authorization.
+   - `providers`: register each provider the system relies on (common control providers,
+     cloud and enterprise services, the CSSP, the software factory) once, as
+     `{id: PRV-##, name, kind}`, and give an external entity that is one of them
+     `provider: PRV-##`. Every later record (P-5 `common_controls.provided_by`, C-1
+     leveraged authorizations, S-3 allocation, S-4 service agreements and `inherited_from`)
+     names the provider by this ID, never by a name typed again (PRV-001). A later task that
+     finds a new provider adds it here with the next number.
 6. **Write the C-SCRM part.** Rewrite `artifacts/data/scrm-org.yaml` whole with the C-SCRM `frame` of SP 800-161 Tasks 1-1
    to 1-4 (OT suppliers in scope; threat, vulnerability, impact and likelihood assumptions
    each refined at P-14; which threat source kinds are addressed; appetite set at level-1 and

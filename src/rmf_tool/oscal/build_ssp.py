@@ -180,9 +180,17 @@ def build_ssp(run: Run) -> str:
                               "title": name, "description": description,
                               "status": {"state": state}})
 
+    org = run.path("artifacts/data/org-context.yaml")
+    registered = {}  # PRV-## -> name: an OSCAL party carries the provider's name (F-04-1)
+    if org.is_file():
+        data = run.data("artifacts/data/org-context.yaml")
+        registered = {str(p["id"]): str(p.get("name") or p["id"])
+                      for p in (data.get("providers") or [] if isinstance(data, dict) else [])
+                      if isinstance(p, dict) and "id" in p}
     for la in (leveraged or {}).get("leveraged_authorizations", []):
         parties.append({"uuid": uuid_for(sid, "ssp", f"party/{la['id']}"),
-                        "type": "organization", "name": la["provider"]})
+                        "type": "organization",
+                        "name": registered.get(la["provider"], la["provider"])})
 
     def user(u: dict[str, Any]) -> dict[str, Any]:
         out: dict[str, Any] = {
@@ -235,7 +243,10 @@ def build_ssp(run: Run) -> str:
         state = s["status"] if s["status"] in IMPLEMENTATION_STATES else "implemented"
         remarks = s.get("rationale")
         if s["status"] == "inherited":
-            remarks = f"Inherited from {s.get('inherited_from', 'a common control provider')}." \
+            source = s.get("inherited_from", "a common control provider")
+            if source in registered:
+                source = f"{registered[source]} ({source})"
+            remarks = f"Inherited from {source}." \
                       + (f" {remarks}" if remarks else "")
         out: dict[str, Any] = {
             "uuid": uuid_for(sid, "ssp", f"requirement/{ctl}"), "control-id": ctl,

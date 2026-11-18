@@ -6,7 +6,7 @@ controls:
     statement: "Hybrid with the Example Enterprise Cloud Access Point, the managed interface between NIPRNet and the cloud, which inspects and filters every session to EFRAS and keeps the traffic logs for the CSSP. EFRAS's part: (a) ingress only from the access point to CMP-EDGE on 443, where the WAF rules apply; no node has a public address; the edge, application and data subnet tiers are separated by security groups (edge to application on 443, application to data on the database port and storage endpoints only), the key internal managed interfaces; egress leaves through the NAT gateway to an allow-list, and everything else is denied and logged in CMP-LOGS. (b) CMP-EDGE, the only component users reach, sits alone in the edge subnet, logically separated from the application and data tiers. (c) EFRAS connects to EMIS, the supply service, the identity broker, the CSSP collector and the factory registry only through these managed interfaces. CMP-SANDBOX has its own security group and reads only the training extract; PT-3's allow-list wildcard was removed on 2026-11-03 and the red team's retest is pending before A-3. The program tells the access point before opening any new port."
     responsible_roles: [PER-ISSE, PER-DEV, PER-CCP]
     components: [CMP-EDGE, CMP-K8S, CMP-SANDBOX]
-    inherited_from: "Example Enterprise Cloud Access Point"
+    inherited_from: PRV-02
     inherited_risks: "A misrule at the access point would block or expose the EFRAS edge; the program's WAF and security groups remain as a second layer."
     parameters:
       sc-07_odp: "logically"

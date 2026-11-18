@@ -333,11 +333,20 @@
             "title": "The appointee's training and, in a cyberspace work role, qualification under the DoD cyberspace workforce policy (DoDD 8140.01), and who verified them (WFQ-001)",
             "type": "object",
             "additionalProperties": false,
-            "required": ["status", "training", "verified_by"],
+            "required": [
+              "status",
+              "training",
+              "verified_by"
+            ],
             "properties": {
               "status": {
                 "title": "Whether the appointee meets the qualification standard of the cyberspace workforce policy for the role",
-                "enum": ["met", "pending", "not-met", "not-a-work-role"]
+                "enum": [
+                  "met",
+                  "pending",
+                  "not-met",
+                  "not-a-work-role"
+                ]
               },
               "standard": {
                 "title": "The qualification standard met or pursued (DoDM 8140.03 for the DCWF work role, or a Component standard)",
@@ -355,23 +364,43 @@
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["course"],
+                  "required": [
+                    "course"
+                  ],
                   "properties": {
-                    "course": {"type": "string", "minLength": 1},
-                    "completed": {"type": "string", "format": "date"}
+                    "course": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "completed": {
+                      "type": "string",
+                      "format": "date"
+                    }
                   }
                 }
               },
               "certifications": {
                 "title": "Professional certifications the appointee holds",
                 "type": "array",
-                "items": {"type": "string", "minLength": 1}
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
               },
               "verified_by": {
                 "title": "The official who verified the training and qualification",
                 "anyOf": [
-                  {"type": "string", "pattern": "^PER-[A-Z]+$"},
-                  {"enum": ["head-of-agency", "dod-component-head", "saorm"]}
+                  {
+                    "type": "string",
+                    "pattern": "^PER-[A-Z]+$"
+                  },
+                  {
+                    "enum": [
+                      "head-of-agency",
+                      "dod-component-head",
+                      "saorm"
+                    ]
+                  }
                 ]
               }
             }
@@ -1673,6 +1702,11 @@
             "items": {
               "$ref": "#/$defs/source"
             }
+          },
+          "provider": {
+            "title": "The registered provider (PRV-##) this entity is, when the system relies on it",
+            "type": "string",
+            "pattern": "^PRV-\\d{2,3}$"
           }
         },
         "required": [
@@ -1693,7 +1727,7 @@
         "additionalProperties": false,
         "properties": {
           "provided_by": {
-            "title": "The common control provider, as the SSP's inherited_from names it",
+            "title": "The common control provider: its PRV-## ID from providers (a name still resolves to a registered provider)",
             "type": "string",
             "minLength": 1
           },
@@ -2950,9 +2984,16 @@
       "title": "The check, at P-2, of each governing reference for a later edition: the edition the run uses, any later edition found, and whether it is adopted (RCUR-001)",
       "type": "object",
       "additionalProperties": false,
-      "required": ["checked", "references", "sources"],
+      "required": [
+        "checked",
+        "references",
+        "sources"
+      ],
       "properties": {
-        "checked": {"type": "string", "format": "date"},
+        "checked": {
+          "type": "string",
+          "format": "date"
+        },
         "references": {
           "title": "Governing references checked for a later edition: the CNSS issuances whose future updates apply, SP 800-53 (the most current version, FIPS 200) and DoDI 8510.01 (the most up-to-date DoD intent)",
           "type": "array",
@@ -2960,31 +3001,71 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["ref", "edition_used", "later_edition", "sources"],
+            "required": [
+              "ref",
+              "edition_used",
+              "later_edition",
+              "sources"
+            ],
             "properties": {
-              "ref": {"title": "Reference ID in references/index.yaml", "type": "string", "pattern": "^[A-Z][A-Z0-9.-]+$"},
-              "edition_used": {"title": "The edition the run applies", "type": "string", "minLength": 1},
+              "ref": {
+                "title": "Reference ID in references/index.yaml",
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9.-]+$"
+              },
+              "edition_used": {
+                "title": "The edition the run applies",
+                "type": "string",
+                "minLength": 1
+              },
               "later_edition": {
                 "title": "A later edition found by the check, or null when none is published",
                 "oneOf": [
-                  {"type": "null"},
+                  {
+                    "type": "null"
+                  },
                   {
                     "type": "object",
                     "additionalProperties": false,
-                    "required": ["edition", "published", "adopted"],
+                    "required": [
+                      "edition",
+                      "published",
+                      "adopted"
+                    ],
                     "properties": {
-                      "edition": {"type": "string", "minLength": 1},
-                      "published": {"type": "string", "format": "date"},
-                      "adopted": {"title": "Whether the run applies the later edition", "type": "boolean"}
+                      "edition": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "published": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "adopted": {
+                        "title": "Whether the run applies the later edition",
+                        "type": "boolean"
+                      }
                     }
                   }
                 ]
               },
-              "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+              "sources": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/source"
+                }
+              }
             }
           }
         },
-        "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
       }
     },
     "obtained_overlays": {
@@ -3095,6 +3176,46 @@
           "sources": {
             "type": "array",
             "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
+    "providers": {
+      "title": "Providers the organization and the system rely on (common control providers, leveraged services, CSSPs), each registered once with a stable ID that every other record names (P-2, extended by P-5)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^PRV-\\d{2,3}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "title": "What the provider is to the system",
+            "enum": [
+              "common-control-provider",
+              "cloud-service-provider",
+              "enterprise-service",
+              "cssp",
+              "software-factory",
+              "organizational-system",
+              "other"
+            ]
+          },
+          "sources": {
+            "type": "array",
             "items": {
               "$ref": "#/$defs/source"
             }

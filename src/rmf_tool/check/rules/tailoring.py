@@ -14,6 +14,7 @@ from typing import Any
 
 from rmf_tool import baseline as baseline_mod
 from rmf_tool import catalog
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import SSP_DIR, family_records
@@ -666,7 +667,9 @@ def referenced(ctx: Context) -> list[RunFinding]:
     data = ctx.data(ALLOCATION_FILE)
     if not isinstance(data, dict) or not (_active(ctx, "S-3") and _active(ctx, "S-4")):
         return []
-    common = {str(a.get("control_id")): a.get("provider") for a in data.get("allocations") or []
+    show = providers.shown(ctx)
+    common = {str(a.get("control_id")): show(a.get("provider"))
+              for a in data.get("allocations") or []
               if isinstance(a, dict) and a.get("type") == "common"}
     out: list[RunFinding] = []
     for rel, item in family_records(ctx, SSP_DIR, "controls"):
@@ -691,12 +694,14 @@ def inheritance(ctx: Context) -> list[RunFinding]:
         out.append(make("TLR-010", message, ALLOCATION_FILE, None, {"S-3"}))
 
     allocations = [a for a in data.get("allocations") or [] if isinstance(a, dict)]
-    providers = {str(p.get("provider")): p for p in data.get("providers") or []
-                 if isinstance(p, dict)}
-    named = sorted({str(a["provider"]) for a in allocations
+    pk, show = providers.keyer(ctx), providers.shown(ctx)
+    records = {pk(p.get("provider")): p for p in data.get("providers") or []
+               if isinstance(p, dict)}
+    named = sorted({str(pk(a["provider"])) for a in allocations
                     if a.get("type") in ("common", "hybrid") and a.get("provider")})
-    for name in named:
-        record = providers.get(name)
+    for key in named:
+        name = show(key)
+        record = records.get(key)
         if record is None:
             err(f"controls are inherited from {name}, and no determination records that its "
                 "common controls protect the system commensurate with risk")
@@ -709,7 +714,7 @@ def inheritance(ctx: Context) -> list[RunFinding]:
                 f"({', '.join(AUTHORIZING)}); system owners and authorizing officials "
                 "determine if the common controls provide protection commensurate with risk")
         common = sorted(str(a.get("control_id")) for a in allocations
-                        if a.get("provider") == name and a.get("type") == "common")
+                        if pk(a.get("provider")) == key and a.get("type") == "common")
         if det.get("commensurate") is not True and common:
             err(f"{', '.join(common)} is inherited whole from {name}, whose common controls "
                 "are not determined to provide protection commensurate with risk")
