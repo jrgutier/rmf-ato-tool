@@ -52,6 +52,13 @@ class GitRepo:
         return self.git("rev-parse", "HEAD")
 
 
+@pytest.fixture(autouse=True)
+def _no_oscal_cli(monkeypatch: pytest.MonkeyPatch) -> None:
+    """OSCAL-003 is optional and machine-dependent: tests run without an installed oscal-cli
+    unless a test names its own (tests/unit/test_oscal_cli.py)."""
+    monkeypatch.setenv("RMF_OSCAL_CLI", "off")
+
+
 @pytest.fixture
 def git_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> GitRepo:
     """An empty git repo isolated from the user's global/system git config."""

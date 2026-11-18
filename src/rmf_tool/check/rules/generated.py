@@ -1,14 +1,17 @@
-"""Generated-output rules: GEN-STALE-001, BSEL-001, BSEL-002, HYB-002, OSCAL-001, OSCAL-002."""
+"""Generated-output rules: GEN-STALE-001, BSEL-001, BSEL-002, HYB-002, OSCAL-001, OSCAL-002,
+OSCAL-003."""
 
 from __future__ import annotations
 
 import json
+import os
 from typing import Any
 
 from rmf_tool import assemble, build, package
 from rmf_tool import baseline as baseline_mod
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
+from rmf_tool.oscal import oscal_cli
 from rmf_tool.oscal import validate as oscal_validate
 from rmf_tool.run.assumptions import REPORT_FILE
 from rmf_tool.run.model import BASELINE_FILE, MANIFEST_FILE
@@ -132,3 +135,16 @@ def oscal_schema(ctx: Context) -> list[RunFinding]:
 
 def oscal_trestle(ctx: Context) -> list[RunFinding]:
     return [make("OSCAL-002", msg, rel) for rel, msg in oscal_validate.trestle_problems(ctx.run)]
+
+
+def oscal_cli_constraints(ctx: Context) -> list[RunFinding]:
+    """OSCAL-003 runs only when ``RMF_OSCAL_CLI`` opts in (``oscal.oscal_cli``); an opt-in that
+    names no executable is reported rather than passed over."""
+    if not os.environ.get(oscal_cli.ENV, "").strip():
+        return []
+    found = oscal_cli.locate(path_lookup=False)
+    if found.path is None:
+        return [] if os.environ[oscal_cli.ENV].strip().lower() == oscal_cli.OFF else [
+            make("OSCAL-003", found.note, run_wide=True)]
+    return [make("OSCAL-003", msg, rel)
+            for rel, msg in oscal_validate.oscal_cli_problems(found.path, ctx.run)]

@@ -4,6 +4,7 @@
 #   scripts/bootstrap.sh              base tools + venv (no AGPL, no OCR)
 #   EXTRACT=1 scripts/bootstrap.sh    also the [extract] extra (PyMuPDF, AGPL; see NOTICE)
 #   OCR=1 scripts/bootstrap.sh        also ocrmypdf + tesseract
+#   OSCAL_CLI=1 scripts/bootstrap.sh  also NIST oscal-cli into .tools/ (OSCAL-003; needs Java 11+)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -82,6 +83,24 @@ if [ -n "${CI:-}" ]; then
 fi
 log "uv sync ${sync_args[*]}"
 uv sync "${sync_args[@]}"
+
+# NIST oscal-cli for OSCAL-003, pinned by version and SHA-256 (Maven Central). Optional.
+OSCAL_CLI_VERSION=3.2.0
+OSCAL_CLI_SHA256=e001b353ee245da6f4ff0ad930c4dfaa88083c63243ca004bd5f5bcef44e8ec8
+if [ "${OSCAL_CLI:-0}" = "1" ] && [ ! -x .tools/oscal-cli/bin/oscal-cli ]; then
+  if ! have java; then
+    echo "OSCAL_CLI=1 needs Java 11 or later on PATH" >&2
+    exit 2
+  fi
+  zip="oscal-cli-enhanced-${OSCAL_CLI_VERSION}-oscal-cli.zip"
+  url="https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/${OSCAL_CLI_VERSION}/${zip}"
+  log "oscal-cli ${OSCAL_CLI_VERSION} into .tools/oscal-cli"
+  mkdir -p .tools
+  curl -fsSL -o ".tools/${zip}" "$url"
+  echo "${OSCAL_CLI_SHA256}  .tools/${zip}" | sha256sum -c - >/dev/null 2>&1 \
+    || shasum -a 256 -c <<<"${OSCAL_CLI_SHA256}  .tools/${zip}" >/dev/null
+  rm -rf .tools/oscal-cli && unzip -q ".tools/${zip}" -d .tools/oscal-cli && rm ".tools/${zip}"
+fi
 
 log "rmf doctor"
 uv run rmf doctor

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 387 rules, 38 repo-scope and 349 run-scope. Authoritative;
+# Rule registry (plan §6.5): 388 rules, 38 repo-scope and 350 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1833,6 +1833,15 @@ rules:
     summary: compliance-trestle 5.2.0 model load failure
     fixture: tests/fixtures/negative/OSCAL-002.yaml
     hint: Fix the source YAML and run `rmf build`.
+  - id: OSCAL-003
+    scope: run
+    severity: W
+    ac: [AC-17]
+    phase: p6
+    applies_after: null
+    summary: "NIST oscal-cli Metaschema constraint failure (allowed values, key references, uniqueness, cardinality); optional: `rmf oscal validate` runs it when oscal-cli is installed, `rmf check` only when RMF_OSCAL_CLI is set"
+    fixture: tests/unit/test_oscal_cli.py::test_oscal_003_reports_constraint_failures
+    hint: Fix the source YAML or the builder that maps it and run `rmf build`; never edit OSCAL JSON (INV-2).
   - id: JOURNAL-001
     scope: run
     severity: E

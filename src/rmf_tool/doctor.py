@@ -42,6 +42,17 @@ def _module(name: str, hint: str) -> Check:
     return Check(name, found, False, "installed" if found else f"not installed ({hint})")
 
 
+def _oscal_cli(root: Path) -> Check:
+    """OSCAL-003's validator, optional; found as ``rmf oscal validate`` finds it."""
+    from rmf_tool.oscal import oscal_cli
+
+    found = oscal_cli.locate(root=root)
+    if found.path is None:
+        return Check(oscal_cli.EXECUTABLE, False, False,
+                     f"{found.note} (optional: OSCAL_CLI=1 make bootstrap, needs Java 11+)")
+    return Check(oscal_cli.EXECUTABLE, True, False, found.path)
+
+
 def run_checks(root: Path) -> list[Check]:
     py = sys.version_info
     checks = [
@@ -72,5 +83,6 @@ def run_checks(root: Path) -> list[Check]:
         _module("pdfplumber", "optional; EXTRACT=1 make bootstrap"),
         _tool("ocrmypdf", False, "optional; OCR=1 make bootstrap", ("--version",)),
         _tool("tesseract", False, "optional; OCR=1 make bootstrap", ("--version",)),
+        _oscal_cli(root),
     ]
     return checks
