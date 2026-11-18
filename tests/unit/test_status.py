@@ -119,12 +119,17 @@ def test_include_after_stop(minimal_run):
 
 
 def test_check_without_options_follows_progress(minimal_run):
-    """Before S-4 is done, the progress-gated check hides S-4-owned and later findings."""
+    """Before S-4 is done, the progress-gated check shows the next task's findings (S-4 is
+    being worked, F-05-3) and counts the later ones it hides."""
     (minimal_run / "artifacts/ssp/controls/si.yaml").unlink()
     run = open_run(minimal_run, REPO_ROOT)
     ev = engine.evaluate(run)
     assert ev.status.next == "S-4"
-    assert "SSP-COV-001" not in {f.rule for f in engine.select(run, ev)}
-    assert "SSP-COV-001" in {f.rule for f in engine.select(run, ev, final=True)}
+    shown = engine.select(run, ev)
+    assert "SSP-COV-001" in {f.rule for f in shown}
+    final = engine.select(run, ev, final=True)
+    assert "SSP-COV-001" in {f.rule for f in final}
+    assert engine.hidden_errors(run, ev, shown) == (
+        sum(f.severity == "E" for f in final) - sum(f.severity == "E" for f in shown))
     assert {f.rule for f in engine.select(run, ev, family="si", final=True)} == {"SSP-COV-001"}
     assert engine.select(run, ev, rules=["TRACE-001"], final=True) == []

@@ -10,6 +10,7 @@ the others in a comment; optional fields are listed by ``show``.
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -100,6 +101,58 @@ def outline(schema: Mapping[str, Any]) -> list[str]:
     return lines
 
 
+def _sample(pattern: str) -> str | None:
+    """A shortest string matching `pattern`, from its parse tree; None when unsure."""
+    try:
+        from re import _parser as parser  # type: ignore[attr-defined]
+    except ImportError:  # pragma: no cover - Python < 3.11
+        import sre_parse as parser  # type: ignore[no-redef]
+    category = {"CATEGORY_DIGIT": "0", "CATEGORY_WORD": "a", "CATEGORY_SPACE": " ",
+                "CATEGORY_NOT_SPACE": "a", "CATEGORY_NOT_DIGIT": "a"}
+
+    def gen(items: Any) -> str:
+        out = []
+        for op, arg in items:
+            name = str(op)
+            if name == "LITERAL":
+                out.append(chr(arg))
+            elif name == "ANY":
+                out.append("a")
+            elif name == "IN":
+                first = arg[0]
+                kind = str(first[0])
+                if kind == "NEGATE":
+                    out.append("a")
+                elif kind == "RANGE":
+                    out.append(chr(first[1][0]))
+                elif kind == "LITERAL":
+                    out.append(chr(first[1]))
+                elif kind == "CATEGORY":
+                    out.append(category.get(str(first[1]), "a"))
+                else:
+                    raise ValueError(kind)
+            elif name in ("MAX_REPEAT", "MIN_REPEAT", "POSSESSIVE_REPEAT"):
+                low, _, sub = arg
+                out.append(gen(sub) * max(low, 0))
+            elif name == "SUBPATTERN":
+                out.append(gen(arg[-1]))
+            elif name == "BRANCH":
+                out.append(gen(arg[1][0]))
+            elif name == "AT":
+                continue
+            elif name == "CATEGORY":
+                out.append(category.get(str(arg), "a"))
+            else:
+                raise ValueError(name)
+        return "".join(out)
+
+    try:
+        value = gen(parser.parse(pattern))
+    except (ValueError, TypeError, IndexError, re.error):
+        return None
+    return value if value and re.search(pattern, value) else None
+
+
 def _fill(node: Mapping[str, Any], key: str) -> str:
     label = str(node.get("title") or key)
     if node.get("pattern"):
@@ -121,13 +174,27 @@ def skeleton(schema: Mapping[str, Any]) -> str:
         kind = node.get("type")
         if kind == "boolean":
             return "false", ""
+        if isinstance(kind, list):
+            kind = next((k for k in kind if k != "null"), None)
         if kind in ("integer", "number"):
             return str(node.get("minimum", 0)), ""
+        if node.get("format") == "date":
+            return "2026-01-01", f"  # <<FILL: {node.get('title') or key}>>"
+        if node.get("pattern"):
+            sample = _sample(str(node["pattern"]))
+            if sample is not None:
+                label = str(node.get("title") or key)
+                return json.dumps(sample), f"  # <<FILL: {label}>>"
         return _fill(node, key), ""
 
     def emit(node: Mapping[str, Any], indent: str, depth: int, first: str = "") -> None:
         node = _resolve(node, schema)
         required = list(node.get("required") or ())
+        # an if/else whose `if` needs a field the skeleton leaves out takes the else branch
+        for cond in [node, *(node.get("allOf") or [])]:
+            if "if" in cond and set(cond["if"].get("required") or ()) - set(required):
+                required += [r for r in (cond.get("else") or {}).get("required") or ()
+                             if r not in required]
         props = node.get("properties") or {}
         if first and not any(k in props for k in required):
             out.append(f"{first}{{}}")

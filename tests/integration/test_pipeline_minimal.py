@@ -54,7 +54,7 @@ def test_check_json_and_task_mode(minimal_run, monkeypatch):
         "GEN-STALE-001", "RUN-ART-001", "AODM-001"}
     task = runner.invoke(app, ["check", str(minimal_run), "--task", "S-4"])
     assert task.exit_code == 1 and "error RUN-ART-001" not in task.output  # gated at R-1
-    assert "note: S-4 is not done yet: ART-CP missing" in task.output
+    assert "note: S-4 is not done yet: Contingency plan (ART-CP) missing" in task.output
     assert runner.invoke(app, ["check", str(minimal_run), "--task", "Q-1"]).exit_code == 2
     assert runner.invoke(app, ["check", str(minimal_run), "--rules", "NOPE-001"]).exit_code == 2
     assert runner.invoke(app, ["check", str(minimal_run), "--final", "--task", "S-4"]
