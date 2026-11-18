@@ -131,7 +131,7 @@ def _processes_pii(run: Run) -> bool:
 def _quiet_owed(run: Run, task: str) -> list[tuple[str, str]]:
     out = []
     for t, rule, rel, key, what in QUIET_OWED:
-        if t != task or not _processes_pii(run):
+        if t != task or not run.holds("0.2.0") or not _processes_pii(run):
             continue
         try:
             data = run.data(rel) if run.path(rel).is_file() else None

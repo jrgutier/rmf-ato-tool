@@ -394,9 +394,12 @@ def poam_sources(ctx: Context) -> list[RunFinding]:
     if first is not None and _block(data, "ao_review").get("by") not in AO_OR_DR:
         err_r4("the plan of action and milestones is not reviewed by the authorizing official")
     # an AO review is recorded at R-3 or R-4, never by A-6 ahead of the work it rests on
-    # (F-14-8): R-3 is reached once every task before it has written its outputs
+    # (F-14-8): R-3 is reached once every task before it has written its outputs; a ledger
+    # that already holds a record past A-2's IATT shows the risk response was made
     reviewed = _day(_block(data, "ao_review").get("reviewed"))
-    if reviewed and "R-3" in ctx.run.tasks and not status.reached(ctx.run, "R-3"):
+    decided = any(r.get("task") not in (None, "A-2") for r in ctx.ledger or ())
+    if (reviewed and not decided and "R-3" in ctx.run.tasks
+            and not status.reached(ctx.run, "R-3")):
         err(f"the AO review of the POA&M on {reviewed} is recorded before the risk response "
             "(R-3) is reached: R-3 or R-4 records it")
     out += _approvals_reconciled(ctx, items)

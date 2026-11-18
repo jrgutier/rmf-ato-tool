@@ -177,6 +177,12 @@ def test_provider_evidence_may_still_be_requested_before_the_report(tmp_path):
     assert [f for f in errors(run_dir) if f.rule == "ASMT-004"]
     edit_yaml(run_dir / "run.yaml", lambda d: d.update(
         lifecycle_stop="A-3", lifecycle_stop_rationale="The report is not written yet."))
+    # nor has A-4 or R-2 written anything yet (F-11-4)
+    for name, old, new in (("ART-SAR", "[A-3, A-4, A-5]", "[A-3]"),
+                           ("ART-RA", "[P-14, C-3, R-2]", "[P-14, C-3]")):
+        doc = run_dir / f"artifacts/{name}.md"
+        doc.write_text(doc.read_text().replace(f"touched_by: {old}", f"touched_by: {new}"))
+    (run_dir / "artifacts/ART-RAR.md").unlink()
     assert [f for f in errors(run_dir) if f.rule == "ASMT-004"] == []
 
 

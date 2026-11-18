@@ -106,7 +106,8 @@ def test_only_a_conditional_record_is_an_optional_data_file():
     framework = load(REPO_ROOT / "framework", REPO_ROOT).framework
     optional = {(e.id, d["path"]) for e in framework.index("artifacts").values()
                 for d in e.data.get("data") or () if d.get("optional")}
-    assert optional == {("ART-AODM", "artifacts/data/cato.yaml")}
+    assert optional == {("ART-AODM", "artifacts/data/cato.yaml"),
+                        ("ART-RA", "artifacts/data/st-protection.yaml")}
     assert all(d.get("since") for e in framework.index("artifacts").values()
                for d in e.data.get("data") or () if d.get("optional"))
 

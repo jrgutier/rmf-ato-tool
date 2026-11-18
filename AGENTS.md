@@ -74,7 +74,7 @@ error. Commands that report support `--format json`.
 | Command | What it does |
 |---|---|
 | `rmf --version` | print the tool version |
-| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, qpdf, LFS hooks); report optional extract/OCR tools and oscal-cli |
+| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, LFS hooks); report qpdf (refs fetch and import only), optional extract/OCR tools and oscal-cli |
 | `rmf ci [--profile P] [--slow] [--release] [--no-tests]` | fast lane (ruff, pytest with coverage >= 85%) plus every check of the profile's phases; `--no-tests` leaves out pytest; only `--release` repeats the suite in a fork clone (marker `release`) |
 | `rmf lessons check` | LES-002 (LESSONS.md format, IDs, dates, append-only vs `resolve_base()`), LES-003 (no `pending`) |
 | `rmf refs fetch [--id ID] [--accept-new --note TEXT]` | download `acquisition: auto` references (ranged-GET probe, allowed domains on every redirect hop, `%PDF-` + `qpdf --check`), pin SHA-256; a changed upstream is reported and kept unless `--accept-new` |

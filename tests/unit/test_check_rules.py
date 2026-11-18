@@ -520,6 +520,10 @@ def test_an_ao_review_of_the_poam_waits_for_the_risk_response(tmp_path):
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
     ra = run_dir / "artifacts/ART-RA.md"
     ra.write_text(ra.read_text().replace("touched_by: [P-14, C-3, R-2]", "touched_by: [P-14, C-3]"))
+    # only A-2's IATT on the ledger: no risk response is recorded yet
+    edit_yaml(run_dir / "artifacts/data/authorizations.yaml",
+              lambda d: d.update({"records": [r for r in d.get("records") or ()
+                                              if r.get("task") == "A-2"]}))
     run = open_run(run_dir, REPO_ROOT)
     found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MPOA-001"]
     assert any("is recorded before the risk response (R-3) is reached" in m for m in found)
