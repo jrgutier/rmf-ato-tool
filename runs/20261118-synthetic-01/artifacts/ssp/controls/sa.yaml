@@ -1,0 +1,32 @@
+# artifacts/ssp/controls/sa.yaml (S-4; schema ssp-controls). Written whole.
+family: sa
+controls:
+  - control_id: sa-9
+    status: implemented
+    statement: "EFRAS uses five external services: the Example GovCloud IL4 region (enterprise cloud contract and EFRAS task order), the Example Enterprise Cloud Access Point and the Example Software Factory (service-level agreements), the Example Cybersecurity Service Provider (support agreement) and the enterprise identity broker (onboarding approval). (a) Each instrument requires the provider to keep its authorization and the controls it authorized, to meet the Component's security and privacy requirements and to report a significant change or a breach; the controls each provider carries are listed per agreement in artifacts/data/service-agreements.yaml. (b) Oversight and user roles are defined in each agreement: the ISSM owns oversight, the ISSO is the day-to-day contact and the product manager signs. (c) The ISSM monitors compliance through the cloud provider's monthly continuous monitoring deliverables on the Component portal, the CSSP's tickets and monthly report, the software factory's release notes and POA&M items, and an annual review of each agreement and of each provider's authorization status."
+    responsible_roles: [PER-ISSM, PER-ISSO, PER-PM]
+    components: [this-system]
+    parameters:
+      sa-09_odp.01: "the controls each provider's authorization covers for EFRAS, as listed per agreement in artifacts/data/service-agreements.yaml"
+      sa-09_odp.02: "review of the cloud provider's monthly continuous monitoring deliverables, the CSSP's tickets and monthly report and the software factory's POA&M items; annual review of each agreement and each provider's authorization status"
+    artifact_locations:
+      - "ART-SVCA and artifacts/data/service-agreements.yaml"
+      - "artifacts/data/leveraged-authorizations.yaml (package reviews)"
+    assurance:
+      addressed: "The agreements, the providers' monthly deliverables and the ISSM's annual review record are the evidence; the assessor examines them against the controls listed per agreement."
+      status: satisfied
+    sources: [INT-110.A1, INT-060.A1, INT-084.A2, product/architecture.md#leveraged]
+  - control_id: sa-11
+    status: partial
+    statement: "Partial. Hybrid with the Example Software Factory, which runs the static, dependency, image and dynamic scans and signs images; ERST owns its code, tests and fixes. In place: (a) ERST's test and evaluation plan is in the repository; (b) unit and integration tests run on every pipeline build and system and regression tests in each developmental test event before a release (DT-2 covered all five roles, squadron scoping, session timeout, inactivity disable, export audit, ingest tamper rejection and restore); (c) the pipeline keeps the evidence of each build and each DT event has a report; (d) each flaw becomes a ticket with severity and due date, is fixed through the pipeline and closes only on a passing retest (PT-1 fixed in 1.5.1 and retested 2026-11-10). Missing: (e) the two high findings in the CMP-REPORT image are not yet corrected (release 1.5.2, 2026-12-10), and the PT-3 retest is pending; no test has verified REQ-11 (DoD IT Standards Registry) or REQ-12 (Section 508), which S-3 traced here as developer verification. Plan: 1.5.2 by 2026-12-10, PT-3 retest before A-3, and a standards and accessibility test in the next DT event before the ATO decision."
+    responsible_roles: [PER-DEV, PER-ISSE]
+    components: [CMP-WEB, CMP-API, CMP-INGEST, CMP-FORECAST, CMP-REPORT]
+    inherited_from: "Example Software Factory"
+    parameters:
+      sa-11_odp.01: "unit; integration; system; regression"
+      sa-11_odp.02: "every pipeline build (unit, integration and scans), and each developmental test event before a release (system and regression)"
+      sa-11_odp.03: "all API role checks and scoping paths, every user role, the ingest and export paths, and static, dependency, image and authenticated dynamic scans of every image"
+    assurance:
+      addressed: "Pipeline records, the DT-2 report, the penetration test report and the flaw tickets are the evidence; the assessor reuses them per DoDI 8510.01."
+      status: planned
+    sources: [INT-111.A1, INT-071.A3, INT-084.A4, product/test-results.md#pipeline-1-5, product/test-results.md#dt-2, product/test-results.md#pentest]

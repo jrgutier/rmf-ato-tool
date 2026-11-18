@@ -1,0 +1,40 @@
+# artifacts/ssp/controls/sc.yaml (S-4; schema ssp-controls). Written whole.
+family: sc
+controls:
+  - control_id: sc-7
+    status: implemented
+    statement: "Hybrid with the Example Enterprise Cloud Access Point, the managed interface between NIPRNet and the cloud, which inspects and filters every session to EFRAS and keeps the traffic logs for the CSSP. EFRAS's part: (a) ingress only from the access point to CMP-EDGE on 443, where the WAF rules apply; no node has a public address; the edge, application and data subnet tiers are separated by security groups (edge to application on 443, application to data on the database port and storage endpoints only), the key internal managed interfaces; egress leaves through the NAT gateway to an allow-list, and everything else is denied and logged in CMP-LOGS. (b) CMP-EDGE, the only component users reach, sits alone in the edge subnet, logically separated from the application and data tiers. (c) EFRAS connects to EMIS, the supply service, the identity broker, the CSSP collector and the factory registry only through these managed interfaces. CMP-SANDBOX has its own security group and reads only the training extract; PT-3's allow-list wildcard was removed on 2026-11-03 and the red team's retest is pending before A-3. The program tells the access point before opening any new port."
+    responsible_roles: [PER-ISSE, PER-DEV, PER-CCP]
+    components: [CMP-EDGE, CMP-K8S, CMP-SANDBOX]
+    inherited_from: "Example Enterprise Cloud Access Point"
+    inherited_risks: "A misrule at the access point would block or expose the EFRAS edge; the program's WAF and security groups remain as a second layer."
+    parameters:
+      sc-07_odp: "logically"
+    sources: [INT-112.A1, INT-113.A1, INT-071.A2, INT-075.A2, product/architecture.md#network, product/test-results.md#pentest]
+  - control_id: sc-8
+    status: implemented
+    statement: "Confidentiality and integrity of transmitted information are protected on every path: users to CMP-EDGE over TLS 1.2 or 1.3 with DoD-approved cipher suites; CMP-EDGE re-encrypts to the services with TLS under certificates of the provider's private certificate authority; CMP-INGEST pulls the EMIS extract over mutual TLS and checks its signature (a tampered extract was rejected in DT-2) and the supply status over TLS; CMP-API reaches the database over TLS with certificate verification. The TLS modules are the provider's FIPS 140-validated modules. This protects maintainer PII in transit as the Privacy Overlay requires."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-EDGE, CMP-INGEST, CMP-API]
+    parameters:
+      sc-08_odp: "confidentiality; integrity"
+    planned_io: "Inputs: user sessions from NIPRNet via the access point, the EMIS extract, supply status. Outputs: dashboards, exports and forwarded logs, all over TLS."
+    sources: [INT-112.A2, product/architecture.md#network, product/architecture.md#interconnections, product/test-results.md#dt-2]
+  - control_id: sc-12
+    status: implemented
+    statement: "Keys are program-owned customer-managed keys in CMP-KMS, the provider key service, whose hardware security modules are FIPS 140 validated. Generation, distribution, storage, access and destruction are managed centrally in the key service following NIST SP 800-57: no key material leaves it; access is granted by policy to named workload identities and two key administrators; every key use is logged to CMP-LOGS; keys rotate yearly and a disabled key is destroyed after a 30-day waiting period. Loss of a data key does not expose PII, because the data stays encrypted under keys only the key service can use."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-KMS]
+    parameters:
+      sc-12_odp: "centralized management of key generation, distribution, storage, access and destruction in the provider key service under program-owned keys, following NIST SP 800-57"
+    sources: [INT-112.A3, INT-074.A3, INT-075.A2, product/architecture.md#components]
+  - control_id: sc-28
+    status: implemented
+    statement: "Confidentiality and integrity of PII and all CUI at rest are protected: CMP-DB, its backups and snapshots, and every CMP-OBJ bucket are encrypted with the program-owned keys of CMP-KMS, AES-256 in an authenticated mode that also detects tampering. The pipeline's infrastructure policy check refuses any store without encryption (pass for 1.5.0)."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-DB, CMP-OBJ]
+    parameters:
+      sc-28_odp.01: "confidentiality; integrity"
+      sc-28_odp.02: "PII and all CUI at rest in the database, object storage and backups"
+    automation: "The pipeline policy check fails a build that defines an unencrypted store."
+    sources: [INT-112.A3, INT-074.A3, product/test-results.md#pipeline-1-5, product/architecture.md#components]

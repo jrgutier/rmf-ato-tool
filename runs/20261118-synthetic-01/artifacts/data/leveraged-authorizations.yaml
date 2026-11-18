@@ -4,14 +4,17 @@
 # authorized organizational systems EFRAS partly inherits from, and LA-04 is a service under
 # agreement (external-service); none of the three offers a control EFRAS inherits whole, and
 # MLEV-001 accepts a common-control-provider only when it supplies a `common` allocation
-# (dryrun-review/findings/06-s3-s4a.md). LA-01 provides the two common controls pe-3 and mp-6.
+# (dryrun-review/findings/06-s3-s4a.md). S-4 revisit (INT-117.A1, orchestrator ruling on F-06-2):
+# LA-01, the DoD-provisionally-authorized cloud service offering, is an external-service whose
+# controls EFRAS inherits through its customer responsibility matrix, as CLOUD-001 requires; the
+# allocation of pe-3 and mp-6 as common to it (S-3) and their inherited statements are unchanged.
 leveraged_authorizations:
   - id: LA-01
     title: "Example GovCloud IL4 region DoD provisional authorization"
     provider: "Example GovCloud IL4 region"
     date_authorized: "2024-09-18"
     decision: AD-ATO
-    arrangement: common-control-provider
+    arrangement: external-service
     service:
       kind: external
       agreement:
@@ -19,7 +22,26 @@ leveraged_authorizations:
         reference: "Component enterprise cloud contract, EFRAS task order (fictional)"
         enterprise: true
         security_requirements: true
-    sources: [INT-060.A1, product/architecture.md#leveraged, ART-ORG-CONTEXT]
+    package_review:
+      date: "2026-11-18"
+      factors:
+        - factor: time-elapsed
+          finding: "DoD provisional authorization of 2024-09-18; monthly continuous monitoring deliverables current."
+        - factor: environment
+          finding: "A commercial IL4 region hosting every EFRAS component in a program-owned account, reached only through the access point."
+        - factor: impact-level
+          finding: "Authorized at IL4, which accommodates the CUI and maintainer PII EFRAS holds (cloud.yaml mission_impact_level)."
+        - factor: risk-tolerance
+          finding: "Within the AO's tolerance; no open condition of the authorization touches EFRAS, and the tenant items of the customer responsibility matrix are the program's own controls."
+      integration:
+        - component: CMP-CSP
+          risk: "CMP-CSP hosts every EFRAS component; a failure or compromise of the region's infrastructure affects the whole system, and the data stays encrypted under program-owned keys."
+      overlays:
+        - overlay: CNSSI1253F-ATT6-PRIVACY-MODERATE
+          consideration: "The region stores maintainer PII encrypted under program-owned keys and sanitizes media under its own privacy and media controls (MP-6 inherited)."
+        - overlay: CNSSI1253F-ATT6-PRIVACY-ACCT
+          consideration: "The provider discloses no PII from EFRAS; its staff cannot read the encrypted stores."
+    sources: [INT-060.A1, INT-117.A1, INT-119.A1, INT-121.A1, product/architecture.md#leveraged, ART-ORG-CONTEXT]
   - id: LA-02
     title: "Example Enterprise Cloud Access Point ATO"
     provider: "Example Enterprise Cloud Access Point"

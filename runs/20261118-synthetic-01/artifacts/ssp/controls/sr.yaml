@@ -1,0 +1,33 @@
+# artifacts/ssp/controls/sr.yaml (S-4; schema ssp-controls). Written whole.
+family: sr
+controls:
+  - control_id: sr-3
+    status: implemented
+    statement: "Hybrid with the Example Software Factory, which vets the upstream sources of its hardened base images with its supply chain team, mirrors every approved package, scans and signs every image. (a) For the CMP-K8S workloads, ERST and the ISSM identify and address supply chain weaknesses with the factory's supply chain team: scan findings and factory POA&M items become EFRAS tickets (the late base image behind limitation 2 is tracked under si-2). (b) Controls: containers start only from the factory's signed hardened base images; the cluster admission policy refuses unsigned or unknown images (pass in 1.5.0); dependencies are pinned by version and hash and pulled only through the factory's artifact repository; worker nodes use the provider's hardened node image; the sandbox egress allow-list no longer reaches public mirrors (PT-3, narrowed 2026-11-03). (c) The processes and controls are documented in this security plan and in the system C-SCRM plan (artifacts/data/scrm-plan.yaml, written in S-4)."
+    responsible_roles: [PER-DEV, PER-ISSM, PER-CCP]
+    components: [CMP-K8S]
+    inherited_from: "Example Software Factory"
+    inherited_risks: "A compromised factory pipeline or signing key would deliver a signed malicious image; EFRAS relies on the factory's own controls for that."
+    parameters:
+      sr-03_odp.01: "the EFRAS container workloads and worker nodes on CMP-K8S"
+      sr-03_odp.02: "the Example Software Factory supply chain team and the EFRAS ISSM"
+      sr-03_odp.03: "signed hardened base images, signature verification at admission, dependency pinning by version and hash, retrieval only through the factory's artifact repository, and the provider's hardened node image"
+      sr-03_odp.04: "security and privacy plans; supply chain risk management plan"
+    assurance:
+      addressed: "The admission policy test, the pipeline's signature verification records and the factory's supply chain vetting records are the evidence; the assessor tests an unsigned image against the admission policy."
+      status: satisfied
+    sources: [INT-111.A2, INT-116.A1, INT-071.A3, product/architecture.md#configuration, product/test-results.md#pipeline-1-5, product/test-results.md#pentest]
+  - control_id: sr-11
+    status: implemented
+    statement: "Hybrid with the Example Software Factory, whose anti-counterfeit procedure checks signatures and hashes of every package it ingests. (a) EFRAS buys no hardware; its software components enter CMP-K8S only as factory-signed images verified at admission, with dependencies pinned by hash and pulled through the factory's repository, so a counterfeit or tampered component fails the signature or hash check. (b) If a scan or signature check flags one, ERST stops the release and reports it to the factory, which reports it to the source and to the Component's supply chain risk management office, and to the EFRAS ISSM and the CSSP."
+    responsible_roles: [PER-DEV, PER-ISSM, PER-CCP]
+    components: [CMP-K8S]
+    inherited_from: "Example Software Factory"
+    parameters:
+      sr-11_odp.01: "source of counterfeit component; the Component supply chain risk management office; the EFRAS ISSM and the Example Cybersecurity Service Provider"
+      sr-11_odp.02: "the Component supply chain risk management office"
+      sr-11_odp.03: "the EFRAS ISSM and the Example Cybersecurity Service Provider"
+    assurance:
+      addressed: "The factory's anti-counterfeit procedure, the admission policy test and the release stop records are the evidence."
+      status: satisfied
+    sources: [INT-111.A2, INT-116.A1, INT-071.A3, product/test-results.md#pipeline-1-5]

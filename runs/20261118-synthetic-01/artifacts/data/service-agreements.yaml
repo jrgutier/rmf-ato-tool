@@ -1,8 +1,10 @@
+# artifacts/data/service-agreements.yaml (S-4; schema service-agreements; M-2 adds
+# effectiveness). Written whole by S-4 (P-16 wrote the environments, C-1 the CSSP agreement
+# SVA-001, kept here). One agreement per provider named in inherited_from in the family files,
+# the CSSP first, with the same provider string (SVCA-001). The enterprise identity broker
+# provides no inherited control; its onboarding approval is interconnection IC-3 in boundary.yaml.
 dodin_connected: true
 system_environments: [cloud]
-# Written early: P-16 (HOST-001) wrote the environments, C-1 adds the CSSP agreement that
-# system-description.yaml service_alignment.cssp_agreement names (SYSD-002). S-4 rewrites the
-# file whole with the other providers' agreements.
 agreements:
   - id: SVA-001
     provider: "Example Cybersecurity Service Provider"
@@ -11,9 +13,13 @@ agreements:
     instrument: support-agreement
     reference: "ECSSP-SA-ARSPO-01 (fictional)"
     environments: [cloud]
-    scope: "24x7 security monitoring of the logs EFRAS forwards, incident response support and vulnerability alerts for the production cloud account"
-    parameters: "Near-real-time log forwarding over TLS to the ECSSP collector; ECSSP keeps forwarded logs one year and alerts on its use cases"
+    scope: "24x7 security monitoring of the logs EFRAS forwards, incident response support, vulnerability alerts and a monthly external scan of the edge for the production cloud account; cybersecurity point of contact with the cloud service provider"
+    parameters: "Near-real-time log forwarding over TLS to the ECSSP collector; ECSSP keeps forwarded logs one year and alerts on its use cases; EFRAS reports a suspected incident within one hour and acknowledges a vulnerability alert within one working day"
     approved_by: PER-AO
+    evaluation:
+      scheme: "DoD O-8530.01-M"
+      authorized_by: USCYBERCOM
+      date: "2025-09-15"
     validation:
       by: PER-ISSM
       date: "2026-04-01"
@@ -23,22 +29,128 @@ agreements:
         name: "Security monitoring of forwarded logs"
         kind: monitoring
         responsibilities:
-          - {party: service-provider, duty: "Monitor forwarded logs 24x7, keep them one year and alert on its use cases"}
-          - {party: subscriber, duty: "Forward application, cluster, database and cloud account logs in near real time"}
+          - {party: service-provider, duty: "Monitor forwarded logs 24x7 against its use cases, keep them one year, alert the ISSO and on-call engineer and send a monthly summary"}
+          - {party: subscriber, duty: "Forward edge, application, cluster, database and cloud account logs and node endpoint telemetry in near real time, and review its own logs weekly"}
         controls: [si-4, au-6]
       - id: SRV-02
         name: "Incident response support"
         kind: incident-response
         responsibilities:
-          - {party: service-provider, duty: "Support incident handling and reporting"}
-          - {party: subscriber, duty: "Report incidents to ECSSP and act on its direction"}
+          - {party: service-provider, duty: "Detect, declare, categorize and analyze incidents, advise on containment and report onward to DoD CERT and the AO's office"}
+          - {party: subscriber, duty: "Report suspected incidents within one hour, contain, eradicate and recover inside the account, and act on the CSSP's direction"}
         controls: [ir-4, ir-6]
       - id: SRV-03
-        name: "Vulnerability alerts"
+        name: "Vulnerability alerts and external scanning"
         kind: vulnerability-detection
         responsibilities:
-          - {party: service-provider, duty: "Send vulnerability alerts and directed actions"}
-          - {party: subscriber, duty: "Assess and remediate alerted vulnerabilities in the program's components"}
+          - {party: service-provider, duty: "Send vulnerability alerts and directed actions and scan the edge monthly from outside"}
+          - {party: subscriber, duty: "Scan inside the account weekly, acknowledge alerts within one working day, remediate within the ra-5 response times and report status on the ticket"}
         controls: [ra-5]
-    sources: [INT-060.A2, INT-060.A3, ASM-016, product/architecture.md#leveraged, product/architecture.md#logging]
-sources: [INT-047.A1, INT-048.A1, INT-060.A3]
+    sources: [INT-060.A2, INT-060.A3, INT-118.A1, INT-108.A1, INT-098.A1, INT-115.A1, ASM-016, product/architecture.md#leveraged, product/architecture.md#logging]
+  - id: SVA-002
+    provider: "Example GovCloud IL4 region"
+    role: cloud-service-provider
+    integration: external
+    instrument: contract
+    reference: "Component enterprise cloud contract, EFRAS task order (fictional)"
+    environments: [cloud]
+    scope: "IL4 platform services for the program-owned production account: managed Kubernetes, managed PostgreSQL, object storage, key service, network and compute, with the physical, infrastructure and media protections of its DoD provisional authorization"
+    parameters: "Contract under DFARS Subpart 239.76; customer responsibility matrix in eMASS; monthly continuous monitoring deliverables on the Component portal; managed service patching in announced windows"
+    approved_by: PER-AODR
+    validation:
+      by: PER-ISSM
+      date: "2026-11-18"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-04
+        name: "Data center physical protection and media sanitization"
+        kind: other
+        responsibilities:
+          - {party: service-provider, duty: "Control physical access to its data centers and sanitize every storage device before it leaves its control"}
+          - {party: subscriber, duty: "Keep privileged access workstations, which are outside the boundary, in controlled space and request no data center access"}
+        controls: [pe-3, mp-6]
+      - id: SRV-05
+        name: "Managed service patching and storage durability"
+        kind: other
+        responsibilities:
+          - {party: service-provider, duty: "Patch the hypervisor, control plane and database engine, publish the hardened node image monthly, and keep backups durable across availability zones"}
+          - {party: subscriber, duty: "Roll worker nodes to the latest node image, patch containers, and configure and test database backups and point-in-time recovery"}
+        controls: [si-2, cp-9]
+    sources: [INT-117.A2, INT-119.A1, INT-119.A2, INT-113.A2, INT-071.A1, INT-096.A1, product/architecture.md#leveraged]
+  - id: SVA-003
+    provider: "Example Enterprise Cloud Access Point"
+    role: common-control-provider
+    integration: external
+    instrument: sla
+    reference: "Component enterprise cloud access point service-level agreement (fictional)"
+    environments: [cloud]
+    scope: "Boundary protection and traffic inspection between NIPRNet and the EFRAS load balancer"
+    parameters: "Only the access point path reaches the load balancer on 443; the program gives notice before opening a new port; traffic logs go to the CSSP"
+    approved_by: PER-AODR
+    validation:
+      by: PER-ISSM
+      date: "2026-11-18"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-06
+        name: "Boundary protection and inspection"
+        kind: detection
+        responsibilities:
+          - {party: service-provider, duty: "Inspect and filter every session to the EFRAS edge and keep the traffic logs for the CSSP"}
+          - {party: subscriber, duty: "Keep its subnets, security groups, WAF rules and egress allow-list, and notify before opening a new port"}
+        controls: [sc-7]
+    sources: [INT-117.A2, INT-113.A1, INT-071.A2, product/architecture.md#network]
+  - id: SVA-004
+    provider: "Example Software Factory"
+    role: common-control-provider
+    integration: external
+    instrument: sla
+    reference: "Example Software Factory tenant service-level agreement (fictional)"
+    environments: [cloud]
+    scope: "Pipeline, security scanning, hardened and signed base images, artifact repository and supply chain vetting for every EFRAS image"
+    parameters: "EFRAS pulls only through the factory's repository and verifies signatures at admission; the factory reports scan findings and its POA&M items to the program"
+    approved_by: PER-AODR
+    validation:
+      by: PER-ISSM
+      date: "2026-11-18"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-07
+        name: "Pipeline security scanning"
+        kind: vulnerability-detection
+        responsibilities:
+          - {party: service-provider, duty: "Run static, dependency, image and dynamic scans on every build and keep the evidence"}
+          - {party: subscriber, duty: "Own its code, tests and test plan, and fix what the scans find"}
+        controls: [sa-11]
+      - id: SRV-08
+        name: "Signed hardened images and supply chain vetting"
+        kind: other
+        responsibilities:
+          - {party: service-provider, duty: "Vet upstream sources, mirror approved packages, sign images, check ingested packages for counterfeits and report them"}
+          - {party: subscriber, duty: "Pin dependencies by hash, pull only through the repository, refuse unsigned images at admission and stop a release on a failed check"}
+        controls: [sr-3, sr-11]
+    sources: [INT-117.A2, INT-116.A1, INT-071.A3, INT-111.A2, product/architecture.md#leveraged]
+  - id: SVA-005
+    provider: "Component privacy office"
+    role: common-control-provider
+    integration: internal
+    instrument: dod-component-issuance
+    reference: "Component privacy program issuance (fictional)"
+    environments: [cloud]
+    scope: "The Component SORN for aviation maintenance records, privacy awareness training, and review of PII processing and the PIA"
+    parameters: "The privacy representative reviews every change that touches PII; the office keeps the SORN and approves the PIA"
+    approved_by: PER-AODR
+    validation:
+      by: PER-ISSM
+      date: "2026-11-18"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-09
+        name: "Privacy program services"
+        kind: other
+        responsibilities:
+          - {party: service-provider, duty: "Keep the SORN and its authority and purposes, deliver privacy training and review PII processing changes and the PIA"}
+          - {party: subscriber, duty: "Keep the PII inventory, restrict processing to the SORN's elements and purposes, and route PII changes to the privacy representative"}
+        controls: [at-2, pt-2, pt-3]
+    sources: [INT-117.A2, INT-106.A1, INT-106.A2, INT-080.A1, product/privacy.md#authority]
+sources: [INT-047.A1, INT-048.A1, INT-060.A3, INT-117.A2]

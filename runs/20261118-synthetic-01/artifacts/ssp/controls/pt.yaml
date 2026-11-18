@@ -1,0 +1,32 @@
+# artifacts/ssp/controls/pt.yaml (S-4; schema ssp-controls). Written whole.
+family: pt
+controls:
+  - control_id: pt-2
+    status: implemented
+    statement: "Hybrid with the Component privacy office. (a) The authority that permits the processing is the Component's maintenance-records authority, documented by the privacy office in the existing Component SORN for aviation maintenance records (coverage confirmed 2026-08-19) and cited in the draft PIA. The processing it permits is receiving maintainer name, DoD ID number, rate or rank, qualifications and work-center assignment in the EMIS extract, storing them, showing qualification coverage per work center and joining actions to people. (b) EFRAS collects nothing from individuals and writes nothing back; the ingest worker drops any extract field outside the five SORN elements, and a new element needs the privacy representative's review through the change process (cm-3). The privacy office keeps the SORN and the authority; the program keeps the data inventory."
+    responsible_roles: [PER-PRIV, PER-ISSM]
+    components: [this-system]
+    inherited_from: "Component privacy office"
+    parameters:
+      pt-02_odp.01: "the Component's maintenance-records authority, as cited in the Component SORN for aviation maintenance records"
+      pt-02_odp.02: "receipt, storage, display and joining of maintainer name, DoD ID number, rate or rank, qualifications and work-center assignment from the EMIS extract"
+      pt-02_odp.03: "receipt, storage, display and joining of maintainer name, DoD ID number, rate or rank, qualifications and work-center assignment from the EMIS extract"
+    artifact_locations:
+      - "Component SORN for aviation maintenance records (privacy office)"
+      - "ART-PIA and artifacts/data/pia.yaml (draft PIA 0.9)"
+    assurance:
+      addressed: "The privacy office's SORN coverage confirmation, the draft PIA's authority citation and the ingest worker's field filter are the evidence; the assessor compares the database schema with the SORN's data elements."
+      status: satisfied
+    sources: [INT-106.A1, INT-080.A1, product/privacy.md#authority, product/privacy.md#pii]
+  - control_id: pt-3
+    status: partial
+    statement: "Partial. Hybrid with the Component privacy office. In place: (a) the purposes, showing qualification coverage per work center and joining maintenance actions to the maintainers who performed them for readiness analysis, are documented in the SORN and the draft PIA; (b) the SORN's purpose and routine-use sections are public; (d) the CCB routes every change that touches PII to the privacy representative, and the PIA and SORN review condition of cm-3 stops a new purpose before release. Missing: (c) analysts' exports from CMP-REPORT and the data scientists' training extract in CMP-SANDBOX may be used only de-identified, yet they keep an unsalted hash of the DoD ID number, and the red team re-identified records with a list of 50 DoD ID numbers (PT-2), so that processing is not restricted to what the purposes allow. Plan: salted, rotated pseudonyms in release 1.6 (2027-01-15); until then the PIA's open item stays with the privacy office."
+    responsible_roles: [PER-PRIV, PER-ISSE, PER-DEV]
+    components: [CMP-REPORT, CMP-SANDBOX]
+    inherited_from: "Component privacy office"
+    parameters:
+      pt-03_odp.01: "showing qualification coverage per work center; joining maintenance actions to the maintainers who performed them for readiness analysis"
+      pt-03_odp.02: "display of identified PII to scoped users, and de-identified exports and training extracts only"
+      pt-03_odp.03: "CCB review of every change that touches PII, with the privacy representative, and the PIA and SORN review condition of the configuration change process"
+      pt-03_odp.04: "the Privacy Act, DoD 5400.11-R and the Component SORN and PIA"
+    sources: [INT-106.A2, product/privacy.md#minimization, product/conops.md#limitations, product/test-results.md#pentest]
